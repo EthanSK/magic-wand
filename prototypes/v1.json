@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "prototype-v1",
+  "name": "Prototype V1",
+  "baselineTag": "prototype-v1.0.0",
+  "hardware": "Original Puck.js v2.1 wand with three grip switches",
+  "settingsManifest": "wand.json",
+  "receiver": {
+    "receiver": "1.2.35",
+    "receiverBuild": "40",
+    "deviceRuntime": "wand-e1ce30d7c407",
+    "bridgeRevision": "c6948df57d8e26f59aa10b1c590b4d5536f9de8bd6cb1246ed2dea4704a02f1d"
+  },
+  "localFeatureFlags": {
+    "orientationCompensation": true
+  },
+  "physicalAcceptance": {
+    "nativePointer": "Ethan confirmed smoother pointing",
+    "tableDetection": "new window-based detector; final physical check pending"
+  },
+  "futurePrototypes": "Create a separate profile and branch; keep the V1 tag immutable"
+}

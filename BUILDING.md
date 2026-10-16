@@ -117,3 +117,18 @@ node --test tests/*.test.*
 `tests/` runs the real device code and bridge through the website’s Espruino shim with a simulated
 clock. These tests don’t replace trying the wand: physical feel, light colours and Bluetooth timing
 only show up on the hardware.
+
+## Experimental wrist-roll compensation
+
+The native receiver defaults to the original fixed mouse axes. To try gravity-based
+wrist-roll compensation, add `"orientationCompensation": true` to
+`~/Library/Application Support/WandReceiver/feature-flags.json`. Preserve any other
+keys in that file. The receiver reloads it every five seconds; set the value to
+`false` to return to the original mapping without reinstalling.
+
+This changes native mouse pointing only. It reuses existing gravity telemetry,
+rotates angular rates before the existing filter and sensitivity, and adds no
+pointer buffer. HUD and chord scrolling retain their device-side mapping. This is
+not absolute 3D position tracking; near a vertical shaft or during obvious
+acceleration shocks it retains the last usable rotation estimate. Physical feel
+still needs testing with the actual grip.

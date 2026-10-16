@@ -200,6 +200,23 @@ than spending power on a higher setting that does not improve actual throughput.
 Reset the connection deadline when a new load starts so recovery gets its full
 time budget instead of inheriting an almost-expired connection attempt.
 
+## Experimental wrist-roll compensation
+
+Native mouse pointing can opt into `orientationCompensation` in the receiver's
+local `feature-flags.json`. Absence or false preserves the original fixed axes.
+Refresh the flag outside the raw-motion path; gravity observations reuse the
+existing 10 Hz IMU telemetry, without adding packets or a pointer buffer.
+
+For the current mount (shaft along sensor Y, neutral face-up along Z), normalize
+gravity's X/Z projection and rotate the bias-corrected angular rates before the
+existing filter and gain. This preserves the screen's vertical gain and LOW gain.
+The test covers 0, 30, 90, 180 and 270 degree wrist rolls, flag-off equivalence,
+stationary input, invalid acceleration and the near-vertical fallback. It does
+not prove physical acceptance or arbitrary three-dimensional tracking. Retain
+the last usable basis during obvious acceleration shocks or when the shaft is
+nearly vertical. This feature changes native mouse pointing only; HUD and chord
+scrolling still use their existing device axes.
+
 ## Detect rest at the sleeping sensor rate
 
 The physical resting wand reported about 1.055 g and several milli-g of variation.
@@ -212,3 +229,14 @@ Use four observations spanning 1.8 seconds for rest confirmation, including at
 only the confirmed gravity reference; re-evaluate current state and timestamps
 after reconnect. Manual mouse activation must rearm return-to-reference detection.
 Learning an idle reference during recording does not itself stop the recording.
+
+## Confirm rest from a window, at any placement angle
+
+The active gyro stream adds accelerometer noise that did not appear at the slow
+idle rate: a still device produced isolated changes above the old 0.012 g anchor
+threshold and gyro samples above 0.3 degrees per second. Do not reset all quiet
+evidence for one such reading. Judge scatter, sustained drift and RMS rotation
+over an elapsed-time window. A new desk angle need not match a saved gravity
+vector or include a detectable impact. Regression fixtures include actual
+stationary active-rate samples. This classification window never buffers pointer
+movement. An IMU alone cannot distinguish a perfectly supported hand from a desk.

@@ -35,7 +35,7 @@ for i in 0...20 {_=rest.update(x:0,y:0,z:1,gyro:0,now:100+Double(i)*0.1,buttons:
 precondition(rest.parked)
 precondition(rest.update(x:0.3,y:0,z:0.954,gyro:5,now:102.1,buttons:false,idle:true)==[.probe])
 precondition(rest.update(x:0.3,y:0,z:0.954,gyro:5,now:102.2,buttons:false,idle:true)==[.pickedUp])
-for i in 0...60 {let e=rest.update(x:0.3,y:0,z:0.954,gyro:0.05,now:102.3+Double(i)*0.1,buttons:false,idle:false);precondition(!e.contains(.putDown),"still hand away from desk does not stop")}
+for i in 0...60 {let e=rest.update(x:0.3+Double(i%2)*0.03,y:0,z:0.954,gyro:1.0,now:102.3+Double(i)*0.1,buttons:false,idle:false);precondition(!e.contains(.putDown),"moving hand away from desk does not stop")}
 var put=0
 for i in 0...30 {let e=rest.update(x:0,y:0,z:1,gyro:0.01,now:109+Double(i)*0.1,buttons:false,idle:false);if e.contains(.putDown){put+=1}}
 precondition(put==1 && rest.parked,"set-down exactly once")
@@ -93,8 +93,28 @@ precondition(tableStops==1 && savedTable.parked,"manual HIGH returns to table wi
 var pickupEvents:[WandRestDetection.Event]=[]
 for i in 0...1 {pickupEvents+=savedTable.update(x:0.08,y:0,z:1.052,gyro:1,now:10+Double(i)*0.625,buttons:false,idle:true)}
 precondition(pickupEvents.contains(.pickedUp),"small pickup must rearm a later put-down")
-for i in 0...40 {precondition(!savedTable.update(x:0.08,y:0,z:1.052,gyro:0,now:12+Double(i)*0.1,buttons:false,idle:false).contains(.putDown))}
+for i in 0...40 {precondition(!savedTable.update(x:0.08+Double(i%2)*0.03,y:0,z:1.052,gyro:1.0,now:12+Double(i)*0.1,buttons:false,idle:false).contains(.putDown))}
 var gentleStops=0
 for i in 0...5 {gentleStops+=savedTable.update(x:0,y:0,z:1.055,gyro:0,now:18+Double(i)*0.625,buttons:false,idle:false).contains(.putDown) ? 1:0}
 precondition(gentleStops==1)
 print("PASS: biased gravity, low-rate table rest, persistent reference, manual mode and gentle pickup")
+
+// A gentle set-down at a different angle has no impact and must still park.
+let newAngle=WandRestDetection();newAngle.pointerActivated()
+var newAngleStops=0
+for i in 0...25 {
+ let e=newAngle.update(x:0.13+Double(i%2)*0.002,y:0.31,z:0.998,gyro:0.05,now:200+Double(i)*0.1,buttons:false,idle:false)
+ newAngleStops+=e.contains(.putDown) ? 1:0
+}
+precondition(newAngleStops==1 && newAngle.parked,"new table angle without impact or old reference")
+let flatPickup=newAngle.update(x:0.13,y:0.31,z:1.08,gyro:0,now:203,buttons:false,idle:true)
+precondition(flatPickup==[.probe],"translation wakes a sleeping probe")
+precondition(newAngle.update(x:0.13,y:0.31,z:1.08,gyro:0,now:203.1,buttons:false,idle:true)==[.pickedUp])
+print("PASS: gentle new-angle set-down and translation pickup")
+
+let activeTable=WandRestDetection();activeTable.pointerActivated()
+let activeSamples:[[Double]]=[[0.2052001953125, -0.08056640625, 1.0428466796875, 0.1], [0.20947265625, -0.084228515625, 1.021728515625, 0.14], [0.2020263671875, -0.0784912109375, 1.0401611328125, 0.24], [0.2130126953125, -0.0814208984375, 1.0302734375, 0.5], [0.206787109375, -0.08349609375, 1.0479736328125, 0.19], [0.2099609375, -0.0841064453125, 1.0299072265625, 0.13], [0.20849609375, -0.07421875, 1.0523681640625, 0.44], [0.2100830078125, -0.0848388671875, 1.0294189453125, 0.14], [0.207763671875, -0.083740234375, 1.0626220703125, 0.15], [0.2120361328125, -0.0848388671875, 1.0457763671875, 0.15], [0.2093505859375, -0.0830078125, 1.02099609375, 0.23], [0.20849609375, -0.0814208984375, 1.0440673828125, 0.17], [0.211669921875, -0.0814208984375, 1.0218505859375, 0.19], [0.2060546875, -0.0830078125, 1.046142578125, 0.2], [0.20654296875, -0.0814208984375, 1.0274658203125, 0.24], [0.2076416015625, -0.080322265625, 1.049560546875, 0.12], [0.208740234375, -0.083740234375, 1.0269775390625, 0.21], [0.2071533203125, -0.0830078125, 1.043701171875, 0.14]]
+var activeStops=0
+for i in 0...55 {let p=activeSamples[i%activeSamples.count];activeStops += activeTable.update(x:p[0],y:p[1],z:p[2],gyro:p[3],now:300+Double(i)*0.1,buttons:false,idle:false).contains(.putDown) ? 1:0}
+precondition(activeStops==1,"actual active-rate desk noise must stop exactly once")
+print("PASS: actual active sensor noise parks once")

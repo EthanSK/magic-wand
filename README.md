@@ -148,7 +148,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles, desk inference and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.33 (38) · device code `wand-e1ce30d7c407` · bridge `c6948df5` · updated 17 October 2026.
+Receiver 1.2.35 (40) · device code `wand-e1ce30d7c407` · bridge `c6948df5` · updated 17 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
@@ -187,3 +187,9 @@ Change the wand first, then this repository: import the sources, update `wand.js
 ## Licence
 
 Code is MIT licensed. Three.js keeps its MIT licence and the fonts their SIL Open Font License, in `docs/lib/` and `docs/fonts/`. Agentic Mouse’s HUD labels and colours come from its MIT-licensed public website. Puck.js and Espruino are products of Pur3 Ltd; this project isn’t affiliated with them.
+
+## Hardware prototypes
+
+The original wand is [Prototype V1](prototypes/README.md), preserved at
+[`prototype-v1.0.0`](https://github.com/EthanSK/magic-wand/tree/prototype-v1.0.0).
+New hardware prototypes get separate profiles so the V1 controls remain recoverable.

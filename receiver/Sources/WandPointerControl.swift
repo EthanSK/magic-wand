@@ -303,6 +303,7 @@ final class WandRestDetection {
     private let cache:URL?
     private var rest:[Double]?,previous:[Double]?,quiet:[Double]?
     private var quietSince=0.0,quietCount=0,pickupCount=0
+    private var quietWindow:[(a:[Double],gyro:Double,time:Double)]=[]
     private var contactUntil=0.0,lastTime=0.0,away=false,settling=false
     private(set) var parked=false
     private(set) var deskQuietSince:Double?
@@ -320,12 +321,12 @@ final class WandRestDetection {
     /// Timestamps and current held/parked state must always be learned afresh.
     func reset(keepingReference:Bool=false){
         if !keepingReference {rest=nil}
-        previous=nil;quiet=nil;quietCount=0;pickupCount=0;contactUntil=0;lastTime=0;away=false;settling=false;parked=false;deskQuietSince=nil
+        previous=nil;quiet=nil;quietCount=0;quietWindow.removeAll();pickupCount=0;contactUntil=0;lastTime=0;away=false;settling=false;parked=false;deskQuietSince=nil
     }
     func pointerActivated(){
-        parked=false;away=rest != nil;quiet=nil;quietCount=0;deskQuietSince=nil
+        parked=false;away=rest != nil;quiet=nil;quietCount=0;quietWindow.removeAll();deskQuietSince=nil
     }
-    func pointerStopped(){quiet=nil;quietCount=0;settling=false}
+    func pointerStopped(){quiet=nil;quietCount=0;quietWindow.removeAll();settling=false}
     private func remember(_ pose:[Double]){
         rest=pose
         if let cache,let data=try? JSONEncoder().encode(pose){
@@ -337,24 +338,36 @@ final class WandRestDetection {
     /// Four observations spanning 1.8 seconds work at both 10 Hz and the
     /// sleeping accelerometer's 1.6 Hz. Never require 18 low-rate observations.
     private func isQuiet(_ a:[Double],gyro:Double,magnitude:Double,now:Double)->Bool {
-        if let anchor=quiet,distance(a,anchor)<0.012,gyro<0.3,abs(magnitude-1)<0.15 {quietCount+=1}
-        else {quiet=a;quietSince=now;quietCount=1}
-        return quietCount>=4 && now-quietSince>=1.8
+        guard gyro<1.5,abs(magnitude-1)<0.15 else {quietWindow.removeAll();return false}
+        quietWindow.append((a,gyro,now))
+        quietWindow.removeAll{now-$0.time>2.15}
+        guard quietWindow.count>=4,let first=quietWindow.first,now-first.time>=1.8 else{return false}
+        let n=Double(quietWindow.count)
+        let mean=(0..<3).map{axis in quietWindow.reduce(0){$0+$1.a[axis]}/n}
+        let scatter=sqrt(quietWindow.reduce(0){$0+pow(distance($1.a,mean),2)}/n)
+        let rotation=sqrt(quietWindow.reduce(0){$0+$1.gyro*$1.gyro}/n)
+        let midTime=quietWindow.reduce(0){$0+$1.time}/n
+        let timeVariance=quietWindow.reduce(0){$0+pow($1.time-midTime,2)}
+        guard timeVariance>0 else{return false}
+        let slope=(0..<3).map{axis in quietWindow.reduce(0){$0+($1.time-midTime)*($1.a[axis]-mean[axis])}/timeVariance}
+        // Compare a window's spread and sustained drift, not every sample with
+        // one anchor: the live stationary 104 Hz sensor has isolated 0.03 g noise.
+        return scatter<0.025 && rotation<0.45 && sqrt(slope.reduce(0){$0+$1*$1})<0.008
     }
     func update(x:Double,y:Double,z:Double,gyro:Double,now:Double,buttons:Bool,idle:Bool)->[Event] {
         let a=[x,y,z],magnitude=sqrt(x*x+y*y+z*z)
-        guard a.allSatisfy({$0.isFinite}),gyro.isFinite,now.isFinite,(0.05...4).contains(magnitude) else{quiet=nil;quietCount=0;deskQuietSince=nil;return []}
-        if lastTime>0 && (now<=lastTime || now-lastTime>2){quiet=nil;quietCount=0;pickupCount=0}
+        guard a.allSatisfy({$0.isFinite}),gyro.isFinite,now.isFinite,(0.05...4).contains(magnitude) else{quiet=nil;quietCount=0;quietWindow.removeAll();deskQuietSince=nil;return []}
+        if lastTime>0 && (now<=lastTime || now-lastTime>2){quiet=nil;quietCount=0;quietWindow.removeAll();pickupCount=0}
         lastTime=now
         let jerk=previous.map{distance(a,$0)} ?? 0;previous=a
-        if buttons {quiet=nil;quietCount=0;pickupCount=0;deskQuietSince=nil;return []}
+        if buttons {quiet=nil;quietCount=0;quietWindow.removeAll();pickupCount=0;deskQuietSince=nil;return []}
         if parked,let pose=rest {
             if jerk>=0.012 || gyro>=0.3 {deskQuietSince=nil}
             else if deskQuietSince==nil {deskQuietSince=now}
-            if distance(a,pose)>0.065 || abs(magnitude-sqrt(pose.reduce(0){$0+$1*$1}))>0.08 {
+            if distance(a,pose)>0.06 || jerk>0.08 || gyro>1.2 || abs(magnitude-sqrt(pose.reduce(0){$0+$1*$1}))>0.06 {
                 pickupCount+=1
                 if pickupCount==1 {return [.probe]}
-                parked=false;deskQuietSince=nil;away=true;quiet=nil;quietCount=0;pickupCount=0
+                parked=false;deskQuietSince=nil;away=true;quiet=nil;quietCount=0;quietWindow.removeAll();pickupCount=0
                 return [.pickedUp]
             }
             pickupCount=0;return []
@@ -367,14 +380,10 @@ final class WandRestDetection {
             }
             return []
         }
-        guard let pose=rest else{quiet=nil;quietCount=0;return []}
-        let offset=distance(a,pose)
-        if offset>0.18 {away=true}
-        if jerk>0.18 {contactUntil=now+4}
-        let possible=(away && offset<0.065) || now<contactUntil
-        guard possible else{quiet=nil;quietCount=0;settling=false;return []}
+        // A desk placement need not return to the last gravity angle or make
+        // an impact. Confirm physical stillness at the new angle instead.
+        // IMU-only detection cannot distinguish a perfectly supported hand.
         var events:[Event]=[]
-        if !settling {settling=true;events.append(.settling)}
         if isQuiet(a,gyro:gyro,magnitude:magnitude,now:now) {
             remember(a);parked=true;deskQuietSince=now;away=false;settling=false;quiet=nil;quietCount=0;contactUntil=0
             events.append(.putDown)
@@ -436,6 +445,19 @@ final class WandMotionFilter {
     private var values:[Double] = []
     private var fx=0.0,fy=0.0,ix=0.0,iy=0.0,meanSpeed=0.0,intentTime=0.0
     private var slackX=0.0,slackY=0.0,fractionX=0.0,fractionY=0.0
+    // Experimental roll compensation for the current mount: the shaft is Y,
+    // with Z facing up at neutral. Rotate angular rates before filtering/gain,
+    // never the cursor or already-scaled pixels. No sample queue or new filter.
+    var orientationCompensation=false
+    private var rollCos=1.0,rollSin=0.0
+    func observeGravity(x:Double,y:Double,z:Double) {
+        guard x.isFinite,y.isFinite,z.isFinite else{return}
+        let length=sqrt(x*x+y*y+z*z),across=hypot(x,z)
+        // Linear acceleration is not gravity. Ignore obvious shocks and retain
+        // the last usable basis near vertical, where roll cannot be determined.
+        guard (0.75...1.25).contains(length),across>=0.25 else{return}
+        rollCos=z/across;rollSin=x/across
+    }
     var configured:Bool {values.count==13}
     func configure(_ v:[Double])->Bool {
         guard v.count==13,v.allSatisfy({$0.isFinite}),abs(v[0])<=32768,abs(v[1])<=32768,
@@ -450,7 +472,9 @@ final class WandMotionFilter {
               (1...50000).contains(microseconds) else{return nil}
         if resetState {reset()}
         let v=values,dt=Double(microseconds)/1_000_000
-        let x=(Double(rawX)-v[0])/134,y=(Double(rawY)-v[1])/134
+        let bodyX=(Double(rawX)-v[0])/134,bodyY=(Double(rawY)-v[1])/134
+        let x=orientationCompensation ? bodyX*rollCos+bodyY*rollSin : bodyX
+        let y=orientationCompensation ? bodyY*rollCos-bodyX*rollSin : bodyY
         let speed=sqrt(x*x+y*y),blend=max(0,min(1,(speed-v[5])/(v[6]-v[5])))
         let alpha=1-exp(-dt/(0.008-0.006*blend))
         fx+=alpha*(x-fx);fy+=alpha*(y-fy)
