@@ -16,7 +16,7 @@ SHA-256; the private directory’s path isn’t recorded.
 | `receiver/Sources/WandContextListener.swift` | Agentic Mouse HUD context | None |
 | `receiver/Sources/WandRecordingState.swift` | Agent Flow recording state | None |
 | `receiver/Sources/WandPointerControl.swift` | Display bounds, LOW routing, rough loops, HIGH dwell clicks and desk inference | None |
-| `receiver/Info.plist` | Receiver bundle 1.2.26 (31) | None |
+| `receiver/Info.plist` | Receiver bundle 1.2.28 (33) | None |
 | `receiver/Sources/WandDeviceConfiguration.swift` | Written for this repository | New |
 
 The installed receiver pinned one Puck’s CoreBluetooth identifier and advertised name. The public
@@ -37,8 +37,8 @@ copying them:
 
 `scripts/device_build.py` keeps the original algorithms. From the imported sources it reproduces
 the private build byte for byte: runtime `wand-e1ce30d7c407`, commands SHA-256 `33bf21e3…`,
-runtime SHA-256 `e25a4de5…`, boot image SHA-256 `b334feb2…` and bridge revision `d051148c…`.
-The bridge revision matches the receiver 1.2.26 (31) bundle, private cache and final live patch readback. The final power-state correction retained calibration and reported no error flags. Earlier large diagnostic queries raised LOW_MEMORY warnings without an observed out-of-memory failure. New gestures still need a physical check.
+runtime SHA-256 `e25a4de5…`, boot image SHA-256 `b334feb2…` and bridge revision `b8d50a3f…`.
+The bridge revision matches the receiver 1.2.28 (33) bundle, private cache and final live patch readback. The final power-state correction retained calibration and reported no error flags. Earlier large diagnostic queries raised LOW_MEMORY warnings without an observed out-of-memory failure. New gestures still need a physical check.
 `tests/manifest.test.mjs` recomputes these identifiers on every run.
 
 The private `wand-status.txt` described receiver 1.2.1 and an older button layout, so it wasn’t used.
@@ -84,7 +84,7 @@ What the demo doesn’t reproduce:
 
 - Gyro readings are derived from the visitor’s aim at about 60 readings a second; the real wand
   requests 104 Hz. The earlier roughly 35 Hz full-processing measurement predates the current
-  lookup optimization; the current rate has not been established.
+  rate trial; the current rate has not been established.
 - Bluetooth delay, the Puck’s 20 ms switch debounce and its memory limits aren’t simulated.
 - The 3D wand turns a quarter as far as the simulated sensor, so its tip stays below the HUD.
 - HUD cards only report what they would do; child pages, held keys and app actions aren’t run.
@@ -148,8 +148,8 @@ The main-HUD browser snapshot does not implement app-specific pages or the VS Co
 
 ## Sensor-rate and update readiness
 
-Receiver 1.2.26 (31) retains 104 Hz after a 208 Hz trial felt more jumpy to Ethan, and keeps
-1.6 Hz accelerometer-only idle sensing. The motion calculation caches repeated lookups but keeps the accepted integration,
+Receiver 1.2.28 (33) retains 104 Hz after a 208 Hz trial felt more jumpy to Ethan, and keeps
+1.6 Hz accelerometer-only idle sensing. The motion calculation uses private scalar state and cached references while keeping the accepted integration,
 angular tolerance, gain and ordinary button-aware sender. Host tests compare exact reports with
 the preceding calculation at 20, 35, 104 and 208 delivered samples per second. These comparisons
 do not measure end-to-end latency or establish a delivered rate of 208 updates per second.
@@ -166,3 +166,22 @@ approved restoring 90 ms for held LOW precision aiming on 17 October 2026. The M
 those pointer deltas and discards the final queued deltas on Bottom release, so the endpoint
 click stays at the last shown position. Released HIGH, real left-button dragging and HUD input
 bypass this queue. This changes the receiver and its browser model; the Puck bridge is unchanged.
+
+## Wide UART motion and unchanged filtering
+
+The Puck's original HID path clamps each axis to 127 counts. Applying that same limit to the
+UART receiver discarded fast travel, especially at low delivered rates. The bridge and native
+receiver now accept up to 4095 counts per axis for UART, while the HID fallback stays at 127.
+Physical display bounds still clamp the final target. Tests exercise large UART travel, the
+bounded HID fallback, and receiver rejection of out-of-range packets.
+
+The exponential 2–8 ms filter, radial slack and intentional-motion thresholds are unchanged.
+The implementation holds intent state in private scalars and skips the telemetry helper call
+between its existing deadlines. These reduce repeated interpreter work without adding a queue
+or changing filter coefficients. End-to-end smoothness still needs physical confirmation.
+
+For the update indicator, Ethan identified the earlier nominal-white setting as the orange he
+actually saw on this hardware. Updating therefore requests 0.45 on each LED channel; the public
+display swatch describes the perceived orange, not a calibrated RGB measurement. No five-second
+completion timeout is used. Failed loads remain visibly updating and may be repaired through the
+same private maintenance channel while connected.

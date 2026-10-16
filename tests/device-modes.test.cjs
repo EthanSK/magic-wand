@@ -125,7 +125,7 @@ for (const bridge of ["readable", "fragments"]) {
     ctx.setWandRecording(true); ctx.connected = false; ctx.updateLights();
     assert.deepEqual(w.colors(), [0.08, 0.016, 0], "disconnected overrides stale recording");
     ctx.WAND_UPDATING = true; ctx.updateLights();
-    assert.deepEqual(w.colors(), [1, 0.2, 0], "update orange retains priority");
+    assert.deepEqual(w.colors(), [.45, .45, .45], "update uses the old white mix perceived as orange");
 
     // Reconnect keeps calibration; a missing calibration restarts on the next press.
     ctx.connected = true; ctx.WAND_UPDATING = false; ctx.setWandRecording(false);

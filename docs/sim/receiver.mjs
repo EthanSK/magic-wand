@@ -151,7 +151,7 @@ export class WandReceiverModel {
   /** The receiver's handshake once the device code and bridge are ready. */
   ready() {
     this.queue(
-      "E.setFlags({pretokenise:1});global.wandDoubleClickSeconds=" +
+      "global.wandBridgeOriginalSend=mouse.send;E.setFlags({pretokenise:1});global.wandDoubleClickSeconds=" +
         Math.min(0.3, this.tuning.macDoubleClickSeconds) +
         ";",
     );
@@ -539,8 +539,8 @@ export class WandReceiverModel {
   handleFrame(x, y, b) {
     if (
       ![x, y, b].every(Number.isInteger) ||
-      Math.abs(x) > 127 ||
-      Math.abs(y) > 127 ||
+      Math.abs(x) > 4095 ||
+      Math.abs(y) > 4095 ||
       b < 0 ||
       b > 3
     )

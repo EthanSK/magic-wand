@@ -155,3 +155,15 @@ interpreter failure. Keep orange until validated completion; do not use a five-s
 At 208 Hz, test helpers that simulate a duration must derive their sample count from the selected
 rate. A hard-coded 104 sample count halves simulated elapsed time and falsely fails the unchanged
 300 ms release pause. Retain fixed-rate traces separately to compare outputs at equal times.
+
+
+## Keep HID limits out of UART movement
+
+The HID mouse fallback needs its byte-sized 127-count cap; the UART text protocol does not.
+The accumulator, pump and native parser must agree on the wider bound, or fast sweeps are
+silently discarded. Keep exact filter-state equivalence tests below the old cap and separate
+wide-travel tests above it, including display clamping and invalid-packet rejection.
+
+Do not call dt/(tau+dt) equivalent to 1-exp(-dt/tau): it changes filter response and can add lag.
+Private scalar state, cached lookups and gating an already rate-limited telemetry helper retain
+the original equations; changing those equations needs separate validation and delay approval.
