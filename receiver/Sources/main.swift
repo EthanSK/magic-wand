@@ -87,7 +87,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func loadModeBridge(_ code:String?=nil) {
         let source=code ?? modeBridge
         bridgeLoadFailed=false;loadingBridge=true;ready=false
-        queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();")
+        queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights.replaceWith(function(){writeLight(LED1,0.45);writeLight(LED2,0.45);writeLight(LED3,0.45);});updateLights();")
         // Each complete statement is small; the old single giant REPL function
         // exceeded the device's available memory during repeated live updates.
         for command in source.split(separator:"\n") where command.trimmingCharacters(in:.whitespaces) != "print('WAND_MODE_ROUTING_READY');" {queue(String(command))}
@@ -143,7 +143,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // device updates do not disconnect the user's working pointer. Only consume
     // a same-user regular file with private permissions; never follow symlinks.
     func maintenance() {
-        guard ready,!restoring else {log("MAINTENANCE_NOT_READY");return}
+        guard !restoring,device?.state == .connected,tx != nil else {log("MAINTENANCE_NOT_READY");return}
         let path=support.appendingPathComponent("maintenance.js").path
         let fd=open(path,O_RDONLY|O_NOFOLLOW)
         guard fd>=0 else{return}
@@ -302,7 +302,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
 
             if line.contains("WAND_NEEDS_CONFIG") { log("UPLOADING_RUNTIME", commands.count); for command in commands { queue(command) } }
             if line.hasSuffix("WAND_BRIDGE_READY") {
-                queue("E.setFlags({pretokenise:1});global.wandDoubleClickSeconds="+String(min(0.3,NSEvent.doubleClickInterval))+";if(global.WAND_BRIDGE_REVISION==='"+bridgeRevision(modeBridge)+"')print('WAND_MODE_ROUTING_READY');else print('WAND_PATCH_NEEDED');")
+                queue("E.setFlags({pretokenise:1});global.wandDoubleClickSeconds="+String(min(0.3,NSEvent.doubleClickInterval))+";if(global.WAND_BRIDGE_REVISION==='"+bridgeRevision(modeBridge)+"'&&global.wandMotionReady!==false)print('WAND_MODE_ROUTING_READY');else print('WAND_PATCH_NEEDED');")
             }
             if line.hasSuffix("WAND_PATCH_NEEDED") {loadModeBridge()}
             if line.hasSuffix("WAND_MODE_ROUTING_READY") {
@@ -627,7 +627,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func handle(_ payload: String) {
         let values = payload.split(separator: ",", omittingEmptySubsequences: false)
         guard values.count == 3, let x = Int(values[0]), let y = Int(values[1]), let b = Int(values[2]),
-              (-127...127).contains(x), (-127...127).contains(y), (0...3).contains(b), !restoring, !scrollActive, AXIsProcessTrusted() else { return }
+              (-4095...4095).contains(x), (-4095...4095).contains(y), (0...3).contains(b), !restoring, !scrollActive, AXIsProcessTrusted() else { return }
         reportCount += 1
         if reportCount == 1 { log("FIRST_DEVICE_REPORT_VALIDATED") }
         let point = WandPointerBounds.clamp(CGEvent(source: nil)?.location ?? .zero,to:pointerDisplays)

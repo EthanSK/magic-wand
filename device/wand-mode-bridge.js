@@ -61,6 +61,34 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // preserves the callback object and scope, including the calibrated zero.
   // Keep the discovery marker so an interrupted update can safely reapply.
   global.wandLiveMotionCallback.replaceWith(function(a){var g=a.gyro;});
+  // HID is still byte-bounded. UART text carries wider counts so fast travel
+  // is not thrown away before the Mac can clamp it to actual screens.
+  pump.replaceWith(function(){});
+  pump.replaceWith(function(){
+  if (!connected || busy) return;
+  var hasState=states.length>0;
+  var b=hasState?states[0]:sentButtons;
+  var limit=global.wandBridgeOriginalSend?4095:127;
+  var x=hasState?0:Math.max(-limit,Math.min(limit,moveX));
+  var y=hasState?0:Math.max(-limit,Math.min(limit,moveY));
+  if (!hasState && !x && !y) return;
+  var token=epoch;
+  busy=true;
+  try {
+    mouse.send(x,y,b,function() {
+      if (token!==epoch) return;
+      busy=false; sentButtons=b;
+      if (hasState) states.shift();
+      if (states.length) pump();
+      // New motion is deliberately not replayed after a delayed report.
+    });
+    if (!hasState) {moveX-=x; moveY-=y;}
+  } catch(e) {
+    // Editor connections and a host not yet subscribed to HID can reject.
+    busy=false; moveX=0; moveY=0;
+    if (states.length && sendTimer===undefined) sendTimer=setTimeout(function(){sendTimer=undefined;pump();},20);
+  }
+});
   // Latency first: retain the accepted sensor rate and filter, reduce both
   // pointer axes by 20%, and keep a one-second sensor grace between gestures.
   // Pointer output still stops immediately; only sensor power-down is deferred.
@@ -84,22 +112,25 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   global.wandSlackX=global.wandSlackY=0;
   // Pure motion calculation lives separately to keep each tokenised upload
   // statement small enough for the Puck's memory. No arrays per gyro sample.
-  global.wandPointerSlack=function(x,y,dt,speed,radius,recentre,quietSpeed){
-    // Separate temporal evidence from the spatial slack. Never replay rejected samples.
-    if(!global.wandSlackX&&!global.wandSlackY){global.wandIX=global.wandIY=global.wandIS=global.wandIT=0;}
-    var a=1-Math.exp(-dt/0.15);
-    global.wandIX=(global.wandIX||0)+a*(x-(global.wandIX||0));
-    global.wandIY=(global.wandIY||0)+a*(y-(global.wandIY||0));
-    global.wandIS=(global.wandIS||0)+a*(speed-(global.wandIS||0));
-    var m=Math.sqrt(global.wandIX*global.wandIX+global.wandIY*global.wandIY);
-    global.wandIT=m>0.45&&m>global.wandIS*0.8?Math.min(0.3,(global.wandIT||0)+dt):Math.max(0,(global.wandIT||0)-dt*3);
-    global.wandIntentActive=speed>0.45&&global.wandIT>=0.25;
-    var ox=global.wandSlackX+x*dt,oy=global.wandSlackY+y*dt;
-    var om=Math.sqrt(ox*ox+oy*oy),qx=0,qy=0;
-    if(!global.wandIntentActive&&(om<=radius||speed<=quietSpeed)){var decay=Math.exp(-dt/recentre);ox*=decay;oy*=decay;om*=decay;}
-    if(om>radius){var excess=(om-radius)/om;qx=ox*excess;qy=oy*excess;ox-=qx;oy-=qy;}
-    global.wandSlackX=ox;global.wandSlackY=oy;global.wandStepX=qx;global.wandStepY=qy;
-  };
+  global.wandPointerSlack=(function(){
+    // Private scalar state avoids repeated searches through the device's global
+    // object. Reset on the same zero-slack boundary as the original algorithm.
+    var ix=0,iy=0,is=0,it=0;
+    return function(x,y,dt,speed,radius,recentre,quietSpeed){
+      var g=global,m=Math,ox=g.wandSlackX,oy=g.wandSlackY;
+      if(!ox&&!oy)ix=iy=is=it=0;
+      var a=1-m.exp(-dt/0.15);
+      ix+=a*(x-ix);iy+=a*(y-iy);is+=a*(speed-is);
+      var mean=m.sqrt(ix*ix+iy*iy);
+      it=mean>0.45&&mean>is*0.8?m.min(0.3,it+dt):m.max(0,it-dt*3);
+      var active=speed>0.45&&it>=0.25;
+      ox+=x*dt;oy+=y*dt;
+      var om=m.sqrt(ox*ox+oy*oy),qx=0,qy=0;
+      if(!active&&(om<=radius||speed<=quietSpeed)){var decay=m.exp(-dt/recentre);ox*=decay;oy*=decay;om*=decay;}
+      if(om>radius){var excess=(om-radius)/om;qx=ox*excess;qy=oy*excess;ox-=qx;oy-=qy;}
+      g.wandIntentActive=active;g.wandSlackX=ox;g.wandSlackY=oy;g.wandStepX=qx;g.wandStepY=qy;
+    };
+  })();
   global.wandPowerDownGyro=function(){
     if(connected&&bias)Puck.accelOn(1.6);else Puck.accelOff();gyroAwake=false;motionWarmup=0;lastTime=0;
     fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;
@@ -143,7 +174,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   var g=a.gyro;
   var G=global,C=CONFIG,M=Math;
   var now=getTime();
-  G.wandReportIMU(a,now);
+  if(now>=G.wandIMUNext)G.wandReportIMU(a,now);
   if (!g || (!gyroAwake&&bias)) return;
   if (!bias) {
     if (now>calibrationDeadline) {calibrationLit=false;updateLights();sleepGyro();return;}
@@ -181,7 +212,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     lastTime=now;fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;return;
   }
   var gap=M.max(0,now-lastTime),dt=M.min(0.05,gap);lastTime=now;
-  motionStats.count++;motionStats.elapsed+=gap;motionStats.maxGap=M.max(motionStats.maxGap,gap);
+  motionStats.count++;motionStats.elapsed+=gap;if(gap>motionStats.maxGap)motionStats.maxGap=gap;
   if(scrollHeld){
     G.wandSlackX=G.wandSlackY=0;
     var sx=(g[C.xAxis]-bias[C.xAxis])/134,sy=(g[C.yAxis]-bias[C.yAxis])/134,sk=radialKeep(sx,sy);
@@ -210,8 +241,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   var x=fractionX<0?M.ceil(fractionX):M.floor(fractionX);
   var y=fractionY<0?M.ceil(fractionY):M.floor(fractionY);
   fractionX-=x; fractionY-=y;
-  moveX=M.max(-127,M.min(127,moveX+x));
-  moveY=M.max(-127,M.min(127,moveY+y));
+  var limit=G.wandBridgeOriginalSend?4095:127;
+  moveX=M.max(-limit,M.min(limit,moveX+x));
+  moveY=M.max(-limit,M.min(limit,moveY+y));
   pump();
 
   });
@@ -228,7 +260,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(connected&&global.wandLastFollow!==moveLatched){global.wandLastFollow=moveLatched;Bluetooth.println('@FOLLOW '+(moveLatched?1:0));}
     var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN);
     var mode=(global.WAND_UPDATING||global.wandMotionReady===false)?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':(scrollHeld||global.wandCircleScrolling)?'scroll':global.wandAppMode?'app':move?'mouse':hud?'hud':(global.wandRecording||!digitalRead(STT_PIN))?'recording':'idle';
-    lightLevels=mode==='update'?[1,0.2,0]:mode==='calibration'||mode==='recording'?[1,0,0]:mode==='disconnected'?[0.08,0.016,0]:mode==='scroll'?[0,1,1]:mode==='app'?(global.wandReviewFiles?[1,0,1]:[0,1,0]):mode==='mouse'?[0,0,1]:mode==='hud'?[1,0.2,0]:[0,0,0];
+    lightLevels=mode==='update'?[0.45,0.45,0.45]:mode==='calibration'||mode==='recording'?[1,0,0]:mode==='disconnected'?[0.08,0.016,0]:mode==='scroll'?[0,1,1]:mode==='app'?(global.wandReviewFiles?[1,0,1]:[0,1,0]):mode==='mouse'?[0,0,1]:mode==='hud'?[1,0.2,0]:[0,0,0];
     writeLight(LED1,lightLevels[0]);writeLight(LED2,lightLevels[1]);writeLight(LED3,lightLevels[2]);
     if(connected&&mode!==global.wandLastLightState){global.wandLastLightState=mode;print('WAND_LIGHT_STATE '+mode+' '+JSON.stringify(lightLevels));}
   });

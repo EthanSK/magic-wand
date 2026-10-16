@@ -180,3 +180,12 @@ test("Top starts and stops Agent Flow, and the recording light yields to other m
   assert(!s.pipeline.agentFlow.recording, "a later press stops on release");
   assert.deepEqual(s.w.colors(), [0, 0, 0]);
 });
+
+
+test('receiver accepts wide UART motion and still clamps to the screen', () => {
+ const s=setup();const before=s.mac.location();
+ s.pipeline.receiver.handleFrame(300,200,0);
+ assert.deepEqual(s.mac.location(),{x:Math.min(before.x+300,s.mac.width-1),y:Math.min(before.y+200,s.mac.height-1)});
+ s.pipeline.receiver.handleFrame(-4095,-4095,0);assert.deepEqual(s.mac.location(),{x:0,y:0});
+ const at=s.mac.location();s.pipeline.receiver.handleFrame(4096,0,0);assert.deepEqual(s.mac.location(),at);
+});
