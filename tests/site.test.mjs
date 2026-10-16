@@ -36,8 +36,8 @@ test("the 3D wand keeps its tip in view across the whole aim range", () => {
     camera.updateMatrixWorld();
     const rig = buildRig(THREE);
     const tip = (yaw, pitch) => { rig.setAim(yaw, pitch); return rig.tipWorld().clone().project(camera); };
-    for (const yaw of [-24, 0, 24]) {
-      for (const pitch of [-18, 0, 18]) {
+    for (const yaw of [-48, 0, 48]) {
+      for (const pitch of [-32, 0, 32]) {
         const point = tip(yaw, pitch);
         assert(Math.abs(point.x) < 0.95 && Math.abs(point.y) < 0.95, `tip visible at ${yaw}, ${pitch} (aspect ${aspect})`);
       }
