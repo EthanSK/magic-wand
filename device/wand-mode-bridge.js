@@ -34,7 +34,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     resetMoveGesture();
   });});
   global.wandCircleScrolling=false;
-  if(!global.wandDoubleClickSeconds)global.wandDoubleClickSeconds=0.8;
+  global.wandDoubleClickSeconds=0.3;
   // A mode takes over deliberately, without leaving the other mode moving too.
   setHUDOpen.replaceWith(function(open){
     if(open){
@@ -51,6 +51,15 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(connected&&(scrollHeld||moveLatched||hudOpen))wakeGyro();else if(bias)sleepGyro();
     updateLights();
   });
+  // Keep the actual registered sensor callback, including its saved scope.
+  var mh=Puck['#onaccel'];if(typeof mh==='function')mh=[mh];
+  var mc=(mh||[]).filter(function(f){return typeof f==='function'&&f.toString().indexOf('var g=a.gyro')>=0;});
+  if(mc.length!==1)throw Error('WAND_MOTION_CALLBACK_NOT_UNIQUE '+mc.length);
+  global.wandLiveMotionCallback=mc[0];delete global.mh;delete global.mc;
+  // Free the old function body before parsing its larger replacement. This
+  // preserves the callback object and scope, including the calibrated zero.
+  // Keep the discovery marker so an interrupted update can safely reapply.
+  global.wandLiveMotionCallback.replaceWith(function(a){var g=a.gyro;});
   // Latency first: retain the accepted sensor rate and filter, reduce both
   // pointer axes by 20%, and keep a one-second sensor grace between gestures.
   // Pointer output still stops immediately; only sensor power-down is deferred.
@@ -73,9 +82,18 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // Pure motion calculation lives separately to keep each tokenised upload
   // statement small enough for the Puck's memory. No arrays per gyro sample.
   global.wandPointerSlack=function(x,y,dt,speed,radius,recentre,quietSpeed){
+    // Separate temporal evidence from the spatial slack. Never replay rejected samples.
+    if(!global.wandSlackX&&!global.wandSlackY){global.wandIX=global.wandIY=global.wandIS=global.wandIT=0;}
+    var a=1-Math.exp(-dt/0.15);
+    global.wandIX=(global.wandIX||0)+a*(x-(global.wandIX||0));
+    global.wandIY=(global.wandIY||0)+a*(y-(global.wandIY||0));
+    global.wandIS=(global.wandIS||0)+a*(speed-(global.wandIS||0));
+    var m=Math.sqrt(global.wandIX*global.wandIX+global.wandIY*global.wandIY);
+    global.wandIT=m>0.45&&m>global.wandIS*0.8?Math.min(0.3,(global.wandIT||0)+dt):Math.max(0,(global.wandIT||0)-dt*3);
+    global.wandIntentActive=speed>0.45&&global.wandIT>=0.25;
     var ox=global.wandSlackX+x*dt,oy=global.wandSlackY+y*dt;
     var om=Math.sqrt(ox*ox+oy*oy),qx=0,qy=0;
-    if(om<=radius||speed<=quietSpeed){var decay=Math.exp(-dt/recentre);ox*=decay;oy*=decay;om*=decay;}
+    if(!global.wandIntentActive&&(om<=radius||speed<=quietSpeed)){var decay=Math.exp(-dt/recentre);ox*=decay;oy*=decay;om*=decay;}
     if(om>radius){var excess=(om-radius)/om;qx=ox*excess;qy=oy*excess;ox-=qx;oy-=qy;}
     global.wandSlackX=ox;global.wandSlackY=oy;global.wandStepX=qx;global.wandStepY=qy;
   };
@@ -109,17 +127,8 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(!connected||!bias||!a.acc||now<global.wandIMUNext)return;
     global.wandIMUNext=now+0.1;
     var q=a.acc,g=a.gyro,r=gyroAwake&&g?Math.sqrt(Math.pow((g.x-bias.x)/134,2)+Math.pow((g.y-bias.y)/134,2)+Math.pow((g.z-bias.z)/134,2)):0;
-    Bluetooth.println('@IMU '+q.x+','+q.y+','+q.z+','+Math.round(r*100)+','+((!digitalRead(MOVE_PIN)||!digitalRead(HUD_PIN)||!digitalRead(STT_PIN))?1:0));
+    Bluetooth.println('@IMU '+q.x+','+q.y+','+q.z+','+Math.round(r*100)+','+((!digitalRead(MOVE_PIN)||!digitalRead(HUD_PIN)||!digitalRead(STT_PIN))?1:0)+','+((moveLatched&&(global.wandSlackX!==0||global.wandSlackY!==0)&&global.wandIntentActive)?1:0));
   };
-  // Keep the actual registered sensor callback, including its saved scope.
-  var mh=Puck['#onaccel'];if(typeof mh==='function')mh=[mh];
-  var mc=(mh||[]).filter(function(f){return typeof f==='function'&&f.toString().indexOf('var g=a.gyro')>=0;});
-  if(mc.length!==1)throw Error('WAND_MOTION_CALLBACK_NOT_UNIQUE '+mc.length);
-  global.wandLiveMotionCallback=mc[0];delete global.mh;delete global.mc;
-  // Free the old function body before parsing its larger replacement. This
-  // preserves the callback object and scope, including the calibrated zero.
-  // Keep the discovery marker so an interrupted update can safely reapply.
-  global.wandLiveMotionCallback.replaceWith(function(a){var g=a.gyro;});
   // Pressing or releasing any grip switch can twist the wand. Only these
   // brief edges are guarded; steady aiming keeps the existing fast filter.
   if(global.wandNoiseGuardWatches)global.wandNoiseGuardWatches.forEach(function(id){try{clearWatch(id);}catch(e){}watches=watches.filter(function(w){return w!==id;});});
@@ -250,6 +259,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       // Remember the previous tap for the Mac's full double-click window, even
       // if its ordinary click has already been posted after the short delay.
       global.wandDragCandidate=tapPending||(getTime()-lastMoveTap<=global.wandDoubleClickSeconds);
+      print('WAND_BUTTON_STATE '+JSON.stringify({edge:'down',mode:moveGestureMode,follow:moveLatched,dragCandidate:global.wandDragCandidate}));
       lastMoveTap=-100;
       secondTap=tapPending;
       if(tapTimer!==undefined)clearTimeout(tapTimer);

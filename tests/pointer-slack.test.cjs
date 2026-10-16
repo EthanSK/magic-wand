@@ -52,3 +52,12 @@ tremor(frozen,.25,35);assert.equal(moving(frozen).length,0,'release click freeze
 rate(frozen,0,0,.2);tremor(frozen,2,35);assert.equal(moving(frozen).length,0,'HIGH resume stays still until intentional movement');
 rate(frozen,10,0,.3);assert(moving(frozen).length>0,'HIGH intentional movement resumes');
 console.log('PASS: radial tremor/drift rejection at 35/104Hz in HIGH/LOW, no noise replay, drift after sweep, slow/fine aiming, diagonals, reversal and 300 ms release freeze.');
+
+for(const low of [false,true])for(const hz of [35,104])for(const sign of [-1,1]){
+ const w=fresh(low);rate(w,.5*sign,0,3,hz);
+ assert(Math.abs(counts(w)[0])>=(low?7:25),'sustained 0.5 deg/s must escape at both rates and signs');
+ const f=fresh(low);rate(f,8,0,.4,hz);f.frames.length=0;rate(f,.5,0,2,hz);
+ assert(Math.abs(counts(f)[0])>=(low?5:20),'slow continuation after intentional sweep');
+ const d=fresh(low);rate(d,.3,.3,5,hz);assert.equal(moving(d).length,0,'existing diagonal drift remains rejected');
+}
+console.log('PASS slow starts, recent intentional motion, and accepted residual drift');

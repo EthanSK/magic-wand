@@ -70,8 +70,8 @@ for (const bridge of ["readable", "fragments"]) {
     // Second held press within the Mac's double-click window, after the ordinary click fired.
     w.advance(0.3); w.tap(); w.advance(0.9);
     frames.length = 0;
-    w.tap(); w.advance(0.5); w.edge("D1", 0); w.advance(0.3);
-    assert(ctx.dragging, "second held press uses the Mac double-click window");
+    w.tap(); w.advance(0.25); w.edge("D1", 0); w.advance(0.3);
+    assert(ctx.dragging, "second held press uses the shortened 300 ms window");
     w.edge("D1", 1);
     assert(!ctx.dragging && ctx.moveLatched);
     ctx.setMouseFollow(false);

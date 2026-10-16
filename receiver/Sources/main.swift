@@ -294,7 +294,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line.contains("Error") || line.contains("OUT OF MEMORY") || line.contains("Uncaught") { log("DEVICE_ERROR", line) }
             if line.contains("WAND_NEEDS_CONFIG") { log("UPLOADING_RUNTIME", commands.count); for command in commands { queue(command) } }
             if line.hasSuffix("WAND_BRIDGE_READY") {
-                queue("E.setFlags({pretokenise:1});global.wandDoubleClickSeconds="+String(NSEvent.doubleClickInterval)+";if(global.WAND_BRIDGE_REVISION==='"+bridgeRevision(modeBridge)+"')print('WAND_MODE_ROUTING_READY');else print('WAND_PATCH_NEEDED');")
+                queue("E.setFlags({pretokenise:1});global.wandDoubleClickSeconds="+String(min(0.3,NSEvent.doubleClickInterval))+";if(global.WAND_BRIDGE_REVISION==='"+bridgeRevision(modeBridge)+"')print('WAND_MODE_ROUTING_READY');else print('WAND_PATCH_NEEDED');")
             }
             if line.hasSuffix("WAND_PATCH_NEEDED") {loadModeBridge()}
             if line.hasSuffix("WAND_MODE_ROUTING_READY") {
@@ -353,7 +353,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     // MIDDLE latches the HUD, then operates the selected native card.
-    var hudDoubleClickInterval:Double {max(0.25,NSEvent.doubleClickInterval)}
+    var hudDoubleClickInterval:Double {max(0.25,min(0.3,NSEvent.doubleClickInterval))}
     func handleMove(_ payload:String) {
         guard !restoring,!scrollActive,AXIsProcessTrusted() else{return}
         let f=payload.split(separator:",",omittingEmptySubsequences:false)
@@ -644,8 +644,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func handleIMU(_ payload:String){
         guard ready,!restoring else{return}
         let parts=payload.split(separator:",",omittingEmptySubsequences:false)
-        guard parts.count==5,let x=Double(parts[0]),let y=Double(parts[1]),let z=Double(parts[2]),let gyro=Double(parts[3]),let held=Int(parts[4]),(0...1).contains(held),abs(x)<=32768,abs(y)<=32768,abs(z)<=32768,(0...100_000).contains(gyro) else{return}
+        guard (5...6).contains(parts.count),let x=Double(parts[0]),let y=Double(parts[1]),let z=Double(parts[2]),let gyro=Double(parts[3]),let held=Int(parts[4]),(0...1).contains(held),abs(x)<=32768,abs(y)<=32768,abs(z)<=32768,(0...100_000).contains(gyro) else{return}
         let now=ProcessInfo.processInfo.systemUptime
+        if parts.count==6,parts[5]=="0" || parts[5]=="1" {dwell.intent(parts[5]=="1",now:now);scheduleDwell()}
         let events=restDetection.update(x:x/8192,y:y/8192,z:z/8192,gyro:gyro/100,now:now,buttons:held==1 || scrollActive || buttons != 0,idle:!dwell.following && !recording.isRecording && !hudSession)
         for event in events {
             switch event {

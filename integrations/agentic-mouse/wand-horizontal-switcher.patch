@@ -1,0 +1,104 @@
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -35,6 +35,7 @@
+ 
+ public final class WandPersistentController {
+     public var onAdjustStep: ((WheelChordDirection)->Bool)?
++    public var onSwitchAppStep: ((WheelChordDirection)->Bool)?
+     public var onContext: ((Bool)->Void)?
+     private let target: WandModeControlling
+     private let scheduler: TickScheduler
+@@ -115,6 +116,12 @@
+             if var nav=current.navigation {
+                 nav.apply(deltaX:dx,deltaY:dy);current.navigation=nav;selected=nav.focusedCell
+                 target.setPointerFocus(nav.pointerFocus)
++            } else if target.pageGeneration == current.pageGeneration, target.isWandHome, current.cell == .switchApp {
++                // The system switcher is horizontal: moving right selects the next app.
++                // Command is already held by the same native press lifecycle.
++                for step in current.tracker.apply(deltaY:-dx) where onSwitchAppStep?(step.wheelDirection) == true {
++                    current.sentSteps += 1;current.netSteps += step == .physicalUp ? 1 : -1
++                }
+             } else if target.pageGeneration == current.pageGeneration, target.activeWheelControl != nil {
+                 for step in current.tracker.apply(deltaY:dy) where onAdjustStep?(step.wheelDirection) == true {
+                     current.sentSteps += 1;current.netSteps += step == .physicalUp ? 1 : -1
+--- a/Sources/AgenticMouseApp/WandHeldKeys.swift
++++ b/Sources/AgenticMouseApp/WandHeldKeys.swift
+@@ -44,6 +44,19 @@
+         return true
+     }
+ 
++    @discardableResult
++    func switchAppStep(_ direction:WheelChordDirection) -> Bool {
++        guard held == .switchApp else {return false}
++        let reverse = direction == .up
++        let flags:CGEventFlags = reverse ? [.maskCommand,.maskShift] : .maskCommand
++        var events:[Event] = []
++        if reverse {events.append(.modifier(keyCode:56,flags:flags,at:0))}
++        events.append(.key(keyCode:48,flags:flags,isDown:true,at:0.006))
++        events.append(.key(keyCode:48,flags:flags,isDown:false,at:0.026))
++        if reverse {events.append(.modifier(keyCode:56,flags:.maskCommand,at:0.032))}
++        return post(events)
++    }
++
+     func release() {
+         guard held != nil else {return}
+         _ = post(releaseEvents)
+--- a/Sources/AgenticMouseApp/AppDelegate.swift
++++ b/Sources/AgenticMouseApp/AppDelegate.swift
+@@ -1589,6 +1589,10 @@
+         wandSelectionController = controller
+         let persistent = WandPersistentController(target:coordinator,scheduler:DispatchTickScheduler(),clock:SystemMonotonicClock(),allowed:{[weak self] in self?.mouseCommandsAllowed == true})
+         persistent.onAdjustStep = {[weak self] direction in self?.performWandAdjustStep(direction) ?? false}
++        persistent.onSwitchAppStep = {[weak self] direction in
++            guard let self,self.mouseCommandsAllowed,AXIsProcessTrusted() else{return false}
++            return self.wandHeldKeys.switchAppStep(direction)
++        }
+         persistent.onContext = { [weak coordinator] active in
+             WandContextSender.send(active:active,appMode:active && coordinator?.page == .appSpecific ? coordinator?.appSpecificTarget?.rawValue : nil)
+         }
+--- a/Tests/AgenticMouseAppTests/WandHeldKeysTests.swift
++++ b/Tests/AgenticMouseAppTests/WandHeldKeysTests.swift
+@@ -4,6 +4,21 @@
+ import XCTest
+ 
+ final class WandHeldKeysTests: XCTestCase {
++    func testSwitchAppStepsInBothDirectionsOnlyWhileCommandIsOwned() {
++        var batches:[[SyntheticKeyboardChordPoster.Event]]=[]
++        let keys=WandHeldKeys {batches.append($0);return true}
++        XCTAssertFalse(keys.switchAppStep(.down))
++        keys.handle(page:.modes,home:true,cell:.switchApp,phase:.press)
++        XCTAssertTrue(keys.switchAppStep(.down))
++        XCTAssertEqual(batches.last?.map(\.keyCode),[48,48])
++        XCTAssertTrue(batches.last!.allSatisfy{$0.flags == .maskCommand})
++        XCTAssertTrue(keys.switchAppStep(.up))
++        XCTAssertEqual(batches.last?.map(\.keyCode),[56,48,48,56])
++        XCTAssertEqual(batches.last?.last?.flags,.maskCommand)
++        keys.release()
++        XCTAssertEqual(batches.last?.last?.flags,[])
++        XCTAssertFalse(keys.switchAppStep(.down))
++    }
+     func testSwitchAppRetainsCommandUntilReleaseAndDoesNotRepeat() {
+         var batches:[[SyntheticKeyboardChordPoster.Event]]=[]
+         let keys=WandHeldKeys { batches.append($0);return true }
+--- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
++++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+@@ -62,6 +62,19 @@
+         XCTAssertNil(target.activeWheelControl);XCTAssertTrue(control.isOpen)
+         XCTAssertEqual(control.focusedCell?.rawValue,1)
+     }
++    func testHeldSwitchAppUsesHorizontalMotionAndPreservesRelease() {
++        var switched:[WheelChordDirection]=[]
++        control.onSwitchAppStep={switched.append($0);return true}
++        control.handle(.init(.press,id:"switch-app-1"))
++        control.handle(.init(.motion,id:"switch-app-1",sequence:1,y:20))
++        XCTAssertTrue(switched.isEmpty,"vertical aiming cannot select another app")
++        control.handle(.init(.motion,id:"switch-app-1",sequence:2,x:7,y:20))
++        XCTAssertEqual(switched,[.down])
++        control.handle(.init(.motion,id:"switch-app-1",sequence:3,x:-7,y:20))
++        XCTAssertEqual(switched,[.down,.up,.up])
++        control.handle(.init(.release,id:"switch-app-1",sequence:4))
++        XCTAssertTrue(control.isOpen)
++    }
+     func testScreenshotUsesNativePressReleaseWithoutDuplicateAction(){
+         var released:[WheelChordControl]=[]
+         target.onWheelControlRelease={_,control in released.append(control)}

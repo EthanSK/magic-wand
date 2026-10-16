@@ -33,7 +33,7 @@
       "./wand-scene.mjs": "./wand-scene.mjs?v=68bf658fc1",
       "./sim/pipeline.mjs": "./sim/pipeline.mjs?v=5d25bab12d",
       "./sim/hud.mjs": "./sim/hud.mjs?v=b6afc5840e",
-      "./sim/receiver.mjs": "./sim/receiver.mjs?v=8ae38c3a77",
+      "./sim/receiver.mjs": "./sim/receiver.mjs?v=53e325475b",
       "./sim/mac.mjs": "./sim/mac.mjs?v=ceefc6fafb"
     }
   }
@@ -43,8 +43,8 @@
     "worker": "./sim/worker.js?v=418f86ed95",
     "shim": "./sim/espruino.js?v=0fba4637ae",
     "device": "./device/wand-mouse-prototype.js?v=036f2bd951",
-    "bridge": "./device/wand-mode-bridge.compact.js?v=2493423e97",
-    "wand": "./data/wand.json?v=f1e7ddfdb5",
+    "bridge": "./device/wand-mode-bridge.compact.js?v=95988d7aec",
+    "wand": "./data/wand.json?v=5b61e15cc2",
     "hud": "./data/hud.json?v=c804168e26"
   }
   </script>
@@ -266,7 +266,7 @@
             <tr><th scope="row">Hold</th><td>220 ms</td><td>Longer presses count as holds</td></tr>
             <tr><th scope="row">LOW movement delay</th><td>90 ms</td><td>Release drops the last unshown movement; HIGH and actual dragging stay immediate</td></tr>
             <tr><th scope="row">HIGH stop-to-click</th><td>450 ms still</td><td>One click after deliberate movement; no repeat while still</td></tr>
-            <tr><th scope="row">Double-click window</th><td>0.8 s</td><td>Read from the Mac’s setting</td></tr>
+            <tr><th scope="row">Double-click window</th><td>0.3 s</td><td>Read from the Mac’s setting</td></tr>
             <tr><th scope="row">Scrolling</th><td>Horizontal × 1.4</td><td>Mac wheel gain 0.8</td></tr>
             <tr><th scope="row">Middle report</th><td>After 80 ms</td><td>So Bottom + Middle can become a scroll</td></tr>
             <tr><th scope="row">Reports</th><td>Every 30 ms</td><td>While the HUD or scrolling is active</td></tr>
@@ -294,7 +294,7 @@
             <li>HIGH dwell, held rough circles, LOW release-jolt buffering, desk inference and VS Code review pass automated checks; physical acceptance is pending.</li>
             <li>End-to-end latency, accuracy and battery life haven’t been measured.</li>
           </ul>
-          <p class="versions"><span>Receiver 1.2.21 (26)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge 2493423e</span></p>
+          <p class="versions"><span>Receiver 1.2.23 (28)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge 95988d7a</span></p>
           <p class="fine">Updated 16 October 2026</p>
           <!-- /wand:status -->
         </div>

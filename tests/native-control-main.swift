@@ -46,3 +46,14 @@ _=review.button(down:true,now:201.2);_=review.button(down:false,now:201.25);prec
 _=review.button(down:true,now:202);_=review.motion(y:0,now:202.1);let fileStep=review.motion(y:9,now:202.4);precondition(fileStep.allSatisfy{$0.mode=="files"})
 precondition(review.cancel().map{$0.phase}==["cancel"])
 print("PASS: review directions, ordered lifecycle, double-tap file toggle and cancellation")
+
+let intentDwell=WandDwellClick();intentDwell.follow(true);intentDwell.move(dx:20,dy:0,now:10,eligible:true)
+intentDwell.intent(true,now:10.3)
+precondition(!intentDwell.tick(now:10.5),"active subpixel motion prevents dwell")
+intentDwell.intent(true,now:10.7);precondition(!intentDwell.tick(now:11.0))
+intentDwell.intent(false,now:11.1);precondition(!intentDwell.tick(now:11.4));precondition(intentDwell.tick(now:11.56))
+let stale=WandDwellClick();stale.follow(true);stale.move(dx:20,dy:0,now:10,eligible:true);stale.intent(true,now:10.2)
+precondition(stale.tick(now:10.81),"lost intent heartbeat expires")
+print("PASS: active subpixel motion, confirmed rest and bounded stale intent")
+
+let quietDwell=WandDwellClick();quietDwell.follow(true);quietDwell.move(dx:20,dy:0,now:1,eligible:true);quietDwell.intent(false,now:1.3);quietDwell.intent(false,now:1.4);precondition(quietDwell.tick(now:1.46),"quiet heartbeats must not postpone dwell")
