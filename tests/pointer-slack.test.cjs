@@ -48,7 +48,7 @@ for(const low of [false,true])for(const hz of [35,104]){
  assert.equal(circle.ctx.fractionX,0);assert.equal(circle.ctx.fractionY,0);
 }
 const frozen=fresh();frozen.edge('D1',0);frozen.advance(.3);rate(frozen,20,0,.2);frozen.edge('D1',1);frozen.frames.length=0;
-tremor(frozen,.9,35);assert.equal(moving(frozen).length,0,'release click freeze rejects jitter');
+tremor(frozen,.25,35);assert.equal(moving(frozen).length,0,'release click freeze rejects jitter');
 rate(frozen,0,0,.2);tremor(frozen,2,35);assert.equal(moving(frozen).length,0,'HIGH resume stays still until intentional movement');
 rate(frozen,10,0,.3);assert(moving(frozen).length>0,'HIGH intentional movement resumes');
-console.log('PASS: radial tremor/drift rejection at 35/104Hz in HIGH/LOW, no noise replay, drift after sweep, slow/fine aiming, diagonals, reversal and one-second release freeze.');
+console.log('PASS: radial tremor/drift rejection at 35/104Hz in HIGH/LOW, no noise replay, drift after sweep, slow/fine aiming, diagonals, reversal and 300 ms release freeze.');

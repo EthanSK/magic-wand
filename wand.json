@@ -11,11 +11,11 @@
     "receiver": "1.2.17",
     "receiverBuild": "22",
     "deviceRuntime": "wand-e1ce30d7c407",
-    "bridgeRevision": "202c1dd6c3271edac7b72f1783d9eaae5b2e4ff99383bcaaaa49562237813158"
+    "bridgeRevision": "c68fa9b403e6a5bede176ccd4e53d0db875e593980d25944a2f162d655af0757"
   },
   "status": [
     "Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.",
-    "Held positioning clicks on release and resumes prior high sensitivity after one second. The new still-hand tolerance needs a physical check.",
+    "Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.",
     "End-to-end latency, accuracy and battery life haven’t been measured."
   ],
   "hardware": {
@@ -70,8 +70,8 @@
         ["Tap", "The pointer follows the wand, without clicking"],
         ["Hold, turn, release", "Click once where you stop"],
         ["Tap while following", "Click"],
-        ["Hold while following", "Move at low sensitivity; release clicks, pauses one second, then resumes high sensitivity"],
-        ["Tap, then hold", "Drag; release drops and stops"],
+        ["Hold while following", "Move at low sensitivity; release clicks, pauses 300 ms, then resumes high sensitivity"],
+        ["Tap, then hold", "Drag; release drops, pauses 300 ms, then resumes prior high sensitivity"],
         ["Double tap while following", "Stop following"]
       ],
       "notes": [
@@ -107,7 +107,7 @@
   "tuning": {
     "pointerGain": 86.4,
     "heldPointerGain": 0.3333333333333333,
-    "releaseClickPauseSeconds": 1,
+    "releaseClickPauseSeconds": 0.3,
     "slackDegrees": 0.2,
     "slackRecentreSeconds": 0.35,
     "slackQuietSpeedDegreesPerSecond": 1,
