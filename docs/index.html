@@ -33,7 +33,7 @@
       "./wand-scene.mjs": "./wand-scene.mjs?v=68bf658fc1",
       "./sim/pipeline.mjs": "./sim/pipeline.mjs?v=5d25bab12d",
       "./sim/hud.mjs": "./sim/hud.mjs?v=b6afc5840e",
-      "./sim/receiver.mjs": "./sim/receiver.mjs?v=5c1984a65a",
+      "./sim/receiver.mjs": "./sim/receiver.mjs?v=fa2a9964c4",
       "./sim/mac.mjs": "./sim/mac.mjs?v=ceefc6fafb"
     }
   }
@@ -43,8 +43,8 @@
     "worker": "./sim/worker.js?v=418f86ed95",
     "shim": "./sim/espruino.js?v=0fba4637ae",
     "device": "./device/wand-mouse-prototype.js?v=036f2bd951",
-    "bridge": "./device/wand-mode-bridge.compact.js?v=c68fa9b403",
-    "wand": "./data/wand.json?v=6289fabcc5",
+    "bridge": "./device/wand-mode-bridge.compact.js?v=6fd61d2c7a",
+    "wand": "./data/wand.json?v=bdcd1384fc",
     "hud": "./data/hud.json?v=c804168e26"
   }
   </script>
@@ -132,8 +132,9 @@
           <p class="control-role"><span class="swatch" aria-hidden="true"></span>Agentic Mouse HUD</p>
           <dl class="gestures">
             <div><dt>Tap</dt><dd>Open the HUD on Switch App, then turn the wand to move the outline</dd></div>
+            <div><dt>Hold to open, turn, release</dt><dd>Use the outlined card on release</dd></div>
             <div><dt>Tap again</dt><dd>Use the outlined card</dd></div>
-            <div><dt>Hold</dt><dd>Hold the card; on some wheel cards, tilt to turn the wheel</dd></div>
+            <div><dt>Hold while open</dt><dd>Hold the card; on some wheel cards, tilt to turn the wheel</dd></div>
             <div><dt>Double tap</dt><dd>Close the HUD</dd></div>
           </dl>
           <ul class="notes"><li>The outline stops at the edges instead of wrapping.</li><li>Bottom goes back to the pointer.</li></ul>
@@ -149,7 +150,7 @@
             <div><dt>Tap, then hold</dt><dd>Drag; release drops, pauses 300 ms, then resumes prior high sensitivity</dd></div>
             <div><dt>Double tap while following</dt><dd>Stop following</dd></div>
           </dl>
-          <ul class="notes"><li>The pointer stays still while a click is decided.</li><li>Middle switches to the HUD.</li><li>High sensitivity is released-button follow. Holding Bottom is low sensitivity, at one-third speed.</li></ul>
+          <ul class="notes"><li>The pointer stays still while a click is decided.</li><li>Middle switches to the HUD.</li><li>High sensitivity is released-button follow. Holding Bottom is low sensitivity, at one-third speed.</li><li>While following with no buttons held, circle clockwise to scroll down or anticlockwise to scroll up.</li><li>The first full loop still moves the pointer; cyan shows scrolling has started. Pause to return to pointing.</li><li>The pointer stays within the real screen edges, including separate monitors.</li></ul>
         </div>
         <div class="control" data-light="scroll">
           <div class="control-head"><h3>Bottom + Middle</h3><p class="control-meta"><kbd>B</kbd>+<kbd>M</kbd></p></div>
@@ -288,9 +289,10 @@
           <ul class="status-list">
             <li>Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.</li>
             <li>Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.</li>
+            <li>Screen-edge reversal, held Middle selection and circular scrolling pass regression checks; their physical feel is still unconfirmed.</li>
             <li>End-to-end latency, accuracy and battery life haven’t been measured.</li>
           </ul>
-          <p class="versions"><span>Receiver 1.2.17 (22)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge c68fa9b4</span></p>
+          <p class="versions"><span>Receiver 1.2.19 (24)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge 6fd61d2c</span></p>
           <p class="fine">Updated 16 October 2026</p>
           <!-- /wand:status -->
         </div>

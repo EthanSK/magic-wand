@@ -9,6 +9,7 @@ rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$ROOT/receiver/Info.plist" "$APP/Contents/Info.plist"
 swiftc -O \
+  "$ROOT/receiver/Sources/WandPointerControl.swift" \
   "$ROOT/receiver/Sources/WandRecordingState.swift" \
   "$ROOT/receiver/Sources/WandControlTransport.swift" \
   "$ROOT/receiver/Sources/WandContextListener.swift" \

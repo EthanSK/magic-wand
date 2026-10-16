@@ -27,8 +27,9 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Gesture | Result |
 | --- | --- |
 | Tap | Open the HUD on Switch App, then turn the wand to move the outline |
+| Hold to open, turn, release | Use the outlined card on release |
 | Tap again | Use the outlined card |
-| Hold | Hold the card; on some wheel cards, tilt to turn the wheel |
+| Hold while open | Hold the card; on some wheel cards, tilt to turn the wheel |
 | Double tap | Close the HUD |
 
 - The outline stops at the edges instead of wrapping.
@@ -48,6 +49,9 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - The pointer stays still while a click is decided.
 - Middle switches to the HUD.
 - High sensitivity is released-button follow. Holding Bottom is low sensitivity, at one-third speed.
+- While following with no buttons held, circle clockwise to scroll down or anticlockwise to scroll up.
+- The first full loop still moves the pointer; cyan shows scrolling has started. Pause to return to pointing.
+- The pointer stays within the real screen edges, including separate monitors.
 
 **Bottom + Middle** · Scroll
 
@@ -73,7 +77,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 ## How it works
 
 1. **Puck.js.** Espruino JavaScript on the wand reads the gyro and three buttons, filters the motion and decides each gesture.
-2. **Bluetooth UART.** Short text lines carry pointer reports (`@WAND x,y,buttons`), HUD angles (`@NAV`), scrolling (`@SCROLL`), Middle presses (`@MIDDLE`), Top presses (`@STT`) and light changes.
+2. **Bluetooth UART.** Short text lines carry pointer reports (`@WAND x,y,buttons`), HUD angles (`@NAV`), scrolling (`@SCROLL`), Bottom edges (`@BOTTOM`), Middle presses (`@MIDDLE`), Top presses (`@STT`) and light changes.
 3. **Wand Receiver.** A background Mac app (Swift, CoreBluetooth) posts ordinary pointer, click and wheel events, sends HUD commands to Agentic Mouse and Top presses to Agent Flow over same-user local sockets, and sends the recording state back to the wand.
 4. **Lights.** The wand shows its mode on the Puck’s RGB light; Agent Flow’s recording notifications keep it red while recording.
 
@@ -137,9 +141,10 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 <!-- wand:status -->
 - Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.
 - Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.
+- Screen-edge reversal, held Middle selection and circular scrolling pass regression checks; their physical feel is still unconfirmed.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.17 (22) · device code `wand-e1ce30d7c407` · bridge `c68fa9b4` · updated 16 October 2026.
+Receiver 1.2.19 (24) · device code `wand-e1ce30d7c407` · bridge `6fd61d2c` · updated 16 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

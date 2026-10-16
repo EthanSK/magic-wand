@@ -39,6 +39,42 @@ function setup() {
   return { w, mac, macEvents, pipeline, turn, press, get hud() { return hud; } };
 }
 
+test("opening with held Middle navigates then selects exactly once on release", () => {
+  const s = setup();
+  s.w.edge("D2", 0); s.w.advance(0.35);
+  s.turn(-10, 0, 0.5); s.turn(0, -9, 0.5);
+  assert.equal(s.hud.cell, 9);
+  assert.equal(s.hud.action, null);
+  s.w.edge("D2", 1); s.w.advance(0.1);
+  assert.equal(s.hud.action.text, "Opens Keys mode");
+  assert(s.hud.open);
+});
+
+test("screen-edge overflow is discarded, so reversing responds immediately", () => {
+  const s = setup();
+  for (let i = 0; i < 200; i++) s.pipeline.receiver.handleFrame(0, 127, 0);
+  assert.equal(s.mac.location().y, s.mac.height - 1);
+  s.pipeline.receiver.handleFrame(0, -3, 0);
+  assert.equal(s.mac.location().y, s.mac.height - 4);
+});
+
+test("circle output uses wheel events and cyan, and Bottom immediately cancels it", () => {
+  const s = setup(); let x = 80, y = 0;
+  for (let i = 1; i <= 105; i++) {
+    const a = i / 35 * Math.PI * 2, nx = 80 * Math.cos(a), ny = 80 * Math.sin(a);
+    s.w.advance(1 / 35);
+    s.pipeline.receiver.handleFrame(Math.round(nx - x), Math.round((ny - y) * 1.4), 0); x = nx; y = ny;
+  }
+  assert(s.macEvents.some(e => e.type === "scroll" && e.dy > 0));
+  s.w.advance(0.01);
+  assert.deepEqual(s.w.colors(), [0, 1, 1]);
+  s.pipeline.receiver.handleLine("@BOTTOM 1");
+  assert(!s.pipeline.receiver.circularScroll.active);
+  const count = s.macEvents.filter(e => e.type === "scroll").length;
+  s.pipeline.receiver.handleFrame(20, 20, 0);
+  assert.equal(s.macEvents.filter(e => e.type === "scroll").length, count);
+});
+
 test("Middle opens the HUD on Switch App, turning moves the outline without wrapping, a tap uses the card", () => {
   const s = setup();
   s.press("D2", 0.12);

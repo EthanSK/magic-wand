@@ -30,6 +30,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var lastTrusted = false, ready = false, legacySignaled = false
     var lastStatusKey = ""
     var lightMode = "unknown"
+    var pointerDisplays:[CGRect]=[]
+    var displayObserver:NSObjectProtocol?
+    let circularScroll=WandCircularScroll()
+    var circleLight=false,bottomHeld=false
+    var circleTimer:Timer?
     var lastClickTime = 0.0, clickCount: Int64 = 0
     var lastClickPoint = CGPoint.zero
     var heartbeat: Timer?
@@ -38,6 +43,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let recording = WandRecordingState(cache:support.appendingPathComponent("recording-state.json"))
     var pointerInHUD=false, middleOperating=false, middleSecondTap=false
     var hudSession=false,hudEntryPress=false
+    var hudEntryPressStarted=0.0
     var navX=0.0,navY=0.0,navOriginX=0.0,navOriginY=0.0,operationOriginX=0.0,operationOriginY=0.0
     var middleX=0.0,middleY=0.0
     var middleHold:Timer?, middleTap:Timer?
@@ -81,6 +87,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     override init() {
         commands = (try? JSONDecoder().decode([String].self, from: Data(contentsOf: Bundle.main.url(forResource: "wand-commands", withExtension: "json")!))) ?? []
         super.init()
+        refreshPointerDisplays()
+        displayObserver=NotificationCenter.default.addObserver(forName:NSApplication.didChangeScreenParametersNotification,object:nil,queue:.main){[weak self] _ in self?.refreshPointerDisplays()}
         context.onChange = {[weak self] active in
             guard let self,self.ready,!self.restoring else{return}
             if !active && self.hudSession {self.hudSession=false;self.hudEntryPress=false;self.hudActive=false;self.navX=0;self.navY=0;self.stopHUDWatchdog();self.middleTap?.invalidate();self.middleTap=nil;self.middleHold?.invalidate();self.middleHold=nil;self.pointerInHUD=false;self.middleOperating=false}
@@ -199,6 +207,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func reset() {
+        cancelCircleScroll();bottomHeld=false
         lightMode="disconnected"
         hudSession=false;hudEntryPress=false
         finishScroll()
@@ -289,12 +298,17 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line.hasSuffix("WAND_RECORDING_LIGHT 0") || line.hasSuffix("WAND_RECORDING_LIGHT 1") {log("DEVICE",line)}
             if line.hasSuffix("@POINTER_MODE") {enterPointerMode()}
             if line.contains("WAND_CALIBRATED") { log(line) }
-            if let marker=line.range(of:"@MIDDLE "){handleMiddle(String(line[marker.upperBound...]))}
+            if let marker=line.range(of:"@BOTTOM ") {
+                let value=String(line[marker.upperBound...]).trimmingCharacters(in:.whitespaces)
+                if value=="0" || value=="1" {bottomHeld=value=="1";cancelCircleScroll()}
+            }
+            if let marker=line.range(of:"@MIDDLE "){cancelCircleScroll();handleMiddle(String(line[marker.upperBound...]))}
             if let marker=line.range(of:"@NAV "){handleNavigation(String(line[marker.upperBound...]))}
             if let marker = line.range(of: "@SCROLL ") { handleScroll(String(line[marker.upperBound...])) }
             if let marker = line.range(of: "@MOVE ") { handleMove(String(line[marker.upperBound...])) }
             if let marker = line.range(of: "@HUD ") { handleHUD(String(line[marker.upperBound...])) }
             if let marker = line.range(of: "@STT "), !restoring, AXIsProcessTrusted() {
+                cancelCircleScroll()
                 let value=String(line[marker.upperBound...]).trimmingCharacters(in: .whitespaces)
                 if value == "0" || value == "1" { log("SPEECH_BUTTON", value, controls.speech(down:value == "1") ? "SENT" : "UNAVAILABLE") }
             }
@@ -360,7 +374,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         switch payload.trimmingCharacters(in:.whitespaces){
         case "1":
             if !hudSession && !context.isActive {
-                hudSession=true;hudEntryPress=true;navigationOpenedHUD=true;navX=0;navY=0
+                hudSession=true;hudEntryPress=true;hudEntryPressStarted=ProcessInfo.processInfo.systemUptime;navigationOpenedHUD=true;navX=0;navY=0
                 controls.persistent("open");resumeHUDNavigation()
                 queue("setHUDOpen(true);")
                 return
@@ -370,7 +384,17 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             operationOriginX=navX;operationOriginY=navY
             handleMove("B,0,0")
         case "0":
-            if hudEntryPress {hudEntryPress=false;navigationOpenedHUD=false;return}
+            if hudEntryPress {
+                hudEntryPress=false;navigationOpenedHUD=false
+                // Firmware delays a held Middle down by 80 ms to arbitrate the scroll chord.
+                // A short entry tap latches navigation; a >=220 ms physical hold selects on up.
+                if ProcessInfo.processInfo.systemUptime-hudEntryPressStarted >= 0.22-0.08 {
+                    controls.persistent("park");hudActive=false;stopHUDWatchdog()
+                    controls.persistent("press");controls.persistent("release")
+                    resumeHUDNavigation();log("HUD_ENTRY_HOLD_SELECTED")
+                }
+                return
+            }
             handleMove("E,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000))
         default:break
         }
@@ -434,7 +458,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard f.count==3,let x=Double(f[1]),let y=Double(f[2]),x.isFinite,y.isFinite,abs(x)<=7_200_000,abs(y)<=7_200_000 else{return}
         switch f[0]{
         case "B":
-            finishScroll();middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
+            cancelCircleScroll();finishScroll();hudEntryPress=false;middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
             if hudActive {controls.persistent("park");if navigationOpenedHUD{controls.persistent("dismiss");hudSession=false;queue("setHUDOpen(false);")}}
             else if middleOperating {controls.persistent("release")}
             hudActive=false;pointerInHUD=false;middleOperating=false;navigationOpenedHUD=false
@@ -477,16 +501,41 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         scrollActive=false;scrollWatchdog?.invalidate();scrollWatchdog=nil
         if wasActive {resumeHUDNavigation()}
     }
+    func refreshPointerDisplays() {
+        var ids=[CGDirectDisplayID](repeating:0,count:32),count:UInt32=0
+        if CGGetActiveDisplayList(UInt32(ids.count),&ids ,&count) == .success {
+            pointerDisplays=ids.prefix(Int(count)).map{CGDisplayBounds($0)}.filter{!$0.isEmpty}
+        }
+    }
+    func setCircleLight(_ active:Bool) {
+        guard circleLight != active else{return};circleLight=active
+        if ready && !restoring {queue("global.wandCircleScrolling="+(active ? "true":"false")+";updateLights();")}
+        if active && circleTimer == nil {
+            circleTimer=Timer.scheduledTimer(withTimeInterval:0.1,repeats:true){[weak self] _ in
+                guard let self else{return}
+                if self.circularScroll.expire(now:ProcessInfo.processInfo.systemUptime){self.setCircleLight(false)}
+            }
+        } else if !active {circleTimer?.invalidate();circleTimer=nil}
+    }
+    func cancelCircleScroll(){circularScroll.reset();setCircleLight(false)}
     func handle(_ payload: String) {
         let values = payload.split(separator: ",", omittingEmptySubsequences: false)
         guard values.count == 3, let x = Int(values[0]), let y = Int(values[1]), let b = Int(values[2]),
               (-127...127).contains(x), (-127...127).contains(y), (0...3).contains(b), !restoring, !scrollActive, AXIsProcessTrusted() else { return }
         reportCount += 1
         if reportCount == 1 { log("FIRST_DEVICE_REPORT_VALIDATED") }
-        let point = CGEvent(source: nil)?.location ?? .zero
+        let point = WandPointerBounds.clamp(CGEvent(source: nil)?.location ?? .zero,to:pointerDisplays)
+        if b != 0 || bottomHeld || hudSession {cancelCircleScroll()}
         transition(to: b, at: point)
         if x != 0 || y != 0 {
-            let newPoint = CGPoint(x: point.x + CGFloat(x), y: point.y + CGFloat(y))
+            let circle=circularScroll.update(dx:Double(x),dy:Double(y),now:ProcessInfo.processInfo.systemUptime,
+                eligible:b==0 && !bottomHeld && !hudSession)
+            setCircleLight(circularScroll.active)
+            if circle.consumesPointer {
+                if circle.lines != 0 {postScroll(x:0,y:circle.lines)}
+                return
+            }
+            let newPoint = WandPointerBounds.clamp(CGPoint(x: point.x + CGFloat(x), y: point.y + CGFloat(y)),to:pointerDisplays)
             let kind: CGEventType = b & 1 != 0 ? .leftMouseDragged : (b & 2 != 0 ? .rightMouseDragged : .mouseMoved)
             let button: CGMouseButton = b & 1 != 0 ? .left : (b & 2 != 0 ? .right : .left)
             CGEvent(mouseEventSource: nil, mouseType: kind, mouseCursorPosition: newPoint, mouseButton: button)?.post(tap: .cghidEventTap)
@@ -515,7 +564,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func releaseButtons() { transition(to: 0, at: CGEvent(source: nil)?.location ?? .zero) }
     func stop() {
-        guard !restoring else { return }; restoring = true; retry?.cancel(); controls.cancel(); hudWatchdog?.invalidate(); releaseButtons()
+        guard !restoring else { return }; cancelCircleScroll();restoring = true; retry?.cancel(); controls.cancel(); hudWatchdog?.invalidate(); releaseButtons()
         finishScroll();log("STOPPING"); status()
         // Preserve the low-power runtime, restoring only its original output sender.
         if device?.state == .connected && tx != nil { chunks = []; queue(restore); DispatchQueue.main.asyncAfter(deadline: .now() + 3) { exit(0) } }

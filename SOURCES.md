@@ -15,7 +15,8 @@ SHA-256; the private directory’s path isn’t recorded.
 | `receiver/Sources/WandControlTransport.swift` | HUD and speech sockets | None |
 | `receiver/Sources/WandContextListener.swift` | Agentic Mouse HUD context | None |
 | `receiver/Sources/WandRecordingState.swift` | Agent Flow recording state | None |
-| `receiver/Info.plist` | Receiver bundle 1.2.17 (22) | None |
+| `receiver/Sources/WandPointerControl.swift` | Display bounds and circular-scroll recognition | None |
+| `receiver/Info.plist` | Receiver bundle 1.2.19 (24) | None |
 | `receiver/Sources/WandDeviceConfiguration.swift` | Written for this repository | New |
 
 The installed receiver pinned one Puck’s CoreBluetooth identifier and advertised name. The public
@@ -36,9 +37,10 @@ copying them:
 
 `scripts/device_build.py` keeps the original algorithms. From the imported sources it reproduces
 the private build byte for byte: runtime `wand-e1ce30d7c407`, commands SHA-256 `33bf21e3…`,
-runtime SHA-256 `e25a4de5…`, boot image SHA-256 `b334feb2…` and bridge revision `c8ad9e20…`.
-The bridge revision matches the receiver 1.2.17 (22) bundle and the last recorded device readback
-on 16 October 2026, which also reported the click guard, three edge watches and no errors.
+runtime SHA-256 `e25a4de5…`, boot image SHA-256 `b334feb2…` and bridge revision `6fd61d2c…`.
+The bridge revision matches the receiver 1.2.19 (24) bundle and the device readback after its
+16 October 2026 reconnect. The readback verified Bottom edge reporting, circular-scroll light
+support, the reconnect handler and no device error flags. New gestures still need a physical check.
 `tests/manifest.test.mjs` recomputes these identifiers on every run.
 
 The private `wand-status.txt` described receiver 1.2.1 and an older button layout, so it wasn’t used.
@@ -75,6 +77,7 @@ stable forwarder, so the bridge’s replacements reach the same watches, timers 
 | --- | --- |
 | Device behaviour, lights and timing | The real device program and bridge |
 | `docs/sim/receiver.mjs` | A port of `receiver/Sources/main.swift`’s message handling |
+| `docs/sim/pointer.mjs` | A port of `WandPointerControl.swift`’s circular-scroll recogniser; native and demo traces are compared on macOS |
 | `docs/sim/hud.mjs` | A port of Agentic Mouse’s wand grid navigator, wheel-detent tracker and persistent HUD controller, from Ethan’s local Agentic Mouse build on 16 October 2026 (MIT, not yet published) |
 | HUD labels and colours | Agentic Mouse’s published `simulator-data.json`, revision `e5fbb056` (v1.0.182 (188)), via `scripts/sync_hud.py` into `data/agentic-mouse-hud.json` |
 | Agent Flow | Its public Primary behaviour: the first press starts, a later press stops on release |
