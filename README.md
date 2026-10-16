@@ -98,6 +98,11 @@ No photo yet; the website shows a schematic. Lighter replacement switches have b
 <details>
 <summary>Tuning</summary>
 
+Holding Bottom uses one-third of the normal pointer gain, for both temporary movement and
+tap-then-hold dragging. Released-button follow keeps the normal gain. HUD movement and scrolling
+keep their own settings. The factor is applied before fractional pointer counts are accumulated;
+it adds no new filtering or hold delay. Physical feel of this setting is still unconfirmed.
+
 <!-- wand:tuning -->
 | Setting | Value | Note |
 | --- | --- | --- |
@@ -128,7 +133,7 @@ No photo yet; the website shows a schematic. Lighter replacement switches have b
 - The newest button-jolt guard is installed and passed device checks; its feel hasn’t been confirmed yet.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.17 (22) · device code `wand-e1ce30d7c407` · bridge `c8ad9e20` · updated 16 October 2026.
+Receiver 1.2.17 (22) · device code `wand-e1ce30d7c407` · bridge `22c831c8` · updated 16 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

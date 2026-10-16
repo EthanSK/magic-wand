@@ -11,7 +11,7 @@
     "receiver": "1.2.17",
     "receiverBuild": "22",
     "deviceRuntime": "wand-e1ce30d7c407",
-    "bridgeRevision": "c8ad9e20156bcf3bb4585a67a2074b4dcaa8e724ce5bf1b347448b664ab305ba"
+    "bridgeRevision": "22c831c82c753b94453afeb768e753b3fc5ad54f9040982f962e6a92ce3e53fc"
   },
   "status": [
     "Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.",
@@ -105,6 +105,7 @@
   ],
   "tuning": {
     "pointerGain": 86.4,
+    "heldPointerGain": 0.3333333333333333,
     "previousPointerGain": 108,
     "verticalRatio": 1.4,
     "fineGain": 0.35,
