@@ -1,0 +1,307 @@
+{
+  "schemaVersion": 1,
+  "name": "Magic Wand",
+  "tagline": "Mouse, HUD, scrolling and speech to text from three buttons on a wand.",
+  "summary": "Turning the wand moves my Mac’s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.",
+  "updated": "2026-10-16",
+  "site": "https://ethansk.github.io/magic-wand/",
+  "repository": "https://github.com/EthanSK/magic-wand",
+  "versions": {
+    "receiver": "1.2.17",
+    "receiverBuild": "22",
+    "deviceRuntime": "wand-e1ce30d7c407",
+    "bridgeRevision": "c8ad9e20156bcf3bb4585a67a2074b4dcaa8e724ce5bf1b347448b664ab305ba"
+  },
+  "status": [
+    "Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.",
+    "The newest button-jolt guard is installed and passed device checks; its feel hasn’t been confirmed yet.",
+    "End-to-end latency, accuracy and battery life haven’t been measured."
+  ],
+  "hardware": {
+    "board": "Puck.js v2.1",
+    "boardUrl": "https://www.espruino.com/Puck.js",
+    "parts": [
+      [
+        "Tip",
+        "Puck.js v2.1: gyro, Bluetooth and an RGB light"
+      ],
+      [
+        "Shaft",
+        "Carbon-fibre tube, roughly 50 cm"
+      ],
+      [
+        "Grip",
+        "Three separate wired momentary buttons"
+      ]
+    ],
+    "wiring": "Each button connects its pin to GND. The Puck’s internal pull-ups make a press read low."
+  },
+  "buttons": [
+    {
+      "id": "top",
+      "name": "Top",
+      "pin": "D30",
+      "key": "T",
+      "role": "Speech to text",
+      "light": "recording",
+      "gestures": [
+        [
+          "Tap",
+          "Start Agent Flow dictation"
+        ],
+        [
+          "Tap again",
+          "Stop and paste"
+        ]
+      ]
+    },
+    {
+      "id": "middle",
+      "name": "Middle",
+      "pin": "D2",
+      "key": "M",
+      "role": "Agentic Mouse HUD",
+      "light": "hud",
+      "gestures": [
+        [
+          "Tap",
+          "Open the HUD on Switch App, then turn the wand to move the outline"
+        ],
+        [
+          "Tap again",
+          "Use the outlined card"
+        ],
+        [
+          "Hold",
+          "Hold the card; on some wheel cards, tilt to turn the wheel"
+        ],
+        [
+          "Double tap",
+          "Close the HUD"
+        ]
+      ],
+      "notes": [
+        "The outline stops at the edges instead of wrapping.",
+        "Bottom goes back to the pointer."
+      ]
+    },
+    {
+      "id": "bottom",
+      "name": "Bottom",
+      "pin": "D1",
+      "key": "B",
+      "role": "Mouse",
+      "light": "mouse",
+      "gestures": [
+        [
+          "Tap",
+          "The pointer follows the wand, without clicking"
+        ],
+        [
+          "Hold, turn, release",
+          "Click once where you stop"
+        ],
+        [
+          "Tap while following",
+          "Click"
+        ],
+        [
+          "Hold while following",
+          "Keep moving; release stops without a click"
+        ],
+        [
+          "Tap, then hold",
+          "Drag; release drops and stops"
+        ],
+        [
+          "Double tap while following",
+          "Stop following"
+        ]
+      ],
+      "notes": [
+        "The pointer stays still while a click is decided.",
+        "Middle switches to the HUD."
+      ]
+    }
+  ],
+  "chords": [
+    {
+      "id": "scroll",
+      "name": "Bottom + Middle",
+      "buttons": [
+        "bottom",
+        "middle"
+      ],
+      "role": "Scroll",
+      "light": "scroll",
+      "gestures": [
+        [
+          "Hold both and turn",
+          "Scroll sideways and up or down at once, including diagonals"
+        ],
+        [
+          "Release either",
+          "Stop scrolling; nothing clicks"
+        ]
+      ]
+    }
+  ],
+  "lights": [
+    {
+      "mode": "update",
+      "name": "Updating",
+      "levels": [
+        1,
+        0,
+        0
+      ],
+      "display": "#ff2e3a",
+      "detail": "Receiver is updating the device code"
+    },
+    {
+      "mode": "disconnected",
+      "name": "Disconnected",
+      "levels": [
+        0.08,
+        0.016,
+        0
+      ],
+      "display": "#8a3a12",
+      "detail": "Dim orange"
+    },
+    {
+      "mode": "calibration",
+      "name": "Calibrating",
+      "levels": [
+        1,
+        0,
+        0
+      ],
+      "display": "#ff2e3a",
+      "detail": "Keep it still with no buttons pressed for two seconds"
+    },
+    {
+      "mode": "scroll",
+      "name": "Scrolling",
+      "levels": [
+        0,
+        1,
+        1
+      ],
+      "display": "#19e3f0",
+      "detail": "Cyan"
+    },
+    {
+      "mode": "mouse",
+      "name": "Pointer",
+      "levels": [
+        0,
+        0,
+        1
+      ],
+      "display": "#4469ff",
+      "detail": "Blue"
+    },
+    {
+      "mode": "hud",
+      "name": "HUD",
+      "levels": [
+        1,
+        0.2,
+        0
+      ],
+      "display": "#ff5a1f",
+      "detail": "Orange"
+    },
+    {
+      "mode": "recording",
+      "name": "Recording",
+      "levels": [
+        1,
+        0,
+        0
+      ],
+      "display": "#ff2e3a",
+      "detail": "Red, unless the pointer, HUD or scrolling is active"
+    },
+    {
+      "mode": "idle",
+      "name": "Idle",
+      "levels": [
+        0,
+        0,
+        0
+      ],
+      "display": "#4a4268",
+      "detail": "Off"
+    }
+  ],
+  "tuning": {
+    "pointerGain": 86.4,
+    "previousPointerGain": 108,
+    "verticalRatio": 1.4,
+    "fineGain": 0.35,
+    "fineSpeedDegreesPerSecond": 2,
+    "fullSpeedDegreesPerSecond": 18,
+    "maximumNoiseZoneDegreesPerSecond": 1.2,
+    "sensorRequestHz": 104,
+    "processedHzMeasured": 35,
+    "bluetoothIntervalMs": 15,
+    "holdMs": 220,
+    "clickDecisionMs": 250,
+    "pressGuardMs": 50,
+    "releaseGuardMs": 70,
+    "coldSettleMs": 96,
+    "sensorIdleGraceMs": 1000,
+    "middleReportDelayMs": 80,
+    "reportIntervalMs": 30,
+    "horizontalScrollBoost": 1.4,
+    "hostScrollGain": 0.8,
+    "receiverHoldMs": 220,
+    "macDoubleClickSeconds": 0.8,
+    "calibrationSeconds": 2
+  },
+  "hud": {
+    "source": "Agentic Mouse’s published Default mode",
+    "startCell": 11,
+    "navigation": {
+      "degreesPerColumn": 8,
+      "degreesPerRow": 7,
+      "hysteresis": 0.18,
+      "dominantAxisRatio": 2,
+      "minorAxisAttenuation": 0.6,
+      "diagonalCommitment": 0.3,
+      "headingMemory": 0.25,
+      "headingHysteresisDegrees": 3
+    },
+    "adjust": {
+      "degreesPerStep": 7,
+      "hysteresis": 0.18,
+      "maximumStepsPerUpdate": 6
+    },
+    "adjustableWheels": [
+      "horizontalScroll",
+      "clipboard"
+    ]
+  },
+  "dependencies": [
+    {
+      "name": "Agentic Mouse",
+      "url": "https://ethansk.github.io/agentic-mouse/",
+      "role": "Draws the HUD and runs its cards",
+      "availability": "Wand support is in Ethan’s local build and isn’t published yet."
+    },
+    {
+      "name": "Agent Flow",
+      "url": "https://ethansk.github.io/AgentFlow/",
+      "role": "Records and pastes dictation",
+      "availability": "The public build accepts its mouse controls; wand input isn’t published yet."
+    },
+    {
+      "name": "Espruino",
+      "url": "https://www.espruino.com/",
+      "role": "JavaScript firmware on the Puck.js",
+      "availability": "Public. The first upload uses the Espruino Web IDE."
+    }
+  ]
+}

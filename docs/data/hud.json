@@ -1,0 +1,152 @@
+{
+  "source": "https://ethansk.github.io/agentic-mouse/simulator-data.json",
+  "sourceSha256": "51cd3d46dd2d70f2369c5ac50b4846b9aa277e1a86356b26bbfbe7202575a35e",
+  "revision": "e5fbb056c903aa86a4a99de6dba5660d5d7ce591",
+  "version": "v1.0.182 (188)",
+  "title": "Default mode",
+  "rows": [
+    [
+      3,
+      6,
+      9,
+      12
+    ],
+    [
+      2,
+      5,
+      8,
+      11
+    ],
+    [
+      1,
+      4,
+      7,
+      10
+    ]
+  ],
+  "cards": [
+    {
+      "cell": 1,
+      "title": "Horizontal Scroll + Wheel",
+      "fill": "#2ac9e0",
+      "border": "#ffffff",
+      "foreground": "#ffffff",
+      "opens": null,
+      "wheel": {
+        "id": "horizontalScroll",
+        "up": "Scroll Right",
+        "down": "Scroll Left"
+      }
+    },
+    {
+      "cell": 2,
+      "title": "Current app mode",
+      "fill": "#44f26a",
+      "border": "#44f26a",
+      "foreground": "#ffffff",
+      "opens": "unsupported",
+      "wheel": null
+    },
+    {
+      "cell": 3,
+      "title": "Screenshot · Wheel Paste",
+      "fill": "#ffbc4a",
+      "border": "#ffffff",
+      "foreground": "#ffffff",
+      "opens": null,
+      "wheel": {
+        "id": "screenshotPaste",
+        "down": "Paste screenshot"
+      }
+    },
+    {
+      "cell": 4,
+      "title": "Copy / Paste + Wheel",
+      "fill": "#34d2b8",
+      "border": "#ffffff",
+      "foreground": "#ffffff",
+      "opens": null,
+      "wheel": {
+        "id": "clipboard",
+        "up": "Paste",
+        "down": "Copy"
+      }
+    },
+    {
+      "cell": 5,
+      "title": "Forward · Hold + 6 for Volume",
+      "fill": "#4e97ff",
+      "border": "#ffffff",
+      "foreground": "#ffffff",
+      "opens": null,
+      "wheel": null
+    },
+    {
+      "cell": 6,
+      "title": "YouTube · Hold 2× / Scrub + Wheel",
+      "fill": "#ff4848",
+      "border": "#ffffff",
+      "foreground": "#ffffff",
+      "opens": null,
+      "wheel": {
+        "id": "youtubeScrub",
+        "up": "YouTube +5 sec",
+        "down": "YouTube −5 sec"
+      }
+    },
+    {
+      "cell": 7,
+      "title": "Enter",
+      "fill": "#30da7e",
+      "border": "#ffffff",
+      "foreground": "#ffffff",
+      "opens": null,
+      "wheel": null
+    },
+    {
+      "cell": 8,
+      "title": "Back",
+      "fill": "#4e97ff",
+      "border": "#ffffff",
+      "foreground": "#ffffff",
+      "opens": null,
+      "wheel": null
+    },
+    {
+      "cell": 9,
+      "title": "Keys mode",
+      "fill": "#ff6800",
+      "border": "#ff6800",
+      "foreground": "#ffffff",
+      "opens": "keys",
+      "wheel": null
+    },
+    {
+      "cell": 10,
+      "title": "Legend toggle",
+      "fill": "#00cdff",
+      "border": "#ffffff",
+      "foreground": "#ffffff",
+      "opens": null,
+      "wheel": null
+    },
+    {
+      "cell": 11,
+      "title": "Switch App",
+      "fill": "#a876ff",
+      "border": "#ffffff",
+      "foreground": "#ffffff",
+      "opens": null,
+      "wheel": null
+    },
+    {
+      "cell": 12,
+      "title": "Utility modes",
+      "fill": "#c800ff",
+      "border": "#c800ff",
+      "foreground": "#ffffff",
+      "opens": "utility",
+      "wheel": null
+    }
+  ]
+}

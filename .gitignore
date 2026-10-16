@@ -1,0 +1,12 @@
+# Local builds: the receiver app, downloaded font sources and scratch output.
+/build/
+/.cache/
+/work/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+
+# The receiver's private device settings never belong in the repository.
+device.json

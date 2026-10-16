@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "files": {
+    "device/wand-mouse-prototype.js": {
+      "importedFrom": "wand-mouse-prototype.js",
+      "transform": "verbatim",
+      "originalSha256": "036f2bd951eb352495702e54e60ad569680930f69fd2075c3803d4ed6d6e24c1",
+      "publicSha256": "036f2bd951eb352495702e54e60ad569680930f69fd2075c3803d4ed6d6e24c1"
+    },
+    "device/wand-mode-bridge.js": {
+      "importedFrom": "wand-mode-bridge.js",
+      "transform": "verbatim",
+      "originalSha256": "acfb56f95a29be904f06a728d4f7895b06ba7f7f3e97a18d9c1779b04a3bea9a",
+      "publicSha256": "acfb56f95a29be904f06a728d4f7895b06ba7f7f3e97a18d9c1779b04a3bea9a"
+    },
+    "receiver/Sources/main.swift": {
+      "importedFrom": "wand-mac-receiver.swift",
+      "transform": "receiver",
+      "originalSha256": "b44718cd83b271f7930f8178c7b5f62fc51783aa961c5fe396323c4e8838fd09",
+      "publicSha256": "426dd5d3bba64cc74180bc03b556846b9b2e196ecd341fe7f1f84623f63330f5"
+    },
+    "receiver/Sources/WandControlTransport.swift": {
+      "importedFrom": "wand-control-transport.swift",
+      "transform": "verbatim",
+      "originalSha256": "62f0a9d09638e8de5fc046c015c91c8784135ae45b03f05fb9452d9483066783",
+      "publicSha256": "62f0a9d09638e8de5fc046c015c91c8784135ae45b03f05fb9452d9483066783"
+    },
+    "receiver/Sources/WandContextListener.swift": {
+      "importedFrom": "wand-context-listener.swift",
+      "transform": "verbatim",
+      "originalSha256": "aac70131961be4939216a75330da7859a757f174b86bb19c822333e985d9b46e",
+      "publicSha256": "aac70131961be4939216a75330da7859a757f174b86bb19c822333e985d9b46e"
+    },
+    "receiver/Sources/WandRecordingState.swift": {
+      "importedFrom": "wand-recording-state.swift",
+      "transform": "verbatim",
+      "originalSha256": "4a69241b310c69cf058e8892c4ffd0027c380488b41cd6289a76aac9b7a93e8c",
+      "publicSha256": "4a69241b310c69cf058e8892c4ffd0027c380488b41cd6289a76aac9b7a93e8c"
+    },
+    "receiver/Info.plist": {
+      "importedFrom": "Wand Receiver.app/Contents/Info.plist",
+      "transform": "verbatim",
+      "originalSha256": "7e1efa2a8e0ea61b37f9bbbe856c45fbc937fa0061350a07cb41d9bea7748cb7",
+      "publicSha256": "7e1efa2a8e0ea61b37f9bbbe856c45fbc937fa0061350a07cb41d9bea7748cb7"
+    }
+  }
+}
