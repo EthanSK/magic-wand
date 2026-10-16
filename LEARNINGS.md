@@ -167,3 +167,35 @@ wide-travel tests above it, including display clamping and invalid-packet reject
 Do not call dt/(tau+dt) equivalent to 1-exp(-dt/tau): it changes filter response and can add lag.
 Private scalar state, cached lookups and gating an already rate-limited telemetry helper retain
 the original equations; changing those equations needs separate validation and delay approval.
+
+## Move expensive pointing math off the interpreter
+
+The 104 Hz chip setting did not imply 104 completed callbacks: the previous live
+run delivered 960 callbacks over 41.216 seconds (about 23.3/s). Cached lookups alone
+did not resolve the rough physical feel. Native `@RAW` handling therefore keeps
+the accepted exponential filter, directional evidence, slack and gains while the
+Puck sends calibrated-axis configuration and raw samples. Retain the fallback
+filter for other hosts; do not enable raw mode until the receiver is ready.
+
+Keep a single clamped cursor point across all lines in one Bluetooth delivery.
+Consecutive CGEvent posts need not be reflected in a fresh cursor query immediately;
+re-querying between frames can overwrite travel from the same delivery. Reset that
+point at the next delivery so physical mouse movement remains respected.
+
+Ethan reversed the held-only 90 ms experiment again: LOW now defaults to zero
+buffer, with a click at release and the existing 300 ms post-click pause intact.
+Do not re-enable a movement buffer from an earlier approval.
+
+The statement compactor splits on top-level semicolons, not on closing braces.
+Put an explicit semicolon after a conditional block that frees old functions
+before a following replacement function literal. Otherwise both remain one REPL
+statement: Espruino must allocate the replacement before executing the free,
+which can produce OUT OF MEMORY or an EOF parse error. The native upload test
+checks that freeing and replacement occupy different generated statements.
+
+Native pointing delivered about 49–51 samples per second in repeated five-second
+active windows, versus the prior 23.3/s. Ethan confirmed it felt much smoother.
+A brief 208 Hz trial stayed around the same delivered rate; retain 104 Hz rather
+than spending power on a higher setting that does not improve actual throughput.
+Reset the connection deadline when a new load starts so recovery gets its full
+time budget instead of inheriting an almost-expired connection attempt.

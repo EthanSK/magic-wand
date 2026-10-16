@@ -199,7 +199,7 @@ function wrap(a) {
   return a;
 }
 export class PointerRouter {
-  constructor({lowDelay=0.09,maxPending=48}={}) {
+  constructor({lowDelay=0,maxPending=48}={}) {
     this.lowDelay=Math.max(0,lowDelay);
     this.maxPending=Math.max(1,maxPending);
     this.circle = new CircularScroll();

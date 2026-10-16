@@ -55,7 +55,7 @@ test(
 
 
 test("held-only 90 ms buffer discards release flick but bypasses HIGH and dragging", () => {
- const r=new PointerRouter();r.bottom(true);
+ const r=new PointerRouter({lowDelay:0.09});r.bottom(true);
  assert.deepEqual(r.frame(4,3,0,false,10).actions,[]);
  assert.deepEqual(r.drain(10.08),[]);
  assert.deepEqual(r.drain(10.1),[{type:"move",dx:4,dy:3}]);

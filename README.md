@@ -79,9 +79,9 @@ The website runs the wand’s own device code in your browser, with the Mac side
 
 ## How it works
 
-1. **Puck.js.** Espruino JavaScript on the wand reads the gyro and three buttons, filters the motion and decides each gesture.
-2. **Bluetooth UART.** Short text lines carry pointer reports (`@WAND x,y,buttons`), HUD angles (`@NAV`), scrolling (`@SCROLL`), Bottom edges (`@BOTTOM`), Middle presses (`@MIDDLE`), Top presses (`@STT`) and light changes.
-3. **Wand Receiver.** A background Mac app (Swift, CoreBluetooth) posts ordinary pointer, click and wheel events, sends HUD commands to Agentic Mouse and Top presses to Agent Flow over same-user local sockets, and sends the recording state back to the wand.
+1. **Puck.js.** Espruino JavaScript on the wand reads the gyro and three buttons, sends raw pointing samples to the Mac and decides each button gesture.
+2. **Bluetooth UART.** Short text lines carry raw gyro samples (`@RAW`), calibration and tuning (`@ZERO`), legacy pointer reports (`@WAND x,y,buttons`), HUD angles (`@NAV`), scrolling (`@SCROLL`), Bottom edges (`@BOTTOM`), Middle presses (`@MIDDLE`), Top presses (`@STT`) and light changes.
+3. **Wand Receiver.** A background Mac app (Swift, CoreBluetooth) filters raw pointing samples with the same sensitivity and noise rejection, posts ordinary pointer, click and wheel events, sends HUD commands to Agentic Mouse and Top presses to Agent Flow over same-user local sockets, and sends the recording state back to the wand.
 4. **Lights.** The wand shows its mode on the Puck’s RGB light; Agent Flow’s recording notifications keep it red while recording.
 
 The Puck also advertises as a Bluetooth mouse, but macOS pairing stalled, so the receiver switches mouse reports to the UART link. On every connection the receiver checks the device code’s version and the bridge’s SHA-256; it uploads only what differs, one statement at a time, because one large command ran the Puck out of memory.
@@ -123,13 +123,13 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 | Vertical | × 1.4 | Up and down move further than sideways |
 | Fine aim | 35% gain below 2°/s | Full gain from 18°/s |
 | Noise zone | Up to 1.2°/s | Measured during calibration |
-| Sensor | 104 Hz requested | About 35 Hz fully processed in a recent measurement |
+| Sensor | 104 Hz requested | About 50 Hz fully processed in a recent measurement |
 | Bluetooth interval | 15 ms requested |  |
 | Button-jolt guard | 50 ms after a press, 70 ms after a release | Motion in the guard is dropped, not replayed |
 | Cold start | 96 ms settling | Skipped when the sensor is still warm |
 | Gyro sleep | After 1 s idle | Accelerometer stays at 1.6 Hz for pickup; off on disconnect |
 | Hold | 220 ms | Longer presses count as holds |
-| LOW movement delay | 90 ms |  |
+| LOW movement delay | 0 ms |  |
 | HIGH stop-to-click | 450 ms still | One click after deliberate movement; no repeat while still |
 | Double-click window | 0.3 s | Read from the Mac’s setting |
 | Scrolling | Horizontal × 1.4 | Mac wheel gain 0.8 |
@@ -143,12 +143,12 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.
+- Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.
 - Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.
 - HIGH dwell, held rough circles, desk inference and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.28 (33) · device code `wand-e1ce30d7c407` · bridge `b8d50a3f` · updated 17 October 2026.
+Receiver 1.2.32 (37) · device code `wand-e1ce30d7c407` · bridge `c6948df5` · updated 17 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
