@@ -60,9 +60,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   CONFIG.heldPointerGain=1/3;
   // Ethan calls released-button follow HIGH sensitivity and a plain held
   // pointer gesture LOW sensitivity. LOW repositions; it does not hold a
-  // mouse button. Release clicks, then HIGH pauses for one second if it was
-  // active before the hold. Tap-then-hold remains the separate real drag.
-  CONFIG.releaseClickPause=1;
+  // mouse button. Release clicks, then HIGH pauses for 300 ms if it was
+  // active before the hold. A real drag also resumes prior HIGH after dropping.
+  CONFIG.releaseClickPause=0.3;
   // A radial angular tolerance absorbs hand tremor without filtering fast
   // travel. Re-centre quiet movement too, so residual bias cannot keep pushing
   // an anchor already at the edge after a sweep. These are starting values,
@@ -208,8 +208,8 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // From mouse-off: a short tap enters latched follow without clicking. A hold
   // moves temporarily, then release clicks once at the endpoint and stops.
   // If HIGH was already active, LOW release clicks and holds that point for
-  // one second before HIGH resumes. Starting LOW from off returns to off.
-  // Click then hold is the explicit real drag; release drops and exits.
+  // 300 ms before HIGH resumes. Starting LOW from off returns to off.
+  // Click then hold is the explicit real drag; release drops, then resumes prior HIGH.
   // Double short-click still exits HIGH.
   global.wandLiveMoveCallback.replaceWith(function(){
     if(!digitalRead(MOVE_PIN)&&digitalRead(HUD_PIN)&&!scrollSuppress)chordFollowBefore=moveLatched;
@@ -256,7 +256,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       moveLatched=global.wandMomentaryStarted===undefined||getTime()-global.wandMomentaryStarted<CONFIG.tapSeconds;
       if(moveLatched)lastMoveTap=getTime();else clickTimes(1);
     }else if(moveGestureMode==='pointer'){
-      if(dragging){dragging=false;states.push(0);pump();moveLatched=false;cancelTapGesture();}
+      if(dragging){dragging=false;states.push(0);pump();moveLatched=!!global.wandFollowBeforeHold;global.wandPointerPauseUntil=getTime()+CONFIG.releaseClickPause;cancelTapGesture();}
       else if(secondTap){moveLatched=false;cancelTapGesture();}
       else {lastMoveTap=getTime();deferSingleClick();}
     }

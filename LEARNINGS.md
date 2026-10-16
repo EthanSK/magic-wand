@@ -55,9 +55,9 @@ fine, medium, fast and reverse speeds; released-button follow retains its origin
 
 HIGH is released-button follow; LOW is a plain Bottom hold for one-third-speed positioning,
 not a left-button drag. LOW release clicks at the endpoint. If HIGH preceded the hold, suppress
-pointer motion for one second, then continue HIGH. From off, LOW release returns to off. The
+pointer motion for 300 ms, then continue HIGH. From off, LOW release returns to off. The
 pause is a pointer-path deadline rather than a resume timer, so it cannot reopen a mode after
-the user switches to the HUD or exits. Tap-then-hold remains the distinct real drag.
+the user switches to the HUD or exits. Tap-then-hold remains the distinct real drag; dropping resumes prior HIGH after the same pause.
 
 ## Loading a larger motion callback
 
@@ -74,5 +74,7 @@ had appeared after earlier partial failures, so verify the actual callback marke
 The pointer uses radial displacement tolerance instead of stacking another rate dead zone.
 Re-centre quiet rates even when the anchor is at the circle edge; otherwise leftover bias can
 keep pushing after a deliberate sweep. Tests cover drift from rest and after motion, fine
-aim, both sensitivity modes, diagonals, curves and the one-second release pause. This is
-simulated-noise coverage; it does not establish Ethan's physical hand-noise threshold.
+aim, both sensitivity modes, diagonals, curves and the 300 ms release pause. This is
+simulated-noise coverage; Ethan confirmed the noise rejection feels good on 16 October 2026; this does not establish an optimal hand-noise threshold.
+
+The release pause was shortened from one second to 300 ms after physical feedback that the wait felt too long. Preserve the accepted angular tolerance and gain curve while tuning only this pause. Actual dragging releases the native left button, then restores prior HIGH after the same pause; it must not send an extra endpoint click.

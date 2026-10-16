@@ -116,7 +116,7 @@ test("Bottom follows, clicks at a fixed point, drags, and Bottom from the HUD re
   s.w.edge("D1", 1); s.w.advance(0.1);
   const types = s.macEvents.map((event) => event.type);
   assert(types.includes("down") && types.includes("drag") && types.at(-1) === "up", "tap then hold drags and drops");
-  assert(!s.w.ctx.moveLatched, "a drop stops following");
+  assert(s.w.ctx.moveLatched, "a drop restores prior HIGH following");
 
   s.press("D2", 0.12); s.w.advance(0.1);
   assert(s.hud.open);

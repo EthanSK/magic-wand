@@ -49,21 +49,22 @@ for (const bridge of ["readable", "fragments"]) {
     w.edge("D1", 1);
     assert(ctx.moveLatched, "LOW release keeps prior HIGH mode armed");
     assert.equal(frames.filter((f) => f[2] === 1).length, 1, "LOW release clicks once");
-    assert(ctx.wandPointerPauseUntil > w.now + 0.99, "release parks the pointer for one second");
+    assert(ctx.wandPointerPauseUntil > w.now + 0.29, "release parks the pointer for 300 ms");
     w.advance(1.01);
     assert(w.device.awake, "prior HIGH mode keeps the sensor awake");
     ctx.setMouseFollow(false);
 
-    // Click then hold drags; release drops and exits.
+    // Click then hold drags; release drops and restores prior HIGH.
     w.advance(0.3); w.tap(); w.advance(0.9);
     frames.length = 0;
     w.tap(); w.advance(0.05); w.edge("D1", 0); w.advance(0.3);
     assert(ctx.dragging, "click then long press begins dragging");
     assert.equal(frames.filter((f) => f[2] === 1).length, 1, "drag has one down and no preceding click");
     w.edge("D1", 1);
-    assert(!ctx.dragging && !ctx.moveLatched, "release drops and exits drag");
+    assert(!ctx.dragging && ctx.moveLatched, "release drops and restores prior HIGH");
     w.advance(1.01);
-    assert(!w.device.awake, "drag release sleeps after grace");
+    assert(w.device.awake, "resumed HIGH keeps the sensor awake");
+    ctx.setMouseFollow(false);
     assert.equal(frames.at(-1)[2], 0, "drag releases the mouse button");
 
     // Second held press within the Mac's double-click window, after the ordinary click fired.
@@ -72,7 +73,8 @@ for (const bridge of ["readable", "fragments"]) {
     w.tap(); w.advance(0.5); w.edge("D1", 0); w.advance(0.3);
     assert(ctx.dragging, "second held press uses the Mac double-click window");
     w.edge("D1", 1);
-    assert(!ctx.dragging && !ctx.moveLatched);
+    assert(!ctx.dragging && ctx.moveLatched);
+    ctx.setMouseFollow(false);
 
     // Double tap while following exits.
     w.advance(0.3); w.tap(); w.advance(0.3); w.tap(); w.advance(0.05); w.tap();

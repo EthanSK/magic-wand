@@ -41,8 +41,8 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap | The pointer follows the wand, without clicking |
 | Hold, turn, release | Click once where you stop |
 | Tap while following | Click |
-| Hold while following | Move at low sensitivity; release clicks, pauses one second, then resumes high sensitivity |
-| Tap, then hold | Drag; release drops and stops |
+| Hold while following | Move at low sensitivity; release clicks, pauses 300 ms, then resumes high sensitivity |
+| Tap, then hold | Drag; release drops, pauses 300 ms, then resumes prior high sensitivity |
 | Double tap while following | Stop following |
 
 - The pointer stays still while a click is decided.
@@ -103,9 +103,9 @@ Holding Bottom uses one-third of the normal pointer gain, for both temporary mov
 tap-then-hold dragging. Released-button follow keeps the normal gain. HUD movement and scrolling
 keep their own settings. The factor is applied before fractional pointer counts are accumulated;
 The pointer uses a 0.2-degree radial tolerance for hand wobble, with quiet re-centering.
-LOW release clicks, holds the pointer for one second and continues prior HIGH mode.
-From off, LOW release clicks and returns to off. Tap-then-hold still drags objects or text.
-Tiny starting nudges and reversals need to cross the angular tolerance; physical feel is unconfirmed.
+LOW release clicks, holds the pointer for 300 ms and continues prior HIGH mode.
+From off, LOW release clicks and returns to off. Tap-then-hold drags objects or text, then resumes prior HIGH after the same short pause.
+Tiny starting nudges and reversals need to cross the angular tolerance; Ethan confirmed that noise rejection feels good.
 
 <!-- wand:tuning -->
 | Setting | Value | Note |
@@ -134,10 +134,10 @@ Tiny starting nudges and reversals need to cross the angular tolerance; physical
 
 <!-- wand:status -->
 - Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.
-- Held positioning clicks on release and resumes prior high sensitivity after one second. The new still-hand tolerance needs a physical check.
+- Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.17 (22) · device code `wand-e1ce30d7c407` · bridge `202c1dd6` · updated 16 October 2026.
+Receiver 1.2.17 (22) · device code `wand-e1ce30d7c407` · bridge `c68fa9b4` · updated 16 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

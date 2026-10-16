@@ -36,7 +36,7 @@ for(const speed of [1.5,8,30,-30]){
     for(let axis=0;axis<2;axis++)assert(Math.abs(result[axis]-normal[axis]/3)<=2,
       `${mode}, ${speed}deg/s, axis${axis}: ${result[axis]} vs ${normal[axis]}/3`);
     held.edge('D1',1);
-    assert.equal(held.ctx.moveLatched,mode==='clutch',`${mode} release preserves HIGH only after a plain LOW hold`);
+    assert.equal(held.ctx.moveLatched,mode!=='entry',`${mode} release restores HIGH after LOW or actual dragging`);
     assert(!held.ctx.dragging,`${mode} release does not leave a button held`);
   }
 }
