@@ -129,3 +129,7 @@ The device code uses Espruino’s `ble_hid_mouse` module, which the Espruino Web
 isn’t bundled here. Its Bluetooth advertising follows Espruino’s HID documentation. The UART UUIDs
 in the receiver are the public Nordic UART Service. Puck.js and Espruino are made by Pur3 Ltd; this
 project isn’t affiliated with them.
+
+## Wand-only Command-Enter
+
+`integrations/agentic-mouse/wand-command-enter.patch` records the four-file incremental change from the earlier local wand integration to the installed Agentic Mouse 1.0.261 (267). It is a recoverable source patch, not a complete Agentic Mouse distribution, and requires that earlier unpublished wand integration. The native handler holds Command across Return down/up and releases it on cancellation. The card is labelled `⌘↩ Steer` only for the wand; Corsair and Razer retain Enter. Focused tests and the full Agentic Mouse gate passed before signed installation; actual Steer acceptance remains unconfirmed. `wand.json` applies that card title over the unchanged published shared-mouse snapshot when generating the demo.

@@ -1,0 +1,95 @@
+--- a/Sources/AgenticMouseApp/WandHeldKeys.swift
++++ b/Sources/AgenticMouseApp/WandHeldKeys.swift
+@@ -25,8 +25,11 @@
+                     .key(keyCode:48,flags:.maskCommand,isDown:false,at:0.026)]
+             up = [.modifier(keyCode:55,flags:[],at:0)]
+         case (true, _, 7):
+-            down = [.key(keyCode:36,flags:[],isDown:true,at:0)]
+-            up = [.key(keyCode:36,flags:[],isDown:false,at:0)]
++            // Wand home uses Command-Enter for Steer; keep Command held until release.
++            down = [.modifier(keyCode:55,flags:.maskCommand,at:0),
++                    .key(keyCode:36,flags:.maskCommand,isDown:true,at:0.006)]
++            up = [.key(keyCode:36,flags:.maskCommand,isDown:false,at:0),
++                  .modifier(keyCode:55,flags:[],at:0.006)]
+         case (false, .keys, 2):
+             down = [.modifier(keyCode:56,flags:.maskShift,at:0)]
+             up = [.modifier(keyCode:56,flags:[],at:0)]
+--- a/Tests/AgenticMouseAppTests/WandHeldKeysTests.swift
++++ b/Tests/AgenticMouseAppTests/WandHeldKeysTests.swift
+@@ -20,7 +20,7 @@
+         XCTAssertEqual(batches[1].first?.flags,[])
+         keys.release();XCTAssertEqual(batches.count,2)
+     }
+-    func testShiftCancellationAndEnterKeepRealDownUpLifetime() {
++    func testShiftCancellationAndCommandEnterKeepRealDownUpLifetime() {
+         var batches:[[SyntheticKeyboardChordPoster.Event]]=[]
+         let keys=WandHeldKeys {batches.append($0);return true}
+         keys.handle(page:.keys,home:false,cell:PhysicalCell(rawValue:2)!,phase:.press)
+@@ -28,9 +28,27 @@
+         keys.release()
+         XCTAssertEqual(batches.last?.first?.flags,[])
+         keys.handle(page:.modes,home:true,cell:PhysicalCell(rawValue:7)!,phase:.press)
+-        XCTAssertEqual(batches.last?.first?.type,.keyDown)
++        XCTAssertEqual(batches.last?.map(\.type),[.flagsChanged,.keyDown])
++        XCTAssertEqual(batches.last?.map(\.keyCode),[55,36])
++        XCTAssertTrue(batches.last!.allSatisfy{$0.flags.contains(.maskCommand)})
++        let count=batches.count
++        keys.handle(page:.modes,home:true,cell:PhysicalCell(rawValue:7)!,phase:.press)
++        XCTAssertEqual(batches.count,count)
+         keys.handle(page:.modes,home:true,cell:PhysicalCell(rawValue:7)!,phase:.release)
+-        XCTAssertEqual(batches.last?.first?.type,.keyUp)
++        XCTAssertEqual(batches.last?.map(\.type),[.keyUp,.flagsChanged])
++        XCTAssertEqual(batches.last?.map(\.keyCode),[36,55])
++        XCTAssertEqual(batches.last?.last?.flags,[])
++        XCTAssertFalse(keys.handle(page:.keys,home:false,cell:PhysicalCell(rawValue:7)!,phase:.press))
+         XCTAssertFalse(keys.handle(page:.modes,home:true,cell:PhysicalCell(rawValue:1)!,phase:.press))
+     }
++    func testCommandEnterCancellationReleasesReturnBeforeCommand() {
++        var batches:[[SyntheticKeyboardChordPoster.Event]]=[]
++        let keys=WandHeldKeys {batches.append($0);return true}
++        keys.handle(page:.modes,home:true,cell:PhysicalCell(rawValue:7)!,phase:.press)
++        keys.release()
++        XCTAssertEqual(batches.last?.map(\.type),[.keyUp,.flagsChanged])
++        XCTAssertEqual(batches.last?.map(\.keyCode),[36,55])
++        XCTAssertEqual(batches.last?.last?.flags,[])
++        let count=batches.count;keys.release();XCTAssertEqual(batches.count,count)
++    }
+ }
+--- a/Sources/ScimitarKit/App/DefaultMapHintCoordinator.swift
++++ b/Sources/ScimitarKit/App/DefaultMapHintCoordinator.swift
+@@ -227,6 +227,8 @@
+             let title: String
+             if cell == DefaultMapHintCommand.triggerCell(for: source) {
+                 title = ModeHUDCopy.legendToggleTitle
++            } else if source == .wand, cell.rawValue == 7 {
++                title = "⌘↩ Steer"
+             } else if cell == .screenshotToggle {
+                 title = ModeHUDCopy.screenshotActionTitle(state: screenshotActionState)
+             } else if cell == .frontmostAppModeSelector {
+@@ -299,7 +301,7 @@
+         if lowered.contains("copy") || lowered.contains("paste") {
+             return ModeHUDActionFamilyPalette.clipboard
+         }
+-        if lowered == "enter" { return ModeHUDActionFamilyPalette.enter }
++        if lowered == "enter" || lowered == "⌘↩ steer" { return ModeHUDActionFamilyPalette.enter }
+         if lowered.contains("legend") { return ModeHUDActionFamilyPalette.legendToggle }
+         if lowered.contains("keys") { return ModePickerCoordinator.keysAccent }
+         if lowered.contains("modes") { return ModePickerCoordinator.accent }
+--- a/Tests/ScimitarKitTests/DefaultMapHintTests.swift
++++ b/Tests/ScimitarKitTests/DefaultMapHintTests.swift
+@@ -272,6 +272,15 @@
+         XCTAssertEqual(razerSnapshot.legend[7].actionTitle, VSCodeModeAction.nextChange.title)
+     }
+ 
++    func testWandHomeUsesCommandEnterButMiceKeepEnter() {
++        let wand=DefaultMapLegend.snapshot(source:.wand)
++        XCTAssertEqual(wand.legend[6].actionTitle,"⌘↩ Steer")
++        XCTAssertEqual(wand.legend[6].accent,ModeHUDActionFamilyPalette.enter)
++        for source:MouseSource in [.corsair,.razer] {
++            XCTAssertEqual(DefaultMapLegend.snapshot(source:source).legend[6].actionTitle,"Enter")
++        }
++    }
++
+     func testYouTubeScrubCopyDoesNotDependOnFrontmostAppSupport() {
+         frontmostAppContext = FrontmostAppModeContext(
+             target: nil,

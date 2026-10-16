@@ -293,6 +293,9 @@ def artifacts(identifiers: dict[str, str]) -> dict[Path, str]:
 
     manifest = load_manifest(identifiers)
     hud = json.loads((ROOT / "data" / "agentic-mouse-hud.json").read_text())
+    # Native wand-only cards override the shared mouse snapshot, without changing upstream data.
+    for card in hud["cards"]:
+        card.update(manifest.get("hud", {}).get("cardOverrides", {}).get(str(card["cell"]), {}))
     public = {key: value for key, value in manifest.items() if not key.startswith("$")}
     out: dict[Path, str] = {
         DOCS / "data" / "wand.json": json.dumps(public, indent=2, ensure_ascii=False) + "\n",
