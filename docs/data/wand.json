@@ -7,13 +7,13 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.28",
-    "receiverBuild": "33",
+    "receiver": "1.2.32",
+    "receiverBuild": "37",
     "deviceRuntime": "wand-e1ce30d7c407",
-    "bridgeRevision": "b8d50a3f246204aa054839e2bdb658b4b18bc523816dc3f6e1dc4dc99fee8058"
+    "bridgeRevision": "c6948df57d8e26f59aa10b1c590b4d5536f9de8bd6cb1246ed2dea4704a02f1d"
   },
   "status": [
-    "Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.",
+    "Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.",
     "Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.",
     "HIGH dwell, held rough circles, desk inference and VS Code review pass automated checks; physical acceptance is pending.",
     "End-to-end latency, accuracy and battery life haven’t been measured."
@@ -283,7 +283,7 @@
     "fullSpeedDegreesPerSecond": 18,
     "maximumNoiseZoneDegreesPerSecond": 1.2,
     "sensorRequestHz": 104,
-    "processedHzMeasured": 35,
+    "processedHzMeasured": 50,
     "bluetoothIntervalMs": 15,
     "holdMs": 220,
     "clickDecisionMs": 250,
@@ -298,7 +298,7 @@
     "receiverHoldMs": 220,
     "macDoubleClickSeconds": 0.3,
     "calibrationSeconds": 2,
-    "lowMotionDelayMs": 90,
+    "lowMotionDelayMs": 0,
     "highDwellMs": 450,
     "highDwellTravelCounts": 12,
     "idleAccelerometerHz": 1.6,

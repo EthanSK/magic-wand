@@ -31,10 +31,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var lastStatusKey = ""
     var lightMode = "unknown"
     var pointerDisplays:[CGRect]=[]
+    var deliveryPoint:CGPoint?
     var displayObserver:NSObjectProtocol?
     // LOW aiming delay, loop scrolling and consumed-click removal live in the
     // pure WandPointerRouter (wand-pointer-control.swift); this class only posts.
     let pointerRouter=WandPointerRouter()
+    let motionFilter=WandMotionFilter()
+    var rawLastArrival=0.0,rawReports=0,rawWindowStart=0.0,rawMaxGap=0.0
     let dwell=WandDwellClick()
     let restDetection=WandRestDetection()
     var dwellTimer:Timer?,probeTimer:Timer?
@@ -87,10 +90,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func loadModeBridge(_ code:String?=nil) {
         let source=code ?? modeBridge
         bridgeLoadFailed=false;loadingBridge=true;ready=false
-        queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights.replaceWith(function(){writeLight(LED1,0.45);writeLight(LED2,0.45);writeLight(LED3,0.45);});updateLights();")
+        deadline(seconds:60)
+        queue("global.WAND_UPDATING=true;global.wandRawPointer=true;global.wandMotionReady=false;updateLights.replaceWith(function(){writeLight(LED1,0.45);writeLight(LED2,0.45);writeLight(LED3,0.45);});updateLights();")
         // Each complete statement is small; the old single giant REPL function
         // exceeded the device's available memory during repeated live updates.
-        for command in source.split(separator:"\n") where command.trimmingCharacters(in:.whitespaces) != "print('WAND_MODE_ROUTING_READY');" {queue(String(command))}
+        for command in source.split(separator:"\n") where !command.contains("WAND_MODE_ROUTING_READY") {queue(String(command))}
         queue("if(global.wandMotionReady){global.WAND_BRIDGE_REVISION='"+bridgeRevision(source)+"';print('WAND_MODE_ROUTING_READY');}else print('WAND_UPDATE_FAILED');")
     }
     let commands: [String]
@@ -289,6 +293,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func peripheral(_ p: CBPeripheral, didUpdateValueFor c: CBCharacteristic, error: Error?) {
         guard device === p, error == nil, let bytes = c.value, let text = String(data: bytes, encoding: .utf8) else { return }
+        deliveryPoint=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays)
+        defer {deliveryPoint=nil}
         input += text.replacingOccurrences(of: "\r", with: "")
         if input.count > 16384 { input = String(input.suffix(4096)) }
         while let newline = input.firstIndex(of: "\n") {
@@ -307,9 +313,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line.hasSuffix("WAND_PATCH_NEEDED") {loadModeBridge()}
             if line.hasSuffix("WAND_MODE_ROUTING_READY") {
                 guard !bridgeLoadFailed else {queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();");log("BRIDGE_LOAD_REJECTED");continue}
-                loadingBridge=false;ready=true;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
+                loadingBridge=false;ready=true;motionFilter.reset();rawLastArrival=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
                 if context.isActive {hudSession=true;resumeHUDNavigation()}
-                queue("global.WAND_UPDATING=false;setHUDOpen("+(context.isActive ? "true":"false")+");updateLights();")
+                queue("global.wandRawPointer=true;global.wandRawBias=undefined;global.wandRawActive=false;global.WAND_UPDATING=false;setHUDOpen("+(context.isActive ? "true":"false")+");updateLights();")
             }
             if line.hasPrefix("WAND_DIAG ") || line.hasPrefix(">WAND_DIAG ") || line.hasPrefix("WAND_CALLBACK_MATCH ") || line.hasPrefix(">WAND_CALLBACK_MATCH ") {log("DEVICE",line)}
             if line.hasPrefix("WAND_BUTTON_STATE ") || line.hasPrefix(">WAND_BUTTON_STATE ") {log("DEVICE",line)}
@@ -328,6 +334,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 let value=line[marker.upperBound...].trimmingCharacters(in:.whitespaces)
                 if value=="0" || value=="1" {dwell.follow(value=="1");scheduleDwell()}
             }
+            if let marker=line.range(of:"@ZERO "),let data=String(line[marker.upperBound...]).data(using:.utf8),let config=try? JSONDecoder().decode([Double].self,from:data) {log("NATIVE_MOTION_CONFIG",motionFilter.configure(config))}
+            if let marker=line.range(of:"@RAW "){handleRaw(String(line[marker.upperBound...]))}
             if let marker=line.range(of:"@IMU ") {handleIMU(String(line[marker.upperBound...]))}
             if let marker=line.range(of:"@REVIEW "),appMode=="vsCode" {
                 let value=line[marker.upperBound...].trimmingCharacters(in:.whitespaces)
@@ -594,7 +602,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // A drain can contain several frames. Carry a locally clamped point
         // through the batch; posting CGEvents need not update the system cursor
         // synchronously before the next frame is posted.
-        var point=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays)
+        var point=deliveryPoint ?? WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays)
         for action in actions {
             switch action {
             case .move(let dx,let dy): point=postPointerMove(dx:dx,dy:dy,from:point)
@@ -602,6 +610,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             case .circleLight(let on): setCircleLight(on)
             }
         }
+        if deliveryPoint != nil {deliveryPoint=point}
         scheduleLowDelay()
     }
     // One one-shot timer for the earliest delayed LOW frame; never runs when idle.
@@ -628,9 +637,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let values = payload.split(separator: ",", omittingEmptySubsequences: false)
         guard values.count == 3, let x = Int(values[0]), let y = Int(values[1]), let b = Int(values[2]),
               (-4095...4095).contains(x), (-4095...4095).contains(y), (0...3).contains(b), !restoring, !scrollActive, AXIsProcessTrusted() else { return }
+        handleFrame(x:x,y:y,b:b)
+    }
+    func handleFrame(x:Int,y:Int,b:Int){
         reportCount += 1
         if reportCount == 1 { log("FIRST_DEVICE_REPORT_VALIDATED") }
-        let point = WandPointerBounds.clamp(CGEvent(source: nil)?.location ?? .zero,to:pointerDisplays)
+        let point = deliveryPoint ?? WandPointerBounds.clamp(CGEvent(source: nil)?.location ?? .zero,to:pointerDisplays)
         // The router may drop a consumed hold's endpoint click; button changes are
         // applied before motion, at the position already shown.
         let routed=pointerRouter.frame(dx:x,dy:y,buttons:b,hud:hudSession,now:ProcessInfo.processInfo.systemUptime)
@@ -639,6 +651,25 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if routed.buttons != b {log("CONSUMED_HOLD_CLICK_DROPPED")}
         transition(to: routed.buttons, at: point)
         performPointer(routed.actions)
+    }
+    func handleRaw(_ payload:String){
+        guard ready,!restoring,!scrollActive,!hudSession,AXIsProcessTrusted() else{return}
+        let fields=payload.split(separator:",",omittingEmptySubsequences:false)
+        guard fields.count==4 else{return}
+        let v=fields.compactMap{Int($0)}
+        guard v.count==4,(0...3).contains(v[3]) else{return}
+        let now=ProcessInfo.processInfo.systemUptime
+        let gap=rawLastArrival>0 ? now-rawLastArrival : 0
+        guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:v[3]&1 != 0,resetState:v[3]&2 != 0 || gap>0.25) else{return}
+        rawLastArrival=now
+        if rawWindowStart==0 || gap>0.25 {rawWindowStart=now;rawReports=0;rawMaxGap=0}
+        rawReports+=1;rawMaxGap=max(rawMaxGap,gap)
+        if now-rawWindowStart>=5 {
+            log("RAW_DELIVERY",rawReports,"seconds",String(format:"%.2f",now-rawWindowStart),"maxGapMs",Int(rawMaxGap*1000))
+            rawWindowStart=now;rawReports=0;rawMaxGap=0
+        }
+        dwell.intent(sample.intent,now:now)
+        handleFrame(x:sample.x,y:sample.y,b:buttons)
     }
     func scheduleDwell(){
         dwellTimer?.invalidate();dwellTimer=nil
@@ -655,7 +686,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let parts=payload.split(separator:",",omittingEmptySubsequences:false)
         guard (5...6).contains(parts.count),let x=Double(parts[0]),let y=Double(parts[1]),let z=Double(parts[2]),let gyro=Double(parts[3]),let held=Int(parts[4]),(0...1).contains(held),abs(x)<=32768,abs(y)<=32768,abs(z)<=32768,(0...100_000).contains(gyro) else{return}
         let now=ProcessInfo.processInfo.systemUptime
-        if parts.count==6,parts[5]=="0" || parts[5]=="1" {dwell.intent(parts[5]=="1",now:now);scheduleDwell()}
+        if !motionFilter.configured,parts.count==6,parts[5]=="0" || parts[5]=="1" {dwell.intent(parts[5]=="1",now:now);scheduleDwell()}
         let events=restDetection.update(x:x/8192,y:y/8192,z:z/8192,gyro:gyro/100,now:now,buttons:held==1 || scrollActive || buttons != 0,idle:!dwell.following && !recording.isRecording && !hudSession)
         for event in events {
             switch event {

@@ -16,7 +16,7 @@ SHA-256; the private directory’s path isn’t recorded.
 | `receiver/Sources/WandContextListener.swift` | Agentic Mouse HUD context | None |
 | `receiver/Sources/WandRecordingState.swift` | Agent Flow recording state | None |
 | `receiver/Sources/WandPointerControl.swift` | Display bounds, LOW routing, rough loops, HIGH dwell clicks and desk inference | None |
-| `receiver/Info.plist` | Receiver bundle 1.2.28 (33) | None |
+| `receiver/Info.plist` | Receiver bundle 1.2.32 (37) | None |
 | `receiver/Sources/WandDeviceConfiguration.swift` | Written for this repository | New |
 
 The installed receiver pinned one Puck’s CoreBluetooth identifier and advertised name. The public
@@ -37,8 +37,8 @@ copying them:
 
 `scripts/device_build.py` keeps the original algorithms. From the imported sources it reproduces
 the private build byte for byte: runtime `wand-e1ce30d7c407`, commands SHA-256 `33bf21e3…`,
-runtime SHA-256 `e25a4de5…`, boot image SHA-256 `b334feb2…` and bridge revision `b8d50a3f…`.
-The bridge revision matches the receiver 1.2.28 (33) bundle, private cache and final live patch readback. The final power-state correction retained calibration and reported no error flags. Earlier large diagnostic queries raised LOW_MEMORY warnings without an observed out-of-memory failure. New gestures still need a physical check.
+runtime SHA-256 `e25a4de5…`, boot image SHA-256 `b334feb2…` and bridge revision `c6948df5…`.
+The bridge revision matches the receiver 1.2.32 (37) bundle, private cache and final live patch readback. The final power-state correction retained calibration and reported no error flags. Earlier large diagnostic queries raised LOW_MEMORY warnings without an observed out-of-memory failure. New gestures still need a physical check.
 `tests/manifest.test.mjs` recomputes these identifiers on every run.
 
 The private `wand-status.txt` described receiver 1.2.1 and an older button layout, so it wasn’t used.
@@ -83,8 +83,8 @@ stable forwarder, so the bridge’s replacements reach the same watches, timers 
 What the demo doesn’t reproduce:
 
 - Gyro readings are derived from the visitor’s aim at about 60 readings a second; the real wand
-  requests 104 Hz. The earlier roughly 35 Hz full-processing measurement predates the current
-  rate trial; the current rate has not been established.
+  requests 104 Hz. The native receiver processed about 50 samples per second in the latest
+  active windows. This is sample throughput, not a measurement of end-to-end latency.
 - Bluetooth delay, the Puck’s 20 ms switch debounce and its memory limits aren’t simulated.
 - The 3D wand turns a quarter as far as the simulated sensor, so its tip stays below the HUD.
 - HUD cards only report what they would do; child pages, held keys and app actions aren’t run.
@@ -148,7 +148,7 @@ The main-HUD browser snapshot does not implement app-specific pages or the VS Co
 
 ## Sensor-rate and update readiness
 
-Receiver 1.2.28 (33) retains 104 Hz after a 208 Hz trial felt more jumpy to Ethan, and keeps
+Receiver 1.2.32 (37) retains 104 Hz after a 208 Hz trial felt more jumpy to Ethan, and keeps
 1.6 Hz accelerometer-only idle sensing. The motion calculation uses private scalar state and cached references while keeping the accepted integration,
 angular tolerance, gain and ordinary button-aware sender. Host tests compare exact reports with
 the preceding calculation at 20, 35, 104 and 208 delivered samples per second. These comparisons
@@ -185,3 +185,24 @@ actually saw on this hardware. Updating therefore requests 0.45 on each LED chan
 display swatch describes the perceived orange, not a calibrated RGB measurement. No five-second
 completion timeout is used. Failed loads remain visibly updating and may be repaired through the
 same private maintenance channel while connected.
+
+### Native pointing calculation
+
+The native receiver opts into `@RAW dtMicroseconds,x,y,flags`. Raw axes are signed
+16-bit gyro readings; `@ZERO` supplies their calibration offsets and 11 existing
+tuning values. Flag 1 identifies a held Bottom button; flag 2 resets filter state
+at a new active segment. Unknown/invalid samples are rejected. No future sample
+is required. The Puck still owns button semantics, HUD angles and chord scrolling.
+Other receivers keep the previous `@WAND` filtered fallback unless they opt in.
+
+A cross-language test compares 2,400 samples against the actual Puck calculation,
+including fast travel, quiet motion, intentional slow motion and one-third held
+gain. A Swift test checks reset and invalid-input handling. The native receiver
+records aggregate arrival timing once per five active seconds, not every sample.
+
+Held LOW aiming is immediate again at Ethan's request. The optional 90 ms
+buffer implementation remains disabled; enabling it requires fresh confirmation.
+
+Ethan confirmed the native pointing felt much smoother on 17 October. Several active
+windows delivered 244–254 samples over about five seconds. A brief 208 Hz trial
+did not increase the received rate; 104 Hz remains selected.

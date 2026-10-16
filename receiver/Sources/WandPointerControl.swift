@@ -171,8 +171,8 @@ final class WandCircularScroll {
 final class WandPointerRouter {
     enum Action:Equatable { case move(dx:Int,dy:Int), scroll(lines:Int32), circleLight(Bool) }
     struct Frame:Equatable { let buttons:Int; let actions:[Action] }
-    /// Ethan approved restoring 90 ms only for held LOW aiming.
-    /// HIGH follow, real left-button dragging and HUD navigation bypass it.
+    /// Ethan returned held LOW aiming to immediate movement. Do not enable
+    /// a buffer again without fresh explicit confirmation.
     let lowDelay:Double
     /// Bounds memory if the drain timer is starved; the oldest motion is then shown, not lost.
     let maxPending:Int
@@ -184,7 +184,7 @@ final class WandPointerRouter {
     private var pending:[(due:Double,dx:Int,dy:Int)]=[]
     private var lit=false
 
-    init(lowDelay:Double=0.09,maxPending:Int=48,circle:WandCircularScroll=WandCircularScroll()) {
+    init(lowDelay:Double=0,maxPending:Int=48,circle:WandCircularScroll=WandCircularScroll()) {
         self.lowDelay=max(0,lowDelay);self.maxPending=max(1,maxPending);self.circle=circle
     }
     var nextDue:Double? {pending.first?.due}
@@ -394,4 +394,55 @@ final class WandReviewGesture {
     func cancel()->[Request] {held=false;lastTap = -100;return finish("cancel")}
     private func request(_ phase:String,direction:String)->Request {seq+=1;return .init(phase:phase,id:id!,seq:seq,direction:direction,mode:mode)}
     private func finish(_ phase:String)->[Request] {guard id != nil else{return []};let r=request(phase,direction:direction);id=nil;return [r]}
+}
+
+
+/// The same pointing calculation used by the Puck, run on the Mac without
+/// queueing or look-ahead. Device sample time controls integration; arrival
+/// time is used only to reject stale state after a transport gap.
+final class WandMotionFilter {
+    struct Result {let x:Int,y:Int;let intent:Bool}
+    private var values:[Double] = []
+    private var fx=0.0,fy=0.0,ix=0.0,iy=0.0,meanSpeed=0.0,intentTime=0.0
+    private var slackX=0.0,slackY=0.0,fractionX=0.0,fractionY=0.0
+    var configured:Bool {values.count==13}
+    func configure(_ v:[Double])->Bool {
+        guard v.count==13,v.allSatisfy({$0.isFinite}),abs(v[0])<=32768,abs(v[1])<=32768,
+              (0...1000).contains(v[2]),(0.1...10).contains(v[3]),(0...1).contains(v[4]),
+              v[5]>=0,v[6]>v[5],(0...1).contains(v[7]),v[8]>=0,v[9]>0,v[10]>=0,
+              abs(v[11])==1,abs(v[12])==1 else{return false}
+        values=v;reset();return true
+    }
+    func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0}
+    func sample(rawX:Int,rawY:Int,microseconds:Int,held:Bool,resetState:Bool)->Result? {
+        guard configured,(-32768...32767).contains(rawX),(-32768...32767).contains(rawY),
+              (1...50000).contains(microseconds) else{return nil}
+        if resetState {reset()}
+        let v=values,dt=Double(microseconds)/1_000_000
+        let x=(Double(rawX)-v[0])/134,y=(Double(rawY)-v[1])/134
+        let speed=sqrt(x*x+y*y),blend=max(0,min(1,(speed-v[5])/(v[6]-v[5])))
+        let alpha=1-exp(-dt/(0.008-0.006*blend))
+        fx+=alpha*(x-fx);fy+=alpha*(y-fy)
+        if slackX==0 && slackY==0 {ix=0;iy=0;meanSpeed=0;intentTime=0}
+        let a=1-exp(-dt/0.15)
+        ix+=a*(fx-ix);iy+=a*(fy-iy);meanSpeed+=a*(speed-meanSpeed)
+        let mean=sqrt(ix*ix+iy*iy)
+        intentTime=mean>0.45 && mean>meanSpeed*0.8 ? min(0.3,intentTime+dt) : max(0,intentTime-dt*3)
+        let active=speed>0.45 && intentTime>=0.25
+        slackX+=fx*dt;slackY+=fy*dt
+        var magnitude=sqrt(slackX*slackX+slackY*slackY),stepX=0.0,stepY=0.0
+        if !active && (magnitude<=v[8] || speed<=v[10]) {
+            let decay=exp(-dt/v[9]);slackX*=decay;slackY*=decay;magnitude*=decay
+        }
+        if magnitude>v[8] {
+            let excess=(magnitude-v[8])/magnitude
+            stepX=slackX*excess;stepY=slackY*excess;slackX-=stepX;slackY-=stepY
+        }
+        var scale=v[4]+(1-v[4])*blend*blend*(3-2*blend)
+        if held {scale*=v[7]}
+        fractionX+=stepX*v[2]*scale*v[11];fractionY+=stepY*v[2]*v[3]*scale*v[12]
+        let countX=Int(fractionX.rounded(.towardZero)),countY=Int(fractionY.rounded(.towardZero))
+        fractionX-=Double(countX);fractionY-=Double(countY)
+        return .init(x:max(-4095,min(4095,countX)),y:max(-4095,min(4095,countY)),intent:active)
+    }
 }
