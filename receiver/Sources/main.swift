@@ -39,7 +39,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let motionFilter=WandMotionFilter()
     var rawLastArrival=0.0,rawReports=0,rawWindowStart=0.0,rawMaxGap=0.0
     let dwell=WandDwellClick()
-    let restDetection=WandRestDetection()
+    let restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
     var dwellTimer:Timer?,probeTimer:Timer?
     var restStopPending=false
     let review=WandReviewGesture()
@@ -230,7 +230,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func reset() {
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
-        probeTimer?.invalidate();probeTimer=nil;restDetection.reset();restStopPending=false
+        probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true);restStopPending=false
         performPointer(pointerRouter.cancelAll());setCircleLight(false)
         lightMode="disconnected"
         hudSession=false;hudEntryPress=false
@@ -332,7 +332,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line.hasSuffix("@POINTER_MODE") {enterPointerMode()}
             if let marker=line.range(of:"@FOLLOW ") {
                 let value=line[marker.upperBound...].trimmingCharacters(in:.whitespaces)
-                if value=="0" || value=="1" {dwell.follow(value=="1");scheduleDwell()}
+                if value=="0" || value=="1" {
+                    if value=="1" {restDetection.pointerActivated()}else{restDetection.pointerStopped()}
+                    dwell.follow(value=="1");scheduleDwell()
+                }
             }
             if let marker=line.range(of:"@ZERO "),let data=String(line[marker.upperBound...]).data(using:.utf8),let config=try? JSONDecoder().decode([Double].self,from:data) {log("NATIVE_MOTION_CONFIG",motionFilter.configure(config))}
             if let marker=line.range(of:"@RAW "){handleRaw(String(line[marker.upperBound...]))}
@@ -687,7 +690,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard (5...6).contains(parts.count),let x=Double(parts[0]),let y=Double(parts[1]),let z=Double(parts[2]),let gyro=Double(parts[3]),let held=Int(parts[4]),(0...1).contains(held),abs(x)<=32768,abs(y)<=32768,abs(z)<=32768,(0...100_000).contains(gyro) else{return}
         let now=ProcessInfo.processInfo.systemUptime
         if !motionFilter.configured,parts.count==6,parts[5]=="0" || parts[5]=="1" {dwell.intent(parts[5]=="1",now:now);scheduleDwell()}
-        let events=restDetection.update(x:x/8192,y:y/8192,z:z/8192,gyro:gyro/100,now:now,buttons:held==1 || scrollActive || buttons != 0,idle:!dwell.following && !recording.isRecording && !hudSession)
+        let wasParked=restDetection.parked
+        let events=restDetection.update(x:x/8192,y:y/8192,z:z/8192,gyro:gyro/100,now:now,buttons:held==1 || scrollActive || buttons != 0,idle:!dwell.following && !hudSession)
+        if !wasParked && restDetection.parked {log("TABLE_REST_CONFIRMED", "reference",restDetection.hasReference)}
         for event in events {
             switch event {
             case .probe:
