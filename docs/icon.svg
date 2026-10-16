@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Magic Wand</title>
+  <defs><radialGradient id="glow"><stop offset="0" stop-color="#4469ff" stop-opacity=".55"/><stop offset="1" stop-color="#4469ff" stop-opacity="0"/></radialGradient></defs>
+  <rect width="64" height="64" rx="14" fill="#1f173d"/>
+  <circle cx="46" cy="19" r="16" fill="url(#glow)"/>
+  <line x1="17" y1="48" x2="42" y2="23" stroke="#3a3744" stroke-width="3.4" stroke-linecap="round"/>
+  <line x1="17.6" y1="47.1" x2="42.3" y2="22.4" stroke="#6f6a80" stroke-width=".8" stroke-linecap="round"/>
+  <line x1="10" y1="55" x2="19" y2="46" stroke="#0f0c16" stroke-width="7" stroke-linecap="round"/>
+  <g fill="none" stroke-width="2.3" stroke-linecap="round"><path d="M39.98 11.01A10 10 0 0 1 52.02 11.01" stroke="#4469ff"/><path d="M53.99 12.98A10 10 0 0 1 53.99 25.02" stroke="#ff5a1f"/><path d="M52.02 26.99A10 10 0 0 1 39.98 26.99" stroke="#ff2e3a"/><path d="M38.01 25.02A10 10 0 0 1 38.01 12.98" stroke="#19e3f0"/></g>
+  <circle cx="46" cy="19" r="6.4" fill="#ece8f4"/>
+  <circle cx="46" cy="19" r="2.1" fill="#4469ff"/>
+</svg>

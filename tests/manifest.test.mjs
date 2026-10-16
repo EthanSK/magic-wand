@@ -1,0 +1,121 @@
+// wand.json is the one maintained description of the wand. These checks fail when it drifts
+// from the device code, the bridge, the receiver or the generated files.
+import test from "node:test";
+import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const { createWand, read } = require("./harness.cjs");
+const manifest = JSON.parse(read("wand.json"));
+const device = read("device/wand-mouse-prototype.js");
+const bridge = read("device/wand-mode-bridge.js");
+const swift = read("receiver/Sources/main.swift");
+const sha256 = (text) => createHash("sha256").update(text).digest("hex");
+const number = (pattern, source, label) => {
+  const match = source.match(pattern);
+  assert(match, `Could not find ${label}`);
+  return Number(match[1]);
+};
+
+test("versions match the sources and the receiver bundle", () => {
+  const body = device.slice(device.indexOf("// Adjust only"));
+  assert.equal(manifest.versions.deviceRuntime, "wand-" + sha256(body).slice(0, 12));
+  assert.equal(manifest.versions.deviceRuntime, read("device/generated/wand-runtime-version.txt"));
+  assert.equal(manifest.versions.bridgeRevision, sha256(read("device/generated/wand-mode-bridge.compact.js")));
+  const plist = read("receiver/Info.plist");
+  const value = (key) => plist.match(new RegExp(`<key>${key}</key>\\s*<string>([^<]+)</string>`))[1];
+  assert.equal(manifest.versions.receiver, value("CFBundleShortVersionString"));
+  assert.equal(manifest.versions.receiverBuild, value("CFBundleVersion"));
+});
+
+test("button pins and pull-ups match the device code", () => {
+  const pins = Object.fromEntries(manifest.buttons.map((button) => [button.id, button.pin]));
+  assert.match(device, new RegExp(`var HUD_PIN=${pins.middle}, STT_PIN=${pins.top};`));
+  assert.match(device, new RegExp(`var MOVE_PIN=${pins.bottom};`));
+  for (const pin of Object.values(pins)) assert.match(device, new RegExp(`pinMode\\(${pin},"input_pullup"\\)`));
+  assert.deepEqual(manifest.buttons.map((button) => button.key), ["T", "M", "B"]);
+  assert.deepEqual(manifest.chords[0].buttons, ["bottom", "middle"]);
+});
+
+test("tuning matches the running device code and the receiver", () => {
+  const wand = createWand({ bridge: "fragments" });
+  wand.calibrate();
+  wand.loadBridge();
+  const { CONFIG } = wand.ctx;
+  const t = manifest.tuning;
+  assert.equal(CONFIG.gain, t.pointerGain);
+  assert.equal(number(/gain:(\d+)/, device, "original gain"), t.previousPointerGain);
+  assert.equal(Math.round((1 - t.pointerGain / t.previousPointerGain) * 100), 20, "20 percent lower gain");
+  assert.equal(CONFIG.yGain, t.verticalRatio);
+  assert.equal(CONFIG.fineGain, t.fineGain);
+  assert.equal(CONFIG.fineSpeed, t.fineSpeedDegreesPerSecond);
+  assert.equal(CONFIG.fullSpeed, t.fullSpeedDegreesPerSecond);
+  assert.equal(CONFIG.deadZone, t.maximumNoiseZoneDegreesPerSecond);
+  assert.equal(CONFIG.sampleRate, t.sensorRequestHz);
+  assert.equal(Math.round(CONFIG.tapSeconds * 1000), t.holdMs);
+  assert.equal(Math.round(CONFIG.doubleTapSeconds * 1000), t.clickDecisionMs);
+  assert.equal(wand.ctx.wandHorizontalScrollBoost, t.horizontalScrollBoost);
+  assert.equal(wand.ctx.wandDoubleClickSeconds, t.macDoubleClickSeconds);
+  const guard = bridge.match(/e\.state\?([\d.]+):([\d.]+)/);
+  assert.equal(Math.round(Number(guard[1]) * 1000), t.releaseGuardMs);
+  assert.equal(Math.round(Number(guard[2]) * 1000), t.pressGuardMs);
+  assert.equal(Math.round(number(/wandMotionReadyAt=lastTime\+([\d.]+)/, bridge, "cold settle") * 1000), t.coldSettleMs);
+  assert.equal(number(/if\(!moveLatched&&!hudOpen&&!scrollHeld\)global\.wandPowerDownGyro\(\);\s*\},(\d+)\)/, bridge, "sensor grace"), t.sensorIdleGraceMs);
+  assert.equal(number(/NRF\.setConnectionInterval\((\d+)\)/, device, "connection interval"), t.bluetoothIntervalMs);
+  assert.equal(number(/if\(hudHeld\)middlePress\(\);\},(\d+)\)/, device, "middle delay"), t.middleReportDelayMs);
+  assert.equal(number(/hudTimer=setInterval\(function\(\)\{hudReport\(\);\},(\d+)\)/, device, "HUD report"), t.reportIntervalMs);
+  assert.equal(number(/scrollTimer=setInterval\(function\(\)\{scrollReport\('U'\);\},(\d+)\)/, device, "scroll report"), t.reportIntervalMs);
+  assert.match(device, new RegExp(`samples>=CONFIG\\.sampleRate\\*${t.calibrationSeconds}\\)`));
+  assert.equal(number(/scrollFractionX\+=\(x\/1000-scrollX\)\*([\d.]+)/, swift, "host scroll gain"), t.hostScrollGain);
+  assert.equal(Math.round(number(/middleHold=Timer\.scheduledTimer\(withTimeInterval:([\d.]+)/, swift, "receiver hold") * 1000), t.receiverHoldMs);
+});
+
+test("light modes, priority and RGB levels match the bridge", () => {
+  const chain = bridge.match(/var mode=(.+);\n/)[1];
+  const order = [...chain.matchAll(/'([a-z]+)'/g)].map((m) => m[1]);
+  assert.deepEqual(manifest.lights.map((light) => light.mode), order, "manifest order is the bridge's priority");
+  const wand = createWand({ bridge: "readable" });
+  wand.calibrate();
+  wand.loadBridge();
+  const { ctx } = wand;
+  const set = (state) => {
+    Object.assign(ctx, { WAND_UPDATING: false, connected: true, calibrationLit: false, scrollHeld: false, moveLatched: false, hudOpen: false, wandRecording: false }, state);
+    ctx.updateLights();
+    return wand.colors();
+  };
+  const states = {
+    update: { WAND_UPDATING: true },
+    disconnected: { connected: false },
+    calibration: { calibrationLit: true },
+    scroll: { scrollHeld: true },
+    mouse: { moveLatched: true },
+    hud: { hudOpen: true },
+    recording: { wandRecording: true },
+    idle: {},
+  };
+  for (const light of manifest.lights) {
+    assert.deepEqual(set(states[light.mode]), light.levels, `${light.mode} levels`);
+    assert.match(light.display, /^#[0-9a-f]{6}$/);
+  }
+  for (const button of [...manifest.buttons, ...manifest.chords]) {
+    assert(manifest.lights.some((light) => light.mode === button.light), `${button.id} names a real light`);
+  }
+});
+
+test("HUD start card and wand-adjustable wheels exist in the synced Agentic Mouse labels", () => {
+  const hud = JSON.parse(read("data/agentic-mouse-hud.json"));
+  const start = hud.cards.find((card) => card.cell === manifest.hud.startCell);
+  assert.equal(start.title, "Switch App");
+  assert.deepEqual(hud.rows.flat().sort((a, b) => a - b), hud.cards.map((card) => card.cell));
+  const wheels = new Set(hud.cards.filter((card) => card.wheel).map((card) => card.wheel.id));
+  for (const id of manifest.hud.adjustableWheels) assert(wheels.has(id), `${id} is a Default wheel card`);
+});
+
+test("public text never states unmeasured performance", () => {
+  const text = readFileSync(new URL("../wand.json", import.meta.url), "utf8").toLowerCase();
+  for (const phrase of ["low latency", "zero latency", "maximum accuracy", "pixel-perfect", "battery lasts", "hours of battery"]) {
+    assert(!text.includes(phrase), phrase);
+  }
+});
