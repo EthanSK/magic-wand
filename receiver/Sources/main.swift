@@ -42,6 +42,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
     var dwellTimer:Timer?,probeTimer:Timer?
     var restStopPending=false
+    var restDiagnosticsRemaining=30
     let review=WandReviewGesture()
     var reviewTimer:Timer?,reviewOriginY=0.0,appMode:String?
     var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false
@@ -123,6 +124,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         recording.start()
         lastTrusted = AXIsProcessTrusted()
+        refreshFeatureFlags()
         log("STARTED", ProcessInfo.processInfo.processIdentifier, "ACCESSIBILITY", lastTrusted)
         if CommandLine.arguments.contains("--request-permissions") {
             let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
@@ -134,6 +136,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             let trusted = AXIsProcessTrusted()
             if self.lastTrusted != trusted { self.lastTrusted = trusted; log("ACCESSIBILITY", trusted); self.status() }
             self.recording.refresh()
+            self.refreshFeatureFlags()
             self.status()
             if !self.ready && self.manager.state == .poweredOn && self.device == nil { self.connect() }
         }
@@ -142,6 +145,20 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func syncRecordingLight() {
         guard ready,!restoring else{return}
         queue("setWandRecording("+(recording.isRecording ? "true":"false")+");")
+    }
+    // Opt-in, local-only flag. A missing or invalid file restores the original
+    // axes. Read off the motion path so pointer delivery never waits for disk.
+    func refreshFeatureFlags() {
+        let path=support.appendingPathComponent("feature-flags.json")
+        let enabled:Bool
+        if let data=try? Data(contentsOf:path),data.count<4096,
+           let flags=try? JSONSerialization.jsonObject(with:data) as? [String:Any] {
+            enabled=(flags["orientationCompensation"] as? Bool)==true
+        }else{enabled=false}
+        if motionFilter.orientationCompensation != enabled {
+            motionFilter.orientationCompensation=enabled;motionFilter.reset()
+            log("ORIENTATION_COMPENSATION",enabled)
+        }
     }
     // Developer maintenance uses the existing BLE owner, so diagnosis and small
     // device updates do not disconnect the user's working pointer. Only consume
@@ -690,6 +707,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard (5...6).contains(parts.count),let x=Double(parts[0]),let y=Double(parts[1]),let z=Double(parts[2]),let gyro=Double(parts[3]),let held=Int(parts[4]),(0...1).contains(held),abs(x)<=32768,abs(y)<=32768,abs(z)<=32768,(0...100_000).contains(gyro) else{return}
         let now=ProcessInfo.processInfo.systemUptime
         if !motionFilter.configured,parts.count==6,parts[5]=="0" || parts[5]=="1" {dwell.intent(parts[5]=="1",now:now);scheduleDwell()}
+        motionFilter.observeGravity(x:x/8192,y:y/8192,z:z/8192)
+        if restDiagnosticsRemaining>0 {
+            restDiagnosticsRemaining-=1
+            log("REST_SAMPLE",x/8192,y/8192,z/8192,"gyro",gyro/100,"held",held,"follow",dwell.following,"parked",restDetection.parked)
+        }
         let wasParked=restDetection.parked
         let events=restDetection.update(x:x/8192,y:y/8192,z:z/8192,gyro:gyro/100,now:now,buttons:held==1 || scrollActive || buttons != 0,idle:!dwell.following && !hudSession)
         if !wasParked && restDetection.parked {log("TABLE_REST_CONFIRMED", "reference",restDetection.hasReference)}

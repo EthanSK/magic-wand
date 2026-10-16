@@ -7,8 +7,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.33",
-    "receiverBuild": "38",
+    "receiver": "1.2.35",
+    "receiverBuild": "40",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "c6948df57d8e26f59aa10b1c590b4d5536f9de8bd6cb1246ed2dea4704a02f1d"
   },
@@ -302,7 +302,12 @@
     "highDwellMs": 450,
     "highDwellTravelCounts": 12,
     "idleAccelerometerHz": 1.6,
-    "imuTelemetryMaxHz": 10
+    "imuTelemetryMaxHz": 10,
+    "orientationCompensation": {
+      "default": false,
+      "experimental": true,
+      "scope": "Native mouse pointing; compensates wrist roll using existing gravity telemetry. Enable with orientationCompensation in the local feature-flags.json. No new movement buffer."
+    }
   },
   "hud": {
     "source": "Agentic Mouse’s published Default mode",
