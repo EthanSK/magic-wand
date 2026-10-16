@@ -79,3 +79,25 @@ Report any check the browser tool can’t do, such as real multitouch, rather th
 - Keep the footer’s “Ethan’s setup” link to https://ethansk.github.io/ethan-setup/.
 - Preserve third-party licences in `docs/lib/` and `docs/fonts/`; update `data/vendor.lock.json`
   only through `scripts/vendor.py`.
+
+## Working rules and project skills
+
+- Commit code regularly, including after each completed, verified feature or fix. Do not leave
+  all the work uncommitted until the end of a long chat. Commit only the intended change;
+  preserve unrelated staged and unstaged work. A commit is not a claim of physical acceptance.
+- Keep track of the rules Ethan adds automatically in this project's `AGENTS.md` or the relevant
+  project skill, using his original wording as closely as possible. He has explicitly chosen
+  these project files for that ongoing rule capture. Preserve explicit corrections to older
+  rules; ask only when the intended rule is unclear. Do not turn every idea, experiment or
+  dictated aside into a permanent rule.
+- Keep historical findings and verified technical lessons in `LEARNINGS.md`; current controls,
+  colours and tuning belong in `wand.json`. Do not use `AGENTS.md` as a transcript or task log.
+- Use [magic-wand-dev](.agents/skills/magic-wand-dev/SKILL.md) for device, receiver, integration,
+  release and prototype work. Use [learnings](.agents/skills/learnings/SKILL.md) before bug fixes
+  and fragile changes, and preserve useful verified lessons afterward.
+- Skills live in `.agents/skills/<name>/SKILL.md`, with `references/`, `scripts/` or `assets/`
+  only when needed. `CLAUDE.md` and `.claude/skills` point at the same canonical instructions;
+  never maintain diverging copies. Reuse the structure, not AIMVS-specific rules or tooling.
+- Preserve `prototype-v1.0.0` as the immutable original-hardware baseline. Read
+  `prototypes/README.md` before changing prototype profiles; later hardware gets a separate
+  profile so returning to V1 does not lose its tuned behaviour.
