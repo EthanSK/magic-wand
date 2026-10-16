@@ -56,6 +56,13 @@ Report any check the browser tool can’t do, such as real multitouch, rather th
 
 ## Boundaries
 
+- If we are going to add a delay in the future, warn Ethan and double-check his explicit confirmation first.
+- Before adding or increasing an intentional delay to pointer movement, including buffering,
+  look-ahead, or smoothing/interpolation that adds latency, explain what will be delayed and the
+  expected amount, then wait for his confirmation before implementing it.
+- An earlier latency experiment or approval does not authorize a new delay. Do not describe
+  smoothing or interpolation as delay-free unless that has been established.
+
 - Never connect to, flash, reconfigure or restart the real Puck, Wand Receiver, Agentic Mouse or
   Agent Flow from work in this repository.
 - Don’t build the receiver app next to Ethan’s installed copy with the same bundle identifier; it
