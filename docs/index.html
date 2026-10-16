@@ -24,7 +24,7 @@
   <link rel="manifest" href="./site.webmanifest?v=7cccaabea0">
   <link rel="preload" href="./fonts/big-shoulders-display.woff2?v=203dd8ba4a" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="./fonts/atkinson-hyperlegible-next.woff2?v=1e4cea71d7" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./styles.css?v=7669c47393">
+  <link rel="stylesheet" href="./styles.css?v=f9a74049f2">
   <script type="importmap">
   {
     "imports": {
@@ -33,7 +33,7 @@
       "./wand-scene.mjs": "./wand-scene.mjs?v=68bf658fc1",
       "./sim/pipeline.mjs": "./sim/pipeline.mjs?v=5d25bab12d",
       "./sim/hud.mjs": "./sim/hud.mjs?v=b6afc5840e",
-      "./sim/receiver.mjs": "./sim/receiver.mjs?v=fa2a9964c4",
+      "./sim/receiver.mjs": "./sim/receiver.mjs?v=8ae38c3a77",
       "./sim/mac.mjs": "./sim/mac.mjs?v=ceefc6fafb"
     }
   }
@@ -43,8 +43,8 @@
     "worker": "./sim/worker.js?v=418f86ed95",
     "shim": "./sim/espruino.js?v=0fba4637ae",
     "device": "./device/wand-mouse-prototype.js?v=036f2bd951",
-    "bridge": "./device/wand-mode-bridge.compact.js?v=6fd61d2c7a",
-    "wand": "./data/wand.json?v=bdcd1384fc",
+    "bridge": "./device/wand-mode-bridge.compact.js?v=2493423e97",
+    "wand": "./data/wand.json?v=f1e7ddfdb5",
     "hud": "./data/hud.json?v=c804168e26"
   }
   </script>
@@ -135,22 +135,22 @@
             <div><dt>Hold to open, turn, release</dt><dd>Use the outlined card on release</dd></div>
             <div><dt>Tap again</dt><dd>Use the outlined card</dd></div>
             <div><dt>Hold while open</dt><dd>Hold the card; on some wheel cards, tilt to turn the wheel</dd></div>
-            <div><dt>Double tap</dt><dd>Close the HUD</dd></div>
+            <div><dt>Double tap</dt><dd>Open the current app’s controls; double tap again to close</dd></div>
           </dl>
-          <ul class="notes"><li>The outline stops at the edges instead of wrapping.</li><li>Bottom goes back to the pointer.</li></ul>
+          <ul class="notes"><li>The outline stops at the edges instead of wrapping.</li><li>Bottom goes back to the pointer.</li><li>VS Code app mode: hold Bottom and tilt down or up to review changes. Crossed files are staged on release through Better Git. Double tap Bottom to toggle file staging mode; green is change review and purple is file staging.</li><li>The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.</li></ul>
         </div>
         <div class="control" data-light="mouse">
           <div class="control-head"><h3>Bottom</h3><p class="control-meta"><span class="pin">D1</span><kbd>B</kbd></p></div>
           <p class="control-role"><span class="swatch" aria-hidden="true"></span>Mouse</p>
           <dl class="gestures">
-            <div><dt>Tap</dt><dd>The pointer follows the wand, without clicking</dd></div>
-            <div><dt>Hold, turn, release</dt><dd>Click once where you stop</dd></div>
-            <div><dt>Tap while following</dt><dd>Click</dd></div>
-            <div><dt>Hold while following</dt><dd>Move at low sensitivity; release clicks, pauses 300 ms, then resumes high sensitivity</dd></div>
-            <div><dt>Tap, then hold</dt><dd>Drag; release drops, pauses 300 ms, then resumes prior high sensitivity</dd></div>
-            <div><dt>Double tap while following</dt><dd>Stop following</dd></div>
+            <div><dt>Tap from off</dt><dd>Enter high-sensitivity follow without clicking</dd></div>
+            <div><dt>Stop after moving in HIGH</dt><dd>Click once after a 450 ms pause</dd></div>
+            <div><dt>Tap while following</dt><dd>Stop following without clicking</dd></div>
+            <div><dt>Hold, turn, release</dt><dd>Aim at one-third speed; release clicks once</dd></div>
+            <div><dt>Hold while following</dt><dd>Aim at low sensitivity; release clicks, pauses 300 ms, then resumes HIGH</dd></div>
+            <div><dt>Tap, then hold</dt><dd>Drag with the actual mouse button held; release drops</dd></div>
           </dl>
-          <ul class="notes"><li>The pointer stays still while a click is decided.</li><li>Middle switches to the HUD.</li><li>High sensitivity is released-button follow. Holding Bottom is low sensitivity, at one-third speed.</li><li>While following with no buttons held, circle clockwise to scroll down or anticlockwise to scroll up.</li><li>The first full loop still moves the pointer; cyan shows scrolling has started. Pause to return to pointing.</li><li>The pointer stays within the real screen edges, including separate monitors.</li></ul>
+          <ul class="notes"><li>HIGH is released-button follow. LOW is a plain Bottom hold at one-third speed.</li><li>Only LOW aiming adds 90 ms of movement delay, so release can discard the switch jolt. HIGH and real dragging stay immediate.</li><li>Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Cyan shows recognition; release stops without an endpoint click.</li><li>Leave the wand idle on the desk for about two seconds to learn its resting pose. Picking it up can then enter HIGH automatically; setting it down stops following after sustained desk confirmation.</li><li>Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.</li><li>Desk detection is an IMU estimate, not a touch sensor; a very still supported hand can resemble a desk. The browser demo covers the buttons, not physical desk detection.</li><li>Middle switches to the HUD. The pointer stays within real display edges.</li></ul>
         </div>
         <div class="control" data-light="scroll">
           <div class="control-head"><h3>Bottom + Middle</h3><p class="control-meta"><kbd>B</kbd>+<kbd>M</kbd></p></div>
@@ -170,6 +170,7 @@
         <li data-light="disconnected"><span class="swatch" aria-hidden="true"></span><strong>Disconnected</strong> <span>Dim orange</span></li>
         <li data-light="calibration"><span class="swatch" aria-hidden="true"></span><strong>Calibrating</strong> <span>Keep it still with no buttons pressed for two seconds</span></li>
         <li data-light="scroll"><span class="swatch" aria-hidden="true"></span><strong>Scrolling</strong> <span>Cyan</span></li>
+        <li data-light="app"><span class="swatch" aria-hidden="true"></span><strong>App review</strong> <span>Green for app review; purple for VS Code file staging</span></li>
         <li data-light="mouse"><span class="swatch" aria-hidden="true"></span><strong>Pointer</strong> <span>Blue</span></li>
         <li data-light="hud"><span class="swatch" aria-hidden="true"></span><strong>HUD</strong> <span>Orange</span></li>
         <li data-light="recording"><span class="swatch" aria-hidden="true"></span><strong>Recording</strong> <span>Red, unless the pointer, HUD or scrolling is active</span></li>
@@ -261,9 +262,10 @@
             <tr><th scope="row">Bluetooth interval</th><td>15 ms requested</td><td></td></tr>
             <tr><th scope="row">Button-jolt guard</th><td>50 ms after a press, 70 ms after a release</td><td>Motion in the guard is dropped, not replayed</td></tr>
             <tr><th scope="row">Cold start</th><td>96 ms settling</td><td>Skipped when the sensor is still warm</td></tr>
-            <tr><th scope="row">Sensor sleep</th><td>After 1 s idle</td><td>Off at once on disconnect</td></tr>
+            <tr><th scope="row">Gyro sleep</th><td>After 1 s idle</td><td>Accelerometer stays at 1.6 Hz for pickup; off on disconnect</td></tr>
             <tr><th scope="row">Hold</th><td>220 ms</td><td>Longer presses count as holds</td></tr>
-            <tr><th scope="row">Click decision</th><td>250 ms</td><td>Waits for a possible double tap</td></tr>
+            <tr><th scope="row">LOW movement delay</th><td>90 ms</td><td>Release drops the last unshown movement; HIGH and actual dragging stay immediate</td></tr>
+            <tr><th scope="row">HIGH stop-to-click</th><td>450 ms still</td><td>One click after deliberate movement; no repeat while still</td></tr>
             <tr><th scope="row">Double-click window</th><td>0.8 s</td><td>Read from the Mac’s setting</td></tr>
             <tr><th scope="row">Scrolling</th><td>Horizontal × 1.4</td><td>Mac wheel gain 0.8</td></tr>
             <tr><th scope="row">Middle report</th><td>After 80 ms</td><td>So Bottom + Middle can become a scroll</td></tr>
@@ -289,10 +291,10 @@
           <ul class="status-list">
             <li>Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.</li>
             <li>Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.</li>
-            <li>Screen-edge reversal, held Middle selection and circular scrolling pass regression checks; their physical feel is still unconfirmed.</li>
+            <li>HIGH dwell, held rough circles, LOW release-jolt buffering, desk inference and VS Code review pass automated checks; physical acceptance is pending.</li>
             <li>End-to-end latency, accuracy and battery life haven’t been measured.</li>
           </ul>
-          <p class="versions"><span>Receiver 1.2.19 (24)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge 6fd61d2c</span></p>
+          <p class="versions"><span>Receiver 1.2.21 (26)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge 2493423e</span></p>
           <p class="fine">Updated 16 October 2026</p>
           <!-- /wand:status -->
         </div>

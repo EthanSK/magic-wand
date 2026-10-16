@@ -25,7 +25,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   var connects=NRF['#onconnect'];
   if(!connects)connects=[onConnect];else if(typeof connects==='function')connects=[connects];
   connects.forEach(function(callback){if(callback.toString().indexOf('stopScroll')>=0)callback.replaceWith(function(){
-    global.wandCircleScrolling=false;stopScroll();scrollSuppress=false;chordFollowBefore=false;
+    global.wandCircleScrolling=false;global.wandAppMode=undefined;global.wandReviewFiles=false;stopScroll();scrollSuppress=false;chordFollowBefore=false;
     clearHoldClick();moveLatched=false;hudOpen=false;moveGestureMode=undefined;lastMoveTap=-100;
     stopHUD();cancelTapGesture();epoch++;connected=true;busy=false;sentButtons=0;
     if(sendTimer!==undefined){clearTimeout(sendTimer);sendTimer=undefined;}
@@ -80,7 +80,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     global.wandSlackX=ox;global.wandSlackY=oy;global.wandStepX=qx;global.wandStepY=qy;
   };
   global.wandPowerDownGyro=function(){
-    Puck.accelOff();gyroAwake=false;motionWarmup=0;lastTime=0;
+    if(connected&&bias)Puck.accelOn(1.6);else Puck.accelOff();gyroAwake=false;motionWarmup=0;lastTime=0;
     fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;
     global.wandSlackX=global.wandSlackY=0;
   };
@@ -95,12 +95,22 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   sleepGyro.replaceWith(function(){
     if(global.wandSleepTimer!==undefined){clearTimeout(global.wandSleepTimer);global.wandSleepTimer=undefined;}
     if(!connected||!bias){global.wandPowerDownGyro();return;}
-    if(!gyroAwake)return;
+    if(!gyroAwake){global.wandPowerDownGyro();return;}
     global.wandSleepTimer=setTimeout(function(){
       global.wandSleepTimer=undefined;
       if(!moveLatched&&!hudOpen&&!scrollHeld)global.wandPowerDownGyro();
     },1000);
   });
+  // Only accelerometer readings run on the desk (1.6 Hz, gyro off). The Mac
+  // classifies pickup and set-down from this stream, never from pointer silence.
+  // Active telemetry is capped at 10 Hz; accepted pointer processing stays 104 Hz.
+  global.wandIMUNext=0;
+  global.wandReportIMU=function(a,now){
+    if(!connected||!bias||!a.acc||now<global.wandIMUNext)return;
+    global.wandIMUNext=now+0.1;
+    var q=a.acc,g=a.gyro,r=gyroAwake&&g?Math.sqrt(Math.pow((g.x-bias.x)/134,2)+Math.pow((g.y-bias.y)/134,2)+Math.pow((g.z-bias.z)/134,2)):0;
+    Bluetooth.println('@IMU '+q.x+','+q.y+','+q.z+','+Math.round(r*100)+','+((!digitalRead(MOVE_PIN)||!digitalRead(HUD_PIN)||!digitalRead(STT_PIN))?1:0));
+  };
   // Keep the actual registered sensor callback, including its saved scope.
   var mh=Puck['#onaccel'];if(typeof mh==='function')mh=[mh];
   var mc=(mh||[]).filter(function(f){return typeof f==='function'&&f.toString().indexOf('var g=a.gyro')>=0;});
@@ -119,8 +129,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   });
   global.wandLiveMotionCallback.replaceWith(function(a) {
   var g=a.gyro;
-  if (!g) return;
   var now=getTime();
+  global.wandReportIMU(a,now);
+  if (!g || (!gyroAwake&&bias)) return;
   if (!bias) {
     if (now>calibrationDeadline) {calibrationLit=false;updateLights();sleepGyro();return;}
     if (warmup>0) {warmup--; return;}
@@ -199,10 +210,12 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   });
   // These are mode indicators, not just button-down lights. Recording remains
   // red after release only if neither pointer, HUD nor scroll has priority.
+  global.wandLastFollow=undefined;
   updateLights.replaceWith(function(){
+    if(connected&&global.wandLastFollow!==moveLatched){global.wandLastFollow=moveLatched;Bluetooth.println('@FOLLOW '+(moveLatched?1:0));}
     var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN);
-    var mode=global.WAND_UPDATING?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':(scrollHeld||global.wandCircleScrolling)?'scroll':move?'mouse':hud?'hud':(global.wandRecording||!digitalRead(STT_PIN))?'recording':'idle';
-    lightLevels=mode==='update'||mode==='calibration'||mode==='recording'?[1,0,0]:mode==='disconnected'?[0.08,0.016,0]:mode==='scroll'?[0,1,1]:mode==='mouse'?[0,0,1]:mode==='hud'?[1,0.2,0]:[0,0,0];
+    var mode=global.WAND_UPDATING?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':(scrollHeld||global.wandCircleScrolling)?'scroll':global.wandAppMode?'app':move?'mouse':hud?'hud':(global.wandRecording||!digitalRead(STT_PIN))?'recording':'idle';
+    lightLevels=mode==='update'||mode==='calibration'||mode==='recording'?[1,0,0]:mode==='disconnected'?[0.08,0.016,0]:mode==='scroll'?[0,1,1]:mode==='app'?(global.wandReviewFiles?[1,0,1]:[0,1,0]):mode==='mouse'?[0,0,1]:mode==='hud'?[1,0.2,0]:[0,0,0];
     writeLight(LED1,lightLevels[0]);writeLight(LED2,lightLevels[1]);writeLight(LED3,lightLevels[2]);
     if(connected&&mode!==global.wandLastLightState){global.wandLastLightState=mode;print('WAND_LIGHT_STATE '+mode+' '+JSON.stringify(lightLevels));}
   });
@@ -211,19 +224,21 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // If HIGH was already active, LOW release clicks and holds that point for
   // 300 ms before HIGH resumes. Starting LOW from off returns to off.
   // Click then hold is the explicit real drag; release drops, then resumes prior HIGH.
-  // Double short-click still exits HIGH.
+  // A single short press exits HIGH; stopping after travel clicks on the Mac.
+  // Keep the preceding short tap available for explicit tap-then-hold dragging.
   // Free the prior button body too: repeated live updates can exhaust Puck RAM.
   global.wandLiveMoveCallback.replaceWith(function(){if(false)clearHoldClick();});
   global.wandLiveMoveCallback.replaceWith(function(){
     if(connected)Bluetooth.println('@BOTTOM '+(digitalRead(MOVE_PIN)?0:1));
     if(!digitalRead(MOVE_PIN)&&digitalRead(HUD_PIN)&&!scrollSuppress)chordFollowBefore=moveLatched;
     if(checkScrollChord()){global.wandMomentaryStarted=undefined;return;}
+    if(global.wandAppMode==='vsCode'){if(connected)Bluetooth.println('@REVIEW '+(digitalRead(MOVE_PIN)?0:1));updateLights();return;}
     moveX=moveY=fractionX=fractionY=filteredX=filteredY=0;
     global.wandSlackX=global.wandSlackY=0;
     if(!digitalRead(MOVE_PIN)){
       if(!bias)calibrate();
       global.wandPressStarted=getTime();
-      global.wandFollowBeforeHold=moveLatched;
+      global.wandFollowBeforeHold=moveLatched||!!(global.wandExitFollow&&getTime()-lastMoveTap<=global.wandDoubleClickSeconds);global.wandExitFollow=false;
       global.wandPointerPauseUntil=0;
       moveGestureMode=moveLatched?'pointer':'enable';
       global.wandMomentaryStarted=moveGestureMode==='enable'?getTime():undefined;
@@ -241,9 +256,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       tapTimer=undefined;tapPending=false;moveClickFired=false;
       clearHoldClick();holdClickTimer=setTimeout(function(){
         holdClickTimer=undefined;
-        if(digitalRead(MOVE_PIN)||moveGestureMode!=='pointer'||!connected||!bias)return;
+        if(digitalRead(MOVE_PIN)||!connected||!bias||(moveGestureMode!=='pointer'&&!(moveGestureMode==='enable'&&global.wandDragCandidate)))return;
         moveClickFired=true;
-        if(global.wandDragCandidate){dragging=true;states.push(1);pump();}
+        if(global.wandDragCandidate){moveGestureMode='pointer';dragging=true;states.push(1);pump();}
         else moveGestureMode='clutch';
         wakeGyro();
       },CONFIG.tapSeconds*1000);
@@ -261,12 +276,11 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       if(moveLatched)lastMoveTap=getTime();else clickTimes(1);
     }else if(moveGestureMode==='pointer'){
       if(dragging){dragging=false;states.push(0);pump();moveLatched=!!global.wandFollowBeforeHold;global.wandPointerPauseUntil=getTime()+CONFIG.releaseClickPause;cancelTapGesture();}
-      else if(secondTap){moveLatched=false;cancelTapGesture();}
-      else {lastMoveTap=getTime();deferSingleClick();}
+      else {moveLatched=false;global.wandExitFollow=true;cancelTapGesture();lastMoveTap=getTime();}
     }
     print('WAND_BUTTON_STATE '+JSON.stringify({mode:moveGestureMode,ms:Math.round((getTime()-global.wandPressStarted)*1000),follow:moveLatched}));
     global.wandMomentaryStarted=undefined;global.wandDragCandidate=false;global.wandFollowBeforeHold=false;moveGestureMode=undefined;secondTap=false;
-    if(!moveLatched)lastMoveTap=-100;
+    // A short exit tap may be followed by the held second press of a real drag.
     if((moveLatched||hudOpen)&&connected)wakeGyro();else if(bias)sleepGyro();
     updateLights();
   });
@@ -283,4 +297,5 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   };
   global.wandState=function(){return {calibrated:!!bias,move:moveLatched,hud:hudOpen,gyro:gyroAwake,bias:bias,light:lightLevels};};
   global.setWandRecording=function(active){global.wandRecording=!!active;updateLights();print('WAND_RECORDING_LIGHT '+(active?'1':'0'));};
+  if(connected&&bias&&!gyroAwake)global.wandPowerDownGyro();
   updateLights();print('WAND_MODE_ROUTING_READY');

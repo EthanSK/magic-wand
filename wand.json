@@ -8,24 +8,33 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.19",
-    "receiverBuild": "24",
+    "receiver": "1.2.21",
+    "receiverBuild": "26",
     "deviceRuntime": "wand-e1ce30d7c407",
-    "bridgeRevision": "6fd61d2c7a36f90bdb0ca0104c657a5a981b7446606edd37d499f03d26fb931b"
+    "bridgeRevision": "2493423e9720e89e3aae8585b4cddfb11295d7109bdb258531e45d0ac118a7d6"
   },
   "status": [
     "Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.",
     "Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.",
-    "Screen-edge reversal, held Middle selection and circular scrolling pass regression checks; their physical feel is still unconfirmed.",
+    "HIGH dwell, held rough circles, LOW release-jolt buffering, desk inference and VS Code review pass automated checks; physical acceptance is pending.",
     "End-to-end latency, accuracy and battery life haven’t been measured."
   ],
   "hardware": {
     "board": "Puck.js v2.1",
     "boardUrl": "https://www.espruino.com/Puck.js",
     "parts": [
-      ["Tip", "Puck.js v2.1: gyro, Bluetooth and an RGB light"],
-      ["Shaft", "Carbon-fibre tube, roughly 50 cm"],
-      ["Grip", "Three separate wired momentary buttons"]
+      [
+        "Tip",
+        "Puck.js v2.1: gyro, Bluetooth and an RGB light"
+      ],
+      [
+        "Shaft",
+        "Carbon-fibre tube, roughly 50 cm"
+      ],
+      [
+        "Grip",
+        "Three separate wired momentary buttons"
+      ]
     ],
     "wiring": "Each button connects its pin to GND. The Puck’s internal pull-ups make a press read low."
   },
@@ -38,8 +47,14 @@
       "role": "Speech to text",
       "light": "recording",
       "gestures": [
-        ["Tap", "Start Agent Flow dictation"],
-        ["Tap again", "Stop and paste"]
+        [
+          "Tap",
+          "Start Agent Flow dictation"
+        ],
+        [
+          "Tap again",
+          "Stop and paste"
+        ]
       ]
     },
     {
@@ -50,15 +65,32 @@
       "role": "Agentic Mouse HUD",
       "light": "hud",
       "gestures": [
-        ["Tap", "Open the HUD on Switch App, then turn the wand to move the outline"],
-        ["Hold to open, turn, release", "Use the outlined card on release"],
-        ["Tap again", "Use the outlined card"],
-        ["Hold while open", "Hold the card; on some wheel cards, tilt to turn the wheel"],
-        ["Double tap", "Close the HUD"]
+        [
+          "Tap",
+          "Open the HUD on Switch App, then turn the wand to move the outline"
+        ],
+        [
+          "Hold to open, turn, release",
+          "Use the outlined card on release"
+        ],
+        [
+          "Tap again",
+          "Use the outlined card"
+        ],
+        [
+          "Hold while open",
+          "Hold the card; on some wheel cards, tilt to turn the wheel"
+        ],
+        [
+          "Double tap",
+          "Open the current app’s controls; double tap again to close"
+        ]
       ],
       "notes": [
         "The outline stops at the edges instead of wrapping.",
-        "Bottom goes back to the pointer."
+        "Bottom goes back to the pointer.",
+        "VS Code app mode: hold Bottom and tilt down or up to review changes. Crossed files are staged on release through Better Git. Double tap Bottom to toggle file staging mode; green is change review and purple is file staging.",
+        "The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations."
       ]
     },
     {
@@ -69,20 +101,39 @@
       "role": "Mouse",
       "light": "mouse",
       "gestures": [
-        ["Tap", "The pointer follows the wand, without clicking"],
-        ["Hold, turn, release", "Click once where you stop"],
-        ["Tap while following", "Click"],
-        ["Hold while following", "Move at low sensitivity; release clicks, pauses 300 ms, then resumes high sensitivity"],
-        ["Tap, then hold", "Drag; release drops, pauses 300 ms, then resumes prior high sensitivity"],
-        ["Double tap while following", "Stop following"]
+        [
+          "Tap from off",
+          "Enter high-sensitivity follow without clicking"
+        ],
+        [
+          "Stop after moving in HIGH",
+          "Click once after a 450 ms pause"
+        ],
+        [
+          "Tap while following",
+          "Stop following without clicking"
+        ],
+        [
+          "Hold, turn, release",
+          "Aim at one-third speed; release clicks once"
+        ],
+        [
+          "Hold while following",
+          "Aim at low sensitivity; release clicks, pauses 300 ms, then resumes HIGH"
+        ],
+        [
+          "Tap, then hold",
+          "Drag with the actual mouse button held; release drops"
+        ]
       ],
       "notes": [
-        "The pointer stays still while a click is decided.",
-        "Middle switches to the HUD.",
-        "High sensitivity is released-button follow. Holding Bottom is low sensitivity, at one-third speed.",
-        "While following with no buttons held, circle clockwise to scroll down or anticlockwise to scroll up.",
-        "The first full loop still moves the pointer; cyan shows scrolling has started. Pause to return to pointing.",
-        "The pointer stays within the real screen edges, including separate monitors."
+        "HIGH is released-button follow. LOW is a plain Bottom hold at one-third speed.",
+        "Only LOW aiming adds 90 ms of movement delay, so release can discard the switch jolt. HIGH and real dragging stay immediate.",
+        "Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Cyan shows recognition; release stops without an endpoint click.",
+        "Leave the wand idle on the desk for about two seconds to learn its resting pose. Picking it up can then enter HIGH automatically; setting it down stops following after sustained desk confirmation.",
+        "Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.",
+        "Desk detection is an IMU estimate, not a touch sensor; a very still supported hand can resemble a desk. The browser demo covers the buttons, not physical desk detection.",
+        "Middle switches to the HUD. The pointer stays within real display edges."
       ]
     }
   ],
@@ -90,24 +141,135 @@
     {
       "id": "scroll",
       "name": "Bottom + Middle",
-      "buttons": ["bottom", "middle"],
+      "buttons": [
+        "bottom",
+        "middle"
+      ],
       "role": "Scroll",
       "light": "scroll",
       "gestures": [
-        ["Hold both and turn", "Scroll sideways and up or down at once, including diagonals"],
-        ["Release either", "Stop scrolling; nothing clicks"]
+        [
+          "Hold both and turn",
+          "Scroll sideways and up or down at once, including diagonals"
+        ],
+        [
+          "Release either",
+          "Stop scrolling; nothing clicks"
+        ]
       ]
     }
   ],
   "lights": [
-    { "mode": "update", "name": "Updating", "levels": [1, 0, 0], "display": "#ff2e3a", "detail": "Receiver is updating the device code" },
-    { "mode": "disconnected", "name": "Disconnected", "levels": [0.08, 0.016, 0], "display": "#8a3a12", "detail": "Dim orange" },
-    { "mode": "calibration", "name": "Calibrating", "levels": [1, 0, 0], "display": "#ff2e3a", "detail": "Keep it still with no buttons pressed for two seconds" },
-    { "mode": "scroll", "name": "Scrolling", "levels": [0, 1, 1], "display": "#19e3f0", "detail": "Cyan" },
-    { "mode": "mouse", "name": "Pointer", "levels": [0, 0, 1], "display": "#4469ff", "detail": "Blue" },
-    { "mode": "hud", "name": "HUD", "levels": [1, 0.2, 0], "display": "#ff5a1f", "detail": "Orange" },
-    { "mode": "recording", "name": "Recording", "levels": [1, 0, 0], "display": "#ff2e3a", "detail": "Red, unless the pointer, HUD or scrolling is active" },
-    { "mode": "idle", "name": "Idle", "levels": [0, 0, 0], "display": "#4a4268", "detail": "Off" }
+    {
+      "mode": "update",
+      "name": "Updating",
+      "levels": [
+        1,
+        0,
+        0
+      ],
+      "display": "#ff2e3a",
+      "detail": "Receiver is updating the device code"
+    },
+    {
+      "mode": "disconnected",
+      "name": "Disconnected",
+      "levels": [
+        0.08,
+        0.016,
+        0
+      ],
+      "display": "#8a3a12",
+      "detail": "Dim orange"
+    },
+    {
+      "mode": "calibration",
+      "name": "Calibrating",
+      "levels": [
+        1,
+        0,
+        0
+      ],
+      "display": "#ff2e3a",
+      "detail": "Keep it still with no buttons pressed for two seconds"
+    },
+    {
+      "mode": "scroll",
+      "name": "Scrolling",
+      "levels": [
+        0,
+        1,
+        1
+      ],
+      "display": "#19e3f0",
+      "detail": "Cyan"
+    },
+    {
+      "mode": "app",
+      "name": "App review",
+      "levels": [
+        0,
+        1,
+        0
+      ],
+      "display": "#22e871",
+      "detail": "Green for app review; purple for VS Code file staging",
+      "variants": [
+        {
+          "name": "File staging",
+          "levels": [
+            1,
+            0,
+            1
+          ],
+          "display": "#c96bff"
+        }
+      ]
+    },
+    {
+      "mode": "mouse",
+      "name": "Pointer",
+      "levels": [
+        0,
+        0,
+        1
+      ],
+      "display": "#4469ff",
+      "detail": "Blue"
+    },
+    {
+      "mode": "hud",
+      "name": "HUD",
+      "levels": [
+        1,
+        0.2,
+        0
+      ],
+      "display": "#ff5a1f",
+      "detail": "Orange"
+    },
+    {
+      "mode": "recording",
+      "name": "Recording",
+      "levels": [
+        1,
+        0,
+        0
+      ],
+      "display": "#ff2e3a",
+      "detail": "Red, unless the pointer, HUD or scrolling is active"
+    },
+    {
+      "mode": "idle",
+      "name": "Idle",
+      "levels": [
+        0,
+        0,
+        0
+      ],
+      "display": "#4a4268",
+      "detail": "Off"
+    }
   ],
   "tuning": {
     "pointerGain": 86.4,
@@ -137,12 +299,21 @@
     "hostScrollGain": 0.8,
     "receiverHoldMs": 220,
     "macDoubleClickSeconds": 0.8,
-    "calibrationSeconds": 2
+    "calibrationSeconds": 2,
+    "lowMotionDelayMs": 90,
+    "highDwellMs": 450,
+    "highDwellTravelCounts": 12,
+    "idleAccelerometerHz": 1.6,
+    "imuTelemetryMaxHz": 10
   },
   "hud": {
     "source": "Agentic Mouse’s published Default mode",
     "startCell": 11,
-    "cardOverrides": { "7": { "title": "⌘↩ Steer" } },
+    "cardOverrides": {
+      "7": {
+        "title": "⌘↩ Steer"
+      }
+    },
     "navigation": {
       "degreesPerColumn": 8,
       "degreesPerRow": 7,
@@ -153,8 +324,15 @@
       "headingMemory": 0.25,
       "headingHysteresisDegrees": 3
     },
-    "adjust": { "degreesPerStep": 7, "hysteresis": 0.18, "maximumStepsPerUpdate": 6 },
-    "adjustableWheels": ["horizontalScroll", "clipboard"]
+    "adjust": {
+      "degreesPerStep": 7,
+      "hysteresis": 0.18,
+      "maximumStepsPerUpdate": 6
+    },
+    "adjustableWheels": [
+      "horizontalScroll",
+      "clipboard"
+    ]
   },
   "dependencies": [
     {
