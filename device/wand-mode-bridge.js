@@ -53,6 +53,10 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // pointer axes by 20%, and keep a one-second sensor grace between gestures.
   // Pointer output still stops immediately; only sensor power-down is deferred.
   CONFIG.gain=86.4;
+  // Holding Bottom is the precision gesture: use one-third of normal pointer
+  // gain for temporary movement and real dragging. Released-button follow
+  // keeps normal gain; HUD selection and the two-button scroll return earlier.
+  CONFIG.heldPointerGain=1/3;
   global.wandPowerDownGyro=function(){
     Puck.accelOff();gyroAwake=false;motionWarmup=0;lastTime=0;
     fractionX=0;fractionY=0;moveX=0;moveY=0;filteredX=0;filteredY=0;
@@ -150,6 +154,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   filteredX+=alpha*(px-filteredX);filteredY+=alpha*(py-filteredY);
   var sx=precisionZone(filteredX,noise[CONFIG.xAxis]),sy=precisionZone(filteredY,noise[CONFIG.yAxis]);
   var scale=CONFIG.fineGain+(1-CONFIG.fineGain)*blend*blend*(3-2*blend);
+  if(!digitalRead(MOVE_PIN))scale*=CONFIG.heldPointerGain;
   fractionX+=sx*dt*CONFIG.gain*scale*CONFIG.xSign;
   fractionY+=sy*dt*CONFIG.gain*CONFIG.yGain*scale*CONFIG.ySign;
   var x=fractionX<0?Math.ceil(fractionX):Math.floor(fractionX);

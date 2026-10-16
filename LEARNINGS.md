@@ -42,3 +42,11 @@ An explicit flex display overrides the browser’s default hidden-attribute styl
 chip needs its own `[hidden] { display: none; }` rule, like the HUD and fallback wand. Check the
 rendered idle state as well as the hidden property: the simulation can be correct while the
 recording light is still drawn.
+
+## Held pointer precision
+
+Apply held sensitivity to the existing pointer scale before fractional counts are accumulated.
+Scaling integer reports instead drops small movements. The pointer path runs after the HUD and
+scroll branches, so a held Bottom gain leaves their angular navigation and wheel gains alone.
+The gesture tests compare both pointer axes across temporary entry, clutch and real dragging at
+fine, medium, fast and reverse speeds; released-button follow retains its original gain.
