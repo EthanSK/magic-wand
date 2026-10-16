@@ -104,10 +104,9 @@ drift without requiring exact closure. Two-count heading segments, 0.6 net-turn 
 these are tested starting values, not physical optimums. Two low-turn windows avoid flickering on
 an oval's flatter side; a sustained straight run still exits promptly.
 
-LOW pointing is immediate as of receiver 1.2.24. Ethan rejected the earlier 90 ms release-jolt
-buffer on 17 October 2026; waiting for stillness before a click does not require delaying visible
-motion. The diagnostic opt-in buffer is not used by the installed receiver. HIGH and real dragging
-remain immediate. The ordered UART Bottom-up
+LOW pointing became immediate in receiver 1.2.24 after Ethan rejected the earlier 90 ms
+release-jolt buffer. He explicitly approved restoring it only for held LOW aiming in 1.2.26; waiting for stillness before a click does not require delaying visible
+motion. The installed receiver now uses that held-only 90 ms buffer. HIGH and real dragging remain immediate. The ordered UART Bottom-up
 edge precedes its synchronous endpoint click; consume that pair after a recognised scrolling hold,
 then disarm on the next physical press. Carry a locally clamped point through a native drain batch
 because posted CGEvents need not update the system cursor synchronously.
@@ -140,7 +139,7 @@ Disconnect turns the sensor off while retaining a valid calibration. On reconnec
 
 Keep a short directional-evidence window separate from the radial pointer tolerance. The previous 350 ms recentering erased a steady 0.5 degree/s turn indefinitely. The new bounded scalar window passes that trace at both 35 and 104 Hz while retaining the existing 0.3-degree/s-per-axis drift test. This threshold cannot identify arbitrarily slow movement separately from sensor bias.
 
-Use the existing IMU heartbeat for the moving/resting hint. Quiet heartbeats must not keep resetting the dwell timer: only the moving-to-rest transition starts the rest delay. A missed heartbeat expires rather than suppressing clicks forever. Keep the accepted pointer gains unchanged; the LOW release-jolt buffer was later disabled.
+Use the existing IMU heartbeat for the moving/resting hint. Quiet heartbeats must not keep resetting the dwell timer: only the moving-to-rest transition starts the rest delay. A missed heartbeat expires rather than suppressing clicks forever. Keep the accepted pointer gains unchanged. The LOW release-jolt buffer was disabled in 1.2.24, then restored with explicit held-only approval in 1.2.26.
 
 Free the old motion callback before allocating replacement filter code. Adding helpers before releasing that body exhausted the physical Puck's memory even though host tests passed. Keep the filter state to five scalar values and use the existing telemetry message. A successful ready marker alone does not prove a complete upload; read back the actual filter and motion callback and inspect fresh error flags.
 

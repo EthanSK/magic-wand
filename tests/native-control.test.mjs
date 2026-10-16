@@ -6,8 +6,8 @@ import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { PointerRouter } from "../docs/sim/pointer.mjs";
-test("LOW demo motion has no delay or release replay", () => {
-  const router = new PointerRouter();
+test("optional zero-buffer LOW motion has no delay or release replay", () => {
+  const router = new PointerRouter({lowDelay:0});
   router.bottom(true);
   assert.deepEqual(router.frame(4, 3, 0, false, 10).actions, [{type: "move", dx: 4, dy: 3}]);
   assert.equal(router.nextDue, undefined);
@@ -16,7 +16,7 @@ test("LOW demo motion has no delay or release replay", () => {
   assert.equal(router.frame(0, 0, 1, false, 11).buttons, 1);
 });
 test(
-  "native immediate LOW, rough loops, optional buffer, dwell, desk detection and review lifecycle",
+  "native held-only buffering, immediate HIGH, rough loops, dwell, desk detection and review lifecycle",
   { skip: process.platform !== "darwin" },
   () => {
     const dir = mkdtempSync(join(tmpdir(), "wand-controls-"));
@@ -52,3 +52,17 @@ test(
     }
   },
 );
+
+
+test("held-only 90 ms buffer discards release flick but bypasses HIGH and dragging", () => {
+ const r=new PointerRouter();r.bottom(true);
+ assert.deepEqual(r.frame(4,3,0,false,10).actions,[]);
+ assert.deepEqual(r.drain(10.08),[]);
+ assert.deepEqual(r.drain(10.1),[{type:"move",dx:4,dy:3}]);
+ r.frame(0,-50,0,false,11);r.bottom(false);
+ assert.deepEqual(r.drain(12),[]);
+ assert.deepEqual(r.frame(8,0,0,false,12).actions,[{type:"move",dx:8,dy:0}]);
+ r.bottom(true);
+ assert.deepEqual(r.frame(8,0,1,false,13).actions,[{type:"move",dx:8,dy:0}]);
+ assert.deepEqual(r.frame(0,8,0,true,14).actions,[{type:"move",dx:0,dy:8}]);
+});
