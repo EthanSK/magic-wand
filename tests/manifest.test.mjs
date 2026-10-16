@@ -47,6 +47,10 @@ test("tuning matches the running device code and the receiver", () => {
   const t = manifest.tuning;
   assert.equal(CONFIG.gain, t.pointerGain);
   assert.equal(CONFIG.heldPointerGain, t.heldPointerGain);
+  assert.equal(CONFIG.releaseClickPause, t.releaseClickPauseSeconds);
+  assert.equal(CONFIG.slackDegrees, t.slackDegrees);
+  assert.equal(CONFIG.slackRecentre, t.slackRecentreSeconds);
+  assert.equal(CONFIG.slackQuietSpeed, t.slackQuietSpeedDegreesPerSecond);
   assert.equal(number(/gain:(\d+)/, device, "original gain"), t.previousPointerGain);
   assert.equal(Math.round((1 - t.pointerGain / t.previousPointerGain) * 100), 20, "20 percent lower gain");
   assert.equal(CONFIG.yGain, t.verticalRatio);

@@ -11,11 +11,11 @@
     "receiver": "1.2.17",
     "receiverBuild": "22",
     "deviceRuntime": "wand-e1ce30d7c407",
-    "bridgeRevision": "22c831c82c753b94453afeb768e753b3fc5ad54f9040982f962e6a92ce3e53fc"
+    "bridgeRevision": "202c1dd6c3271edac7b72f1783d9eaae5b2e4ff99383bcaaaa49562237813158"
   },
   "status": [
     "Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.",
-    "The newest button-jolt guard is installed and passed device checks; its feel hasn’t been confirmed yet.",
+    "Held positioning clicks on release and resumes prior high sensitivity after one second. The new still-hand tolerance needs a physical check.",
     "End-to-end latency, accuracy and battery life haven’t been measured."
   ],
   "hardware": {
@@ -70,13 +70,14 @@
         ["Tap", "The pointer follows the wand, without clicking"],
         ["Hold, turn, release", "Click once where you stop"],
         ["Tap while following", "Click"],
-        ["Hold while following", "Keep moving; release stops without a click"],
+        ["Hold while following", "Move at low sensitivity; release clicks, pauses one second, then resumes high sensitivity"],
         ["Tap, then hold", "Drag; release drops and stops"],
         ["Double tap while following", "Stop following"]
       ],
       "notes": [
         "The pointer stays still while a click is decided.",
-        "Middle switches to the HUD."
+        "Middle switches to the HUD.",
+        "High sensitivity is released-button follow. Holding Bottom is low sensitivity, at one-third speed."
       ]
     }
   ],
@@ -106,6 +107,10 @@
   "tuning": {
     "pointerGain": 86.4,
     "heldPointerGain": 0.3333333333333333,
+    "releaseClickPauseSeconds": 1,
+    "slackDegrees": 0.2,
+    "slackRecentreSeconds": 0.35,
+    "slackQuietSpeedDegreesPerSecond": 1,
     "previousPointerGain": 108,
     "verticalRatio": 1.4,
     "fineGain": 0.35,
