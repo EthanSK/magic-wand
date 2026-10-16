@@ -270,6 +270,11 @@
   "hud": {
     "source": "Agentic Mouse’s published Default mode",
     "startCell": 11,
+    "cardOverrides": {
+      "7": {
+        "title": "⌘↩ Steer"
+      }
+    },
     "navigation": {
       "degreesPerColumn": 8,
       "degreesPerRow": 7,

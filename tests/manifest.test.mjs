@@ -124,3 +124,15 @@ test("public text never states unmeasured performance", () => {
     assert(!text.includes(phrase), phrase);
   }
 });
+
+
+test("wand-only Steer card overrides the shared mouse snapshot", () => {
+  const shared = JSON.parse(read("data/agentic-mouse-hud.json"));
+  const generated = JSON.parse(read("docs/data/hud.json"));
+  assert.equal(shared.cards.find(card => card.cell === 7).title, "Enter");
+  assert.equal(generated.cards.find(card => card.cell === 7).title, "⌘↩ Steer");
+  assert.equal(manifest.hud.cardOverrides["7"].title, "⌘↩ Steer");
+  for (const card of shared.cards.filter(card => card.cell !== 7)) {
+    assert.deepEqual(generated.cards.find(value => value.cell === card.cell), card);
+  }
+});

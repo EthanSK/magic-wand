@@ -89,6 +89,8 @@ The Puck also advertises as a Bluetooth mouse, but macOS pairing stalled, so the
 
 Without Agentic Mouse and Agent Flow wand support, pointing, clicking, dragging and scrolling still work; Middle and Top have nothing to talk to.
 
+The wand’s main HUD uses `⌘↩ Steer` on cell 7: it sends Command-Enter instead of ordinary Enter. Other mouse sources keep Enter. The tested local change is saved in [`integrations/agentic-mouse/wand-command-enter.patch`](integrations/agentic-mouse/wand-command-enter.patch); it depends on the locally installed wand integration, which is not on Agentic Mouse’s public main yet.
+
 ## Hardware
 
 - Puck.js v2.1 at the tip of a roughly 50 cm carbon-fibre tube.
