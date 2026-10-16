@@ -145,7 +145,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 <!-- wand:status -->
 - Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.
 - Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.
-- HIGH dwell, held rough circles, desk inference and VS Code review pass automated checks; physical acceptance is pending.
+- Ethan confirmed automatic pickup and put-down both work on receiver 1.2.35.
+- HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
 Receiver 1.2.35 (40) · device code `wand-e1ce30d7c407` · bridge `c6948df5` · updated 17 October 2026.
