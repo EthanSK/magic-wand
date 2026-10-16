@@ -56,7 +56,7 @@ final class WandCircularScroll {
         /// that movement passes through as pointer motion.
         var exitFraction=0.3, straightTurn=0.35
         /// Wheel lines per full loop, the recognition kick and the per-update cap.
-        var linesPerTurn=10.0, kick:Int32=3, maxLinesPerUpdate=6
+        var linesPerTurn=8.0, kick:Int32=2, maxLinesPerUpdate=6
         init(){}
     }
     private struct Segment { let turn:Double; let length:Double; let t:Double; let x:Double; let y:Double }
@@ -267,13 +267,20 @@ final class WandDwellClick {
     let pause:Double
     let travel:Double
     private(set) var following=false
-    private var x=0.0,y=0.0,lastMotion=0.0,inhibitedUntil=0.0
+    private var x=0.0,y=0.0,lastMotion=0.0,inhibitedUntil=0.0,intentUntil=0.0
     private(set) var armed=false
     init(pause:Double=0.45,travel:Double=12){self.pause=pause;self.travel=travel}
-    var nextDue:Double? {following && armed ? max(lastMotion+pause,inhibitedUntil) : nil}
-    func reset(){x=0;y=0;armed=false;lastMotion=0}
+    var nextDue:Double? {following && armed ? max(lastMotion+pause,inhibitedUntil,intentUntil) : nil}
+    func reset(){x=0;y=0;armed=false;lastMotion=0;intentUntil=0}
     func follow(_ on:Bool){if following != on {reset()};following=on}
     func inhibit(until:Double){reset();inhibitedUntil=max(inhibitedUntil,until)}
+    /// The device sees sub-pixel motion before integer cursor counts exist.
+    /// A bounded heartbeat lease prevents both premature clicks and stuck state.
+    func intent(_ moving:Bool,now:Double){
+        guard following else{return}
+        if moving {intentUntil=now+0.6;lastMotion=now}
+        else if intentUntil>0 {intentUntil=0;lastMotion=now}
+    }
     func move(dx:Int,dy:Int,now:Double,eligible:Bool){
         guard following,eligible,now>=inhibitedUntil else{reset();return}
         guard dx != 0 || dy != 0 else{return}

@@ -133,3 +133,11 @@ VS Code URI delivery can reorder callbacks. Tag every gesture with a fresh ident
 ## Reconnect must re-enable idle pickup sensing
 
 Disconnect turns the sensor off while retaining a valid calibration. On reconnect, `sleepGyro` must explicitly restore the 1.6 Hz accelerometer even when `gyroAwake` is already false. Returning early in that state leaves automatic pickup blind until the first button press. Device tests cover readable and fragmented bridges, reconnect, retained bias and the idle sensor rate. The correction was applied through the current UART owner without another reconnect.
+
+## Slow intentional movement and dwell
+
+Keep a short directional-evidence window separate from the radial pointer tolerance. The previous 350 ms recentering erased a steady 0.5 degree/s turn indefinitely. The new bounded scalar window passes that trace at both 35 and 104 Hz while retaining the existing 0.3-degree/s-per-axis drift test. This threshold cannot identify arbitrarily slow movement separately from sensor bias.
+
+Use the existing IMU heartbeat for the moving/resting hint. Quiet heartbeats must not keep resetting the dwell timer: only the moving-to-rest transition starts the rest delay. A missed heartbeat expires rather than suppressing clicks forever. Keep LOW's release-jolt buffer and the accepted pointer gains unchanged.
+
+Free the old motion callback before allocating replacement filter code. Adding helpers before releasing that body exhausted the physical Puck's memory even though host tests passed. Keep the filter state to five scalar values and use the existing telemetry message. A successful ready marker alone does not prove a complete upload; read back the actual filter and motion callback and inspect fresh error flags.

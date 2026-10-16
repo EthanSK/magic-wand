@@ -15,8 +15,8 @@ export class CircularScroll {
       idleEnd: 0.35,
       exitFraction: 0.3,
       straightTurn: 0.35,
-      linesPerTurn: 10,
-      kick: 3,
+      linesPerTurn: 8,
+      kick: 2,
       maxLinesPerUpdate: 6,
       ...tuning,
     };
@@ -300,6 +300,7 @@ export class DwellClick {
     this.y = 0;
     this.armed = false;
     this.lastMotion = 0;
+    this.intentUntil = 0;
   }
   follow(on) {
     if (this.following !== on) this.reset();
@@ -307,8 +308,13 @@ export class DwellClick {
   }
   get nextDue() {
     return this.following && this.armed
-      ? Math.max(this.lastMotion + 0.45, this.inhibitedUntil)
+      ? Math.max(this.lastMotion + 0.45, this.inhibitedUntil, this.intentUntil)
       : null;
+  }
+  intent(moving, now) {
+    if (!this.following) return;
+    if (moving) { this.intentUntil = now + 0.6; this.lastMotion = now; }
+    else if (this.intentUntil > 0) { this.intentUntil = 0; this.lastMotion = now; }
   }
   move(dx, dy, now, eligible) {
     if (!this.following || !eligible || now < this.inhibitedUntil) {

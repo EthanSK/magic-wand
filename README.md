@@ -132,7 +132,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 | Hold | 220 ms | Longer presses count as holds |
 | LOW movement delay | 90 ms | Release drops the last unshown movement; HIGH and actual dragging stay immediate |
 | HIGH stop-to-click | 450 ms still | One click after deliberate movement; no repeat while still |
-| Double-click window | 0.8 s | Read from the Mac’s setting |
+| Double-click window | 0.3 s | Read from the Mac’s setting |
 | Scrolling | Horizontal × 1.4 | Mac wheel gain 0.8 |
 | Middle report | After 80 ms | So Bottom + Middle can become a scroll |
 | Reports | Every 30 ms | While the HUD or scrolling is active |
@@ -149,7 +149,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles, LOW release-jolt buffering, desk inference and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.21 (26) · device code `wand-e1ce30d7c407` · bridge `2493423e` · updated 16 October 2026.
+Receiver 1.2.23 (28) · device code `wand-e1ce30d7c407` · bridge `95988d7a` · updated 16 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

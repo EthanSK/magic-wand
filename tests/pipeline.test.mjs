@@ -95,8 +95,8 @@ test("Middle opens the HUD on Switch App, turning moves the outline without wrap
   assert.equal(s.hud.cell, 9, "turning up moves to Keys mode");
 
   s.press("D2", 0.12);
-  s.w.advance(0.5);
-  assert.equal(s.hud.action, null, "a tap waits for the Mac's double-click interval");
+  s.w.advance(0.15);
+  assert.equal(s.hud.action, null, "a tap waits for the shortened double-click interval");
   s.w.advance(0.5);
   assert.equal(s.hud.action.text, "Opens Keys mode", "the outlined card is used once");
   assert(s.hud.open, "the HUD stays open after using a card");
@@ -130,8 +130,8 @@ test("HIGH clicks once after settling, a tap exits; tap then hold drags and rest
   assert(!s.macEvents.some(e=>e.type==="down"),"entry never clicks");
   const start=s.mac.location();s.turn(10,0,.5);
   assert(s.mac.location().x>start.x+100);
-  s.w.advance(.44);assert(!s.macEvents.some(e=>e.type==="down"));
-  const fixed=s.mac.location();s.w.advance(.03);
+  s.turn(0,0,.44);assert(!s.macEvents.some(e=>e.type==="down"));
+  const fixed=s.mac.location();s.turn(0,0,.15);
   let clicks=s.macEvents.filter(e=>e.type==="down"||e.type==="up");
   assert.deepEqual(clicks.map(e=>e.type),["down","up"]);
   assert(clicks.every(e=>e.x===fixed.x&&e.y===fixed.y));

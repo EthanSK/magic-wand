@@ -145,14 +145,14 @@ export class WandReceiverModel {
   }
 
   get doubleClickInterval() {
-    return Math.max(0.25, this.tuning.macDoubleClickSeconds);
+    return Math.max(0.25, Math.min(0.3, this.tuning.macDoubleClickSeconds));
   }
 
   /** The receiver's handshake once the device code and bridge are ready. */
   ready() {
     this.queue(
       "E.setFlags({pretokenise:1});global.wandDoubleClickSeconds=" +
-        this.tuning.macDoubleClickSeconds +
+        Math.min(0.3, this.tuning.macDoubleClickSeconds) +
         ";",
     );
     this.syncRecordingLight();
@@ -242,6 +242,13 @@ export class WandReceiverModel {
       this.dwell.reset();
       this.scheduleDwell();
       this.performPointer(this.pointerRouter.bottom(this.bottomHeld));
+    }
+    if ((payload = at("@IMU ")) !== null) {
+      const fields = payload.split(",");
+      if (fields.length === 6 && ["0", "1"].includes(fields[5])) {
+        this.dwell.intent(fields[5] === "1", this.timers.now());
+        this.scheduleDwell();
+      }
     }
     if ((payload = at("@MIDDLE ")) !== null) {
       this.cancelCircleScroll();

@@ -8,10 +8,10 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.21",
-    "receiverBuild": "26",
+    "receiver": "1.2.23",
+    "receiverBuild": "28",
     "deviceRuntime": "wand-e1ce30d7c407",
-    "bridgeRevision": "2493423e9720e89e3aae8585b4cddfb11295d7109bdb258531e45d0ac118a7d6"
+    "bridgeRevision": "95988d7aec411b7bb22467b18b9df5fe510db98b83bfdcecf668e998aa1c9467"
   },
   "status": [
     "Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.",
@@ -298,7 +298,7 @@
     "horizontalScrollBoost": 1.4,
     "hostScrollGain": 0.8,
     "receiverHoldMs": 220,
-    "macDoubleClickSeconds": 0.8,
+    "macDoubleClickSeconds": 0.3,
     "calibrationSeconds": 2,
     "lowMotionDelayMs": 90,
     "highDwellMs": 450,
