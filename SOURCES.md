@@ -84,7 +84,7 @@ What the demo doesn’t reproduce:
 - Gyro readings are derived from the visitor’s aim at about 60 readings a second; the real wand
   requests 104 Hz and fully processed about 35 Hz in a recent measurement.
 - Bluetooth delay, the Puck’s 20 ms switch debounce and its memory limits aren’t simulated.
-- The 3D wand turns half as far as the simulated sensor, so its tip stays below the HUD.
+- The 3D wand turns a quarter as far as the simulated sensor, so its tip stays below the HUD.
 - HUD cards only report what they would do; child pages, held keys and app actions aren’t run.
 - The Mac’s double-click interval is fixed at Ethan’s 0.8 seconds; a wheel line scrolls 14 points.
 

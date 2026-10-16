@@ -35,3 +35,10 @@ previous aim just before each new one after a pause, then averages the rate over
 The three@0.186.1 npm package has no `build/*.min.js`, and the GitHub `r186` tag has none either.
 three@0.185.1 includes them, and its files are byte-identical to the copies Agentic Mouse vendors,
 so the site pins 0.185.1.
+
+## Hidden recording indicator
+
+An explicit flex display overrides the browser’s default hidden-attribute style. The recording
+chip needs its own `[hidden] { display: none; }` rule, like the HUD and fallback wand. Check the
+rendered idle state as well as the hidden property: the simulation can be correct while the
+recording light is still drawn.

@@ -7,9 +7,9 @@ export const RIG = {
   pivot: [0.15, -0.24, -0.5], // The hand, in front of and below the camera.
   aimAt: [0.02, -0.08, -1.4], // At rest the tip sits just under the simulated screen.
   fov: 30, // Widened on narrow screens so the whole aim range stays in view.
-  // The drawn wand turns half as far as the simulated sensor, so the tip stays below the HUD
+  // The drawn wand turns a quarter as far as the simulated sensor, so the tip stays below the HUD
   // instead of sweeping across the screen. The device code still receives the full rotation.
-  visualScale: 0.5,
+  visualScale: 0.25,
   buttons: { bottom: 0.035, middle: 0.07, top: 0.105 }, // Top sits nearest the shaft.
 };
 

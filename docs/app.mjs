@@ -16,8 +16,8 @@ const urls = Object.fromEntries(
   Object.entries(JSON.parse($("#asset-urls").textContent)).map(([key, value]) => [key, new URL(value, document.baseURI).href]),
 );
 
-const AIM_LIMIT = { yaw: 24, pitch: 18 };
-const AIM_SPAN = 48; // Degrees across the stage's width.
+const AIM_LIMIT = { yaw: 48, pitch: 32 };
+const AIM_SPAN = 96; // Degrees across the stage's width.
 const SLEW = 260; // Degrees per second: re-entering the stage sweeps rather than jumps.
 const ARROW_SPEED = 32;
 const ARROW_SLOW = 7;
@@ -129,9 +129,9 @@ async function main() {
     return {
       resize() {},
       setAim(yaw, pitch) {
-        // Same half-scale motion as the 3D wand.
-        angle = -150 + yaw * 0.55;
-        length = 0.52 - pitch * 0.003;
+        // Same quarter-scale motion as the 3D wand.
+        angle = -150 + yaw * 0.275;
+        length = 0.52 - pitch * 0.0015;
         rod.style.setProperty("--fallback-angle", `${angle}deg`);
         rod.style.setProperty("--fallback-length", `${length * 100}%`);
       },
