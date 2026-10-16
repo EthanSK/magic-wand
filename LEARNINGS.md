@@ -78,3 +78,29 @@ aim, both sensitivity modes, diagonals, curves and the 300 ms release pause. Thi
 simulated-noise coverage; Ethan confirmed the noise rejection feels good on 16 October 2026; this does not establish an optimal hand-noise threshold.
 
 The release pause was shortened from one second to 300 ms after physical feedback that the wait felt too long. Preserve the accepted angular tolerance and gain curve while tuning only this pause. Actual dragging releases the native left button, then restores prior HIGH after the same pause; it must not send an extra endpoint click.
+
+## Bound event targets to real displays
+
+Clamp both the current event location and its proposed target to actual CGDisplayBounds before
+posting relative motion. Sending an unbounded target can leave invisible excess beyond an edge,
+so reversing feels stuck. Clamp to the nearest real display rectangle rather than a union bounding
+box, which includes gaps between staggered monitors. Native tests cover repeated outward motion,
+immediate reversal, negative coordinates, gaps and recovery of an old offscreen location.
+
+## Preserve tap entry and held entry separately
+
+Middle's opening press is delayed 80 ms on the device to allow the scroll chord. The receiver
+therefore measures the 220 ms physical hold against the remaining 140 ms. A short entry release
+leaves the HUD latched; a held entry parks navigation, presses and releases the selected card,
+then resumes navigation. Clear the pending entry when a chord begins. Existing open-HUD holds
+still operate the card instead of navigating. Native routing and demo pipeline tests cover both.
+
+## Circular scrolling without an input buffer
+
+Candidate circle motion passes through immediately. Only a deliberate closed, consistently turning
+loop consumes pointer reports and becomes native wheel lines. Apply it only to released-button
+HIGH follow; physical Bottom edge reports also exclude LOW, whose mouse-button mask is zero.
+The Puck retains its accepted motion filter and sample rate; the Mac classifies existing reports.
+Native and JavaScript traces match for both directions. Tests reject incomplete curves, small
+noise and sharp rectangular lassos; pausing, a radial exit or a button restores pointing.
+This is regression evidence, not physical acceptance or a measured latency improvement.

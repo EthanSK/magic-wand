@@ -10,14 +10,14 @@
     "device/wand-mode-bridge.js": {
       "importedFrom": "wand-mode-bridge.js",
       "transform": "verbatim",
-      "originalSha256": "ba6e9008ef749dbb4995390a20913e85e336f7c0ee0ae27905f9039440710ee7",
-      "publicSha256": "ba6e9008ef749dbb4995390a20913e85e336f7c0ee0ae27905f9039440710ee7"
+      "originalSha256": "f795030321d5747534a2010a6fcd960f49a721803a3558b6c691585c1c1adc2c",
+      "publicSha256": "f795030321d5747534a2010a6fcd960f49a721803a3558b6c691585c1c1adc2c"
     },
     "receiver/Sources/main.swift": {
       "importedFrom": "wand-mac-receiver.swift",
       "transform": "receiver",
-      "originalSha256": "b44718cd83b271f7930f8178c7b5f62fc51783aa961c5fe396323c4e8838fd09",
-      "publicSha256": "426dd5d3bba64cc74180bc03b556846b9b2e196ecd341fe7f1f84623f63330f5"
+      "originalSha256": "007cce83a6fd29f556b1ce02d6d190c0dc256827bc806268cd8e72ccebc7eedb",
+      "publicSha256": "dfd8db523fd7e912dbe4675a9987220c1ccc46fe50cb5234aa9050333d139bab"
     },
     "receiver/Sources/WandControlTransport.swift": {
       "importedFrom": "wand-control-transport.swift",
@@ -37,11 +37,17 @@
       "originalSha256": "4a69241b310c69cf058e8892c4ffd0027c380488b41cd6289a76aac9b7a93e8c",
       "publicSha256": "4a69241b310c69cf058e8892c4ffd0027c380488b41cd6289a76aac9b7a93e8c"
     },
+    "receiver/Sources/WandPointerControl.swift": {
+      "importedFrom": "wand-pointer-control.swift",
+      "transform": "verbatim",
+      "originalSha256": "325af13160783e283a7ff45c14e7af57829e2093d76ed6c0713dac83c3fecdd2",
+      "publicSha256": "325af13160783e283a7ff45c14e7af57829e2093d76ed6c0713dac83c3fecdd2"
+    },
     "receiver/Info.plist": {
       "importedFrom": "Wand Receiver.app/Contents/Info.plist",
       "transform": "verbatim",
-      "originalSha256": "7e1efa2a8e0ea61b37f9bbbe856c45fbc937fa0061350a07cb41d9bea7748cb7",
-      "publicSha256": "7e1efa2a8e0ea61b37f9bbbe856c45fbc937fa0061350a07cb41d9bea7748cb7"
+      "originalSha256": "62c4de296927c970d57201b39500e193a5e2e645de8df686c1291591998c9870",
+      "publicSha256": "62c4de296927c970d57201b39500e193a5e2e645de8df686c1291591998c9870"
     }
   }
 }

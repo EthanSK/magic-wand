@@ -30,11 +30,13 @@ for (const bridge of ["readable", "fragments"]) {
       w.edge(first, 1);
       assert(!ctx.scrollHeld && ctx.scrollSuppress);
       assert(lines.some((l) => l.startsWith("@SCROLL E,")));
-      const count = lines.filter((l) => l.startsWith("@")).length;
+      // Physical Bottom edge reports cancel circle recognition; they are not HUD actions.
+      const actionLines = () => lines.filter((l) => l.startsWith("@") && !l.startsWith("@BOTTOM "));
+      const count = actionLines().length;
       w.advance(0.4); w.edge(second, 1); w.advance(0.3);
       assert(!ctx.scrollSuppress);
       assert.equal(ctx.moveLatched, priorFollow, "prior pointer follow is restored");
-      assert.equal(lines.filter((l) => l.startsWith("@")).length, count, "the held remainder does not activate the HUD");
+      assert.equal(actionLines().length, count, "the held remainder does not activate the HUD");
       assert(frames.every((f) => f[2] === 0), "the chord never clicks");
       if (!priorFollow) { grace(); assert(!w.device.awake); } else assert(w.device.awake);
     }

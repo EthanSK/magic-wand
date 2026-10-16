@@ -25,7 +25,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   var connects=NRF['#onconnect'];
   if(!connects)connects=[onConnect];else if(typeof connects==='function')connects=[connects];
   connects.forEach(function(callback){if(callback.toString().indexOf('stopScroll')>=0)callback.replaceWith(function(){
-    stopScroll();scrollSuppress=false;chordFollowBefore=false;
+    global.wandCircleScrolling=false;stopScroll();scrollSuppress=false;chordFollowBefore=false;
     clearHoldClick();moveLatched=false;hudOpen=false;moveGestureMode=undefined;lastMoveTap=-100;
     stopHUD();cancelTapGesture();epoch++;connected=true;busy=false;sentButtons=0;
     if(sendTimer!==undefined){clearTimeout(sendTimer);sendTimer=undefined;}
@@ -33,6 +33,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(bias){calibrationLit=false;sleepGyro();updateLights();}else calibrate();
     resetMoveGesture();
   });});
+  global.wandCircleScrolling=false;
   if(!global.wandDoubleClickSeconds)global.wandDoubleClickSeconds=0.8;
   // A mode takes over deliberately, without leaving the other mode moving too.
   setHUDOpen.replaceWith(function(open){
@@ -200,7 +201,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // red after release only if neither pointer, HUD nor scroll has priority.
   updateLights.replaceWith(function(){
     var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN);
-    var mode=global.WAND_UPDATING?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':scrollHeld?'scroll':move?'mouse':hud?'hud':(global.wandRecording||!digitalRead(STT_PIN))?'recording':'idle';
+    var mode=global.WAND_UPDATING?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':(scrollHeld||global.wandCircleScrolling)?'scroll':move?'mouse':hud?'hud':(global.wandRecording||!digitalRead(STT_PIN))?'recording':'idle';
     lightLevels=mode==='update'||mode==='calibration'||mode==='recording'?[1,0,0]:mode==='disconnected'?[0.08,0.016,0]:mode==='scroll'?[0,1,1]:mode==='mouse'?[0,0,1]:mode==='hud'?[1,0.2,0]:[0,0,0];
     writeLight(LED1,lightLevels[0]);writeLight(LED2,lightLevels[1]);writeLight(LED3,lightLevels[2]);
     if(connected&&mode!==global.wandLastLightState){global.wandLastLightState=mode;print('WAND_LIGHT_STATE '+mode+' '+JSON.stringify(lightLevels));}
@@ -211,7 +212,10 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // 300 ms before HIGH resumes. Starting LOW from off returns to off.
   // Click then hold is the explicit real drag; release drops, then resumes prior HIGH.
   // Double short-click still exits HIGH.
+  // Free the prior button body too: repeated live updates can exhaust Puck RAM.
+  global.wandLiveMoveCallback.replaceWith(function(){if(false)clearHoldClick();});
   global.wandLiveMoveCallback.replaceWith(function(){
+    if(connected)Bluetooth.println('@BOTTOM '+(digitalRead(MOVE_PIN)?0:1));
     if(!digitalRead(MOVE_PIN)&&digitalRead(HUD_PIN)&&!scrollSuppress)chordFollowBefore=moveLatched;
     if(checkScrollChord()){global.wandMomentaryStarted=undefined;return;}
     moveX=moveY=fractionX=fractionY=filteredX=filteredY=0;

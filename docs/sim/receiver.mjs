@@ -4,6 +4,7 @@
 // the Puck's UART lines into pointer, click and wheel events, runs the HUD session timing, and
 // forwards speech presses. Here the "native events" go to the simulated screen instead of macOS.
 
+import { CircularScroll } from "./pointer.mjs";
 const finite = (value) => Number.isFinite(value) && Math.abs(value) <= 7_200_000;
 
 function parseTriple(payload) {
@@ -106,6 +107,9 @@ export class WandReceiverModel {
     this.middleOperating = false;
     this.hudSession = false;
     this.hudEntryPress = false;
+    this.hudEntryPressStarted = 0;
+    this.circularScroll = new CircularScroll();
+    this.circleLight = false; this.bottomHeld = false; this.circleTimer = null;
     this.navX = 0; this.navY = 0;
     this.navOriginX = 0; this.navOriginY = 0;
     this.operationOriginX = 0; this.operationOriginY = 0;
@@ -168,11 +172,15 @@ export class WandReceiverModel {
     }
     if (line.endsWith("@POINTER_MODE")) this.enterPointerMode();
     let payload;
-    if ((payload = at("@MIDDLE ")) !== null) this.handleMiddle(payload);
+    if ((payload = at("@BOTTOM ")) !== null && ["0", "1"].includes(payload.trim())) {
+      this.bottomHeld = payload.trim() === "1"; this.cancelCircleScroll();
+    }
+    if ((payload = at("@MIDDLE ")) !== null) { this.cancelCircleScroll(); this.handleMiddle(payload); }
     if ((payload = at("@NAV ")) !== null) this.handleNavigation(payload);
     if ((payload = at("@SCROLL ")) !== null) this.handleScroll(payload);
     if ((payload = at("@MOVE ")) !== null) this.handleMove(payload);
     if ((payload = at("@STT ")) !== null) {
+      this.cancelCircleScroll();
       const value = payload.trim();
       if (value === "0" || value === "1") this.controls.speech(value === "1");
     }
@@ -258,7 +266,7 @@ export class WandReceiverModel {
     switch (payload.trim()) {
       case "1":
         if (!this.hudSession && !this.contextActive) {
-          this.hudSession = true; this.hudEntryPress = true; this.navigationOpenedHUD = true;
+          this.hudSession = true; this.hudEntryPress = true; this.hudEntryPressStarted = this.timers.now(); this.navigationOpenedHUD = true;
           this.navX = 0; this.navY = 0;
           this.controls.persistent("open");
           this.resumeHUDNavigation();
@@ -271,7 +279,14 @@ export class WandReceiverModel {
         this.handleMove("B,0,0");
         break;
       case "0":
-        if (this.hudEntryPress) { this.hudEntryPress = false; this.navigationOpenedHUD = false; return; }
+        if (this.hudEntryPress) {
+          this.hudEntryPress = false; this.navigationOpenedHUD = false;
+          if (this.timers.now() - this.hudEntryPressStarted >= (this.tuning.holdMs - this.tuning.middleReportDelayMs) / 1000) {
+            this.controls.persistent("park"); this.hudActive = false; this.stopHUDWatchdog();
+            this.controls.persistent("press"); this.controls.persistent("release"); this.resumeHUDNavigation();
+          }
+          return;
+        }
         this.handleMove("E," + (this.navX - this.operationOriginX) * 1000 + "," + (this.navY - this.operationOriginY) * 1000);
         break;
       default:
@@ -328,7 +343,7 @@ export class WandReceiverModel {
     if (!parsed) return;
     const { phase, x, y } = parsed;
     if (phase === "B") {
-      this.finishScroll(); this.clearTimer("middleTap"); this.clearTimer("middleHold");
+      this.cancelCircleScroll(); this.finishScroll(); this.hudEntryPress = false; this.clearTimer("middleTap"); this.clearTimer("middleHold");
       if (this.hudActive) {
         this.controls.persistent("park");
         if (this.navigationOpenedHUD) { this.controls.persistent("dismiss"); this.hudSession = false; this.queue("setHUDOpen(false);"); }
@@ -375,9 +390,31 @@ export class WandReceiverModel {
     if (![x, y, b].every(Number.isInteger) || Math.abs(x) > 127 || Math.abs(y) > 127 || b < 0 || b > 3) return;
     if (this.scrollActive) return;
     const point = this.mac.location();
+    if (b !== 0 || this.bottomHeld || this.hudSession) this.cancelCircleScroll();
     this.transition(b, point);
-    if (x !== 0 || y !== 0) this.mac.mouse(b & 1 ? "drag" : "move", { x: point.x + x, y: point.y + y }, this.clickCount);
+    if (x !== 0 || y !== 0) {
+      const circle = this.circularScroll.update(x, y, this.timers.now(), b === 0 && !this.bottomHeld && !this.hudSession);
+      this.setCircleLight(this.circularScroll.active);
+      if (circle.consumesPointer) {
+        // Native wheel lines are positive up; the screen model uses positive down.
+        if (circle.lines) this.mac.scroll(0, -circle.lines);
+        return;
+      }
+      this.mac.mouse(b & 1 ? "drag" : "move", { x: point.x + x, y: point.y + y }, this.clickCount);
+    }
   }
+
+  setCircleLight(active) {
+    if (this.circleLight === active) return;
+    this.circleLight = active;
+    this.queue("global.wandCircleScrolling=" + active + ";updateLights();");
+    if (active && this.circleTimer === null) {
+      this.circleTimer = this.timers.setInterval(() => {
+        if (this.circularScroll.expire(this.timers.now())) this.setCircleLight(false);
+      }, 100);
+    } else if (!active) { this.timers.clearInterval(this.circleTimer); this.circleTimer = null; }
+  }
+  cancelCircleScroll() { this.circularScroll.reset(); this.setCircleLight(false); }
 
   transition(next, point) {
     if ((this.buttons & 1) !== (next & 1)) {

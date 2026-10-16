@@ -30,6 +30,7 @@ FILES = {
     "wand-control-transport.swift": ("receiver/Sources/WandControlTransport.swift", "verbatim"),
     "wand-context-listener.swift": ("receiver/Sources/WandContextListener.swift", "verbatim"),
     "wand-recording-state.swift": ("receiver/Sources/WandRecordingState.swift", "verbatim"),
+    "wand-pointer-control.swift": ("receiver/Sources/WandPointerControl.swift", "verbatim"),
     "Wand Receiver.app/Contents/Info.plist": ("receiver/Info.plist", "verbatim"),
 }
 

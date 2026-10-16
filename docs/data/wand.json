@@ -7,14 +7,15 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.17",
-    "receiverBuild": "22",
+    "receiver": "1.2.19",
+    "receiverBuild": "24",
     "deviceRuntime": "wand-e1ce30d7c407",
-    "bridgeRevision": "c68fa9b403e6a5bede176ccd4e53d0db875e593980d25944a2f162d655af0757"
+    "bridgeRevision": "6fd61d2c7a36f90bdb0ca0104c657a5a981b7446606edd37d499f03d26fb931b"
   },
   "status": [
     "Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.",
     "Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.",
+    "Screen-edge reversal, held Middle selection and circular scrolling pass regression checks; their physical feel is still unconfirmed.",
     "End-to-end latency, accuracy and battery life haven’t been measured."
   ],
   "hardware": {
@@ -68,11 +69,15 @@
           "Open the HUD on Switch App, then turn the wand to move the outline"
         ],
         [
+          "Hold to open, turn, release",
+          "Use the outlined card on release"
+        ],
+        [
           "Tap again",
           "Use the outlined card"
         ],
         [
-          "Hold",
+          "Hold while open",
           "Hold the card; on some wheel cards, tilt to turn the wheel"
         ],
         [
@@ -121,7 +126,10 @@
       "notes": [
         "The pointer stays still while a click is decided.",
         "Middle switches to the HUD.",
-        "High sensitivity is released-button follow. Holding Bottom is low sensitivity, at one-third speed."
+        "High sensitivity is released-button follow. Holding Bottom is low sensitivity, at one-third speed.",
+        "While following with no buttons held, circle clockwise to scroll down or anticlockwise to scroll up.",
+        "The first full loop still moves the pointer; cyan shows scrolling has started. Pause to return to pointing.",
+        "The pointer stays within the real screen edges, including separate monitors."
       ]
     }
   ],

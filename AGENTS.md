@@ -41,6 +41,10 @@ a local server (`npm run serve`) or use the live site and check:
   double tap stops. The pointer holds still while a click is decided.
 - Middle: tap opens the HUD on Switch App, turning moves the outline and stops at the edges,
   a tap uses a card after about 0.8 s, double tap closes, Bottom returns to the pointer.
+- Starting with the HUD closed: hold Middle, turn to a card, then release to use it once.
+- In released-button pointer follow: a deliberate full clockwise circle starts down-scroll,
+  anticlockwise starts up-scroll, cyan shows recognition, and pausing returns to pointing.
+  Bottom holds, real drags and HUD navigation must never trigger circular scrolling.
 - Hold Middle on Horizontal Scroll + Wheel and tilt: wheel steps appear.
 - Bottom + Middle (both mouse buttons, B+M keys, or the chord key while dragging) scrolls both axes.
 - Top toggles the Agent Flow indicator; the light is red only when nothing else is active.
