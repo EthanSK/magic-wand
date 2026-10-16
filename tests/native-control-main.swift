@@ -9,7 +9,14 @@ for (name,points) in fixtures.sorted(by:{$0.key<$1.key}) {
  if name.contains("cw") {precondition(name.contains("ccw") ? lines>0 : lines<0,name)}
  else {precondition(lines==0,name)}
 }
-let r=WandPointerRouter();_=r.bottom(down:true)
+let immediate=WandPointerRouter();_=immediate.bottom(down:true)
+precondition(immediate.lowDelay==0)
+precondition(immediate.frame(dx:4,dy:3,buttons:0,hud:false,now:10).actions==[.move(dx:4,dy:3)],"LOW immediate")
+precondition(immediate.pendingCount==0 && immediate.nextDue==nil,"no LOW timer")
+_=immediate.bottom(down:false)
+precondition(immediate.drain(now:12).isEmpty,"release never replays motion")
+precondition(immediate.frame(dx:0,dy:0,buttons:1,hud:false,now:12).buttons==1,"release click preserved")
+let r=WandPointerRouter(lowDelay:0.09);_=r.bottom(down:true)
 precondition(r.frame(dx:4,dy:3,buttons:0,hud:false,now:10).actions.isEmpty)
 precondition(r.drain(now:10.08).isEmpty)
 precondition(r.drain(now:10.10)==[.move(dx:4,dy:3)])

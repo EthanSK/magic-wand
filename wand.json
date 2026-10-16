@@ -4,19 +4,19 @@
   "name": "Magic Wand",
   "tagline": "Mouse, HUD, scrolling and speech to text from three buttons on a wand.",
   "summary": "Turning the wand moves my Mac’s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.",
-  "updated": "2026-10-16",
+  "updated": "2026-10-17",
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.23",
-    "receiverBuild": "28",
+    "receiver": "1.2.24",
+    "receiverBuild": "29",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "95988d7aec411b7bb22467b18b9df5fe510db98b83bfdcecf668e998aa1c9467"
   },
   "status": [
     "Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.",
     "Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.",
-    "HIGH dwell, held rough circles, LOW release-jolt buffering, desk inference and VS Code review pass automated checks; physical acceptance is pending.",
+    "HIGH dwell, held rough circles, desk inference and VS Code review pass automated checks; physical acceptance is pending.",
     "End-to-end latency, accuracy and battery life haven’t been measured."
   ],
   "hardware": {
@@ -128,7 +128,6 @@
       ],
       "notes": [
         "HIGH is released-button follow. LOW is a plain Bottom hold at one-third speed.",
-        "Only LOW aiming adds 90 ms of movement delay, so release can discard the switch jolt. HIGH and real dragging stay immediate.",
         "Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Cyan shows recognition; release stops without an endpoint click.",
         "Leave the wand idle on the desk for about two seconds to learn its resting pose. Picking it up can then enter HIGH automatically; setting it down stops following after sustained desk confirmation.",
         "Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.",
@@ -300,7 +299,7 @@
     "receiverHoldMs": 220,
     "macDoubleClickSeconds": 0.3,
     "calibrationSeconds": 2,
-    "lowMotionDelayMs": 90,
+    "lowMotionDelayMs": 0,
     "highDwellMs": 450,
     "highDwellTravelCounts": 12,
     "idleAccelerometerHz": 1.6,

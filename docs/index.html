@@ -44,7 +44,7 @@
     "shim": "./sim/espruino.js?v=0fba4637ae",
     "device": "./device/wand-mouse-prototype.js?v=036f2bd951",
     "bridge": "./device/wand-mode-bridge.compact.js?v=95988d7aec",
-    "wand": "./data/wand.json?v=5b61e15cc2",
+    "wand": "./data/wand.json?v=6b90283644",
     "hud": "./data/hud.json?v=c804168e26"
   }
   </script>
@@ -150,7 +150,7 @@
             <div><dt>Hold while following</dt><dd>Aim at low sensitivity; release clicks, pauses 300 ms, then resumes HIGH</dd></div>
             <div><dt>Tap, then hold</dt><dd>Drag with the actual mouse button held; release drops</dd></div>
           </dl>
-          <ul class="notes"><li>HIGH is released-button follow. LOW is a plain Bottom hold at one-third speed.</li><li>Only LOW aiming adds 90 ms of movement delay, so release can discard the switch jolt. HIGH and real dragging stay immediate.</li><li>Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Cyan shows recognition; release stops without an endpoint click.</li><li>Leave the wand idle on the desk for about two seconds to learn its resting pose. Picking it up can then enter HIGH automatically; setting it down stops following after sustained desk confirmation.</li><li>Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.</li><li>Desk detection is an IMU estimate, not a touch sensor; a very still supported hand can resemble a desk. The browser demo covers the buttons, not physical desk detection.</li><li>Middle switches to the HUD. The pointer stays within real display edges.</li></ul>
+          <ul class="notes"><li>HIGH is released-button follow. LOW is a plain Bottom hold at one-third speed.</li><li>Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Cyan shows recognition; release stops without an endpoint click.</li><li>Leave the wand idle on the desk for about two seconds to learn its resting pose. Picking it up can then enter HIGH automatically; setting it down stops following after sustained desk confirmation.</li><li>Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.</li><li>Desk detection is an IMU estimate, not a touch sensor; a very still supported hand can resemble a desk. The browser demo covers the buttons, not physical desk detection.</li><li>Middle switches to the HUD. The pointer stays within real display edges.</li></ul>
         </div>
         <div class="control" data-light="scroll">
           <div class="control-head"><h3>Bottom + Middle</h3><p class="control-meta"><kbd>B</kbd>+<kbd>M</kbd></p></div>
@@ -264,7 +264,7 @@
             <tr><th scope="row">Cold start</th><td>96 ms settling</td><td>Skipped when the sensor is still warm</td></tr>
             <tr><th scope="row">Gyro sleep</th><td>After 1 s idle</td><td>Accelerometer stays at 1.6 Hz for pickup; off on disconnect</td></tr>
             <tr><th scope="row">Hold</th><td>220 ms</td><td>Longer presses count as holds</td></tr>
-            <tr><th scope="row">LOW movement delay</th><td>90 ms</td><td>Release drops the last unshown movement; HIGH and actual dragging stay immediate</td></tr>
+            <tr><th scope="row">LOW movement delay</th><td>0 ms</td><td></td></tr>
             <tr><th scope="row">HIGH stop-to-click</th><td>450 ms still</td><td>One click after deliberate movement; no repeat while still</td></tr>
             <tr><th scope="row">Double-click window</th><td>0.3 s</td><td>Read from the Mac’s setting</td></tr>
             <tr><th scope="row">Scrolling</th><td>Horizontal × 1.4</td><td>Mac wheel gain 0.8</td></tr>
@@ -291,11 +291,11 @@
           <ul class="status-list">
             <li>Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.</li>
             <li>Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.</li>
-            <li>HIGH dwell, held rough circles, LOW release-jolt buffering, desk inference and VS Code review pass automated checks; physical acceptance is pending.</li>
+            <li>HIGH dwell, held rough circles, desk inference and VS Code review pass automated checks; physical acceptance is pending.</li>
             <li>End-to-end latency, accuracy and battery life haven’t been measured.</li>
           </ul>
-          <p class="versions"><span>Receiver 1.2.23 (28)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge 95988d7a</span></p>
-          <p class="fine">Updated 16 October 2026</p>
+          <p class="versions"><span>Receiver 1.2.24 (29)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge 95988d7a</span></p>
+          <p class="fine">Updated 17 October 2026</p>
           <!-- /wand:status -->
         </div>
       </div>

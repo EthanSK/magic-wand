@@ -159,10 +159,12 @@ final class WandCircularScroll {
 /// The receiver performs the returned actions in order and owns only CGEvent posting.
 ///
 /// LOW is a plain Bottom hold with no mouse button down (precision aiming, not a
-/// drag). Only LOW motion is shown `lowDelay` after it arrives: the device reports
+/// drag). LOW motion is immediate by default. An optional nonzero `lowDelay`
+/// can defer it: the device reports
 /// the release edge in the same ordered UART stream as motion, so stiff-switch
 /// movement in the last instant before release is discarded unseen and the release
-/// click lands where the pointer is already shown. HIGH follow and real dragging
+/// click lands where the pointer is already shown. Normal operation does not
+/// buffer or roll back movement. HIGH follow and real dragging
 /// stay immediate. Loop scrolling is recognised only during LOW. A hold in which a
 /// loop was recognised is consumed by scrolling: the endpoint click that the device
 /// emits right after that `@BOTTOM 0` (same callback, so before any later frame) is
@@ -171,11 +173,8 @@ final class WandCircularScroll {
 final class WandPointerRouter {
     enum Action:Equatable { case move(dx:Int,dy:Int), scroll(lines:Int32), circleLight(Bool) }
     struct Frame:Equatable { let buttons:Int; let actions:[Action] }
-    /// 90 ms covers the Puck's 20 ms switch debounce, a few tens of ms of wand
-    /// rotation while a stiff switch is pushed before its contact opens, and one
-    /// ~28 ms report at the measured ~35 Hz pointer rate. BLE latency cancels out
-    /// because motion and the edge share one ordered stream. A starting value;
-    /// confirm physically.
+    /// Disabled by default: stillness recognition does not require delaying
+    /// visible pointer movement. Retained as an explicit opt-in for diagnostics.
     let lowDelay:Double
     /// Bounds memory if the drain timer is starved; the oldest motion is then shown, not lost.
     let maxPending:Int
@@ -187,7 +186,7 @@ final class WandPointerRouter {
     private var pending:[(due:Double,dx:Int,dy:Int)]=[]
     private var lit=false
 
-    init(lowDelay:Double=0.09,maxPending:Int=48,circle:WandCircularScroll=WandCircularScroll()) {
+    init(lowDelay:Double=0,maxPending:Int=48,circle:WandCircularScroll=WandCircularScroll()) {
         self.lowDelay=max(0,lowDelay);self.maxPending=max(1,maxPending);self.circle=circle
     }
     var nextDue:Double? {pending.first?.due}
@@ -221,6 +220,10 @@ final class WandPointerRouter {
         if circle.active != lit {lit=circle.active;actions.append(.circleLight(lit))}
         if result.consumesPointer {
             if result.lines != 0 {actions.append(.scroll(lines:result.lines))}
+            return .init(buttons:bits,actions:actions)
+        }
+        if lowDelay == 0 {
+            actions.append(.move(dx:dx,dy:dy))
             return .init(buttons:bits,actions:actions)
         }
         actions+=drain(now:now)

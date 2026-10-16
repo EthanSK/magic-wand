@@ -49,7 +49,6 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap, then hold | Drag with the actual mouse button held; release drops |
 
 - HIGH is released-button follow. LOW is a plain Bottom hold at one-third speed.
-- Only LOW aiming adds 90 ms of movement delay, so release can discard the switch jolt. HIGH and real dragging stay immediate.
 - Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Cyan shows recognition; release stops without an endpoint click.
 - Leave the wand idle on the desk for about two seconds to learn its resting pose. Picking it up can then enter HIGH automatically; setting it down stops following after sustained desk confirmation.
 - Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.
@@ -130,7 +129,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 | Cold start | 96 ms settling | Skipped when the sensor is still warm |
 | Gyro sleep | After 1 s idle | Accelerometer stays at 1.6 Hz for pickup; off on disconnect |
 | Hold | 220 ms | Longer presses count as holds |
-| LOW movement delay | 90 ms | Release drops the last unshown movement; HIGH and actual dragging stay immediate |
+| LOW movement delay | 0 ms |  |
 | HIGH stop-to-click | 450 ms still | One click after deliberate movement; no repeat while still |
 | Double-click window | 0.3 s | Read from the Mac’s setting |
 | Scrolling | Horizontal × 1.4 | Mac wheel gain 0.8 |
@@ -146,10 +145,10 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 <!-- wand:status -->
 - Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.
 - Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.
-- HIGH dwell, held rough circles, LOW release-jolt buffering, desk inference and VS Code review pass automated checks; physical acceptance is pending.
+- HIGH dwell, held rough circles, desk inference and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.23 (28) · device code `wand-e1ce30d7c407` · bridge `95988d7a` · updated 16 October 2026.
+Receiver 1.2.24 (29) · device code `wand-e1ce30d7c407` · bridge `95988d7a` · updated 17 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

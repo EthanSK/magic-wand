@@ -198,7 +198,7 @@ def tuning_rows(manifest: dict) -> list[tuple[str, str, str]]:
         ("Cold start", f"{t['coldSettleMs']} ms settling", "Skipped when the sensor is still warm"),
         ("Gyro sleep", f"After {t['sensorIdleGraceMs'] / 1000:g} s idle", f"Accelerometer stays at {t['idleAccelerometerHz']} Hz for pickup; off on disconnect"),
         ("Hold", f"{t['holdMs']} ms", "Longer presses count as holds"),
-        ("LOW movement delay", f"{t['lowMotionDelayMs']} ms", "Release drops the last unshown movement; HIGH and actual dragging stay immediate"),
+        ("LOW movement delay", f"{t['lowMotionDelayMs']} ms", ""),
         ("HIGH stop-to-click", f"{t['highDwellMs']} ms still", "One click after deliberate movement; no repeat while still"),
         ("Double-click window", f"{t['macDoubleClickSeconds']:g} s", "Read from the Mac’s setting"),
         ("Scrolling", f"Horizontal × {t['horizontalScrollBoost']}", f"Mac wheel gain {t['hostScrollGain']}"),
