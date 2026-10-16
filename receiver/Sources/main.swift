@@ -26,7 +26,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var chunks: [Data] = []
     var writing = false, configuring = false
     var input = "", buttons = 0, reportCount = 0, movementCount = 0
-    var restoring = false, generation = 0, retry: DispatchWorkItem?
+    var restoring = false, bridgeLoadFailed = false, loadingBridge = false, generation = 0, retry: DispatchWorkItem?
     var lastTrusted = false, ready = false, legacySignaled = false
     var lastStatusKey = ""
     var lightMode = "unknown"
@@ -86,10 +86,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func bridgeRevision(_ code:String)->String {SHA256.hash(data:Data(code.utf8)).map{String(format:"%02x",$0)}.joined()}
     func loadModeBridge(_ code:String?=nil) {
         let source=code ?? modeBridge
+        bridgeLoadFailed=false;loadingBridge=true;ready=false
+        queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();")
         // Each complete statement is small; the old single giant REPL function
         // exceeded the device's available memory during repeated live updates.
         for command in source.split(separator:"\n") where command.trimmingCharacters(in:.whitespaces) != "print('WAND_MODE_ROUTING_READY');" {queue(String(command))}
-        queue("global.WAND_BRIDGE_REVISION='"+bridgeRevision(source)+"';print('WAND_MODE_ROUTING_READY');")
+        queue("if(global.wandMotionReady){global.WAND_BRIDGE_REVISION='"+bridgeRevision(source)+"';print('WAND_MODE_ROUTING_READY');}else print('WAND_UPDATE_FAILED');")
     }
     let commands: [String]
     let runtimeVersion = (try? String(contentsOf: Bundle.main.url(forResource: "wand-runtime-version", withExtension: "txt")!, encoding: .utf8)) ?? ""
@@ -292,13 +294,20 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         while let newline = input.firstIndex(of: "\n") {
             let line = String(input[..<newline]); input.removeSubrange(...newline)
             if line.contains("Error") || line.contains("OUT OF MEMORY") || line.contains("Uncaught") { log("DEVICE_ERROR", line) }
+            // Source echo may contain the word Error. Only actual runtime failures
+            // invalidate a bridge load; a later ready marker cannot hide one.
+            if loadingBridge && (line.contains("Uncaught ") || line.contains("OUT OF MEMORY") || line == "WAND_UPDATE_FAILED" || line == ">WAND_UPDATE_FAILED") {
+                bridgeLoadFailed=true;ready=false;lightMode="update";status()
+            }
+
             if line.contains("WAND_NEEDS_CONFIG") { log("UPLOADING_RUNTIME", commands.count); for command in commands { queue(command) } }
             if line.hasSuffix("WAND_BRIDGE_READY") {
                 queue("E.setFlags({pretokenise:1});global.wandDoubleClickSeconds="+String(min(0.3,NSEvent.doubleClickInterval))+";if(global.WAND_BRIDGE_REVISION==='"+bridgeRevision(modeBridge)+"')print('WAND_MODE_ROUTING_READY');else print('WAND_PATCH_NEEDED');")
             }
             if line.hasSuffix("WAND_PATCH_NEEDED") {loadModeBridge()}
             if line.hasSuffix("WAND_MODE_ROUTING_READY") {
-                ready=true;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
+                guard !bridgeLoadFailed else {queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();");log("BRIDGE_LOAD_REJECTED");continue}
+                loadingBridge=false;ready=true;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
                 if context.isActive {hudSession=true;resumeHUDNavigation()}
                 queue("global.WAND_UPDATING=false;setHUDOpen("+(context.isActive ? "true":"false")+");updateLights();")
             }

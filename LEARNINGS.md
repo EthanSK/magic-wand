@@ -143,3 +143,16 @@ Keep a short directional-evidence window separate from the radial pointer tolera
 Use the existing IMU heartbeat for the moving/resting hint. Quiet heartbeats must not keep resetting the dwell timer: only the moving-to-rest transition starts the rest delay. A missed heartbeat expires rather than suppressing clicks forever. Keep the accepted pointer gains unchanged; the LOW release-jolt buffer was later disabled.
 
 Free the old motion callback before allocating replacement filter code. Adding helpers before releasing that body exhausted the physical Puck's memory even though host tests passed. Keep the filter state to five scalar values and use the existing telemetry message. A successful ready marker alone does not prove a complete upload; read back the actual filter and motion callback and inspect fresh error flags.
+
+## A partial live patch must not look ready
+
+A successful final print is not proof that every preceding REPL statement installed: FIFO_FULL
+and OUT OF MEMORY can leave the motion callback at its temporary no-op while button watches
+still respond. Load the complete compact bridge through the receiver's statement loader instead
+of a multi-kilobyte ad-hoc maintenance command. Retain the previous bundle and bridge for recovery.
+Validate the callback's expected motion marker and reject a later ready marker after an actual
+interpreter failure. Keep orange until validated completion; do not use a five-second timer.
+
+At 208 Hz, test helpers that simulate a duration must derive their sample count from the selected
+rate. A hard-coded 104 sample count halves simulated elapsed time and falsely fails the unchanged
+300 ms release pause. Retain fixed-rate traces separately to compare outputs at equal times.

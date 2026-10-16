@@ -16,7 +16,7 @@ SHA-256; the private directory’s path isn’t recorded.
 | `receiver/Sources/WandContextListener.swift` | Agentic Mouse HUD context | None |
 | `receiver/Sources/WandRecordingState.swift` | Agent Flow recording state | None |
 | `receiver/Sources/WandPointerControl.swift` | Display bounds, LOW routing, rough loops, HIGH dwell clicks and desk inference | None |
-| `receiver/Info.plist` | Receiver bundle 1.2.24 (29) | None |
+| `receiver/Info.plist` | Receiver bundle 1.2.25 (30) | None |
 | `receiver/Sources/WandDeviceConfiguration.swift` | Written for this repository | New |
 
 The installed receiver pinned one Puck’s CoreBluetooth identifier and advertised name. The public
@@ -37,8 +37,8 @@ copying them:
 
 `scripts/device_build.py` keeps the original algorithms. From the imported sources it reproduces
 the private build byte for byte: runtime `wand-e1ce30d7c407`, commands SHA-256 `33bf21e3…`,
-runtime SHA-256 `e25a4de5…`, boot image SHA-256 `b334feb2…` and bridge revision `95988d7a…`.
-The bridge revision matches the receiver 1.2.24 (29) bundle, private cache and final live patch readback. The final power-state correction retained calibration and reported no error flags. Earlier large diagnostic queries raised LOW_MEMORY warnings without an observed out-of-memory failure. New gestures still need a physical check.
+runtime SHA-256 `e25a4de5…`, boot image SHA-256 `b334feb2…` and bridge revision `d051148c…`.
+The bridge revision matches the receiver 1.2.25 (30) bundle, private cache and final live patch readback. The final power-state correction retained calibration and reported no error flags. Earlier large diagnostic queries raised LOW_MEMORY warnings without an observed out-of-memory failure. New gestures still need a physical check.
 `tests/manifest.test.mjs` recomputes these identifiers on every run.
 
 The private `wand-status.txt` described receiver 1.2.1 and an older button layout, so it wasn’t used.
@@ -83,7 +83,8 @@ stable forwarder, so the bridge’s replacements reach the same watches, timers 
 What the demo doesn’t reproduce:
 
 - Gyro readings are derived from the visitor’s aim at about 60 readings a second; the real wand
-  requests 104 Hz and fully processed about 35 Hz in a recent measurement.
+  requests 104 Hz. The earlier roughly 35 Hz full-processing measurement predates the current
+  lookup optimization; the current rate has not been established.
 - Bluetooth delay, the Puck’s 20 ms switch debounce and its memory limits aren’t simulated.
 - The 3D wand turns a quarter as far as the simulated sensor, so its tip stays below the HUD.
 - HUD cards only report what they would do; child pages, held keys and app actions aren’t run.
@@ -144,3 +145,16 @@ The main-HUD browser snapshot does not implement app-specific pages or the VS Co
 ## Horizontal app switching
 
 `integrations/agentic-mouse/wand-horizontal-switcher.patch` preserves the incremental change installed in signed Agentic Mouse 1.0.263 (269). While holding the Switch App card, horizontal wand movement selects the next or previous app using the existing Command-Tab lifecycle; release chooses it. The patch includes focused control and modifier-lifecycle tests, and the complete native check passed before installation. The installed app’s signature, input readiness, command-socket ownership and unchanged mouse configuration were verified. Physical acceptance of horizontal selection remains pending. This patch depends on the earlier local wand integration and is not a standalone Agentic Mouse distribution.
+
+## Sensor-rate and update readiness
+
+Receiver 1.2.25 (30) retains 104 Hz after a 208 Hz trial felt more jumpy to Ethan, and keeps
+1.6 Hz accelerometer-only idle sensing. The motion calculation caches repeated lookups but keeps the accepted integration,
+angular tolerance, gain and ordinary button-aware sender. Host tests compare exact reports with
+the preceding calculation at 20, 35, 104 and 208 delivered samples per second. These comparisons
+do not measure end-to-end latency or establish a delivered rate of 208 updates per second.
+
+The update light is orange. An incomplete motion callback also holds orange; neither a timeout
+nor a later ready marker is sufficient to clear a failed bridge load. The receiver rejects a
+ready marker after an actual interpreter failure during that load. Recording remains red, mouse
+mode blue, and a lost Bluetooth connection retains its dim-orange indication.

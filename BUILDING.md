@@ -73,7 +73,7 @@ Use the name your Puck advertises (the Espruino Web IDE’s device list shows it
    Privacy & Security. Starting it with `--request-permissions` shows the Accessibility prompt.
    It only connects once Accessibility is on, because it posts pointer, click and wheel events.
 3. On each connection it compares the Puck’s runtime version with `wand-runtime-version.txt`.
-   If they differ it uploads `wand-commands.json` (red while updating), then sends the bridge
+   If they differ it uploads `wand-commands.json` (orange while updating), then sends the bridge
    one statement at a time.
 4. To start it at login, add it to Login Items or a LaunchAgent. Ethan’s install uses a LaunchAgent.
 

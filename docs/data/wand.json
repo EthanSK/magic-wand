@@ -7,10 +7,10 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.24",
-    "receiverBuild": "29",
+    "receiver": "1.2.25",
+    "receiverBuild": "30",
     "deviceRuntime": "wand-e1ce30d7c407",
-    "bridgeRevision": "95988d7aec411b7bb22467b18b9df5fe510db98b83bfdcecf668e998aa1c9467"
+    "bridgeRevision": "d051148c50b266ed7d24667b47020d967280d50a89d84032118a87eec2bca599"
   },
   "status": [
     "Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.",
@@ -163,10 +163,10 @@
       "name": "Updating",
       "levels": [
         1,
-        0,
+        0.2,
         0
       ],
-      "display": "#ff2e3a",
+      "display": "#ff8a20",
       "detail": "Receiver is updating the device code"
     },
     {
