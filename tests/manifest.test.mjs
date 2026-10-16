@@ -12,6 +12,7 @@ const manifest = JSON.parse(read("wand.json"));
 const device = read("device/wand-mouse-prototype.js");
 const bridge = read("device/wand-mode-bridge.js");
 const swift = read("receiver/Sources/main.swift");
+const pointer = read("receiver/Sources/WandPointerControl.swift");
 const sha256 = (text) => createHash("sha256").update(text).digest("hex");
 const number = (pattern, source, label) => {
   const match = source.match(pattern);
@@ -45,6 +46,7 @@ test("tuning matches the running device code and the receiver", () => {
   wand.loadBridge();
   const { CONFIG } = wand.ctx;
   const t = manifest.tuning;
+  assert.equal(number(/init\(lowDelay:Double=([\d.]+)/, pointer, "LOW delay") * 1000, t.lowMotionDelayMs);
   assert.equal(CONFIG.gain, t.pointerGain);
   assert.equal(CONFIG.heldPointerGain, t.heldPointerGain);
   assert.equal(CONFIG.releaseClickPause, t.releaseClickPauseSeconds);

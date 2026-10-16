@@ -259,12 +259,7 @@ export class PointerRouter {
       if (r.lines) actions.push({ type: "scroll", lines: r.lines });
       return { buttons: bits, actions };
     }
-    actions.push(...this.drain(now));
-    this.pending.push({ due: now + 0.09, dx, dy });
-    while (this.pending.length > 48) {
-      const p = this.pending.shift();
-      actions.push({ type: "move", dx: p.dx, dy: p.dy });
-    }
+    actions.push({ type: "move", dx, dy });
     return { buttons: bits, actions };
   }
   drain(now) {

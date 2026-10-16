@@ -5,8 +5,18 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import { PointerRouter } from "../docs/sim/pointer.mjs";
+test("LOW demo motion has no delay or release replay", () => {
+  const router = new PointerRouter();
+  router.bottom(true);
+  assert.deepEqual(router.frame(4, 3, 0, false, 10).actions, [{type: "move", dx: 4, dy: 3}]);
+  assert.equal(router.nextDue, undefined);
+  router.bottom(false);
+  assert.deepEqual(router.drain(11), []);
+  assert.equal(router.frame(0, 0, 1, false, 11).buttons, 1);
+});
 test(
-  "native rough loops, release jolt buffer, dwell, desk detection and review lifecycle",
+  "native immediate LOW, rough loops, optional buffer, dwell, desk detection and review lifecycle",
   { skip: process.platform !== "darwin" },
   () => {
     const dir = mkdtempSync(join(tmpdir(), "wand-controls-"));
