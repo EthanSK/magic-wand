@@ -25,7 +25,7 @@ idle.frames.length=0;turn(idle,1.2);assert(!moved(idle),'no delayed HIGH entry f
 // A deliberate new gesture overrides the wait; there is no resume timer that
 // could later reopen a mode after the user switches or disconnects.
 w.frames.length=0;w.edge('D1',0);w.advance(.3);w.edge('D1',1);w.advance(.1);
-w.tap();w.advance(.05);w.tap();assert(!w.ctx.moveLatched,'double tap during pause exits');
+w.tap();assert(!w.ctx.moveLatched,'single tap during pause exits');
 w.advance(1.1);assert(!w.ctx.moveLatched,'no delayed resurrection after exit');
 w.tap();w.advance(.9);w.edge('D1',0);w.advance(.3);w.edge('D1',1);
 w.tap('D2');assert(w.ctx.hudOpen&&!w.ctx.moveLatched,'HUD switch during pause wins');

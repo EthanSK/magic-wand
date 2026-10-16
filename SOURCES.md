@@ -15,8 +15,8 @@ SHA-256; the private directory’s path isn’t recorded.
 | `receiver/Sources/WandControlTransport.swift` | HUD and speech sockets | None |
 | `receiver/Sources/WandContextListener.swift` | Agentic Mouse HUD context | None |
 | `receiver/Sources/WandRecordingState.swift` | Agent Flow recording state | None |
-| `receiver/Sources/WandPointerControl.swift` | Display bounds and circular-scroll recognition | None |
-| `receiver/Info.plist` | Receiver bundle 1.2.19 (24) | None |
+| `receiver/Sources/WandPointerControl.swift` | Display bounds, LOW routing, rough loops, HIGH dwell clicks and desk inference | None |
+| `receiver/Info.plist` | Receiver bundle 1.2.21 (26) | None |
 | `receiver/Sources/WandDeviceConfiguration.swift` | Written for this repository | New |
 
 The installed receiver pinned one Puck’s CoreBluetooth identifier and advertised name. The public
@@ -37,10 +37,8 @@ copying them:
 
 `scripts/device_build.py` keeps the original algorithms. From the imported sources it reproduces
 the private build byte for byte: runtime `wand-e1ce30d7c407`, commands SHA-256 `33bf21e3…`,
-runtime SHA-256 `e25a4de5…`, boot image SHA-256 `b334feb2…` and bridge revision `6fd61d2c…`.
-The bridge revision matches the receiver 1.2.19 (24) bundle and the device readback after its
-16 October 2026 reconnect. The readback verified Bottom edge reporting, circular-scroll light
-support, the reconnect handler and no device error flags. New gestures still need a physical check.
+runtime SHA-256 `e25a4de5…`, boot image SHA-256 `b334feb2…` and bridge revision `2493423e…`.
+The bridge revision matches the receiver 1.2.21 (26) bundle, private cache and final live patch readback. The final power-state correction retained calibration and reported no error flags. Earlier large diagnostic queries raised LOW_MEMORY warnings without an observed out-of-memory failure. New gestures still need a physical check.
 `tests/manifest.test.mjs` recomputes these identifiers on every run.
 
 The private `wand-status.txt` described receiver 1.2.1 and an older button layout, so it wasn’t used.
@@ -136,3 +134,9 @@ project isn’t affiliated with them.
 ## Wand-only Command-Enter
 
 `integrations/agentic-mouse/wand-command-enter.patch` records the four-file incremental change from the earlier local wand integration to the installed Agentic Mouse 1.0.261 (267). It is a recoverable source patch, not a complete Agentic Mouse distribution, and requires that earlier unpublished wand integration. The native handler holds Command across Return down/up and releases it on cancellation. The card is labelled `⌘↩ Steer` only for the wand; Corsair and Razer retain Enter. Focused tests and the full Agentic Mouse gate passed before signed installation; actual Steer acceptance remains unconfirmed. `wand.json` applies that card title over the unchanged published shared-mouse snapshot when generating the demo.
+
+## App-specific review
+
+`integrations/agentic-mouse/wand-app-review.patch` records the incremental source changes used by signed Agentic Mouse 1.0.262 (268). It depends on the earlier unpublished wand integration and is not a complete distribution. The receiver asks Agentic Mouse to enter the actual frontmost app’s controls, then consumes its same-user app context. In VS Code, Bottom sends source-isolated, ordered review requests to Better Git 1.2.127 over its registered URI handler; it reuses the existing staging transaction, Undo and file-range logic. Better Git is published on the Marketplace and its `codex/wand-review` source branch; the Agentic Mouse changes remain unpublished.
+
+The main-HUD browser snapshot does not implement app-specific pages or the VS Code staging transport. Its double tap dismisses that snapshot; the installed receiver’s double tap enters the current app’s controls, and a second double tap leaves them. Native regression checks cover both modes and directions against real Git-index state. Physical wand acceptance of this integration is still pending.

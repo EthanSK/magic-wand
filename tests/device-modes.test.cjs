@@ -27,7 +27,7 @@ for (const bridge of ["readable", "fragments"]) {
     w.edge("D1", 1);
     assert(!ctx.moveLatched && w.device.awake, "held entry stops pointer immediately but keeps sensor warm");
     w.advance(1.01);
-    assert(!w.device.awake, "sensor sleeps after one idle second");
+    assert(!ctx.gyroAwake && w.device.sampleRate === 1.6, "gyro sleeps; low-power pickup sensing remains at 1.6 Hz");
     assert.equal(frames.filter((f) => f[2] === 1).length, 1, "held movement from idle clicks once on release");
     assert.equal(frames.at(-1)[2], 0, "endpoint click is released");
     const before = frames.length;
@@ -76,9 +76,9 @@ for (const bridge of ["readable", "fragments"]) {
     assert(!ctx.dragging && ctx.moveLatched);
     ctx.setMouseFollow(false);
 
-    // Double tap while following exits.
-    w.advance(0.3); w.tap(); w.advance(0.3); w.tap(); w.advance(0.05); w.tap();
-    assert(!ctx.moveLatched, "double click exits latched follow");
+    // A single tap while following exits.
+    w.advance(0.3); w.tap(); w.advance(0.3); w.tap();
+    assert(!ctx.moveLatched, "single click exits latched follow");
     w.advance(0.3);
 
     // Exclusive HUD and pointer modes.
@@ -94,7 +94,8 @@ for (const bridge of ["readable", "fragments"]) {
     assert.equal(frames.filter((f) => f[2] === 1).length, 0, "HUD to pointer tap enters without a click");
     frames.length = 0;
     w.tap(); w.advance(0.3);
-    assert.equal(frames.filter((f) => f[2] === 1).length, 1, "later bottom tap clicks once");
+    assert.equal(frames.filter((f) => f[2] === 1).length, 0, "later bottom tap exits HIGH without clicking");
+    assert(!ctx.moveLatched);
     middleTap();
     assert(ctx.hudOpen && !ctx.moveLatched);
 
@@ -131,7 +132,8 @@ for (const bridge of ["readable", "fragments"]) {
     const savedBias = JSON.stringify(ctx.bias);
     w.device.disconnect(); w.device.connect();
     assert.equal(JSON.stringify(ctx.bias), savedBias, "reconnect retains valid calibration");
-    assert(!ctx.calibrationLit && !w.device.awake);
+    assert(!ctx.calibrationLit,"reconnect keeps completed calibration");
+    w.advance(1.01);assert(!ctx.gyroAwake && w.device.sampleRate === 1.6,"reconnect returns to low-power pickup sensing");
     ctx.bias = undefined; ctx.calibrationDeadline = w.now - 1; ctx.calibrationLit = false;
     w.edge("D1", 0);
     assert(ctx.calibrationLit && w.device.awake, "button restarts missing calibration");
@@ -152,7 +154,7 @@ for (const bridge of ["readable", "fragments"]) {
     ctx.wakeGyro(); w.advance(0.6);
     assert(w.device.awake, "rewake cancels the old sleep timer");
     ctx.sleepGyro(); w.advance(1.01);
-    assert(!w.device.awake, "idle grace is bounded");
+    assert(!ctx.gyroAwake && w.device.sampleRate === 1.6, "idle gyro grace is bounded; pickup sensing stays on");
     ctx.wakeGyro(); w.device.disconnect();
     assert(!w.device.awake, "disconnect powers the sensor off immediately");
     assert.equal(ctx.CONFIG.gain, 86.4);
@@ -194,14 +196,10 @@ for (const bridge of ["readable", "fragments"]) {
     assert(moved(), "warm follow resumes after deliberate movement crosses the angular tolerance");
 
     w.advance(0.9); frames.length = 0; w.tap();
-    assert(ctx.tapPending, "ordinary latched click waits for the double-tap decision");
-    for (let i = 0; i < 7; i++) paced(0.03);
-    assert(!moved(), "pointer stays fixed while its click is pending");
-    assert(!frames.some((f) => f[2] === 1), "pending click has not fired early");
-    paced(0.04);
-    assert.equal(frames.filter((f) => f[2] === 1).length, 1, "pending click emits once at the fixed position");
-    assert(frames.filter((f) => f[2] === 1).every((f) => f[0] === 0 && f[1] === 0), "click frame has no motion");
-    assert(moved(), "following resumes after the click decision");
+    assert(!ctx.moveLatched, "HIGH tap exits immediately without a click");
+    for (let i=0;i<10;i++) paced(0.03);
+    assert(!moved() && !frames.some(f=>f[2]===1), "exit neither moves nor clicks");
+    w.advance(0.9);w.tap();w.advance(0.1);frames.length=0;
 
     frames.length = 0; w.edge("D30", 0); paced(0.03);
     assert(!moved(), "speech press does not jolt a following pointer");

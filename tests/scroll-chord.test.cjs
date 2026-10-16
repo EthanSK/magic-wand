@@ -31,14 +31,14 @@ for (const bridge of ["readable", "fragments"]) {
       assert(!ctx.scrollHeld && ctx.scrollSuppress);
       assert(lines.some((l) => l.startsWith("@SCROLL E,")));
       // Physical Bottom edge reports cancel circle recognition; they are not HUD actions.
-      const actionLines = () => lines.filter((l) => l.startsWith("@") && !l.startsWith("@BOTTOM "));
+      const actionLines = () => lines.filter((l) => l.startsWith("@") && !["@BOTTOM ","@IMU ","@FOLLOW "].some(prefix=>l.startsWith(prefix)));
       const count = actionLines().length;
       w.advance(0.4); w.edge(second, 1); w.advance(0.3);
       assert(!ctx.scrollSuppress);
       assert.equal(ctx.moveLatched, priorFollow, "prior pointer follow is restored");
       assert.equal(actionLines().length, count, "the held remainder does not activate the HUD");
       assert(frames.every((f) => f[2] === 0), "the chord never clicks");
-      if (!priorFollow) { grace(); assert(!w.device.awake); } else assert(w.device.awake);
+      if (!priorFollow) { grace(); assert(!ctx.gyroAwake && w.device.sampleRate===1.6); } else assert(w.device.awake);
     }
     chord("D1"); chord("D2"); chord("D1", true); chord("D2", true);
 
@@ -63,7 +63,7 @@ for (const bridge of ["readable", "fragments"]) {
     ctx.setHUDOpen(true); assert(w.device.awake, "late HUD context cannot stop the scroll sensor");
     ctx.setHUDOpen(false); assert(w.device.awake);
     w.edge("D1", 1); w.edge("D2", 1); grace();
-    assert(!w.device.awake);
+    assert(!ctx.gyroAwake && w.device.sampleRate===1.6);
 
     // Re-pressing while Middle stays held resumes scrolling; disconnect stops everything.
     w.edge("D1", 0); w.advance(0.02); w.edge("D2", 0); w.edge("D1", 1);

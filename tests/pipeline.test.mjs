@@ -58,8 +58,8 @@ test("screen-edge overflow is discarded, so reversing responds immediately", () 
   assert.equal(s.mac.location().y, s.mac.height - 4);
 });
 
-test("circle output uses wheel events and cyan, and Bottom immediately cancels it", () => {
-  const s = setup(); let x = 80, y = 0;
+test("held LOW circles use wheel events and cyan; release cancels without a click", () => {
+  const s = setup(); s.pipeline.receiver.handleLine("@BOTTOM 1"); let x = 80, y = 0;
   for (let i = 1; i <= 105; i++) {
     const a = i / 35 * Math.PI * 2, nx = 80 * Math.cos(a), ny = 80 * Math.sin(a);
     s.w.advance(1 / 35);
@@ -68,8 +68,8 @@ test("circle output uses wheel events and cyan, and Bottom immediately cancels i
   assert(s.macEvents.some(e => e.type === "scroll" && e.dy > 0));
   s.w.advance(0.01);
   assert.deepEqual(s.w.colors(), [0, 1, 1]);
-  s.pipeline.receiver.handleLine("@BOTTOM 1");
-  assert(!s.pipeline.receiver.circularScroll.active);
+  s.pipeline.receiver.handleLine("@BOTTOM 0");
+  assert(!s.pipeline.receiver.pointerRouter.circle.active);
   const count = s.macEvents.filter(e => e.type === "scroll").length;
   s.pipeline.receiver.handleFrame(20, 20, 0);
   assert.equal(s.macEvents.filter(e => e.type === "scroll").length, count);
@@ -124,41 +124,28 @@ test("holding Middle on a wheel card turns its wheel with tilt", () => {
   assert(!s.hud.pressed && s.hud.open, "release ends the hold and keeps the HUD");
 });
 
-test("Bottom follows, clicks at a fixed point, drags, and Bottom from the HUD returns to the pointer", () => {
-  const s = setup();
-  s.press("D1", 0.06); s.w.advance(0.1);
-  assert(s.w.ctx.moveLatched);
-  assert.deepEqual(s.w.colors(), [0, 0, 1], "pointer is blue");
-  const start = s.mac.location();
-  s.turn(10, 0, 0.5);
-  assert(s.mac.location().x > start.x + 100, "turning right moves the pointer right");
-  s.w.advance(0.1);
-
-  s.macEvents.length = 0;
-  s.press("D1", 0.06);
-  const fixed = s.mac.location();
-  s.turn(4, 0, 0.2);
-  assert.deepEqual(s.mac.location(), fixed, "the pointer stays still while the click is decided");
-  s.w.advance(0.1);
-  const clicks = s.macEvents.filter((event) => event.type === "down" || event.type === "up");
-  assert.deepEqual(clicks.map((event) => event.type), ["down", "up"]);
-  assert(clicks.every((event) => event.x === fixed.x && event.y === fixed.y), "click lands where the pointer stopped");
-
-  s.w.advance(1);
-  s.macEvents.length = 0;
-  s.press("D1", 0.06); s.w.advance(0.05);
-  s.w.edge("D1", 0); s.w.advance(0.3);
-  s.turn(6, 4, 0.3);
-  s.w.edge("D1", 1); s.w.advance(0.1);
-  const types = s.macEvents.map((event) => event.type);
-  assert(types.includes("down") && types.includes("drag") && types.at(-1) === "up", "tap then hold drags and drops");
-  assert(s.w.ctx.moveLatched, "a drop restores prior HIGH following");
-
-  s.press("D2", 0.12); s.w.advance(0.1);
-  assert(s.hud.open);
-  s.press("D1", 0.06); s.w.advance(0.1);
-  assert(!s.hud.open, "Bottom closes the HUD");
-  assert(s.w.ctx.moveLatched, "and the pointer follows again");
+test("HIGH clicks once after settling, a tap exits; tap then hold drags and restores HIGH", () => {
+  const s=setup();s.press("D1",.06);s.w.advance(.1);
+  assert(s.w.ctx.moveLatched);assert.deepEqual(s.w.colors(),[0,0,1]);
+  assert(!s.macEvents.some(e=>e.type==="down"),"entry never clicks");
+  const start=s.mac.location();s.turn(10,0,.5);
+  assert(s.mac.location().x>start.x+100);
+  s.w.advance(.44);assert(!s.macEvents.some(e=>e.type==="down"));
+  const fixed=s.mac.location();s.w.advance(.03);
+  let clicks=s.macEvents.filter(e=>e.type==="down"||e.type==="up");
+  assert.deepEqual(clicks.map(e=>e.type),["down","up"]);
+  assert(clicks.every(e=>e.x===fixed.x&&e.y===fixed.y));
+  s.w.advance(2);assert.equal(s.macEvents.filter(e=>e.type==="down").length,1,"stillness does not repeat");
+  s.press("D1",.06);assert(!s.w.ctx.moveLatched,"a single tap exits HIGH");
+  s.w.advance(.9);s.press("D1",.06);s.w.advance(.9);s.macEvents.length=0;
+  s.press("D1",.06);s.w.advance(.05);s.w.edge("D1",0);s.w.advance(.3);
+  s.turn(6,4,.3);s.w.edge("D1",1);s.w.advance(.1);
+  const types=s.macEvents.map(e=>e.type);
+  assert(types.includes("down")&&types.includes("drag")&&types.at(-1)==="up");
+  assert(s.w.ctx.moveLatched,"a drop restores prior HIGH");
+  s.press("D2",.12);s.w.advance(.1);assert(s.hud.open);
+  s.press("D1",.06);s.w.advance(.1);
+  assert(!s.hud.open&&s.w.ctx.moveLatched,"Bottom leaves HUD for pointer follow");
 });
 
 test("Bottom + Middle scrolls both axes as separate wheel events and never clicks", () => {
@@ -186,7 +173,7 @@ test("Top starts and stops Agent Flow, and the recording light yields to other m
   assert.deepEqual(s.w.colors(), [1, 0, 0], "recording is red");
   s.press("D1", 0.06); s.w.advance(0.05);
   assert.deepEqual(s.w.colors(), [0, 0, 1], "pointer blue wins over recording");
-  s.press("D1", 0.06); s.w.advance(0.05); s.press("D1", 0.06); s.w.advance(0.3);
+  s.press("D1", 0.06); s.w.advance(0.3);
   assert(!s.w.ctx.moveLatched);
   assert.deepEqual(s.w.colors(), [1, 0, 0], "recording red returns when idle");
   s.press("D30", 0.08); s.w.advance(0.05);

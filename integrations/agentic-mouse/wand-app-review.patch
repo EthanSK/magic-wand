@@ -1,0 +1,94 @@
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -4,7 +4,7 @@
+ /// A parked outline and a separate native press/release lifecycle. The wand
+ /// never fabricates Corsair input: it uses the same coordinator under its own source.
+ public struct WandPersistentCommand: Equatable {
+-    public enum Phase: String { case open, navigate, motion, park, press, release, dismiss }
++    public enum Phase: String { case open, appSpecific, navigate, motion, park, press, release, dismiss }
+     public let phase: Phase
+     public let id: String
+     public let sequence: Int
+@@ -74,6 +74,15 @@
+         if ownsHUD && !target.isActive {ownsHUD=false;hold=nil;scheduler.stop()}
+         defer {onContext?(isOpen)}
+         if command.phase == .dismiss {reset(reason:.userRequested);return}
++        if command.phase == .appSpecific {
++            hold=nil
++            if target.isActive {target.exit(reason:.userRequested)}
++            target.handle(.init(action:.openAppSpecific,source:.wand,physicalCell:.frontmostAppModeSelector,phase:.press),inputTime:clock.now)
++            ownsHUD=target.isActive
++            selected=WandSelectionController.startCell(for:target.page)
++            if ownsHUD {target.setPointerFocus(.init(cell:selected));startWatchdog()}
++            return
++        }
+         if command.phase == .open {
+             if !target.isActive {
+                 selected = .switchApp
+@@ -124,7 +133,7 @@
+                 target.handle(.init(action:.select,source:.wand,physicalCell:current.cell,phase:.release),inputTime:clock.now)
+             }
+             keepOutline(after:current.navigation?.focusedCell ?? current.cell,generation:current.pageGeneration)
+-        case .open, .dismiss:break
++        case .open, .appSpecific, .dismiss:break
+         }
+         if !target.isActive {ownsHUD=false;hold=nil;scheduler.stop()}
+     }
+--- a/Sources/AgenticMouseApp/WandContextSender.swift
++++ b/Sources/AgenticMouseApp/WandContextSender.swift
+@@ -4,12 +4,12 @@
+ /// Same-user feedback lets the receiver suppress cursor output only while
+ /// Agentic Mouse actually owns a persistent wand HUD. Never trust a stale lease.
+ enum WandContextSender {
+-    static func send(active:Bool) {
++    static func send(active:Bool,appMode:String?=nil) {
+         let path=FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/WandReceiver/context.sock").path
+         var metadata=stat()
+         guard lstat(path,&metadata)==0,metadata.st_uid==geteuid(),metadata.st_mode & S_IFMT == S_IFSOCK,
+               metadata.st_mode & 0o077 == 0,
+-              let data=try? JSONSerialization.data(withJSONObject:["version":1,"active":active,"pid":getpid(),"sentAt":Date().timeIntervalSince1970]) else {return}
++              let data=try? JSONSerialization.data(withJSONObject:["version":1,"active":active,"appMode":appMode ?? "","pid":getpid(),"sentAt":Date().timeIntervalSince1970]) else {return}
+         let fd=socket(AF_UNIX,SOCK_DGRAM,0);guard fd>=0 else{return};defer{close(fd)}
+         _=fcntl(fd,F_SETFL,O_NONBLOCK)
+         var address=sockaddr_un();address.sun_family=sa_family_t(AF_UNIX)
+--- a/Sources/AgenticMouseApp/AppDelegate.swift
++++ b/Sources/AgenticMouseApp/AppDelegate.swift
+@@ -1589,7 +1589,9 @@
+         wandSelectionController = controller
+         let persistent = WandPersistentController(target:coordinator,scheduler:DispatchTickScheduler(),clock:SystemMonotonicClock(),allowed:{[weak self] in self?.mouseCommandsAllowed == true})
+         persistent.onAdjustStep = {[weak self] direction in self?.performWandAdjustStep(direction) ?? false}
+-        persistent.onContext = { active in WandContextSender.send(active:active) }
++        persistent.onContext = { [weak coordinator] active in
++            WandContextSender.send(active:active,appMode:active && coordinator?.page == .appSpecific ? coordinator?.appSpecificTarget?.rawValue : nil)
++        }
+         wandPersistentController = persistent
+     }
+ 
+--- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
++++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+@@ -27,6 +27,15 @@
+         XCTAssertTrue(clicks.isEmpty);XCTAssertTrue(presses.isEmpty)
+         clock.advance(by:600);tick.fire()
+         XCTAssertTrue(control.isOpen);XCTAssertEqual(control.focusedCell,.frontmostAppModeSelector)
++    }
++    func testExplicitAppEntryReusesFrontmostAppAndRetainsOwnership(){
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
++        control.handle(.init(.appSpecific,id:"app-mode-001"))
++        XCTAssertTrue(control.isOpen)
++        XCTAssertEqual(target.page,.appSpecific)
++        XCTAssertEqual(target.appSpecificTarget,.vsCode)
++        XCTAssertTrue(clicks.isEmpty)
++        clock.advance(by:2);tick.fire();XCTAssertTrue(control.isOpen)
+     }
+     func testNativePressReleaseAndChildBackKeepOutline(){
+         select(-24)
+--- a/LEARNINGS.md
++++ b/LEARNINGS.md
+@@ -3060,3 +3060,7 @@
+ ## Wand home Steer uses a held Command-Enter lifecycle (2026-10-16)
+ 
+ Only the wand-source main HUD cell 7 uses Command-Enter and the label `⌘↩ Steer`. The shared Corsair/Razer Default map remains Enter, and Keys-page cell 7 retains its existing action. Use the existing WandHeldKeys press/release boundary: Command flagsChanged down, Return down carrying Command, Return up carrying Command, Command flagsChanged up. Cancellation releases Return before Command, and repeat press/release is idempotent. The full clean gate and focused modifier-lifetime/source-label tests passed; signed 1.0.261 (267) was installed with the existing receiver and Agent Flow processes retained. Native action acceptance remains separate from generated event tests.
++
++## Wand app-specific review preserves physical mouse ownership (2026-10-16)
++
++`appSpecific` enters the actual current app through ModePickerCoordinator with source `.wand`. Return the active app target with the same-user HUD context lease so the receiver owns only gesture adaptation; do not create Corsair events or alter shared mouse profiles. Green app review and purple VS Code file staging are receiver feedback, and Better Git owns all staged-range state. The signed 1.0.262 (268) package passed the full clean gate; four Mini Better Git tests checked review/file modes in both directions, ordering gaps, exact staged content and Undo. Physical wand acceptance is separate. The recoverable incremental patch is maintained with the wand project because this checkout contains unrelated staged work.

@@ -86,7 +86,7 @@ test("light modes, priority and RGB levels match the bridge", () => {
   wand.loadBridge();
   const { ctx } = wand;
   const set = (state) => {
-    Object.assign(ctx, { WAND_UPDATING: false, connected: true, calibrationLit: false, scrollHeld: false, moveLatched: false, hudOpen: false, wandRecording: false }, state);
+    Object.assign(ctx, { WAND_UPDATING: false, connected: true, calibrationLit: false, scrollHeld: false, moveLatched: false, hudOpen: false, wandRecording: false, wandAppMode: undefined, wandReviewFiles: false }, state);
     ctx.updateLights();
     return wand.colors();
   };
@@ -95,6 +95,7 @@ test("light modes, priority and RGB levels match the bridge", () => {
     disconnected: { connected: false },
     calibration: { calibrationLit: true },
     scroll: { scrollHeld: true },
+    app: {wandAppMode:"vsCode"},
     mouse: { moveLatched: true },
     hud: { hudOpen: true },
     recording: { wandRecording: true },
@@ -104,6 +105,7 @@ test("light modes, priority and RGB levels match the bridge", () => {
     assert.deepEqual(set(states[light.mode]), light.levels, `${light.mode} levels`);
     assert.match(light.display, /^#[0-9a-f]{6}$/);
   }
+  assert.deepEqual(set({wandAppMode:"vsCode",wandReviewFiles:true}), [1,0,1], "file staging is purple");
   for (const button of [...manifest.buttons, ...manifest.chords]) {
     assert(manifest.lights.some((light) => light.mode === button.light), `${button.id} names a real light`);
   }

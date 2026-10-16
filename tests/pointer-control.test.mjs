@@ -29,10 +29,10 @@ test("circular scrolling has both directions, passes initial motion immediately 
   }
 });
 
-test("jitter, incomplete curves, straight motion, held buttons and real drags never scroll", () => {
+test("jitter, incomplete curves, straight motion, ineligible modes never scroll", () => {
   for (const eligible of [true, false]) {
     const detector = new CircularScroll();
-    assert(trace(true, 35, eligible ? 5 : 80).every(p => !detector.update(...p, eligible).consumesPointer));
+    assert(trace(true, 35, eligible ? 3 : 80).every(p => !detector.update(...p, eligible).consumesPointer));
   }
   const straight = new CircularScroll();
   for (let i = 0; i < 180; i++) assert.equal(straight.update(3, 0, 20 + i / 35, true).lines, 0);
@@ -78,6 +78,14 @@ print(String(data:try! JSONSerialization.data(withJSONObject:output),encoding:.u
     assert.equal(built.status, 0, built.stderr);
     const run = spawnSync(join(dir, "check"), [], { encoding: "utf8" });
     assert.equal(run.status, 0, run.stderr);
-    assert.deepEqual(JSON.parse(run.stdout), reports);
+    const native=JSON.parse(run.stdout);assert.equal(native.length,reports.length);
+    let nativeLines=0,demoLines=0;
+    native.forEach((actual,i)=>{
+      assert.equal(actual.consumesPointer,reports[i].consumesPointer,`routing at ${i}`);
+      nativeLines+=actual.lines;demoLines+=reports[i].lines;
+      // Floating point atan2 can put one wheel line on either side of an exact boundary.
+      assert(Math.abs(nativeLines-demoLines)<=1,`wheel quantisation at ${i}`);
+    });
+    assert(Math.abs(nativeLines-demoLines)<=1);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });

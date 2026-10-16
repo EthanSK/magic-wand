@@ -95,12 +95,41 @@ leaves the HUD latched; a held entry parks navigation, presses and releases the 
 then resumes navigation. Clear the pending entry when a chord begins. Existing open-HUD holds
 still operate the card instead of navigating. Native routing and demo pipeline tests cover both.
 
-## Circular scrolling without an input buffer
+## Held circles and release-jolt buffering
 
-Candidate circle motion passes through immediately. Only a deliberate closed, consistently turning
-loop consumes pointer reports and becomes native wheel lines. Apply it only to released-button
-HIGH follow; physical Bottom edge reports also exclude LOW, whose mouse-button mask is zero.
-The Puck retains its accepted motion filter and sample rate; the Mac classifies existing reports.
-Native and JavaScript traces match for both directions. Tests reject incomplete curves, small
-noise and sharp rectangular lassos; pausing, a radial exit or a button restores pointing.
-This is regression evidence, not physical acceptance or a measured latency improvement.
+Rough loops belong only to a plain Bottom LOW hold. HIGH, real left-button dragging, HUD navigation
+and the two-button scroll chord are excluded. Direction-of-travel turning recognises ovals and radius
+drift without requiring exact closure. Two-count heading segments, 0.6 net-turn consistency and a
+1.5-radian corner limit passed independent rough and integer-quantised traces in both directions;
+these are tested starting values, not physical optimums. Two low-turn windows avoid flickering on
+an oval's flatter side; a sustained straight run still exits promptly.
+
+Delay only LOW pointing by 90 ms. On release discard its unshown tail and place the click at the
+already displayed position. HIGH and real dragging remain immediate. The ordered UART Bottom-up
+edge precedes its synchronous endpoint click; consume that pair after a recognised scrolling hold,
+then disarm on the next physical press. Carry a locally clamped point through a native drain batch
+because posted CGEvents need not update the system cursor synchronously.
+
+## HIGH dwell and desk inference
+
+HIGH clicks once after meaningful travel and 450 ms without a pointer report. Entry, continued
+stillness and small sub-threshold motion never re-arm the click. Reset on every control, recording
+or mode edge. A short Bottom tap now exits HIGH without clicking.
+
+The Puck's raw accelerometer divisor is 8192 per g; gyro is 134 per degree/second. On the desk,
+Puck.accelOn(1.6) disables the gyro. Cap active IMU telemetry at 10 Hz while keeping the accepted
+104 Hz pointer request. Learn a rest pose only while idle; confirm pickup over multiple samples;
+require return/contact followed by quiet accelerometer variation and gyro rate before set-down.
+Require three further quiet seconds before sending one ordinary Top tap during Agent Flow
+recording, and cancel on pickup or any control. A still supported hand remains an unavoidable
+ambiguity without a contact sensor. These checks are simulated evidence, not physical acceptance.
+
+## Reuse app-specific staging transactions
+
+Keep app identity and HUD ownership in Agentic Mouse. The receiver learns `vsCode` from its same-user context lease and adapts Bottom’s vertical angular travel to existing Better Git review requests. Do not fabricate Corsair input, change physical mouse mappings or maintain a second staging algorithm. Green identifies app review; purple identifies file staging; both yield to the scroll chord.
+
+VS Code URI delivery can reorder callbacks. Tag every gesture with a fresh identifier and ordered sequence; buffer gaps before finishing, retire completed identifiers, and cancel on lost focus or a missing heartbeat. Four native Mini cases exercised changes/files in both directions, deliberately delivered finish before a missing heartbeat, checked the exact Git index and verified Undo. The signed Agentic Mouse and Marketplace Better Git installs were verified separately from physical gesture acceptance.
+
+## Reconnect must re-enable idle pickup sensing
+
+Disconnect turns the sensor off while retaining a valid calibration. On reconnect, `sleepGyro` must explicitly restore the 1.6 Hz accelerometer even when `gyroAwake` is already false. Returning early in that state leaves automatic pickup blind until the first button press. Device tests cover readable and fragmented bridges, reconnect, retained bias and the idle sensor rate. The correction was applied through the current UART owner without another reconnect.

@@ -95,9 +95,9 @@ test("aim becomes pointer motion while following, including a move after a pause
   const jump = sumX() - paused;
   assert(jump > 250, `a move after a pause keeps its size (got ${jump})`);
 
-  // A double tap stops following, and the sensor sleeps after its grace.
-  for (const ms of [60, 60]) { worker.send({ type: "pin", pin: "D1", value: 0 }); worker.advance(ms); worker.send({ type: "pin", pin: "D1", value: 1 }); worker.advance(40); }
+  // One tap stops following, and the gyro sleeps while pickup sensing stays on.
+  for (const ms of [60]) { worker.send({ type: "pin", pin: "D1", value: 0 }); worker.advance(ms); worker.send({ type: "pin", pin: "D1", value: 1 }); worker.advance(40); }
   worker.advance(1200);
   assert.equal(worker.state().moveLatched, false);
-  assert.equal(worker.state().awake, false, "sensor sleeps after the grace");
+  assert.equal(worker.state().awake, true, "low-power accelerometer stays on for pickup sensing");
 });
