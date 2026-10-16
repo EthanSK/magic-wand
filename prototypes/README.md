@@ -25,5 +25,5 @@ its exact resource files, calibration and enabled feature flags. Private device
 settings, calibration, binaries and local paths are intentionally not published.
 
 This baseline preserves behaviour and recovery information; it is not a claim
-that every experimental gesture has been physically accepted. Table pickup and
-put-down still require Ethan's final physical check.
+that every experimental gesture has been physically accepted. Ethan subsequently confirmed table pickup and put-down both work; the acceptance
+record is kept in `v1.json` without moving the original baseline tag.
