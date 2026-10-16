@@ -199,3 +199,16 @@ A brief 208 Hz trial stayed around the same delivered rate; retain 104 Hz rather
 than spending power on a higher setting that does not improve actual throughput.
 Reset the connection deadline when a new load starts so recovery gets its full
 time budget instead of inheriting an almost-expired connection attempt.
+
+## Detect rest at the sleeping sensor rate
+
+The physical resting wand reported about 1.055 g and several milli-g of variation.
+The old fixed 0.97–1.03 g gate and 0.004 g anchor tolerance rejected those readings.
+Allow the measured sensor bias and compare pickup magnitude with the learned rest
+magnitude. Quiet evidence still requires low rotation and a stable anchor.
+
+Use four observations spanning 1.8 seconds for rest confirmation, including at
+1.6 Hz. Eighteen observations took over ten seconds in low-power mode. Persist
+only the confirmed gravity reference; re-evaluate current state and timestamps
+after reconnect. Manual mouse activation must rearm return-to-reference detection.
+Learning an idle reference during recording does not itself stop the recording.

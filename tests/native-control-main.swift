@@ -66,3 +66,35 @@ print("PASS: active subpixel motion, confirmed rest and bounded stale intent")
 let quietDwell=WandDwellClick();quietDwell.follow(true);quietDwell.move(dx:20,dy:0,now:1,eligible:true);quietDwell.intent(false,now:1.3);quietDwell.intent(false,now:1.4);precondition(quietDwell.tick(now:1.46),"quiet heartbeats must not postpone dwell")
 
 precondition(WandPointerRouter().lowDelay==0)
+
+// Rest detection uses elapsed time at the sleeping 1.6 Hz rate and tolerates
+// an uncalibrated accelerometer reporting a stationary magnitude above 1 g.
+let tableDirectory=URL(fileURLWithPath:NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString)
+try FileManager.default.createDirectory(at:tableDirectory,withIntermediateDirectories:true)
+defer{try? FileManager.default.removeItem(at:tableDirectory)}
+let tableCache=tableDirectory.appendingPathComponent("table.json")
+let table=WandRestDetection(cache:tableCache)
+for i in 0...5 {
+ let jitter=i%2==0 ? 0.002 : -0.002
+ let e=table.update(x:0,y:0,z:1.055+jitter,gyro:0,now:1+Double(i)*0.625,buttons:false,idle:true)
+ precondition(e.isEmpty,"initial idle reference must not itself stop recording")
+}
+precondition(table.parked && table.hasReference)
+let savedTable=WandRestDetection(cache:tableCache)
+precondition(savedTable.hasReference && !savedTable.parked)
+savedTable.reset(keepingReference:true);precondition(savedTable.hasReference)
+savedTable.pointerActivated()
+var tableStops=0
+for i in 0...5 {
+ let e=savedTable.update(x:0,y:0,z:1.055,gyro:0,now:6+Double(i)*0.625,buttons:false,idle:false)
+ tableStops+=e.contains(.putDown) ? 1:0
+}
+precondition(tableStops==1 && savedTable.parked,"manual HIGH returns to table within seconds at low sample rate")
+var pickupEvents:[WandRestDetection.Event]=[]
+for i in 0...1 {pickupEvents+=savedTable.update(x:0.08,y:0,z:1.052,gyro:1,now:10+Double(i)*0.625,buttons:false,idle:true)}
+precondition(pickupEvents.contains(.pickedUp),"small pickup must rearm a later put-down")
+for i in 0...40 {precondition(!savedTable.update(x:0.08,y:0,z:1.052,gyro:0,now:12+Double(i)*0.1,buttons:false,idle:false).contains(.putDown))}
+var gentleStops=0
+for i in 0...5 {gentleStops+=savedTable.update(x:0,y:0,z:1.055,gyro:0,now:18+Double(i)*0.625,buttons:false,idle:false).contains(.putDown) ? 1:0}
+precondition(gentleStops==1)
+print("PASS: biased gravity, low-rate table rest, persistent reference, manual mode and gentle pickup")
