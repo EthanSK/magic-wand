@@ -199,7 +199,9 @@ function wrap(a) {
   return a;
 }
 export class PointerRouter {
-  constructor() {
+  constructor({lowDelay=0.09,maxPending=48}={}) {
+    this.lowDelay=Math.max(0,lowDelay);
+    this.maxPending=Math.max(1,maxPending);
     this.circle = new CircularScroll();
     this.bottomHeld = false;
     this.holdConsumed = false;
@@ -259,7 +261,15 @@ export class PointerRouter {
       if (r.lines) actions.push({ type: "scroll", lines: r.lines });
       return { buttons: bits, actions };
     }
-    actions.push({ type: "move", dx, dy });
+    if (this.lowDelay === 0) {
+      actions.push({type: "move", dx, dy});
+      return {buttons: bits, actions};
+    }
+    actions.push(...this.drain(now));
+    this.pending.push({due:now+this.lowDelay,dx,dy});
+    while(this.pending.length>this.maxPending) {
+      const p=this.pending.shift();actions.push({type:"move",dx:p.dx,dy:p.dy});
+    }
     return { buttons: bits, actions };
   }
   drain(now) {

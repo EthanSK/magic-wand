@@ -112,7 +112,7 @@ export class WandReceiverModel {
     this.hudSession = false;
     this.hudEntryPress = false;
     this.hudEntryPressStarted = 0;
-    this.pointerRouter = new PointerRouter();
+    this.pointerRouter = new PointerRouter({lowDelay:tuning.lowMotionDelayMs/1000});
     this.dwell = new DwellClick();
     this.lowDelayTimer = null;
     this.dwellTimer = null;

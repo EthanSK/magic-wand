@@ -129,7 +129,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 | Cold start | 96 ms settling | Skipped when the sensor is still warm |
 | Gyro sleep | After 1 s idle | Accelerometer stays at 1.6 Hz for pickup; off on disconnect |
 | Hold | 220 ms | Longer presses count as holds |
-| LOW movement delay | 0 ms |  |
+| LOW movement delay | 90 ms |  |
 | HIGH stop-to-click | 450 ms still | One click after deliberate movement; no repeat while still |
 | Double-click window | 0.3 s | Read from the Mac’s setting |
 | Scrolling | Horizontal × 1.4 | Mac wheel gain 0.8 |
@@ -148,7 +148,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles, desk inference and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.25 (30) · device code `wand-e1ce30d7c407` · bridge `d051148c` · updated 17 October 2026.
+Receiver 1.2.26 (31) · device code `wand-e1ce30d7c407` · bridge `d051148c` · updated 17 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

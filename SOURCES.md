@@ -16,7 +16,7 @@ SHA-256; the private directory’s path isn’t recorded.
 | `receiver/Sources/WandContextListener.swift` | Agentic Mouse HUD context | None |
 | `receiver/Sources/WandRecordingState.swift` | Agent Flow recording state | None |
 | `receiver/Sources/WandPointerControl.swift` | Display bounds, LOW routing, rough loops, HIGH dwell clicks and desk inference | None |
-| `receiver/Info.plist` | Receiver bundle 1.2.25 (30) | None |
+| `receiver/Info.plist` | Receiver bundle 1.2.26 (31) | None |
 | `receiver/Sources/WandDeviceConfiguration.swift` | Written for this repository | New |
 
 The installed receiver pinned one Puck’s CoreBluetooth identifier and advertised name. The public
@@ -38,7 +38,7 @@ copying them:
 `scripts/device_build.py` keeps the original algorithms. From the imported sources it reproduces
 the private build byte for byte: runtime `wand-e1ce30d7c407`, commands SHA-256 `33bf21e3…`,
 runtime SHA-256 `e25a4de5…`, boot image SHA-256 `b334feb2…` and bridge revision `d051148c…`.
-The bridge revision matches the receiver 1.2.25 (30) bundle, private cache and final live patch readback. The final power-state correction retained calibration and reported no error flags. Earlier large diagnostic queries raised LOW_MEMORY warnings without an observed out-of-memory failure. New gestures still need a physical check.
+The bridge revision matches the receiver 1.2.26 (31) bundle, private cache and final live patch readback. The final power-state correction retained calibration and reported no error flags. Earlier large diagnostic queries raised LOW_MEMORY warnings without an observed out-of-memory failure. New gestures still need a physical check.
 `tests/manifest.test.mjs` recomputes these identifiers on every run.
 
 The private `wand-status.txt` described receiver 1.2.1 and an older button layout, so it wasn’t used.
@@ -148,7 +148,7 @@ The main-HUD browser snapshot does not implement app-specific pages or the VS Co
 
 ## Sensor-rate and update readiness
 
-Receiver 1.2.25 (30) retains 104 Hz after a 208 Hz trial felt more jumpy to Ethan, and keeps
+Receiver 1.2.26 (31) retains 104 Hz after a 208 Hz trial felt more jumpy to Ethan, and keeps
 1.6 Hz accelerometer-only idle sensing. The motion calculation caches repeated lookups but keeps the accepted integration,
 angular tolerance, gain and ordinary button-aware sender. Host tests compare exact reports with
 the preceding calculation at 20, 35, 104 and 208 delivered samples per second. These comparisons
@@ -158,3 +158,11 @@ The update light is orange. An incomplete motion callback also holds orange; nei
 nor a later ready marker is sufficient to clear a failed bridge load. The receiver rejects a
 ready marker after an actual interpreter failure during that load. Recording remains red, mouse
 mode blue, and a lost Bluetooth connection retains its dim-orange indication.
+
+## Approved held-aim release-flick buffer
+
+After clarifying that the old buffer never affected released-button HIGH, Ethan explicitly
+approved restoring 90 ms for held LOW precision aiming on 17 October 2026. The Mac holds only
+those pointer deltas and discards the final queued deltas on Bottom release, so the endpoint
+click stays at the last shown position. Released HIGH, real left-button dragging and HUD input
+bypass this queue. This changes the receiver and its browser model; the Puck bridge is unchanged.

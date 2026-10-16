@@ -7,8 +7,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.25",
-    "receiverBuild": "30",
+    "receiver": "1.2.26",
+    "receiverBuild": "31",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "d051148c50b266ed7d24667b47020d967280d50a89d84032118a87eec2bca599"
   },
@@ -298,7 +298,7 @@
     "receiverHoldMs": 220,
     "macDoubleClickSeconds": 0.3,
     "calibrationSeconds": 2,
-    "lowMotionDelayMs": 0,
+    "lowMotionDelayMs": 90,
     "highDwellMs": 450,
     "highDwellTravelCounts": 12,
     "idleAccelerometerHz": 1.6,
