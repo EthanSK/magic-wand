@@ -56,6 +56,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   var mc=(mh||[]).filter(function(f){return typeof f==='function'&&f.toString().indexOf('var g=a.gyro')>=0;});
   if(mc.length!==1)throw Error('WAND_MOTION_CALLBACK_NOT_UNIQUE '+mc.length);
   global.wandLiveMotionCallback=mc[0];delete global.mh;delete global.mc;
+  global.wandMotionReady=false;
   // Free the old function body before parsing its larger replacement. This
   // preserves the callback object and scope, including the calibrated zero.
   // Keep the discovery marker so an interrupted update can safely reapply.
@@ -64,6 +65,8 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // pointer axes by 20%, and keep a one-second sensor grace between gestures.
   // Pointer output still stops immediately; only sensor power-down is deferred.
   CONFIG.gain=86.4;
+  // The 208 Hz trial stuttered on this workload; keep the smoother 104 Hz rate.
+  CONFIG.sampleRate=104;
   // Holding Bottom is the precision gesture: use one-third of normal pointer
   // gain for temporary movement and real dragging. Released-button follow
   // keeps normal gain; HUD selection and the two-button scroll return earlier.
@@ -138,8 +141,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   });
   global.wandLiveMotionCallback.replaceWith(function(a) {
   var g=a.gyro;
+  var G=global,C=CONFIG,M=Math;
   var now=getTime();
-  global.wandReportIMU(a,now);
+  G.wandReportIMU(a,now);
   if (!g || (!gyroAwake&&bias)) return;
   if (!bias) {
     if (now>calibrationDeadline) {calibrationLit=false;updateLights();sleepGyro();return;}
@@ -147,9 +151,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     // Never learn a held/moving wand as its stationary zero.
     var stable=digitalRead(MOVE_PIN) && digitalRead(D2) && digitalRead(D30);
     ['x','y','z'].forEach(function(k) {
-      restMin[k]=Math.min(restMin[k],g[k]);
-      restMax[k]=Math.max(restMax[k],g[k]);
-      if (Math.abs(g[k])>8*134 || restMax[k]-restMin[k]>3*134) stable=false;
+      restMin[k]=M.min(restMin[k],g[k]);
+      restMax[k]=M.max(restMax[k],g[k]);
+      if (M.abs(g[k])>8*134 || restMax[k]-restMin[k]>3*134) stable=false;
     });
     if (!stable) {
       sum={x:0,y:0,z:0}; sumSquares={x:0,y:0,z:0}; samples=0;
@@ -158,10 +162,10 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     }
     sum.x+=g.x; sum.y+=g.y; sum.z+=g.z;
     sumSquares.x+=g.x*g.x;sumSquares.y+=g.y*g.y;sumSquares.z+=g.z*g.z;samples++;
-    if (samples>=CONFIG.sampleRate*2) {
+    if (samples>=C.sampleRate*2) {
       bias={x:sum.x/samples,y:sum.y/samples,z:sum.z/samples};
       ["x","y","z"].forEach(function(k){
-        noise[k]=Math.max(0.25,Math.min(CONFIG.deadZone,4*Math.sqrt(Math.max(0,sumSquares[k]/samples-bias[k]*bias[k]))/134));
+        noise[k]=M.max(0.25,M.min(C.deadZone,4*M.sqrt(M.max(0,sumSquares[k]/samples-bias[k]*bias[k]))/134));
       });
       calibrationLit=false;updateLights(); lastTime=now; motionWarmup=0;
       print('WAND_CALIBRATED',JSON.stringify(bias));
@@ -172,42 +176,42 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // Ignore the physical switch impulse; discard it instead of replaying it.
   // Cold sensor settling is time-based so dropped readings cannot stretch it.
   motionWarmup=0;
-  if(now<(global.wandMotionReadyAt||0)||now<(global.wandSettleUntil||0)){
-    global.wandSlackX=global.wandSlackY=0;
+  if(now<(G.wandMotionReadyAt||0)||now<(G.wandSettleUntil||0)){
+    G.wandSlackX=G.wandSlackY=0;
     lastTime=now;fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;return;
   }
-  var gap=Math.max(0,now-lastTime),dt=Math.min(0.05,gap);lastTime=now;
-  motionStats.count++;motionStats.elapsed+=gap;motionStats.maxGap=Math.max(motionStats.maxGap,gap);
+  var gap=M.max(0,now-lastTime),dt=M.min(0.05,gap);lastTime=now;
+  motionStats.count++;motionStats.elapsed+=gap;motionStats.maxGap=M.max(motionStats.maxGap,gap);
   if(scrollHeld){
-    global.wandSlackX=global.wandSlackY=0;
-    var sx=(g[CONFIG.xAxis]-bias[CONFIG.xAxis])/134,sy=(g[CONFIG.yAxis]-bias[CONFIG.yAxis])/134,sk=radialKeep(sx,sy);
-    scrollX+=sx*sk*dt*CONFIG.xSign;scrollY+=sy*sk*dt*CONFIG.ySign;return;
+    G.wandSlackX=G.wandSlackY=0;
+    var sx=(g[C.xAxis]-bias[C.xAxis])/134,sy=(g[C.yAxis]-bias[C.yAxis])/134,sk=radialKeep(sx,sy);
+    scrollX+=sx*sk*dt*C.xSign;scrollY+=sy*sk*dt*C.ySign;return;
   }
-  if(scrollSuppress){global.wandSlackX=global.wandSlackY=0;return;}
+  if(scrollSuppress){G.wandSlackX=G.wandSlackY=0;return;}
   if(hudOpen&&connected){
-    var hx=(g[CONFIG.xAxis]-bias[CONFIG.xAxis])/134,hy=(g[CONFIG.yAxis]-bias[CONFIG.yAxis])/134,keep=radialKeep(hx,hy);
-    hudX+=hx*keep*dt*CONFIG.xSign;hudY+=hy*keep*dt*CONFIG.ySign;
+    var hx=(g[C.xAxis]-bias[C.xAxis])/134,hy=(g[C.yAxis]-bias[C.yAxis])/134,keep=radialKeep(hx,hy);
+    hudX+=hx*keep*dt*C.xSign;hudY+=hy*keep*dt*C.ySign;
   }
-  if (!connected || !moveLatched || tapPending || now<(global.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging)) {
-    global.wandSlackX=global.wandSlackY=0;
+  if (!connected || !moveLatched || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging)) {
+    G.wandSlackX=G.wandSlackY=0;
     fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;return;
   }
   // Espruino documents raw gyro values / 134 as degrees per second.
-  var px=(g[CONFIG.xAxis]-bias[CONFIG.xAxis])/134,py=(g[CONFIG.yAxis]-bias[CONFIG.yAxis])/134;
+  var px=(g[C.xAxis]-bias[C.xAxis])/134,py=(g[C.yAxis]-bias[C.yAxis])/134;
   // Time-based light smoothing: 8 ms for fine aim, 2 ms during fast sweeps.
-  var speed=Math.sqrt(px*px+py*py),blend=Math.max(0,Math.min(1,(speed-CONFIG.fineSpeed)/(CONFIG.fullSpeed-CONFIG.fineSpeed)));
-  var alpha=1-Math.exp(-dt/(0.008-0.006*blend));
+  var speed=M.sqrt(px*px+py*py),blend=M.max(0,M.min(1,(speed-C.fineSpeed)/(C.fullSpeed-C.fineSpeed)));
+  var alpha=1-M.exp(-dt/(0.008-0.006*blend));
   filteredX+=alpha*(px-filteredX);filteredY+=alpha*(py-filteredY);
-  global.wandPointerSlack(filteredX,filteredY,dt,speed,CONFIG.slackDegrees,CONFIG.slackRecentre,CONFIG.slackQuietSpeed);
-  var scale=CONFIG.fineGain+(1-CONFIG.fineGain)*blend*blend*(3-2*blend);
-  if(!digitalRead(MOVE_PIN))scale*=CONFIG.heldPointerGain;
-  fractionX+=global.wandStepX*CONFIG.gain*scale*CONFIG.xSign;
-  fractionY+=global.wandStepY*CONFIG.gain*CONFIG.yGain*scale*CONFIG.ySign;
-  var x=fractionX<0?Math.ceil(fractionX):Math.floor(fractionX);
-  var y=fractionY<0?Math.ceil(fractionY):Math.floor(fractionY);
+  G.wandPointerSlack(filteredX,filteredY,dt,speed,C.slackDegrees,C.slackRecentre,C.slackQuietSpeed);
+  var scale=C.fineGain+(1-C.fineGain)*blend*blend*(3-2*blend);
+  if(!digitalRead(MOVE_PIN))scale*=C.heldPointerGain;
+  fractionX+=G.wandStepX*C.gain*scale*C.xSign;
+  fractionY+=G.wandStepY*C.gain*C.yGain*scale*C.ySign;
+  var x=fractionX<0?M.ceil(fractionX):M.floor(fractionX);
+  var y=fractionY<0?M.ceil(fractionY):M.floor(fractionY);
   fractionX-=x; fractionY-=y;
-  moveX=Math.max(-127,Math.min(127,moveX+x));
-  moveY=Math.max(-127,Math.min(127,moveY+y));
+  moveX=M.max(-127,M.min(127,moveX+x));
+  moveY=M.max(-127,M.min(127,moveY+y));
   pump();
 
   });
@@ -223,8 +227,8 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   updateLights.replaceWith(function(){
     if(connected&&global.wandLastFollow!==moveLatched){global.wandLastFollow=moveLatched;Bluetooth.println('@FOLLOW '+(moveLatched?1:0));}
     var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN);
-    var mode=global.WAND_UPDATING?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':(scrollHeld||global.wandCircleScrolling)?'scroll':global.wandAppMode?'app':move?'mouse':hud?'hud':(global.wandRecording||!digitalRead(STT_PIN))?'recording':'idle';
-    lightLevels=mode==='update'||mode==='calibration'||mode==='recording'?[1,0,0]:mode==='disconnected'?[0.08,0.016,0]:mode==='scroll'?[0,1,1]:mode==='app'?(global.wandReviewFiles?[1,0,1]:[0,1,0]):mode==='mouse'?[0,0,1]:mode==='hud'?[1,0.2,0]:[0,0,0];
+    var mode=(global.WAND_UPDATING||global.wandMotionReady===false)?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':(scrollHeld||global.wandCircleScrolling)?'scroll':global.wandAppMode?'app':move?'mouse':hud?'hud':(global.wandRecording||!digitalRead(STT_PIN))?'recording':'idle';
+    lightLevels=mode==='update'?[1,0.2,0]:mode==='calibration'||mode==='recording'?[1,0,0]:mode==='disconnected'?[0.08,0.016,0]:mode==='scroll'?[0,1,1]:mode==='app'?(global.wandReviewFiles?[1,0,1]:[0,1,0]):mode==='mouse'?[0,0,1]:mode==='hud'?[1,0.2,0]:[0,0,0];
     writeLight(LED1,lightLevels[0]);writeLight(LED2,lightLevels[1]);writeLight(LED3,lightLevels[2]);
     if(connected&&mode!==global.wandLastLightState){global.wandLastLightState=mode;print('WAND_LIGHT_STATE '+mode+' '+JSON.stringify(lightLevels));}
   });
@@ -308,4 +312,8 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   global.wandState=function(){return {calibrated:!!bias,move:moveLatched,hud:hudOpen,gyro:gyroAwake,bias:bias,light:lightLevels};};
   global.setWandRecording=function(active){global.wandRecording=!!active;updateLights();print('WAND_RECORDING_LIGHT '+(active?'1':'0'));};
   if(connected&&bias&&!gyroAwake)global.wandPowerDownGyro();
-  updateLights();print('WAND_MODE_ROUTING_READY');
+  // Do not advertise a working mouse after an interrupted or partial upload.
+  global.wandMotionReady=global.wandLiveMotionCallback.toString().indexOf('wandPointerSlack')>=0;
+  if(gyroAwake)Puck.accelOn(CONFIG.sampleRate);
+  updateLights();
+  if(global.wandMotionReady)print('WAND_MODE_ROUTING_READY');else print('WAND_UPDATE_FAILED');

@@ -2,7 +2,7 @@ const fs=require('node:fs'),assert=require('node:assert/strict');
 const {createWand}=require('./harness.cjs');
 const source=fs.readFileSync(require('node:path').join(__dirname,'../device/wand-mode-bridge.js'),'utf8');
 function fresh(){const w=createWand({bridge:false});w.calibrate();w.device.evaluate(source);return w;}
-function turn(w,seconds){for(let i=0;i<Math.round(seconds*104);i++)w.motion({x:1340,y:0,z:1340});}
+function turn(w,seconds){for(let i=0;i<Math.round(seconds*w.ctx.CONFIG.sampleRate);i++)w.motion({x:1340,y:0,z:1340});}
 const moved=w=>w.frames.some(f=>f[0]||f[1]);
 
 const w=fresh();w.tap();w.advance(.9);
