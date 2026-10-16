@@ -41,16 +41,18 @@ for (const bridge of ["readable", "fragments"]) {
     w.advance(0.3);
     assert.equal(frames.filter((f) => f[2] === 1).length, 0, "entry tap never emits a delayed click");
 
-    // Ordinary hold from latched follow: clutch, release exits, never presses.
+    // LOW hold from HIGH: reposition, release clicks once, HIGH stays armed.
     w.advance(0.9);
     frames.length = 0;
     w.edge("D1", 0); w.advance(0.3);
     assert(ctx.moveLatched && !ctx.dragging, "ordinary hold never selects text");
     w.edge("D1", 1);
-    assert(!ctx.moveLatched, "ordinary hold from latched follow exits on release");
+    assert(ctx.moveLatched, "LOW release keeps prior HIGH mode armed");
+    assert.equal(frames.filter((f) => f[2] === 1).length, 1, "LOW release clicks once");
+    assert(ctx.wandPointerPauseUntil > w.now + 0.99, "release parks the pointer for one second");
     w.advance(1.01);
-    assert(!w.device.awake);
-    assert(frames.every((f) => f[2] === 0), "ordinary hold never presses a mouse button");
+    assert(w.device.awake, "prior HIGH mode keeps the sensor awake");
+    ctx.setMouseFollow(false);
 
     // Click then hold drags; release drops and exits.
     w.advance(0.3); w.tap(); w.advance(0.9);
@@ -186,7 +188,8 @@ for (const bridge of ["readable", "fragments"]) {
     frames.length = 0; w.edge("D1", 1); paced(0.03); paced(0.03);
     assert(!moved(), "release rebound is rejected for 70 ms");
     paced(0.02);
-    assert(moved(), "warm follow resumes without replaying rejected motion");
+    paced(0.03);
+    assert(moved(), "warm follow resumes after deliberate movement crosses the angular tolerance");
 
     w.advance(0.9); frames.length = 0; w.tap();
     assert(ctx.tapPending, "ordinary latched click waits for the double-tap decision");
@@ -205,6 +208,7 @@ for (const bridge of ["readable", "fragments"]) {
     frames.length = 0; w.edge("D30", 1); paced(0.06);
     assert(!moved(), "speech release rebound is rejected");
     paced(0.02);
+    paced(0.03);
     assert(moved());
 
     prepareIdle(); w.edge("D1", 0); w.advance(0.02); w.edge("D2", 0);

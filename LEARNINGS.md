@@ -50,3 +50,29 @@ Scaling integer reports instead drops small movements. The pointer path runs aft
 scroll branches, so a held Bottom gain leaves their angular navigation and wheel gains alone.
 The gesture tests compare both pointer axes across temporary entry, clutch and real dragging at
 fine, medium, fast and reverse speeds; released-button follow retains its original gain.
+
+## HIGH and LOW pointer gestures
+
+HIGH is released-button follow; LOW is a plain Bottom hold for one-third-speed positioning,
+not a left-button drag. LOW release clicks at the endpoint. If HIGH preceded the hold, suppress
+pointer motion for one second, then continue HIGH. From off, LOW release returns to off. The
+pause is a pointer-path deadline rather than a resume timer, so it cannot reopen a mode after
+the user switches to the HUD or exits. Tap-then-hold remains the distinct real drag.
+
+## Loading a larger motion callback
+
+Replacing the motion callback in one statement ran the actual Puck out of memory while both
+old and new bodies existed. First replace its body with a tiny function retaining the
+`var g=a.gyro` discovery marker, then load the tested replacement. Function.replaceWith keeps
+the callback object and scope, including calibration. A separate pure angular-slack helper
+also keeps the largest statement small. The final staged upload completed without OUT OF MEMORY;
+an idle device health query after the upload returned no error flags. A ready marker alone
+had appeared after earlier partial failures, so verify the actual callback marker and settings.
+
+## Angular tolerance and residual drift
+
+The pointer uses radial displacement tolerance instead of stacking another rate dead zone.
+Re-centre quiet rates even when the anchor is at the circle edge; otherwise leftover bias can
+keep pushing after a deliberate sweep. Tests cover drift from rest and after motion, fine
+aim, both sensitivity modes, diagonals, curves and the one-second release pause. This is
+simulated-noise coverage; it does not establish Ethan's physical hand-noise threshold.

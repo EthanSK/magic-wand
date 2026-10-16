@@ -41,12 +41,13 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap | The pointer follows the wand, without clicking |
 | Hold, turn, release | Click once where you stop |
 | Tap while following | Click |
-| Hold while following | Keep moving; release stops without a click |
+| Hold while following | Move at low sensitivity; release clicks, pauses one second, then resumes high sensitivity |
 | Tap, then hold | Drag; release drops and stops |
 | Double tap while following | Stop following |
 
 - The pointer stays still while a click is decided.
 - Middle switches to the HUD.
+- High sensitivity is released-button follow. Holding Bottom is low sensitivity, at one-third speed.
 
 **Bottom + Middle** · Scroll
 
@@ -101,7 +102,10 @@ No photo yet; the website shows a schematic. Lighter replacement switches have b
 Holding Bottom uses one-third of the normal pointer gain, for both temporary movement and
 tap-then-hold dragging. Released-button follow keeps the normal gain. HUD movement and scrolling
 keep their own settings. The factor is applied before fractional pointer counts are accumulated;
-it adds no new filtering or hold delay. Physical feel of this setting is still unconfirmed.
+The pointer uses a 0.2-degree radial tolerance for hand wobble, with quiet re-centering.
+LOW release clicks, holds the pointer for one second and continues prior HIGH mode.
+From off, LOW release clicks and returns to off. Tap-then-hold still drags objects or text.
+Tiny starting nudges and reversals need to cross the angular tolerance; physical feel is unconfirmed.
 
 <!-- wand:tuning -->
 | Setting | Value | Note |
@@ -130,10 +134,10 @@ it adds no new filtering or hold delay. Physical feel of this setting is still u
 
 <!-- wand:status -->
 - Earlier controls were tested on the wand; the latest gestures and tuning still need a physical check.
-- The newest button-jolt guard is installed and passed device checks; its feel hasn’t been confirmed yet.
+- Held positioning clicks on release and resumes prior high sensitivity after one second. The new still-hand tolerance needs a physical check.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.17 (22) · device code `wand-e1ce30d7c407` · bridge `22c831c8` · updated 16 October 2026.
+Receiver 1.2.17 (22) · device code `wand-e1ce30d7c407` · bridge `202c1dd6` · updated 16 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

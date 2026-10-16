@@ -41,6 +41,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       global.wandMomentaryStarted=undefined;
       cancelTapGesture();clearHoldClick();moveGestureMode=undefined;moveLatched=false;lastMoveTap=-100;
       moveX=0;moveY=0;fractionX=0;fractionY=0;
+      global.wandSlackX=global.wandSlackY=0;
     }
     if(hudOpen===open){updateLights();return;}
     hudOpen=open;
@@ -57,15 +58,37 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // gain for temporary movement and real dragging. Released-button follow
   // keeps normal gain; HUD selection and the two-button scroll return earlier.
   CONFIG.heldPointerGain=1/3;
+  // Ethan calls released-button follow HIGH sensitivity and a plain held
+  // pointer gesture LOW sensitivity. LOW repositions; it does not hold a
+  // mouse button. Release clicks, then HIGH pauses for one second if it was
+  // active before the hold. Tap-then-hold remains the separate real drag.
+  CONFIG.releaseClickPause=1;
+  // A radial angular tolerance absorbs hand tremor without filtering fast
+  // travel. Re-centre quiet movement too, so residual bias cannot keep pushing
+  // an anchor already at the edge after a sweep. These are starting values,
+  // not measured hand-noise limits. Keep HUD and wheel angular input separate.
+  CONFIG.slackDegrees=0.2;CONFIG.slackRecentre=0.35;CONFIG.slackQuietSpeed=1;
+  global.wandSlackX=global.wandSlackY=0;
+  // Pure motion calculation lives separately to keep each tokenised upload
+  // statement small enough for the Puck's memory. No arrays per gyro sample.
+  global.wandPointerSlack=function(x,y,dt,speed,radius,recentre,quietSpeed){
+    var ox=global.wandSlackX+x*dt,oy=global.wandSlackY+y*dt;
+    var om=Math.sqrt(ox*ox+oy*oy),qx=0,qy=0;
+    if(om<=radius||speed<=quietSpeed){var decay=Math.exp(-dt/recentre);ox*=decay;oy*=decay;om*=decay;}
+    if(om>radius){var excess=(om-radius)/om;qx=ox*excess;qy=oy*excess;ox-=qx;oy-=qy;}
+    global.wandSlackX=ox;global.wandSlackY=oy;global.wandStepX=qx;global.wandStepY=qy;
+  };
   global.wandPowerDownGyro=function(){
     Puck.accelOff();gyroAwake=false;motionWarmup=0;lastTime=0;
-    fractionX=0;fractionY=0;moveX=0;moveY=0;filteredX=0;filteredY=0;
+    fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;
+    global.wandSlackX=global.wandSlackY=0;
   };
   wakeGyro.replaceWith(function(){
     if(global.wandSleepTimer!==undefined){clearTimeout(global.wandSleepTimer);global.wandSleepTimer=undefined;}
     if(gyroAwake)return;
     gyroAwake=true;motionWarmup=0;lastTime=getTime();global.wandMotionReadyAt=lastTime+0.096;
     filteredX=0;filteredY=0;motionStats={count:0,elapsed:0,maxGap:0};
+    global.wandSlackX=global.wandSlackY=0;
     Puck.accelOn(CONFIG.sampleRate);
   });
   sleepGyro.replaceWith(function(){
@@ -82,22 +105,21 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   var mc=(mh||[]).filter(function(f){return typeof f==='function'&&f.toString().indexOf('var g=a.gyro')>=0;});
   if(mc.length!==1)throw Error('WAND_MOTION_CALLBACK_NOT_UNIQUE '+mc.length);
   global.wandLiveMotionCallback=mc[0];delete global.mh;delete global.mc;
+  // Free the old function body before parsing its larger replacement. This
+  // preserves the callback object and scope, including the calibrated zero.
+  // Keep the discovery marker so an interrupted update can safely reapply.
+  global.wandLiveMotionCallback.replaceWith(function(a){var g=a.gyro;});
   // Pressing or releasing any grip switch can twist the wand. Only these
   // brief edges are guarded; steady aiming keeps the existing fast filter.
   if(global.wandNoiseGuardWatches)global.wandNoiseGuardWatches.forEach(function(id){try{clearWatch(id);}catch(e){}watches=watches.filter(function(w){return w!==id;});});
   global.wandNoiseGuardWatches=[MOVE_PIN,HUD_PIN,STT_PIN].map(function(pin){
-    var id=setWatch(function(e){global.wandSettleUntil=getTime()+(e.state?0.07:0.05);},pin,{edge:'both',repeat:true,debounce:20});
+    var id=setWatch(function(e){global.wandSlackX=global.wandSlackY=0;global.wandSettleUntil=getTime()+(e.state?0.07:0.05);},pin,{edge:'both',repeat:true,debounce:20});
     watches.push(id);return id;
   });
   global.wandLiveMotionCallback.replaceWith(function(a) {
   var g=a.gyro;
   if (!g) return;
   var now=getTime();
-  if (!digitalRead(MOVE_PIN) && now<debugUntil && now>=debugNext) {
-    debugNext=now+0.25;
-    print("GYRO degrees/sec", {x:g.x/134,y:g.y/134,z:g.z/134},
-          "HOLD", !digitalRead(MOVE_PIN));
-  }
   if (!bias) {
     if (now>calibrationDeadline) {calibrationLit=false;updateLights();sleepGyro();return;}
     if (warmup>0) {warmup--; return;}
@@ -130,21 +152,24 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // Cold sensor settling is time-based so dropped readings cannot stretch it.
   motionWarmup=0;
   if(now<(global.wandMotionReadyAt||0)||now<(global.wandSettleUntil||0)){
-    lastTime=now;fractionX=0;fractionY=0;moveX=0;moveY=0;filteredX=0;filteredY=0;return;
+    global.wandSlackX=global.wandSlackY=0;
+    lastTime=now;fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;return;
   }
   var gap=Math.max(0,now-lastTime),dt=Math.min(0.05,gap);lastTime=now;
   motionStats.count++;motionStats.elapsed+=gap;motionStats.maxGap=Math.max(motionStats.maxGap,gap);
   if(scrollHeld){
+    global.wandSlackX=global.wandSlackY=0;
     var sx=(g[CONFIG.xAxis]-bias[CONFIG.xAxis])/134,sy=(g[CONFIG.yAxis]-bias[CONFIG.yAxis])/134,sk=radialKeep(sx,sy);
     scrollX+=sx*sk*dt*CONFIG.xSign;scrollY+=sy*sk*dt*CONFIG.ySign;return;
   }
-  if(scrollSuppress)return;
+  if(scrollSuppress){global.wandSlackX=global.wandSlackY=0;return;}
   if(hudOpen&&connected){
     var hx=(g[CONFIG.xAxis]-bias[CONFIG.xAxis])/134,hy=(g[CONFIG.yAxis]-bias[CONFIG.yAxis])/134,keep=radialKeep(hx,hy);
     hudX+=hx*keep*dt*CONFIG.xSign;hudY+=hy*keep*dt*CONFIG.ySign;
   }
-  if (!connected || !moveLatched || tapPending || (moveGestureMode==="pointer" && !dragging)) {
-    fractionX=0;fractionY=0;moveX=0;moveY=0;filteredX=0;filteredY=0;return;
+  if (!connected || !moveLatched || tapPending || now<(global.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging)) {
+    global.wandSlackX=global.wandSlackY=0;
+    fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;return;
   }
   // Espruino documents raw gyro values / 134 as degrees per second.
   var px=(g[CONFIG.xAxis]-bias[CONFIG.xAxis])/134,py=(g[CONFIG.yAxis]-bias[CONFIG.yAxis])/134;
@@ -152,11 +177,11 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   var speed=Math.sqrt(px*px+py*py),blend=Math.max(0,Math.min(1,(speed-CONFIG.fineSpeed)/(CONFIG.fullSpeed-CONFIG.fineSpeed)));
   var alpha=1-Math.exp(-dt/(0.008-0.006*blend));
   filteredX+=alpha*(px-filteredX);filteredY+=alpha*(py-filteredY);
-  var sx=precisionZone(filteredX,noise[CONFIG.xAxis]),sy=precisionZone(filteredY,noise[CONFIG.yAxis]);
+  global.wandPointerSlack(filteredX,filteredY,dt,speed,CONFIG.slackDegrees,CONFIG.slackRecentre,CONFIG.slackQuietSpeed);
   var scale=CONFIG.fineGain+(1-CONFIG.fineGain)*blend*blend*(3-2*blend);
   if(!digitalRead(MOVE_PIN))scale*=CONFIG.heldPointerGain;
-  fractionX+=sx*dt*CONFIG.gain*scale*CONFIG.xSign;
-  fractionY+=sy*dt*CONFIG.gain*CONFIG.yGain*scale*CONFIG.ySign;
+  fractionX+=global.wandStepX*CONFIG.gain*scale*CONFIG.xSign;
+  fractionY+=global.wandStepY*CONFIG.gain*CONFIG.yGain*scale*CONFIG.ySign;
   var x=fractionX<0?Math.ceil(fractionX):Math.floor(fractionX);
   var y=fractionY<0?Math.ceil(fractionY):Math.floor(fractionY);
   fractionX-=x; fractionY-=y;
@@ -182,17 +207,20 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   });
   // From mouse-off: a short tap enters latched follow without clicking. A hold
   // moves temporarily, then release clicks once at the endpoint and stops.
-  // Already-latched pointer gestures keep their existing behavior
-  // so the hand can return without moving the cursor backwards. Once latched,
-  // a plain hold is also temporary movement. Click then hold is the explicit
-  // drag gesture; release drops and exits. Double short-click still exits.
+  // If HIGH was already active, LOW release clicks and holds that point for
+  // one second before HIGH resumes. Starting LOW from off returns to off.
+  // Click then hold is the explicit real drag; release drops and exits.
+  // Double short-click still exits HIGH.
   global.wandLiveMoveCallback.replaceWith(function(){
     if(!digitalRead(MOVE_PIN)&&digitalRead(HUD_PIN)&&!scrollSuppress)chordFollowBefore=moveLatched;
     if(checkScrollChord()){global.wandMomentaryStarted=undefined;return;}
-    moveX=0;moveY=0;fractionX=0;fractionY=0;filteredX=0;filteredY=0;
+    moveX=moveY=fractionX=fractionY=filteredX=filteredY=0;
+    global.wandSlackX=global.wandSlackY=0;
     if(!digitalRead(MOVE_PIN)){
       if(!bias)calibrate();
       global.wandPressStarted=getTime();
+      global.wandFollowBeforeHold=moveLatched;
+      global.wandPointerPauseUntil=0;
       moveGestureMode=moveLatched?'pointer':'enable';
       global.wandMomentaryStarted=moveGestureMode==='enable'?getTime():undefined;
       if(moveGestureMode==='enable'){
@@ -219,7 +247,11 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     }
     clearHoldClick();
     if(moveGestureMode==='operation'){pointerReport('E');stopPointerTrack();}
-    else if(moveGestureMode==='clutch'){moveLatched=false;cancelTapGesture();}
+    else if(moveGestureMode==='clutch'){
+      moveLatched=!!global.wandFollowBeforeHold;cancelTapGesture();lastMoveTap=-100;
+      global.wandPointerPauseUntil=getTime()+CONFIG.releaseClickPause;
+      clickTimes(1);
+    }
     else if(moveGestureMode==='enable'){
       moveLatched=global.wandMomentaryStarted===undefined||getTime()-global.wandMomentaryStarted<CONFIG.tapSeconds;
       if(moveLatched)lastMoveTap=getTime();else clickTimes(1);
@@ -229,7 +261,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       else {lastMoveTap=getTime();deferSingleClick();}
     }
     print('WAND_BUTTON_STATE '+JSON.stringify({mode:moveGestureMode,ms:Math.round((getTime()-global.wandPressStarted)*1000),follow:moveLatched}));
-    global.wandMomentaryStarted=undefined;global.wandDragCandidate=false;moveGestureMode=undefined;secondTap=false;
+    global.wandMomentaryStarted=undefined;global.wandDragCandidate=false;global.wandFollowBeforeHold=false;moveGestureMode=undefined;secondTap=false;
     if(!moveLatched)lastMoveTap=-100;
     if((moveLatched||hudOpen)&&connected)wakeGyro();else if(bias)sleepGyro();
     updateLights();
@@ -240,6 +272,8 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   global.restoreWandCalibration=function(value){
     if(!value||!isFinite(value.x)||!isFinite(value.y)||!isFinite(value.z))return;
     bias={x:value.x,y:value.y,z:value.z};calibrationLit=false;
+    global.wandSlackX=global.wandSlackY=0;
+    fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;
     if(moveLatched||hudOpen)wakeGyro();else sleepGyro();updateLights();
     print('WAND_CALIBRATED',JSON.stringify(bias));
   };
