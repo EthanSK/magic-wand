@@ -46,7 +46,7 @@ zsh scripts/build_receiver.sh
 ```
 
 This checks the generated files, compiles `receiver/Sources/*.swift`, adds the upload commands and
-the compacted bridge from `device/generated/`, and ad-hoc signs `build/Wand Receiver.app` for your
+the compacted bridge from `device/generated/`, and ad-hoc signs `build.noindex/Wand Receiver.app` for your
 Mac. It includes the original Magic Wand icon from `receiver/AppIcon.icns`;
 `scripts/make_images.py` regenerates it alongside the website artwork.
 
@@ -68,7 +68,7 @@ Use the name your Puck advertises (the Espruino Web IDE’s device list shows it
 
 ## 5. Run it
 
-1. Open `build/Wand Receiver.app` once. It has no window or Dock icon.
+1. Open `build.noindex/Wand Receiver.app` once. It has no window or Dock icon.
 2. Allow Bluetooth when asked, and turn on Accessibility for Wand Receiver in System Settings →
    Privacy & Security. Starting it with `--request-permissions` shows the Accessibility prompt.
    It only connects once Accessibility is on, because it posts pointer, click and wheel events.

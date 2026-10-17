@@ -1,9 +1,9 @@
 #!/bin/zsh
-# Build Wand Receiver.app from receiver/ into build/. Needs the Xcode command line tools.
+# Build Wand Receiver.app from receiver/ into build.noindex/. Needs the Xcode command line tools.
 # The app is ad-hoc signed for this Mac only; nothing here installs, launches or replaces an app.
 set -euo pipefail
 ROOT="${0:A:h:h}"
-APP="$ROOT/build/Wand Receiver.app"
+APP="$ROOT/build.noindex/Wand Receiver.app"
 python3 "$ROOT/scripts/build.py" --check
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
