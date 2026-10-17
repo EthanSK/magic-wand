@@ -240,3 +240,14 @@ over an elapsed-time window. A new desk angle need not match a saved gravity
 vector or include a detectable impact. Regression fixtures include actual
 stationary active-rate samples. This classification window never buffers pointer
 movement. An IMU alone cannot distinguish a perfectly supported hand from a desk.
+
+## Keep pointer-ordering hypotheses separate from physical symptoms
+
+A source-level asynchronous-position race and a synthetic passing regression are
+not proof of the cause of a reported stop/restart jump. A persistent posted-point
+reconciliation experiment passed its pure tests but Ethan reported worse feel,
+so it was reverted. A subsequent live trace showed occasional stale position
+reads across closely spaced notifications, but the observed automatic clicks
+stayed at the current position. Do not claim those reads caused the reported
+symptom, or re-enable that experiment as an accepted fix. Retain the working
+receiver until a new physical reproduction supports a narrower change.
