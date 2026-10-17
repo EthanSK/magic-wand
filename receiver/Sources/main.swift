@@ -32,6 +32,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var lightMode = "unknown"
     var pointerDisplays:[CGRect]=[]
     var deliveryPoint:CGPoint?
+    let pointerPosition=WandPointerPosition()
     var displayObserver:NSObjectProtocol?
     // LOW aiming delay, loop scrolling and consumed-click removal live in the
     // pure WandPointerRouter (wand-pointer-control.swift); this class only posts.
@@ -249,6 +250,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
         probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true);restStopPending=false
         performPointer(pointerRouter.cancelAll());setCircleLight(false)
+        pointerPosition.reset();deliveryPoint=nil
         lightMode="disconnected"
         hudSession=false;hudEntryPress=false
         finishScroll()
@@ -310,7 +312,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func peripheral(_ p: CBPeripheral, didUpdateValueFor c: CBCharacteristic, error: Error?) {
         guard device === p, error == nil, let bytes = c.value, let text = String(data: bytes, encoding: .utf8) else { return }
-        deliveryPoint=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays)
+        deliveryPoint=currentPointerPosition()
         defer {deliveryPoint=nil}
         input += text.replacingOccurrences(of: "\r", with: "")
         if input.count > 16384 { input = String(input.suffix(4096)) }
@@ -588,7 +590,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         scrollActive=false;scrollWatchdog?.invalidate();scrollWatchdog=nil
         if wasActive {resumeHUDNavigation()}
     }
+    func currentPointerPosition()->CGPoint {
+        let observed=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? pointerPosition.latest ?? .zero,to:pointerDisplays)
+        return pointerPosition.observe(observed)
+    }
     func refreshPointerDisplays() {
+        pointerPosition.reset()
         var ids=[CGDirectDisplayID](repeating:0,count:32),count:UInt32=0
         if CGGetActiveDisplayList(UInt32(ids.count),&ids ,&count) == .success {
             pointerDisplays=ids.prefix(Int(count)).map{CGDisplayBounds($0)}.filter{!$0.isEmpty}
@@ -619,10 +626,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func performPointer(_ actions:[WandPointerRouter.Action]) {
-        // A drain can contain several frames. Carry a locally clamped point
-        // through the batch; posting CGEvents need not update the system cursor
-        // synchronously before the next frame is posted.
-        var point=deliveryPoint ?? WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays)
+        // Share posted coordinates across deliveries and dwell clicks. macOS
+        // can still report an older position while posted events are in flight.
+        var point=deliveryPoint ?? currentPointerPosition()
         for action in actions {
             switch action {
             case .move(let dx,let dy): point=postPointerMove(dx:dx,dy:dy,from:point)
@@ -648,7 +654,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let newPoint=WandPointerBounds.clamp(CGPoint(x:point.x+CGFloat(dx),y:point.y+CGFloat(dy)),to:pointerDisplays)
         let kind:CGEventType = buttons & 1 != 0 ? .leftMouseDragged : (buttons & 2 != 0 ? .rightMouseDragged : .mouseMoved)
         let button:CGMouseButton = buttons & 1 != 0 ? .left : (buttons & 2 != 0 ? .right : .left)
-        CGEvent(mouseEventSource:nil,mouseType:kind,mouseCursorPosition:newPoint,mouseButton:button)?.post(tap:.cghidEventTap)
+        if let event=CGEvent(mouseEventSource:nil,mouseType:kind,mouseCursorPosition:newPoint,mouseButton:button) {
+            pointerPosition.posted(newPoint)
+            event.post(tap:.cghidEventTap)
+        }
         movementCount += 1
         if movementCount == 1 || movementCount % 100 == 0 { log("MOVEMENT_REPORTS_POSTED", movementCount) }
         return newPoint
@@ -662,7 +671,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func handleFrame(x:Int,y:Int,b:Int){
         reportCount += 1
         if reportCount == 1 { log("FIRST_DEVICE_REPORT_VALIDATED") }
-        let point = deliveryPoint ?? WandPointerBounds.clamp(CGEvent(source: nil)?.location ?? .zero,to:pointerDisplays)
+        let point = deliveryPoint ?? currentPointerPosition()
         // The router may drop a consumed hold's endpoint click; button changes are
         // applied before motion, at the position already shown.
         let routed=pointerRouter.frame(dx:x,dy:y,buttons:b,hud:hudSession,now:ProcessInfo.processInfo.systemUptime)
@@ -697,7 +706,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         dwellTimer=Timer.scheduledTimer(withTimeInterval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             guard let self else{return};self.dwellTimer=nil
             guard self.ready,!self.restoring,!self.pointerRouter.bottomHeld,!self.hudSession,!self.scrollActive,self.buttons==0,AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
-            let point=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:self.pointerDisplays)
+            let point=self.currentPointerPosition()
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
         }
     }
@@ -762,7 +771,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         buttons = next
     }
-    func releaseButtons() { transition(to: 0, at: CGEvent(source: nil)?.location ?? .zero) }
+    func releaseButtons() { transition(to: 0, at: currentPointerPosition()) }
     func stop() {
         sendReview(review.cancel());reviewTimer?.invalidate();reviewTimer=nil
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil;probeTimer?.invalidate();probeTimer=nil;restStopPending=false

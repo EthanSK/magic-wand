@@ -240,3 +240,14 @@ over an elapsed-time window. A new desk angle need not match a saved gravity
 vector or include a detectable impact. Regression fixtures include actual
 stationary active-rate samples. This classification window never buffers pointer
 movement. An IMU alone cannot distinguish a perfectly supported hand from a desk.
+
+## Use one posted position for movement and dwell clicks
+
+CGEvent posting is asynchronous across Bluetooth notifications as well as inside
+one notification. Re-reading the OS cursor at every notification and separately
+for a dwell click can select an older point than the receiver already posted.
+Reconcile observations against bounded outstanding coordinate history, use the
+latest issued point for both movement and clicking, and accept a position outside
+that history as an external pointer move or application warp. Keep this as
+coordinate bookkeeping, not a movement queue, smoothing or a delay. Test stale
+and intermediate acknowledgements, click/resume order, and external moves.
