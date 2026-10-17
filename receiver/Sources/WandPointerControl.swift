@@ -18,6 +18,32 @@ enum WandPointerBounds {
     }
 }
 
+/// Reconcile asynchronous cursor observations with events already posted.
+/// Keep coordinates only; this never queues motion or waits to deliver it.
+final class WandPointerPosition {
+    private var confirmed:CGPoint?
+    private var pending:[CGPoint]=[]
+    private let capacity=128
+    var latest:CGPoint? {pending.last ?? confirmed}
+    func reset(){confirmed=nil;pending.removeAll(keepingCapacity:true)}
+    func observe(_ point:CGPoint)->CGPoint {
+        guard let latest else {confirmed=point;return point}
+        if point==latest {confirmed=point;pending.removeAll(keepingCapacity:true);return point}
+        if point==confirmed {return latest}
+        if let index=pending.firstIndex(of:point) {
+            confirmed=point;pending.removeFirst(index+1)
+            return pending.last ?? point
+        }
+        // A position outside our outstanding events came from another pointer
+        // or an application warp. Respect it immediately.
+        confirmed=point;pending.removeAll(keepingCapacity:true);return point
+    }
+    func posted(_ point:CGPoint) {
+        if pending.last != point {pending.append(point)}
+        if pending.count>capacity {pending.removeFirst(pending.count-capacity)}
+    }
+}
+
 /// Recognise a rough, intentional loop from LOW pointer deltas and turn it into
 /// native wheel lines (no trackpad emulation).
 ///
