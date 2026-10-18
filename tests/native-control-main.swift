@@ -26,7 +26,7 @@ precondition(r.frame(dx:8,dy:0,buttons:0,hud:false,now:12).actions==[.move(dx:8,
 _=r.bottom(down:true)
 precondition(r.frame(dx:8,dy:0,buttons:1,hud:false,now:13).actions==[.move(dx:8,dy:0)],"actual drag immediate")
 let d=WandDwellClick();d.follow(true);precondition(!d.tick(now:20),"entry never clicks")
-d.move(dx:20,dy:0,now:20,eligible:true);precondition(!d.tick(now:20.4));precondition(d.tick(now:20.46));precondition(!d.tick(now:30),"one click while still")
+d.move(dx:20,dy:0,now:20,eligible:true);precondition(!d.tick(now:20.199));precondition(d.tick(now:20.201));precondition(!d.tick(now:30),"one click while still")
 d.move(dx:1,dy:0,now:30,eligible:true);precondition(!d.tick(now:31),"jitter does not rearm")
 d.move(dx:20,dy:0,now:32,eligible:true);d.follow(false);precondition(!d.tick(now:40),"exit cancels")
 d.follow(true);d.move(dx:20,dy:0,now:41,eligible:false);precondition(!d.tick(now:42),"LOW/drag/HUD excludes dwell")
@@ -58,7 +58,7 @@ let intentDwell=WandDwellClick();intentDwell.follow(true);intentDwell.move(dx:20
 intentDwell.intent(true,now:10.3)
 precondition(!intentDwell.tick(now:10.5),"active subpixel motion prevents dwell")
 intentDwell.intent(true,now:10.7);precondition(!intentDwell.tick(now:11.0))
-intentDwell.intent(false,now:11.1);precondition(!intentDwell.tick(now:11.4));precondition(intentDwell.tick(now:11.56))
+intentDwell.intent(false,now:11.1);precondition(!intentDwell.tick(now:11.299));precondition(intentDwell.tick(now:11.301))
 let stale=WandDwellClick();stale.follow(true);stale.move(dx:20,dy:0,now:10,eligible:true);stale.intent(true,now:10.2)
 precondition(stale.tick(now:10.81),"lost intent heartbeat expires")
 print("PASS: active subpixel motion, confirmed rest and bounded stale intent")
@@ -318,3 +318,12 @@ for i in 0..<100 {
 }
 precondition(steadyArc.circular && arcBins.allSatisfy{(7...9).contains(Int($0))},"same speed must keep the same wheel rate before, during and after circle recognition")
 print("PASS: constant-speed U-turn has no sign or gain discontinuity at recognition")
+
+// Starting again during the shorter rest window postpones the click.
+let resumed=WandDwellClick();resumed.follow(true)
+resumed.move(dx:20,dy:0,now:50,eligible:true)
+resumed.move(dx:1,dy:0,now:50.15,eligible:true)
+precondition(!resumed.tick(now:50.201))
+precondition(!resumed.tick(now:50.349))
+precondition(resumed.tick(now:50.351))
+precondition(!resumed.tick(now:55),"one click per stop")

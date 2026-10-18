@@ -291,7 +291,7 @@ export class DwellClick {
   }
   get nextDue() {
     return this.following && this.armed
-      ? Math.max(this.lastMotion + 0.45, this.inhibitedUntil, this.intentUntil)
+      ? Math.max(this.lastMotion + 0.2, this.inhibitedUntil, this.intentUntil)
       : null;
   }
   intent(moving, now) {

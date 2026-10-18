@@ -8,12 +8,13 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.52",
-    "receiverBuild": "57",
+    "receiver": "1.2.53",
+    "receiverBuild": "58",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "691e21c9f52188cd5378185983d32a2f24edc954f38559c06cbf3fb31e633e53"
   },
   "status": [
+    "HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.",
     "Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.",
     "Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling in V1 passes automated checks; physical gesture acceptance is pending.",
     "Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.",
@@ -115,7 +116,7 @@
         ],
         [
           "Stop after moving in HIGH",
-          "Click once after a 450 ms pause"
+          "Click once after a 200 ms pause"
         ],
         [
           "Tap while following",
@@ -308,7 +309,7 @@
     "macDoubleClickSeconds": 0.3,
     "calibrationSeconds": 2,
     "lowMotionDelayMs": 0,
-    "highDwellMs": 450,
+    "highDwellMs": 200,
     "highDwellTravelCounts": 12,
     "idleAccelerometerHz": 1.6,
     "imuTelemetryMaxHz": 10,

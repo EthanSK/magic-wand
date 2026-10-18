@@ -266,7 +266,7 @@ final class WandDwellClick {
     private(set) var following=false
     private var x=0.0,y=0.0,lastMotion=0.0,inhibitedUntil=0.0,intentUntil=0.0
     private(set) var armed=false
-    init(pause:Double=0.45,travel:Double=12){self.pause=pause;self.travel=travel}
+    init(pause:Double=0.2,travel:Double=12){self.pause=pause;self.travel=travel}
     var nextDue:Double? {following && armed ? max(lastMotion+pause,inhibitedUntil,intentUntil) : nil}
     func reset(){x=0;y=0;armed=false;lastMotion=0;intentUntil=0}
     func follow(_ on:Bool){if following != on {reset()};following=on}
