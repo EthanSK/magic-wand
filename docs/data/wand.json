@@ -3,16 +3,17 @@
   "name": "Magic Wand",
   "tagline": "Mouse, HUD, scrolling and speech to text from three buttons on a wand.",
   "summary": "Turning the wand moves my Mac’s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.",
-  "updated": "2026-10-17",
+  "updated": "2026-10-18",
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.35",
-    "receiverBuild": "40",
+    "receiver": "1.2.40",
+    "receiverBuild": "45",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "c6948df57d8e26f59aa10b1c590b4d5536f9de8bd6cb1246ed2dea4704a02f1d"
   },
   "status": [
+    "Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.",
     "Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.",
     "Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.",
     "Ethan confirmed automatic pickup and put-down both work on receiver 1.2.35.",
@@ -124,11 +125,15 @@
         [
           "Tap, then hold",
           "Drag with the actual mouse button held; release drops"
+        ],
+        [
+          "Double tap",
+          "Recenter the pointer on the main screen and keep following"
         ]
       ],
       "notes": [
         "HIGH is released-button follow. LOW is a plain Bottom hold at one-third speed.",
-        "Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Cyan shows recognition; release stops without an endpoint click.",
+        "Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Once recognized, the pointer stays fixed through pauses and straight motion until release; release stops without an endpoint click.",
         "Leave the wand idle on the desk for about two seconds to learn its resting pose. Picking it up can then enter HIGH automatically; setting it down stops following after sustained desk confirmation.",
         "Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.",
         "Desk detection is an IMU estimate, not a touch sensor; a very still supported hand can resemble a desk. The browser demo covers the buttons, not physical desk detection.",

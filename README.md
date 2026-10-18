@@ -47,9 +47,10 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Hold, turn, release | Aim at one-third speed; release clicks once |
 | Hold while following | Aim at low sensitivity; release clicks, pauses 300 ms, then resumes HIGH |
 | Tap, then hold | Drag with the actual mouse button held; release drops |
+| Double tap | Recenter the pointer on the main screen and keep following |
 
 - HIGH is released-button follow. LOW is a plain Bottom hold at one-third speed.
-- Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Cyan shows recognition; release stops without an endpoint click.
+- Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Once recognized, the pointer stays fixed through pauses and straight motion until release; release stops without an endpoint click.
 - Leave the wand idle on the desk for about two seconds to learn its resting pose. Picking it up can then enter HIGH automatically; setting it down stops following after sustained desk confirmation.
 - Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.
 - Desk detection is an IMU estimate, not a touch sensor; a very still supported hand can resemble a desk. The browser demo covers the buttons, not physical desk detection.
@@ -143,13 +144,14 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.
 - Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.
 - Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.
 - Ethan confirmed automatic pickup and put-down both work on receiver 1.2.35.
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.35 (40) · device code `wand-e1ce30d7c407` · bridge `c6948df5` · updated 17 October 2026.
+Receiver 1.2.40 (45) · device code `wand-e1ce30d7c407` · bridge `c6948df5` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

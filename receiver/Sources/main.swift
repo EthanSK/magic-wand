@@ -32,10 +32,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var lightMode = "unknown"
     var pointerDisplays:[CGRect]=[]
     var deliveryPoint:CGPoint?
+    var circleAnchor:CGPoint?,scrollAnchor:CGPoint?
     var displayObserver:NSObjectProtocol?
     // LOW aiming delay, loop scrolling and consumed-click removal live in the
     // pure WandPointerRouter (wand-pointer-control.swift); this class only posts.
     let pointerRouter=WandPointerRouter()
+    let recenterGesture=WandRecenterGesture()
     let motionFilter=WandMotionFilter()
     var rawLastArrival=0.0,rawReports=0,rawWindowStart=0.0,rawMaxGap=0.0
     let dwell=WandDwellClick()
@@ -248,7 +250,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
         probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true);restStopPending=false
-        performPointer(pointerRouter.cancelAll());setCircleLight(false)
+        recenterGesture.cancel();performPointer(pointerRouter.cancelAll());setCircleLight(false)
         lightMode="disconnected"
         hudSession=false;hudEntryPress=false
         finishScroll()
@@ -304,9 +306,16 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         writing = true; p.writeValue(chunks.removeFirst(), for: characteristic, type: .withResponse)
     }
     func peripheral(_ p: CBPeripheral, didWriteValueFor c: CBCharacteristic, error: Error?) {
-        guard device === p else { return }; writing = false
-        if let error { log("WRITE_FAILED", error.localizedDescription); reconnect(); return }
-        sendNext()
+        guard device === p else { return }
+        if let error {writing=false;log("WRITE_FAILED",error.localizedDescription);reconnect();return}
+        // A GATT acknowledgement precedes the Puck parsing a large code fragment.
+        // Pace installation only: FIFO_FULL otherwise drops bytes inside functions.
+        if !ready {
+            DispatchQueue.main.asyncAfter(deadline:.now()+0.01){[weak self] in
+                guard let self,self.device === p,!self.restoring else{return}
+                self.writing=false;self.sendNext()
+            }
+        } else {writing=false;sendNext()}
     }
     func peripheral(_ p: CBPeripheral, didUpdateValueFor c: CBCharacteristic, error: Error?) {
         guard device === p, error == nil, let bytes = c.value, let text = String(data: bytes, encoding: .utf8) else { return }
@@ -373,7 +382,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 let value=String(line[marker.upperBound...]).trimmingCharacters(in:.whitespaces)
                 // The device prints each edge before the click it emits on release,
                 // so a consumed (scrolled) hold's endpoint click is dropped by order.
-                if value=="0" || value=="1" {restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.bottom(down:value=="1"))}
+                if value=="0" || value=="1" {
+                    let recenter=recenterGesture.edge(down:value=="1",now:ProcessInfo.processInfo.systemUptime,eligible:appMode==nil && !scrollActive && !pointerRouter.holdConsumed && buttons==0)
+                    restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.bottom(down:value=="1"))
+                    if recenter {recenterPointer();queue("setMouseFollow(true);")}
+                }
             }
             if let marker=line.range(of:"@MIDDLE "){cancelCircleScroll();handleMiddle(String(line[marker.upperBound...]))}
             if let marker=line.range(of:"@NAV "){handleNavigation(String(line[marker.upperBound...]))}
@@ -550,6 +563,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             else if middleOperating {controls.persistent("release")}
             hudActive=false;pointerInHUD=false;middleOperating=false;navigationOpenedHUD=false
             stopHUDWatchdog();releaseButtons()
+            scrollAnchor=deliveryPoint ?? CGEvent(source:nil)?.location
             scrollActive=true;scrollX=x/1000;scrollY=y/1000;scrollFractionX=0;scrollFractionY=0
             scrollPostedX=0;scrollPostedY=0
             scrollUpdated=Date();log("SCROLL_BEGIN")
@@ -571,22 +585,33 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // Ordinary mice deliver one wheel axis at a time. Mixed-axis line events
     // can be reduced to the dominant direction by native scrolling views.
     // Send both components back-to-back so diagonal wand motion retains both.
-    static func wheelEvents(x:Int32,y:Int32)->[CGEvent] {
+    static func wheelEvents(x:Int32,y:Int32,at point:CGPoint?=nil)->[CGEvent] {
         guard let source=CGEventSource(stateID:.hidSystemState) else{return []}
         var events:[CGEvent]=[]
         if x != 0, let event=CGEvent(scrollWheelEvent2Source:source,units:.line,wheelCount:2,wheel1:0,wheel2:x,wheel3:0) {events.append(event)}
         if y != 0, let event=CGEvent(scrollWheelEvent2Source:source,units:.line,wheelCount:2,wheel1:y,wheel2:0,wheel3:0) {events.append(event)}
+        if let point {for event in events {event.location=point}}
         return events
     }
     func postScroll(x:Int32,y:Int32){
-        for event in Self.wheelEvents(x:x,y:y) {event.post(tap:.cghidEventTap)}
+        for event in Self.wheelEvents(x:x,y:y,at:scrollAnchor ?? circleAnchor) {event.post(tap:.cghidEventTap)}
         scrollPostedX+=Int(x);scrollPostedY+=Int(y)
     }
     func finishScroll(){
         if scrollActive{log("SCROLL_END lines",scrollPostedX,scrollPostedY)}
         let wasActive=scrollActive
-        scrollActive=false;scrollWatchdog?.invalidate();scrollWatchdog=nil
+        scrollActive=false;scrollAnchor=nil;scrollWatchdog?.invalidate();scrollWatchdog=nil
         if wasActive {resumeHUDNavigation()}
+    }
+    /// Reposition the pointer only; preserve the known-good gyro calibration.
+    func recenterPointer() {
+        guard ready,!restoring,AXIsProcessTrusted() else{return}
+        cancelCircleScroll();finishScroll();releaseButtons();motionFilter.reset()
+        let bounds=CGDisplayBounds(CGMainDisplayID())
+        let point=CGPoint(x:bounds.midX,y:bounds.midY)
+        CGWarpMouseCursorPosition(point)
+        deliveryPoint=point
+        log("POINTER_RECENTER")
     }
     func refreshPointerDisplays() {
         var ids=[CGDirectDisplayID](repeating:0,count:32),count:UInt32=0
@@ -596,6 +621,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func setCircleLight(_ active:Bool) {
         guard circleLight != active else{return};circleLight=active
+        if !active {circleAnchor=nil}
         if ready && !restoring {queue("global.wandCircleScrolling="+(active ? "true":"false")+";updateLights();")}
         if active && circleTimer == nil {
             circleTimer=Timer.scheduledTimer(withTimeInterval:0.1,repeats:true){[weak self] _ in
@@ -605,7 +631,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         } else if !active {circleTimer?.invalidate();circleTimer=nil}
     }
     /// Scroll chord, HUD and speech take over: drop unshown LOW motion and any circle.
-    func cancelCircleScroll(){restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
+    func cancelCircleScroll(){recenterGesture.cancel();restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
     func sendReview(_ requests:[WandReviewGesture.Request]){
         for request in requests {
             guard let app=NSRunningApplication.runningApplications(withBundleIdentifier:"com.microsoft.VSCode").first,
@@ -627,7 +653,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             switch action {
             case .move(let dx,let dy): point=postPointerMove(dx:dx,dy:dy,from:point)
             case .scroll(let lines): postScroll(x:0,y:lines)
-            case .circleLight(let on): setCircleLight(on)
+            case .circleLight(let on):
+                if on {circleAnchor=point}
+                setCircleLight(on)
             }
         }
         if deliveryPoint != nil {deliveryPoint=point}

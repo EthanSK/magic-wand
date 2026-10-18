@@ -251,3 +251,30 @@ reads across closely spaced notifications, but the observed automatic clicks
 stayed at the current position. Do not claim those reads caused the reported
 symptom, or re-enable that experiment as an accepted fix. Retain the working
 receiver until a new physical reproduction supports a narrower change.
+
+
+## Retain a held scroll through a pause
+
+Once LOW circular scrolling is recognized, pause expiry and straight-motion
+heuristics must not return the same held gesture to pointer movement. Forget
+stale headings on pause so resuming cannot invent a large turn, but retain the
+scroll latch until release or explicit mode cancellation. Native and simulation
+regressions cover the pause, long straight motion, release and suppressed endpoint
+click. Pin wheel-event locations for both circle and chord gestures to their
+captured target. Physical feel remains a separate acceptance check.
+
+Bottom double-tap recentering is recognized only on a short second release;
+a held second press remains the existing drag. Recenter the pointer on the main
+display without changing sensor calibration, and reset dwell evidence so the
+warp cannot cause an automatic click.
+
+
+## Pace code uploads after the GATT acknowledgement
+
+A GATT write acknowledgement does not mean Espruino has parsed the received
+JavaScript. The device reported FIFO_FULL during a bridge upload, followed by
+undefined local variables in partially received functions. Pace write chunks
+by 10 ms while the receiver is not ready. Retain immediate dispatch after it
+is ready; this delay applies to installation, not pointer samples or gestures.
+Recover through the existing Bluetooth owner and preserve a successful sensor
+zero. Source tests cannot reproduce the device's UART input capacity.

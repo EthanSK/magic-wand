@@ -118,3 +118,28 @@ var activeStops=0
 for i in 0...55 {let p=activeSamples[i%activeSamples.count];activeStops += activeTable.update(x:p[0],y:p[1],z:p[2],gyro:p[3],now:300+Double(i)*0.1,buttons:false,idle:false).contains(.putDown) ? 1:0}
 precondition(activeStops==1,"actual active-rate desk noise must stop exactly once")
 print("PASS: actual active sensor noise parks once")
+
+let heldScroll=WandPointerRouter();_=heldScroll.bottom(down:true)
+var loopX=80.0,loopY=0.0
+for i in 1...105 {
+ let a=Double(i)/35*2*Double.pi,nx=80*cos(a),ny=80*sin(a)
+ _=heldScroll.frame(dx:Int((nx-loopX).rounded()),dy:Int(((ny-loopY)*1.4).rounded()),buttons:0,hud:false,now:10+Double(i)/35)
+ loopX=nx;loopY=ny
+}
+precondition(heldScroll.circle.active)
+precondition(heldScroll.tick(now:16).isEmpty,"pause keeps held scrolling")
+for i in 0..<100 {precondition(!heldScroll.frame(dx:8,dy:0,buttons:0,hud:false,now:17+Double(i)/35).actions.contains{if case .move = $0{return true};return false},"straight motion cannot move pointer after scroll recognition")}
+precondition(heldScroll.circle.active)
+precondition(heldScroll.bottom(down:false)==[.circleLight(false)])
+precondition(heldScroll.frame(dx:0,dy:0,buttons:1,hud:false,now:21).buttons==0,"scroll release never clicks")
+precondition(heldScroll.frame(dx:4,dy:0,buttons:0,hud:false,now:22).actions==[.move(dx:4,dy:0)])
+print("PASS: held scrolling survives pause and straight motion until release")
+
+let center=WandRecenterGesture()
+precondition(!center.edge(down:true,now:1));precondition(!center.edge(down:false,now:1.08))
+precondition(!center.edge(down:true,now:1.2));precondition(center.edge(down:false,now:1.28))
+precondition(!center.edge(down:true,now:2));precondition(!center.edge(down:false,now:2.08))
+precondition(!center.edge(down:true,now:2.2));precondition(!center.edge(down:false,now:2.5),"held second press must remain a drag")
+precondition(!center.edge(down:true,now:3));precondition(!center.edge(down:false,now:3.08))
+precondition(!center.edge(down:true,now:3.2,eligible:false));precondition(!center.edge(down:false,now:3.28),"other modes cancel double tap")
+print("PASS: short double tap recenters; held second press and other modes do not")

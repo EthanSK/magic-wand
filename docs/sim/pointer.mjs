@@ -13,8 +13,6 @@ export class CircularScroll {
       window: 2,
       minDuration: 0.2,
       idleEnd: 0.35,
-      exitFraction: 0.3,
-      straightTurn: 0.35,
       linesPerTurn: 8,
       kick: 2,
       maxLinesPerUpdate: 6,
@@ -38,15 +36,14 @@ export class CircularScroll {
     this.windowPath = 0;
     this.windowTurn = 0;
     this.windowSigned = 0;
-    this.straightWindows = 0;
-    this.straightDistance = 0;
     this.active = false;
   }
   expire(now) {
     if (this.lastTime > 0 && now - this.lastTime > this.tuning.idleEnd) {
-      const was = this.active;
-      this.reset();
-      return was;
+      if (this.active) {
+        this.heading = null;
+        this.accX = this.accY = this.remainder = this.lastTime = 0;
+      } else this.reset();
     }
     return false;
   }
@@ -146,29 +143,10 @@ export class CircularScroll {
   scroll(turn, length) {
     const t = this.tuning,
       kept = Math.abs(turn) > t.maxTurn ? 0 : turn;
-    if (Math.abs(kept) < 0.04) this.straightDistance += length;
-    else this.straightDistance = 0;
-    if (
-      this.straightDistance >=
-      Math.max(20, Math.min(60, this.loopLength * 0.25))
-    ) {
-      this.reset();
-      return { consumesPointer: false, lines: 0 };
-    }
     this.windowPath += length;
     this.windowTurn += Math.abs(kept);
     this.windowSigned += kept;
-    if (
-      this.windowPath >=
-      Math.max(t.segment * 3, this.loopLength * t.exitFraction)
-    ) {
-      const expected = (2 * Math.PI * this.windowPath) / this.loopLength;
-      if (this.windowTurn < expected * t.straightTurn) this.straightWindows++;
-      else this.straightWindows = 0;
-      if (this.straightWindows >= 2) {
-        this.reset();
-        return { consumesPointer: false, lines: 0 };
-      }
+    if (this.windowPath >= Math.max(t.segment * 3, this.loopLength * 0.3)) {
       if (Math.abs(this.windowSigned) > 0.5)
         this.loopLength = Math.max(
           24,
@@ -337,4 +315,18 @@ export class DwellClick {
     this.reset();
     return true;
   }
+}
+
+export class RecenterGesture {
+ constructor(){this.cancel();}
+ cancel(){this.pressedAt=null;this.lastRelease=null;this.second=false;}
+ edge(down,now,eligible=true){
+  if(!eligible){this.cancel();return false;}
+  if(down){if(this.pressedAt!==null)return false;this.second=this.lastRelease!==null&&now-this.lastRelease>=0&&now-this.lastRelease<=.3;this.pressedAt=now;return false;}
+  if(this.pressedAt===null)return false;
+  const duration=now-this.pressedAt;this.pressedAt=null;
+  if(duration<0||duration>=.22){this.lastRelease=null;this.second=false;return false;}
+  if(this.second){this.lastRelease=null;this.second=false;return true;}
+  this.lastRelease=now;return false;
+ }
 }

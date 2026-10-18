@@ -49,12 +49,8 @@ final class WandCircularScroll {
         var minAspect=0.25
         /// Turning older than `window` seconds is forgotten; a loop takes at least `minDuration`.
         var window=2.0, minDuration=0.2
-        /// No motion for this long ends an established circle.
+        /// Forget a paused heading; an established scroll stays latched until release.
         var idleEnd=0.35
-        /// Over `exitFraction` of a loop's length, turning below `straightTurn` of a
-        /// loop's expected turning is a deliberate straight move: scrolling ends and
-        /// that movement passes through as pointer motion.
-        var exitFraction=0.3, straightTurn=0.35
         /// Wheel lines per full loop, the recognition kick and the per-update cap.
         var linesPerTurn=8.0, kick:Int32=2, maxLinesPerUpdate=6
         init(){}
@@ -66,7 +62,6 @@ final class WandCircularScroll {
     private var accX=0.0,accY=0.0,posX=0.0,posY=0.0,lastTime=0.0
     private var heading:Double?
     private var remainder=0.0,loopLength=0.0,windowPath=0.0,windowTurn=0.0,windowSigned=0.0
-    private var straightWindows=0,straightDistance=0.0
     private(set) var active=false
 
     init(tuning:Tuning=Tuning()){self.tuning=tuning}
@@ -74,14 +69,16 @@ final class WandCircularScroll {
     func reset(){
         segments.removeAll(keepingCapacity:true);signedTurn=0;absoluteTurn=0;path=0
         accX=0;accY=0;posX=0;posY=0;lastTime=0;heading=nil
-        remainder=0;loopLength=0;windowPath=0;windowTurn=0;windowSigned=0;straightWindows=0;straightDistance=0;active=false
+        remainder=0;loopLength=0;windowPath=0;windowTurn=0;windowSigned=0;active=false
     }
-    /// A pause ends an established circle and forgets candidate turning, so slow
-    /// aiming broken by pauses can never add up to a loop.
+    /// Forget candidate motion or a stale heading, never the held scroll latch.
+    /// Resuming after a pause must not invent a turn between unrelated headings.
     @discardableResult
     func expire(now:Double)->Bool {
         guard lastTime>0,now-lastTime>tuning.idleEnd else{return false}
-        let was=active;reset();return was
+        if active {heading=nil;accX=0;accY=0;remainder=0;lastTime=0}
+        else {reset()}
+        return false
     }
     func update(dx:Double,dy:Double,now:Double,eligible:Bool)->Result {
         let none=Result(consumesPointer:false,lines:0)
@@ -128,14 +125,8 @@ final class WandCircularScroll {
         // A cusp (circling direction reversed) contributes no burst; the turning
         // that follows simply winds the scroll the other way.
         let kept=abs(turn)>tuning.maxTurn ? 0 : turn
-        if abs(kept)<0.04 {straightDistance+=length}else{straightDistance=0}
-        if straightDistance>=max(20,min(60,loopLength*0.25)) {reset();return .init(consumesPointer:false,lines:0)}
         windowPath+=length;windowTurn+=abs(kept);windowSigned+=kept
-        if windowPath>=max(tuning.segment*3,loopLength*tuning.exitFraction) {
-            let expected=2*Double.pi*windowPath/loopLength
-            if windowTurn<expected*tuning.straightTurn {straightWindows+=1}else{straightWindows=0}
-            if straightWindows>=2 {reset();return .init(consumesPointer:false,lines:0)}
-            // Follow radius drift: re-estimate the loop length from recent turning.
+        if windowPath>=max(tuning.segment*3,loopLength*0.3) {
             if abs(windowSigned)>0.5 {
                 loopLength=max(24,min(6000,0.7*loopLength+0.3*windowPath*2*Double.pi/abs(windowSigned)))
             }
@@ -239,7 +230,7 @@ final class WandPointerRouter {
         }
         return actions
     }
-    /// Periodic: show due motion and end an idle circle.
+    /// Periodic: show due motion and forget stale headings, retaining a held scroll.
     func tick(now:Double)->[Action] {
         var actions=drain(now:now)
         circle.expire(now:now)
@@ -499,5 +490,25 @@ final class WandMotionFilter {
         let countX=Int(fractionX.rounded(.towardZero)),countY=Int(fractionY.rounded(.towardZero))
         fractionX-=Double(countX);fractionY-=Double(countY)
         return .init(x:max(-4095,min(4095,countX)),y:max(-4095,min(4095,countY)),intent:active)
+    }
+}
+
+
+/// Short second release recenters; a held second press remains a real drag.
+final class WandRecenterGesture {
+    private var pressedAt:Double?,lastRelease:Double?,second=false
+    func cancel(){pressedAt=nil;lastRelease=nil;second=false}
+    func edge(down:Bool,now:Double,eligible:Bool=true)->Bool {
+        guard eligible else{cancel();return false}
+        if down {
+            guard pressedAt==nil else{return false}
+            second=lastRelease.map{now-$0>=0 && now-$0<=0.3} ?? false
+            pressedAt=now;return false
+        }
+        guard let start=pressedAt else{return false}
+        pressedAt=nil
+        guard now-start>=0 && now-start<0.22 else{lastRelease=nil;second=false;return false}
+        if second {lastRelease=nil;second=false;return true}
+        lastRelease=now;return false
     }
 }

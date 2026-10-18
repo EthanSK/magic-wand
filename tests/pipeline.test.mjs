@@ -171,7 +171,7 @@ test("Top starts and stops Agent Flow, and the recording light yields to other m
   s.press("D30", 0.08); s.w.advance(0.05);
   assert(s.pipeline.agentFlow.recording, "first press starts recording");
   assert.deepEqual(s.w.colors(), [1, 0, 0], "recording is red");
-  s.press("D1", 0.06); s.w.advance(0.05);
+  s.press("D1", 0.06); s.w.advance(0.4);
   assert.deepEqual(s.w.colors(), [0, 0, 1], "pointer blue wins over recording");
   s.press("D1", 0.06); s.w.advance(0.3);
   assert(!s.w.ctx.moveLatched);
@@ -188,4 +188,17 @@ test('receiver accepts wide UART motion and still clamps to the screen', () => {
  assert.deepEqual(s.mac.location(),{x:Math.min(before.x+300,s.mac.width-1),y:Math.min(before.y+200,s.mac.height-1)});
  s.pipeline.receiver.handleFrame(-4095,-4095,0);assert.deepEqual(s.mac.location(),{x:0,y:0});
  const at=s.mac.location();s.pipeline.receiver.handleFrame(4096,0,0);assert.deepEqual(s.mac.location(),at);
+});
+
+
+test("Bottom double tap recenters but a held second press remains a drag", () => {
+ const s=setup();
+ s.mac.mouse('move',{x:100,y:120});
+ s.press('D1',0.08);s.w.advance(0.08);s.press('D1',0.08);s.w.advance(0.05);
+ assert.deepEqual(s.mac.location(),{x:s.mac.width/2,y:s.mac.height/2});
+ assert(s.w.ctx.moveLatched,'recenter keeps follow active');
+ assert.equal(s.macEvents.filter(e=>e.type==='down').length,0,'recenter does not click');
+ s.w.advance(0.5);s.press('D1',0.08);s.w.advance(0.08);s.w.edge('D1',0);s.w.advance(0.3);
+ assert(s.mac.buttonDown,'second press held drags');
+ s.w.edge('D1',1);s.w.advance(0.05);assert(!s.mac.buttonDown);
 });

@@ -38,13 +38,14 @@ a local server (`npm run serve`) or use the live site and check:
 
 - Hovering turns the wand; left button is Bottom, right button is Middle.
 - Bottom: tap to follow, hold-turn-release clicks once, tap-then-hold drags a light stroke,
-  double tap stops. The pointer holds still while a click is decided.
+  double tap recenters on the main display. The pointer holds still while a click is decided.
 - Middle: tap opens the HUD on Switch App, turning moves the outline and stops at the edges,
   a tap uses a card after about 0.8 s, double tap closes, Bottom returns to the pointer.
 - Starting with the HUD closed: hold Middle, turn to a card, then release to use it once.
-- In released-button pointer follow: a deliberate full clockwise circle starts down-scroll,
-  anticlockwise starts up-scroll, cyan shows recognition, and pausing returns to pointing.
-  Bottom holds, real drags and HUD navigation must never trigger circular scrolling.
+- During a plain Bottom hold, a rough clockwise circle starts down-scroll and
+  anticlockwise starts up-scroll. Cyan shows recognition. The pointer remains fixed
+  through pauses and straight motion until release; release suppresses the endpoint
+  click. HIGH follow, real drags and HUD navigation do not trigger circular scrolling.
 - Hold Middle on Horizontal Scroll + Wheel and tilt: wheel steps appear.
 - Bottom + Middle (both mouse buttons, B+M keys, or the chord key while dragging) scrolls both axes.
 - Top toggles the Agent Flow indicator; the light is red only when nothing else is active.
