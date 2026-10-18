@@ -183,7 +183,7 @@ precondition(scrollV2.active && scrollV2.consumes(buttons:0))
 var up:Int32=0,down:Int32=0
 for _ in 0..<50 {up += scrollV2.sample(y:-20,dt:0.01)}
 for _ in 0..<50 {down += scrollV2.sample(y:20,dt:0.01)}
-precondition(up==16 && down == -16,"equal up and down scrolling")
+precondition(up == -16 && down == 16,"equal up and down scrolling")
 precondition(scrollV2.end(now:201))
 precondition(!scrollV2.active && scrollV2.sample(y:50,dt:0.01)==0,"release stops immediately")
 precondition(!scrollV2.consumes(buttons:0),"interleaved raw reports cannot clear pending click suppression")
@@ -211,5 +211,5 @@ precondition(!contextual.startDrag(now:302.4),"scroll target never starts draggi
 precondition(contextual.sample(y:-20,dt:0.01,now:302.1)==0,"existing tap cutoff retained")
 var lines:Int32=0
 for i in 0..<10 {lines+=contextual.sample(y:-20,dt:0.01,now:302.23+Double(i)*0.01)}
-precondition(lines>0)
+precondition(lines<0)
 print("PASS: context selection preserves short taps and emits one drag down only for non-scroll targets")

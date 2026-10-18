@@ -8,13 +8,13 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.45",
-    "receiverBuild": "50",
+    "receiver": "1.2.46",
+    "receiverBuild": "51",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "52a4617bad4bdfdbdd3628cbc5b6e541fcf3b4179f18106872a5b14d84f4cb6f"
   },
   "status": [
-    "Control V2 adds context-sensitive Bottom holding: scroll over a scroll area, otherwise drag. Control V1 is preserved and selectable. Physical acceptance is pending.",
+    "Control V2 hold-scrolling direction is reversed to drag page content with the wand. Automated checks passed; physical direction confirmation is pending.",
     "Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling and recording/mouse light alternation pass automated checks; physical gesture acceptance is pending.",
     "Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.",
     "Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.",

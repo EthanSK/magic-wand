@@ -162,7 +162,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Control V2 adds context-sensitive Bottom holding: scroll over a scroll area, otherwise drag. Control V1 is preserved and selectable. Physical acceptance is pending.
+- Control V2 hold-scrolling direction is reversed to drag page content with the wand. Automated checks passed; physical direction confirmation is pending.
 - Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling and recording/mouse light alternation pass automated checks; physical gesture acceptance is pending.
 - Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.
 - Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.
@@ -172,7 +172,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.45 (50) · device code `wand-e1ce30d7c407` · bridge `52a4617b` · updated 18 October 2026.
+Receiver 1.2.46 (51) · device code `wand-e1ce30d7c407` · bridge `52a4617b` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
