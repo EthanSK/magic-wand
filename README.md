@@ -23,6 +23,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap again | Stop and paste |
 
 - Recording stays red when no other mode is active. Mouse mode stays blue, including while recording.
+- Putting the wand down never stops dictation. Use Top to stop and paste.
 
 **Middle** (`D2`) · Agentic Mouse HUD
 
@@ -38,7 +39,8 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - Bottom goes back to the pointer.
 - VS Code app mode: hold Bottom and tilt down or up to review changes. Crossed files are staged on release through Better Git. Double tap Bottom to exit review and return to centred mouse follow.
 - The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.
-- With VS Code frontmost, Review changes and Stage files appear beside Switch App. Hold Middle on either and move vertically, then circle to continue; reverse circling to reverse direction. Release finishes the existing Better Git action.
+- With VS Code frontmost, Review changes and Stage files appear in a separate group beside Switch App. Tap one to select it; tap it again to clear. Hold Middle and move vertically, then circle to continue; reverse circling to reverse direction. The selection survives hiding the HUD, with a small reminder in VS Code. Release finishes the current Better Git action.
+- The HUD has no normal inactivity timeout. Screenshot selection temporarily uses the pointer and returns to the same HUD afterward.
 
 **Bottom** (`D1`) · Mouse
 
@@ -164,7 +166,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Prepared source fix: table rest no longer stops dictation or closes the HUD. Installation is pending so active Agent Flow use is not interrupted.
+- Installed: Wand Receiver 1.2.55 and signed Agentic Mouse 1.0.268 keep review modes selected through HUD dismissal, preserve the HUD through screenshots and never stop dictation on table rest. Physical acceptance is pending.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
 - HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.
 - Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.
@@ -177,7 +179,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.54 (59) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
+Receiver 1.2.55 (60) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

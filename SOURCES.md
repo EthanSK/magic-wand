@@ -211,6 +211,13 @@ did not increase the received rate; 104 Hz remains selected.
 
 `integrations/agentic-mouse/wand-vscode-review-shortcuts.patch` preserves the incremental addition installed in signed Agentic Mouse 1.0.267 (273). It depends on the earlier local wand integration; apply this zero-context patch with `git apply --unidiff-zero`. The wand home HUD adds Review changes and Stage files immediately after Switch App only with VS Code frontmost; physical mouse grids remain unchanged. A held Middle publishes a short-lived review context. Wand Receiver 1.2.54 reuses its existing straight-to-circle scroll geometry and ordered Better Git review transport; release finishes and lost context cancels. Native input and rendered-layout checks passed. Physical gesture acceptance remains pending.
 
-### Pending HUD lifetime fix
+### Persistent wand review modes
 
-`integrations/agentic-mouse/wand-hud-no-timeout.patch` removes the healthy-held-gesture duration limit while retaining missing-input teardown. Apply with `git apply --unidiff-zero` after the existing wand review shortcuts. Source tests pass; local installation is pending a safe idle boundary, not implied by this patch.
+`integrations/agentic-mouse/wand-persistent-review.patch` applies after the existing
+wand VS Code review shortcut patch, using `git apply --unidiff-zero`. It retains
+selected review mode independently of the visible HUD, adds the bottom-center
+reminder and removes the healthy-hold duration limit. Receiver source preserves
+the HUD through screenshot pointer use and never stops dictation on table rest.
+Source tests pass; current local installation status is recorded in `wand.json`.
+
+Better Git VS Code 1.2.130 enables its existing Eyes preview mode for wand change review; file staging uses its normal file mode. The focused real URI tests passed against Git-index changes and Undo. Marketplace validation and local Gallery installation were verified. VS Code’s extension host was restarted through its supported command and fresh Better Git activation was verified; physical wand acceptance remains pending.

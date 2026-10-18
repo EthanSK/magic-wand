@@ -26,6 +26,7 @@ final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=fals
 final class Harness {
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter()
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
+ var selectedReviewMode:String?,hiddenReviewOperating=false,hiddenReviewPending=false,screenshotActive=false,screenshotHUD=false
  var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleSecondTap=false,navigationOpenedHUD=false
  var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
  let wandShortcutScroll=WandHeldScroll()
@@ -36,11 +37,12 @@ final class Harness {
  var hudLastUpdate=Date.distantPast,commands:[String]=[]
  var hudDoubleClickInterval:Double {0.3}
  func queue(_ s:String){commands.append(s)}
+ func setWandShortcut(_ mode:String?){wandShortcutMode=mode}
  func cancelCircleScroll(){}
  func sendReview(_ v:[Int]){}
  func releaseButtons(){}
  init(){${callback}}
- ${['finishWandShortcut','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog'].map(method).join('\n')}
+ ${['setScreenshotActive','finishWandShortcut','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 let h=Harness()
@@ -66,7 +68,16 @@ shortcut.handleMiddle("0")
 precondition(shortcut.wandShortcutMode==nil && shortcut.review.committed,"physical Middle release immediately finishes review")
 shortcut.wandShortcutMode="files";shortcut.closeHUD(reason:"disconnect")
 precondition(shortcut.wandShortcutMode==nil && !shortcut.review.committed,"lost HUD cancels review")
-print("PASS: native full close, stale input rejection, delayed click cancellation, fresh reopen, watchdog teardown")
+let screenshot=Harness();screenshot.hudSession=true;screenshot.hudActive=true
+screenshot.setScreenshotActive(true);screenshot.enterPointerMode()
+precondition(!screenshot.hudSession && screenshot.screenshotHUD)
+precondition(!screenshot.controls.phases.contains("dismiss"))
+screenshot.setScreenshotActive(false)
+precondition(screenshot.hudSession && screenshot.hudActive && !screenshot.screenshotHUD)
+let pinned=Harness();pinned.selectedReviewMode="changes";pinned.handleMiddle("1");settle(0.25)
+precondition(pinned.hiddenReviewOperating && pinned.wandShortcutMode=="changes" && !pinned.hudSession)
+pinned.handleMiddle("0");precondition(!pinned.hiddenReviewOperating && pinned.wandShortcutMode==nil && !pinned.hudSession)
+print("PASS: screenshot HUD preservation, hidden review hold, native full close, stale input rejection, delayed click cancellation, fresh reopen, watchdog teardown")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-hud-'));
  try {

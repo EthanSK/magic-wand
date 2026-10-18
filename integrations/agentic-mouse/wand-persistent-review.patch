@@ -1,0 +1,309 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index 95a9b83..c7e2c9c 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -108,0 +109,6 @@ When Stay Restore is disabled, the saved monitor layout does not match, Organize
++
++- The wand HUD must not close just because time has passed. Keep a healthy held gesture open indefinitely; only stale telemetry, explicit dismissal, or existing safety/session teardown may cancel it.
++
++- Do not restart Agent Flow, Wand Receiver or Agentic Mouse while I am using Agent Flow. Before installation, check current recording and all pending transcription/delivery work; unknown state blocks installation. Recheck immediately before replacement after the warning. A brief gap between dictated messages is not permission to restart. Table-rest detection must never send a speech stop, and it must never dismiss an explicitly open wand HUD. User-requested — 2026-10-18.
++
++- In the wand VS Code HUD, a single tap selects Review changes or Stage files as a persistent mode; the selected card keeps its stronger outline even when hover moves away. Middle double-tap hides the HUD without clearing that selection. Show a small bottom-center reminder only when VS Code is frontmost and the main HUD is hidden. A tap on the selected card clears it; session lock/shutdown clears it. Keep the two review cards visually separated from the shared mouse controls.
+diff --git a/LEARNINGS.md b/LEARNINGS.md
+index 134e168..3125146 100644
+--- a/LEARNINGS.md
++++ b/LEARNINGS.md
+@@ -3138,0 +3139,8 @@ The Middle press sends a bounded review-mode context lease to Wand Receiver, whi
++
++## Persistent wand HUD has no maximum hold duration
++
++The persistent controller previously closed a healthy held gesture after 30 seconds because its watchdog checked absolute start time as well as the last valid report. Only the last valid report should expire: stationary reports count as activity, while missing telemetry still releases held actions safely. Regression tests cover two-minute navigation and operation holds, normal release, and loss of telemetry after a long healthy hold. An idle parked HUD already has no inactivity deadline.
++
++## Persistent review selection and screenshot lifetime
++
++A selected VS Code review mode is separate from transient hover and held-operation state. Keep its heartbeat alive while the main HUD is hidden, but only advertise the mode when VS Code is frontmost. Explicit session teardown clears it. The receiver temporarily lends Bottom to screenshot pointer interaction without dismissing the coordinator; capture completion resumes the same HUD. Table rest and absolute gesture age do not dismiss a healthy explicit HUD.
+diff --git a/Resources/Info.plist b/Resources/Info.plist
+index c3c09e1..c7cf5d3 100644
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -21 +21 @@
+-	<string>1.0.267</string>
++	<string>1.0.268</string>
+@@ -23 +23 @@
+-	<string>273</string>
++	<string>274</string>
+diff --git a/Sources/AgenticMouseApp/AppDelegate.swift b/Sources/AgenticMouseApp/AppDelegate.swift
+index e511261..5b777ef 100644
+--- a/Sources/AgenticMouseApp/AppDelegate.swift
++++ b/Sources/AgenticMouseApp/AppDelegate.swift
+@@ -60,0 +61 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
++    private let wandReviewIndicator = WandReviewIndicator()
+@@ -229,0 +231 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
++        wandPersistentController?.refreshContext()
+@@ -1602,2 +1604,5 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
+-        persistent.onContext = { [weak coordinator, weak persistent] active in
+-            WandContextSender.send(active:active,appMode:active && coordinator?.page == .appSpecific ? coordinator?.appSpecificTarget?.rawValue : nil,reviewMode:active ? persistent?.reviewMode : nil)
++        persistent.onContext = { [weak self, weak coordinator, weak persistent] active in
++            guard let self else { return }
++            let selected = self.mouseCommandsAllowed ? persistent?.selectedReviewMode : nil
++            self.wandReviewIndicator.update(mode:active ? nil : selected)
++            WandContextSender.send(active:active,appMode:active && coordinator?.page == .appSpecific ? coordinator?.appSpecificTarget?.rawValue : nil,reviewMode:active ? persistent?.reviewMode : nil,reviewSelection:selected,screenshotActive:self.selectedAreaScreenshotController.isCapturing)
+diff --git a/Sources/AgenticMouseApp/WandContextSender.swift b/Sources/AgenticMouseApp/WandContextSender.swift
+index 21a01f9..5387bbf 100644
+--- a/Sources/AgenticMouseApp/WandContextSender.swift
++++ b/Sources/AgenticMouseApp/WandContextSender.swift
+@@ -7 +7 @@ enum WandContextSender {
+-    static func send(active:Bool,appMode:String?=nil,reviewMode:String?=nil) {
++    static func send(active:Bool,appMode:String?=nil,reviewMode:String?=nil,reviewSelection:String?=nil,screenshotActive:Bool=false) {
+@@ -12 +12 @@ enum WandContextSender {
+-              let data=try? JSONSerialization.data(withJSONObject:["version":1,"active":active,"appMode":appMode ?? "","reviewMode":reviewMode ?? "","pid":getpid(),"sentAt":Date().timeIntervalSince1970]) else {return}
++              let data=try? JSONSerialization.data(withJSONObject:["version":1,"active":active,"appMode":appMode ?? "","reviewMode":reviewMode ?? "","reviewSelection":reviewSelection ?? "","screenshotActive":screenshotActive,"pid":getpid(),"sentAt":Date().timeIntervalSince1970]) else {return}
+diff --git a/Sources/ScimitarKit/App/ModeHUDLegend.swift b/Sources/ScimitarKit/App/ModeHUDLegend.swift
+index d41bccd..27bdf50 100644
+--- a/Sources/ScimitarKit/App/ModeHUDLegend.swift
++++ b/Sources/ScimitarKit/App/ModeHUDLegend.swift
+@@ -381,0 +382 @@ public struct ModeHUDSnapshot: Equatable, Sendable {
++    public var wandReviewSelection: PhysicalCell? = nil
+diff --git a/Sources/ScimitarKit/App/ModePickerCoordinator.swift b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
+index 0223485..34f7a92 100644
+--- a/Sources/ScimitarKit/App/ModePickerCoordinator.swift
++++ b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
+@@ -255,0 +256,7 @@ public final class ModePickerCoordinator {
++    public var wandReviewAvailable: Bool { resolveFrontmostApp?().target == .vsCode }
++    private var wandReviewSelection: PhysicalCell?
++    public func setWandReviewSelection(_ cell: PhysicalCell?) {
++        guard wandReviewSelection != cell else { return }
++        wandReviewSelection = cell; refreshWandHome()
++    }
++
+@@ -1067,0 +1075 @@ public final class ModePickerCoordinator {
++        value.wandReviewSelection = wandReviewAvailable ? wandReviewSelection : nil
+diff --git a/Sources/ScimitarKit/App/WandPersistentControl.swift b/Sources/ScimitarKit/App/WandPersistentControl.swift
+index 6624d37..e1306dc 100644
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -7 +7 @@ public struct WandPersistentCommand: Equatable {
+-    public enum Phase: String { case open, appSpecific, navigate, motion, park, press, release, dismiss }
++    public enum Phase: String { case open, appSpecific, navigate, motion, park, press, release, activate, dismiss }
+@@ -49 +48,0 @@ public final class WandPersistentController {
+-        let started:TimeInterval
+@@ -61,0 +61,3 @@ public final class WandPersistentController {
++    public private(set) var pinnedReviewCell: PhysicalCell?
++    public var selectedReviewMode: String? { target.wandReviewAvailable ? pinnedReviewCell?.wandReviewMode : nil }
++    public func clearReviewSelection() { pinnedReviewCell=nil;target.setWandReviewSelection(nil);if !isOpen {scheduler.stop()};onContext?(isOpen) }
+@@ -73,0 +76 @@ public final class WandPersistentController {
++        pinnedReviewCell=nil;target.setWandReviewSelection(nil)
+@@ -80 +83 @@ public final class WandPersistentController {
+-        if ownsHUD && !target.isActive {ownsHUD=false;hold=nil;scheduler.stop()}
++        if ownsHUD && !target.isActive {ownsHUD=false;hold=nil;if pinnedReviewCell == nil {scheduler.stop()}}
+@@ -82 +85,20 @@ public final class WandPersistentController {
+-        if command.phase == .dismiss {reset(reason:.userRequested);return}
++        if command.phase == .dismiss {
++            hold=nil;ownsHUD=false
++            if target.isActive {target.exit(reason:.userRequested)}
++            if pinnedReviewCell == nil {scheduler.stop()} else {startWatchdog()}
++            return
++        }
++        if command.phase == .activate, isOpen {
++            guard command.id != lastFinished else {return}
++            lastFinished=command.id
++            let cell=target.pointerFocus?.cell ?? selected
++            if target.isWandHome,cell.wandReviewMode != nil,target.wandReviewAvailable {
++                pinnedReviewCell = pinnedReviewCell == cell ? nil : cell
++                target.setWandReviewSelection(pinnedReviewCell)
++                startWatchdog();return
++            }
++            let generation=target.pageGeneration
++            target.handle(.init(action:.select,source:.wand,physicalCell:cell,phase:.press),inputTime:clock.now)
++            target.handle(.init(action:.select,source:.wand,physicalCell:cell,phase:.release),inputTime:clock.now)
++            keepOutline(after:cell,generation:generation);return
++        }
+@@ -109,0 +132 @@ public final class WandPersistentController {
++            if command.phase == .press, target.isWandHome, selectedReviewMode != nil, let pinned=pinnedReviewCell {selected=pinned}
+@@ -111 +134 @@ public final class WandPersistentController {
+-            hold=Hold(id:command.id,sequence:command.sequence,received:clock.now,started:clock.now,
++            hold=Hold(id:command.id,sequence:command.sequence,received:clock.now,
+@@ -155 +178 @@ public final class WandPersistentController {
+-        case .open, .appSpecific, .dismiss:break
++        case .open, .appSpecific, .activate, .dismiss:break
+@@ -157 +180 @@ public final class WandPersistentController {
+-        if !target.isActive {ownsHUD=false;hold=nil;scheduler.stop()}
++        if !target.isActive {ownsHUD=false;hold=nil;if pinnedReviewCell == nil {scheduler.stop()}}
+@@ -164,0 +188 @@ public final class WandPersistentController {
++    public func refreshContext() { onContext?(isOpen) }
+@@ -171,2 +195,3 @@ public final class WandPersistentController {
+-        guard isOpen else {ownsHUD=false;hold=nil;scheduler.stop();onContext?(false);return}
+-        if let current=hold, clock.now-current.received > 1 || clock.now-current.started > 30 {
++        guard isOpen else {ownsHUD=false;hold=nil;if pinnedReviewCell == nil {scheduler.stop()};onContext?(false);return}
++        // A healthy hold has no duration limit. Only missing telemetry expires it.
++        if let current=hold, clock.now-current.received > 1 {
+diff --git a/Sources/ScimitarKit/App/WandSelection.swift b/Sources/ScimitarKit/App/WandSelection.swift
+index cfa1cf5..903f475 100644
+--- a/Sources/ScimitarKit/App/WandSelection.swift
++++ b/Sources/ScimitarKit/App/WandSelection.swift
+@@ -598,0 +599,2 @@ public protocol WandModeControlling: AnyObject {
++    var wandReviewAvailable: Bool { get }
++    func setWandReviewSelection(_ cell: PhysicalCell?)
+@@ -605,0 +608,2 @@ public extension WandModeControlling {
++    var wandReviewAvailable: Bool { false }
++    func setWandReviewSelection(_ cell: PhysicalCell?) {}
+diff --git a/Sources/ScimitarUI/ColorProofHUDView.swift b/Sources/ScimitarUI/ColorProofHUDView.swift
+index d631c74..1537250 100644
+--- a/Sources/ScimitarUI/ColorProofHUDView.swift
++++ b/Sources/ScimitarUI/ColorProofHUDView.swift
+@@ -11,0 +12 @@ final class ModeHUDViewModel: ObservableObject {
++    @Published var wandReviewSelection: PhysicalCell?
+@@ -64,0 +66 @@ final class ModeHUDViewModel: ObservableObject {
++            wandReviewSelection = snapshot.wandReviewSelection
+@@ -413 +415 @@ struct ModeHUDView: View {
+-        .frame(width: extendedWandGrid ? 1035 : 705)
++        .frame(width: extendedWandGrid ? 1049 : 705)
+@@ -425,0 +428,3 @@ struct ModeHUDView: View {
++                        if cell == .wandReviewChanges {
++                            Rectangle().fill(Color.white.opacity(0.35)).frame(width:1,height:64).padding(.horizontal,6)
++                        }
+@@ -447 +452 @@ struct ModeHUDView: View {
+-            let fillColor = Color(cardColors.fill)
++            let fillColor = item.cell.wandReviewMode != nil ? Color(red:0.055,green:0.075,blue:0.10) : Color(cardColors.fill)
+@@ -449 +454 @@ struct ModeHUDView: View {
+-            let foregroundColor = Color(cardColors.foreground)
++            let foregroundColor = item.cell.wandReviewMode != nil ? Color.white : Color(cardColors.foreground)
+@@ -471 +476 @@ struct ModeHUDView: View {
+-                    usesStrongDestinationFill: cardColors.usesStrongDestinationFill,
++                    usesStrongDestinationFill: item.cell.wandReviewMode != nil || cardColors.usesStrongDestinationFill,
+@@ -475,0 +481,10 @@ struct ModeHUDView: View {
++                if item.cell.wandReviewMode != nil {
++                    shape.fill(Color(item.accent).opacity(0.12)).allowsHitTesting(false)
++                    shape.strokeBorder(Color(item.accent).opacity(0.7),lineWidth:1.5).allowsHitTesting(false)
++                }
++                if model.wandReviewSelection == item.cell {
++                    shape.strokeBorder(Color(item.accent),lineWidth:5)
++                        .padding(-5).shadow(color:Color(item.accent).opacity(0.6),radius:6).allowsHitTesting(false)
++                    Image(systemName:"lock.fill").font(.system(size:11,weight:.bold))
++                        .foregroundStyle(Color(item.accent)).frame(maxWidth:.infinity,maxHeight:.infinity,alignment:.topTrailing).padding(7)
++                }
+diff --git a/Sources/ScimitarUI/WandReviewIndicator.swift b/Sources/ScimitarUI/WandReviewIndicator.swift
+new file mode 100644
+index 0000000..4ecff12
+--- /dev/null
++++ b/Sources/ScimitarUI/WandReviewIndicator.swift
+@@ -0,0 +1,33 @@
++import AppKit
++import SwiftUI
++
++/// A non-activating reminder of the wand's selected VS Code review mode.
++/// The controller owns its lifetime; hiding the main HUD does not clear it.
++public final class WandReviewIndicator {
++    private var panel:NSPanel?
++    private var current:String?
++    public init() {}
++    public func update(mode:String?) {
++        guard mode != current else { return }
++        current=mode
++        panel?.orderOut(nil);panel=nil
++        guard let mode, ["changes","files"].contains(mode), let screen=NSScreen.main else{return}
++        let frame=NSRect(x:screen.visibleFrame.midX-90,y:screen.visibleFrame.minY+18,width:180,height:36)
++        let p=NSPanel(contentRect:frame,styleMask:[.borderless,.nonactivatingPanel],backing:.buffered,defer:false)
++        p.isOpaque=false;p.backgroundColor = .clear;p.hasShadow=true;p.level = .floating
++        p.hidesOnDeactivate=false;p.ignoresMouseEvents=true;p.collectionBehavior=[.canJoinAllSpaces,.fullScreenAuxiliary]
++        p.contentView=NSHostingView(rootView:WandReviewIndicatorView(mode:mode))
++        panel=p;p.orderFrontRegardless()
++    }
++}
++struct WandReviewIndicatorView:View {
++    let mode:String
++    var body:some View {
++        Label(mode == "changes" ? "Review changes" : "Stage files",systemImage:mode == "changes" ? "eye" : "doc.on.doc")
++            .font(.system(size:12,weight:.semibold,design:.rounded))
++            .foregroundStyle(mode == "changes" ? Color.green : Color.purple)
++            .padding(.horizontal,14).frame(width:180,height:36)
++            .background(.ultraThinMaterial,in:Capsule())
++            .overlay(Capsule().strokeBorder(.white.opacity(0.28),lineWidth:1))
++    }
++}
+diff --git a/Tests/ScimitarKitTests/WandPersistentControlTests.swift b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+index bd5b665..513a16f 100644
+--- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
++++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+@@ -93,0 +94,29 @@ final class WandPersistentControlTests:XCTestCase {
++    func testHealthyHeldNavigationAndOperationHaveNoDurationLimit() {
++        for phase in [WandPersistentCommand.Phase.navigate, .press] {
++            let id = "long-hold-\(phase.rawValue)"
++            control.handle(.init(phase,id:id))
++            // Zero movement is a live report too; remaining still must not dismiss.
++            for sequence in 1...240 {
++                clock.advance(by:0.5)
++                control.handle(.init(.motion,id:id,sequence:sequence))
++                tick.fire()
++                XCTAssertTrue(control.isOpen,"healthy \(phase) closed after \(sequence / 2) seconds")
++            }
++            XCTAssertTrue(clicks.isEmpty)
++            control.handle(.init(phase == .navigate ? .park : .release,id:id,sequence:241))
++            XCTAssertTrue(control.isOpen)
++        }
++        XCTAssertEqual(clicks,[.switchApp],"only the explicit operation release selects")
++    }
++    func testMissingTelemetryStillClosesAfterLongHealthyHold() {
++        control.handle(.init(.press,id:"long-then-lost"))
++        for sequence in 1...80 {
++            clock.advance(by:0.5)
++            control.handle(.init(.motion,id:"long-then-lost",sequence:sequence))
++            tick.fire()
++        }
++        XCTAssertTrue(control.isOpen)
++        clock.advance(by:1.1);tick.fire()
++        XCTAssertFalse(control.isOpen)
++        XCTAssertTrue(clicks.isEmpty)
++    }
+@@ -129,0 +159,40 @@ final class WandPersistentControlTests:XCTestCase {
++    func testReviewSelectionSurvivesNavigationHidingAndAppSwitch() {
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
++        select(8)
++        control.handle(.init(.activate,id:"select-review-1"))
++        XCTAssertEqual(control.selectedReviewMode,"changes")
++        XCTAssertEqual(control.pinnedReviewCell,.wandReviewChanges)
++        control.handle(.init(.navigate,id:"move-away-1"))
++        control.handle(.init(.motion,id:"move-away-1",sequence:1,x:-24))
++        control.handle(.init(.park,id:"move-away-1",sequence:2))
++        XCTAssertNotEqual(control.focusedCell,.wandReviewChanges)
++        XCTAssertEqual(control.selectedReviewMode,"changes")
++        control.handle(.init(.press,id:"operate-pinned-1"))
++        XCTAssertEqual(control.reviewMode,"changes")
++        control.handle(.init(.release,id:"operate-pinned-1",sequence:1))
++        control.handle(.init(.dismiss,id:"hide-review-1"))
++        XCTAssertFalse(control.isOpen)
++        XCTAssertEqual(control.selectedReviewMode,"changes")
++        var reported=0;control.onContext={_ in reported+=1}
++        clock.advance(by:120);tick.fire()
++        XCTAssertGreaterThan(reported,0,"hidden selected mode keeps its context heartbeat")
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.chrome,displayName:"Chrome",bundleIdentifier:"com.google.Chrome")}
++        XCTAssertNil(control.selectedReviewMode)
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
++        XCTAssertEqual(control.selectedReviewMode,"changes")
++        control.reset(reason:.systemSleep)
++        XCTAssertNil(control.selectedReviewMode)
++        XCTAssertNil(control.pinnedReviewCell)
++    }
++    func testTappingSelectedReviewCardAgainClearsMode() {
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
++        select(16)
++        control.handle(.init(.activate,id:"select-files-1"))
++        XCTAssertEqual(control.selectedReviewMode,"files")
++        control.handle(.init(.activate,id:"select-files-1"))
++        XCTAssertEqual(control.selectedReviewMode,"files","a duplicate datagram cannot toggle the selected mode off")
++        control.handle(.init(.activate,id:"clear-files-1"))
++        XCTAssertNil(control.selectedReviewMode)
++        XCTAssertTrue(clicks.isEmpty)
++    }
++
+diff --git a/Tests/ScimitarUITests/WandPointerFocusTests.swift b/Tests/ScimitarUITests/WandPointerFocusTests.swift
+index 0016241..2478998 100644
+--- a/Tests/ScimitarUITests/WandPointerFocusTests.swift
++++ b/Tests/ScimitarUITests/WandPointerFocusTests.swift
+@@ -117 +117,2 @@ final class WandPointerFocusTests: XCTestCase {
+-        home.pointerFocus = .init(cell:.wandReviewChanges,pullX:0.3)
++        home.pointerFocus = .init(cell:.switchApp,pullX:0.3)
++        home.wandReviewSelection = .wandReviewChanges
+@@ -121 +122 @@ final class WandPointerFocusTests: XCTestCase {
+-        XCTAssertEqual(image.size.width,1035,accuracy:1)
++        XCTAssertEqual(image.size.width,1049,accuracy:1)
