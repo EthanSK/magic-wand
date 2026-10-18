@@ -421,6 +421,20 @@ final class WandReviewGesture {
         }
         return result
     }
+    // The HUD adapter supplies real wheel-sized steps; Better Git still owns staging.
+    func beginDetents(mode:String,now:Double) {
+        _=cancel();files=mode=="files";held=true;started=now;lastInput=now
+    }
+    func detents(_ count:Int32,now:Double)->[Request] {
+        guard held else{return []};lastInput=now
+        guard count != 0 else{return []}
+        let step=count>0 ? "next":"previous"
+        var result:[Request]=[]
+        if id==nil {id=UUID().uuidString;seq=0;direction=step;lastPulse=now;result.append(request("begin",direction:step))}
+        for _ in 0..<min(12,abs(Int(count))) {result.append(request("step",direction:step))}
+        return result
+    }
+    func endDetents(commit:Bool)->[Request] {held=false;lastTap = -100;return finish(commit ? "finish":"cancel")}
     func tick(now:Double)->[Request] {
         guard held,id != nil else{return []}
         if now-lastInput>0.9 {held=false;return finish("cancel")}
@@ -633,7 +647,9 @@ final class WandHeldScroll {
     private var started=0.0,confirmed=0.0,fraction=0.0,moved=false,dropClick=false,droppingClick=false
     // Reuse the existing Bottom tap/hold cutoff; do not add a movement buffer.
     let holdSeconds=0.22
-    init(){
+    private let linesPerDegree:Double
+    init(linesPerDegree:Double=1.6){
+        self.linesPerDegree=linesPerDegree
         var tuning=WandCircularScroll.Tuning()
         // Angular degrees, before sensitivity. Recognise the bend while the
         // wand still travels in its original vertical direction.
@@ -699,7 +715,7 @@ final class WandHeldScroll {
         // continues it. Use the same distance/gain before and after recognition;
         // the returning leg must never leak an opposite signed vertical delta.
         // Only established circular winding can subsequently reverse direction.
-        fraction += (scrollDirection != 0 ? scrollDirection*hypot(dx,dy):vertical)*1.6
+        fraction += (scrollDirection != 0 ? scrollDirection*hypot(dx,dy):vertical)*linesPerDegree
         let lines=Int32(max(-12,min(12,fraction.rounded(.towardZero))))
         fraction -= Double(lines)
         if lines != 0 {moved=true}

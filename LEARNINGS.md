@@ -403,3 +403,7 @@ Short taps, native drag releases and watchdog cancellation are different exits. 
 must not acquire this activation just because they share a cleanup function. Pass the
 resume intent explicitly on physical release; a lost-telemetry timeout only stops input.
 Native lifecycle and device-to-simulator tests cover initially-on and initially-off states.
+
+## Reuse review sessions from wand-only home cards
+
+Keep the two extra review cards out of physical mouse cell enumeration and decoding. Render and navigate the same extended middle row only when VS Code is frontmost. The HUD publishes the selected held review mode; the receiver retains ownership of angular conversion, shared circular continuation and ordered Better Git requests. A physical Middle release finishes immediately; hidden HUD, stale navigation or lost app context cancels. Do not introduce another hold delay after Middle is already qualified. One seven-degree step reuses one review ratchet.

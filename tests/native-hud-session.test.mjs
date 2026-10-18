@@ -22,11 +22,13 @@ func AXIsProcessTrusted()->Bool {true}
 func log(_ parts:Any...) {}
 final class Context {var isActive=false;var onChange:((Bool)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
 final class Controls {var phases:[String]=[];func persistent(_ phase:String,x:Double=0,y:Double=0){phases.append(phase)}}
-final class Review {func cancel()->[Int]{[]};var isHeld=false;func motion(y:Double,now:Double)->[Int]{[]}}
+final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{[]};func endDetents(commit:Bool)->[Int]{committed=commit;return[]}}
 final class Harness {
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter()
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
  var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleSecondTap=false,navigationOpenedHUD=false
+ var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
+ let wandShortcutScroll=WandHeldScroll()
  var appMode:String?,reviewTimer:Timer?,middleTap:Timer?,middleHold:Timer?,hudWatchdog:Timer?
  var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false,hudEntryPressStarted=0.0
  var reviewOriginY=0.0,navX=0.0,navY=0.0,navOriginX=0.0,navOriginY=0.0,operationOriginX=0.0,operationOriginY=0.0,middleX=0.0,middleY=0.0
@@ -38,7 +40,7 @@ final class Harness {
  func sendReview(_ v:[Int]){}
  func releaseButtons(){}
  init(){${callback}}
- ${['closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog'].map(method).join('\n')}
+ ${['finishWandShortcut','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 let h=Harness()
@@ -59,6 +61,11 @@ h.context.set(false);let closed=h.controls.phases.count;settle(0.4)
 precondition(!h.controls.phases.dropFirst(closed).contains("press"),"hidden HUD must cancel delayed click")
 h.middleLastRelease = -100;h.handleMiddle("1");h.handleMiddle("0");h.hudLastUpdate=Date.distantPast;settle(0.3)
 precondition(!h.hudSession && !h.acceptHUDContext && h.controls.phases.last=="dismiss","watchdog clears full session")
+let shortcut=Harness();shortcut.hudSession=true;shortcut.pointerInHUD=true;shortcut.middleOperating=true;shortcut.wandShortcutMode="changes"
+shortcut.handleMiddle("0")
+precondition(shortcut.wandShortcutMode==nil && shortcut.review.committed,"physical Middle release immediately finishes review")
+shortcut.wandShortcutMode="files";shortcut.closeHUD(reason:"disconnect")
+precondition(shortcut.wandShortcutMode==nil && !shortcut.review.committed,"lost HUD cancels review")
 print("PASS: native full close, stale input rejection, delayed click cancellation, fresh reopen, watchdog teardown")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-hud-'));

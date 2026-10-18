@@ -206,3 +206,7 @@ buffer implementation remains disabled; enabling it requires fresh confirmation.
 Ethan confirmed the native pointing felt much smoother on 17 October. Several active
 windows delivered 244–254 samples over about five seconds. A brief 208 Hz trial
 did not increase the received rate; 104 Hz remains selected.
+
+## Wand VS Code home shortcuts
+
+`integrations/agentic-mouse/wand-vscode-review-shortcuts.patch` preserves the incremental addition installed in signed Agentic Mouse 1.0.267 (273). It depends on the earlier local wand integration; apply this zero-context patch with `git apply --unidiff-zero`. The wand home HUD adds Review changes and Stage files immediately after Switch App only with VS Code frontmost; physical mouse grids remain unchanged. A held Middle publishes a short-lived review context. Wand Receiver 1.2.54 reuses its existing straight-to-circle scroll geometry and ordered Better Git review transport; release finishes and lost context cancels. Native input and rendered-layout checks passed. Physical gesture acceptance remains pending.

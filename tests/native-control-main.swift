@@ -327,3 +327,22 @@ precondition(!resumed.tick(now:50.201))
 precondition(!resumed.tick(now:50.349))
 precondition(resumed.tick(now:50.351))
 precondition(!resumed.tick(now:55),"one click per stop")
+
+for mode in ["changes","files"] {
+ let shortcut=WandReviewGesture();shortcut.beginDetents(mode:mode,now:500)
+ let next=shortcut.detents(2,now:500.01)
+ precondition(next.map { $0.phase } == ["begin","step","step"])
+ precondition(next.allSatisfy { $0.mode==mode && $0.direction=="next" })
+ let reverse=shortcut.detents(-1,now:500.02)
+ precondition(reverse.count==1 && reverse[0].direction=="previous")
+ precondition(shortcut.endDetents(commit:true).map { $0.phase } == ["finish"])
+ precondition(shortcut.endDetents(commit:true).isEmpty)
+ shortcut.beginDetents(mode:mode,now:501);_=shortcut.detents(1,now:501.1)
+ precondition(shortcut.endDetents(commit:false).map { $0.phase } == ["cancel"])
+}
+// Review uses the very same straight-to-circle recognizer, at one ratchet per 7 degrees.
+let reviewScroll=WandHeldScroll(linesPerDegree:1.0/7);reviewScroll.begin(now:599)
+var reviewSteps:Int32=0
+for i in 1...71 {reviewSteps+=reviewScroll.sample(y:10,dt:0.01,now:600+Double(i)*0.01)}
+precondition(reviewSteps==1,"one ratchet after crossing seven degrees")
+print("PASS: wand shortcut detents reuse ordered review sessions and existing scroll geometry")
