@@ -7,12 +7,13 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.41",
-    "receiverBuild": "46",
+    "receiver": "1.2.42",
+    "receiverBuild": "47",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "c6948df57d8e26f59aa10b1c590b4d5536f9de8bd6cb1246ed2dea4704a02f1d"
   },
   "status": [
+    "Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.",
     "Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.",
     "Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.",
     "Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.",
@@ -84,7 +85,7 @@
         ],
         [
           "Double tap",
-          "Open the current app’s controls; double tap again to close"
+          "Close the entire HUD"
         ]
       ],
       "notes": [
@@ -312,7 +313,7 @@
     "orientationCompensation": {
       "default": false,
       "experimental": true,
-      "scope": "Native mouse pointing; compensates wrist roll and the loss of horizontal heading sensitivity as the tip rises. Heading correction is capped at 2x. Enable with orientationCompensation in the local feature-flags.json. No new movement buffer.",
+      "scope": "Shared correction for mouse, HUD selection, held actions, review and scrolling. Wrist roll and elevated-tip heading correction run before screen-axis gains, with heading correction capped at 2x. No new movement buffer.",
       "maxHeadingGain": 2
     }
   },

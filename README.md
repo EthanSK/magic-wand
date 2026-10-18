@@ -30,7 +30,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Hold to open, turn, release | Use the outlined card on release |
 | Tap again | Use the outlined card |
 | Hold while open | Hold the card; on some wheel cards, tilt to turn the wheel |
-| Double tap | Open the current app’s controls; double tap again to close |
+| Double tap | Close the entire HUD |
 
 - The outline stops at the edges instead of wrapping.
 - Bottom goes back to the pointer.
@@ -144,6 +144,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.
 - Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.
 - Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.
 - Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.
@@ -151,7 +152,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.41 (46) · device code `wand-e1ce30d7c407` · bridge `c6948df5` · updated 18 October 2026.
+Receiver 1.2.42 (47) · device code `wand-e1ce30d7c407` · bridge `c6948df5` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

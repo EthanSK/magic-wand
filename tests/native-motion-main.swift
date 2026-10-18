@@ -104,3 +104,30 @@ let pole=counts(roll:0,h:20,v:0,held:false,pitch:80*Double.pi/180)
 precondition(abs(pole.0)<abs(highX),"near-vertical correction must stay bounded")
 print("PASS: sensitivity stays bounded near vertical")
 }
+
+// Every angular route uses the very same basis as native pointer movement.
+for signs in [(-1.0,-1.0),(-1.0,1.0),(1.0,-1.0),(1.0,1.0)] {
+ for roll in [0.0,0.7,Double.pi/2,Double.pi,Double.pi*1.5] {
+  for elevation in [0.0,0.4,Double.pi/3] {
+   let f=WandMotionFilter();var c=config;c[11]=signs.0;c[12]=signs.1
+   precondition(f.configure(c));f.orientationCompensation=true
+   f.observeGravity(x:sin(roll)*cos(elevation),y:sin(elevation),z:cos(roll)*cos(elevation))
+   for gain in [1.0,1.4] {
+    var stream=WandAngularStream();let desired=(x:3.0,y:2.0)
+    let a=desired.x*cos(elevation),b=desired.y
+    let bodyX=a*cos(roll)-b*sin(roll),bodyY=a*sin(roll)+b*cos(roll)
+    var rawX=0.0,rawY=0.0
+    for _ in 0..<5 {rawX+=bodyX*signs.0*gain;rawY+=bodyY*signs.1}
+    let got=stream.update(x:rawX,y:rawY,using:f,horizontalGain:gain)
+    precondition(abs(got.x-15*signs.0*gain)<0.00001 && abs(got.y-10*signs.1)<0.00001,"angular stream invariance")
+    f.observeGravity(x:sin(roll+0.2)*cos(elevation),y:sin(elevation),z:cos(roll+0.2)*cos(elevation))
+    let still=stream.update(x:rawX,y:rawY,using:f,horizontalGain:gain)
+    precondition(still.x==got.x && still.y==got.y,"changing wrist angle must not rotate accumulated travel")
+    stream.reset();let zero=stream.update(x:0,y:0,using:f,horizontalGain:gain)
+    precondition(zero.x==0 && zero.y==0)
+    f.observeGravity(x:sin(roll)*cos(elevation),y:sin(elevation),z:cos(roll)*cos(elevation))
+   }
+  }
+ }
+}
+print("PASS: shared HUD, operation and two-axis scroll transforms preserve gains, signs and stationary totals")

@@ -431,15 +431,10 @@ final class WandReviewGesture {
 /// The same pointing calculation used by the Puck, run on the Mac without
 /// queueing or look-ahead. Device sample time controls integration; arrival
 /// time is used only to reject stale state after a transport gap.
-final class WandMotionFilter {
-    struct Result {let x:Int,y:Int;let intent:Bool}
-    private var values:[Double] = []
-    private var fx=0.0,fy=0.0,ix=0.0,iy=0.0,meanSpeed=0.0,intentTime=0.0
-    private var slackX=0.0,slackY=0.0,fractionX=0.0,fractionY=0.0
-    // Experimental roll compensation for the current mount: the shaft is Y,
-    // with Z facing up at neutral. Rotate angular rates before filtering/gain,
-    // never the cursor or already-scaled pixels. No sample queue or new filter.
-    var orientationCompensation=false
+/// One gravity basis for pointer, HUD, review and scrolling angular deltas.
+/// Transform increments before accumulating them: rotating an old total would jump.
+final class WandOrientation {
+    var enabled=false
     private var rollCos=1.0,rollSin=0.0,yawScale=1.0
     func observeGravity(x:Double,y:Double,z:Double) {
         guard x.isFinite,y.isFinite,z.isFinite else{return}
@@ -452,6 +447,39 @@ final class WandMotionFilter {
         // axes perpendicular to the shaft. Undo that before the speed curve.
         // Cap at 2x (60 degrees); heading is ill-conditioned near vertical.
         yawScale=min(2,length/across)
+    }
+    func project(x:Double,y:Double)->(x:Double,y:Double) {
+        guard enabled else{return (x,y)}
+        return ((x*rollCos+y*rollSin)*yawScale,y*rollCos-x*rollSin)
+    }
+}
+
+struct WandAngularStream {
+    private var lastX=0.0,lastY=0.0
+    private(set) var x=0.0,y=0.0
+    mutating func reset(){lastX=0;lastY=0;x=0;y=0}
+    mutating func update(x rawX:Double,y rawY:Double,using filter:WandMotionFilter,horizontalGain:Double=1)->(x:Double,y:Double) {
+        let step=filter.projectSigned(x:(rawX-lastX)/horizontalGain,y:rawY-lastY)
+        lastX=rawX;lastY=rawY;x+=step.x*horizontalGain;y+=step.y
+        return (x,y)
+    }
+}
+
+final class WandMotionFilter {
+    struct Result {let x:Int,y:Int;let intent:Bool}
+    private var values:[Double] = []
+    private var fx=0.0,fy=0.0,ix=0.0,iy=0.0,meanSpeed=0.0,intentTime=0.0
+    private var slackX=0.0,slackY=0.0,fractionX=0.0,fractionY=0.0
+    let orientation=WandOrientation()
+    var orientationCompensation:Bool {
+        get {orientation.enabled}
+        set {orientation.enabled=newValue}
+    }
+    func observeGravity(x:Double,y:Double,z:Double){orientation.observeGravity(x:x,y:y,z:z)}
+    func projectSigned(x:Double,y:Double)->(x:Double,y:Double) {
+        let sx=configured ? values[11] : -1,sy=configured ? values[12] : -1
+        let result=orientation.project(x:x/sx,y:y/sy)
+        return (result.x*sx,result.y*sy)
     }
     var configured:Bool {values.count==13}
     func configure(_ v:[Double])->Bool {
@@ -468,8 +496,8 @@ final class WandMotionFilter {
         if resetState {reset()}
         let v=values,dt=Double(microseconds)/1_000_000
         let bodyX=(Double(rawX)-v[0])/134,bodyY=(Double(rawY)-v[1])/134
-        let x=orientationCompensation ? (bodyX*rollCos+bodyY*rollSin)*yawScale : bodyX
-        let y=orientationCompensation ? bodyY*rollCos-bodyX*rollSin : bodyY
+        let projected=orientation.project(x:bodyX,y:bodyY)
+        let x=projected.x,y=projected.y
         let speed=sqrt(x*x+y*y),blend=max(0,min(1,(speed-v[5])/(v[6]-v[5])))
         let alpha=1-exp(-dt/(0.008-0.006*blend))
         fx+=alpha*(x-fx);fy+=alpha*(y-fy)
