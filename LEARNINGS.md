@@ -364,8 +364,9 @@ press. Keep long second presses as holds. Connection resets still clear the reco
 ## Continue vertical scrolling with either circle direction
 
 Control V2 recognises a bend in rotation-corrected angular movement after a vertical
-start. Keep the first meaningful vertical direction for circular continuation; winding
-must not reverse scrolling. Before the bend, direct vertical scrolling retains its sign.
+start. Map the first U-turn winding to the meaningful starting vertical direction.
+Later consistent opposite winding reverses scrolling without releasing; choosing the
+initial U-turn side alone must not reverse it. Before the bend, direct vertical scrolling retains its sign.
 After recognition, integrate two-axis angular distance, not only vertical displacement,
 so sideways arcs scroll and the returning half of a loop does not reverse the page.
 A pause retains continuation only for the same physical hold. Release, mode cancellation
@@ -373,3 +374,9 @@ and lost button telemetry clear it through the existing held-input lifecycle.
 Use angular rates before pointer sensitivity, ignore still-hand noise and retain the
 captured wheel target. Native traces cover both starts and windings, uneven speed,
 sideways arcs, pauses, release and straight reversals. Physical feel remains unverified.
+
+For winding changes, ignore tangent cusps and require at least three opposite heading
+segments accumulating 30 degrees. Matching-direction segments clear the reversal
+evidence; stale evidence expires. This is shape evidence, not a pointer or wheel buffer.
+Tests cover repeated reversals, both initial sides and vertical directions, uneven
+speed, oval shapes and alternating wobbles.

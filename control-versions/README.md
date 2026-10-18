@@ -8,7 +8,8 @@ installed application and local settings.
 - **Control V1**: `controls-v1.0.0`, receiver 1.2.44 (49). Original Bottom pointer
   gestures and optional flick scrolling.
 - **Control V2**: context-sensitive Bottom hold: scroll over a scroll area, or drag elsewhere.
-  Start scrolling vertically, then circle either way to continue the same direction.
+  Start scrolling vertically, then U-turn either way to continue. Reverse circling
+  to reverse the scrolling direction without releasing.
   Release stops. Standalone flick and circle triggers stay off. Select either version
   from the receiver menu. Bottom double tap globally returns to centred mouse follow.
 
