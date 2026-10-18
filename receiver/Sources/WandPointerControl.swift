@@ -64,13 +64,15 @@ final class WandCircularScroll {
     private var heading:Double?
     private var remainder=0.0,loopLength=0.0,windowPath=0.0,windowTurn=0.0,windowSigned=0.0
     private(set) var active=false
+    /// Accepted heading change for this sample; zero for jitter or a cusp.
+    private(set) var latestTurn=0.0
 
     init(tuning:Tuning=Tuning()){self.tuning=tuning}
 
     func reset(){
         segments.removeAll(keepingCapacity:true);signedTurn=0;absoluteTurn=0;path=0
         accX=0;accY=0;posX=0;posY=0;lastTime=0;heading=nil
-        remainder=0;loopLength=0;windowPath=0;windowTurn=0;windowSigned=0;active=false
+        remainder=0;loopLength=0;windowPath=0;windowTurn=0;windowSigned=0;active=false;latestTurn=0
     }
     /// Forget candidate motion or a stale heading, never the held scroll latch.
     /// Resuming after a pause must not invent a turn between unrelated headings.
@@ -82,6 +84,7 @@ final class WandCircularScroll {
         return false
     }
     func update(dx:Double,dy:Double,now:Double,eligible:Bool)->Result {
+        latestTurn=0
         let none=Result(consumesPointer:false,lines:0)
         guard eligible,dx.isFinite,dy.isFinite,now.isFinite else{reset();return none}
         expire(now:now)
@@ -93,6 +96,7 @@ final class WandCircularScroll {
         let direction=atan2(accY,accX);accX=0;accY=0
         let turn=heading.map{Self.wrap(direction-$0)} ?? 0
         heading=direction
+        latestTurn=abs(turn)<=tuning.maxTurn ? turn:0
         return active ? scroll(turn:turn,length:length) : candidate(turn:turn,length:length,now:now)
     }
     private func candidate(turn:Double,length:Double,now:Double)->Result {
@@ -623,6 +627,8 @@ final class WandHeldScroll {
     private(set) var scrollable=true
     private(set) var circular=false
     private var scrollDirection=0.0,directionTravel=0.0,sampleTime=0.0
+    private var winding=0.0,windingToScroll=0.0,reverseTurn=0.0,reverseAt=0.0
+    private var reverseSegments=0
     private let circle:WandCircularScroll
     private var started=0.0,confirmed=0.0,fraction=0.0,moved=false,dropClick=false,droppingClick=false
     // Reuse the existing Bottom tap/hold cutoff; do not add a movement buffer.
@@ -637,7 +643,7 @@ final class WandHeldScroll {
         tuning.minDuration=0.06;tuning.window=1.0;tuning.idleEnd=0.35
         circle=WandCircularScroll(tuning:tuning)
     }
-    func reset(){active=false;dragging=false;circular=false;scrollDirection=0;directionTravel=0;sampleTime=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
+    func reset(){active=false;dragging=false;circular=false;scrollDirection=0;directionTravel=0;sampleTime=0;winding=0;windingToScroll=0;reverseTurn=0;reverseAt=0;reverseSegments=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
     func begin(now:Double,scrollable:Bool=true){reset();active=true;started=now;confirmed=now;self.scrollable=scrollable}
     // A lease is renewed only by actual button samples, never by a timer.
     // Stop rather than keep a native drag or scroll alive after telemetry loss.
@@ -659,18 +665,36 @@ final class WandHeldScroll {
         guard active,scrollable,now.map({qualified(now:$0)}) ?? true,
               x.isFinite,y.isFinite,dt>0,dt<=0.05 else{return 0}
         sampleTime=now ?? sampleTime+dt
-        guard hypot(x,y)>1 else{circle.expire(now:sampleTime);return 0}
+        guard hypot(x,y)>1 else{circle.expire(now:sampleTime);reverseTurn=0;reverseSegments=0;return 0}
         let dx=x*dt,dy=y*dt,vertical=abs(y)>1 ? dy:0
         // The first vertical movement chooses the direction for this hold.
-        // Circle winding never determines page direction.
+        // The first U-turn maps its winding to that direction; subsequent
+        // consistent opposite winding reverses it without releasing.
         if scrollDirection==0 {
             directionTravel+=vertical
             if abs(directionTravel)>=0.25 {scrollDirection=directionTravel>0 ? 1:-1}
         }
         let result=circle.update(dx:dx,dy:dy,now:sampleTime,eligible:scrollDirection != 0)
-        if result.consumesPointer {circular=true}
+        if result.consumesPointer && !circular {
+            circular=true
+            winding=result.lines<0 ? 1:-1
+            windingToScroll=scrollDirection*winding
+        } else if circular {
+            let turn=circle.latestTurn
+            if turn*winding < -0.005 {
+                if sampleTime-reverseAt>0.25 {reverseTurn=0;reverseSegments=0}
+                reverseAt=sampleTime;reverseTurn+=abs(turn);reverseSegments+=1
+                if reverseTurn>=Double.pi/6 && reverseSegments>=3 {
+                    winding = -winding;scrollDirection=windingToScroll*winding
+                    reverseTurn=0;reverseSegments=0
+                }
+            } else if turn*winding>0.005 {
+                reverseTurn=0;reverseSegments=0
+            }
+        }
         // Before a bend, preserve direct vertical scrolling. After recognition,
-        // use distance around the loop so sideways arcs do not stall or reverse.
+        // use distance around the loop so sideways arcs do not stall. Only
+        // confirmed opposite winding, not the returning half, reverses scrolling.
         fraction += (circular ? scrollDirection*hypot(dx,dy):vertical)*1.6
         let lines=Int32(max(-12,min(12,fraction.rounded(.towardZero))))
         fraction -= Double(lines)

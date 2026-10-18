@@ -247,3 +247,44 @@ let sideways=WandHeldScroll();sideways.begin(now:600)
 for i in 0..<100 {precondition(sideways.sample(x:20,y:0,dt:0.01,now:600.23+Double(i)*0.01)==0)}
 precondition(!sideways.circular,"sideways movement alone cannot choose a scroll direction")
 print("PASS: up/down start, both rough circle windings, sideways arcs, pause/release, straight reversal and no sideways-only start")
+
+
+// A first U-turn may be left or right. Later opposite winding reverses the
+// mapped scroll direction without another press, then reversing again restores it.
+for initialDirection in [-1.0,1.0] {
+ for initialWinding in [-1.0,1.0] {
+  for ovalWidth in [0.65,1.0,1.8] {
+   let gesture=WandHeldScroll();gesture.begin(now:700)
+   var timestamp=700.23,angle=0.0
+   for _ in 0..<40 {timestamp+=0.01;_=gesture.sample(y:initialDirection*20,dt:0.01,now:timestamp)}
+   func circleRun(_ direction:Double)->[Int32] {
+    var outputs:[Int32]=[]
+    for i in 0..<150 {
+     angle+=direction*2*Double.pi*0.01
+     let speed=20*(1+0.2*sin(angle*3))
+     timestamp+=0.01
+     let line=gesture.sample(x:direction*initialWinding*ovalWidth*speed*sin(angle),y:direction*initialDirection*speed*cos(angle),dt:0.01,now:timestamp)
+     if i>60 {outputs.append(line)}
+    }
+    return outputs
+   }
+   let first=circleRun(1)
+   precondition(gesture.circular && first.reduce(0,+)*Int32(initialDirection)>0)
+   let baseHeading=atan2(initialDirection*20*cos(angle),initialWinding*ovalWidth*20*sin(angle))
+   for i in 0..<20 {
+    timestamp+=0.01
+    let heading=baseHeading+(i%2==0 ? 0.08:-0.08)
+    let wobble=gesture.sample(x:20*cos(heading),y:20*sin(heading),dt:0.01,now:timestamp)
+    precondition(Double(wobble)*initialDirection>=0,"alternating small wobbles must not reverse scrolling")
+   }
+   let reversed=circleRun(-1)
+   precondition(reversed.reduce(0,+)*Int32(initialDirection)<0,"reverse circle must reverse scrolling without release")
+   precondition(reversed.allSatisfy{Double($0)*initialDirection<=0},"confirmed reverse stays consistent")
+   let restored=circleRun(1)
+   precondition(restored.reduce(0,+)*Int32(initialDirection)>0,"reverse again restores initial direction")
+   _=gesture.end(now:timestamp+0.01)
+   precondition(gesture.sample(x:20,y:20,dt:0.01)==0)
+  }
+ }
+}
+print("PASS: both initial U-turn sides, up/down starts, rough oval reversal and reversal back without release")

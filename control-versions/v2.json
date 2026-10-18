@@ -4,7 +4,7 @@
   "name": "Control V2",
   "parent": "controls-v1.0.0",
   "receiver": "1.2.45",
-  "bottomHold": "Scroll vertically at the captured target, then circle either way to continue the initial direction; native drag elsewhere. Release stops or drops.",
+  "bottomHold": "Start scrolling vertically at the captured target, U-turn left or right, then reverse circling to reverse scrolling. Native drag elsewhere; release stops or drops.",
   "bottomTap": "Unchanged from V1",
   "disabledGestures": [
     "flick scrolling",
