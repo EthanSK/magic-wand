@@ -57,6 +57,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let context = WandContextListener()
     let recording = WandRecordingState(cache:support.appendingPathComponent("recording-state.json"))
     var pointerInHUD=false, middleOperating=false, middleSecondTap=false
+    var acceptHUDContext=true
+    var navStream=WandAngularStream(),moveStream=WandAngularStream(),legacyHUDStream=WandAngularStream(),scrollStream=WandAngularStream()
     var hudSession=false,hudEntryPress=false
     var hudEntryPressStarted=0.0
     var navX=0.0,navY=0.0,navOriginX=0.0,navOriginY=0.0,operationOriginX=0.0,operationOriginY=0.0
@@ -109,13 +111,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         displayObserver=NotificationCenter.default.addObserver(forName:NSApplication.didChangeScreenParametersNotification,object:nil,queue:.main){[weak self] _ in self?.refreshPointerDisplays()}
         context.onChange = {[weak self] active in
             guard let self,self.ready,!self.restoring else{return}
-            if !active && self.hudSession {self.hudSession=false;self.hudEntryPress=false;self.hudActive=false;self.navX=0;self.navY=0;self.stopHUDWatchdog();self.middleTap?.invalidate();self.middleTap=nil;self.middleHold?.invalidate();self.middleHold=nil;self.pointerInHUD=false;self.middleOperating=false}
-            if active && !self.hudSession {self.cancelCircleScroll();self.hudSession=true;self.navX=0;self.navY=0;self.resumeHUDNavigation()}
-            self.queue("if(typeof setHUDOpen==='function')setHUDOpen("+(active ? "true":"false")+");")
+            if !active {self.closeHUD(reason:"context ended");return}
+            guard self.acceptHUDContext else{return}
+            if !self.hudSession {self.cancelCircleScroll();self.hudSession=true;self.navStream.reset();self.navX=0;self.navY=0;self.resumeHUDNavigation()}
+            self.queue("if(typeof setHUDOpen==='function')setHUDOpen(true);")
         }
         context.start()
         context.onModeChange = {[weak self] mode in
-            guard let self else{return};self.sendReview(self.review.cancel());self.appMode=mode
+            guard let self,self.acceptHUDContext,self.hudSession else{return};self.sendReview(self.review.cancel());self.appMode=mode
             self.queue("global.wandAppMode="+(mode.map{ "'"+$0+"'" } ?? "undefined")+";updateLights();")
             if mode != nil {self.resumeHUDNavigation()}
         }
@@ -412,22 +415,20 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     // MIDDLE latches the HUD, then operates the selected native card.
     var hudDoubleClickInterval:Double {max(0.25,min(0.3,NSEvent.doubleClickInterval))}
-    func handleMove(_ payload:String) {
+    func handleMove(_ payload:String,project:Bool=true) {
         guard !restoring,!scrollActive,AXIsProcessTrusted() else{return}
         let f=payload.split(separator:",",omittingEmptySubsequences:false)
         guard f.count==3,let x=Double(f[1]),let y=Double(f[2]),x.isFinite,y.isFinite,abs(x)<=7_200_000,abs(y)<=7_200_000 else{return}
-        middleX=x/1000;middleY=y/1000
+        guard hudSession else{return}
+        if f[0]=="B" {moveStream.reset()}
+        let point=project ? moveStream.update(x:x/1000,y:y/1000,using:motionFilter) : (x:x/1000,y:y/1000)
+        middleX=point.x;middleY=point.y
         switch f[0] {
         case "B":
             if middleTap != nil {
                 middleTap?.invalidate();middleTap=nil
                 middleHold?.invalidate();middleHold=nil
-                pointerInHUD=false;middleOperating=false;middleSecondTap=false
-                stopHUDWatchdog();releaseButtons()
-                controls.persistent("dismiss")
-                hudSession=false;hudEntryPress=false;hudActive=false
-                queue("setHUDOpen(false);")
-                log("HUD_DOUBLE_CLICK_DISMISSED")
+                closeHUD(reason:"middle double click")
                 return
             }
             guard context.isActive || hudSession else{return}
@@ -449,7 +450,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             else {
                 middleTap=Timer.scheduledTimer(withTimeInterval:hudDoubleClickInterval,repeats:false){[weak self] _ in
                     guard let self else{return};self.middleTap=nil
-                    guard self.context.isActive,!self.restoring else{return}
+                    guard self.hudSession,self.acceptHUDContext,self.context.isActive,!self.restoring else{return}
                     self.controls.persistent("press");self.controls.persistent("release");self.resumeHUDNavigation()
                 }
             }
@@ -457,14 +458,18 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         default:break
         }
     }
-    func enterPointerMode(){
+    /// Close the entire wand session, including delayed clicks and app-specific state.
+    /// Ignore stale positive heartbeats until a fresh physical Middle press opens it.
+    func closeHUD(reason:String) {
+        acceptHUDContext=false
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil
-        queue("global.wandAppMode=undefined;updateLights();")
-        hudSession=false;hudEntryPress=false;hudActive=false;pointerInHUD=false;middleOperating=false
+        hudSession=false;hudEntryPress=false;hudActive=false;pointerInHUD=false;middleOperating=false;navigationOpenedHUD=false
         middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
         stopHUDWatchdog();controls.persistent("dismiss")
-        log("POINTER_MODE_ENTERED")
+        queue("global.wandAppMode=undefined;setHUDOpen(false);updateLights();")
+        log("HUD_CLOSED",reason)
     }
+    func enterPointerMode(){closeHUD(reason:"pointer mode");log("POINTER_MODE_ENTERED")}
     func handleMiddle(_ payload:String){
         guard !restoring,!scrollActive,AXIsProcessTrusted() else{return}
         switch payload.trimmingCharacters(in:.whitespaces){
@@ -473,12 +478,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if now-middleLastRelease<=hudDoubleClickInterval {
                 middleLastRelease = -100;middleDoubleConsumed=true
                 middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
-                controls.persistent("park");stopHUDWatchdog();hudActive=false;pointerInHUD=false;middleOperating=false;hudEntryPress=false
-                if appMode != nil {enterPointerMode();queue("setHUDOpen(false);")}
-                else {hudSession=true;controls.persistent("appSpecific");queue("setMouseFollow(false);setHUDOpen(true);")}
+                closeHUD(reason:"middle double click")
                 return
             }
-            if !hudSession && !context.isActive {
+            if !hudSession {
+                acceptHUDContext=true;navStream.reset();
                 hudSession=true;hudEntryPress=true;hudEntryPressStarted=ProcessInfo.processInfo.systemUptime;navigationOpenedHUD=true;navX=0;navY=0
                 controls.persistent("open");resumeHUDNavigation()
                 queue("setHUDOpen(true);")
@@ -487,7 +491,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             hudSession=true;hudEntryPress=false
             if hudActive {controls.persistent("park");hudActive=false;stopHUDWatchdog()}
             operationOriginX=navX;operationOriginY=navY
-            handleMove("B,0,0")
+            handleMove("B,0,0",project:false)
         case "0":
             if middleDoubleConsumed {middleDoubleConsumed=false;return}
             middleLastRelease=ProcessInfo.processInfo.systemUptime-middlePressedAt<0.14 ? ProcessInfo.processInfo.systemUptime : -100
@@ -502,18 +506,19 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 }
                 return
             }
-            handleMove("E,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000))
+            handleMove("E,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000),project:false)
         default:break
         }
     }
     func handleNavigation(_ payload:String){
         let f=payload.split(separator:",")
         guard f.count==2,let x=Double(f[0]),let y=Double(f[1]),x.isFinite,y.isFinite,abs(x)<=7_200_000,abs(y)<=7_200_000 else{return}
-        navX=x/1000;navY=y/1000
+        let point=navStream.update(x:x/1000,y:y/1000,using:motionFilter)
+        navX=point.x;navY=point.y
         if appMode=="vsCode" && review.isHeld {sendReview(review.motion(y:navY-reviewOriginY,now:ProcessInfo.processInfo.systemUptime));return}
         guard !restoring,!scrollActive,hudSession else{return}
         if pointerInHUD {
-            handleMove("U,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000))
+            handleMove("U,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000),project:false)
         }else if hudActive {
             hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY)
         }
@@ -525,9 +530,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     // MIDDLE opens the grid and directly moves its existing liquid outline.
     func handleHUD(_ payload:String) {
-        guard !restoring,!scrollActive,AXIsProcessTrusted() else{return}
+        guard !restoring,!scrollActive,hudSession,AXIsProcessTrusted() else{return}
         let f=payload.split(separator:",",omittingEmptySubsequences:false)
-        guard f.count==3,let x=Double(f[1]),let y=Double(f[2]),x.isFinite,y.isFinite,abs(x)<=7_200_000,abs(y)<=7_200_000 else{return}
+        guard f.count==3,let rawX=Double(f[1]),let rawY=Double(f[2]),rawX.isFinite,rawY.isFinite,abs(rawX)<=7_200_000,abs(rawY)<=7_200_000 else{return}
+        if f[0]=="B" {legacyHUDStream.reset()}
+        let point=legacyHUDStream.update(x:rawX,y:rawY,using:motionFilter)
+        let x=point.x,y=point.y
         switch f[0] {
         case "B":
             middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
@@ -550,10 +558,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         hudWatchdog=Timer.scheduledTimer(withTimeInterval:0.25,repeats:true){[weak self] timer in
             guard let self else{timer.invalidate();return}
             if Date().timeIntervalSince(self.hudLastUpdate)>0.8 {
-                self.middleHold?.invalidate();self.middleHold=nil
-                self.middleTap?.invalidate();self.middleTap=nil
-                self.controls.persistent("dismiss");self.hudActive=false
-                self.pointerInHUD=false;self.middleOperating=false;timer.invalidate()
+                self.closeHUD(reason:"navigation timed out");timer.invalidate()
             }
         }
     }
@@ -563,7 +568,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func handleScroll(_ payload:String){
         guard !restoring,AXIsProcessTrusted() else{return}
         let f=payload.split(separator:",",omittingEmptySubsequences:false)
-        guard f.count==3,let x=Double(f[1]),let y=Double(f[2]),x.isFinite,y.isFinite,abs(x)<=7_200_000,abs(y)<=7_200_000 else{return}
+        guard f.count==3,let rawX=Double(f[1]),let rawY=Double(f[2]),rawX.isFinite,rawY.isFinite,abs(rawX)<=7_200_000,abs(rawY)<=7_200_000 else{return}
+        if f[0]=="B" {scrollStream.reset()}
+        let point=scrollStream.update(x:rawX,y:rawY,using:motionFilter,horizontalGain:1.4)
+        let x=point.x,y=point.y
         switch f[0]{
         case "B":
             sendReview(review.cancel());cancelCircleScroll();finishScroll();hudEntryPress=false;middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil

@@ -219,8 +219,23 @@ roll/elevation/speed/direction/held combinations, nonzero bias, flag-off equival
 stationary input, invalid acceleration and the near-vertical fallback. It does
 not prove physical acceptance or arbitrary three-dimensional tracking. Retain
 the last usable basis during obvious acceleration shocks or when the shaft is
-nearly vertical. This feature changes native mouse pointing only; HUD and chord
-scrolling still use their existing device axes.
+nearly vertical. Pointer, HUD navigation, held card operations, review and chord scrolling
+share this basis. UART navigation and scrolling contain cumulative angular coordinates:
+transform each new increment, not the entire historical total, or changing wrist angle
+rotates old travel and jumps the selection. Undo transport signs and horizontal scroll
+boost before projection, then restore those screen-space settings afterward.
+
+## Closing a wand HUD is a session boundary
+
+A hidden panel must not retain navigation, an app-specific mode, a delayed card click or
+a held action. Use one complete close path for Middle double-click, pointer takeover,
+context loss and navigation timeout. The old timeout dismissed the panel but retained
+the receiver session, while the old double-click path entered app-specific mode.
+Reject positive context heartbeats after explicit close until a fresh Middle press:
+a queued heartbeat is not permission to reopen the HUD. Native tests compile the actual
+receiver methods against inert transports and verify complete close, late-input rejection,
+delayed-click cancellation and deliberate reopening. The reported extra Codex window
+has not been reproduced by those synthetic tests; its exact trigger remains unproven.
 
 ## Detect rest at the sleeping sensor rate
 
