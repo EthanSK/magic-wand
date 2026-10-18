@@ -102,3 +102,11 @@ Report any check the browser tool can’t do, such as real multitouch, rather th
 - Preserve `prototype-v1.0.0` as the immutable original-hardware baseline. Read
   `prototypes/README.md` before changing prototype profiles; later hardware gets a separate
   profile so returning to V1 does not lose its tuned behaviour.
+
+## Control versions
+
+- Before moving on to the next control version, keep the current state and snapshot it.
+  Preserve the matching device code, receiver, settings and controls together so we can
+  go back without losing the behavior. Control versions are separate from hardware prototypes.
+- When a new control version changes only Bottom, keep every other control unchanged.
+  Use one runtime version selector; never silently redefine an older version or move its tag.
