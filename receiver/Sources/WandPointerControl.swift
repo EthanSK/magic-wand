@@ -733,3 +733,41 @@ final class WandHeldScroll {
         return false
     }
 }
+
+
+/// Ethan's "eyes mode" = Review changes; "bang mode" / "!" = Stage files.
+/// This only turns a circular wand path into ratchets. Better Git owns preview/staging.
+/// Screen coordinates: positive Y points down, so positive winding is clockwise.
+struct WandReviewCircle {
+    private var heading:Double?,lastTime=0.0,turn=0.0,arc=0.0
+    private var candidate=0,segments=0,direction=0
+    mutating func reset(){self=Self()}
+    mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
+        guard dx.isFinite,dy.isFinite,now.isFinite else{reset();return 0}
+        let distance=hypot(dx,dy)
+        guard distance>=0.015 else{return 0}
+        if lastTime>0 && now-lastTime>0.35 {reset()};lastTime=now
+        guard distance<30 else{reset();return 0}
+        let next=atan2(dy,dx);defer{heading=next}
+        guard let previous=heading else{return 0}
+        var delta=next-previous
+        while delta>Double.pi{delta-=2*Double.pi}
+        while delta < -Double.pi{delta+=2*Double.pi}
+        // A sharp cusp is a changed stroke, not evidence of a circle.
+        if abs(delta)>2.35 {turn=0;segments=0;candidate=0;arc=0;return 0}
+        if abs(delta)>0.008 {
+            let sign=delta>0 ? 1 : -1
+            if candidate != sign {candidate=sign;turn=0;segments=0}
+            turn+=abs(delta);segments+=1
+            if direction != sign {
+                arc=0
+                guard turn>=Double.pi/6 && segments>=3 else{return 0}
+                direction=sign
+            }
+        }
+        guard direction != 0 else{return 0}
+        arc+=distance
+        let count=min(6,Int(arc/7));arc-=Double(count)*7
+        return Int32(count*direction)
+    }
+}

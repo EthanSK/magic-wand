@@ -12,7 +12,7 @@ const { createWand, read } = require("./harness.cjs");
 const manifest = JSON.parse(read("wand.json"));
 const layout = JSON.parse(read("data/agentic-mouse-hud.json"));
 
-function setup() {
+function setup({legacy=false}={}) {
   let pipeline = null;
   const w = createWand({ bridge: "fragments", onEvents: (events) => pipeline && pipeline.handle(events) });
   const mac = new MacScreen();
@@ -26,7 +26,7 @@ function setup() {
     onHud: (state) => { hud = state; },
   });
   w.calibrate();
-  w.loadBridge();
+  if(legacy)w.device.evaluate(read("tests/fixtures/control-v2-bridge.js"));else w.loadBridge();
   pipeline.receiver.ready();
   w.advance(0.05);
   /** Turn the wand at a steady rate; +yaw is right and +pitch is down, in degrees. */
@@ -145,11 +145,11 @@ test("HIGH clicks once after settling, a tap exits; tap then hold drags and rest
   assert(s.w.ctx.moveLatched,"a drop restores prior HIGH");
   s.press("D2",.12);s.w.advance(.1);assert(s.hud.open);
   s.press("D1",.06);s.w.advance(.1);
-  assert(!s.hud.open&&s.w.ctx.moveLatched,"Bottom leaves HUD for pointer follow");
+  assert(s.hud.open&&s.w.ctx.hudOpen,"Bottom leaves the Middle HUD open");
 });
 
-test("Bottom + Middle scrolls both axes as separate wheel events and never clicks", () => {
-  const s = setup();
+test("Legacy Bottom + Middle scrolls both axes as separate wheel events and never clicks", () => {
+  const s = setup({legacy:true});
   s.macEvents.length = 0;
   s.w.edge("D1", 0); s.w.advance(0.03); s.w.edge("D2", 0); s.w.advance(0.1);
   assert.deepEqual(s.w.colors(), [0, 1, 1], "scrolling is cyan");
@@ -205,7 +205,7 @@ test("Bottom double tap recenters but a held second press remains a drag", () =>
  s.w.edge('D1',1);s.w.advance(0.05);assert(!s.mac.buttonDown);
 });
 
-test('Bottom double tap exits any prior mode into centred mouse follow',()=>{
+test('Bottom double tap centres mouse while preserving the independent HUD',()=>{
  for(const mode of ['off','mouse','hud','scroll']) {
   const s=setup();
   if(mode==='mouse'){s.press('D1',.06);s.w.advance(.5);}
@@ -213,16 +213,16 @@ test('Bottom double tap exits any prior mode into centred mouse follow',()=>{
   if(mode==='scroll'){s.pipeline.receiver.scrollActive=true;}
   s.press('D1',.06);s.w.advance(.07);s.press('D1',.06);s.w.advance(.1);
   assert(s.w.ctx.moveLatched,mode+' enables follow');
-  assert(!s.pipeline.receiver.hudSession && !s.pipeline.receiver.scrollActive,mode+' exits previous mode');
+  assert.equal(s.pipeline.receiver.hudSession,mode==='hud',mode+' preserves the Middle HUD');assert(!s.pipeline.receiver.scrollActive);
   const p=s.mac.location();assert.equal(p.x,s.mac.width/2);assert.equal(p.y,s.mac.height/2);
   assert.equal(s.pipeline.receiver.buttons,0);
  }
 });
 
 
-test('releasing a page-scroll chord enables mouse follow even when it started off',()=>{
+test('Legacy releasing a page-scroll chord enables mouse follow even when it started off',()=>{
  for(const prior of [false,true]) {
-  const s=setup();
+  const s=setup({legacy:true});
   if(prior){s.press('D1',.06);s.w.advance(.4);}
   s.w.edge('D1',0);s.w.advance(.03);s.w.edge('D2',0);s.w.advance(.15);
   s.turn(0,8,.4);s.w.edge('D1',1);s.w.edge('D2',1);s.w.advance(.3);

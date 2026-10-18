@@ -6,7 +6,7 @@ const assert = require("node:assert/strict");
 const { createWand } = require("./harness.cjs");
 
 for (const bridge of ["readable", "fragments"]) {
-  test(`exclusive modes, lights, calibration and guards (${bridge} bridge)`, () => {
+  test(`independent modes, lights, calibration and guards (${bridge} bridge)`, () => {
     const w = createWand({ bridge });
     const { ctx, frames, lines } = w;
     w.calibrate();
@@ -81,34 +81,18 @@ for (const bridge of ["readable", "fragments"]) {
     assert(!ctx.moveLatched, "single click exits latched follow");
     w.advance(0.3);
 
-    // Exclusive HUD and pointer modes.
-    w.tap();
-    assert(ctx.moveLatched);
-    middleTap();
-    assert(ctx.hudOpen && !ctx.moveLatched, "HUD entry stops pointer follow");
-    frames.length = 0; lines.length = 0;
-    w.edge("D1", 0);
-    assert(!ctx.hudOpen && ctx.moveLatched, "bottom down leaves the HUD and starts follow");
-    assert(lines.includes("@POINTER_MODE"));
-    w.edge("D1", 1); w.advance(0.3);
-    assert.equal(frames.filter((f) => f[2] === 1).length, 0, "HUD to pointer tap enters without a click");
-    frames.length = 0;
-    w.tap(); w.advance(0.3);
-    assert.equal(frames.filter((f) => f[2] === 1).length, 0, "later bottom tap exits HIGH without clicking");
-    assert(!ctx.moveLatched);
-    middleTap();
-    assert(ctx.hudOpen && !ctx.moveLatched);
-
-    // Reapplying the bridge (a reconnect) never duplicates watches; the scroll chord still wins.
-    const watchers = w.device.watchCount();
-    w.loadBridge();
-    assert.equal(w.device.watchCount(), watchers, "reconnect never duplicates mode watchers");
-    frames.length = 0;
-    w.edge("D1", 0); w.advance(0.03); w.edge("D2", 0);
-    assert(ctx.scrollHeld, "two-button chord wins");
-    w.edge("D1", 1); w.edge("D2", 1);
-    assert(!ctx.scrollHeld);
-
+    // The host controls HUD visibility; firmware Middle cannot change pointer follow.
+    w.tap(); assert(ctx.moveLatched);middleTap();assert(ctx.moveLatched);
+    ctx.setHUDOpen(true);assert(ctx.moveLatched && ctx.hudOpen);
+    w.edge("D1",0);w.advance(.3);w.edge("D1",1);
+    assert(ctx.hudOpen,"Bottom never dismisses the HUD");
+    ctx.setMouseFollow(false);assert(ctx.hudOpen);
+    ctx.setHUDOpen(false);
+    const watchers=w.device.watchCount();w.loadBridge();
+    assert.equal(w.device.watchCount(),watchers);
+    w.edge("D1",0);w.advance(.03);w.edge("D2",0);
+    assert(!ctx.scrollHeld,"independent buttons do not become a chord");
+    w.edge("D1",1);w.edge("D2",1);
     // Light priority.
     ctx.setHUDOpen(false); ctx.moveLatched = false; ctx.updateLights();
     assert.deepEqual(w.colors(), [0, 0, 0]);
@@ -116,7 +100,7 @@ for (const bridge of ["readable", "fragments"]) {
     assert.deepEqual(w.colors(), [1, 0, 0], "idle recording stays red after speech release");
     ctx.moveLatched = true; ctx.updateLights();
     assert.deepEqual(w.colors(), [0, 0, 1], "pointer blue overrides recording red");
-    ctx.setHUDOpen(true); ctx.updateLights();
+    ctx.moveLatched=false;ctx.setHUDOpen(true); ctx.updateLights();
     assert.deepEqual(w.colors(), [1, 0.2, 0], "HUD orange overrides recording red");
     ctx.scrollHeld = true; ctx.updateLights();
     assert.deepEqual(w.colors(), [0, 1, 1], "scroll cyan overrides recording red");
@@ -211,12 +195,10 @@ for (const bridge of ["readable", "fragments"]) {
     paced(0.03);
     assert(moved());
 
-    prepareIdle(); w.edge("D1", 0); w.advance(0.02); w.edge("D2", 0);
-    assert(ctx.scrollHeld);
-    paced(0.03);
-    assert.equal(ctx.scrollX, 0, "scroll chord press has no scroll kick");
-    paced(0.09);
-    assert.notEqual(ctx.scrollX, 0, "two-axis scrolling resumes after settling");
-    w.edge("D1", 1); w.edge("D2", 1);
+    prepareIdle();w.edge("D1",0);w.advance(.02);w.edge("D2",0);w.advance(.1);
+    assert(!ctx.scrollHeld,"Bottom and Middle remain independent");
+    assert(lines.some(l=>l==="@MIDDLE 1"),"Middle still reaches its owner");
+    w.edge("D1",1);w.edge("D2",1);
+
   });
 }

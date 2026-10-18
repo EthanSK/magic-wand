@@ -37,7 +37,8 @@ test("button pins and pull-ups match the device code", () => {
   assert.match(device, new RegExp(`var MOVE_PIN=${pins.bottom};`));
   for (const pin of Object.values(pins)) assert.match(device, new RegExp(`pinMode\\(${pin},"input_pullup"\\)`));
   assert.deepEqual(manifest.buttons.map((button) => button.key), ["T", "M", "B"]);
-  assert.deepEqual(manifest.chords[0].buttons, ["bottom", "middle"]);
+  assert.deepEqual(manifest.chords, [], "current independent controls have no combined-button chord");
+  assert.match(bridge,/checkScrollChord\.replaceWith\(function\(\)\{return false;\}\)/);
 });
 
 test("tuning matches the running device code and the receiver", () => {
@@ -71,7 +72,7 @@ test("tuning matches the running device code and the receiver", () => {
   assert.equal(Math.round(Number(guard[1]) * 1000), t.releaseGuardMs);
   assert.equal(Math.round(Number(guard[2]) * 1000), t.pressGuardMs);
   assert.equal(Math.round(number(/wandMotionReadyAt=lastTime\+([\d.]+)/, bridge, "cold settle") * 1000), t.coldSettleMs);
-  assert.equal(number(/if\(!moveLatched&&!hudOpen&&!scrollHeld\)global\.wandPowerDownGyro\(\);\s*\},(\d+)\)/, bridge, "sensor grace"), t.sensorIdleGraceMs);
+  assert.equal(number(/if\(!moveLatched&&!hudOpen&&!scrollHeld&&!global\.wandReviewTracking\)global\.wandPowerDownGyro\(\);\s*\},(\d+)\)/, bridge, "sensor grace"), t.sensorIdleGraceMs);
   assert.equal(number(/NRF\.setConnectionInterval\((\d+)\)/, device, "connection interval"), t.bluetoothIntervalMs);
   assert.equal(number(/if\(hudHeld\)middlePress\(\);\},(\d+)\)/, device, "middle delay"), t.middleReportDelayMs);
   assert.equal(number(/hudTimer=setInterval\(function\(\)\{hudReport\(\);\},(\d+)\)/, device, "HUD report"), t.reportIntervalMs);

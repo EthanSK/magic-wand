@@ -3,14 +3,14 @@
 // so "sensor off" checks wait for it.
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { createWand } = require("./harness.cjs");
+const { createWand, read } = require("./harness.cjs");
 
-for (const bridge of ["readable", "fragments"]) {
-  test(`scroll chord in both press orders, diagonals and clean release (${bridge} bridge)`, () => {
+for (const bridge of [false]) {
+  test(`legacy scroll chord in both press orders, diagonals and clean release (${bridge} bridge)`, () => {
     const w = createWand({ bridge });
     const { ctx, frames, lines } = w;
     w.calibrate();
-    w.loadBridge();
+    w.device.evaluate(read("tests/fixtures/control-v2-bridge.js")); // Frozen pre-independent control version.
     const grace = () => w.advance(1.01);
 
     function chord(first, priorFollow = false) {

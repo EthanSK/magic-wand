@@ -29,7 +29,8 @@ final class Harness {
  var selectedReviewMode:String?,hiddenReviewOperating=false,hiddenReviewPending=false,screenshotActive=false,screenshotHUD=false
  var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleSecondTap=false,navigationOpenedHUD=false
  var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
- let wandShortcutScroll=WandHeldScroll()
+ var wandShortcutCircle=WandReviewCircle();var middleReviewExit=false
+ let pointerRouter=WandPointerRouter()
  var appMode:String?,reviewTimer:Timer?,middleTap:Timer?,middleHold:Timer?,hudWatchdog:Timer?
  var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false,hudEntryPressStarted=0.0
  var reviewOriginY=0.0,navX=0.0,navY=0.0,navOriginX=0.0,navOriginY=0.0,operationOriginX=0.0,operationOriginY=0.0,middleX=0.0,middleY=0.0
@@ -74,9 +75,11 @@ precondition(!screenshot.hudSession && screenshot.screenshotHUD)
 precondition(!screenshot.controls.phases.contains("dismiss"))
 screenshot.setScreenshotActive(false)
 precondition(screenshot.hudSession && screenshot.hudActive && !screenshot.screenshotHUD)
-let pinned=Harness();pinned.selectedReviewMode="changes";pinned.handleMiddle("1");settle(0.25)
-precondition(pinned.hiddenReviewOperating && pinned.wandShortcutMode=="changes" && !pinned.hudSession)
-pinned.handleMiddle("0");precondition(!pinned.hiddenReviewOperating && pinned.wandShortcutMode==nil && !pinned.hudSession)
+let pinned=Harness();pinned.selectedReviewMode="changes";pinned.wandShortcutMode="changes";pinned.handleMiddle("1")
+precondition(pinned.selectedReviewMode==nil && pinned.wandShortcutMode==nil && pinned.controls.phases.last=="exitReview")
+pinned.handleMiddle("0");precondition(!pinned.hudSession)
+let independent=Harness();independent.hudSession=true;independent.enterPointerMode();precondition(independent.hudSession,"Bottom leaves Middle HUD alone")
+
 print("PASS: screenshot HUD preservation, hidden review hold, native full close, stale input rejection, delayed click cancellation, fresh reopen, watchdog teardown")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-hud-'));
@@ -168,6 +171,8 @@ struct Context {var isActive=false}
 final class Harness {
  var loadingBridge=false,loadingRuntime=false,bridgeLoadFailed=false,ready=false,lightMode="",generation=0,rawLastArrival=0.0,hudSession=false
  let commands=["PROGRAM"],modeBridge="bridge",context=Context(),motionFilter=Filter()
+ var selectedReviewMode:String?
+ func setWandShortcut(_ mode:String){}
  var sent:[String]=[];var loads=0
  func queue(_ value:String){sent.append(value)}
  func loadModeBridge(){loads+=1;loadingBridge=true}

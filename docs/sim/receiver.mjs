@@ -232,7 +232,7 @@ export class WandReceiverModel {
       this.bottomHeld = payload.trim() === "1";
       if(this.bottomHeld)this.recenterSuppressButtons=false;
       const recenter=this.recenterGesture.edge(this.bottomHeld,this.timers.now());
-      if(recenter){this.closeHUD();this.cancelCircleScroll();this.finishScroll();this.releaseButtons();this.recenterSuppressButtons=true;this.bottomHeld=false;this.pointerRouter.bottom(false);this.dwell.follow(true);this.scheduleDwell();this.mac.mouse("move",{x:this.mac.width/2,y:this.mac.height/2});this.queue("stopScroll();stopPointerTrack();scrollSuppress=false;global.wandAppMode=undefined;global.wandCircleScrolling=false;setHUDOpen(false);setMouseFollow(true);");return;}
+      if(recenter){this.cancelCircleScroll();this.finishScroll();this.releaseButtons();this.recenterSuppressButtons=true;this.bottomHeld=false;this.pointerRouter.bottom(false);this.dwell.follow(true);this.scheduleDwell();this.mac.mouse("move",{x:this.mac.width/2,y:this.mac.height/2});this.queue("stopScroll();stopPointerTrack();scrollSuppress=false;global.wandCircleScrolling=false;setMouseFollow(true);");return;}
       const endedScroll=!this.bottomHeld && this.pointerRouter.circle.active;
       this.dwell.reset();
       this.scheduleDwell();
@@ -247,14 +247,12 @@ export class WandReceiverModel {
       }
     }
     if ((payload = at("@MIDDLE ")) !== null) {
-      this.cancelCircleScroll();
       this.handleMiddle(payload);
     }
     if ((payload = at("@NAV ")) !== null) this.handleNavigation(payload);
     if ((payload = at("@SCROLL ")) !== null) this.handleScroll(payload);
     if ((payload = at("@MOVE ")) !== null) this.handleMove(payload);
     if ((payload = at("@STT ")) !== null) {
-      this.cancelCircleScroll();
       const value = payload.trim();
       if (value === "0" || value === "1") this.controls.speech(value === "1");
     }
@@ -342,7 +340,7 @@ export class WandReceiverModel {
     this.queue("global.wandAppMode=undefined;setHUDOpen(false);updateLights();");
   }
 
-  enterPointerMode() { this.closeHUD(); }
+  enterPointerMode() { /* Bottom does not own the Middle HUD. */ }
 
   handleMiddle(payload) {
     if (this.scrollActive) return;
@@ -548,7 +546,7 @@ export class WandReceiverModel {
       x,
       y,
       b,
-      this.hudSession,
+      false,
       this.timers.now(),
     );
     this.dwell.move(

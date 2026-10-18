@@ -28,8 +28,8 @@ w.frames.length=0;w.edge('D1',0);w.advance(.3);w.edge('D1',1);w.advance(.1);
 w.tap();assert(!w.ctx.moveLatched,'single tap during pause exits');
 w.advance(1.1);assert(!w.ctx.moveLatched,'no delayed resurrection after exit');
 w.tap();w.advance(.9);w.edge('D1',0);w.advance(.3);w.edge('D1',1);
-w.tap('D2');assert(w.ctx.hudOpen&&!w.ctx.moveLatched,'HUD switch during pause wins');
-w.advance(1.1);assert(w.ctx.hudOpen&&!w.ctx.moveLatched,'pause never restores pointer over HUD');
+w.tap('D2');w.ctx.setHUDOpen(true);assert(w.ctx.hudOpen&&w.ctx.moveLatched,'HUD leaves HIGH armed');
+w.advance(1.1);assert(w.ctx.hudOpen&&w.ctx.moveLatched,'HUD and HIGH remain independent');
 
 const drag=fresh();drag.tap();drag.advance(.9);drag.tap();drag.advance(.05);drag.edge('D1',0);drag.advance(.3);
 assert(drag.ctx.dragging,'tap then hold remains a real drag');

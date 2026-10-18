@@ -433,3 +433,10 @@ cards bright and retain their non-activating badge when the main HUD is visible 
 hidden. Anchor that badge above the recorder's actual floating window when available;
 exclude the normal Agent Flow Dashboard from placement and leave room when hidden.
 Rendered SwiftUI checks do not establish physical wand acceptance.
+
+
+## Independent pointer, review and speech lanes
+
+Review changes is Ethan's “eyes mode”; Stage files is his “bang mode” / “!” whole-file selection. Keep those searchable names beside the adapter, not as a new implementation of Better Git. Review selection hides the main HUD while preserving the selected-mode heartbeat. Circle input is separate from Bottom's scroll recognizer: screen-clockwise produces next ratchets, anticlockwise previous, only with VS Code frontmost and Bottom released. Idle selected sessions send existing keepalive packets rather than silently expiring after a pause. Middle exits and finishes the existing Better Git selection; Bottom/recenter and speech do not clear it. Missing context or app focus stops review input.
+
+Developer patches must queue complete statements individually with quiet-console prefixes and installation pacing. One unpaced multiline UART command can lose parser bytes even when a later ready marker prints. Verify both the registered button callback and the sensor callback after a patch; a matching source hash alone is insufficient proof of intact callbacks.
