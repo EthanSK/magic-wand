@@ -46,18 +46,15 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap from off | Enter high-sensitivity follow without clicking |
 | Stop after moving in HIGH | Click once after a 450 ms pause |
 | Tap while following | Stop following without clicking |
-| Hold, turn, release | Aim at one-third speed; release clicks once |
-| Hold while following | Aim at low sensitivity; release clicks, pauses 300 ms, then resumes HIGH |
-| Tap, then hold | Drag with the actual mouse button held; release drops |
+| Hold over a scroll area | Move up or down to scroll; release to stop |
+| Hold elsewhere | Drag with the mouse button down; release to drop |
 | Double tap | Recenter the pointer on the main screen and keep following |
 
-- HIGH is released-button follow. LOW is a plain Bottom hold at one-third speed.
-- Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Once recognized, the pointer stays fixed through pauses and straight motion until release; release stops without an endpoint click.
-- Leave the wand idle on the desk for about two seconds to learn its resting pose. Picking it up can then enter HIGH automatically; setting it down stops following after sustained desk confirmation.
-- Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.
-- Desk detection is an IMU estimate, not a touch sensor; a very still supported hand can resemble a desk. The browser demo covers the buttons, not physical desk detection.
+- Control V2 keeps short taps unchanged. The existing 220 ms cutoff separates a tap from a hold.
+- The target under the pointer at press chooses scrolling or native dragging. Scrolling stays in that area until release.
+- Flick and circular-scroll recognition are disabled in V2. Control V1 retains the earlier gestures.
+- VS Code app mode retains Bottom review controls.
 - Middle switches to the HUD. The pointer stays within real display edges.
-- Optional Flick to scroll: in HIGH with Bottom released, flick upward then lower slowly to scroll up. Enable it in Wand Receiver’s menu-bar Options menu.
 
 **Bottom + Middle** · Scroll
 
@@ -83,15 +80,21 @@ The website runs the wand’s own device code in your browser, with the Mac side
 
 ## User options
 
-Wand Receiver is a background Mac app. Its wand icon in the menu bar has an **Options** menu:
+Wand Receiver is a background Mac app. Its wand icon in the menu bar provides:
 
-- **Flick to scroll** (off by default): in HIGH mouse mode with Bottom released, flick up, then
-  lower the wand slowly to scroll up. Scrolling starts during the first slow return; no repeated
-  circles or buttons are needed. The pointer remains at the scroll target during the gesture.
-- **Rotation-independent controls** keeps screen directions upright while rotating the wand.
+- **Control version → V2 · Hold to scroll**: hold Bottom over a scroll area and move up
+  or down to scroll. Over a title bar or other non-scroll target, the same hold drags
+  with the native mouse button down. Release stops scrolling or drops the object.
+  Short taps retain their existing mouse behavior. The target is captured at press.
+- **Control version → V1 · Pointer** restores the previous Bottom gestures. The exact
+  pre-V2 implementation is also saved at `controls-v1.0.0`; see `control-versions/`.
+- **Options → Rotation-independent controls** keeps screen directions upright while
+  rotating the wand. Flick scrolling is available only in Control V1.
 
-These switches save locally and take effect without reconnecting. The original held-circle and
-Bottom + Middle scrolling remain available. The browser demo does not simulate Flick to scroll.
+The existing 220 ms tap-versus-hold cutoff is unchanged. No movement buffer is added.
+Accessibility identifies scroll areas; custom interfaces that do not expose one fall
+back to native dragging. HUD, speech, VS Code review and two-button scrolling are unchanged.
+The browser demo still shows Control V1; V2 needs the native receiver.
 
 ## How it works
 
@@ -159,6 +162,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Control V2 adds context-sensitive Bottom holding: scroll over a scroll area, otherwise drag. Control V1 is preserved and selectable. Physical acceptance is pending.
 - Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling and recording/mouse light alternation pass automated checks; physical gesture acceptance is pending.
 - Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.
 - Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.
@@ -168,7 +172,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.44 (49) · device code `wand-e1ce30d7c407` · bridge `52a4617b` · updated 18 October 2026.
+Receiver 1.2.45 (50) · device code `wand-e1ce30d7c407` · bridge `52a4617b` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

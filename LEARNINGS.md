@@ -314,3 +314,20 @@ it off. A single brief spike or slow pointing alone must not start scrolling.
 The Options menu and file refresh must share one flag store and preserve unrelated keys.
 Recording/mouse light alternation runs on one device-side timer only while both states hold;
 leaving either state clears it. Do not send Bluetooth packets for every blink.
+
+
+## Control V2 captures its target and preserves short taps
+
+Control versions are distinct from hardware prototypes. V1 retains the prior exact source tag
+and local installed snapshot; V2 changes Bottom holds while keeping its short taps. The
+existing 220 ms tap/hold cutoff separates these paths. Never let the firmware's legacy hold
+click or drag reports leak into the native V2 path. A raw zero-button frame between release
+and the queued firmware click must not clear suppression; wait for that click's down/up.
+
+Capture the Accessibility target at press. Check only its ancestry for a scroll area; a
+scroll view elsewhere in the window does not make a title bar scrollable. Perform the bounded
+Accessibility lookup off the motion thread. Use the captured pointer position for wheel
+updates until release. Non-scroll targets use a normal mouse-down, drag and mouse-up; unknown
+custom Accessibility structures fall back to that native drag. No wheel is posted after
+release and no synthetic click follows a used hold. Cancelled and switched-version sessions
+must release any held native button. Flick/circle recognition stays disabled throughout V2.
