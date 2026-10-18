@@ -1,13 +1,13 @@
 diff --git a/Resources/Info.plist b/Resources/Info.plist
-index c3c09e1..4d14c60 100644
+index c3c09e1..ddc54cc 100644
 --- a/Resources/Info.plist
 +++ b/Resources/Info.plist
 @@ -21 +21 @@
 -	<string>1.0.267</string>
-+	<string>1.0.273</string>
++	<string>1.0.274</string>
 @@ -23 +23 @@
 -	<string>273</string>
-+	<string>279</string>
++	<string>280</string>
 diff --git a/Sources/AgenticMouseApp/AppDelegate.swift b/Sources/AgenticMouseApp/AppDelegate.swift
 index e511261..04039ea 100644
 --- a/Sources/AgenticMouseApp/AppDelegate.swift
@@ -215,7 +215,7 @@ index d631c74..a48e388 100644
 +                }
 diff --git a/Sources/ScimitarUI/WandReviewIndicator.swift b/Sources/ScimitarUI/WandReviewIndicator.swift
 new file mode 100644
-index 0000000..c7ab9e5
+index 0000000..b93bdeb
 --- /dev/null
 +++ b/Sources/ScimitarUI/WandReviewIndicator.swift
 @@ -0,0 +1,64 @@
@@ -274,7 +274,7 @@ index 0000000..c7ab9e5
 +            Label(mode == "changes" ? "Review changes" : "Stage files",systemImage:mode == "changes" ? "eye" : "doc.on.doc")
 +                .font(.system(size:12,weight:.semibold,design:.rounded))
 +            // Ethan calls staging the selected working set "commit set".
-+            Text("(double click to commit set)")
++            Text("(hold to commit set)")
 +                .font(.system(size:10,weight:.medium,design:.rounded))
 +        }
 +            .foregroundStyle(Color.black)

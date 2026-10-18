@@ -60,7 +60,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let review=WandReviewGesture()
     var reviewTimer:Timer?,reviewOriginY=0.0,appMode:String?
     var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
-    var wandShortcutCircle=WandReviewCircle()
+    var wandShortcutCircle=WandReviewNavigation()
     var middleReviewExit=false
     var reviewExitGesture=WandReviewExitGesture()
     var reviewExitTimer:Timer?
@@ -141,7 +141,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         context.onModeChange = {[weak self] mode in
             guard let self,self.acceptHUDContext,self.hudSession else{return};self.sendReview(self.review.cancel());self.appMode=mode
             self.queue("global.wandAppMode="+(mode.map{ "'"+$0+"'" } ?? "undefined")+";updateLights();")
-            if mode != nil {self.resumeHUDNavigation()}
+            // App-specific entry is a submenu of the existing wand journey.
+            // Its selection already resumed navigation. A second navigate ID
+            // conflicts with that live hold and makes Agentic Mouse close it.
         }
         // Review selection, rather than a held HUD card, owns the independent session.
         context.onReviewChange = {_ in }
@@ -605,12 +607,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if selectedReviewMode != nil {
                 middleReviewExit=true;middleLastRelease = -100
                 reviewExitTimer?.invalidate();reviewExitTimer=nil
-                // Ethan's "commit the working set" means release Better Git's existing
-                // held selection to stage it, not create a Git commit. Keep the mode
-                // selected so the next circle starts a fresh set without reopening HUD.
-                if reviewExitGesture.down(now:now,interval:hudDoubleClickInterval) {
-                    commitSelectedReview()
-                }
+                beginReviewCommitHold(now:now)
                 return
             }
             if now-middleLastRelease<=hudDoubleClickInterval {
@@ -633,15 +630,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         case "0":
             if middleReviewExit {
                 middleReviewExit=false
-                if reviewExitGesture.up(now:ProcessInfo.processInfo.systemUptime) {
-                    reviewExitTimer=Timer.scheduledTimer(withTimeInterval:hudDoubleClickInterval,repeats:false){[weak self] _ in
-                        guard let self else{return}
-                        self.reviewExitTimer=nil
-                        if self.reviewExitGesture.expire(now:ProcessInfo.processInfo.systemUptime,interval:self.hudDoubleClickInterval) {
-                            self.exitSelectedReview(commit:false)
-                        }
-                    }
+                reviewExitTimer?.invalidate();reviewExitTimer=nil
+                switch reviewExitGesture.up(now:ProcessInfo.processInfo.systemUptime) {
+                case .cancel: exitSelectedReview(commit:false)
+                case .commit: commitSelectedReview()
+                case .none: break
                 }
+                // Held movement is never replayed into the next working set.
+                wandShortcutCircle.reset()
                 return
             }
             if hiddenReviewOperating {
@@ -887,8 +883,21 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         controls.persistent("exitReview")
         log("WAND_REVIEW_EXIT",commit ? "stage set":"cancel set")
     }
+    func beginReviewCommitHold(now:Double) {
+        reviewExitGesture.down(now:now)
+        wandShortcutCircle.reset()
+        reviewExitTimer=Timer.scheduledTimer(withTimeInterval:WandReviewExitGesture.holdSeconds,repeats:false){[weak self] _ in
+            self?.commitReviewHold(now:ProcessInfo.processInfo.systemUptime)
+        }
+    }
+    func commitReviewHold(now:Double) {
+        guard selectedReviewMode != nil,reviewExitGesture.commitIfHeld(now:now) else{return}
+        commitSelectedReview()
+    }
     func commitSelectedReview() {
-        reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset()
+        reviewExitTimer?.invalidate();reviewExitTimer=nil
+        // Keep the held latch until Middle-up: circling must not change the set,
+        // including after this one staging action has already completed.
         guard let mode=selectedReviewMode else{return}
         sendReview(review.endDetents(commit:true))
         // Start another Better Git transaction lazily on the next ratchet. Keep
