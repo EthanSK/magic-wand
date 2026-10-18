@@ -30,6 +30,7 @@ final class Harness {
  var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleSecondTap=false,navigationOpenedHUD=false
  var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
  var wandShortcutCircle=WandReviewCircle();var middleReviewExit=false
+ var reviewExitGesture=WandReviewExitGesture();var reviewExitTimer:Timer?
  let pointerRouter=WandPointerRouter()
  var appMode:String?,reviewTimer:Timer?,middleTap:Timer?,middleHold:Timer?,hudWatchdog:Timer?
  var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false,hudEntryPressStarted=0.0
@@ -43,7 +44,7 @@ final class Harness {
  func sendReview(_ v:[Int]){}
  func releaseButtons(){}
  init(){${callback}}
- ${['setScreenshotActive','finishWandShortcut','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog'].map(method).join('\n')}
+ ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 let h=Harness()
@@ -76,8 +77,12 @@ precondition(!screenshot.controls.phases.contains("dismiss"))
 screenshot.setScreenshotActive(false)
 precondition(screenshot.hudSession && screenshot.hudActive && !screenshot.screenshotHUD)
 let pinned=Harness();pinned.selectedReviewMode="changes";pinned.wandShortcutMode="changes";pinned.handleMiddle("1")
-precondition(pinned.selectedReviewMode==nil && pinned.wandShortcutMode==nil && pinned.controls.phases.last=="exitReview")
-pinned.handleMiddle("0");precondition(!pinned.hudSession)
+precondition(pinned.selectedReviewMode=="changes" && pinned.wandShortcutMode=="changes","first down must preserve the set for a double click")
+pinned.handleMiddle("0");pinned.handleMiddle("1")
+precondition(pinned.selectedReviewMode==nil && pinned.wandShortcutMode==nil && pinned.controls.phases.last=="exitReview" && pinned.review.committed)
+pinned.handleMiddle("0");precondition(!pinned.hudSession,"second release never opens HUD")
+let cancel=Harness();cancel.selectedReviewMode="files";cancel.wandShortcutMode="files";cancel.handleMiddle("1");cancel.handleMiddle("0");settle(0.36)
+precondition(cancel.selectedReviewMode==nil && cancel.wandShortcutMode==nil && !cancel.review.committed,"single Middle exits without staging")
 let independent=Harness();independent.hudSession=true;independent.enterPointerMode();precondition(independent.hudSession,"Bottom leaves Middle HUD alone")
 
 print("PASS: screenshot HUD preservation, hidden review hold, native full close, stale input rejection, delayed click cancellation, fresh reopen, watchdog teardown")
