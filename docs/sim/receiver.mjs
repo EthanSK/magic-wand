@@ -233,9 +233,11 @@ export class WandReceiverModel {
       if(this.bottomHeld)this.recenterSuppressButtons=false;
       const recenter=this.recenterGesture.edge(this.bottomHeld,this.timers.now());
       if(recenter){this.closeHUD();this.cancelCircleScroll();this.finishScroll();this.releaseButtons();this.recenterSuppressButtons=true;this.bottomHeld=false;this.pointerRouter.bottom(false);this.dwell.follow(true);this.scheduleDwell();this.mac.mouse("move",{x:this.mac.width/2,y:this.mac.height/2});this.queue("stopScroll();stopPointerTrack();scrollSuppress=false;global.wandAppMode=undefined;global.wandCircleScrolling=false;setHUDOpen(false);setMouseFollow(true);");return;}
+      const endedScroll=!this.bottomHeld && this.pointerRouter.circle.active;
       this.dwell.reset();
       this.scheduleDwell();
       this.performPointer(this.pointerRouter.bottom(this.bottomHeld));
+      if(endedScroll)this.enableMouseAfterScroll();
     }
     if ((payload = at("@IMU ")) !== null) {
       const fields = payload.split(",");
@@ -514,16 +516,20 @@ export class WandReceiverModel {
     // One wheel event per axis: native views can drop the smaller axis of a mixed event.
     if (dx !== 0) this.mac.scroll(dx, 0);
     if (dy !== 0) this.mac.scroll(0, dy);
-    if (phase === "E") this.finishScroll();
+    if (phase === "E") this.finishScroll(true);
   }
 
-  finishScroll() {
+  enableMouseAfterScroll() {
+    this.enterPointerMode();this.dwell.reset();this.dwell.follow(true);this.scheduleDwell();
+    this.queue("global.wandPointerPauseUntil=0;setMouseFollow(true);");
+  }
+  finishScroll(resumeMouse = false) {
     const wasActive = this.scrollActive;
     this.scrollActive = false;
     if (this.scrollWatchdog !== null)
       this.timers.clearInterval(this.scrollWatchdog);
     this.scrollWatchdog = null;
-    if (wasActive) this.resumeHUDNavigation();
+    if (wasActive) {if(resumeMouse)this.enableMouseAfterScroll();else this.resumeHUDNavigation();}
   }
 
   /** One mouse report: buttons first, then relative movement from the current location. */
