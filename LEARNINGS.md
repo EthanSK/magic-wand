@@ -359,3 +359,17 @@ release closes the full HUD and review session, cancels scrolling and native dra
 held pointer state, centres on the main display and explicitly enables mouse follow on
 both host and device. Discard queued old click reports until the next physical Bottom
 press. Keep long second presses as holds. Connection resets still clear the recogniser.
+
+
+## Continue vertical scrolling with either circle direction
+
+Control V2 recognises a bend in rotation-corrected angular movement after a vertical
+start. Keep the first meaningful vertical direction for circular continuation; winding
+must not reverse scrolling. Before the bend, direct vertical scrolling retains its sign.
+After recognition, integrate two-axis angular distance, not only vertical displacement,
+so sideways arcs scroll and the returning half of a loop does not reverse the page.
+A pause retains continuation only for the same physical hold. Release, mode cancellation
+and lost button telemetry clear it through the existing held-input lifecycle.
+Use angular rates before pointer sensitivity, ignore still-hand noise and retain the
+captured wheel target. Native traces cover both starts and windings, uneven speed,
+sideways arcs, pauses, release and straight reversals. Physical feel remains unverified.

@@ -869,7 +869,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if controlVersion == .scrollV2 && heldScroll.active {
             dwell.reset();scheduleDwell()
             if heldScroll.scrollable {
-                let lines=heldScroll.sample(y:sample.angularY,dt:Double(v[0])/1_000_000,now:now)
+                let lines=heldScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now)
                 if lines != 0 {
                     setCircleLight(true)
                     for event in Self.wheelEvents(x:0,y:lines,at:heldScrollAnchor){event.post(tap:.cghidEventTap)}

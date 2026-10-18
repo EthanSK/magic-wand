@@ -213,3 +213,37 @@ var lines:Int32=0
 for i in 0..<10 {lines+=contextual.sample(y:-20,dt:0.01,now:302.23+Double(i)*0.01)}
 precondition(lines<0)
 print("PASS: context selection preserves short taps and emits one drag down only for non-scroll targets")
+
+
+// Start up or down, then continue around rough circles in either direction.
+// Winding does not change page direction, and sideways arcs keep scrolling.
+for direction in [-1.0,1.0] {
+ for winding in [-1.0,1.0] {
+  let held=WandHeldScroll();held.begin(now:400)
+  for i in 0..<35 {_=held.sample(x:0,y:direction*20,dt:0.01,now:400.23+Double(i)*0.01)}
+  var circularLines:Int32=0,wrongWay=0,sidewaysLines:Int32=0
+  for i in 0..<250 {
+   let angle=Double(i)*0.01*2*Double.pi
+   let speed=20.0*(1+0.25*sin(angle*3))
+   let x=winding*speed*sin(angle),y=direction*speed*cos(angle)
+   let lines=held.sample(x:x,y:y,dt:0.01,now:400.58+Double(i)*0.01)
+   if Double(lines)*direction<0 {wrongWay+=1}
+   if held.circular {circularLines+=lines;if abs(sin(angle))>0.9 {sidewaysLines+=lines}}
+  }
+  precondition(held.circular && Double(circularLines)*direction>40)
+  precondition(wrongWay==0 && Double(sidewaysLines)*direction>0,"circle continuation keeps initial direction, including sideways arcs")
+  _=held.sample(x:0,y:0,dt:0.01,now:404)
+  precondition(held.circular && held.sample(x:direction*20,y:0,dt:0.05,now:404.1)*Int32(direction)>0,"pause keeps circle continuation until release")
+  _=held.end(now:405)
+  precondition(held.sample(x:20,y:20,dt:0.01,now:405.1)==0 && !held.circular)
+ }
+}
+let straight=WandHeldScroll();straight.begin(now:500)
+var straightForward:Int32=0,straightReverse:Int32=0
+for i in 0..<60 {straightForward+=straight.sample(x:0,y:20,dt:0.01,now:500.23+Double(i)*0.01)}
+for i in 0..<60 {straightReverse+=straight.sample(x:0,y:-20,dt:0.01,now:500.83+Double(i)*0.01)}
+precondition(!straight.circular && straightForward>0 && straightReverse<0,"ordinary straight scrolling still reverses directly")
+let sideways=WandHeldScroll();sideways.begin(now:600)
+for i in 0..<100 {precondition(sideways.sample(x:20,y:0,dt:0.01,now:600.23+Double(i)*0.01)==0)}
+precondition(!sideways.circular,"sideways movement alone cannot choose a scroll direction")
+print("PASS: up/down start, both rough circle windings, sideways arcs, pause/release, straight reversal and no sideways-only start")

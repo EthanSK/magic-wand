@@ -7,13 +7,13 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.48",
-    "receiverBuild": "53",
+    "receiver": "1.2.49",
+    "receiverBuild": "54",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "691e21c9f52188cd5378185983d32a2f24edc954f38559c06cbf3fb31e633e53"
   },
   "status": [
-    "Bottom double tap centres the pointer and enables mouse follow from every control mode. Automated checks passed; physical acceptance is pending.",
+    "Control V2 starts with vertical hold-scrolling and can continue in either circular direction. Automated checks passed; physical acceptance is pending.",
     "Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling in V1 passes automated checks; physical gesture acceptance is pending.",
     "Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.",
     "Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.",
@@ -122,7 +122,7 @@
         ],
         [
           "Hold over a scroll area",
-          "Move up or down to scroll; release to stop"
+          "Move up or down to start; circle either way to continue that direction; release to stop"
         ],
         [
           "Hold elsewhere",
@@ -136,7 +136,7 @@
       "notes": [
         "Control V2 keeps short taps unchanged. The existing 220 ms cutoff separates a tap from a hold.",
         "The target under the pointer at press chooses scrolling or native dragging. Scrolling stays in that area until release.",
-        "Flick and circular-scroll recognition are disabled in V2. Control V1 retains the earlier gestures.",
+        "V2 circular continuation keeps the direction chosen by the initial vertical movement. Standalone flick and circle triggers remain disabled; V1 retains its earlier gestures.",
         "VS Code app mode retains Bottom review controls.",
         "Middle switches to the HUD. The pointer stays within real display edges."
       ]
