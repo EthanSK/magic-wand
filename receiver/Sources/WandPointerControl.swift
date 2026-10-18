@@ -833,14 +833,18 @@ struct WandReviewCircle {
 }
 
 /// Compose review circles with Ethan's "just down one/up one" after a pause.
-/// A short mostly-vertical stroke earns one ratchet only after it stops; an
-/// established circle suppresses that fallback, so its initial arc is not doubled.
+/// A short mostly-vertical stroke earns one ratchet only after it stops. Use
+/// its first outward lobe, not the endpoint: Ethan's "little quick flick" may
+/// spring back. A circle which already emitted a ratchet cannot double-count.
 struct WandReviewNavigation {
     private var circle = WandReviewCircle()
     private var x = 0.0, y = 0.0
     private var started: Double?, lastMotion: Double?
-    private var circleSeen = false
+    private var circleEmitted = false
+    private var maxX = 0.0, maxY = 0.0
+    private var flickDirection: Int32 = 0
     static let settleSeconds = 0.12
+    static let flickDegrees = 0.3
     mutating func reset() { self = Self() }
     mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
         guard dx.isFinite,dy.isFinite,now.isFinite else { reset();return 0 }
@@ -849,14 +853,18 @@ struct WandReviewNavigation {
         if moving {
             if started == nil {started=now}
             x+=dx;y+=dy;lastMotion=now
+            maxX=max(maxX,abs(x));maxY=max(maxY,abs(y))
+            if flickDirection==0 && abs(y)>=Self.flickDegrees && abs(y)>=1.6*maxX {
+                flickDirection = y>0 ? 1 : -1
+            }
             let steps=circle.sample(dx:dx,dy:dy,now:now)
-            if circle.isCircling {circleSeen=true}
+            if steps != 0 {circleEmitted=true}
             return steps
         }
         guard let lastMotion,now-lastMotion>=Self.settleSeconds else{return 0}
         let short=started.map{lastMotion-$0<=0.45} ?? false
-        let nudge = !circleSeen && short && abs(y)>=1.5 && abs(y)>=1.7*abs(x)
-        let steps:Int32 = nudge ? (y>0 ? 1 : -1) : 0
+        let nudge = !circleEmitted && short && flickDirection != 0 && maxY>=1.6*maxX
+        let steps:Int32 = nudge ? flickDirection : 0
         reset()
         return steps
     }

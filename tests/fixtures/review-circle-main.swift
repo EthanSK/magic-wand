@@ -129,4 +129,24 @@ let quiet=WandHeldScroll();quiet.begin(now:50)
 var quietOutput:Int32=0
 for i in 1...2000 {quietOutput+=quiet.sample(x:0.8*sin(Double(i)),y:0.8*cos(Double(i)),dt:0.02,now:50.3+Double(i)*0.02)}
 check(quietOutput==0 && !quiet.circular,"quiet calibrated gyro noise does not scroll")
-if failures>0{exit(1)};print("PASS existing controls and micro circles")
+// Tiny up/down flicks retain the first stroke even when the hand springs back.
+var flicks=WandReviewNavigation(),ft=200.0
+for sign in [1.0,-1.0,1.0,-1.0] {
+ var output:Int32=0
+ for part in [0.06,0.13,0.14,-0.09,-0.14,-0.10] {
+  ft+=0.025;output+=flicks.sample(dx:0.008,dy:sign*part,now:ft)
+ }
+ ft+=0.15;output+=flicks.sample(dx:0,dy:0,now:ft)
+ check(output==Int32(sign),"small repeated flick works in either direction including spring-back")
+ ft+=0.05
+}
+// A short curved flick is still vertical intent, not a swallowed partial circle.
+for sign in [-1.0,1.0] {
+ var n=WandReviewNavigation(),total:Int32=0,time=220.0
+ for (dx,dy) in [(0.03,0.12),(0.06,0.13),(-0.05,0.12),(-0.03,-0.14),(-0.01,-0.16)] {
+  time+=0.03;total+=n.sample(dx:dx,dy:dy*sign,now:time)
+ }
+ total+=n.sample(dx:0,dy:0,now:time+0.15)
+ check(total==Int32(sign),"curved small flick retains its original direction")
+}
+if failures>0{exit(1)};print("PASS small flicks, micro circles and prior controls")
