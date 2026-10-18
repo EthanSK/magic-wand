@@ -366,17 +366,23 @@ press. Keep long second presses as holds. Connection resets still clear the reco
 Control V2 recognises a bend in rotation-corrected angular movement after a vertical
 start. Map the first U-turn winding to the meaningful starting vertical direction.
 Later consistent opposite winding reverses scrolling without releasing; choosing the
-initial U-turn side alone must not reverse it. Before the bend, direct vertical scrolling retains its sign.
-After recognition, integrate two-axis angular distance, not only vertical displacement,
+initial U-turn side alone must not reverse it. As soon as the initial direction is known,
+integrate two-axis angular distance with that sign before and after recognition,
 so sideways arcs scroll and the returning half of a loop does not reverse the page.
 A pause retains continuation only for the same physical hold. Release, mode cancellation
 and lost button telemetry clear it through the existing held-input lifecycle.
 Use angular rates before pointer sensitivity, ignore still-hand noise and retain the
 captured wheel target. Native traces cover both starts and windings, uneven speed,
-sideways arcs, pauses, release and straight reversals. Physical feel remains unverified.
+sideways arcs, pauses, release and deliberate winding reversals. Physical feel remains unverified.
 
 For winding changes, ignore tangent cusps and require at least three opposite heading
 segments accumulating 30 degrees. Matching-direction segments clear the reversal
 evidence; stale evidence expires. This is shape evidence, not a pointer or wheel buffer.
 Tests cover repeated reversals, both initial sides and vertical directions, uneven
 speed, oval shapes and alternating wobbles.
+
+A flat-bottomed or paused U reproduced a wrong-way wheel event before full circle
+recognition: the candidate path still used signed vertical movement. Never pass that
+returning-leg sign through after acquiring the starting direction. The same arc-length
+gain now spans candidate and confirmed states; constant-speed bins verify no gain step.
+The old implementation fails the paused/flat U regression, and the corrected one passes.

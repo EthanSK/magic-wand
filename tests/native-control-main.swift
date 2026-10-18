@@ -183,7 +183,7 @@ precondition(scrollV2.active && scrollV2.consumes(buttons:0))
 var up:Int32=0,down:Int32=0
 for _ in 0..<50 {up += scrollV2.sample(y:-20,dt:0.01)}
 for _ in 0..<50 {down += scrollV2.sample(y:20,dt:0.01)}
-precondition(up == -16 && down == 16,"equal up and down scrolling")
+precondition(up == -16 && down == -16,"starting direction holds through the initial return")
 precondition(scrollV2.end(now:201))
 precondition(!scrollV2.active && scrollV2.sample(y:50,dt:0.01)==0,"release stops immediately")
 precondition(!scrollV2.consumes(buttons:0),"interleaved raw reports cannot clear pending click suppression")
@@ -242,11 +242,11 @@ let straight=WandHeldScroll();straight.begin(now:500)
 var straightForward:Int32=0,straightReverse:Int32=0
 for i in 0..<60 {straightForward+=straight.sample(x:0,y:20,dt:0.01,now:500.23+Double(i)*0.01)}
 for i in 0..<60 {straightReverse+=straight.sample(x:0,y:-20,dt:0.01,now:500.83+Double(i)*0.01)}
-precondition(!straight.circular && straightForward>0 && straightReverse<0,"ordinary straight scrolling still reverses directly")
+precondition(!straight.circular && straightForward>0 && straightReverse>0,"before circle recognition the return retains the starting direction")
 let sideways=WandHeldScroll();sideways.begin(now:600)
 for i in 0..<100 {precondition(sideways.sample(x:20,y:0,dt:0.01,now:600.23+Double(i)*0.01)==0)}
 precondition(!sideways.circular,"sideways movement alone cannot choose a scroll direction")
-print("PASS: up/down start, both rough circle windings, sideways arcs, pause/release, straight reversal and no sideways-only start")
+print("PASS: up/down start, both rough circle windings, sideways arcs, pause/release, direction latch and no sideways-only start")
 
 
 // A first U-turn may be left or right. Later opposite winding reverses the
@@ -288,3 +288,33 @@ for initialDirection in [-1.0,1.0] {
  }
 }
 print("PASS: both initial U-turn sides, up/down starts, rough oval reversal and reversal back without release")
+
+
+// The first U can have a flat bottom, a pause or a tiny corner. None is a
+// command to reverse scrolling before winding has been established.
+for handoverDirection in [-1.0,1.0] {
+ for side in [-1.0,1.0] {
+  for paused in [false,true] {
+   let handover=WandHeldScroll();handover.begin(now:900)
+   var handoverTime=900.23
+   for _ in 0..<40 {handoverTime+=0.01;_=handover.sample(x:0,y:handoverDirection*20,dt:0.01,now:handoverTime)}
+   if paused {handoverTime+=0.5;_=handover.sample(x:0,y:0,dt:0.01,now:handoverTime)}
+   var returningLines:Int32=0
+   for _ in 0..<20 {handoverTime+=0.01;let l=handover.sample(x:side*20,y:0,dt:0.01,now:handoverTime);precondition(Double(l)*handoverDirection>=0,"flat U bottom cannot reverse")}
+   for _ in 0..<40 {handoverTime+=0.01;let l=handover.sample(x:0,y:-handoverDirection*20,dt:0.01,now:handoverTime);returningLines+=l;precondition(Double(l)*handoverDirection>=0,"returning U leg must retain starting direction before circle recognition")}
+   precondition(Double(returningLines)*handoverDirection>0)
+  }
+ }
+}
+print("PASS: flat and paused U transitions retain the first direction before circle recognition")
+
+
+let steadyArc=WandHeldScroll();steadyArc.begin(now:1000)
+for i in 0..<40 {_=steadyArc.sample(y:20,dt:0.01,now:1000.23+Double(i)*0.01)}
+var arcBins=[Int32](repeating:0,count:4)
+for i in 0..<100 {
+ let angle=Double(i)*Double.pi/100
+ arcBins[i/25]+=steadyArc.sample(x:20*sin(angle),y:20*cos(angle),dt:0.01,now:1000.63+Double(i)*0.01)
+}
+precondition(steadyArc.circular && arcBins.allSatisfy{(7...9).contains(Int($0))},"same speed must keep the same wheel rate before, during and after circle recognition")
+print("PASS: constant-speed U-turn has no sign or gain discontinuity at recognition")
