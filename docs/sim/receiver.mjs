@@ -4,7 +4,7 @@
 // the Puck's UART lines into pointer, click and wheel events, runs the HUD session timing, and
 // forwards speech presses. Here the "native events" go to the simulated screen instead of macOS.
 
-import { PointerRouter, DwellClick } from "./pointer.mjs";
+import { PointerRouter, DwellClick, RecenterGesture } from "./pointer.mjs";
 const finite = (value) =>
   Number.isFinite(value) && Math.abs(value) <= 7_200_000;
 
@@ -133,6 +133,7 @@ export class WandReceiverModel {
     this.hudLastUpdate = -Infinity;
     this.hudWatchdog = null;
     this.navigationOpenedHUD = false;
+    this.recenterGesture = new RecenterGesture();
     this.scrollActive = false;
     this.scrollX = 0;
     this.scrollY = 0;
@@ -239,6 +240,8 @@ export class WandReceiverModel {
       ["0", "1"].includes(payload.trim())
     ) {
       this.bottomHeld = payload.trim() === "1";
+      const recenter=this.recenterGesture.edge(this.bottomHeld,this.timers.now(),!this.scrollActive&&!this.pointerRouter.holdConsumed&&this.buttons===0);
+      if(recenter){this.cancelCircleScroll();this.finishScroll();this.releaseButtons();this.mac.mouse("move",{x:this.mac.width/2,y:this.mac.height/2});this.queue("setMouseFollow(true);");}
       this.dwell.reset();
       this.scheduleDwell();
       this.performPointer(this.pointerRouter.bottom(this.bottomHeld));
@@ -623,6 +626,7 @@ export class WandReceiverModel {
     }
   }
   cancelCircleScroll() {
+    this.recenterGesture.cancel();
     this.dwell.reset();
     this.scheduleDwell();
     this.performPointer(this.pointerRouter.interrupt());

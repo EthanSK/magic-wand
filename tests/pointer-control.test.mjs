@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, writeFileSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -16,7 +16,7 @@ function trace(clockwise, hz = 35, radius = 80, loops = 3) {
   });
 }
 
-test("circular scrolling has both directions, passes initial motion immediately and expires on pause", () => {
+test("circular scrolling has both directions, passes initial motion immediately and stays latched on pause", () => {
   for (const hz of [20, 35, 104]) for (const clockwise of [false, true]) {
     const detector = new CircularScroll();
     const reports = trace(clockwise, hz).map(p => detector.update(...p, true));
@@ -24,8 +24,9 @@ test("circular scrolling has both directions, passes initial motion immediately 
     assert(reports.slice(0, Math.floor(hz * 0.7)).every(r => r.lines === 0));
     const lines = reports.reduce((sum, r) => sum + r.lines, 0);
     assert(clockwise ? lines < -10 : lines > 10);
-    assert(detector.expire(14));
-    assert(!detector.update(2, 0, 14.01, true).consumesPointer);
+    assert(!detector.expire(14));
+    assert(detector.active);
+    assert(detector.update(2, 0, 14.01, true).consumesPointer);
   }
 });
 
@@ -88,4 +89,27 @@ print(String(data:try! JSONSerialization.data(withJSONObject:output),encoding:.u
     });
     assert(Math.abs(nativeLines-demoLines)<=1);
   } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+
+test("native wheel axes retain the same fixed scroll target", {skip:process.platform!=="darwin"}, () => {
+ const dir=mkdtempSync(join(tmpdir(),"wand-wheel.noindex-"));
+ try {
+  const source=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.url),'utf8');
+  const start=source.indexOf('    static func wheelEvents('),end=source.indexOf('    func postScroll(',start);
+  writeFileSync(join(dir,'main.swift'),`import Foundation
+import ApplicationServices
+enum Wheel {
+${source.slice(start,end)}
+}
+let point=CGPoint(x:-321,y:654)
+let events=Wheel.wheelEvents(x:3,y:-4,at:point)
+precondition(events.count==2)
+precondition(events.allSatisfy{$0.location==point},"wheel events stay at their original target")
+precondition(events[0].getIntegerValueField(.scrollWheelEventDeltaAxis2)==3)
+precondition(events[1].getIntegerValueField(.scrollWheelEventDeltaAxis1)==(-4))
+`);
+  const build=spawnSync('swiftc',[join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);
+  const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stderr);
+ } finally {rmSync(dir,{recursive:true,force:true});}
 });

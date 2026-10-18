@@ -66,3 +66,16 @@ test("held-only 90 ms buffer discards release flick but bypasses HIGH and draggi
  assert.deepEqual(r.frame(8,0,1,false,13).actions,[{type:"move",dx:8,dy:0}]);
  assert.deepEqual(r.frame(0,8,0,true,14).actions,[{type:"move",dx:0,dy:8}]);
 });
+
+
+test("recognized scrolling keeps the pointer locked through pauses and straight motion until release", () => {
+ const r=new PointerRouter();r.bottom(true);let x=80,y=0;
+ for(let i=1;i<=105;i++){const a=i/35*Math.PI*2,nx=80*Math.cos(a),ny=80*Math.sin(a);r.frame(Math.round(nx-x),Math.round((ny-y)*1.4),0,false,10+i/35);x=nx;y=ny;}
+ assert(r.circle.active);
+ assert.deepEqual(r.tick(16),[]);
+ for(let i=0;i<100;i++)assert(!r.frame(8,0,0,false,17+i/35).actions.some(a=>a.type==='move'));
+ assert(r.circle.active);
+ assert.deepEqual(r.bottom(false),[{type:'light',on:false}]);
+ assert.equal(r.frame(0,0,1,false,21).buttons,0,'no click after scrolling');
+ assert(r.frame(4,0,0,false,22).actions.some(a=>a.type==='move'));
+});
