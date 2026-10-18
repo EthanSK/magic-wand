@@ -17,19 +17,21 @@ test('native HUD close cancels actions, rejects stale context and closes any chi
  };
  const a=source.indexOf('        context.onChange = '),b=source.indexOf('\n        context.start()',a);
  const callback=source.slice(a,b);
+ const modeStart=source.indexOf('        context.onModeChange = '),modeEnd=source.indexOf('        // Review selection',modeStart);
+ const modeCallback=source.slice(modeStart,modeEnd);
  const code=`import Foundation
 func AXIsProcessTrusted()->Bool {true}
 func log(_ parts:Any...) {}
-final class Context {var isActive=false;var onChange:((Bool)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
+final class Context {var isActive=false;var onChange:((Bool)->Void)?;var onModeChange:((String?)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
 final class Controls {var phases:[String]=[];func persistent(_ phase:String,x:Double=0,y:Double=0){phases.append(phase)}}
-final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];func beginDetents(mode:String,now:Double){starts.append(mode)};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{[]};func endDetents(commit:Bool)->[Int]{committed=commit;return[]}}
+final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];var inputs=0;func beginDetents(mode:String,now:Double){starts.append(mode)};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{inputs+=1;return[]};func endDetents(commit:Bool)->[Int]{committed=commit;return[]}}
 final class Harness {
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter()
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
  var selectedReviewMode:String?,hiddenReviewOperating=false,hiddenReviewPending=false,screenshotActive=false,screenshotHUD=false
  var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleSecondTap=false,navigationOpenedHUD=false
  var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
- var wandShortcutCircle=WandReviewCircle();var middleReviewExit=false
+ var wandShortcutCircle=WandReviewNavigation();var middleReviewExit=false
  var reviewExitGesture=WandReviewExitGesture();var reviewExitTimer:Timer?
  let pointerRouter=WandPointerRouter()
  var appMode:String?,reviewTimer:Timer?,middleTap:Timer?,middleHold:Timer?,hudWatchdog:Timer?
@@ -43,8 +45,9 @@ final class Harness {
  func cancelCircleScroll(){}
  func sendReview(_ v:[Int]){}
  func releaseButtons(){}
- init(){${callback}}
- ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog'].map(method).join('\n')}
+ init(){${callback}
+${modeCallback}}
+ ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 let h=Harness()
@@ -77,16 +80,31 @@ precondition(!screenshot.controls.phases.contains("dismiss"))
 screenshot.setScreenshotActive(false)
 precondition(screenshot.hudSession && screenshot.hudActive && !screenshot.screenshotHUD)
 let pinned=Harness();pinned.selectedReviewMode="changes";pinned.wandShortcutMode="changes";pinned.handleMiddle("1")
-precondition(pinned.selectedReviewMode=="changes" && pinned.wandShortcutMode=="changes","first down must preserve the set for a double click")
-pinned.handleMiddle("0");pinned.handleMiddle("1")
+precondition(pinned.reviewExitGesture.pending && !pinned.review.committed,"Middle-down freezes the existing working set")
+for i in 1...80 {pinned.handleNavigation("\(i*1000),\(i*2000)")}
+precondition(pinned.review.inputs==0,"held motion never reaches Better Git")
+pinned.commitReviewHold(now:ProcessInfo.processInfo.systemUptime+0.6)
 precondition(pinned.selectedReviewMode=="changes" && pinned.wandShortcutMode=="changes" && !pinned.controls.phases.contains("exitReview") && pinned.review.committed)
-precondition(pinned.review.starts==["changes"],"double click arms the next set in the same mode")
+precondition(pinned.review.starts==["changes"] && pinned.reviewExitGesture.pending,"long press arms the next set but remains frozen until release")
+for i in 81...160 {pinned.handleNavigation("\(i*1000),\(i*2000)")}
+pinned.commitReviewHold(now:ProcessInfo.processInfo.systemUptime+2)
+precondition(pinned.review.inputs==0 && pinned.review.starts.count==1,"continued holding neither edits nor commits the next set")
 pinned.handleMiddle("0");settle(0.36)
-precondition(!pinned.hudSession && pinned.selectedReviewMode=="changes","second release neither opens HUD nor exits after the single-click timeout")
-pinned.handleMiddle("1");pinned.handleMiddle("0");settle(0.36)
-precondition(pinned.selectedReviewMode==nil && !pinned.review.committed,"a later single click still cancels and exits")
-let cancel=Harness();cancel.selectedReviewMode="files";cancel.wandShortcutMode="files";cancel.handleMiddle("1");cancel.handleMiddle("0");settle(0.36)
-precondition(cancel.selectedReviewMode==nil && cancel.wandShortcutMode==nil && !cancel.review.committed,"single Middle exits without staging")
+precondition(!pinned.hudSession && pinned.selectedReviewMode=="changes" && !pinned.reviewExitGesture.pending,"release stays in review and unfreezes")
+pinned.handleNavigation("161000,322000")
+precondition(pinned.review.inputs==1,"new motion after release resumes review")
+pinned.handleMiddle("1");pinned.handleMiddle("0")
+precondition(pinned.selectedReviewMode==nil && !pinned.review.committed,"a later short tap cancels and exits")
+let cancel=Harness();cancel.selectedReviewMode="files";cancel.wandShortcutMode="files";cancel.handleMiddle("1");cancel.handleMiddle("0");settle(0.6)
+precondition(cancel.selectedReviewMode==nil && cancel.wandShortcutMode==nil && !cancel.review.committed,"short tap cancels the timer without staging later")
+let late=Harness();late.selectedReviewMode="files";late.wandShortcutMode="files";late.middleReviewExit=true
+late.beginReviewCommitHold(now:ProcessInfo.processInfo.systemUptime-0.6);late.handleMiddle("0")
+precondition(late.review.committed && late.review.starts==["files"] && late.selectedReviewMode=="files","long release works even when the timer was delayed")
+let submenu=Harness();submenu.hudSession=true;submenu.context.set(true);submenu.resumeHUDNavigation()
+let navigationStarts=submenu.controls.phases.filter{$0=="navigate"}.count
+submenu.context.onModeChange?("vsCode")
+precondition(submenu.appMode=="vsCode" && submenu.hudSession && submenu.hudActive)
+precondition(submenu.controls.phases.filter{$0=="navigate"}.count==navigationStarts,"app-specific submenu must retain one navigation owner")
 let independent=Harness();independent.hudSession=true;independent.enterPointerMode();precondition(independent.hudSession,"Bottom leaves Middle HUD alone")
 
 print("PASS: screenshot HUD preservation, hidden review hold, native full close, stale input rejection, delayed click cancellation, fresh reopen, watchdog teardown")

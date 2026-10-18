@@ -750,33 +750,37 @@ final class WandHeldScroll {
 }
 
 
-/// Middle in an active review: a single click cancels; a double click stages the set.
-/// Only classifies the button; it never buffers pointer motion or owns Git selection.
+/// Middle in an active review: tap cancels; a long press stages the working set.
+/// Ethan's "bucket" and "commit set" mean Better Git's selected staging set,
+/// not a Git commit. Formerly a double-click action. Pointer motion is unbuffered.
 struct WandReviewExitGesture {
-    private var releasedAt: Double?
-    private var pressed = false
-    var pending: Bool { pressed || releasedAt != nil }
-    mutating func down(now: Double, interval: Double) -> Bool {
-        if let releasedAt, now - releasedAt <= interval {
-            reset(); return true
-        }
-        pressed = true; releasedAt = nil; return false
+    enum Release { case none, cancel, commit }
+    static let holdSeconds = 0.5
+    private var pressedAt: Double?
+    private var committed = false
+    var pending: Bool { pressedAt != nil }
+    mutating func down(now: Double) {
+        guard pressedAt == nil else { return }
+        pressedAt = now; committed = false
     }
-    mutating func up(now: Double) -> Bool {
-        guard pressed else { return false }
-        pressed = false; releasedAt = now; return true
+    mutating func commitIfHeld(now: Double) -> Bool {
+        guard let pressedAt, !committed, now - pressedAt >= Self.holdSeconds else { return false }
+        committed = true; return true
     }
-    mutating func expire(now: Double, interval: Double) -> Bool {
-        guard let releasedAt, now - releasedAt >= interval else { return false }
-        reset(); return true
+    mutating func up(now: Double) -> Release {
+        guard let pressedAt else { return .none }
+        defer { reset() }
+        if committed { return .none }
+        return now - pressedAt >= Self.holdSeconds ? .commit : .cancel
     }
-    mutating func reset() { pressed = false; releasedAt = nil }
+    mutating func reset() { pressedAt = nil; committed = false }
 }
 
 /// Ethan's "eyes mode" = Review changes; "bang mode" / "!" = Stage files.
 /// This only turns a circular wand path into ratchets. Better Git owns preview/staging.
 /// Screen coordinates: positive Y points down, so positive winding is clockwise.
 struct WandReviewCircle {
+    var isCircling: Bool { direction != 0 }
     private var heading:Double?,lastTime=0.0,turn=0.0,arc=0.0
     private var candidate=0,segments=0,direction=0
     mutating func reset(){self=Self()}
@@ -807,5 +811,35 @@ struct WandReviewCircle {
         arc+=distance
         let count=min(6,Int(arc/7));arc-=Double(count)*7
         return Int32(count*direction)
+    }
+}
+
+/// Compose review circles with Ethan's "just down one/up one" after a pause.
+/// A short mostly-vertical stroke earns one ratchet only after it stops; an
+/// established circle suppresses that fallback, so its initial arc is not doubled.
+struct WandReviewNavigation {
+    private var circle = WandReviewCircle()
+    private var x = 0.0, y = 0.0
+    private var started: Double?, lastMotion: Double?
+    private var circleSeen = false
+    static let settleSeconds = 0.12
+    mutating func reset() { self = Self() }
+    mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
+        guard dx.isFinite,dy.isFinite,now.isFinite else { reset();return 0 }
+        let moving = hypot(dx,dy) >= 0.04
+        if let lastMotion,now-lastMotion>0.3,moving {reset()}
+        if moving {
+            if started == nil {started=now}
+            x+=dx;y+=dy;lastMotion=now
+            let steps=circle.sample(dx:dx,dy:dy,now:now)
+            if circle.isCircling {circleSeen=true}
+            return steps
+        }
+        guard let lastMotion,now-lastMotion>=Self.settleSeconds else{return 0}
+        let short=started.map{lastMotion-$0<=0.45} ?? false
+        let nudge = !circleSeen && short && abs(y)>=1.5 && abs(y)>=1.7*abs(x)
+        let steps:Int32 = nudge ? (y>0 ? 1 : -1) : 0
+        reset()
+        return steps
     }
 }

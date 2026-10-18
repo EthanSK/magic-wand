@@ -26,7 +26,7 @@ let req=g.detents(2,now:1);check(req.map{$0.phase} == ["begin","step","step"],"r
 check(req.allSatisfy{$0.mode=="changes"&&$0.direction=="next"},"eyes contract")
 _ = g.detents(0,now:5);check(!g.tick(now:5).contains{$0.phase=="cancel"},"idle selected session can stay alive")
 let finished=g.endDetents(commit:true)
-check(finished.last?.phase=="finish","double click finishes existing selection")
+check(finished.last?.phase=="finish","long press finishes existing selection")
 g.beginDetents(mode:"changes",now:5.1)
 let continued=g.detents(1,now:5.2)
 check(continued.map{$0.phase} == ["begin","step"] && continued.first?.id != finished.first?.id,"continuing review starts a fresh ordered set")
@@ -35,12 +35,43 @@ _ = g.cancel()
 g.beginDetents(mode:"files",now:6);check(g.detents(-1,now:7).allSatisfy{$0.mode=="files"&&$0.direction=="previous"},"whole-file contract")
 check(g.cancel().last?.phase=="cancel","focus loss cancels")
 var exitGesture=WandReviewExitGesture()
-check(!exitGesture.down(now:0,interval:0.35) && exitGesture.pending,"first press keeps the set pending")
-check(exitGesture.up(now:0.05),"first release starts classification")
-check(!exitGesture.expire(now:0.2,interval:0.35),"no premature cancel")
-check(exitGesture.down(now:0.25,interval:0.35),"second click stages the accumulated set")
-check(!exitGesture.pending && !exitGesture.up(now:0.3),"second release cannot reopen HUD or cancel")
-check(!exitGesture.down(now:1,interval:0.35),"new single click")
-check(exitGesture.up(now:1.05),"single release")
-check(exitGesture.expire(now:1.41,interval:0.35) && !exitGesture.pending,"single click exits without staging")
+exitGesture.down(now:0)
+check(exitGesture.pending && !exitGesture.commitIfHeld(now:0.49),"hold freezes input before its deadline")
+check(exitGesture.commitIfHeld(now:0.5),"long press commits at the deadline")
+check(exitGesture.pending && !exitGesture.commitIfHeld(now:2),"one commit while still held, input remains frozen")
+check(exitGesture.up(now:2) == .none && !exitGesture.pending,"release unfreezes without exit or another commit")
+exitGesture.down(now:3)
+check(exitGesture.up(now:3.1) == .cancel && !exitGesture.pending,"short tap cancels without staging")
+exitGesture.down(now:3.2)
+check(exitGesture.up(now:3.3) == .cancel,"another short tap cannot become a double-click commit")
+exitGesture.down(now:4)
+check(exitGesture.up(now:4.6) == .commit,"late timer still commits a qualified hold exactly once on release")
+check(exitGesture.up(now:4.7) == .none,"duplicate release is inert")
+exitGesture.down(now:5);exitGesture.reset()
+check(!exitGesture.commitIfHeld(now:6) && !exitGesture.pending,"teardown cancels the hold")
+// A quick vertical nudge is one step after rest, not one per sample.
+for sign in [-1.0,1.0] {
+ var n=WandReviewNavigation();var total:Int32=0
+ for i in 1...5 {total+=n.sample(dx:0.03,dy:sign*0.5,now:Double(i)*0.03)}
+ check(total==0,"ambiguous moving stroke waits for its endpoint")
+ total+=n.sample(dx:0,dy:0,now:0.3)
+ check(total==Int32(sign),"quick vertical nudge moves exactly one item")
+ for i in 1...10 {total+=n.sample(dx:0,dy:0,now:0.3+Double(i)*0.03)}
+ check(total==Int32(sign),"rest does not repeat the nudge")
+}
+var nudges=WandReviewNavigation(),noise:Int32=0
+for i in 1...12 {noise+=nudges.sample(dx:0.005,dy:0.008,now:Double(i)*0.03)}
+check(noise==0,"noise never becomes a nudge")
+var diagonal=WandReviewNavigation(),diagonalSteps:Int32=0
+for i in 1...5 {diagonalSteps+=diagonal.sample(dx:0.5,dy:0.5,now:Double(i)*0.03)}
+diagonalSteps+=diagonal.sample(dx:0,dy:0,now:0.3)
+check(diagonalSteps==0,"diagonal sweep is not an ambiguous up/down nudge")
+for sign in [-1.0,1.0] {
+ var nav=WandReviewNavigation(),px=8.0,py=0.0,total:Int32=0,time=1.0
+ for i in 1...240 {let angle=sign*Double(i)*Double.pi/60,xx=cos(angle)*8,yy=sin(angle)*8;time+=0.03;total+=nav.sample(dx:xx-px,dy:yy-py,now:time);px=xx;py=yy}
+ check(sign>0 ? total>12:total < -12,"hybrid navigation preserves circle direction and ratchets")
+ check(nav.sample(dx:0,dy:0,now:time+0.15)==0,"circle endpoint cannot add an extra nudge")
+ for i in 1...5 {_=nav.sample(dx:0,dy:0.5,now:time+0.2+Double(i)*0.03)}
+ check(nav.sample(dx:0,dy:0,now:time+0.5)==1,"pause after circling permits down-one again")
+}
 if failures>0{exit(1)};print("PASS independent circles and Better Git lifecycle")

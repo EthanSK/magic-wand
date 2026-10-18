@@ -456,7 +456,28 @@ Seven final native Mini tests passed together, along with 156 non-GUI Better Git
 
 ## Committing a set keeps its selected review mode
 
-Middle double-click stages through the existing Better Git finish request, then arms a fresh transaction in the same selected mode. Preserve the current navigation stream, tracking timer and badge; only the circular gesture accumulator resets. The next ratchet gets a new transaction ID. Consume the second release so it cannot become a single-click exit. Single Middle still cancels and exits without staging. Receiver gesture tests cover continuation and subsequent cancellation; physical acceptance remains separate.
+Middle long-press stages through the existing Better Git finish request, then arms a
+fresh transaction in the same selected mode. Keep the button latch through release,
+even after the timer fires, so held movement cannot change either working set. A short
+Middle tap cancels and exits without staging. The badge says `(hold to commit set)`.
+A delayed timer is handled by the same once-only classifier on release. Receiver tests
+cover frozen input, one finish, no held-motion replay and cancellation.
+
+A quick mostly-vertical nudge after rest produces one next/previous ratchet when it
+settles for 120 ms. Circle recognition takes precedence, so its opening arc never
+becomes an extra nudge. Circle pauses reset that path before a new nudge; holding
+Middle resets and suppresses both through the same navigation gate. This gesture
+classification does not buffer pointer motion. Tests cover both directions, repeated
+rest, noise, diagonals and a nudge after circling.
+
+## App-specific pages retain their navigation owner
+
+The app-mode context callback formerly sent another `navigate` command after entry
+had already resumed navigation. Its new identity competed with the live navigation
+hold, so Agentic Mouse correctly failed closed; the receiver then logged `context
+ended` and dismissed the new submenu. The callback now updates context only. Keep the
+entry/release path as the one owner of navigation startup, as for the other submenus.
+An actual-callback regression test checks the unchanged navigation-command count.
 
 ## Horizontal and vertical circle continuation share one recognizer
 
