@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": 1,
+  "name": "Control V1",
+  "sourceTag": "controls-v1.0.0",
+  "sourceCommit": "2d872e2cb4f3b497982a62e17ca0e25a41aeaa8c",
+  "versions": {
+    "receiver": "1.2.44",
+    "receiverBuild": "49",
+    "deviceRuntime": "wand-e1ce30d7c407",
+    "bridgeRevision": "52a4617bad4bdfdbdd3628cbc5b6e541fcf3b4179f18106872a5b14d84f4cb6f"
+  },
+  "description": "Snapshot before replacing Bottom pointer aiming with scrolling. Includes optional flick scrolling, original HIGH/LOW, real drag, recenter, HUD and speech controls.",
+  "localOptionsAtSnapshot": {
+    "orientationCompensation": true,
+    "flickScroll": true
+  },
+  "hardwareProfile": "prototype-v1"
+}
