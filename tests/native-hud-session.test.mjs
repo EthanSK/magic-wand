@@ -22,7 +22,7 @@ func AXIsProcessTrusted()->Bool {true}
 func log(_ parts:Any...) {}
 final class Context {var isActive=false;var onChange:((Bool)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
 final class Controls {var phases:[String]=[];func persistent(_ phase:String,x:Double=0,y:Double=0){phases.append(phase)}}
-final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{[]};func endDetents(commit:Bool)->[Int]{committed=commit;return[]}}
+final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];func beginDetents(mode:String,now:Double){starts.append(mode)};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{[]};func endDetents(commit:Bool)->[Int]{committed=commit;return[]}}
 final class Harness {
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter()
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
@@ -44,7 +44,7 @@ final class Harness {
  func sendReview(_ v:[Int]){}
  func releaseButtons(){}
  init(){${callback}}
- ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog'].map(method).join('\n')}
+ ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 let h=Harness()
@@ -79,8 +79,12 @@ precondition(screenshot.hudSession && screenshot.hudActive && !screenshot.screen
 let pinned=Harness();pinned.selectedReviewMode="changes";pinned.wandShortcutMode="changes";pinned.handleMiddle("1")
 precondition(pinned.selectedReviewMode=="changes" && pinned.wandShortcutMode=="changes","first down must preserve the set for a double click")
 pinned.handleMiddle("0");pinned.handleMiddle("1")
-precondition(pinned.selectedReviewMode==nil && pinned.wandShortcutMode==nil && pinned.controls.phases.last=="exitReview" && pinned.review.committed)
-pinned.handleMiddle("0");precondition(!pinned.hudSession,"second release never opens HUD")
+precondition(pinned.selectedReviewMode=="changes" && pinned.wandShortcutMode=="changes" && !pinned.controls.phases.contains("exitReview") && pinned.review.committed)
+precondition(pinned.review.starts==["changes"],"double click arms the next set in the same mode")
+pinned.handleMiddle("0");settle(0.36)
+precondition(!pinned.hudSession && pinned.selectedReviewMode=="changes","second release neither opens HUD nor exits after the single-click timeout")
+pinned.handleMiddle("1");pinned.handleMiddle("0");settle(0.36)
+precondition(pinned.selectedReviewMode==nil && !pinned.review.committed,"a later single click still cancels and exits")
 let cancel=Harness();cancel.selectedReviewMode="files";cancel.wandShortcutMode="files";cancel.handleMiddle("1");cancel.handleMiddle("0");settle(0.36)
 precondition(cancel.selectedReviewMode==nil && cancel.wandShortcutMode==nil && !cancel.review.committed,"single Middle exits without staging")
 let independent=Harness();independent.hudSession=true;independent.enterPointerMode();precondition(independent.hudSession,"Bottom leaves Middle HUD alone")
