@@ -176,3 +176,40 @@ try settings.set("flickScroll",false)
 precondition(!settings.enabled("flickScroll") && settings.enabled("orientationCompensation"))
 try FileManager.default.removeItem(at:optionURL)
 print("PASS: optional first-flick scrolling, noise rejection, cancellation and persisted options")
+
+let scrollV2=WandHeldScroll()
+scrollV2.begin(now:200)
+precondition(scrollV2.active && scrollV2.consumes(buttons:0))
+var up:Int32=0,down:Int32=0
+for _ in 0..<50 {up += scrollV2.sample(y:-20,dt:0.01)}
+for _ in 0..<50 {down += scrollV2.sample(y:20,dt:0.01)}
+precondition(up==16 && down == -16,"equal up and down scrolling")
+precondition(scrollV2.end(now:201))
+precondition(!scrollV2.active && scrollV2.sample(y:50,dt:0.01)==0,"release stops immediately")
+precondition(!scrollV2.consumes(buttons:0),"interleaved raw reports cannot clear pending click suppression")
+precondition(scrollV2.consumes(buttons:1) && scrollV2.consumes(buttons:0),"old release click swallowed in order")
+precondition(!scrollV2.consumes(buttons:1),"later click remains valid")
+scrollV2.begin(now:202);precondition(!scrollV2.end(now:202.08))
+precondition(!scrollV2.consumes(buttons:1),"a short tap keeps existing mouse behavior")
+scrollV2.begin(now:203);precondition(scrollV2.end(now:203.3))
+precondition(scrollV2.consumes(buttons:1),"stationary hold must not click on release")
+scrollV2.begin(now:204);scrollV2.reset();precondition(!scrollV2.active)
+for value:Any in [0,3,-1,1.5,true,"2"] {precondition(WandControlVersion.read(value) == .pointerV1)}
+precondition(WandControlVersion.read(2) == .scrollV2)
+print("PASS: V2 held scroll, unchanged short taps, ordered click suppression, no stale movement, version fallback")
+
+let contextual=WandHeldScroll()
+contextual.begin(now:300,scrollable:false)
+precondition(!contextual.startDrag(now:300.1),"short taps never generate a native drag")
+precondition(contextual.startDrag(now:300.23) && contextual.dragging)
+precondition(!contextual.startDrag(now:300.3),"mouse down emitted once")
+precondition(contextual.sample(y:20,dt:0.01,now:300.3)==0,"drag target never scrolls")
+contextual.setTarget(scrollable:true);precondition(!contextual.scrollable,"late hit test cannot change an active drag")
+_=contextual.end(now:301)
+contextual.begin(now:302,scrollable:true)
+precondition(!contextual.startDrag(now:302.4),"scroll target never starts dragging")
+precondition(contextual.sample(y:-20,dt:0.01,now:302.1)==0,"existing tap cutoff retained")
+var lines:Int32=0
+for i in 0..<10 {lines+=contextual.sample(y:-20,dt:0.01,now:302.23+Double(i)*0.01)}
+precondition(lines>0)
+print("PASS: context selection preserves short taps and emits one drag down only for non-scroll targets")

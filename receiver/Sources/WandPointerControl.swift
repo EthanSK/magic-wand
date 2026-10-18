@@ -1,4 +1,5 @@
 import Foundation
+import CoreFoundation
 import CoreGraphics
 
 /// Discard outward excess at the actual display edge so reversal responds at once.
@@ -596,9 +597,65 @@ final class WandUserOptions {
         return value
     }
     func enabled(_ key:String)->Bool {(read()[key] as? Bool)==true}
-    func set(_ key:String,_ enabled:Bool)throws {
-        var value=read();value[key]=enabled
+    func set(_ key:String,_ enabled:Bool)throws {try setValue(key,enabled)}
+    func setValue(_ key:String,_ setting:Any)throws {
+        var value=read();value[key]=setting
         let data=try JSONSerialization.data(withJSONObject:value,options:[.sortedKeys])
         try data.write(to:url,options:.atomic)
+    }
+}
+
+/// Control schemes are independent of the hardware prototype. Unknown persisted
+/// values fall back to V1 so an older installation retains its known behavior.
+enum WandControlVersion:Int {
+    case pointerV1=1,scrollV2=2
+    static func read(_ value:Any?)->WandControlVersion {
+        guard let n=value as? NSNumber,CFGetTypeID(n) != CFBooleanGetTypeID(),let v=WandControlVersion(rawValue:n.intValue),n.doubleValue==Double(n.intValue) else{return .pointerV1}
+        return v
+    }
+}
+
+/// V2 changes only a Bottom hold. Short taps are still interpreted by the
+/// existing device callback; a used/long hold must never emit its old end click.
+final class WandHeldScroll {
+    private(set) var active=false
+    private(set) var dragging=false
+    private(set) var scrollable=true
+    private var started=0.0,fraction=0.0,moved=false,dropClick=false,droppingClick=false
+    // Reuse the existing Bottom tap/hold cutoff; do not add a movement buffer.
+    let holdSeconds=0.22
+    func reset(){active=false;dragging=false;fraction=0;moved=false;dropClick=false;droppingClick=false}
+    func begin(now:Double,scrollable:Bool=true){reset();active=true;started=now;self.scrollable=scrollable}
+    func setTarget(scrollable:Bool){if active && !dragging {self.scrollable=scrollable}}
+    func qualified(now:Double)->Bool {active && now-started>=holdSeconds}
+    func startDrag(now:Double)->Bool {
+        guard !scrollable,!dragging,qualified(now:now) else{return false}
+        dragging=true;return true
+    }
+    @discardableResult
+    func end(now:Double)->Bool {
+        guard active else{return false}
+        active=false;dropClick=moved || now-started>=0.22
+        fraction=0;return dropClick
+    }
+    func sample(y:Double,dt:Double,now:Double?=nil)->Int32 {
+        guard active,scrollable,now.map({qualified(now:$0)}) ?? true,y.isFinite,dt>0,dt<=0.05 else{return 0}
+        guard abs(y)>1 else{return 0}
+        fraction += -y*dt*1.6
+        let lines=Int32(max(-12,min(12,fraction.rounded(.towardZero))))
+        fraction -= Double(lines)
+        if lines != 0 {moved=true}
+        return lines
+    }
+    func consumes(buttons:Int)->Bool {
+        if active {return true}
+        // Device reports an endpoint click as ordered down/up frames after
+        // Bottom-up. Keep dropping it until its up, never the next physical tap.
+        if dropClick && buttons & 1 != 0 {dropClick=false;droppingClick=true;return true}
+        if droppingClick {
+            if buttons & 1 == 0 {droppingClick=false}
+            return true
+        }
+        return false
     }
 }

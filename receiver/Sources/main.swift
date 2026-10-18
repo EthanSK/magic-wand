@@ -41,6 +41,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let motionFilter=WandMotionFilter()
     let options=WandUserOptions(url:support.appendingPathComponent("feature-flags.json"))
     let flickScroll=WandFlickScroll()
+    let heldScroll=WandHeldScroll()
+    var heldScrollAnchor:CGPoint?
+    var heldTargetToken=UUID()
+    var controlVersion:WandControlVersion = .pointerV1
+    var controlV1Menu:NSMenuItem?,controlV2Menu:NSMenuItem?
     var flickScrollEnabled=false
     var flickAnchor:CGPoint?
     var statusItem:NSStatusItem?,connectionMenuItem:NSMenuItem?,flickMenuItem:NSMenuItem?,rotationMenuItem:NSMenuItem?
@@ -162,7 +167,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // axes. Read off the motion path so pointer delivery never waits for disk.
     func refreshFeatureFlags() {
         let enabled=options.enabled("orientationCompensation")
-        let flick=options.enabled("flickScroll")
+        let selected=WandControlVersion.read(options.read()["controlVersion"])
+        if controlVersion != selected {controlVersion=selected;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;performPointer(pointerRouter.cancelAll());setCircleLight(false);releaseButtons();motionFilter.reset()}
+        controlV1Menu?.state=selected == .pointerV1 ? .on : .off
+        controlV2Menu?.state=selected == .scrollV2 ? .on : .off
+        let flick=selected == .pointerV1 && options.enabled("flickScroll")
+        flickMenuItem?.isEnabled=selected == .pointerV1
+        flickMenuItem?.isHidden=selected == .scrollV2
         if flickScrollEnabled != flick {if flickScroll.active {setCircleLight(false);motionFilter.reset()};flickScrollEnabled=flick;flickScroll.reset();flickAnchor=nil}
         flickMenuItem?.state=flick ? .on : .off
         rotationMenuItem?.state=enabled ? .on : .off
@@ -180,6 +191,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let title=NSMenuItem(title:"Wand Receiver",action:nil,keyEquivalent:"");title.isEnabled=false;menu.addItem(title)
         let connection=NSMenuItem(title:"Connecting…",action:nil,keyEquivalent:"");connection.isEnabled=false;menu.addItem(connection);connectionMenuItem=connection
         menu.addItem(.separator())
+        let versions=NSMenu(title:"Control version")
+        let v1=NSMenuItem(title:"V1 · Pointer",action:#selector(selectControlV1),keyEquivalent:"");v1.target=self;versions.addItem(v1);controlV1Menu=v1
+        let v2=NSMenuItem(title:"V2 · Hold to scroll",action:#selector(selectControlV2),keyEquivalent:"");v2.target=self;versions.addItem(v2);controlV2Menu=v2
+        let versionItem=NSMenuItem(title:"Control version",action:nil,keyEquivalent:"");versionItem.submenu=versions;menu.addItem(versionItem)
         let settings=NSMenu(title:"Options")
         let flick=NSMenuItem(title:"Flick to scroll",action:#selector(toggleFlickScroll),keyEquivalent:"")
         flick.target=self;flick.toolTip="In mouse mode, flick up then lower slowly to scroll up. No buttons needed."
@@ -194,6 +209,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         do {try options.set(key,!options.enabled(key));refreshFeatureFlags();status();log("OPTION_CHANGED",key,options.enabled(key))}
         catch {connectionMenuItem?.title="Couldn’t save option";log("OPTION_SAVE_FAILED",key,error)}
     }
+    func selectControlVersion(_ version:WandControlVersion) {
+        do {try options.setValue("controlVersion",version.rawValue);refreshFeatureFlags();status();log("CONTROL_VERSION",version.rawValue)}
+        catch {connectionMenuItem?.title="Couldn’t save option";log("OPTION_SAVE_FAILED",error)}
+    }
+    @objc func selectControlV1(){selectControlVersion(.pointerV1)}
+    @objc func selectControlV2(){selectControlVersion(.scrollV2)}
     @objc func toggleFlickScroll(){changeOption("flickScroll")}
     @objc func toggleRotation(){changeOption("orientationCompensation")}
     // Developer maintenance uses the existing BLE owner, so diagnosis and small
@@ -226,11 +247,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func status() {
         connectionMenuItem?.title=ready ? "Connected" : "Connecting…"
-        let key = "\(device?.state == .connected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(flickScrollEnabled)|\(motionFilter.orientationCompensation)"
+        let key = "\(device?.state == .connected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(motionFilter.orientationCompensation)"
         guard key != lastStatusKey else { return }
         lastStatusKey = key
         let value: [String: Any] = ["pid": ProcessInfo.processInfo.processIdentifier, "connected": device?.state == .connected,
-            "ready": ready, "options":["flickScroll":flickScrollEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
+            "ready": ready, "options":["controlVersion":controlVersion.rawValue,"flickScroll":flickScrollEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
             "updatedAt": ISO8601DateFormatter().string(from: Date())]
         if let data = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]) { try? data.write(to: support.appendingPathComponent("status.json"), options: .atomic) }
     }
@@ -282,6 +303,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func reset() {
+        heldScroll.reset();heldScrollAnchor=nil
         flickScroll.reset();flickAnchor=nil
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
@@ -427,6 +449,26 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // The device prints each edge before the click it emits on release,
                 // so a consumed (scrolled) hold's endpoint click is dropped by order.
                 if value=="0" || value=="1" {
+                    if controlVersion == .scrollV2 && appMode != "vsCode" && !scrollActive {
+                        if value=="1" {
+                            heldScrollAnchor=deliveryPoint ?? CGEvent(source:nil)?.location
+                            heldScroll.begin(now:ProcessInfo.processInfo.systemUptime,scrollable:false)
+                            releaseButtons()
+                            let point=heldScrollAnchor ?? .zero,token=UUID();heldTargetToken=token
+                            DispatchQueue.global(qos:.userInitiated).async { [weak self] in
+                                let scrollable=Self.isScrollable(at:point)
+                                DispatchQueue.main.async {
+                                    guard let self,self.heldTargetToken==token,self.heldScroll.active else{return}
+                                    self.heldScroll.setTarget(scrollable:scrollable)
+                                    log("BOTTOM_HOLD_TARGET",scrollable ? "scroll":"drag")
+                                }
+                            }
+                        } else {
+                            if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)}
+                            if heldScroll.end(now:ProcessInfo.processInfo.systemUptime) {queue("global.wandPointerPauseUntil=0;")}
+                            heldScrollAnchor=nil;setCircleLight(false)
+                        }
+                    }
                     if value=="1" && flickScroll.active {flickScroll.reset();flickAnchor=nil;setCircleLight(false);motionFilter.reset()}
                     let recenter=recenterGesture.edge(down:value=="1",now:ProcessInfo.processInfo.systemUptime,eligible:appMode==nil && !scrollActive && !pointerRouter.holdConsumed && buttons==0)
                     restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.bottom(down:value=="1"))
@@ -632,6 +674,30 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         default:break
         }
     }
+    /// Hit-test the actual pointer target, not any scroll view in the window.
+    /// A toolbar/title bar therefore falls back to a real native mouse drag.
+    static func isScrollable(at point:CGPoint)->Bool {
+        let system=AXUIElementCreateSystemWide(),deadline=Date().addingTimeInterval(0.06)
+        AXUIElementSetMessagingTimeout(system,0.02)
+        var hit:AXUIElement?
+        guard AXUIElementCopyElementAtPosition(system,Float(point.x),Float(point.y),&hit) == .success else{return false}
+        var current=hit
+        for _ in 0..<24 {
+            guard let item=current,Date()<deadline else{break}
+            AXUIElementSetMessagingTimeout(item,Float(max(0.001,min(0.01,deadline.timeIntervalSinceNow))))
+            var role:CFTypeRef?
+            if AXUIElementCopyAttributeValue(item,kAXRoleAttribute as CFString,&role) == .success,
+               let name=role as? String {
+                if name==kAXScrollAreaRole as String {return true}
+                if name==kAXWindowRole as String || name==kAXApplicationRole as String {break}
+            }
+            var parent:CFTypeRef?
+            guard AXUIElementCopyAttributeValue(item,kAXParentAttribute as CFString,&parent) == .success,
+                  let value=parent,CFGetTypeID(value)==AXUIElementGetTypeID() else{break}
+            current=(value as! AXUIElement)
+        }
+        return false
+    }
     // Ordinary mice deliver one wheel axis at a time. Mixed-axis line events
     // can be reduced to the dominant direction by native scrolling views.
     // Send both components back-to-back so diagonal wand motion retains both.
@@ -681,7 +747,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         } else if !active {circleTimer?.invalidate();circleTimer=nil}
     }
     /// Scroll chord, HUD and speech take over: drop unshown LOW motion and any circle.
-    func cancelCircleScroll(){flickScroll.reset();flickAnchor=nil;recenterGesture.cancel();restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
+    func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)};heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;recenterGesture.cancel();restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
     func sendReview(_ requests:[WandReviewGesture.Request]){
         for request in requests {
             guard let app=NSRunningApplication.runningApplications(withBundleIdentifier:"com.microsoft.VSCode").first,
@@ -738,6 +804,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         handleFrame(x:x,y:y,b:b)
     }
     func handleFrame(x:Int,y:Int,b:Int){
+        if controlVersion == .scrollV2 && (heldScroll.consumes(buttons:b) || pointerRouter.bottomHeld) {dwell.reset();scheduleDwell();return}
         reportCount += 1
         if reportCount == 1 { log("FIRST_DEVICE_REPORT_VALIDATED") }
         let point = deliveryPoint ?? WandPointerBounds.clamp(CGEvent(source: nil)?.location ?? .zero,to:pointerDisplays)
@@ -766,6 +833,25 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             log("RAW_DELIVERY",rawReports,"seconds",String(format:"%.2f",now-rawWindowStart),"maxGapMs",Int(rawMaxGap*1000))
             rawWindowStart=now;rawReports=0;rawMaxGap=0
         }
+        if controlVersion == .scrollV2 && heldScroll.active {
+            dwell.reset();scheduleDwell()
+            if heldScroll.scrollable {
+                let lines=heldScroll.sample(y:sample.angularY,dt:Double(v[0])/1_000_000,now:now)
+                if lines != 0 {
+                    setCircleLight(true)
+                    for event in Self.wheelEvents(x:0,y:lines,at:heldScrollAnchor){event.post(tap:.cghidEventTap)}
+                }
+            } else {
+                if heldScroll.startDrag(now:now) {transition(to:1,at:heldScrollAnchor ?? deliveryPoint ?? .zero)}
+                if heldScroll.dragging {
+                    let point=deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero
+                    let moved=postPointerMove(dx:sample.x,dy:sample.y,from:point)
+                    if deliveryPoint != nil {deliveryPoint=moved}
+                }
+            }
+            return
+        }
+        if controlVersion == .scrollV2 && pointerRouter.bottomHeld {return}
         let wasFlick=flickScroll.active
         let flick=flickScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now,
             eligible:flickScrollEnabled && dwell.following && !pointerRouter.bottomHeld && buttons==0)
@@ -785,7 +871,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard ready,!restoring,let due=dwell.nextDue else{return}
         dwellTimer=Timer.scheduledTimer(withTimeInterval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             guard let self else{return};self.dwellTimer=nil
-            guard self.ready,!self.restoring,!self.pointerRouter.bottomHeld,!self.hudSession,!self.scrollActive,self.buttons==0,AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
+            guard self.ready,!self.restoring,!self.heldScroll.active,!self.pointerRouter.bottomHeld,!self.hudSession,!self.scrollActive,self.buttons==0,AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
             let point=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:self.pointerDisplays)
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
         }

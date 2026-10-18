@@ -7,7 +7,8 @@ installed application and local settings.
 
 - **Control V1**: `controls-v1.0.0`, receiver 1.2.44 (49). Original Bottom pointer
   gestures and optional flick scrolling.
-- **Control V2**: next version, with a changed Bottom scrolling gesture. Other controls
-  retain their existing behavior. The exact Bottom gesture is being confirmed.
+- **Control V2**: context-sensitive Bottom hold: scroll over a scroll area, or drag elsewhere.
+  Short taps and other controls retain their existing behavior. Flick and circle
+  recognition are off. Select either version from the receiver menu.
 
 The original `prototype-v1.0.0` hardware baseline remains separate and unchanged.

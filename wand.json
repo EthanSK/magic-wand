@@ -8,12 +8,13 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.44",
-    "receiverBuild": "49",
+    "receiver": "1.2.45",
+    "receiverBuild": "50",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "52a4617bad4bdfdbdd3628cbc5b6e541fcf3b4179f18106872a5b14d84f4cb6f"
   },
   "status": [
+    "Control V2 adds context-sensitive Bottom holding: scroll over a scroll area, otherwise drag. Control V1 is preserved and selectable. Physical acceptance is pending.",
     "Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling and recording/mouse light alternation pass automated checks; physical gesture acceptance is pending.",
     "Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.",
     "Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.",
@@ -121,16 +122,12 @@
           "Stop following without clicking"
         ],
         [
-          "Hold, turn, release",
-          "Aim at one-third speed; release clicks once"
+          "Hold over a scroll area",
+          "Move up or down to scroll; release to stop"
         ],
         [
-          "Hold while following",
-          "Aim at low sensitivity; release clicks, pauses 300 ms, then resumes HIGH"
-        ],
-        [
-          "Tap, then hold",
-          "Drag with the actual mouse button held; release drops"
+          "Hold elsewhere",
+          "Drag with the mouse button down; release to drop"
         ],
         [
           "Double tap",
@@ -138,13 +135,11 @@
         ]
       ],
       "notes": [
-        "HIGH is released-button follow. LOW is a plain Bottom hold at one-third speed.",
-        "Hold Bottom and make a rough clockwise loop to scroll down, or anticlockwise to scroll up. Once recognized, the pointer stays fixed through pauses and straight motion until release; release stops without an endpoint click.",
-        "Leave the wand idle on the desk for about two seconds to learn its resting pose. Picking it up can then enter HIGH automatically; setting it down stops following after sustained desk confirmation.",
-        "Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.",
-        "Desk detection is an IMU estimate, not a touch sensor; a very still supported hand can resemble a desk. The browser demo covers the buttons, not physical desk detection.",
-        "Middle switches to the HUD. The pointer stays within real display edges.",
-        "Optional Flick to scroll: in HIGH with Bottom released, flick upward then lower slowly to scroll up. Enable it in Wand Receiver\u2019s menu-bar Options menu."
+        "Control V2 keeps short taps unchanged. The existing 220 ms cutoff separates a tap from a hold.",
+        "The target under the pointer at press chooses scrolling or native dragging. Scrolling stays in that area until release.",
+        "Flick and circular-scroll recognition are disabled in V2. Control V1 retains the earlier gestures.",
+        "VS Code app mode retains Bottom review controls.",
+        "Middle switches to the HUD. The pointer stays within real display edges."
       ]
     }
   ],
@@ -331,7 +326,10 @@
         40
       ],
       "linesPerDegree": 1.6,
-      "description": "Optional: in HIGH mouse mode with Bottom released, flick up then lower slowly to scroll up. The pointer stays put during the gesture."
+      "description": "Optional: in HIGH mouse mode with Bottom released, flick up then lower slowly to scroll up. The pointer stays put during the gesture.",
+      "availableInControlVersions": [
+        1
+      ]
     },
     "recordingMouseBlinkMs": 350
   },
@@ -382,5 +380,20 @@
       "role": "JavaScript firmware on the Puck.js",
       "availability": "Public. The first upload uses the Espruino Web IDE."
     }
-  ]
+  ],
+  "controlVersions": {
+    "active": 2,
+    "available": [
+      {
+        "id": 1,
+        "name": "V1 \u00b7 Pointer",
+        "snapshotTag": "controls-v1.0.0"
+      },
+      {
+        "id": 2,
+        "name": "V2 \u00b7 Hold to scroll",
+        "profile": "control-versions/v2.json"
+      }
+    ]
+  }
 }

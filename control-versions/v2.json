@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": 2,
+  "name": "Control V2",
+  "parent": "controls-v1.0.0",
+  "receiver": "1.2.45",
+  "bottomHold": "Scroll at the captured scroll target, or native mouse drag elsewhere. Release stops or drops.",
+  "bottomTap": "Unchanged from V1",
+  "disabledGestures": [
+    "flick scrolling",
+    "circular scrolling"
+  ],
+  "preserved": [
+    "HIGH pointer and dwell click",
+    "Bottom double-tap recenter",
+    "Top speech",
+    "Middle HUD",
+    "VS Code review",
+    "rotation correction",
+    "recording lights",
+    "two-button scroll"
+  ]
+}
