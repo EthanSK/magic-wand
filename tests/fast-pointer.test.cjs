@@ -60,7 +60,7 @@ test('orange persists through a stalled update and overrides a stale mouse mode'
   w.ctx.wandMotionReady=true;w.ctx.updateLights();
   assert.deepEqual(w.colors(),[0,0,1]);
   w.device.disconnect();
-  assert.deepEqual(w.colors(),[.08,.016,0]);
+  assert.deepEqual(w.colors(),[.45,.45,.45]);
 });
 
 

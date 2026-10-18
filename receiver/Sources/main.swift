@@ -26,7 +26,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var chunks: [Data] = []
     var writing = false, configuring = false, uartPaused = false
     var input = "", buttons = 0, reportCount = 0, movementCount = 0
-    var restoring = false, bridgeLoadFailed = false, loadingBridge = false, generation = 0, retry: DispatchWorkItem?
+    var restoring = false, bridgeLoadFailed = false, loadingBridge = false, loadingRuntime = false, generation = 0, retry: DispatchWorkItem?
     var lastTrusted = false, ready = false, legacySignaled = false
     var lastStatusKey = ""
     var lightMode = "unknown"
@@ -337,7 +337,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func centralManager(_ c: CBCentralManager, didConnect p: CBPeripheral) {
         guard device === p, !restoring else { c.cancelPeripheralConnection(p); return }
-        log("CONNECTED_TO_PUCK"); deadline(seconds: 60); status(); p.discoverServices([uart])
+        loadingRuntime=false;bridgeLoadFailed=false;log("CONNECTED_TO_PUCK"); deadline(seconds: 60); status(); p.discoverServices([uart])
     }
     func centralManager(_ c: CBCentralManager, didFailToConnect p: CBPeripheral, error: Error?) {
         guard device === p else { return }; log("CONNECT_FAILED", error?.localizedDescription ?? "unknown"); reconnect()
@@ -365,6 +365,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard !configuring else { return }; configuring = true
         log("CHECKING_RUNTIME", runtimeVersion)
         let handshake = "if(global.WAND_RUNTIME_VERSION===\"" + runtimeVersion + "\"){if(!global.wandBridgeOriginalSend)global.wandBridgeOriginalSend=mouse.send;mouse.send=function(x,y,b,cb){Bluetooth.println(\"@WAND \"+x+\",\"+y+\",\"+b);if(cb)cb();};if(!connected)onConnect();print(\"WAND_BRIDGE_READY\");}else print(\"WAND_NEEDS_CONFIG\");"
+        // An interrupted prior UART write can leave a partial REPL expression.
+        // Cancel only that input before the handshake; keep saved code and calibration.
+        queue("\u{03}\u{03}\n\u{10}global.WAND_UPDATING=true;if(typeof writeLight==='function'){writeLight(LED1,0.45);writeLight(LED2,0.45);writeLight(LED3,0.45);}" )
         queue(handshake)
     }
     func queue(_ command: String) {
@@ -407,18 +410,24 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line.contains("Error") || line.contains("OUT OF MEMORY") || line.contains("Uncaught") { log("DEVICE_ERROR", line) }
             // Source echo may contain the word Error. Only actual runtime failures
             // invalidate a bridge load; a later ready marker cannot hide one.
-            if loadingBridge && (line.contains("Uncaught ") || line.contains("OUT OF MEMORY") || line == "WAND_UPDATE_FAILED" || line == ">WAND_UPDATE_FAILED") {
+            if (loadingBridge || loadingRuntime) && (line.contains("Uncaught ") || line.contains("OUT OF MEMORY") || line == "WAND_UPDATE_FAILED" || line == ">WAND_UPDATE_FAILED") {
                 bridgeLoadFailed=true;ready=false;lightMode="update";status()
             }
 
-            if line.contains("WAND_NEEDS_CONFIG") { log("UPLOADING_RUNTIME", commands.count); for command in commands { queue(command) } }
-            if line.hasSuffix("WAND_BRIDGE_READY") {
+            if line == "WAND_NEEDS_CONFIG" || line == ">WAND_NEEDS_CONFIG" {
+                guard !loadingRuntime else {continue}
+                loadingRuntime=true;bridgeLoadFailed=false
+                log("UPLOADING_RUNTIME", commands.count); for command in commands { queue(command) }
+            }
+            if line.hasPrefix("WAND_BRIDGE_READY") || line.hasPrefix(">WAND_BRIDGE_READY") {
+                guard !bridgeLoadFailed else {log("RUNTIME_LOAD_REJECTED");continue}
+                loadingRuntime=false
                 queue("E.setFlags({pretokenise:1});global.wandDoubleClickSeconds="+String(min(0.3,NSEvent.doubleClickInterval))+";if(global.WAND_BRIDGE_REVISION==='"+bridgeRevision(modeBridge)+"'&&global.wandMotionReady!==false)print('WAND_MODE_ROUTING_READY');else print('WAND_PATCH_NEEDED');")
             }
-            if line.hasSuffix("WAND_PATCH_NEEDED") {loadModeBridge()}
-            if line.hasSuffix("WAND_MODE_ROUTING_READY") {
+            if line == "WAND_PATCH_NEEDED" || line == ">WAND_PATCH_NEEDED" {loadModeBridge()}
+            if line == "WAND_MODE_ROUTING_READY" || line == ">WAND_MODE_ROUTING_READY" {
                 guard !bridgeLoadFailed else {queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();");log("BRIDGE_LOAD_REJECTED");continue}
-                loadingBridge=false;ready=true;motionFilter.reset();rawLastArrival=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
+                loadingBridge=false;loadingRuntime=false;ready=true;motionFilter.reset();rawLastArrival=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
                 if context.isActive {hudSession=true;resumeHUDNavigation()}
                 queue("global.wandRawPointer=true;global.wandRawBias=undefined;global.wandRawActive=false;global.WAND_UPDATING=false;setHUDOpen("+(context.isActive ? "true":"false")+");updateLights();")
             }

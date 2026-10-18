@@ -1,39 +1,15 @@
-diff --git a/AGENTS.md b/AGENTS.md
-index 95a9b83..c7e2c9c 100644
---- a/AGENTS.md
-+++ b/AGENTS.md
-@@ -108,0 +109,6 @@ When Stay Restore is disabled, the saved monitor layout does not match, Organize
-+
-+- The wand HUD must not close just because time has passed. Keep a healthy held gesture open indefinitely; only stale telemetry, explicit dismissal, or existing safety/session teardown may cancel it.
-+
-+- Do not restart Agent Flow, Wand Receiver or Agentic Mouse while I am using Agent Flow. Before installation, check current recording and all pending transcription/delivery work; unknown state blocks installation. Recheck immediately before replacement after the warning. A brief gap between dictated messages is not permission to restart. Table-rest detection must never send a speech stop, and it must never dismiss an explicitly open wand HUD. User-requested — 2026-10-18.
-+
-+- In the wand VS Code HUD, a single tap selects Review changes or Stage files as a persistent mode; the selected card keeps its stronger outline even when hover moves away. Middle double-tap hides the HUD without clearing that selection. Show a small bottom-center reminder only when VS Code is frontmost and the main HUD is hidden. A tap on the selected card clears it; session lock/shutdown clears it. Keep the two review cards visually separated from the shared mouse controls.
-diff --git a/LEARNINGS.md b/LEARNINGS.md
-index 134e168..3125146 100644
---- a/LEARNINGS.md
-+++ b/LEARNINGS.md
-@@ -3138,0 +3139,8 @@ The Middle press sends a bounded review-mode context lease to Wand Receiver, whi
-+
-+## Persistent wand HUD has no maximum hold duration
-+
-+The persistent controller previously closed a healthy held gesture after 30 seconds because its watchdog checked absolute start time as well as the last valid report. Only the last valid report should expire: stationary reports count as activity, while missing telemetry still releases held actions safely. Regression tests cover two-minute navigation and operation holds, normal release, and loss of telemetry after a long healthy hold. An idle parked HUD already has no inactivity deadline.
-+
-+## Persistent review selection and screenshot lifetime
-+
-+A selected VS Code review mode is separate from transient hover and held-operation state. Keep its heartbeat alive while the main HUD is hidden, but only advertise the mode when VS Code is frontmost. Explicit session teardown clears it. The receiver temporarily lends Bottom to screenshot pointer interaction without dismissing the coordinator; capture completion resumes the same HUD. Table rest and absolute gesture age do not dismiss a healthy explicit HUD.
 diff --git a/Resources/Info.plist b/Resources/Info.plist
-index c3c09e1..c7cf5d3 100644
+index c3c09e1..1db57e5 100644
 --- a/Resources/Info.plist
 +++ b/Resources/Info.plist
 @@ -21 +21 @@
 -	<string>1.0.267</string>
-+	<string>1.0.268</string>
++	<string>1.0.270</string>
 @@ -23 +23 @@
 -	<string>273</string>
-+	<string>274</string>
++	<string>276</string>
 diff --git a/Sources/AgenticMouseApp/AppDelegate.swift b/Sources/AgenticMouseApp/AppDelegate.swift
-index e511261..5b777ef 100644
+index e511261..3adab17 100644
 --- a/Sources/AgenticMouseApp/AppDelegate.swift
 +++ b/Sources/AgenticMouseApp/AppDelegate.swift
 @@ -60,0 +61 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
@@ -46,7 +22,7 @@ index e511261..5b777ef 100644
 +        persistent.onContext = { [weak self, weak coordinator, weak persistent] active in
 +            guard let self else { return }
 +            let selected = self.mouseCommandsAllowed ? persistent?.selectedReviewMode : nil
-+            self.wandReviewIndicator.update(mode:active ? nil : selected)
++            self.wandReviewIndicator.update(mode:selected)
 +            WandContextSender.send(active:active,appMode:active && coordinator?.page == .appSpecific ? coordinator?.appSpecificTarget?.rawValue : nil,reviewMode:active ? persistent?.reviewMode : nil,reviewSelection:selected,screenshotActive:self.selectedAreaScreenshotController.isCapturing)
 diff --git a/Sources/AgenticMouseApp/WandContextSender.swift b/Sources/AgenticMouseApp/WandContextSender.swift
 index 21a01f9..5387bbf 100644
@@ -148,7 +124,7 @@ index cfa1cf5..903f475 100644
 +    var wandReviewAvailable: Bool { false }
 +    func setWandReviewSelection(_ cell: PhysicalCell?) {}
 diff --git a/Sources/ScimitarUI/ColorProofHUDView.swift b/Sources/ScimitarUI/ColorProofHUDView.swift
-index d631c74..1537250 100644
+index d631c74..de7b089 100644
 --- a/Sources/ScimitarUI/ColorProofHUDView.swift
 +++ b/Sources/ScimitarUI/ColorProofHUDView.swift
 @@ -11,0 +12 @@ final class ModeHUDViewModel: ObservableObject {
@@ -162,16 +138,17 @@ index d631c74..1537250 100644
 +                        if cell == .wandReviewChanges {
 +                            Rectangle().fill(Color.white.opacity(0.35)).frame(width:1,height:64).padding(.horizontal,6)
 +                        }
-@@ -447 +452 @@ struct ModeHUDView: View {
+@@ -447 +452,2 @@ struct ModeHUDView: View {
 -            let fillColor = Color(cardColors.fill)
-+            let fillColor = item.cell.wandReviewMode != nil ? Color(red:0.055,green:0.075,blue:0.10) : Color(cardColors.fill)
-@@ -449 +454 @@ struct ModeHUDView: View {
++            let reviewSelected = model.wandReviewSelection == item.cell
++            let fillColor = reviewSelected ? Color(item.accent) : (item.cell.wandReviewMode != nil ? Color(red:0.055,green:0.075,blue:0.10) : Color(cardColors.fill))
+@@ -449 +455 @@ struct ModeHUDView: View {
 -            let foregroundColor = Color(cardColors.foreground)
-+            let foregroundColor = item.cell.wandReviewMode != nil ? Color.white : Color(cardColors.foreground)
-@@ -471 +476 @@ struct ModeHUDView: View {
++            let foregroundColor = reviewSelected ? Color.black : (item.cell.wandReviewMode != nil ? Color.white : Color(cardColors.foreground))
+@@ -471 +477 @@ struct ModeHUDView: View {
 -                    usesStrongDestinationFill: cardColors.usesStrongDestinationFill,
 +                    usesStrongDestinationFill: item.cell.wandReviewMode != nil || cardColors.usesStrongDestinationFill,
-@@ -475,0 +481,10 @@ struct ModeHUDView: View {
+@@ -475,0 +482,10 @@ struct ModeHUDView: View {
 +                if item.cell.wandReviewMode != nil {
 +                    shape.fill(Color(item.accent).opacity(0.12)).allowsHitTesting(false)
 +                    shape.strokeBorder(Color(item.accent).opacity(0.7),lineWidth:1.5).allowsHitTesting(false)
@@ -184,10 +161,10 @@ index d631c74..1537250 100644
 +                }
 diff --git a/Sources/ScimitarUI/WandReviewIndicator.swift b/Sources/ScimitarUI/WandReviewIndicator.swift
 new file mode 100644
-index 0000000..4ecff12
+index 0000000..d1ef422
 --- /dev/null
 +++ b/Sources/ScimitarUI/WandReviewIndicator.swift
-@@ -0,0 +1,33 @@
+@@ -0,0 +1,59 @@
 +import AppKit
 +import SwiftUI
 +
@@ -198,26 +175,52 @@ index 0000000..4ecff12
 +    private var current:String?
 +    public init() {}
 +    public func update(mode:String?) {
-+        guard mode != current else { return }
++        guard let mode, ["changes","files"].contains(mode), let screen=NSScreen.main else {
++            current=nil;panel?.orderOut(nil);panel=nil;return
++        }
++        let frame=indicatorFrame(on:screen)
++        if current == mode,let panel {panel.setFrameOrigin(frame.origin);return}
 +        current=mode
 +        panel?.orderOut(nil);panel=nil
-+        guard let mode, ["changes","files"].contains(mode), let screen=NSScreen.main else{return}
-+        let frame=NSRect(x:screen.visibleFrame.midX-90,y:screen.visibleFrame.minY+18,width:180,height:36)
 +        let p=NSPanel(contentRect:frame,styleMask:[.borderless,.nonactivatingPanel],backing:.buffered,defer:false)
-+        p.isOpaque=false;p.backgroundColor = .clear;p.hasShadow=true;p.level = .floating
++        p.isOpaque=false;p.backgroundColor = .clear;p.hasShadow=true;p.level = NSWindow.Level(rawValue:NSWindow.Level.floating.rawValue+2)
 +        p.hidesOnDeactivate=false;p.ignoresMouseEvents=true;p.collectionBehavior=[.canJoinAllSpaces,.fullScreenAuxiliary]
 +        p.contentView=NSHostingView(rootView:WandReviewIndicatorView(mode:mode))
 +        panel=p;p.orderFrontRegardless()
 +    }
++    /// Use the recorder's actual on-screen panel, excluding Agent Flow's Dashboard.
++    /// Window-server coordinates have a top-left origin; AppKit uses bottom-left.
++    private func indicatorFrame(on screen:NSScreen)->NSRect {
++        let pids=Set(NSWorkspace.shared.runningApplications.filter {
++            $0.executableURL?.lastPathComponent == "AgentFlow"
++        }.map { $0.processIdentifier })
++        let windows=CGWindowListCopyWindowInfo([.optionOnScreenOnly,.excludeDesktopElements],kCGNullWindowID) as? [[String:Any]] ?? []
++        let top=NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
++        let recorder=windows.compactMap { info -> CGRect? in
++            guard let owner=info[kCGWindowOwnerPID as String] as? Int32,pids.contains(owner),
++                  let layer=info[kCGWindowLayer as String] as? Int,layer>0,
++                  let data=info[kCGWindowBounds as String] as? NSDictionary,
++                  let cg=CGRect(dictionaryRepresentation:data),cg.width>=160,cg.width<1400,
++                  cg.height>=35,cg.height<700 else{return nil}
++            let r=CGRect(x:cg.minX,y:top-cg.maxY,width:cg.width,height:cg.height)
++            guard r.intersects(screen.frame),abs(r.midX-screen.visibleFrame.midX)<300,
++                  r.minY<screen.visibleFrame.minY+360 else{return nil}
++            return r
++        }.max { $0.maxY < $1.maxY }
++        let bottom=recorder.map {$0.maxY+12} ?? (screen.visibleFrame.minY+168)
++        return NSRect(x:screen.visibleFrame.midX-90,
++            y:min(screen.visibleFrame.maxY-48,bottom),width:180,height:36)
++    }
++
 +}
 +struct WandReviewIndicatorView:View {
 +    let mode:String
 +    var body:some View {
 +        Label(mode == "changes" ? "Review changes" : "Stage files",systemImage:mode == "changes" ? "eye" : "doc.on.doc")
 +            .font(.system(size:12,weight:.semibold,design:.rounded))
-+            .foregroundStyle(mode == "changes" ? Color.green : Color.purple)
++            .foregroundStyle(Color.black)
 +            .padding(.horizontal,14).frame(width:180,height:36)
-+            .background(.ultraThinMaterial,in:Capsule())
++            .background(mode == "changes" ? Color.green : Color(red:0.78,green:0.6,blue:1),in:Capsule())
 +            .overlay(Capsule().strokeBorder(.white.opacity(0.28),lineWidth:1))
 +    }
 +}
@@ -297,13 +300,32 @@ index bd5b665..513a16f 100644
 +    }
 +
 diff --git a/Tests/ScimitarUITests/WandPointerFocusTests.swift b/Tests/ScimitarUITests/WandPointerFocusTests.swift
-index 0016241..2478998 100644
+index 0016241..884e454 100644
 --- a/Tests/ScimitarUITests/WandPointerFocusTests.swift
 +++ b/Tests/ScimitarUITests/WandPointerFocusTests.swift
-@@ -117 +117,2 @@ final class WandPointerFocusTests: XCTestCase {
+@@ -107,0 +108,18 @@ final class WandPointerFocusTests: XCTestCase {
++    @MainActor
++    func testReviewSelectionComparison() throws {
++        let states:[PhysicalCell?] = [nil,.wandReviewChanges,.wandReviewFiles]
++        let models=states.map { selected in
++            let model=ModeHUDViewModel(source:.wand,appIconProvider:NoIconProvider())
++            var home=DefaultMapLegend.snapshot(source:.wand,frontmostAppContext:FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode"))
++            home.legend += [.init(cell:.wandReviewChanges,actionTitle:"Review changes",accent:.init(red:65,green:201,blue:122)),.init(cell:.wandReviewFiles,actionTitle:"Stage files",accent:.init(red:180,green:105,blue:235))]
++            home.pointerFocus = .init(cell:.switchApp)
++            home.wandReviewSelection=selected
++            model.apply(home)
++            return model
++        }
++        let view=VStack(spacing:16){ForEach(Array(models.enumerated()),id:\.offset){_,model in ModeHUDView(model:model)}}.padding(24).background(Color.black)
++        let renderer=ImageRenderer(content:view);renderer.scale=1
++        let image=try XCTUnwrap(renderer.nsImage)
++        if let path=ProcessInfo.processInfo.environment["WAND_REVIEW_COMPARE_OUTPUT"],let data=image.tiffRepresentation,let bitmap=NSBitmapImageRep(data:data),let png=bitmap.representation(using:.png,properties:[:]) {try png.write(to:URL(fileURLWithPath:path))}
++    }
++
+@@ -117 +135,2 @@ final class WandPointerFocusTests: XCTestCase {
 -        home.pointerFocus = .init(cell:.wandReviewChanges,pullX:0.3)
 +        home.pointerFocus = .init(cell:.switchApp,pullX:0.3)
 +        home.wandReviewSelection = .wandReviewChanges
-@@ -121 +122 @@ final class WandPointerFocusTests: XCTestCase {
+@@ -121 +140 @@ final class WandPointerFocusTests: XCTestCase {
 -        XCTAssertEqual(image.size.width,1035,accuracy:1)
 +        XCTAssertEqual(image.size.width,1049,accuracy:1)

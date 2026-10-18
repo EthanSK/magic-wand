@@ -123,7 +123,7 @@ for (const bridge of ["readable", "fragments"]) {
     ctx.scrollHeld = false; ctx.setHUDOpen(false); ctx.setWandRecording(false);
     assert.deepEqual(w.colors(), [0, 0, 0], "stopping recording clears idle light");
     ctx.setWandRecording(true); ctx.connected = false; ctx.updateLights();
-    assert.deepEqual(w.colors(), [0.08, 0.016, 0], "disconnected overrides stale recording");
+    assert.deepEqual(w.colors(), [.45, .45, .45], "disconnected overrides stale recording");
     ctx.WAND_UPDATING = true; ctx.updateLights();
     assert.deepEqual(w.colors(), [.45, .45, .45], "update uses the old white mix perceived as orange");
 

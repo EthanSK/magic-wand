@@ -411,3 +411,25 @@ Keep the two extra review cards out of physical mouse cell enumeration and decod
 ## Automatic table rest can stop active dictation
 
 The native receiver previously sent a synthetic Top press after a quiet table-rest interval. Receiver traces proved AUTO_RECORDING_STOP_REQUEST immediately preceded recording stopping while Agent Flow retained the same PID. Do not diagnose that as an app restart. Rest detection now owns pointer power only and ignores samples while the explicit HUD session is open; intentional Top input remains the speech route. Do not use an idle gap between dictated messages as permission for an installation.
+
+
+## UART source echo is not a runtime response
+
+A cancelled partial REPL command can restore echo. Searching an echoed handshake for
+`WAND_NEEDS_CONFIG` triggered an unnecessary full upload and exhausted device memory.
+Reapply quiet input after clearing the command, match standalone response markers, and
+reject a ready marker after an actual upload error. Tests execute the receiver's actual
+marker handler against echoed source, duplicate markers and a failed load. Keep base
+runtime failures separate from bridge failures, and preserve calibration when reusing
+an unchanged runtime. A small verified light-function replacement can avoid reloading
+the entire bridge during a receiver update.
+
+## Review tap identity and visible selection
+
+Each activation needs a new transport identity after a completed navigation gesture.
+Reusing navigation's completed ID made the HUD deduplicate a real selection tap. Test
+the actual transport method, not a stand-in generator. Keep selected Review and Stage
+cards bright and retain their non-activating badge when the main HUD is visible or
+hidden. Anchor that badge above the recorder's actual floating window when available;
+exclude the normal Agent Flow Dashboard from placement and leave room when hidden.
+Rendered SwiftUI checks do not establish physical wand acceptance.

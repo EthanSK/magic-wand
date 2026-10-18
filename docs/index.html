@@ -24,7 +24,7 @@
   <link rel="manifest" href="./site.webmanifest?v=7cccaabea0">
   <link rel="preload" href="./fonts/big-shoulders-display.woff2?v=203dd8ba4a" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="./fonts/atkinson-hyperlegible-next.woff2?v=1e4cea71d7" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./styles.css?v=36f748d5b2">
+  <link rel="stylesheet" href="./styles.css?v=61287e3db2">
   <script type="importmap">
   {
     "imports": {
@@ -43,8 +43,8 @@
     "worker": "./sim/worker.js?v=418f86ed95",
     "shim": "./sim/espruino.js?v=0fba4637ae",
     "device": "./device/wand-mouse-prototype.js?v=036f2bd951",
-    "bridge": "./device/wand-mode-bridge.compact.js?v=691e21c9f5",
-    "wand": "./data/wand.json?v=532b34b520",
+    "bridge": "./device/wand-mode-bridge.compact.js?v=7380f996de",
+    "wand": "./data/wand.json?v=9782d6bb7d",
     "hud": "./data/hud.json?v=c804168e26"
   }
   </script>
@@ -168,7 +168,7 @@
       <p class="fine">Listed from highest priority.</p>
       <ul class="lights">
         <li data-light="update"><span class="swatch" aria-hidden="true"></span><strong>Updating</strong> <span>Receiver is updating the device code</span></li>
-        <li data-light="disconnected"><span class="swatch" aria-hidden="true"></span><strong>Disconnected</strong> <span>Dim orange</span></li>
+        <li data-light="disconnected"><span class="swatch" aria-hidden="true"></span><strong>Disconnected</strong> <span>Orange while unavailable</span></li>
         <li data-light="calibration"><span class="swatch" aria-hidden="true"></span><strong>Calibrating</strong> <span>Keep it still with no buttons pressed for two seconds</span></li>
         <li data-light="scroll"><span class="swatch" aria-hidden="true"></span><strong>Scrolling</strong> <span>Cyan</span></li>
         <li data-light="app"><span class="swatch" aria-hidden="true"></span><strong>App review</strong> <span>Green for app review; purple for VS Code file staging</span></li>
@@ -290,7 +290,9 @@
           <h3>Status</h3>
           <!-- wand:status -->
           <ul class="status-list">
-            <li>Installed: Wand Receiver 1.2.55 and signed Agentic Mouse 1.0.268 keep review modes selected through HUD dismissal, preserve the HUD through screenshots and never stop dictation on table rest. Physical acceptance is pending.</li>
+            <li>Installed: Wand Receiver 1.2.57 and signed Agentic Mouse 1.0.270 add distinct review tap identities, brighter selected cards and an indicator above Agent Flow. Physical acceptance is pending.</li>
+            <li>Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.</li>
+            <li>The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.</li>
             <li>Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.</li>
             <li>HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.</li>
             <li>Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.</li>
@@ -303,7 +305,7 @@
             <li>HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.</li>
             <li>End-to-end latency, accuracy and battery life haven’t been measured.</li>
           </ul>
-          <p class="versions"><span>Receiver 1.2.55 (60)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge 691e21c9</span></p>
+          <p class="versions"><span>Receiver 1.2.57 (62)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge 7380f996</span></p>
           <p class="fine">Updated 18 October 2026</p>
           <!-- /wand:status -->
         </div>
