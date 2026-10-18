@@ -110,3 +110,5 @@ Report any check the browser tool can’t do, such as real multitouch, rather th
   go back without losing the behavior. Control versions are separate from hardware prototypes.
 - When a new control version changes only Bottom, keep every other control unchanged.
   Use one runtime version selector; never silently redefine an older version or move its tag.
+
+- Do not restart Agent Flow, Wand Receiver or Agentic Mouse while I am using Agent Flow. Before installation, check current recording and all pending transcription/delivery work; unknown state blocks installation. Recheck immediately before replacement after the warning. A brief gap between dictated messages is not permission to restart. Table-rest detection must never send a speech stop, and it must never dismiss an explicitly open wand HUD. User-requested — 2026-10-18.

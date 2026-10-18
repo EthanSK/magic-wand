@@ -210,3 +210,7 @@ did not increase the received rate; 104 Hz remains selected.
 ## Wand VS Code home shortcuts
 
 `integrations/agentic-mouse/wand-vscode-review-shortcuts.patch` preserves the incremental addition installed in signed Agentic Mouse 1.0.267 (273). It depends on the earlier local wand integration; apply this zero-context patch with `git apply --unidiff-zero`. The wand home HUD adds Review changes and Stage files immediately after Switch App only with VS Code frontmost; physical mouse grids remain unchanged. A held Middle publishes a short-lived review context. Wand Receiver 1.2.54 reuses its existing straight-to-circle scroll geometry and ordered Better Git review transport; release finishes and lost context cancels. Native input and rendered-layout checks passed. Physical gesture acceptance remains pending.
+
+### Pending HUD lifetime fix
+
+`integrations/agentic-mouse/wand-hud-no-timeout.patch` removes the healthy-held-gesture duration limit while retaining missing-input teardown. Apply with `git apply --unidiff-zero` after the existing wand review shortcuts. Source tests pass; local installation is pending a safe idle boundary, not implied by this patch.

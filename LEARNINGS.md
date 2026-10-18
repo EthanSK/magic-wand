@@ -407,3 +407,7 @@ Native lifecycle and device-to-simulator tests cover initially-on and initially-
 ## Reuse review sessions from wand-only home cards
 
 Keep the two extra review cards out of physical mouse cell enumeration and decoding. Render and navigate the same extended middle row only when VS Code is frontmost. The HUD publishes the selected held review mode; the receiver retains ownership of angular conversion, shared circular continuation and ordered Better Git requests. A physical Middle release finishes immediately; hidden HUD, stale navigation or lost app context cancels. Do not introduce another hold delay after Middle is already qualified. One seven-degree step reuses one review ratchet.
+
+## Automatic table rest can stop active dictation
+
+The native receiver previously sent a synthetic Top press after a quiet table-rest interval. Receiver traces proved AUTO_RECORDING_STOP_REQUEST immediately preceded recording stopping while Agent Flow retained the same PID. Do not diagnose that as an app restart. Rest detection now owns pointer power only and ignores samples while the explicit HUD session is open; intentional Top input remains the speech route. Do not use an idle gap between dictated messages as permission for an installation.
