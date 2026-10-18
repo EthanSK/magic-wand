@@ -39,6 +39,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let pointerRouter=WandPointerRouter()
     let recenterGesture=WandRecenterGesture()
     let motionFilter=WandMotionFilter()
+    let options=WandUserOptions(url:support.appendingPathComponent("feature-flags.json"))
+    let flickScroll=WandFlickScroll()
+    var flickScrollEnabled=false
+    var flickAnchor:CGPoint?
+    var statusItem:NSStatusItem?,connectionMenuItem:NSMenuItem?,flickMenuItem:NSMenuItem?,rotationMenuItem:NSMenuItem?
+
     var rawLastArrival=0.0,rawReports=0,rawWindowStart=0.0,rawMaxGap=0.0
     let dwell=WandDwellClick()
     let restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
@@ -129,6 +135,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         recording.start()
         lastTrusted = AXIsProcessTrusted()
+        setupOptionsMenu()
         refreshFeatureFlags()
         log("STARTED", ProcessInfo.processInfo.processIdentifier, "ACCESSIBILITY", lastTrusted)
         if CommandLine.arguments.contains("--request-permissions") {
@@ -154,17 +161,41 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // Opt-in, local-only flag. A missing or invalid file restores the original
     // axes. Read off the motion path so pointer delivery never waits for disk.
     func refreshFeatureFlags() {
-        let path=support.appendingPathComponent("feature-flags.json")
-        let enabled:Bool
-        if let data=try? Data(contentsOf:path),data.count<4096,
-           let flags=try? JSONSerialization.jsonObject(with:data) as? [String:Any] {
-            enabled=(flags["orientationCompensation"] as? Bool)==true
-        }else{enabled=false}
+        let enabled=options.enabled("orientationCompensation")
+        let flick=options.enabled("flickScroll")
+        if flickScrollEnabled != flick {if flickScroll.active {setCircleLight(false);motionFilter.reset()};flickScrollEnabled=flick;flickScroll.reset();flickAnchor=nil}
+        flickMenuItem?.state=flick ? .on : .off
+        rotationMenuItem?.state=enabled ? .on : .off
         if motionFilter.orientationCompensation != enabled {
             motionFilter.orientationCompensation=enabled;motionFilter.reset()
             log("ORIENTATION_COMPENSATION",enabled)
         }
     }
+    func setupOptionsMenu() {
+        let item=NSStatusBar.system.statusItem(withLength:NSStatusItem.variableLength)
+        item.button?.image=NSImage(systemSymbolName:"wand.and.stars",accessibilityDescription:"Magic Wand")
+        item.button?.image?.isTemplate=true
+        item.button?.toolTip="Magic Wand"
+        let menu=NSMenu(title:"Magic Wand")
+        let title=NSMenuItem(title:"Wand Receiver",action:nil,keyEquivalent:"");title.isEnabled=false;menu.addItem(title)
+        let connection=NSMenuItem(title:"Connecting…",action:nil,keyEquivalent:"");connection.isEnabled=false;menu.addItem(connection);connectionMenuItem=connection
+        menu.addItem(.separator())
+        let settings=NSMenu(title:"Options")
+        let flick=NSMenuItem(title:"Flick to scroll",action:#selector(toggleFlickScroll),keyEquivalent:"")
+        flick.target=self;flick.toolTip="In mouse mode, flick up then lower slowly to scroll up. No buttons needed."
+        settings.addItem(flick);flickMenuItem=flick
+        let rotation=NSMenuItem(title:"Rotation-independent controls",action:#selector(toggleRotation),keyEquivalent:"")
+        rotation.target=self;rotation.toolTip="Keep mouse, HUD and scroll directions upright when you rotate the wand."
+        settings.addItem(rotation);rotationMenuItem=rotation
+        let parent=NSMenuItem(title:"Options",action:nil,keyEquivalent:"");parent.submenu=settings;menu.addItem(parent)
+        item.menu=menu;statusItem=item
+    }
+    func changeOption(_ key:String) {
+        do {try options.set(key,!options.enabled(key));refreshFeatureFlags();status();log("OPTION_CHANGED",key,options.enabled(key))}
+        catch {connectionMenuItem?.title="Couldn’t save option";log("OPTION_SAVE_FAILED",key,error)}
+    }
+    @objc func toggleFlickScroll(){changeOption("flickScroll")}
+    @objc func toggleRotation(){changeOption("orientationCompensation")}
     // Developer maintenance uses the existing BLE owner, so diagnosis and small
     // device updates do not disconnect the user's working pointer. Only consume
     // a same-user regular file with private permissions; never follow symlinks.
@@ -194,11 +225,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         } else {queue(command)}
     }
     func status() {
-        let key = "\(device?.state == .connected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)"
+        connectionMenuItem?.title=ready ? "Connected" : "Connecting…"
+        let key = "\(device?.state == .connected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(flickScrollEnabled)|\(motionFilter.orientationCompensation)"
         guard key != lastStatusKey else { return }
         lastStatusKey = key
         let value: [String: Any] = ["pid": ProcessInfo.processInfo.processIdentifier, "connected": device?.state == .connected,
-            "ready": ready, "recording":recording.isRecording, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
+            "ready": ready, "options":["flickScroll":flickScrollEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
             "updatedAt": ISO8601DateFormatter().string(from: Date())]
         if let data = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]) { try? data.write(to: support.appendingPathComponent("status.json"), options: .atomic) }
     }
@@ -250,6 +282,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func reset() {
+        flickScroll.reset();flickAnchor=nil
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
         probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true);restStopPending=false
@@ -370,7 +403,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if let marker=line.range(of:"@FOLLOW ") {
                 let value=line[marker.upperBound...].trimmingCharacters(in:.whitespaces)
                 if value=="0" || value=="1" {
-                    if value=="1" {restDetection.pointerActivated()}else{restDetection.pointerStopped()}
+                    if value=="1" {restDetection.pointerActivated()}else{restDetection.pointerStopped();flickScroll.reset();flickAnchor=nil;setCircleLight(false)}
                     dwell.follow(value=="1");scheduleDwell()
                 }
             }
@@ -394,6 +427,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // The device prints each edge before the click it emits on release,
                 // so a consumed (scrolled) hold's endpoint click is dropped by order.
                 if value=="0" || value=="1" {
+                    if value=="1" && flickScroll.active {flickScroll.reset();flickAnchor=nil;setCircleLight(false);motionFilter.reset()}
                     let recenter=recenterGesture.edge(down:value=="1",now:ProcessInfo.processInfo.systemUptime,eligible:appMode==nil && !scrollActive && !pointerRouter.holdConsumed && buttons==0)
                     restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.bottom(down:value=="1"))
                     if recenter {recenterPointer();queue("setMouseFollow(true);")}
@@ -647,7 +681,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         } else if !active {circleTimer?.invalidate();circleTimer=nil}
     }
     /// Scroll chord, HUD and speech take over: drop unshown LOW motion and any circle.
-    func cancelCircleScroll(){recenterGesture.cancel();restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
+    func cancelCircleScroll(){flickScroll.reset();flickAnchor=nil;recenterGesture.cancel();restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
     func sendReview(_ requests:[WandReviewGesture.Request]){
         for request in requests {
             guard let app=NSRunningApplication.runningApplications(withBundleIdentifier:"com.microsoft.VSCode").first,
@@ -732,6 +766,17 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             log("RAW_DELIVERY",rawReports,"seconds",String(format:"%.2f",now-rawWindowStart),"maxGapMs",Int(rawMaxGap*1000))
             rawWindowStart=now;rawReports=0;rawMaxGap=0
         }
+        let wasFlick=flickScroll.active
+        let flick=flickScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now,
+            eligible:flickScrollEnabled && dwell.following && !pointerRouter.bottomHeld && buttons==0)
+        if flick.consumesPointer {
+            if flickAnchor==nil {flickAnchor=deliveryPoint ?? CGEvent(source:nil)?.location;setCircleLight(true)}
+            dwell.reset();scheduleDwell()
+            if flick.lines != 0 {for event in Self.wheelEvents(x:0,y:flick.lines,at:flickAnchor){event.post(tap:.cghidEventTap)}}
+            return
+        }
+        flickAnchor=nil
+        if wasFlick {setCircleLight(false);motionFilter.reset();dwell.reset();scheduleDwell();return}
         dwell.intent(sample.intent,now:now)
         handleFrame(x:sample.x,y:sample.y,b:buttons)
     }
@@ -819,6 +864,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
 }
 let instanceLock = open(support.appendingPathComponent("receiver.lock").path, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)
 guard instanceLock >= 0, flock(instanceLock, LOCK_EX | LOCK_NB) == 0 else { log("ALREADY_RUNNING"); exit(0) }
+let application=NSApplication.shared
+application.setActivationPolicy(.accessory)
 let receiver = WandReceiver()
 signal(SIGINT, SIG_IGN); signal(SIGTERM, SIG_IGN); signal(SIGUSR1, SIG_IGN)
 let interrupt = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
@@ -827,4 +874,4 @@ interrupt.setEventHandler { receiver.stop() }; terminate.setEventHandler { recei
 let maintenanceSignal = DispatchSource.makeSignalSource(signal: SIGUSR1, queue: .main)
 maintenanceSignal.setEventHandler { receiver.maintenance() }
 interrupt.resume(); terminate.resume(); maintenanceSignal.resume()
-RunLoop.main.run()
+application.run()

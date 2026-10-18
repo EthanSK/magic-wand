@@ -466,7 +466,7 @@ struct WandAngularStream {
 }
 
 final class WandMotionFilter {
-    struct Result {let x:Int,y:Int;let intent:Bool}
+    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double}
     private var values:[Double] = []
     private var fx=0.0,fy=0.0,ix=0.0,iy=0.0,meanSpeed=0.0,intentTime=0.0
     private var slackX=0.0,slackY=0.0,fractionX=0.0,fractionY=0.0
@@ -521,7 +521,7 @@ final class WandMotionFilter {
         fractionX+=stepX*v[2]*scale*v[11];fractionY+=stepY*v[2]*v[3]*scale*v[12]
         let countX=Int(fractionX.rounded(.towardZero)),countY=Int(fractionY.rounded(.towardZero))
         fractionX-=Double(countX);fractionY-=Double(countY)
-        return .init(x:max(-4095,min(4095,countX)),y:max(-4095,min(4095,countY)),intent:active)
+        return .init(x:max(-4095,min(4095,countX)),y:max(-4095,min(4095,countY)),intent:active,angularX:x*v[11],angularY:y*v[12])
     }
 }
 
@@ -542,5 +542,63 @@ final class WandRecenterGesture {
         guard now-start>=0 && now-start<0.22 else{lastRelease=nil;second=false;return false}
         if second {lastRelease=nil;second=false;return true}
         lastRelease=now;return false
+    }
+}
+
+/// A fast upward cue followed by its slow return scrolls up in released-button
+/// HIGH mode. No sample buffer: only the recognised gesture owns the pointer.
+final class WandFlickScroll {
+    struct Result {let consumesPointer:Bool;let lines:Int32}
+    private enum Phase {case idle, flick, armed, scrolling}
+    private var phase:Phase = .idle
+    private var start=0.0,lastMotion=0.0,travel=0.0,fraction=0.0
+    var active:Bool {phase != .idle}
+    func reset(){phase = .idle;start=0;lastMotion=0;travel=0;fraction=0}
+    func sample(x:Double,y:Double,dt:Double,now:Double,eligible:Bool)->Result {
+        let none=Result(consumesPointer:false,lines:0)
+        guard eligible,x.isFinite,y.isFinite,dt>0,dt<=0.05,now.isFinite else{reset();return none}
+        let upward=y < -55 && abs(y)>abs(x)*1.5
+        if upward {
+            if phase != .flick {phase = .flick;start=now;travel=0;fraction=0}
+            travel += -y*dt;lastMotion=now
+            return .init(consumesPointer:true,lines:0)
+        }
+        guard phase != .idle else{return none}
+        if abs(x)>max(15,abs(y)*1.5) || y>55 {reset();return none}
+        if phase == .flick {
+            if y < -12 && now-start<=0.35 {travel += -y*dt;lastMotion=now;return .init(consumesPointer:true,lines:0)}
+            guard travel>=3,now-start<=0.35 else{reset();return none}
+            phase = .armed;lastMotion=now
+        }
+        if y>=1.5 && y<=40 {
+            // Begin on the first deliberate return sample, without waiting for
+            // enough fractional travel to fill the first native wheel line.
+            if phase != .scrolling {fraction=1}
+            phase = .scrolling;lastMotion=now
+            fraction += y*dt*1.6
+            let lines=Int32(min(12,fraction.rounded(.towardZero)))
+            fraction -= Double(lines)
+            return .init(consumesPointer:true,lines:lines)
+        }
+        let timeout=phase == .armed ? 0.6 : 0.25
+        if now-lastMotion>timeout {reset();return none}
+        return .init(consumesPointer:true,lines:0)
+    }
+}
+
+/// The menu and file watcher use this same store. Unrelated flags survive edits.
+final class WandUserOptions {
+    let url:URL
+    init(url:URL){self.url=url}
+    func read()->[String:Any] {
+        guard let data=try? Data(contentsOf:url),data.count<4096,
+              let value=try? JSONSerialization.jsonObject(with:data) as? [String:Any] else{return [:]}
+        return value
+    }
+    func enabled(_ key:String)->Bool {(read()[key] as? Bool)==true}
+    func set(_ key:String,_ enabled:Bool)throws {
+        var value=read();value[key]=enabled
+        let data=try JSONSerialization.data(withJSONObject:value,options:[.sortedKeys])
+        try data.write(to:url,options:.atomic)
     }
 }
