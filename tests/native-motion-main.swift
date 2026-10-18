@@ -58,3 +58,49 @@ for index in 0..<100 {
     precondition(a.x==0 && a.y==0,"gravity changes alone cannot move cursor")
 }
 print("PASS: roll invariance, flag-off equivalence, gravity guards and stationary cursor")
+
+// Static world-space movement must retain the chosen gains as the grip rolls
+// and the tip rises, including nonzero bias and the nonlinear speed curve.
+do {
+let config:[Double]=[83,-57,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]
+func counts(roll:Double,h:Double,v:Double,held:Bool,pitch:Double=0)->(Int,Int) {
+ let f=WandMotionFilter();precondition(f.configure(config));f.orientationCompensation=true
+ // Rotate physical gyro and gravity vectors about the wand's Y shaft.
+ let c=cos(roll),s=sin(roll),p=cos(pitch)
+ f.observeGravity(x:-s*p,y:sin(pitch),z:c*p)
+ var x=0,y=0
+ for _ in 0..<120 {
+  let bodyZ=h*p*c+v*s,bodyX=v*c-h*p*s
+  let r=f.sample(rawX:Int((bodyZ*134+config[0]).rounded()),rawY:Int((bodyX*134+config[1]).rounded()),microseconds:10000,held:held,resetState:false)!
+  x+=r.x;y+=r.y
+ }
+ return (x,y)
+}
+var cases=0,maxError=0
+for degrees in stride(from:0,through:345,by:15) {
+ for pitch in [-60.0,0,60] {
+  for held in [false,true] {
+   for speed in [0.8,3,20] {
+    for direction in [0.0,Double.pi/4,Double.pi/2] {
+     let h=speed*cos(direction),v=speed*sin(direction)
+     let a=counts(roll:0,h:h,v:v,held:held)
+     let b=counts(roll:Double(degrees)*Double.pi/180,h:h,v:v,held:held,pitch:pitch*Double.pi/180)
+     let error=max(abs(a.0-b.0),abs(a.1-b.1));maxError=max(maxError,error);cases+=1
+     precondition(error<=2,"roll \(degrees), pitch \(pitch), held \(held), speed \(speed): \(a) != \(b)")
+    }
+   }
+  }
+ }
+}
+let highX=counts(roll:0,h:20,v:0,held:false).0
+let highY=counts(roll:0,h:0,v:20,held:false).1
+let lowX=counts(roll:0,h:20,v:0,held:true).0
+precondition(abs(Double(highY)/Double(highX)-1.4)<0.002)
+precondition(abs(Double(lowX)/Double(highX)-1.0/3)<0.002)
+print("PASS \(cases) static-angle/speed/direction cases; max accumulated difference \(maxError) pointer counts")
+print("Vertical/horizontal ratio:",Double(highY)/Double(highX),"held/high:",Double(lowX)/Double(highX))
+// Above 60 degrees the correction is bounded; do not amplify pole noise without limit.
+let pole=counts(roll:0,h:20,v:0,held:false,pitch:80*Double.pi/180)
+precondition(abs(pole.0)<abs(highX),"near-vertical correction must stay bounded")
+print("PASS: sensitivity stays bounded near vertical")
+}

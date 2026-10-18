@@ -210,7 +210,12 @@ existing 10 Hz IMU telemetry, without adding packets or a pointer buffer.
 For the current mount (shaft along sensor Y, neutral face-up along Z), normalize
 gravity's X/Z projection and rotate the bias-corrected angular rates before the
 existing filter and gain. This preserves the screen's vertical gain and LOW gain.
-The test covers 0, 30, 90, 180 and 270 degree wrist rolls, flag-off equivalence,
+Horizontal heading projects onto the shaft-perpendicular axes with a cosine
+loss as the tip rises. Correct by length(gravity)/length(projected gravity),
+capped at 2x, before the nonlinear speed curve; correcting final pixels leaves
+the acceleration curve using the wrong speed. Vertical 1.4x and held 1/3 gains
+remain screen-space values applied afterward. The expanded test covers 1,296
+roll/elevation/speed/direction/held combinations, nonzero bias, flag-off equivalence,
 stationary input, invalid acceleration and the near-vertical fallback. It does
 not prove physical acceptance or arbitrary three-dimensional tracking. Retain
 the last usable basis during obvious acceleration shocks or when the shaft is

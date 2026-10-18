@@ -49,6 +49,7 @@ test("tuning matches the running device code and the receiver", () => {
   assert.equal(number(/init\(lowDelay:Double=([\d.]+)/, pointer, "LOW delay") * 1000, t.lowMotionDelayMs);
   assert.equal(CONFIG.gain, t.pointerGain);
   assert.equal(CONFIG.heldPointerGain, t.heldPointerGain);
+  assert.equal(number(/yawScale=min\(([\d.]+),length\/across\)/, pointer, "maximum heading correction"), t.orientationCompensation.maxHeadingGain);
   assert.equal(CONFIG.releaseClickPause, t.releaseClickPauseSeconds);
   assert.equal(CONFIG.slackDegrees, t.slackDegrees);
   assert.equal(CONFIG.slackRecentre, t.slackRecentreSeconds);
