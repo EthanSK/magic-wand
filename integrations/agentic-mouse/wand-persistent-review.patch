@@ -1,13 +1,13 @@
 diff --git a/Resources/Info.plist b/Resources/Info.plist
-index c3c09e1..081ba65 100644
+index c3c09e1..efd9e10 100644
 --- a/Resources/Info.plist
 +++ b/Resources/Info.plist
 @@ -21 +21 @@
 -	<string>1.0.267</string>
-+	<string>1.0.271</string>
++	<string>1.0.272</string>
 @@ -23 +23 @@
 -	<string>273</string>
-+	<string>277</string>
++	<string>278</string>
 diff --git a/Sources/AgenticMouseApp/AppDelegate.swift b/Sources/AgenticMouseApp/AppDelegate.swift
 index e511261..3adab17 100644
 --- a/Sources/AgenticMouseApp/AppDelegate.swift
@@ -171,10 +171,10 @@ index d631c74..de7b089 100644
 +                }
 diff --git a/Sources/ScimitarUI/WandReviewIndicator.swift b/Sources/ScimitarUI/WandReviewIndicator.swift
 new file mode 100644
-index 0000000..d1ef422
+index 0000000..c7ab9e5
 --- /dev/null
 +++ b/Sources/ScimitarUI/WandReviewIndicator.swift
-@@ -0,0 +1,59 @@
+@@ -0,0 +1,64 @@
 +import AppKit
 +import SwiftUI
 +
@@ -218,18 +218,23 @@ index 0000000..d1ef422
 +            return r
 +        }.max { $0.maxY < $1.maxY }
 +        let bottom=recorder.map {$0.maxY+12} ?? (screen.visibleFrame.minY+168)
-+        return NSRect(x:screen.visibleFrame.midX-90,
-+            y:min(screen.visibleFrame.maxY-48,bottom),width:180,height:36)
++        return NSRect(x:screen.visibleFrame.midX-105,
++            y:min(screen.visibleFrame.maxY-64,bottom),width:210,height:52)
 +    }
 +
 +}
 +struct WandReviewIndicatorView:View {
 +    let mode:String
 +    var body:some View {
-+        Label(mode == "changes" ? "Review changes" : "Stage files",systemImage:mode == "changes" ? "eye" : "doc.on.doc")
-+            .font(.system(size:12,weight:.semibold,design:.rounded))
++        VStack(spacing:3) {
++            Label(mode == "changes" ? "Review changes" : "Stage files",systemImage:mode == "changes" ? "eye" : "doc.on.doc")
++                .font(.system(size:12,weight:.semibold,design:.rounded))
++            // Ethan calls staging the selected working set "commit set".
++            Text("(double click to commit set)")
++                .font(.system(size:10,weight:.medium,design:.rounded))
++        }
 +            .foregroundStyle(Color.black)
-+            .padding(.horizontal,14).frame(width:180,height:36)
++            .padding(.horizontal,14).frame(width:210,height:52)
 +            .background(mode == "changes" ? Color.green : Color(red:0.78,green:0.6,blue:1),in:Capsule())
 +            .overlay(Capsule().strokeBorder(.white.opacity(0.28),lineWidth:1))
 +    }

@@ -622,9 +622,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 middleReviewExit=true;middleLastRelease = -100
                 reviewExitTimer?.invalidate();reviewExitTimer=nil
                 // Ethan's "commit the working set" means release Better Git's existing
-                // held selection to stage it, not create a Git commit.
+                // held selection to stage it, not create a Git commit. Keep the mode
+                // selected so the next circle starts a fresh set without reopening HUD.
                 if reviewExitGesture.down(now:now,interval:hudDoubleClickInterval) {
-                    exitSelectedReview(commit:true)
+                    commitSelectedReview()
                 }
                 return
             }
@@ -912,6 +913,16 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         finishWandShortcut(commit:commit);selectedReviewMode=nil
         controls.persistent("exitReview")
         log("WAND_REVIEW_EXIT",commit ? "stage set":"cancel set")
+    }
+    func commitSelectedReview() {
+        reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset()
+        guard let mode=selectedReviewMode else{return}
+        sendReview(review.endDetents(commit:true))
+        // Start another Better Git transaction lazily on the next ratchet. Keep
+        // the live NAV stream, tracking timer and selected badge uninterrupted.
+        review.beginDetents(mode:mode,now:ProcessInfo.processInfo.systemUptime)
+        wandShortcutCircle.reset()
+        log("WAND_REVIEW_COMMIT",mode,"continue")
     }
     func sendReview(_ requests:[WandReviewGesture.Request]){
         for request in requests {
