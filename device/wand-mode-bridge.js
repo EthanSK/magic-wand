@@ -164,7 +164,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(!connected||!bias||!a.acc||now<global.wandIMUNext)return;
     global.wandIMUNext=now+0.1;
     var q=a.acc,g=a.gyro,r=gyroAwake&&g?Math.sqrt(Math.pow((g.x-bias.x)/134,2)+Math.pow((g.y-bias.y)/134,2)+Math.pow((g.z-bias.z)/134,2)):0;
-    Bluetooth.println('@IMU '+q.x+','+q.y+','+q.z+','+Math.round(r*100)+','+((!digitalRead(MOVE_PIN)||!digitalRead(HUD_PIN)||!digitalRead(STT_PIN))?1:0)+','+((moveLatched&&(global.wandSlackX!==0||global.wandSlackY!==0)&&global.wandIntentActive)?1:0));
+    Bluetooth.println('@IMU '+q.x+','+q.y+','+q.z+','+Math.round(r*100)+','+((!digitalRead(MOVE_PIN)||!digitalRead(HUD_PIN)||!digitalRead(STT_PIN))?1:0)+','+((moveLatched&&(global.wandSlackX!==0||global.wandSlackY!==0)&&global.wandIntentActive)?1:0)+','+((digitalRead(MOVE_PIN)?0:1)+(digitalRead(HUD_PIN)?0:2)+(digitalRead(STT_PIN)?0:4)));
   };
   // Pressing or releasing any grip switch can twist the wand. Only these
   // brief edges are guarded; steady aiming keeps the existing fast filter.
@@ -258,19 +258,15 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   });
   // These are mode indicators, not just button-down lights. Recording remains
   // red after release only if neither pointer, HUD nor scroll has priority.
+  // Remove the prior animation when updating a running bridge.
+  if(global.wandRecordingBlinkTimer!==undefined){clearInterval(global.wandRecordingBlinkTimer);delete global.wandRecordingBlinkTimer;}
+  delete global.wandRecordingBlinkRed;
   global.wandLastFollow=undefined;
   updateLights.replaceWith(function(){
     if(connected&&global.wandLastFollow!==moveLatched){global.wandLastFollow=moveLatched;Bluetooth.println('@FOLLOW '+(moveLatched?1:0));}
     var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN);
     var mode=(global.WAND_UPDATING||global.wandMotionReady===false)?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':(scrollHeld||global.wandCircleScrolling)?'scroll':global.wandAppMode?'app':move?'mouse':hud?'hud':(global.wandRecording||!digitalRead(STT_PIN))?'recording':'idle';
-    var blink=mode==='mouse'&&!!global.wandRecording;
-    if(blink&&global.wandRecordingBlinkTimer===undefined){
-      global.wandRecordingBlinkRed=false;
-      global.wandRecordingBlinkTimer=setInterval(function(){global.wandRecordingBlinkRed=!global.wandRecordingBlinkRed;updateLights();},350);
-    }else if(!blink&&global.wandRecordingBlinkTimer!==undefined){
-      clearInterval(global.wandRecordingBlinkTimer);global.wandRecordingBlinkTimer=undefined;global.wandRecordingBlinkRed=false;
-    }
-    lightLevels=mode==='update'?[0.45,0.45,0.45]:mode==='calibration'||mode==='recording'?[1,0,0]:mode==='disconnected'?[0.08,0.016,0]:mode==='scroll'?[0,1,1]:mode==='app'?(global.wandReviewFiles?[1,0,1]:[0,1,0]):mode==='mouse'?(blink&&global.wandRecordingBlinkRed?[1,0,0]:[0,0,1]):mode==='hud'?[1,0.2,0]:[0,0,0];
+    lightLevels=mode==='update'?[0.45,0.45,0.45]:mode==='calibration'||mode==='recording'?[1,0,0]:mode==='disconnected'?[0.08,0.016,0]:mode==='scroll'?[0,1,1]:mode==='app'?(global.wandReviewFiles?[1,0,1]:[0,1,0]):mode==='mouse'?[0,0,1]:mode==='hud'?[1,0.2,0]:[0,0,0];
     writeLight(LED1,lightLevels[0]);writeLight(LED2,lightLevels[1]);writeLight(LED3,lightLevels[2]);
     if(connected&&mode!==global.wandLastLightState){global.wandLastLightState=mode;print('WAND_LIGHT_STATE '+mode+' '+JSON.stringify(lightLevels));}
   });

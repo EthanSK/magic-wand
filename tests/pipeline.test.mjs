@@ -172,9 +172,9 @@ test("Top starts and stops Agent Flow, and the recording light yields to other m
   assert(s.pipeline.agentFlow.recording, "first press starts recording");
   assert.deepEqual(s.w.colors(), [1, 0, 0], "recording is red");
   s.press("D1", 0.06); s.w.advance(0.4);
-  assert.deepEqual(s.w.colors(), [1, 0, 0], "mouse and recording alternate to red");
+  assert.deepEqual(s.w.colors(), [0, 0, 1], "mouse stays blue while recording");
   s.w.advance(0.35);
-  assert.deepEqual(s.w.colors(), [0, 0, 1], "then return to blue");
+  assert.deepEqual(s.w.colors(), [0, 0, 1], "mouse stays steady blue");
   s.press("D1", 0.06); s.w.advance(0.3);
   assert(!s.w.ctx.moveLatched);
   assert.deepEqual(s.w.colors(), [1, 0, 0], "recording red returns when idle");

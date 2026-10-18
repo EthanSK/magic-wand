@@ -22,7 +22,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap | Start Agent Flow dictation |
 | Tap again | Stop and paste |
 
-- Recording in mouse mode alternates red and blue every 350 ms. With mouse mode off, recording stays red.
+- Recording stays red when no other mode is active. Mouse mode stays blue, including while recording.
 
 **Middle** (`D2`) · Agentic Mouse HUD
 
@@ -72,9 +72,9 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Calibrating | Keep it still with no buttons pressed for two seconds |
 | Scrolling | Cyan |
 | App review | Green for app review; purple for VS Code file staging |
-| Pointer | Blue; alternates with red every 350 ms while recording |
+| Pointer | Steady blue, including while recording |
 | HUD | Orange |
-| Recording | Red while idle; alternates with blue in mouse mode. HUD and scrolling keep their own colours. |
+| Recording | Steady red while idle. Mouse, HUD and scrolling keep their own colours. |
 | Idle | Off |
 <!-- /wand:controls -->
 
@@ -162,8 +162,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Control V2 hold-scrolling direction is reversed to drag page content with the wand. Automated checks passed; physical direction confirmation is pending.
-- Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling and recording/mouse light alternation pass automated checks; physical gesture acceptance is pending.
+- Control V2 stops held scrolling and dragging on physical button-up or lost button telemetry. Recording and mouse lights are steady. Automated checks passed; physical acceptance is pending.
+- Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling in V1 passes automated checks; physical gesture acceptance is pending.
 - Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.
 - Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.
 - Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.
@@ -172,7 +172,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.46 (51) · device code `wand-e1ce30d7c407` · bridge `52a4617b` · updated 18 October 2026.
+Receiver 1.2.47 (52) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

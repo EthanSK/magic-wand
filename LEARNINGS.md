@@ -312,8 +312,8 @@ This is a gesture classifier, not a movement buffer; ordinary pointing remains u
 it off. A single brief spike or slow pointing alone must not start scrolling.
 
 The Options menu and file refresh must share one flag store and preserve unrelated keys.
-Recording/mouse light alternation runs on one device-side timer only while both states hold;
-leaving either state clears it. Do not send Bluetooth packets for every blink.
+Recording uses steady red only when no higher-priority mode is active. Mouse mode stays blue.
+Clear a legacy recording blink timer when replacing the bridge; do not recreate it.
 
 
 ## Control V2 captures its target and preserves short taps
@@ -336,3 +336,16 @@ must release any held native button. Flick/circle recognition stays disabled thr
 Control V2 hold scrolling uses positive angular Y for native wheel lines, so page content
 follows the wand like touch dragging. Keep this sign local to V2; V1, wheel chords and
 physical-mouse scroll settings retain their existing direction.
+
+
+## End held input from physical state, not only its release edge
+
+The V2 host previously depended on one `@BOTTOM 0` edge and put its teardown behind
+current app/chord conditions. A missed edge could leave host-held scrolling or dragging
+active even when raw samples reported the physical button up. End a hold unconditionally
+on its release edge, and reconcile against physical bits in raw motion and the existing
+IMU heartbeat. Discard a recovered release sample before movement and clear the target.
+Renew a held-input lease only from actual button samples; if they disappear, release the
+native drag and stop scrolling. Late telemetry alone must not start the hold again.
+Tests drop the explicit release and exercise the actual raw handler, plus native drag
+teardown and lease expiry. This proves the failure path, not the original physical cause.

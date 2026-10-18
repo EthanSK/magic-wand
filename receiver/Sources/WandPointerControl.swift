@@ -621,11 +621,15 @@ final class WandHeldScroll {
     private(set) var active=false
     private(set) var dragging=false
     private(set) var scrollable=true
-    private var started=0.0,fraction=0.0,moved=false,dropClick=false,droppingClick=false
+    private var started=0.0,confirmed=0.0,fraction=0.0,moved=false,dropClick=false,droppingClick=false
     // Reuse the existing Bottom tap/hold cutoff; do not add a movement buffer.
     let holdSeconds=0.22
     func reset(){active=false;dragging=false;fraction=0;moved=false;dropClick=false;droppingClick=false}
-    func begin(now:Double,scrollable:Bool=true){reset();active=true;started=now;self.scrollable=scrollable}
+    func begin(now:Double,scrollable:Bool=true){reset();active=true;started=now;confirmed=now;self.scrollable=scrollable}
+    // A lease is renewed only by actual button samples, never by a timer.
+    // Stop rather than keep a native drag or scroll alive after telemetry loss.
+    func confirmHeld(now:Double){if active {confirmed=now}}
+    func stale(now:Double)->Bool {active && now-confirmed>0.8}
     func setTarget(scrollable:Bool){if active && !dragging {self.scrollable=scrollable}}
     func qualified(now:Double)->Bool {active && now-started>=holdSeconds}
     func startDrag(now:Double)->Bool {

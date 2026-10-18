@@ -44,6 +44,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let heldScroll=WandHeldScroll()
     var heldScrollAnchor:CGPoint?
     var heldTargetToken=UUID()
+    var heldSafetyTimer:Timer?
     var controlVersion:WandControlVersion = .pointerV1
     var controlV1Menu:NSMenuItem?,controlV2Menu:NSMenuItem?
     var flickScrollEnabled=false
@@ -168,7 +169,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func refreshFeatureFlags() {
         let enabled=options.enabled("orientationCompensation")
         let selected=WandControlVersion.read(options.read()["controlVersion"])
-        if controlVersion != selected {controlVersion=selected;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;performPointer(pointerRouter.cancelAll());setCircleLight(false);releaseButtons();motionFilter.reset()}
+        if controlVersion != selected {controlVersion=selected;heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;performPointer(pointerRouter.cancelAll());setCircleLight(false);releaseButtons();motionFilter.reset()}
         controlV1Menu?.state=selected == .pointerV1 ? .on : .off
         controlV2Menu?.state=selected == .scrollV2 ? .on : .off
         let flick=selected == .pointerV1 && options.enabled("flickScroll")
@@ -303,7 +304,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func reset() {
-        heldScroll.reset();heldScrollAnchor=nil
+        heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil
         flickScroll.reset();flickAnchor=nil
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
@@ -449,10 +450,16 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // The device prints each edge before the click it emits on release,
                 // so a consumed (scrolled) hold's endpoint click is dropped by order.
                 if value=="0" || value=="1" {
+                    if controlVersion == .scrollV2 && value=="0" {finishBottomHold(now:ProcessInfo.processInfo.systemUptime)}
                     if controlVersion == .scrollV2 && appMode != "vsCode" && !scrollActive {
                         if value=="1" {
                             heldScrollAnchor=deliveryPoint ?? CGEvent(source:nil)?.location
                             heldScroll.begin(now:ProcessInfo.processInfo.systemUptime,scrollable:false)
+                            heldSafetyTimer?.invalidate()
+                            heldSafetyTimer=Timer.scheduledTimer(withTimeInterval:0.1,repeats:true){[weak self] _ in
+                                guard let self else{return};let now=ProcessInfo.processInfo.systemUptime
+                                if self.heldScroll.stale(now:now){self.reconcileBottomHold(down:false,now:now,reason:"button telemetry timeout")}
+                            }
                             releaseButtons()
                             let point=heldScrollAnchor ?? .zero,token=UUID();heldTargetToken=token
                             DispatchQueue.global(qos:.userInitiated).async { [weak self] in
@@ -463,10 +470,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                                     log("BOTTOM_HOLD_TARGET",scrollable ? "scroll":"drag")
                                 }
                             }
-                        } else {
-                            if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)}
-                            if heldScroll.end(now:ProcessInfo.processInfo.systemUptime) {queue("global.wandPointerPauseUntil=0;")}
-                            heldScrollAnchor=nil;setCircleLight(false)
                         }
                     }
                     if value=="1" && flickScroll.active {flickScroll.reset();flickAnchor=nil;setCircleLight(false);motionFilter.reset()}
@@ -747,7 +750,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         } else if !active {circleTimer?.invalidate();circleTimer=nil}
     }
     /// Scroll chord, HUD and speech take over: drop unshown LOW motion and any circle.
-    func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)};heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;recenterGesture.cancel();restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
+    func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;recenterGesture.cancel();restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
     func sendReview(_ requests:[WandReviewGesture.Request]){
         for request in requests {
             guard let app=NSRunningApplication.runningApplications(withBundleIdentifier:"com.microsoft.VSCode").first,
@@ -817,13 +820,30 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         transition(to: routed.buttons, at: point)
         performPointer(routed.actions)
     }
+    func finishBottomHold(now:Double) {
+        heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldTargetToken=UUID()
+        guard heldScroll.active else{return}
+        if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)}
+        if heldScroll.end(now:now) {queue("global.wandPointerPauseUntil=0;")}
+        heldScrollAnchor=nil;setCircleLight(false)
+    }
+    func reconcileBottomHold(down:Bool,now:Double,reason:String) {
+        guard controlVersion == .scrollV2,heldScroll.active else{return}
+        if down {heldScroll.confirmHeld(now:now);return}
+        finishBottomHold(now:now)
+        performPointer(pointerRouter.bottom(down:false));recenterGesture.cancel()
+        dwell.reset();scheduleDwell();log("BOTTOM_HOLD_RECOVERED",reason)
+    }
     func handleRaw(_ payload:String){
-        guard ready,!restoring,!scrollActive,!hudSession,AXIsProcessTrusted() else{return}
+        guard ready,!restoring else{return}
         let fields=payload.split(separator:",",omittingEmptySubsequences:false)
         guard fields.count==4 else{return}
         let v=fields.compactMap{Int($0)}
-        guard v.count==4,(0...3).contains(v[3]) else{return}
+        guard v.count==4,(1...50000).contains(v[0]),(-32768...32767).contains(v[1]),(-32768...32767).contains(v[2]),(0...3).contains(v[3]) else{return}
         let now=ProcessInfo.processInfo.systemUptime
+        let released=heldScroll.active && v[3]&1 == 0
+        reconcileBottomHold(down:v[3]&1 != 0,now:now,reason:"motion button state")
+        guard !released,!scrollActive,!hudSession,AXIsProcessTrusted() else{return}
         let gap=rawLastArrival>0 ? now-rawLastArrival : 0
         guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:v[3]&1 != 0,resetState:v[3]&2 != 0 || gap>0.25) else{return}
         rawLastArrival=now
@@ -879,9 +899,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func handleIMU(_ payload:String){
         guard ready,!restoring else{return}
         let parts=payload.split(separator:",",omittingEmptySubsequences:false)
-        guard (5...6).contains(parts.count),let x=Double(parts[0]),let y=Double(parts[1]),let z=Double(parts[2]),let gyro=Double(parts[3]),let held=Int(parts[4]),(0...1).contains(held),abs(x)<=32768,abs(y)<=32768,abs(z)<=32768,(0...100_000).contains(gyro) else{return}
+        guard (5...7).contains(parts.count),let x=Double(parts[0]),let y=Double(parts[1]),let z=Double(parts[2]),let gyro=Double(parts[3]),let held=Int(parts[4]),(0...1).contains(held),abs(x)<=32768,abs(y)<=32768,abs(z)<=32768,(0...100_000).contains(gyro) else{return}
         let now=ProcessInfo.processInfo.systemUptime
-        if !motionFilter.configured,parts.count==6,parts[5]=="0" || parts[5]=="1" {dwell.intent(parts[5]=="1",now:now);scheduleDwell()}
+        if parts.count==7,let mask=Int(parts[6]),(0...7).contains(mask) {
+            reconcileBottomHold(down:mask&1 != 0,now:now,reason:"sensor button state")
+        } else if held==0 {reconcileBottomHold(down:false,now:now,reason:"all buttons released")}
+        if !motionFilter.configured,parts.count>=6,parts[5]=="0" || parts[5]=="1" {dwell.intent(parts[5]=="1",now:now);scheduleDwell()}
         motionFilter.observeGravity(x:x/8192,y:y/8192,z:z/8192)
         if restDiagnosticsRemaining>0 {
             restDiagnosticsRemaining-=1
