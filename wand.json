@@ -8,12 +8,13 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.42",
-    "receiverBuild": "47",
+    "receiver": "1.2.44",
+    "receiverBuild": "49",
     "deviceRuntime": "wand-e1ce30d7c407",
-    "bridgeRevision": "c6948df57d8e26f59aa10b1c590b4d5536f9de8bd6cb1246ed2dea4704a02f1d"
+    "bridgeRevision": "52a4617bad4bdfdbdd3628cbc5b6e541fcf3b4179f18106872a5b14d84f4cb6f"
   },
   "status": [
+    "Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling and recording/mouse light alternation pass automated checks; physical gesture acceptance is pending.",
     "Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.",
     "Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.",
     "Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.",
@@ -58,6 +59,9 @@
           "Tap again",
           "Stop and paste"
         ]
+      ],
+      "notes": [
+        "Recording in mouse mode alternates red and blue every 350 ms. With mouse mode off, recording stays red."
       ]
     },
     {
@@ -139,7 +143,8 @@
         "Leave the wand idle on the desk for about two seconds to learn its resting pose. Picking it up can then enter HIGH automatically; setting it down stops following after sustained desk confirmation.",
         "Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.",
         "Desk detection is an IMU estimate, not a touch sensor; a very still supported hand can resemble a desk. The browser demo covers the buttons, not physical desk detection.",
-        "Middle switches to the HUD. The pointer stays within real display edges."
+        "Middle switches to the HUD. The pointer stays within real display edges.",
+        "Optional Flick to scroll: in HIGH with Bottom released, flick upward then lower slowly to scroll up. Enable it in Wand Receiver\u2019s menu-bar Options menu."
       ]
     }
   ],
@@ -241,7 +246,7 @@
         1
       ],
       "display": "#4469ff",
-      "detail": "Blue"
+      "detail": "Blue; alternates with red every 350 ms while recording"
     },
     {
       "mode": "hud",
@@ -263,7 +268,7 @@
         0
       ],
       "display": "#ff2e3a",
-      "detail": "Red, unless the pointer, HUD or scrolling is active"
+      "detail": "Red while idle; alternates with blue in mouse mode. HUD and scrolling keep their own colours."
     },
     {
       "mode": "idle",
@@ -316,7 +321,19 @@
       "experimental": true,
       "scope": "Shared correction for mouse, HUD selection, held actions, review and scrolling. Wrist roll and elevated-tip heading correction run before screen-axis gains, with heading correction capped at 2x. No new movement buffer.",
       "maxHeadingGain": 2
-    }
+    },
+    "flickScroll": {
+      "default": false,
+      "rapidUpDegreesPerSecond": 55,
+      "minimumUpDegrees": 3,
+      "returnDegreesPerSecond": [
+        1.5,
+        40
+      ],
+      "linesPerDegree": 1.6,
+      "description": "Optional: in HIGH mouse mode with Bottom released, flick up then lower slowly to scroll up. The pointer stays put during the gesture."
+    },
+    "recordingMouseBlinkMs": 350
   },
   "hud": {
     "source": "Agentic Mouse\u2019s published Default mode",

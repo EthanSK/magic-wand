@@ -143,3 +143,36 @@ precondition(!center.edge(down:true,now:2.2));precondition(!center.edge(down:fal
 precondition(!center.edge(down:true,now:3));precondition(!center.edge(down:false,now:3.08))
 precondition(!center.edge(down:true,now:3.2,eligible:false));precondition(!center.edge(down:false,now:3.28),"other modes cancel double tap")
 print("PASS: short double tap recenters; held second press and other modes do not")
+
+// The first sharp upward cue arms scrolling; only the slow downward return scrolls.
+let flick=WandFlickScroll()
+var now=100.0
+func sampleFlick(_ x:Double,_ y:Double,_ eligible:Bool=true)->WandFlickScroll.Result {
+ now+=0.01;return flick.sample(x:x,y:y,dt:0.01,now:now,eligible:eligible)
+}
+for _ in 0..<100 {precondition(!sampleFlick(2,-3).consumesPointer)}
+for _ in 0..<6 {let r=sampleFlick(1,-100);precondition(r.consumesPointer && r.lines==0)}
+let firstReturn=sampleFlick(0,12)
+precondition(firstReturn.lines==1,"first deliberate slow return scrolls immediately")
+var flickLines:Int32=firstReturn.lines
+for _ in 0..<80 {let r=sampleFlick(0,12);precondition(r.consumesPointer);flickLines+=r.lines}
+precondition(flickLines>10,"first slow return scrolls up without repeated flicks")
+for _ in 0..<30 {_=sampleFlick(0,0)}
+precondition(!flick.active,"stationary return ends capture")
+flick.reset();_=sampleFlick(0,-70);precondition(!sampleFlick(0,0).consumesPointer,"one-sample click jolt must not scroll")
+for _ in 0..<10 {_=sampleFlick(0,-100)}
+precondition(!sampleFlick(0,10,false).consumesPointer && !flick.active,"Bottom hold, HUD and disabled option cancel immediately")
+flick.reset();for _ in 0..<80 {precondition(!sampleFlick(0,15).consumesPointer,"slow pointing alone never starts scrolling")}
+for _ in 0..<8 {_=sampleFlick(0,-100)}
+precondition(!sampleFlick(80,0).consumesPointer,"sideways pointing cancels")
+flick.reset();for _ in 0..<8 {_=sampleFlick(0,-100)}
+precondition(!sampleFlick(0,80).consumesPointer,"fast down movement is not a slow return")
+let optionURL=URL(fileURLWithPath:NSTemporaryDirectory()).appendingPathComponent(UUID().uuidString+".json")
+let settings=WandUserOptions(url:optionURL)
+precondition(!settings.enabled("flickScroll"))
+try settings.set("orientationCompensation",true);try settings.set("flickScroll",true)
+precondition(settings.enabled("flickScroll") && settings.enabled("orientationCompensation"))
+try settings.set("flickScroll",false)
+precondition(!settings.enabled("flickScroll") && settings.enabled("orientationCompensation"))
+try FileManager.default.removeItem(at:optionURL)
+print("PASS: optional first-flick scrolling, noise rejection, cancellation and persisted options")

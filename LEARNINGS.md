@@ -299,3 +299,18 @@ is parsed. Pace write chunks by 10 ms while the receiver is not ready. Retain im
 is ready; this delay applies to installation, not pointer samples or gestures.
 Recover through the existing Bluetooth owner and preserve a successful sensor
 zero. Source tests cannot reproduce the device's UART input capacity.
+
+
+## First-flick scrolling is an explicit option
+
+Classify the shared, rotation-corrected angular rates, before pointer sensitivity or pixel rounding.
+A sharp upward cue with enough angular travel arms one slow downward return; the return posts
+positive native wheel lines (scroll up). Do not wait for repeated cycles. While capturing the
+gesture, keep the pointer at the original target and suppress the HIGH dwell click. Cancel on
+button input, HUD entry, pointer exit, option-off, sideways movement or an excessive return speed.
+This is a gesture classifier, not a movement buffer; ordinary pointing remains unchanged with
+it off. A single brief spike or slow pointing alone must not start scrolling.
+
+The Options menu and file refresh must share one flag store and preserve unrelated keys.
+Recording/mouse light alternation runs on one device-side timer only while both states hold;
+leaving either state clears it. Do not send Bluetooth packets for every blink.

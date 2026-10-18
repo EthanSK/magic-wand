@@ -10,7 +10,7 @@ Turning the wand moves my Mac’s pointer or the Agentic Mouse HUD outline. A Pu
 
 ![Magic Wand](docs/assets/social.png)
 
-The website runs the wand’s own device code in your browser, with the Mac side simulated, so you can try every control without the hardware. Nothing connects to a wand, Bluetooth or your Mac.
+The website runs the wand’s own device code in your browser, with the Mac side simulated, so you can try the button controls without the hardware. Nothing connects to a wand, Bluetooth or your Mac.
 
 ## Controls
 
@@ -21,6 +21,8 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | --- | --- |
 | Tap | Start Agent Flow dictation |
 | Tap again | Stop and paste |
+
+- Recording in mouse mode alternates red and blue every 350 ms. With mouse mode off, recording stays red.
 
 **Middle** (`D2`) · Agentic Mouse HUD
 
@@ -55,6 +57,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - Agent Flow stops after about five seconds of confirmed desk rest during recording. Moving the wand cancels the pending stop.
 - Desk detection is an IMU estimate, not a touch sensor; a very still supported hand can resemble a desk. The browser demo covers the buttons, not physical desk detection.
 - Middle switches to the HUD. The pointer stays within real display edges.
+- Optional Flick to scroll: in HIGH with Bottom released, flick upward then lower slowly to scroll up. Enable it in Wand Receiver’s menu-bar Options menu.
 
 **Bottom + Middle** · Scroll
 
@@ -72,11 +75,23 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Calibrating | Keep it still with no buttons pressed for two seconds |
 | Scrolling | Cyan |
 | App review | Green for app review; purple for VS Code file staging |
-| Pointer | Blue |
+| Pointer | Blue; alternates with red every 350 ms while recording |
 | HUD | Orange |
-| Recording | Red, unless the pointer, HUD or scrolling is active |
+| Recording | Red while idle; alternates with blue in mouse mode. HUD and scrolling keep their own colours. |
 | Idle | Off |
 <!-- /wand:controls -->
+
+## User options
+
+Wand Receiver is a background Mac app. Its wand icon in the menu bar has an **Options** menu:
+
+- **Flick to scroll** (off by default): in HIGH mouse mode with Bottom released, flick up, then
+  lower the wand slowly to scroll up. Scrolling starts during the first slow return; no repeated
+  circles or buttons are needed. The pointer remains at the scroll target during the gesture.
+- **Rotation-independent controls** keeps screen directions upright while rotating the wand.
+
+These switches save locally and take effect without reconnecting. The original held-circle and
+Bottom + Middle scrolling remain available. The browser demo does not simulate Flick to scroll.
 
 ## How it works
 
@@ -144,6 +159,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling and recording/mouse light alternation pass automated checks; physical gesture acceptance is pending.
 - Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.
 - Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.
 - Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.
@@ -152,7 +168,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.42 (47) · device code `wand-e1ce30d7c407` · bridge `c6948df5` · updated 18 October 2026.
+Receiver 1.2.44 (49) · device code `wand-e1ce30d7c407` · bridge `52a4617b` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
