@@ -17,3 +17,15 @@ test('red is exclusive to recording; unavailable and calibration states use oran
  }
  c.updateLights();assert.deepEqual(w.colors(),[0,0,0]);c.wandRecording=true;c.updateLights();assert.deepEqual(w.colors(),[1,0,0]);
 });
+
+test('review keeps gyro telemetry alive without owning mouse or speech',()=>{
+ const w=createWand({bridge:'readable'});w.calibrate();w.loadBridge();const c=w.ctx;
+ c.setMouseFollow(false);c.setWandReviewTracking(true);w.advance(1.2);
+ assert(c.gyroAwake);assert(!c.moveLatched);assert(!c.hudOpen);
+ w.lines.length=0;for(let i=0;i<20;i++)w.motion({x:1340,y:0,z:1340});
+ assert(w.lines.some(x=>x.startsWith('@NAV ')));
+ c.setMouseFollow(true);c.setHUDOpen(true);assert(c.moveLatched);
+ c.setHUDOpen(false);assert(c.moveLatched);assert(c.wandReviewTracking);
+ c.setWandRecording(true);assert(c.moveLatched);assert(c.wandReviewTracking);
+ c.setWandReviewTracking(false);assert(c.moveLatched);assert(c.wandRecording);
+});

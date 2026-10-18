@@ -28,7 +28,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   var connects=NRF['#onconnect'];
   if(!connects)connects=[onConnect];else if(typeof connects==='function')connects=[connects];
   connects.forEach(function(callback){if(callback.toString().indexOf('stopScroll')>=0)callback.replaceWith(function(){
-    global.wandCircleScrolling=false;global.wandAppMode=undefined;global.wandReviewFiles=false;stopScroll();scrollSuppress=false;chordFollowBefore=false;
+    global.wandCircleScrolling=false;global.wandReviewTracking=false;global.wandAppMode=undefined;global.wandReviewFiles=false;stopScroll();scrollSuppress=false;chordFollowBefore=false;
     clearHoldClick();moveLatched=false;hudOpen=false;moveGestureMode=undefined;lastMoveTap=-100;
     stopHUD();cancelTapGesture();epoch++;connected=true;busy=false;sentButtons=0;
     if(sendTimer!==undefined){clearTimeout(sendTimer);sendTimer=undefined;}
@@ -38,22 +38,35 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   });});
   global.wandCircleScrolling=false;
   global.wandDoubleClickSeconds=0.3;
-  // A mode takes over deliberately, without leaving the other mode moving too.
-  setHUDOpen.replaceWith(function(open){
-    if(open){
-      if(dragging){states.push(0);pump();}
-      global.wandMomentaryStarted=undefined;
-      cancelTapGesture();clearHoldClick();moveGestureMode=undefined;moveLatched=false;lastMoveTap=-100;
-      moveX=0;moveY=0;fractionX=0;fractionY=0;
-      global.wandSlackX=global.wandSlackY=0;
-    }
-    if(hudOpen===open){updateLights();return;}
-    hudOpen=open;
-    if(open){hudX=0;hudY=0;if(hudTimer!==undefined)clearInterval(hudTimer);hudTimer=setInterval(function(){hudReport();},30);}
-    else stopHUD();
-    if(connected&&(scrollHeld||moveLatched||hudOpen))wakeGyro();else if(bias)sleepGyro();
+  // Ethan's independent lanes: Bottom = mouse, Middle = HUD/review, Top = speech.
+  global.wandReviewTracking=false;
+  // Keep legacy simultaneous-button scrolling out of the independent controls.
+  checkScrollChord.replaceWith(function(){return false;});
+  middlePress.replaceWith(function(){
+    if(!connected)return;hudReportStarted=true;Bluetooth.println('@MIDDLE 1');
+  });
+  hudReport.replaceWith(function(){
+    if(connected&&(hudOpen||global.wandReviewTracking))Bluetooth.println('@NAV '+Math.round(hudX*1000)+','+Math.round(hudY*1000));
+  });
+  setMouseFollow.replaceWith(function(on){
+    cancelTapGesture();clearHoldClick();moveGestureMode=undefined;moveLatched=!!on;
+    if(connected&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();
     updateLights();
   });
+  setHUDOpen.replaceWith(function(open){
+    if(hudOpen===open){updateLights();return;}hudOpen=open;
+    if(open||global.wandReviewTracking){
+      if(hudTimer===undefined){hudX=0;hudY=0;hudTimer=setInterval(function(){hudReport();},30);}
+    }else stopHUD();
+    if(connected&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();
+    updateLights();
+  });
+  global.setWandReviewTracking=function(active){
+    if(global.wandReviewTracking===!!active)return;
+    global.wandReviewTracking=!!active;
+    if(active){hudX=0;hudY=0;if(hudTimer===undefined)hudTimer=setInterval(function(){hudReport();},30);wakeGyro();}
+    else if(!hudOpen){stopHUD();if(!moveLatched)sleepGyro();}
+  };
   // Keep the actual registered sensor callback, including its saved scope.
   var mh=Puck['#onaccel'];if(typeof mh==='function')mh=[mh];
   var mc=(mh||[]).filter(function(f){return typeof f==='function'&&f.toString().indexOf('var g=a.gyro')>=0;});
@@ -153,7 +166,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(!gyroAwake){global.wandPowerDownGyro();return;}
     global.wandSleepTimer=setTimeout(function(){
       global.wandSleepTimer=undefined;
-      if(!moveLatched&&!hudOpen&&!scrollHeld)global.wandPowerDownGyro();
+      if(!moveLatched&&!hudOpen&&!scrollHeld&&!global.wandReviewTracking)global.wandPowerDownGyro();
     },1000);
   });
   // Only accelerometer readings run on the desk (1.6 Hz, gyro off). The Mac
@@ -173,7 +186,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     var id=setWatch(function(e){global.wandSlackX=global.wandSlackY=0;global.wandSettleUntil=getTime()+(e.state?0.07:0.05);},pin,{edge:'both',repeat:true,debounce:20});
     watches.push(id);return id;
   });
-  global.wandLiveMotionCallback.replaceWith(function(a) {
+  if(!global.wandRawPointer)global.wandLiveMotionCallback.replaceWith(function(a) {
   var g=a.gyro;
   var G=global,C=CONFIG,M=Math;
   var now=getTime();
@@ -222,7 +235,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     scrollX+=sx*sk*dt*C.xSign;scrollY+=sy*sk*dt*C.ySign;return;
   }
   if(scrollSuppress){G.wandSlackX=G.wandSlackY=0;return;}
-  if(hudOpen&&connected){
+  if((hudOpen||G.wandReviewTracking)&&connected){
     var hx=(g[C.xAxis]-bias[C.xAxis])/134,hy=(g[C.yAxis]-bias[C.yAxis])/134,keep=radialKeep(hx,hy);
     hudX+=hx*keep*dt*C.xSign;hudY+=hy*keep*dt*C.ySign;
   }
@@ -279,14 +292,10 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // Keep the preceding short tap available for explicit tap-then-hold dragging.
   // Free the prior button body too: repeated live updates can exhaust Puck RAM.
   global.wandLiveMoveCallback.replaceWith(function(){if(false)clearHoldClick();});
+  // Small helpers inherit the registered callback's saved boot scope.
+  // This keeps peak parser memory below the monolithic button handler.
   global.wandLiveMoveCallback.replaceWith(function(){
-    if(connected)Bluetooth.println('@BOTTOM '+(digitalRead(MOVE_PIN)?0:1));
-    if(!digitalRead(MOVE_PIN)&&digitalRead(HUD_PIN)&&!scrollSuppress)chordFollowBefore=moveLatched;
-    if(checkScrollChord()){global.wandMomentaryStarted=undefined;return;}
-    if(global.wandAppMode==='vsCode'){if(connected)Bluetooth.println('@REVIEW '+(digitalRead(MOVE_PIN)?0:1));updateLights();return;}
-    moveX=moveY=fractionX=fractionY=filteredX=filteredY=0;
-    global.wandSlackX=global.wandSlackY=0;
-    if(!digitalRead(MOVE_PIN)){
+    global.wandBottomPress=function(){
       if(!bias)calibrate();
       global.wandPressStarted=getTime();
       global.wandFollowBeforeHold=moveLatched||!!(global.wandExitFollow&&getTime()-lastMoveTap<=global.wandDoubleClickSeconds);global.wandExitFollow=false;
@@ -295,7 +304,6 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       global.wandMomentaryStarted=moveGestureMode==='enable'?getTime():undefined;
       if(moveGestureMode==='enable'){
         moveLatched=true;
-        if(hudOpen){setHUDOpen(false);Bluetooth.println('@POINTER_MODE');}
         if(connected)wakeGyro();
       }
       // Remember the previous tap for the Mac's full double-click window, even
@@ -315,7 +323,12 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
         wakeGyro();
       },CONFIG.tapSeconds*1000);
       updateLights();return;
-    }
+
+    };
+  });
+  global.wandLiveMoveCallback();
+  global.wandLiveMoveCallback.replaceWith(function(){
+    global.wandBottomRelease=function(){
     clearHoldClick();
     if(moveGestureMode==='operation'){pointerReport('E');stopPointerTrack();}
     else if(moveGestureMode==='clutch'){
@@ -333,8 +346,21 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     print('WAND_BUTTON_STATE '+JSON.stringify({mode:moveGestureMode,ms:Math.round((getTime()-global.wandPressStarted)*1000),follow:moveLatched}));
     global.wandMomentaryStarted=undefined;global.wandDragCandidate=false;global.wandFollowBeforeHold=false;moveGestureMode=undefined;secondTap=false;
     // A short exit tap may be followed by the held second press of a real drag.
-    if((moveLatched||hudOpen)&&connected)wakeGyro();else if(bias)sleepGyro();
+    if((moveLatched||hudOpen||global.wandReviewTracking)&&connected)wakeGyro();else if(bias)sleepGyro();
     updateLights();
+
+    };
+  });
+  global.wandLiveMoveCallback();
+  global.wandLiveMoveCallback.replaceWith(function(){
+    if(connected)Bluetooth.println('@BOTTOM '+(digitalRead(MOVE_PIN)?0:1));
+    if(!digitalRead(MOVE_PIN)&&digitalRead(HUD_PIN)&&!scrollSuppress)chordFollowBefore=moveLatched;
+    if(checkScrollChord()){global.wandMomentaryStarted=undefined;return;}
+    moveX=moveY=fractionX=fractionY=filteredX=filteredY=0;
+    global.wandSlackX=global.wandSlackY=0;
+    // Discovery marker for the registered watch.
+    if(false)clearHoldClick();
+    if(!digitalRead(MOVE_PIN))global.wandBottomPress();else global.wandBottomRelease();
   });
   // Expose the same scoped functions to receiver commands; never a second copy
   // of mode state. Recording changes do not wake the motion sensor.
@@ -359,13 +385,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
 // The native receiver opts in before loading. Free the interpreted pointer
 // calculation before allocating this shorter callback; other hosts keep it.
 if(global.wandRawPointer){global.wandLiveMotionCallback.replaceWith(function(a){var g=a.gyro;});delete global.wandPointerSlack;global.wandRawBias=undefined;global.wandRawActive=false;};
-if(global.wandRawPointer)global.wandLiveMotionCallback.replaceWith(function(a) {
-  var g=a.gyro,rawReset=!global.wandRawActive;global.wandRawActive=false;
-  var G=global,C=CONFIG,M=Math;
-  var now=getTime();
-  if(now>=G.wandIMUNext)G.wandReportIMU(a,now);
-  if (!g || (!gyroAwake&&bias)) return;
-  if (!bias) {
+if(global.wandRawPointer){
+  global.wandLiveMotionCallback.replaceWith(function(){
+    global.wandCalibrateSample=function(g,now){var C=CONFIG,M=Math;
     if (now>calibrationDeadline) {calibrationLit=false;updateLights();sleepGyro();return;}
     if (warmup>0) {warmup--; return;}
     // Never learn a held/moving wand as its stationary zero.
@@ -392,7 +414,17 @@ if(global.wandRawPointer)global.wandLiveMotionCallback.replaceWith(function(a) {
       if (!connected || (!moveLatched && !hudOpen && digitalRead(MOVE_PIN))) sleepGyro();
     }
     return;
-  }
+  };
+  });
+  global.wandLiveMotionCallback();
+}
+if(global.wandRawPointer)global.wandLiveMotionCallback.replaceWith(function(a) {
+  var g=a.gyro,rawReset=!global.wandRawActive;global.wandRawActive=false;
+  var G=global,C=CONFIG,M=Math;
+  var now=getTime();
+  if(now>=G.wandIMUNext)G.wandReportIMU(a,now);
+  if (!g || (!gyroAwake&&bias)) return;
+  if (!bias) {G.wandCalibrateSample(g,now);return;}
   // Ignore the physical switch impulse; discard it instead of replaying it.
   // Cold sensor settling is time-based so dropped readings cannot stretch it.
   motionWarmup=0;
@@ -408,7 +440,7 @@ if(global.wandRawPointer)global.wandLiveMotionCallback.replaceWith(function(a) {
     scrollX+=sx*sk*dt*C.xSign;scrollY+=sy*sk*dt*C.ySign;return;
   }
   if(scrollSuppress){G.wandSlackX=G.wandSlackY=0;return;}
-  if(hudOpen&&connected){
+  if((hudOpen||G.wandReviewTracking)&&connected){
     var hx=(g[C.xAxis]-bias[C.xAxis])/134,hy=(g[C.yAxis]-bias[C.yAxis])/134,keep=radialKeep(hx,hy);
     hudX+=hx*keep*dt*C.xSign;hudY+=hy*keep*dt*C.ySign;
   }

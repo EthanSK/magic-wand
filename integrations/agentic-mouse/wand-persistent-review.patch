@@ -1,13 +1,13 @@
 diff --git a/Resources/Info.plist b/Resources/Info.plist
-index c3c09e1..1db57e5 100644
+index c3c09e1..081ba65 100644
 --- a/Resources/Info.plist
 +++ b/Resources/Info.plist
 @@ -21 +21 @@
 -	<string>1.0.267</string>
-+	<string>1.0.270</string>
++	<string>1.0.271</string>
 @@ -23 +23 @@
 -	<string>273</string>
-+	<string>276</string>
++	<string>277</string>
 diff --git a/Sources/AgenticMouseApp/AppDelegate.swift b/Sources/AgenticMouseApp/AppDelegate.swift
 index e511261..3adab17 100644
 --- a/Sources/AgenticMouseApp/AppDelegate.swift
@@ -55,12 +55,12 @@ index 0223485..34f7a92 100644
 @@ -1067,0 +1075 @@ public final class ModePickerCoordinator {
 +        value.wandReviewSelection = wandReviewAvailable ? wandReviewSelection : nil
 diff --git a/Sources/ScimitarKit/App/WandPersistentControl.swift b/Sources/ScimitarKit/App/WandPersistentControl.swift
-index 6624d37..e1306dc 100644
+index 6624d37..53ecfca 100644
 --- a/Sources/ScimitarKit/App/WandPersistentControl.swift
 +++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
 @@ -7 +7 @@ public struct WandPersistentCommand: Equatable {
 -    public enum Phase: String { case open, appSpecific, navigate, motion, park, press, release, dismiss }
-+    public enum Phase: String { case open, appSpecific, navigate, motion, park, press, release, activate, dismiss }
++    public enum Phase: String { case open, appSpecific, navigate, motion, park, press, release, activate, dismiss, exitReview }
 @@ -49 +48,0 @@ public final class WandPersistentController {
 -        let started:TimeInterval
 @@ -61,0 +61,3 @@ public final class WandPersistentController {
@@ -72,8 +72,14 @@ index 6624d37..e1306dc 100644
 @@ -80 +83 @@ public final class WandPersistentController {
 -        if ownsHUD && !target.isActive {ownsHUD=false;hold=nil;scheduler.stop()}
 +        if ownsHUD && !target.isActive {ownsHUD=false;hold=nil;if pinnedReviewCell == nil {scheduler.stop()}}
-@@ -82 +85,20 @@ public final class WandPersistentController {
+@@ -82 +85,30 @@ public final class WandPersistentController {
 -        if command.phase == .dismiss {reset(reason:.userRequested);return}
++        // Middle exits the independent review lane without opening another HUD.
++        if command.phase == .exitReview {
++            clearReviewSelection();hold=nil;ownsHUD=false
++            if target.isActive {target.exit(reason:.userRequested)}
++            scheduler.stop();onContext?(false);return
++        }
 +        if command.phase == .dismiss {
 +            hold=nil;ownsHUD=false
 +            if target.isActive {target.exit(reason:.userRequested)}
@@ -87,6 +93,10 @@ index 6624d37..e1306dc 100644
 +            if target.isWandHome,cell.wandReviewMode != nil,target.wandReviewAvailable {
 +                pinnedReviewCell = pinnedReviewCell == cell ? nil : cell
 +                target.setWandReviewSelection(pinnedReviewCell)
++                // Ethan calls these eyes mode and whole-file bang mode.
++                // Entering either gets the full grid out of the way.
++                hold=nil;ownsHUD=false
++                if target.isActive {target.exit(reason:.userRequested)}
 +                startWatchdog();return
 +            }
 +            let generation=target.pageGeneration
@@ -94,20 +104,20 @@ index 6624d37..e1306dc 100644
 +            target.handle(.init(action:.select,source:.wand,physicalCell:cell,phase:.release),inputTime:clock.now)
 +            keepOutline(after:cell,generation:generation);return
 +        }
-@@ -109,0 +132 @@ public final class WandPersistentController {
+@@ -109,0 +142 @@ public final class WandPersistentController {
 +            if command.phase == .press, target.isWandHome, selectedReviewMode != nil, let pinned=pinnedReviewCell {selected=pinned}
-@@ -111 +134 @@ public final class WandPersistentController {
+@@ -111 +144 @@ public final class WandPersistentController {
 -            hold=Hold(id:command.id,sequence:command.sequence,received:clock.now,started:clock.now,
 +            hold=Hold(id:command.id,sequence:command.sequence,received:clock.now,
-@@ -155 +178 @@ public final class WandPersistentController {
+@@ -155 +188 @@ public final class WandPersistentController {
 -        case .open, .appSpecific, .dismiss:break
-+        case .open, .appSpecific, .activate, .dismiss:break
-@@ -157 +180 @@ public final class WandPersistentController {
++        case .open, .appSpecific, .activate, .dismiss, .exitReview:break
+@@ -157 +190 @@ public final class WandPersistentController {
 -        if !target.isActive {ownsHUD=false;hold=nil;scheduler.stop()}
 +        if !target.isActive {ownsHUD=false;hold=nil;if pinnedReviewCell == nil {scheduler.stop()}}
-@@ -164,0 +188 @@ public final class WandPersistentController {
+@@ -164,0 +198 @@ public final class WandPersistentController {
 +    public func refreshContext() { onContext?(isOpen) }
-@@ -171,2 +195,3 @@ public final class WandPersistentController {
+@@ -171,2 +205,3 @@ public final class WandPersistentController {
 -        guard isOpen else {ownsHUD=false;hold=nil;scheduler.stop();onContext?(false);return}
 -        if let current=hold, clock.now-current.received > 1 || clock.now-current.started > 30 {
 +        guard isOpen else {ownsHUD=false;hold=nil;if pinnedReviewCell == nil {scheduler.stop()};onContext?(false);return}
@@ -225,7 +235,7 @@ index 0000000..d1ef422
 +    }
 +}
 diff --git a/Tests/ScimitarKitTests/WandPersistentControlTests.swift b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
-index bd5b665..513a16f 100644
+index bd5b665..0beebf4 100644
 --- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
 +++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
 @@ -93,0 +94,29 @@ final class WandPersistentControlTests:XCTestCase {
@@ -258,23 +268,15 @@ index bd5b665..513a16f 100644
 +        XCTAssertFalse(control.isOpen)
 +        XCTAssertTrue(clicks.isEmpty)
 +    }
-@@ -129,0 +159,40 @@ final class WandPersistentControlTests:XCTestCase {
+@@ -129,0 +159,32 @@ final class WandPersistentControlTests:XCTestCase {
 +    func testReviewSelectionSurvivesNavigationHidingAndAppSwitch() {
 +        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
 +        select(8)
 +        control.handle(.init(.activate,id:"select-review-1"))
 +        XCTAssertEqual(control.selectedReviewMode,"changes")
 +        XCTAssertEqual(control.pinnedReviewCell,.wandReviewChanges)
-+        control.handle(.init(.navigate,id:"move-away-1"))
-+        control.handle(.init(.motion,id:"move-away-1",sequence:1,x:-24))
-+        control.handle(.init(.park,id:"move-away-1",sequence:2))
-+        XCTAssertNotEqual(control.focusedCell,.wandReviewChanges)
-+        XCTAssertEqual(control.selectedReviewMode,"changes")
-+        control.handle(.init(.press,id:"operate-pinned-1"))
-+        XCTAssertEqual(control.reviewMode,"changes")
-+        control.handle(.init(.release,id:"operate-pinned-1",sequence:1))
++        XCTAssertFalse(control.isOpen,"selection immediately hides the full HUD")
 +        control.handle(.init(.dismiss,id:"hide-review-1"))
-+        XCTAssertFalse(control.isOpen)
 +        XCTAssertEqual(control.selectedReviewMode,"changes")
 +        var reported=0;control.onContext={_ in reported+=1}
 +        clock.advance(by:120);tick.fire()
@@ -294,7 +296,7 @@ index bd5b665..513a16f 100644
 +        XCTAssertEqual(control.selectedReviewMode,"files")
 +        control.handle(.init(.activate,id:"select-files-1"))
 +        XCTAssertEqual(control.selectedReviewMode,"files","a duplicate datagram cannot toggle the selected mode off")
-+        control.handle(.init(.activate,id:"clear-files-1"))
++        control.handle(.init(.exitReview,id:"clear-files-1"))
 +        XCTAssertNil(control.selectedReviewMode)
 +        XCTAssertTrue(clicks.isEmpty)
 +    }

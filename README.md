@@ -36,11 +36,11 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Double tap | Close the entire HUD |
 
 - The outline stops at the edges instead of wrapping.
-- Bottom goes back to the pointer.
-- VS Code app mode: hold Bottom and tilt down or up to review changes. Crossed files are staged on release through Better Git. Double tap Bottom to exit review and return to centred mouse follow.
 - The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.
-- With VS Code frontmost, Review changes and Stage files appear in a separate group beside Switch App. Tap one to select it; tap it again to clear. Hold Middle and move vertically, then circle to continue; reverse circling to reverse direction. The selection survives hiding the HUD, with a small reminder in VS Code. Release finishes the current Better Git action.
 - The HUD has no normal inactivity timeout. Screenshot selection temporarily uses the pointer and returns to the same HUD afterward.
+- Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.
+- In VS Code, tap Review changes or Stage files to enter and hide the HUD. Circle clockwise for next and anticlockwise for previous, with no button held. Tap Middle once to exit. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.
+- Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.
 
 **Bottom** (`D1`) · Mouse
 
@@ -51,21 +51,14 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap while following | Stop following without clicking |
 | Hold over a scroll area | Start up or down, U-turn either way, then reverse circling to reverse scrolling; release to stop |
 | Hold elsewhere | Drag with the mouse button down; release to drop |
-| Double tap | Exit other modes, centre the pointer on the main screen and enable mouse follow |
+| Double tap | Centre the pointer on the main screen and enable mouse follow; keep the HUD and review selection unchanged |
 
 - Control V2 keeps short taps unchanged. The existing 220 ms cutoff separates a tap from a hold.
 - The target under the pointer at press chooses scrolling or native dragging. Scrolling stays in that area until release.
 - V2 keeps the starting direction through either initial U-turn, even before circle recognition. Once circling is established, reversing it reverses scrolling without releasing. Standalone flick and circle triggers remain disabled; V1 retains its earlier gestures.
-- VS Code app mode retains Bottom review controls.
 - Middle switches to the HUD. The pointer stays within real display edges.
 - Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.
-
-**Bottom + Middle** · Scroll
-
-| Gesture | Result |
-| --- | --- |
-| Hold both and turn | Scroll sideways and up or down at once, including diagonals |
-| Release either | Stop scrolling and enable mouse follow; nothing clicks |
+- Bottom never opens, closes or clears the Middle HUD or review selection.
 
 **Lights**, highest priority first
 
@@ -166,7 +159,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.57 and signed Agentic Mouse 1.0.270 add distinct review tap identities, brighter selected cards and an indicator above Agent Flow. Physical acceptance is pending.
+- Installed: Wand Receiver 1.2.60 and Agentic Mouse 1.0.271 keep pointer, HUD review and speech independent. Review and Stage files hide the grid on entry and use hands-free circles in VS Code. Physical gesture acceptance is pending.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
 - The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
@@ -181,7 +174,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.57 (62) · device code `wand-e1ce30d7c407` · bridge `7380f996` · updated 18 October 2026.
+Receiver 1.2.60 (65) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

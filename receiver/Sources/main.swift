@@ -60,7 +60,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let review=WandReviewGesture()
     var reviewTimer:Timer?,reviewOriginY=0.0,appMode:String?
     var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
-    let wandShortcutScroll=WandHeldScroll(linesPerDegree:1.0/7)
+    var wandShortcutCircle=WandReviewCircle()
+    var middleReviewExit=false
     var selectedReviewMode:String?
     var hiddenReviewOperating=false
     var hiddenReviewPending=false
@@ -140,11 +141,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             self.queue("global.wandAppMode="+(mode.map{ "'"+$0+"'" } ?? "undefined")+";updateLights();")
             if mode != nil {self.resumeHUDNavigation()}
         }
-        context.onReviewChange = {[weak self] mode in self?.setWandShortcut(mode)}
+        // Review selection, rather than a held HUD card, owns the independent session.
+        context.onReviewChange = {_ in }
         context.onSelectionChange = {[weak self] mode in
             guard let self else{return}
-            if self.selectedReviewMode != mode {self.finishWandShortcut(commit:false);if self.hiddenReviewOperating {self.hiddenReviewOperating=false;self.queue("setHUDOpen(false);")}}
             self.selectedReviewMode=mode
+            self.setWandShortcut(mode)
         }
         context.onScreenshotChange = {[weak self] active in self?.setScreenshotActive(active)}
         recording.onChange = {[weak self] active in
@@ -247,7 +249,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard count==data.count,let command=String(bytes:data,encoding:.utf8) else{return}
         unlink(path);log("MAINTENANCE_QUEUED",count)
         let marker="// WAND_BRIDGE_UPDATE\n"
-        if command.hasPrefix(marker) {
+        if command.hasPrefix("// WAND_PATCH\n") {
+            ready=false;loadingBridge=true;bridgeLoadFailed=false;status();deadline(seconds:60)
+            // Quiet and pace each complete statement, as in the normal bridge loader.
+            for line in command.dropFirst("// WAND_PATCH\n".count).split(separator:"\n") {queue(String(line))}
+            queue("print('WAND_MODE_ROUTING_READY');")
+        } else if command.hasPrefix(marker) {
             let code=String(command.dropFirst(marker.count))
             let previous=modeBridge
             let value=["runtime":runtimeVersion,"build":receiverBuild,"code":code]
@@ -363,6 +370,20 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard device === p else { return }
         guard error == nil, c.isNotifying else { log("NOTIFY_FAILED"); reconnect(); return }
         guard !configuring else { return }; configuring = true
+        // One-shot local recovery: start from saved flash before loading a bridge.
+        // A fresh connection is needed when memory exhaustion left UART XOFF stuck.
+        let resetPath=support.appendingPathComponent("reload-on-connect").path
+        var resetInfo=stat()
+        if lstat(resetPath,&resetInfo)==0,resetInfo.st_uid==geteuid(),
+           resetInfo.st_mode & S_IFMT == S_IFREG,resetInfo.st_mode & 0o077 == 0 {
+            unlink(resetPath);log("RELOADING_SAVED_PROGRAM")
+            queue("\u{03}\u{03}\n\u{10}load();")
+            DispatchQueue.main.asyncAfter(deadline:.now()+2){[weak self] in
+                guard let self,self.device === p,!self.ready,!self.restoring else{return}
+                self.reconnect()
+            }
+            return
+        }
         log("CHECKING_RUNTIME", runtimeVersion)
         let handshake = "if(global.WAND_RUNTIME_VERSION===\"" + runtimeVersion + "\"){if(!global.wandBridgeOriginalSend)global.wandBridgeOriginalSend=mouse.send;mouse.send=function(x,y,b,cb){Bluetooth.println(\"@WAND \"+x+\",\"+y+\",\"+b);if(cb)cb();};if(!connected)onConnect();print(\"WAND_BRIDGE_READY\");}else print(\"WAND_NEEDS_CONFIG\");"
         // An interrupted prior UART write can leave a partial REPL expression.
@@ -429,6 +450,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 guard !bridgeLoadFailed else {queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();");log("BRIDGE_LOAD_REJECTED");continue}
                 loadingBridge=false;loadingRuntime=false;ready=true;motionFilter.reset();rawLastArrival=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
                 if context.isActive {hudSession=true;resumeHUDNavigation()}
+                if let mode=selectedReviewMode {setWandShortcut(mode)}
                 queue("global.wandRawPointer=true;global.wandRawBias=undefined;global.wandRawActive=false;global.WAND_UPDATING=false;setHUDOpen("+(context.isActive ? "true":"false")+");updateLights();")
             }
             if line.hasPrefix("WAND_DIAG ") || line.hasPrefix(">WAND_DIAG ") || line.hasPrefix("WAND_CALLBACK_MATCH ") || line.hasPrefix(">WAND_CALLBACK_MATCH ") {log("DEVICE",line)}
@@ -473,7 +495,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 if value=="0" || value=="1" {
                     if recognizeBottomRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
                     if controlVersion == .scrollV2 && value=="0" {finishBottomHold(now:ProcessInfo.processInfo.systemUptime)}
-                    if controlVersion == .scrollV2 && appMode != "vsCode" && !scrollActive {
+                    if controlVersion == .scrollV2 && !scrollActive {
                         if value=="1" {
                             heldScrollAnchor=deliveryPoint ?? CGEvent(source:nil)?.location
                             heldScroll.begin(now:ProcessInfo.processInfo.systemUptime,scrollable:false)
@@ -500,13 +522,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     if endedLegacyScroll {enableMouseAfterScroll()}
                 }
             }
-            if let marker=line.range(of:"@MIDDLE "){cancelCircleScroll();handleMiddle(String(line[marker.upperBound...]))}
+            if let marker=line.range(of:"@MIDDLE "){handleMiddle(String(line[marker.upperBound...]))}
             if let marker=line.range(of:"@NAV "){handleNavigation(String(line[marker.upperBound...]))}
             if let marker = line.range(of: "@SCROLL ") { handleScroll(String(line[marker.upperBound...])) }
             if let marker = line.range(of: "@MOVE ") { handleMove(String(line[marker.upperBound...])) }
             if let marker = line.range(of: "@HUD ") { handleHUD(String(line[marker.upperBound...])) }
             if let marker = line.range(of: "@STT "), !restoring, AXIsProcessTrusted() {
-                cancelCircleScroll()
                 let value=String(line[marker.upperBound...]).trimmingCharacters(in: .whitespaces)
                 if value == "0" || value == "1" { log("SPEECH_BUTTON", value, controls.speech(down:value == "1") ? "SENT" : "UNAVAILABLE") }
             }
@@ -584,7 +605,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if screenshotActive && (hudSession || screenshotHUD) {
             screenshotHUD=true;controls.persistent("park");hudActive=false;hudSession=false
             pointerInHUD=false;middleOperating=false;stopHUDWatchdog();queue("setHUDOpen(false);")
-        } else {closeHUD(reason:"pointer mode")}
+        } // Bottom changes pointing only; it never closes the Middle-owned HUD/review.
         log("POINTER_MODE_ENTERED")
     }
     func handleMiddle(_ payload:String){
@@ -598,15 +619,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 closeHUD(reason:"middle double click")
                 return
             }
-            if !hudSession,selectedReviewMode != nil {
-                hiddenReviewPending=true
-                middleHold=Timer.scheduledTimer(withTimeInterval:0.22,repeats:false){[weak self] _ in
-                    guard let self,self.hiddenReviewPending,let mode=self.selectedReviewMode else{return}
-                    self.hiddenReviewPending=false;self.hiddenReviewOperating=true
-                    self.navStream.reset();self.navX=0;self.navY=0
-                    self.queue("setMouseFollow(false);setHUDOpen(true);")
-                    self.setWandShortcut(mode)
-                }
+            if selectedReviewMode != nil {
+                middleReviewExit=true;middleLastRelease = -100
+                finishWandShortcut(commit:true);selectedReviewMode=nil
+                controls.persistent("exitReview")
                 return
             }
             if !hudSession {
@@ -621,6 +637,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             operationOriginX=navX;operationOriginY=navY
             handleMove("B,0,0",project:false)
         case "0":
+            if middleReviewExit {middleReviewExit=false;return}
             if hiddenReviewOperating {
                 finishWandShortcut(commit:true);hiddenReviewOperating=false
                 middleHold?.invalidate();middleHold=nil
@@ -657,12 +674,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let point=navStream.update(x:x/1000,y:y/1000,using:motionFilter)
         navX=point.x;navY=point.y
         if wandShortcutMode != nil {
-            handleMove("U,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000),project:false)
-            let now=ProcessInfo.processInfo.systemUptime,dt=max(0.005,min(0.05,ProcessInfo.processInfo.systemUptime-wandShortcutTime))
+            let now=ProcessInfo.processInfo.systemUptime
             let dx=navX-wandShortcutX,dy=navY-wandShortcutY
             wandShortcutX=navX;wandShortcutY=navY;wandShortcutTime=now
-            let steps=wandShortcutScroll.sample(x:dx/dt,y:dy/dt,dt:dt,now:now)
-            sendReview(review.detents(steps,now:now))
+            // Bottom retains its mouse gesture. Never interpret that held movement as review.
+            if pointerRouter.bottomHeld {wandShortcutCircle.reset();return}
+            sendReview(review.detents(wandShortcutCircle.sample(dx:dx,dy:dy,now:now),now:now))
             return
         }
         if appMode=="vsCode" && review.isHeld {sendReview(review.motion(y:navY-reviewOriginY,now:ProcessInfo.processInfo.systemUptime));return}
@@ -807,14 +824,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard recenterGesture.edge(down:down,now:now) else{return false}
         recenterPointer();return true
     }
-    /// Preserve gyro calibration, but clear every pointer/HUD/scroll owner.
+    /// Recenter only the Bottom pointer lane; preserve Middle HUD/review and speech.
     func recenterPointer() {
         guard ready,!restoring,AXIsProcessTrusted() else{return}
-        closeHUD(reason:"bottom double tap")
         cancelCircleScroll();finishScroll();performPointer(pointerRouter.cancelAll());releaseButtons();motionFilter.reset()
         recenterSuppressButtons=true
         dwell.follow(true);restDetection.pointerActivated();scheduleDwell()
-        queue("stopScroll();stopPointerTrack();scrollSuppress=false;global.wandAppMode=undefined;global.wandCircleScrolling=false;setHUDOpen(false);setMouseFollow(true);")
+        queue("stopScroll();stopPointerTrack();scrollSuppress=false;global.wandCircleScrolling=false;setMouseFollow(true);")
         let bounds=CGDisplayBounds(CGMainDisplayID())
         let point=CGPoint(x:bounds.midX,y:bounds.midY)
         CGWarpMouseCursorPosition(point)
@@ -840,31 +856,35 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     /// Scroll chord, HUD and speech take over: drop unshown LOW motion and any circle.
     func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
+    // Ethan: Review changes = eyes mode; Stage files = whole-file "bang" selection.
+    // Keep the existing Better Git URI lifecycle; only the gesture source changes.
     func setWandShortcut(_ mode:String?) {
-        guard let mode else {finishWandShortcut(commit:!pointerInHUD && context.isActive);return}
-        guard ready,!restoring,((hudSession && acceptHUDContext && pointerInHUD && middleOperating) || (hiddenReviewOperating && context.isFresh)),
-              ["changes","files"].contains(mode),
+        guard let mode else {finishWandShortcut(commit:true);return}
+        guard ready,!restoring,context.isFresh,["changes","files"].contains(mode),
               NSWorkspace.shared.frontmostApplication?.bundleIdentifier=="com.microsoft.VSCode" else{return}
-        finishWandShortcut(commit:false)
+        if wandShortcutMode==mode{return}
+        finishWandShortcut(commit:true)
         let now=ProcessInfo.processInfo.systemUptime
         wandShortcutMode=mode;wandShortcutX=navX;wandShortcutY=navY;wandShortcutTime=now
+        wandShortcutCircle.reset();navStream.reset();navX=0;navY=0;wandShortcutX=0;wandShortcutY=0
         review.beginDetents(mode:mode,now:now)
-        // Middle is already past its existing hold cutoff; do not wait twice.
-        wandShortcutScroll.begin(now:now-wandShortcutScroll.holdSeconds)
+        queue("setWandReviewTracking(true);")
         reviewTimer=Timer.scheduledTimer(withTimeInterval:0.2,repeats:true){[weak self] _ in
             guard let self else{return}
             let now=ProcessInfo.processInfo.systemUptime
-            if !(self.context.isActive || (self.hiddenReviewOperating && self.context.isFresh)) || NSWorkspace.shared.frontmostApplication?.bundleIdentifier != "com.microsoft.VSCode" || now-self.wandShortcutTime>0.8 {
+            if !self.context.isFresh || NSWorkspace.shared.frontmostApplication?.bundleIdentifier != "com.microsoft.VSCode" || now-self.wandShortcutTime>0.8 {
                 self.finishWandShortcut(commit:false);return
             }
+            _=self.review.detents(0,now:now)
             self.sendReview(self.review.tick(now:now))
         }
         log("WAND_REVIEW_SHORTCUT",mode)
     }
     func finishWandShortcut(commit:Bool) {
         guard wandShortcutMode != nil else{return}
-        wandShortcutMode=nil;wandShortcutScroll.reset()
+        wandShortcutMode=nil;wandShortcutCircle.reset()
         sendReview(review.endDetents(commit:commit));reviewTimer?.invalidate();reviewTimer=nil
+        if ready && !restoring {queue("setWandReviewTracking(false);")}
     }
     func sendReview(_ requests:[WandReviewGesture.Request]){
         for request in requests {
@@ -930,7 +950,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let point = deliveryPoint ?? WandPointerBounds.clamp(CGEvent(source: nil)?.location ?? .zero,to:pointerDisplays)
         // The router may drop a consumed hold's endpoint click; button changes are
         // applied before motion, at the position already shown.
-        let routed=pointerRouter.frame(dx:x,dy:y,buttons:b,hud:hudSession,now:ProcessInfo.processInfo.systemUptime)
+        let routed=pointerRouter.frame(dx:x,dy:y,buttons:b,hud:false,now:ProcessInfo.processInfo.systemUptime)
         dwell.move(dx:x,dy:y,now:ProcessInfo.processInfo.systemUptime,eligible:!pointerRouter.bottomHeld && b==0 && !hudSession && !scrollActive)
         scheduleDwell()
         if routed.buttons != b {log("CONSUMED_HOLD_CLICK_DROPPED")}
@@ -962,7 +982,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let now=ProcessInfo.processInfo.systemUptime
         let released=heldScroll.active && v[3]&1 == 0
         reconcileBottomHold(down:v[3]&1 != 0,now:now,reason:"motion button state")
-        guard !released,!scrollActive,!hudSession,AXIsProcessTrusted() else{return}
+        guard !released,!scrollActive,AXIsProcessTrusted() else{return}
         let gap=rawLastArrival>0 ? now-rawLastArrival : 0
         guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:v[3]&1 != 0,resetState:v[3]&2 != 0 || gap>0.25) else{return}
         rawLastArrival=now
