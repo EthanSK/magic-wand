@@ -36,7 +36,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 
 - The outline stops at the edges instead of wrapping.
 - Bottom goes back to the pointer.
-- VS Code app mode: hold Bottom and tilt down or up to review changes. Crossed files are staged on release through Better Git. Double tap Bottom to toggle file staging mode; green is change review and purple is file staging.
+- VS Code app mode: hold Bottom and tilt down or up to review changes. Crossed files are staged on release through Better Git. Double tap Bottom to exit review and return to centred mouse follow.
 - The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.
 
 **Bottom** (`D1`) · Mouse
@@ -48,7 +48,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap while following | Stop following without clicking |
 | Hold over a scroll area | Move up or down to scroll; release to stop |
 | Hold elsewhere | Drag with the mouse button down; release to drop |
-| Double tap | Recenter the pointer on the main screen and keep following |
+| Double tap | Exit other modes, centre the pointer on the main screen and enable mouse follow |
 
 - Control V2 keeps short taps unchanged. The existing 220 ms cutoff separates a tap from a hold.
 - The target under the pointer at press chooses scrolling or native dragging. Scrolling stays in that area until release.
@@ -162,7 +162,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Control V2 stops held scrolling and dragging on physical button-up or lost button telemetry. Recording and mouse lights are steady. Automated checks passed; physical acceptance is pending.
+- Bottom double tap centres the pointer and enables mouse follow from every control mode. Automated checks passed; physical acceptance is pending.
 - Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling in V1 passes automated checks; physical gesture acceptance is pending.
 - Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.
 - Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.
@@ -172,7 +172,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.47 (52) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
+Receiver 1.2.48 (53) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

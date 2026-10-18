@@ -349,3 +349,13 @@ Renew a held-input lease only from actual button samples; if they disappear, rel
 native drag and stop scrolling. Late telemetry alone must not start the hold again.
 Tests drop the explicit release and exercise the actual raw handler, plus native drag
 teardown and lease expiry. This proves the failure path, not the original physical cause.
+
+
+## Bottom double tap is a global pointer escape
+
+Recognise physical Bottom double taps before app-specific, HUD, scrolling or native-button
+gates. Mode cleanup between the two taps must not erase the recogniser. A short second
+release closes the full HUD and review session, cancels scrolling and native drags, clears
+held pointer state, centres on the main display and explicitly enables mouse follow on
+both host and device. Discard queued old click reports until the next physical Bottom
+press. Keep long second presses as holds. Connection resets still clear the recogniser.

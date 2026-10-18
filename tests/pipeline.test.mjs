@@ -204,3 +204,17 @@ test("Bottom double tap recenters but a held second press remains a drag", () =>
  assert(s.mac.buttonDown,'second press held drags');
  s.w.edge('D1',1);s.w.advance(0.05);assert(!s.mac.buttonDown);
 });
+
+test('Bottom double tap exits any prior mode into centred mouse follow',()=>{
+ for(const mode of ['off','mouse','hud','scroll']) {
+  const s=setup();
+  if(mode==='mouse'){s.press('D1',.06);s.w.advance(.5);}
+  if(mode==='hud'){s.press('D2',.06);s.w.advance(.5);}
+  if(mode==='scroll'){s.pipeline.receiver.scrollActive=true;}
+  s.press('D1',.06);s.w.advance(.07);s.press('D1',.06);s.w.advance(.1);
+  assert(s.w.ctx.moveLatched,mode+' enables follow');
+  assert(!s.pipeline.receiver.hudSession && !s.pipeline.receiver.scrollActive,mode+' exits previous mode');
+  const p=s.mac.location();assert.equal(p.x,s.mac.width/2);assert.equal(p.y,s.mac.height/2);
+  assert.equal(s.pipeline.receiver.buttons,0);
+ }
+});
