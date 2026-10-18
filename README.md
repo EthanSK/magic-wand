@@ -50,7 +50,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap from off | Enter high-sensitivity follow without clicking |
 | Stop after moving in HIGH | Click once after a 200 ms pause |
 | Tap while following | Stop following without clicking |
-| Hold over a scroll area | Start up or down, U-turn either way, then reverse circling to reverse scrolling; release to stop |
+| Hold over a scroll area | Start left/right for horizontal or up/down for vertical, then continue in circles; reverse circling to reverse scrolling and release to stop |
 | Hold elsewhere | Drag with the mouse button down; release to drop |
 | Double tap | Centre the pointer on the main screen and enable mouse follow; keep the HUD and review selection unchanged |
 
@@ -60,6 +60,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - Middle switches to the HUD. The pointer stays within real display edges.
 - Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.
 - Bottom never opens, closes or clears the Middle HUD or review selection.
+- On a scrollable area, hold Bottom and start left/right for horizontal scrolling, or up/down for vertical scrolling. Continue in circles on that axis; reverse winding to reverse scrolling. Release to stop and return to mouse follow.
 
 **Lights**, highest priority first
 
@@ -160,7 +161,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.62 and Agentic Mouse 1.0.273, with Better Git 1.2.131 active. Middle double-click stages the accumulated set and stays in the same review mode; one click cancels and exits. The wand home HUD always offers Play/Pause beside Utility. Automated checks and rendered HUD previews passed; physical acceptance is pending.
+- Installed: Wand Receiver 1.2.63 adds left/right starts and horizontal circle continuation, with the same gain, winding reversal and release behavior as vertical scrolling. All 70 automated checks passed; physical acceptance is pending.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
 - The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
@@ -175,7 +176,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.62 (67) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 18 October 2026.
+Receiver 1.2.63 (68) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

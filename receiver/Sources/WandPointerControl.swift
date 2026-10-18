@@ -640,7 +640,8 @@ final class WandHeldScroll {
     private(set) var dragging=false
     private(set) var scrollable=true
     private(set) var circular=false
-    private var scrollDirection=0.0,directionTravel=0.0,sampleTime=0.0
+    private(set) var horizontal=false
+    private var scrollDirection=0.0,directionTravel=0.0,directionTravelX=0.0,sampleTime=0.0
     private var winding=0.0,windingToScroll=0.0,reverseTurn=0.0,reverseAt=0.0
     private var reverseSegments=0
     private let circle:WandCircularScroll
@@ -659,7 +660,7 @@ final class WandHeldScroll {
         tuning.minDuration=0.06;tuning.window=1.0;tuning.idleEnd=0.35
         circle=WandCircularScroll(tuning:tuning)
     }
-    func reset(){active=false;dragging=false;circular=false;scrollDirection=0;directionTravel=0;sampleTime=0;winding=0;windingToScroll=0;reverseTurn=0;reverseAt=0;reverseSegments=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
+    func reset(){active=false;dragging=false;circular=false;horizontal=false;scrollDirection=0;directionTravel=0;directionTravelX=0;sampleTime=0;winding=0;windingToScroll=0;reverseTurn=0;reverseAt=0;reverseSegments=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
     func begin(now:Double,scrollable:Bool=true){reset();active=true;started=now;confirmed=now;self.scrollable=scrollable}
     // A lease is renewed only by actual button samples, never by a timer.
     // Stop rather than keep a native drag or scroll alive after telemetry loss.
@@ -682,15 +683,22 @@ final class WandHeldScroll {
               x.isFinite,y.isFinite,dt>0,dt<=0.05 else{return 0}
         sampleTime=now ?? sampleTime+dt
         guard hypot(x,y)>1 else{circle.expire(now:sampleTime);reverseTurn=0;reverseSegments=0;return 0}
-        let dx=x*dt,dy=y*dt,vertical=abs(y)>1 ? dy:0
-        // The first vertical movement chooses the direction for this hold.
+        let dx=x*dt,dy=y*dt
+        var travel=hypot(dx,dy)
+        // Ethan's left/right start is the horizontal equivalent of up/down.
+        // The first deliberate stroke chooses one axis for the entire hold;
+        // sideways portions of its later circle must not switch scroll axes.
         // The first U-turn maps its winding to that direction; subsequent
         // consistent opposite winding reverses it without releasing.
         if scrollDirection==0 {
-            directionTravel+=vertical
-            if abs(directionTravel)>=0.25 {
-                scrollDirection=directionTravel>0 ? 1:-1
-                fraction=scrollDirection*abs(fraction)
+            directionTravelX+=dx;directionTravel+=dy
+            if hypot(directionTravelX,directionTravel)>=0.25 {
+                horizontal=abs(directionTravelX)>abs(directionTravel)
+                let initialTravel=horizontal ? directionTravelX:directionTravel
+                scrollDirection=initialTravel>0 ? 1:-1
+                // Include the acquisition stroke once, on its chosen axis.
+                fraction=scrollDirection*hypot(directionTravelX,directionTravel)*linesPerDegree
+                travel = 0
             }
         }
         let result=circle.update(dx:dx,dy:dy,now:sampleTime,eligible:scrollDirection != 0)
@@ -715,7 +723,11 @@ final class WandHeldScroll {
         // continues it. Use the same distance/gain before and after recognition;
         // the returning leg must never leak an opposite signed vertical delta.
         // Only established circular winding can subsequently reverse direction.
-        fraction += (scrollDirection != 0 ? scrollDirection*hypot(dx,dy):vertical)*linesPerDegree
+        // No output before axis acquisition; keep that small initial travel
+        // so choosing an axis neither loses distance nor leaks onto the other.
+        if scrollDirection != 0 {
+            fraction += scrollDirection*travel*linesPerDegree
+        }
         let lines=Int32(max(-12,min(12,fraction.rounded(.towardZero))))
         fraction -= Double(lines)
         if lines != 0 {moved=true}

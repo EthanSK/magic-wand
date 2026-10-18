@@ -244,9 +244,42 @@ for i in 0..<60 {straightForward+=straight.sample(x:0,y:20,dt:0.01,now:500.23+Do
 for i in 0..<60 {straightReverse+=straight.sample(x:0,y:-20,dt:0.01,now:500.83+Double(i)*0.01)}
 precondition(!straight.circular && straightForward>0 && straightReverse>0,"before circle recognition the return retains the starting direction")
 let sideways=WandHeldScroll();sideways.begin(now:600)
-for i in 0..<100 {precondition(sideways.sample(x:20,y:0,dt:0.01,now:600.23+Double(i)*0.01)==0)}
-precondition(!sideways.circular,"sideways movement alone cannot choose a scroll direction")
-print("PASS: up/down start, both rough circle windings, sideways arcs, pause/release, direction latch and no sideways-only start")
+var sidewaysLines:Int32=0
+for i in 0..<100 {sidewaysLines+=sideways.sample(x:20,y:0,dt:0.01,now:600.23+Double(i)*0.01)}
+precondition(sideways.horizontal && sidewaysLines==32 && !sideways.circular,"left/right movement chooses horizontal scrolling")
+print("PASS: up/down and left/right start, both rough circle windings, pause/release and direction latch")
+
+// Transpose the exact same gesture: left/right starts must retain every
+// vertical behavior, including initial U-turn, reversal, pauses and release.
+for direction in [-1.0,1.0] {
+ for winding in [-1.0,1.0] {
+  let horizontal=WandHeldScroll(),vertical=WandHeldScroll()
+  horizontal.begin(now:1100);vertical.begin(now:1100)
+  var time=1100.23,angle=0.0
+  func compare(_ x:Double,_ y:Double) {
+   time+=0.01
+   let v=vertical.sample(x:x,y:y,dt:0.01,now:time)
+   let h=horizontal.sample(x:y,y:x,dt:0.01,now:time)
+   precondition(v==h,"transposed gesture must give identical scroll steps")
+  }
+  for _ in 0..<40 {compare(0,direction*20)}
+  precondition(horizontal.horizontal && !vertical.horizontal)
+  for turn in [1.0,-1.0,1.0] {
+   for _ in 0..<180 {
+    angle+=turn*0.06
+    compare(turn*winding*13*sin(angle),turn*direction*20*cos(angle))
+   }
+   precondition(horizontal.circular && vertical.circular)
+  }
+  compare(0,0)
+  precondition(horizontal.horizontal,"circle and pause keep the acquired axis")
+  _=horizontal.end(now:time+0.01);_=vertical.end(now:time+0.01)
+  precondition(horizontal.sample(x:20,y:0,dt:0.01)==0)
+  horizontal.begin(now:time+1)
+  _=horizontal.sample(x:0,y:20,dt:0.02,now:time+1.3)
+  precondition(!horizontal.horizontal,"a new hold may choose another axis")
+ }
+}
 
 
 // A first U-turn may be left or right. Later opposite winding reverses the

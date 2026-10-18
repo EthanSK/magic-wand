@@ -31,7 +31,8 @@ final class Harness {
  func scheduleDwell(){}
  func postPointerMove(dx:Int,dy:Int,from p:CGPoint)->CGPoint{p}
  func handleFrame(x:Int,y:Int,b:Int){frames+=1}
- static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{[]}
+ static var wheelPairs:[(Int32,Int32)]=[]
+ static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
  ${['enableMouseAfterScroll','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
 }
 let h=Harness();precondition(h.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
@@ -69,6 +70,16 @@ let drag=Harness();drag.heldScroll.begin(now:100,scrollable:false);_=drag.heldSc
 precondition(!drag.dwell.following,"native dragging is not a scroll gesture")
 let lost=Harness();lost.heldScroll.begin(now:100);lost.reconcileBottomHold(down:false,now:101,reason:"timeout",resumeMouse:false)
 precondition(!lost.dwell.following,"lost telemetry must not activate mouse")
+for horizontal in [false,true] {
+ let axis=Harness();precondition(axis.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
+ axis.heldScroll.begin(now:now-1);_=axis.pointerRouter.bottom(down:true);Harness.wheelPairs=[]
+ for _ in 0..<50 {axis.handleRaw(horizontal ? "10000,2680,0,1":"10000,0,2680,1")}
+ precondition(!Harness.wheelPairs.isEmpty,"raw motion must reach the wheel output")
+ precondition(Harness.wheelPairs.allSatisfy{horizontal ? ($0.0 != 0 && $0.1 == 0):($0.0 == 0 && $0.1 != 0)},"the receiver must post only the acquired scroll axis")
+ let count=Harness.wheelPairs.count
+ axis.handleRaw("10000,2680,2680,0")
+ precondition(Harness.wheelPairs.count==count && !axis.heldScroll.active,"release must stop both axes before emitting movement")
+}
 print("PASS: missing release, native drag release, stale telemetry and scroll-to-mouse from both prior states")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-release-'));
