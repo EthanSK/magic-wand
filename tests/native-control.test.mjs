@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { PointerRouter } from "../docs/sim/pointer.mjs";
+import { PointerRouter, DwellClick } from "../docs/sim/pointer.mjs";
 test("optional zero-buffer LOW motion has no delay or release replay", () => {
   const router = new PointerRouter({lowDelay:0});
   router.bottom(true);
@@ -78,4 +78,21 @@ test("recognized scrolling keeps the pointer locked through pauses and straight 
  assert.deepEqual(r.bottom(false),[{type:'light',on:false}]);
  assert.equal(r.frame(0,0,1,false,21).buttons,0,'no click after scrolling');
  assert(r.frame(4,0,0,false,22).actions.some(a=>a.type==='move'));
+});
+
+test("HIGH clicks after 200 ms rest, but not during slow motion or twice at rest", () => {
+ const d=new DwellClick();d.follow(true);
+ assert.equal(d.tick(1),false);
+ d.move(20,0,10,true);
+ assert.equal(d.tick(10.199),false);
+ assert.equal(d.tick(10.201),true);
+ assert.equal(d.tick(11),false);
+ d.move(1,0,12,true);assert.equal(d.tick(13),false);
+ d.move(20,0,20,true);d.intent(true,20.1);
+ assert.equal(d.tick(20.4),false);
+ d.intent(false,20.5);d.intent(false,20.6);
+ assert.equal(d.tick(20.699),false);assert.equal(d.tick(20.701),true);
+ d.move(20,0,30,true);d.move(1,0,30.15,true);
+ assert.equal(d.tick(30.201),false);assert.equal(d.tick(30.351),true);
+ d.move(20,0,40,true);d.follow(false);assert.equal(d.tick(41),false);
 });

@@ -44,7 +44,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Gesture | Result |
 | --- | --- |
 | Tap from off | Enter high-sensitivity follow without clicking |
-| Stop after moving in HIGH | Click once after a 450 ms pause |
+| Stop after moving in HIGH | Click once after a 200 ms pause |
 | Tap while following | Stop following without clicking |
 | Hold over a scroll area | Start up or down, U-turn either way, then reverse circling to reverse scrolling; release to stop |
 | Hold elsewhere | Drag with the mouse button down; release to drop |
@@ -150,7 +150,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 | Gyro sleep | After 1 s idle | Accelerometer stays at 1.6 Hz for pickup; off on disconnect |
 | Hold | 220 ms | Longer presses count as holds |
 | LOW movement delay | 0 ms |  |
-| HIGH stop-to-click | 450 ms still | One click after deliberate movement; no repeat while still |
+| HIGH stop-to-click | 200 ms still | One click after deliberate movement; no repeat while still |
 | Double-click window | 0.3 s | Read from the Mac’s setting |
 | Scrolling | Horizontal × 1.4 | Mac wheel gain 0.8 |
 | Middle report | After 80 ms | So Bottom + Middle can become a scroll |
@@ -163,6 +163,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.
 - Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.
 - Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling in V1 passes automated checks; physical gesture acceptance is pending.
 - Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.
@@ -173,7 +174,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.52 (57) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
+Receiver 1.2.53 (58) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

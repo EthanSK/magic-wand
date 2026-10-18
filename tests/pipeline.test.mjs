@@ -130,7 +130,7 @@ test("HIGH clicks once after settling, a tap exits; tap then hold drags and rest
   assert(!s.macEvents.some(e=>e.type==="down"),"entry never clicks");
   const start=s.mac.location();s.turn(10,0,.5);
   assert(s.mac.location().x>start.x+100);
-  s.turn(0,0,.44);assert(!s.macEvents.some(e=>e.type==="down"));
+  s.turn(0,0,.19);assert(!s.macEvents.some(e=>e.type==="down"));
   const fixed=s.mac.location();s.turn(0,0,.15);
   let clicks=s.macEvents.filter(e=>e.type==="down"||e.type==="up");
   assert.deepEqual(clicks.map(e=>e.type),["down","up"]);

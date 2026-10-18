@@ -47,6 +47,7 @@ test("tuning matches the running device code and the receiver", () => {
   const { CONFIG } = wand.ctx;
   const t = manifest.tuning;
   assert.equal(number(/init\(lowDelay:Double=([\d.]+)/, pointer, "LOW delay") * 1000, t.lowMotionDelayMs);
+  assert.equal(number(/init\(pause:Double=([\d.]+)/, pointer, "HIGH dwell") * 1000, t.highDwellMs);
   assert.equal(CONFIG.gain, t.pointerGain);
   assert.equal(CONFIG.heldPointerGain, t.heldPointerGain);
   assert.equal(number(/yawScale=min\(([\d.]+),length\/across\)/, pointer, "maximum heading correction"), t.orientationCompensation.maxHeadingGain);

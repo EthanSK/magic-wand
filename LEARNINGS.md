@@ -113,9 +113,14 @@ because posted CGEvents need not update the system cursor synchronously.
 
 ## HIGH dwell and desk inference
 
-HIGH clicks once after meaningful travel and 450 ms without a pointer report. Entry, continued
+HIGH clicks once after meaningful travel and 200 ms after confirmed rest. Entry, continued
 stillness and small sub-threshold motion never re-arm the click. Reset on every control, recording
 or mode edge. A short Bottom tap now exits HIGH without clicking.
+
+The shorter rest interval changes only click timing, not motion filtering. Preserve the
+bounded intent lease so ongoing subpixel movement cannot click early; quiet heartbeats
+must not postpone a confirmed stop. Native and browser tests cover the 200 ms boundary,
+resumed movement, no repeat at rest, and no click on mode entry or exit.
 
 The Puck's raw accelerometer divisor is 8192 per g; gyro is 134 per degree/second. On the desk,
 Puck.accelOn(1.6) disables the gyro. Cap active IMU telemetry at 10 Hz while keeping the accepted
