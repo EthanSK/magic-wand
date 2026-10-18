@@ -83,3 +83,36 @@ test('complete published receiver typechecks together', {skip:process.platform!=
  const result=spawnSync('swiftc',['-typecheck',...files],{encoding:'utf8'});
  assert.equal(result.status,0,result.stderr);
 });
+
+// Exercise the real IMU receiver method with inert transports. A table report
+// may park the pointer, but never owns the recording lifecycle or an open HUD.
+test('table rest never stops dictation or closes an explicit HUD', {skip:process.platform!=='darwin'},()=>{
+ const source=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.url),'utf8');
+ const start=source.indexOf('    func handleIMU('),open=source.indexOf('{',start);let depth=1,end=open+1;
+ while(depth){if(source[end]==='{')depth++;if(source[end]==='}')depth--;end++;}
+ const code=`import Foundation
+func log(_ values:Any...){}
+struct Filter {var configured=true;func observeGravity(x:Double,y:Double,z:Double){}}
+final class Dwell {var following=true;func intent(_ value:Bool,now:Double){};func follow(_ value:Bool){following=value};func inhibit(until:Double){}}
+final class Rest {var parked=false;var hasReference=true;var sawButtons=false;enum Event{case probe,pickedUp,settling,putDown};func update(x:Double,y:Double,z:Double,gyro:Double,now:Double,buttons:Bool,idle:Bool)->[Event]{sawButtons=buttons;if buttons{return []};parked=true;return [.putDown]}}
+final class Controls {var speechEvents=0;func speech(down:Bool)->Bool{speechEvents+=1;return true}}
+final class Recording {var isRecording=true}
+final class Harness {
+ var ready=true,restoring=false,scrollActive=false,buttons=0,restDiagnosticsRemaining=0,hudSession=false
+ var motionFilter=Filter();let dwell=Dwell(),restDetection=Rest(),controls=Controls(),recording=Recording()
+ var probeTimer:Timer?,queued:[String]=[],entered=0
+ func reconcileBottomHold(down:Bool,now:Double,reason:String){};func scheduleDwell(){};func cancelCircleScroll(){};func releaseButtons(){}
+ func enterPointerMode(){entered+=1;hudSession=false};func queue(_ text:String){queued.append(text)}
+ ${source.slice(start,end)}
+}
+let h=Harness();h.handleIMU("0,0,8192,0,0,0,0")
+precondition(!h.dwell.following && h.entered==1)
+precondition(h.controls.speechEvents==0 && h.recording.isRecording)
+let hud=Harness();hud.hudSession=true;hud.handleIMU("0,0,8192,0,0,0,0")
+precondition(hud.hudSession && hud.entered==0 && hud.restDetection.sawButtons)
+precondition(hud.controls.speechEvents==0 && hud.recording.isRecording)
+print("PASS: table rest cannot stop recording or dismiss open HUD")
+`;
+ const dir=mkdtempSync(join(tmpdir(),'wand-rest-'));
+ try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',[join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
+});

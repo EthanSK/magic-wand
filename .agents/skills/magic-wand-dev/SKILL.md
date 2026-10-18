@@ -29,6 +29,10 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
 3. Keep one Bluetooth owner: the installed receiver. Prefer diagnostics through its existing
    connection; opening a second connection can make a working device appear disconnected.
    Prepare and check updates before the short swap, preserving calibration and rollback.
+   Before any private installation, follow the Agent Flow recording/processing gate in the
+   shared development-workflow local-installation reference. Do not restart while Ethan is
+   using Agent Flow; recording=false alone does not prove transcription/delivery is idle.
+   Table-rest detection must not stop dictation or dismiss an explicitly open HUD.
 4. Do not add intentional movement latency without Ethan's fresh explicit confirmation.
    Sensor sampling, delivered update rate and end-to-end latency are different measurements.
 5. For prototype changes, read [the prototype policy](../../../prototypes/README.md).

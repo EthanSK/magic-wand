@@ -56,7 +56,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let dwell=WandDwellClick()
     let restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
     var dwellTimer:Timer?,probeTimer:Timer?
-    var restStopPending=false
     var restDiagnosticsRemaining=30
     let review=WandReviewGesture()
     var reviewTimer:Timer?,reviewOriginY=0.0,appMode:String?
@@ -141,7 +140,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         recording.onChange = {[weak self] active in
             guard let self else{return}
             log("RECORDING_STATE",active);self.dwell.reset();self.scheduleDwell();self.syncRecordingLight();self.status()
-            if !active {self.restStopPending=false}
         }
         recording.start()
         lastTrusted = AXIsProcessTrusted()
@@ -312,7 +310,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         flickScroll.reset();flickAnchor=nil
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
-        probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true);restStopPending=false
+        probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true)
         recenterGesture.cancel();recenterSuppressButtons=false;performPointer(pointerRouter.cancelAll());setCircleLight(false)
         lightMode="disconnected"
         hudSession=false;hudEntryPress=false
@@ -479,7 +477,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     }
                     if value=="1" && flickScroll.active {flickScroll.reset();flickAnchor=nil;setCircleLight(false);motionFilter.reset()}
                     let endedLegacyScroll=value=="0" && pointerRouter.circle.active
-                    restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.bottom(down:value=="1"))
+                    dwell.reset();scheduleDwell();performPointer(pointerRouter.bottom(down:value=="1"))
                     if endedLegacyScroll {enableMouseAfterScroll()}
                 }
             }
@@ -784,7 +782,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         } else if !active {circleTimer?.invalidate();circleTimer=nil}
     }
     /// Scroll chord, HUD and speech take over: drop unshown LOW motion and any circle.
-    func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
+    func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
     func setWandShortcut(_ mode:String?) {
         guard let mode else {finishWandShortcut(commit:!pointerInHUD && context.isActive);return}
         guard ready,!restoring,hudSession,acceptHUDContext,pointerInHUD,middleOperating,
@@ -975,16 +973,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             log("REST_SAMPLE",x/8192,y/8192,z/8192,"gyro",gyro/100,"held",held,"follow",dwell.following,"parked",restDetection.parked)
         }
         let wasParked=restDetection.parked
-        let events=restDetection.update(x:x/8192,y:y/8192,z:z/8192,gyro:gyro/100,now:now,buttons:held==1 || scrollActive || buttons != 0,idle:!dwell.following && !hudSession)
+        let events=restDetection.update(x:x/8192,y:y/8192,z:z/8192,gyro:gyro/100,now:now,buttons:held==1 || scrollActive || buttons != 0 || hudSession,idle:!dwell.following && !hudSession)
         if !wasParked && restDetection.parked {log("TABLE_REST_CONFIRMED", "reference",restDetection.hasReference)}
         for event in events {
             switch event {
             case .probe:
-                restStopPending=false
                 queue("wakeGyro();")
                 probeTimer?.invalidate();probeTimer=Timer.scheduledTimer(withTimeInterval:1.5,repeats:false){[weak self] _ in self?.queue("if(!moveLatched&&!hudOpen&&!scrollHeld)sleepGyro();")}
             case .pickedUp:
-                restStopPending=false
                 probeTimer?.invalidate();probeTimer=nil
                 guard !hudSession else{continue}
                 enterPointerMode();dwell.follow(true);queue("setMouseFollow(true);");log("AUTO_PICKUP")
@@ -992,18 +988,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 dwell.inhibit(until:now+3);scheduleDwell()
             case .putDown:
                 cancelCircleScroll();enterPointerMode();dwell.follow(false);releaseButtons();queue("setMouseFollow(false);setHUDOpen(false);");log("AUTO_PUT_DOWN")
-                restStopPending=recording.isRecording
             }
         }
-        // Stopping dictation deserves stronger evidence than parking the
-        // pointer: three more seconds of a quiet desk, cancelled by pickup or
-        // any control. Send one ordinary Top tap, never a blind toggle.
-        if restStopPending,restDetection.parked,let since=restDetection.deskQuietSince,now-since>=3,recording.isRecording {
-            restStopPending=false
-            let sent=controls.speech(down:true)
-            DispatchQueue.main.asyncAfter(deadline:.now()+0.08){[weak self] in _=self?.controls.speech(down:false)}
-            log("AUTO_RECORDING_STOP_REQUEST",sent)
-        }
+        // Rest detection owns pointer power only. It must never stop Agent Flow:
+        // a still wand is not evidence that Ethan has finished speaking.
+
     }
     func transition(to next: Int, at point: CGPoint) {
         for (mask, button) in [(1, CGMouseButton.left), (2, CGMouseButton.right)] where buttons & mask != next & mask {
@@ -1027,7 +1016,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func releaseButtons() { transition(to: 0, at: CGEvent(source: nil)?.location ?? .zero) }
     func stop() {
         sendReview(review.cancel());reviewTimer?.invalidate();reviewTimer=nil
-        dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil;probeTimer?.invalidate();probeTimer=nil;restStopPending=false
+        dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil;probeTimer?.invalidate();probeTimer=nil
         guard !restoring else { return }; performPointer(pointerRouter.cancelAll());setCircleLight(false);restoring = true; retry?.cancel(); controls.cancel(); hudWatchdog?.invalidate(); releaseButtons()
         finishScroll();log("STOPPING"); status()
         // Preserve the low-power runtime, restoring only its original output sender.

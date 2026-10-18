@@ -1,0 +1,47 @@
+diff --git a/Sources/ScimitarKit/App/WandPersistentControl.swift b/Sources/ScimitarKit/App/WandPersistentControl.swift
+index 6624d37..736c24f 100644
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -49 +48,0 @@ public final class WandPersistentController {
+-        let started:TimeInterval
+@@ -111 +110 @@ public final class WandPersistentController {
+-            hold=Hold(id:command.id,sequence:command.sequence,received:clock.now,started:clock.now,
++            hold=Hold(id:command.id,sequence:command.sequence,received:clock.now,
+@@ -172 +171,2 @@ public final class WandPersistentController {
+-        if let current=hold, clock.now-current.received > 1 || clock.now-current.started > 30 {
++        // A healthy hold has no duration limit. Only missing telemetry expires it.
++        if let current=hold, clock.now-current.received > 1 {
+diff --git a/Tests/ScimitarKitTests/WandPersistentControlTests.swift b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+index bd5b665..0185c92 100644
+--- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
++++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+@@ -93,0 +94,29 @@ final class WandPersistentControlTests:XCTestCase {
++    func testHealthyHeldNavigationAndOperationHaveNoDurationLimit() {
++        for phase in [WandPersistentCommand.Phase.navigate, .press] {
++            let id = "long-hold-\(phase.rawValue)"
++            control.handle(.init(phase,id:id))
++            // Zero movement is a live report too; remaining still must not dismiss.
++            for sequence in 1...240 {
++                clock.advance(by:0.5)
++                control.handle(.init(.motion,id:id,sequence:sequence))
++                tick.fire()
++                XCTAssertTrue(control.isOpen,"healthy \(phase) closed after \(sequence / 2) seconds")
++            }
++            XCTAssertTrue(clicks.isEmpty)
++            control.handle(.init(phase == .navigate ? .park : .release,id:id,sequence:241))
++            XCTAssertTrue(control.isOpen)
++        }
++        XCTAssertEqual(clicks,[.switchApp],"only the explicit operation release selects")
++    }
++    func testMissingTelemetryStillClosesAfterLongHealthyHold() {
++        control.handle(.init(.press,id:"long-then-lost"))
++        for sequence in 1...80 {
++            clock.advance(by:0.5)
++            control.handle(.init(.motion,id:"long-then-lost",sequence:sequence))
++            tick.fire()
++        }
++        XCTAssertTrue(control.isOpen)
++        clock.advance(by:1.1);tick.fire()
++        XCTAssertFalse(control.isOpen)
++        XCTAssertTrue(clicks.isEmpty)
++    }

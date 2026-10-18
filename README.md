@@ -164,6 +164,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Prepared source fix: table rest no longer stops dictation or closes the HUD. Installation is pending so active Agent Flow use is not interrupted.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
 - HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.
 - Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.
