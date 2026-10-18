@@ -735,6 +735,29 @@ final class WandHeldScroll {
 }
 
 
+/// Middle in an active review: a single click cancels; a double click stages the set.
+/// Only classifies the button; it never buffers pointer motion or owns Git selection.
+struct WandReviewExitGesture {
+    private var releasedAt: Double?
+    private var pressed = false
+    var pending: Bool { pressed || releasedAt != nil }
+    mutating func down(now: Double, interval: Double) -> Bool {
+        if let releasedAt, now - releasedAt <= interval {
+            reset(); return true
+        }
+        pressed = true; releasedAt = nil; return false
+    }
+    mutating func up(now: Double) -> Bool {
+        guard pressed else { return false }
+        pressed = false; releasedAt = now; return true
+    }
+    mutating func expire(now: Double, interval: Double) -> Bool {
+        guard let releasedAt, now - releasedAt >= interval else { return false }
+        reset(); return true
+    }
+    mutating func reset() { pressed = false; releasedAt = nil }
+}
+
 /// Ethan's "eyes mode" = Review changes; "bang mode" / "!" = Stage files.
 /// This only turns a circular wand path into ratchets. Better Git owns preview/staging.
 /// Screen coordinates: positive Y points down, so positive winding is clockwise.

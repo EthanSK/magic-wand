@@ -62,6 +62,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
     var wandShortcutCircle=WandReviewCircle()
     var middleReviewExit=false
+    var reviewExitGesture=WandReviewExitGesture()
+    var reviewExitTimer:Timer?
     var selectedReviewMode:String?
     var hiddenReviewOperating=false
     var hiddenReviewPending=false
@@ -145,6 +147,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         context.onReviewChange = {_ in }
         context.onSelectionChange = {[weak self] mode in
             guard let self else{return}
+            self.reviewExitTimer?.invalidate();self.reviewExitTimer=nil;self.reviewExitGesture.reset()
             self.selectedReviewMode=mode
             self.setWandShortcut(mode)
         }
@@ -323,9 +326,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func reset() {
+        reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset();middleReviewExit=false
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil
         flickScroll.reset();flickAnchor=nil
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
+        wandShortcutMode=nil;wandShortcutCircle.reset()
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
         probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true)
         recenterGesture.cancel();recenterSuppressButtons=false;performPointer(pointerRouter.cancelAll());setCircleLight(false)
@@ -613,16 +618,20 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         switch payload.trimmingCharacters(in:.whitespaces){
         case "1":
             let now=ProcessInfo.processInfo.systemUptime;middlePressedAt=now
+            if selectedReviewMode != nil {
+                middleReviewExit=true;middleLastRelease = -100
+                reviewExitTimer?.invalidate();reviewExitTimer=nil
+                // Ethan's "commit the working set" means release Better Git's existing
+                // held selection to stage it, not create a Git commit.
+                if reviewExitGesture.down(now:now,interval:hudDoubleClickInterval) {
+                    exitSelectedReview(commit:true)
+                }
+                return
+            }
             if now-middleLastRelease<=hudDoubleClickInterval {
                 middleLastRelease = -100;middleDoubleConsumed=true
                 middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
                 closeHUD(reason:"middle double click")
-                return
-            }
-            if selectedReviewMode != nil {
-                middleReviewExit=true;middleLastRelease = -100
-                finishWandShortcut(commit:true);selectedReviewMode=nil
-                controls.persistent("exitReview")
                 return
             }
             if !hudSession {
@@ -637,7 +646,19 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             operationOriginX=navX;operationOriginY=navY
             handleMove("B,0,0",project:false)
         case "0":
-            if middleReviewExit {middleReviewExit=false;return}
+            if middleReviewExit {
+                middleReviewExit=false
+                if reviewExitGesture.up(now:ProcessInfo.processInfo.systemUptime) {
+                    reviewExitTimer=Timer.scheduledTimer(withTimeInterval:hudDoubleClickInterval,repeats:false){[weak self] _ in
+                        guard let self else{return}
+                        self.reviewExitTimer=nil
+                        if self.reviewExitGesture.expire(now:ProcessInfo.processInfo.systemUptime,interval:self.hudDoubleClickInterval) {
+                            self.exitSelectedReview(commit:false)
+                        }
+                    }
+                }
+                return
+            }
             if hiddenReviewOperating {
                 finishWandShortcut(commit:true);hiddenReviewOperating=false
                 middleHold?.invalidate();middleHold=nil
@@ -678,7 +699,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             let dx=navX-wandShortcutX,dy=navY-wandShortcutY
             wandShortcutX=navX;wandShortcutY=navY;wandShortcutTime=now
             // Bottom retains its mouse gesture. Never interpret that held movement as review.
-            if pointerRouter.bottomHeld {wandShortcutCircle.reset();return}
+            if pointerRouter.bottomHeld || reviewExitGesture.pending {wandShortcutCircle.reset();return}
             sendReview(review.detents(wandShortcutCircle.sample(dx:dx,dy:dy,now:now),now:now))
             return
         }
@@ -859,11 +880,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // Ethan: Review changes = eyes mode; Stage files = whole-file "bang" selection.
     // Keep the existing Better Git URI lifecycle; only the gesture source changes.
     func setWandShortcut(_ mode:String?) {
-        guard let mode else {finishWandShortcut(commit:true);return}
+        guard let mode else {finishWandShortcut(commit:false);return}
         guard ready,!restoring,context.isFresh,["changes","files"].contains(mode),
               NSWorkspace.shared.frontmostApplication?.bundleIdentifier=="com.microsoft.VSCode" else{return}
         if wandShortcutMode==mode{return}
-        finishWandShortcut(commit:true)
+        finishWandShortcut(commit:false)
         let now=ProcessInfo.processInfo.systemUptime
         wandShortcutMode=mode;wandShortcutX=navX;wandShortcutY=navY;wandShortcutTime=now
         wandShortcutCircle.reset();navStream.reset();navX=0;navY=0;wandShortcutX=0;wandShortcutY=0
@@ -885,6 +906,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         wandShortcutMode=nil;wandShortcutCircle.reset()
         sendReview(review.endDetents(commit:commit));reviewTimer?.invalidate();reviewTimer=nil
         if ready && !restoring {queue("setWandReviewTracking(false);")}
+    }
+    func exitSelectedReview(commit:Bool) {
+        reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset()
+        finishWandShortcut(commit:commit);selectedReviewMode=nil
+        controls.persistent("exitReview")
+        log("WAND_REVIEW_EXIT",commit ? "stage set":"cancel set")
     }
     func sendReview(_ requests:[WandReviewGesture.Request]){
         for request in requests {

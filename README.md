@@ -39,7 +39,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.
 - The HUD has no normal inactivity timeout. Screenshot selection temporarily uses the pointer and returns to the same HUD afterward.
 - Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.
-- In VS Code, tap Review changes or Stage files to enter and hide the HUD. Circle clockwise for next and anticlockwise for previous, with no button held. Tap Middle once to exit. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.
+- In VS Code, tap Review changes or Stage files to enter and hide the HUD. Circle clockwise for next and anticlockwise for previous, with no button held. Tap Middle once to cancel and exit, or double-click Middle to stage the accumulated set and exit. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.
 - Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.
 
 **Bottom** (`D1`) · Mouse
@@ -159,7 +159,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.60 and Agentic Mouse 1.0.271 keep pointer, HUD review and speech independent. Review and Stage files hide the grid on entry and use hands-free circles in VS Code. Physical gesture acceptance is pending.
+- Wand Receiver 1.2.61 adds double-click Middle to stage the review set; a single click cancels and exits. Better Git 1.2.131 lets either circle direction build a new set after backtracking through its start. Installation and physical acceptance are pending.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
 - The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
@@ -174,7 +174,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.60 (65) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 18 October 2026.
+Receiver 1.2.61 (66) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
