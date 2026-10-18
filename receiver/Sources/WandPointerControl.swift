@@ -657,9 +657,9 @@ final class WandHeldScroll {
         var tuning=WandCircularScroll.Tuning()
         // Angular degrees, before sensitivity. Recognise the bend while the
         // wand still travels in its original vertical direction.
-        tuning.verticalRatio=1;tuning.segment=0.025
+        tuning.verticalRatio=1;tuning.segment=0.012
         tuning.recogniseTurn=Double.pi/3;tuning.consistency=0.65
-        tuning.minPath=0.35;tuning.minExtent=0.1;tuning.minAspect=0.1
+        tuning.minPath=0.18;tuning.minExtent=0.05;tuning.minAspect=0.1
         tuning.minDuration=0.06;tuning.window=1.0;tuning.idleEnd=0.35
         circle=WandCircularScroll(tuning:tuning)
     }
@@ -685,6 +685,8 @@ final class WandHeldScroll {
         guard active,scrollable,now.map({qualified(now:$0)}) ?? true,
               x.isFinite,y.isFinite,dt>0,dt<=0.05 else{return 0}
         sampleTime=now ?? sampleTime+dt
+        // Ethan's "micro circles": smaller geometry below retains the same
+        // quiet-rate guard, wheel gain and pointer tuning.
         guard hypot(x,y)>1 else{circle.expire(now:sampleTime);reverseTurn=0;reverseSegments=0;return 0}
         let dx=x*dt,dy=y*dt
         var travel=hypot(dx,dy)
@@ -695,7 +697,7 @@ final class WandHeldScroll {
         // consistent opposite winding reverses it without releasing.
         if scrollDirection==0 {
             directionTravelX+=dx;directionTravel+=dy
-            if hypot(directionTravelX,directionTravel)>=0.25 {
+            if hypot(directionTravelX,directionTravel)>=0.12 {
                 horizontal=abs(directionTravelX)>abs(directionTravel)
                 let initialTravel=horizontal ? directionTravelX:directionTravel
                 scrollDirection=initialTravel>0 ? 1:-1
@@ -783,32 +785,48 @@ struct WandReviewCircle {
     var isCircling: Bool { direction != 0 }
     private var heading:Double?,lastTime=0.0,turn=0.0,arc=0.0
     private var candidate=0,segments=0,direction=0
+    private var pendingX=0.0,pendingY=0.0,x=0.0,y=0.0
+    private var minX=0.0,maxX=0.0,minY=0.0,maxY=0.0
     mutating func reset(){self=Self()}
     mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
         guard dx.isFinite,dy.isFinite,now.isFinite else{reset();return 0}
-        let distance=hypot(dx,dy)
+        if lastTime>0 && now-lastTime>0.35 {reset()}
+        guard hypot(dx,dy)<30 else{reset();return 0}
+        if dx != 0 || dy != 0 {lastTime=now}
+        // Accumulate rather than discard sub-segment motion. Opposing jitter
+        // cancels; a slow small circle still reaches the same heading sampler.
+        pendingX+=dx;pendingY+=dy
+        let distance=hypot(pendingX,pendingY)
         guard distance>=0.015 else{return 0}
-        if lastTime>0 && now-lastTime>0.35 {reset()};lastTime=now
-        guard distance<30 else{reset();return 0}
-        let next=atan2(dy,dx);defer{heading=next}
+        x+=pendingX;y+=pendingY
+        minX=min(minX,x);maxX=max(maxX,x);minY=min(minY,y);maxY=max(maxY,y)
+        let next=atan2(pendingY,pendingX);pendingX=0;pendingY=0
+        defer{heading=next}
         guard let previous=heading else{return 0}
         var delta=next-previous
         while delta>Double.pi{delta-=2*Double.pi}
         while delta < -Double.pi{delta+=2*Double.pi}
         // A sharp cusp is a changed stroke, not evidence of a circle.
-        if abs(delta)>2.35 {turn=0;segments=0;candidate=0;arc=0;return 0}
+        if abs(delta)>2.35 {turn=0;segments=0;candidate=0;arc=0;minX=x;maxX=x;minY=y;maxY=y;return 0}
         if abs(delta)>0.008 {
             let sign=delta>0 ? 1 : -1
-            if candidate != sign {candidate=sign;turn=0;segments=0}
+            if candidate != sign {candidate=sign;turn=0;segments=0;minX=x;maxX=x;minY=y;maxY=y}
             turn+=abs(delta);segments+=1
             if direction != sign {
                 arc=0
-                guard turn>=Double.pi/6 && segments>=3 else{return 0}
+                guard turn>=Double.pi/6 && segments>=3,
+                      maxX-minX>=0.12,maxY-minY>=0.12 else{return 0}
                 direction=sign
             }
         }
         guard direction != 0 else{return 0}
-        arc+=distance
+        // A tiny, sharp heading wobble must not inherit the gain of the last
+        // real circle. This checks local curvature, without fitting a centre.
+        if abs(delta)>0.008 && distance/abs(delta)<0.08 {return 0}
+        // Keep seven-degree ratchets for ordinary circles. For Ethan's
+        // "micro circles", coherent turning supplies at least one ratchet per
+        // full turn, without accelerating straight motion or changing pointing.
+        arc+=max(distance,delta*Double(direction)>0 ? abs(delta)*1.15:0)
         let count=min(6,Int(arc/7));arc-=Double(count)*7
         return Int32(count*direction)
     }
@@ -826,7 +844,7 @@ struct WandReviewNavigation {
     mutating func reset() { self = Self() }
     mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
         guard dx.isFinite,dy.isFinite,now.isFinite else { reset();return 0 }
-        let moving = hypot(dx,dy) >= 0.04
+        let moving = hypot(dx,dy) >= 0.003
         if let lastMotion,now-lastMotion>0.3,moving {reset()}
         if moving {
             if started == nil {started=now}
