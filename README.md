@@ -159,7 +159,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Prepared: Wand Receiver 1.2.62 and Agentic Mouse 1.0.272. Middle double-click stages the accumulated set and stays in the same review mode; one click cancels and exits. Physical acceptance is pending.
+- Installed: Wand Receiver 1.2.62 and Agentic Mouse 1.0.272, with Better Git 1.2.131 active. Middle double-click stages the accumulated set and stays in the same review mode; one click cancels and exits. Automated checks and the rendered indicator passed; physical acceptance is pending.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
 - The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
