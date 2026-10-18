@@ -1,15 +1,15 @@
 diff --git a/Resources/Info.plist b/Resources/Info.plist
-index c3c09e1..efd9e10 100644
+index c3c09e1..4d14c60 100644
 --- a/Resources/Info.plist
 +++ b/Resources/Info.plist
 @@ -21 +21 @@
 -	<string>1.0.267</string>
-+	<string>1.0.272</string>
++	<string>1.0.273</string>
 @@ -23 +23 @@
 -	<string>273</string>
-+	<string>278</string>
++	<string>279</string>
 diff --git a/Sources/AgenticMouseApp/AppDelegate.swift b/Sources/AgenticMouseApp/AppDelegate.swift
-index e511261..3adab17 100644
+index e511261..04039ea 100644
 --- a/Sources/AgenticMouseApp/AppDelegate.swift
 +++ b/Sources/AgenticMouseApp/AppDelegate.swift
 @@ -60,0 +61 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
@@ -24,6 +24,28 @@ index e511261..3adab17 100644
 +            let selected = self.mouseCommandsAllowed ? persistent?.selectedReviewMode : nil
 +            self.wandReviewIndicator.update(mode:selected)
 +            WandContextSender.send(active:active,appMode:active && coordinator?.page == .appSpecific ? coordinator?.appSpecificTarget?.rawValue : nil,reviewMode:active ? persistent?.reviewMode : nil,reviewSelection:selected,screenshotActive:self.selectedAreaScreenshotController.isCapturing)
+@@ -1609,0 +1615,4 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
++        if cell == .wandPlayPause {
++            if case .success = keysModeActionExecutor.performPlayPause() { return true }
++            return false
++        }
+diff --git a/Sources/AgenticMouseApp/KeysModeActionExecutor.swift b/Sources/AgenticMouseApp/KeysModeActionExecutor.swift
+index 5fcc88e..d48035c 100644
+--- a/Sources/AgenticMouseApp/KeysModeActionExecutor.swift
++++ b/Sources/AgenticMouseApp/KeysModeActionExecutor.swift
+@@ -83,0 +84,10 @@ struct KeysModeActionExecutor {
++        performMediaKey(Int32(action == .next ? NX_KEYTYPE_NEXT : NX_KEYTYPE_PREVIOUS))
++    }
++
++    /// The wand's Play/Pause card sends the same consumer control as the
++    /// physical mouse's configured middle click, without a synthetic mouse click.
++    func performPlayPause() -> Result<Void, KeysModeActionError> {
++        performMediaKey(Int32(NX_KEYTYPE_PLAY))
++    }
++
++    private func performMediaKey(_ keyType: Int32) -> Result<Void, KeysModeActionError> {
+@@ -86 +95,0 @@ struct KeysModeActionExecutor {
+-        let keyType = Int32(action == .next ? NX_KEYTYPE_NEXT : NX_KEYTYPE_PREVIOUS)
 diff --git a/Sources/AgenticMouseApp/WandContextSender.swift b/Sources/AgenticMouseApp/WandContextSender.swift
 index 21a01f9..5387bbf 100644
 --- a/Sources/AgenticMouseApp/WandContextSender.swift
@@ -41,7 +63,7 @@ index d41bccd..27bdf50 100644
 @@ -381,0 +382 @@ public struct ModeHUDSnapshot: Equatable, Sendable {
 +    public var wandReviewSelection: PhysicalCell? = nil
 diff --git a/Sources/ScimitarKit/App/ModePickerCoordinator.swift b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
-index 0223485..34f7a92 100644
+index 0223485..b7da2dc 100644
 --- a/Sources/ScimitarKit/App/ModePickerCoordinator.swift
 +++ b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
 @@ -255,0 +256,7 @@ public final class ModePickerCoordinator {
@@ -52,8 +74,24 @@ index 0223485..34f7a92 100644
 +        wandReviewSelection = cell; refreshWandHome()
 +    }
 +
-@@ -1067,0 +1075 @@ public final class ModePickerCoordinator {
+@@ -1060,0 +1068 @@ public final class ModePickerCoordinator {
++        value.legend.append(ModeHUDLegendItem(cell: .wandPlayPause, actionTitle: "Play/Pause", accent: ModeHUDActionFamilyPalette.media))
+@@ -1067,0 +1076 @@ public final class ModePickerCoordinator {
 +        value.wandReviewSelection = wandReviewAvailable ? wandReviewSelection : nil
+diff --git a/Sources/ScimitarKit/App/PhysicalCell.swift b/Sources/ScimitarKit/App/PhysicalCell.swift
+index 1928659..aa2ed37 100644
+--- a/Sources/ScimitarKit/App/PhysicalCell.swift
++++ b/Sources/ScimitarKit/App/PhysicalCell.swift
+@@ -69,0 +70 @@ public struct PhysicalCell: RawRepresentable, Hashable, Codable, Sendable, Compa
++    public static let wandPlayPause = PhysicalCell(wandSlot: 15)
+@@ -74,0 +76,4 @@ public struct PhysicalCell: RawRepresentable, Hashable, Codable, Sendable, Compa
++        if source == .wand, legend.contains(where: { $0.cell == .wandPlayPause }) {
++            // Ethan wants the wand's own media button just right of Utility.
++            rows[0].append(.wandPlayPause)
++        }
+@@ -284 +289 @@ public struct PhysicalCell: RawRepresentable, Hashable, Codable, Sendable, Compa
+-        if wandReviewMode != nil { return "Wand" }
++        if wandReviewMode != nil || self == .wandPlayPause { return "Wand" }
 diff --git a/Sources/ScimitarKit/App/WandPersistentControl.swift b/Sources/ScimitarKit/App/WandPersistentControl.swift
 index 6624d37..53ecfca 100644
 --- a/Sources/ScimitarKit/App/WandPersistentControl.swift
@@ -134,7 +172,7 @@ index cfa1cf5..903f475 100644
 +    var wandReviewAvailable: Bool { false }
 +    func setWandReviewSelection(_ cell: PhysicalCell?) {}
 diff --git a/Sources/ScimitarUI/ColorProofHUDView.swift b/Sources/ScimitarUI/ColorProofHUDView.swift
-index d631c74..de7b089 100644
+index d631c74..a48e388 100644
 --- a/Sources/ScimitarUI/ColorProofHUDView.swift
 +++ b/Sources/ScimitarUI/ColorProofHUDView.swift
 @@ -11,0 +12 @@ final class ModeHUDViewModel: ObservableObject {
@@ -143,22 +181,28 @@ index d631c74..de7b089 100644
 +            wandReviewSelection = snapshot.wandReviewSelection
 @@ -413 +415 @@ struct ModeHUDView: View {
 -        .frame(width: extendedWandGrid ? 1035 : 705)
-+        .frame(width: extendedWandGrid ? 1049 : 705)
-@@ -425,0 +428,3 @@ struct ModeHUDView: View {
++        .frame(width: extendedWandGrid ? extendedWandWidth : 705)
+@@ -420,0 +423,5 @@ struct ModeHUDView: View {
++    private var extendedWandWidth: CGFloat {
++        let columns=displayRows.map(\.count).max() ?? 4
++        let reviewDivider=model.legend.contains { $0.cell == .wandReviewChanges } ? 14 : 0
++        return CGFloat(columns * 156 + (columns - 1) * 9 + 54 + reviewDivider)
++    }
+@@ -425,0 +433,3 @@ struct ModeHUDView: View {
 +                        if cell == .wandReviewChanges {
 +                            Rectangle().fill(Color.white.opacity(0.35)).frame(width:1,height:64).padding(.horizontal,6)
 +                        }
-@@ -447 +452,2 @@ struct ModeHUDView: View {
+@@ -447 +457,2 @@ struct ModeHUDView: View {
 -            let fillColor = Color(cardColors.fill)
 +            let reviewSelected = model.wandReviewSelection == item.cell
 +            let fillColor = reviewSelected ? Color(item.accent) : (item.cell.wandReviewMode != nil ? Color(red:0.055,green:0.075,blue:0.10) : Color(cardColors.fill))
-@@ -449 +455 @@ struct ModeHUDView: View {
+@@ -449 +460 @@ struct ModeHUDView: View {
 -            let foregroundColor = Color(cardColors.foreground)
 +            let foregroundColor = reviewSelected ? Color.black : (item.cell.wandReviewMode != nil ? Color.white : Color(cardColors.foreground))
-@@ -471 +477 @@ struct ModeHUDView: View {
+@@ -471 +482 @@ struct ModeHUDView: View {
 -                    usesStrongDestinationFill: cardColors.usesStrongDestinationFill,
 +                    usesStrongDestinationFill: item.cell.wandReviewMode != nil || cardColors.usesStrongDestinationFill,
-@@ -475,0 +482,10 @@ struct ModeHUDView: View {
+@@ -475,0 +487,10 @@ struct ModeHUDView: View {
 +                if item.cell.wandReviewMode != nil {
 +                    shape.fill(Color(item.accent).opacity(0.12)).allowsHitTesting(false)
 +                    shape.strokeBorder(Color(item.accent).opacity(0.7),lineWidth:1.5).allowsHitTesting(false)
@@ -239,8 +283,24 @@ index 0000000..c7ab9e5
 +            .overlay(Capsule().strokeBorder(.white.opacity(0.28),lineWidth:1))
 +    }
 +}
+diff --git a/Tests/AgenticMouseAppTests/KeysModeActionExecutorTests.swift b/Tests/AgenticMouseAppTests/KeysModeActionExecutorTests.swift
+index 61dc4be..42d2da0 100644
+--- a/Tests/AgenticMouseAppTests/KeysModeActionExecutorTests.swift
++++ b/Tests/AgenticMouseAppTests/KeysModeActionExecutorTests.swift
+@@ -110,0 +111,11 @@ final class KeysModeActionExecutorTests: XCTestCase {
++    func testPlayPausePostsOneConsumerCycleAndHonorsTheInputGate() {
++        var events: [(Int32, Bool)] = []
++        let executor = KeysModeActionExecutor(postSystemEvent: { key, down in events.append((key,down)); return true }, accessibilityTrusted: { true })
++        guard case .success = executor.performPlayPause() else { return XCTFail("Play/Pause should post") }
++        XCTAssertEqual(events.map(\.0), [16,16])
++        XCTAssertEqual(events.map(\.1), [true,false])
++        let blocked = KeysModeActionExecutor(postSystemEvent: { key, down in events.append((key,down)); return true }, accessibilityTrusted: { true }, inputAllowed: { false })
++        guard case .failure(.inputBlocked) = blocked.performPlayPause() else { return XCTFail("locked input must not toggle playback") }
++        XCTAssertEqual(events.count,2)
++    }
++
 diff --git a/Tests/ScimitarKitTests/WandPersistentControlTests.swift b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
-index bd5b665..0beebf4 100644
+index bd5b665..4b8f6b9 100644
 --- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
 +++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
 @@ -93,0 +94,29 @@ final class WandPersistentControlTests:XCTestCase {
@@ -273,7 +333,16 @@ index bd5b665..0beebf4 100644
 +        XCTAssertFalse(control.isOpen)
 +        XCTAssertTrue(clicks.isEmpty)
 +    }
-@@ -129,0 +159,32 @@ final class WandPersistentControlTests:XCTestCase {
+@@ -105 +134 @@ final class WandPersistentControlTests:XCTestCase {
+-        XCTAssertEqual(target.wandNavigationRows.map(\.count),[4,4,4])
++        XCTAssertEqual(target.wandNavigationRows.map(\.count),[5,4,4])
+@@ -107 +136 @@ final class WandPersistentControlTests:XCTestCase {
+-        XCTAssertEqual(target.wandNavigationRows.map(\.count),[4,6,4])
++        XCTAssertEqual(target.wandNavigationRows.map(\.count),[5,6,4])
+@@ -126 +155 @@ final class WandPersistentControlTests:XCTestCase {
+-        XCTAssertEqual(target.wandNavigationRows.map(\.count),[4,4,4])
++        XCTAssertEqual(target.wandNavigationRows.map(\.count),[5,4,4])
+@@ -129,0 +159,49 @@ final class WandPersistentControlTests:XCTestCase {
 +    func testReviewSelectionSurvivesNavigationHidingAndAppSwitch() {
 +        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
 +        select(8)
@@ -293,6 +362,23 @@ index bd5b665..0beebf4 100644
 +        control.reset(reason:.systemSleep)
 +        XCTAssertNil(control.selectedReviewMode)
 +        XCTAssertNil(control.pinnedReviewCell)
++    }
++
++    func testPlayPauseIsAlwaysRightOfUtilityAndOnlyActsOnceOnRelease() {
++        XCTAssertNil(PhysicalCell(rawValue:15),"not a physical mouse button")
++        XCTAssertEqual(target.wandNavigationRows[0].suffix(2), [.modePickerEntry,.wandPlayPause])
++        XCTAssertFalse(PhysicalCell.wandRows(source:.corsair,legend:[]).joined().contains(.wandPlayPause))
++        XCTAssertFalse(PhysicalCell.wandRows(source:.razer,legend:[]).joined().contains(.wandPlayPause))
++        control.handle(.init(.navigate,id:"media-focus"))
++        control.handle(.init(.motion,id:"media-focus",sequence:1,y:-7))
++        control.handle(.init(.motion,id:"media-focus",sequence:2,x:8,y:-7))
++        control.handle(.init(.park,id:"media-focus",sequence:3))
++        XCTAssertEqual(control.focusedCell,.wandPlayPause)
++        control.handle(.init(.press,id:"media-1"))
++        XCTAssertTrue(clicks.isEmpty)
++        control.handle(.init(.release,id:"media-1",sequence:1))
++        control.handle(.init(.release,id:"media-1",sequence:1))
++        XCTAssertEqual(clicks,[.wandPlayPause]);XCTAssertTrue(control.isOpen)
 +    }
 +    func testTappingSelectedReviewCardAgainClearsMode() {
 +        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}

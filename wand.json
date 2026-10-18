@@ -14,7 +14,7 @@
     "bridgeRevision": "da9327f3342fe74dbe2fcaaea24514ab50919e73b29022e6ea969d24909c1874"
   },
   "status": [
-    "Installed: Wand Receiver 1.2.62 and Agentic Mouse 1.0.272, with Better Git 1.2.131 active. Middle double-click stages the accumulated set and stays in the same review mode; one click cancels and exits. Automated checks and the rendered indicator passed; physical acceptance is pending.",
+    "Installed: Wand Receiver 1.2.62 and Agentic Mouse 1.0.273, with Better Git 1.2.131 active. Middle double-click stages the accumulated set and stays in the same review mode; one click cancels and exits. The wand home HUD always offers Play/Pause beside Utility. Automated checks and rendered HUD previews passed; physical acceptance is pending.",
     "Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.",
     "The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.",
     "Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.",
@@ -106,7 +106,8 @@
         "The HUD has no normal inactivity timeout. Screenshot selection temporarily uses the pointer and returns to the same HUD afterward.",
         "Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.",
         "In VS Code, tap Review changes or Stage files to enter and hide the HUD. Circle clockwise for next and anticlockwise for previous, with no button held. Tap Middle once to cancel and exit, or double-click Middle to stage the accumulated set and keep reviewing. The floating indicator says “(double click to commit set)”. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.",
-        "Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow."
+        "Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.",
+        "The native wand home HUD always has Play/Pause immediately to the right of Utility. It uses the Mac’s standard media key, without changing either physical mouse."
       ]
     },
     {
