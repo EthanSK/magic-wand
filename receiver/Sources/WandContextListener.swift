@@ -7,6 +7,10 @@ final class WandContextListener {
     private var source:DispatchSourceRead?
     var onChange:((Bool)->Void)?
     var onModeChange:((String?)->Void)?
+    var onSelectionChange:((String?)->Void)?
+    var onScreenshotChange:((Bool)->Void)?
+    private var reviewSelection:String?
+    private var screenshotActive=false
     var onReviewChange:((String?)->Void)?
     private var reviewMode:String?
     private(set) var appMode:String?
@@ -15,7 +19,8 @@ final class WandContextListener {
     private var active=false, received=Date.distantPast
     private var appPID:Int32=0
     private let path=FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support/WandReceiver/context.sock").path
-    var isActive:Bool {active && Date().timeIntervalSince(received)<0.8 && kill(appPID,0)==0}
+    var isFresh:Bool {Date().timeIntervalSince(received)<0.8 && kill(appPID,0)==0}
+    var isActive:Bool {active && isFresh}
     func start() {
         var info=stat()
         if lstat(path,&info)==0 {
@@ -51,10 +56,21 @@ final class WandContextListener {
             let rawReview = v["reviewMode"] as? String ?? ""
             let nextReview = a && ["changes","files"].contains(rawReview) ? rawReview : nil
             if nextReview != reviewMode {reviewMode=nextReview;onReviewChange?(nextReview)}
+            let selection=v["reviewSelection"] as? String ?? ""
+            let selected=["changes","files"].contains(selection) ? selection : nil
+            if selected != reviewSelection {reviewSelection=selected;onSelectionChange?(selected)}
+            let screenshot=v["screenshotActive"] as? Bool ?? false
+            if screenshot != screenshotActive {screenshotActive=screenshot;onScreenshotChange?(screenshot)}
             expiry?.cancel()
             let task=DispatchWorkItem{[weak self] in
                 guard let self else{return}
-                if self.reported && !self.isActive {self.reported=false;self.onChange?(false);if self.reviewMode != nil {self.reviewMode=nil;self.onReviewChange?(nil)};if self.appMode != nil {self.appMode=nil;self.onModeChange?(nil)}}
+                if Date().timeIntervalSince(self.received)>=0.8 {
+                    if self.reported {self.reported=false;self.onChange?(false)}
+                    if self.reviewMode != nil {self.reviewMode=nil;self.onReviewChange?(nil)}
+                    if self.reviewSelection != nil {self.reviewSelection=nil;self.onSelectionChange?(nil)}
+                    if self.screenshotActive {self.screenshotActive=false;self.onScreenshotChange?(false)}
+                    if self.appMode != nil {self.appMode=nil;self.onModeChange?(nil)}
+                }
             }
             expiry=task;DispatchQueue.main.asyncAfter(deadline:.now()+0.9,execute:task)
         }

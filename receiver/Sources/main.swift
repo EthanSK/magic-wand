@@ -61,6 +61,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var reviewTimer:Timer?,reviewOriginY=0.0,appMode:String?
     var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
     let wandShortcutScroll=WandHeldScroll(linesPerDegree:1.0/7)
+    var selectedReviewMode:String?
+    var hiddenReviewOperating=false
+    var hiddenReviewPending=false
+    var screenshotActive=false,screenshotHUD=false
     var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false
     var circleLight=false
     var circleTimer:Timer?,lowDelayTimer:Timer?
@@ -125,7 +129,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         displayObserver=NotificationCenter.default.addObserver(forName:NSApplication.didChangeScreenParametersNotification,object:nil,queue:.main){[weak self] _ in self?.refreshPointerDisplays()}
         context.onChange = {[weak self] active in
             guard let self,self.ready,!self.restoring else{return}
-            if !active {self.closeHUD(reason:"context ended");return}
+            if !active {if self.hudSession {self.closeHUD(reason:"context ended")};return}
             guard self.acceptHUDContext else{return}
             if !self.hudSession {self.cancelCircleScroll();self.hudSession=true;self.navStream.reset();self.navX=0;self.navY=0;self.resumeHUDNavigation()}
             self.queue("if(typeof setHUDOpen==='function')setHUDOpen(true);")
@@ -137,6 +141,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if mode != nil {self.resumeHUDNavigation()}
         }
         context.onReviewChange = {[weak self] mode in self?.setWandShortcut(mode)}
+        context.onSelectionChange = {[weak self] mode in
+            guard let self else{return}
+            if self.selectedReviewMode != mode {self.finishWandShortcut(commit:false);if self.hiddenReviewOperating {self.hiddenReviewOperating=false;self.queue("setHUDOpen(false);")}}
+            self.selectedReviewMode=mode
+        }
+        context.onScreenshotChange = {[weak self] active in self?.setScreenshotActive(active)}
         recording.onChange = {[weak self] active in
             guard let self else{return}
             log("RECORDING_STATE",active);self.dwell.reset();self.scheduleDwell();self.syncRecordingLight();self.status()
@@ -533,7 +543,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 middleTap=Timer.scheduledTimer(withTimeInterval:hudDoubleClickInterval,repeats:false){[weak self] _ in
                     guard let self else{return};self.middleTap=nil
                     guard self.hudSession,self.acceptHUDContext,self.context.isActive,!self.restoring else{return}
-                    self.controls.persistent("press");self.controls.persistent("release");self.resumeHUDNavigation()
+                    self.controls.persistent("activate");self.resumeHUDNavigation()
                 }
             }
             middleOperating=false
@@ -544,6 +554,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// Ignore stale positive heartbeats until a fresh physical Middle press opens it.
     func closeHUD(reason:String) {
         finishWandShortcut(commit:false)
+        hiddenReviewPending=false;hiddenReviewOperating=false
+        screenshotHUD=false
         acceptHUDContext=false
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil
         hudSession=false;hudEntryPress=false;hudActive=false;pointerInHUD=false;middleOperating=false;navigationOpenedHUD=false
@@ -552,7 +564,20 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         queue("global.wandAppMode=undefined;setHUDOpen(false);updateLights();")
         log("HUD_CLOSED",reason)
     }
-    func enterPointerMode(){closeHUD(reason:"pointer mode");log("POINTER_MODE_ENTERED")}
+    func setScreenshotActive(_ active:Bool) {
+        screenshotActive=active
+        if !active,screenshotHUD {
+            screenshotHUD=false;hudSession=true;acceptHUDContext=true
+            queue("setMouseFollow(false);setHUDOpen(true);");resumeHUDNavigation()
+        }
+    }
+    func enterPointerMode(){
+        if screenshotActive && (hudSession || screenshotHUD) {
+            screenshotHUD=true;controls.persistent("park");hudActive=false;hudSession=false
+            pointerInHUD=false;middleOperating=false;stopHUDWatchdog();queue("setHUDOpen(false);")
+        } else {closeHUD(reason:"pointer mode")}
+        log("POINTER_MODE_ENTERED")
+    }
     func handleMiddle(_ payload:String){
         guard !restoring,!scrollActive,AXIsProcessTrusted() else{return}
         switch payload.trimmingCharacters(in:.whitespaces){
@@ -562,6 +587,17 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 middleLastRelease = -100;middleDoubleConsumed=true
                 middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
                 closeHUD(reason:"middle double click")
+                return
+            }
+            if !hudSession,selectedReviewMode != nil {
+                hiddenReviewPending=true
+                middleHold=Timer.scheduledTimer(withTimeInterval:0.22,repeats:false){[weak self] _ in
+                    guard let self,self.hiddenReviewPending,let mode=self.selectedReviewMode else{return}
+                    self.hiddenReviewPending=false;self.hiddenReviewOperating=true
+                    self.navStream.reset();self.navX=0;self.navY=0
+                    self.queue("setMouseFollow(false);setHUDOpen(true);")
+                    self.setWandShortcut(mode)
+                }
                 return
             }
             if !hudSession {
@@ -576,6 +612,18 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             operationOriginX=navX;operationOriginY=navY
             handleMove("B,0,0",project:false)
         case "0":
+            if hiddenReviewOperating {
+                finishWandShortcut(commit:true);hiddenReviewOperating=false
+                middleHold?.invalidate();middleHold=nil
+                queue("setHUDOpen(false);");return
+            }
+            if hiddenReviewPending {
+                hiddenReviewPending=false;middleHold?.invalidate();middleHold=nil
+                // A tap reopens the main HUD without changing the selected review mode.
+                acceptHUDContext=true;hudSession=true;hudEntryPress=false;navStream.reset();navX=0;navY=0
+                controls.persistent("open");queue("setHUDOpen(true);");resumeHUDNavigation()
+                middleLastRelease=ProcessInfo.processInfo.systemUptime;return
+            }
             finishWandShortcut(commit:true)
             if middleDoubleConsumed {middleDoubleConsumed=false;return}
             middleLastRelease=ProcessInfo.processInfo.systemUptime-middlePressedAt<0.14 ? ProcessInfo.processInfo.systemUptime : -100
@@ -585,7 +633,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // A short entry tap latches navigation; a >=220 ms physical hold selects on up.
                 if ProcessInfo.processInfo.systemUptime-hudEntryPressStarted >= 0.22-0.08 {
                     controls.persistent("park");hudActive=false;stopHUDWatchdog()
-                    controls.persistent("press");controls.persistent("release")
+                    controls.persistent("activate")
                     resumeHUDNavigation();log("HUD_ENTRY_HOLD_SELECTED")
                 }
                 return
@@ -785,7 +833,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
     func setWandShortcut(_ mode:String?) {
         guard let mode else {finishWandShortcut(commit:!pointerInHUD && context.isActive);return}
-        guard ready,!restoring,hudSession,acceptHUDContext,pointerInHUD,middleOperating,
+        guard ready,!restoring,((hudSession && acceptHUDContext && pointerInHUD && middleOperating) || (hiddenReviewOperating && context.isFresh)),
               ["changes","files"].contains(mode),
               NSWorkspace.shared.frontmostApplication?.bundleIdentifier=="com.microsoft.VSCode" else{return}
         finishWandShortcut(commit:false)
@@ -797,7 +845,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         reviewTimer=Timer.scheduledTimer(withTimeInterval:0.2,repeats:true){[weak self] _ in
             guard let self else{return}
             let now=ProcessInfo.processInfo.systemUptime
-            if !self.context.isActive || NSWorkspace.shared.frontmostApplication?.bundleIdentifier != "com.microsoft.VSCode" || now-self.wandShortcutTime>0.8 {
+            if !(self.context.isActive || (self.hiddenReviewOperating && self.context.isFresh)) || NSWorkspace.shared.frontmostApplication?.bundleIdentifier != "com.microsoft.VSCode" || now-self.wandShortcutTime>0.8 {
                 self.finishWandShortcut(commit:false);return
             }
             self.sendReview(self.review.tick(now:now))

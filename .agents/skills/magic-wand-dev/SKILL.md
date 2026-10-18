@@ -31,7 +31,9 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
    Prepare and check updates before the short swap, preserving calibration and rollback.
    Before any private installation, follow the Agent Flow recording/processing gate in the
    shared development-workflow local-installation reference. Do not restart while Ethan is
-   using Agent Flow; recording=false alone does not prove transcription/delivery is idle.
+   using Agent Flow. Check its authoritative idle probe automatically; do not ask Ethan
+   to declare idle when the app can report it. Recheck after the warning and leave Agent
+   Flow itself running. A recording=false file alone is not the authoritative probe.
    Table-rest detection must not stop dictation or dismiss an explicitly open HUD.
 4. Do not add intentional movement latency without Ethan's fresh explicit confirmation.
    Sensor sampling, delivered update rate and end-to-end latency are different measurements.

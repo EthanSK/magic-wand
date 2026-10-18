@@ -3,18 +3,18 @@
   "schemaVersion": 1,
   "name": "Magic Wand",
   "tagline": "Mouse, HUD, scrolling and speech to text from three buttons on a wand.",
-  "summary": "Turning the wand moves my Mac\u2019s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.",
+  "summary": "Turning the wand moves my Mac’s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.",
   "updated": "2026-10-18",
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.54",
-    "receiverBuild": "59",
+    "receiver": "1.2.55",
+    "receiverBuild": "60",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "691e21c9f52188cd5378185983d32a2f24edc954f38559c06cbf3fb31e633e53"
   },
   "status": [
-    "Prepared source fix: table rest no longer stops dictation or closes the HUD. Installation is pending so active Agent Flow use is not interrupted.",
+    "Installed: Wand Receiver 1.2.55 and signed Agentic Mouse 1.0.268 keep review modes selected through HUD dismissal, preserve the HUD through screenshots and never stop dictation on table rest. Physical acceptance is pending.",
     "Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.",
     "HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.",
     "Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.",
@@ -25,7 +25,7 @@
     "Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.",
     "Ethan confirmed automatic pickup and put-down both work on receiver 1.2.35.",
     "HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.",
-    "End-to-end latency, accuracy and battery life haven\u2019t been measured."
+    "End-to-end latency, accuracy and battery life haven’t been measured."
   ],
   "hardware": {
     "board": "Puck.js v2.1",
@@ -44,7 +44,7 @@
         "Three separate wired momentary buttons"
       ]
     ],
-    "wiring": "Each button connects its pin to GND. The Puck\u2019s internal pull-ups make a press read low."
+    "wiring": "Each button connects its pin to GND. The Puck’s internal pull-ups make a press read low."
   },
   "buttons": [
     {
@@ -65,7 +65,8 @@
         ]
       ],
       "notes": [
-        "Recording stays red when no other mode is active. Mouse mode stays blue, including while recording."
+        "Recording stays red when no other mode is active. Mouse mode stays blue, including while recording.",
+        "Putting the wand down never stops dictation. Use Top to stop and paste."
       ]
     },
     {
@@ -102,7 +103,8 @@
         "Bottom goes back to the pointer.",
         "VS Code app mode: hold Bottom and tilt down or up to review changes. Crossed files are staged on release through Better Git. Double tap Bottom to exit review and return to centred mouse follow.",
         "The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.",
-        "With VS Code frontmost, Review changes and Stage files appear beside Switch App. Hold Middle on either and move vertically, then circle to continue; reverse circling to reverse direction. Release finishes the existing Better Git action."
+        "With VS Code frontmost, Review changes and Stage files appear in a separate group beside Switch App. Tap one to select it; tap it again to clear. Hold Middle and move vertically, then circle to continue; reverse circling to reverse direction. The selection survives hiding the HUD, with a small reminder in VS Code. Release finishes the current Better Git action.",
+        "The HUD has no normal inactivity timeout. Screenshot selection temporarily uses the pointer and returns to the same HUD afterward."
       ]
     },
     {
@@ -339,11 +341,11 @@
     "recordingMouseBlinkMs": 0
   },
   "hud": {
-    "source": "Agentic Mouse\u2019s published Default mode",
+    "source": "Agentic Mouse’s published Default mode",
     "startCell": 11,
     "cardOverrides": {
       "7": {
-        "title": "\u2318\u21a9 Steer"
+        "title": "⌘↩ Steer"
       }
     },
     "navigation": {
@@ -371,13 +373,13 @@
       "name": "Agentic Mouse",
       "url": "https://ethansk.github.io/agentic-mouse/",
       "role": "Draws the HUD and runs its cards",
-      "availability": "Wand support is in Ethan\u2019s local build and isn\u2019t published yet."
+      "availability": "Wand support is in Ethan’s local build and isn’t published yet."
     },
     {
       "name": "Agent Flow",
       "url": "https://ethansk.github.io/AgentFlow/",
       "role": "Records and pastes dictation",
-      "availability": "The public build accepts its mouse controls; wand input isn\u2019t published yet."
+      "availability": "The public build accepts its mouse controls; wand input isn’t published yet."
     },
     {
       "name": "Espruino",
@@ -391,12 +393,12 @@
     "available": [
       {
         "id": 1,
-        "name": "V1 \u00b7 Pointer",
+        "name": "V1 · Pointer",
         "snapshotTag": "controls-v1.0.0"
       },
       {
         "id": 2,
-        "name": "V2 \u00b7 Hold to scroll",
+        "name": "V2 · Hold to scroll",
         "profile": "control-versions/v2.json"
       }
     ]
