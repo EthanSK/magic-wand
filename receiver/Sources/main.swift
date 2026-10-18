@@ -60,6 +60,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var restDiagnosticsRemaining=30
     let review=WandReviewGesture()
     var reviewTimer:Timer?,reviewOriginY=0.0,appMode:String?
+    var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
+    let wandShortcutScroll=WandHeldScroll(linesPerDegree:1.0/7)
     var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false
     var circleLight=false
     var circleTimer:Timer?,lowDelayTimer:Timer?
@@ -135,6 +137,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             self.queue("global.wandAppMode="+(mode.map{ "'"+$0+"'" } ?? "undefined")+";updateLights();")
             if mode != nil {self.resumeHUDNavigation()}
         }
+        context.onReviewChange = {[weak self] mode in self?.setWandShortcut(mode)}
         recording.onChange = {[weak self] active in
             guard let self else{return}
             log("RECORDING_STATE",active);self.dwell.reset();self.scheduleDwell();self.syncRecordingLight();self.status()
@@ -542,6 +545,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// Close the entire wand session, including delayed clicks and app-specific state.
     /// Ignore stale positive heartbeats until a fresh physical Middle press opens it.
     func closeHUD(reason:String) {
+        finishWandShortcut(commit:false)
         acceptHUDContext=false
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil
         hudSession=false;hudEntryPress=false;hudActive=false;pointerInHUD=false;middleOperating=false;navigationOpenedHUD=false
@@ -574,6 +578,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             operationOriginX=navX;operationOriginY=navY
             handleMove("B,0,0",project:false)
         case "0":
+            finishWandShortcut(commit:true)
             if middleDoubleConsumed {middleDoubleConsumed=false;return}
             middleLastRelease=ProcessInfo.processInfo.systemUptime-middlePressedAt<0.14 ? ProcessInfo.processInfo.systemUptime : -100
             if hudEntryPress {
@@ -596,6 +601,15 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard f.count==2,let x=Double(f[0]),let y=Double(f[1]),x.isFinite,y.isFinite,abs(x)<=7_200_000,abs(y)<=7_200_000 else{return}
         let point=navStream.update(x:x/1000,y:y/1000,using:motionFilter)
         navX=point.x;navY=point.y
+        if wandShortcutMode != nil {
+            handleMove("U,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000),project:false)
+            let now=ProcessInfo.processInfo.systemUptime,dt=max(0.005,min(0.05,ProcessInfo.processInfo.systemUptime-wandShortcutTime))
+            let dx=navX-wandShortcutX,dy=navY-wandShortcutY
+            wandShortcutX=navX;wandShortcutY=navY;wandShortcutTime=now
+            let steps=wandShortcutScroll.sample(x:dx/dt,y:dy/dt,dt:dt,now:now)
+            sendReview(review.detents(steps,now:now))
+            return
+        }
         if appMode=="vsCode" && review.isHeld {sendReview(review.motion(y:navY-reviewOriginY,now:ProcessInfo.processInfo.systemUptime));return}
         guard !restoring,!scrollActive,hudSession else{return}
         if pointerInHUD {
@@ -771,6 +785,32 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     /// Scroll chord, HUD and speech take over: drop unshown LOW motion and any circle.
     func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
+    func setWandShortcut(_ mode:String?) {
+        guard let mode else {finishWandShortcut(commit:!pointerInHUD && context.isActive);return}
+        guard ready,!restoring,hudSession,acceptHUDContext,pointerInHUD,middleOperating,
+              ["changes","files"].contains(mode),
+              NSWorkspace.shared.frontmostApplication?.bundleIdentifier=="com.microsoft.VSCode" else{return}
+        finishWandShortcut(commit:false)
+        let now=ProcessInfo.processInfo.systemUptime
+        wandShortcutMode=mode;wandShortcutX=navX;wandShortcutY=navY;wandShortcutTime=now
+        review.beginDetents(mode:mode,now:now)
+        // Middle is already past its existing hold cutoff; do not wait twice.
+        wandShortcutScroll.begin(now:now-wandShortcutScroll.holdSeconds)
+        reviewTimer=Timer.scheduledTimer(withTimeInterval:0.2,repeats:true){[weak self] _ in
+            guard let self else{return}
+            let now=ProcessInfo.processInfo.systemUptime
+            if !self.context.isActive || NSWorkspace.shared.frontmostApplication?.bundleIdentifier != "com.microsoft.VSCode" || now-self.wandShortcutTime>0.8 {
+                self.finishWandShortcut(commit:false);return
+            }
+            self.sendReview(self.review.tick(now:now))
+        }
+        log("WAND_REVIEW_SHORTCUT",mode)
+    }
+    func finishWandShortcut(commit:Bool) {
+        guard wandShortcutMode != nil else{return}
+        wandShortcutMode=nil;wandShortcutScroll.reset()
+        sendReview(review.endDetents(commit:commit));reviewTimer?.invalidate();reviewTimer=nil
+    }
     func sendReview(_ requests:[WandReviewGesture.Request]){
         for request in requests {
             guard let app=NSRunningApplication.runningApplications(withBundleIdentifier:"com.microsoft.VSCode").first,

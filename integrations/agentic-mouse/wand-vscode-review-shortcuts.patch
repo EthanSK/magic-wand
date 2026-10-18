@@ -1,0 +1,236 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index 582a37c..95a9b83 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -103,0 +104,5 @@ When Stay Restore is disabled, the saved monitor layout does not match, Organize
++
++## Wand VS Code shortcuts
++
++- Only the wand home HUD gains Review changes and Stage files immediately to the right of Switch App, in that order, while VS Code is frontmost. Keep the normal mice and app-specific navigation unchanged.
++- Hold Middle on either shortcut; initial vertical travel then circular continuation produces existing review wheel steps. Release finishes the same Better Git session. Preserve cancellation on stale input, hidden HUD or app changes.
+diff --git a/LEARNINGS.md b/LEARNINGS.md
+index 332658f..134e168 100644
+--- a/LEARNINGS.md
++++ b/LEARNINGS.md
+@@ -3132,0 +3133,6 @@ Verification found unchanged Stay database tables and preferences, restored orig
++
++## Wand-only VS Code review shortcuts
++
++Two virtual HUD slots follow Switch App only in the wand home view while VS Code is frontmost. Keep them out of PhysicalCell.all, public raw-value construction, physical mouse layouts and transports. Render and navigate the same extended middle row; changing the foreground app removes the slots and revokes any held review.
++
++The Middle press sends a bounded review-mode context lease to Wand Receiver, which reuses its existing straight-to-circle scroll detector and ordered Better Git review session. Physical release finishes; stale context, lost navigation, HUD dismissal or app loss cancels. A seven-degree step remains one review ratchet. No duplicated Git staging algorithm or physical mouse binding is needed.
+diff --git a/Resources/Info.plist b/Resources/Info.plist
+index b644330..c3c09e1 100644
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -21 +21 @@
+-	<string>1.0.266</string>
++	<string>1.0.267</string>
+@@ -23 +23 @@
+-	<string>272</string>
++	<string>273</string>
+diff --git a/Sources/AgenticMouseApp/AppDelegate.swift b/Sources/AgenticMouseApp/AppDelegate.swift
+index 0929b54..e511261 100644
+--- a/Sources/AgenticMouseApp/AppDelegate.swift
++++ b/Sources/AgenticMouseApp/AppDelegate.swift
+@@ -1602,2 +1602,2 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
+-        persistent.onContext = { [weak coordinator] active in
+-            WandContextSender.send(active:active,appMode:active && coordinator?.page == .appSpecific ? coordinator?.appSpecificTarget?.rawValue : nil)
++        persistent.onContext = { [weak coordinator, weak persistent] active in
++            WandContextSender.send(active:active,appMode:active && coordinator?.page == .appSpecific ? coordinator?.appSpecificTarget?.rawValue : nil,reviewMode:active ? persistent?.reviewMode : nil)
+diff --git a/Sources/AgenticMouseApp/WandContextSender.swift b/Sources/AgenticMouseApp/WandContextSender.swift
+index 22dc863..21a01f9 100644
+--- a/Sources/AgenticMouseApp/WandContextSender.swift
++++ b/Sources/AgenticMouseApp/WandContextSender.swift
+@@ -7 +7 @@ enum WandContextSender {
+-    static func send(active:Bool,appMode:String?=nil) {
++    static func send(active:Bool,appMode:String?=nil,reviewMode:String?=nil) {
+@@ -12 +12 @@ enum WandContextSender {
+-              let data=try? JSONSerialization.data(withJSONObject:["version":1,"active":active,"appMode":appMode ?? "","pid":getpid(),"sentAt":Date().timeIntervalSince1970]) else {return}
++              let data=try? JSONSerialization.data(withJSONObject:["version":1,"active":active,"appMode":appMode ?? "","reviewMode":reviewMode ?? "","pid":getpid(),"sentAt":Date().timeIntervalSince1970]) else {return}
+diff --git a/Sources/ScimitarKit/App/ModePickerCoordinator.swift b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
+index 62bd0e3..0223485 100644
+--- a/Sources/ScimitarKit/App/ModePickerCoordinator.swift
++++ b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
+@@ -1009 +1009,5 @@ public final class ModePickerCoordinator {
+-        let resolved = isActive && page != .keypad ? focus : nil
++        var resolved = isActive && page != .keypad ? focus : nil
++        if let candidate = resolved, candidate.cell.wandReviewMode != nil,
++           !wandNavigationRows.joined().contains(candidate.cell) {
++            resolved = ModeHUDPointerFocus(cell: .switchApp)
++        }
+@@ -1056,0 +1061,6 @@ public final class ModePickerCoordinator {
++        if resolveFrontmostApp?().target == .vsCode {
++            value.legend += [
++                ModeHUDLegendItem(cell: .wandReviewChanges, actionTitle: "Review changes", accent: RGBColor(red: 65, green: 201, blue: 122)),
++                ModeHUDLegendItem(cell: .wandReviewFiles, actionTitle: "Stage files", accent: RGBColor(red: 180, green: 105, blue: 235))
++            ]
++        }
+@@ -1060,0 +1071,4 @@ public final class ModePickerCoordinator {
++    public var wandNavigationRows: [[PhysicalCell]] {
++        PhysicalCell.wandRows(source: source ?? .wand, legend: snapshot().legend)
++    }
++
+diff --git a/Sources/ScimitarKit/App/PhysicalCell.swift b/Sources/ScimitarKit/App/PhysicalCell.swift
+index 2dff298..1928659 100644
+--- a/Sources/ScimitarKit/App/PhysicalCell.swift
++++ b/Sources/ScimitarKit/App/PhysicalCell.swift
+@@ -65,0 +66,16 @@ public struct PhysicalCell: RawRepresentable, Hashable, Codable, Sendable, Compa
++    // Private presentation slots: never accepted by physical input or added to `all`.
++    private init(wandSlot: Int) { rawValue = wandSlot }
++    public static let wandReviewChanges = PhysicalCell(wandSlot: 13)
++    public static let wandReviewFiles = PhysicalCell(wandSlot: 14)
++    public var wandReviewMode: String? {
++        self == .wandReviewChanges ? "changes" : self == .wandReviewFiles ? "files" : nil
++    }
++    public static func wandRows(source: MouseSource, legend: [ModeHUDLegendItem]) -> [[PhysicalCell]] {
++        var rows = displayRowsTopToBottom(for: source)
++        if source == .wand, legend.contains(where: { $0.cell == .wandReviewChanges }),
++           legend.contains(where: { $0.cell == .wandReviewFiles }) {
++            rows[1] += [.wandReviewChanges, .wandReviewFiles]
++        }
++        return rows
++    }
++
+@@ -268 +284,2 @@ public struct PhysicalCell: RawRepresentable, Hashable, Codable, Sendable, Compa
+-        "\(source.presentationSource.displayName) \(printedSide(on: source)!)"
++        if wandReviewMode != nil { return "Wand" }
++        return "\(source.presentationSource.displayName) \(printedSide(on: source)!)"
+diff --git a/Sources/ScimitarKit/App/WandPersistentControl.swift b/Sources/ScimitarKit/App/WandPersistentControl.swift
+index 1c300f3..6624d37 100644
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -62,0 +63,5 @@ public final class WandPersistentController {
++    public var reviewMode: String? {
++        guard isOpen, target.isWandHome, let current = hold, current.navigation == nil,
++              target.wandNavigationRows.joined().contains(current.cell) else { return nil }
++        return current.cell.wandReviewMode
++    }
+@@ -105 +110 @@ public final class WandPersistentController {
+-            let nav = command.phase == .navigate ? WandGridNavigator(rows:PhysicalCell.displayRowsTopToBottom(for:.wand),start:selected) : nil
++            let nav = command.phase == .navigate ? WandGridNavigator(rows:target.wandNavigationRows,start:selected) : nil
+@@ -108 +113 @@ public final class WandPersistentController {
+-            if command.phase == .press {
++            if command.phase == .press && selected.wandReviewMode == nil {
+@@ -113,0 +119,3 @@ public final class WandPersistentController {
++            if current.cell.wandReviewMode != nil && !target.wandNavigationRows.joined().contains(current.cell) {
++                hold=nil;target.setPointerFocus(.init(cell:.switchApp));return
++            }
+@@ -116,0 +125,4 @@ public final class WandPersistentController {
++                if nav.rows != target.wandNavigationRows {
++                    let start = target.wandNavigationRows.joined().contains(selected) ? selected : .switchApp
++                    nav = WandGridNavigator(rows:target.wandNavigationRows,start:start)!
++                }
+@@ -139 +151 @@ public final class WandPersistentController {
+-            if current.navigation == nil && target.pageGeneration == current.pageGeneration && target.isActive {
++            if current.cell.wandReviewMode == nil && current.navigation == nil && target.pageGeneration == current.pageGeneration && target.isActive {
+diff --git a/Sources/ScimitarKit/App/WandSelection.swift b/Sources/ScimitarKit/App/WandSelection.swift
+index 25c8464..cfa1cf5 100644
+--- a/Sources/ScimitarKit/App/WandSelection.swift
++++ b/Sources/ScimitarKit/App/WandSelection.swift
+@@ -306,2 +306 @@ public struct WandGridNavigator: Equatable, Sendable {
+-        guard let width = rows.first?.count, width > 0,
+-              rows.allSatisfy({ $0.count == width })
++        guard !rows.isEmpty, rows.allSatisfy({ !$0.isEmpty })
+@@ -345 +344 @@ public struct WandGridNavigator: Equatable, Sendable {
+-        let width = rows[0].count
++        let width = rows[row].count
+@@ -434,0 +434,2 @@ public struct WandGridNavigator: Equatable, Sendable {
++            column = min(column, rows[row].count - 1)
++            positionX = min(positionX, Double(rows[row].count - 1))
+@@ -596,0 +598 @@ public protocol WandModeControlling: AnyObject {
++    var wandNavigationRows: [[PhysicalCell]] { get }
+@@ -602,0 +605,3 @@ public protocol WandModeControlling: AnyObject {
++public extension WandModeControlling {
++    var wandNavigationRows: [[PhysicalCell]] { PhysicalCell.displayRowsTopToBottom(for: .wand) }
++}
+diff --git a/Sources/ScimitarUI/ColorProofHUDView.swift b/Sources/ScimitarUI/ColorProofHUDView.swift
+index 2d254ed..d631c74 100644
+--- a/Sources/ScimitarUI/ColorProofHUDView.swift
++++ b/Sources/ScimitarUI/ColorProofHUDView.swift
+@@ -413 +413 @@ struct ModeHUDView: View {
+-        .frame(width: 705)
++        .frame(width: extendedWandGrid ? 1035 : 705)
+@@ -416,0 +417,4 @@ struct ModeHUDView: View {
++    private var displayRows: [[PhysicalCell]] {
++        PhysicalCell.wandRows(source: model.source, legend: model.legend)
++    }
++    private var extendedWandGrid: Bool { displayRows.contains { $0.count > 4 } }
+@@ -418,2 +422,2 @@ struct ModeHUDView: View {
+-        VStack(spacing: 9) {
+-            ForEach(Array(PhysicalCell.displayRowsTopToBottom(for: model.source).enumerated()), id: \.offset) { _, row in
++        VStack(alignment: .leading, spacing: 9) {
++            ForEach(Array(displayRows.enumerated()), id: \.offset) { _, row in
+@@ -422 +426 @@ struct ModeHUDView: View {
+-                        legendCell(for: cell)
++                        legendCell(for: cell).frame(width: extendedWandGrid ? 156 : nil)
+diff --git a/Tests/ScimitarKitTests/WandPersistentControlTests.swift b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+index 3755a5b..bd5b665 100644
+--- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
++++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+@@ -101,0 +102,37 @@ final class WandPersistentControlTests:XCTestCase {
++    func testVSCodeShortcutsAreWandOnlyAndUseHeldReviewContext() {
++        XCTAssertNil(PhysicalCell(rawValue:13))
++        XCTAssertEqual(PhysicalCell.all.count,12)
++        XCTAssertEqual(target.wandNavigationRows.map(\.count),[4,4,4])
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
++        XCTAssertEqual(target.wandNavigationRows.map(\.count),[4,6,4])
++        select(8)
++        XCTAssertEqual(control.focusedCell,.wandReviewChanges)
++        XCTAssertNil(control.reviewMode)
++        control.handle(.init(.press,id:"review-changes-1"))
++        XCTAssertEqual(control.reviewMode,"changes")
++        XCTAssertTrue(clicks.isEmpty);XCTAssertTrue(presses.isEmpty)
++        control.handle(.init(.motion,id:"review-changes-1",sequence:1,y:10))
++        XCTAssertEqual(control.focusedCell,.wandReviewChanges)
++        control.handle(.init(.release,id:"review-changes-1",sequence:2))
++        XCTAssertNil(control.reviewMode)
++        control.handle(.init(.navigate,id:"next-shortcut-1"))
++        control.handle(.init(.motion,id:"next-shortcut-1",sequence:1,x:8))
++        control.handle(.init(.park,id:"next-shortcut-1",sequence:2))
++        XCTAssertEqual(control.focusedCell,.wandReviewFiles)
++        control.handle(.init(.press,id:"review-files-1"))
++        XCTAssertEqual(control.reviewMode,"files")
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.chrome,displayName:"Chrome",bundleIdentifier:"com.google.Chrome")}
++        XCTAssertNil(control.reviewMode,"leaving VS Code revokes the hold")
++        XCTAssertEqual(target.wandNavigationRows.map(\.count),[4,4,4])
++        control.handle(.init(.dismiss,id:"dismiss-extra-1"))
++        XCTAssertNil(control.reviewMode)
++    }
++    func testExtendedRowsClampInsteadOfWrappingOrEnteringBlankSpace() throws {
++        let rows=PhysicalCell.displayRowsTopToBottom.enumerated().map { i,row in i==1 ? row+[.wandReviewChanges,.wandReviewFiles] : row }
++        var nav=try XCTUnwrap(WandGridNavigator(rows:rows,start:.switchApp))
++        nav.apply(deltaX:800,deltaY:0);XCTAssertEqual(nav.focusedCell,.wandReviewFiles)
++        nav.apply(deltaX:0,deltaY:-80);XCTAssertEqual(nav.focusedCell,rows[0][3])
++        nav.apply(deltaX:8,deltaY:0);XCTAssertEqual(nav.focusedCell,rows[0][3])
++        XCTAssertEqual(PhysicalCell.wandRows(source:.corsair,legend:[.init(cell:.wandReviewChanges,actionTitle:"Review",accent:.init(red:1,green:1,blue:1)),.init(cell:.wandReviewFiles,actionTitle:"Files",accent:.init(red:1,green:1,blue:1))]).map(\.count),[4,4,4])
++    }
++
+diff --git a/Tests/ScimitarUITests/WandPointerFocusTests.swift b/Tests/ScimitarUITests/WandPointerFocusTests.swift
+index 8cc95b8..0016241 100644
+--- a/Tests/ScimitarUITests/WandPointerFocusTests.swift
++++ b/Tests/ScimitarUITests/WandPointerFocusTests.swift
+@@ -107,0 +108,23 @@ final class WandPointerFocusTests: XCTestCase {
++    @MainActor
++    func testWandVSCodeReviewCardsRenderBesideSwitchApp() throws {
++        let model = ModeHUDViewModel(source: .wand, appIconProvider: NoIconProvider())
++        var home = DefaultMapLegend.snapshot(source:.wand, frontmostAppContext:
++            FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode"))
++        home.legend += [
++            .init(cell:.wandReviewChanges,actionTitle:"Review changes",accent:.init(red:65,green:201,blue:122)),
++            .init(cell:.wandReviewFiles,actionTitle:"Stage files",accent:.init(red:180,green:105,blue:235))
++        ]
++        home.pointerFocus = .init(cell:.wandReviewChanges,pullX:0.3)
++        model.apply(home)
++        let renderer=ImageRenderer(content:ModeHUDView(model:model));renderer.scale=1
++        let image=try XCTUnwrap(renderer.nsImage)
++        XCTAssertEqual(image.size.width,1035,accuracy:1)
++        if let path=ProcessInfo.processInfo.environment["WAND_REVIEW_VISUAL_OUTPUT"],let data=image.tiffRepresentation,
++           let bitmap=NSBitmapImageRep(data:data),let png=bitmap.representation(using:.png,properties:[:]) {
++            try png.write(to:URL(fileURLWithPath:path))
++        }
++        home.legend.removeAll { $0.cell.wandReviewMode != nil };model.apply(home)
++        let normal=ImageRenderer(content:ModeHUDView(model:model));normal.scale=1
++        XCTAssertEqual(try XCTUnwrap(normal.nsImage).size.width,705,accuracy:1)
++    }
++

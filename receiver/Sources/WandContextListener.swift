@@ -7,6 +7,8 @@ final class WandContextListener {
     private var source:DispatchSourceRead?
     var onChange:((Bool)->Void)?
     var onModeChange:((String?)->Void)?
+    var onReviewChange:((String?)->Void)?
+    private var reviewMode:String?
     private(set) var appMode:String?
     private var expiry:DispatchWorkItem?
     private var reported=false
@@ -46,10 +48,13 @@ final class WandContextListener {
             let mode=a && !rawMode.isEmpty && rawMode.count<=32 && rawMode.allSatisfy({$0.isLetter}) ? rawMode : nil
             if mode != appMode {appMode=mode;onModeChange?(mode)}
             if reported != isActive {reported=isActive;onChange?(reported)}
+            let rawReview = v["reviewMode"] as? String ?? ""
+            let nextReview = a && ["changes","files"].contains(rawReview) ? rawReview : nil
+            if nextReview != reviewMode {reviewMode=nextReview;onReviewChange?(nextReview)}
             expiry?.cancel()
             let task=DispatchWorkItem{[weak self] in
                 guard let self else{return}
-                if self.reported && !self.isActive {self.reported=false;self.onChange?(false);if self.appMode != nil {self.appMode=nil;self.onModeChange?(nil)}}
+                if self.reported && !self.isActive {self.reported=false;self.onChange?(false);if self.reviewMode != nil {self.reviewMode=nil;self.onReviewChange?(nil)};if self.appMode != nil {self.appMode=nil;self.onModeChange?(nil)}}
             }
             expiry=task;DispatchQueue.main.asyncAfter(deadline:.now()+0.9,execute:task)
         }

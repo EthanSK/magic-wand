@@ -38,6 +38,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - Bottom goes back to the pointer.
 - VS Code app mode: hold Bottom and tilt down or up to review changes. Crossed files are staged on release through Better Git. Double tap Bottom to exit review and return to centred mouse follow.
 - The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.
+- With VS Code frontmost, Review changes and Stage files appear beside Switch App. Hold Middle on either and move vertically, then circle to continue; reverse circling to reverse direction. Release finishes the existing Better Git action.
 
 **Bottom** (`D1`) · Mouse
 
@@ -163,6 +164,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
 - HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.
 - Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.
 - Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling in V1 passes automated checks; physical gesture acceptance is pending.
@@ -174,7 +176,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.53 (58) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
+Receiver 1.2.54 (59) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
