@@ -386,3 +386,15 @@ recognition: the candidate path still used signed vertical movement. Never pass 
 returning-leg sign through after acquiring the starting direction. The same arc-length
 gain now spans candidate and confirmed states; constant-speed bins verify no gain step.
 The old implementation fails the paused/flat U regression, and the corrected one passes.
+
+
+## Finish page scrolling in mouse follow
+
+A physical release ending a qualified scroll hold or the two-button page-scroll chord
+explicitly enables mouse follow on both host and device. Keep the current pointer
+position; do not reuse the global recenter action. Reset dwell evidence and clear the
+legacy release pause so returning to pointing cannot immediately click.
+Short taps, native drag releases and watchdog cancellation are different exits. They
+must not acquire this activation just because they share a cleanup function. Pass the
+resume intent explicitly on physical release; a lost-telemetry timeout only stops input.
+Native lifecycle and device-to-simulator tests cover initially-on and initially-off states.

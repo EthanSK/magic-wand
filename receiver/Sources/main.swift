@@ -460,7 +460,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                             heldSafetyTimer?.invalidate()
                             heldSafetyTimer=Timer.scheduledTimer(withTimeInterval:0.1,repeats:true){[weak self] _ in
                                 guard let self else{return};let now=ProcessInfo.processInfo.systemUptime
-                                if self.heldScroll.stale(now:now){self.reconcileBottomHold(down:false,now:now,reason:"button telemetry timeout")}
+                                if self.heldScroll.stale(now:now){self.reconcileBottomHold(down:false,now:now,reason:"button telemetry timeout",resumeMouse:false)}
                             }
                             releaseButtons()
                             let point=heldScrollAnchor ?? .zero,token=UUID();heldTargetToken=token
@@ -475,7 +475,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                         }
                     }
                     if value=="1" && flickScroll.active {flickScroll.reset();flickAnchor=nil;setCircleLight(false);motionFilter.reset()}
+                    let endedLegacyScroll=value=="0" && pointerRouter.circle.active
                     restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.bottom(down:value=="1"))
+                    if endedLegacyScroll {enableMouseAfterScroll()}
                 }
             }
             if let marker=line.range(of:"@MIDDLE "){cancelCircleScroll();handleMiddle(String(line[marker.upperBound...]))}
@@ -673,7 +675,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             let dy=max(-4096,min(4096,scrollFractionY.rounded(.towardZero)))
             scrollFractionX-=dx;scrollFractionY-=dy
             if dx != 0 || dy != 0 {postScroll(x:Int32(dx),y:Int32(dy))}
-            if f[0]=="E"{finishScroll()}
+            if f[0]=="E"{finishScroll(resumeMouse:true)}
         default:break
         }
     }
@@ -716,11 +718,18 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         for event in Self.wheelEvents(x:x,y:y,at:scrollAnchor ?? circleAnchor) {event.post(tap:.cghidEventTap)}
         scrollPostedX+=Int(x);scrollPostedY+=Int(y)
     }
-    func finishScroll(){
+    func enableMouseAfterScroll(){
+        guard ready,!restoring else{return}
+        enterPointerMode();motionFilter.reset();dwell.reset();dwell.follow(true)
+        restDetection.pointerActivated();scheduleDwell()
+        queue("global.wandPointerPauseUntil=0;setMouseFollow(true);")
+        log("SCROLL_FINISHED_MOUSE_ON")
+    }
+    func finishScroll(resumeMouse:Bool=false){
         if scrollActive{log("SCROLL_END lines",scrollPostedX,scrollPostedY)}
         let wasActive=scrollActive
         scrollActive=false;scrollAnchor=nil;scrollWatchdog?.invalidate();scrollWatchdog=nil
-        if wasActive {resumeHUDNavigation()}
+        if wasActive {if resumeMouse {enableMouseAfterScroll()}else{resumeHUDNavigation()}}
     }
     /// Bottom double tap is a global escape into pointing, not a mode action.
     /// Keep its recognition alive when the first tap closes a HUD or scroll.
@@ -833,17 +842,19 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         transition(to: routed.buttons, at: point)
         performPointer(routed.actions)
     }
-    func finishBottomHold(now:Double) {
+    func finishBottomHold(now:Double,resumeMouse:Bool=true) {
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldTargetToken=UUID()
         guard heldScroll.active else{return}
+        let completedScroll=heldScroll.scrollable && !heldScroll.dragging && heldScroll.qualified(now:now)
         if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)}
         if heldScroll.end(now:now) {queue("global.wandPointerPauseUntil=0;")}
         heldScrollAnchor=nil;setCircleLight(false)
+        if completedScroll && resumeMouse {enableMouseAfterScroll()}
     }
-    func reconcileBottomHold(down:Bool,now:Double,reason:String) {
+    func reconcileBottomHold(down:Bool,now:Double,reason:String,resumeMouse:Bool=true) {
         guard controlVersion == .scrollV2,heldScroll.active else{return}
         if down {heldScroll.confirmHeld(now:now);return}
-        finishBottomHold(now:now)
+        finishBottomHold(now:now,resumeMouse:resumeMouse)
         performPointer(pointerRouter.bottom(down:false))
         dwell.reset();scheduleDwell();log("BOTTOM_HOLD_RECOVERED",reason)
     }

@@ -13,20 +13,26 @@ func AXIsProcessTrusted()->Bool {true}
 func log(_ v:Any...) {}
 enum Tap {case cghidEventTap}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?){ };func post(tap:Tap){}}
+final class Rest {var activated=false;func pointerActivated(){activated=true}}
 final class Harness {
+ let restDetection=Rest()
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),motionFilter=WandMotionFilter(),dwell=WandDwellClick(),recenterGesture=WandRecenterGesture(),flickScroll=WandFlickScroll()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?
  var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,hudSession=false,flickScrollEnabled=false
+ var commands:[String]=[],scrollPostedX=0,scrollPostedY=0
+ var scrollAnchor:CGPoint?,scrollWatchdog:Timer?
  var rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,wheels=0,frames=0,ups=0,light=false
  func transition(to:Int,at:CGPoint){buttons=to;if to==0 {ups+=1}}
- func queue(_ s:String){}
+ func queue(_ s:String){commands.append(s)}
+ func enterPointerMode(){hudSession=false}
+ func resumeHUDNavigation(){}
  func setCircleLight(_ b:Bool){light=b}
  func performPointer(_ a:[WandPointerRouter.Action]){}
  func scheduleDwell(){}
  func postPointerMove(dx:Int,dy:Int,from p:CGPoint)->CGPoint{p}
  func handleFrame(x:Int,y:Int,b:Int){frames+=1}
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{[]}
- ${['finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
+ ${['enableMouseAfterScroll','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
 }
 let h=Harness();precondition(h.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 let now=ProcessInfo.processInfo.systemUptime
@@ -48,7 +54,22 @@ precondition(!h.heldScroll.active,"late telemetry must not restart a cancelled h
 h.heldScroll.begin(now:30);h.scrollActive=true
 h.finishBottomHold(now:31)
 precondition(!h.heldScroll.active,"release teardown is independent of other mode state")
-print("PASS: missing release, native drag release, stale telemetry and no implicit restart")
+for prior in [false,true] {
+ let exit=Harness();exit.dwell.follow(prior);exit.heldScroll.begin(now:100)
+ exit.finishBottomHold(now:101)
+ precondition(exit.dwell.following && exit.restDetection.activated,"completed scroll enables mouse regardless of prior follow")
+ precondition(exit.commands.contains("global.wandPointerPauseUntil=0;setMouseFollow(true);"))
+ let chord=Harness();chord.dwell.follow(prior);chord.scrollActive=true
+ chord.finishScroll(resumeMouse:true)
+ precondition(chord.dwell.following && !chord.scrollActive,"chord release enables mouse")
+}
+let tap=Harness();tap.heldScroll.begin(now:100);tap.finishBottomHold(now:100.05)
+precondition(!tap.dwell.following,"short taps retain their existing meaning")
+let drag=Harness();drag.heldScroll.begin(now:100,scrollable:false);_=drag.heldScroll.startDrag(now:100.3);drag.finishBottomHold(now:101)
+precondition(!drag.dwell.following,"native dragging is not a scroll gesture")
+let lost=Harness();lost.heldScroll.begin(now:100);lost.reconcileBottomHold(down:false,now:101,reason:"timeout",resumeMouse:false)
+precondition(!lost.dwell.following,"lost telemetry must not activate mouse")
+print("PASS: missing release, native drag release, stale telemetry and scroll-to-mouse from both prior states")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-release-'));
  try {writeFileSync(join(dir,'main.swift'),code);const built=spawnSync('swiftc',['-O',new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(built.status,0,built.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}

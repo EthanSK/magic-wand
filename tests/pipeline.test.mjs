@@ -218,3 +218,16 @@ test('Bottom double tap exits any prior mode into centred mouse follow',()=>{
   assert.equal(s.pipeline.receiver.buttons,0);
  }
 });
+
+
+test('releasing a page-scroll chord enables mouse follow even when it started off',()=>{
+ for(const prior of [false,true]) {
+  const s=setup();
+  if(prior){s.press('D1',.06);s.w.advance(.4);}
+  s.w.edge('D1',0);s.w.advance(.03);s.w.edge('D2',0);s.w.advance(.15);
+  s.turn(0,8,.4);s.w.edge('D1',1);s.w.edge('D2',1);s.w.advance(.3);
+  assert(s.w.ctx.moveLatched,'page scroll returns to mouse follow');
+  assert(s.pipeline.receiver.dwell.following);
+  assert(!s.pipeline.receiver.scrollActive);
+ }
+});

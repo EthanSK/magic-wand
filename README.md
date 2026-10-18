@@ -55,13 +55,14 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - V2 keeps the starting direction through either initial U-turn, even before circle recognition. Once circling is established, reversing it reverses scrolling without releasing. Standalone flick and circle triggers remain disabled; V1 retains its earlier gestures.
 - VS Code app mode retains Bottom review controls.
 - Middle switches to the HUD. The pointer stays within real display edges.
+- Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.
 
 **Bottom + Middle** · Scroll
 
 | Gesture | Result |
 | --- | --- |
 | Hold both and turn | Scroll sideways and up or down at once, including diagonals |
-| Release either | Stop scrolling; nothing clicks |
+| Release either | Stop scrolling and enable mouse follow; nothing clicks |
 
 **Lights**, highest priority first
 
@@ -162,7 +163,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Control V2 keeps the initial scroll direction through the U-turn before circle recognition. Reversing an established circle reverses scrolling. Automated checks passed; physical acceptance is pending.
+- Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.
 - Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling in V1 passes automated checks; physical gesture acceptance is pending.
 - Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.
 - Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.
@@ -172,7 +173,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.51 (56) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
+Receiver 1.2.52 (57) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
