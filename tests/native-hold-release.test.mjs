@@ -29,14 +29,33 @@ final class Harness {
  func setCircleLight(_ b:Bool){light=b}
  func performPointer(_ a:[WandPointerRouter.Action]){}
  func scheduleDwell(){}
+ func releaseButtons(){buttons=0}
  func postPointerMove(dx:Int,dy:Int,from p:CGPoint)->CGPoint{p}
  func handleFrame(x:Int,y:Int,b:Int){frames+=1}
  static var wheelPairs:[(Int32,Int32)]=[]
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
- ${['enableMouseAfterScroll','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
+ ${['beginBottomHold','enableMouseAfterScroll','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
 }
 let h=Harness();precondition(h.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 let now=ProcessInfo.processInfo.systemUptime
+let explicit=Harness();precondition(explicit.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
+_=explicit.recenterGesture.edge(down:true,now:now-1)
+explicit.beginBottomHold(now:now-1)
+precondition(explicit.heldScroll.scrollable,"a plain hold always scrolls, regardless of text under the pointer")
+_=explicit.recenterGesture.edge(down:false,now:now-0.95)
+explicit.finishBottomHold(now:now-0.95)
+_=explicit.recenterGesture.edge(down:true,now:now-0.85)
+explicit.beginBottomHold(now:now-0.85)
+precondition(!explicit.heldScroll.scrollable,"only the second held click requests a real drag")
+explicit.handleRaw("10000,2680,0,1")
+precondition(explicit.heldScroll.dragging && explicit.buttons==1,"explicit drag posts mouse-down")
+precondition(!explicit.recenterGesture.edge(down:false,now:now),"held second click must not recenter")
+explicit.handleRaw("10000,2680,0,0")
+precondition(!explicit.heldScroll.active && explicit.buttons==0,"release drops the explicit drag")
+_=explicit.recenterGesture.edge(down:true,now:now+1)
+explicit.beginBottomHold(now:now+1)
+precondition(explicit.heldScroll.scrollable,"the next ordinary hold returns to scrolling")
+explicit.finishBottomHold(now:now+2)
 h.heldScroll.begin(now:now-1);_=h.pointerRouter.bottom(down:true);h.light=true
 h.handleRaw("10000,0,2680,0") // no @BOTTOM 0: raw physical-up must still stop first
 precondition(!h.heldScroll.active && !h.pointerRouter.bottomHeld && !h.light)

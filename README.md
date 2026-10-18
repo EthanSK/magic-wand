@@ -50,17 +50,17 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap from off | Enter high-sensitivity follow without clicking |
 | Stop after moving in HIGH | Click once after a 200 ms pause |
 | Tap while following | Stop following without clicking |
-| Hold over a scroll area | Start left/right for horizontal or up/down for vertical, then continue in circles; reverse circling to reverse scrolling and release to stop |
-| Hold elsewhere | Drag with the mouse button down; release to drop |
+| Hold | Start left/right for horizontal or up/down for vertical, then continue in circles; reverse circling to reverse scrolling and release to stop |
+| Tap, then hold the second press | Drag with the mouse button down; release to drop |
 | Double tap | Centre the pointer on the main screen and enable mouse follow; keep the HUD and review selection unchanged |
 
 - Control V2 keeps short taps unchanged. The existing 220 ms cutoff separates a tap from a hold.
-- The target under the pointer at press chooses scrolling or native dragging. Scrolling stays in that area until release.
+- A plain hold only scrolls, including over text. Tap, then hold the second press to drag. The pointer stays fixed while scrolling until release.
 - V2 keeps the starting direction through either initial U-turn, even before circle recognition. Once circling is established, reversing it reverses scrolling without releasing. Standalone flick and circle triggers remain disabled; V1 retains its earlier gestures.
 - Middle switches to the HUD. The pointer stays within real display edges.
 - Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.
 - Bottom never opens, closes or clears the Middle HUD or review selection.
-- On a scrollable area, hold Bottom and start left/right for horizontal scrolling, or up/down for vertical scrolling. Continue in circles on that axis; reverse winding to reverse scrolling. Release to stop and return to mouse follow.
+- Hold Bottom and start left/right for horizontal scrolling, or up/down for vertical scrolling. Continue in circles on that axis; reverse winding to reverse scrolling. Release to stop and return to mouse follow.
 
 **Lights**, highest priority first
 
@@ -81,18 +81,19 @@ The website runs the wand’s own device code in your browser, with the Mac side
 
 Wand Receiver is a background Mac app. Its wand icon in the menu bar provides:
 
-- **Control version → V2 · Hold to scroll**: hold Bottom over a scroll area and move up
-  or down to scroll. Over a title bar or other non-scroll target, the same hold drags
-  with the native mouse button down. Release stops scrolling or drops the object.
-  Short taps retain their existing mouse behavior. The target is captured at press.
+- **Control version → V2 · Hold to scroll**: hold Bottom and start left/right for
+  horizontal scrolling, or up/down for vertical scrolling. Continue in circles;
+  release to stop. A plain hold never selects text or drags a window.
+  To drag, tap Bottom, then press again and keep it held. Release to drop.
+  Short taps retain their existing mouse behavior.
 - **Control version → V1 · Pointer** restores the previous Bottom gestures. The exact
   pre-V2 implementation is also saved at `controls-v1.0.0`; see `control-versions/`.
 - **Options → Rotation-independent controls** keeps screen directions upright while
   rotating the wand. Flick scrolling is available only in Control V1.
 
 The existing 220 ms tap-versus-hold cutoff is unchanged. No movement buffer is added.
-Accessibility identifies scroll areas; custom interfaces that do not expose one fall
-back to native dragging. HUD, speech, VS Code review and two-button scrolling are unchanged.
+Scrolling uses the pointer position captured at press. Native dragging requires an
+explicit tap-then-hold. HUD, speech, VS Code review and two-button scrolling are unchanged.
 The browser demo still shows Control V1; V2 needs the native receiver.
 
 ## How it works
@@ -161,7 +162,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.63 adds left/right starts and horizontal circle continuation, with the same gain, winding reversal and release behavior as vertical scrolling. All 70 automated checks passed; physical acceptance is pending.
+- Installed: Wand Receiver 1.2.64 makes a plain Bottom hold scroll everywhere. Tap, then hold the second press to drag; an ordinary double tap still recentres. All 70 automated checks passed; physical acceptance is pending.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
 - The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
@@ -176,7 +177,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.63 (68) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
+Receiver 1.2.64 (69) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

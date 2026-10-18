@@ -321,7 +321,7 @@ Recording uses steady red only when no higher-priority mode is active. Mouse mod
 Clear a legacy recording blink timer when replacing the bridge; do not recreate it.
 
 
-## Control V2 captures its target and preserves short taps
+## Control V2 preserves short taps and separates explicit dragging
 
 Control versions are distinct from hardware prototypes. V1 retains the prior exact source tag
 and local installed snapshot; V2 changes Bottom holds while keeping its short taps. The
@@ -329,13 +329,18 @@ existing 220 ms tap/hold cutoff separates these paths. Never let the firmware's 
 click or drag reports leak into the native V2 path. A raw zero-button frame between release
 and the queued firmware click must not clear suppression; wait for that click's down/up.
 
-Capture the Accessibility target at press. Check only its ancestry for a scroll area; a
-scroll view elsewhere in the window does not make a title bar scrollable. Perform the bounded
-Accessibility lookup off the motion thread. Use the captured pointer position for wheel
-updates until release. Non-scroll targets use a normal mouse-down, drag and mouse-up; unknown
-custom Accessibility structures fall back to that native drag. No wheel is posted after
-release and no synthetic click follows a used hold. Cancelled and switched-version sessions
-must release any held native button. Flick/circle recognition stays disabled throughout V2.
+The original V2 used Accessibility to choose between scroll and native drag. Ethan
+replaced that behavior on 19 October: a plain hold must always scroll, including over
+text or controls that do not expose a scroll area. Remove the hit-test fallback;
+its negative result could turn intended scrolling into unwanted text selection.
+Capture only the pointer position for wheel delivery and keep it fixed until release.
+
+The existing double-tap recognizer identifies a second press within 300 ms. A second
+press held beyond the existing 220 ms cutoff selects native dragging; a short second
+release still recentres. Keep that intent separate from the text or window below the
+pointer. Physical-up reconciliation and the telemetry watchdog must release either
+path. Native handler tests cover a plain hold, a tap-then-hold drag, release, and a
+later plain hold returning to scroll. No new pointer buffering is involved.
 
 
 Control V2 hold scrolling uses positive angular Y for native wheel lines, so page content

@@ -502,23 +502,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     if controlVersion == .scrollV2 && value=="0" {finishBottomHold(now:ProcessInfo.processInfo.systemUptime)}
                     if controlVersion == .scrollV2 && !scrollActive {
                         if value=="1" {
-                            heldScrollAnchor=deliveryPoint ?? CGEvent(source:nil)?.location
-                            heldScroll.begin(now:ProcessInfo.processInfo.systemUptime,scrollable:false)
-                            heldSafetyTimer?.invalidate()
-                            heldSafetyTimer=Timer.scheduledTimer(withTimeInterval:0.1,repeats:true){[weak self] _ in
-                                guard let self else{return};let now=ProcessInfo.processInfo.systemUptime
-                                if self.heldScroll.stale(now:now){self.reconcileBottomHold(down:false,now:now,reason:"button telemetry timeout",resumeMouse:false)}
-                            }
-                            releaseButtons()
-                            let point=heldScrollAnchor ?? .zero,token=UUID();heldTargetToken=token
-                            DispatchQueue.global(qos:.userInitiated).async { [weak self] in
-                                let scrollable=Self.isScrollable(at:point)
-                                DispatchQueue.main.async {
-                                    guard let self,self.heldTargetToken==token,self.heldScroll.active else{return}
-                                    self.heldScroll.setTarget(scrollable:scrollable)
-                                    log("BOTTOM_HOLD_TARGET",scrollable ? "scroll":"drag")
-                                }
-                            }
+                            beginBottomHold(now:ProcessInfo.processInfo.systemUptime)
                         }
                     }
                     if value=="1" && flickScroll.active {flickScroll.reset();flickAnchor=nil;setCircleLight(false);motionFilter.reset()}
@@ -787,29 +771,18 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         default:break
         }
     }
-    /// Hit-test the actual pointer target, not any scroll view in the window.
-    /// A toolbar/title bar therefore falls back to a real native mouse drag.
-    static func isScrollable(at point:CGPoint)->Bool {
-        let system=AXUIElementCreateSystemWide(),deadline=Date().addingTimeInterval(0.06)
-        AXUIElementSetMessagingTimeout(system,0.02)
-        var hit:AXUIElement?
-        guard AXUIElementCopyElementAtPosition(system,Float(point.x),Float(point.y),&hit) == .success else{return false}
-        var current=hit
-        for _ in 0..<24 {
-            guard let item=current,Date()<deadline else{break}
-            AXUIElementSetMessagingTimeout(item,Float(max(0.001,min(0.01,deadline.timeIntervalSinceNow))))
-            var role:CFTypeRef?
-            if AXUIElementCopyAttributeValue(item,kAXRoleAttribute as CFString,&role) == .success,
-               let name=role as? String {
-                if name==kAXScrollAreaRole as String {return true}
-                if name==kAXWindowRole as String || name==kAXApplicationRole as String {break}
-            }
-            var parent:CFTypeRef?
-            guard AXUIElementCopyAttributeValue(item,kAXParentAttribute as CFString,&parent) == .success,
-                  let value=parent,CFGetTypeID(value)==AXUIElementGetTypeID() else{break}
-            current=(value as! AXUIElement)
+    /// A plain hold always scrolls, even over text or a title bar. Only the
+    /// explicit tap-then-hold gesture may press the native mouse button.
+    func beginBottomHold(now:Double) {
+        heldScrollAnchor=deliveryPoint ?? CGEvent(source:nil)?.location
+        heldScroll.begin(now:now,scrollable:!recenterGesture.isSecondPress)
+        heldSafetyTimer?.invalidate()
+        heldSafetyTimer=Timer.scheduledTimer(withTimeInterval:0.1,repeats:true){[weak self] _ in
+            guard let self else{return};let now=ProcessInfo.processInfo.systemUptime
+            if self.heldScroll.stale(now:now){self.reconcileBottomHold(down:false,now:now,reason:"button telemetry timeout",resumeMouse:false)}
         }
-        return false
+        releaseButtons()
+        log("BOTTOM_HOLD_TARGET",heldScroll.scrollable ? "scroll":"explicit drag")
     }
     // Ordinary mice deliver one wheel axis at a time. Mixed-axis line events
     // can be reduced to the dominant direction by native scrolling views.
