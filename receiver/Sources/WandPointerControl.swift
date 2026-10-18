@@ -440,7 +440,7 @@ final class WandMotionFilter {
     // with Z facing up at neutral. Rotate angular rates before filtering/gain,
     // never the cursor or already-scaled pixels. No sample queue or new filter.
     var orientationCompensation=false
-    private var rollCos=1.0,rollSin=0.0
+    private var rollCos=1.0,rollSin=0.0,yawScale=1.0
     func observeGravity(x:Double,y:Double,z:Double) {
         guard x.isFinite,y.isFinite,z.isFinite else{return}
         let length=sqrt(x*x+y*y+z*z),across=hypot(x,z)
@@ -448,6 +448,10 @@ final class WandMotionFilter {
         // the last usable basis near vertical, where roll cannot be determined.
         guard (0.75...1.25).contains(length),across>=0.25 else{return}
         rollCos=z/across;rollSin=x/across
+        // Heading speed loses cos(elevation) when projected onto the two
+        // axes perpendicular to the shaft. Undo that before the speed curve.
+        // Cap at 2x (60 degrees); heading is ill-conditioned near vertical.
+        yawScale=min(2,length/across)
     }
     var configured:Bool {values.count==13}
     func configure(_ v:[Double])->Bool {
@@ -464,7 +468,7 @@ final class WandMotionFilter {
         if resetState {reset()}
         let v=values,dt=Double(microseconds)/1_000_000
         let bodyX=(Double(rawX)-v[0])/134,bodyY=(Double(rawY)-v[1])/134
-        let x=orientationCompensation ? bodyX*rollCos+bodyY*rollSin : bodyX
+        let x=orientationCompensation ? (bodyX*rollCos+bodyY*rollSin)*yawScale : bodyX
         let y=orientationCompensation ? bodyY*rollCos-bodyX*rollSin : bodyY
         let speed=sqrt(x*x+y*y),blend=max(0,min(1,(speed-v[5])/(v[6]-v[5])))
         let alpha=1-exp(-dt/(0.008-0.006*blend))

@@ -7,8 +7,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.40",
-    "receiverBuild": "45",
+    "receiver": "1.2.41",
+    "receiverBuild": "46",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "c6948df57d8e26f59aa10b1c590b4d5536f9de8bd6cb1246ed2dea4704a02f1d"
   },
@@ -312,7 +312,8 @@
     "orientationCompensation": {
       "default": false,
       "experimental": true,
-      "scope": "Native mouse pointing; compensates wrist roll using existing gravity telemetry. Enable with orientationCompensation in the local feature-flags.json. No new movement buffer."
+      "scope": "Native mouse pointing; compensates wrist roll and the loss of horizontal heading sensitivity as the tip rises. Heading correction is capped at 2x. Enable with orientationCompensation in the local feature-flags.json. No new movement buffer.",
+      "maxHeadingGain": 2
     }
   },
   "hud": {
