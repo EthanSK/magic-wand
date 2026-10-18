@@ -273,8 +273,9 @@ warp cannot cause an automatic click.
 
 A GATT write acknowledgement does not mean Espruino has parsed the received
 JavaScript. The device reported FIFO_FULL during a bridge upload, followed by
-undefined local variables in partially received functions. Pace write chunks
-by 10 ms while the receiver is not ready. Retain immediate dispatch after it
+undefined local variables in partially received functions. The receive stream also carried XOFF/XON control bytes. Honor XOFF by pausing
+queued writes until XON; a fixed delay alone is insufficient while a function
+is parsed. Pace write chunks by 10 ms while the receiver is not ready. Retain immediate dispatch after it
 is ready; this delay applies to installation, not pointer samples or gestures.
 Recover through the existing Bluetooth owner and preserve a successful sensor
 zero. Source tests cannot reproduce the device's UART input capacity.

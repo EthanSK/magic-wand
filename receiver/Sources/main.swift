@@ -24,7 +24,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var device: CBPeripheral?
     var tx: CBCharacteristic?
     var chunks: [Data] = []
-    var writing = false, configuring = false
+    var writing = false, configuring = false, uartPaused = false
     var input = "", buttons = 0, reportCount = 0, movementCount = 0
     var restoring = false, bridgeLoadFailed = false, loadingBridge = false, generation = 0, retry: DispatchWorkItem?
     var lastTrusted = false, ready = false, legacySignaled = false
@@ -255,7 +255,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         hudSession=false;hudEntryPress=false
         finishScroll()
         controls.cancel(); hudActive = false; hudWatchdog?.invalidate(); hudWatchdog = nil
-        generation += 1; middleHold?.invalidate();middleTap?.invalidate();middleHold=nil;middleTap=nil;middleOperating=false;pointerInHUD=false;controls.persistent("dismiss");releaseButtons(); ready = false; tx = nil; chunks = []; input = ""; writing = false; configuring = false
+        generation += 1; middleHold?.invalidate();middleTap?.invalidate();middleHold=nil;middleTap=nil;middleOperating=false;pointerInHUD=false;controls.persistent("dismiss");releaseButtons(); ready = false; tx = nil; chunks = []; input = ""; writing = false; configuring = false; uartPaused = false
     }
     func reconnect() {
         if let p = device { manager.cancelPeripheralConnection(p) }
@@ -302,7 +302,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         sendNext()
     }
     func sendNext() {
-        guard !writing, let p = device, p.state == .connected, let characteristic = tx, !chunks.isEmpty else { return }
+        guard !writing, !uartPaused, let p = device, p.state == .connected, let characteristic = tx, !chunks.isEmpty else { return }
         writing = true; p.writeValue(chunks.removeFirst(), for: characteristic, type: .withResponse)
     }
     func peripheral(_ p: CBPeripheral, didWriteValueFor c: CBCharacteristic, error: Error?) {
@@ -318,7 +318,15 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         } else {writing=false;sendNext()}
     }
     func peripheral(_ p: CBPeripheral, didUpdateValueFor c: CBCharacteristic, error: Error?) {
-        guard device === p, error == nil, let bytes = c.value, let text = String(data: bytes, encoding: .utf8) else { return }
+        guard device === p,error == nil,let bytes=c.value else{return}
+        // Espruino sends XOFF while parsing code and XON when its UART can accept
+        // more bytes. A BLE acknowledgement alone is not this permission.
+        for byte in bytes {
+            if byte==0x13 {uartPaused=true}
+            else if byte==0x11 {uartPaused=false}
+        }
+        sendNext()
+        guard let text=String(data:Data(bytes.filter{$0 != 0x11 && $0 != 0x13}),encoding:.utf8) else{return}
         deliveryPoint=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays)
         defer {deliveryPoint=nil}
         input += text.replacingOccurrences(of: "\r", with: "")
