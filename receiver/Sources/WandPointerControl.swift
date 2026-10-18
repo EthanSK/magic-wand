@@ -672,7 +672,10 @@ final class WandHeldScroll {
         // consistent opposite winding reverses it without releasing.
         if scrollDirection==0 {
             directionTravel+=vertical
-            if abs(directionTravel)>=0.25 {scrollDirection=directionTravel>0 ? 1:-1}
+            if abs(directionTravel)>=0.25 {
+                scrollDirection=directionTravel>0 ? 1:-1
+                fraction=scrollDirection*abs(fraction)
+            }
         }
         let result=circle.update(dx:dx,dy:dy,now:sampleTime,eligible:scrollDirection != 0)
         if result.consumesPointer && !circular {
@@ -686,16 +689,17 @@ final class WandHeldScroll {
                 reverseAt=sampleTime;reverseTurn+=abs(turn);reverseSegments+=1
                 if reverseTurn>=Double.pi/6 && reverseSegments>=3 {
                     winding = -winding;scrollDirection=windingToScroll*winding
-                    reverseTurn=0;reverseSegments=0
+                    fraction=0;reverseTurn=0;reverseSegments=0
                 }
             } else if turn*winding>0.005 {
                 reverseTurn=0;reverseSegments=0
             }
         }
-        // Before a bend, preserve direct vertical scrolling. After recognition,
-        // use distance around the loop so sideways arcs do not stall. Only
-        // confirmed opposite winding, not the returning half, reverses scrolling.
-        fraction += (circular ? scrollDirection*hypot(dx,dy):vertical)*1.6
+        // As soon as the starting direction is known, every part of the U
+        // continues it. Use the same distance/gain before and after recognition;
+        // the returning leg must never leak an opposite signed vertical delta.
+        // Only established circular winding can subsequently reverse direction.
+        fraction += (scrollDirection != 0 ? scrollDirection*hypot(dx,dy):vertical)*1.6
         let lines=Int32(max(-12,min(12,fraction.rounded(.towardZero))))
         fraction -= Double(lines)
         if lines != 0 {moved=true}
