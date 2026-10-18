@@ -621,10 +621,23 @@ final class WandHeldScroll {
     private(set) var active=false
     private(set) var dragging=false
     private(set) var scrollable=true
+    private(set) var circular=false
+    private var scrollDirection=0.0,directionTravel=0.0,sampleTime=0.0
+    private let circle:WandCircularScroll
     private var started=0.0,confirmed=0.0,fraction=0.0,moved=false,dropClick=false,droppingClick=false
     // Reuse the existing Bottom tap/hold cutoff; do not add a movement buffer.
     let holdSeconds=0.22
-    func reset(){active=false;dragging=false;fraction=0;moved=false;dropClick=false;droppingClick=false}
+    init(){
+        var tuning=WandCircularScroll.Tuning()
+        // Angular degrees, before sensitivity. Recognise the bend while the
+        // wand still travels in its original vertical direction.
+        tuning.verticalRatio=1;tuning.segment=0.025
+        tuning.recogniseTurn=Double.pi/3;tuning.consistency=0.65
+        tuning.minPath=0.35;tuning.minExtent=0.1;tuning.minAspect=0.1
+        tuning.minDuration=0.06;tuning.window=1.0;tuning.idleEnd=0.35
+        circle=WandCircularScroll(tuning:tuning)
+    }
+    func reset(){active=false;dragging=false;circular=false;scrollDirection=0;directionTravel=0;sampleTime=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
     func begin(now:Double,scrollable:Bool=true){reset();active=true;started=now;confirmed=now;self.scrollable=scrollable}
     // A lease is renewed only by actual button samples, never by a timer.
     // Stop rather than keep a native drag or scroll alive after telemetry loss.
@@ -640,13 +653,25 @@ final class WandHeldScroll {
     func end(now:Double)->Bool {
         guard active else{return false}
         active=false;dropClick=moved || now-started>=0.22
-        fraction=0;return dropClick
+        fraction=0;circle.reset();circular=false;return dropClick
     }
-    func sample(y:Double,dt:Double,now:Double?=nil)->Int32 {
-        guard active,scrollable,now.map({qualified(now:$0)}) ?? true,y.isFinite,dt>0,dt<=0.05 else{return 0}
-        guard abs(y)>1 else{return 0}
-        // Drag page content with the wand, like a finger on a touchscreen.
-        fraction += y*dt*1.6
+    func sample(x:Double=0,y:Double,dt:Double,now:Double?=nil)->Int32 {
+        guard active,scrollable,now.map({qualified(now:$0)}) ?? true,
+              x.isFinite,y.isFinite,dt>0,dt<=0.05 else{return 0}
+        sampleTime=now ?? sampleTime+dt
+        guard hypot(x,y)>1 else{circle.expire(now:sampleTime);return 0}
+        let dx=x*dt,dy=y*dt,vertical=abs(y)>1 ? dy:0
+        // The first vertical movement chooses the direction for this hold.
+        // Circle winding never determines page direction.
+        if scrollDirection==0 {
+            directionTravel+=vertical
+            if abs(directionTravel)>=0.25 {scrollDirection=directionTravel>0 ? 1:-1}
+        }
+        let result=circle.update(dx:dx,dy:dy,now:sampleTime,eligible:scrollDirection != 0)
+        if result.consumesPointer {circular=true}
+        // Before a bend, preserve direct vertical scrolling. After recognition,
+        // use distance around the loop so sideways arcs do not stall or reverse.
+        fraction += (circular ? scrollDirection*hypot(dx,dy):vertical)*1.6
         let lines=Int32(max(-12,min(12,fraction.rounded(.towardZero))))
         fraction -= Double(lines)
         if lines != 0 {moved=true}
