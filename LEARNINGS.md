@@ -498,3 +498,16 @@ cover 0.15-degree review loops, 0.1-degree held loops, both directions, normal-s
 ratchet equivalence, quantised input, straight creep and post-circle jitter. These
 are input traces, not a measurement of the smallest reliable physical hand motion.
 The device calibration, pointer filter, gains and motion-delay settings stay unchanged.
+
+## Small review flicks follow their first lobe
+
+Testing only the endpoint displacement rejected short up/down flicks that returned
+towards the starting position. The review adapter now remembers the first qualified
+vertical lobe, with a 0.3-degree threshold instead of 1.5 degrees. It still waits for
+the existing 120 ms quiet endpoint, emits one step, then resets so the next flick
+can go either way. Track maximum horizontal excursion to reject diagonal motion.
+An actual circle ratchet suppresses the flick fallback; a weak curved candidate
+which never emitted a circle step must not swallow an otherwise vertical flick.
+Tests reproduce missed return strokes before the fix and exercise alternating
+flick directions, curved flicks, circles, noise and the existing review lifecycle.
+These are synthetic gesture checks; physical feel still needs acceptance.

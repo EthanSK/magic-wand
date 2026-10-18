@@ -84,6 +84,7 @@ test("tuning matches the running device code and the receiver", () => {
 
 test("micro-circle tuning matches native geometry and preserves pointer noise guards", () => {
   const t = manifest.tuning.microCircles;
+  assert.equal(number(/static let flickDegrees = ([\d.]+)/, pointer, "review flick"), manifest.tuning.reviewFlickDegrees);
   const held = pointer.slice(pointer.indexOf("final class WandHeldScroll"), pointer.indexOf("struct WandReviewExitGesture"));
   const review = pointer.slice(pointer.indexOf("struct WandReviewCircle"));
   for (const [key, re] of [

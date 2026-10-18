@@ -162,7 +162,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.66 accepts smaller deliberate circles for scrolling and review while preserving normal circle speed and pointer filtering. Automated checks passed; physical acceptance is pending.
+- Installed: Wand Receiver 1.2.67 adds smaller up/down review flicks that retain their original direction on spring-back. Micro circles, ordinary circle speed and pointer filtering are preserved. Automated checks passed; physical acceptance is pending.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
 - The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
@@ -177,7 +177,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.66 (71) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
+Receiver 1.2.67 (72) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
