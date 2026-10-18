@@ -548,6 +548,9 @@ final class WandMotionFilter {
 /// Short second release recenters; a held second press remains a real drag.
 final class WandRecenterGesture {
     private var pressedAt:Double?,lastRelease:Double?,second=false
+    /// Ethan's "double click with the second one held" is a deliberate drag.
+    /// A short second release still belongs to the existing recenter gesture.
+    var isSecondPress:Bool {pressedAt != nil && second}
     func cancel(){pressedAt=nil;lastRelease=nil;second=false}
     func edge(down:Bool,now:Double,eligible:Bool=true)->Bool {
         guard eligible else{cancel();return false}

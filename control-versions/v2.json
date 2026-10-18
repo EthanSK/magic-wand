@@ -3,8 +3,8 @@
   "id": 2,
   "name": "Control V2",
   "parent": "controls-v1.0.0",
-  "receiver": "1.2.45",
-  "bottomHold": "Start scrolling vertically at the captured target, U-turn left or right, then reverse circling to reverse scrolling. Native drag elsewhere; release stops or drops.",
+  "receiver": "1.2.64",
+  "bottomHold": "Scroll everywhere: start left/right for horizontal or up/down for vertical, then continue in circles. Reverse circling to reverse scrolling. Release stops. Tap, then hold the second press for native dragging; release drops.",
   "bottomTap": "Unchanged from V1",
   "disabledGestures": [
     "flick scrolling",
