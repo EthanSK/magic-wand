@@ -452,3 +452,7 @@ Seven final native Mini tests passed together, along with 156 non-GUI Better Git
 ## Committing a set keeps its selected review mode
 
 Middle double-click stages through the existing Better Git finish request, then arms a fresh transaction in the same selected mode. Preserve the current navigation stream, tracking timer and badge; only the circular gesture accumulator resets. The next ratchet gets a new transaction ID. Consume the second release so it cannot become a single-click exit. Single Middle still cancels and exits without staging. Receiver gesture tests cover continuation and subsequent cancellation; physical acceptance remains separate.
+
+## Horizontal and vertical circle continuation share one recognizer
+
+The first deliberate Bottom-held stroke selects the dominant screen axis and direction. Keep that axis fixed until release; both axes then share arc-length gain, first-U direction retention and confirmed winding reversal. Accumulate acquisition travel once, and send wheel steps only on the chosen native wheel axis. Transposing the input trajectory must produce identical step counts, including pauses, reversal and stop-on-release. Tests also run actual raw receiver input through the native axis router.

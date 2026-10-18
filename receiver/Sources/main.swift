@@ -1036,7 +1036,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 let lines=heldScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now)
                 if lines != 0 {
                     setCircleLight(true)
-                    for event in Self.wheelEvents(x:0,y:lines,at:heldScrollAnchor){event.post(tap:.cghidEventTap)}
+                    let x: Int32=heldScroll.horizontal ? lines:0
+                    let y: Int32=heldScroll.horizontal ? 0:lines
+                    for event in Self.wheelEvents(x:x,y:y,at:heldScrollAnchor){event.post(tap:.cghidEventTap)}
                 }
             } else {
                 if heldScroll.startDrag(now:now) {transition(to:1,at:heldScrollAnchor ?? deliveryPoint ?? .zero)}
