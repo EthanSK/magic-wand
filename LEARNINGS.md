@@ -331,3 +331,8 @@ updates until release. Non-scroll targets use a normal mouse-down, drag and mous
 custom Accessibility structures fall back to that native drag. No wheel is posted after
 release and no synthetic click follows a used hold. Cancelled and switched-version sessions
 must release any held native button. Flick/circle recognition stays disabled throughout V2.
+
+
+Control V2 hold scrolling uses positive angular Y for native wheel lines, so page content
+follows the wand like touch dragging. Keep this sign local to V2; V1, wheel chords and
+physical-mouse scroll settings retain their existing direction.

@@ -641,7 +641,8 @@ final class WandHeldScroll {
     func sample(y:Double,dt:Double,now:Double?=nil)->Int32 {
         guard active,scrollable,now.map({qualified(now:$0)}) ?? true,y.isFinite,dt>0,dt<=0.05 else{return 0}
         guard abs(y)>1 else{return 0}
-        fraction += -y*dt*1.6
+        // Drag page content with the wand, like a finger on a touchscreen.
+        fraction += y*dt*1.6
         let lines=Int32(max(-12,min(12,fraction.rounded(.towardZero))))
         fraction -= Double(lines)
         if lines != 0 {moved=true}

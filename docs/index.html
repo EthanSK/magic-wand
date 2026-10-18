@@ -44,7 +44,7 @@
     "shim": "./sim/espruino.js?v=0fba4637ae",
     "device": "./device/wand-mouse-prototype.js?v=036f2bd951",
     "bridge": "./device/wand-mode-bridge.compact.js?v=52a4617bad",
-    "wand": "./data/wand.json?v=99f4b499b1",
+    "wand": "./data/wand.json?v=ca494a1df3",
     "hud": "./data/hud.json?v=c804168e26"
   }
   </script>
@@ -290,7 +290,7 @@
           <h3>Status</h3>
           <!-- wand:status -->
           <ul class="status-list">
-            <li>Control V2 adds context-sensitive Bottom holding: scroll over a scroll area, otherwise drag. Control V1 is preserved and selectable. Physical acceptance is pending.</li>
+            <li>Control V2 hold-scrolling direction is reversed to drag page content with the wand. Automated checks passed; physical direction confirmation is pending.</li>
             <li>Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling and recording/mouse light alternation pass automated checks; physical gesture acceptance is pending.</li>
             <li>Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.</li>
             <li>Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.</li>
@@ -300,7 +300,7 @@
             <li>HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.</li>
             <li>End-to-end latency, accuracy and battery life haven’t been measured.</li>
           </ul>
-          <p class="versions"><span>Receiver 1.2.45 (50)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge 52a4617b</span></p>
+          <p class="versions"><span>Receiver 1.2.46 (51)</span> <span>Device code wand-e1ce30d7c407</span> <span>Bridge 52a4617b</span></p>
           <p class="fine">Updated 18 October 2026</p>
           <!-- /wand:status -->
         </div>
