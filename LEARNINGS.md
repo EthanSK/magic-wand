@@ -482,3 +482,19 @@ An actual-callback regression test checks the unchanged navigation-command count
 ## Horizontal and vertical circle continuation share one recognizer
 
 The first deliberate Bottom-held stroke selects the dominant screen axis and direction. Keep that axis fixed until release; both axes then share arc-length gain, first-U direction retention and confirmed winding reversal. Accumulate acquisition travel once, and send wheel steps only on the chosen native wheel axis. Transposing the input trajectory must produce identical step counts, including pauses, reversal and stop-on-release. Tests also run actual raw receiver input through the native axis router.
+
+## Micro circles without changing pointer gain
+
+The review router discarded each sub-0.04-degree NAV delta, and its circle detector
+dropped sub-0.015-degree segments instead of accumulating them. Preserve those
+small increments until they form a heading sample; opposite jitter cancels. Review
+ratchets retain the seven-degree distance scale for normal circles, with a bounded
+turn contribution for tiny loops. Require travel on both axes and reject tiny local
+curvature so a preceding real circle cannot amplify stationary wobble.
+
+Held V2 scrolling keeps its quiet-rate guard and line gain while reducing the
+heading segment, acquisition travel and minimum geometric extent. Synthetic tests
+cover 0.15-degree review loops, 0.1-degree held loops, both directions, normal-size
+ratchet equivalence, quantised input, straight creep and post-circle jitter. These
+are input traces, not a measurement of the smallest reliable physical hand motion.
+The device calibration, pointer filter, gains and motion-delay settings stay unchanged.

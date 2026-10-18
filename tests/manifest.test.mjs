@@ -82,6 +82,27 @@ test("tuning matches the running device code and the receiver", () => {
   assert.equal(Math.round(number(/middleHold=Timer\.scheduledTimer\(withTimeInterval:([\d.]+)/, swift, "receiver hold") * 1000), t.receiverHoldMs);
 });
 
+test("micro-circle tuning matches native geometry and preserves pointer noise guards", () => {
+  const t = manifest.tuning.microCircles;
+  const held = pointer.slice(pointer.indexOf("final class WandHeldScroll"), pointer.indexOf("struct WandReviewExitGesture"));
+  const review = pointer.slice(pointer.indexOf("struct WandReviewCircle"));
+  for (const [key, re] of [
+    ["heldHeadingSegmentDegrees", /tuning.segment=([\d.]+)/],
+    ["heldMinimumPathDegrees", /tuning.minPath=([\d.]+)/],
+    ["heldMinimumExtentDegrees", /tuning.minExtent=([\d.]+)/],
+    ["heldAxisAcquisitionDegrees", /hypot\(directionTravelX,directionTravel\)>=([\d.]+)/],
+    ["heldQuietSpeedDegreesPerSecond", /guard hypot\(x,y\)>([\d.]+)/],
+  ]) assert.equal(number(re, held, key), t[key]);
+  for (const [key, re] of [
+    ["reviewHeadingSegmentDegrees", /guard distance>=([\d.]+)/],
+    ["reviewMinimumExtentDegrees", /maxX-minX>=([\d.]+)/],
+    ["reviewMinimumTurningRadiusDegrees", /abs\(delta\)\*([\d.]+)/],
+    ["reviewMinimumLocalRadiusDegrees", /distance\/abs\(delta\)<([\d.]+)/],
+    ["reviewRatchetDegrees", /Int\(arc\/([\d.]+)\)/],
+    ["reviewMotionSampleDegrees", /let moving = hypot\(dx,dy\) >= ([\d.]+)/],
+  ]) assert.equal(number(re, review, key), t[key]);
+});
+
 test("light modes, priority and RGB levels match the bridge", () => {
   const chain = bridge.match(/var mode=(.+);\n/)[1];
   const order = [...chain.matchAll(/'([a-z]+)'/g)].map((m) => m[1]);

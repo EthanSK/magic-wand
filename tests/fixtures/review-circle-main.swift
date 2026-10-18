@@ -74,4 +74,59 @@ for sign in [-1.0,1.0] {
  for i in 1...5 {_=nav.sample(dx:0,dy:0.5,now:time+0.2+Double(i)*0.03)}
  check(nav.sample(dx:0,dy:0,now:time+0.5)==1,"pause after circling permits down-one again")
 }
-if failures>0{exit(1)};print("PASS independent circles and Better Git lifecycle")
+
+// Tiny loops are quantised like @NAV and tested through the actual hybrid router.
+for radius in [0.15,0.3,0.6,8.0] {
+ for sign in [-1.0,1.0] {
+  for samples in [24,40,80] {
+   var nav=WandReviewNavigation(),total:Int32=0
+   var px=radius,py=0.0,time=10.0
+   for i in 1...samples*4 {
+    let a=sign*Double(i)*2*Double.pi/Double(samples)
+    let xx=(cos(a)*radius*1000).rounded()/1000,yy=(sin(a)*radius*1000).rounded()/1000
+    time+=1.0/Double(samples)
+    total+=nav.sample(dx:xx-px,dy:yy-py,now:time);px=xx;py=yy
+   }
+   check(Double(total)*sign>=2,"micro review circle radius \(radius), samples \(samples), winding \(sign)")
+   check(nav.sample(dx:0,dy:0,now:time+0.15)==0,"tiny circle cannot finish with an extra nudge")
+  }
+ }
+}
+// Bounded jitter, straight creep and alternating switch impulses are not loops.
+for pattern in 0...2 {
+ var nav=WandReviewNavigation(),total:Int32=0,px=0.0,py=0.0
+ for i in 1...2000 {
+  let xx=pattern==0 ? 0.025*sin(Double(i)*0.71) : (pattern==1 ? Double(i)*0.004 : (i%2==0 ? 0.045:-0.045))
+  let yy=pattern==0 ? 0.025*cos(Double(i)*0.93) : (pattern==1 ? Double(i)*0.002 : (i%2==0 ? 0.015:-0.015))
+  total+=nav.sample(dx:xx-px,dy:yy-py,now:20+Double(i)*0.03);px=xx;py=yy
+ }
+ check(total==0,"jitter or straight creep does not produce review steps \(pattern)")
+}
+// A valid circle must not lend its gain to later stationary wobble.
+var afterCircle=WandReviewNavigation(),cx=8.0,cy=0.0,ct=100.0
+for i in 1...160 {let a=Double(i)*Double.pi/40,xx=8*cos(a),yy=8*sin(a);ct+=0.025;_=afterCircle.sample(dx:xx-cx,dy:yy-cy,now:ct);cx=xx;cy=yy}
+var afterNoise:Int32=0;cx=0.025;cy=0
+for i in 1...1000 {let a=Double(i)*0.5,xx=0.025*cos(a),yy=0.025*sin(a);ct+=0.025;afterNoise+=afterCircle.sample(dx:xx-cx,dy:yy-cy,now:ct);cx=xx;cy=yy}
+check(afterNoise==0,"small wobble after a real circle cannot inherit amplified gain")
+// Ordinary circles retain their prior ratchet count, without an overall gain change.
+check(circle(1).reduce(0,+)==20,"normal eight-degree review circles retain their measured 20 ratchets")
+for radius in [0.1,0.2,0.4] {
+ for sign in [-1.0,1.0] {
+  let held=WandHeldScroll();held.begin(now:30)
+  var time=30.23,total:Int32=0
+  for _ in 0..<15 {time+=0.02;total+=held.sample(y:sign*1.2,dt:0.02,now:time)}
+  for i in 1...300 {
+   let a=Double(i)*2*Double.pi/25
+   time+=0.02
+   total+=held.sample(x:radius*4*Double.pi*sin(a),y:sign*radius*4*Double.pi*cos(a),dt:0.02,now:time)
+  }
+  check(held.circular && Double(total)*sign>0,"held micro circle radius \(radius), direction \(sign)")
+  _=held.end(now:time+0.02)
+  check(held.sample(x:1,y:1,dt:0.02)==0,"release stops tiny-circle scroll")
+ }
+}
+let quiet=WandHeldScroll();quiet.begin(now:50)
+var quietOutput:Int32=0
+for i in 1...2000 {quietOutput+=quiet.sample(x:0.8*sin(Double(i)),y:0.8*cos(Double(i)),dt:0.02,now:50.3+Double(i)*0.02)}
+check(quietOutput==0 && !quiet.circular,"quiet calibrated gyro noise does not scroll")
+if failures>0{exit(1)};print("PASS existing controls and micro circles")

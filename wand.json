@@ -8,13 +8,13 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.65",
-    "receiverBuild": "70",
+    "receiver": "1.2.66",
+    "receiverBuild": "71",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "da9327f3342fe74dbe2fcaaea24514ab50919e73b29022e6ea969d24909c1874"
   },
   "status": [
-    "Installed: Wand Receiver 1.2.65 and Agentic Mouse 1.0.274 add long-press staging with review input frozen until release, one-step up/down nudges after a pause, and stable app-specific submenu entry. All 70 wand checks passed; physical acceptance is pending.",
+    "Installed: Wand Receiver 1.2.66 accepts smaller deliberate circles for scrolling and review while preserving normal circle speed and pointer filtering. Automated checks passed; physical acceptance is pending.",
     "Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.",
     "The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.",
     "Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.",
@@ -321,7 +321,21 @@
         1
       ]
     },
-    "recordingMouseBlinkMs": 0
+    "recordingMouseBlinkMs": 0,
+    "microCircles": {
+      "heldHeadingSegmentDegrees": 0.012,
+      "heldMinimumPathDegrees": 0.18,
+      "heldMinimumExtentDegrees": 0.05,
+      "heldAxisAcquisitionDegrees": 0.12,
+      "heldQuietSpeedDegreesPerSecond": 1,
+      "reviewHeadingSegmentDegrees": 0.015,
+      "reviewMinimumExtentDegrees": 0.12,
+      "reviewMinimumTurningRadiusDegrees": 1.15,
+      "reviewRatchetDegrees": 7,
+      "reviewMotionSampleDegrees": 0.003,
+      "scope": "Smaller circle geometry and accumulated sub-segment movement; existing pointer gains, filters, sensor rate and motion-delay settings remain unchanged. Minimum reliable physical radius has not been measured.",
+      "reviewMinimumLocalRadiusDegrees": 0.08
+    }
   },
   "hud": {
     "source": "Agentic Mouse’s published Default mode",
