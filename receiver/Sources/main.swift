@@ -38,6 +38,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // pure WandPointerRouter (wand-pointer-control.swift); this class only posts.
     let pointerRouter=WandPointerRouter()
     let recenterGesture=WandRecenterGesture()
+    var recenterSuppressButtons=false
     let motionFilter=WandMotionFilter()
     let options=WandUserOptions(url:support.appendingPathComponent("feature-flags.json"))
     let flickScroll=WandFlickScroll()
@@ -309,7 +310,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
         probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true);restStopPending=false
-        recenterGesture.cancel();performPointer(pointerRouter.cancelAll());setCircleLight(false)
+        recenterGesture.cancel();recenterSuppressButtons=false;performPointer(pointerRouter.cancelAll());setCircleLight(false)
         lightMode="disconnected"
         hudSession=false;hudEntryPress=false
         finishScroll()
@@ -450,6 +451,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // The device prints each edge before the click it emits on release,
                 // so a consumed (scrolled) hold's endpoint click is dropped by order.
                 if value=="0" || value=="1" {
+                    if recognizeBottomRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
                     if controlVersion == .scrollV2 && value=="0" {finishBottomHold(now:ProcessInfo.processInfo.systemUptime)}
                     if controlVersion == .scrollV2 && appMode != "vsCode" && !scrollActive {
                         if value=="1" {
@@ -473,9 +475,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                         }
                     }
                     if value=="1" && flickScroll.active {flickScroll.reset();flickAnchor=nil;setCircleLight(false);motionFilter.reset()}
-                    let recenter=recenterGesture.edge(down:value=="1",now:ProcessInfo.processInfo.systemUptime,eligible:appMode==nil && !scrollActive && !pointerRouter.holdConsumed && buttons==0)
                     restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.bottom(down:value=="1"))
-                    if recenter {recenterPointer();queue("setMouseFollow(true);")}
                 }
             }
             if let marker=line.range(of:"@MIDDLE "){cancelCircleScroll();handleMiddle(String(line[marker.upperBound...]))}
@@ -722,10 +722,21 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         scrollActive=false;scrollAnchor=nil;scrollWatchdog?.invalidate();scrollWatchdog=nil
         if wasActive {resumeHUDNavigation()}
     }
-    /// Reposition the pointer only; preserve the known-good gyro calibration.
+    /// Bottom double tap is a global escape into pointing, not a mode action.
+    /// Keep its recognition alive when the first tap closes a HUD or scroll.
+    func recognizeBottomRecenter(down:Bool,now:Double)->Bool {
+        if down {recenterSuppressButtons=false}
+        guard recenterGesture.edge(down:down,now:now) else{return false}
+        recenterPointer();return true
+    }
+    /// Preserve gyro calibration, but clear every pointer/HUD/scroll owner.
     func recenterPointer() {
         guard ready,!restoring,AXIsProcessTrusted() else{return}
-        cancelCircleScroll();finishScroll();releaseButtons();motionFilter.reset()
+        closeHUD(reason:"bottom double tap")
+        cancelCircleScroll();finishScroll();performPointer(pointerRouter.cancelAll());releaseButtons();motionFilter.reset()
+        recenterSuppressButtons=true
+        dwell.follow(true);restDetection.pointerActivated();scheduleDwell()
+        queue("stopScroll();stopPointerTrack();scrollSuppress=false;global.wandAppMode=undefined;global.wandCircleScrolling=false;setHUDOpen(false);setMouseFollow(true);")
         let bounds=CGDisplayBounds(CGMainDisplayID())
         let point=CGPoint(x:bounds.midX,y:bounds.midY)
         CGWarpMouseCursorPosition(point)
@@ -750,7 +761,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         } else if !active {circleTimer?.invalidate();circleTimer=nil}
     }
     /// Scroll chord, HUD and speech take over: drop unshown LOW motion and any circle.
-    func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;recenterGesture.cancel();restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
+    func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;restStopPending=false;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
     func sendReview(_ requests:[WandReviewGesture.Request]){
         for request in requests {
             guard let app=NSRunningApplication.runningApplications(withBundleIdentifier:"com.microsoft.VSCode").first,
@@ -807,6 +818,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         handleFrame(x:x,y:y,b:b)
     }
     func handleFrame(x:Int,y:Int,b:Int){
+        // The device can finish an old release click after the global escape.
+        if recenterSuppressButtons && b != 0 {return}
         if controlVersion == .scrollV2 && (heldScroll.consumes(buttons:b) || pointerRouter.bottomHeld) {dwell.reset();scheduleDwell();return}
         reportCount += 1
         if reportCount == 1 { log("FIRST_DEVICE_REPORT_VALIDATED") }
@@ -831,7 +844,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard controlVersion == .scrollV2,heldScroll.active else{return}
         if down {heldScroll.confirmHeld(now:now);return}
         finishBottomHold(now:now)
-        performPointer(pointerRouter.bottom(down:false));recenterGesture.cancel()
+        performPointer(pointerRouter.bottom(down:false))
         dwell.reset();scheduleDwell();log("BOTTOM_HOLD_RECOVERED",reason)
     }
     func handleRaw(_ payload:String){

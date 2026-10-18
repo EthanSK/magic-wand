@@ -136,6 +136,7 @@ export class WandReceiverModel {
     this.hudWatchdog = null;
     this.navigationOpenedHUD = false;
     this.recenterGesture = new RecenterGesture();
+    this.recenterSuppressButtons = false;
     this.scrollActive = false;
     this.scrollX = 0;
     this.scrollY = 0;
@@ -229,8 +230,9 @@ export class WandReceiverModel {
       ["0", "1"].includes(payload.trim())
     ) {
       this.bottomHeld = payload.trim() === "1";
-      const recenter=this.recenterGesture.edge(this.bottomHeld,this.timers.now(),!this.scrollActive&&!this.pointerRouter.holdConsumed&&this.buttons===0);
-      if(recenter){this.cancelCircleScroll();this.finishScroll();this.releaseButtons();this.mac.mouse("move",{x:this.mac.width/2,y:this.mac.height/2});this.queue("setMouseFollow(true);");}
+      if(this.bottomHeld)this.recenterSuppressButtons=false;
+      const recenter=this.recenterGesture.edge(this.bottomHeld,this.timers.now());
+      if(recenter){this.closeHUD();this.cancelCircleScroll();this.finishScroll();this.releaseButtons();this.recenterSuppressButtons=true;this.bottomHeld=false;this.pointerRouter.bottom(false);this.dwell.follow(true);this.scheduleDwell();this.mac.mouse("move",{x:this.mac.width/2,y:this.mac.height/2});this.queue("stopScroll();stopPointerTrack();scrollSuppress=false;global.wandAppMode=undefined;global.wandCircleScrolling=false;setHUDOpen(false);setMouseFollow(true);");return;}
       this.dwell.reset();
       this.scheduleDwell();
       this.performPointer(this.pointerRouter.bottom(this.bottomHeld));
@@ -526,6 +528,7 @@ export class WandReceiverModel {
 
   /** One mouse report: buttons first, then relative movement from the current location. */
   handleFrame(x, y, b) {
+    if (this.recenterSuppressButtons && b !== 0) return;
     if (
       ![x, y, b].every(Number.isInteger) ||
       Math.abs(x) > 4095 ||
@@ -612,7 +615,6 @@ export class WandReceiverModel {
     }
   }
   cancelCircleScroll() {
-    this.recenterGesture.cancel();
     this.dwell.reset();
     this.scheduleDwell();
     this.performPointer(this.pointerRouter.interrupt());
