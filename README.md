@@ -72,7 +72,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Light | Shows |
 | --- | --- |
 | Updating | Receiver is updating the device code |
-| Disconnected | Dim orange |
+| Disconnected | Orange while unavailable |
 | Calibrating | Keep it still with no buttons pressed for two seconds |
 | Scrolling | Cyan |
 | App review | Green for app review; purple for VS Code file staging |
@@ -166,7 +166,9 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.55 and signed Agentic Mouse 1.0.268 keep review modes selected through HUD dismissal, preserve the HUD through screenshots and never stop dictation on table rest. Physical acceptance is pending.
+- Installed: Wand Receiver 1.2.57 and signed Agentic Mouse 1.0.270 add distinct review tap identities, brighter selected cards and an indicator above Agent Flow. Physical acceptance is pending.
+- Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
+- The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
 - HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.
 - Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.
@@ -179,7 +181,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.55 (60) · device code `wand-e1ce30d7c407` · bridge `691e21c9` · updated 18 October 2026.
+Receiver 1.2.57 (62) · device code `wand-e1ce30d7c407` · bridge `7380f996` · updated 18 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

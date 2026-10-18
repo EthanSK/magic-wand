@@ -112,3 +112,5 @@ Report any check the browser tool can’t do, such as real multitouch, rather th
   Use one runtime version selector; never silently redefine an older version or move its tag.
 
 - Before restarting Wand Receiver or Agentic Mouse, check Agent Flow automatically using its current authoritative idle probe, then recheck immediately after the restart warning and before replacement. Do not ask me whether I am finished when the app can report that itself. Busy or unknown capture state blocks the swap; do not stop recording to manufacture idle. Leave Agent Flow itself running. Table-rest detection must never stop dictation or dismiss an explicitly open wand HUD. User-requested — 2026-10-18.
+
+- Notify me in this chat and with the native heads-up before installing a new wand version. Prepare and check it first so disconnection is as short as possible. Red is only for voice recording; updates, unavailable connections and calibration use orange. User-requested — 2026-10-18.

@@ -75,7 +75,7 @@ final class WandControlTransport {
     private var persistentID = UUID().uuidString
     private var persistentSequence=0
     func persistent(_ phase:String,x:Double=0,y:Double=0) {
-        if ["open","navigate","press","dismiss"].contains(phase) {persistentID=UUID().uuidString;persistentSequence=0}
+        if ["open","navigate","press","activate","dismiss"].contains(phase) {persistentID=UUID().uuidString;persistentSequence=0}
         persistentSequence += 1
         _=send(["command":"agentic_mouse_wand_control","version":1,"phase":phase,"id":persistentID,
                 "seq":persistentSequence,"x":x,"y":y],path:agenticPath,limit:512)

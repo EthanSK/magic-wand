@@ -9,3 +9,11 @@ test('recording never flashes mouse blue, cancels legacy timers and preserves mo
  c.hudOpen=true;c.updateLights();assert.deepEqual(w.colors(),[1,.2,0]);
  c.hudOpen=false;c.moveLatched=true;c.updateLights();c.connected=false;c.updateLights();assert.equal(c.wandRecordingBlinkTimer,undefined);
 });
+test('red is exclusive to recording; unavailable and calibration states use orange',()=>{
+ const w=createWand({bridge:'readable'});w.calibrate();w.loadBridge();const c=w.ctx;
+ Object.assign(c,{connected:true,WAND_UPDATING:false,wandMotionReady:true,calibrationLit:false,moveLatched:false,hudOpen:false,scrollHeld:false,wandRecording:false});
+ for(const [key,value] of [['WAND_UPDATING',true],['calibrationLit',true],['connected',false],['wandMotionReady',false]]) {
+  const previous=c[key];c[key]=value;c.updateLights();assert.deepEqual(w.colors(),[.45,.45,.45],key);c[key]=previous;
+ }
+ c.updateLights();assert.deepEqual(w.colors(),[0,0,0]);c.wandRecording=true;c.updateLights();assert.deepEqual(w.colors(),[1,0,0]);
+});

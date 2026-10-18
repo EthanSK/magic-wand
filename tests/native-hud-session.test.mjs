@@ -127,3 +127,70 @@ print("PASS: table rest cannot stop recording or dismiss open HUD")
  const dir=mkdtempSync(join(tmpdir(),'wand-rest-'));
  try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',[join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
 });
+
+test('receiver selection taps have independent identities after navigation and previous taps', {skip:process.platform!=='darwin'},()=>{
+ const source=readFileSync(new URL('../receiver/Sources/WandControlTransport.swift',import.meta.url),'utf8');
+ const start=source.indexOf('    private var persistentID');
+ const end=source.indexOf('\n    func speech(',start);
+ assert(start>=0&&end>start);
+ const code=`import Foundation
+final class Transport {
+ let agenticPath="test-only"
+ var packets:[[String:Any]]=[]
+ func send(_ packet:[String:Any],path:String,limit:Int)->Bool {packets.append(packet);return true}
+ ${source.slice(start,end)}
+}
+let t=Transport()
+t.persistent("navigate");t.persistent("motion",x:12);t.persistent("park")
+t.persistent("activate");t.persistent("activate")
+let ids=t.packets.map{$0["id"] as! String}
+precondition(ids[0]==ids[1] && ids[1]==ids[2],"navigation packets must share identity")
+precondition(ids[3] != ids[2],"selection after navigation must not be rejected as duplicate")
+precondition(ids[4] != ids[3],"a second physical tap must be independently selectable")
+precondition(t.packets[3]["seq"] as! Int==1 && t.packets[4]["seq"] as! Int==1)
+print("PASS: real receiver generates independent selection identities")
+`;
+ const dir=mkdtempSync(join(tmpdir(),'wand-tap-id-'));
+ try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',[join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
+});
+
+test('actual UART marker handler ignores echoed source and never hides a failed upload', {skip:process.platform!=='darwin'},()=>{
+ const source=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.url),'utf8');
+ const start=source.indexOf('            if line.contains("Error")');
+ const end=source.indexOf('            if line.hasPrefix("WAND_DIAG ")',start);
+ assert(start>=0&&end>start);
+ const handler=source.slice(start,end);
+ const code=`import Foundation
+import AppKit
+func log(_ values:Any...) {}
+struct Filter {func reset(){}}
+struct Context {var isActive=false}
+final class Harness {
+ var loadingBridge=false,loadingRuntime=false,bridgeLoadFailed=false,ready=false,lightMode="",generation=0,rawLastArrival=0.0,hudSession=false
+ let commands=["PROGRAM"],modeBridge="bridge",context=Context(),motionFilter=Filter()
+ var sent:[String]=[];var loads=0
+ func queue(_ value:String){sent.append(value)}
+ func loadModeBridge(){loads+=1;loadingBridge=true}
+ func bridgeRevision(_ value:String)->String{"revision"}
+ func status(){};func syncRecordingLight(){};func resumeHUDNavigation(){}
+ func receive(_ value:String){for line in [value]{${handler}}}
+}
+let h=Harness()
+h.receive("if (...) print(\\\"WAND_NEEDS_CONFIG\\\");")
+precondition(h.sent.isEmpty)
+h.receive("WAND_NEEDS_CONFIG");h.receive(">WAND_NEEDS_CONFIG")
+precondition(h.sent == ["PROGRAM"])
+h.receive("OUT OF MEMORYUncaught SyntaxError: Got EOF expected '}'")
+h.receive("WAND_BRIDGE_READY BOTTOM=D1")
+h.receive("WAND_MODE_ROUTING_READY")
+precondition(!h.ready && h.bridgeLoadFailed)
+let valid=Harness();valid.receive(">WAND_BRIDGE_READY");precondition(valid.sent.count==1)
+valid.receive("WAND_MODE_ROUTING_READY");precondition(valid.ready)
+print("UART regression passed")
+`;
+ const dir=mkdtempSync(join(tmpdir(),'wand-uart-'));
+ try {const file=join(dir,'main.swift'),bin=join(dir,'test');writeFileSync(file,code);
+ const build=spawnSync('swiftc',[file,'-o',bin],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);
+ const run=spawnSync(bin,[],{encoding:'utf8'});assert.equal(run.status,0,run.stderr);
+ } finally {rmSync(dir,{recursive:true,force:true});}
+});
