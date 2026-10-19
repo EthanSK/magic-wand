@@ -95,6 +95,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var navStream=WandAngularStream(),moveStream=WandAngularStream(),legacyHUDStream=WandAngularStream(),scrollStream=WandAngularStream()
     var hudSession=false,hudEntryPress=false
     var hudEntryPressStarted=0.0
+    // Ethan's hold-to-show HUD: true from Middle down to Middle up while the
+    // HUD is steering. Agentic Mouse decides on release whether it stays open.
+    var middleHeld=false,hudOpenedAt=0.0
     var navX=0.0,navY=0.0,navOriginX=0.0,navOriginY=0.0,operationOriginX=0.0,operationOriginY=0.0
     var middleX=0.0,middleY=0.0
     var middleHold:Timer?, middleTap:Timer?
@@ -145,9 +148,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         displayObserver=NotificationCenter.default.addObserver(forName:NSApplication.didChangeScreenParametersNotification,object:nil,queue:.main){[weak self] _ in self?.refreshPointerDisplays()}
         context.onChange = {[weak self] active in
             guard let self,self.ready,!self.restoring else{return}
-            if !active {if self.hudSession {self.closeHUD(reason:"context ended")};return}
+            // Agentic Mouse closes the HUD after a completed action. It already
+            // knows, so this close sends no dismiss that would cut short the
+            // action's follow-up. A live Middle hold settles it on release.
+            if !active {if self.hudSession && !self.middleHeld {self.closeHUD(reason:"context ended",notifyNative:false)};return}
             guard self.acceptHUDContext else{return}
-            if !self.hudSession {self.cancelCircleScroll();self.hudSession=true;self.navStream.reset();self.navX=0;self.navY=0;self.resumeHUDNavigation()}
+            // Waiting for the next hold: show the HUD, but never steer it unheld.
+            if !self.hudSession {self.cancelCircleScroll();self.hudSession=true;self.hudOpenedAt=ProcessInfo.processInfo.systemUptime;self.navStream.reset();self.navX=0;self.navY=0}
             self.queue("if(typeof setHUDOpen==='function')setHUDOpen(true);")
         }
         context.start()
@@ -398,7 +405,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         hudSession=false;hudEntryPress=false
         finishScroll()
         controls.cancel(); hudActive = false; hudWatchdog?.invalidate(); hudWatchdog = nil
-        generation += 1; middleHold?.invalidate();middleTap?.invalidate();middleHold=nil;middleTap=nil;middleOperating=false;pointerInHUD=false;controls.persistent("dismiss");releaseButtons(); ready = false; tx = nil; chunks = []; input = ""; writing = false; configuring = false; uartPaused = false
+        generation += 1; middleHold?.invalidate();middleTap?.invalidate();middleHold=nil;middleTap=nil;middleOperating=false;pointerInHUD=false;middleHeld=false;controls.persistent("dismiss");releaseButtons(); ready = false; tx = nil; chunks = []; input = ""; writing = false; configuring = false; uartPaused = false
     }
     func reconnect() {
         if let p = device { manager.cancelPeripheralConnection(p) }
@@ -514,7 +521,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line == "WAND_MODE_ROUTING_READY" || line == ">WAND_MODE_ROUTING_READY" {
                 guard !bridgeLoadFailed else {queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();");log("BRIDGE_LOAD_REJECTED");continue}
                 loadingBridge=false;loadingRuntime=false;ready=true;motionFilter.reset();rawLastArrival=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
-                if context.isActive {hudSession=true;resumeHUDNavigation()}
+                if context.isActive {hudSession=true;hudOpenedAt=ProcessInfo.processInfo.systemUptime}
                 if let mode=selectedReviewMode {setWandShortcut(mode)}
                 queue("global.wandRawPointer=true;global.wandRawBias=undefined;global.wandRawActive=false;global.WAND_UPDATING=false;setHUDOpen("+(context.isActive ? "true":"false")+");updateLights();")
             }
@@ -587,7 +594,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if restoring && line.contains("WAND_BRIDGE_RESTORED") { log("STOPPED"); exit(0) }
         }
     }
-    // MIDDLE latches the HUD, then operates the selected native card.
+    // Legacy @MOVE card operation. Middle itself now uses the hold-to-show
+    // lifecycle in handleMiddle: hold steers, release uses the card.
     var hudDoubleClickInterval:Double {max(0.25,min(0.3,NSEvent.doubleClickInterval))}
     func handleMove(_ payload:String,project:Bool=true) {
         guard !restoring,!scrollActive,AXIsProcessTrusted() else{return}
@@ -634,23 +642,24 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     /// Close the entire wand session, including delayed clicks and app-specific state.
     /// Ignore stale positive heartbeats until a fresh physical Middle press opens it.
-    func closeHUD(reason:String) {
+    /// `notifyNative` is false when Agentic Mouse itself closed the HUD.
+    func closeHUD(reason:String,notifyNative:Bool=true) {
         finishWandShortcut(commit:false)
         hiddenReviewPending=false;hiddenReviewOperating=false
         screenshotHUD=false
         acceptHUDContext=false
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil
-        hudSession=false;hudEntryPress=false;hudActive=false;pointerInHUD=false;middleOperating=false;navigationOpenedHUD=false
+        hudSession=false;hudEntryPress=false;hudActive=false;pointerInHUD=false;middleOperating=false;navigationOpenedHUD=false;middleHeld=false
         middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
-        stopHUDWatchdog();controls.persistent("dismiss")
+        stopHUDWatchdog();if notifyNative {controls.persistent("dismiss")}
         queue("global.wandAppMode=undefined;setHUDOpen(false);updateLights();")
         log("HUD_CLOSED",reason)
     }
     func setScreenshotActive(_ active:Bool) {
         screenshotActive=active
         if !active,screenshotHUD {
-            screenshotHUD=false;hudSession=true;acceptHUDContext=true
-            queue("setMouseFollow(false);setHUDOpen(true);");resumeHUDNavigation()
+            screenshotHUD=false;hudSession=true;acceptHUDContext=true;hudOpenedAt=ProcessInfo.processInfo.systemUptime
+            queue("setMouseFollow(false);setHUDOpen(true);")
         }
     }
     func enterPointerMode(){
@@ -672,22 +681,33 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 return
             }
             if now-middleLastRelease<=hudDoubleClickInterval {
+                // Double click still dismisses, cancelling the first tap's pending use.
                 middleLastRelease = -100;middleDoubleConsumed=true
                 middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
                 closeHUD(reason:"middle double click")
                 return
             }
+            // A session Agentic Mouse no longer shows (it quit or lost the
+            // lease) is stale: start a fresh HUD instead of steering nothing.
+            if hudSession && !context.isActive && now-hudOpenedAt>1 {closeHUD(reason:"context missing",notifyNative:false);acceptHUDContext=true}
+            if let pending=middleTap {
+                // A tap whose double-click window just ended: use it now, before
+                // this new hold, rather than lose it to a late timer.
+                pending.invalidate();middleTap=nil
+                if hudSession,acceptHUDContext,context.isActive {controls.persistent("activate");log("HUD_TAP_USED")}
+            }
+            middleHeld=true;hudEntryPress=false
             if !hudSession {
-                acceptHUDContext=true;navStream.reset();
-                hudSession=true;hudEntryPress=true;hudEntryPressStarted=ProcessInfo.processInfo.systemUptime;navigationOpenedHUD=true;navX=0;navY=0
+                // Holding Middle shows the HUD and steers it from Switch App.
+                acceptHUDContext=true;navStream.reset()
+                hudSession=true;hudOpenedAt=now;navigationOpenedHUD=true;navX=0;navY=0
                 controls.persistent("open");resumeHUDNavigation()
                 queue("setHUDOpen(true);")
                 return
             }
-            hudSession=true;hudEntryPress=false
-            if hudActive {controls.persistent("park");hudActive=false;stopHUDWatchdog()}
-            operationOriginX=navX;operationOriginY=navY
-            handleMove("B,0,0",project:false)
+            // The HUD stayed open for more: steer its page, or adjust the card
+            // the last release armed. Agentic Mouse knows which.
+            resumeHUDNavigation()
         case "0":
             if middleReviewExit {
                 middleReviewExit=false
@@ -715,19 +735,32 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             }
             finishWandShortcut(commit:true)
             if middleDoubleConsumed {middleDoubleConsumed=false;return}
-            middleLastRelease=ProcessInfo.processInfo.systemUptime-middlePressedAt<0.14 ? ProcessInfo.processInfo.systemUptime : -100
-            if hudEntryPress {
-                hudEntryPress=false;navigationOpenedHUD=false
-                // Firmware delays a held Middle down by 80 ms to arbitrate the scroll chord.
-                // A short entry tap latches navigation; a >=220 ms physical hold selects on up.
-                if ProcessInfo.processInfo.systemUptime-hudEntryPressStarted >= 0.22-0.08 {
-                    controls.persistent("park");hudActive=false;stopHUDWatchdog()
-                    controls.persistent("activate")
-                    resumeHUDNavigation();log("HUD_ENTRY_HOLD_SELECTED")
-                }
-                return
+            guard middleHeld else{return}
+            middleHeld=false;navigationOpenedHUD=false
+            // Firmware delays a held Middle down by 80 ms to arbitrate the scroll
+            // chord, so under 140 ms here is a physical tap under 220 ms.
+            let now=ProcessInfo.processInfo.systemUptime
+            let tap=now-middlePressedAt<0.14
+            middleLastRelease=tap ? now : -100
+            if hudActive {
+                hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY)
+                controls.persistent("park")
             }
-            handleMove("E,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000),project:false)
+            hudActive=false;stopHUDWatchdog()
+            if tap {
+                // A tap uses the outlined card once the double-click window
+                // passes, so a double click can still dismiss without acting.
+                middleTap=Timer.scheduledTimer(withTimeInterval:hudDoubleClickInterval,repeats:false){[weak self] _ in
+                    guard let self else{return};self.middleTap=nil
+                    guard self.hudSession,self.acceptHUDContext,self.context.isActive,!self.restoring else{return}
+                    self.controls.persistent("activate");log("HUD_TAP_USED")
+                }
+            } else {
+                // Releasing a hold uses the outlined card at once; a card that
+                // needs more motion is armed for the next hold instead.
+                controls.persistent("choose");log("HUD_HOLD_RELEASED")
+                if !context.isActive && now-hudOpenedAt>1 {closeHUD(reason:"context missing",notifyNative:false)}
+            }
         default:break
         }
     }
@@ -1090,7 +1123,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // for the whole press, including entry and the card's hold threshold.
         // Returning the unchanged point discards motion instead of replaying it
         // on release; an open, unheld HUD and independent review stay separate.
-        guard !(hudSession && (hudEntryPress || pointerInHUD)) else{return point}
+        guard !(hudSession && (middleHeld || hudEntryPress || pointerInHUD)) else{return point}
         let newPoint=WandPointerBounds.clamp(CGPoint(x:point.x+CGFloat(dx),y:point.y+CGFloat(dy)),to:pointerDisplays)
         let kind:CGEventType = buttons & 1 != 0 ? .leftMouseDragged : (buttons & 2 != 0 ? .rightMouseDragged : .mouseMoved)
         let button:CGMouseButton = buttons & 1 != 0 ? .left : (buttons & 2 != 0 ? .right : .left)

@@ -691,6 +691,14 @@ picture on the old grid hit map. Cache label geometry and measured typography
 per layout/title set, not on every pointer update. Inspect crowded and odd-count
 wheels as well as the default layout.
 
+Keep the focus outline as one animatable shape across the centre and ring, rather
+than changing view identity and fading it. Test very small steps at both ends of
+the morph as well as coarse intermediate frames: a full inward pull just below
+the ring endpoint produced a visible 14-point jump. Ease the pull itself with
+the morph. For readable radial labels, measure whole lines against the wedge at
+each height and cache the resulting plan; rectangular fitting alone made long
+labels shrink the whole wheel. Keep a cold-plan timing check alongside renders.
+
 ## Contextual holds must settle before input
 
 A Bottom hold starts an off-thread, bounded Accessibility hit test. Only a
