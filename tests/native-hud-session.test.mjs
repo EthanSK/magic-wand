@@ -22,6 +22,14 @@ test('native HUD close cancels actions, rejects stale context and closes any chi
  const code=`import Foundation
 func AXIsProcessTrusted()->Bool {true}
 func log(_ parts:Any...) {}
+enum CGEventType {case leftMouseDragged,rightMouseDragged,mouseMoved}
+enum CGMouseButton {case left,right}
+enum EventTap {case cghidEventTap}
+final class CGEvent {
+ static var posted=0
+ init?(mouseEventSource:Int?,mouseType:CGEventType,mouseCursorPosition:CGPoint,mouseButton:CGMouseButton){}
+ func post(tap:EventTap){Self.posted+=1}
+}
 final class Context {var isActive=false,isFresh=true;var onChange:((Bool)->Void)?;var onModeChange:((String?)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
 final class Application {var bundleIdentifier="com.microsoft.VSCode"}
 final class NSWorkspace {static let shared=NSWorkspace();var frontmostApplication:Application?=Application()}
@@ -32,6 +40,7 @@ final class Harness {
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter(),reviewTrace=Trace()
  var deskSleep=WandDeskSleep()
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
+ var buttons=0,movementCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1000,height:1000)]
  var selectedReviewMode:String?,hiddenReviewOperating=false,hiddenReviewPending=false,screenshotActive=false,screenshotHUD=false
  var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleSecondTap=false,navigationOpenedHUD=false
  var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
@@ -53,7 +62,7 @@ final class Harness {
  func releaseButtons(){}
  init(){${callback}
 ${modeCallback}}
- ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog'].map(method).join('\n')}
+ ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 let h=Harness()
@@ -125,6 +134,31 @@ asleep.hudLastUpdate=Date.distantPast;settle(1)
 precondition(asleep.hudSession && asleep.hudActive,"sleep stops NAV heartbeat without closing the HUD")
 asleep.deskSleep.reset();asleep.closeHUD(reason:"test done")
 let independent=Harness();independent.hudSession=true;independent.enterPointerMode();precondition(independent.hudSession,"Bottom leaves Middle HUD alone")
+
+// Ethan's "switch app button" is Middle operating the selected HUD card.
+// Use the real pointer posting and Middle/navigation handlers with inert events.
+let switching=Harness(),anchor=CGPoint(x:400,y:400)
+precondition(switching.postPointerMove(dx:20,dy:10,from:anchor)==CGPoint(x:420,y:410))
+switching.handleMiddle("1")
+let entryPosts=CGEvent.posted
+for _ in 0..<100 {precondition(switching.postPointerMove(dx:30,dy:-15,from:anchor)==anchor,"Middle entry hold freezes an already-following pointer")}
+switching.handleNavigation("10000,0")
+precondition(CGEvent.posted==entryPosts && switching.controls.phases.last=="motion","entry still delivers horizontal HUD navigation without moving the pointer")
+switching.hudEntryPressStarted-=0.15;switching.handleMiddle("0")
+precondition(switching.postPointerMove(dx:-20,dy:10,from:anchor)==CGPoint(x:380,y:410),"release resumes new pointer movement without replaying the held sweep")
+switching.middleLastRelease = -100;switching.handleMiddle("1")
+let pressPosts=CGEvent.posted
+precondition(switching.pointerInHUD && switching.postPointerMove(dx:60,dy:40,from:anchor)==anchor,"freeze begins before the card hold qualifies")
+settle(0.24)
+switching.handleNavigation("-20000,0");switching.handleNavigation("20000,0")
+precondition(switching.middleOperating && switching.controls.phases.contains("press") && switching.controls.phases.last=="motion","left and right held-card input remains active")
+precondition(switching.postPointerMove(dx:100,dy:100,from:anchor)==anchor && CGEvent.posted==pressPosts,"held Switch App cannot move or drag the pointer")
+switching.handleMiddle("0")
+precondition(!switching.pointerInHUD && switching.postPointerMove(dx:5,dy:0,from:anchor)==CGPoint(x:405,y:400),"Middle release restores pointing even while the HUD stays open")
+switching.middleLastRelease = -100;switching.handleMiddle("1");switching.closeHUD(reason:"context ended")
+precondition(switching.postPointerMove(dx:7,dy:0,from:anchor)==CGPoint(x:407,y:400),"cancelled HUD hold cannot leave the pointer frozen")
+let independentReview=Harness();independentReview.selectedReviewMode="changes";independentReview.handleMiddle("1")
+precondition(independentReview.postPointerMove(dx:8,dy:0,from:anchor)==CGPoint(x:408,y:400),"independent review commit holds retain the Bottom pointer lane")
 
 print("PASS: screenshot HUD preservation, hidden review hold, native full close, stale input rejection, delayed click cancellation, fresh reopen, watchdog teardown")
 `;

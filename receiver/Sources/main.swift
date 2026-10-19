@@ -1002,6 +1002,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     @discardableResult
     func postPointerMove(dx:Int,dy:Int,from point:CGPoint)->CGPoint {
+        // Ethan's "switch app button": Middle operates the selected HUD card.
+        // Keep horizontal card input, but drop concurrent mouse-mode movement
+        // for the whole press, including entry and the card's hold threshold.
+        // Returning the unchanged point discards motion instead of replaying it
+        // on release; an open, unheld HUD and independent review stay separate.
+        guard !(hudSession && (hudEntryPress || pointerInHUD)) else{return point}
         let newPoint=WandPointerBounds.clamp(CGPoint(x:point.x+CGFloat(dx),y:point.y+CGFloat(dy)),to:pointerDisplays)
         let kind:CGEventType = buttons & 1 != 0 ? .leftMouseDragged : (buttons & 2 != 0 ? .rightMouseDragged : .mouseMoved)
         let button:CGMouseButton = buttons & 1 != 0 ? .left : (buttons & 2 != 0 ? .right : .left)
