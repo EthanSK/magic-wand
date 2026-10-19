@@ -715,3 +715,15 @@ at confirmed rest, clear that remembered choice on explicit Bottom input, and
 let the recording-start pause take precedence. If recording ends while the wand
 is still resting, defer restoration until pickup. Keep HUD and recording state
 out of rest ownership. Native tests cover prior ON/OFF and intervening choices.
+
+## A visible HUD owns its placement until it closes
+
+The wand presenters previously polled Agent Flow window bounds every 250 ms and moved their panels whenever those bounds changed. Startup/transient recorder windows could therefore move an active target. Capture recorder clearance once per visible HUD lifetime, share the placement helper with the review indicator, and refresh on reopening or display reconfiguration. This is a visual anchoring policy; it adds no pointer buffering. Synthetic regressions cover large/compact/disappearing recorder frames while an anchor remains active. A live Agent Flow start was not forced during ongoing dictation.
+
+## Tilt only where it earns readable space
+
+A wedge-aligned title should remain upright and use a gentle exact card angle.
+Prefer flat text when the tilted result is not both 1.5 pt and 10% larger; tall
+slanted paragraphs remain flat. Measure each final rotated text box against the
+actual wedge and keep the normal physical-mouse grid untouched. Cache the final
+plan so pointer-focus updates do not redo the typography search.
