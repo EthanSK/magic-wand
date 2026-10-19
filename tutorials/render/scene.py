@@ -278,7 +278,7 @@ class Timeline:
                 self.aim_segments.append((t, end, _line(aim, target, action.get("ease", "inOut"))))
                 aim = target
             if "circle" in action:
-                fn, aim = _circle(aim, action["circle"], action.get("turns", 1), action.get("radius", 6))
+                fn, aim = _circle(aim, action["circle"], action.get("turns", 1), action.get("radius", 6), action.get("startAngle", -90))
                 self.aim_segments.append((t, end, fn))
             if "nudge" in action:
                 self.aim_segments.append((t, end, _nudge(aim, action["nudge"])))
@@ -379,13 +379,15 @@ def _line(start, end, kind):
     return fn
 
 
-def _circle(start, direction, turns, radius):
-    # Screen coordinates (y down): increasing angle draws clockwise. Start at the circle's top.
-    centre = (start[0], start[1] + radius)
+def _circle(start, direction, turns, radius, start_angle=-90):
+    # Ethan's north->east / east->north examples share the same centre.
+    # Screen coordinates (y down): increasing angle draws clockwise.
+    initial = math.radians(start_angle)
+    centre = (start[0] - radius * math.cos(initial), start[1] - radius * math.sin(initial))
     sign = 1 if direction == "cw" else -1
 
     def fn(u):
-        angle = -math.pi / 2 + sign * 2 * math.pi * turns * u
+        angle = initial + sign * 2 * math.pi * turns * u
         return (centre[0] + radius * math.cos(angle), centre[1] + radius * math.sin(angle))
     return fn, fn(1.0)
 

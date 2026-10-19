@@ -40,3 +40,21 @@ test('drag demonstration keeps the two presses within the actual double-tap wind
  assert.ok(time(held)-time(tap)>.14,'first press must release before second begins');
  assert.ok(time(held)-time(tap)-.14<.3,'second press must begin within the receiver double-tap window');
 });
+
+test('quarter-turn illustrations preserve their centre when reversing', () => {
+ const source = `import sys, math
+sys.path.insert(0, 'tutorials/render')
+from scene import _circle
+def same(a,b):
+ assert math.dist(a,b)<1e-8,(a,b)
+f,e=_circle((0,-6),'cw',0.25,6)
+same(e,(6,0))
+f,e=_circle(e,'ccw',0.25,6,0)
+same(e,(0,-6))
+f,e=_circle((0,-6),'ccw',0.25,6)
+same(e,(-6,0))
+print('PASS quarter-turn illustrations')
+`;
+ const r=spawnSync('python3',['-c',source],{cwd:root,encoding:'utf8'});
+ assert.equal(r.status,0,r.stdout+r.stderr);
+});

@@ -782,58 +782,75 @@ struct WandReviewExitGesture {
 /// This only turns a circular wand path into ratchets. Better Git owns preview/staging.
 /// Screen coordinates: positive Y points down, so positive winding is clockwise.
 struct WandReviewCircle {
+    // Ethan's "north to east" is one clockwise quarter-turn, not seven degrees
+    // of pointer travel. Radius/speed must not change the number of review steps.
+    static let quarterTurn = Double.pi / 2
+    static let turnTolerance = Double.pi / 9 // 20 degrees for rough/sampled endpoints.
+    static let reversalTurn = Double.pi / 9
+    static let minimumExtent = 0.08, minimumPath = 0.15, minimumRadius = 0.08
     var isCircling: Bool { direction != 0 }
-    private var heading:Double?,lastTime=0.0,turn=0.0,arc=0.0,headingRun=0.0
-    private var candidate=0,segments=0,direction=0
+    private var heading:Double?,lastTime=0.0,headingRun=0.0
+    private var progress=0.0,oppositeTurn=0.0,path=0.0
+    private var direction=0
     private var pendingX=0.0,pendingY=0.0,x=0.0,y=0.0
     private var minX=0.0,maxX=0.0,minY=0.0,maxY=0.0
     mutating func reset(){self=Self()}
     mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
         guard dx.isFinite,dy.isFinite,now.isFinite else{reset();return 0}
-        if lastTime>0 && now-lastTime>0.35 {reset()}
+        if lastTime>0 && now-lastTime>0.6 {reset()}
         guard hypot(dx,dy)<30 else{reset();return 0}
         if dx != 0 || dy != 0 {lastTime=now}
-        // Accumulate rather than discard sub-segment motion. Opposing jitter
-        // cancels; a slow small circle still reaches the same heading sampler.
         pendingX+=dx;pendingY+=dy
         let distance=hypot(pendingX,pendingY)
         guard distance>=0.015 else{return 0}
-        x+=pendingX;y+=pendingY
+        x+=pendingX;y+=pendingY;path+=distance
         minX=min(minX,x);maxX=max(maxX,x);minY=min(minY,y);maxY=max(maxY,y)
         let next=atan2(pendingY,pendingX);pendingX=0;pendingY=0
-        defer{heading=next}
-        guard let previous=heading else{headingRun=distance;return 0}
+        guard let previous=heading else{heading=next;headingRun=distance;return 0}
         var delta=next-previous
         while delta>Double.pi{delta-=2*Double.pi}
         while delta < -Double.pi{delta+=2*Double.pi}
         let previousRun=headingRun
-        // A diamond corner concentrates its turn into one short sample. Judge
-        // its size from the preceding straight edge, not that sample alone.
+        heading=next
         if abs(delta)<0.2 {headingRun+=distance} else {headingRun=distance}
-        // A sharp cusp is a changed stroke, not evidence of a circle.
-        if abs(delta)>2.35 {turn=0;segments=0;candidate=0;arc=0;minX=x;maxX=x;minY=y;maxY=y;return 0}
+        // An about-face is a return stroke, not a clockwise/anticlockwise corner.
+        if abs(delta)>2.35 {
+            direction=0;progress=0;oppositeTurn=0;path=0
+            minX=x;maxX=x;minY=y;maxY=y
+            return 0
+        }
         if abs(delta)>0.008 {
+            // Small, bounded wobble cannot inherit a previous genuine turn. A rough
+            // diamond corner uses its preceding edge rather than one tiny sample.
+            let cornerLength=abs(delta)>=0.65 ? max(distance,min(previousRun,0.3)):distance
+            guard cornerLength/abs(delta)>=Self.minimumRadius else{return 0}
             let sign=delta>0 ? 1 : -1
-            if candidate != sign {candidate=sign;turn=0;segments=0;minX=x;maxX=x;minY=y;maxY=y}
-            turn+=abs(delta);segments+=1
-            if direction != sign {
-                arc=0
-                guard turn>=Double.pi/6 && segments>=3,
-                      maxX-minX>=0.12,maxY-minY>=0.12 else{return 0}
-                direction=sign
+            if direction==0 {
+                direction=sign;progress=Self.turnTolerance+abs(delta)
+            } else if direction==sign {
+                progress+=abs(delta);oppositeTurn=max(0,oppositeTurn-abs(delta))
+            } else {
+                // Signed cancellation prevents alternating heading jitter from adding
+                // steps. A deliberate reverse earns its own first-quarter tolerance.
+                progress-=abs(delta);oppositeTurn+=abs(delta)
+                if oppositeTurn>=Self.reversalTurn {
+                    direction=sign;progress=Self.turnTolerance+oppositeTurn;oppositeTurn=0
+                }
             }
         }
-        guard direction != 0 else{return 0}
-        // A tiny, sharp heading wobble must not inherit the gain of the last
-        // real circle. This checks local curvature, without fitting a centre.
-        let cornerLength=abs(delta)>=0.65 ? max(distance,min(previousRun,0.3)):distance
-        if abs(delta)>0.008 && cornerLength/abs(delta)<0.08 {return 0}
-        // Keep seven-degree ratchets for ordinary circles. For Ethan's
-        // "micro circles", coherent turning supplies at least one ratchet per
-        // full turn, without accelerating straight motion or changing pointing.
-        arc+=max(distance,delta*Double(direction)>0 ? abs(delta)*1.15:0)
-        let count=min(6,Int(arc/7));arc-=Double(count)*7
-        return Int32(count*direction)
+        guard maxX-minX>=Self.minimumExtent,maxY-minY>=Self.minimumExtent,
+              path>=Self.minimumPath else {
+            // Unqualified noise must not save a backlog of hidden steps which
+            // could spill out when the next genuine movement starts.
+            progress=min(progress,Self.quarterTurn)
+            return 0
+        }
+        guard progress+1e-9>=Self.quarterTurn else{return 0}
+        // One report can only cross one qualified quarter. Keep the angular
+        // remainder so a continuous full loop produces four, not extra jumps.
+        progress-=Self.quarterTurn
+        path=0;minX=x;maxX=x;minY=y;maxY=y
+        return Int32(direction)
     }
 }
 

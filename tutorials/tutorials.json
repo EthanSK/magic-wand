@@ -1086,11 +1086,12 @@
         "next change",
         "better git",
         "circle",
-        "nudge",
         "stage",
-        "commit set"
+        "commit set",
+        "quarter-turn",
+        "diamond"
       ],
-      "summary": "Choose Review changes, circle through changes, hold Middle to stage the set.",
+      "summary": "Choose Review changes, quarter-turn through changes, hold Middle to stage the set.",
       "buttons": ["middle"],
       "base": "vscode",
       "initial": {"pointer": [0.8, 0.2], "app": "VS Code", "hud.vscode": true},
@@ -1101,8 +1102,8 @@
       "steps": [
         "Open the HUD",
         "Choose Review changes",
-        "Circle to move",
-        "Nudge to step",
+        "Turn to move",
+        "Quarter-turn to step",
         "Hold Middle to stage",
         "Tap Middle to exit"
       ],
@@ -1132,31 +1133,30 @@
           ]
         },
         {
-          "text": "With no button held, circle clockwise for the next change and anticlockwise for the previous one.",
+          "text": "With no button held, a clockwise quarter-turn goes to the next change. Turn anticlockwise to go back one.",
           "step": 2,
           "actions": [
-            {"at": 0.04, "to": 0.5, "circle": "cw", "turns": 1, "radius": 6},
-            {"at": 0.26, "set": {"review.pos": 1}},
-            {"at": 0.48, "set": {"review.pos": 2}},
-            {"at": 0.56, "to": 0.92, "circle": "ccw", "turns": 0.8, "radius": 6},
-            {"at": 0.86, "set": {"review.pos": 1}}
+            {"at": 0.04, "to": 0.4, "circle": "cw", "turns": 0.25, "radius": 6},
+            {"at": 0.4, "set": {"review.pos": 1}},
+            {"at": 0.56, "to": 0.92, "circle": "ccw", "turns": 0.25, "radius": 6, "startAngle": 0},
+            {"at": 0.92, "set": {"review.pos": 0}}
           ]
         },
         {
-          "text": "After a pause, a quick nudge down or up moves one change forward or back.",
+          "text": "Up to right moves forward one. Right to up moves back one. A full circle moves four changes.",
           "step": 3,
           "actions": [
-            {"at": 0.3, "to": 0.44, "nudge": "down"},
-            {"at": 0.46, "set": {"review.pos": 2}},
-            {"at": 0.68, "to": 0.82, "nudge": "up"},
-            {"at": 0.84, "set": {"review.pos": 1}}
+            {"at": 0.08, "to": 0.38, "circle": "cw", "turns": 0.25, "radius": 6},
+            {"at": 0.38, "set": {"review.pos": 1}},
+            {"at": 0.55, "to": 0.85, "circle": "ccw", "turns": 0.25, "radius": 6, "startAngle": 0},
+            {"at": 0.85, "set": {"review.pos": 0}}
           ]
         },
         {
           "text": "Files you finish join the set. Hold Middle for about half a second to stage them and keep reviewing.",
           "step": 4,
           "actions": [
-            {"at": 0.02, "to": 0.34, "circle": "cw", "turns": 1.2, "radius": 6},
+            {"at": 0.02, "to": 0.34, "circle": "cw", "turns": 0.75, "radius": 6},
             {"at": 0.12, "set": {"review.pos": 2}},
             {"at": 0.22, "set": {"review.pos": 3}},
             {"at": 0.32, "set": {"review.pos": 4}},
@@ -1198,18 +1198,18 @@
             "generated": "2026-10-19"
           },
           {
-            "file": "tutorials/narration/review-changes/03-3ae9362bde.mp3",
-            "textSha256": "3ae9362bde54bbad484ba6cad319cdaa86287f10dedaf182fdab04f694ed0786",
-            "seconds": 5.094,
-            "wordsPerMinute": 188,
+            "file": "tutorials/narration/review-changes/03-8a288a32ef.mp3",
+            "textSha256": "8a288a32ef943601be7953e9a4307914d5f3b944d65064917867f4665185d228",
+            "seconds": 6.661,
+            "wordsPerMinute": 162,
             "model": "Eleven v4",
             "generated": "2026-10-19"
           },
           {
-            "file": "tutorials/narration/review-changes/04-8d2e8827d6.mp3",
-            "textSha256": "8d2e8827d6ab2b3940477fa0722afd0e2f6facf931dc5739c8f1b8bf0096044d",
-            "seconds": 4.31,
-            "wordsPerMinute": 209,
+            "file": "tutorials/narration/review-changes/04-65dfb9c8c1.mp3",
+            "textSha256": "65dfb9c8c1845bd2f5782866515a705ea608d09464543f9aade91fb52dddf116",
+            "seconds": 7.262,
+            "wordsPerMinute": 149,
             "model": "Eleven v4",
             "generated": "2026-10-19"
           },
@@ -1236,26 +1236,26 @@
         "poster": "docs/how-to/videos/review-changes.jpg",
         "captions": "docs/how-to/videos/review-changes.vtt",
         "transcript": "docs/how-to/transcripts/review-changes.txt",
-        "duration": 31.07,
+        "duration": 35.57,
         "codecs": ["aac", "h264"],
         "size": [1280, 720],
         "beats": [
           {"start": 0.9, "end": 5.863},
           {"start": 6.313, "end": 11.067},
-          {"start": 11.517, "end": 16.611},
-          {"start": 17.061, "end": 21.371},
-          {"start": 21.821, "end": 26.837},
-          {"start": 27.287, "end": 29.638}
+          {"start": 11.517, "end": 18.178},
+          {"start": 18.628, "end": 25.89},
+          {"start": 26.34, "end": 31.356},
+          {"start": 31.806, "end": 34.157}
         ],
         "sha256": {
-          "video": "23a6ad9ec9c6bea659c42a88c8747d87f0ddcd9ba8047e9bba7d50d85ec10ff9",
+          "video": "2c601dbbb82158acf2911835a1c47981725d4a619fb1a11d9e03f117058d77e7",
           "poster": "b3127ca01307ce93a531f24e14d538d3793265732778b38cbc69c97b45854a43",
-          "captions": "1484f2c4cb38693f2e26d1f92d0ae43488587ec81785a6ee72420fd7954e1924",
-          "transcript": "52bf651cba4043eab12a1f53739411c4c8bfefe4bb180981664bac13b1336d71"
+          "captions": "698e205b2bfca54f2f127714fa4f42bc4d1e1d6c68ec3f7e25b783f29bd8d73b",
+          "transcript": "a344da3fcba4947020d69a8e136cf1e8d122db6929ce236e19feaf1375ce025d"
         },
-        "controlFingerprint": "44ca53e43cfd34fe0eac4fd08744b56656fee0d5e6b4b4b984f7fba28cf3500c",
-        "storyboardFingerprint": "82f7717dcc5fd80f9870ebc495006c164411417bd5c4d9e03dc3cf284560d41e",
-        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "controlFingerprint": "072ecd243c2beb1368f2692fb6a877bb2cd47e2e66ae1f7697bd732b4424f8d7",
+        "storyboardFingerprint": "33c8baf7956aa723075c8374c17034196c80432f96006969374fa95d4da942f2",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.71 (76)", "controlVersion": 2},
         "renderer": "tutorials/render/render.py",
         "rendered": "2026-10-19"
       }
@@ -1280,7 +1280,8 @@
         "git",
         "better git",
         "circle",
-        "nudge"
+        "quarter-turn",
+        "diamond"
       ],
       "summary": "Choose Stage files, circle to build a set, hold Middle to stage it.",
       "buttons": ["middle"],
@@ -1294,7 +1295,7 @@
         "Open the HUD",
         "Choose Stage files",
         "Circle to select",
-        "Nudge to step",
+        "Quarter-turn to step",
         "Hold Middle to stage",
         "Tap Middle to exit"
       ],
@@ -1318,20 +1319,25 @@
           ]
         },
         {
-          "text": "Circle clockwise to add the next file to the set, or anticlockwise to drop the last one.",
+          "text": "A clockwise quarter-turn moves to the next file. Turn anticlockwise to go back one file.",
           "step": 2,
           "actions": [
-            {"at": 0.04, "to": 0.5, "circle": "cw", "turns": 1, "radius": 6},
-            {"at": 0.26, "set": {"review.pos": 1}},
-            {"at": 0.48, "set": {"review.pos": 2}},
-            {"at": 0.58, "to": 0.92, "circle": "ccw", "turns": 0.6, "radius": 6},
-            {"at": 0.86, "set": {"review.pos": 1}}
+            {"at": 0.04, "to": 0.4, "circle": "cw", "turns": 0.25, "radius": 6},
+            {"at": 0.4, "set": {"review.pos": 1}},
+            {"at": 0.56, "to": 0.92, "circle": "ccw", "turns": 0.25, "radius": 6, "startAngle": 0},
+            {"at": 0.92, "set": {"review.pos": 0}}
           ]
         },
         {
-          "text": "After a pause, a quick nudge down or up moves one file.",
+          "text": "Each quarter-turn moves one file. Two clockwise quarter-turns move forward two. Reverse to go back one.",
           "step": 3,
-          "actions": [{"at": 0.36, "to": 0.52, "nudge": "down"}, {"at": 0.54, "set": {"review.pos": 2}}]
+          "actions": [
+            {"at": 0.04, "to": 0.54, "circle": "cw", "turns": 0.5, "radius": 6},
+            {"at": 0.29, "set": {"review.pos": 1}},
+            {"at": 0.54, "set": {"review.pos": 2}},
+            {"at": 0.65, "to": 0.92, "circle": "ccw", "turns": 0.25, "radius": 6, "startAngle": 90},
+            {"at": 0.92, "set": {"review.pos": 1}}
+          ]
         },
         {
           "text": "Hold Middle for about half a second to stage the whole set. You stay in Stage files, ready for the next one.",
@@ -1367,18 +1373,18 @@
             "generated": "2026-10-19"
           },
           {
-            "file": "tutorials/narration/stage-files/02-7f5fceed2b.mp3",
-            "textSha256": "7f5fceed2b68492dbf07e5fa541ff0ef4cb2083144ac5593256032a2677c5422",
-            "seconds": 4.65,
-            "wordsPerMinute": 219,
+            "file": "tutorials/narration/stage-files/02-9a0efc57b0.mp3",
+            "textSha256": "9a0efc57b025bf9dcb746866acab5e8b14ae259e000efad27dbfd345bda27796",
+            "seconds": 6.06,
+            "wordsPerMinute": 149,
             "model": "Eleven v4",
             "generated": "2026-10-19"
           },
           {
-            "file": "tutorials/narration/stage-files/03-3c506d1e60.mp3",
-            "textSha256": "3c506d1e6035bc1f3cd41b52665b80a791ae4d659783f4c550c0f4a89ef1300c",
-            "seconds": 3.291,
-            "wordsPerMinute": 219,
+            "file": "tutorials/narration/stage-files/03-b8a2474388.mp3",
+            "textSha256": "b8a2474388e32b8cd30dffd62a59f2108f61d9b6daa66dcb62c6aa5e98905dec",
+            "seconds": 7.34,
+            "wordsPerMinute": 131,
             "model": "Eleven v4",
             "generated": "2026-10-19"
           },
@@ -1405,25 +1411,25 @@
         "poster": "docs/how-to/videos/stage-files.jpg",
         "captions": "docs/how-to/videos/stage-files.vtt",
         "transcript": "docs/how-to/transcripts/stage-files.txt",
-        "duration": 26.03,
+        "duration": 31.5,
         "codecs": ["aac", "h264"],
         "size": [1280, 720],
         "beats": [
           {"start": 0.9, "end": 7.64},
-          {"start": 8.09, "end": 12.74},
-          {"start": 13.19, "end": 16.481},
-          {"start": 16.931, "end": 22.077},
-          {"start": 22.527, "end": 24.617}
+          {"start": 8.09, "end": 14.15},
+          {"start": 14.6, "end": 21.94},
+          {"start": 22.39, "end": 27.536},
+          {"start": 27.986, "end": 30.076}
         ],
         "sha256": {
-          "video": "c1ebd1ee63076cc00e473d782ffafeeee6a90f4d00d53ea87579fb7b2046ffbf",
-          "poster": "f4dd6718c83d0cf76d73d4f797c60a33a99697bee403871ea7db0f5cbecb2462",
-          "captions": "72f26e5b31cd685a62059a77e6728e3fb199b4e3beaae2837f9d209782ac907d",
-          "transcript": "afbe92e96c347c0ff70677195dd089b42c3ae3e0654fcbc0687260cb29f83ca5"
+          "video": "99e7f9ee5278a4d240395c5c3fd714389051778cdeed6b197261d669c243f392",
+          "poster": "9c43fffe05f3d0f3c089120e7112023d9297a2658e2d37a399d29344763b112c",
+          "captions": "89b6d37a61b8ab2545d9fa605880be33c3a92f16612a3a5a85fb6f330f884664",
+          "transcript": "d504ee760d75787212fc01b4070f93b54a6db3b3d1cc070c121cb4f0857f63c0"
         },
-        "controlFingerprint": "44ca53e43cfd34fe0eac4fd08744b56656fee0d5e6b4b4b984f7fba28cf3500c",
-        "storyboardFingerprint": "f552e7db37340fa0c398555da15929abf623479467b2cb11229e9f9ba9faf8ae",
-        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "controlFingerprint": "072ecd243c2beb1368f2692fb6a877bb2cd47e2e66ae1f7697bd732b4424f8d7",
+        "storyboardFingerprint": "26daba2eabbad3673973228c0e87d87d771df34bd14abeb2d1b493b701189d95",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.71 (76)", "controlVersion": 2},
         "renderer": "tutorials/render/render.py",
         "rendered": "2026-10-19"
       }
