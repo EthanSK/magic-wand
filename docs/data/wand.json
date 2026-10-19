@@ -7,13 +7,13 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.67",
-    "receiverBuild": "72",
+    "receiver": "1.2.68",
+    "receiverBuild": "73",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "da9327f3342fe74dbe2fcaaea24514ab50919e73b29022e6ea969d24909c1874"
   },
   "status": [
-    "Installed: Wand Receiver 1.2.67 adds smaller up/down review flicks that retain their original direction on spring-back. Micro circles, ordinary circle speed and pointer filtering are preserved. Automated checks passed; physical acceptance is pending.",
+    "Installed: Wand Receiver 1.2.68 adds an optional nod/shake review control, left off. Current circle/flick controls remain selected; smaller-circle and small-flick checks pass. Physical acceptance is pending.",
     "Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.",
     "The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.",
     "Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.",
@@ -335,7 +335,17 @@
       "scope": "Smaller circle geometry and accumulated sub-segment movement; existing pointer gains, filters, sensor rate and motion-delay settings remain unchanged. Minimum reliable physical radius has not been measured.",
       "reviewMinimumLocalRadiusDegrees": 0.08
     },
-    "reviewFlickDegrees": 0.3
+    "reviewFlickDegrees": 0.3,
+    "reviewAxisGestures": {
+      "default": false,
+      "optionKey": "reviewAxisGestures",
+      "title": "Review with nods and shakes",
+      "vertical": "next",
+      "horizontal": "previous",
+      "minimumTravelDegrees": 0.3,
+      "maximumGestureSeconds": 4,
+      "scope": "Optional replacement for circles and flicks in Review changes and Stage files only. Up-and-down goes next; side-to-side goes previous, after an outward-and-return motion. Pointer, HUD and speech are unchanged."
+    }
   },
   "hud": {
     "source": "Agentic Mouse’s published Default mode",

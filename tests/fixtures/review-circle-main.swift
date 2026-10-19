@@ -149,4 +149,34 @@ for sign in [-1.0,1.0] {
  total+=n.sample(dx:0,dy:0,now:time+0.15)
  check(total==Int32(sign),"curved small flick retains its original direction")
 }
-if failures>0{exit(1)};print("PASS small flicks, micro circles and prior controls")
+// The alternative stays off by default, and its classifier is screen-axis based.
+check(!WandReviewNavigation().useAxisGestures,"new review option defaults off")
+for vertical in [true,false] {
+ for sign in [-1.0,1.0] {
+  for duration in [0.15,0.8,2.0] {
+   var n=WandReviewNavigation();n.useAxisGestures=true
+   n.reset();check(n.useAxisGestures,"reset preserves the selected option")
+   var total:Int32=0,t=300.0
+   for _ in 0..<3 {
+    for part in [0.08,0.13,0.16,-0.12,-0.17,-0.08] {
+     t+=duration/6
+     total+=n.sample(dx:vertical ? 0:part*sign,dy:vertical ? part*sign:0,now:t)
+    }
+    t+=0.1
+   }
+   check(total == (vertical ? 3:-3),"optional nod/shake works either initial direction and speed")
+  }
+ }
+}
+for shape in ["noise","diagonal","circle"] {
+ var n=WandReviewNavigation();n.useAxisGestures=true
+ var total:Int32=0,px=0.0,py=0.0
+ for i in 1...600 {
+  let t=Double(i)*0.02
+  let xx=shape=="noise" ? 0.025*sin(t*8):shape=="diagonal" ? 0.4*sin(t*6):0.4*(cos(t*6)-1)
+  let yy=shape=="noise" ? 0.025*cos(t*9):0.4*sin(t*6)
+  total+=abs(n.sample(dx:xx-px,dy:yy-py,now:400+t));px=xx;py=yy
+ }
+ check(total==0,"optional axis gesture rejects \(shape)")
+}
+if failures>0{exit(1)};print("PASS optional nods/shakes and existing circle/flick controls")

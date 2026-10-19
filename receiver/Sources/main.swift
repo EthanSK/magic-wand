@@ -49,6 +49,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var controlVersion:WandControlVersion = .pointerV1
     var controlV1Menu:NSMenuItem?,controlV2Menu:NSMenuItem?
     var flickScrollEnabled=false
+    var reviewAxisEnabled=false
+    var reviewAxisMenuItem:NSMenuItem?
     var flickAnchor:CGPoint?
     var statusItem:NSStatusItem?,connectionMenuItem:NSMenuItem?,flickMenuItem:NSMenuItem?,rotationMenuItem:NSMenuItem?
 
@@ -197,6 +199,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if flickScrollEnabled != flick {if flickScroll.active {setCircleLight(false);motionFilter.reset()};flickScrollEnabled=flick;flickScroll.reset();flickAnchor=nil}
         flickMenuItem?.state=flick ? .on : .off
         rotationMenuItem?.state=enabled ? .on : .off
+        let reviewAxes=options.enabled("reviewAxisGestures")
+        if reviewAxisEnabled != reviewAxes {
+            reviewAxisEnabled=reviewAxes;wandShortcutCircle.useAxisGestures=reviewAxes;wandShortcutCircle.reset()
+        }
+        reviewAxisMenuItem?.state=reviewAxes ? .on : .off
         if motionFilter.orientationCompensation != enabled {
             motionFilter.orientationCompensation=enabled;motionFilter.reset()
             log("ORIENTATION_COMPENSATION",enabled)
@@ -222,6 +229,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let rotation=NSMenuItem(title:"Rotation-independent controls",action:#selector(toggleRotation),keyEquivalent:"")
         rotation.target=self;rotation.toolTip="Keep mouse, HUD and scroll directions upright when you rotate the wand."
         settings.addItem(rotation);rotationMenuItem=rotation
+        let reviewAxes=NSMenuItem(title:"Review with nods and shakes",action:#selector(toggleReviewAxes),keyEquivalent:"")
+        reviewAxes.target=self
+        reviewAxes.toolTip="Up/down goes next; side-to-side goes previous. Replaces review circles and flicks."
+        settings.addItem(reviewAxes);reviewAxisMenuItem=reviewAxes
         let parent=NSMenuItem(title:"Options",action:nil,keyEquivalent:"");parent.submenu=settings;menu.addItem(parent)
         item.menu=menu;statusItem=item
     }
@@ -237,6 +248,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     @objc func selectControlV2(){selectControlVersion(.scrollV2)}
     @objc func toggleFlickScroll(){changeOption("flickScroll")}
     @objc func toggleRotation(){changeOption("orientationCompensation")}
+    @objc func toggleReviewAxes(){changeOption("reviewAxisGestures")}
     // Developer maintenance uses the existing BLE owner, so diagnosis and small
     // device updates do not disconnect the user's working pointer. Only consume
     // a same-user regular file with private permissions; never follow symlinks.
@@ -272,11 +284,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func status() {
         connectionMenuItem?.title=ready ? "Connected" : "Connecting…"
-        let key = "\(device?.state == .connected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(motionFilter.orientationCompensation)"
+        let key = "\(device?.state == .connected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(reviewAxisEnabled)|\(motionFilter.orientationCompensation)"
         guard key != lastStatusKey else { return }
         lastStatusKey = key
         let value: [String: Any] = ["pid": ProcessInfo.processInfo.processIdentifier, "connected": device?.state == .connected,
-            "ready": ready, "options":["controlVersion":controlVersion.rawValue,"flickScroll":flickScrollEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
+            "ready": ready, "options":["controlVersion":controlVersion.rawValue,"flickScroll":flickScrollEnabled,"reviewAxisGestures":reviewAxisEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
             "updatedAt": ISO8601DateFormatter().string(from: Date())]
         if let data = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]) { try? data.write(to: support.appendingPathComponent("status.json"), options: .atomic) }
     }
