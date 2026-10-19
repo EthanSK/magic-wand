@@ -10,14 +10,14 @@
     "device/wand-mode-bridge.js": {
       "importedFrom": "wand-mode-bridge.js",
       "transform": "verbatim",
-      "originalSha256": "47ca6edaba2858df34a8b227dacff6726d53ac73ddb17374df21443c30224284",
-      "publicSha256": "47ca6edaba2858df34a8b227dacff6726d53ac73ddb17374df21443c30224284"
+      "originalSha256": "c9e0bd2d124b9fc6bc4a8cb244fd3aac42d3f97f46e1da37355f6d0722703401",
+      "publicSha256": "c9e0bd2d124b9fc6bc4a8cb244fd3aac42d3f97f46e1da37355f6d0722703401"
     },
     "receiver/Sources/main.swift": {
       "importedFrom": "wand-mac-receiver.swift",
       "transform": "receiver",
-      "originalSha256": "5f6b3af3c2de0e2579aa6eda47f63a9ace521eb094f72d0d7a180caa8aeafba6",
-      "publicSha256": "d5bd94cd8e48b594e0b747df2b326fb666c47c3dae1c5b7a501a8bb6b1a262e4"
+      "originalSha256": "e7cab386b9bb9bb8ce1c3a89ac51d043db887ec0127af131bbe19186debcf4ce",
+      "publicSha256": "55e406db57e993a2b8119bbecdc57c6141d3e9f32d7b3d8d2b8e5bfe9e06e6ec"
     },
     "receiver/Sources/WandControlTransport.swift": {
       "importedFrom": "wand-control-transport.swift",
@@ -37,17 +37,23 @@
       "originalSha256": "4a69241b310c69cf058e8892c4ffd0027c380488b41cd6289a76aac9b7a93e8c",
       "publicSha256": "4a69241b310c69cf058e8892c4ffd0027c380488b41cd6289a76aac9b7a93e8c"
     },
+    "receiver/Sources/WandReviewTrace.swift": {
+      "importedFrom": "wand-review-trace.swift",
+      "transform": "verbatim",
+      "originalSha256": "07781b562e64b3868b8646a4e8fec32b443089c8e5567bd138524a48c8e45634",
+      "publicSha256": "07781b562e64b3868b8646a4e8fec32b443089c8e5567bd138524a48c8e45634"
+    },
     "receiver/Sources/WandPointerControl.swift": {
       "importedFrom": "wand-pointer-control.swift",
       "transform": "verbatim",
-      "originalSha256": "4200d88c9b260b7f8be9b1361bc08339d177c25ef03e394654ec2ed45989cbda",
-      "publicSha256": "4200d88c9b260b7f8be9b1361bc08339d177c25ef03e394654ec2ed45989cbda"
+      "originalSha256": "42cf60b197a2ed04a54b72057f48e99e28ed8fe2e5618a31edfa997d1e911188",
+      "publicSha256": "42cf60b197a2ed04a54b72057f48e99e28ed8fe2e5618a31edfa997d1e911188"
     },
     "receiver/Info.plist": {
       "importedFrom": "Wand Receiver.app/Contents/Info.plist",
       "transform": "verbatim",
-      "originalSha256": "4a99dddaa3df23d0ad6f71857347c5e3dab0e8174a06e0b8187c7ffd1c02d1f8",
-      "publicSha256": "4a99dddaa3df23d0ad6f71857347c5e3dab0e8174a06e0b8187c7ffd1c02d1f8"
+      "originalSha256": "cb117631a77f4d511a7eeff58e65445787a1ad0d76e9c27dc8aab727b520d059",
+      "publicSha256": "cb117631a77f4d511a7eeff58e65445787a1ad0d76e9c27dc8aab727b520d059"
     }
   }
 }

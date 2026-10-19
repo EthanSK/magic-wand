@@ -57,11 +57,15 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var rawLastArrival=0.0,rawReports=0,rawWindowStart=0.0,rawMaxGap=0.0
     let dwell=WandDwellClick()
     let restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
+    var deskSleep=WandDeskSleep()
     var dwellTimer:Timer?,probeTimer:Timer?
     var restDiagnosticsRemaining=30
     let review=WandReviewGesture()
     var reviewTimer:Timer?,reviewOriginY=0.0,appMode:String?
     var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
+    let reviewTrace = WandReviewTrace(directory:support.appendingPathComponent("review-traces"),
+        configuration:support.appendingPathComponent("review-trace.json"),
+        build:Bundle.main.object(forInfoDictionaryKey:"CFBundleVersion") as? String ?? "unknown")
     var wandShortcutCircle=WandReviewNavigation()
     var middleReviewExit=false
     var reviewExitGesture=WandReviewExitGesture()
@@ -199,6 +203,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         rotationMenuItem?.state=enabled ? .on : .off
         let reviewAxes=options.enabled("reviewAxisGestures")
         if reviewAxisEnabled != reviewAxes {
+            reviewTrace.record(.init(kind:"boundary",t:ProcessInfo.processInfo.systemUptime,
+                                     reason:"axes changed",axisGestures:reviewAxes))
             reviewAxisEnabled=reviewAxes;wandShortcutCircle.useAxisGestures=reviewAxes;wandShortcutCircle.reset()
         }
         reviewAxisMenuItem?.state=reviewAxes ? .on : .off
@@ -282,11 +288,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func status() {
         connectionMenuItem?.title=ready ? "Connected" : "Connecting…"
-        let key = "\(device?.state == .connected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(reviewAxisEnabled)|\(motionFilter.orientationCompensation)"
+        let traceState=reviewTrace.status
+        let key = "\(device?.state == .connected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(deskSleep.sleeping)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(reviewAxisEnabled)|\(motionFilter.orientationCompensation)|\(traceState["enabled"] ?? false)|\(traceState["diskError"] ?? false)"
         guard key != lastStatusKey else { return }
         lastStatusKey = key
         let value: [String: Any] = ["pid": ProcessInfo.processInfo.processIdentifier, "connected": device?.state == .connected,
-            "ready": ready, "options":["controlVersion":controlVersion.rawValue,"flickScroll":flickScrollEnabled,"reviewAxisGestures":reviewAxisEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
+            "ready": ready, "options":["controlVersion":controlVersion.rawValue,"flickScroll":flickScrollEnabled,"reviewAxisGestures":reviewAxisEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording,"deskSleeping":deskSleep.sleeping, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
+            "reviewTrace":traceState,
             "updatedAt": ISO8601DateFormatter().string(from: Date())]
         if let data = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]) { try? data.write(to: support.appendingPathComponent("status.json"), options: .atomic) }
     }
@@ -338,13 +346,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func reset() {
+        reviewTrace.boundary("receiver reset",mode:wandShortcutMode)
         reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset();middleReviewExit=false
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil
         flickScroll.reset();flickAnchor=nil
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
         wandShortcutMode=nil;wandShortcutCircle.reset()
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
-        probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true)
+        probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true);deskSleep.reset()
         recenterGesture.cancel();recenterSuppressButtons=false;performPointer(pointerRouter.cancelAll());setCircleLight(false)
         lightMode="disconnected"
         hudSession=false;hudEntryPress=false
@@ -475,7 +484,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if let marker=line.range(of:"WAND_LIGHT_STATE ") {
                 let payload=String(line[marker.upperBound...])
                 let mode=String(payload.prefix{!$0.isWhitespace})
-                if ["update","calibration","disconnected","scroll","app","mouse","hud","recording","idle"].contains(mode),
+                if ["update","calibration","disconnected","sleep","scroll","app","mouse","hud","recording","idle"].contains(mode),
                    let first=payload.firstIndex(of:"["),let last=payload[first...].firstIndex(of:"]"),
                    let levels=try? JSONDecoder().decode([Double].self,from:Data(payload[first...last].utf8)),levels.count==3 {
                     lightMode=mode;log("DEVICE_LIGHT",mode,levels);status()
@@ -493,7 +502,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if let marker=line.range(of:"@ZERO "),let data=String(line[marker.upperBound...]).data(using:.utf8),let config=try? JSONDecoder().decode([Double].self,from:data) {log("NATIVE_MOTION_CONFIG",motionFilter.configure(config))}
             if let marker=line.range(of:"@RAW "){handleRaw(String(line[marker.upperBound...]))}
             if let marker=line.range(of:"@IMU ") {handleIMU(String(line[marker.upperBound...]))}
-            if let marker=line.range(of:"@REVIEW "),appMode=="vsCode" {
+            // Legacy held app-page packets never own a selected persistent review set.
+            if let marker=line.range(of:"@REVIEW "),appMode=="vsCode",selectedReviewMode==nil {
                 let value=line[marker.upperBound...].trimmingCharacters(in:.whitespaces)
                 if value=="0" || value=="1" {
                     if value=="1" {reviewOriginY=navY;if hudActive {controls.persistent("park");hudActive=false;stopHUDWatchdog()}}
@@ -690,17 +700,36 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             let dx=navX-wandShortcutX,dy=navY-wandShortcutY
             wandShortcutX=navX;wandShortcutY=navY;wandShortcutTime=now
             // Bottom retains its mouse gesture. Never interpret that held movement as review.
-            if pointerRouter.bottomHeld || reviewExitGesture.pending {wandShortcutCircle.reset();return}
-            sendReview(review.detents(wandShortcutCircle.sample(dx:dx,dy:dy,now:now),now:now))
+            let blocked = pointerRouter.bottomHeld ? "bottom held" : reviewExitGesture.pending ? "middle held" :
+                (!ready || restoring) ? "receiver unavailable" : !context.isFresh ? "context expired" :
+                NSWorkspace.shared.frontmostApplication?.bundleIdentifier != "com.microsoft.VSCode" ? "app not frontmost" : nil
+            if let blocked {
+                wandShortcutCircle.reset()
+                recordReviewInput(rawX:x/1000,rawY:y/1000,dx:dx,dy:dy,now:now,blocked:blocked,step:0)
+                return
+            }
+            let step=wandShortcutCircle.sample(dx:dx,dy:dy,now:now)
+            recordReviewInput(rawX:x/1000,rawY:y/1000,dx:dx,dy:dy,now:now,blocked:nil,step:step)
+            sendReview(review.detents(step,now:now))
             return
         }
-        if appMode=="vsCode" && review.isHeld {sendReview(review.motion(y:navY-reviewOriginY,now:ProcessInfo.processInfo.systemUptime));return}
+        if appMode=="vsCode" && review.isHeld && selectedReviewMode==nil {sendReview(review.motion(y:navY-reviewOriginY,now:ProcessInfo.processInfo.systemUptime));return}
         guard !restoring,!scrollActive,hudSession else{return}
         if pointerInHUD {
             handleMove("U,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000),project:false)
         }else if hudActive {
             hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY)
         }
+    }
+    func recordReviewInput(rawX:Double,rawY:Double,dx:Double,dy:Double,now:Double,blocked:String?,step:Int32) {
+        guard reviewTrace.enabled else{return}
+        let state=wandShortcutCircle.snapshot
+        let metrics=WandReviewTrace.Metrics(event:state.event.rawValue,active:state.active,
+            turn:state.turn,effective:state.effective,scale:state.scale,segment:state.segment,
+            pending:state.pending,direction:state.direction,runSteps:state.runSteps,credit:state.credit,sideways:state.sideways)
+        reviewTrace.record(.init(kind:"input",t:now,reason:blocked,mode:wandShortcutMode,
+            rawX:rawX,rawY:rawY,x:navX,y:navY,dx:dx,dy:dy,eligible:blocked==nil,
+            axisGestures:reviewAxisEnabled,step:Int(step),metrics:metrics))
     }
     func resumeHUDNavigation(){
         guard hudSession,!scrollActive,!restoring else{return}
@@ -736,6 +765,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         hudLastUpdate=Date();hudWatchdog?.invalidate()
         hudWatchdog=Timer.scheduledTimer(withTimeInterval:0.25,repeats:true){[weak self] timer in
             guard let self else{timer.invalidate();return}
+            if self.deskSleep.sleeping {return}
             if Date().timeIntervalSince(self.hudLastUpdate)>0.8 {
                 self.closeHUD(reason:"navigation timed out");timer.invalidate()
             }
@@ -869,6 +899,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         wandShortcutMode=mode;wandShortcutX=navX;wandShortcutY=navY;wandShortcutTime=now
         wandShortcutCircle.reset();navStream.reset();navX=0;navY=0;wandShortcutX=0;wandShortcutY=0
         review.beginDetents(mode:mode,now:now)
+        reviewTrace.boundary("begin",mode:mode,now:now)
         queue("setWandReviewTracking(true);")
         reviewTimer=Timer.scheduledTimer(withTimeInterval:0.2,repeats:true){[weak self] _ in
             guard let self else{return}
@@ -883,6 +914,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func finishWandShortcut(commit:Bool) {
         guard wandShortcutMode != nil else{return}
+        reviewTrace.boundary(commit ? "finish":"cancel",mode:wandShortcutMode)
         wandShortcutMode=nil;wandShortcutCircle.reset()
         sendReview(review.endDetents(commit:commit));reviewTimer?.invalidate();reviewTimer=nil
         if ready && !restoring {queue("setWandReviewTracking(false);")}
@@ -894,6 +926,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         log("WAND_REVIEW_EXIT",commit ? "stage set":"cancel set")
     }
     func beginReviewCommitHold(now:Double) {
+        reviewTrace.boundary("middle down",mode:wandShortcutMode,now:now)
         reviewExitGesture.down(now:now)
         wandShortcutCircle.reset()
         reviewExitTimer=Timer.scheduledTimer(withTimeInterval:WandReviewExitGesture.holdSeconds,repeats:false){[weak self] _ in
@@ -913,6 +946,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // Start another Better Git transaction lazily on the next ratchet. Keep
         // the live NAV stream, tracking timer and selected badge uninterrupted.
         review.beginDetents(mode:mode,now:ProcessInfo.processInfo.systemUptime)
+        reviewTrace.boundary("commit",mode:mode)
         wandShortcutCircle.reset()
         log("WAND_REVIEW_COMMIT",mode,"continue")
     }
@@ -925,6 +959,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             guard let target=url.url else{continue}
             let config=NSWorkspace.OpenConfiguration();config.activates=false;config.addsToRecentItems=false
             NSWorkspace.shared.open([target],withApplicationAt:application,configuration:config){_,error in if let error {log("VSCODE_REVIEW_FAILED",error.localizedDescription)}}
+            reviewTrace.record(.init(kind:"request",t:ProcessInfo.processInfo.systemUptime,mode:request.mode,
+                                    phase:request.phase,direction:request.direction))
             log("VSCODE_REVIEW_SENT",request.phase,request.direction,request.mode)
         }
     }
@@ -1082,13 +1118,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             log("REST_SAMPLE",x/8192,y/8192,z/8192,"gyro",gyro/100,"held",held,"follow",dwell.following,"parked",restDetection.parked)
         }
         let wasParked=restDetection.parked
-        let events=restDetection.update(x:x/8192,y:y/8192,z:z/8192,gyro:gyro/100,now:now,buttons:held==1 || scrollActive || buttons != 0 || hudSession,idle:!dwell.following && !hudSession)
+        let events=restDetection.update(x:x/8192,y:y/8192,z:z/8192,gyro:gyro/100,now:now,buttons:held==1 || scrollActive || buttons != 0,idle:!dwell.following && !hudSession)
         if !wasParked && restDetection.parked {log("TABLE_REST_CONFIRMED", "reference",restDetection.hasReference)}
         for event in events {
             switch event {
             case .probe:
                 queue("wakeGyro();")
-                probeTimer?.invalidate();probeTimer=Timer.scheduledTimer(withTimeInterval:1.5,repeats:false){[weak self] _ in self?.queue("if(!moveLatched&&!hudOpen&&!scrollHeld)sleepGyro();")}
+                probeTimer?.invalidate();probeTimer=Timer.scheduledTimer(withTimeInterval:1.5,repeats:false){[weak self] _ in self?.queue("if(global.wandDeskSleeping)global.wandPowerDownGyro();else if(!moveLatched&&!hudOpen&&!scrollHeld)sleepGyro();")}
             case .pickedUp:
                 probeTimer?.invalidate();probeTimer=nil
                 guard !hudSession else{continue}
@@ -1096,8 +1132,15 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             case .settling:
                 dwell.inhibit(until:now+3);scheduleDwell()
             case .putDown:
+                // Rest may sleep the LEDs, but an explicit HUD remains open.
+                guard !hudSession else{continue}
                 cancelCircleScroll();enterPointerMode();dwell.follow(false);releaseButtons();queue("setMouseFollow(false);setHUDOpen(false);");log("AUTO_PUT_DOWN")
             }
+        }
+        if let sleeping=deskSleep.sample(parked:restDetection.parked,
+                                        buttons:held==1 || scrollActive || buttons != 0,now:now) {
+            queue("if(typeof setWandDeskSleeping==='function')setWandDeskSleeping("+(sleeping ? "true":"false")+");")
+            log(sleeping ? "DESK_SLEEP":"DESK_WAKE")
         }
         // Rest detection owns pointer power only. It must never stop Agent Flow:
         // a still wand is not evidence that Ethan has finished speaking.

@@ -336,7 +336,11 @@ final class WandRestDetection {
     private func isQuiet(_ a:[Double],gyro:Double,magnitude:Double,now:Double)->Bool {
         guard gyro<1.5,abs(magnitude-1)<0.15 else {quietWindow.removeAll();return false}
         quietWindow.append((a,gyro,now))
-        quietWindow.removeAll{now-$0.time>2.15}
+        // Keep the shortest window spanning 1.8 s (at least four samples).
+        // A fixed 2.15 s cutoff has a blind band: at 0.56 s intervals four
+        // samples span only 1.68 s, but five span 2.24 s and lose the first.
+        while quietWindow.count>4 && now-quietWindow[1].time>=1.8 {quietWindow.removeFirst()}
+        if quietWindow.count>256 {quietWindow.removeFirst(quietWindow.count-256)}
         guard quietWindow.count>=4,let first=quietWindow.first,now-first.time>=1.8 else{return false}
         let n=Double(quietWindow.count)
         let mean=(0..<3).map{axis in quietWindow.reduce(0){$0+$1.a[axis]}/n}
@@ -385,6 +389,30 @@ final class WandRestDetection {
             events.append(.putDown)
         }
         return events
+    }
+}
+
+/// Ethan's "go to sleep after a minute": dark LEDs and low-rate pickup sensing,
+/// never a dictation stop or an explicit HUD/review dismissal. The existing rest
+/// detector owns the desk classification; this policy only times confirmed rest.
+struct WandDeskSleep {
+    static let seconds = 60.0
+    private(set) var sleeping = false
+    private var restSince:Double?,lastSeen:Double?
+    mutating func reset(){sleeping=false;restSince=nil;lastSeen=nil}
+    /// Reuse the existing confirmed parked/pickup state. Isolated sensor noise
+    /// must not postpone sleep forever. A telemetry gap cannot prove rest.
+    mutating func sample(parked:Bool,buttons:Bool,now:Double)->Bool? {
+        guard now.isFinite else{return nil}
+        let was=sleeping
+        if let last=lastSeen,now<=last || now-last>2 {restSince=nil}
+        lastSeen=now
+        if buttons || !parked {sleeping=false;restSince=nil}
+        else {
+            if restSince==nil {restSince=now}
+            if let since=restSince,now-since>=Self.seconds {sleeping=true}
+        }
+        return was==sleeping ? nil:sleeping
     }
 }
 
@@ -779,93 +807,351 @@ struct WandReviewExitGesture {
 }
 
 /// Ethan's "eyes mode" = Review changes; "bang mode" / "!" = Stage files.
-/// This only turns a circular wand path into ratchets. Better Git owns preview/staging.
-/// Screen coordinates: positive Y points down, so positive winding is clockwise.
+/// Turns rough clockwise/anticlockwise loops, squares, diamonds and single
+/// corners into review ratchets. Better Git owns preview and staging.
+/// Screen coordinates: positive Y points down, so positive turning is clockwise
+/// (next) and negative is anticlockwise (previous).
+///
+/// Clean 2026-10-19 redesign. Ethan: "each corner of the square... one revolution
+/// does four jumps evenly spread" and "if I just wanted to flick in a clockwise
+/// direction... it would just do one jump". North->east is next; east->north,
+/// including the same arc straight back, is previous; north->west is previous.
+/// The former detector summed signed per-packet headings with tolerance boosts,
+/// so turnarounds, tremor and slow motion became missed flicks and random
+/// back-and-forth. Here:
+/// - Headings come only from spatial segments sized to the gesture itself, so
+///   speed, Bluetooth bunching and packet count do not change them.
+/// - A run counts the unwrapped turn of its travel direction from its opening
+///   stroke. Wobble cancels instead of accumulating. The first step needs a rough
+///   quarter (45 degrees); each further step a full quarter, so a loop gives four
+///   evenly spaced steps at any radius, and turning back by a quarter from the
+///   furthest point reached gives one opposite step.
+/// - A sharp about-face (a large turn within a short, size-relative path) is a
+///   straight reversal, never winding: it starts a fresh run, so a curved arc
+///   traced back afterwards counts as its own opposite quarter.
+/// - A step also needs sideways travel into the turn, by a fraction of the
+///   gesture's size. Tremor or a turnaround hook turns the heading without it.
+///   A sharp turn is held until its outgoing stroke leaves the short path in
+///   which it could still become an about-face (or the wand settles).
+/// - Floors rise with hand noise learned from the packets themselves, so a steady
+///   hand keeps tiny gestures and a shaky one cannot invent turns.
+/// - A pause does not reset anything by time alone. When movement resumes, a
+///   consistent direction continues the run (very slow motion), and a new
+///   direction starts a fresh run from the pause point (a separate gesture).
+/// Nothing here moves or buffers the pointer.
 struct WandReviewCircle {
-    // Ethan's "north to east" is one clockwise quarter-turn, not seven degrees
-    // of pointer travel. Radius/speed must not change the number of review steps.
-    static let quarterTurn = Double.pi / 2
-    static let turnTolerance = Double.pi / 9 // 20 degrees for rough/sampled endpoints.
-    static let reversalTurn = Double.pi / 9
-    static let minimumExtent = 0.08, minimumPath = 0.15, minimumRadius = 0.08
+    enum Event:String {case none,start,segment,pending,cancelled,cusp,resumed,step,settled,rest,gap,jump,invalid}
+    struct Snapshot {
+        let event:Event,active:Bool,turn:Double,effective:Double,scale:Double,segment:Double
+        let pending:Int,direction:Int,runSteps:Int,credit:Double,sideways:Double
+        // Read-only diagnostics. `credit` is retired (no return allowance) and always 0.
+        let noise:Double,paused:Bool,jitter:Double,wobble:Double
+    }
+    // Turning of the path's travel direction, in degrees.
+    static let firstTurnDegrees = 45.0     // a rough quarter-turn earns a run's first step
+    static let quarterTurnDegrees = 90.0   // each further step, and turning back to an opposite step
+    static let cuspTurnDegrees = 115.0     // this much turning within a short path is an about-face
+    static let straightDegrees = 10.0      // a segment this far off the opening chord ends the opening stroke
+    static let continueDegrees = 45.0      // after a pause, a direction within this continues the run
+    static let cancelBackDegrees = 20.0    // falling this far back below a threshold cancels it
+    static let sharpDegrees = 40.0         // a turn this sharp at one junction may still become an about-face
+    // Geometry: degrees of wand angle, or fractions of the gesture's own size.
+    static let segmentFraction = 0.12, minimumSegment = 0.03, maximumSegment = 1.0, partialSegment = 0.5
+    static let referenceSegments = 2.0     // opening-stroke chord length, in segments, for the reference
+    static let reliableNoise = 6.0         // an opening chord shorter than this many noise widths is unreliable
+    static let cuspNoise = 4.0             // a partial segment must be this many noise widths to show an about-face
+    static let confirmFraction = 0.3       // sideways travel into a turn
+    static let cuspFraction = 0.4          // the short path, as a fraction of the gesture's size, of an about-face
+    static let settleFraction = 0.15       // smaller sideways travel accepted once the wand settles
+    static let strongFraction = 0.6        // sideways travel that confirms even a sharp turn at once
+    static let stepPathFraction = 0.5      // path between steps, as a fraction of the gesture's size
+    static let minimumSideways = 0.05, minimumPath = 0.1, restTravel = 0.05
+    // Learned hand noise raises these floors: packets while still, and sideways
+    // scatter of moving packets (the firmware dead zone hides tremor at rest but
+    // passes it during motion). A steady hand keeps small gestures; a shaky one
+    // cannot invent turns.
+    static let noiseSegment = 3.5, noiseTravel = 2.5, wobbleWeight = 1.5, noiseCeiling = 0.4
+    // Pause classification only, in seconds; nothing waits on a timer and no
+    // minimum speed is imposed. A corner with a short sideways leg is accepted
+    // once the wand settles; a longer pause marks where a new gesture may begin.
+    static let settleSeconds = 0.12, restSeconds = 0.35, gapSeconds = 1.0
+    // Tremor is a fast wobble: only closely spaced packets can show it. Widely
+    // spaced packets (slow sparse input) show shape, never noise.
+    static let tremorSpan = 0.1
+
+    private(set) var event = Event.none
+    private(set) var active = false
+    private var x=0.0,y=0.0,lastTime:Double?
+    private var jitter=0.0,wobble=0.0,jitterCount=0.0,wobbleCount=0.0
+    private var progressX=0.0,progressY=0.0,lastProgress:Double?
+    private var settled=false,paused=false,pauseX=0.0,pauseY=0.0
+    // Spatial segments: heading is measured only between points a segment apart.
+    private var anchorX=0.0,anchorY=0.0,heading:Double?,path=0.0
+    // The two previous moving packets, for the sideways-scatter noise estimate.
+    private var priorX=0.0,priorY=0.0,olderX=0.0,olderY=0.0,olderTime=0.0,priorTime=0.0,moving=0
+    private var lastDX=0.0,lastDY=0.0,lastPacket:Double?
+    // The furthest point along the current heading since the last segment:
+    // where an about-face actually turned round.
+    private var extremeX=0.0,extremeY=0.0,extremeReach=0.0
+    // One run, between about-faces and redirected pauses. `turn` is the unwrapped
+    // heading change since the run's first segment; `reference` is the direction
+    // of its opening stroke.
+    private var turn=0.0,firstHeading=0.0,reference=0.0,referenceChord=0.0,referenceLocked=false
+    private var window:[(path:Double,turn:Double)]=[]
+    private var runX=0.0,runY=0.0,runSteps=0
+    // The gesture's size: the furthest distance from where the current step window
+    // began (run start or last step). Rotation-invariant, unlike a bounding box.
+    private var windowX=0.0,windowY=0.0,spread=0.0,previousExtent=0.0,stepPath=0.0
+    private var direction=0.0,next=0.0,peak=0.0,peakX=0.0,peakY=0.0,peakHeading=0.0
+    private var refX=0.0,refY=0.0,refHeading=0.0
+    private var pendingSign=0.0,pendingThreshold=0.0,pendingX=0.0,pendingY=0.0,pendingHeading=0.0,pendingPartial=false
+    private var pendingSharp=false,armX=0.0,armY=0.0,armSideways=0.0,recentTurn=0.0
+
     var isCircling: Bool { direction != 0 }
-    private var heading:Double?,lastTime=0.0,headingRun=0.0
-    private var progress=0.0,oppositeTurn=0.0,path=0.0
-    private var direction=0
-    private var pendingX=0.0,pendingY=0.0,x=0.0,y=0.0
-    private var minX=0.0,maxX=0.0,minY=0.0,maxY=0.0
-    mutating func reset(){self=Self()}
+    /// Keeps the learned noise floors; everything about the gesture starts afresh.
+    mutating func reset(){let learned=(jitter,wobble,jitterCount,wobbleCount);self=Self();(jitter,wobble,jitterCount,wobbleCount)=learned}
+    /// Replay only: start from noise floors recorded in a trace snapshot.
+    mutating func restoreNoise(jitter learnedJitter:Double,wobble learnedWobble:Double) {
+        guard learnedJitter.isFinite,learnedWobble.isFinite else{return}
+        jitter=max(0,min(0.1,learnedJitter));wobble=max(0,min(0.1,learnedWobble));jitterCount=20;wobbleCount=20
+    }
+
+    private static func radians(_ degrees:Double)->Double {degrees*Double.pi/180}
+    private static func wrap(_ angle:Double)->Double {
+        var value=angle
+        while value>Double.pi {value-=2*Double.pi}
+        while value < -Double.pi {value+=2*Double.pi}
+        return value
+    }
+    /// Persistent tremor raises a noise estimate within a few packets; one shape
+    /// corner among sparse packets barely moves it.
+    private static func robust(_ value:Double,_ estimate:Double)->Double {min(value,estimate*3+0.01,0.1)}
+    private var extent:Double {spread}
+    private var scale:Double {max(extent,previousExtent*0.5)}
+    private var noise:Double {max(jitter,wobble*Self.wobbleWeight)}
+    private func floor(_ base:Double,_ factor:Double,_ level:Double)->Double {min(Self.noiseCeiling,max(base,level*factor))}
+    private var segmentLength:Double {max(floor(Self.minimumSegment,Self.noiseSegment,noise),min(Self.maximumSegment,scale*Self.segmentFraction))}
+    /// The short path within which a large turn is an about-face rather than winding.
+    private var cuspReach:Double {max(Self.cuspFraction*scale,segmentLength)}
+    /// An opening chord a few noise widths long (or locked) can anchor a turn.
+    private var referenceReliable:Bool {referenceLocked || referenceChord>=max(Self.partialSegment*segmentLength,Self.reliableNoise*noise)}
+    /// Turn measured from the run's opening stroke.
+    private func effective(_ raw:Double)->Double {raw-Self.wrap(reference-firstHeading)}
+    private var sideways:Double {
+        guard pendingSign != 0 else{return 0}
+        return pendingSign*(-(x-pendingX)*sin(pendingHeading)+(y-pendingY)*cos(pendingHeading))
+    }
+    var snapshot:Snapshot {
+        let degrees=180/Double.pi
+        return Snapshot(event:event,active:active,turn:turn*degrees,effective:effective(turn)*degrees,scale:scale,segment:segmentLength,
+                        pending:Int(pendingSign),direction:Int(direction),runSteps:runSteps,credit:0,sideways:sideways,
+                        noise:noise,paused:paused,jitter:jitter,wobble:wobble)
+    }
+    private mutating func note(_ next:Event) {
+        let rank:[Event:Int]=[.none:0,.segment:1,.start:2,.resumed:2,.pending:3,.cancelled:4,.cusp:5,.rest:6,.gap:6,.step:7,.settled:7,.jump:8,.invalid:8]
+        if rank[next,default:0]>=rank[event,default:0] {event=next}
+    }
+
+    // MARK: Packets and pauses
+
     mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
-        guard dx.isFinite,dy.isFinite,now.isFinite else{reset();return 0}
-        if lastTime>0 && now-lastTime>0.6 {reset()}
-        guard hypot(dx,dy)<30 else{reset();return 0}
-        if dx != 0 || dy != 0 {lastTime=now}
-        pendingX+=dx;pendingY+=dy
-        let distance=hypot(pendingX,pendingY)
-        guard distance>=0.015 else{return 0}
-        x+=pendingX;y+=pendingY;path+=distance
-        minX=min(minX,x);maxX=max(maxX,x);minY=min(minY,y);maxY=max(maxY,y)
-        let next=atan2(pendingY,pendingX);pendingX=0;pendingY=0
-        guard let previous=heading else{heading=next;headingRun=distance;return 0}
-        var delta=next-previous
-        while delta>Double.pi{delta-=2*Double.pi}
-        while delta < -Double.pi{delta+=2*Double.pi}
-        let previousRun=headingRun
-        heading=next
-        if abs(delta)<0.2 {headingRun+=distance} else {headingRun=distance}
-        // An about-face is a return stroke, not a clockwise/anticlockwise corner.
-        if abs(delta)>2.35 {
-            direction=0;progress=0;oppositeTurn=0;path=0
-            minX=x;maxX=x;minY=y;maxY=y
-            return 0
+        event = .none
+        guard dx.isFinite,dy.isFinite,now.isFinite else{reset();event = .invalid;return 0}
+        guard hypot(dx,dy)<30 else{reset();event = .jump;return 0}
+        // A transport gap, or no progress for restSeconds, is a pause at the last
+        // position before this packet; this packet's movement then decides how
+        // the run resumes.
+        if active,!paused {
+            if let lastTime,now-lastTime>Self.gapSeconds {pause();note(.gap)}
+            else if let lastProgress,now-lastProgress>=Self.restSeconds {pause();note(.rest)}
         }
-        if abs(delta)>0.008 {
-            // Small, bounded wobble cannot inherit a previous genuine turn. A rough
-            // diamond corner uses its preceding edge rather than one tiny sample.
-            let cornerLength=abs(delta)>=0.65 ? max(distance,min(previousRun,0.3)):distance
-            guard cornerLength/abs(delta)>=Self.minimumRadius else{return 0}
-            let sign=delta>0 ? 1 : -1
-            if direction==0 {
-                direction=sign;progress=Self.turnTolerance+abs(delta)
-            } else if direction==sign {
-                progress+=abs(delta);oppositeTurn=max(0,oppositeTurn-abs(delta))
-            } else {
-                // Signed cancellation prevents alternating heading jitter from adding
-                // steps. A deliberate reverse earns its own first-quarter tolerance.
-                progress-=abs(delta);oppositeTurn+=abs(delta)
-                if oppositeTurn>=Self.reversalTurn {
-                    direction=sign;progress=Self.turnTolerance+oppositeTurn;oppositeTurn=0
-                }
+        lastTime=now;x+=dx;y+=dy
+        // The first packet after construction or reset only sets the baseline: it
+        // may carry a stale NAV total, and nothing about the hand is known yet.
+        if lastProgress==nil {progressX=x;progressY=y;lastProgress=now}
+        // Sideways scatter of each moving packet from the chord joining its
+        // neighbours: tremor counts, acceleration along the path does not.
+        if active,!settled,dx != 0 || dy != 0 {
+            if moving>=2 && now-olderTime<=Self.tremorSpan {
+                let cx=x-olderX,cy=y-olderY,chord=hypot(cx,cy)
+                if chord>1e-6 {wobbleCount=min(wobbleCount+1,20);wobble+=(Self.robust(abs(cx*(priorY-olderY)-cy*(priorX-olderX))/chord,wobble)-wobble)/wobbleCount}
+            }
+            olderX=priorX;olderY=priorY;olderTime=priorTime;priorX=x;priorY=y;priorTime=now;moving+=1
+        }
+        var output:Int32=0
+        let travel=floor(Self.restTravel,Self.noiseTravel,noise)
+        if hypot(x-progressX,y-progressY)>=travel {
+            if !active {active=true;note(.start);startRun(x:progressX,y:progressY,previous:0)}
+            progressX=x;progressY=y;lastProgress=now;settled=false
+        } else if let lastProgress,now-lastProgress>=Self.settleSeconds {
+            // Jitter is the packet-to-packet change while not progressing: random
+            // tremor has it, steady very slow motion does not, so slow deliberate
+            // movement never raises the floors. Zero packets count as quiet.
+            if let lastPacket,now-lastPacket<=Self.tremorSpan/2 {jitterCount=min(jitterCount+1,20);jitter+=(Self.robust(hypot(dx-lastDX,dy-lastDY)/2,jitter)-jitter)/jitterCount}
+            if active {
+                // Only a corner armed by a completed segment may be accepted on settling.
+                if pendingSign != 0 && !pendingPartial {output+=confirm(onSettle:true,value:nil)}
+                settled=true;moving=0
             }
         }
-        guard maxX-minX>=Self.minimumExtent,maxY-minY>=Self.minimumExtent,
-              path>=Self.minimumPath else {
-            // Unqualified noise must not save a backlog of hidden steps which
-            // could spill out when the next genuine movement starts.
-            progress=min(progress,Self.quarterTurn)
+        lastDX=dx;lastDY=dy;lastPacket=now
+        guard active else{return output}
+        return output+advance()
+    }
+    /// Remember where the wand stopped. Nothing is reset until movement resumes.
+    private mutating func pause() {paused=true;pauseX=x;pauseY=y}
+    /// Movement after a pause: a consistent direction continues the run (slow
+    /// continuous motion); a new direction is a separate gesture from the pause point.
+    private mutating func resume(direction resumed:Double) {
+        paused=false
+        guard let current=heading,abs(Self.wrap(resumed-current))>Self.radians(Self.continueDegrees) else{return}
+        startRun(x:pauseX,y:pauseY,previous:0);note(.resumed)
+    }
+    /// A run starts at a point with no heading yet; its first segment sets it.
+    private mutating func startRun(x startX:Double,y startY:Double,previous:Double) {
+        anchorX=startX;anchorY=startY;heading=nil;extremeX=startX;extremeY=startY;extremeReach=0
+        turn=0;firstHeading=0;reference=0;referenceChord=0;referenceLocked=false;window=[]
+        runX=startX;runY=startY;runSteps=0
+        direction=0;next=0;peak=0;pendingSign=0;pendingPartial=false;stepPath=0
+        previousExtent=previous;windowX=startX;windowY=startY;spread=hypot(x-startX,y-startY)
+    }
+
+    // MARK: Segments and turning
+
+    private mutating func advance()->Int32 {
+        if paused {
+            // Decide only once the new direction is measurable.
+            let rx=x-pauseX,ry=y-pauseY
+            guard hypot(rx,ry)>=max(Self.partialSegment*segmentLength,Self.noiseTravel*noise) else{return 0}
+            resume(direction:atan2(ry,rx))
+        }
+        let length=segmentLength
+        spread=max(spread,hypot(x-windowX,y-windowY))
+        let ddx=x-anchorX,ddy=y-anchorY,distance=hypot(ddx,ddy),h=atan2(ddy,ddx)
+        if let current=heading {
+            let reach=ddx*cos(current)+ddy*sin(current)
+            if reach>extremeReach {extremeReach=reach;extremeX=x;extremeY=y}
+        }
+        // A quick flick may be only three or four packets: half a segment can open
+        // a run, and stands in for the current heading until a segment completes.
+        let partial=distance>=max(Self.partialSegment*length,Self.noiseTravel*noise)
+        guard let previous=heading else{
+            guard partial else{return 0}
+            heading=h;firstHeading=h;reference=h;referenceChord=distance;turn=0;commit(distance:distance)
+            window=[(path,0)];refX=runX;refY=runY;refHeading=h
             return 0
         }
-        guard progress+1e-9>=Self.quarterTurn else{return 0}
-        // One report can only cross one qualified quarter. Keep the angular
-        // remainder so a continuous full loop produces four, not extra jumps.
-        progress-=Self.quarterTurn
-        path=0;minX=x;maxX=x;minY=y;maxY=y
-        return Int32(direction)
+        let delta=Self.wrap(h-previous),estimate=turn+delta
+        // Turning this sharply within a short, size-relative path is an about-face
+        // or a turnaround hook: the stroke reversed. It is never winding; a fresh run
+        // starts where the stroke turned round.
+        let reach=cuspReach,junction=path
+        var sharp=abs(delta)
+        for entry in window where junction-entry.path<=reach {sharp=max(sharp,abs(estimate-entry.turn))}
+        // A corner is a turn at one junction; a tight arc spreads its turn out.
+        recentTurn=abs(delta)
+        // A partial segment may reveal an about-face early, but only when it is
+        // clearly longer than tremor at a momentary stop.
+        if sharp>=Self.radians(Self.cuspTurnDegrees) && (distance>=length || distance>=max(Self.partialSegment*length,Self.cuspNoise*noise)) {
+            if pendingSign != 0 {note(.cancelled)}
+            let stroke=extent
+            startRun(x:extremeReach>0 ? extremeX:anchorX,y:extremeReach>0 ? extremeY:anchorY,previous:stroke)
+            note(.cusp)
+            return advance()
+        }
+        guard distance>=length else{
+            return partial ? count(raw:estimate,heading:h,partial:true) : 0
+        }
+        window.append((junction,turn))
+        while window.count>1,junction-window[0].path>reach {window.removeFirst()}
+        heading=h;turn=estimate;commit(distance:distance)
+        // Up to two segments of the opening stroke's chord, rather than one short
+        // noisy segment, are the run's reference; turning ends the opening stroke.
+        // A chord shorter than a few noise widths cannot lock on a turn: under
+        // tremor the reference keeps following the opening chord instead.
+        if !referenceLocked {
+            let chordX=x-runX,chordY=y-runY,chord=hypot(chordX,chordY),chordHeading=atan2(chordY,chordX)
+            if referenceReliable && abs(Self.wrap(h-reference))>Self.radians(Self.straightDegrees) {referenceLocked=true}
+            else {
+                reference=firstHeading+Self.wrap(chordHeading-firstHeading);refHeading=chordHeading;referenceChord=chord
+                if chord>=Self.referenceSegments*length {referenceLocked=true}
+            }
+        }
+        return count(raw:turn,heading:h,partial:false)
+    }
+    private mutating func commit(distance:Double) {
+        anchorX=x;anchorY=y;path+=distance;stepPath+=distance
+        extremeX=x;extremeY=y;extremeReach=0;note(.segment)
+    }
+
+    // MARK: Steps
+
+    private mutating func count(raw:Double,heading now:Double,partial:Bool)->Int32 {
+        let value=effective(raw)
+        let first=Self.radians(Self.firstTurnDegrees),quarter=Self.radians(Self.quarterTurnDegrees)
+        if direction != 0 && (value-peak)*direction>0 {peak=value;peakX=x;peakY=y;peakHeading=now}
+        if pendingSign == 0 {
+            if direction == 0 {
+                // A run whose opening stroke is still tremor-sized has no direction
+                // to turn from yet.
+                if abs(value)>=first && referenceReliable {arm(value>0 ? 1:-1,threshold:value>0 ? first:-first,x:runX,y:runY,heading:reference)}
+            } else if (value-next)*direction>=0 {
+                arm(direction,threshold:next,x:refX,y:refY,heading:refHeading)
+            } else if (peak-value)*direction>=quarter {
+                arm(-direction,threshold:peak-quarter*direction,x:peakX,y:peakY,heading:peakHeading)
+            }
+            guard pendingSign != 0 else{return 0}
+            pendingPartial=partial
+        } else if (value-pendingThreshold)*pendingSign < -Self.radians(Self.cancelBackDegrees) {
+            pendingSign=0;note(.cancelled);return 0
+        } else if !partial {
+            pendingPartial=false
+        }
+        return confirm(onSettle:false,value:value)
+    }
+    private mutating func arm(_ sign:Double,threshold:Double,x fromX:Double,y fromY:Double,heading h:Double) {
+        pendingSign=sign;pendingThreshold=threshold;pendingX=fromX;pendingY=fromY;pendingHeading=h;note(.pending)
+        pendingSharp=recentTurn>=Self.radians(Self.sharpDegrees);armX=x;armY=y;armSideways=sideways
+    }
+    /// A step needs sideways travel into the turn, not just a turned heading.
+    private mutating func confirm(onSettle:Bool,value:Double?)->Int32 {
+        guard pendingSign != 0 else{return 0}
+        let need=max((onSettle ? Self.settleFraction:Self.confirmFraction)*scale,floor(Self.minimumSideways,Self.noiseTravel,noise))
+        // Consecutive steps need travel of at least half the gesture's size between
+        // them, as every corner of a square or quarter of a loop has.
+        guard sideways>=need,stepPath>=max(Self.minimumPath,Self.stepPathFraction*scale) else{return 0}
+        // A sharp turn is confirmed once its outgoing stroke has left the short path
+        // in which it could still become an about-face, once the wand settles, or
+        // when the path had already curved well sideways before it (an arc's last
+        // packet). Sideways travel gained after the turn could be a reset stroke.
+        if pendingSharp && !onSettle && armSideways<Self.strongFraction*scale && hypot(x-armX,y-armY)<cuspReach {return 0}
+        let sign=pendingSign,now=heading ?? 0
+        direction=sign;next=pendingThreshold+Self.radians(Self.quarterTurnDegrees)*sign
+        peak=value ?? effective(turn);peakX=x;peakY=y;peakHeading=now
+        refX=x;refY=y;refHeading=now
+        runSteps+=1;stepPath=0;previousExtent=extent;windowX=x;windowY=y;spread=0
+        pendingSign=0;note(onSettle ? .settled:.step)
+        return Int32(sign)
     }
 }
 
 /// Ethan's review "circles" include clockwise/anticlockwise diamonds and squares.
-/// Straight up/down flicks no longer navigate; the optional yes/no experiment is
+/// Straight up/down flicks do not navigate; the optional yes/no experiment is
 /// kept separately. This adapter leaves Better Git's selection lifecycle intact.
 struct WandReviewNavigation {
     var useAxisGestures = false
     private var axisGesture = WandAxisReviewGesture()
     private var circle = WandReviewCircle()
-    mutating func reset() { let selected=useAxisGestures;self=Self();useAxisGestures=selected }
+    /// Starts a fresh gesture; the default classifier keeps its learned hand noise.
+    mutating func reset() { axisGesture.reset();circle.reset() }
     mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
         if useAxisGestures { return axisGesture.sample(dx:dx,dy:dy,now:now) }
         return circle.sample(dx:dx,dy:dy,now:now)
     }
+    /// Diagnostics only: the default classifier's state after the last sample.
+    var snapshot: WandReviewCircle.Snapshot { circle.snapshot }
+    /// Replay only: seed the default classifier's learned noise from a trace.
+    mutating func restoreNoise(jitter:Double,wobble:Double) { circle.restoreNoise(jitter:jitter,wobble:wobble) }
 }
 
 /// Ethan's optional "yes/no": an up-and-down nod moves next; a side-to-side

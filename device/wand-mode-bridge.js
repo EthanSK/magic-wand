@@ -28,7 +28,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   var connects=NRF['#onconnect'];
   if(!connects)connects=[onConnect];else if(typeof connects==='function')connects=[connects];
   connects.forEach(function(callback){if(callback.toString().indexOf('stopScroll')>=0)callback.replaceWith(function(){
-    global.wandCircleScrolling=false;global.wandReviewTracking=false;global.wandAppMode=undefined;global.wandReviewFiles=false;stopScroll();scrollSuppress=false;chordFollowBefore=false;
+    global.wandCircleScrolling=false;global.wandReviewTracking=false;global.wandDeskSleeping=false;global.wandAppMode=undefined;global.wandReviewFiles=false;stopScroll();scrollSuppress=false;chordFollowBefore=false;
     clearHoldClick();moveLatched=false;hudOpen=false;moveGestureMode=undefined;lastMoveTap=-100;
     stopHUD();cancelTapGesture();epoch++;connected=true;busy=false;sentButtons=0;
     if(sendTimer!==undefined){clearTimeout(sendTimer);sendTimer=undefined;}
@@ -39,7 +39,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   global.wandCircleScrolling=false;
   global.wandDoubleClickSeconds=0.3;
   // Ethan's independent lanes: Bottom = mouse, Middle = HUD/review, Top = speech.
-  global.wandReviewTracking=false;
+  global.wandReviewTracking=false;global.wandDeskSleeping=false;
   // Keep legacy simultaneous-button scrolling out of the independent controls.
   checkScrollChord.replaceWith(function(){return false;});
   middlePress.replaceWith(function(){
@@ -50,7 +50,8 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   });
   setMouseFollow.replaceWith(function(on){
     cancelTapGesture();clearHoldClick();moveGestureMode=undefined;moveLatched=!!on;
-    if(connected&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();
+    if(on&&global.wandDeskSleeping)global.setWandDeskSleeping(false);
+    if(connected&&!global.wandDeskSleeping&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();
     updateLights();
   });
   setHUDOpen.replaceWith(function(open){
@@ -58,13 +59,13 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(open||global.wandReviewTracking){
       if(hudTimer===undefined){hudX=0;hudY=0;hudTimer=setInterval(function(){hudReport();},30);}
     }else stopHUD();
-    if(connected&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();
+    if(connected&&!global.wandDeskSleeping&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();
     updateLights();
   });
   global.setWandReviewTracking=function(active){
     if(global.wandReviewTracking===!!active)return;
     global.wandReviewTracking=!!active;
-    if(active){hudX=0;hudY=0;if(hudTimer===undefined)hudTimer=setInterval(function(){hudReport();},30);wakeGyro();}
+    if(active){hudX=0;hudY=0;if(hudTimer===undefined)hudTimer=setInterval(function(){hudReport();},30);if(!global.wandDeskSleeping)wakeGyro();}
     else if(!hudOpen){stopHUD();if(!moveLatched)sleepGyro();}
   };
   // Keep the actual registered sensor callback, including its saved scope.
@@ -169,6 +170,23 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       if(!moveLatched&&!hudOpen&&!scrollHeld&&!global.wandReviewTracking)global.wandPowerDownGyro();
     },1000);
   });
+  // A minute of confirmed desk rest is timed by the existing Mac detector.
+  // Preserve the logical modes, recording and calibration. The accelerometer
+  // stays at 1.6 Hz so pickup can wake it; this is not a Bluetooth disconnect.
+  global.setWandDeskSleeping=function(on){
+    if(on&&(!digitalRead(MOVE_PIN)||!digitalRead(HUD_PIN)||!digitalRead(STT_PIN)))return;
+    if(global.wandDeskSleeping===!!on)return;
+    global.wandDeskSleeping=!!on;
+    if(on){
+      if(global.wandSleepTimer!==undefined){clearTimeout(global.wandSleepTimer);global.wandSleepTimer=undefined;}
+      if(hudTimer!==undefined){clearInterval(hudTimer);hudTimer=undefined;}
+      global.wandPowerDownGyro();
+    }else{
+      if((hudOpen||global.wandReviewTracking)&&hudTimer===undefined)hudTimer=setInterval(function(){hudReport();},30);
+      if(connected&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();
+    }
+    updateLights();
+  };
   // Only accelerometer readings run on the desk (1.6 Hz, gyro off). The Mac
   // classifies pickup and set-down from this stream, never from pointer silence.
   // Active telemetry is capped at 10 Hz; accepted pointer processing stays 104 Hz.
@@ -183,7 +201,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   // brief edges are guarded; steady aiming keeps the existing fast filter.
   if(global.wandNoiseGuardWatches)global.wandNoiseGuardWatches.forEach(function(id){try{clearWatch(id);}catch(e){}watches=watches.filter(function(w){return w!==id;});});
   global.wandNoiseGuardWatches=[MOVE_PIN,HUD_PIN,STT_PIN].map(function(pin){
-    var id=setWatch(function(e){global.wandSlackX=global.wandSlackY=0;global.wandSettleUntil=getTime()+(e.state?0.07:0.05);},pin,{edge:'both',repeat:true,debounce:20});
+    var id=setWatch(function(e){if(!e.state&&global.wandDeskSleeping)global.setWandDeskSleeping(false);global.wandSlackX=global.wandSlackY=0;global.wandSettleUntil=getTime()+(e.state?0.07:0.05);},pin,{edge:'both',repeat:true,debounce:20});
     watches.push(id);return id;
   });
   if(!global.wandRawPointer)global.wandLiveMotionCallback.replaceWith(function(a) {
@@ -278,7 +296,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   updateLights.replaceWith(function(){
     if(connected&&global.wandLastFollow!==moveLatched){global.wandLastFollow=moveLatched;Bluetooth.println('@FOLLOW '+(moveLatched?1:0));}
     var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN);
-    var mode=(global.WAND_UPDATING||global.wandMotionReady===false)?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':(scrollHeld||global.wandCircleScrolling)?'scroll':global.wandAppMode?'app':move?'mouse':hud?'hud':(global.wandRecording||!digitalRead(STT_PIN))?'recording':'idle';
+    var mode=(global.WAND_UPDATING||global.wandMotionReady===false)?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':global.wandDeskSleeping?'sleep':(scrollHeld||global.wandCircleScrolling)?'scroll':global.wandAppMode?'app':move?'mouse':hud?'hud':(global.wandRecording||!digitalRead(STT_PIN))?'recording':'idle';
     lightLevels=mode==='update'||mode==='calibration'||mode==='disconnected'?[0.45,0.45,0.45]:mode==='recording'?[1,0,0]:mode==='scroll'?[0,1,1]:mode==='app'?(global.wandReviewFiles?[1,0,1]:[0,1,0]):mode==='mouse'?[0,0,1]:mode==='hud'?[1,0.2,0]:[0,0,0];
     writeLight(LED1,lightLevels[0]);writeLight(LED2,lightLevels[1]);writeLight(LED3,lightLevels[2]);
     if(connected&&mode!==global.wandLastLightState){global.wandLastLightState=mode;print('WAND_LIGHT_STATE '+mode+' '+JSON.stringify(lightLevels));}

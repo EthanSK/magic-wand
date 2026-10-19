@@ -8,14 +8,15 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.72",
-    "receiverBuild": "77",
+    "receiver": "1.2.74",
+    "receiverBuild": "79",
     "deviceRuntime": "wand-e1ce30d7c407",
-    "bridgeRevision": "da9327f3342fe74dbe2fcaaea24514ab50919e73b29022e6ea969d24909c1874"
+    "bridgeRevision": "cd1c870efd9e4c3c875314113b0e6129fb54853c63c446d474931403b27163b6"
   },
   "status": [
-    "Installed: Wand Receiver 1.2.72 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.",
-    "Review navigation maps each rough quarter-turn to one VS Code review step: clockwise next, anticlockwise previous. Step count follows turn angle rather than distance. Nod/shake remains disabled. Automated traces pass; physical acceptance is pending.",
+    "Installed: Wand Receiver 1.2.74 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.",
+    "Review navigation uses a redesigned spatial corner detector with learned noise tolerance. Reversible quarters, rough squares, slow motion and simulated device traces pass automated checks; physical acceptance is pending.",
+    "A minute of confirmed desk rest turns the lights off and keeps low-rate pickup sensing. Pickup or a button restores the light. Rest never stops dictation or dismisses the open HUD.",
     "Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.",
     "The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.",
     "Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.",
@@ -191,6 +192,17 @@
       "detail": "Keep it still with no buttons pressed for two seconds"
     },
     {
+      "mode": "sleep",
+      "name": "Sleeping",
+      "levels": [
+        0,
+        0,
+        0
+      ],
+      "display": "#4a4268",
+      "detail": "Off after a minute on the desk; pickup restores the light"
+    },
+    {
       "mode": "scroll",
       "name": "Scrolling",
       "levels": [
@@ -329,14 +341,16 @@
       "heldMinimumExtentDegrees": 0.05,
       "heldAxisAcquisitionDegrees": 0.12,
       "heldQuietSpeedDegreesPerSecond": 1,
-      "reviewHeadingSegmentDegrees": 0.015,
-      "reviewMinimumExtentDegrees": 0.08,
       "scope": "Review navigation counts rough quarter-turns by angle, independent of path radius. Held scrolling, pointer gains, filters, sensor rate and motion-delay settings remain unchanged.",
-      "reviewMinimumLocalRadiusDegrees": 0.08,
+      "reviewHeadingSegmentDegrees": 0.03,
+      "reviewMinimumSidewaysDegrees": 0.05,
+      "reviewMinimumPathDegrees": 0.1,
+      "reviewFirstTurnDegrees": 45,
       "reviewQuarterTurnDegrees": 90,
-      "reviewTurnToleranceDegrees": 20,
-      "reviewReversalDegrees": 20,
-      "reviewMinimumPathDegrees": 0.15
+      "reviewCuspTurnDegrees": 115,
+      "reviewSegmentFraction": 0.12,
+      "reviewMinimumSegmentFraction": 0.5,
+      "reviewNoiseSegmentFactor": 3.5
     },
     "reviewAxisGestures": {
       "default": false,
@@ -348,7 +362,8 @@
       "scope": "Optional replacement for quarter-turn review navigation. Every clear vertical turn advances; every horizontal turn goes previous. The first step needs an outward motion and a reversal. Continued back-and-forth movement counts each new turn. Pointer, HUD and speech are unchanged.",
       "reversalTravelDegrees": 0.06,
       "maximumAcquisitionSeconds": 4
-    }
+    },
+    "deskSleepSeconds": 60
   },
   "hud": {
     "source": "Agentic Mouse’s published Default mode",
