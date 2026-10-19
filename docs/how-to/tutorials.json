@@ -627,11 +627,12 @@
         "next change",
         "better git",
         "circle",
-        "nudge",
         "stage",
-        "commit set"
+        "commit set",
+        "quarter-turn",
+        "diamond"
       ],
-      "summary": "Choose Review changes, circle through changes, hold Middle to stage the set.",
+      "summary": "Choose Review changes, quarter-turn through changes, hold Middle to stage the set.",
       "buttons": [
         "middle"
       ],
@@ -641,29 +642,29 @@
       "steps": [
         "Open the HUD",
         "Choose Review changes",
-        "Circle to move",
-        "Nudge to step",
+        "Turn to move",
+        "Quarter-turn to step",
         "Hold Middle to stage",
         "Tap Middle to exit"
       ],
-      "seconds": 31.07,
+      "seconds": 35.57,
       "optionNote": "This video shows the default review gestures. With Review with nods and shakes on, use up/down for next and side-to-side for previous instead. Each clear direction change makes one step.",
-      "video": "https://ethansk.github.io/magic-wand/how-to/videos/review-changes.mp4?v=23a6ad9ec9",
+      "video": "https://ethansk.github.io/magic-wand/how-to/videos/review-changes.mp4?v=2c601dbbb8",
       "poster": "https://ethansk.github.io/magic-wand/how-to/videos/review-changes.jpg?v=b3127ca013",
-      "captions": "https://ethansk.github.io/magic-wand/how-to/videos/review-changes.vtt?v=1484f2c4cb",
-      "transcript": "https://ethansk.github.io/magic-wand/how-to/transcripts/review-changes.txt?v=52bf651cba",
+      "captions": "https://ethansk.github.io/magic-wand/how-to/videos/review-changes.vtt?v=698e205b2b",
+      "transcript": "https://ethansk.github.io/magic-wand/how-to/transcripts/review-changes.txt?v=a344da3fcb",
       "narration": [
         "In VS Code, tap Middle to open the HUD. Review changes is just right of Switch App.",
         "Outline it and tap Middle. The HUD hides, the light turns green and review starts.",
-        "With no button held, circle clockwise for the next change and anticlockwise for the previous one.",
-        "After a pause, a quick nudge down or up moves one change forward or back.",
+        "With no button held, a clockwise quarter-turn goes to the next change. Turn anticlockwise to go back one.",
+        "Up to right moves forward one. Right to up moves back one. A full circle moves four changes.",
         "Files you finish join the set. Hold Middle for about half a second to stage them and keep reviewing.",
         "Tap Middle once to cancel and leave review."
       ],
       "controls": [
         {
           "button": "Middle",
-          "note": "In VS Code, tap Review changes or Stage files to enter and hide the HUD. Circle clockwise for next and anticlockwise for previous, with no button held. After a pause, a quick down/up nudge moves one item forward/back. Tap Middle once to cancel and exit, or hold it for about half a second to stage the working set and keep reviewing. Navigation stays frozen until release. The floating indicator says “(hold to commit set)”. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection."
+          "note": "In VS Code, tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit, or hold it for about half a second to stage the working set and keep reviewing. Navigation stays frozen until release. The floating indicator says “(hold to commit set)”. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection."
         },
         {
           "button": "Middle",
@@ -672,7 +673,7 @@
       ],
       "describes": {
         "updated": "2026-10-19",
-        "receiver": "1.2.69 (74)",
+        "receiver": "1.2.71 (76)",
         "controlVersion": 2
       }
     },
@@ -697,7 +698,8 @@
         "git",
         "better git",
         "circle",
-        "nudge"
+        "quarter-turn",
+        "diamond"
       ],
       "summary": "Choose Stage files, circle to build a set, hold Middle to stage it.",
       "buttons": [
@@ -710,27 +712,27 @@
         "Open the HUD",
         "Choose Stage files",
         "Circle to select",
-        "Nudge to step",
+        "Quarter-turn to step",
         "Hold Middle to stage",
         "Tap Middle to exit"
       ],
-      "seconds": 26.03,
+      "seconds": 31.5,
       "optionNote": "This video shows the default review gestures. With Review with nods and shakes on, use up/down for next and side-to-side for previous instead. Each clear direction change makes one step.",
-      "video": "https://ethansk.github.io/magic-wand/how-to/videos/stage-files.mp4?v=c1ebd1ee63",
-      "poster": "https://ethansk.github.io/magic-wand/how-to/videos/stage-files.jpg?v=f4dd6718c8",
-      "captions": "https://ethansk.github.io/magic-wand/how-to/videos/stage-files.vtt?v=72f26e5b31",
-      "transcript": "https://ethansk.github.io/magic-wand/how-to/transcripts/stage-files.txt?v=afbe92e96c",
+      "video": "https://ethansk.github.io/magic-wand/how-to/videos/stage-files.mp4?v=99e7f9ee52",
+      "poster": "https://ethansk.github.io/magic-wand/how-to/videos/stage-files.jpg?v=9c43fffe05",
+      "captions": "https://ethansk.github.io/magic-wand/how-to/videos/stage-files.vtt?v=89b6d37a61",
+      "transcript": "https://ethansk.github.io/magic-wand/how-to/transcripts/stage-files.txt?v=d504ee760d",
       "narration": [
         "In VS Code, open the HUD, outline Stage files next to Review changes, and tap Middle. The light turns purple.",
-        "Circle clockwise to add the next file to the set, or anticlockwise to drop the last one.",
-        "After a pause, a quick nudge down or up moves one file.",
+        "A clockwise quarter-turn moves to the next file. Turn anticlockwise to go back one file.",
+        "Each quarter-turn moves one file. Two clockwise quarter-turns move forward two. Reverse to go back one.",
         "Hold Middle for about half a second to stage the whole set. You stay in Stage files, ready for the next one.",
         "Tap Middle once to cancel and leave."
       ],
       "controls": [
         {
           "button": "Middle",
-          "note": "In VS Code, tap Review changes or Stage files to enter and hide the HUD. Circle clockwise for next and anticlockwise for previous, with no button held. After a pause, a quick down/up nudge moves one item forward/back. Tap Middle once to cancel and exit, or hold it for about half a second to stage the working set and keep reviewing. Navigation stays frozen until release. The floating indicator says “(hold to commit set)”. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection."
+          "note": "In VS Code, tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit, or hold it for about half a second to stage the working set and keep reviewing. Navigation stays frozen until release. The floating indicator says “(hold to commit set)”. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection."
         },
         {
           "button": "Middle",
@@ -739,7 +741,7 @@
       ],
       "describes": {
         "updated": "2026-10-19",
-        "receiver": "1.2.69 (74)",
+        "receiver": "1.2.71 (76)",
         "controlVersion": 2
       }
     },

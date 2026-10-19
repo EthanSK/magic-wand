@@ -73,8 +73,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false
     var circleLight=false
     var circleTimer:Timer?,lowDelayTimer:Timer?
-    var lastClickTime = 0.0, clickCount: Int64 = 0
-    var lastClickPoint = CGPoint.zero
     var heartbeat: Timer?
     let controls = WandControlTransport()
     let context = WandContextListener()
@@ -1105,22 +1103,22 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // a still wand is not evidence that Ethan has finished speaking.
 
     }
+    /// Ethan's "normal click": a plain single click, never inherited Command-click
+    /// or an OS double-click made from two independent stop-to-click gestures.
+    /// Bottom double-tap is classified by the wand router (recenter), not here.
+    static func mouseButtonEvent(button:CGMouseButton,down:Bool,at point:CGPoint)->CGEvent? {
+        let kind:CGEventType = button == .left ? (down ? .leftMouseDown:.leftMouseUp) : (down ? .rightMouseDown:.rightMouseUp)
+        guard let event=CGEvent(mouseEventSource:nil,mouseType:kind,mouseCursorPosition:point,mouseButton:button) else{return nil}
+        event.flags=[]
+        event.setIntegerValueField(.mouseEventClickState,value:1)
+        return event
+    }
     func transition(to next: Int, at point: CGPoint) {
         for (mask, button) in [(1, CGMouseButton.left), (2, CGMouseButton.right)] where buttons & mask != next & mask {
             let down = next & mask != 0
-            let kind: CGEventType = button == .left ? (down ? .leftMouseDown : .leftMouseUp) : (down ? .rightMouseDown : .rightMouseUp)
-            let event = CGEvent(mouseEventSource: nil, mouseType: kind, mouseCursorPosition: point, mouseButton: button)
-            if button == .left {
-                if down {
-                    let now = ProcessInfo.processInfo.systemUptime
-                    let close = hypot(point.x - lastClickPoint.x, point.y - lastClickPoint.y) <= 4
-                    clickCount = close && now - lastClickTime <= NSEvent.doubleClickInterval ? clickCount + 1 : 1
-                    lastClickTime = now; lastClickPoint = point
-                }
-                event?.setIntegerValueField(.mouseEventClickState, value: clickCount)
-            }
-            event?.post(tap: .cghidEventTap)
-            log("BUTTON", button == .left ? "LEFT" : "RIGHT", down ? "DOWN" : "UP")
+            let event=Self.mouseButtonEvent(button:button,down:down,at:point)
+            event?.post(tap:.cghidEventTap)
+            log("BUTTON",button == .left ? "LEFT":"RIGHT",down ? "DOWN":"UP","flags",event?.flags.rawValue ?? 0,"clickCount",event?.getIntegerValueField(.mouseEventClickState) ?? 0)
         }
         buttons = next
     }

@@ -95,11 +95,14 @@ test("micro-circle tuning matches native geometry and preserves pointer noise gu
   ]) assert.equal(number(re, held, key), t[key]);
   for (const [key, re] of [
     ["reviewHeadingSegmentDegrees", /guard distance>=([\d.]+)/],
-    ["reviewMinimumExtentDegrees", /maxX-minX>=([\d.]+)/],
-    ["reviewMinimumTurningRadiusDegrees", /abs\(delta\)\*([\d.]+)/],
-    ["reviewMinimumLocalRadiusDegrees", /cornerLength\/abs\(delta\)<([\d.]+)/],
-    ["reviewRatchetDegrees", /Int\(arc\/([\d.]+)\)/],
+    ["reviewMinimumExtentDegrees", /minimumExtent = ([\d.]+)/],
+    ["reviewMinimumPathDegrees", /minimumPath = ([\d.]+)/],
+    ["reviewMinimumLocalRadiusDegrees", /minimumRadius = ([\d.]+)/],
   ]) assert.equal(number(re, review, key), t[key]);
+  for (const [key, name] of [["reviewQuarterTurnDegrees","quarterTurn"],["reviewTurnToleranceDegrees","turnTolerance"],["reviewReversalDegrees","reversalTurn"]]) {
+    const divisor=number(new RegExp(name+" = Double\\.pi / ([0-9.]+)"),review,name);
+    assert.equal(180/divisor,t[key]);
+  }
 });
 
 test("light modes, priority and RGB levels match the bridge", () => {

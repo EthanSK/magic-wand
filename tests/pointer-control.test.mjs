@@ -113,3 +113,34 @@ precondition(events[1].getIntegerValueField(.scrollWheelEventDeltaAxis1)==(-4))
   const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stderr);
  } finally {rmSync(dir,{recursive:true,force:true});}
 });
+
+// Create the receiver's actual events without posting any mouse input.
+test("ordinary wand clicks never inherit modifiers or multiclick state", {skip:process.platform!=="darwin"},()=>{
+ const dir=mkdtempSync(join(tmpdir(),"wand-plain-click-"));
+ try {
+  const text=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.url),'utf8');
+  const a=text.indexOf('    static func mouseButtonEvent('),b=text.indexOf('    func transition(',a);
+  assert.ok(a>0 && b>a);
+  writeFileSync(join(dir,'main.swift'),`import Foundation
+import CoreGraphics
+enum Receiver {${text.slice(a,b)}}
+for _ in 0..<3 {
+ for button in [CGMouseButton.left,.right] {
+  for down in [true,false] {
+   let e=Receiver.mouseButtonEvent(button:button,down:down,at:CGPoint(x:50,y:60))!
+   precondition(e.flags.isEmpty)
+   precondition(e.getIntegerValueField(.mouseEventClickState)==1)
+   precondition(e.getIntegerValueField(.mouseEventButtonNumber)==Int64(button.rawValue))
+   precondition(e.location==CGPoint(x:50,y:60))
+   let type:CGEventType=button == .left ? (down ? .leftMouseDown:.leftMouseUp) : (down ? .rightMouseDown:.rightMouseUp)
+   precondition(e.type==type)
+  }
+ }
+}
+print("PASS plain single mouse events")
+`);
+  const build=spawnSync('swiftc',[join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);
+  const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);
+  assert.match(text.slice(b,text.indexOf('    func releaseButtons()',b)),/Self\.mouseButtonEvent/);
+ }finally{rmSync(dir,{recursive:true,force:true});}
+});

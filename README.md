@@ -39,7 +39,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.
 - The HUD has no normal inactivity timeout. Screenshot selection temporarily uses the pointer and returns to the same HUD afterward.
 - Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.
-- In VS Code, tap Review changes or Stage files to enter and hide the HUD. Circle clockwise for next and anticlockwise for previous, with no button held. After a pause, a quick down/up nudge moves one item forward/back. Tap Middle once to cancel and exit, or hold it for about half a second to stage the working set and keep reviewing. Navigation stays frozen until release. The floating indicator says “(hold to commit set)”. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.
+- In VS Code, tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit, or hold it for about half a second to stage the working set and keep reviewing. Navigation stays frozen until release. The floating indicator says “(hold to commit set)”. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.
 - Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.
 - The native wand home HUD always has Play/Pause immediately to the right of Utility. It uses the Mac’s standard media key, without changing either physical mouse.
 
@@ -165,7 +165,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.70 uses clockwise/anticlockwise review loops, including small diamond and square paths. Straight up/down flicks are disabled. The optional nod/shake experiment is saved and switched off. Automated checks pass; physical acceptance is pending.
+- Installed: Wand Receiver 1.2.72 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.
+- Review navigation maps each rough quarter-turn to one VS Code review step: clockwise next, anticlockwise previous. Step count follows turn angle rather than distance. Nod/shake remains disabled. Automated traces pass; physical acceptance is pending.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
 - The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
@@ -180,7 +181,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.70 (75) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
+Receiver 1.2.72 (77) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

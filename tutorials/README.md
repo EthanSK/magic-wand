@@ -12,7 +12,7 @@ the videos are illustrations, not recordings or proof of physical behaviour.
 2. Match the user's intended action, not just a button name. Return the matching guide's
    `url` and one short instruction. Its `video` URL is the direct MP4.
 3. Check the user's selected control version and options when available. These videos show
-   Control V2. Review changes and Stage files show the default circles and nudges. With
+   Control V2. Review changes and Stage files show the default clockwise/anticlockwise quarter-turns. With
    **Review with nods and shakes** enabled, use the guide's `optionNote`: vertical turns go
    next, horizontal turns go previous. Do not tell that user to use the default circles.
 4. If the version or option differs, explain the difference. If the action is not covered,

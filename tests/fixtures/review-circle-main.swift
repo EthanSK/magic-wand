@@ -7,9 +7,9 @@ func circle(_ sign:Double,dt:Double=0.03,turns:Double=3)->[Int32] {
  return steps
 }
 let cw=circle(1),ccw=circle(-1)
-check(cw.reduce(0,+)>12 && cw.allSatisfy{$0>=0},"clockwise is next only")
-check(ccw.reduce(0,+)<(-12) && ccw.allSatisfy{$0<=0},"anticlockwise is previous only")
-check(circle(1,dt:0.12).reduce(0,+)>12,"slow intended circles")
+check(cw.reduce(0,+)==12 && cw.allSatisfy{$0>=0},"clockwise is next only")
+check(ccw.reduce(0,+)==(-12) && ccw.allSatisfy{$0<=0},"anticlockwise is previous only")
+check(circle(1,dt:0.12).reduce(0,+)==12,"slow intended circles")
 var r=WandReviewCircle(),sum:Int32=0
 for i in 1...300{sum += r.sample(dx:0,dy:0.5,now:Double(i)*0.03)}
 check(sum==0,"straight movement is not a review gesture")
@@ -20,7 +20,7 @@ r.reset();var t=1.0,x=8.0,y=0.0,forward:Int32=0,back:Int32=0
 for (segment,sign) in [1.0,-1.0].enumerated(){
  for i in 1...240 {let a=sign*Double(i)*Double.pi/60,xx=cos(a)*8,yy=sin(a)*8;t+=0.03;let n=r.sample(dx:xx-x,dy:yy-y,now:t);if segment==0{forward+=n}else{back+=n};x=xx;y=yy}
 }
-check(forward>12 && back < -12,"winding reverses within the same session")
+check(forward==8 && back == -8,"winding reverses within the same session")
 let g=WandReviewGesture();g.beginDetents(mode:"changes",now:0)
 let req=g.detents(2,now:1);check(req.map{$0.phase} == ["begin","step","step"],"reuse ordered lifecycle")
 check(req.allSatisfy{$0.mode=="changes"&&$0.direction=="next"},"eyes contract")
@@ -69,7 +69,7 @@ check(diagonalSteps==0,"diagonal sweep is not an ambiguous up/down nudge")
 for sign in [-1.0,1.0] {
  var nav=WandReviewNavigation(),px=8.0,py=0.0,total:Int32=0,time=1.0
  for i in 1...240 {let angle=sign*Double(i)*Double.pi/60,xx=cos(angle)*8,yy=sin(angle)*8;time+=0.03;total+=nav.sample(dx:xx-px,dy:yy-py,now:time);px=xx;py=yy}
- check(sign>0 ? total>12:total < -12,"hybrid navigation preserves circle direction and ratchets")
+ check(sign>0 ? total==8:total == -8,"hybrid navigation preserves circle direction and ratchets")
  check(nav.sample(dx:0,dy:0,now:time+0.15)==0,"circle endpoint cannot add an extra nudge")
  for i in 1...5 {_=nav.sample(dx:0,dy:0.5,now:time+0.2+Double(i)*0.03)}
  check(nav.sample(dx:0,dy:0,now:time+0.5)==0,"pause after circling never enables a straight flick")
@@ -108,8 +108,8 @@ for i in 1...160 {let a=Double(i)*Double.pi/40,xx=8*cos(a),yy=8*sin(a);ct+=0.025
 var afterNoise:Int32=0;cx=0.025;cy=0
 for i in 1...1000 {let a=Double(i)*0.5,xx=0.025*cos(a),yy=0.025*sin(a);ct+=0.025;afterNoise+=afterCircle.sample(dx:xx-cx,dy:yy-cy,now:ct);cx=xx;cy=yy}
 check(afterNoise==0,"small wobble after a real circle cannot inherit amplified gain")
-// Ordinary circles retain their prior ratchet count, without an overall gain change.
-check(circle(1).reduce(0,+)==20,"normal eight-degree review circles retain their measured 20 ratchets")
+// Review count is angular: radius no longer changes the number of steps.
+check(circle(1).reduce(0,+)==12,"three full circles produce twelve quarter-turn steps")
 for radius in [0.1,0.2,0.4] {
  for sign in [-1.0,1.0] {
   let held=WandHeldScroll();held.begin(now:30)
@@ -223,6 +223,54 @@ for scale in [0.15,0.4,1.0,4.0] {
    }
   }
  }
+}
+
+func arc(_ start:Double,_ end:Double,_ r:Double,_ count:Int,_ duration:Double, _ label:String){
+ var g=WandReviewCircle(),x=r*cos(start),y=r*sin(start),t=1.0,total:Int32=0
+ let expected:Int32=end>start ? 1:-1
+ for i in 1...count {let a=start+(end-start)*Double(i)/Double(count),xx=r*cos(a),yy=r*sin(a);t+=duration/Double(count);let n=g.sample(dx:xx-x,dy:yy-y,now:t);check(n==0 || n==expected,label+" never wrong/two");total+=n;x=xx;y=yy}
+ check(total==expected,"\(label) radius \(r) count \(count) got \(total)")
+ for _ in 0..<20 {t+=0.03;check(g.sample(dx:0,dy:0,now:t)==0,label+" stationary duplicate")}
+}
+for r in [0.15,0.3,1,8,32] {for count in [8,24,80] {for d in [0.3,1,3] {
+ arc(-Double.pi/2,0,r,count,d,"north-east NEXT")
+ arc(0,-Double.pi/2,r,count,d,"east-north PREVIOUS")
+ arc(-Double.pi/2,-Double.pi,r,count,d,"north-west PREVIOUS")
+}}}
+for sign in [-1.0,1.0] {
+ var g=WandReviewCircle(),x=1.0,y=0.0,t=1.0,total:Int32=0
+ for i in 1...240 {let a=sign*Double(i)*2*Double.pi/60,xx=cos(a),yy=sin(a);t+=0.03;total+=g.sample(dx:xx-x,dy:yy-y,now:t);x=xx;y=yy}
+ check(total==Int32(sign*16),"four circles sixteen quarters got \(total)")
+}
+
+// A sharp up->right corner and its mirrors count once even when each edge
+// arrives as many small packets; do not require another corner to flush it.
+for (first,second,want) in [((0.0,-0.4),(0.4,0.0),Int32(1)),((0.4,0.0),(0.0,-0.4),Int32(-1)),((0.0,-0.4),(-0.4,0.0),Int32(-1))] {
+ var n=WandReviewNavigation(),total:Int32=0,t=1000.0
+ for v in [first,second] {for _ in 0..<20 {t+=0.02;let q=n.sample(dx:v.0/20,dy:v.1/20,now:t);check(q==0 || q==want,"sharp corner never goes wrong or doubles");total+=q}}
+ check(total==want,"one subdivided rough corner is one step")
+ for _ in 0..<20 {t+=0.02;check(n.sample(dx:0,dy:0,now:t)==0,"no delayed repeat after corner")}
+}
+// A quarter turn followed immediately by the same path backwards earns exactly
+// one opposite step. No old clockwise remainder can leak into the return.
+for radius in [0.15,1.0,8.0] {
+ var n=WandReviewNavigation(),x=0.0,y = -radius,t=1100.0
+ for (start,end,want) in [(-Double.pi/2,0.0,Int32(1)),(0.0,-Double.pi/2,Int32(-1)),(-Double.pi/2,0.0,Int32(1))] {
+  var total:Int32=0
+  for i in 1...30 {let a=start+(end-start)*Double(i)/30,xx=radius*cos(a),yy=radius*sin(a);t+=0.03;let q=n.sample(dx:xx-x,dy:yy-y,now:t);check(q==0 || q==want,"return quarter never emits old direction");total+=q;x=xx;y=yy}
+  check(total==want,"quarter reversal radius \(radius) gives one step")
+ }
+}
+// Mildly uneven, quantised arcs still qualify in both directions.
+for sign in [-1.0,1.0] {
+ var n=WandReviewNavigation(),x=0.0,y = -0.3,t=1200.0,total:Int32=0
+ for i in 1...30 {
+  let a = -Double.pi/2 + sign*Double.pi/2*Double(i)/30
+  let radius=0.3*(1+0.04*sin(Double(i)*0.31))
+  let xx=(radius*cos(a)*1000).rounded()/1000,yy=(radius*sin(a)*1000).rounded()/1000
+  t+=0.025;let q=n.sample(dx:xx-x,dy:yy-y,now:t);check(q==0 || q==Int32(sign),"rough quarter has only intended direction");total+=q;x=xx;y=yy
+ }
+ check(total==Int32(sign),"rough quantised quarter counts once")
 }
 
 if failures>0{exit(1)};print("PASS optional nods/shakes and clockwise/anticlockwise loops")

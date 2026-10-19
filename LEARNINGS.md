@@ -560,3 +560,34 @@ travel for a sharp corner, while keeping the existing local guard for smooth
 noise. Quantised circles, diamond loops in both directions and stationary noise
 after real movement are separate regression cases. These synthetic traces do not
 establish physical acceptance or prove the original asymmetric double-step cause.
+
+## Review steps are quarter-turns, not travel distance
+
+Ethan's north-to-east, east-to-north and north-to-west examples specify one step
+per rough quarter-turn. The older review detector still accumulated path length
+with a seven-degree quota, so radius affected the number of jumps. Default review
+now accumulates signed heading change, with a 90-degree quota and 20-degree
+endpoint tolerance. The first partial turn can qualify without a complete loop;
+subsequent continuous quarter-turns retain the angular remainder. A meaningful
+reverse clears the previous direction's remainder; a straight about-face resets
+acquisition instead of inventing a clockwise/anticlockwise step.
+
+Retain the independent geometry/noise guards, prevent unqualified motion from
+banking a backlog, and count at most one step per report. Verify exact counts,
+not just nonzero output: smooth and rough north/east/west arcs, subdivided sharp
+corners, immediate reversal, multiple radii/speeds, four steps per loop, and
+post-motion jitter are all covered. The nod/shake experiment remains available
+but disabled. These are synthetic input checks; physical acceptance is separate.
+
+## Ordinary pointer clicks are not the wand's double-tap gesture
+
+Mouse events created with a nil source can inherit current modifier flags. The
+receiver also used nearby click timing to grow the OS click count, even though
+Bottom's double-tap is already consumed as a recenter gesture by the wand router.
+Emit ordinary pointer button down/up as explicit modifier-free single clicks.
+This applies to direct clicks, dwell clicks and native drag endpoints; it does not
+change Middle's controls or the device's double-tap classification. Tests construct
+the actual native events without posting input and verify type, button, flags,
+position and repeated single-click count. The intermittent Codex new-window
+symptom stopped before this change; its exact triggering state was not captured,
+so do not describe either possible path as a confirmed physical root cause.
