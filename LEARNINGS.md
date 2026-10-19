@@ -511,3 +511,14 @@ which never emitted a circle step must not swallow an otherwise vertical flick.
 Tests reproduce missed return strokes before the fix and exercise alternating
 flick directions, curved flicks, circles, noise and the existing review lifecycle.
 These are synthetic gesture checks; physical feel still needs acceptance.
+
+## Keep the nod/shake review option independent
+
+The optional review classifier accepts an outward-and-return motion on one screen
+axis: either initial vertical direction means next, either horizontal direction
+means previous. It preserves the selected option across gesture resets and checks
+repeated gestures, slow input, noise, diagonals and circles separately. Its default
+is false; installation must not change the user's existing feature-flags file.
+Only review navigation uses this classifier. It does not alter mouse, HUD or speech.
+The existing firmware navigation noise gate still applies; synthetic slow input
+tests do not establish arbitrary slow physical-motion recognition.

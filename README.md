@@ -88,6 +88,9 @@ Wand Receiver is a background Mac app. Its wand icon in the menu bar provides:
   Short taps retain their existing mouse behavior.
 - **Control version → V1 · Pointer** restores the previous Bottom gestures. The exact
   pre-V2 implementation is also saved at `controls-v1.0.0`; see `control-versions/`.
+- **Options → Review with nods and shakes** is off by default. When enabled,
+  an up-and-down motion goes next and a side-to-side motion goes previous in
+  Review changes or Stage files. It replaces only their circles and flicks.
 - **Options → Rotation-independent controls** keeps screen directions upright while
   rotating the wand. Flick scrolling is available only in Control V1.
 
@@ -162,7 +165,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.67 adds smaller up/down review flicks that retain their original direction on spring-back. Micro circles, ordinary circle speed and pointer filtering are preserved. Automated checks passed; physical acceptance is pending.
+- Installed: Wand Receiver 1.2.68 adds an optional nod/shake review control, left off. Current circle/flick controls remain selected; smaller-circle and small-flick checks pass. Physical acceptance is pending.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
 - The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
@@ -177,7 +180,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.67 (72) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
+Receiver 1.2.68 (73) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

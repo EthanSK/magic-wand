@@ -837,6 +837,8 @@ struct WandReviewCircle {
 /// its first outward lobe, not the endpoint: Ethan's "little quick flick" may
 /// spring back. A circle which already emitted a ratchet cannot double-count.
 struct WandReviewNavigation {
+    var useAxisGestures = false
+    private var axisGesture = WandAxisReviewGesture()
     private var circle = WandReviewCircle()
     private var x = 0.0, y = 0.0
     private var started: Double?, lastMotion: Double?
@@ -845,8 +847,9 @@ struct WandReviewNavigation {
     private var flickDirection: Int32 = 0
     static let settleSeconds = 0.12
     static let flickDegrees = 0.3
-    mutating func reset() { self = Self() }
+    mutating func reset() { let selected=useAxisGestures;self=Self();useAxisGestures=selected }
     mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
+        if useAxisGestures { return axisGesture.sample(dx:dx,dy:dy,now:now) }
         guard dx.isFinite,dy.isFinite,now.isFinite else { reset();return 0 }
         let moving = hypot(dx,dy) >= 0.003
         if let lastMotion,now-lastMotion>0.3,moving {reset()}
@@ -867,5 +870,42 @@ struct WandReviewNavigation {
         let steps:Int32 = nudge ? flickDirection : 0
         reset()
         return steps
+    }
+}
+
+/// Ethan's optional "yes/no": an up-and-down nod moves next; a side-to-side
+/// shake moves previous. Off by default; replaces only the review gestures.
+struct WandAxisReviewGesture {
+    private var x=0.0,y=0.0,peak=0.0,direction=0.0,started:Double?,lastMotion:Double?
+    private var axis=0
+    private var completed=false
+    mutating func reset(){self=Self()}
+    mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
+        guard dx.isFinite,dy.isFinite,now.isFinite else{reset();return 0}
+        if let lastMotion,now-lastMotion>0.6 {reset()}
+        guard hypot(dx,dy)>=0.003 else{
+            if completed,let lastMotion,now-lastMotion>=0.12 {reset()}
+            return 0
+        }
+        if let started,now-started>4 {reset()}
+        if started==nil {started=now}
+        lastMotion=now;x+=dx;y+=dy
+        if axis==0 {
+            guard max(abs(x),abs(y))>=0.3 else{return 0}
+            if abs(y)>=1.6*abs(x) {axis=1;direction=y>0 ? 1:-1}
+            else if abs(x)>=1.6*abs(y) {axis=2;direction=x>0 ? 1:-1}
+            else{return 0}
+        }
+        let primary=(axis==1 ? y:x)*direction,cross=axis==1 ? x:y
+        if completed {
+            if abs(primary)<=0.1 && abs(cross)<=0.1 {reset()}
+            return 0
+        }
+        peak=max(peak,primary)
+        // A broad sideways bend is a curve, not a nod or shake.
+        if abs(cross)>max(0.12,peak*0.6) {reset();return 0}
+        guard primary<=peak*0.35 else{return 0}
+        let step:Int32=axis==1 ? 1:-1
+        completed=true;return step
     }
 }
