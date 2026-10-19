@@ -7,13 +7,13 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.68",
-    "receiverBuild": "73",
+    "receiver": "1.2.69",
+    "receiverBuild": "74",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "da9327f3342fe74dbe2fcaaea24514ab50919e73b29022e6ea969d24909c1874"
   },
   "status": [
-    "Installed: Wand Receiver 1.2.68 adds an optional nod/shake review control, left off. Current circle/flick controls remain selected; smaller-circle and small-flick checks pass. Physical acceptance is pending.",
+    "Installed: Wand Receiver 1.2.69 counts each clear turn in the optional nod/shake review mode. The option is enabled for Ethan; the published default remains off. Gesture tests pass; physical acceptance is pending.",
     "Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.",
     "The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.",
     "Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.",
@@ -343,8 +343,9 @@
       "vertical": "next",
       "horizontal": "previous",
       "minimumTravelDegrees": 0.3,
-      "maximumGestureSeconds": 4,
-      "scope": "Optional replacement for circles and flicks in Review changes and Stage files only. Up-and-down goes next; side-to-side goes previous, after an outward-and-return motion. Pointer, HUD and speech are unchanged."
+      "scope": "Optional replacement for review circles and flicks. Every clear vertical turn advances; every horizontal turn goes previous. The first step needs an outward motion and a reversal. Continued back-and-forth movement counts each new turn. Pointer, HUD and speech are unchanged.",
+      "reversalTravelDegrees": 0.06,
+      "maximumAcquisitionSeconds": 4
     }
   },
   "hud": {

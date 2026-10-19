@@ -90,7 +90,7 @@ Wand Receiver is a background Mac app. Its wand icon in the menu bar provides:
   pre-V2 implementation is also saved at `controls-v1.0.0`; see `control-versions/`.
 - **Options → Review with nods and shakes** is off by default. When enabled,
   an up-and-down motion goes next and a side-to-side motion goes previous in
-  Review changes or Stage files. It replaces only their circles and flicks.
+  Review changes or Stage files. Every clear direction change makes a step. It replaces only their circles and flicks.
 - **Options → Rotation-independent controls** keeps screen directions upright while
   rotating the wand. Flick scrolling is available only in Control V1.
 
@@ -165,7 +165,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.68 adds an optional nod/shake review control, left off. Current circle/flick controls remain selected; smaller-circle and small-flick checks pass. Physical acceptance is pending.
+- Installed: Wand Receiver 1.2.69 counts each clear turn in the optional nod/shake review mode. The option is enabled for Ethan; the published default remains off. Gesture tests pass; physical acceptance is pending.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
 - The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
@@ -180,7 +180,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.68 (73) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
+Receiver 1.2.69 (74) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
@@ -225,3 +225,10 @@ Code is MIT licensed. Three.js keeps its MIT licence and the fonts their SIL Ope
 The original wand is [Prototype V1](prototypes/README.md), preserved at
 [`prototype-v1.0.0`](https://github.com/EthanSK/magic-wand/tree/prototype-v1.0.0).
 New hardware prototypes get separate profiles so the V1 controls remain recoverable.
+
+## How-to videos
+
+The [How To gallery](https://ethansk.github.io/magic-wand/how-to/) has twelve short narrated
+guides, with captions, transcripts and links to individual actions. These are illustrations of
+Control V2, not physical test recordings. [Tutorial maintenance](tutorials/README.md) explains
+question lookup and the reproducible render pipeline.
