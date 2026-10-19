@@ -1,4 +1,4 @@
-// Finding the right How To guide for a question. Shared by the gallery page, scripts/how-to.mjs
+// Finding the right How To guide for a question. Shared by the gallery page, tutorials/find.mjs
 // and the tests, so a person searching the page and an agent answering a question get the same
 // guide. It has no DOM code.
 

@@ -30,14 +30,14 @@ narration duration. `narration` and `render` blocks are written by their respect
 ```sh
 python3 -m pip install pillow numpy
 # Use the existing configured ElevenLabs helper; never put credentials in this repository.
-python3 tutorials/narrate.py
+python3 tutorials/narrate.py --session-id "$CODEX_THREAD_ID"
 python3 tutorials/render/render.py --workers 2 --scratch /path/to/verified/scratch
 python3 scripts/build.py
 npm run check
 node tutorials/find.mjs "How do I drag?"
 ```
 
-Use an isolated Python environment if the system package manager requires it. The renderer
+Run narration from the current Codex task, with `CODEX_THREAD_ID` set and the local voice helper configured. Use an isolated Python environment if the system package manager requires it. The renderer
 also needs `ffmpeg` and `ffprobe` on PATH. `--frames /path/to/previews` creates stills without
 encoding; a tutorial ID restricts either operation to that guide. Rendering reuses the existing
 audio. Narration uses the configured ElevenLabs helper and never plays speech during production.
