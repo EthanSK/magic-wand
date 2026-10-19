@@ -1,0 +1,296 @@
+--- a/Sources/ScimitarUI/HUDPanel.swift
++++ b/Sources/ScimitarUI/HUDPanel.swift
+@@ -78,6 +78,8 @@
+     private let scaleStore: HUDScaleStore
+     private let workspaceNotificationCenter: NotificationCenter
+     private var scaleObservation: AnyCancellable?
++    private var wandPlacementTimer: Timer?
++    private var wandRecorderFrames: [NSRect]?
+     private var problemDismissWorkItem: DispatchWorkItem?
+     private var delayedSpaceReattachWorkItem: DispatchWorkItem?
+ 
+@@ -113,6 +115,7 @@
+     }
+ 
+     deinit {
++        wandPlacementTimer?.invalidate()
+         delayedSpaceReattachWorkItem?.cancel()
+         NotificationCenter.default.removeObserver(self)
+         workspaceNotificationCenter.removeObserver(self)
+@@ -200,6 +203,7 @@
+     }
+ 
+     private func discardPanels() {
++        wandPlacementTimer?.invalidate(); wandPlacementTimer=nil; wandRecorderFrames=nil
+         panels.values.forEach {
+             HUDScaleHoverCoordinator.shared.unregister(hudPanel: $0.panel)
+             $0.scaleControlPanel.orderOut(nil)
+@@ -242,6 +246,20 @@
+     }
+ 
+     private func reconcilePanels(show: Bool) {
++        if source == .wand, show, wandPlacementTimer == nil {
++            // Follow recorder appearance/movement even while the wand is still.
++            // Do not remeasure animated selection on unchanged geometry.
++            wandRecorderFrames=WandHUDPlacement.recorderFrames()
++            wandPlacementTimer=Timer.scheduledTimer(withTimeInterval:0.25,repeats:true) { [weak self] _ in
++                guard let self, self.isVisible else { return }
++                let frames=WandHUDPlacement.recorderFrames()
++                guard frames != self.wandRecorderFrames else { return }
++                self.wandRecorderFrames=frames
++                for screen in NSScreen.screens {
++                    if let instance=self.panels[ObjectIdentifier(screen)] { self.position(instance,on:screen) }
++                }
++            }
++        }
+         let screens = NSScreen.screens
+         let targetKeys = Set(screens.map(ObjectIdentifier.init))
+         for key in panels.keys.filter({ !targetKeys.contains($0) }) {
+@@ -276,6 +294,8 @@
+             origin = NSPoint(x: visible.minX + margin, y: visible.minY + margin)
+         case .bottomRight:
+             origin = NSPoint(x: visible.maxX - size.width - margin, y: visible.minY + margin)
++        case .bottomCenter:
++            origin = WandHUDPlacement.frame(size:size,on:screen,margin:margin).origin
+         case .center:
+             origin = NSPoint(
+                 x: visible.midX - size.width / 2,
+@@ -293,7 +313,7 @@
+         switch AppConfiguration.HUDConfiguration.sourceCorner(for: source) {
+         case .topLeft, .bottomLeft:
+             x = instance.panel.frame.minX + inset
+-        case .topRight, .bottomRight, .center:
++        case .topRight, .bottomRight, .center, .bottomCenter:
+             x = instance.panel.frame.maxX - HUDScaleControlPanel.size.width - inset
+         }
+         instance.scaleControlPanel.setFrameOrigin(NSPoint(
+--- a/Sources/ScimitarUI/ColorProofHUDPanel.swift
++++ b/Sources/ScimitarUI/ColorProofHUDPanel.swift
+@@ -25,6 +25,8 @@
+     private let scaleStore: HUDScaleStore
+     private let workspaceNotificationCenter: NotificationCenter
+     private var scaleObservation: AnyCancellable?
++    private var wandPlacementTimer: Timer?
++    private var wandRecorderFrames: [NSRect]?
+     private var problemDismissWorkItem: DispatchWorkItem?
+     private var feedbackDismissWorkItem: DispatchWorkItem?
+     private var delayedScreenReconcileWorkItem: DispatchWorkItem?
+@@ -69,6 +71,7 @@
+     }
+ 
+     deinit {
++        wandPlacementTimer?.invalidate()
+         delayedScreenReconcileWorkItem?.cancel()
+         delayedSpaceReattachWorkItem?.cancel()
+         NotificationCenter.default.removeObserver(self)
+@@ -196,6 +199,20 @@
+     }
+ 
+     private func reconcilePanels(show: Bool) {
++        if source == .wand, show, wandPlacementTimer == nil {
++            // Follow recorder appearance/movement even while the wand is still.
++            // Do not remeasure animated selection on unchanged geometry.
++            wandRecorderFrames=WandHUDPlacement.recorderFrames()
++            wandPlacementTimer=Timer.scheduledTimer(withTimeInterval:0.25,repeats:true) { [weak self] _ in
++                guard let self, self.isVisible else { return }
++                let frames=WandHUDPlacement.recorderFrames()
++                guard frames != self.wandRecorderFrames else { return }
++                self.wandRecorderFrames=frames
++                for screen in NSScreen.screens {
++                    if let instance=self.panels[ObjectIdentifier(screen)] { self.position(instance,on:screen) }
++                }
++            }
++        }
+         let screens = targetScreens()
+         let targetKeys = Set(screens.map(ObjectIdentifier.init))
+ 
+@@ -215,6 +232,7 @@
+     }
+ 
+     private func discardPanels() {
++        wandPlacementTimer?.invalidate(); wandPlacementTimer=nil; wandRecorderFrames=nil
+         panels.values.forEach {
+             HUDScaleHoverCoordinator.shared.unregister(hudPanel: $0.panel)
+             $0.scaleControlPanel.orderOut(nil)
+@@ -275,6 +293,8 @@
+             origin = NSPoint(x: visible.minX + margin, y: visible.minY + margin)
+         case .bottomRight:
+             origin = NSPoint(x: visible.maxX - size.width - margin, y: visible.minY + margin)
++        case .bottomCenter:
++            origin = WandHUDPlacement.frame(size:size,on:screen,margin:margin).origin
+         case .center:
+             origin = NSPoint(x: visible.midX - size.width / 2, y: visible.midY - size.height / 2)
+         }
+@@ -289,7 +309,7 @@
+         switch AppConfiguration.HUDConfiguration.sourceCorner(for: source) {
+         case .topLeft, .bottomLeft:
+             x = instance.panel.frame.minX + inset
+-        case .topRight, .bottomRight, .center:
++        case .topRight, .bottomRight, .center, .bottomCenter:
+             x = instance.panel.frame.maxX - HUDScaleControlPanel.size.width - inset
+         }
+         instance.scaleControlPanel.setFrameOrigin(NSPoint(
+--- a/Sources/ScimitarUI/WandReviewIndicator.swift
++++ b/Sources/ScimitarUI/WandReviewIndicator.swift
+@@ -21,28 +21,8 @@
+         p.contentView=NSHostingView(rootView:WandReviewIndicatorView(mode:mode))
+         panel=p;p.orderFrontRegardless()
+     }
+-    /// Use the recorder's actual on-screen panel, excluding Agent Flow's Dashboard.
+-    /// Window-server coordinates have a top-left origin; AppKit uses bottom-left.
+     private func indicatorFrame(on screen:NSScreen)->NSRect {
+-        let pids=Set(NSWorkspace.shared.runningApplications.filter {
+-            $0.executableURL?.lastPathComponent == "AgentFlow"
+-        }.map { $0.processIdentifier })
+-        let windows=CGWindowListCopyWindowInfo([.optionOnScreenOnly,.excludeDesktopElements],kCGNullWindowID) as? [[String:Any]] ?? []
+-        let top=NSScreen.screens.first?.frame.maxY ?? screen.frame.maxY
+-        let recorder=windows.compactMap { info -> CGRect? in
+-            guard let owner=info[kCGWindowOwnerPID as String] as? Int32,pids.contains(owner),
+-                  let layer=info[kCGWindowLayer as String] as? Int,layer>0,
+-                  let data=info[kCGWindowBounds as String] as? NSDictionary,
+-                  let cg=CGRect(dictionaryRepresentation:data),cg.width>=160,cg.width<1400,
+-                  cg.height>=35,cg.height<700 else{return nil}
+-            let r=CGRect(x:cg.minX,y:top-cg.maxY,width:cg.width,height:cg.height)
+-            guard r.intersects(screen.frame),abs(r.midX-screen.visibleFrame.midX)<300,
+-                  r.minY<screen.visibleFrame.minY+360 else{return nil}
+-            return r
+-        }.max { $0.maxY < $1.maxY }
+-        let bottom=recorder.map {$0.maxY+12} ?? (screen.visibleFrame.minY+168)
+-        return NSRect(x:screen.visibleFrame.midX-105,
+-            y:min(screen.visibleFrame.maxY-64,bottom),width:210,height:52)
++        WandHUDPlacement.frame(size:NSSize(width:210,height:52),on:screen)
+     }
+ 
+ }
+--- a/Sources/ScimitarKit/Config/AppConfiguration.swift
++++ b/Sources/ScimitarKit/Config/AppConfiguration.swift
+@@ -241,7 +241,7 @@
+ 
+     public struct HUDConfiguration: Codable, Equatable, Sendable {
+         public enum Corner: String, Codable, CaseIterable, Sendable {
+-            case topLeft, topRight, bottomLeft, bottomRight, center
++            case topLeft, topRight, bottomLeft, bottomRight, center, bottomCenter
+         }
+ 
+         public var corner: Corner
+@@ -275,9 +275,9 @@
+             switch source {
+             case .corsair: return .bottomRight
+             case .razer: return .bottomLeft
+-            // The wand selection HUD is a transient, centred menu so it can
+-            // coexist with either mouse's corner legend without overlapping.
+-            case .wand: return .center
++            // Ethan's Magic Wand HUD stays bottom-centre, above Agent Flow.
++            // The presenter resolves live recorder geometry on that screen.
++            case .wand: return .bottomCenter
+             }
+         }
+     }
+--- a/Tests/ScimitarKitTests/WandSelectionTests.swift
++++ b/Tests/ScimitarKitTests/WandSelectionTests.swift
+@@ -115,7 +115,7 @@
+             XCTAssertEqual(cell.printedSide(on: .wand), cell.printedSide(on: .corsair))
+         }
+         XCTAssertEqual(PhysicalCell(rawValue: 10)!.displayLabel(on: .razer), "Razer 12")
+-        XCTAssertEqual(AppConfiguration.HUDConfiguration.sourceCorner(for: .wand), .center)
++        XCTAssertEqual(AppConfiguration.HUDConfiguration.sourceCorner(for: .wand), .bottomCenter)
+         XCTAssertEqual(AppConfiguration.HUDConfiguration.sourceCorner(for: .corsair), .bottomRight)
+         XCTAssertEqual(AppConfiguration.HUDConfiguration.sourceCorner(for: .razer), .bottomLeft)
+         XCTAssertFalse(MouseSource.wand.isPhysicalAdapter)
+--- /dev/null
++++ b/Sources/ScimitarUI/WandHUDPlacement.swift
+@@ -0,0 +1,42 @@
++import AppKit
++
++/// Ethan's "Magic Wand HUD": bottom-centre, sharing the review reminder's
++/// clearance above Agent Flow. This reads window geometry, never recording input.
++enum WandHUDPlacement {
++    static func frame(size:NSSize,on screen:NSScreen,margin:CGFloat=12)->NSRect {
++        frame(size:size,visible:screen.visibleFrame,recorderFrames:recorderFrames(),margin:margin)
++    }
++
++    static func frame(size:NSSize,visible:NSRect,recorderFrames:[NSRect],margin:CGFloat=12)->NSRect {
++        let gap=max(12,margin)
++        let x=max(visible.minX,min(visible.maxX-size.width,visible.midX-size.width/2))
++        // Only recorder panels below this HUD's column affect this display.
++        // The ordinary Agent Flow Dashboard must never lift the wand menu.
++        let ceiling=recorderFrames.filter {
++            $0.intersects(visible) && $0.maxX>x && $0.minX<x+size.width &&
++            $0.minY<visible.minY+360
++        }.map(\.maxY).max()
++        let y=max(visible.minY,min(visible.maxY-size.height,
++            ceiling.map { $0+gap } ?? (visible.minY+gap)))
++        return NSRect(origin:NSPoint(x:x,y:y),size:size)
++    }
++
++    static func recorderFrames()->[NSRect] {
++        let pids=Set(NSWorkspace.shared.runningApplications.filter {
++            $0.executableURL?.lastPathComponent == "AgentFlow"
++        }.map(\.processIdentifier))
++        guard !pids.isEmpty else {return []}
++        let top=NSScreen.screens.first?.frame.maxY ?? 0
++        let windows=CGWindowListCopyWindowInfo([.optionOnScreenOnly,.excludeDesktopElements],kCGNullWindowID) as? [[String:Any]] ?? []
++        return windows.compactMap { info in
++            guard let owner=info[kCGWindowOwnerPID as String] as? Int32,pids.contains(owner),
++                let layer=info[kCGWindowLayer as String] as? Int,layer>0,
++                let alpha=info[kCGWindowAlpha as String] as? Double,alpha>0,
++                let data=info[kCGWindowBounds as String] as? NSDictionary,
++                let cg=CGRect(dictionaryRepresentation:data),
++                cg.width>=160,cg.width<1400,cg.height>=35,cg.height<700 else {return nil}
++            // WindowServer is top-left; AppKit is bottom-left on the primary screen.
++            return NSRect(x:cg.minX,y:top-cg.maxY,width:cg.width,height:cg.height)
++        }
++    }
++}
+--- /dev/null
++++ b/Tests/ScimitarUITests/WandHUDPlacementTests.swift
+@@ -0,0 +1,35 @@
++import AppKit
++@testable import ScimitarUI
++import XCTest
++
++final class WandHUDPlacementTests:XCTestCase {
++    let screen=NSRect(x:-1728,y:612,width:1728,height:1090)
++    let size=NSSize(width:500,height:300)
++
++    func testIdleHUDUsesBottomCentre() {
++        let r=WandHUDPlacement.frame(size:size,visible:screen,recorderFrames:[])
++        XCTAssertEqual(r.midX,screen.midX)
++        XCTAssertEqual(r.minY,screen.minY+12)
++    }
++    func testHUDClearsActualRecorderGeometry() {
++        let recorder=NSRect(x:screen.midX-200,y:screen.minY+30,width:400,height:130)
++        let r=WandHUDPlacement.frame(size:size,visible:screen,recorderFrames:[recorder])
++        XCTAssertEqual(r.minY,recorder.maxY+12)
++        XCTAssertFalse(r.intersects(recorder))
++        XCTAssertEqual(r.midX,screen.midX)
++    }
++    func testOtherScreenAndNonoverlappingPanelsDoNotMoveHUD() {
++        let unrelated=[NSRect(x:0,y:0,width:400,height:150),
++            NSRect(x:screen.minX,y:screen.minY,width:100,height:100)]
++        let r=WandHUDPlacement.frame(size:size,visible:screen,recorderFrames:unrelated)
++        XCTAssertEqual(r.minY,screen.minY+12)
++    }
++    func testHighestOverlappingPanelWinsAndTopIsClamped() {
++        let panels=[NSRect(x:screen.midX-100,y:screen.minY,width:200,height:60),
++            NSRect(x:screen.midX-100,y:screen.minY+30,width:200,height:180)]
++        let r=WandHUDPlacement.frame(size:size,visible:screen,recorderFrames:panels)
++        XCTAssertEqual(r.minY,panels[1].maxY+12)
++        let tall=WandHUDPlacement.frame(size:NSSize(width:500,height:1000),visible:screen,recorderFrames:panels)
++        XCTAssertEqual(tall.maxY,screen.maxY)
++    }
++}
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -18,9 +18,9 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.274</string>
++	<string>1.0.275</string>
+ 	<key>CFBundleVersion</key>
+-	<string>280</string>
++	<string>281</string>
+ 	<key>LSMinimumSystemVersion</key>
+ 	<string>13.0</string>
+ 
