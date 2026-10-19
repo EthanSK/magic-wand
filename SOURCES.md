@@ -275,3 +275,16 @@ continuity regression for the return to centre. Native and receiver tests
 passed; installed visual checks confirmed the labels and submenu lifecycle.
 Physical gesture feel and animation perception still need user acceptance.
 The browser simulator remains the explicitly labelled older grid demo.
+
+## Larger angled labels and stable placement
+
+`integrations/agentic-mouse/wand-readable-anchored-hud.patch` applies after
+`wand-held-radial-ux.patch` and records Agentic Mouse 1.0.278 (284). It raises readable title sizes and uses an upright
+card-aligned tilt only when that permits materially larger text. Crowded titles
+still fit whole words inside their own wedge; the wheel size and controls are
+unchanged. The shared text planner is cached and timing-tested.
+
+Each visible wand HUD now retains the recorder clearance it captured when it
+opened. Agent Flow startup cannot move an active target up and down; reopening
+refreshes the clearance. Both native presenters and the small review indicator
+share this policy. Agent Flow itself is not changed or restarted.

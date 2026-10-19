@@ -1,0 +1,740 @@
+diff --git a/AGENTS.md b/AGENTS.md
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -127,3 +127,5 @@
+ 
+ - Hold Middle to show the wand HUD and move its outline; releasing uses the outlined card. An ordinary completed action closes the HUD. A submenu or selected continuous wheel control stays open for the next hold, and that next hold supplies its adjustment motion. Keep double-click dismissal. This replaces the earlier tap-to-latch/free-navigation HUD flow; Bottom mouse controls, Top dictation, and the separate persistent VS Code review lane remain independent. User-requested — 2026-10-20.
+ - The wand home Enter card sends ordinary Enter, just like the normal Agentic Mouse. Do not restore the retired wand-only Command-Enter / Steer override. User-requested — 2026-10-20.
++
++- Keep the visible wand HUD anchored while Agent Flow starts or changes its panel. Capture recorder clearance when the HUD opens, and refresh on the next open or display reconfiguration; never move an active target under the wand because another app publishes temporary window bounds. User-requested — 2026-10-20.
+diff --git a/Resources/Info.plist b/Resources/Info.plist
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -18,9 +18,9 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.277</string>
++	<string>1.0.278</string>
+ 	<key>CFBundleVersion</key>
+-	<string>283</string>
++	<string>284</string>
+ 	<key>LSMinimumSystemVersion</key>
+ 	<string>13.0</string>
+ 
+diff --git a/Sources/ScimitarUI/ColorProofHUDPanel.swift b/Sources/ScimitarUI/ColorProofHUDPanel.swift
+--- a/Sources/ScimitarUI/ColorProofHUDPanel.swift
++++ b/Sources/ScimitarUI/ColorProofHUDPanel.swift
+@@ -25,8 +25,7 @@
+     private let scaleStore: HUDScaleStore
+     private let workspaceNotificationCenter: NotificationCenter
+     private var scaleObservation: AnyCancellable?
+-    private var wandPlacementTimer: Timer?
+-    private var wandRecorderFrames: [NSRect]?
++    private var wandPlacementAnchor: WandHUDPlacement.Anchor?
+     private var problemDismissWorkItem: DispatchWorkItem?
+     private var feedbackDismissWorkItem: DispatchWorkItem?
+     private var delayedScreenReconcileWorkItem: DispatchWorkItem?
+@@ -71,7 +70,6 @@
+     }
+ 
+     deinit {
+-        wandPlacementTimer?.invalidate()
+         delayedScreenReconcileWorkItem?.cancel()
+         delayedSpaceReattachWorkItem?.cancel()
+         NotificationCenter.default.removeObserver(self)
+@@ -149,6 +147,7 @@
+     }
+ 
+     @objc private func screenParametersDidChange(_ notification: Notification) {
++        wandPlacementAnchor = nil
+         guard isVisible else { return }
+         reconcilePanels(show: true)
+         scheduleSettledScreenReconciliation()
+@@ -199,20 +198,7 @@
+     }
+ 
+     private func reconcilePanels(show: Bool) {
+-        if source == .wand, show, wandPlacementTimer == nil {
+-            // Follow recorder appearance/movement even while the wand is still.
+-            // Do not remeasure animated selection on unchanged geometry.
+-            wandRecorderFrames=WandHUDPlacement.recorderFrames()
+-            wandPlacementTimer=Timer.scheduledTimer(withTimeInterval:0.25,repeats:true) { [weak self] _ in
+-                guard let self, self.isVisible else { return }
+-                let frames=WandHUDPlacement.recorderFrames()
+-                guard frames != self.wandRecorderFrames else { return }
+-                self.wandRecorderFrames=frames
+-                for screen in NSScreen.screens {
+-                    if let instance=self.panels[ObjectIdentifier(screen)] { self.position(instance,on:screen) }
+-                }
+-            }
+-        }
++
+         let screens = targetScreens()
+         let targetKeys = Set(screens.map(ObjectIdentifier.init))
+ 
+@@ -232,7 +218,7 @@
+     }
+ 
+     private func discardPanels() {
+-        wandPlacementTimer?.invalidate(); wandPlacementTimer=nil; wandRecorderFrames=nil
++        wandPlacementAnchor = nil
+         panels.values.forEach {
+             HUDScaleHoverCoordinator.shared.unregister(hudPanel: $0.panel)
+             $0.scaleControlPanel.orderOut(nil)
+@@ -294,7 +280,8 @@
+         case .bottomRight:
+             origin = NSPoint(x: visible.maxX - size.width - margin, y: visible.minY + margin)
+         case .bottomCenter:
+-            origin = WandHUDPlacement.frame(size:size,on:screen,margin:margin).origin
++            if wandPlacementAnchor == nil { wandPlacementAnchor = .init() }
++            origin = wandPlacementAnchor!.frame(size:size,on:screen,margin:margin).origin
+         case .center:
+             origin = NSPoint(x: visible.midX - size.width / 2, y: visible.midY - size.height / 2)
+         }
+diff --git a/Sources/ScimitarUI/HUDPanel.swift b/Sources/ScimitarUI/HUDPanel.swift
+--- a/Sources/ScimitarUI/HUDPanel.swift
++++ b/Sources/ScimitarUI/HUDPanel.swift
+@@ -78,8 +78,7 @@
+     private let scaleStore: HUDScaleStore
+     private let workspaceNotificationCenter: NotificationCenter
+     private var scaleObservation: AnyCancellable?
+-    private var wandPlacementTimer: Timer?
+-    private var wandRecorderFrames: [NSRect]?
++    private var wandPlacementAnchor: WandHUDPlacement.Anchor?
+     private var problemDismissWorkItem: DispatchWorkItem?
+     private var delayedSpaceReattachWorkItem: DispatchWorkItem?
+ 
+@@ -115,7 +114,6 @@
+     }
+ 
+     deinit {
+-        wandPlacementTimer?.invalidate()
+         delayedSpaceReattachWorkItem?.cancel()
+         NotificationCenter.default.removeObserver(self)
+         workspaceNotificationCenter.removeObserver(self)
+@@ -167,6 +165,7 @@
+     // MARK: - Panel plumbing
+ 
+     @objc private func screenParametersDidChange(_ notification: Notification) {
++        wandPlacementAnchor = nil
+         guard isVisible else { return }
+         reconcilePanels(show: true)
+     }
+@@ -203,7 +202,7 @@
+     }
+ 
+     private func discardPanels() {
+-        wandPlacementTimer?.invalidate(); wandPlacementTimer=nil; wandRecorderFrames=nil
++        wandPlacementAnchor = nil
+         panels.values.forEach {
+             HUDScaleHoverCoordinator.shared.unregister(hudPanel: $0.panel)
+             $0.scaleControlPanel.orderOut(nil)
+@@ -246,20 +245,7 @@
+     }
+ 
+     private func reconcilePanels(show: Bool) {
+-        if source == .wand, show, wandPlacementTimer == nil {
+-            // Follow recorder appearance/movement even while the wand is still.
+-            // Do not remeasure animated selection on unchanged geometry.
+-            wandRecorderFrames=WandHUDPlacement.recorderFrames()
+-            wandPlacementTimer=Timer.scheduledTimer(withTimeInterval:0.25,repeats:true) { [weak self] _ in
+-                guard let self, self.isVisible else { return }
+-                let frames=WandHUDPlacement.recorderFrames()
+-                guard frames != self.wandRecorderFrames else { return }
+-                self.wandRecorderFrames=frames
+-                for screen in NSScreen.screens {
+-                    if let instance=self.panels[ObjectIdentifier(screen)] { self.position(instance,on:screen) }
+-                }
+-            }
+-        }
++
+         let screens = NSScreen.screens
+         let targetKeys = Set(screens.map(ObjectIdentifier.init))
+         for key in panels.keys.filter({ !targetKeys.contains($0) }) {
+@@ -295,7 +281,8 @@
+         case .bottomRight:
+             origin = NSPoint(x: visible.maxX - size.width - margin, y: visible.minY + margin)
+         case .bottomCenter:
+-            origin = WandHUDPlacement.frame(size:size,on:screen,margin:margin).origin
++            if wandPlacementAnchor == nil { wandPlacementAnchor = .init() }
++            origin = wandPlacementAnchor!.frame(size:size,on:screen,margin:margin).origin
+         case .center:
+             origin = NSPoint(
+                 x: visible.midX - size.width / 2,
+diff --git a/Sources/ScimitarUI/WandHUDPlacement.swift b/Sources/ScimitarUI/WandHUDPlacement.swift
+--- a/Sources/ScimitarUI/WandHUDPlacement.swift
++++ b/Sources/ScimitarUI/WandHUDPlacement.swift
+@@ -3,6 +3,27 @@
+ /// Ethan's "Magic Wand HUD": bottom-centre, sharing the review reminder's
+ /// clearance above Agent Flow. This reads window geometry, never recording input.
+ enum WandHUDPlacement {
++    /// Ethan's "glitches up and then comes back down": recorder host windows
++    /// can appear/change during startup. Capture clearance once for each visible
++    /// HUD session so an unrelated panel never moves the target under the wand.
++    /// Reopening (or a display reconfiguration) creates a fresh anchor.
++    struct Anchor {
++        private let recorderFrames: [NSRect]
++
++        init(readRecorderFrames: () -> [NSRect] = WandHUDPlacement.recorderFrames) {
++            recorderFrames = readRecorderFrames()
++        }
++
++        func frame(size: NSSize, on screen: NSScreen, margin: CGFloat = 12) -> NSRect {
++            frame(size: size, visible: screen.visibleFrame, margin: margin)
++        }
++
++        func frame(size: NSSize, visible: NSRect, margin: CGFloat = 12) -> NSRect {
++            WandHUDPlacement.frame(size: size, visible: visible,
++                                   recorderFrames: recorderFrames, margin: margin)
++        }
++    }
++
+     static func frame(size:NSSize,on screen:NSScreen,margin:CGFloat=12)->NSRect {
+         frame(size:size,visible:screen.visibleFrame,recorderFrames:recorderFrames(),margin:margin)
+     }
+diff --git a/Sources/ScimitarUI/WandRadialHUDView.swift b/Sources/ScimitarUI/WandRadialHUDView.swift
+--- a/Sources/ScimitarUI/WandRadialHUDView.swift
++++ b/Sources/ScimitarUI/WandRadialHUDView.swift
+@@ -135,7 +135,8 @@
+                     Image(systemName: "lock.fill")
+                         .font(.system(size: 11, weight: .bold))
+                         .foregroundStyle(foreground)
+-                        .position(x: wheelCenter.x + lock.x, y: wheelCenter.y + lock.y)
++                        .rotationEffect(.radians(text.rotation))
++                        .position(drawn(lock, in: text))
+                 }
+                 ForEach(Array(text.lines.enumerated()), id: \.offset) { _, line in
+                     Text(line.text)
+@@ -143,7 +144,8 @@
+                         .lineLimit(1)
+                         .fixedSize()
+                         .foregroundStyle(foreground)
+-                        .position(x: wheelCenter.x + line.center.x, y: wheelCenter.y + line.center.y)
++                        .rotationEffect(.radians(text.rotation))
++                        .position(drawn(line.center, in: text))
+                 }
+                 Text(text.label.text)
+                     .font(.system(size: WandCardTypography.labelSize, weight: .medium, design: .monospaced))
+@@ -151,11 +153,18 @@
+                     .minimumScaleFactor(WandCardTypography.labelMinimumScale)
+                     .frame(width: text.label.room)
+                     .foregroundStyle(foreground)
+-                    .position(x: wheelCenter.x + text.label.center.x, y: wheelCenter.y + text.label.center.y)
++                    .rotationEffect(.radians(text.rotation))
++                    .position(drawn(text.label.center, in: text))
+             }
+             .accessibilityElement(children: .ignore)
+             .accessibilityLabel(Text("\(item.actionTitle), \(item.printedControlLabel(on: model.source))"))
+         }
++    }
++
++    /// A planned point as drawn in the wheel frame, including any tilt.
++    private func drawn(_ point: CGPoint, in text: WandCardText) -> CGPoint {
++        let turned = text.drawn(point)
++        return CGPoint(x: wheelCenter.x + turned.x, y: wheelCenter.y + turned.y)
+     }
+ 
+     private func cardFill(_ color: Color, selected: Bool, strong: Bool) -> Color {
+diff --git a/Sources/ScimitarUI/WandRadialText.swift b/Sources/ScimitarUI/WandRadialText.swift
+--- a/Sources/ScimitarUI/WandRadialText.swift
++++ b/Sources/ScimitarUI/WandRadialText.swift
+@@ -117,13 +117,17 @@
+ 
+ enum WandCardTypography {
+     /// Ring titles share one size up to this; the few that cannot reach the
+-    /// shared size shrink on their own.
+-    static let maximumRingSize: CGFloat = 22
+-    static let maximumCenterSize: CGFloat = 26
++    /// shared size shrink on their own. Roomy pages reach it; crowded pages
++    /// are limited by their cards instead.
++    static let maximumRingSize: CGFloat = 26
++    static let maximumCenterSize: CGFloat = 30
+     static let minimumSize: CGFloat = 11
+     static let step: CGFloat = 0.5
+     static let lineHeight: CGFloat = 1.18
+     static let maximumLines = 5
++    /// A tilted block reads well as one to three short lines; a taller tilted
++    /// block reads as a slanted paragraph, so it stays flat instead.
++    static let maximumTiltedLines = 3
+     static let labelSize: CGFloat = 11
+     static let labelRow: CGFloat = labelSize * 1.3
+     static let spacing: CGFloat = 4
+@@ -132,6 +136,26 @@
+     static let measurementMargin: CGFloat = 1.05
+     /// A label may shrink to this before it no longer fits.
+     static let labelMinimumScale: CGFloat = 0.8
++    /// Text may tilt to follow its card (exactly along the card's axis or
++    /// across it), but never past this, so it stays easy to read and never
++    /// turns upside down or reads downward.
++    static let maximumTilt: Double = 40 * .pi / 180
++    /// Flat text is easier to read, so a card tilts only where that lets its
++    /// title grow by both of these, and only if it is still at least
++    /// `tiltGain` larger at the size finally drawn.
++    static let tiltGain: CGFloat = 1.5
++    static let tiltGainRatio: CGFloat = 1.1
++
++    /// Whether a card whose tilted title can reach `tilted` points should
++    /// tilt instead of reaching `flat` points level (nil: level text does not
++    /// fit at all).
++    static func tiltEarnsSpace(tilted: CGFloat, flat: CGFloat?) -> Bool {
++        guard let flat else { return true }
++        return tilted >= max(flat + tiltGain, flat * tiltGainRatio)
++    }
++
++    /// `.never` keeps every title flat, for comparison and tests.
++    enum TiltPolicy: String { case never, whenLarger }
+ 
+     static func titleFont(size: CGFloat) -> NSFont {
+         let base = NSFont.systemFont(ofSize: size, weight: .semibold)
+@@ -145,8 +169,16 @@
+     }
+ 
+     /// Sizes from the largest down; binary search picks one.
+-    static func sizes(maximum: CGFloat) -> [CGFloat] {
+-        stride(from: maximum, through: minimumSize, by: -step).map { $0 }
++    static func sizes(maximum: CGFloat, minimum: CGFloat = minimumSize) -> [CGFloat] {
++        stride(from: maximum, through: minimum, by: -step).map { $0 }
++    }
++
++    /// The smallest tilted size that could earn a tilt over level text
++    /// reaching `flat`, on the size grid.
++    static func smallestWorthwhileTilt(flat: CGFloat?) -> CGFloat {
++        guard let flat else { return minimumSize }
++        let needed = max(flat + tiltGain, flat * tiltGainRatio)
++        return max(minimumSize, (needed / step).rounded(.up) * step)
+     }
+ }
+ 
+@@ -168,8 +200,26 @@
+     let lines: [Line]
+     let label: Line
+     let lock: CGPoint?
+-
+-    /// Every row's measured box, relative to the wheel centre.
++    /// Clockwise tilt in radians. Rows are laid out in a frame turned back by
++    /// this much and drawn turned by it, about the wheel centre.
++    var rotation: Double = 0
++
++    /// A laid-out point as drawn, relative to the wheel centre.
++    func drawn(_ point: CGPoint) -> CGPoint {
++        guard rotation != 0 else { return point }
++        let c = CGFloat(cos(rotation)), s = CGFloat(sin(rotation))
++        return CGPoint(x: point.x * c - point.y * s, y: point.x * s + point.y * c)
++    }
++
++    /// Every row's corners as drawn, relative to the wheel centre.
++    var drawnCorners: [[CGPoint]] {
++        rows.map { row in
++            [CGPoint(x: row.minX, y: row.minY), CGPoint(x: row.maxX, y: row.minY),
++             CGPoint(x: row.maxX, y: row.maxY), CGPoint(x: row.minX, y: row.maxY)].map(drawn)
++        }
++    }
++
++    /// Every row's measured box in the laid-out frame, relative to the wheel centre.
+     var rows: [CGRect] {
+         var boxes = lines.map {
+             CGRect(x: $0.center.x - $0.measured / 2, y: $0.center.y - lineHeight / 2, width: $0.measured, height: lineHeight)
+@@ -193,17 +243,21 @@
+     let room: WandCardRoom
+     /// Candidate block centres, relative to the wheel centre.
+     let anchors: [CGPoint]
++    /// The tilt this layout is drawn at; `room` and `anchors` are already
++    /// turned back by it.
++    let rotation: Double
+ 
+     private let words: [String]
+     private let labelWidth: CGFloat
+     private var memo: [CGFloat: WandCardText?] = [:]
+ 
+-    init(title: String, label: String, lock: Bool, room: WandCardRoom, anchors: [CGPoint]) {
++    init(title: String, label: String, lock: Bool, room: WandCardRoom, anchors: [CGPoint], rotation: Double = 0) {
+         self.title = title
+         self.label = label
+         self.lock = lock
+         self.room = room
+         self.anchors = anchors
++        self.rotation = rotation
+         words = Self.breakableWords(title)
+         labelWidth = WandCardTypography.width(label, font: WandCardTypography.labelFont())
+     }
+@@ -246,8 +300,9 @@
+         guard !words.isEmpty else { return nil }
+         let measured = measure(size: size)
+         var best: (text: WandCardText, slack: CGFloat)?
++        let maximumLines = rotation == 0 ? WandCardTypography.maximumLines : WandCardTypography.maximumTiltedLines
+         for anchor in anchors {
+-            for count in 1...WandCardTypography.maximumLines {
++            for count in 1...maximumLines {
+                 guard let candidate = fit(measured, size: size, anchor: anchor, lines: count) else { continue }
+                 if best == nil || candidate.slack > best!.slack { best = candidate }
+                 break
+@@ -293,12 +348,15 @@
+         guard labelWidth * WandCardTypography.labelMinimumScale <= labelRoom else { return nil }
+         let label = WandCardText.Line(text: self.label, center: CGPoint(x: anchor.x, y: y + WandCardTypography.labelRow / 2),
+                                       room: labelRoom, measured: min(labelWidth, labelRoom))
+-        return (WandCardText(titleSize: size, lineHeight: lineHeight, lines: lines, label: label, lock: lockCenter), slack)
+-    }
+-
+-    /// Largest size, up to `maximum`, at which the title fits anywhere.
+-    func largestSize(maximum: CGFloat) -> CGFloat? {
+-        let sizes = WandCardTypography.sizes(maximum: maximum)
++        return (WandCardText(titleSize: size, lineHeight: lineHeight, lines: lines, label: label, lock: lockCenter,
++                             rotation: rotation), slack)
++    }
++
++    /// Largest size from `minimum` up to `maximum` at which the title fits
++    /// anywhere.
++    func largestSize(maximum: CGFloat, minimum: CGFloat = WandCardTypography.minimumSize) -> CGFloat? {
++        let sizes = WandCardTypography.sizes(maximum: maximum, minimum: minimum)
++        guard !sizes.isEmpty else { return nil }
+         var low = 0, high = sizes.count - 1
+         guard layout(size: sizes[high]) != nil else { return nil }
+         // sizes descend: find the first index that fits.
+@@ -343,13 +401,14 @@
+     static func plan(
+         for geometry: WandWheelGeometry,
+         cards: [PhysicalCell: Entry],
+-        locked: PhysicalCell? = nil
++        locked: PhysicalCell? = nil,
++        tilt policy: WandCardTypography.TiltPolicy = .whenLarger
+     ) -> WandWheelPlan {
+         let layout = geometry.layout
+         let key = layout.cells.map { cell -> String in
+             let entry = cards[cell]
+             return "\(cell.rawValue)\u{1F}\(entry?.title ?? "")\u{1F}\(entry?.label ?? "")\u{1F}\(cell == locked)"
+-        }.joined(separator: "\u{1E}") + "#\(layout.center?.rawValue ?? 0)#\(layout.ring.count)"
++        }.joined(separator: "\u{1E}") + "#\(layout.center?.rawValue ?? 0)#\(layout.ring.count)#\(policy.rawValue)"
+         if let cached = cache[key] { return cached }
+ 
+         var center: Card?
+@@ -361,19 +420,54 @@
+             center = Card(text: text.layout(size: size), titleSize: size)
+         }
+ 
+-        let layouts: [WandCardTextLayout?] = layout.ring.indices.map { index in
++        // Flat text first. A card tilts only where that makes its title
++        // clearly larger, so the wheel stays mostly level and easy to read.
++        let flats: [WandCardTextLayout?] = layout.ring.indices.map { index in
+             guard let entry = cards[layout.ring[index]] else { return nil }
+             return WandCardTextLayout(title: entry.title, label: entry.label, lock: layout.ring[index] == locked,
+                                       room: WandCardRoom(shape: .wedge(geometry.wedge(at: index))),
+                                       anchors: geometry.textAnchors(at: index))
+         }
+-        let best = layouts.map { $0?.largestSize(maximum: WandCardTypography.maximumRingSize) }
++        let tilted: [[WandCardTextLayout]] = layout.ring.indices.map { index in
++            guard policy == .whenLarger, let entry = cards[layout.ring[index]] else { return [] }
++            return geometry.textTilts(at: index).map { tilt in
++                let local = geometry.wedge(at: index, angle: layout.angle(at: index) - tilt)
++                return WandCardTextLayout(title: entry.title, label: entry.label, lock: layout.ring[index] == locked,
++                                          room: WandCardRoom(shape: .wedge(local)),
++                                          anchors: geometry.textAnchors(for: local), rotation: tilt)
++            }
++        }
++        let maximum = WandCardTypography.maximumRingSize
++        let flatBest = flats.map { $0?.largestSize(maximum: maximum) }
++        let tiltBest: [CGFloat?] = layout.ring.indices.map { index in
++            // Search only sizes that could earn a tilt; a card already as
++            // large as allowed has none.
++            let floor = WandCardTypography.smallestWorthwhileTilt(flat: flatBest[index])
++            guard floor <= maximum else { return nil }
++            return tilted[index].compactMap { $0.largestSize(maximum: maximum, minimum: floor) }.max()
++        }
++        let best: [CGFloat?] = layout.ring.indices.map { index in
++            guard let tilt = tiltBest[index], WandCardTypography.tiltEarnsSpace(tilted: tilt, flat: flatBest[index])
++            else { return flatBest[index] }
++            return tilt
++        }
+         let reached = best.compactMap { $0 }.sorted()
+-        let shared = reached.isEmpty ? WandCardTypography.maximumRingSize : reached[reached.count / 4]
+-        let ring: [Card] = layouts.indices.map { index in
+-            guard let text = layouts[index] else { return Card(text: nil, titleSize: shared) }
++        let shared = reached.isEmpty ? maximum : reached[reached.count / 4]
++        let ring: [Card] = layout.ring.indices.map { index in
++            guard let flat = flats[index] else { return Card(text: nil, titleSize: shared) }
+             let size = min(shared, best[index] ?? WandCardTypography.minimumSize)
+-            return Card(text: text.layout(size: size) ?? text.layout(size: WandCardTypography.minimumSize), titleSize: size)
++            // Check the gain again at the size actually drawn: a card the
++            // shared size holds back may gain too little to be worth tilting.
++            let flatSize = flatBest[index].map { min(size, $0) }
++            var choices: [() -> WandCardText?] = []
++            if best[index] != flatBest[index], size - (flatSize ?? 0) >= WandCardTypography.tiltGain {
++                // Gentlest tilt first.
++                choices += tilted[index].map { layout in { layout.layout(size: size) } }
++            }
++            if let flatSize { choices.append { flat.layout(size: flatSize) } }
++            choices.append { flat.layout(size: WandCardTypography.minimumSize) }
++            let text = choices.lazy.compactMap { $0() }.first
++            return Card(text: text, titleSize: text?.titleSize ?? size)
+         }
+         let plan = WandWheelPlan(center: center, ring: ring, sharedSize: shared)
+         if cache.count > 48 { cache.removeAll() }
+@@ -387,7 +481,10 @@
+     /// centre: along its centre line from the inner to the outer part, and a
+     /// little either side of it for tilted cards.
+     func textAnchors(at index: Int) -> [CGPoint] {
+-        let wedge = wedge(at: index)
++        textAnchors(for: wedge(at: index))
++    }
++
++    func textAnchors(for wedge: WandWedge) -> [CGPoint] {
+         let direction = WandWedge.radial(wedge.centerAngle)
+         let tangent = WandWedge.tangent(wedge.centerAngle)
+         let thickness = wedge.outer - wedge.inner
+@@ -402,4 +499,28 @@
+         }
+         return anchors
+     }
++
++    /// Tilts worth trying for a ring card, gentlest first: exactly along the
++    /// card's axis or exactly across it, whichever of those reads upright
++    /// within `maximumTilt`. A partial tilt that follows neither would look
++    /// random beside its neighbours, so it is never offered. Cards at 12, 3,
++    /// 6 and 9 o'clock are already aligned with flat text.
++    func textTilts(at index: Int) -> [Double] {
++        let theta = layout.angle(at: index)
++        let limit = WandCardTypography.maximumTilt + 1e-9
++        var tilts: [Double] = []
++        for aligned in [Self.upright(theta), Self.upright(theta - .pi / 2)]
++        where abs(aligned) > 0.02 && abs(aligned) <= limit && !tilts.contains(where: { abs($0 - aligned) < 0.02 }) {
++            tilts.append(aligned)
++        }
++        return tilts.sorted { abs($0) < abs($1) }
++    }
++
++    /// The same line direction, turned to read left to right: (−90°, 90°].
++    static func upright(_ value: Double) -> Double {
++        var v = value.truncatingRemainder(dividingBy: .pi)
++        if v > .pi / 2 + 1e-9 { v -= .pi }
++        if v <= -.pi / 2 + 1e-9 { v += .pi }
++        return v
++    }
+ }
+diff --git a/Sources/ScimitarUI/WandReviewIndicator.swift b/Sources/ScimitarUI/WandReviewIndicator.swift
+--- a/Sources/ScimitarUI/WandReviewIndicator.swift
++++ b/Sources/ScimitarUI/WandReviewIndicator.swift
+@@ -6,10 +6,11 @@
+ public final class WandReviewIndicator {
+     private var panel:NSPanel?
+     private var current:String?
++    private var placementAnchor: WandHUDPlacement.Anchor?
+     public init() {}
+     public func update(mode:String?) {
+         guard let mode, ["changes","files"].contains(mode), let screen=NSScreen.main else {
+-            current=nil;panel?.orderOut(nil);panel=nil;return
++            current=nil;panel?.orderOut(nil);panel=nil;placementAnchor=nil;return
+         }
+         let frame=indicatorFrame(on:screen)
+         if current == mode,let panel {panel.setFrameOrigin(frame.origin);return}
+@@ -22,7 +23,8 @@
+         panel=p;p.orderFrontRegardless()
+     }
+     private func indicatorFrame(on screen:NSScreen)->NSRect {
+-        WandHUDPlacement.frame(size:NSSize(width:210,height:52),on:screen)
++        if placementAnchor == nil { placementAnchor = .init() }
++        return placementAnchor!.frame(size:NSSize(width:210,height:52),on:screen)
+     }
+ 
+ }
+diff --git a/Tests/ScimitarUITests/WandHUDPlacementTests.swift b/Tests/ScimitarUITests/WandHUDPlacementTests.swift
+--- a/Tests/ScimitarUITests/WandHUDPlacementTests.swift
++++ b/Tests/ScimitarUITests/WandHUDPlacementTests.swift
+@@ -32,4 +32,31 @@
+         let tall=WandHUDPlacement.frame(size:NSSize(width:500,height:1000),visible:screen,recorderFrames:panels)
+         XCTAssertEqual(tall.maxY,screen.maxY)
+     }
++    func testVisibleSessionDoesNotFollowRecorderStartupWindowChanges() {
++        var frames: [NSRect] = []
++        var reads = 0
++        let anchor = WandHUDPlacement.Anchor {
++            reads += 1
++            return frames
++        }
++        let initial = anchor.frame(size:size,visible:screen)
++        // Agent Flow's transparent host appears, then its compact state changes.
++        frames = [NSRect(x:screen.midX-270,y:screen.minY+24,width:540,height:430)]
++        XCTAssertEqual(anchor.frame(size:size,visible:screen),initial)
++        frames = [NSRect(x:screen.midX-200,y:screen.minY+24,width:400,height:97)]
++        XCTAssertEqual(anchor.frame(size:size,visible:screen),initial)
++        XCTAssertEqual(reads,1)
++        let reopened = WandHUDPlacement.Anchor { frames }
++        XCTAssertEqual(reopened.frame(size:size,visible:screen).minY,frames[0].maxY+12)
++    }
++
++    func testAnchoredClearanceSurvivesTemporaryRecorderDisappearance() {
++        var frames = [NSRect(x:screen.midX-200,y:screen.minY+24,width:400,height:97)]
++        let anchor = WandHUDPlacement.Anchor { frames }
++        let initial = anchor.frame(size:size,visible:screen)
++        frames = []
++        XCTAssertEqual(anchor.frame(size:size,visible:screen),initial)
++        XCTAssertEqual(WandHUDPlacement.Anchor { frames }.frame(size:size,visible:screen).minY,screen.minY+12)
++    }
++
+ }
+diff --git a/Tests/ScimitarUITests/WandRadialHUDTests.swift b/Tests/ScimitarUITests/WandRadialHUDTests.swift
+--- a/Tests/ScimitarUITests/WandRadialHUDTests.swift
++++ b/Tests/ScimitarUITests/WandRadialHUDTests.swift
+@@ -342,26 +342,39 @@
+         }, uniquingKeysWith: { first, _ in first })
+     }
+ 
+-    private func plan(_ snapshot: ModeHUDSnapshot) -> (WandWheelGeometry, WandWheelPlan) {
++    private func plan(
++        _ snapshot: ModeHUDSnapshot,
++        tilt: WandCardTypography.TiltPolicy = .whenLarger
++    ) -> (WandWheelGeometry, WandWheelPlan) {
+         let geometry = WandWheelGeometry(layout: snapshot.wandRadialLayout!)
+-        return (geometry, WandWheelPlan.plan(for: geometry, cards: entries(snapshot)))
+-    }
+-
+-    func testTitlesAreMateriallyLargerOnEveryWheel() {
+-        // The previous wheel capped every ring title at 13 pt, and the
+-        // crowded VS Code home fell to 9.5 pt on its longest cards.
++        return (geometry, WandWheelPlan.plan(for: geometry, cards: entries(snapshot), tilt: tilt))
++    }
++
++    private var everyPage: [(String, ModeHUDSnapshot)] {
++        [("home", snapshot(.chrome)), ("VS Code home", snapshot(.vsCode)), ("Finder home", snapshot(nil)),
++         ("Keys", snapshot(.chrome, open: [9])), ("Codex", snapshot(.codex, open: [2])),
++         ("Utility", snapshot(.chrome, open: [12])), ("Extra Utilities", snapshot(.chrome, open: [12, 12])),
++         ("Chrome", snapshot(.chrome, open: [2])), ("VS Code", snapshot(.vsCode, open: [2])),
++         ("Spotify", snapshot(.spotify, open: [2]))]
++    }
++
++    func testTitlesAreAsLargeAsTheirCardsAllow() {
++        // The first wheel capped every ring title at 13 pt, and the crowded
++        // VS Code home fell to 9.5 pt; the level-only planner reached 18 and
++        // 17.5. Ethan: "make it as big as possible".
+         let pages: [(String, ModeHUDSnapshot, CGFloat, CGFloat)] = [
+-            ("home", snapshot(.chrome), 17.5, 15),
+-            ("VS Code home", snapshot(.vsCode), 17, 13),
+-            ("Keys", snapshot(.chrome, open: [9]), 20, 17),
+-            ("Codex", snapshot(.codex, open: [2]), 20, 17),
+-            ("Utility", snapshot(.chrome, open: [12]), 20, 17),
++            ("home", snapshot(.chrome), 21.5, 16.5),
++            ("VS Code home", snapshot(.vsCode), 19.5, 13),
++            ("Keys", snapshot(.chrome, open: [9]), 25.5, 21.5),
++            ("Codex", snapshot(.codex, open: [2]), 25.5, 22),
++            ("Utility", snapshot(.chrome, open: [12]), 20.5, 18.5),
++            ("Chrome", snapshot(.chrome, open: [2]), 25.5, 24),
+         ]
+         for (name, page, sharedFloor, cardFloor) in pages {
+             let (_, plan) = plan(page)
+             XCTAssertGreaterThanOrEqual(plan.sharedSize, sharedFloor, name)
+             for card in plan.ring { XCTAssertGreaterThanOrEqual(card.titleSize, cardFloor, "\(name) card") }
+-            XCTAssertGreaterThanOrEqual(plan.center?.titleSize ?? 0, 24, "\(name) centre")
++            XCTAssertGreaterThanOrEqual(plan.center?.titleSize ?? 0, 28, "\(name) centre")
+             XCTAssertLessThanOrEqual(plan.sharedSize, WandCardTypography.maximumRingSize)
+         }
+     }
+@@ -383,8 +396,7 @@
+     }
+ 
+     func testEveryTitleKeepsWholeWordsInsideItsOwnCard() {
+-        for page in [snapshot(.chrome), snapshot(.vsCode), snapshot(.chrome, open: [9]), snapshot(.codex, open: [2]),
+-                     snapshot(.chrome, open: [12]), snapshot(.chrome, open: [12, 12]), snapshot(.chrome, open: [2])] {
++        for (_, page) in everyPage {
+             let (geometry, plan) = plan(page)
+             for (index, cell) in geometry.layout.ring.enumerated() {
+                 let item = page.legend.first { $0.cell == cell }!
+@@ -398,10 +410,10 @@
+                 }
+                 XCTAssertEqual(text.label.text, item.printedControlLabel(on: .wand).uppercased(), "the printed label stays underneath")
+                 XCTAssertGreaterThan(text.label.center.y, text.lines.last!.center.y)
++                // Where it is drawn, including any tilt.
+                 let wedge = geometry.wedge(at: index)
+-                for row in text.rows {
+-                    for corner in [CGPoint(x: row.minX, y: row.minY), CGPoint(x: row.maxX, y: row.minY),
+-                                   CGPoint(x: row.minX, y: row.maxY), CGPoint(x: row.maxX, y: row.maxY)] {
++                for corners in text.drawnCorners {
++                    for corner in corners {
+                         XCTAssertTrue(wedge.contains(corner, margin: 0), "\(item.actionTitle) stays inside its card")
+                     }
+                 }
+@@ -413,6 +425,86 @@
+         let codex = plan(snapshot(.codex, open: [2]))
+         let voice = codex.0.layout.ring.firstIndex { $0.rawValue == 12 }!
+         XCTAssertTrue(codex.1.ring[voice].text!.label.text.contains("❌"), "the repair marker stays visible")
++    }
++
++    // MARK: Tilt
++
++    /// Ethan: "make the text be like angled correctly so it has more space ...
++    /// although it's easier to read [level]". A card tilts only to follow its
++    /// own shape, and only where that makes its title clearly larger.
++    func testTiltFollowsItsCardExactlyAndAlwaysReadsUpright() {
++        for (name, page) in everyPage {
++            let (geometry, plan) = plan(page)
++            for (index, card) in plan.ring.enumerated() {
++                guard let text = card.text, text.rotation != 0 else { continue }
++                XCTAssertLessThanOrEqual(abs(text.rotation), WandCardTypography.maximumTilt + 1e-9,
++                                         "\(name): never steeper than the limit, never upside down")
++                let theta = geometry.layout.angle(at: index)
++                let along = WandWheelGeometry.upright(theta - .pi / 2), across = WandWheelGeometry.upright(theta)
++                XCTAssertTrue(abs(text.rotation - along) < 1e-9 || abs(text.rotation - across) < 1e-9,
++                              "\(name): exactly along or across its card, never a random slant")
++                XCTAssertLessThanOrEqual(text.lines.count, WandCardTypography.maximumTiltedLines,
++                                         "\(name): a tilted block stays short")
++                // Its lines read left to right.
++                let start = text.drawn(CGPoint(x: -10, y: 0)), end = text.drawn(CGPoint(x: 10, y: 0))
++                XCTAssertGreaterThan(end.x, start.x)
++            }
++        }
++    }
++
++    func testTiltIsUsedOnlyWhereItMakesTheTitleClearlyLarger() {
++        XCTAssertFalse(WandCardTypography.tiltEarnsSpace(tilted: 22, flat: 21), "1 pt is not worth a tilt")
++        XCTAssertFalse(WandCardTypography.tiltEarnsSpace(tilted: 26, flat: 24.5), "nor 6% on a roomy card")
++        XCTAssertTrue(WandCardTypography.tiltEarnsSpace(tilted: 22, flat: 15.5))
++        XCTAssertTrue(WandCardTypography.tiltEarnsSpace(tilted: 12, flat: nil), "level text that cannot fit at all")
++        // The tilted search starts at the first size that could win.
++        XCTAssertEqual(WandCardTypography.smallestWorthwhileTilt(flat: 21), 23.5)
++        XCTAssertTrue(WandCardTypography.tiltEarnsSpace(tilted: 23.5, flat: 21))
++        XCTAssertFalse(WandCardTypography.tiltEarnsSpace(tilted: 23, flat: 21))
++        for (name, page) in everyPage {
++            let (geometry, plan) = plan(page)
++            let cards = entries(page)
++            for (index, card) in plan.ring.enumerated() {
++                guard let text = card.text, text.rotation != 0, let entry = cards[geometry.layout.ring[index]] else { continue }
++                let flat = WandCardTextLayout(title: entry.title, label: entry.label, lock: false,
++                                              room: WandCardRoom(shape: .wedge(geometry.wedge(at: index))),
++                                              anchors: geometry.textAnchors(at: index))
++                    .largestSize(maximum: WandCardTypography.maximumRingSize)
++                XCTAssertGreaterThanOrEqual(text.titleSize - min(flat ?? 0, text.titleSize), WandCardTypography.tiltGain,
++                                            "\(name): \(entry.title) tilts to \(text.titleSize) pt only because level text reaches \(flat ?? 0) pt")
++            }
++            let (_, level) = self.plan(page, tilt: .never)
++            XCTAssertTrue(level.ring.allSatisfy { ($0.text?.rotation ?? 0) == 0 })
++        }
++    }
++
++    func testTiltNeverShrinksACardAndKeepsMostOfTheWheelLevel() {
++        for (name, page) in everyPage {
++            let (_, tilted) = plan(page)
++            let (_, level) = plan(page, tilt: .never)
++            XCTAssertGreaterThanOrEqual(tilted.sharedSize, level.sharedSize, name)
++            for (a, b) in zip(tilted.ring, level.ring) {
++                XCTAssertGreaterThanOrEqual(a.titleSize, b.titleSize, "\(name): no card is smaller for its neighbours tilting")
++            }
++            let count = tilted.ring.filter { ($0.text?.rotation ?? 0) != 0 }.count
++            XCTAssertLessThanOrEqual(count * 2, tilted.ring.count, "\(name): most cards stay level")
++        }
++        // The crowded homes are where tilt earns its space.
++        XCTAssertGreaterThanOrEqual(plan(snapshot(.chrome)).1.sharedSize, plan(snapshot(.chrome), tilt: .never).1.sharedSize + 3)
++        XCTAssertGreaterThanOrEqual(plan(snapshot(.vsCode)).1.sharedSize, plan(snapshot(.vsCode), tilt: .never).1.sharedSize + 2)
++    }
++
++    func testTiltedTextIsDrawnTurnedAboutTheWheelCentre() {
++        let line = WandCardText.Line(text: "A", center: CGPoint(x: 0, y: -200), room: 50, measured: 10)
++        var text = WandCardText(titleSize: 20, lineHeight: 24, lines: [line], label: line, lock: nil)
++        XCTAssertEqual(text.drawn(line.center), line.center, "level text is drawn where it was laid out")
++        text.rotation = .pi / 6
++        let drawn = text.drawn(line.center)
++        // 12 o'clock turned 30° clockwise lands at 1 o'clock.
++        XCTAssertEqual(drawn.x, 200 * sin(.pi / 6), accuracy: 1e-9)
++        XCTAssertEqual(drawn.y, -200 * cos(.pi / 6), accuracy: 1e-9)
++        XCTAssertEqual(WandWheelGeometry.upright(.pi * 5 / 6), -.pi / 6, accuracy: 1e-9, "never upside down")
++        XCTAssertEqual(WandWheelGeometry.upright(-.pi * 2 / 3), .pi / 3, accuracy: 1e-9)
+     }
+ 
+     func testSeparatorsStayWithTheWordBeforeThem() {
