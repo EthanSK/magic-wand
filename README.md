@@ -69,6 +69,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Updating | Receiver is updating the device code |
 | Disconnected | Orange while unavailable |
 | Calibrating | Keep it still with no buttons pressed for two seconds |
+| Sleeping | Off after a minute on the desk; pickup restores the light |
 | Scrolling | Cyan |
 | App review | Green for app review; purple for VS Code file staging |
 | Pointer | Steady blue, including while recording |
@@ -165,8 +166,9 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.72 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.
-- Review navigation maps each rough quarter-turn to one VS Code review step: clockwise next, anticlockwise previous. Step count follows turn angle rather than distance. Nod/shake remains disabled. Automated traces pass; physical acceptance is pending.
+- Installed: Wand Receiver 1.2.74 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.
+- Review navigation uses a redesigned spatial corner detector with learned noise tolerance. Reversible quarters, rough squares, slow motion and simulated device traces pass automated checks; physical acceptance is pending.
+- A minute of confirmed desk rest turns the lights off and keeps low-rate pickup sensing. Pickup or a button restores the light. Rest never stops dictation or dismisses the open HUD.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
 - The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.
 - Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.
@@ -181,7 +183,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.72 (77) · device code `wand-e1ce30d7c407` · bridge `da9327f3` · updated 19 October 2026.
+Receiver 1.2.74 (79) · device code `wand-e1ce30d7c407` · bridge `cd1c870e` · updated 19 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

@@ -93,16 +93,18 @@ test("micro-circle tuning matches native geometry and preserves pointer noise gu
     ["heldAxisAcquisitionDegrees", /hypot\(directionTravelX,directionTravel\)>=([\d.]+)/],
     ["heldQuietSpeedDegreesPerSecond", /guard hypot\(x,y\)>([\d.]+)/],
   ]) assert.equal(number(re, held, key), t[key]);
-  for (const [key, re] of [
-    ["reviewHeadingSegmentDegrees", /guard distance>=([\d.]+)/],
-    ["reviewMinimumExtentDegrees", /minimumExtent = ([\d.]+)/],
-    ["reviewMinimumPathDegrees", /minimumPath = ([\d.]+)/],
-    ["reviewMinimumLocalRadiusDegrees", /minimumRadius = ([\d.]+)/],
-  ]) assert.equal(number(re, review, key), t[key]);
-  for (const [key, name] of [["reviewQuarterTurnDegrees","quarterTurn"],["reviewTurnToleranceDegrees","turnTolerance"],["reviewReversalDegrees","reversalTurn"]]) {
-    const divisor=number(new RegExp(name+" = Double\\.pi / ([0-9.]+)"),review,name);
-    assert.equal(180/divisor,t[key]);
-  }
+  for (const [key,re] of [
+    ["reviewHeadingSegmentDegrees",/minimumSegment = ([\d.]+)/],
+    ["reviewMinimumSidewaysDegrees",/minimumSideways = ([\d.]+)/],
+    ["reviewMinimumPathDegrees",/minimumPath = ([\d.]+)/],
+    ["reviewFirstTurnDegrees",/firstTurnDegrees = ([\d.]+)/],
+    ["reviewQuarterTurnDegrees",/quarterTurnDegrees = ([\d.]+)/],
+    ["reviewCuspTurnDegrees",/cuspTurnDegrees = ([\d.]+)/],
+    ["reviewSegmentFraction",/segmentFraction = ([\d.]+)/],
+    ["reviewMinimumSegmentFraction",/partialSegment = ([\d.]+)/],
+    ["reviewNoiseSegmentFactor",/noiseSegment = ([\d.]+)/],
+  ]) assert.equal(number(re,review,key),t[key]);
+  assert.equal(number(/static let seconds = ([\d.]+)/,pointer,"desk sleep"),manifest.tuning.deskSleepSeconds);
 });
 
 test("light modes, priority and RGB levels match the bridge", () => {
@@ -114,7 +116,7 @@ test("light modes, priority and RGB levels match the bridge", () => {
   wand.loadBridge();
   const { ctx } = wand;
   const set = (state) => {
-    Object.assign(ctx, { WAND_UPDATING: false, connected: true, calibrationLit: false, scrollHeld: false, moveLatched: false, hudOpen: false, wandRecording: false, wandAppMode: undefined, wandReviewFiles: false }, state);
+    Object.assign(ctx, { WAND_UPDATING: false, connected: true, calibrationLit: false, scrollHeld: false, moveLatched: false, hudOpen: false, wandRecording: false, wandAppMode: undefined, wandReviewFiles: false, wandDeskSleeping:false }, state);
     ctx.updateLights();
     return wand.colors();
   };
@@ -122,6 +124,7 @@ test("light modes, priority and RGB levels match the bridge", () => {
     update: { WAND_UPDATING: true },
     disconnected: { connected: false },
     calibration: { calibrationLit: true },
+    sleep:{wandDeskSleeping:true},
     scroll: { scrollHeld: true },
     app: {wandAppMode:"vsCode"},
     mouse: { moveLatched: true },

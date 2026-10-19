@@ -22,11 +22,15 @@ test('native HUD close cancels actions, rejects stale context and closes any chi
  const code=`import Foundation
 func AXIsProcessTrusted()->Bool {true}
 func log(_ parts:Any...) {}
-final class Context {var isActive=false;var onChange:((Bool)->Void)?;var onModeChange:((String?)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
+final class Context {var isActive=false,isFresh=true;var onChange:((Bool)->Void)?;var onModeChange:((String?)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
+final class Application {var bundleIdentifier="com.microsoft.VSCode"}
+final class NSWorkspace {static let shared=NSWorkspace();var frontmostApplication:Application?=Application()}
+final class Trace {var boundaries:[String]=[];func boundary(_ reason:String,mode:String?=nil,now:Double=0){boundaries.append(reason)}}
 final class Controls {var phases:[String]=[];func persistent(_ phase:String,x:Double=0,y:Double=0){phases.append(phase)}}
 final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];var inputs=0;func beginDetents(mode:String,now:Double){starts.append(mode)};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{inputs+=1;return[]};func endDetents(commit:Bool)->[Int]{committed=commit;return[]}}
 final class Harness {
- let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter()
+ let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter(),reviewTrace=Trace()
+ var deskSleep=WandDeskSleep()
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
  var selectedReviewMode:String?,hiddenReviewOperating=false,hiddenReviewPending=false,screenshotActive=false,screenshotHUD=false
  var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleSecondTap=false,navigationOpenedHUD=false
@@ -44,6 +48,8 @@ final class Harness {
  func setWandShortcut(_ mode:String?){wandShortcutMode=mode}
  func cancelCircleScroll(){}
  func sendReview(_ v:[Int]){}
+ var traceInputs=0
+ func recordReviewInput(rawX:Double,rawY:Double,dx:Double,dy:Double,now:Double,blocked:String?,step:Int32){traceInputs+=1}
  func releaseButtons(){}
  init(){${callback}
 ${modeCallback}}
@@ -81,18 +87,26 @@ screenshot.setScreenshotActive(false)
 precondition(screenshot.hudSession && screenshot.hudActive && !screenshot.screenshotHUD)
 let pinned=Harness();pinned.selectedReviewMode="changes";pinned.wandShortcutMode="changes";pinned.handleMiddle("1")
 precondition(pinned.reviewExitGesture.pending && !pinned.review.committed,"Middle-down freezes the existing working set")
-for i in 1...80 {pinned.handleNavigation("\(i*1000),\(i*2000)")}
+for i in 1...80 {pinned.handleNavigation("\\(i*1000),\\(i*2000)")}
 precondition(pinned.review.inputs==0,"held motion never reaches Better Git")
 pinned.commitReviewHold(now:ProcessInfo.processInfo.systemUptime+0.6)
 precondition(pinned.selectedReviewMode=="changes" && pinned.wandShortcutMode=="changes" && !pinned.controls.phases.contains("exitReview") && pinned.review.committed)
 precondition(pinned.review.starts==["changes"] && pinned.reviewExitGesture.pending,"long press arms the next set but remains frozen until release")
-for i in 81...160 {pinned.handleNavigation("\(i*1000),\(i*2000)")}
+for i in 81...160 {pinned.handleNavigation("\\(i*1000),\\(i*2000)")}
 pinned.commitReviewHold(now:ProcessInfo.processInfo.systemUptime+2)
 precondition(pinned.review.inputs==0 && pinned.review.starts.count==1,"continued holding neither edits nor commits the next set")
 pinned.handleMiddle("0");settle(0.36)
 precondition(!pinned.hudSession && pinned.selectedReviewMode=="changes" && !pinned.reviewExitGesture.pending,"release stays in review and unfreezes")
 pinned.handleNavigation("161000,322000")
 precondition(pinned.review.inputs==1,"new motion after release resumes review")
+precondition(pinned.traceInputs==161,"accepted and blocked review points both reach diagnostic capture count="+String(pinned.traceInputs)+"")
+NSWorkspace.shared.frontmostApplication?.bundleIdentifier="other"
+pinned.handleNavigation("162000,324000")
+precondition(pinned.review.inputs==1,"focus loss blocks review immediately, before the timer")
+NSWorkspace.shared.frontmostApplication?.bundleIdentifier="com.microsoft.VSCode"
+pinned.context.isFresh=false;pinned.handleNavigation("163000,326000")
+precondition(pinned.review.inputs==1,"expired context cannot deliver a review step")
+pinned.context.isFresh=true
 pinned.handleMiddle("1");pinned.handleMiddle("0")
 precondition(pinned.selectedReviewMode==nil && !pinned.review.committed,"a later short tap cancels and exits")
 let cancel=Harness();cancel.selectedReviewMode="files";cancel.wandShortcutMode="files";cancel.handleMiddle("1");cancel.handleMiddle("0");settle(0.6)
@@ -105,6 +119,11 @@ let navigationStarts=submenu.controls.phases.filter{$0=="navigate"}.count
 submenu.context.onModeChange?("vsCode")
 precondition(submenu.appMode=="vsCode" && submenu.hudSession && submenu.hudActive)
 precondition(submenu.controls.phases.filter{$0=="navigate"}.count==navigationStarts,"app-specific submenu must retain one navigation owner")
+let asleep=Harness();asleep.hudSession=true;asleep.resumeHUDNavigation()
+for i in 0...60 {_=asleep.deskSleep.sample(parked:true,buttons:false,now:100+Double(i))}
+asleep.hudLastUpdate=Date.distantPast;settle(1)
+precondition(asleep.hudSession && asleep.hudActive,"sleep stops NAV heartbeat without closing the HUD")
+asleep.deskSleep.reset();asleep.closeHUD(reason:"test done")
 let independent=Harness();independent.hudSession=true;independent.enterPointerMode();precondition(independent.hudSession,"Bottom leaves Middle HUD alone")
 
 print("PASS: screenshot HUD preservation, hidden review hold, native full close, stale input rejection, delayed click cancellation, fresh reopen, watchdog teardown")
@@ -112,7 +131,7 @@ print("PASS: screenshot HUD preservation, hidden review hold, native full close,
  const dir=mkdtempSync(join(tmpdir(),'wand-hud-'));
  try {
   writeFileSync(join(dir,'main.swift'),code);
-  const compile=spawnSync('swiftc',['-O',new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});
+  const compile=spawnSync('swiftc',['-Onone',new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});
   assert.equal(compile.status,0,compile.stderr);
   const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);
  }finally{rmSync(dir,{recursive:true,force:true});}
@@ -120,7 +139,7 @@ print("PASS: screenshot HUD preservation, hidden review hold, native full close,
 
 test('complete published receiver typechecks together', {skip:process.platform!=='darwin'},()=>{
  const directory=new URL('../receiver/Sources/',import.meta.url);
- const files=['WandPointerControl.swift','WandRecordingState.swift','WandControlTransport.swift','WandContextListener.swift','WandDeviceConfiguration.swift','main.swift'].map(name=>new URL(name,directory).pathname);
+ const files=['WandPointerControl.swift','WandRecordingState.swift','WandControlTransport.swift','WandContextListener.swift','WandReviewTrace.swift','WandDeviceConfiguration.swift','main.swift'].map(name=>new URL(name,directory).pathname);
  const result=spawnSync('swiftc',['-typecheck',...files],{encoding:'utf8'});
  assert.equal(result.status,0,result.stderr);
 });
@@ -135,12 +154,14 @@ test('table rest never stops dictation or closes an explicit HUD', {skip:process
 func log(_ values:Any...){}
 struct Filter {var configured=true;func observeGravity(x:Double,y:Double,z:Double){}}
 final class Dwell {var following=true;func intent(_ value:Bool,now:Double){};func follow(_ value:Bool){following=value};func inhibit(until:Double){}}
-final class Rest {var parked=false;var hasReference=true;var sawButtons=false;enum Event{case probe,pickedUp,settling,putDown};func update(x:Double,y:Double,z:Double,gyro:Double,now:Double,buttons:Bool,idle:Bool)->[Event]{sawButtons=buttons;if buttons{return []};parked=true;return [.putDown]}}
+final class Rest {var parked=false;var deskQuietSince:Double?;var hasReference=true;var sawButtons=false;enum Event{case probe,pickedUp,settling,putDown};func update(x:Double,y:Double,z:Double,gyro:Double,now:Double,buttons:Bool,idle:Bool)->[Event]{sawButtons=buttons;if buttons{return []};parked=true;deskQuietSince=now-61;return [.putDown]}}
 final class Controls {var speechEvents=0;func speech(down:Bool)->Bool{speechEvents+=1;return true}}
 final class Recording {var isRecording=true}
 final class Harness {
  var ready=true,restoring=false,scrollActive=false,buttons=0,restDiagnosticsRemaining=0,hudSession=false
  var motionFilter=Filter();let dwell=Dwell(),restDetection=Rest(),controls=Controls(),recording=Recording()
+ struct Sleep {var sleeping=false;mutating func sample(parked:Bool,buttons:Bool,now:Double)->Bool?{sleeping=parked && !buttons;return sleeping}}
+ var deskSleep=Sleep()
  var probeTimer:Timer?,queued:[String]=[],entered=0
  func reconcileBottomHold(down:Bool,now:Double,reason:String){};func scheduleDwell(){};func cancelCircleScroll(){};func releaseButtons(){}
  func enterPointerMode(){entered+=1;hudSession=false};func queue(_ text:String){queued.append(text)}
@@ -150,12 +171,13 @@ let h=Harness();h.handleIMU("0,0,8192,0,0,0,0")
 precondition(!h.dwell.following && h.entered==1)
 precondition(h.controls.speechEvents==0 && h.recording.isRecording)
 let hud=Harness();hud.hudSession=true;hud.handleIMU("0,0,8192,0,0,0,0")
-precondition(hud.hudSession && hud.entered==0 && hud.restDetection.sawButtons)
+precondition(hud.hudSession && hud.entered==0 && !hud.restDetection.sawButtons)
 precondition(hud.controls.speechEvents==0 && hud.recording.isRecording)
+precondition(hud.deskSleep.sleeping && hud.queued.contains{ $0.contains("setWandDeskSleeping(true)") },"desk sleep preserves HUD and recording")
 print("PASS: table rest cannot stop recording or dismiss open HUD")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-rest-'));
- try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',[join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
+ try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',[new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
 });
 
 test('receiver selection taps have independent identities after navigation and previous taps', {skip:process.platform!=='darwin'},()=>{

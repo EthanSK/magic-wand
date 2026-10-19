@@ -13,6 +13,7 @@ swiftc -O \
   "$ROOT/receiver/Sources/WandRecordingState.swift" \
   "$ROOT/receiver/Sources/WandControlTransport.swift" \
   "$ROOT/receiver/Sources/WandContextListener.swift" \
+  "$ROOT/receiver/Sources/WandReviewTrace.swift" \
   "$ROOT/receiver/Sources/WandDeviceConfiguration.swift" \
   "$ROOT/receiver/Sources/main.swift" \
   -o "$APP/Contents/MacOS/WandReceiver"

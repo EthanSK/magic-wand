@@ -591,3 +591,37 @@ the actual native events without posting input and verify type, button, flags,
 position and repeated single-click count. The intermittent Codex new-window
 symptom stopped before this change; its exact triggering state was not captured,
 so do not describe either possible path as a confirmed physical root cause.
+
+
+## Desk sleep reuses confirmed rest, without closing the HUD
+
+After 60 seconds of fresh, continuously parked observations, the receiver requests
+LED-off sleep. Gyro and HUD-report timer stop; 1.6 Hz accelerometer pickup sensing
+continues. Pickup or a physical grip switch clears sleep, restoring the current
+mode's light and the HUD report timer without resetting its angular origin.
+Recording, explicit HUD visibility and selected review state are not sleep-owned.
+The native HUD watchdog must tolerate suspended NAV heartbeats during desk sleep.
+A telemetry gap restarts the pre-sleep interval rather than proving desk rest.
+
+A fixed 2.15-second rest window had a blind band: at 0.56-second sample intervals,
+four samples span only 1.68 seconds and the fifth loses the oldest sample before
+reaching the required 1.8-second span. Keep the shortest window that actually spans
+1.8 seconds with at least four samples. Native regression cases cover 0.1–0.9-second
+intervals, and the installed receiver confirmed desk rest after this correction.
+
+## Review corner diagnosis needs point history
+
+The old classifier accumulated packet headings with tolerance boosts. Noisy isolated
+synthetic quarters could disappear even when the noiseless version passed. The new
+spatial detector measures coherent strokes and turning, distinguishes straight
+about-faces from curved reversals, and retains learned noise across gesture resets.
+Keep reversible quarter, rough square/diamond, sparse/slow and device-model tests.
+Very small paths near the noise floor can still miss; synthetic success is not
+physical acceptance or a measured precision claim.
+
+Review traces are opt-in, local and bounded. Capture delivered NAV points before and
+after orientation correction, eligibility, decisions and queued requests; replay
+with the canonical Swift implementation. Queuing a Better Git command does not
+prove it executed. Live enabling, learned noise and rotated prefixes limit exact
+replay comparisons. Never publish private captures or treat synthetic traces as the
+user's recorded motion. See diagnostics/README.md for capture and replay controls.
