@@ -224,3 +224,12 @@ Source tests pass; current local installation status is recorded in `wand.json`.
 Better Git VS Code 1.2.130 enables its existing Eyes preview mode for wand change review; file staging uses its normal file mode. The focused real URI tests passed against Git-index changes and Undo. Marketplace validation and local Gallery installation were verified. VS Code’s extension host was restarted through its supported command and fresh Better Git activation was verified; physical wand acceptance remains pending.
 
 The incremental `integrations/agentic-mouse/wand-bottom-placement.patch` preserves the native HUD layout installed in Agentic Mouse 1.0.275 (281). The main wand presenters and review reminder share bottom-centre placement above the actual visible Agent Flow recorder panels on each applicable display. WindowServer provides geometry; no recording command is sent for layout. Recorder geometry is polled only while the main HUD is visible, and unchanged geometry does not remeasure animated selection. This patch depends on the earlier unpublished wand integration. Clean native checks passed; installed visual overlap awaits normal unlocked-session input.
+
+## Recording pauses pointer delivery
+
+Receiver 1.2.77 observes Agent Flow's existing distributed recording notifications.
+During recording the common pointer emitter drops motion and HIGH automatic clicks
+are suspended. The latched follow choice stays intact; stop resets transient motion
+and click state before fresh pointer movement resumes. No recording shortcut or
+Agent Flow lifecycle change is used. Native inert-transport tests pass; physical
+acceptance remains pending.

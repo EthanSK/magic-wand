@@ -632,6 +632,12 @@ Control V3 owns wheel velocity in a separate pure controller; the old V2 circle
 recognizer remains available but is never called for V3. Capture a deliberate
 straight stroke's speed before deceleration, retain it while the hand rests,
 and replace it after a new coherent stroke, including an opposite direction.
+Synthetic minimum-jerk strokes reproduced early-speed capture, tremor relatching,
+recoil reversal and cross-axis leakage in the first controller. Measure a coherent
+stroke, retain its peak averaged rate through deceleration, reject small recent
+recoil and snap near-cardinal strokes to their axis. Use device intervals for rate
+measurement and receiver time for transport gaps. The wheel-only rate average has
+a 40 ms time constant; it does not buffer pointer movement.
 A bounded wheel timer emits at the captured pointer anchor and cannot replay a
 large delayed backlog. The existing physical-up reconciliation and button-sample
 lease own cancellation; timer activity must never renew that lease. Native tests
@@ -653,3 +659,15 @@ cancellation clears the existing ownership flags. Native tests execute the real
 handlers with inert mouse events, covering held sweeps, both horizontal directions,
 release, context cancellation and review independence. Physical feel remains a
 separate user check; the regression adds no pointer buffer or intentional delay.
+
+## A recording pause preserves the mouse lane
+
+Ethan's “stops moving the mouse ... afterwards it continues” means suppressing
+pointer delivery during Agent Flow recording, not toggling its latched follow
+state. Reuse the existing recording observer. Drop queued movement, reset the
+motion filter and rebase the delivery point on both recording edges; never replay
+speech-time travel on resume. Disable HIGH dwell scheduling and its timer callback
+while recording so suppressed movement cannot create automatic clicks. The actual
+receiver callback and event emitter are exercised with inert transports, including
+prior-follow on/off and the existing held HUD guard. This does not prove physical
+recording acceptance.
