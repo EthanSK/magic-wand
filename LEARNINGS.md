@@ -671,3 +671,14 @@ while recording so suppressed movement cannot create automatic clicks. The actua
 receiver callback and event emitter are exercised with inert transports, including
 prior-follow on/off and the existing held HUD guard. This does not prove physical
 recording acceptance.
+
+
+## Recording pause is a state change, not a permanent filter
+
+Ethan wants recording to switch mouse follow off once, then allow explicit Bottom input
+to turn it back on while dictation continues. A recording-state guard in the shared
+movement emitter prevented that manual override. Use a separate pause state, clear it
+on manual Bottom input, and keep the recording observer responsible only for its
+one-time transition. Remember the prior follow state only until manual input overrides
+it. Automatic desk pickup must not defeat that recording pause. Native inert tests
+exercise start, manual override, explicit off, end restoration and queued-motion reset.
