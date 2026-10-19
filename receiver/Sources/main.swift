@@ -86,6 +86,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let recording = WandRecordingState(cache:support.appendingPathComponent("recording-state.json"))
     var recordingPointerPaused=false
     var recordingRestoreFollow:Bool?
+    var restFollow=WandRestFollowMemory()
+    // One serial lane bounds the Bottom-hold Accessibility probe off the
+    // main thread; motion and posting never wait for it.
+    let holdTargetQueue=DispatchQueue(label:"wand.hold-target",qos:.userInitiated)
     var pointerInHUD=false, middleOperating=false, middleSecondTap=false
     var acceptHUDContext=true
     var navStream=WandAngularStream(),moveStream=WandAngularStream(),legacyHUDStream=WandAngularStream(),scrollStream=WandAngularStream()
@@ -196,14 +200,18 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // Bottom can explicitly re-enter mouse mode while speech keeps running.
         performPointer(pointerRouter.interrupt());motionFilter.reset();deliveryPoint=nil
         if active {
-            recordingRestoreFollow=dwell.following
+            // A resting wand keeps the user's choice in rest memory; recording
+            // takes it over so pickup during speech cannot switch it back on.
+            recordingRestoreFollow=dwell.following || restFollow.handOverToRecording()
             recordingPointerPaused=true
             dwell.follow(false);restDetection.pointerStopped()
             queue("setMouseFollow(false);")
         } else {
             let resume=recordingPointerPaused && recordingRestoreFollow == true
             recordingPointerPaused=false;recordingRestoreFollow=nil
-            if resume {dwell.follow(true);restDetection.pointerActivated();queue("setMouseFollow(true);")}
+            // Still resting on the desk: resume on pickup, not on the table.
+            if resume && restDetection.parked {restFollow.restoreOnPickup()}
+            else if resume {dwell.follow(true);restDetection.pointerActivated();queue("setMouseFollow(true);")}
         }
         dwell.reset();scheduleDwell()
         log("RECORDING_STATE",active);syncRecordingLight();status()
@@ -212,6 +220,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // Manual Bottom input wins over automatic speech-time restoration,
         // including a later explicit switch off. Never stop Agent Flow here.
         recordingPointerPaused=false;recordingRestoreFollow=nil
+        restFollow.manualChoice()
     }
     // Opt-in, local-only flag. A missing or invalid file restores the original
     // axes. Read off the motion path so pointer delivery never waits for disk.
@@ -383,7 +392,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
         wandShortcutMode=nil;wandShortcutCircle.reset()
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
-        probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true);deskSleep.reset()
+        probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true);deskSleep.reset();restFollow.reset()
         recenterGesture.cancel();recenterSuppressButtons=false;performPointer(pointerRouter.cancelAll());setCircleLight(false)
         lightMode="disconnected"
         hudSession=false;hudEntryPress=false
@@ -556,6 +565,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     if controlVersion.usesHeldScroll && !scrollActive {
                         if value=="1" {
                             beginBottomHold(now:ProcessInfo.processInfo.systemUptime)
+                            if heldScroll.resolving {probeHoldTarget(at:heldScrollAnchor ?? .zero,token:heldTargetToken)}
                         }
                     }
                     if value=="1" && flickScroll.active {flickScroll.reset();flickAnchor=nil;setCircleLight(false);motionFilter.reset()}
@@ -838,11 +848,15 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         default:break
         }
     }
-    /// A plain hold always scrolls, even over text or a title bar. Only the
-    /// explicit tap-then-hold gesture may press the native mouse button.
+    /// Ethan's smart hold: over a real scroll area it scrolls (V3 sustained),
+    /// over a draggable target it becomes a native drag. Until the bounded
+    /// target probe answers it behaves as a scroll and can never drag, and an
+    /// unknown answer keeps scrolling. Tap-then-hold is always a native drag.
     func beginBottomHold(now:Double) {
         heldScrollAnchor=deliveryPoint ?? CGEvent(source:nil)?.location
-        heldScroll.begin(now:now,scrollable:!recenterGesture.isSecondPress,sustain:controlVersion == .sustainedV3)
+        heldTargetToken=UUID()
+        let explicitDrag=recenterGesture.isSecondPress
+        heldScroll.begin(now:now,scrollable:!explicitDrag,sustain:controlVersion == .sustainedV3,resolving:!explicitDrag)
         heldSafetyTimer?.invalidate()
         heldSafetyTimer=Timer.scheduledTimer(withTimeInterval:0.02,repeats:true){[weak self] _ in
             guard let self else{return};let now=ProcessInfo.processInfo.systemUptime
@@ -855,7 +869,47 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             }
         }
         releaseButtons()
-        log("BOTTOM_HOLD_TARGET",heldScroll.scrollable ? "scroll":"explicit drag")
+        if explicitDrag {log("BOTTOM_HOLD_TARGET","explicit drag")}
+    }
+    /// One bounded Accessibility hit test per hold, off the main thread. The
+    /// gesture token drops any reply that arrives after the hold ended, and
+    /// the hold itself rejects one that arrives after the tap/hold decision.
+    func probeHoldTarget(at point:CGPoint,token:UUID) {
+        holdTargetQueue.async { [weak self] in
+            let target=WandHoldTarget.classify(roles:Self.holdTargetRoles(at:point))
+            DispatchQueue.main.async {
+                guard let self,self.heldTargetToken==token,self.heldScroll.active else{return}
+                let applied=self.heldScroll.setTarget(scrollable:target != .drag,now:ProcessInfo.processInfo.systemUptime)
+                log("BOTTOM_HOLD_TARGET",applied ? target.rawValue : "late (scroll)")
+            }
+        }
+    }
+    /// Roles of the element under the pointer and its ancestors, nearest
+    /// first, within a hard 60 ms budget. Stops at the first role that
+    /// decides the hold. A failure returns what was read, which classifies
+    /// as unknown unless a deciding role was already found.
+    static func holdTargetRoles(at point:CGPoint,budget:TimeInterval=0.06)->[String] {
+        guard AXIsProcessTrusted() else{return []}
+        let system=AXUIElementCreateSystemWide(),deadline=Date().addingTimeInterval(budget)
+        AXUIElementSetMessagingTimeout(system,0.02)
+        var hit:AXUIElement?
+        guard AXUIElementCopyElementAtPosition(system,Float(point.x),Float(point.y),&hit) == .success else{return []}
+        var roles:[String]=[]
+        var current=hit
+        for _ in 0..<24 {
+            guard let item=current,Date()<deadline else{break}
+            AXUIElementSetMessagingTimeout(item,Float(max(0.001,min(0.01,deadline.timeIntervalSinceNow))))
+            var role:CFTypeRef?
+            guard AXUIElementCopyAttributeValue(item,kAXRoleAttribute as CFString,&role) == .success,
+                  let name=role as? String else{break}
+            roles.append(name)
+            if WandHoldTarget.ends(at:name) {break}
+            var parent:CFTypeRef?
+            guard AXUIElementCopyAttributeValue(item,kAXParentAttribute as CFString,&parent) == .success,
+                  let value=parent,CFGetTypeID(value)==AXUIElementGetTypeID() else{break}
+            current=(value as! AXUIElement)
+        }
+        return roles
     }
     // Ordinary mice deliver one wheel axis at a time. Mixed-axis line events
     // can be reduced to the dominant direction by native scrolling views.
@@ -1107,6 +1161,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         if controlVersion.usesHeldScroll && heldScroll.active {
             dwell.reset();scheduleDwell()
+            heldScroll.settleTarget(now:now)
             if heldScroll.scrollable {
                 let lines=heldScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now)
                 if lines != 0 {
@@ -1166,7 +1221,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         let wasParked=restDetection.parked
         let events=restDetection.update(x:x/8192,y:y/8192,z:z/8192,gyro:gyro/100,now:now,buttons:held==1 || scrollActive || buttons != 0,idle:!dwell.following && !hudSession)
-        if !wasParked && restDetection.parked {log("TABLE_REST_CONFIRMED", "reference",restDetection.hasReference)}
+        if !wasParked && restDetection.parked {
+            // Remember the choice rest is about to hide, before put-down acts.
+            restFollow.cameToRest(following:dwell.following)
+            log("TABLE_REST_CONFIRMED", "reference",restDetection.hasReference,"follow",dwell.following)
+        }
         for event in events {
             switch event {
             case .probe:
@@ -1174,7 +1233,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 probeTimer?.invalidate();probeTimer=Timer.scheduledTimer(withTimeInterval:1.5,repeats:false){[weak self] _ in self?.queue("if(global.wandDeskSleeping)global.wandPowerDownGyro();else if(!moveLatched&&!hudOpen&&!scrollHeld)sleepGyro();")}
             case .pickedUp:
                 probeTimer?.invalidate();probeTimer=nil
-                guard !hudSession,!recordingPointerPaused else{continue}
+                // Ethan: waking returns to the state before rest. Mouse mode
+                // comes back only if it was on, never while recording paused it.
+                let resume=restFollow.pickedUp(recordingPaused:recordingPointerPaused)
+                guard !hudSession,resume else{log("AUTO_PICKUP_KEPT_STATE",dwell.following);continue}
                 enterPointerMode();dwell.follow(true);queue("setMouseFollow(true);");log("AUTO_PICKUP")
             case .settling:
                 dwell.inhibit(until:now+3);scheduleDwell()

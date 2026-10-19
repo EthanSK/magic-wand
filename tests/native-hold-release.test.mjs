@@ -42,7 +42,7 @@ let now=ProcessInfo.processInfo.systemUptime
 let explicit=Harness();precondition(explicit.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 _=explicit.recenterGesture.edge(down:true,now:now-1)
 explicit.beginBottomHold(now:now-1)
-precondition(explicit.heldScroll.scrollable,"a plain hold always scrolls, regardless of text under the pointer")
+precondition(explicit.heldScroll.scrollable,"a plain hold scrolls until its target is proven draggable")
 _=explicit.recenterGesture.edge(down:false,now:now-0.95)
 explicit.finishBottomHold(now:now-0.95)
 _=explicit.recenterGesture.edge(down:true,now:now-0.85)

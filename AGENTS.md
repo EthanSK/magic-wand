@@ -128,3 +128,13 @@ through their build/check commands; never claim an illustration is physical veri
 ## Opus for UX
 
 - Ethan: “Do any UX related stuff with Opus actually and bug fixing and stuff you do yourself and like testing and installing.” Use Opus for Magic Wand UX implementation; Codex owns bug fixes, verification and installation. Announce each use with “Opus for UX” and say why it is being used. User-requested — 2026-10-19.
+
+## Current contextual hold and sleep behaviour
+
+- Bottom hold scrolls over a scroll area and drags a confirmed draggable target.
+  Unknown or late target detection must never turn scrolling into a surprise
+  drag; release and lost telemetry cancel pending target results. Preserve the
+  explicit tap-then-hold drag. User-requested — 2026-10-19.
+- On waking, return to the mouse-follow state from before rest instead of always
+  entering mouse mode. A newer manual choice or recording-start pause wins.
+  Keep HUD and dictation independent of sleep. User-requested — 2026-10-19.

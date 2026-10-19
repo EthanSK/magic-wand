@@ -52,10 +52,38 @@ def html_meta(manifest: dict) -> str:
 
 
 def html_intro(manifest: dict) -> str:
+    vision = manifest["vision"]
     return (
         f'<p class="tagline">{escape(manifest["tagline"])}</p>\n'
-        f'<p class="summary">{escape(manifest["summary"])}</p>'
+        f'<p class="summary">{escape(manifest["summary"])}</p>\n'
+        f'<p class="vision"><strong>{escape(vision["headline"])}</strong> {escape(vision["detail"])}</p>'
     )
+
+
+def md_intro(manifest: dict) -> str:
+    vision = manifest["vision"]
+    return f"{manifest['tagline']}\n\n{manifest['summary']}\n\n**{vision['headline']}** {vision['detail']}"
+
+
+def grip_angle_notes(manifest: dict) -> list[str]:
+    """Wand Receiver's optional roll compensation, from its tuning entry. Keep
+    the limits: it measures roll from gravity, not full 3D orientation, and
+    the wrist idea is untested."""
+    option = manifest["tuning"]["orientationCompensation"]
+    state = "on by default" if option["default"] else "off by default"
+    check = " and still needs a physical check" if option.get("experimental") else ""
+    return [
+        "Roll the wand to a comfortable grip: Wand Receiver’s Options → Rotation-independent controls reads gravity "
+        "from the Puck’s accelerometer, so directions stay upright on screen. Sideways speed also holds as the tip rises, "
+        f"with up to {option['maxHeadingGain']:g}× correction.",
+        f"It’s {state}{check}. It can’t read roll with the tip pointing almost straight up or down, and it isn’t full 3D "
+        "tracking. Wrist training with different grip angles is an idea to study, not a tested benefit.",
+    ]
+
+
+def html_grip_angle(manifest: dict) -> str:
+    notes = "\n".join(f"  <p>{escape(note)}</p>" for note in grip_angle_notes(manifest))
+    return f'<h3 class="needs-title" id="grip-angle">Grip Angle</h3>\n<div class="inside-notes grip-notes">\n{notes}\n</div>'
 
 
 def html_grip(manifest: dict) -> str:
@@ -315,6 +343,7 @@ def artifacts(identifiers: dict[str, str]) -> dict[Path, str]:
         "meta": html_meta(manifest), "intro": html_intro(manifest), "grip": html_grip(manifest),
         "controls": html_controls(manifest), "lights": html_lights(manifest), "dependencies": html_dependencies(manifest),
         "hardware": html_hardware(manifest), "tuning": html_tuning(manifest), "status": html_status(manifest),
+        "gripAngle": html_grip_angle(manifest),
     }
     for page in ("index.html", "404.html"):
         path = DOCS / page
@@ -328,7 +357,7 @@ def artifacts(identifiers: dict[str, str]) -> dict[Path, str]:
     readme = ROOT / "README.md"
     if readme.exists():
         out[readme] = replace_markers(readme.read_text(), {
-            "intro": f"{manifest['tagline']}\n\n{manifest['summary']}", "controls": md_controls(manifest), "status": md_status(manifest),
+            "intro": md_intro(manifest), "controls": md_controls(manifest), "status": md_status(manifest),
             "dependencies": md_dependencies(manifest), "tuning": md_tuning(manifest),
         })
     return out

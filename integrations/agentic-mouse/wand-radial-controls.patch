@@ -1,0 +1,2717 @@
+diff --git a/Sources/ScimitarUI/ColorProofHUDView.swift b/Sources/ScimitarUI/ColorProofHUDView.swift
+--- a/Sources/ScimitarUI/ColorProofHUDView.swift
++++ b/Sources/ScimitarUI/ColorProofHUDView.swift
+@@ -20,6 +20,12 @@
+     @Published var feedback: ModeHUDFeedback?
+     @Published var presentationStyle: ModeHUDPresentationStyle = .neutral
+     @Published var appIcons: [PhysicalCell: NSImage] = [:]
++    @Published var wandRadialLayout: WandRadialLayout?
++    /// Continuous centre angle of the outlined ring card. It is unwrapped
++    /// against the previous one so a move between the last and first card
++    /// slides the short way round instead of unwinding the whole wheel. It is
++    /// updated just before `pointerFocus`, whose publication redraws it.
++    private(set) var wandFocusAngle: Double = 0
+     private var appliedSnapshot: ModeHUDSnapshot?
+     let appVersion = AgenticMouseVersion.displayString()
+     private let appIconProvider: ModeHUDAppIconProviding
+@@ -39,7 +45,10 @@
+             previous.pointerFocus = snapshot.pointerFocus
+             if previous == snapshot {
+                 appliedSnapshot = snapshot
+-                if pointerFocus != snapshot.pointerFocus { pointerFocus = snapshot.pointerFocus }
++                if pointerFocus != snapshot.pointerFocus {
++                    updateWandFocusAngle(snapshot.pointerFocus, layout: snapshot.wandRadialLayout)
++                    pointerFocus = snapshot.pointerFocus
++                }
+                 return true
+             }
+         }
+@@ -57,6 +66,7 @@
+         // focus-only updates above keep the outline's spring and liquid pull.
+         var cut = Transaction()
+         cut.disablesAnimations = true
++        updateWandFocusAngle(snapshot.pointerFocus, layout: snapshot.wandRadialLayout)
+         withTransaction(cut) {
+             isActive = snapshot.isActive
+             modeTitle = snapshot.modeTitle
+@@ -73,8 +83,18 @@
+             problem = snapshot.problem
+             presentationStyle = snapshot.presentationStyle
+             appIcons = resolvedIcons
++            wandRadialLayout = snapshot.wandRadialLayout
+         }
+         return false
++    }
++
++    private func updateWandFocusAngle(_ focus: ModeHUDPointerFocus?, layout: WandRadialLayout?) {
++        guard source == .wand, let focus else { return }
++        let resolved = layout ?? .inferred(legend: legend)
++        guard let index = resolved.ringIndex(of: focus.cell) else { return }
++        let target = resolved.angle(at: index)
++        let turns = ((wandFocusAngle - target) / (2 * .pi)).rounded()
++        wandFocusAngle = target + turns * 2 * .pi
+     }
+ 
+     /// Hidden panels are discarded, but this model outlives them. Forget the
+@@ -397,6 +417,29 @@
+     }
+ 
+     var body: some View {
++        if model.source == .wand {
++            wandBody
++        } else {
++            gridBody
++        }
++    }
++
++    /// Ethan's weapon-wheel wand HUD. Same panel, cards and footer as the
++    /// grid; only the arrangement differs. Physical mice never reach this.
++    private var wandBody: some View {
++        VStack(alignment: .leading, spacing: 12) {
++            if let problem = model.problem, !problem.isEmpty {
++                problemBanner(problem)
++            }
++            WandRadialWheel(model: model, reduceMotion: reduceMotion)
++            footer
++        }
++        .padding(WandWheelMetrics.panelPadding)
++        .frame(width: WandWheelMetrics.panelWidth)
++        .background(panelBackground)
++    }
++
++    private var gridBody: some View {
+         VStack(alignment: .leading, spacing: 18) {
+             if let problem = model.problem, !problem.isEmpty {
+                 problemBanner(problem)
+diff --git a/Sources/ScimitarUI/WandRadialHUDView.swift b/Sources/ScimitarUI/WandRadialHUDView.swift
+new file mode 100644
+--- /dev/null
++++ b/Sources/ScimitarUI/WandRadialHUDView.swift
+@@ -0,0 +1,363 @@
++import AppKit
++import ScimitarKit
++import SwiftUI
++
++/// Ethan's weapon-wheel wand HUD: the centre card with every other card
++/// spaced evenly around it. Card colours, borders, artwork, review styling
++/// and copy are the same as the grid's; only the arrangement differs. The
++/// physical mouse HUDs never use this view.
++struct WandRadialWheel: View {
++    @ObservedObject var model: ModeHUDViewModel
++    let reduceMotion: Bool
++
++    private var geometry: WandWheelGeometry {
++        WandWheelGeometry(layout: model.wandRadialLayout ?? .inferred(legend: model.legend))
++    }
++
++    var body: some View {
++        let geometry = geometry
++        let plan = WandWheelPlan.plan(
++            for: geometry,
++            titles: Dictionary(model.legend.map { ($0.cell, $0.actionTitle) }, uniquingKeysWith: { first, _ in first }),
++            extraTopLine: model.wandReviewSelection.map { [$0] } ?? []
++        )
++        ZStack {
++            if let center = geometry.layout.center, let item = item(for: center), let card = plan.center {
++                WandRadialCard(model: model, item: item,
++                               shape: .disc(WandCenterDiscShape(radius: WandWheelMetrics.centerRadius)),
++                               labelFrame: card.labelFrame, artworkFrame: geometry.centerBounds,
++                               titleSize: card.titleSize, isCenter: true)
++            }
++            ForEach(Array(geometry.layout.ring.enumerated()), id: \.element) { index, cell in
++                if let item = item(for: cell), index < plan.ring.count {
++                    WandRadialCard(model: model, item: item,
++                                   shape: .wedge(WandWedgeShape(wedge: geometry.wedge(at: index))),
++                                   labelFrame: plan.ring[index].labelFrame, artworkFrame: geometry.bounds(at: index),
++                                   titleSize: plan.ring[index].titleSize, isCenter: false)
++                }
++            }
++            WandRadialFocusLayer(model: model, geometry: geometry, reduceMotion: reduceMotion)
++        }
++        .frame(width: geometry.size, height: geometry.size)
++    }
++
++    private func item(for cell: PhysicalCell) -> ModeHUDLegendItem? {
++        model.legend.first { $0.cell == cell }
++    }
++}
++
++/// A wheel card's shape: the centre disc or one ring wedge.
++enum WandCardShape: InsettableShape {
++    case disc(WandCenterDiscShape)
++    case wedge(WandWedgeShape)
++
++    func path(in rect: CGRect) -> Path {
++        switch self {
++        case .disc(let shape): return shape.path(in: rect)
++        case .wedge(let shape): return shape.path(in: rect)
++        }
++    }
++
++    func inset(by amount: CGFloat) -> WandCardShape {
++        switch self {
++        case .disc(let shape): return .disc(shape.inset(by: amount))
++        case .wedge(let shape): return .wedge(shape.inset(by: amount))
++        }
++    }
++}
++
++private struct WandRadialCard: View {
++    @ObservedObject var model: ModeHUDViewModel
++    let item: ModeHUDLegendItem
++    let shape: WandCardShape
++    let labelFrame: CGRect
++    /// The card's own bounds, which its app artwork fills edge to edge.
++    let artworkFrame: CGRect
++    let titleSize: CGFloat
++    let isCenter: Bool
++
++    var body: some View {
++        let selected = item.cell == model.selection?.cell
++        let colors = ModeHUDCardColors(
++            modeAccent: model.accent,
++            actionAccent: item.accent,
++            destinationModeAccent: item.destinationModeAccent,
++            presentationStyle: model.presentationStyle
++        )
++        let border = ModeHUDCardBorderTreatment(isSelected: selected, isModeNavigation: item.destinationModeAccent != nil)
++        let isReview = item.cell.wandReviewMode != nil
++        let reviewSelected = model.wandReviewSelection == item.cell
++        let fill = reviewSelected ? Color(wheel: item.accent)
++            : (isReview ? Color(red: 0.055, green: 0.075, blue: 0.10) : Color(wheel: colors.fill))
++        let foreground = reviewSelected ? Color.black : (isReview ? Color.white : Color(wheel: colors.foreground))
++
++        ZStack {
++            shape.fill(cardFill(fill, selected: selected, strong: isReview || colors.usesStrongDestinationFill))
++            if let icon = model.appIcons[item.cell] {
++                Image(nsImage: icon)
++                    .resizable()
++                    .interpolation(.high)
++                    .scaledToFill()
++                    .frame(width: artworkFrame.width * ModeHUDAppBackdropMetrics.scale,
++                           height: artworkFrame.height * ModeHUDAppBackdropMetrics.scale)
++                    .position(x: artworkFrame.midX, y: artworkFrame.midY)
++                    .saturation(1.35)
++                    .contrast(1.08)
++                    .blur(radius: ModeHUDAppBackdropMetrics.blurRadius)
++                    .clipShape(shape)
++                shape.fill(Color.black.opacity(0.28))
++                shape.fill(fill.opacity(0.18))
++            }
++            if isReview {
++                shape.fill(Color(wheel: item.accent).opacity(0.12))
++                shape.strokeBorder(Color(wheel: item.accent).opacity(0.7), lineWidth: 1.5)
++            }
++            shape.strokeBorder(Color(wheel: colors.border).opacity(border.opacity), lineWidth: border.lineWidth)
++            if reviewSelected {
++                shape.strokeBorder(Color(wheel: item.accent), lineWidth: 5)
++                    .shadow(color: Color(wheel: item.accent).opacity(0.6), radius: 6)
++            }
++            label(foreground: foreground, reviewSelected: reviewSelected)
++        }
++        .allowsHitTesting(false)
++    }
++
++    /// `labelFrame` already keeps the shared 12-point inset from the card's
++    /// edges, so the stack fills it without further padding.
++    private func label(foreground: Color, reviewSelected: Bool) -> some View {
++        return VStack(spacing: WandWheelTypography.spacing) {
++            if reviewSelected {
++                Image(systemName: "lock.fill")
++                    .font(.system(size: 11, weight: .bold))
++                    .foregroundStyle(foreground)
++            }
++            Text(item.actionTitle.uppercased())
++                .font(.system(size: titleSize, weight: .semibold, design: .rounded))
++                .lineLimit(WandWheelTypography.maximumLines)
++                .minimumScaleFactor(0.85)
++                .multilineTextAlignment(.center)
++                .fixedSize(horizontal: false, vertical: true)
++                .foregroundStyle(foreground)
++            Text(item.printedControlLabel(on: model.source).uppercased())
++                .font(.system(size: WandWheelTypography.labelSize, weight: .medium, design: .monospaced))
++                .lineLimit(1)
++                .minimumScaleFactor(0.75)
++                .foregroundStyle(foreground)
++        }
++        .frame(width: labelFrame.width, height: labelFrame.height)
++        .position(x: labelFrame.midX, y: labelFrame.midY)
++    }
++
++    private func cardFill(_ color: Color, selected: Bool, strong: Bool) -> Color {
++        switch model.presentationStyle {
++        case .neutral:
++            return strong ? color : color.opacity(selected ? 0.58 : 0.24)
++        case .boldOpaque:
++            return color
++        }
++    }
++}
++
++// MARK: - Focus outline
++
++/// Visual phase of the wand cursor, so the centre and ring outlines can
++/// cross-fade while a ring-to-ring move slides.
++private enum WandFocusSlotKind: Hashable {
++    case center
++    case ring
++}
++
++private struct WandRadialFocusLayer: View {
++    @ObservedObject var model: ModeHUDViewModel
++    let geometry: WandWheelGeometry
++    let reduceMotion: Bool
++
++    var body: some View {
++        ZStack {
++            if let focus = model.pointerFocus, let slot = geometry.slot(for: focus.cell) {
++                switch slot {
++                case .center:
++                    WandRadialFocusOutline(focus: focus, slot: .center(radius: WandWheelMetrics.centerRadius),
++                                           accent: accent(for: focus.cell), reduceMotion: reduceMotion)
++                        .transition(.opacity)
++                        .id(WandFocusSlotKind.center)
++                case .ring(let index):
++                    WandRadialFocusOutline(focus: focus,
++                                           slot: .ring(geometry.wedge(at: index, angle: model.wandFocusAngle)),
++                                           accent: accent(for: focus.cell), reduceMotion: reduceMotion)
++                        .transition(.opacity)
++                        .id(WandFocusSlotKind.ring)
++                }
++            }
++        }
++        .animation(WandRadialFocusStyle.slideAnimation(reduceMotion: reduceMotion), value: model.pointerFocus?.cell)
++        .allowsHitTesting(false)
++    }
++
++    private func accent(for cell: PhysicalCell) -> Color {
++        Color(wheel: model.legend.first { $0.cell == cell }?.accent ?? model.accent)
++    }
++}
++
++/// Animation choices for the wheel cursor, pure so reduce motion stays testable.
++enum WandRadialFocusStyle {
++    static func slideAnimation(reduceMotion: Bool) -> Animation? {
++        reduceMotion ? nil : .interactiveSpring(response: 0.22, dampingFraction: 0.82)
++    }
++
++    static func pullAnimation(reduceMotion: Bool) -> Animation? {
++        reduceMotion ? nil : .linear(duration: 0.03)
++    }
++
++    /// The wheel-adjustment ring leans less than navigation so its stretch
++    /// stays inside the panel at the outer edge.
++    static let adjustmentPullScale = 0.6
++}
++
++enum WandRadialFocusSlot: Equatable {
++    case center(radius: CGFloat)
++    case ring(WandWedge)
++}
++
++/// Solid while moving, dashed when a wheel card is armed, and a coloured
++/// ratchet while that card is being adjusted, matching the grid outline's
++/// meaning in the wheel's own shapes.
++private struct WandRadialFocusOutline: View {
++    let focus: ModeHUDPointerFocus
++    let slot: WandRadialFocusSlot
++    let accent: Color
++    let reduceMotion: Bool
++
++    var body: some View {
++        if let adjustment = focus.adjustment {
++            adjustmentRing(adjustment)
++        } else {
++            navigationOutline
++                .shadow(color: Color.white.opacity(0.75), radius: 6)
++                .animation(WandRadialFocusStyle.pullAnimation(reduceMotion: reduceMotion), value: focus.pullX)
++                .animation(WandRadialFocusStyle.pullAnimation(reduceMotion: reduceMotion), value: focus.pullY)
++        }
++    }
++
++    private var navigationStyle: StrokeStyle {
++        StrokeStyle(
++            lineWidth: ModeHUDPointerFocusMetrics.lineWidth,
++            lineJoin: .round,
++            dash: focus.isArmed ? ModeHUDPointerFocusMetrics.armedDash : []
++        )
++    }
++
++    private var navigationGradient: LinearGradient {
++        LinearGradient(colors: [.white, .white.opacity(0.65), .white], startPoint: .topLeading, endPoint: .bottomTrailing)
++    }
++
++    // Concrete shape types (never type-erased) so SwiftUI interpolates the
++    // outline itself: pull, and the ring angle when it slides to a neighbour.
++    @ViewBuilder
++    private var navigationOutline: some View {
++        switch slot {
++        case .center(let radius):
++            WandLiquidDiscOutline(radius: radius + WandWheelMetrics.focusOutset, pullX: focus.pullX, pullY: focus.pullY)
++                .stroke(navigationGradient, style: navigationStyle)
++        case .ring(let wedge):
++            let outline = wedge.expanded(by: WandWheelMetrics.focusOutset)
++            let parts = outline.components(ofPull: CGPoint(x: focus.pullX, y: focus.pullY))
++            WandLiquidWedgeOutline(wedge: outline, along: parts.along, inward: parts.inward)
++                .stroke(navigationGradient, style: navigationStyle)
++        }
++    }
++
++    private func ratchetStyle(_ adjustment: ModeHUDWheelAdjustment) -> StrokeStyle {
++        StrokeStyle(
++            lineWidth: WandAdjustRingStyle.lineWidth,
++            lineCap: .round,
++            dash: WandAdjustRingStyle.dash,
++            dashPhase: WandAdjustRingStyle.dashPhase(netSteps: adjustment.netSteps)
++        )
++    }
++
++    @ViewBuilder
++    private func ratchetOutline(_ adjustment: ModeHUDWheelAdjustment) -> some View {
++        let gradient = LinearGradient(colors: [accent, .white, accent], startPoint: .top, endPoint: .bottom)
++        let pull = CGPoint(x: 0, y: adjustment.pull * WandRadialFocusStyle.adjustmentPullScale)
++        switch slot {
++        case .center(let radius):
++            WandLiquidDiscOutline(radius: radius + WandWheelMetrics.focusOutset, pullX: 0, pullY: Double(pull.y))
++                .stroke(gradient, style: ratchetStyle(adjustment))
++        case .ring(let wedge):
++            let outline = wedge.expanded(by: WandWheelMetrics.focusOutset)
++            let parts = outline.components(ofPull: pull)
++            WandLiquidWedgeOutline(wedge: outline, along: parts.along, inward: parts.inward)
++                .stroke(gradient, style: ratchetStyle(adjustment))
++        }
++    }
++
++    @ViewBuilder
++    private var restOutline: some View {
++        switch slot {
++        case .center(let radius):
++            WandCenterDiscShape(radius: radius + WandWheelMetrics.focusOutset).stroke(accent, lineWidth: 2)
++        case .ring(let wedge):
++            WandWedgeShape(wedge: wedge.expanded(by: WandWheelMetrics.focusOutset)).stroke(accent, lineWidth: 2)
++        }
++    }
++
++    private var slotCenter: UnitPoint {
++        switch slot {
++        case .center:
++            return .center
++        case .ring(let wedge):
++            let direction = WandWedge.radial(wedge.centerAngle)
++            let radius = (wedge.inner + wedge.outer) / 2
++            let size = WandWheelMetrics.wheelSize
++            return UnitPoint(x: 0.5 + direction.x * radius / size, y: 0.5 + direction.y * radius / size)
++        }
++    }
++
++    private func adjustmentRing(_ adjustment: ModeHUDWheelAdjustment) -> some View {
++        ZStack {
++            ratchetOutline(adjustment)
++                .animation(WandAdjustRingStyle.notchAnimation(reduceMotion: reduceMotion), value: adjustment.netSteps)
++                .animation(WandAdjustRingStyle.stretchAnimation(reduceMotion: reduceMotion), value: adjustment.pull)
++
++            if WandAdjustRingStyle.showsRipple(adjustment, reduceMotion: reduceMotion) {
++                restOutline
++                    .id(adjustment.sentSteps)
++                    .transition(.asymmetric(
++                        insertion: .modifier(
++                            active: WandRadialRipple(phase: 0, offset: WandAdjustRingStyle.rippleOffset(lastStepWasUp: adjustment.lastStepWasUp), anchor: slotCenter),
++                            identity: WandRadialRipple(phase: 1, offset: WandAdjustRingStyle.rippleOffset(lastStepWasUp: adjustment.lastStepWasUp), anchor: slotCenter)
++                        ),
++                        removal: .identity
++                    ))
++            }
++        }
++        .animation(WandAdjustRingStyle.rippleAnimation(reduceMotion: reduceMotion), value: adjustment.sentSteps)
++        .shadow(color: accent.opacity(0.8), radius: 7)
++    }
++}
++
++/// A sent detent's pulse, grown about its own card rather than the wheel.
++private struct WandRadialRipple: ViewModifier {
++    let phase: CGFloat
++    let offset: CGFloat
++    let anchor: UnitPoint
++
++    func body(content: Content) -> some View {
++        content
++            .scaleEffect(1 + WandAdjustRingStyle.rippleGrowth * phase, anchor: anchor)
++            .offset(y: offset * phase)
++            .opacity(Double(1 - phase))
++    }
++}
++
++extension Color {
++    init(wheel rgb: ScimitarKit.RGBColor) {
++        self.init(
++            red: Double(rgb.red) / 255.0,
++            green: Double(rgb.green) / 255.0,
++            blue: Double(rgb.blue) / 255.0,
++            opacity: Double(rgb.alpha) / 255.0
++        )
++    }
++}
+diff --git a/Sources/ScimitarUI/WandRadialGeometry.swift b/Sources/ScimitarUI/WandRadialGeometry.swift
+new file mode 100644
+--- /dev/null
++++ b/Sources/ScimitarUI/WandRadialGeometry.swift
+@@ -0,0 +1,626 @@
++import AppKit
++import CoreGraphics
++import Foundation
++import ScimitarKit
++import SwiftUI
++
++/// Fixed geometry of the wand's weapon-wheel HUD, at 100 % HUD scale. The
++/// wheel never resizes with its card count or outline state, so the panel
++/// frame stays still while the wand moves.
++enum WandWheelMetrics {
++    static let wheelSize: CGFloat = 680
++    static let outerRadius: CGFloat = 324
++    static let innerRadius: CGFloat = 134
++    static let centerRadius: CGFloat = 115
++    /// Constant-width gutter between neighbouring ring cards.
++    static let gap: CGFloat = 9
++    static let cornerRadius: CGFloat = 16
++    static let panelPadding: CGFloat = 22
++    static var panelWidth: CGFloat { wheelSize + panelPadding * 2 }
++    /// Same outset as the grid outline: drawn in the gutter, outside the card.
++    static let focusOutset: CGFloat = 4
++}
++
++/// One rounded annular sector: a ring card, or its outline when expanded.
++///
++/// `halfWidth` measures the sector's boundary rays from its centre angle.
++/// The visible edges run parallel to those rays, `halfGap` inside them, so
++/// neighbouring cards keep a constant-width gutter at every radius.
++/// Angles are radians clockwise from 12 o'clock; points are screen-space
++/// offsets from the wheel centre.
++struct WandWedge: Equatable {
++    var centerAngle: Double
++    var halfWidth: Double
++    var inner: CGFloat
++    var outer: CGFloat
++    var halfGap: CGFloat
++    var cornerRadius: CGFloat
++
++    /// Grows (or, negative, shrinks) every edge by the same distance.
++    func expanded(by amount: CGFloat) -> WandWedge {
++        var value = self
++        value.inner = max(1, inner - amount)
++        value.outer = outer + amount
++        value.halfGap = halfGap - amount
++        value.cornerRadius = max(0.5, cornerRadius + amount)
++        return value
++    }
++
++    static func radial(_ angle: Double) -> CGPoint { CGPoint(x: sin(angle), y: -cos(angle)) }
++    static func tangent(_ angle: Double) -> CGPoint { CGPoint(x: cos(angle), y: sin(angle)) }
++
++    /// Largest usable corner radius at each corner, so arcs never overlap.
++    func clampedRadius(_ radius: CGFloat, inner isInner: Bool) -> CGFloat {
++        let thicknessLimit = max(0.5, (outer - inner) / 2 - 0.5)
++        var limit = min(radius, thicknessLimit)
++        let s = CGFloat(sin(min(halfWidth, .pi / 2)))
++        if isInner, s < 0.999 {
++            // The inner arc is the shortest edge: its two corner arcs must not cross.
++            limit = min(limit, max(0.5, (inner * s - halfGap) / (1 - s) - 0.5))
++        } else if !isInner, s < 0.999 {
++            limit = min(limit, max(0.5, (outer * s - halfGap) / (1 + s) - 0.5))
++        }
++        return max(0.5, limit)
++    }
++
++    /// Exact rounded outline, clockwise on screen, sampled about every
++    /// `step` points. Radii are outer-start, outer-end, inner-end and
++    /// inner-start, where "start" is the counter-clockwise edge.
++    func outline(radii requested: [CGFloat]? = nil, step: CGFloat = 2.5) -> [CGPoint] {
++        let base = requested ?? Array(repeating: cornerRadius, count: 4)
++        let r = [
++            clampedRadius(base[0], inner: false), clampedRadius(base[1], inner: false),
++            clampedRadius(base[2], inner: true), clampedRadius(base[3], inner: true),
++        ]
++        let a0 = centerAngle - halfWidth
++        let a1 = centerAngle + halfWidth
++        let g = halfGap
++
++        struct Corner { let center: CGPoint; let onLine: CGPoint; let onArc: CGPoint; let radius: CGFloat; let arcAngle: Double }
++        // side +1: start edge (interior lies clockwise); -1: end edge.
++        func corner(edge a: Double, side: CGFloat, arcRadius: CGFloat, outerArc: Bool, radius: CGFloat) -> Corner {
++            let distance = outerArc ? arcRadius - radius : arcRadius + radius
++            let off = g + radius
++            let along = sqrt(max(0, distance * distance - off * off))
++            let er = Self.radial(a), et = Self.tangent(a)
++            let center = CGPoint(x: er.x * along + et.x * side * off, y: er.y * along + et.y * side * off)
++            let onLine = CGPoint(x: er.x * along + et.x * side * g, y: er.y * along + et.y * side * g)
++            let scale = distance > 0 ? arcRadius / distance : 0
++            let onArc = CGPoint(x: center.x * scale, y: center.y * scale)
++            let arcAngle = a + Double(side) * asin(Double(min(1, off / max(distance, 0.001))))
++            return Corner(center: center, onLine: onLine, onArc: onArc, radius: radius, arcAngle: arcAngle)
++        }
++        let outerStart = corner(edge: a0, side: 1, arcRadius: outer, outerArc: true, radius: r[0])
++        let outerEnd = corner(edge: a1, side: -1, arcRadius: outer, outerArc: true, radius: r[1])
++        let innerEnd = corner(edge: a1, side: -1, arcRadius: inner, outerArc: false, radius: r[2])
++        let innerStart = corner(edge: a0, side: 1, arcRadius: inner, outerArc: false, radius: r[3])
++
++        var points: [CGPoint] = []
++        func arc(radius: CGFloat, from start: Double, to end: Double) {
++            let count = max(2, Int((abs(end - start) * Double(radius) / Double(step)).rounded(.up)))
++            for index in 0..<count {
++                let angle = start + (end - start) * Double(index) / Double(count)
++                points.append(CGPoint(x: radius * CGFloat(sin(angle)), y: -radius * CGFloat(cos(angle))))
++            }
++        }
++        func cornerArc(_ c: Corner, from p: CGPoint, to q: CGPoint) {
++            let start = atan2(Double(p.y - c.center.y), Double(p.x - c.center.x))
++            var delta = atan2(Double(q.y - c.center.y), Double(q.x - c.center.x)) - start
++            while delta > .pi { delta -= 2 * .pi }
++            while delta <= -.pi { delta += 2 * .pi }
++            let count = max(2, Int((abs(delta) * Double(c.radius) / Double(step)).rounded(.up)))
++            for index in 0..<count {
++                let angle = start + delta * Double(index) / Double(count)
++                points.append(CGPoint(x: c.center.x + c.radius * CGFloat(cos(angle)),
++                                      y: c.center.y + c.radius * CGFloat(sin(angle))))
++            }
++        }
++        func line(from p: CGPoint, to q: CGPoint) {
++            let count = max(1, Int((hypot(q.x - p.x, q.y - p.y) / step).rounded(.up)))
++            for index in 0..<count {
++                let f = CGFloat(index) / CGFloat(count)
++                points.append(CGPoint(x: p.x + (q.x - p.x) * f, y: p.y + (q.y - p.y) * f))
++            }
++        }
++        arc(radius: outer, from: outerStart.arcAngle, to: outerEnd.arcAngle)
++        cornerArc(outerEnd, from: outerEnd.onArc, to: outerEnd.onLine)
++        line(from: outerEnd.onLine, to: innerEnd.onLine)
++        cornerArc(innerEnd, from: innerEnd.onLine, to: innerEnd.onArc)
++        arc(radius: inner, from: innerEnd.arcAngle, to: innerStart.arcAngle)
++        cornerArc(innerStart, from: innerStart.onArc, to: innerStart.onLine)
++        line(from: innerStart.onLine, to: outerStart.onLine)
++        cornerArc(outerStart, from: outerStart.onLine, to: outerStart.onArc)
++        return points
++    }
++
++    /// Whether `point` lies inside the card with `margin` to spare.
++    func contains(_ point: CGPoint, margin: CGFloat) -> Bool {
++        contains(point, horizontalMargin: margin, verticalMargin: margin)
++    }
++
++    /// Margin to a border depends on its direction: text keeps the full
++    /// horizontal inset from a border beside it and a smaller one from a
++    /// border above or below it. A border's margin interpolates by how
++    /// sideways its normal points.
++    func contains(_ point: CGPoint, horizontalMargin: CGFloat, verticalMargin: CGFloat) -> Bool {
++        func margin(normalX: CGFloat) -> CGFloat {
++            verticalMargin + (horizontalMargin - verticalMargin) * abs(normalX)
++        }
++        let radius = hypot(point.x, point.y)
++        let arcMargin = margin(normalX: point.x / max(radius, 0.001))
++        guard radius >= inner + arcMargin, radius <= outer - arcMargin else { return false }
++        let theta = WandRadialLayout.angle(x: Double(point.x), y: Double(point.y))
++        let offset = WandRadialLayout.angularDifference(theta, centerAngle)
++        guard abs(offset) <= halfWidth else { return false }
++        guard halfWidth < .pi / 2 else { return true }
++        let start = Self.tangent(centerAngle - halfWidth), end = Self.tangent(centerAngle + halfWidth)
++        let fromStart = point.x * start.x + point.y * start.y
++        let fromEnd = -(point.x * end.x + point.y * end.y)
++        return fromStart >= halfGap + margin(normalX: start.x) && fromEnd >= halfGap + margin(normalX: end.x)
++    }
++}
++
++/// Everything the wheel needs to place and outline its cards, derived only
++/// from the shared `WandRadialLayout`.
++struct WandWheelGeometry {
++    enum Slot: Equatable {
++        case center
++        case ring(Int)
++    }
++
++    let layout: WandRadialLayout
++    let size: CGFloat
++
++    init(layout: WandRadialLayout, size: CGFloat = WandWheelMetrics.wheelSize) {
++        self.layout = layout
++        self.size = size
++    }
++
++    var center: CGPoint { CGPoint(x: size / 2, y: size / 2) }
++
++    func slot(for cell: PhysicalCell) -> Slot? {
++        if layout.center == cell { return .center }
++        return layout.ringIndex(of: cell).map(Slot.ring)
++    }
++
++    func wedge(at index: Int, angle: Double? = nil) -> WandWedge {
++        WandWedge(
++            centerAngle: angle ?? layout.angle(at: index),
++            halfWidth: layout.sectorWidth / 2,
++            inner: WandWheelMetrics.innerRadius,
++            outer: WandWheelMetrics.outerRadius,
++            halfGap: WandWheelMetrics.gap / 2,
++            cornerRadius: WandWheelMetrics.cornerRadius
++        )
++    }
++
++    /// Every axis-aligned text area a ring card offers, largest first, each
++    /// near the card's centre line and already keeping the shared 12-point
++    /// inset from its edges. The wheel is mirror-symmetric, so each card
++    /// reuses the search of its mirror image in the first quadrant, and the
++    /// result is cached per card shape rather than per page.
++    func labelCandidates(at index: Int) -> [CGRect] {
++        let angle = layout.angle(at: index).truncatingRemainder(dividingBy: 2 * .pi)
++        let mirrorX = angle > .pi              // left half: mirror across the vertical axis
++        let folded = mirrorX ? 2 * .pi - angle : angle
++        let mirrorY = folded > .pi / 2         // lower half: mirror across the horizontal axis
++        let canonical = mirrorY ? .pi - folded : folded
++        let key = WandWheelPlan.CandidateKey(
++            angle: Int((canonical * 1_000_000).rounded()),
++            halfWidth: Int((layout.sectorWidth / 2 * 1_000_000).rounded())
++        )
++        let base: [CGRect]
++        if let cached = WandWheelPlan.candidateCache[key] {
++            base = cached
++        } else {
++            base = Self.searchCandidates(wedge: wedge(at: index, angle: canonical))
++            WandWheelPlan.candidateCache[key] = base
++        }
++        return base.map { rect in
++            var value = rect
++            if mirrorY { value.origin.y = -rect.maxY }
++            if mirrorX { value.origin.x = -rect.maxX }
++            return value.offsetBy(dx: center.x, dy: center.y)
++        }
++    }
++
++    /// Candidate boxes relative to the wheel centre, largest first.
++    private static func searchCandidates(wedge: WandWedge) -> [CGRect] {
++        let direction = WandWedge.radial(wedge.centerAngle)
++        let tangent = WandWedge.tangent(wedge.centerAngle)
++        let thickness = wedge.outer - wedge.inner
++        var candidates: [CGRect] = []
++        for fraction in stride(from: CGFloat(0.38), through: 0.8, by: 0.06) {
++            let radius = wedge.inner + thickness * fraction
++            // A tilted card can hold a wider level box slightly off its centre line.
++            let reach = radius * CGFloat(sin(wedge.halfWidth)) * 0.5
++            for shift in [0, -0.35, 0.35] as [CGFloat] {
++                let mid = CGPoint(x: direction.x * radius + tangent.x * reach * shift,
++                                  y: direction.y * radius + tangent.y * reach * shift)
++                for height in stride(from: CGFloat(40), through: 120, by: 8) {
++                    var low: CGFloat = 0, high: CGFloat = 260
++                    for _ in 0..<10 {
++                        let width = (low + high) / 2
++                        if fits(CGRect(x: mid.x - width / 2, y: mid.y - height / 2, width: width, height: height), in: wedge) {
++                            low = width
++                        } else {
++                            high = width
++                        }
++                    }
++                    if low >= 30 {
++                        candidates.append(CGRect(x: mid.x - low / 2, y: mid.y - height / 2, width: low, height: height))
++                    }
++                }
++            }
++        }
++        return candidates.sorted { $0.width * $0.height > $1.width * $1.height }
++    }
++
++    /// The shared 12-point inset applies horizontally; above and below the
++    /// text half of it is enough.
++    static let verticalLabelMargin = ModeHUDLayoutMetrics.cardHorizontalContentInset / 2
++
++    private static func fits(_ rect: CGRect, in wedge: WandWedge) -> Bool {
++        let horizontal = ModeHUDLayoutMetrics.cardHorizontalContentInset
++        let vertical = Self.verticalLabelMargin
++        let corners = [
++            CGPoint(x: rect.minX, y: rect.minY), CGPoint(x: rect.maxX, y: rect.minY),
++            CGPoint(x: rect.maxX, y: rect.maxY), CGPoint(x: rect.minX, y: rect.maxY),
++            CGPoint(x: rect.midX, y: rect.minY), CGPoint(x: rect.midX, y: rect.maxY),
++            CGPoint(x: rect.minX, y: rect.midY), CGPoint(x: rect.maxX, y: rect.midY),
++        ]
++        guard corners.allSatisfy({ wedge.contains($0, horizontalMargin: horizontal, verticalMargin: vertical) })
++        else { return false }
++        // The inner arc bows into a box whose corners all clear it.
++        let nearest = CGPoint(x: min(max(0, rect.minX), rect.maxX), y: min(max(0, rect.minY), rect.maxY))
++        let radius = hypot(nearest.x, nearest.y)
++        let sideways = abs(nearest.x) / max(radius, 0.001)
++        return radius >= wedge.inner + vertical + (horizontal - vertical) * sideways
++    }
++
++    /// Bounding box of a ring card in wheel coordinates.
++    func bounds(at index: Int) -> CGRect {
++        let points = wedge(at: index).outline(step: 6)
++        let xs = points.map(\.x), ys = points.map(\.y)
++        guard let minX = xs.min(), let maxX = xs.max(), let minY = ys.min(), let maxY = ys.max() else { return .zero }
++        return CGRect(x: minX + center.x, y: minY + center.y, width: maxX - minX, height: maxY - minY)
++    }
++
++    var centerBounds: CGRect {
++        let radius = WandWheelMetrics.centerRadius
++        return CGRect(x: center.x - radius, y: center.y - radius, width: radius * 2, height: radius * 2)
++    }
++
++    var centerLabelFrame: CGRect {
++        // The largest centred box inside the disc, less the 12-point inset.
++        let width = (WandWheelMetrics.centerRadius - ModeHUDLayoutMetrics.cardHorizontalContentInset) * 2 * 0.86
++        let height = WandWheelMetrics.centerRadius * 1.0
++        return CGRect(x: center.x - width / 2, y: center.y - height / 2, width: width, height: height)
++    }
++}
++
++// MARK: - Liquid deformation
++
++/// Ethan's "liquidy" wand outline, rebuilt for the wheel.
++///
++/// Every outline point moves through one smooth field, so the whole
++/// silhouette travels and the rounded corners go with their edges rather
++/// than staying pinned. At rest the outline is exactly the card's rounded
++/// shape. Pull is the shared navigator's screen-space vector.
++enum WandLiquidMetrics {
++    // Ring card, in fractions of its half-width or thickness.
++    static let leadStretch = 0.4
++    static let trailFollow = 0.12
++    static let neck = 0.16
++    static let leadBulge = 0.06
++    static let inwardLead = 0.2
++    static let inwardFollow = 0.06
++    static let inwardNarrowing = 0.22
++    static let leadRounding: CGFloat = 0.55
++    static let trailTightening: CGFloat = 0.15
++    // Centre disc, in fractions of its radius.
++    static let discReach = 0.2
++    static let discStretch = 0.16
++    static let discNeck = 0.2
++}
++
++extension WandWedge {
++    /// Splits a screen-space pull into travel along the ring (clockwise
++    /// positive) and toward the centre (positive inward).
++    func components(ofPull pull: CGPoint) -> (along: Double, inward: Double) {
++        let radial = Self.radial(centerAngle), tangent = Self.tangent(centerAngle)
++        let along = Double(pull.x * tangent.x + pull.y * tangent.y)
++        let inward = -Double(pull.x * radial.x + pull.y * radial.y)
++        return (max(-1, min(1, along)), max(-1, min(1, inward)))
++    }
++
++    /// The liquid outline for travel `along` the ring and `inward`.
++    func liquidOutline(along: Double, inward: Double, step: CGFloat = 2.5) -> [CGPoint] {
++        let t = along.isFinite ? max(-1, min(1, along)) : 0
++        let r = inward.isFinite ? max(-1, min(1, inward)) : 0
++        let a = CGFloat(abs(t)), inwardAmount = CGFloat(max(0, r))
++        // Leading corners soften into a tip while trailing ones tighten.
++        let lead = cornerRadius * (1 + WandLiquidMetrics.leadRounding * a)
++        let trail = cornerRadius * max(0.5, 1 - WandLiquidMetrics.trailTightening * a)
++        var radii: [CGFloat] = t >= 0 ? [trail, lead, lead, trail] : [lead, trail, trail, lead]
++        radii[2] *= 1 + 0.6 * inwardAmount
++        radii[3] *= 1 + 0.6 * inwardAmount
++        let rest = outline(radii: radii, step: step)
++        guard t != 0 || r != 0 else { return rest }
++
++        let sign: Double = t >= 0 ? 1 : -1
++        let span = Double(outer - inner)
++        let mid = Double(inner + outer) / 2
++        return rest.map { point in
++            let rho = Double(hypot(point.x, point.y))
++            let theta = WandRadialLayout.angle(x: Double(point.x), y: Double(point.y))
++            var u = WandRadialLayout.angularDifference(theta, centerAngle) / halfWidth
++            let normalized = max(0, min(1, (rho - Double(inner)) / span))
++            let leading = max(0, min(1, (u * sign + 1) / 2))
++            let eased = leading * leading * (3 - 2 * leading)
++            // Leading edge reaches far, trailing edge follows a little, and
++            // the leading edge bows outward in the middle like a meniscus.
++            u += sign * Double(a) * (WandLiquidMetrics.trailFollow
++                + (WandLiquidMetrics.leadStretch - WandLiquidMetrics.trailFollow) * leading)
++            u += sign * Double(a) * WandLiquidMetrics.leadBulge
++                * pow(max(0, u * sign), 8) * sin(.pi * normalized)
++            // Volume is conserved: the stretched end narrows.
++            var radius = mid + (rho - mid) * (1 - WandLiquidMetrics.neck * Double(a) * eased)
++            if r != 0 {
++                let toward = r > 0
++                    ? WandLiquidMetrics.inwardLead * (1 - normalized) + WandLiquidMetrics.inwardFollow * normalized
++                    : WandLiquidMetrics.inwardFollow * (1 - normalized) + WandLiquidMetrics.inwardLead * normalized
++                radius -= r * span * toward
++                let narrowEnd = r > 0 ? 1 - normalized : normalized
++                u *= 1 - abs(r) * WandLiquidMetrics.inwardNarrowing * narrowEnd
++            }
++            let angle = centerAngle + u * halfWidth
++            return CGPoint(x: CGFloat(radius * sin(angle)), y: CGFloat(-radius * cos(angle)))
++        }
++    }
++}
++
++enum WandLiquidDisc {
++    /// Circle of `radius` drawn toward `pull` like one drop: the leading side
++    /// reaches out and narrows, the trailing side follows a little.
++    static func outline(radius: CGFloat, pull: CGPoint, step: CGFloat = 2.5) -> [CGPoint] {
++        let count = max(48, Int((2 * .pi * radius / step).rounded(.up)))
++        let length = min(1, hypot(pull.x, pull.y))
++        let direction = length > 0.0001 ? CGPoint(x: pull.x / length, y: pull.y / length) : CGPoint(x: 0, y: -1)
++        let normal = CGPoint(x: -direction.y, y: direction.x)
++        let v = Double(length)
++        return (0..<count).map { index in
++            let alpha = 2 * Double.pi * Double(index) / Double(count)
++            var along = Double(radius) * cos(alpha)
++            var across = Double(radius) * sin(alpha)
++            if v > 0 {
++                along = along * (1 + WandLiquidMetrics.discStretch * v) + WandLiquidMetrics.discReach * v * Double(radius)
++                across *= 1 - WandLiquidMetrics.discNeck * v * (1 + cos(alpha)) / 2
++            }
++            return CGPoint(x: direction.x * CGFloat(along) + normal.x * CGFloat(across),
++                           y: direction.y * CGFloat(along) + normal.y * CGFloat(across))
++        }
++    }
++}
++
++// MARK: - Shapes
++
++private func closedPath(_ points: [CGPoint], around center: CGPoint) -> Path {
++    var path = Path()
++    guard let first = points.first else { return path }
++    path.move(to: CGPoint(x: first.x + center.x, y: first.y + center.y))
++    for point in points.dropFirst() {
++        path.addLine(to: CGPoint(x: point.x + center.x, y: point.y + center.y))
++    }
++    path.closeSubpath()
++    return path
++}
++
++/// A ring card's fill and border. Drawn across the whole wheel frame.
++struct WandWedgeShape: InsettableShape {
++    var wedge: WandWedge
++
++    func path(in rect: CGRect) -> Path {
++        closedPath(wedge.outline(), around: CGPoint(x: rect.midX, y: rect.midY))
++    }
++
++    func inset(by amount: CGFloat) -> WandWedgeShape {
++        WandWedgeShape(wedge: wedge.expanded(by: -amount))
++    }
++}
++
++/// The centre card, a circle about the wheel centre.
++struct WandCenterDiscShape: InsettableShape {
++    var radius: CGFloat
++
++    func path(in rect: CGRect) -> Path {
++        Path(ellipseIn: CGRect(x: rect.midX - radius, y: rect.midY - radius, width: radius * 2, height: radius * 2))
++    }
++
++    func inset(by amount: CGFloat) -> WandCenterDiscShape {
++        WandCenterDiscShape(radius: max(0.5, radius - amount))
++    }
++}
++
++/// Liquid wand outline around a ring card. The centre angle animates too, so
++/// a neighbour change slides the outline round the wheel.
++struct WandLiquidWedgeOutline: Shape {
++    var wedge: WandWedge
++    var along: Double
++    var inward: Double
++
++    var animatableData: AnimatablePair<Double, AnimatablePair<Double, Double>> {
++        get { AnimatablePair(wedge.centerAngle, AnimatablePair(along, inward)) }
++        set {
++            wedge.centerAngle = newValue.first
++            along = newValue.second.first
++            inward = newValue.second.second
++        }
++    }
++
++    func path(in rect: CGRect) -> Path {
++        closedPath(wedge.liquidOutline(along: along, inward: inward), around: CGPoint(x: rect.midX, y: rect.midY))
++    }
++}
++
++/// Liquid wand outline around the centre card.
++struct WandLiquidDiscOutline: Shape {
++    var radius: CGFloat
++    var pullX: Double
++    var pullY: Double
++
++    var animatableData: AnimatablePair<Double, Double> {
++        get { AnimatablePair(pullX, pullY) }
++        set { pullX = newValue.first; pullY = newValue.second }
++    }
++
++    func path(in rect: CGRect) -> Path {
++        closedPath(
++            WandLiquidDisc.outline(radius: radius, pull: CGPoint(x: pullX, y: pullY)),
++            around: CGPoint(x: rect.midX, y: rect.midY)
++        )
++    }
++}
++
++// MARK: - Typography and label plan
++
++/// Word wrap measured with the face the card draws: rounded semibold.
++struct WandTitleMeasure {
++    let words: [String]
++    private var widths: [CGFloat: (words: [CGFloat], space: CGFloat)] = [:]
++
++    init(_ title: String) {
++        words = title.uppercased().split(separator: " ").map(String.init)
++    }
++
++    static func font(size: CGFloat) -> NSFont {
++        let base = NSFont.systemFont(ofSize: size, weight: .semibold)
++        let rounded = base.fontDescriptor.withDesign(.rounded).flatMap { NSFont(descriptor: $0, size: size) }
++        return rounded ?? base
++    }
++
++    /// SwiftUI draws the rounded face a little wider than AppKit measures
++    /// it, so measured widths carry this margin before they must fit.
++    static let measurementMargin: CGFloat = 1.05
++
++    private mutating func metrics(size: CGFloat) -> (words: [CGFloat], space: CGFloat) {
++        if let cached = widths[size] { return cached }
++        let attributes: [NSAttributedString.Key: Any] = [.font: Self.font(size: size)]
++        let value = (
++            words: words.map { ($0 as NSString).size(withAttributes: attributes).width * Self.measurementMargin },
++            space: (" " as NSString).size(withAttributes: attributes).width * Self.measurementMargin
++        )
++        widths[size] = value
++        return value
++    }
++
++    /// Greedy wrap; nil when a single word cannot fit the width.
++    mutating func lines(size: CGFloat, width: CGFloat) -> Int? {
++        let measured = metrics(size: size)
++        var lines = 0
++        var current: CGFloat = -1
++        for word in measured.words {
++            guard word <= width else { return nil }
++            if current < 0 {
++                current = word
++            } else if current + measured.space + word <= width {
++                current += measured.space + word
++            } else {
++                lines += 1
++                current = word
++            }
++        }
++        return lines + (current < 0 ? 0 : 1)
++    }
++}
++
++enum WandWheelTypography {
++    static let maximumTitleSize: CGFloat = 15
++    static let maximumCenterTitleSize: CGFloat = 17
++    static let minimumTitleSize: CGFloat = 9.5
++    static let labelSize: CGFloat = 10.5
++    static let spacing: CGFloat = 4
++    static let maximumLines = 4
++    static let lineHeight: CGFloat = 1.22
++    /// Below this, a ring card shrinks on its own instead of shrinking the
++    /// whole wheel with it.
++    static let sharedFloor: CGFloat = 13
++
++    static func fits(_ measure: inout WandTitleMeasure, size: CGFloat, in frame: CGRect, extraHeight: CGFloat = 0) -> Bool {
++        guard let lines = measure.lines(size: size, width: frame.width), lines <= maximumLines else { return false }
++        return CGFloat(lines) * size * lineHeight + labelSize * 1.3 + spacing + extraHeight <= frame.height
++    }
++
++    static var sizes: [CGFloat] {
++        stride(from: maximumCenterTitleSize, through: minimumTitleSize, by: -0.5).map { $0 }
++    }
++}
++
++/// Where each card's text goes and how large it is, for one wheel. Built
++/// once per page and title set, then reused while the outline moves, so
++/// focus updates never repeat text measurement.
++///
++/// Every title keeps whole words (no mid-word breaks) and at most four
++/// lines. Ring titles share one size so the wheel reads as one set; a title
++/// that cannot fit at that size shrinks on its own, never below the minimum.
++struct WandWheelPlan: Equatable {
++    struct CandidateKey: Hashable { let angle: Int; let halfWidth: Int }
++    struct Card: Equatable {
++        let labelFrame: CGRect
++        let titleSize: CGFloat
++    }
++
++    static var candidateCache: [CandidateKey: [CGRect]] = [:]
++    private static var planCache: [String: WandWheelPlan] = [:]
++
++    let center: Card?
++    let ring: [Card]
++
++    static func plan(for geometry: WandWheelGeometry, titles: [PhysicalCell: String], extraTopLine: Set<PhysicalCell> = []) -> WandWheelPlan {
++        let layout = geometry.layout
++        let key = layout.cells.map { "\($0.rawValue):\(titles[$0] ?? ""):\(extraTopLine.contains($0))" }.joined(separator: "|")
++            + "#\(layout.center?.rawValue ?? 0)"
++        if let cached = planCache[key] { return cached }
++
++        var center: Card?
++        if let cell = layout.center {
++            var measure = WandTitleMeasure(titles[cell] ?? "")
++            let frame = geometry.centerLabelFrame
++            let extra: CGFloat = extraTopLine.contains(cell) ? 15 : 0
++            let size = WandWheelTypography.sizes.first {
++                $0 <= WandWheelTypography.maximumCenterTitleSize
++                    && WandWheelTypography.fits(&measure, size: $0, in: frame, extraHeight: extra)
++            } ?? WandWheelTypography.minimumTitleSize
++            center = Card(labelFrame: frame, titleSize: size)
++        }
++
++        // Largest size each ring title can reach anywhere in its card.
++        var measures = layout.ring.map { WandTitleMeasure(titles[$0] ?? "") }
++        var bestSizes: [CGFloat] = []
++        for index in layout.ring.indices {
++            let candidates = geometry.labelCandidates(at: index)
++            let extra: CGFloat = extraTopLine.contains(layout.ring[index]) ? 15 : 0
++            let best = WandWheelTypography.sizes.first { size in
++                size <= WandWheelTypography.maximumTitleSize
++                    && candidates.contains { WandWheelTypography.fits(&measures[index], size: size, in: $0, extraHeight: extra) }
++            } ?? WandWheelTypography.minimumTitleSize
++            bestSizes.append(best)
++        }
++        let shared = max(WandWheelTypography.sharedFloor, bestSizes.min() ?? WandWheelTypography.maximumTitleSize)
++        let ring: [Card] = layout.ring.indices.map { index in
++            let size = min(shared, bestSizes[index])
++            let candidates = geometry.labelCandidates(at: index)
++            let extra: CGFloat = extraTopLine.contains(layout.ring[index]) ? 15 : 0
++            // The roomiest area that holds the title at that size.
++            let frame = candidates.first { WandWheelTypography.fits(&measures[index], size: size, in: $0, extraHeight: extra) }
++                ?? candidates.first
++                ?? CGRect(x: geometry.center.x - 40, y: geometry.center.y - 30, width: 80, height: 60)
++            return Card(labelFrame: frame, titleSize: size)
++        }
++
++        let plan = WandWheelPlan(center: center, ring: ring)
++        if planCache.count > 48 { planCache.removeAll() }
++        planCache[key] = plan
++        return plan
++    }
++}
+diff --git a/Sources/ScimitarKit/App/WandPersistentControl.swift b/Sources/ScimitarKit/App/WandPersistentControl.swift
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -46,7 +46,7 @@
+         var sequence:Int
+         var last:WandAngularOffset = .zero
+         var received:TimeInterval
+-        var navigation:WandGridNavigator?
++        var navigation:WandRadialNavigator?
+         let cell:PhysicalCell
+         let pageGeneration:UInt64
+         var tracker = WandAdjustDetentTracker()
+@@ -64,7 +64,7 @@
+     public var isOpen:Bool { ownsHUD && target.isActive }
+     public var reviewMode: String? {
+         guard isOpen, target.isWandHome, let current = hold, current.navigation == nil,
+-              target.wandNavigationRows.joined().contains(current.cell) else { return nil }
++              target.wandRadialLayout.contains(current.cell) else { return nil }
+         return current.cell.wandReviewMode
+     }
+     public var focusedCell:PhysicalCell? { isOpen ? target.pointerFocus?.cell ?? selected : nil }
+@@ -140,7 +140,7 @@
+             }
+             selected=target.pointerFocus?.cell ?? selected
+             if command.phase == .press, target.isWandHome, selectedReviewMode != nil, let pinned=pinnedReviewCell {selected=pinned}
+-            let nav = command.phase == .navigate ? WandGridNavigator(rows:target.wandNavigationRows,start:selected) : nil
++            let nav = command.phase == .navigate ? WandRadialNavigator(layout:target.wandRadialLayout,start:selected) : nil
+             hold=Hold(id:command.id,sequence:command.sequence,received:clock.now,
+                       navigation:nav,cell:selected,pageGeneration:target.pageGeneration)
+             if command.phase == .press && selected.wandReviewMode == nil {
+@@ -149,15 +149,18 @@
+             }
+         case .motion:
+             guard var current=hold,current.id == command.id,command.sequence > current.sequence else {return}
+-            if current.cell.wandReviewMode != nil && !target.wandNavigationRows.joined().contains(current.cell) {
+-                hold=nil;target.setPointerFocus(.init(cell:.switchApp));return
++            if current.cell.wandReviewMode != nil && !target.wandRadialLayout.contains(current.cell) {
++                hold=nil;target.setPointerFocus(.init(cell:target.wandRadialLayout.center ?? .switchApp));return
+             }
+             let dx=command.offset.x-current.last.x,dy=command.offset.y-current.last.y
+             current.sequence=command.sequence;current.last=command.offset;current.received=clock.now
+             if var nav=current.navigation {
+-                if nav.rows != target.wandNavigationRows {
+-                    let start = target.wandNavigationRows.joined().contains(selected) ? selected : .switchApp
+-                    nav = WandGridNavigator(rows:target.wandNavigationRows,start:start)!
++                // The wheel can change under a live hold (VS Code review cards
++                // appear or disappear). Re-seat on the same card, never jump.
++                let layout=target.wandRadialLayout
++                if nav.layout != layout, let reseated=WandRadialNavigator(
++                    layout:layout,start:layout.contains(selected) ? selected : layout.center ?? .switchApp) {
++                    nav=reseated
+                 }
+                 nav.apply(deltaX:dx,deltaY:dy);current.navigation=nav;selected=nav.focusedCell
+                 target.setPointerFocus(nav.pointerFocus)
+diff --git a/Sources/ScimitarKit/App/WandSelection.swift b/Sources/ScimitarKit/App/WandSelection.swift
+--- a/Sources/ScimitarKit/App/WandSelection.swift
++++ b/Sources/ScimitarKit/App/WandSelection.swift
+@@ -215,7 +215,8 @@
+ 
+ // MARK: - Navigation
+ 
+-/// Angular tolerance for moving the wand outline across the 4 × 3 grid.
++/// Angular tolerance for the retired 4 × 3 grid cursor. Its `hysteresis`
++/// still sets the wheel-adjustment detent band.
+ ///
+ /// The outline position is continuous, so one fast sweep crosses several
+ /// cards. `hysteresis` widens every boundary by a fraction of a cell, so
+@@ -289,7 +290,8 @@
+ }
+ 
+ /// Pure grid cursor. Rows are presentation rows from the top of the mouse
+-/// toward the desk, exactly as the HUD draws them.
++/// toward the desk. The wand HUD no longer uses it: it draws and selects a
++/// weapon wheel through `WandRadialLayout` and `WandRadialNavigator`.
+ public struct WandGridNavigator: Equatable, Sendable {
+     public let rows: [[PhysicalCell]]
+     public private(set) var column: Int
+@@ -595,7 +597,9 @@
+     var activeWheelControl: WheelChordControl? { get }
+     var pointerFocus: ModeHUDPointerFocus? { get }
+     var pageGeneration: UInt64 { get }
+-    var wandNavigationRows: [[PhysicalCell]] { get }
++    /// The weapon wheel currently drawn for the wand. Selection uses this
++    /// exact layout, never a separate grid.
++    var wandRadialLayout: WandRadialLayout { get }
+     var wandReviewAvailable: Bool { get }
+     func setWandReviewSelection(_ cell: PhysicalCell?)
+     func enterWandHome(source: MouseSource, pointerFocus: ModeHUDPointerFocus?)
+@@ -607,12 +611,14 @@
+ public extension WandModeControlling {
+     var wandReviewAvailable: Bool { false }
+     func setWandReviewSelection(_ cell: PhysicalCell?) {}
+-    var wandNavigationRows: [[PhysicalCell]] { PhysicalCell.displayRowsTopToBottom(for: .wand) }
+ }
+ extension ModePickerCoordinator: WandModeControlling {}
+ 
+ public struct WandSelectionPolicy: Equatable, Sendable {
++    /// Retained for its detent hysteresis; card selection uses `radial`.
+     public var navigation: WandNavigationTuning
++    /// Weapon-wheel selection over the HUD's own `WandRadialLayout`.
++    public var radial: WandRadialTuning
+     public var adjustDegreesPerStep: Double
+     /// Slower apparent motion is treated as residual gyro bias, not intent.
+     public var driftFloorDegreesPerSecond: Double
+@@ -630,6 +636,7 @@
+ 
+     public init(
+         navigation: WandNavigationTuning = .init(),
++        radial: WandRadialTuning = .init(),
+         adjustDegreesPerStep: Double = 7,
+         driftFloorDegreesPerSecond: Double = 1.5,
+         gestureStallTimeout: TimeInterval = 1.0,
+@@ -640,6 +647,7 @@
+         watchdogInterval: TimeInterval = 0.25
+     ) {
+         self.navigation = navigation
++        self.radial = radial
+         self.adjustDegreesPerStep = adjustDegreesPerStep
+         self.driftFloorDegreesPerSecond = driftFloorDegreesPerSecond
+         self.gestureStallTimeout = gestureStallTimeout
+@@ -712,7 +720,7 @@
+ 
+     private enum State {
+         case idle
+-        case navigating(Gesture, WandGridNavigator)
++        case navigating(Gesture, WandRadialNavigator)
+         case armed(ArmedCard)
+         case adjusting(Gesture, ArmedCard, AdjustSession)
+         case lingering(deadline: TimeInterval)
+@@ -857,10 +865,10 @@
+         // never makes the outline jump.
+         let start = target.pointerFocus?.cell
+             ?? (target.isWandHome ? Self.homeStartCell : Self.startCell(for: target.page))
+-        guard let navigator = WandGridNavigator(
+-            rows: PhysicalCell.displayRowsTopToBottom(for: Self.source),
++        guard let navigator = WandRadialNavigator(
++            layout: target.wandRadialLayout,
+             start: start,
+-            tuning: policy.navigation
++            tuning: policy.radial
+         ) else { return }
+         state = .navigating(gesture, navigator)
+         target.setPointerFocus(ModeHUDPointerFocus(cell: navigator.focusedCell))
+diff --git a/Sources/ScimitarKit/App/WandRadialMenu.swift b/Sources/ScimitarKit/App/WandRadialMenu.swift
+new file mode 100644
+--- /dev/null
++++ b/Sources/ScimitarKit/App/WandRadialMenu.swift
+@@ -0,0 +1,336 @@
++import Foundation
++
++// MARK: - Layout
++
++/// Ethan's weapon-wheel wand HUD: one card in the centre and every other card
++/// spaced evenly around it, so every card is the same distance from the
++/// centre. The HUD draws from this layout and the wand selects from it, so
++/// what is drawn is exactly what is hit.
++///
++/// Angles are measured clockwise from 12 o'clock in screen space (x right,
++/// y down). The ring keeps the page's legend order clockwise and ends at
++/// 12 o'clock. With twelve ring cards, which is Default without VS Code, each
++/// numbered card (Corsair 1 to 10) therefore sits at its own clock hour.
++/// Other counts, including odd ones, are spaced evenly the same way.
++public struct WandRadialLayout: Equatable, Sendable {
++    public let center: PhysicalCell?
++    public let ring: [PhysicalCell]
++
++    public init(center: PhysicalCell?, ring: [PhysicalCell]) {
++        self.center = center
++        var seen: Set<PhysicalCell> = center.map { [$0] } ?? []
++        self.ring = ring.filter { seen.insert($0).inserted }
++    }
++
++    public static let empty = WandRadialLayout(center: nil, ring: [])
++
++    public var isEmpty: Bool { center == nil && ring.isEmpty }
++
++    /// Centre first, then the ring clockwise.
++    public var cells: [PhysicalCell] { (center.map { [$0] } ?? []) + ring }
++
++    public func contains(_ cell: PhysicalCell) -> Bool {
++        center == cell || ring.contains(cell)
++    }
++
++    public func ringIndex(of cell: PhysicalCell) -> Int? { ring.firstIndex(of: cell) }
++
++    /// Angular width of one ring card, in radians.
++    public var sectorWidth: Double { 2 * .pi / Double(max(1, ring.count)) }
++
++    /// Centre angle of ring card `index`, in radians clockwise from
++    /// 12 o'clock, normalised to (0, 2π].
++    public func angle(at index: Int) -> Double {
++        Double(index + 1) * sectorWidth
++    }
++
++    /// Screen-space unit vector from the centre toward ring card `index`.
++    public func direction(at index: Int) -> (x: Double, y: Double) {
++        let theta = angle(at: index)
++        return (sin(theta), -cos(theta))
++    }
++
++    /// Ring card whose sector contains `theta` (radians, clockwise from up).
++    public func nearestIndex(toAngle theta: Double) -> Int? {
++        guard !ring.isEmpty, theta.isFinite else { return nil }
++        let turns = (theta / sectorWidth - 1).rounded()
++        let count = ring.count
++        return ((Int(turns) % count) + count) % count
++    }
++
++    /// Clockwise angle of a screen-space vector, in radians in [0, 2π).
++    public static func angle(x: Double, y: Double) -> Double {
++        let theta = atan2(x, -y)
++        return theta < 0 ? theta + 2 * .pi : theta
++    }
++
++    /// Signed shortest angular difference `a - b`, in (-π, π].
++    public static func angularDifference(_ a: Double, _ b: Double) -> Double {
++        var value = (a - b).truncatingRemainder(dividingBy: 2 * .pi)
++        if value <= -.pi { value += 2 * .pi }
++        if value > .pi { value -= 2 * .pi }
++        return value
++    }
++}
++
++public extension WandRadialLayout {
++    /// The one definition of each wand page's wheel.
++    ///
++    /// * Home puts Switch App in the centre, so a tap with no movement still
++    ///   switches app. Every other home card, including Play/Pause and the
++    ///   VS Code review cards when present, goes around it in legend order.
++    /// * Child pages put their own exit in the centre: on an app page that is
++    ///   cell 2, otherwise cell 10. A wand exit returns to the parent page.
++    ///   App pages also map cell 10 to the same exit, so that duplicate is
++    ///   left out of the ring rather than taking a second slot.
++    /// * Unassigned Spare cards stay on the physical mouse grids but are left
++    ///   out of the wand ring, so every wand slot does something.
++    static func wandMenu(
++        legend: [ModeHUDLegendItem],
++        page: ModePickerPage,
++        isHome: Bool
++    ) -> WandRadialLayout {
++        let center: PhysicalCell = isHome ? .switchApp : WandSelectionController.startCell(for: page)
++        let duplicateExits: Set<PhysicalCell> = !isHome && (page == .appSpecific || page == .chromeWebsites)
++            ? [.modeExit]
++            : []
++        return menu(legend: legend, center: center, omitting: duplicateExits)
++    }
++
++    static func menu(
++        legend: [ModeHUDLegendItem],
++        center: PhysicalCell?,
++        omitting omitted: Set<PhysicalCell> = []
++    ) -> WandRadialLayout {
++        let centre = center.flatMap { cell in legend.contains { $0.cell == cell } ? cell : nil }
++        let ring = legend
++            .filter { $0.cell != centre && !omitted.contains($0.cell) && !$0.isUnassignedSpare }
++            .map(\.cell)
++        return WandRadialLayout(center: centre, ring: ring)
++    }
++
++    /// Presentation fallback for a hand-built wand snapshot that carries no
++    /// layout. The coordinator always supplies `wandMenu`; this only keeps a
++    /// stray snapshot drawable. Home is recognised by its wand-only
++    /// Play/Pause slot; anything else centres its universal exit.
++    static func inferred(legend: [ModeHUDLegendItem]) -> WandRadialLayout {
++        let isHome = legend.contains { $0.cell == .wandPlayPause }
++        return menu(legend: legend, center: isHome ? .switchApp : .modeExit)
++    }
++}
++
++public extension ModeHUDLegendItem {
++    /// Every legend builder labels an unassigned control exactly "Spare".
++    var isUnassignedSpare: Bool {
++        destinationModeAccent == nil && actionTitle == "Spare"
++    }
++}
++
++// MARK: - Navigation
++
++/// How the wand steers its weapon wheel.
++///
++/// Wand rotation moves a virtual stick. The centre card is held until the
++/// stick travels `reachDegrees` from the centre; the ring card in that
++/// direction is then chosen. A ring card is held until the stick comes back
++/// within `centerReturnDegrees`, so the band in between absorbs tremor at the
++/// centre boundary. Around the ring, the stick must pass a sector edge by
++/// `angularHysteresis` of a sector (at most `maximumHysteresisDegrees`)
++/// before the neighbour takes over, so tremor on an edge never flickers.
++/// Ring cards change only while the stick is out at the reach radius,
++/// where its angle is reliable. The stick saturates at `maximumDegrees`: an over-long sweep never winds
++/// up, and a reversal acts at once.
++public struct WandRadialTuning: Equatable, Sendable {
++    public var reachDegrees: Double
++    public var centerReturnDegrees: Double
++    public var maximumDegrees: Double
++    /// Where a hold that starts on a ring card begins, between reach and
++    /// maximum, so a small first movement neither drops to the centre nor
++    /// needs to unwind saturation.
++    public var restingDegrees: Double
++    public var angularHysteresis: Double
++    public var maximumHysteresisDegrees: Double
++
++    public init(
++        reachDegrees: Double = 7,
++        centerReturnDegrees: Double = 4,
++        maximumDegrees: Double = 11,
++        restingDegrees: Double = 9,
++        angularHysteresis: Double = 0.22,
++        maximumHysteresisDegrees: Double = 9
++    ) {
++        self.reachDegrees = reachDegrees
++        self.centerReturnDegrees = centerReturnDegrees
++        self.maximumDegrees = maximumDegrees
++        self.restingDegrees = restingDegrees
++        self.angularHysteresis = angularHysteresis
++        self.maximumHysteresisDegrees = maximumHysteresisDegrees
++    }
++
++    /// Bounded copy: radii stay ordered and positive, and the angular band
++    /// can never swallow a whole sector.
++    var sanitized: WandRadialTuning {
++        func bounded(_ value: Double, _ range: ClosedRange<Double>, _ fallback: Double) -> Double {
++            value.isFinite ? min(range.upperBound, max(range.lowerBound, value)) : fallback
++        }
++        let reach = bounded(reachDegrees, 1...60, 7)
++        let back = bounded(centerReturnDegrees, 0.25...(reach * 0.9), min(4, reach * 0.9))
++        let maximum = bounded(maximumDegrees, (reach + 0.5)...120, max(11, reach + 0.5))
++        let resting = bounded(restingDegrees, reach...maximum, (reach + maximum) / 2)
++        return WandRadialTuning(
++            reachDegrees: reach,
++            centerReturnDegrees: back,
++            maximumDegrees: maximum,
++            restingDegrees: resting,
++            angularHysteresis: bounded(angularHysteresis, 0...0.45, 0.22),
++            maximumHysteresisDegrees: bounded(maximumHysteresisDegrees, 0...30, 9)
++        )
++    }
++}
++
++/// Pure weapon-wheel cursor over one `WandRadialLayout`.
++public struct WandRadialNavigator: Equatable, Sendable {
++    public let layout: WandRadialLayout
++    public let tuning: WandRadialTuning
++    /// Virtual stick, in degrees of wand rotation, screen axes.
++    public private(set) var positionX: Double
++    public private(set) var positionY: Double
++    /// nil while the centre card is selected.
++    public private(set) var ringIndex: Int?
++
++    public init?(
++        layout: WandRadialLayout,
++        start: PhysicalCell,
++        tuning: WandRadialTuning = .init()
++    ) {
++        guard !layout.isEmpty else { return nil }
++        self.layout = layout
++        self.tuning = tuning.sanitized
++        if let index = layout.ringIndex(of: start) {
++            ringIndex = index
++        } else if layout.center != nil {
++            ringIndex = nil
++        } else {
++            ringIndex = 0
++        }
++        let resting = Self.restingPosition(ringIndex: ringIndex, layout: layout, tuning: self.tuning)
++        positionX = resting.x
++        positionY = resting.y
++    }
++
++    /// Where the stick rests for a card: the centre, or along the card's
++    /// direction at `restingDegrees`.
++    public static func restingPosition(
++        of cell: PhysicalCell,
++        in layout: WandRadialLayout,
++        tuning: WandRadialTuning = .init()
++    ) -> (x: Double, y: Double) {
++        restingPosition(ringIndex: layout.ringIndex(of: cell), layout: layout, tuning: tuning.sanitized)
++    }
++
++    private static func restingPosition(
++        ringIndex: Int?,
++        layout: WandRadialLayout,
++        tuning: WandRadialTuning
++    ) -> (x: Double, y: Double) {
++        guard let ringIndex else { return (0, 0) }
++        let direction = layout.direction(at: ringIndex)
++        return (direction.x * tuning.restingDegrees, direction.y * tuning.restingDegrees)
++    }
++
++    public var focusedCell: PhysicalCell {
++        if let ringIndex { return layout.ring[ringIndex] }
++        return layout.center ?? layout.ring[0]
++    }
++
++    private var radius: Double { (positionX * positionX + positionY * positionY).squareRoot() }
++
++    private var hysteresisRadians: Double {
++        min(tuning.angularHysteresis * layout.sectorWidth, tuning.maximumHysteresisDegrees * .pi / 180)
++    }
++
++    /// Applies one bias-corrected angular delta. Returns true only when the
++    /// selected card changed.
++    @discardableResult
++    public mutating func apply(deltaX: Double, deltaY: Double) -> Bool {
++        guard deltaX.isFinite, deltaY.isFinite else { return false }
++        positionX += deltaX
++        positionY += deltaY
++        let length = radius
++        if length > tuning.maximumDegrees {
++            let scale = tuning.maximumDegrees / length
++            positionX *= scale
++            positionY *= scale
++        }
++        let previous = ringIndex
++        resolve()
++        return previous != ringIndex
++    }
++
++    private mutating func resolve() {
++        let length = radius
++        let theta = WandRadialLayout.angle(x: positionX, y: positionY)
++        guard let current = ringIndex else {
++            // On the centre: only a deliberate reach picks a ring card.
++            if length >= tuning.reachDegrees { ringIndex = layout.nearestIndex(toAngle: theta) }
++            return
++        }
++        if layout.center != nil, length < tuning.centerReturnDegrees {
++            ringIndex = nil
++            return
++        }
++        // Close to the centre the stick's angle swings wildly with tiny
++        // motion, so only a stick out at the ring may change ring cards.
++        guard length >= tuning.reachDegrees else { return }
++        let offset = WandRadialLayout.angularDifference(theta, layout.angle(at: current))
++        if abs(offset) > layout.sectorWidth / 2 + hysteresisRadians {
++            ringIndex = layout.nearestIndex(toAngle: theta)
++        }
++    }
++
++    /// Screen-space pull toward the card that would come next, length ≤ 1.
++    ///
++    /// On the centre it points where the stick points, growing toward the
++    /// reach. On a ring card it combines travel toward a neighbour (along the
++    /// ring, ±1 at the hysteresis edge) with travel back toward the centre
++    /// (1 at the return radius). Just after any change it leans back toward
++    /// the card that was left, exactly like the grid outline after a snap.
++    public var pull: (x: Double, y: Double) {
++        let length = radius
++        guard let ringIndex else {
++            let scale = 1 / tuning.reachDegrees
++            return Self.clampedUnit(x: positionX * scale, y: positionY * scale)
++        }
++        let direction = layout.direction(at: ringIndex)
++        let tangent = (x: -direction.y, y: direction.x) // clockwise along the ring
++        var along = 0.0
++        if length > 0 {
++            let theta = WandRadialLayout.angle(x: positionX, y: positionY)
++            let offset = WandRadialLayout.angularDifference(theta, layout.angle(at: ringIndex))
++            let edge = layout.sectorWidth / 2 + hysteresisRadians
++            // Inside the band the ring cannot change, so travel toward a
++            // neighbour fades out on the way in and is full at the reach.
++            let band = max(0, min(1, (length - tuning.centerReturnDegrees)
++                / (tuning.reachDegrees - tuning.centerReturnDegrees)))
++            let confidence = band * band * (3 - 2 * band)
++            along = layout.ring.count > 1 ? max(-1, min(1, offset / edge)) * confidence : 0
++        }
++        let span = tuning.reachDegrees - tuning.centerReturnDegrees
++        let inward = layout.center == nil ? 0 : max(0, min(1, (tuning.reachDegrees - length) / span))
++        return Self.clampedUnit(
++            x: tangent.x * along - direction.x * inward,
++            y: tangent.y * along - direction.y * inward
++        )
++    }
++
++    public var pointerFocus: ModeHUDPointerFocus {
++        let value = pull
++        return ModeHUDPointerFocus(cell: focusedCell, pullX: value.x, pullY: value.y)
++    }
++
++    private static func clampedUnit(x: Double, y: Double) -> (x: Double, y: Double) {
++        let length = (x * x + y * y).squareRoot()
++        guard length > 1 else { return (x, y) }
++        return (x / length, y / length)
++    }
++}
+diff --git a/Sources/ScimitarKit/App/ModeHUDLegend.swift b/Sources/ScimitarKit/App/ModeHUDLegend.swift
+--- a/Sources/ScimitarKit/App/ModeHUDLegend.swift
++++ b/Sources/ScimitarKit/App/ModeHUDLegend.swift
+@@ -380,6 +380,10 @@
+     /// Present only while a pointer-style selection input owns this HUD.
+     public var pointerFocus: ModeHUDPointerFocus?
+     public var wandReviewSelection: PhysicalCell? = nil
++    /// The wand's weapon-wheel arrangement of `legend`. Set by the wand
++    /// coordinator from the same definition its selection uses; mice leave it
++    /// nil and keep their physical grid.
++    public var wandRadialLayout: WandRadialLayout? = nil
+ 
+     public var lightingAvailable: Bool { !lightingTargets.isEmpty }
+ 
+diff --git a/Sources/ScimitarKit/App/ModePickerCoordinator.swift b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
+--- a/Sources/ScimitarKit/App/ModePickerCoordinator.swift
++++ b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
+@@ -1014,9 +1014,13 @@
+     /// action. Keypad owns a separate HUD, so it never receives a cursor.
+     public func setPointerFocus(_ focus: ModeHUDPointerFocus?) {
+         var resolved = isActive && page != .keypad ? focus : nil
+-        if let candidate = resolved, candidate.cell.wandReviewMode != nil,
+-           !wandNavigationRows.joined().contains(candidate.cell) {
+-            resolved = ModeHUDPointerFocus(cell: .switchApp)
++        if source == .wand, let candidate = resolved {
++            // Never outline a card the wheel does not draw (a review card
++            // outside VS Code, a Spare, a duplicate exit): use its centre.
++            let layout = wandRadialLayout
++            if !layout.contains(candidate.cell), let center = layout.center {
++                resolved = ModeHUDPointerFocus(cell: center)
++            }
+         }
+         guard resolved != pointerFocus else { return }
+         pointerFocus = resolved
+@@ -1059,6 +1063,9 @@
+     private func snapshot() -> ModeHUDSnapshot {
+         var value = pageSnapshot()
+         value.pointerFocus = pointerFocus
++        if source == .wand {
++            value.wandRadialLayout = .wandMenu(legend: value.legend, page: page, isHome: isWandHome)
++        }
+         return value
+     }
+ 
+@@ -1077,8 +1084,10 @@
+         return value
+     }
+ 
+-    public var wandNavigationRows: [[PhysicalCell]] {
+-        PhysicalCell.wandRows(source: source ?? .wand, legend: snapshot().legend)
++    /// The wand's weapon wheel for the page it is showing. The HUD receives
++    /// this same layout in every wand snapshot.
++    public var wandRadialLayout: WandRadialLayout {
++        .wandMenu(legend: pageSnapshot().legend, page: page, isHome: isWandHome)
+     }
+ 
+     private func pageSnapshot() -> ModeHUDSnapshot {
+diff --git a/Tests/ScimitarUITests/WandPointerFocusTests.swift b/Tests/ScimitarUITests/WandPointerFocusTests.swift
+--- a/Tests/ScimitarUITests/WandPointerFocusTests.swift
++++ b/Tests/ScimitarUITests/WandPointerFocusTests.swift
+@@ -106,7 +106,7 @@
+     }
+ 
+     @MainActor
+-    func testWandVSCodeReviewCardsRenderBesideSwitchApp() throws {
++    func testWandVSCodeReviewCardsJoinTheWheelWithoutResizingIt() throws {
+         let model = ModeHUDViewModel(source: .wand, appIconProvider: NoIconProvider())
+         var home = DefaultMapLegend.snapshot(source:.wand, frontmostAppContext:
+             FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode"))
+@@ -116,17 +116,21 @@
+         ]
+         home.pointerFocus = .init(cell:.switchApp,pullX:0.3)
+         home.wandReviewSelection = .wandReviewChanges
++        home.wandRadialLayout = .wandMenu(legend:home.legend,page:.modes,isHome:true)
++        XCTAssertEqual(Array(home.wandRadialLayout!.ring.suffix(2)),[.wandReviewChanges,.wandReviewFiles])
+         model.apply(home)
+         let renderer=ImageRenderer(content:ModeHUDView(model:model));renderer.scale=1
+         let image=try XCTUnwrap(renderer.nsImage)
+-        XCTAssertEqual(image.size.width,1049,accuracy:1)
++        XCTAssertEqual(image.size.width,WandWheelMetrics.panelWidth,accuracy:1)
+         if let path=ProcessInfo.processInfo.environment["WAND_REVIEW_VISUAL_OUTPUT"],let data=image.tiffRepresentation,
+            let bitmap=NSBitmapImageRep(data:data),let png=bitmap.representation(using:.png,properties:[:]) {
+             try png.write(to:URL(fileURLWithPath:path))
+         }
+-        home.legend.removeAll { $0.cell.wandReviewMode != nil };model.apply(home)
++        home.legend.removeAll { $0.cell.wandReviewMode != nil }
++        home.wandRadialLayout = .wandMenu(legend:home.legend,page:.modes,isHome:true)
++        model.apply(home)
+         let normal=ImageRenderer(content:ModeHUDView(model:model));normal.scale=1
+-        XCTAssertEqual(try XCTUnwrap(normal.nsImage).size.width,705,accuracy:1)
++        XCTAssertEqual(try XCTUnwrap(normal.nsImage).size, image.size, "review cards never resize the wheel")
+     }
+ 
+     private func snapshot(
+diff --git a/Tests/ScimitarUITests/WandRadialHUDTests.swift b/Tests/ScimitarUITests/WandRadialHUDTests.swift
+new file mode 100644
+--- /dev/null
++++ b/Tests/ScimitarUITests/WandRadialHUDTests.swift
+@@ -0,0 +1,317 @@
++import AppKit
++import ScimitarKit
++import SwiftUI
++@testable import ScimitarUI
++import XCTest
++
++/// Renders the wand's weapon wheel through the real coordinator snapshots
++/// and the real view, at representative card counts and outline states.
++/// Set WAND_RADIAL_VISUAL_OUTPUT to a directory to keep the PNGs.
++final class WandRadialHUDTests: XCTestCase {
++    private func coordinator(frontmost: AppSpecificTarget?) -> (ModePickerCoordinator, RecordingModeHUDPresenter) {
++        let hud = RecordingModeHUDPresenter()
++        let coordinator = ModePickerCoordinator(
++            lease: WandModeLease(),
++            hud: hud,
++            scheduler: ManualTickScheduler(),
++            log: Log(category: "test", sink: NullLogSink())
++        )
++        coordinator.resolveFrontmostApp = {
++            FrontmostAppModeContext(
++                target: frontmost,
++                displayName: frontmost?.displayName ?? "Finder",
++                bundleIdentifier: frontmost?.bundleIdentifier
++            )
++        }
++        return (coordinator, hud)
++    }
++
++    private func homeSnapshot(frontmost: AppSpecificTarget?, focus: ModeHUDPointerFocus? = nil) throws -> ModeHUDSnapshot {
++        let (coordinator, hud) = coordinator(frontmost: frontmost)
++        coordinator.enterWandHome(source: .wand, pointerFocus: ModeHUDPointerFocus(cell: .switchApp))
++        if let focus { coordinator.setPointerFocus(focus) }
++        return try XCTUnwrap(hud.snapshots.last)
++    }
++
++    private func childSnapshot(
++        open: (ModePickerCoordinator) -> Void,
++        frontmost: AppSpecificTarget? = .chrome,
++        focus: ((WandRadialLayout) -> ModeHUDPointerFocus?)? = nil
++    ) throws -> ModeHUDSnapshot {
++        let (coordinator, hud) = coordinator(frontmost: frontmost)
++        coordinator.enterWandHome(source: .wand, pointerFocus: ModeHUDPointerFocus(cell: .switchApp))
++        open(coordinator)
++        if let focus, let value = focus(coordinator.wandRadialLayout) { coordinator.setPointerFocus(value) }
++        return try XCTUnwrap(hud.snapshots.last)
++    }
++
++    private func select(_ coordinator: ModePickerCoordinator, _ raw: Int) {
++        let cell = PhysicalCell(rawValue: raw)!
++        coordinator.handle(.init(action: .select, source: .wand, physicalCell: cell, phase: .press))
++        coordinator.handle(.init(action: .select, source: .wand, physicalCell: cell, phase: .release))
++    }
++
++    @MainActor
++    private func render(_ snapshot: ModeHUDSnapshot) throws -> NSImage {
++        let model = ModeHUDViewModel(source: .wand, appIconProvider: NoRadialIconProvider())
++        model.apply(snapshot)
++        let renderer = ImageRenderer(content: ModeHUDView(model: model).background(Color(white: 0.16)))
++        renderer.scale = 1
++        return try XCTUnwrap(renderer.nsImage)
++    }
++
++    private func navigatorFocus(
++        _ layout: WandRadialLayout,
++        from start: PhysicalCell,
++        moves: [(Double, Double)]
++    ) -> ModeHUDPointerFocus {
++        var navigator = WandRadialNavigator(layout: layout, start: start)!
++        for move in moves { navigator.apply(deltaX: move.0, deltaY: move.1) }
++        return navigator.pointerFocus
++    }
++
++    // MARK: Layout contract
++
++    func testHomeWheelCentresSwitchAppAndKeepsEveryOtherCardInOrder() throws {
++        let home = try homeSnapshot(frontmost: .chrome)
++        let layout = try XCTUnwrap(home.wandRadialLayout)
++        XCTAssertEqual(layout.center, .switchApp)
++        XCTAssertEqual(layout.ring, home.legend.map(\.cell).filter { $0 != .switchApp },
++                       "every other home card, once, in legend order")
++        XCTAssertEqual(layout.ring.last, .wandPlayPause)
++        XCTAssertEqual(layout.ring.firstIndex(of: .wandPlayPause), layout.ring.firstIndex(of: .modePickerEntry).map { $0 + 1 },
++                       "Play/Pause stays immediately after Utility, clockwise")
++
++        let vsCode = try XCTUnwrap(homeSnapshot(frontmost: .vsCode).wandRadialLayout)
++        XCTAssertEqual(vsCode.ring.count, 14)
++        XCTAssertEqual(Array(vsCode.ring.suffix(3)), [.wandPlayPause, .wandReviewChanges, .wandReviewFiles])
++    }
++
++    func testChildPagesCentreTheirOwnExitAndDropSparesAndDuplicateExits() throws {
++        let keys = try childSnapshot(open: { self.select($0, 9) })
++        let keysLayout = try XCTUnwrap(keys.wandRadialLayout)
++        XCTAssertEqual(keysLayout.center, .modeExit)
++        XCTAssertEqual(keysLayout.ring.count % 2, 1, "Keys is an odd-count wheel: \(keysLayout.ring.count)")
++
++        let codex = try childSnapshot(open: { self.select($0, 2) }, frontmost: .codex)
++        let codexLayout = try XCTUnwrap(codex.wandRadialLayout)
++        XCTAssertEqual(codexLayout.center, .frontmostAppModeSelector)
++        XCTAssertFalse(codexLayout.contains(.modeExit), "cell 10 is the same exit as the centre")
++        for item in codex.legend where item.isUnassignedSpare {
++            XCTAssertFalse(codexLayout.contains(item.cell), "a Spare never takes a wand slot")
++        }
++    }
++
++    @MainActor
++    func testPhysicalMiceNeverDrawTheWheelAndKeepTheirGridWidth() throws {
++        for source in MouseSource.allCases {
++            let hud = RecordingModeHUDPresenter()
++            let mouse = ModePickerCoordinator(lease: WandModeLease(), hud: hud, scheduler: ManualTickScheduler(),
++                                              log: Log(category: "test", sink: NullLogSink()))
++            mouse.enterKeys(source: source)
++            let snapshot = try XCTUnwrap(hud.snapshots.last)
++            XCTAssertNil(snapshot.wandRadialLayout)
++            let model = ModeHUDViewModel(source: source, appIconProvider: NoRadialIconProvider())
++            model.apply(snapshot)
++            let renderer = ImageRenderer(content: ModeHUDView(model: model))
++            renderer.scale = 1
++            XCTAssertEqual(try XCTUnwrap(renderer.nsImage).size.width, 705, accuracy: 1, "\(source) keeps its grid")
++        }
++    }
++
++    func testReduceMotionRemovesEveryWheelAnimation() {
++        XCTAssertNil(WandRadialFocusStyle.slideAnimation(reduceMotion: true))
++        XCTAssertNil(WandRadialFocusStyle.pullAnimation(reduceMotion: true))
++        XCTAssertNotNil(WandRadialFocusStyle.slideAnimation(reduceMotion: false))
++        XCTAssertNotNil(WandRadialFocusStyle.pullAnimation(reduceMotion: false))
++    }
++
++    func testOutlineSlidesTheShortWayRoundTheWheel() {
++        let model = ModeHUDViewModel(source: .wand, appIconProvider: NoRadialIconProvider())
++        var home = ModeHUDSnapshot(isActive: true, modeTitle: "Default mode", source: .wand, selection: nil,
++                                   legend: DefaultMapLegend.snapshot(source: .wand).legend
++                                       + [ModeHUDLegendItem(cell: .wandPlayPause, actionTitle: "Play/Pause", accent: ModeHUDActionFamilyPalette.media)],
++                                   accent: DefaultMapLegend.accent, footerTitle: "Default mode")
++        home.wandRadialLayout = .wandMenu(legend: home.legend, page: .modes, isHome: true)
++        let layout = home.wandRadialLayout!
++        home.pointerFocus = ModeHUDPointerFocus(cell: .wandPlayPause) // 12 o'clock, 2π
++        model.apply(home)
++        let top = model.wandFocusAngle
++        home.pointerFocus = ModeHUDPointerFocus(cell: PhysicalCell(rawValue: 1)!) // 1 o'clock
++        XCTAssertTrue(model.apply(home))
++        XCTAssertEqual(model.wandFocusAngle - top, layout.sectorWidth, accuracy: 1e-9,
++                       "Play/Pause → Corsair 1 moves one sector clockwise, not eleven back")
++        home.pointerFocus = ModeHUDPointerFocus(cell: .wandPlayPause)
++        XCTAssertTrue(model.apply(home))
++        XCTAssertEqual(model.wandFocusAngle, top, accuracy: 1e-9)
++    }
++
++    /// The angle each card is drawn at is the angle the navigator selects.
++    func testDrawnCardsSitExactlyWhereSelectionAimsForThem() {
++        let layout = WandRadialLayout(center: .modeExit, ring: PhysicalCell.all.filter { $0 != .modeExit })
++        let geometry = WandWheelGeometry(layout: layout)
++        for (index, cell) in layout.ring.enumerated() {
++            let wedge = geometry.wedge(at: index)
++            XCTAssertEqual(wedge.centerAngle, layout.angle(at: index))
++            let rest = WandRadialNavigator.restingPosition(of: cell, in: layout)
++            XCTAssertEqual(WandRadialLayout.angularDifference(WandRadialLayout.angle(x: rest.x, y: rest.y), wedge.centerAngle),
++                           0, accuracy: 1e-9)
++            let mid = (wedge.inner + wedge.outer) / 2
++            let direction = WandWedge.radial(wedge.centerAngle)
++            XCTAssertTrue(wedge.contains(CGPoint(x: direction.x * mid, y: direction.y * mid), margin: 0))
++            for candidate in geometry.labelCandidates(at: index).prefix(5) {
++                let local = CGPoint(x: candidate.midX - geometry.center.x, y: candidate.midY - geometry.center.y)
++                XCTAssertTrue(wedge.contains(local, margin: 0), "label for \(cell) sits in its own card")
++            }
++        }
++    }
++
++    func testLiquidOutlineIsExactAtRestAndMovesItsCornersWhenPulled() {
++        let wedge = WandWheelGeometry(layout: WandRadialLayout(center: .modeExit, ring: PhysicalCell.all.filter { $0 != .modeExit }))
++            .wedge(at: 2).expanded(by: WandWheelMetrics.focusOutset)
++        XCTAssertEqual(wedge.liquidOutline(along: 0, inward: 0), wedge.outline(), "rest is the card's own shape")
++        let rest = wedge.outline()
++        let pulled = wedge.liquidOutline(along: 0.8, inward: 0)
++        func bounds(_ points: [CGPoint]) -> CGRect {
++            let xs = points.map(\.x), ys = points.map(\.y)
++            return CGRect(x: xs.min()!, y: ys.min()!, width: xs.max()! - xs.min()!, height: ys.max()! - ys.min()!)
++        }
++        // Every part of the silhouette travels: the leading and trailing
++        // ends both move clockwise, the leading end further.
++        func angularExtent(_ points: [CGPoint]) -> (Double, Double) {
++            let offsets = points.map { WandRadialLayout.angularDifference(WandRadialLayout.angle(x: Double($0.x), y: Double($0.y)), wedge.centerAngle) }
++            return (offsets.min()!, offsets.max()!)
++        }
++        let (restStart, restEnd) = angularExtent(rest)
++        let (pulledStart, pulledEnd) = angularExtent(pulled)
++        XCTAssertGreaterThan(pulledEnd - restEnd, pulledStart - restStart, "the leading end reaches further")
++        XCTAssertGreaterThan(pulledStart - restStart, 0, "the trailing end follows rather than staying pinned")
++        XCTAssertTrue(pulled.allSatisfy { $0.x.isFinite && $0.y.isFinite })
++        XCTAssertNotEqual(bounds(pulled), bounds(rest))
++        let disc = WandLiquidDisc.outline(radius: 100, pull: .zero)
++        XCTAssertEqual(disc.map { hypot($0.x, $0.y) }.max()!, 100, accuracy: 1e-9)
++        let drop = WandLiquidDisc.outline(radius: 100, pull: CGPoint(x: 0.8, y: 0))
++        XCTAssertGreaterThan(drop.map(\.x).max()!, 120, "the drop reaches toward the pull")
++        XCTAssertGreaterThan(drop.map(\.x).min()!, -100, "and its trailing side follows")
++    }
++
++    // MARK: Renders
++
++    @MainActor
++    func testWheelRendersInOneFixedFrameForEveryCountAndOutlineState() throws {
++        let home = try homeSnapshot(frontmost: .chrome)
++        let layout = try XCTUnwrap(home.wandRadialLayout)
++        let utility = PhysicalCell.modePickerEntry
++        var states: [(String, ModeHUDSnapshot)] = [("home-rest", home)]
++
++        var centrePull = home
++        centrePull.pointerFocus = navigatorFocus(layout, from: .switchApp, moves: [(3.2, -2.4)])
++        states.append(("home-centre-pull", centrePull))
++
++        var ring = home
++        ring.pointerFocus = navigatorFocus(layout, from: .switchApp, moves: [(0, -10)])
++        states.append(("home-ring-arrival", ring))
++
++        var along = home
++        along.pointerFocus = navigatorFocus(layout, from: utility, moves: [(1.4, 0)])
++        states.append(("ring-partial-along", along))
++
++        var nearBoundary = home
++        nearBoundary.pointerFocus = navigatorFocus(layout, from: utility, moves: [(3.1, 0.5)])
++        states.append(("ring-near-boundary", nearBoundary))
++
++        var inward = home
++        inward.pointerFocus = navigatorFocus(layout, from: utility, moves: [(0, 5.2)])
++        states.append(("ring-inward", inward))
++
++        var diagonal = home
++        diagonal.pointerFocus = navigatorFocus(layout, from: PhysicalCell(rawValue: 4)!, moves: [(-2.2, -2.6)])
++        states.append(("ring-diagonal", diagonal))
++
++        var armed = home
++        armed.pointerFocus = ModeHUDPointerFocus(cell: PhysicalCell(rawValue: 1)!, isArmed: true)
++        states.append(("ring-armed", armed))
++
++        var adjusting = home
++        adjusting.pointerFocus = ModeHUDPointerFocus(
++            cell: PhysicalCell(rawValue: 1)!,
++            adjustment: ModeHUDWheelAdjustment(pull: -0.7, netSteps: 2, sentSteps: 2, lastStepWasUp: true)
++        )
++        states.append(("ring-adjusting", adjusting))
++
++        let vsCode = try homeSnapshot(frontmost: .vsCode)
++        var vsCodeReview = vsCode
++        vsCodeReview.wandReviewSelection = .wandReviewChanges
++        vsCodeReview.pointerFocus = ModeHUDPointerFocus(cell: .wandReviewFiles, pullX: -0.35, pullY: 0)
++        states.append(("home-vscode-14", vsCodeReview))
++
++        let keys = try childSnapshot(open: { self.select($0, 9) }, focus: { layout in
++            self.navigatorFocus(layout, from: .modeExit, moves: [(-6.8, 2.4)])
++        })
++        states.append(("keys-odd", keys))
++
++        let codex = try childSnapshot(open: { self.select($0, 2) }, frontmost: .codex)
++        states.append(("codex-child", codex))
++
++        var chromeHome = home
++        chromeHome.pointerFocus = ModeHUDPointerFocus(cell: .frontmostAppModeSelector)
++        states.append(("home-app-artwork", chromeHome))
++
++        var sizes: Set<String> = []
++        var images: [(String, NSImage)] = []
++        for (name, snapshot) in states {
++            let image = try render(snapshot)
++            sizes.insert("\(image.size.width)x\(image.size.height)")
++            images.append((name, image))
++        }
++        XCTAssertEqual(sizes.count, 1, "no count or outline state may change the panel: \(sizes)")
++        let size = try XCTUnwrap(images.first?.1.size)
++        XCTAssertEqual(size.width, WandWheelMetrics.panelWidth, accuracy: 1)
++
++        if let directory = ProcessInfo.processInfo.environment["WAND_RADIAL_VISUAL_OUTPUT"] {
++            // ImageRenderer cannot draw AppKit's native glass, so inspection
++            // renders show the wheel and footer over a dark stand-in.
++            try FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
++            for (name, snapshot) in states {
++                let icons: ModeHUDAppIconProviding = name.contains("artwork") ? SystemIconProvider() : NoRadialIconProvider()
++                let model = ModeHUDViewModel(source: .wand, appIconProvider: icons)
++                model.apply(snapshot)
++                let content = WandRadialWheel(model: model, reduceMotion: false)
++                    .padding(WandWheelMetrics.panelPadding)
++                    .background(RoundedRectangle(cornerRadius: 27).fill(Color(white: 0.11)))
++                let renderer = ImageRenderer(content: content)
++                renderer.scale = 2
++                let image = try XCTUnwrap(renderer.nsImage)
++                let bitmap = try XCTUnwrap(NSBitmapImageRep(data: XCTUnwrap(image.tiffRepresentation)))
++                let png = try XCTUnwrap(bitmap.representation(using: .png, properties: [:]))
++                try png.write(to: URL(fileURLWithPath: directory).appendingPathComponent("\(name).png"))
++            }
++        }
++    }
++}
++
++private final class NoRadialIconProvider: ModeHUDAppIconProviding {
++    func icon(for backdrop: ModeHUDAppBackdrop) -> NSImage? { nil }
++}
++
++/// Inspection only: a real installed system icon stands in for the app.
++private final class SystemIconProvider: ModeHUDAppIconProviding {
++    func icon(for backdrop: ModeHUDAppBackdrop) -> NSImage? {
++        NSWorkspace.shared.icon(forFile: "/System/Applications/Calculator.app")
++    }
++}
++
++final class WandWheelPlanTimingTests: XCTestCase {
++    /// First use of a new card count must not hitch the main thread.
++    func testPlanningANewWheelIsCheap() {
++        for count in [9, 13, 15, 16] {
++            let cells = PhysicalCell.all.filter { $0 != .modeExit } + [.wandPlayPause, .wandReviewChanges, .wandReviewFiles, .switchApp]
++            let layout = WandRadialLayout(center: .modeExit, ring: Array(cells.prefix(count)))
++            let titles = Dictionary(uniqueKeysWithValues: layout.cells.map { ($0, "Horizontal Scroll + Wheel") })
++            let start = ProcessInfo.processInfo.systemUptime
++            _ = WandWheelPlan.plan(for: WandWheelGeometry(layout: layout), titles: titles)
++            let elapsed = ProcessInfo.processInfo.systemUptime - start
++            XCTAssertLessThan(elapsed, 0.25, "\(count) cards took \(elapsed) s")
++        }
++    }
++}
+diff --git a/Tests/ScimitarKitTests/WandPersistentControlTests.swift b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+--- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
++++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+@@ -14,15 +14,27 @@
+         control.onAdjustStep={[unowned self] in self.steps.append($0);return true}
+         control.handle(.init(.open,id:"open-0001"))
+     }
+-    func select(_ x:Double,_ y:Double=0){
+-        control.handle(.init(.navigate,id:"navigate-0001"))
+-        control.handle(.init(.motion,id:"navigate-0001",sequence:1,x:x,y:0))
+-        control.handle(.init(.motion,id:"navigate-0001",sequence:2,x:x,y:y))
+-        control.handle(.init(.park,id:"navigate-0001",sequence:3))
++    /// Cumulative motion from the parked outline to `cell`, using the
++    /// HUD's own weapon-wheel layout, exactly as the receiver streams it.
++    func offset(to cell:PhysicalCell,scale:Double=1)->(x:Double,y:Double){
++        let layout=target.wandRadialLayout
++        let start=WandRadialNavigator.restingPosition(of:control.focusedCell ?? .switchApp,in:layout)
++        let goal=WandRadialNavigator.restingPosition(of:cell,in:layout)
++        return (goal.x*scale-start.x,goal.y*scale-start.y)
++    }
++    var navigateCount=0
++    func select(_ cell:PhysicalCell){
++        navigateCount+=1
++        let id="navigate-\(navigateCount)-wand"
++        let goal=offset(to:cell)
++        control.handle(.init(.navigate,id:id))
++        control.handle(.init(.motion,id:id,sequence:1,x:goal.x/2,y:goal.y/2))
++        control.handle(.init(.motion,id:id,sequence:2,x:goal.x,y:goal.y))
++        control.handle(.init(.park,id:id,sequence:3))
+     }
+     func operate(){control.handle(.init(.press,id:UUID().uuidString))}
+     func testReleaseParksWithoutClickAndStaysOpen(){
+-        select(-24)
++        select(.frontmostAppModeSelector)
+         XCTAssertTrue(control.isOpen);XCTAssertEqual(control.focusedCell,.frontmostAppModeSelector)
+         XCTAssertTrue(clicks.isEmpty);XCTAssertTrue(presses.isEmpty)
+         clock.advance(by:600);tick.fire()
+@@ -38,7 +50,7 @@
+         clock.advance(by:2);tick.fire();XCTAssertTrue(control.isOpen)
+     }
+     func testNativePressReleaseAndChildBackKeepOutline(){
+-        select(-24)
++        select(.frontmostAppModeSelector)
+         control.handle(.init(.press,id:"operate-001"));XCTAssertTrue(target.isWandHome)
+         control.handle(.init(.release,id:"operate-001",sequence:1));XCTAssertFalse(target.isWandHome)
+         XCTAssertEqual(control.focusedCell,.frontmostAppModeSelector)
+@@ -52,7 +64,7 @@
+         XCTAssertEqual(clicks,[.switchApp]);XCTAssertTrue(control.isOpen)
+     }
+     func testHoldWheelUsesSameControlAndRelease(){
+-        select(-24,7) // home cell 1: horizontal scroll
++        select(PhysicalCell(rawValue:1)!) // home cell 1: horizontal scroll
+         XCTAssertEqual(control.focusedCell?.rawValue,1)
+         control.handle(.init(.press,id:"operate-001"))
+         XCTAssertEqual(target.activeWheelControl,.horizontalScroll)
+@@ -78,7 +90,7 @@
+     func testScreenshotUsesNativePressReleaseWithoutDuplicateAction(){
+         var released:[WheelChordControl]=[]
+         target.onWheelControlRelease={_,control in released.append(control)}
+-        select(-24,-7)
++        select(.screenshotToggle)
+         XCTAssertEqual(control.focusedCell,.screenshotToggle)
+         control.handle(.init(.press,id:"screenshot-1"))
+         XCTAssertEqual(target.activeWheelControl,.screenshotPaste)
+@@ -131,10 +143,12 @@
+     func testVSCodeShortcutsAreWandOnlyAndUseHeldReviewContext() {
+         XCTAssertNil(PhysicalCell(rawValue:13))
+         XCTAssertEqual(PhysicalCell.all.count,12)
+-        XCTAssertEqual(target.wandNavigationRows.map(\.count),[5,4,4])
+-        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
+-        XCTAssertEqual(target.wandNavigationRows.map(\.count),[5,6,4])
+-        select(8)
++        XCTAssertEqual(target.wandRadialLayout.ring.count,12)
++        XCTAssertFalse(target.wandRadialLayout.contains(.wandReviewChanges))
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
++        XCTAssertEqual(target.wandRadialLayout.ring.count,14)
++        XCTAssertEqual(target.wandRadialLayout.center,.switchApp)
++        select(.wandReviewChanges)
+         XCTAssertEqual(control.focusedCell,.wandReviewChanges)
+         XCTAssertNil(control.reviewMode)
+         control.handle(.init(.press,id:"review-changes-1"))
+@@ -144,21 +158,19 @@
+         XCTAssertEqual(control.focusedCell,.wandReviewChanges)
+         control.handle(.init(.release,id:"review-changes-1",sequence:2))
+         XCTAssertNil(control.reviewMode)
+-        control.handle(.init(.navigate,id:"next-shortcut-1"))
+-        control.handle(.init(.motion,id:"next-shortcut-1",sequence:1,x:8))
+-        control.handle(.init(.park,id:"next-shortcut-1",sequence:2))
++        select(.wandReviewFiles)
+         XCTAssertEqual(control.focusedCell,.wandReviewFiles)
+         control.handle(.init(.press,id:"review-files-1"))
+         XCTAssertEqual(control.reviewMode,"files")
+         target.resolveFrontmostApp={FrontmostAppModeContext(target:.chrome,displayName:"Chrome",bundleIdentifier:"com.google.Chrome")}
+         XCTAssertNil(control.reviewMode,"leaving VS Code revokes the hold")
+-        XCTAssertEqual(target.wandNavigationRows.map(\.count),[5,4,4])
++        XCTAssertEqual(target.wandRadialLayout.ring.count,12)
+         control.handle(.init(.dismiss,id:"dismiss-extra-1"))
+         XCTAssertNil(control.reviewMode)
+     }
+     func testReviewSelectionSurvivesNavigationHidingAndAppSwitch() {
+         target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
+-        select(8)
++        select(.wandReviewChanges)
+         control.handle(.init(.activate,id:"select-review-1"))
+         XCTAssertEqual(control.selectedReviewMode,"changes")
+         XCTAssertEqual(control.pinnedReviewCell,.wandReviewChanges)
+@@ -179,13 +191,12 @@
+ 
+     func testPlayPauseIsAlwaysRightOfUtilityAndOnlyActsOnceOnRelease() {
+         XCTAssertNil(PhysicalCell(rawValue:15),"not a physical mouse button")
+-        XCTAssertEqual(target.wandNavigationRows[0].suffix(2), [.modePickerEntry,.wandPlayPause])
++        let ring=target.wandRadialLayout.ring
++        XCTAssertEqual(ring.firstIndex(of:.wandPlayPause),ring.firstIndex(of:.modePickerEntry).map{$0+1},
++                       "Play/Pause sits immediately after Utility, clockwise round the wheel")
+         XCTAssertFalse(PhysicalCell.wandRows(source:.corsair,legend:[]).joined().contains(.wandPlayPause))
+         XCTAssertFalse(PhysicalCell.wandRows(source:.razer,legend:[]).joined().contains(.wandPlayPause))
+-        control.handle(.init(.navigate,id:"media-focus"))
+-        control.handle(.init(.motion,id:"media-focus",sequence:1,y:-7))
+-        control.handle(.init(.motion,id:"media-focus",sequence:2,x:8,y:-7))
+-        control.handle(.init(.park,id:"media-focus",sequence:3))
++        select(.wandPlayPause)
+         XCTAssertEqual(control.focusedCell,.wandPlayPause)
+         control.handle(.init(.press,id:"media-1"))
+         XCTAssertTrue(clicks.isEmpty)
+@@ -193,9 +204,24 @@
+         control.handle(.init(.release,id:"media-1",sequence:1))
+         XCTAssertEqual(clicks,[.wandPlayPause]);XCTAssertTrue(control.isOpen)
+     }
++    func testWheelChangingUnderALiveHoldKeepsTheSameCard() {
++        let id="live-reseat-1"
++        let toward=offset(to:PhysicalCell(rawValue:5)!)
++        control.handle(.init(.navigate,id:id))
++        control.handle(.init(.motion,id:id,sequence:1,x:toward.x,y:toward.y))
++        XCTAssertEqual(control.focusedCell?.rawValue,5)
++        // VS Code comes to the front mid-hold: two review cards join the wheel.
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
++        control.handle(.init(.motion,id:id,sequence:2,x:toward.x+0.2,y:toward.y))
++        XCTAssertEqual(control.focusedCell?.rawValue,5,"the outline never jumps to whatever now sits there")
++        XCTAssertEqual(target.wandRadialLayout.ring.count,14)
++        control.handle(.init(.park,id:id,sequence:3))
++        XCTAssertTrue(clicks.isEmpty,"hover alone never acts")
++    }
++
+     func testTappingSelectedReviewCardAgainClearsMode() {
+         target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
+-        select(16)
++        select(.wandReviewFiles)
+         control.handle(.init(.activate,id:"select-files-1"))
+         XCTAssertEqual(control.selectedReviewMode,"files")
+         control.handle(.init(.activate,id:"select-files-1"))
+diff --git a/Tests/ScimitarKitTests/WandSwitchAppAndAdjustTests.swift b/Tests/ScimitarKitTests/WandSwitchAppAndAdjustTests.swift
+--- a/Tests/ScimitarKitTests/WandSwitchAppAndAdjustTests.swift
++++ b/Tests/ScimitarKitTests/WandSwitchAppAndAdjustTests.swift
+@@ -17,7 +17,7 @@
+     private var frontmost: AppSpecificTarget = .chrome
+     private var gestureCounter = 0
+     private var sequence = 0
+-    private var origin: (column: Int, row: Int) = (0, 0)
++    private var origin: (x: Double, y: Double) = (0, 0)
+ 
+     override func setUp() {
+         super.setUp()
+@@ -59,18 +59,18 @@
+ 
+     private func cell(_ raw: Int) -> PhysicalCell { PhysicalCell(rawValue: raw)! }
+ 
+-    private func grid(_ target: PhysicalCell) -> (column: Int, row: Int) {
+-        for (row, cells) in PhysicalCell.displayRowsTopToBottom(for: .wand).enumerated() {
+-            if let column = cells.firstIndex(of: target) { return (column, row) }
+-        }
+-        preconditionFailure("cell is not in the grid")
++    /// Resting stick position of a card on the wheel the HUD is drawing.
++    private func wheel(_ target: PhysicalCell) -> (x: Double, y: Double) {
++        let layout = coordinator.wandRadialLayout
++        precondition(layout.contains(target), "cell is not on the wheel")
++        return WandRadialNavigator.restingPosition(of: target, in: layout)
+     }
+ 
+     private func hold() {
+         gestureCounter += 1
+         sequence = 0
+         controller.handle(.init(phase: .begin, gestureID: gestureID, sequence: 0))
+-        origin = grid(controller.focusedCell ?? WandSelectionController.homeStartCell)
++        origin = wheel(controller.focusedCell ?? WandSelectionController.homeStartCell)
+     }
+ 
+     private func offset(_ x: Double, _ y: Double) {
+@@ -80,11 +80,8 @@
+     }
+ 
+     private func walk(to target: Int) {
+-        let destination = grid(cell(target))
+-        let x = Double(destination.column - origin.column) * 8
+-        let y = Double(destination.row - origin.row) * 7
+-        offset(x, 0)
+-        offset(x, y)
++        let destination = wheel(cell(target))
++        offset(destination.x - origin.x, destination.y - origin.y)
+         XCTAssertEqual(controller.focusedCell?.rawValue, target)
+     }
+ 
+@@ -149,7 +146,7 @@
+         walk(to: 2)
+         release() // into the current app's mode
+         XCTAssertEqual(coordinator.page, .appSpecific)
+-        select(10) // Exit Chrome mode → Default
++        select(2) // the wheel's centre, Exit Chrome mode → Default
+         XCTAssertTrue(coordinator.isWandHome)
+         XCTAssertEqual(coordinator.pointerFocus?.cell, .frontmostAppModeSelector)
+         tap()
+diff --git a/Tests/ScimitarKitTests/WandRadialNavigatorTests.swift b/Tests/ScimitarKitTests/WandRadialNavigatorTests.swift
+new file mode 100644
+--- /dev/null
++++ b/Tests/ScimitarKitTests/WandRadialNavigatorTests.swift
+@@ -0,0 +1,221 @@
++import XCTest
++@testable import ScimitarKit
++
++/// The wand's weapon wheel: one layout places the cards and selects them.
++final class WandRadialNavigatorTests: XCTestCase {
++    private func cell(_ raw: Int) -> PhysicalCell { PhysicalCell(rawValue: raw)! }
++    private let tuning = WandRadialTuning()
++
++    /// Default home without VS Code: twelve ring cards around Switch App.
++    private var home: WandRadialLayout {
++        let ring: [PhysicalCell] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12].map { PhysicalCell(rawValue: $0)! } + [.wandPlayPause]
++        return WandRadialLayout(center: .switchApp, ring: ring)
++    }
++
++    private func layout(ringCount: Int) -> WandRadialLayout {
++        let cells = PhysicalCell.all.filter { $0 != .modeExit } + [.wandPlayPause, .wandReviewChanges, .wandReviewFiles]
++        return WandRadialLayout(center: .modeExit, ring: Array(cells.prefix(ringCount)))
++    }
++
++    private func degrees(_ radians: Double) -> Double { radians * 180 / .pi }
++
++    /// Moves the stick by `distance` degrees toward `angle` (clockwise from
++    /// up) in small receiver-sized samples, returning every card visited.
++    @discardableResult
++    private func drive(_ nav: inout WandRadialNavigator, toward angle: Double, distance: Double, step: Double = 0.3) -> [PhysicalCell] {
++        let radians = angle * .pi / 180
++        var visited = [nav.focusedCell]
++        var travelled = 0.0
++        while travelled < distance {
++            let d = min(step, distance - travelled)
++            nav.apply(deltaX: sin(radians) * d, deltaY: -cos(radians) * d)
++            travelled += d
++            if visited.last != nav.focusedCell { visited.append(nav.focusedCell) }
++        }
++        return visited
++    }
++
++    // MARK: Layout
++
++    func testTwelveCardHomePutsEachNumberedCardAtItsClockHour() {
++        let layout = home
++        for raw in 1...10 {
++            let index = layout.ringIndex(of: cell(raw))!
++            XCTAssertEqual(degrees(layout.angle(at: index)), Double(raw) * 30, accuracy: 1e-9, "Corsair \(raw)")
++        }
++        XCTAssertEqual(degrees(layout.angle(at: layout.ringIndex(of: .modePickerEntry)!)), 330, accuracy: 1e-9)
++        XCTAssertEqual(degrees(layout.angle(at: layout.ringIndex(of: .wandPlayPause)!)), 360, accuracy: 1e-9)
++        XCTAssertFalse(layout.ring.contains(.switchApp), "the centre is not repeated on the ring")
++    }
++
++    func testOddAndEvenCountsAreEvenlySpacedAndEverySectorIsReachable() {
++        for count in [1, 2, 5, 11, 12, 13, 14] {
++            let layout = layout(ringCount: count)
++            XCTAssertEqual(layout.ring.count, count)
++            for index in 0..<count {
++                // Pointing straight at a card's centre selects exactly it.
++                XCTAssertEqual(layout.nearestIndex(toAngle: layout.angle(at: index)), index, "\(count) cards")
++                var nav = WandRadialNavigator(layout: layout, start: .modeExit)!
++                let direction = layout.direction(at: index)
++                nav.apply(deltaX: direction.x * 9, deltaY: direction.y * 9)
++                XCTAssertEqual(nav.focusedCell, layout.ring[index], "\(count) cards, index \(index)")
++            }
++            // Neighbouring centres are exactly one sector apart.
++            if count > 1 {
++                XCTAssertEqual(layout.angle(at: 1) - layout.angle(at: 0), 2 * .pi / Double(count), accuracy: 1e-12)
++            }
++        }
++    }
++
++    func testDuplicatesCollapseAndTheCentreIsNeverOnTheRing() {
++        let layout = WandRadialLayout(center: .modeExit, ring: [cell(1), .modeExit, cell(1), cell(3)])
++        XCTAssertEqual(layout.ring, [cell(1), cell(3)])
++        XCTAssertEqual(layout.cells, [.modeExit, cell(1), cell(3)])
++    }
++
++    // MARK: Centre and radial hysteresis
++
++    func testCentreDeadZoneHoldsUntilADeliberateReach() {
++        var nav = WandRadialNavigator(layout: home, start: .switchApp)!
++        XCTAssertFalse(nav.apply(deltaX: 6.5, deltaY: 0), "short of the reach")
++        XCTAssertEqual(nav.focusedCell, .switchApp)
++        XCTAssertTrue(nav.apply(deltaX: 0.6, deltaY: 0))
++        XCTAssertEqual(nav.focusedCell, cell(3), "straight right is 3 o'clock")
++    }
++
++    func testReturningToTheCentreNeedsTheInnerRadius() {
++        var nav = WandRadialNavigator(layout: home, start: cell(3))! // rests 9° right
++        XCTAssertFalse(nav.apply(deltaX: -4.5, deltaY: 0), "4.5° from centre: inside the band, still the card")
++        XCTAssertEqual(nav.focusedCell, cell(3))
++        XCTAssertTrue(nav.apply(deltaX: -1, deltaY: 0), "3.5° from centre returns to it")
++        XCTAssertEqual(nav.focusedCell, .switchApp)
++        XCTAssertFalse(nav.apply(deltaX: 3, deltaY: 0), "6.5°: the centre holds until the reach again")
++        XCTAssertEqual(nav.focusedCell, .switchApp)
++    }
++
++    func testInsideTheBandTheAngleCannotSwapRingCards() {
++        var nav = WandRadialNavigator(layout: home, start: .modePickerEntry)! // 11 o'clock
++        // Straight down from 11 o'clock passes close to the centre, where the
++        // angle swings through 10 o'clock; the card must not change.
++        let visited = drive(&nav, toward: 180, distance: 5.2)
++        XCTAssertEqual(visited, [.modePickerEntry])
++        XCTAssertGreaterThan(nav.pointerFocus.pullY, 0.1, "the outline leans toward the centre")
++    }
++
++    // MARK: Ring and angular hysteresis
++
++    func testNeighbourNeedsTheEdgePlusHysteresis() {
++        var nav = WandRadialNavigator(layout: home, start: cell(12))!
++        nav.apply(deltaX: 0, deltaY: -5) // out to the rim (11°)
++        let rim = tuning.maximumDegrees
++        // Sweep clockwise along the rim one degree of arc at a time.
++        var angle = 330.0
++        var switchedAt: Double?
++        while angle < 375, switchedAt == nil {
++            angle += 0.5
++            let target = (sin(angle * .pi / 180) * rim, -cos(angle * .pi / 180) * rim)
++            nav.apply(deltaX: target.0 - nav.positionX, deltaY: target.1 - nav.positionY)
++            if nav.focusedCell != cell(12) { switchedAt = angle }
++        }
++        let edge = 330 + 15 + min(0.22 * 30, 9)
++        XCTAssertEqual(switchedAt ?? 0, edge, accuracy: 0.6, "the neighbour takes over just past the band")
++        XCTAssertEqual(nav.focusedCell, .wandPlayPause)
++        XCTAssertLessThan(nav.pointerFocus.pullX, 0, "just after the change it leans back toward Utility")
++    }
++
++    func testTremorOnABoundaryNeverFlickers() {
++        var seed: UInt64 = 0x5EED_1234
++        func noise() -> Double {
++            seed = seed &* 6364136223846793005 &+ 1442695040888963407
++            return (Double(seed >> 11) / Double(1 << 53) - 0.5) * 0.7
++        }
++        var nav = WandRadialNavigator(layout: home, start: cell(3))!
++        // Park on the 3/4 boundary (105°) at the rim.
++        let rim = 10.0
++        nav.apply(deltaX: sin(105 * .pi / 180) * rim - nav.positionX, deltaY: -cos(105 * .pi / 180) * rim - nav.positionY)
++        var visited = [nav.focusedCell]
++        for _ in 0..<200 {
++            nav.apply(deltaX: noise(), deltaY: noise())
++            if visited.last != nav.focusedCell { visited.append(nav.focusedCell) }
++        }
++        XCTAssertLessThanOrEqual(visited.count, 2, "at most one deliberate crossing: \(visited)")
++
++        var resting = WandRadialNavigator(layout: home, start: .switchApp)!
++        var changes = 0
++        for _ in 0..<200 where resting.apply(deltaX: noise(), deltaY: noise()) { changes += 1 }
++        XCTAssertEqual(changes, 0, "tremor at the centre never leaves it")
++    }
++
++    func testCircularSweepVisitsCardsInClockwiseOrderWithoutBacktracking() {
++        var nav = WandRadialNavigator(layout: home, start: cell(12))!
++        var visited = [nav.focusedCell]
++        let rim = 10.5
++        for step in 1...240 {
++            let angle = (330 + Double(step) * 1.5) * .pi / 180
++            nav.apply(deltaX: sin(angle) * rim - nav.positionX, deltaY: -cos(angle) * rim - nav.positionY)
++            if visited.last != nav.focusedCell { visited.append(nav.focusedCell) }
++        }
++        let expected = Array((home.ring + home.ring).drop { $0 != cell(12) }.prefix(visited.count))
++        XCTAssertEqual(visited, expected, "one full lap, every card once, in ring order")
++        XCTAssertGreaterThanOrEqual(visited.count, 12)
++    }
++
++    // MARK: Slow intent, large sweeps and saturation
++
++    func testSlowDeliberateMotionStillSelects() {
++        var nav = WandRadialNavigator(layout: home, start: .switchApp)!
++        for _ in 0..<160 { nav.apply(deltaX: -0.05, deltaY: 0) } // 8° in tiny samples
++        XCTAssertEqual(nav.focusedCell, cell(9), "no speed threshold: slow intent counts in full")
++    }
++
++    func testOneLargeSweepLandsOnTheFarCardAndDoesNotWindUp() {
++        var nav = WandRadialNavigator(layout: home, start: cell(3))!
++        XCTAssertTrue(nav.apply(deltaX: -40, deltaY: 0), "one huge update across the wheel")
++        XCTAssertEqual(nav.focusedCell, cell(9))
++        XCTAssertEqual((nav.positionX * nav.positionX + nav.positionY * nav.positionY).squareRoot(),
++                       tuning.maximumDegrees, accuracy: 1e-9, "saturated on the rim")
++        nav.apply(deltaX: 7.5, deltaY: 0)
++        XCTAssertEqual(nav.focusedCell, .switchApp, "the reversal acts at once: no hidden overshoot")
++    }
++
++    func testNonFiniteMotionAndBadTuningAreSafe() {
++        var nav = WandRadialNavigator(layout: home, start: .switchApp,
++                                      tuning: WandRadialTuning(reachDegrees: .nan, centerReturnDegrees: 99, maximumDegrees: -1))!
++        XCTAssertFalse(nav.apply(deltaX: .infinity, deltaY: 0))
++        XCTAssertFalse(nav.apply(deltaX: .nan, deltaY: 1))
++        XCTAssertLessThan(nav.tuning.centerReturnDegrees, nav.tuning.reachDegrees)
++        XCTAssertGreaterThan(nav.tuning.maximumDegrees, nav.tuning.reachDegrees)
++        XCTAssertNil(WandRadialNavigator(layout: .empty, start: .switchApp))
++        let ringOnly = WandRadialLayout(center: nil, ring: [cell(1), cell(2)])
++        var noCentre = WandRadialNavigator(layout: ringOnly, start: .switchApp)!
++        XCTAssertEqual(noCentre.focusedCell, cell(1), "without a centre the first card holds")
++        noCentre.apply(deltaX: -8, deltaY: 0)
++        noCentre.apply(deltaX: 8, deltaY: 0)
++        XCTAssertNotEqual(noCentre.focusedCell, .switchApp)
++    }
++
++    // MARK: Liquid pull
++
++    func testCentrePullPointsWhereTheStickPoints() {
++        var nav = WandRadialNavigator(layout: home, start: .switchApp)!
++        nav.apply(deltaX: 2.1, deltaY: -2.8) // 3.5° toward 1 o'clock-ish
++        let pull = nav.pointerFocus
++        XCTAssertEqual(pull.cell, .switchApp)
++        XCTAssertEqual(pull.pullX, 0.3, accuracy: 1e-9)
++        XCTAssertEqual(pull.pullY, -0.4, accuracy: 1e-9)
++    }
++
++    func testRingPullGrowsTowardTheNeighbourAndTowardTheCentre() {
++        var nav = WandRadialNavigator(layout: home, start: cell(12))!
++        XCTAssertEqual(nav.pointerFocus.pullX, 0, accuracy: 1e-9)
++        XCTAssertEqual(nav.pointerFocus.pullY, 0, accuracy: 1e-9, "a fresh hold starts at rest")
++        nav.apply(deltaX: 1.5, deltaY: 0)
++        let along = nav.pointerFocus
++        XCTAssertEqual(along.cell, cell(12))
++        XCTAssertGreaterThan(along.pullX, 0.2, "pulled clockwise toward Play/Pause")
++        var inward = WandRadialNavigator(layout: home, start: cell(3))!
++        inward.apply(deltaX: -4.5, deltaY: 0)
++        XCTAssertEqual(inward.pointerFocus.pullX, -(7 - 4.5) / 3, accuracy: 1e-9, "toward the centre")
++        XCTAssertEqual(inward.pointerFocus.pullY, 0, accuracy: 1e-9)
++    }
++}
+diff --git a/Tests/ScimitarKitTests/WandSelectionTests.swift b/Tests/ScimitarKitTests/WandSelectionTests.swift
+--- a/Tests/ScimitarKitTests/WandSelectionTests.swift
++++ b/Tests/ScimitarKitTests/WandSelectionTests.swift
+@@ -346,12 +346,30 @@
+         if !home && !coordinator.isActive { coordinator.enterAppSpecific(source: .wand) }
+         gestureCounter += 1
+         controller.handle(.init(phase: .begin, gestureID: gestureID, sequence: 0))
++        holdStart = controller.focusedCell ?? .switchApp
+     }
+ 
+     private func move(_ x: Double, _ y: Double, seq: Int) {
+         clock.advance(by: 0.02)
+         controller.handle(.init(phase: .update, gestureID: gestureID, sequence: seq, offset: .init(x: x, y: y)))
+     }
++
++    /// Cumulative offset that points the wheel's virtual stick at `raw`
++    /// from where this hold started, using the HUD's own radial layout.
++    /// `scale` > 1 overshoots, as a large sweep would.
++    private func offset(toward raw: Int, scale: Double = 1) -> (x: Double, y: Double) {
++        let layout = coordinator.wandRadialLayout
++        let start = WandRadialNavigator.restingPosition(of: holdStart, in: layout)
++        let goal = WandRadialNavigator.restingPosition(of: PhysicalCell(rawValue: raw)!, in: layout)
++        return (goal.x * scale - start.x, goal.y * scale - start.y)
++    }
++
++    private func aim(at raw: Int, seq: Int, scale: Double = 1) {
++        let value = offset(toward: raw, scale: scale)
++        move(value.x, value.y, seq: seq)
++    }
++
++    private var holdStart: PhysicalCell = .switchApp
+ 
+     private func end(seq: Int = 99) {
+         clock.advance(by: 0.02)
+@@ -385,7 +403,7 @@
+ 
+     func testSelectingTheCurrentAppCardEntersItsMode() {
+         begin(home: true)
+-        move(-24, 0, seq: 1) // Switch App → current app card
++        aim(at: 2, seq: 1) // Switch App → current app card
+         XCTAssertEqual(controller.focusedCell, .frontmostAppModeSelector)
+         end()
+         XCTAssertFalse(coordinator.isWandHome)
+@@ -398,8 +416,8 @@
+         var selected: [PhysicalCell] = []
+         coordinator.onWandHomeInput = { selected.append($0); return true }
+         begin(home: true)
+-        move(-24, 0, seq: 1)
+-        move(-24, -7, seq: 2)
++        aim(at: 4, seq: 1)
++        aim(at: 3, seq: 2)
+         XCTAssertEqual(controller.focusedCell, .screenshotToggle)
+         end()
+         XCTAssertEqual(selected, [], "screenshot now uses the native held-wheel release route")
+@@ -446,7 +464,7 @@
+ 
+     func testReleaseSelectsExactlyTheOutlinedCardThroughTheSharedCoordinator() {
+         begin()
+-        move(5.6, 0, seq: 1) // cell 5: Chrome New tab
++        aim(at: 5, seq: 1) // cell 5: Chrome New tab
+         XCTAssertEqual(hud.snapshots.last?.pointerFocus?.cell.rawValue, 5)
+         end()
+         XCTAssertEqual(appInputs, [
+@@ -465,9 +483,16 @@
+ 
+     func testOneSweepCanTraverseSeveralCardsBeforeRelease() {
+         begin()
+-        move(17, 0, seq: 1)
++        aim(at: 8, seq: 1, scale: 4) // overshoots: the stick saturates, no wind-up
+         XCTAssertEqual(controller.focusedCell?.rawValue, 8)
+-        move(26, -6, seq: 2)
++        // The stick saturated on the rim, so from there one update sweeps
++        // round to a card on the far side.
++        let layout = coordinator.wandRadialLayout
++        let first = offset(toward: 8, scale: 4)
++        let rim = WandRadialNavigator.restingPosition(of: PhysicalCell(rawValue: 8)!, in: layout)
++        let maximum = WandRadialTuning().maximumDegrees / WandRadialTuning().restingDegrees
++        let goal = WandRadialNavigator.restingPosition(of: PhysicalCell(rawValue: 12)!, in: layout)
++        move(first.x + goal.x - rim.x * maximum, first.y + goal.y - rim.y * maximum, seq: 2)
+         XCTAssertEqual(controller.focusedCell?.rawValue, 12)
+     }
+ 
+@@ -485,14 +510,15 @@
+         }
+         XCTAssertEqual(controller.focusedCell?.rawValue, 2, "1.4 dps of residual bias is not intent")
+         XCTAssertTrue(coordinator.isActive, "messages kept the gesture alive")
+-        controller.handle(.init(phase: .update, gestureID: gestureID, sequence: 16, offset: .init(x: -15 + 5.6, y: -15)))
++        let toward = offset(toward: 5)
++        controller.handle(.init(phase: .update, gestureID: gestureID, sequence: 16, offset: .init(x: -15 + toward.x, y: -15 + toward.y)))
+         XCTAssertEqual(controller.focusedCell?.rawValue, 5, "drift is never re-applied as travel")
+     }
+ 
+     func testOutOfOrderAndForeignMessagesAreIgnored() {
+         begin()
+-        move(5.6, 0, seq: 3)
+-        move(17, 0, seq: 2)
++        aim(at: 5, seq: 3)
++        aim(at: 8, seq: 2)
+         XCTAssertEqual(controller.focusedCell?.rawValue, 5)
+         controller.handle(.init(phase: .update, gestureID: "someone-else", sequence: 10, offset: .init(x: 30, y: 0)))
+         controller.handle(.init(phase: .end, gestureID: "someone-else", sequence: 11))
+@@ -508,7 +534,7 @@
+ 
+     func testLostReleaseClosesWithoutSelecting() {
+         begin()
+-        move(5.6, 0, seq: 1)
++        aim(at: 5, seq: 1)
+         tickAfter(0.9)
+         XCTAssertTrue(coordinator.isActive)
+         tickAfter(0.2)
+@@ -535,7 +561,7 @@
+ 
+     func testNewGestureBeforeTheOldEndClosesTheOldOneUnselected() {
+         begin()
+-        move(5.6, 0, seq: 1)
++        aim(at: 5, seq: 1)
+         begin()
+         XCTAssertEqual(appInputs, [])
+         XCTAssertTrue(coordinator.isActive)
+@@ -546,13 +572,13 @@
+ 
+     func testCancelAndDisconnectFailClosed() {
+         begin()
+-        move(5.6, 0, seq: 1)
++        aim(at: 5, seq: 1)
+         controller.handle(.init(phase: .cancel, gestureID: gestureID, sequence: 2, cancelReason: .user))
+         XCTAssertFalse(coordinator.isActive)
+         XCTAssertEqual(appInputs, [])
+ 
+         begin()
+-        move(5.6, 0, seq: 1)
++        aim(at: 5, seq: 1)
+         end()
+         XCTAssertEqual(controller.phase, .lingering)
+         controller.handle(.init(phase: .cancel, gestureID: "stale-gesture", sequence: 1, cancelReason: .user))
+@@ -567,7 +593,7 @@
+         XCTAssertFalse(coordinator.isActive)
+         allowed = true
+         begin()
+-        move(5.6, 0, seq: 1)
++        aim(at: 5, seq: 1)
+         allowed = false
+         watchdog.fire()
+         XCTAssertFalse(coordinator.isActive)
+@@ -581,7 +607,7 @@
+ 
+     func testChildPageStaysOpenAndTheNextHoldNavigatesIt() {
+         begin()
+-        move(17, 0, seq: 1) // Chrome cell 8: Open website
++        aim(at: 8, seq: 1) // Chrome cell 8: Open website
+         end()
+         XCTAssertEqual(coordinator.page, .chromeWebsites)
+         XCTAssertEqual(controller.phase, .lingering)
+@@ -599,14 +625,14 @@
+ 
+         begin()
+         XCTAssertEqual(controller.focusedCell?.rawValue, 8, "the next hold continues from that card")
+-        move(-17, 0, seq: 1) // back across to Exit Chrome mode
++        aim(at: 2, seq: 1) // back to the centre: Exit Chrome mode
+         end()
+         XCTAssertFalse(coordinator.isActive, "the journey's root page still closes deliberately")
+     }
+ 
+     func testIdleChildPageClosesItself() {
+         begin()
+-        move(17, 0, seq: 1)
++        aim(at: 8, seq: 1)
+         end()
+         tickAfter(8.1)
+         XCTAssertFalse(coordinator.isActive)
+@@ -615,7 +641,7 @@
+     func testWheelCardArmsThenTheNextHoldAdjustsWithTilt() {
+         frontmost = .codex
+         begin()
+-        move(6, 5, seq: 1) // cell 4: Reasoning Effort + Wheel
++        aim(at: 4, seq: 1) // cell 4: Reasoning Effort + Wheel
+         XCTAssertEqual(controller.focusedCell?.rawValue, 4)
+         end()
+         XCTAssertEqual(controller.phase, .armed)
+@@ -648,7 +674,7 @@
+     func testArmedCardTimesOutWithoutAClickRelease() {
+         frontmost = .codex
+         begin()
+-        move(6, 5, seq: 1)
++        aim(at: 4, seq: 1)
+         end()
+         tickAfter(8.1)
+         XCTAssertFalse(coordinator.isActive)
+@@ -659,7 +685,7 @@
+     func testRetargetedFrontmostAppDisarmsTheWandCard() {
+         frontmost = .codex
+         begin()
+-        move(6, 5, seq: 1)
++        aim(at: 4, seq: 1)
+         end()
+         XCTAssertEqual(controller.phase, .armed)
+         frontmost = .chrome
+@@ -678,7 +704,7 @@
+             return true
+         }
+         begin()
+-        move(5.6, 0, seq: 1)
++        aim(at: 5, seq: 1)
+         end()
+         XCTAssertEqual(appInputs.count, 2)
+         XCTAssertEqual(controller.phase, .lingering)
+@@ -695,7 +721,7 @@
+             return true
+         }
+         begin()
+-        move(5.6, 0, seq: 1)
++        aim(at: 5, seq: 1)
+         end()
+         XCTAssertEqual(appInputs.count, 2)
+         XCTAssertFalse(coordinator.isActive)
+diff --git a/Tests/ScimitarKitTests/WandBackAndDiagonalTests.swift b/Tests/ScimitarKitTests/WandBackAndDiagonalTests.swift
+--- a/Tests/ScimitarKitTests/WandBackAndDiagonalTests.swift
++++ b/Tests/ScimitarKitTests/WandBackAndDiagonalTests.swift
+@@ -17,7 +17,7 @@
+     private var keypadAvailable = false
+     private var gestureCounter = 0
+     private var sequence = 0
+-    private var gestureOrigin: (column: Int, row: Int) = (0, 0)
++    private var gestureOrigin: (x: Double, y: Double) = (0, 0)
+ 
+     override func setUp() {
+         super.setUp()
+@@ -55,11 +55,11 @@
+ 
+     private var gestureID: String { "gesture-\(gestureCounter)" }
+ 
+-    private func grid(_ cell: PhysicalCell) -> (column: Int, row: Int) {
+-        for (row, cells) in PhysicalCell.displayRowsTopToBottom(for: .wand).enumerated() {
+-            if let column = cells.firstIndex(of: cell) { return (column, row) }
+-        }
+-        preconditionFailure("cell is not in the grid")
++    /// Resting stick position of a card on the wheel the HUD is drawing.
++    private func wheel(_ cell: PhysicalCell) -> (x: Double, y: Double) {
++        let layout = coordinator.wandRadialLayout
++        precondition(layout.contains(cell), "cell is not on the wheel")
++        return WandRadialNavigator.restingPosition(of: cell, in: layout)
+     }
+ 
+     private func cell(_ raw: Int) -> PhysicalCell { PhysicalCell(rawValue: raw)! }
+@@ -68,7 +68,7 @@
+         gestureCounter += 1
+         sequence = 0
+         controller.handle(.init(phase: .begin, gestureID: gestureID, sequence: 0))
+-        gestureOrigin = grid(controller.focusedCell ?? .frontmostAppModeSelector)
++        gestureOrigin = wheel(controller.focusedCell ?? .frontmostAppModeSelector)
+     }
+ 
+     private func offset(_ x: Double, _ y: Double) {
+@@ -77,14 +77,11 @@
+         controller.handle(.init(phase: .update, gestureID: gestureID, sequence: sequence, offset: .init(x: x, y: y)))
+     }
+ 
+-    /// Straight horizontal then vertical travel to the card, card-centre to
+-    /// card-centre, so the route never depends on diagonal judgement.
++    /// Straight travel from where the hold started to the card's resting
++    /// stick position on the HUD's own wheel.
+     private func walk(to target: Int) {
+-        let destination = grid(cell(target))
+-        let x = Double(destination.column - gestureOrigin.column) * 8
+-        let y = Double(destination.row - gestureOrigin.row) * 7
+-        offset(x, 0)
+-        offset(x, y)
++        let destination = wheel(cell(target))
++        offset(destination.x - gestureOrigin.x, destination.y - gestureOrigin.y)
+         XCTAssertEqual(controller.focusedCell?.rawValue, target, "walked to the wrong card")
+     }
+ 
+@@ -215,7 +212,8 @@
+ 
+         select(8) // Chrome → websites
+         XCTAssertEqual(coordinator.page, .chromeWebsites)
+-        select(10) // websites exit → Chrome, not Default
++        XCTAssertFalse(coordinator.wandRadialLayout.contains(.modeExit), "cell 10 duplicates the centre exit")
++        select(2) // the centre exit → Chrome, not Default
+         XCTAssertEqual(coordinator.page, .appSpecific)
+         XCTAssertEqual(coordinator.pointerFocus?.cell.rawValue, 8)
+ 
+diff --git a/Resources/Info.plist b/Resources/Info.plist
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -18,9 +18,9 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.275</string>
++	<string>1.0.276</string>
+ 	<key>CFBundleVersion</key>
+-	<string>281</string>
++	<string>282</string>
+ 	<key>LSMinimumSystemVersion</key>
+ 	<string>13.0</string>
+ 
