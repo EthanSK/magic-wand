@@ -124,3 +124,7 @@ describe the optional nod/shake mode. Keep the manifest, rendered videos and gal
 through their build/check commands; never claim an illustration is physical verification.
 
 - Control V3 page scrolling follows Ethan’s “drag up or down or left or right”: a straight stroke chooses velocity, holding still continues at that speed, another deliberate stroke changes direction or speed without release, and release stops. Do not re-enable circular page scrolling in V3. Preserve V2 and the independent Middle review gestures. User-requested — 2026-10-19.
+
+## Opus for UX
+
+- Ethan: “Do any UX related stuff with Opus actually and bug fixing and stuff you do yourself and like testing and installing.” Use Opus for Magic Wand UX implementation; Codex owns bug fixes, verification and installation. Announce each use with “Opus for UX” and say why it is being used. User-requested — 2026-10-19.
