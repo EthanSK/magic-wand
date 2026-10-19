@@ -42,9 +42,13 @@ test('drag demonstration keeps the two presses within the actual double-tap wind
 });
 
 test('quarter-turn illustrations preserve their centre when reversing', () => {
- const source = `import sys, math
-sys.path.insert(0, 'tutorials/render')
-from scene import _circle
+ const source = `import ast, math
+from pathlib import Path
+tree=ast.parse(Path('tutorials/render/scene.py').read_text())
+node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='_circle')
+namespace={'math':math}
+exec(compile(ast.Module(body=[node],type_ignores=[]),'scene._circle','exec'),namespace)
+_circle=namespace['_circle']
 def same(a,b):
  assert math.dist(a,b)<1e-8,(a,b)
 f,e=_circle((0,-6),'cw',0.25,6)
@@ -55,6 +59,6 @@ f,e=_circle((0,-6),'ccw',0.25,6)
 same(e,(-6,0))
 print('PASS quarter-turn illustrations')
 `;
- const r=spawnSync('python3',['-c',source],{cwd:root,encoding:'utf8'});
+ const r=spawnSync('python3',['-S','-c',source],{cwd:root,encoding:'utf8'});
  assert.equal(r.status,0,r.stdout+r.stderr);
 });
