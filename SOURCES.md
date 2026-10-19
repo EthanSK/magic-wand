@@ -257,3 +257,21 @@ tests. The receiver's 18 native tests passed without skips against the candidate
 sources. Both installed binaries, versions and preserved settings were checked;
 the running radial HUD was visually inspected. Physical scroll/drag feel and
 wake behaviour still need user acceptance.
+
+## Held radial selection and larger labels
+
+`integrations/agentic-mouse/wand-held-radial-ux.patch` applies after
+`wand-radial-controls.patch` and records Agentic Mouse 1.0.277 (283).
+Wand Receiver 1.2.80 (85) opens selection while Middle is held and uses the
+outlined card on release. Completed actions hide the HUD; submenus and
+adjustable cards remain for another hold. A quick tap from closed switches
+app once; a held selection of Switch App retains its horizontal chooser.
+The independent review lane, Bottom controls and Top dictation are preserved.
+The home Enter card sends ordinary Enter again.
+
+Titles fit whole lines to their wedge and use larger mixed-case text within
+the same wheel. The focus has one continuously morphing outline, with a
+continuity regression for the return to centre. Native and receiver tests
+passed; installed visual checks confirmed the labels and submenu lifecycle.
+Physical gesture feel and animation perception still need user acceptance.
+The browser simulator remains the explicitly labelled older grid demo.

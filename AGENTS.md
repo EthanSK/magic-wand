@@ -138,3 +138,8 @@ through their build/check commands; never claim an illustration is physical veri
 - On waking, return to the mouse-follow state from before rest instead of always
   entering mouse mode. A newer manual choice or recording-start pause wins.
   Keep HUD and dictation independent of sleep. User-requested — 2026-10-19.
+
+## Hold-to-show wand HUD
+
+- Hold Middle to show the wand HUD and move its outline; releasing uses the outlined card. An ordinary completed action closes the HUD. A submenu or selected continuous wheel control stays open for the next hold, and that next hold supplies its adjustment motion. Keep double-click dismissal. This replaces the earlier tap-to-latch/free-navigation HUD flow; Bottom mouse controls, Top dictation, and the separate persistent VS Code review lane remain independent. User-requested — 2026-10-20.
+- The wand home Enter card sends ordinary Enter, just like the normal Agentic Mouse. Do not restore the retired wand-only Command-Enter / Steer override. User-requested — 2026-10-20.

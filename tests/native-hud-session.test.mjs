@@ -48,6 +48,7 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  var buttons=0,movementCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1000,height:1000)]
  var selectedReviewMode:String?,hiddenReviewOperating=false,hiddenReviewPending=false,screenshotActive=false,screenshotHUD=false
  var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleSecondTap=false,navigationOpenedHUD=false
+ var middleHeld=false,hudOpenedAt=0.0
  var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
  var wandShortcutCircle=WandReviewNavigation();var middleReviewExit=false
  var reviewExitGesture=WandReviewExitGesture();var reviewExitTimer:Timer?
@@ -75,24 +76,54 @@ ${modeCallback}}
  ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
+// Ethan's hold-to-show HUD. Holding Middle shows and steers it; releasing
+// uses the outlined card; Agentic Mouse closes it after an ordinary action
+// and keeps it open only for a submenu or a card that needs more motion.
 let h=Harness()
-h.handleMiddle("1");h.context.set(true);h.handleMiddle("0")
-precondition(h.hudSession)
-h.appMode="codex";h.handleMiddle("1");h.handleMiddle("0")
-precondition(!h.hudSession && h.appMode==nil && h.controls.phases.last=="dismiss")
-precondition(!h.controls.phases.contains("appSpecific"))
-let after=h.controls.phases.count
-h.context.set(false);h.context.set(true);h.handleNavigation("40000,40000");h.handleHUD("B,0,0");h.handleMove("B,0,0")
+h.handleMiddle("1")
+precondition(h.hudSession && h.middleHeld && Array(h.controls.phases.suffix(2))==["open","navigate"] && h.commands.contains("setHUDOpen(true);"),"holding Middle shows and steers the HUD")
+h.context.set(true);h.handleNavigation("8000,0")
+precondition(h.controls.phases.last=="motion","held motion steers the outline")
+h.middlePressedAt-=0.3;h.handleMiddle("0")
+precondition(Array(h.controls.phases.suffix(3))==["motion","park","choose"] && !h.middleHeld && !h.hudActive,"releasing a hold uses the outlined card at once")
+let beforeClose=h.controls.phases.count
+h.context.set(false)
+precondition(!h.hudSession && !h.controls.phases.dropFirst(beforeClose).contains("dismiss"),"Agentic Mouse closed it, so no dismiss cuts short the action's follow-up")
+h.context.set(true);h.handleNavigation("20000,0");h.handleHUD("B,0,0");h.handleMove("B,0,0");settle(0.35)
+precondition(!h.hudSession && h.controls.phases.count==beforeClose,"a stale positive heartbeat never reopens or steers a closed HUD")
+
+let menu=Harness();menu.handleMiddle("1");menu.context.set(true);menu.middlePressedAt-=0.3;menu.handleMiddle("0")
+precondition(menu.hudSession && !menu.hudActive,"a kept-open HUD waits for the next hold")
+let waiting=menu.controls.phases.count
+menu.handleNavigation("9000,0")
+precondition(menu.controls.phases.count==waiting,"an unheld HUD never moves its outline")
+menu.handleMiddle("1")
+precondition(menu.controls.phases.last=="navigate" && menu.middleHeld && !menu.controls.phases.dropFirst(waiting).contains("open"),"the next hold steers the page or adjusts the armed card")
+menu.handleNavigation("0,7000");menu.middlePressedAt-=0.3;menu.handleMiddle("0")
+precondition(menu.controls.phases.last=="choose")
+
+let tap=Harness();tap.handleMiddle("1");tap.context.set(true);tap.handleMiddle("0")
+precondition(tap.middleTap != nil && tap.controls.phases.last=="park","a tap waits out the double-click window")
 settle(0.35)
-precondition(!h.hudSession && !h.controls.phases.dropFirst(after).contains("press"))
-h.middleLastRelease = -100;h.handleMiddle("1");h.context.set(true);h.handleMiddle("0")
-precondition(h.hudSession,"fresh Middle press must re-open")
-settle(0.32);h.handleMiddle("1");h.handleMiddle("0")
-precondition(h.middleTap != nil)
-h.context.set(false);let closed=h.controls.phases.count;settle(0.4)
-precondition(!h.controls.phases.dropFirst(closed).contains("press"),"hidden HUD must cancel delayed click")
-h.middleLastRelease = -100;h.handleMiddle("1");h.handleMiddle("0");h.hudLastUpdate=Date.distantPast;settle(0.3)
-precondition(!h.hudSession && !h.acceptHUDContext && h.controls.phases.last=="dismiss","watchdog clears full session")
+precondition(tap.controls.phases.last=="activate" && tap.middleTap == nil,"a lone tap then uses the outlined card")
+let double=Harness();double.handleMiddle("1");double.context.set(true);double.handleMiddle("0");double.handleMiddle("1")
+precondition(!double.hudSession && double.controls.phases.last=="dismiss","double click still dismisses")
+double.handleMiddle("0");settle(0.35)
+precondition(!double.controls.phases.contains("activate") && !double.controls.phases.contains("choose") && !double.hudSession,"and never acts")
+let lateTap=Harness();lateTap.handleMiddle("1");lateTap.context.set(true);lateTap.handleMiddle("0")
+lateTap.middleLastRelease = -100;lateTap.handleMiddle("1")
+precondition(lateTap.middleTap == nil && Array(lateTap.controls.phases.suffix(2))==["activate","navigate"],"a tap whose window ended is used before the next hold, never lost")
+let hidden=Harness();hidden.handleMiddle("1");hidden.context.set(true);hidden.handleMiddle("0");hidden.context.set(false);settle(0.4)
+precondition(!hidden.controls.phases.contains("activate"),"a closed HUD cancels the pending tap")
+let racing=Harness();racing.handleMiddle("1");racing.context.set(true);racing.context.set(false)
+precondition(racing.hudSession && racing.middleHeld,"a close during a live hold waits for its release")
+racing.middlePressedAt-=0.3;racing.handleMiddle("0")
+precondition(racing.controls.phases.last=="choose")
+let lost=Harness();lost.handleMiddle("1");lost.hudLastUpdate=Date.distantPast;settle(0.3)
+precondition(!lost.hudSession && !lost.acceptHUDContext && lost.controls.phases.last=="dismiss","lost telemetry during a hold clears the whole session")
+lost.context.set(true);precondition(!lost.hudSession)
+let stale=Harness();stale.hudSession=true;stale.hudOpenedAt=ProcessInfo.processInfo.systemUptime-5;stale.handleMiddle("1")
+precondition(stale.hudSession && stale.middleHeld && stale.controls.phases.contains("open"),"a session Agentic Mouse no longer shows restarts as a fresh HUD")
 let shortcut=Harness();shortcut.hudSession=true;shortcut.pointerInHUD=true;shortcut.middleOperating=true;shortcut.wandShortcutMode="changes"
 shortcut.handleMiddle("0")
 precondition(shortcut.wandShortcutMode==nil && shortcut.review.committed,"physical Middle release immediately finishes review")
@@ -103,7 +134,7 @@ screenshot.setScreenshotActive(true);screenshot.enterPointerMode()
 precondition(!screenshot.hudSession && screenshot.screenshotHUD)
 precondition(!screenshot.controls.phases.contains("dismiss"))
 screenshot.setScreenshotActive(false)
-precondition(screenshot.hudSession && screenshot.hudActive && !screenshot.screenshotHUD)
+precondition(screenshot.hudSession && !screenshot.hudActive && !screenshot.screenshotHUD,"the HUD returns waiting, never steering unheld")
 let pinned=Harness();pinned.selectedReviewMode="changes";pinned.wandShortcutMode="changes";pinned.handleMiddle("1")
 precondition(pinned.reviewExitGesture.pending && !pinned.review.committed,"Middle-down freezes the existing working set")
 for i in 1...80 {pinned.handleNavigation("\\(i*1000),\\(i*2000)")}
@@ -145,28 +176,27 @@ precondition(asleep.hudSession && asleep.hudActive,"sleep stops NAV heartbeat wi
 asleep.deskSleep.reset();asleep.closeHUD(reason:"test done")
 let independent=Harness();independent.hudSession=true;independent.enterPointerMode();precondition(independent.hudSession,"Bottom leaves Middle HUD alone")
 
-// Ethan's "switch app button" is Middle operating the selected HUD card.
+// Every Middle hold, including the second hold that adjusts an armed card
+// such as Switch App, freezes the Bottom pointer lane for its length only.
 // Use the real pointer posting and Middle/navigation handlers with inert events.
 let switching=Harness(),anchor=CGPoint(x:400,y:400)
 precondition(switching.postPointerMove(dx:20,dy:10,from:anchor)==CGPoint(x:420,y:410))
 switching.handleMiddle("1")
 let entryPosts=CGEvent.posted
-for _ in 0..<100 {precondition(switching.postPointerMove(dx:30,dy:-15,from:anchor)==anchor,"Middle entry hold freezes an already-following pointer")}
+for _ in 0..<100 {precondition(switching.postPointerMove(dx:30,dy:-15,from:anchor)==anchor,"a Middle hold freezes an already-following pointer")}
 switching.handleNavigation("10000,0")
-precondition(CGEvent.posted==entryPosts && switching.controls.phases.last=="motion","entry still delivers horizontal HUD navigation without moving the pointer")
-switching.hudEntryPressStarted-=0.15;switching.handleMiddle("0")
+precondition(CGEvent.posted==entryPosts && switching.controls.phases.last=="motion","the hold still steers the HUD without moving the pointer")
+switching.context.set(true);switching.middlePressedAt-=0.3;switching.handleMiddle("0")
 precondition(switching.postPointerMove(dx:-20,dy:10,from:anchor)==CGPoint(x:380,y:410),"release resumes new pointer movement without replaying the held sweep")
-switching.middleLastRelease = -100;switching.handleMiddle("1")
+switching.handleMiddle("1")
 let pressPosts=CGEvent.posted
-precondition(switching.pointerInHUD && switching.postPointerMove(dx:60,dy:40,from:anchor)==anchor,"freeze begins before the card hold qualifies")
-settle(0.24)
+precondition(switching.postPointerMove(dx:60,dy:40,from:anchor)==anchor,"the second hold freezes the pointer too")
 switching.handleNavigation("-20000,0");switching.handleNavigation("20000,0")
-precondition(switching.middleOperating && switching.controls.phases.contains("press") && switching.controls.phases.last=="motion","left and right held-card input remains active")
-precondition(switching.postPointerMove(dx:100,dy:100,from:anchor)==anchor && CGEvent.posted==pressPosts,"held Switch App cannot move or drag the pointer")
-switching.handleMiddle("0")
-precondition(!switching.pointerInHUD && switching.postPointerMove(dx:5,dy:0,from:anchor)==CGPoint(x:405,y:400),"Middle release restores pointing even while the HUD stays open")
-switching.middleLastRelease = -100;switching.handleMiddle("1");switching.closeHUD(reason:"context ended")
-precondition(switching.postPointerMove(dx:7,dy:0,from:anchor)==CGPoint(x:407,y:400),"cancelled HUD hold cannot leave the pointer frozen")
+precondition(switching.controls.phases.last=="motion" && CGEvent.posted==pressPosts,"left and right reach the armed card without moving the pointer")
+switching.middlePressedAt-=0.3;switching.handleMiddle("0")
+precondition(switching.postPointerMove(dx:5,dy:0,from:anchor)==CGPoint(x:405,y:400),"Middle release restores pointing even while the HUD stays open")
+switching.handleMiddle("1");switching.closeHUD(reason:"context ended")
+precondition(switching.postPointerMove(dx:7,dy:0,from:anchor)==CGPoint(x:407,y:400),"a cancelled hold cannot leave the pointer frozen")
 let independentReview=Harness();independentReview.selectedReviewMode="changes";independentReview.handleMiddle("1")
 precondition(independentReview.postPointerMove(dx:8,dy:0,from:anchor)==CGPoint(x:408,y:400),"independent review commit holds retain the Bottom pointer lane")
 
@@ -196,7 +226,7 @@ precondition(!manual.recordingPointerPaused && manual.recording.isRecording)
 precondition(manual.postPointerMove(dx:6,dy:2,from:anchor)==CGPoint(x:406,y:402),"manual Bottom re-entry allows pointer movement while recording")
 manual.dwell.follow(false);manual.recording.isRecording=false;manual.recordingChanged(false)
 precondition(!manual.dwell.following,"recording end preserves a manual switch off")
-print("PASS: screenshot HUD preservation, hidden review hold, native full close, stale input rejection, delayed click cancellation, fresh reopen, watchdog teardown")
+print("PASS: hold-to-show HUD, native close, kept-open next hold, tap and double click, stale input rejection, watchdog teardown, review hold")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-hud-'));
  try {
@@ -290,7 +320,7 @@ func log(_ values:Any...) {}
 struct Filter {func reset(){}}
 struct Context {var isActive=false}
 final class Harness {
- var loadingBridge=false,loadingRuntime=false,bridgeLoadFailed=false,ready=false,lightMode="",generation=0,rawLastArrival=0.0,hudSession=false
+ var loadingBridge=false,loadingRuntime=false,bridgeLoadFailed=false,ready=false,lightMode="",generation=0,rawLastArrival=0.0,hudSession=false,hudOpenedAt=0.0
  let commands=["PROGRAM"],modeBridge="bridge",context=Context(),motionFilter=Filter()
  var selectedReviewMode:String?
  func setWandShortcut(_ mode:String){}

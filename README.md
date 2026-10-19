@@ -31,15 +31,16 @@ The website runs the wand’s own device code in your browser, with the Mac side
 
 | Gesture | Result |
 | --- | --- |
-| Tap | Open the HUD on Switch App, then turn the wand to move the outline |
-| Hold to open, turn, release | Use the outlined card on release |
-| Tap again | Use the outlined card |
-| Hold while open | Hold the card; on some wheel cards, tilt to turn the wheel |
+| Quick tap from closed | Switch app once |
+| Hold, turn, release | Open the HUD, point to a card and use it on release |
+| Choose a submenu | Keep the submenu open; hold Middle again to choose within it |
+| Choose a wheel control | Keep it selected; hold Middle again and turn the wand to adjust it |
 | Double tap | Close the entire HUD |
 
 - The installed wand uses a radial HUD with Switch App in the centre. The browser demo retains its earlier grid.
 - The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.
-- The HUD has no normal inactivity timeout. Screenshot selection temporarily uses the pointer and returns to the same HUD afterward.
+- Ordinary actions close the HUD on release. Submenus and selected wheel controls stay open for the next hold; they have no inactivity timeout. Bottom and speech remain independent.
+- Hold and release on Switch App to keep its chooser selected; the next hold moves through apps horizontally. A quick tap from closed switches once and closes.
 - Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.
 - In VS Code, tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit, or hold it for about half a second to stage the working set and keep reviewing. Navigation stays frozen until release. The floating indicator says “(hold to commit set)”. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.
 - Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.
@@ -168,6 +169,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: hold Middle to show and steer the radial HUD, then release to use the outlined card. Submenus and adjustable wheel cards stay open for the next hold. Quick tap from closed switches app once. The centre Switch App chooser still supports horizontal movement on a second hold. Native interaction tests passed; physical acceptance is pending.
+- Installed: larger mixed-case radial labels, a continuous liquid centre-to-ring transition, and ordinary Enter in the wand home HUD. Native layout, morph continuity and key-output checks passed; real-device feel remains for user acceptance.
 - Installed: the wand HUD is a radial wheel with Switch App in the centre and the other available actions around it. Native checks and installed visual inspection passed; physical selection feel still needs acceptance.
 - Installed: Bottom hold scrolls a scrolling surface or drags a confirmed draggable target. Unknown or late target results stay on the scrolling path. Native lifecycle checks passed; physical app coverage is pending.
 - Installed: waking restores the mouse-follow choice from before rest. Manual choices and recording pauses take precedence. Native checks passed; physical acceptance is pending.
@@ -189,7 +192,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.79 (84) · device code `wand-e1ce30d7c407` · bridge `cd1c870e` · updated 19 October 2026.
+Receiver 1.2.80 (85) · device code `wand-e1ce30d7c407` · bridge `cd1c870e` · updated 20 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
