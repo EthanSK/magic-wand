@@ -639,3 +639,17 @@ exercise all directions, diagonals, reversal, quiet hands, release and telemetry
 loss, including the actual receiver timer. This is synthetic verification, not
 physical acceptance. Preserve explicitly labelled V2 tutorials against their
 immutable control snapshot instead of claiming their footage demonstrates V3.
+
+## A held HUD action owns pointer movement temporarily
+
+Mouse follow and Middle's HUD navigation are independent, but the held card action
+must not also move the system pointer. Ethan's "switch app button" is Middle
+operating the selected Switch App card. Gate the common native pointer-posting
+method for HUD entry holds and existing-card presses, including the period before
+the hold qualifies. Keep angular navigation and card press/release delivery intact.
+Return the unchanged pointer position rather than retaining movement for release.
+An open, unheld HUD and independent review commit holds retain ordinary pointing;
+cancellation clears the existing ownership flags. Native tests execute the real
+handlers with inert mouse events, covering held sweeps, both horizontal directions,
+release, context cancellation and review independence. Physical feel remains a
+separate user check; the regression adds no pointer buffer or intentional delay.
