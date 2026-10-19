@@ -7,13 +7,13 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.69",
-    "receiverBuild": "74",
+    "receiver": "1.2.70",
+    "receiverBuild": "75",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "da9327f3342fe74dbe2fcaaea24514ab50919e73b29022e6ea969d24909c1874"
   },
   "status": [
-    "Installed: Wand Receiver 1.2.69 counts each clear turn in the optional nod/shake review mode. The option is enabled for Ethan; the published default remains off. Gesture tests pass; physical acceptance is pending.",
+    "Installed: Wand Receiver 1.2.70 uses clockwise/anticlockwise review loops, including small diamond and square paths. Straight up/down flicks are disabled. The optional nod/shake experiment is saved and switched off. Automated checks pass; physical acceptance is pending.",
     "Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.",
     "The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.",
     "Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.",
@@ -331,11 +331,9 @@
       "reviewMinimumExtentDegrees": 0.12,
       "reviewMinimumTurningRadiusDegrees": 1.15,
       "reviewRatchetDegrees": 7,
-      "reviewMotionSampleDegrees": 0.003,
       "scope": "Smaller circle geometry and accumulated sub-segment movement; existing pointer gains, filters, sensor rate and motion-delay settings remain unchanged. Minimum reliable physical radius has not been measured.",
       "reviewMinimumLocalRadiusDegrees": 0.08
     },
-    "reviewFlickDegrees": 0.3,
     "reviewAxisGestures": {
       "default": false,
       "optionKey": "reviewAxisGestures",

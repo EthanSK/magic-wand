@@ -49,15 +49,15 @@ check(exitGesture.up(now:4.6) == .commit,"late timer still commits a qualified h
 check(exitGesture.up(now:4.7) == .none,"duplicate release is inert")
 exitGesture.down(now:5);exitGesture.reset()
 check(!exitGesture.commitIfHeld(now:6) && !exitGesture.pending,"teardown cancels the hold")
-// A quick vertical nudge is one step after rest, not one per sample.
+// Straight flicks are disabled: winding is the only default review gesture.
 for sign in [-1.0,1.0] {
  var n=WandReviewNavigation();var total:Int32=0
  for i in 1...5 {total+=n.sample(dx:0.03,dy:sign*0.5,now:Double(i)*0.03)}
  check(total==0,"ambiguous moving stroke waits for its endpoint")
  total+=n.sample(dx:0,dy:0,now:0.3)
- check(total==Int32(sign),"quick vertical nudge moves exactly one item")
+ check(total==0,"vertical flick no longer produces a review step")
  for i in 1...10 {total+=n.sample(dx:0,dy:0,now:0.3+Double(i)*0.03)}
- check(total==Int32(sign),"rest does not repeat the nudge")
+ check(total==0,"rest does not produce a flick step")
 }
 var nudges=WandReviewNavigation(),noise:Int32=0
 for i in 1...12 {noise+=nudges.sample(dx:0.005,dy:0.008,now:Double(i)*0.03)}
@@ -72,7 +72,7 @@ for sign in [-1.0,1.0] {
  check(sign>0 ? total>12:total < -12,"hybrid navigation preserves circle direction and ratchets")
  check(nav.sample(dx:0,dy:0,now:time+0.15)==0,"circle endpoint cannot add an extra nudge")
  for i in 1...5 {_=nav.sample(dx:0,dy:0.5,now:time+0.2+Double(i)*0.03)}
- check(nav.sample(dx:0,dy:0,now:time+0.5)==1,"pause after circling permits down-one again")
+ check(nav.sample(dx:0,dy:0,now:time+0.5)==0,"pause after circling never enables a straight flick")
 }
 
 // Tiny loops are quantised like @NAV and tested through the actual hybrid router.
@@ -129,7 +129,7 @@ let quiet=WandHeldScroll();quiet.begin(now:50)
 var quietOutput:Int32=0
 for i in 1...2000 {quietOutput+=quiet.sample(x:0.8*sin(Double(i)),y:0.8*cos(Double(i)),dt:0.02,now:50.3+Double(i)*0.02)}
 check(quietOutput==0 && !quiet.circular,"quiet calibrated gyro noise does not scroll")
-// Tiny up/down flicks retain the first stroke even when the hand springs back.
+// A flick or spring-back must not become a step in loop-only review.
 var flicks=WandReviewNavigation(),ft=200.0
 for sign in [1.0,-1.0,1.0,-1.0] {
  var output:Int32=0
@@ -137,17 +137,17 @@ for sign in [1.0,-1.0,1.0,-1.0] {
   ft+=0.025;output+=flicks.sample(dx:0.008,dy:sign*part,now:ft)
  }
  ft+=0.15;output+=flicks.sample(dx:0,dy:0,now:ft)
- check(output==Int32(sign),"small repeated flick works in either direction including spring-back")
+ check(output==0,"straight flick and spring-back do not navigate")
  ft+=0.05
 }
-// A short curved flick is still vertical intent, not a swallowed partial circle.
+// An incomplete curved flick is not enough evidence of winding.
 for sign in [-1.0,1.0] {
  var n=WandReviewNavigation(),total:Int32=0,time=220.0
  for (dx,dy) in [(0.03,0.12),(0.06,0.13),(-0.05,0.12),(-0.03,-0.14),(-0.01,-0.16)] {
   time+=0.03;total+=n.sample(dx:dx,dy:dy*sign,now:time)
  }
  total+=n.sample(dx:0,dy:0,now:time+0.15)
- check(total==Int32(sign),"curved small flick retains its original direction")
+ check(total==0,"curved partial flick does not navigate")
 }
 // The alternative stays off by default, and its classifier is screen-axis based.
 check(!WandReviewNavigation().useAxisGestures,"new review option defaults off")
@@ -204,4 +204,25 @@ for shape in ["noise","diagonal","circle"] {
  }
  check(total==0,"optional axis gesture rejects \(shape)")
 }
-if failures>0{exit(1)};print("PASS optional nods/shakes and existing circle/flick controls")
+// Ethan's "clockwise diamond square" is winding, not an up/down flick.
+for scale in [0.15,0.4,1.0,4.0] {
+ for sign in [-1.0,1.0] {
+  for steps in [1,4,16] {
+   for duration in [0.3,1.2,4.0] {
+    if duration/Double(4*steps)>0.3 {continue} // No artificial one-second holes between device packets.
+    var g=WandReviewNavigation(),x=0.0,y = -scale,t=1.0,total:Int32=0
+    let points=[(scale,0.0),(0.0,scale),(-scale,0.0),(0.0,-scale)]
+    for _ in 0..<5 {
+     for (rawx,yy) in points {
+      let xx=rawx*sign,dx=(xx-x)/Double(steps),dy=(yy-y)/Double(steps)
+      for _ in 0..<steps {t+=duration/Double(4*steps);let n=g.sample(dx:dx,dy:dy,now:t);check(Double(n)*sign>=0,"diamond wrong direction");total+=n}
+      x=xx;y=yy
+     }
+    }
+    check(Double(total)*sign>=2,"diamond scale \(scale) steps \(steps) duration \(duration) sign \(sign)")
+   }
+  }
+ }
+}
+
+if failures>0{exit(1)};print("PASS optional nods/shakes and clockwise/anticlockwise loops")

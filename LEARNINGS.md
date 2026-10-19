@@ -548,3 +548,15 @@ Restarting a LaunchAgent does not terminate a manually launched process holding 
 lock. Inspect the exact running receiver and launchd state. If the authorised restart needs to
 replace an outside owner, recheck Agent Flow idle and terminate only that verified process;
 then verify the new connected receiver and unchanged independent app processes.
+
+## Review loops include sharp diamond and square corners
+
+Ethan returned to clockwise-next and anticlockwise-previous, with the nod/shake
+experiment disabled. The default review router no longer adds straight up/down
+flick steps after a pause. A small polygon can place all its heading change in
+one short sample: treating only that sample length as its turn radius rejected
+valid diamond corners. Use the preceding straight edge as bounded supporting
+travel for a sharp corner, while keeping the existing local guard for smooth
+noise. Quantised circles, diamond loops in both directions and stationary noise
+after real movement are separate regression cases. These synthetic traces do not
+establish physical acceptance or prove the original asymmetric double-step cause.

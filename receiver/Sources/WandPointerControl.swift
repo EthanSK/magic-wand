@@ -783,7 +783,7 @@ struct WandReviewExitGesture {
 /// Screen coordinates: positive Y points down, so positive winding is clockwise.
 struct WandReviewCircle {
     var isCircling: Bool { direction != 0 }
-    private var heading:Double?,lastTime=0.0,turn=0.0,arc=0.0
+    private var heading:Double?,lastTime=0.0,turn=0.0,arc=0.0,headingRun=0.0
     private var candidate=0,segments=0,direction=0
     private var pendingX=0.0,pendingY=0.0,x=0.0,y=0.0
     private var minX=0.0,maxX=0.0,minY=0.0,maxY=0.0
@@ -802,10 +802,14 @@ struct WandReviewCircle {
         minX=min(minX,x);maxX=max(maxX,x);minY=min(minY,y);maxY=max(maxY,y)
         let next=atan2(pendingY,pendingX);pendingX=0;pendingY=0
         defer{heading=next}
-        guard let previous=heading else{return 0}
+        guard let previous=heading else{headingRun=distance;return 0}
         var delta=next-previous
         while delta>Double.pi{delta-=2*Double.pi}
         while delta < -Double.pi{delta+=2*Double.pi}
+        let previousRun=headingRun
+        // A diamond corner concentrates its turn into one short sample. Judge
+        // its size from the preceding straight edge, not that sample alone.
+        if abs(delta)<0.2 {headingRun+=distance} else {headingRun=distance}
         // A sharp cusp is a changed stroke, not evidence of a circle.
         if abs(delta)>2.35 {turn=0;segments=0;candidate=0;arc=0;minX=x;maxX=x;minY=y;maxY=y;return 0}
         if abs(delta)>0.008 {
@@ -822,7 +826,8 @@ struct WandReviewCircle {
         guard direction != 0 else{return 0}
         // A tiny, sharp heading wobble must not inherit the gain of the last
         // real circle. This checks local curvature, without fitting a centre.
-        if abs(delta)>0.008 && distance/abs(delta)<0.08 {return 0}
+        let cornerLength=abs(delta)>=0.65 ? max(distance,min(previousRun,0.3)):distance
+        if abs(delta)>0.008 && cornerLength/abs(delta)<0.08 {return 0}
         // Keep seven-degree ratchets for ordinary circles. For Ethan's
         // "micro circles", coherent turning supplies at least one ratchet per
         // full turn, without accelerating straight motion or changing pointing.
@@ -832,44 +837,17 @@ struct WandReviewCircle {
     }
 }
 
-/// Compose review circles with Ethan's "just down one/up one" after a pause.
-/// A short mostly-vertical stroke earns one ratchet only after it stops. Use
-/// its first outward lobe, not the endpoint: Ethan's "little quick flick" may
-/// spring back. A circle which already emitted a ratchet cannot double-count.
+/// Ethan's review "circles" include clockwise/anticlockwise diamonds and squares.
+/// Straight up/down flicks no longer navigate; the optional yes/no experiment is
+/// kept separately. This adapter leaves Better Git's selection lifecycle intact.
 struct WandReviewNavigation {
     var useAxisGestures = false
     private var axisGesture = WandAxisReviewGesture()
     private var circle = WandReviewCircle()
-    private var x = 0.0, y = 0.0
-    private var started: Double?, lastMotion: Double?
-    private var circleEmitted = false
-    private var maxX = 0.0, maxY = 0.0
-    private var flickDirection: Int32 = 0
-    static let settleSeconds = 0.12
-    static let flickDegrees = 0.3
     mutating func reset() { let selected=useAxisGestures;self=Self();useAxisGestures=selected }
     mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
         if useAxisGestures { return axisGesture.sample(dx:dx,dy:dy,now:now) }
-        guard dx.isFinite,dy.isFinite,now.isFinite else { reset();return 0 }
-        let moving = hypot(dx,dy) >= 0.003
-        if let lastMotion,now-lastMotion>0.3,moving {reset()}
-        if moving {
-            if started == nil {started=now}
-            x+=dx;y+=dy;lastMotion=now
-            maxX=max(maxX,abs(x));maxY=max(maxY,abs(y))
-            if flickDirection==0 && abs(y)>=Self.flickDegrees && abs(y)>=1.6*maxX {
-                flickDirection = y>0 ? 1 : -1
-            }
-            let steps=circle.sample(dx:dx,dy:dy,now:now)
-            if steps != 0 {circleEmitted=true}
-            return steps
-        }
-        guard let lastMotion,now-lastMotion>=Self.settleSeconds else{return 0}
-        let short=started.map{lastMotion-$0<=0.45} ?? false
-        let nudge = !circleEmitted && short && flickDirection != 0 && maxY>=1.6*maxX
-        let steps:Int32 = nudge ? flickDirection : 0
-        reset()
-        return steps
+        return circle.sample(dx:dx,dy:dy,now:now)
     }
 }
 
