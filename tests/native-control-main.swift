@@ -194,7 +194,7 @@ precondition(!scrollV2.consumes(buttons:1),"a short tap keeps existing mouse beh
 scrollV2.begin(now:203);precondition(scrollV2.end(now:203.3))
 precondition(scrollV2.consumes(buttons:1),"stationary hold must not click on release")
 scrollV2.begin(now:204);scrollV2.reset();precondition(!scrollV2.active)
-for value:Any in [0,3,-1,1.5,true,"2"] {precondition(WandControlVersion.read(value) == .pointerV1)}
+for value:Any in [0,4,-1,1.5,true,"2"] {precondition(WandControlVersion.read(value) == .pointerV1)}
 precondition(WandControlVersion.read(2) == .scrollV2)
 print("PASS: V2 held scroll, unchanged short taps, ordered click suppression, no stale movement, version fallback")
 

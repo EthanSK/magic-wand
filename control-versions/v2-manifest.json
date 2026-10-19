@@ -1,0 +1,431 @@
+{
+  "$comment": "The one maintained description of the wand. Edit it with the device or receiver change, run python3 scripts/build.py, then npm test. Tests compare these values with the real sources.",
+  "schemaVersion": 1,
+  "name": "Magic Wand",
+  "tagline": "Mouse, HUD, scrolling and speech to text from three buttons on a wand.",
+  "summary": "Turning the wand moves my Mac’s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.",
+  "updated": "2026-10-19",
+  "site": "https://ethansk.github.io/magic-wand/",
+  "repository": "https://github.com/EthanSK/magic-wand",
+  "versions": {
+    "receiver": "1.2.74",
+    "receiverBuild": "79",
+    "deviceRuntime": "wand-e1ce30d7c407",
+    "bridgeRevision": "cd1c870efd9e4c3c875314113b0e6129fb54853c63c446d474931403b27163b6"
+  },
+  "status": [
+    "Installed: Wand Receiver 1.2.74 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.",
+    "Review navigation uses a redesigned spatial corner detector with learned noise tolerance. Reversible quarters, rough squares, slow motion and simulated device traces pass automated checks; physical acceptance is pending.",
+    "A minute of confirmed desk rest turns the lights off and keeps low-rate pickup sensing. Pickup or a button restores the light. Rest never stops dictation or dismisses the open HUD.",
+    "Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.",
+    "The power-on program still has its older calibration light before the receiver connects. The tested orange-startup update awaits safe storage maintenance; the working receiver remains installed.",
+    "Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.",
+    "HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.",
+    "Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.",
+    "Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling in V1 passes automated checks; physical gesture acceptance is pending.",
+    "Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.",
+    "Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.",
+    "Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.",
+    "Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.",
+    "Ethan confirmed automatic pickup and put-down both work on receiver 1.2.35.",
+    "HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.",
+    "End-to-end latency, accuracy and battery life haven’t been measured."
+  ],
+  "hardware": {
+    "board": "Puck.js v2.1",
+    "boardUrl": "https://www.espruino.com/Puck.js",
+    "parts": [
+      [
+        "Tip",
+        "Puck.js v2.1: gyro, Bluetooth and an RGB light"
+      ],
+      [
+        "Shaft",
+        "Carbon-fibre tube, roughly 50 cm"
+      ],
+      [
+        "Grip",
+        "Three separate wired momentary buttons"
+      ]
+    ],
+    "wiring": "Each button connects its pin to GND. The Puck’s internal pull-ups make a press read low."
+  },
+  "buttons": [
+    {
+      "id": "top",
+      "name": "Top",
+      "pin": "D30",
+      "key": "T",
+      "role": "Speech to text",
+      "light": "recording",
+      "gestures": [
+        [
+          "Tap",
+          "Start Agent Flow dictation"
+        ],
+        [
+          "Tap again",
+          "Stop and paste"
+        ]
+      ],
+      "notes": [
+        "Recording stays red when no other mode is active. Mouse mode stays blue, including while recording.",
+        "Putting the wand down never stops dictation. Use Top to stop and paste."
+      ]
+    },
+    {
+      "id": "middle",
+      "name": "Middle",
+      "pin": "D2",
+      "key": "M",
+      "role": "Agentic Mouse HUD",
+      "light": "hud",
+      "gestures": [
+        [
+          "Tap",
+          "Open the HUD on Switch App, then turn the wand to move the outline"
+        ],
+        [
+          "Hold to open, turn, release",
+          "Use the outlined card on release"
+        ],
+        [
+          "Tap again",
+          "Use the outlined card"
+        ],
+        [
+          "Hold while open",
+          "Hold the card; on some wheel cards, tilt to turn the wheel"
+        ],
+        [
+          "Double tap",
+          "Close the entire HUD"
+        ]
+      ],
+      "notes": [
+        "The outline stops at the edges instead of wrapping.",
+        "The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.",
+        "The HUD has no normal inactivity timeout. Screenshot selection temporarily uses the pointer and returns to the same HUD afterward.",
+        "Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.",
+        "In VS Code, tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit, or hold it for about half a second to stage the working set and keep reviewing. Navigation stays frozen until release. The floating indicator says “(hold to commit set)”. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.",
+        "Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.",
+        "The native wand home HUD always has Play/Pause immediately to the right of Utility. It uses the Mac’s standard media key, without changing either physical mouse."
+      ]
+    },
+    {
+      "id": "bottom",
+      "name": "Bottom",
+      "pin": "D1",
+      "key": "B",
+      "role": "Mouse",
+      "light": "mouse",
+      "gestures": [
+        [
+          "Tap from off",
+          "Enter high-sensitivity follow without clicking"
+        ],
+        [
+          "Stop after moving in HIGH",
+          "Click once after a 200 ms pause"
+        ],
+        [
+          "Tap while following",
+          "Stop following without clicking"
+        ],
+        [
+          "Hold",
+          "Start left/right for horizontal or up/down for vertical, then continue in circles; reverse circling to reverse scrolling and release to stop"
+        ],
+        [
+          "Tap, then hold the second press",
+          "Drag with the mouse button down; release to drop"
+        ],
+        [
+          "Double tap",
+          "Centre the pointer on the main screen and enable mouse follow; keep the HUD and review selection unchanged"
+        ]
+      ],
+      "notes": [
+        "Control V2 keeps short taps unchanged. The existing 220 ms cutoff separates a tap from a hold.",
+        "A plain hold only scrolls, including over text. Tap, then hold the second press to drag. The pointer stays fixed while scrolling until release.",
+        "V2 keeps the starting direction through either initial U-turn, even before circle recognition. Once circling is established, reversing it reverses scrolling without releasing. Standalone flick and circle triggers remain disabled; V1 retains its earlier gestures.",
+        "Middle switches to the HUD. The pointer stays within real display edges.",
+        "Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.",
+        "Bottom never opens, closes or clears the Middle HUD or review selection.",
+        "Hold Bottom and start left/right for horizontal scrolling, or up/down for vertical scrolling. Continue in circles on that axis; reverse winding to reverse scrolling. Release to stop and return to mouse follow."
+      ]
+    }
+  ],
+  "chords": [],
+  "lights": [
+    {
+      "mode": "update",
+      "name": "Updating",
+      "levels": [
+        0.45,
+        0.45,
+        0.45
+      ],
+      "display": "#ff8a20",
+      "detail": "Receiver is updating the device code"
+    },
+    {
+      "mode": "disconnected",
+      "name": "Disconnected",
+      "levels": [
+        0.45,
+        0.45,
+        0.45
+      ],
+      "display": "#ff8a20",
+      "detail": "Orange while unavailable"
+    },
+    {
+      "mode": "calibration",
+      "name": "Calibrating",
+      "levels": [
+        0.45,
+        0.45,
+        0.45
+      ],
+      "display": "#ff8a20",
+      "detail": "Keep it still with no buttons pressed for two seconds"
+    },
+    {
+      "mode": "sleep",
+      "name": "Sleeping",
+      "levels": [
+        0,
+        0,
+        0
+      ],
+      "display": "#4a4268",
+      "detail": "Off after a minute on the desk; pickup restores the light"
+    },
+    {
+      "mode": "scroll",
+      "name": "Scrolling",
+      "levels": [
+        0,
+        1,
+        1
+      ],
+      "display": "#19e3f0",
+      "detail": "Cyan"
+    },
+    {
+      "mode": "app",
+      "name": "App review",
+      "levels": [
+        0,
+        1,
+        0
+      ],
+      "display": "#22e871",
+      "detail": "Green for app review; purple for VS Code file staging",
+      "variants": [
+        {
+          "name": "File staging",
+          "levels": [
+            1,
+            0,
+            1
+          ],
+          "display": "#c96bff"
+        }
+      ]
+    },
+    {
+      "mode": "mouse",
+      "name": "Pointer",
+      "levels": [
+        0,
+        0,
+        1
+      ],
+      "display": "#4469ff",
+      "detail": "Steady blue, including while recording"
+    },
+    {
+      "mode": "hud",
+      "name": "HUD",
+      "levels": [
+        1,
+        0.2,
+        0
+      ],
+      "display": "#ff5a1f",
+      "detail": "Orange"
+    },
+    {
+      "mode": "recording",
+      "name": "Recording",
+      "levels": [
+        1,
+        0,
+        0
+      ],
+      "display": "#ff2e3a",
+      "detail": "Steady red while idle. Mouse, HUD and scrolling keep their own colours."
+    },
+    {
+      "mode": "idle",
+      "name": "Idle",
+      "levels": [
+        0,
+        0,
+        0
+      ],
+      "display": "#4a4268",
+      "detail": "Off"
+    }
+  ],
+  "tuning": {
+    "pointerGain": 86.4,
+    "heldPointerGain": 0.3333333333333333,
+    "releaseClickPauseSeconds": 0.3,
+    "slackDegrees": 0.2,
+    "slackRecentreSeconds": 0.35,
+    "slackQuietSpeedDegreesPerSecond": 1,
+    "previousPointerGain": 108,
+    "verticalRatio": 1.4,
+    "fineGain": 0.35,
+    "fineSpeedDegreesPerSecond": 2,
+    "fullSpeedDegreesPerSecond": 18,
+    "maximumNoiseZoneDegreesPerSecond": 1.2,
+    "sensorRequestHz": 104,
+    "processedHzMeasured": 50,
+    "bluetoothIntervalMs": 15,
+    "holdMs": 220,
+    "clickDecisionMs": 250,
+    "pressGuardMs": 50,
+    "releaseGuardMs": 70,
+    "coldSettleMs": 96,
+    "sensorIdleGraceMs": 1000,
+    "middleReportDelayMs": 80,
+    "reportIntervalMs": 30,
+    "horizontalScrollBoost": 1.4,
+    "hostScrollGain": 0.8,
+    "receiverHoldMs": 220,
+    "macDoubleClickSeconds": 0.3,
+    "calibrationSeconds": 2,
+    "lowMotionDelayMs": 0,
+    "highDwellMs": 200,
+    "highDwellTravelCounts": 12,
+    "idleAccelerometerHz": 1.6,
+    "imuTelemetryMaxHz": 10,
+    "orientationCompensation": {
+      "default": false,
+      "experimental": true,
+      "scope": "Shared correction for mouse, HUD selection, held actions, review and scrolling. Wrist roll and elevated-tip heading correction run before screen-axis gains, with heading correction capped at 2x. No new movement buffer.",
+      "maxHeadingGain": 2
+    },
+    "flickScroll": {
+      "default": false,
+      "rapidUpDegreesPerSecond": 55,
+      "minimumUpDegrees": 3,
+      "returnDegreesPerSecond": [
+        1.5,
+        40
+      ],
+      "linesPerDegree": 1.6,
+      "description": "Optional: in HIGH mouse mode with Bottom released, flick up then lower slowly to scroll up. The pointer stays put during the gesture.",
+      "availableInControlVersions": [
+        1
+      ]
+    },
+    "recordingMouseBlinkMs": 0,
+    "microCircles": {
+      "heldHeadingSegmentDegrees": 0.012,
+      "heldMinimumPathDegrees": 0.18,
+      "heldMinimumExtentDegrees": 0.05,
+      "heldAxisAcquisitionDegrees": 0.12,
+      "heldQuietSpeedDegreesPerSecond": 1,
+      "scope": "Review navigation counts rough quarter-turns by angle, independent of path radius. Held scrolling, pointer gains, filters, sensor rate and motion-delay settings remain unchanged.",
+      "reviewHeadingSegmentDegrees": 0.03,
+      "reviewMinimumSidewaysDegrees": 0.05,
+      "reviewMinimumPathDegrees": 0.1,
+      "reviewFirstTurnDegrees": 45,
+      "reviewQuarterTurnDegrees": 90,
+      "reviewCuspTurnDegrees": 115,
+      "reviewSegmentFraction": 0.12,
+      "reviewMinimumSegmentFraction": 0.5,
+      "reviewNoiseSegmentFactor": 3.5
+    },
+    "reviewAxisGestures": {
+      "default": false,
+      "optionKey": "reviewAxisGestures",
+      "title": "Review with nods and shakes",
+      "vertical": "next",
+      "horizontal": "previous",
+      "minimumTravelDegrees": 0.3,
+      "scope": "Optional replacement for quarter-turn review navigation. Every clear vertical turn advances; every horizontal turn goes previous. The first step needs an outward motion and a reversal. Continued back-and-forth movement counts each new turn. Pointer, HUD and speech are unchanged.",
+      "reversalTravelDegrees": 0.06,
+      "maximumAcquisitionSeconds": 4
+    },
+    "deskSleepSeconds": 60
+  },
+  "hud": {
+    "source": "Agentic Mouse’s published Default mode",
+    "startCell": 11,
+    "cardOverrides": {
+      "7": {
+        "title": "⌘↩ Steer"
+      }
+    },
+    "navigation": {
+      "degreesPerColumn": 8,
+      "degreesPerRow": 7,
+      "hysteresis": 0.18,
+      "dominantAxisRatio": 2,
+      "minorAxisAttenuation": 0.6,
+      "diagonalCommitment": 0.3,
+      "headingMemory": 0.25,
+      "headingHysteresisDegrees": 3
+    },
+    "adjust": {
+      "degreesPerStep": 7,
+      "hysteresis": 0.18,
+      "maximumStepsPerUpdate": 6
+    },
+    "adjustableWheels": [
+      "horizontalScroll",
+      "clipboard"
+    ]
+  },
+  "dependencies": [
+    {
+      "name": "Agentic Mouse",
+      "url": "https://ethansk.github.io/agentic-mouse/",
+      "role": "Draws the HUD and runs its cards",
+      "availability": "Wand support is in Ethan’s local build and isn’t published yet."
+    },
+    {
+      "name": "Agent Flow",
+      "url": "https://ethansk.github.io/AgentFlow/",
+      "role": "Records and pastes dictation",
+      "availability": "The public build accepts its mouse controls; wand input isn’t published yet."
+    },
+    {
+      "name": "Espruino",
+      "url": "https://www.espruino.com/",
+      "role": "JavaScript firmware on the Puck.js",
+      "availability": "Public. The first upload uses the Espruino Web IDE."
+    }
+  ],
+  "controlVersions": {
+    "active": 2,
+    "available": [
+      {
+        "id": 1,
+        "name": "V1 · Pointer",
+        "snapshotTag": "controls-v1.0.0"
+      },
+      {
+        "id": 2,
+        "name": "V2 · Hold to scroll",
+        "profile": "control-versions/v2.json"
+      }
+    ]
+  }
+}

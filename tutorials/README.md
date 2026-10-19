@@ -57,3 +57,5 @@ Before publication, test gallery search, keyboard focus, opening/closing a playe
 direct guide links, narrow layouts and reduced motion in the authorised browser. Record any
 blocked checks honestly. Preserve the existing device installation: website work never flashes
 the Puck or restarts the receiver, Agentic Mouse or Agent Flow.
+
+The existing videos explicitly target Control V2. When V3 is active, build/check reads the immutable `control-versions/v2-manifest.json` snapshot referenced by its version entry. Do not relabel V2 circle-scroll footage as V3; the gallery explains V3’s straight-drag continuation separately. New V3 footage needs its own verified storyboard and render.

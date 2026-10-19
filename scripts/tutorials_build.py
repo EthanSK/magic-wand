@@ -41,7 +41,12 @@ CUE_TIME = re.compile(r"^(\d+):(\d\d)\.(\d{3})$")
 
 
 def load() -> tuple[dict, dict]:
-    return common.load_manifest(), json.loads(common.WAND.read_text())
+    manifest=common.load_manifest()
+    wand=json.loads(common.WAND.read_text())
+    if manifest["controlVersion"] != wand["controlVersions"]["active"]:
+        entry=next(item for item in wand["controlVersions"]["available"] if item["id"]==manifest["controlVersion"])
+        wand=json.loads((ROOT / entry["snapshotManifest"]).read_text())
+    return manifest,wand
 
 
 def duration(seconds: float) -> str:

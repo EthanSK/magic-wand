@@ -657,10 +657,51 @@ final class WandUserOptions {
 /// Control schemes are independent of the hardware prototype. Unknown persisted
 /// values fall back to V1 so an older installation retains its known behavior.
 enum WandControlVersion:Int {
-    case pointerV1=1,scrollV2=2
+    case pointerV1=1,scrollV2=2,sustainedV3=3
+    var usesHeldScroll:Bool {self != .pointerV1}
     static func read(_ value:Any?)->WandControlVersion {
         guard let n=value as? NSNumber,CFGetTypeID(n) != CFBooleanGetTypeID(),let v=WandControlVersion(rawValue:n.intValue),n.doubleValue==Double(n.intValue) else{return .pointerV1}
         return v
+    }
+}
+
+/// Ethan's "drag then keep it held": retain the initial straight stroke's
+/// screen direction and speed while still. A new deliberate stroke replaces
+/// both, including reversal during the same hold. No circle classifier runs.
+/// This controls wheel velocity only, never pointer smoothing or buffering.
+final class WandSustainedScroll {
+    private(set) var velocityX=0.0,velocityY=0.0
+    private var strokeX=0.0,strokeY=0.0,strokeTime=0.0
+    private var fractionX=0.0,fractionY=0.0,lastTick=0.0
+    private var tracking=false
+    private let linesPerDegree:Double
+    init(linesPerDegree:Double=1.6){self.linesPerDegree=linesPerDegree}
+    var started:Bool {velocityX != 0 || velocityY != 0}
+    func reset(now:Double=0){velocityX=0;velocityY=0;strokeX=0;strokeY=0;strokeTime=0;fractionX=0;fractionY=0;lastTick=now;tracking=false}
+    func sample(x:Double,y:Double,dt:Double){
+        guard x.isFinite,y.isFinite,dt>0,dt<=0.05 else{return}
+        let speed=hypot(x,y)
+        guard speed>1 else{tracking=false;strokeX=0;strokeY=0;strokeTime=0;return}
+        // Preserve the speed captured at stroke acquisition as the hand slows
+        // to a stop. Once stationary, another stroke can choose a new speed.
+        let v=hypot(velocityX,velocityY)
+        let aligned=v>0 && (x*velocityX+y*velocityY)/(speed*v)>0.8
+        if tracking && aligned {strokeX=0;strokeY=0;strokeTime=0;return}
+        if strokeTime>0 && x*strokeX+y*strokeY<0 {strokeX=0;strokeY=0;strokeTime=0}
+        strokeX+=x*dt;strokeY+=y*dt;strokeTime+=dt
+        let distance=hypot(strokeX,strokeY)
+        guard distance>=0.12 else{return}
+        let rate=min(120,distance/strokeTime*linesPerDegree)
+        velocityX=strokeX/distance*rate;velocityY=strokeY/distance*rate
+        // A new direction never inherits fractional travel from the old one.
+        fractionX=0;fractionY=0;strokeX=0;strokeY=0;strokeTime=0;tracking=true
+    }
+    func tick(now:Double)->(x:Int32,y:Int32){
+        guard now.isFinite,now>=lastTick else{return (0,0)}
+        let dt=min(0.05,now-lastTick);lastTick=now
+        fractionX+=velocityX*dt;fractionY+=velocityY*dt
+        let x=Int32(fractionX.rounded(.towardZero)),y=Int32(fractionY.rounded(.towardZero))
+        fractionX-=Double(x);fractionY-=Double(y);return(x,y)
     }
 }
 
@@ -672,6 +713,8 @@ final class WandHeldScroll {
     private(set) var scrollable=true
     private(set) var circular=false
     private(set) var horizontal=false
+    private(set) var sustaining=false
+    let sustained:WandSustainedScroll
     private var scrollDirection=0.0,directionTravel=0.0,directionTravelX=0.0,sampleTime=0.0
     private var winding=0.0,windingToScroll=0.0,reverseTurn=0.0,reverseAt=0.0
     private var reverseSegments=0
@@ -682,6 +725,7 @@ final class WandHeldScroll {
     private let linesPerDegree:Double
     init(linesPerDegree:Double=1.6){
         self.linesPerDegree=linesPerDegree
+        self.sustained=WandSustainedScroll(linesPerDegree:linesPerDegree)
         var tuning=WandCircularScroll.Tuning()
         // Angular degrees, before sensitivity. Recognise the bend while the
         // wand still travels in its original vertical direction.
@@ -691,8 +735,8 @@ final class WandHeldScroll {
         tuning.minDuration=0.06;tuning.window=1.0;tuning.idleEnd=0.35
         circle=WandCircularScroll(tuning:tuning)
     }
-    func reset(){active=false;dragging=false;circular=false;horizontal=false;scrollDirection=0;directionTravel=0;directionTravelX=0;sampleTime=0;winding=0;windingToScroll=0;reverseTurn=0;reverseAt=0;reverseSegments=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
-    func begin(now:Double,scrollable:Bool=true){reset();active=true;started=now;confirmed=now;self.scrollable=scrollable}
+    func reset(){sustained.reset();sustaining=false;active=false;dragging=false;circular=false;horizontal=false;scrollDirection=0;directionTravel=0;directionTravelX=0;sampleTime=0;winding=0;windingToScroll=0;reverseTurn=0;reverseAt=0;reverseSegments=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
+    func begin(now:Double,scrollable:Bool=true,sustain:Bool=false){reset();active=true;started=now;confirmed=now;self.scrollable=scrollable;sustaining=sustain;sustained.reset(now:now)}
     // A lease is renewed only by actual button samples, never by a timer.
     // Stop rather than keep a native drag or scroll alive after telemetry loss.
     func confirmHeld(now:Double){if active {confirmed=now}}
@@ -706,12 +750,13 @@ final class WandHeldScroll {
     @discardableResult
     func end(now:Double)->Bool {
         guard active else{return false}
-        active=false;dropClick=moved || now-started>=0.22
+        active=false;sustained.reset();dropClick=moved || now-started>=0.22
         fraction=0;circle.reset();circular=false;return dropClick
     }
     func sample(x:Double=0,y:Double,dt:Double,now:Double?=nil)->Int32 {
         guard active,scrollable,now.map({qualified(now:$0)}) ?? true,
               x.isFinite,y.isFinite,dt>0,dt<=0.05 else{return 0}
+        if sustaining {sustained.sample(x:x,y:y,dt:dt);return 0}
         sampleTime=now ?? sampleTime+dt
         // Ethan's "micro circles": smaller geometry below retains the same
         // quiet-rate guard, wheel gain and pointer tuning.
@@ -765,6 +810,12 @@ final class WandHeldScroll {
         fraction -= Double(lines)
         if lines != 0 {moved=true}
         return lines
+    }
+    func continuation(now:Double)->(x:Int32,y:Int32){
+        guard active,sustaining,scrollable,qualified(now:now),!stale(now:now) else{return(0,0)}
+        let result=sustained.tick(now:now)
+        if result.x != 0 || result.y != 0 {moved=true}
+        return result
     }
     func consumes(buttons:Int)->Bool {
         if active {return true}

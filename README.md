@@ -50,17 +50,16 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap from off | Enter high-sensitivity follow without clicking |
 | Stop after moving in HIGH | Click once after a 200 ms pause |
 | Tap while following | Stop following without clicking |
-| Hold | Start left/right for horizontal or up/down for vertical, then continue in circles; reverse circling to reverse scrolling and release to stop |
+| Hold | Drag in any direction to scroll, keep holding to continue at the initial drag speed, and drag the other way to reverse. Release stops scrolling and returns to mouse follow. |
 | Tap, then hold the second press | Drag with the mouse button down; release to drop |
 | Double tap | Centre the pointer on the main screen and enable mouse follow; keep the HUD and review selection unchanged |
 
-- Control V2 keeps short taps unchanged. The existing 220 ms cutoff separates a tap from a hold.
+- Control V3 keeps short taps and tap-then-hold dragging unchanged. The existing 220 ms cutoff separates a tap from a hold.
 - A plain hold only scrolls, including over text. Tap, then hold the second press to drag. The pointer stays fixed while scrolling until release.
-- V2 keeps the starting direction through either initial U-turn, even before circle recognition. Once circling is established, reversing it reverses scrolling without releasing. Standalone flick and circle triggers remain disabled; V1 retains its earlier gestures.
 - Middle switches to the HUD. The pointer stays within real display edges.
 - Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.
 - Bottom never opens, closes or clears the Middle HUD or review selection.
-- Hold Bottom and start left/right for horizontal scrolling, or up/down for vertical scrolling. Continue in circles on that axis; reverse winding to reverse scrolling. Release to stop and return to mouse follow.
+- V3 uses straight strokes in either axis, including diagonals. Holding still continues the captured speed; a new stroke can change speed or reverse without releasing. Circular page-scroll recognition is disabled; V2 remains selectable.
 
 **Lights**, highest priority first
 
@@ -166,7 +165,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.74 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.
+- Control V3 replaces circular page scrolling with straight-drag velocity: continue while held still and reverse with another stroke. Automated lifecycle checks pass; physical acceptance is pending.
+- Installed: Wand Receiver 1.2.75 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.
 - Review navigation uses a redesigned spatial corner detector with learned noise tolerance. Reversible quarters, rough squares, slow motion and simulated device traces pass automated checks; physical acceptance is pending.
 - A minute of confirmed desk rest turns the lights off and keeps low-rate pickup sensing. Pickup or a button restores the light. Rest never stops dictation or dismisses the open HUD.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
@@ -183,7 +183,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.74 (79) · device code `wand-e1ce30d7c407` · bridge `cd1c870e` · updated 19 October 2026.
+Receiver 1.2.75 (80) · device code `wand-e1ce30d7c407` · bridge `cd1c870e` · updated 19 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

@@ -42,10 +42,7 @@ a local server (`npm run serve`) or use the live site and check:
 - Middle: tap opens the HUD on Switch App, turning moves the outline and stops at the edges,
   a tap uses a card after about 0.8 s, double tap closes, Bottom returns to the pointer.
 - Starting with the HUD closed: hold Middle, turn to a card, then release to use it once.
-- During a plain Bottom hold, a rough clockwise circle starts down-scroll and
-  anticlockwise starts up-scroll. Cyan shows recognition. The pointer remains fixed
-  through pauses and straight motion until release; release suppresses the endpoint
-  click. HIGH follow, real drags and HUD navigation do not trigger circular scrolling.
+- Control V3 on the installed receiver: a Bottom-held straight stroke sets scrolling direction and speed; holding still continues it. Another stroke can reverse in the same hold. Release stops; the pointer remains anchored. Circular page scrolling stays disabled. The browser simulation and illustrated videos retain their labelled earlier control scope until ported.
 - Hold Middle on Horizontal Scroll + Wheel and tilt: wheel steps appear.
 - Bottom + Middle (both mouse buttons, B+M keys, or the chord key while dragging) scrolls both axes.
 - Top toggles the Agent Flow indicator; the light is red only when nothing else is active.
@@ -125,3 +122,5 @@ index or `node tutorials/find.mjs "user question"` and return the matching direc
 Check the selected control version and options first: default review-circle videos do not
 describe the optional nod/shake mode. Keep the manifest, rendered videos and gallery in sync
 through their build/check commands; never claim an illustration is physical verification.
+
+- Control V3 page scrolling follows Ethan’s “drag up or down or left or right”: a straight stroke chooses velocity, holding still continues at that speed, another deliberate stroke changes direction or speed without release, and release stops. Do not re-enable circular page scrolling in V3. Preserve V2 and the independent Middle review gestures. User-requested — 2026-10-19.

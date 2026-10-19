@@ -99,6 +99,19 @@ for horizontal in [false,true] {
  axis.handleRaw("10000,2680,2680,0")
  precondition(Harness.wheelPairs.count==count && !axis.heldScroll.active,"release must stop both axes before emitting movement")
 }
+let continuing=Harness();continuing.controlVersion = .sustainedV3
+precondition(continuing.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
+_=continuing.recenterGesture.edge(down:true,now:now-1)
+continuing.beginBottomHold(now:now-1)
+continuing.handleRaw("10000,0,2680,1")
+precondition(continuing.heldScroll.sustained.started)
+Harness.wheelPairs=[]
+RunLoop.current.run(until:Date().addingTimeInterval(0.12))
+precondition(!Harness.wheelPairs.isEmpty,"actual receiver timer keeps scrolling without fresh movement")
+continuing.handleRaw("10000,0,2680,0")
+let stoppedCount=Harness.wheelPairs.count
+RunLoop.current.run(until:Date().addingTimeInterval(0.06))
+precondition(Harness.wheelPairs.count==stoppedCount && !continuing.heldScroll.active,"raw button-up cancels the real continuation timer")
 print("PASS: missing release, native drag release, stale telemetry and scroll-to-mouse from both prior states")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-release-'));
