@@ -665,36 +665,201 @@ enum WandControlVersion:Int {
     }
 }
 
-/// Ethan's "drag then keep it held": retain the initial straight stroke's
-/// screen direction and speed while still. A new deliberate stroke replaces
-/// both, including reversal during the same hold. No circle classifier runs.
-/// This controls wheel velocity only, never pointer smoothing or buffering.
+/// Ethan's "drag up or down or left or right ... if I keep it held down ... it
+/// keeps scrolling ... ideally at the same speed as the initial drag ... until I
+/// let go". A deliberate stroke sets the wheel velocity: it rises with the hand,
+/// then keeps that stroke's representative (peak averaged) speed while the hand
+/// slows and rests. Another deliberate stroke in the same hold replaces it,
+/// including a reversal or a change of axis. Tremor, slow drift, end-of-stroke
+/// recoil, follow-through and one-reading knocks are not strokes. No circle
+/// classifier runs.
+///
+/// This sets wheel velocity only. The pointer stays at its anchor; nothing here
+/// delays, buffers or replays pointer motion. The 40 ms average shapes only how
+/// quickly the wheel speed follows the hand during a stroke.
 final class WandSustainedScroll {
+    struct Tuning {
+        /// Seconds: exponential average of the angular rate, for wheel speed only.
+        var smoothing=0.04
+        /// Averaged degrees per second below which the hand is resting.
+        var restSpeed=2.5
+        /// Averaged peak degrees per second that a stroke must reach.
+        var strokeSpeed=6.0
+        /// Degrees of straight travel for the first stroke, then for any stroke
+        /// that changes an established velocity.
+        var firstTravel=0.6,changeTravel=0.8
+        var minimumSeconds=0.03
+        /// Net travel / path length: wobble goes back and forth.
+        var straightness=0.6
+        /// cos(60 degrees): turning further from a stroke's direction ends it.
+        var turnCosine=0.5
+        /// A stroke ends when its averaged rate falls below this share of its peak.
+        var endShare=0.35
+        /// A same-direction restroke takes its own speed after passing its peak.
+        var settleShare=0.7
+        /// A same-direction restroke must rise to this multiple of its starting
+        /// rate, so a stroke's decaying or creeping tail never lowers its speed.
+        var riseFactor=2.5
+        /// A direction change starting this soon after a stroke ends is probably
+        /// recoil: it needs this share of that stroke's travel, within a bound.
+        var recoilSeconds=0.4,recoilShare=0.55,recoilMaxTravel=3.0
+        /// tan(30 degrees): a stroke closer than this to an axis scrolls only that axis.
+        var axisSnap=0.577
+        /// Output directions this close keep the established direction.
+        var sameDirectionCosine=0.9
+        /// Averaged motion within this cosine of the scroll direction is its tail.
+        var forwardCosine=0.7
+        /// Receiver seconds without readings that end the current measurement.
+        var gapSeconds=0.25
+        var maxRate=120.0
+    }
+    /// Counts for the opt-in per-hold diagnostic line. No positions or coordinates.
+    struct Summary:Equatable {
+        var strokes=0,directionChanges=0,speedChanges=0,ignoredRecoils=0
+        var peakRate=0.0
+    }
     private(set) var velocityX=0.0,velocityY=0.0
-    private var strokeX=0.0,strokeY=0.0,strokeTime=0.0
+    private(set) var summary=Summary()
+    let tuning:Tuning
     private var fractionX=0.0,fractionY=0.0,lastTick=0.0
-    private var tracking=false
+    // Averaged angular rate, device-sample clock and last receiver arrival.
+    private var rateX=0.0,rateY=0.0,averaging=false,clock=0.0,lastArrival:Double?
+    // Candidate movement since it last started, restarted or turned.
+    private var moving=false,moveX=0.0,moveY=0.0,movePath=0.0,moveTime=0.0
+    private var movePeak=0.0,moveFloor=0.0,moveStart=0.0,moveLargestStep=0.0,moveCountedRecoil=false
+    // The committed stroke while the hand is still making it.
+    private var stroking=false,settling=false,keepOutput=false
+    private var directionX=0.0,directionY=0.0,outputX=0.0,outputY=0.0
+    private var strokeX=0.0,strokeY=0.0,peak=0.0,base=0.0
+    // The most recent finished stroke, for recoil rejection.
+    private var endedAt = -Double.infinity,endedTravel=0.0
     private let linesPerDegree:Double
-    init(linesPerDegree:Double=1.6){self.linesPerDegree=linesPerDegree}
+    init(linesPerDegree:Double=1.6,tuning:Tuning=Tuning()){self.linesPerDegree=linesPerDegree;self.tuning=tuning}
     var started:Bool {velocityX != 0 || velocityY != 0}
-    func reset(now:Double=0){velocityX=0;velocityY=0;strokeX=0;strokeY=0;strokeTime=0;fractionX=0;fractionY=0;lastTick=now;tracking=false}
-    func sample(x:Double,y:Double,dt:Double){
+    func reset(now:Double=0){
+        velocityX=0;velocityY=0;summary=Summary();fractionX=0;fractionY=0;lastTick=now
+        rateX=0;rateY=0;averaging=false;clock=0;lastArrival=nil
+        moving=false;stroking=false;settling=false;keepOutput=false;strokeX=0;strokeY=0;peak=0;base=0
+        endedAt = -Double.infinity;endedTravel=0
+    }
+    /// One held reading: screen-corrected angular rate in degrees per second, its
+    /// device interval, and optionally the receiver arrival time for gap detection.
+    func sample(x:Double,y:Double,dt:Double,now:Double?=nil){
         guard x.isFinite,y.isFinite,dt>0,dt<=0.05 else{return}
-        let speed=hypot(x,y)
-        guard speed>1 else{tracking=false;strokeX=0;strokeY=0;strokeTime=0;return}
-        // Preserve the speed captured at stroke acquisition as the hand slows
-        // to a stop. Once stationary, another stroke can choose a new speed.
-        let v=hypot(velocityX,velocityY)
-        let aligned=v>0 && (x*velocityX+y*velocityY)/(speed*v)>0.8
-        if tracking && aligned {strokeX=0;strokeY=0;strokeTime=0;return}
-        if strokeTime>0 && x*strokeX+y*strokeY<0 {strokeX=0;strokeY=0;strokeTime=0}
-        strokeX+=x*dt;strokeY+=y*dt;strokeTime+=dt
-        let distance=hypot(strokeX,strokeY)
-        guard distance>=0.12 else{return}
-        let rate=min(120,distance/strokeTime*linesPerDegree)
-        velocityX=strokeX/distance*rate;velocityY=strokeY/distance*rate
-        // A new direction never inherits fractional travel from the old one.
-        fractionX=0;fractionY=0;strokeX=0;strokeY=0;strokeTime=0;tracking=true
+        if let now,now.isFinite {
+            // Readings missing in transit: do not join motion across the gap.
+            if let last=lastArrival,now-last>tuning.gapSeconds {interrupt()}
+            lastArrival=now
+        }
+        clock+=dt
+        if averaging {let a=1-exp(-dt/tuning.smoothing);rateX+=a*(x-rateX);rateY+=a*(y-rateY)}
+        else {rateX=x;rateY=y;averaging=true}
+        let speed=hypot(rateX,rateY)
+        if stroking {
+            continueStroke(x:x,y:y,dt:dt,speed:speed)
+            if stroking {return}
+        }
+        track(x:x,y:y,dt:dt,speed:speed)
+    }
+    private func interrupt(){
+        if stroking {finishStroke()}
+        moving=false;averaging=false
+    }
+    private func continueStroke(x:Double,y:Double,dt:Double,speed:Double){
+        strokeX+=x*dt;strokeY+=y*dt
+        var along=rateX*directionX+rateY*directionY
+        if along>=peak {
+            // Still accelerating: the growing stroke refines a direction that its
+            // first fraction of a degree, or slow drift, may have skewed.
+            let distance=hypot(strokeX,strokeY)
+            if distance>0 {
+                directionX=strokeX/distance;directionY=strokeY/distance
+                along=rateX*directionX+rateY*directionY
+                if !keepOutput {
+                    let output=snapped(directionX,directionY)
+                    if output.x==0 {fractionX=0}
+                    if output.y==0 {fractionY=0}
+                    outputX=output.x;outputY=output.y
+                }
+            }
+            peak=max(peak,along);apply()
+        }
+        if along<max(tuning.restSpeed,tuning.endShare*peak) || (speed>tuning.restSpeed && along<tuning.turnCosine*speed) {
+            finishStroke();return
+        }
+        if settling && along<tuning.settleShare*peak {settling=false;apply()}
+    }
+    private func finishStroke(){
+        stroking=false;endedAt=clock;endedTravel=max(0,strokeX*directionX+strokeY*directionY)
+        if settling {settling=false;apply()}
+    }
+    private func apply(){
+        let rate=min(tuning.maxRate,peak*linesPerDegree)
+        let magnitude=settling ? max(base,rate) : rate
+        velocityX=outputX*magnitude;velocityY=outputY*magnitude
+        summary.peakRate=max(summary.peakRate,magnitude)
+    }
+    private func track(x:Double,y:Double,dt:Double,speed:Double){
+        guard speed>=tuning.restSpeed else{moving=false;return}
+        let velocity=hypot(velocityX,velocityY)
+        let forward=velocity>0 && rateX*velocityX+rateY*velocityY>=tuning.forwardCosine*speed*velocity
+        if moving {
+            let distance=hypot(moveX,moveY)
+            let turned=distance>0.1 && rateX*moveX+rateY*moveY<tuning.turnCosine*speed*distance
+            // Restart at each new low so a candidate measures a fresh rise, not
+            // drift banked while resting. Along the current scroll this applies
+            // throughout, so the previous stroke's tail never sets a new speed.
+            if turned || (speed<moveFloor && (forward || movePeak<tuning.strokeSpeed)) {moving=false}
+        }
+        if !moving {
+            moving=true;moveX=0;moveY=0;movePath=0;moveTime=0;movePeak=0
+            moveFloor=speed;moveStart=clock;moveLargestStep=0;moveCountedRecoil=false
+        }
+        let step=hypot(x,y)*dt
+        moveX+=x*dt;moveY+=y*dt;movePath+=step;moveTime+=dt;moveLargestStep=max(moveLargestStep,step)
+        let distance=hypot(moveX,moveY)
+        guard distance>0 else{return}
+        movePeak=max(movePeak,(rateX*moveX+rateY*moveY)/distance)
+        guard moveTime>=tuning.minimumSeconds,movePeak>=tuning.strokeSpeed,distance>=tuning.straightness*movePath else{return}
+        let unitX=moveX/distance,unitY=moveY/distance
+        let output=snapped(unitX,unitY)
+        let same=velocity>0 && (output.x*velocityX+output.y*velocityY)/velocity>=tuning.sameDirectionCosine
+        if same && movePeak<tuning.riseFactor*moveFloor {return}
+        var required=velocity>0 ? tuning.changeTravel : tuning.firstTravel
+        let change=velocity>0 && !same
+        if change && moveStart-endedAt<=tuning.recoilSeconds {
+            required=max(required,min(tuning.recoilMaxTravel,tuning.recoilShare*endedTravel))
+        }
+        // One reading cannot supply most of a stroke: a knock is not a drag.
+        guard distance>=required,distance-moveLargestStep>=0.5*required else{
+            if change && distance>=tuning.changeTravel && !moveCountedRecoil {moveCountedRecoil=true;summary.ignoredRecoils+=1}
+            return
+        }
+        moving=false;stroking=true;directionX=unitX;directionY=unitY;strokeX=moveX;strokeY=moveY;peak=movePeak
+        summary.strokes+=1
+        if same {
+            // Same direction: keep it and change only the speed, without a dip.
+            outputX=velocityX/velocity;outputY=velocityY/velocity;base=velocity;settling=true;keepOutput=true
+            summary.speedChanges+=1
+        } else {
+            if velocity>0 {summary.directionChanges+=1}
+            outputX=output.x;outputY=output.y;base=0;settling=false;keepOutput=false
+            // A new direction never inherits fractional travel from the old one;
+            // the travel already made pays for its first line at the next tick.
+            fractionX=output.x;fractionY=output.y
+        }
+        apply()
+    }
+    private func snapped(_ x:Double,_ y:Double)->(x:Double,y:Double){
+        if abs(x)<abs(y)*tuning.axisSnap {return (0,y<0 ? -1:1)}
+        if abs(y)<abs(x)*tuning.axisSnap {return (x<0 ? -1:1,0)}
+        return (x,y)
+    }
+    /// The opt-in diagnostic line: counts and wheel rates only, never positions.
+    func report(seconds:Double,ended:String)->String {
+        let rate=hypot(velocityX,velocityY)
+        let axis=rate==0 ? "none" : velocityX==0 ? "vertical" : velocityY==0 ? "horizontal" : "diagonal"
+        return "ms=\(Int((seconds*1000).rounded())) end=\(ended) strokes=\(summary.strokes) directionChanges=\(summary.directionChanges) speedChanges=\(summary.speedChanges) ignoredRecoils=\(summary.ignoredRecoils) peakLinesPerSecond=\(Int(summary.peakRate.rounded())) finalLinesPerSecond=\(Int(rate.rounded())) axis=\(axis)"
     }
     func tick(now:Double)->(x:Int32,y:Int32){
         guard now.isFinite,now>=lastTick else{return (0,0)}
@@ -743,6 +908,7 @@ final class WandHeldScroll {
     func stale(now:Double)->Bool {active && now-confirmed>0.8}
     func setTarget(scrollable:Bool){if active && !dragging {self.scrollable=scrollable}}
     func qualified(now:Double)->Bool {active && now-started>=holdSeconds}
+    func elapsed(now:Double)->Double {now-started}
     func startDrag(now:Double)->Bool {
         guard !scrollable,!dragging,qualified(now:now) else{return false}
         dragging=true;return true
@@ -754,9 +920,12 @@ final class WandHeldScroll {
         fraction=0;circle.reset();circular=false;return dropClick
     }
     func sample(x:Double=0,y:Double,dt:Double,now:Double?=nil)->Int32 {
-        guard active,scrollable,now.map({qualified(now:$0)}) ?? true,
-              x.isFinite,y.isFinite,dt>0,dt<=0.05 else{return 0}
-        if sustaining {sustained.sample(x:x,y:y,dt:dt);return 0}
+        guard active,scrollable,x.isFinite,y.isFinite,dt>0,dt<=0.05 else{return 0}
+        // V3 measures a stroke from its first held reading, including the readings
+        // before the 220 ms tap/hold decision. Only continuation() emits wheel
+        // lines, and it still waits for that decision, so taps never scroll.
+        if sustaining {sustained.sample(x:x,y:y,dt:dt,now:now);return 0}
+        guard now.map({qualified(now:$0)}) ?? true else{return 0}
         sampleTime=now ?? sampleTime+dt
         // Ethan's "micro circles": smaller geometry below retains the same
         // quiet-rate guard, wheel gain and pointer tuning.

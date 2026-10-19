@@ -10,7 +10,8 @@ test('native held scrolling and dragging stop on physical up even without the ed
  function method(name){const a=source.indexOf('    func '+name+'(');assert(a>=0,name);let b=source.indexOf('{',a)+1,depth=1;while(depth){if(source[b]==='{')depth++;if(source[b]==='}')depth--;b++;}return source.slice(a,b);}
  const code=`import Foundation
 func AXIsProcessTrusted()->Bool {true}
-func log(_ v:Any...) {}
+var logged:[String]=[]
+func log(_ v:Any...) {logged.append(v.map{"\\($0)"}.joined(separator:" "))}
 enum Tap {case cghidEventTap}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?){ };func post(tap:Tap){}}
 final class Rest {var activated=false;func pointerActivated(){activated=true}}
@@ -18,7 +19,7 @@ final class Harness {
  let restDetection=Rest()
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),motionFilter=WandMotionFilter(),dwell=WandDwellClick(),recenterGesture=WandRecenterGesture(),flickScroll=WandFlickScroll()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?
- var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,hudSession=false,flickScrollEnabled=false
+ var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,hudSession=false,flickScrollEnabled=false,heldScrollDiagnostics=false
  var commands:[String]=[],scrollPostedX=0,scrollPostedY=0
  var scrollAnchor:CGPoint?,scrollWatchdog:Timer?
  var rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,wheels=0,frames=0,ups=0,light=false
@@ -103,8 +104,10 @@ let continuing=Harness();continuing.controlVersion = .sustainedV3
 precondition(continuing.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 _=continuing.recenterGesture.edge(down:true,now:now-1)
 continuing.beginBottomHold(now:now-1)
-continuing.handleRaw("10000,0,2680,1")
-precondition(continuing.heldScroll.sustained.started)
+continuing.heldScrollDiagnostics=true
+// A short straight stroke (20 degrees per second for 80 ms) through the real raw handler.
+for _ in 0..<8 {continuing.handleRaw("10000,0,2680,1")}
+precondition(continuing.heldScroll.sustained.started,"a held straight stroke starts V3 scrolling")
 Harness.wheelPairs=[]
 RunLoop.current.run(until:Date().addingTimeInterval(0.12))
 precondition(!Harness.wheelPairs.isEmpty,"actual receiver timer keeps scrolling without fresh movement")
@@ -112,6 +115,15 @@ continuing.handleRaw("10000,0,2680,0")
 let stoppedCount=Harness.wheelPairs.count
 RunLoop.current.run(until:Date().addingTimeInterval(0.06))
 precondition(Harness.wheelPairs.count==stoppedCount && !continuing.heldScroll.active,"raw button-up cancels the real continuation timer")
+let summary=logged.filter{$0.hasPrefix("V3_SCROLL_HOLD ")}
+precondition(summary.count==1 && summary[0].contains(" strokes=1 ") && summary[0].contains(" end=release ") && summary[0].hasSuffix(" axis=vertical"),"opt-in diagnostics write one line per hold: "+summary.joined())
+precondition(!summary[0].contains("."),"the diagnostic line has whole counts and rates, never coordinates")
+let quietLog=Harness();quietLog.controlVersion = .sustainedV3
+precondition(quietLog.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
+logged=[];quietLog.beginBottomHold(now:now-1)
+for _ in 0..<8 {quietLog.handleRaw("10000,0,2680,1")}
+quietLog.handleRaw("10000,0,2680,0")
+precondition(!quietLog.heldScroll.active && !logged.contains{$0.hasPrefix("V3_SCROLL_HOLD")},"diagnostics stay off unless enabled")
 print("PASS: missing release, native drag release, stale telemetry and scroll-to-mouse from both prior states")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-release-'));

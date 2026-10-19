@@ -30,6 +30,7 @@ final class CGEvent {
  init?(mouseEventSource:Int?,mouseType:CGEventType,mouseCursorPosition:CGPoint,mouseButton:CGMouseButton){}
  func post(tap:EventTap){Self.posted+=1}
 }
+final class Recording {var isRecording=false}
 final class Context {var isActive=false,isFresh=true;var onChange:((Bool)->Void)?;var onModeChange:((String?)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
 final class Application {var bundleIdentifier="com.microsoft.VSCode"}
 final class NSWorkspace {static let shared=NSWorkspace();var frontmostApplication:Application?=Application()}
@@ -37,7 +38,7 @@ final class Trace {var boundaries:[String]=[];func boundary(_ reason:String,mode
 final class Controls {var phases:[String]=[];func persistent(_ phase:String,x:Double=0,y:Double=0){phases.append(phase)}}
 final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];var inputs=0;func beginDetents(mode:String,now:Double){starts.append(mode)};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{inputs+=1;return[]};func endDetents(commit:Bool)->[Int]{committed=commit;return[]}}
 final class Harness {
- let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter(),reviewTrace=Trace()
+ let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter(),reviewTrace=Trace(),recording=Recording(),dwell=WandDwellClick()
  var deskSleep=WandDeskSleep()
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
  var buttons=0,movementCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1000,height:1000)]
@@ -46,7 +47,12 @@ final class Harness {
  var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
  var wandShortcutCircle=WandReviewNavigation();var middleReviewExit=false
  var reviewExitGesture=WandReviewExitGesture();var reviewExitTimer:Timer?
- let pointerRouter=WandPointerRouter()
+ var pointerRouter=WandPointerRouter()
+ var deliveryPoint:CGPoint?
+ func performPointer(_ actions:[WandPointerRouter.Action]){}
+ func scheduleDwell(){}
+ func syncRecordingLight(){}
+ func status(){}
  var appMode:String?,reviewTimer:Timer?,middleTap:Timer?,middleHold:Timer?,hudWatchdog:Timer?
  var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false,hudEntryPressStarted=0.0
  var reviewOriginY=0.0,navX=0.0,navY=0.0,navOriginX=0.0,navOriginY=0.0,operationOriginX=0.0,operationOriginY=0.0,middleX=0.0,middleY=0.0
@@ -62,7 +68,7 @@ final class Harness {
  func releaseButtons(){}
  init(){${callback}
 ${modeCallback}}
- ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove'].map(method).join('\n')}
+ ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','recordingChanged'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 let h=Harness()
@@ -160,6 +166,25 @@ precondition(switching.postPointerMove(dx:7,dy:0,from:anchor)==CGPoint(x:407,y:4
 let independentReview=Harness();independentReview.selectedReviewMode="changes";independentReview.handleMiddle("1")
 precondition(independentReview.postPointerMove(dx:8,dy:0,from:anchor)==CGPoint(x:408,y:400),"independent review commit holds retain the Bottom pointer lane")
 
+// Recording freezes delivery and forgets speech-time travel without changing
+// the latched follow choice. Exercise the actual receiver callback and emitter.
+for following in [false,true] {
+ let speech=Harness();speech.dwell.follow(following)
+ speech.pointerRouter=WandPointerRouter(lowDelay:0.09)
+ _=speech.pointerRouter.bottom(down:true)
+ _=speech.pointerRouter.frame(dx:25,dy:0,buttons:0,hud:false,now:1)
+ precondition(speech.pointerRouter.pendingCount==1)
+ speech.dwell.move(dx:40,dy:0,now:1,eligible:true)
+ speech.deliveryPoint=CGPoint(x:900,y:900)
+ speech.recording.isRecording=true;speech.recordingChanged(true)
+ precondition(speech.dwell.following==following && !speech.dwell.armed && speech.pointerRouter.pendingCount==0 && speech.deliveryPoint==nil)
+ let before=CGEvent.posted
+ for _ in 0..<100 {precondition(speech.postPointerMove(dx:50,dy:30,from:anchor)==anchor)}
+ precondition(CGEvent.posted==before,"recording suppresses both pointer motion and native drag movement")
+ speech.recording.isRecording=false;speech.recordingChanged(false)
+ precondition(speech.dwell.following==following && !speech.dwell.armed && speech.pointerRouter.drain(now:100).isEmpty)
+ precondition(speech.postPointerMove(dx:3,dy:-2,from:anchor)==CGPoint(x:403,y:398),"resume applies only new motion from the visible pointer")
+}
 print("PASS: screenshot HUD preservation, hidden review hold, native full close, stale input rejection, delayed click cancellation, fresh reopen, watchdog teardown")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-hud-'));

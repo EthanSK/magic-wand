@@ -49,6 +49,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var controlVersion:WandControlVersion = .pointerV1
     var controlV1Menu:NSMenuItem?,controlV2Menu:NSMenuItem?,controlV3Menu:NSMenuItem?
     var flickScrollEnabled=false
+    // Opt-in: one local line per Control V3 hold with stroke counts and wheel
+    // rates, never positions. Off unless feature-flags.json enables it.
+    var heldScrollDiagnostics=false
     var reviewAxisEnabled=false
     var reviewAxisMenuItem:NSMenuItem?
     var flickAnchor:CGPoint?
@@ -159,8 +162,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         context.onScreenshotChange = {[weak self] active in self?.setScreenshotActive(active)}
         recording.onChange = {[weak self] active in
-            guard let self else{return}
-            log("RECORDING_STATE",active);self.dwell.reset();self.scheduleDwell();self.syncRecordingLight();self.status()
+            self?.recordingChanged(active)
         }
         recording.start()
         lastTrusted = AXIsProcessTrusted()
@@ -187,6 +189,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard ready,!restoring else{return}
         queue("setWandRecording("+(recording.isRecording ? "true":"false")+");")
     }
+    func recordingChanged(_ active:Bool) {
+        // Ethan: "stops moving the mouse ... afterwards it continues". Pause
+        // delivery, not the latched mouse mode. Discard hidden motion on both
+        // edges so resuming cannot replay it or click from speech-time travel.
+        performPointer(pointerRouter.interrupt());motionFilter.reset();deliveryPoint=nil
+        dwell.reset();scheduleDwell()
+        log("RECORDING_STATE",active);syncRecordingLight();status()
+    }
     // Opt-in, local-only flag. A missing or invalid file restores the original
     // axes. Read off the motion path so pointer delivery never waits for disk.
     func refreshFeatureFlags() {
@@ -201,6 +211,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         flickMenuItem?.isHidden=selected.usesHeldScroll
         if flickScrollEnabled != flick {if flickScroll.active {setCircleLight(false);motionFilter.reset()};flickScrollEnabled=flick;flickScroll.reset();flickAnchor=nil}
         flickMenuItem?.state=flick ? .on : .off
+        heldScrollDiagnostics=options.enabled("heldScrollDiagnostics")
         rotationMenuItem?.state=enabled ? .on : .off
         let reviewAxes=options.enabled("reviewAxisGestures")
         if reviewAxisEnabled != reviewAxes {
@@ -1002,6 +1013,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     @discardableResult
     func postPointerMove(dx:Int,dy:Int,from point:CGPoint)->CGPoint {
+        guard !recording.isRecording else{return point}
         // Ethan's "switch app button": Middle operates the selected HUD card.
         // Keep horizontal card input, but drop concurrent mouse-mode movement
         // for the whole press, including entry and the card's hold threshold.
@@ -1032,7 +1044,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // The router may drop a consumed hold's endpoint click; button changes are
         // applied before motion, at the position already shown.
         let routed=pointerRouter.frame(dx:x,dy:y,buttons:b,hud:false,now:ProcessInfo.processInfo.systemUptime)
-        dwell.move(dx:x,dy:y,now:ProcessInfo.processInfo.systemUptime,eligible:!pointerRouter.bottomHeld && b==0 && !hudSession && !scrollActive)
+        dwell.move(dx:x,dy:y,now:ProcessInfo.processInfo.systemUptime,eligible:!recording.isRecording && !pointerRouter.bottomHeld && b==0 && !hudSession && !scrollActive)
         scheduleDwell()
         if routed.buttons != b {log("CONSUMED_HOLD_CLICK_DROPPED")}
         transition(to: routed.buttons, at: point)
@@ -1042,6 +1054,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldTargetToken=UUID()
         guard heldScroll.active else{return}
         let completedScroll=heldScroll.scrollable && !heldScroll.dragging && heldScroll.qualified(now:now)
+        if heldScrollDiagnostics && heldScroll.sustaining && completedScroll {
+            log("V3_SCROLL_HOLD",heldScroll.sustained.report(seconds:heldScroll.elapsed(now:now),ended:resumeMouse ? "release":"lost"))
+        }
         if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)}
         if heldScroll.end(now:now) {queue("global.wandPointerPauseUntil=0;")}
         heldScrollAnchor=nil;setCircleLight(false)
@@ -1110,10 +1125,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func scheduleDwell(){
         dwellTimer?.invalidate();dwellTimer=nil
-        guard ready,!restoring,let due=dwell.nextDue else{return}
+        guard ready,!restoring,!recording.isRecording,let due=dwell.nextDue else{return}
         dwellTimer=Timer.scheduledTimer(withTimeInterval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             guard let self else{return};self.dwellTimer=nil
-            guard self.ready,!self.restoring,!self.heldScroll.active,!self.pointerRouter.bottomHeld,!self.hudSession,!self.scrollActive,self.buttons==0,AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
+            guard self.ready,!self.restoring,!self.recording.isRecording,!self.heldScroll.active,!self.pointerRouter.bottomHeld,!self.hudSession,!self.scrollActive,self.buttons==0,AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
             let point=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:self.pointerDisplays)
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
         }

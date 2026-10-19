@@ -70,3 +70,12 @@ bug. Inspect the recorded state and the full gesture boundary before drawing a c
    regression, then verify the fix. Keep physical acceptance separate from passing traces.
 6. Turn capture off once the tester accepts the behavior. The bounded files remain local
    for inspection; disabling capture does not delete them.
+
+## Held page-scroll summary
+
+The separate local `heldScrollDiagnostics: true` feature flag adds one
+`V3_SCROLL_HOLD` receiver-log line at the end of each qualified V3 page-scroll hold.
+It reports duration, release/loss, accepted strokes, direction/speed changes,
+ignored recoil candidates and peak/final wheel rates. It includes no points,
+coordinates or content and is off by default. It does not replace review capture
+or establish what physical movement the user intended.
