@@ -84,6 +84,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let controls = WandControlTransport()
     let context = WandContextListener()
     let recording = WandRecordingState(cache:support.appendingPathComponent("recording-state.json"))
+    var recordingPointerPaused=false
+    var recordingRestoreFollow:Bool?
     var pointerInHUD=false, middleOperating=false, middleSecondTap=false
     var acceptHUDContext=true
     var navStream=WandAngularStream(),moveStream=WandAngularStream(),legacyHUDStream=WandAngularStream(),scrollStream=WandAngularStream()
@@ -190,12 +192,26 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         queue("setWandRecording("+(recording.isRecording ? "true":"false")+");")
     }
     func recordingChanged(_ active:Bool) {
-        // Ethan: "stops moving the mouse ... afterwards it continues". Pause
-        // delivery, not the latched mouse mode. Discard hidden motion on both
-        // edges so resuming cannot replay it or click from speech-time travel.
+        // Ethan: recording switches mouse follow off once. It is not a lock:
+        // Bottom can explicitly re-enter mouse mode while speech keeps running.
         performPointer(pointerRouter.interrupt());motionFilter.reset();deliveryPoint=nil
+        if active {
+            recordingRestoreFollow=dwell.following
+            recordingPointerPaused=true
+            dwell.follow(false);restDetection.pointerStopped()
+            queue("setMouseFollow(false);")
+        } else {
+            let resume=recordingPointerPaused && recordingRestoreFollow == true
+            recordingPointerPaused=false;recordingRestoreFollow=nil
+            if resume {dwell.follow(true);restDetection.pointerActivated();queue("setMouseFollow(true);")}
+        }
         dwell.reset();scheduleDwell()
         log("RECORDING_STATE",active);syncRecordingLight();status()
+    }
+    func manualPointerDuringRecording() {
+        // Manual Bottom input wins over automatic speech-time restoration,
+        // including a later explicit switch off. Never stop Agent Flow here.
+        recordingPointerPaused=false;recordingRestoreFollow=nil
     }
     // Opt-in, local-only flag. A missing or invalid file restores the original
     // axes. Read off the motion path so pointer delivery never waits for disk.
@@ -505,10 +521,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 }
             }
             if line.hasSuffix("WAND_RECORDING_LIGHT 0") || line.hasSuffix("WAND_RECORDING_LIGHT 1") {log("DEVICE",line)}
-            if line.hasSuffix("@POINTER_MODE") {enterPointerMode()}
+            if line.hasSuffix("@POINTER_MODE") {manualPointerDuringRecording();enterPointerMode()}
             if let marker=line.range(of:"@FOLLOW ") {
                 let value=line[marker.upperBound...].trimmingCharacters(in:.whitespaces)
-                if value=="0" || value=="1" {
+                if value=="0" || value=="1", !recordingPointerPaused {
                     if value=="1" {restDetection.pointerActivated()}else{restDetection.pointerStopped();flickScroll.reset();flickAnchor=nil;setCircleLight(false)}
                     dwell.follow(value=="1");scheduleDwell()
                 }
@@ -534,6 +550,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // The device prints each edge before the click it emits on release,
                 // so a consumed (scrolled) hold's endpoint click is dropped by order.
                 if value=="0" || value=="1" {
+                    if value=="1" {manualPointerDuringRecording()}
                     if recognizeBottomRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
                     if controlVersion.usesHeldScroll && value=="0" {finishBottomHold(now:ProcessInfo.processInfo.systemUptime)}
                     if controlVersion.usesHeldScroll && !scrollActive {
@@ -1013,7 +1030,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     @discardableResult
     func postPointerMove(dx:Int,dy:Int,from point:CGPoint)->CGPoint {
-        guard !recording.isRecording else{return point}
+        guard !recordingPointerPaused else{return point}
         // Ethan's "switch app button": Middle operates the selected HUD card.
         // Keep horizontal card input, but drop concurrent mouse-mode movement
         // for the whole press, including entry and the card's hold threshold.
@@ -1044,7 +1061,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // The router may drop a consumed hold's endpoint click; button changes are
         // applied before motion, at the position already shown.
         let routed=pointerRouter.frame(dx:x,dy:y,buttons:b,hud:false,now:ProcessInfo.processInfo.systemUptime)
-        dwell.move(dx:x,dy:y,now:ProcessInfo.processInfo.systemUptime,eligible:!recording.isRecording && !pointerRouter.bottomHeld && b==0 && !hudSession && !scrollActive)
+        dwell.move(dx:x,dy:y,now:ProcessInfo.processInfo.systemUptime,eligible:!recordingPointerPaused && !pointerRouter.bottomHeld && b==0 && !hudSession && !scrollActive)
         scheduleDwell()
         if routed.buttons != b {log("CONSUMED_HOLD_CLICK_DROPPED")}
         transition(to: routed.buttons, at: point)
@@ -1125,10 +1142,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func scheduleDwell(){
         dwellTimer?.invalidate();dwellTimer=nil
-        guard ready,!restoring,!recording.isRecording,let due=dwell.nextDue else{return}
+        guard ready,!restoring,!recordingPointerPaused,let due=dwell.nextDue else{return}
         dwellTimer=Timer.scheduledTimer(withTimeInterval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             guard let self else{return};self.dwellTimer=nil
-            guard self.ready,!self.restoring,!self.recording.isRecording,!self.heldScroll.active,!self.pointerRouter.bottomHeld,!self.hudSession,!self.scrollActive,self.buttons==0,AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
+            guard self.ready,!self.restoring,!self.recordingPointerPaused,!self.heldScroll.active,!self.pointerRouter.bottomHeld,!self.hudSession,!self.scrollActive,self.buttons==0,AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
             let point=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:self.pointerDisplays)
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
         }
@@ -1157,7 +1174,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 probeTimer?.invalidate();probeTimer=Timer.scheduledTimer(withTimeInterval:1.5,repeats:false){[weak self] _ in self?.queue("if(global.wandDeskSleeping)global.wandPowerDownGyro();else if(!moveLatched&&!hudOpen&&!scrollHeld)sleepGyro();")}
             case .pickedUp:
                 probeTimer?.invalidate();probeTimer=nil
-                guard !hudSession else{continue}
+                guard !hudSession,!recordingPointerPaused else{continue}
                 enterPointerMode();dwell.follow(true);queue("setMouseFollow(true);");log("AUTO_PICKUP")
             case .settling:
                 dwell.inhibit(until:now+3);scheduleDwell()

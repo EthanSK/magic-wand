@@ -31,6 +31,7 @@ final class CGEvent {
  func post(tap:EventTap){Self.posted+=1}
 }
 final class Recording {var isRecording=false}
+final class Rest {func pointerActivated(){};func pointerStopped(){}}
 final class Context {var isActive=false,isFresh=true;var onChange:((Bool)->Void)?;var onModeChange:((String?)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
 final class Application {var bundleIdentifier="com.microsoft.VSCode"}
 final class NSWorkspace {static let shared=NSWorkspace();var frontmostApplication:Application?=Application()}
@@ -40,6 +41,8 @@ final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=fals
 final class Harness {
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter(),reviewTrace=Trace(),recording=Recording(),dwell=WandDwellClick()
  var deskSleep=WandDeskSleep()
+ var recordingPointerPaused=false,recordingRestoreFollow:Bool?
+ let restDetection=Rest()
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
  var buttons=0,movementCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1000,height:1000)]
  var selectedReviewMode:String?,hiddenReviewOperating=false,hiddenReviewPending=false,screenshotActive=false,screenshotHUD=false
@@ -68,7 +71,7 @@ final class Harness {
  func releaseButtons(){}
  init(){${callback}
 ${modeCallback}}
- ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','recordingChanged'].map(method).join('\n')}
+ ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 let h=Harness()
@@ -177,7 +180,7 @@ for following in [false,true] {
  speech.dwell.move(dx:40,dy:0,now:1,eligible:true)
  speech.deliveryPoint=CGPoint(x:900,y:900)
  speech.recording.isRecording=true;speech.recordingChanged(true)
- precondition(speech.dwell.following==following && !speech.dwell.armed && speech.pointerRouter.pendingCount==0 && speech.deliveryPoint==nil)
+ precondition(!speech.dwell.following && speech.recordingPointerPaused && !speech.dwell.armed && speech.pointerRouter.pendingCount==0 && speech.deliveryPoint==nil)
  let before=CGEvent.posted
  for _ in 0..<100 {precondition(speech.postPointerMove(dx:50,dy:30,from:anchor)==anchor)}
  precondition(CGEvent.posted==before,"recording suppresses both pointer motion and native drag movement")
@@ -185,6 +188,13 @@ for following in [false,true] {
  precondition(speech.dwell.following==following && !speech.dwell.armed && speech.pointerRouter.drain(now:100).isEmpty)
  precondition(speech.postPointerMove(dx:3,dy:-2,from:anchor)==CGPoint(x:403,y:398),"resume applies only new motion from the visible pointer")
 }
+let manual=Harness();manual.dwell.follow(true)
+manual.recording.isRecording=true;manual.recordingChanged(true)
+manual.manualPointerDuringRecording();manual.dwell.follow(true)
+precondition(!manual.recordingPointerPaused && manual.recording.isRecording)
+precondition(manual.postPointerMove(dx:6,dy:2,from:anchor)==CGPoint(x:406,y:402),"manual Bottom re-entry allows pointer movement while recording")
+manual.dwell.follow(false);manual.recording.isRecording=false;manual.recordingChanged(false)
+precondition(!manual.dwell.following,"recording end preserves a manual switch off")
 print("PASS: screenshot HUD preservation, hidden review hold, native full close, stale input rejection, delayed click cancellation, fresh reopen, watchdog teardown")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-hud-'));
@@ -218,6 +228,7 @@ final class Controls {var speechEvents=0;func speech(down:Bool)->Bool{speechEven
 final class Recording {var isRecording=true}
 final class Harness {
  var ready=true,restoring=false,scrollActive=false,buttons=0,restDiagnosticsRemaining=0,hudSession=false
+ var recordingPointerPaused=false
  var motionFilter=Filter();let dwell=Dwell(),restDetection=Rest(),controls=Controls(),recording=Recording()
  struct Sleep {var sleeping=false;mutating func sample(parked:Bool,buttons:Bool,now:Double)->Bool?{sleeping=parked && !buttons;return sleeping}}
  var deskSleep=Sleep()
