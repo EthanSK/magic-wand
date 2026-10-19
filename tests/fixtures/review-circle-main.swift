@@ -162,12 +162,37 @@ for vertical in [true,false] {
      t+=duration/6
      total+=n.sample(dx:vertical ? 0:part*sign,dy:vertical ? part*sign:0,now:t)
     }
-    t+=0.1
+    t+=0.7
    }
    check(total == (vertical ? 3:-3),"optional nod/shake works either initial direction and speed")
   }
  }
 }
+// Ethan wants one ratchet at every corner while continuously nodding/shaking,
+// including the reverse corner, without waiting for a complete return to neutral.
+for vertical in [true,false] {
+ for sign in [-1.0,1.0] {
+  for dt in [0.015,0.1] {
+   var n=WandReviewNavigation();n.useAxisGestures=true
+   var total:Int32=0,last=0.0,t=600.0
+   for target in [0.5,-0.5,0.5,-0.5,0.5,-0.5,0.0] {
+    let start=last
+    for i in 1...20 {
+     let value=start+(target-start)*Double(i)/20
+     let delta=(value-last)*sign;t+=dt
+     total+=n.sample(dx:vertical ? 0:delta,dy:vertical ? delta:0,now:t);last=value
+    }
+   }
+   check(total == (vertical ? 6:-6),"continuous nod/shake counts every direction change at either speed")
+  }
+ }
+}
+var earlyCorner=WandReviewNavigation();earlyCorner.useAxisGestures=true
+var earlyTotal:Int32=0,earlyTime=700.0
+for dy in [0.1,0.1,0.1,0.1,-0.08] {earlyTime+=0.03;earlyTotal+=earlyCorner.sample(dx:0,dy:dy,now:earlyTime)}
+check(earlyTotal==1,"first corner fires before returning to neutral")
+for dy in [0.012,-0.012,0.01,-0.01,0.006,-0.006] {earlyTime+=0.03;earlyTotal+=earlyCorner.sample(dx:0,dy:dy,now:earlyTime)}
+check(earlyTotal==1,"tremor around a turn does not repeat the ratchet")
 for shape in ["noise","diagonal","circle"] {
  var n=WandReviewNavigation();n.useAxisGestures=true
  var total:Int32=0,px=0.0,py=0.0

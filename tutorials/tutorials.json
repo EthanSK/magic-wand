@@ -1,0 +1,1539 @@
+{
+  "$comment": "The one maintained list of Magic Wand how-to videos. Authors edit questions, steps, beats and actions. tutorials/narrate.py owns each tutorial's narration block and tutorials/render/render.py owns its render block; scripts/tutorials_build.py builds the gallery from this file. See tutorials/README.md.",
+  "schemaVersion": 1,
+  "controlVersion": 2,
+  "scope": "Control V2 on the native receiver",
+  "site": "https://ethansk.github.io/magic-wand/how-to/",
+  "video": {"width": 1280, "height": 720, "fps": 30, "introSeconds": 0.9, "gapSeconds": 0.45, "tailSeconds": 1.4},
+  "narration": {
+    "provider": "ElevenLabs",
+    "helper": "speak-action-reminder/scripts/elevenlabs-audio.py",
+    "delivery": "neutral",
+    "maxBeatCharacters": 240
+  },
+  "tutorials": [
+    {
+      "id": "point-and-click",
+      "question": "How do I move the pointer and click?",
+      "questions": [
+        "How do I use the wand as a mouse?",
+        "How do I click?",
+        "How do I turn on mouse follow?",
+        "How do I stop the pointer following the wand?"
+      ],
+      "keywords": ["pointer", "cursor", "mouse", "click", "follow", "high", "dwell", "stop"],
+      "summary": "Tap Bottom to follow, stop to click once, tap again to stop.",
+      "buttons": ["bottom"],
+      "base": "dialog",
+      "initial": {"pointer": [0.42, 0.42]},
+      "controls": [
+        {"button": "bottom", "gesture": "Tap from off"},
+        {"button": "bottom", "gesture": "Stop after moving in HIGH"},
+        {"button": "bottom", "gesture": "Tap while following"}
+      ],
+      "steps": ["Tap Bottom", "Turn to point", "Stop to click", "Tap Bottom to stop"],
+      "beats": [
+        {
+          "text": "Tap Bottom once. The light turns blue and the pointer starts following the wand. Nothing is clicked.",
+          "step": 0,
+          "actions": [{"at": 0.1, "tap": "bottom"}, {"at": 0.14, "light": "mouse"}, {"at": 0.14, "pulse": "follow"}]
+        },
+        {
+          "text": "Turn the wand to move the pointer.",
+          "step": 1,
+          "actions": [{"at": 0.08, "to": 0.9, "point": [0.71, 0.66]}]
+        },
+        {
+          "text": "Stop on what you want. After a brief pause, it clicks once.",
+          "step": 2,
+          "actions": [{"at": 0.3, "pulse": "dwell"}, {"at": 0.5, "pulse": "click"}, {"at": 0.52, "set": {"saved": true}}]
+        },
+        {
+          "text": "Tap Bottom again to stop following, without a click.",
+          "step": 3,
+          "actions": [
+            {"at": 0.12, "tap": "bottom"},
+            {"at": 0.16, "light": "idle"},
+            {"at": 0.45, "to": 0.9, "turn": [-9, -4]}
+          ]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/point-and-click/01-813baa5283.mp3",
+            "textSha256": "813baa52832bc3d209d6323a926eaa4944ab2c5bc525d98e8165a25bb7b9d08a",
+            "seconds": 5.303,
+            "wordsPerMinute": 192,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/point-and-click/02-3cbfbc3384.mp3",
+            "textSha256": "3cbfbc338401bfece57d3efe404d6eed2c841cb762ca9bfb51aa75ec04c74084",
+            "seconds": 1.75,
+            "wordsPerMinute": 240,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/point-and-click/03-74cd3a58f1.mp3",
+            "textSha256": "74cd3a58f1e0e269b3d91488cec8ea2661c7373ffd983a3e5e0924e34e5f315e",
+            "seconds": 3.866,
+            "wordsPerMinute": 186,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/point-and-click/04-83aeaf04fb.mp3",
+            "textSha256": "83aeaf04fb1b64ef324f054be17e0a7e5f3bfce554eb0e1f33e6d3d556f71509",
+            "seconds": 2.769,
+            "wordsPerMinute": 195,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/point-and-click.mp4",
+        "poster": "docs/how-to/videos/point-and-click.jpg",
+        "captions": "docs/how-to/videos/point-and-click.vtt",
+        "transcript": "docs/how-to/transcripts/point-and-click.txt",
+        "duration": 17.37,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [
+          {"start": 0.9, "end": 6.203},
+          {"start": 6.653, "end": 8.403},
+          {"start": 8.853, "end": 12.719},
+          {"start": 13.169, "end": 15.938}
+        ],
+        "sha256": {
+          "video": "ced1c7acaead2d4cec8b1c558b472723447c509c8c989c260065950c17eb4416",
+          "poster": "5e1e82d07fa9470c04414c1cd7d4dbc5ad393f853d27abc052cda909652a899e",
+          "captions": "4c27e780f8b1bbfe6402ca412a810eb539c04b92893ddbf22e8da60543491ebd",
+          "transcript": "274aa69dc9b41a2c9e5ca57b630ed60c08fc158adcdc3a5127838ade80156916"
+        },
+        "controlFingerprint": "233a38dc241c574eeaed370205526ff6182e9a7efe7d550376d718de14c6ea59",
+        "storyboardFingerprint": "76364c8236d859b678bc1d7cae8618e318dcfe91337a76704bc9ecee2ca10d2b",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    },
+    {
+      "id": "drag",
+      "question": "How do I drag something?",
+      "questions": [
+        "How do I drag and drop?",
+        "How do I select text?",
+        "How do I move a window?",
+        "How do I hold the mouse button down?"
+      ],
+      "keywords": ["drag", "drop", "select", "text", "window", "move", "file", "tap then hold"],
+      "summary": "Tap Bottom, then hold the second press to drag; release to drop.",
+      "buttons": ["bottom"],
+      "base": "files",
+      "initial": {"pointer": [0.27, 0.47]},
+      "controls": [
+        {"button": "bottom", "gesture": "Tap, then hold the second press"},
+        {"button": "bottom", "note": "A plain hold only scrolls"}
+      ],
+      "steps": ["Tap Bottom", "Press again and hold", "Turn to drag", "Release to drop", "A plain hold scrolls"],
+      "beats": [
+        {
+          "text": "Tap Bottom, then press it again and keep holding. That holds the mouse button down.",
+          "step": 0,
+          "actions": [
+            {"at": 0.08, "tap": "bottom"},
+            {"at": 0.11, "light": "mouse"},
+            {"at": 0.08, "step": 1, "atS": 0.26},
+            {"at": 0.08, "press": "bottom", "atS": 0.26},
+            {"at": 0.08, "set": {"pointer.down": true, "grab": true}, "atS": 0.49}
+          ]
+        },
+        {
+          "text": "Turn the wand to drag.",
+          "step": 2,
+          "actions": [{"at": 0.06, "to": 0.92, "point": [0.74, 0.43]}]
+        },
+        {
+          "text": "Release Bottom to drop.",
+          "step": 3,
+          "actions": [
+            {"at": 0.3, "release": "bottom"},
+            {"at": 0.3, "set": {"pointer.down": false, "grab": false, "dropped": true}},
+            {"at": 0.3, "pulse": "drop"}
+          ]
+        },
+        {
+          "text": "A plain hold scrolls instead, so always tap first when you want to drag or select text.",
+          "step": 4,
+          "actions": [
+            {"at": 0.02, "to": 0.13, "point": [0.33, 0.56]},
+            {"at": 0.15, "press": "bottom"},
+            {"at": 0.26, "light": "scroll"},
+            {"at": 0.28, "to": 0.64, "turn": [-4, -9]},
+            {"at": 0.28, "to": 0.64, "animate": {"scrollY": 120}},
+            {"at": 0.72, "release": "bottom"},
+            {"at": 0.74, "light": "mouse"}
+          ]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/drag/01-e369e32fb6.mp3",
+            "textSha256": "e369e32fb6b2a5f499bd9c1f8e2fda99dbfefd1497ca7e37be715b1580d327a2",
+            "seconds": 4.545,
+            "wordsPerMinute": 198,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/drag/02-c1ec2ce118.mp3",
+            "textSha256": "c1ec2ce1186030aded448a2afd253e5396ad1b64bbfdbd5a1b89c3cf07b46843",
+            "seconds": 1.62,
+            "wordsPerMinute": 185,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/drag/03-d05981a5bf.mp3",
+            "textSha256": "d05981a5bfe9dbc42219390f9ea9d96038b304796aea63c954148271bb282346",
+            "seconds": 1.567,
+            "wordsPerMinute": 153,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/drag/04-7a6bbbb657.mp3",
+            "textSha256": "7a6bbbb65711d657d5f153acfcce445ecdaa31bc7374e1bf8a29486b1f6b5b39",
+            "seconds": 4.937,
+            "wordsPerMinute": 207,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/drag.mp4",
+        "poster": "docs/how-to/videos/drag.jpg",
+        "captions": "docs/how-to/videos/drag.vtt",
+        "transcript": "docs/how-to/transcripts/drag.txt",
+        "duration": 16.33,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [
+          {"start": 0.9, "end": 5.445},
+          {"start": 5.895, "end": 7.515},
+          {"start": 7.965, "end": 9.532},
+          {"start": 9.982, "end": 14.919}
+        ],
+        "sha256": {
+          "video": "24e4c11cbd928cd7b56518b0b1d46e4a1cfd2bab1ab4ce06c2d60b88b07e12bb",
+          "poster": "ebc0b0ab10fcef2b1a10db7a56619c8f51d8d0845ccdca43abab83ba8668d406",
+          "captions": "4b75ec736f2a9431a18af9165fb2ad5e9b440378d1827849085c5e1ee2669cdd",
+          "transcript": "7e4b06d4fd1fbf3806c7bd467ad449a4eb1b3d13a2a8622bf76ec776d9582ddd"
+        },
+        "controlFingerprint": "44ffa9c0d67206fdfac65050a3e60ac7d93c09e51454f0199e15ff0f59355154",
+        "storyboardFingerprint": "1d603970d475365734f2835a3b8f0eaacfb38527670bdfe93e57887aab4abfa4",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    },
+    {
+      "id": "recenter",
+      "question": "How do I get the pointer back to the middle?",
+      "questions": [
+        "I lost the pointer. How do I find it?",
+        "How do I centre the pointer?",
+        "How do I recenter the cursor?",
+        "Where did my pointer go?"
+      ],
+      "keywords": ["recenter", "recentre", "centre", "center", "lost", "find", "pointer", "cursor", "double tap"],
+      "summary": "Double tap Bottom to centre the pointer with mouse follow on.",
+      "buttons": ["bottom"],
+      "base": "desktop",
+      "initial": {"pointer": [0.965, 0.09], "badge": "Review changes"},
+      "controls": [{"button": "bottom", "gesture": "Double tap"}],
+      "steps": ["Double tap Bottom", "Pointer centres", "Follow is on", "Review stays"],
+      "beats": [
+        {
+          "text": "Lost the pointer? Double tap Bottom.",
+          "step": 0,
+          "actions": [{"at": 0.05, "to": 0.45, "pulse": "search"}, {"at": 0.55, "double": "bottom"}]
+        },
+        {
+          "text": "It jumps to the centre of your main screen, with mouse follow turned on.",
+          "step": 1,
+          "actions": [
+            {"at": 0.02, "jump": [0.5, 0.5]},
+            {"at": 0.02, "pulse": "centre"},
+            {"at": 0.02, "light": "mouse"},
+            {"at": 0.5, "step": 2},
+            {"at": 0.52, "pulse": "follow"}
+          ]
+        },
+        {
+          "text": "The HUD, any review and dictation carry on as they were.",
+          "step": 3,
+          "actions": [{"at": 0.15, "pulse": "badge"}]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/recenter/01-a0099c2e60.mp3",
+            "textSha256": "a0099c2e60bb0ca189292aa6c28ba9899066e4b1eae8bb4069a62f6d71145b9a",
+            "seconds": 2.142,
+            "wordsPerMinute": 168,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/recenter/02-134cabda68.mp3",
+            "textSha256": "134cabda6807001fce865b7d67ae8caf3d723a4482eeb3dff206601d405ca08d",
+            "seconds": 3.422,
+            "wordsPerMinute": 245,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/recenter/03-0ff5f607da.mp3",
+            "textSha256": "0ff5f607da3b886fa1c134f60566b6390e266650a0859dee4b30f0a03e5a10b1",
+            "seconds": 3.344,
+            "wordsPerMinute": 197,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/recenter.mp4",
+        "poster": "docs/how-to/videos/recenter.jpg",
+        "captions": "docs/how-to/videos/recenter.vtt",
+        "transcript": "docs/how-to/transcripts/recenter.txt",
+        "duration": 12.13,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [{"start": 0.9, "end": 3.042}, {"start": 3.492, "end": 6.914}, {"start": 7.364, "end": 10.708}],
+        "sha256": {
+          "video": "284531b9dee3c6d6e7be0340b4a1ea126f3503e31a6ee7d9df9d9c334abee6ed",
+          "poster": "4d408455e64eabfcc27252cab061dab3ba810bd10df66db583f8dd7df85f401a",
+          "captions": "277cca3ced452f05beea15e56ec435184a2d8537f99b51a7d96569da382826a2",
+          "transcript": "83b2609af488b6bd7e6c73ccc02d189a88310296c06c8da79df1490ca8cf05ed"
+        },
+        "controlFingerprint": "3c3c0a3c861a1ac0325dda3ccdf1e6efc1bcbe1dbe52aac6a39eeaf336b472f7",
+        "storyboardFingerprint": "b3034de86d99fe678f59e9d02518a0628246146e1464def069b197bea0547c5e",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    },
+    {
+      "id": "scroll-up-down",
+      "question": "How do I scroll up and down?",
+      "questions": [
+        "How do I scroll a page?",
+        "How do I scroll vertically?",
+        "How do I keep scrolling?",
+        "How do I scroll with circles?"
+      ],
+      "keywords": ["scroll", "vertical", "up", "down", "page", "circle", "circles", "hold", "keep scrolling", "reverse"],
+      "summary": "Hold Bottom, move up or down, then keep circling; release to stop.",
+      "buttons": ["bottom"],
+      "base": "document",
+      "initial": {"pointer": [0.5, 0.48]},
+      "controls": [
+        {"button": "bottom", "gesture": "Hold"},
+        {"button": "bottom", "note": "V2 keeps the starting direction"},
+        {"button": "bottom", "note": "Release a completed scroll to enable mouse follow"}
+      ],
+      "steps": ["Hold Bottom", "Move up or down", "Keep circling", "Reverse to go back", "Release to stop"],
+      "beats": [
+        {
+          "text": "Hold Bottom and move the wand up or down. That picks vertical scrolling, and the page follows the wand.",
+          "step": 0,
+          "actions": [
+            {"at": 0.06, "press": "bottom"},
+            {"at": 0.3, "step": 1},
+            {"at": 0.32, "light": "scroll"},
+            {"at": 0.32, "to": 0.8, "turn": [0, -7]},
+            {"at": 0.34, "to": 0.84, "animate": {"scrollY": 260}}
+          ]
+        },
+        {
+          "text": "To keep going, carry on in circles. Your first loop can go either way round.",
+          "step": 2,
+          "actions": [
+            {"at": 0.04, "to": 0.94, "circle": "cw", "turns": 2, "radius": 6},
+            {"at": 0.04, "to": 0.94, "animate": {"scrollY": 1180}, "ease": "linear"}
+          ]
+        },
+        {
+          "text": "Reverse your circles to reverse the scrolling.",
+          "step": 3,
+          "actions": [
+            {"at": 0.05, "to": 0.92, "circle": "ccw", "turns": 1.5, "radius": 6},
+            {"at": 0.12, "to": 0.92, "animate": {"scrollY": 640}, "ease": "linear"}
+          ]
+        },
+        {
+          "text": "Release Bottom to stop. The pointer then follows the wand.",
+          "step": 4,
+          "actions": [
+            {"at": 0.1, "release": "bottom"},
+            {"at": 0.13, "light": "mouse"},
+            {"at": 0.45, "to": 1.4, "point": [0.64, 0.36]}
+          ]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/scroll-up-down/01-51778b5329.mp3",
+            "textSha256": "51778b532991b4c7a266ea07aa19d31a175e148d15e4e901bb21f9f99913897a",
+            "seconds": 5.381,
+            "wordsPerMinute": 212,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/scroll-up-down/02-c39d5dca93.mp3",
+            "textSha256": "c39d5dca9313199da9303379f15d54484194aeee9122a829958ddb504f6bf4d0",
+            "seconds": 4.232,
+            "wordsPerMinute": 213,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/scroll-up-down/03-1d6f91fe64.mp3",
+            "textSha256": "1d6f91fe6424733d8c17b3c8428943e1eabd96b82d78bae47aca17da29176412",
+            "seconds": 2.22,
+            "wordsPerMinute": 189,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/scroll-up-down/04-25f4fade6d.mp3",
+            "textSha256": "25f4fade6d619945fd9035baf2a71049567b0f459380f89bb99cf1f6e7392ce0",
+            "seconds": 3.422,
+            "wordsPerMinute": 175,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/scroll-up-down.mp4",
+        "poster": "docs/how-to/videos/scroll-up-down.jpg",
+        "captions": "docs/how-to/videos/scroll-up-down.vtt",
+        "transcript": "docs/how-to/transcripts/scroll-up-down.txt",
+        "duration": 18.93,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [
+          {"start": 0.9, "end": 6.281},
+          {"start": 6.731, "end": 10.963},
+          {"start": 11.413, "end": 13.633},
+          {"start": 14.083, "end": 17.505}
+        ],
+        "sha256": {
+          "video": "c534c7d91326fe168089727790b32931ebc1b316bd7ccfa9d90a88fd19ec0237",
+          "poster": "dd1e8a689afb606d4ff6de1d0b1d76ea02e103854d85d7b327a4cf905a92b019",
+          "captions": "68e72b0c22e455e9e5def8d1b86c623e73d5b30f1e9f8ca6ea692da4ddee4ff7",
+          "transcript": "7a69b304ff86f3991ecfd5c6295da3b2a400fe66637b85dd9907af84c66255ae"
+        },
+        "controlFingerprint": "04700b9f2c06f09ec3a701d3ff9cf2ed2edaed631c4ecb24d066faeb1b13fe98",
+        "storyboardFingerprint": "8ff3ae79abc95b31e0a44176afcae55ad3750c3bfc656f5e5a81bc2f39f6a3fe",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    },
+    {
+      "id": "scroll-sideways",
+      "question": "How do I scroll sideways?",
+      "questions": ["How do I scroll horizontally?", "How do I scroll left and right?", "How do I scroll a timeline?"],
+      "keywords": ["scroll", "sideways", "horizontal", "left", "right", "timeline", "circle", "circles", "hold"],
+      "summary": "Hold Bottom, start left or right, then keep circling; release to stop.",
+      "buttons": ["bottom"],
+      "base": "timeline",
+      "initial": {"pointer": [0.5, 0.5], "scrollX": 1600},
+      "controls": [
+        {"button": "bottom", "gesture": "Hold"},
+        {"button": "bottom", "note": "start left/right for horizontal scrolling"}
+      ],
+      "steps": ["Hold Bottom", "Move left or right", "Keep circling", "Reverse to go back", "Release to stop"],
+      "beats": [
+        {
+          "text": "Hold Bottom and start by moving left or right. That picks sideways scrolling.",
+          "step": 0,
+          "actions": [
+            {"at": 0.06, "press": "bottom"},
+            {"at": 0.3, "step": 1},
+            {"at": 0.33, "light": "scroll"},
+            {"at": 0.33, "to": 0.84, "turn": [8, 0]},
+            {"at": 0.35, "to": 0.86, "animate": {"scrollX": 1300}}
+          ]
+        },
+        {
+          "text": "Carry on in circles to keep scrolling the same way. It stays sideways until you let go.",
+          "step": 2,
+          "actions": [
+            {"at": 0.04, "to": 0.94, "circle": "cw", "turns": 2, "radius": 6},
+            {"at": 0.04, "to": 0.94, "animate": {"scrollX": 250}, "ease": "linear"}
+          ]
+        },
+        {
+          "text": "Reverse the circles to scroll back, then release Bottom to stop.",
+          "step": 3,
+          "actions": [
+            {"at": 0.04, "to": 0.6, "circle": "ccw", "turns": 1.25, "radius": 6},
+            {"at": 0.08, "to": 0.6, "animate": {"scrollX": 780}, "ease": "linear"},
+            {"at": 0.66, "step": 4},
+            {"at": 0.7, "release": "bottom"},
+            {"at": 0.73, "light": "mouse"}
+          ]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/scroll-sideways/01-9607148ef9.mp3",
+            "textSha256": "9607148ef9f3cb5f106f98eb45a0127745ffe24000a98ba7f1287fa867df00b6",
+            "seconds": 4.18,
+            "wordsPerMinute": 187,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/scroll-sideways/02-a75e4d9771.mp3",
+            "textSha256": "a75e4d9771d887f7728b833351dce57e56300d995f94afde83ed00def1b56d03",
+            "seconds": 4.571,
+            "wordsPerMinute": 223,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/scroll-sideways/03-626f3d5f9a.mp3",
+            "textSha256": "626f3d5f9af1331afd59fdb98a0870eb37089178d1ded65f5e64de43ace9bb4c",
+            "seconds": 3.422,
+            "wordsPerMinute": 193,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/scroll-sideways.mp4",
+        "poster": "docs/how-to/videos/scroll-sideways.jpg",
+        "captions": "docs/how-to/videos/scroll-sideways.vtt",
+        "transcript": "docs/how-to/transcripts/scroll-sideways.txt",
+        "duration": 15.4,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [{"start": 0.9, "end": 5.08}, {"start": 5.53, "end": 10.101}, {"start": 10.551, "end": 13.973}],
+        "sha256": {
+          "video": "118948a1b0540e5eb6b6b4c824153c08057ac756720fc56b388b8ec8d54a60dc",
+          "poster": "e180a2e0d940f496708cd5e1585339591618c49b09ddd9c613b298416097e93c",
+          "captions": "6dfb9c452a1dfb7c82fd77e05129ebe5c11afe8435f2ff6cc7fad3d3ebfc0030",
+          "transcript": "670f02601bb5340c9d5e323bfd8bbbe61b4d0aa65a1583d041c48fed6d0713a3"
+        },
+        "controlFingerprint": "59ea2aafa330b1b4e210b1f249c4e228dcb0ab6c87944210f3b7214912389e58",
+        "storyboardFingerprint": "38f553f1eece48690c819c5502ac1b6f3dc152c6122fa75794eea7b87c6f63cc",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    },
+    {
+      "id": "hud-cards",
+      "question": "How do I open the HUD and use a card?",
+      "questions": [
+        "How do I use the HUD?",
+        "How do I pick a HUD card?",
+        "How do I close the HUD?",
+        "What does the Middle button do?"
+      ],
+      "keywords": ["hud", "card", "middle", "open", "close", "choose", "outline", "menu", "double tap"],
+      "summary": "Tap Middle, turn to a card, tap to use it; double tap to close.",
+      "buttons": ["middle"],
+      "base": "desktop",
+      "initial": {"pointer": [0.62, 0.3]},
+      "controls": [
+        {"button": "middle", "gesture": "Tap"},
+        {"button": "middle", "gesture": "Tap again"},
+        {"button": "middle", "gesture": "Hold to open, turn, release"},
+        {"button": "middle", "gesture": "Double tap"},
+        {"button": "middle", "note": "The outline stops at the edges"}
+      ],
+      "steps": ["Tap Middle", "Turn to choose", "Tap to use", "Double tap to close", "Or hold, turn, release"],
+      "beats": [
+        {
+          "text": "Tap Middle. The HUD opens on Switch App, and the light turns orange.",
+          "step": 0,
+          "actions": [
+            {"at": 0.1, "tap": "middle"},
+            {"at": 0.16, "set": {"hud.open": true, "hud.x": 3, "hud.y": 1}},
+            {"at": 0.16, "light": "hud"}
+          ]
+        },
+        {
+          "text": "Turn the wand to move the outline. It stops at the edges.",
+          "step": 1,
+          "actions": [
+            {"at": 0.05, "to": 0.32, "turn": [7, 0]},
+            {"at": 0.08, "to": 0.3, "animate": {"hud.pullX": 0.7}},
+            {"at": 0.3, "to": 0.42, "animate": {"hud.pullX": 0}},
+            {"at": 0.48, "to": 0.88, "turn": [-3, 0]},
+            {"at": 0.5, "to": 0.82, "animate": {"hud.x": 2}}
+          ]
+        },
+        {
+          "text": "Tap Middle again to use the outlined card. The HUD stays open.",
+          "step": 2,
+          "actions": [{"at": 0.12, "tap": "middle"}, {"at": 0.24, "pulse": "use"}]
+        },
+        {
+          "text": "Double tap Middle to close the HUD.",
+          "step": 3,
+          "actions": [
+            {"at": 0.2, "double": "middle"},
+            {"at": 0.42, "set": {"hud.open": false}},
+            {"at": 0.42, "light": "idle"}
+          ]
+        },
+        {
+          "text": "For a quick one-off, hold Middle, turn to a card and release to use it.",
+          "step": 4,
+          "actions": [
+            {"at": 0.06, "press": "middle"},
+            {"at": 0.12, "set": {"hud.open": true, "hud.x": 3, "hud.y": 1}},
+            {"at": 0.12, "light": "hud"},
+            {"at": 0.32, "to": 0.62, "turn": [-11, 0]},
+            {"at": 0.34, "to": 0.6, "animate": {"hud.x": 2}},
+            {"at": 0.74, "release": "middle"},
+            {"at": 0.78, "pulse": "use"}
+          ]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/hud-cards/01-7649209540.mp3",
+            "textSha256": "7649209540b5c27a24e5eaa7ca400bf5beca60956d453f1be3a7f419a46434c4",
+            "seconds": 3.866,
+            "wordsPerMinute": 202,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/hud-cards/02-38fa893be7.mp3",
+            "textSha256": "38fa893be712d70f74c8bdbdb1bc62f3b5b9d70cf0e45d5974171a7ee6e2e92a",
+            "seconds": 3.213,
+            "wordsPerMinute": 224,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/hud-cards/03-5263d6c7a1.mp3",
+            "textSha256": "5263d6c7a15f45b0aef9db7d08387e994d097abd55a28679818752aece16f74f",
+            "seconds": 3.553,
+            "wordsPerMinute": 203,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/hud-cards/04-7d8a1a8f75.mp3",
+            "textSha256": "7d8a1a8f753ae99c16c57805032dd7c98a97adfeb1baec8a269a8ba021552940",
+            "seconds": 1.829,
+            "wordsPerMinute": 230,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/hud-cards/05-94669f2d0f.mp3",
+            "textSha256": "94669f2d0fd43e47623820e17f85128f26c933faf3a98245b7e381dc0aaaf9e6",
+            "seconds": 3.814,
+            "wordsPerMinute": 236,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/hud-cards.mp4",
+        "poster": "docs/how-to/videos/hud-cards.jpg",
+        "captions": "docs/how-to/videos/hud-cards.vtt",
+        "transcript": "docs/how-to/transcripts/hud-cards.txt",
+        "duration": 20.4,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [
+          {"start": 0.9, "end": 4.766},
+          {"start": 5.216, "end": 8.429},
+          {"start": 8.879, "end": 12.432},
+          {"start": 12.882, "end": 14.711},
+          {"start": 15.161, "end": 18.975}
+        ],
+        "sha256": {
+          "video": "35ed48321c714776aa02b488a6426244ff25b0516e86b7991007160392cde465",
+          "poster": "6bc42ca43e30f7032f4724f3dda2de022a25e297ffb9852c388d62902f41f139",
+          "captions": "9665c3aa860c22b77fb7ce6b0f68dbe374d057725698d2a73d8af239ea715fd3",
+          "transcript": "b08f7dbf2b818fd08f975e5bd350cdeed661edd6214ecb3b3cb7058e1e20a86c"
+        },
+        "controlFingerprint": "3120268a08a10d037e40f100d9c815ab99c5260a931f6e80f91d95f3a24b763d",
+        "storyboardFingerprint": "57a317f27eb9a42510527c18d3f89834a36e090459e89e1f47c66a26c9b7711b",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    },
+    {
+      "id": "hud-pages",
+      "question": "How do I open a HUD page and go back?",
+      "questions": [
+        "How do I open a HUD submenu?",
+        "How do I get to Keys mode?",
+        "How do I open Utility modes?",
+        "How do I use app-specific controls?",
+        "How do I go back in the HUD?"
+      ],
+      "keywords": ["hud", "page", "submenu", "keys", "utility", "app specific", "current app", "exit", "back"],
+      "summary": "Tap Middle on a page card; its exit card goes back one page.",
+      "buttons": ["middle"],
+      "base": "desktop",
+      "initial": {"pointer": [0.62, 0.3]},
+      "controls": [{"button": "middle", "gesture": "Tap again"}, {"button": "middle", "gesture": "Double tap"}],
+      "steps": ["Tap Middle", "Outline a page card", "Tap to open", "Exit goes back", "Double tap to close"],
+      "beats": [
+        {
+          "text": "Some cards open their own page, like Keys mode, Utility modes or controls for the current app.",
+          "step": 0,
+          "actions": [
+            {"at": 0.06, "tap": "middle"},
+            {"at": 0.12, "set": {"hud.open": true, "hud.x": 3, "hud.y": 1}},
+            {"at": 0.12, "light": "hud"},
+            {"at": 0.36, "pulse": "highlight", "cell": 9},
+            {"at": 0.56, "pulse": "highlight", "cell": 12},
+            {"at": 0.76, "pulse": "highlight", "cell": 2}
+          ]
+        },
+        {
+          "text": "Outline one and tap Middle to open its page.",
+          "step": 1,
+          "actions": [
+            {"at": 0.04, "to": 0.4, "turn": [-8, -7]},
+            {"at": 0.06, "to": 0.4, "animate": {"hud.x": 2, "hud.y": 0}},
+            {"at": 0.5, "step": 2},
+            {"at": 0.55, "tap": "middle"},
+            {"at": 0.66, "set": {"hud.page": "keys", "hud.x": 3, "hud.y": 2}}
+          ]
+        },
+        {
+          "text": "The page's exit card takes you back one page.",
+          "step": 3,
+          "actions": [
+            {"at": 0.15, "pulse": "highlight", "cell": 10},
+            {"at": 0.4, "tap": "middle"},
+            {"at": 0.52, "set": {"hud.page": "default", "hud.x": 2, "hud.y": 0}}
+          ]
+        },
+        {
+          "text": "Double tap Middle at any time to close the whole HUD.",
+          "step": 4,
+          "actions": [
+            {"at": 0.22, "double": "middle"},
+            {"at": 0.44, "set": {"hud.open": false}},
+            {"at": 0.44, "light": "idle"}
+          ]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/hud-pages/01-19a4a995e9.mp3",
+            "textSha256": "19a4a995e94f81c26a84580126fce01211167eccbe472649df60580743b55d24",
+            "seconds": 5.016,
+            "wordsPerMinute": 203,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/hud-pages/02-0906a3a1e5.mp3",
+            "textSha256": "0906a3a1e5f4b501f04fcf83f2eeab57ebc9ce4335f24d2f7ac72403964cbe18",
+            "seconds": 2.717,
+            "wordsPerMinute": 199,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/hud-pages/03-90846b841c.mp3",
+            "textSha256": "90846b841cf90d09bd8f064434bb1359790a932947bf1b865d419ddddaaeaa3f",
+            "seconds": 2.586,
+            "wordsPerMinute": 209,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/hud-pages/04-6c412e0124.mp3",
+            "textSha256": "6c412e012470d2846bc240c5a9dfbe52569a3925acaecc55cea85fa8e59353b5",
+            "seconds": 2.664,
+            "wordsPerMinute": 248,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/hud-pages.mp4",
+        "poster": "docs/how-to/videos/hud-pages.jpg",
+        "captions": "docs/how-to/videos/hud-pages.vtt",
+        "transcript": "docs/how-to/transcripts/hud-pages.txt",
+        "duration": 16.63,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [
+          {"start": 0.9, "end": 5.916},
+          {"start": 6.366, "end": 9.083},
+          {"start": 9.533, "end": 12.119},
+          {"start": 12.569, "end": 15.233}
+        ],
+        "sha256": {
+          "video": "cdcbff1c119a8c5c6ca0697c35f0de5e3371ce02aa3c71b0af08569f1ecbef63",
+          "poster": "b0b358e5781e0de264e9af26b4134d51145925574253dc21ba1fc751b331d8a8",
+          "captions": "063d17907625482b710374e14e4094a2f37fc1157d67776d0e905eb268ee5341",
+          "transcript": "1b217f035985f7b3a9d0bb90d28f39c80b90c02f72da32b9b913e78911375c7a"
+        },
+        "controlFingerprint": "4eb565a5e48f3e4e57d68300980c26138c3166aa267a9d39b217bab1e39fff52",
+        "storyboardFingerprint": "2bb5e7a5d4b9e53e6e9cec375f60970a72b310b7076e640eaa689a603886acdc",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    },
+    {
+      "id": "switch-apps",
+      "question": "How do I switch apps?",
+      "questions": [
+        "How do I go back to the last app?",
+        "How do I use Command-Tab?",
+        "How do I pick another app?",
+        "How do I use the app switcher?"
+      ],
+      "keywords": ["switch", "app", "apps", "command tab", "switcher", "last app", "previous app"],
+      "summary": "Tap Switch App for your last app, or hold and turn to pick one.",
+      "buttons": ["middle"],
+      "base": "app",
+      "initial": {
+        "pointer": [0.62, 0.3],
+        "app": "VS Code",
+        "switcher.apps": ["VS Code", "Chrome", "Codex", "Agent Flow", "Music"]
+      },
+      "controls": [
+        {"button": "middle", "gesture": "Tap"},
+        {"button": "middle", "gesture": "Tap again"},
+        {"button": "middle", "gesture": "Hold while open"}
+      ],
+      "steps": ["Tap Middle", "Tap for your last app", "Hold and turn", "Release to switch"],
+      "beats": [
+        {
+          "text": "Tap Middle to open the HUD. It starts on Switch App.",
+          "step": 0,
+          "actions": [
+            {"at": 0.1, "tap": "middle"},
+            {"at": 0.16, "set": {"hud.open": true, "hud.x": 3, "hud.y": 1}},
+            {"at": 0.16, "light": "hud"}
+          ]
+        },
+        {
+          "text": "Tap Middle again to jump back to the app you used last.",
+          "step": 1,
+          "actions": [
+            {"at": 0.2, "tap": "middle"},
+            {"at": 0.32, "pulse": "use"},
+            {
+              "at": 0.42,
+              "set": {"app": "Chrome", "switcher.apps": ["Chrome", "VS Code", "Codex", "Agent Flow", "Music"]}
+            }
+          ]
+        },
+        {
+          "text": "To pick a different app, hold Middle on Switch App and turn left or right through the app switcher. Release to switch.",
+          "step": 2,
+          "actions": [
+            {"at": 0.05, "press": "middle"},
+            {"at": 0.12, "set": {"switcher.open": true, "switcher.index": 1, "hud.pressed": true}},
+            {"at": 0.28, "to": 0.66, "turn": [14, 0]},
+            {"at": 0.3, "to": 0.64, "animate": {"switcher.index": 3}, "ease": "steps"},
+            {"at": 0.74, "step": 3},
+            {"at": 0.78, "release": "middle"},
+            {"at": 0.8, "set": {"switcher.open": false, "hud.pressed": false, "app": "Agent Flow"}}
+          ]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/switch-apps/01-d00883bbca.mp3",
+            "textSha256": "d00883bbcad80cb64fe7de816ddf381535f5f8e8cb4faaaa4d43bd3628ab8dc8",
+            "seconds": 2.926,
+            "wordsPerMinute": 226,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/switch-apps/02-328d953e80.mp3",
+            "textSha256": "328d953e80e85ce6d5bc052ca29564744b8889f86f14c8403f76b2bbce75de67",
+            "seconds": 2.795,
+            "wordsPerMinute": 258,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/switch-apps/03-155ea192ad.mp3",
+            "textSha256": "155ea192ad1b180c1732aaec2287fadea3188a27cc4e7d43eb5210bfb5f97e92",
+            "seconds": 5.851,
+            "wordsPerMinute": 226,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/switch-apps.mp4",
+        "poster": "docs/how-to/videos/switch-apps.jpg",
+        "captions": "docs/how-to/videos/switch-apps.vtt",
+        "transcript": "docs/how-to/transcripts/switch-apps.txt",
+        "duration": 14.8,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [{"start": 0.9, "end": 3.826}, {"start": 4.276, "end": 7.071}, {"start": 7.521, "end": 13.372}],
+        "sha256": {
+          "video": "e5d1db4c2c159dd550adb84c6ee7d6cf4221b6e6a46c46db03d8d396cf208bfd",
+          "poster": "808930095864e1679601924562997c496a3e9ed08bd386b1d4f23d32528bfd28",
+          "captions": "4d7d5c07ed685b0742c715ab6b71e95156854881627c7194c5bbf0f2a0b52ef8",
+          "transcript": "53a51a5a996d21092820e42c895829a5f51257b122c62b86018d13327251342a"
+        },
+        "controlFingerprint": "feb21da5e7ebf743ce937f9bdffd190576e8524297b7912f26223f6175b0312b",
+        "storyboardFingerprint": "1b9c7c5dd1909a3614d3872290ceafbdb72fa3ef37cff3a298689ddf4dab08ca",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    },
+    {
+      "id": "dictate",
+      "question": "How do I dictate?",
+      "questions": [
+        "How do I use speech to text?",
+        "How do I start Agent Flow?",
+        "How do I stop dictation?",
+        "How do I talk to my agent?"
+      ],
+      "keywords": [
+        "dictate",
+        "dictation",
+        "speech",
+        "voice",
+        "talk",
+        "speak",
+        "agent flow",
+        "record",
+        "transcribe",
+        "top"
+      ],
+      "summary": "Tap Top to start Agent Flow and tap again to stop and paste.",
+      "buttons": ["top"],
+      "base": "chat",
+      "initial": {"pointer": [0.7, 0.3]},
+      "controls": [
+        {"button": "top", "gesture": "Tap"},
+        {"button": "top", "gesture": "Tap again"},
+        {"button": "top", "note": "Putting the wand down never stops dictation"}
+      ],
+      "steps": ["Tap Top", "Speak", "Tap Top to stop", "Text is pasted"],
+      "beats": [
+        {
+          "text": "Tap Top to start Agent Flow dictation. The light turns red when nothing else is active.",
+          "step": 0,
+          "actions": [
+            {"at": 0.1, "tap": "top"},
+            {"at": 0.15, "set": {"recording": true}},
+            {"at": 0.15, "light": "recording"}
+          ]
+        },
+        {
+          "text": "Talk normally. The pointer, HUD and review all keep working while you speak.",
+          "step": 1,
+          "actions": [
+            {"at": 0.3, "tap": "middle"},
+            {"at": 0.36, "set": {"hud.open": true, "hud.x": 3, "hud.y": 1}},
+            {"at": 0.36, "light": "hud"},
+            {"at": 0.7, "double": "middle"},
+            {"at": 0.88, "set": {"hud.open": false}},
+            {"at": 0.88, "light": "recording"}
+          ]
+        },
+        {
+          "text": "Putting the wand down never stops dictation, so tap Top again when you're done. Agent Flow then pastes what you said.",
+          "step": 2,
+          "actions": [
+            {"at": 0.52, "tap": "top"},
+            {"at": 0.56, "set": {"recording": false}},
+            {"at": 0.56, "light": "idle"},
+            {"at": 0.72, "step": 3},
+            {"at": 0.74, "set": {"pasted": true}}
+          ]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/dictate/01-6b94829667.mp3",
+            "textSha256": "6b94829667b0903067470187e14f1171deb5227d5a35be6100b4c5c9b2c09af5",
+            "seconds": 4.493,
+            "wordsPerMinute": 214,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/dictate/02-6eade5f8e7.mp3",
+            "textSha256": "6eade5f8e77cf2b8906caf3f1102f81f2ff5e725afee8ea54e00d98bae21580d",
+            "seconds": 4.31,
+            "wordsPerMinute": 181,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/dictate/03-48cee1584b.mp3",
+            "textSha256": "48cee1584b912689a96bb82bbf38e39017362eeeb3fadaa2a90bdc57d763a728",
+            "seconds": 6.113,
+            "wordsPerMinute": 206,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/dictate.mp4",
+        "poster": "docs/how-to/videos/dictate.jpg",
+        "captions": "docs/how-to/videos/dictate.vtt",
+        "transcript": "docs/how-to/transcripts/dictate.txt",
+        "duration": 18.13,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [{"start": 0.9, "end": 5.393}, {"start": 5.843, "end": 10.153}, {"start": 10.603, "end": 16.716}],
+        "sha256": {
+          "video": "10122d28e33402c2302a6ed1c8f99218a46bdc7cc1745022cd00119f179f7e59",
+          "poster": "6c67175aaf5aed6cd78284ba7b51919125a80963d7eadaff6ec4c526ccb5864b",
+          "captions": "0d0c31898b578a60d7068d118b2cd79b7447211713b756d8671cd2fceee56b9a",
+          "transcript": "854ac2a0c4a1e20afdd98f84eb48af9be5ca291ad2a96dd6b5ec90958ef1fc77"
+        },
+        "controlFingerprint": "412b6dc6d0a692165f515b2a77fb3658f6faeb9be7e6ef4c3a0ab160dfc47f27",
+        "storyboardFingerprint": "52ef91e8d38cab26aaf28eb2b83401ff2bb5685a9e0682a5ae8b9ffb5319bede",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    },
+    {
+      "id": "review-changes",
+      "question": "How do I review my changes in VS Code?",
+      "questions": [
+        "How do I use eyes mode?",
+        "How do I step through my changes?",
+        "How do I go to the next change?",
+        "How do I review a diff with the wand?"
+      ],
+      "keywords": [
+        "review",
+        "changes",
+        "vs code",
+        "vscode",
+        "diff",
+        "eyes",
+        "next change",
+        "better git",
+        "circle",
+        "nudge",
+        "stage",
+        "commit set"
+      ],
+      "summary": "Choose Review changes, circle through changes, hold Middle to stage the set.",
+      "buttons": ["middle"],
+      "base": "vscode",
+      "initial": {"pointer": [0.8, 0.2], "app": "VS Code", "hud.vscode": true},
+      "controls": [
+        {"button": "middle", "note": "In VS Code, tap Review changes or Stage files"},
+        {"button": "middle", "note": "Review input only runs while VS Code is frontmost"}
+      ],
+      "steps": [
+        "Open the HUD",
+        "Choose Review changes",
+        "Circle to move",
+        "Nudge to step",
+        "Hold Middle to stage",
+        "Tap Middle to exit"
+      ],
+      "beats": [
+        {
+          "text": "In VS Code, tap Middle to open the HUD. Review changes is just right of Switch App.",
+          "step": 0,
+          "actions": [
+            {"at": 0.1, "tap": "middle"},
+            {"at": 0.16, "set": {"hud.open": true, "hud.x": 3, "hud.y": 1}},
+            {"at": 0.16, "light": "hud"},
+            {"at": 0.62, "pulse": "highlight", "cell": 13}
+          ]
+        },
+        {
+          "text": "Outline it and tap Middle. The HUD hides, the light turns green and review starts.",
+          "step": 1,
+          "actions": [
+            {"at": 0.04, "to": 0.3, "turn": [8, 0]},
+            {"at": 0.06, "to": 0.3, "animate": {"hud.x": 4}},
+            {"at": 0.42, "tap": "middle"},
+            {
+              "at": 0.52,
+              "set": {"hud.open": false, "review.mode": "changes", "badge": "Review changes (hold to commit set)"}
+            },
+            {"at": 0.52, "light": "app"}
+          ]
+        },
+        {
+          "text": "With no button held, circle clockwise for the next change and anticlockwise for the previous one.",
+          "step": 2,
+          "actions": [
+            {"at": 0.04, "to": 0.5, "circle": "cw", "turns": 1, "radius": 6},
+            {"at": 0.26, "set": {"review.pos": 1}},
+            {"at": 0.48, "set": {"review.pos": 2}},
+            {"at": 0.56, "to": 0.92, "circle": "ccw", "turns": 0.8, "radius": 6},
+            {"at": 0.86, "set": {"review.pos": 1}}
+          ]
+        },
+        {
+          "text": "After a pause, a quick nudge down or up moves one change forward or back.",
+          "step": 3,
+          "actions": [
+            {"at": 0.3, "to": 0.44, "nudge": "down"},
+            {"at": 0.46, "set": {"review.pos": 2}},
+            {"at": 0.68, "to": 0.82, "nudge": "up"},
+            {"at": 0.84, "set": {"review.pos": 1}}
+          ]
+        },
+        {
+          "text": "Files you finish join the set. Hold Middle for about half a second to stage them and keep reviewing.",
+          "step": 4,
+          "actions": [
+            {"at": 0.02, "to": 0.34, "circle": "cw", "turns": 1.2, "radius": 6},
+            {"at": 0.12, "set": {"review.pos": 2}},
+            {"at": 0.22, "set": {"review.pos": 3}},
+            {"at": 0.32, "set": {"review.pos": 4}},
+            {"at": 0.48, "press": "middle"},
+            {"at": 0.48, "atS": 0.5, "set": {"staged": [0, 1]}},
+            {"at": 0.48, "atS": 0.5, "pulse": "stage"},
+            {"at": 0.84, "release": "middle"}
+          ]
+        },
+        {
+          "text": "Tap Middle once to cancel and leave review.",
+          "step": 5,
+          "actions": [
+            {"at": 0.22, "tap": "middle"},
+            {"at": 0.32, "set": {"review.mode": null, "badge": null}},
+            {"at": 0.32, "light": "idle"}
+          ]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/review-changes/01-322120ee22.mp3",
+            "textSha256": "322120ee2245d439b4bd844af6da26d2f4c4c14ac02f5095d60ea043d2e1737d",
+            "seconds": 4.963,
+            "wordsPerMinute": 206,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/review-changes/02-02332230d6.mp3",
+            "textSha256": "02332230d6fd9f7f8ca11097330061ff41d9c0692d36b1b92e6a5bf5fcde9e23",
+            "seconds": 4.754,
+            "wordsPerMinute": 189,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/review-changes/03-3ae9362bde.mp3",
+            "textSha256": "3ae9362bde54bbad484ba6cad319cdaa86287f10dedaf182fdab04f694ed0786",
+            "seconds": 5.094,
+            "wordsPerMinute": 188,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/review-changes/04-8d2e8827d6.mp3",
+            "textSha256": "8d2e8827d6ab2b3940477fa0722afd0e2f6facf931dc5739c8f1b8bf0096044d",
+            "seconds": 4.31,
+            "wordsPerMinute": 209,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/review-changes/05-75b4863e6b.mp3",
+            "textSha256": "75b4863e6b10929593ef9880d2e61f7b1a0e910224c053d9212326d3154338c2",
+            "seconds": 5.016,
+            "wordsPerMinute": 227,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/review-changes/06-4c3db855de.mp3",
+            "textSha256": "4c3db855de8df0e881bd94a7207f680f93aba2bdd1abfdae01b1ccfd7fbe56d5",
+            "seconds": 2.351,
+            "wordsPerMinute": 204,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/review-changes.mp4",
+        "poster": "docs/how-to/videos/review-changes.jpg",
+        "captions": "docs/how-to/videos/review-changes.vtt",
+        "transcript": "docs/how-to/transcripts/review-changes.txt",
+        "duration": 31.07,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [
+          {"start": 0.9, "end": 5.863},
+          {"start": 6.313, "end": 11.067},
+          {"start": 11.517, "end": 16.611},
+          {"start": 17.061, "end": 21.371},
+          {"start": 21.821, "end": 26.837},
+          {"start": 27.287, "end": 29.638}
+        ],
+        "sha256": {
+          "video": "23a6ad9ec9c6bea659c42a88c8747d87f0ddcd9ba8047e9bba7d50d85ec10ff9",
+          "poster": "b3127ca01307ce93a531f24e14d538d3793265732778b38cbc69c97b45854a43",
+          "captions": "1484f2c4cb38693f2e26d1f92d0ae43488587ec81785a6ee72420fd7954e1924",
+          "transcript": "52bf651cba4043eab12a1f53739411c4c8bfefe4bb180981664bac13b1336d71"
+        },
+        "controlFingerprint": "44ca53e43cfd34fe0eac4fd08744b56656fee0d5e6b4b4b984f7fba28cf3500c",
+        "storyboardFingerprint": "82f7717dcc5fd80f9870ebc495006c164411417bd5c4d9e03dc3cf284560d41e",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    },
+    {
+      "id": "stage-files",
+      "question": "How do I stage files in VS Code?",
+      "questions": [
+        "How do I use bang mode?",
+        "How do I stage a set of files?",
+        "How do I commit a set of files?",
+        "How do I select whole files to stage?"
+      ],
+      "keywords": [
+        "stage",
+        "files",
+        "vs code",
+        "vscode",
+        "commit set",
+        "bang",
+        "whole file",
+        "git",
+        "better git",
+        "circle",
+        "nudge"
+      ],
+      "summary": "Choose Stage files, circle to build a set, hold Middle to stage it.",
+      "buttons": ["middle"],
+      "base": "vscode",
+      "initial": {"pointer": [0.8, 0.2], "app": "VS Code", "hud.vscode": true, "review.unit": "file"},
+      "controls": [
+        {"button": "middle", "note": "In VS Code, tap Review changes or Stage files"},
+        {"button": "middle", "note": "Review input only runs while VS Code is frontmost"}
+      ],
+      "steps": [
+        "Open the HUD",
+        "Choose Stage files",
+        "Circle to select",
+        "Nudge to step",
+        "Hold Middle to stage",
+        "Tap Middle to exit"
+      ],
+      "beats": [
+        {
+          "text": "In VS Code, open the HUD, outline Stage files next to Review changes, and tap Middle. The light turns purple.",
+          "step": 0,
+          "actions": [
+            {"at": 0.05, "tap": "middle"},
+            {"at": 0.1, "set": {"hud.open": true, "hud.x": 3, "hud.y": 1}},
+            {"at": 0.1, "light": "hud"},
+            {"at": 0.22, "step": 1},
+            {"at": 0.24, "to": 0.52, "turn": [15, 0]},
+            {"at": 0.26, "to": 0.52, "animate": {"hud.x": 5}},
+            {"at": 0.62, "tap": "middle"},
+            {
+              "at": 0.7,
+              "set": {"hud.open": false, "review.mode": "files", "badge": "Stage files (hold to commit set)"}
+            },
+            {"at": 0.7, "light": "files"}
+          ]
+        },
+        {
+          "text": "Circle clockwise to add the next file to the set, or anticlockwise to drop the last one.",
+          "step": 2,
+          "actions": [
+            {"at": 0.04, "to": 0.5, "circle": "cw", "turns": 1, "radius": 6},
+            {"at": 0.26, "set": {"review.pos": 1}},
+            {"at": 0.48, "set": {"review.pos": 2}},
+            {"at": 0.58, "to": 0.92, "circle": "ccw", "turns": 0.6, "radius": 6},
+            {"at": 0.86, "set": {"review.pos": 1}}
+          ]
+        },
+        {
+          "text": "After a pause, a quick nudge down or up moves one file.",
+          "step": 3,
+          "actions": [{"at": 0.36, "to": 0.52, "nudge": "down"}, {"at": 0.54, "set": {"review.pos": 2}}]
+        },
+        {
+          "text": "Hold Middle for about half a second to stage the whole set. You stay in Stage files, ready for the next one.",
+          "step": 4,
+          "actions": [
+            {"at": 0.08, "press": "middle"},
+            {"at": 0.08, "atS": 0.5, "set": {"staged": [0, 1, 2], "review.pos": 3, "review.start": 3}},
+            {"at": 0.08, "atS": 0.5, "pulse": "stage"},
+            {"at": 0.5, "release": "middle"}
+          ]
+        },
+        {
+          "text": "Tap Middle once to cancel and leave.",
+          "step": 5,
+          "actions": [
+            {"at": 0.25, "tap": "middle"},
+            {"at": 0.35, "set": {"review.mode": null, "badge": null}},
+            {"at": 0.35, "light": "idle"}
+          ]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/stage-files/01-4069f7ff57.mp3",
+            "textSha256": "4069f7ff57172a0c2ccde372c2d50067baf449bf7a95d2b861e303c8af1e3a16",
+            "seconds": 6.74,
+            "wordsPerMinute": 178,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/stage-files/02-7f5fceed2b.mp3",
+            "textSha256": "7f5fceed2b68492dbf07e5fa541ff0ef4cb2083144ac5593256032a2677c5422",
+            "seconds": 4.65,
+            "wordsPerMinute": 219,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/stage-files/03-3c506d1e60.mp3",
+            "textSha256": "3c506d1e6035bc1f3cd41b52665b80a791ae4d659783f4c550c0f4a89ef1300c",
+            "seconds": 3.291,
+            "wordsPerMinute": 219,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/stage-files/04-f710aeebf9.mp3",
+            "textSha256": "f710aeebf998d048df92223505d17049717ca6f3de0d01c416bded258e09c721",
+            "seconds": 5.146,
+            "wordsPerMinute": 257,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/stage-files/05-768ca8a7d4.mp3",
+            "textSha256": "768ca8a7d4cd51dcc3b2d0c993d74e49da596c06efaeb93ae85e9c008884e4db",
+            "seconds": 2.09,
+            "wordsPerMinute": 201,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/stage-files.mp4",
+        "poster": "docs/how-to/videos/stage-files.jpg",
+        "captions": "docs/how-to/videos/stage-files.vtt",
+        "transcript": "docs/how-to/transcripts/stage-files.txt",
+        "duration": 26.03,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [
+          {"start": 0.9, "end": 7.64},
+          {"start": 8.09, "end": 12.74},
+          {"start": 13.19, "end": 16.481},
+          {"start": 16.931, "end": 22.077},
+          {"start": 22.527, "end": 24.617}
+        ],
+        "sha256": {
+          "video": "c1ebd1ee63076cc00e473d782ffafeeee6a90f4d00d53ea87579fb7b2046ffbf",
+          "poster": "f4dd6718c83d0cf76d73d4f797c60a33a99697bee403871ea7db0f5cbecb2462",
+          "captions": "72f26e5b31cd685a62059a77e6728e3fb199b4e3beaae2837f9d209782ac907d",
+          "transcript": "afbe92e96c347c0ff70677195dd089b42c3ae3e0654fcbc0687260cb29f83ca5"
+        },
+        "controlFingerprint": "44ca53e43cfd34fe0eac4fd08744b56656fee0d5e6b4b4b984f7fba28cf3500c",
+        "storyboardFingerprint": "f552e7db37340fa0c398555da15929abf623479467b2cb11229e9f9ba9faf8ae",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    },
+    {
+      "id": "play-pause",
+      "question": "How do I play or pause music?",
+      "questions": [
+        "How do I pause a video?",
+        "How do I play music?",
+        "Where is Play/Pause?",
+        "How do I use the media key?"
+      ],
+      "keywords": ["play", "pause", "music", "video", "media", "song", "youtube", "spotify", "playback"],
+      "summary": "Open the HUD and use Play/Pause, right of Utility on the top row.",
+      "buttons": ["middle"],
+      "base": "player",
+      "initial": {"pointer": [0.82, 0.2], "playing": true},
+      "controls": [
+        {"button": "middle", "note": "Play/Pause immediately to the right of Utility"},
+        {"button": "middle", "gesture": "Tap again"}
+      ],
+      "steps": ["Tap Middle", "Outline Play/Pause", "Tap Middle", "Tap again to resume"],
+      "beats": [
+        {
+          "text": "Tap Middle to open the HUD. Play/Pause is on the top row, right of Utility.",
+          "step": 0,
+          "actions": [
+            {"at": 0.1, "tap": "middle"},
+            {"at": 0.16, "set": {"hud.open": true, "hud.x": 3, "hud.y": 1}},
+            {"at": 0.16, "light": "hud"},
+            {"at": 0.66, "pulse": "highlight", "cell": 15}
+          ]
+        },
+        {
+          "text": "Turn the wand to outline it, then tap Middle.",
+          "step": 1,
+          "actions": [
+            {"at": 0.04, "to": 0.24, "turn": [0, -7]},
+            {"at": 0.05, "to": 0.24, "animate": {"hud.y": 0}},
+            {"at": 0.26, "to": 0.46, "turn": [8, -7]},
+            {"at": 0.27, "to": 0.46, "animate": {"hud.x": 4}},
+            {"at": 0.56, "step": 2},
+            {"at": 0.62, "tap": "middle"},
+            {"at": 0.72, "pulse": "use"},
+            {"at": 0.74, "set": {"playing": false}}
+          ]
+        },
+        {
+          "text": "It sends your Mac's standard play/pause key, so it controls whatever is playing.",
+          "step": 3,
+          "actions": [
+            {"at": 0.55, "tap": "middle"},
+            {"at": 0.64, "pulse": "use"},
+            {"at": 0.66, "set": {"playing": true}}
+          ]
+        }
+      ],
+      "narration": {
+        "provider": "ElevenLabs",
+        "delivery": "neutral",
+        "voice": "The voice the helper assigns to the production session",
+        "beats": [
+          {
+            "file": "tutorials/narration/play-pause/01-477ff19bc6.mp3",
+            "textSha256": "477ff19bc65fdfae8106fb7eda9ee5790230885197a025a9ed2dc734e723b61a",
+            "seconds": 4.833,
+            "wordsPerMinute": 186,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/play-pause/02-c766424270.mp3",
+            "textSha256": "c766424270b950514d466102a5adc7bfb830a852dafdb867756f66863ac98fd1",
+            "seconds": 2.847,
+            "wordsPerMinute": 190,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          },
+          {
+            "file": "tutorials/narration/play-pause/03-eca803c1a0.mp3",
+            "textSha256": "eca803c1a078124876de056d5eb73263fd309b3f6900b98d835da973a60d4c4c",
+            "seconds": 4.127,
+            "wordsPerMinute": 189,
+            "model": "Eleven v4",
+            "generated": "2026-10-19"
+          }
+        ]
+      },
+      "render": {
+        "video": "docs/how-to/videos/play-pause.mp4",
+        "poster": "docs/how-to/videos/play-pause.jpg",
+        "captions": "docs/how-to/videos/play-pause.vtt",
+        "transcript": "docs/how-to/transcripts/play-pause.txt",
+        "duration": 15.03,
+        "codecs": ["aac", "h264"],
+        "size": [1280, 720],
+        "beats": [{"start": 0.9, "end": 5.733}, {"start": 6.183, "end": 9.03}, {"start": 9.48, "end": 13.607}],
+        "sha256": {
+          "video": "39a94ebc4154945155d848530ec9debc2d406fd6cb7bc2a2c56feea914f49e1a",
+          "poster": "ea56a3e38b10ef08bc3d8043b299957adcc838fe7e5d2897a85a514953fb6264",
+          "captions": "81d3362458c11fdc7370d37f808b2f66cdd2f8f35dac20dbf181b21b80da9471",
+          "transcript": "d339dd1bcab64ce895a574ca22bb7dc1a363c89dd78eb1e4acbe08afe255afde"
+        },
+        "controlFingerprint": "26f7418ffcca8ce715b074e3af6f31702e7d322b55395646ce178b6cfd5fd78a",
+        "storyboardFingerprint": "1a87d2d3618a6b0613dddbbe37c65e8cfccca73b9820ac57e1821b7a08cc1e3c",
+        "wand": {"updated": "2026-10-19", "receiver": "1.2.69 (74)", "controlVersion": 2},
+        "renderer": "tutorials/render/render.py",
+        "rendered": "2026-10-19"
+      }
+    }
+  ]
+}

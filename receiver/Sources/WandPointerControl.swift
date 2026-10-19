@@ -876,36 +876,38 @@ struct WandReviewNavigation {
 /// Ethan's optional "yes/no": an up-and-down nod moves next; a side-to-side
 /// shake moves previous. Off by default; replaces only the review gestures.
 struct WandAxisReviewGesture {
-    private var x=0.0,y=0.0,peak=0.0,direction=0.0,started:Double?,lastMotion:Double?
+    static let minimumTravel=0.3, reversalTravel=0.06
+    private var x=0.0,y=0.0,extreme=0.0,extremeCross=0.0,strokeStart=0.0,crossStart=0.0,direction=0.0
     private var axis=0
-    private var completed=false
+    private var started:Double?,lastMotion:Double?
     mutating func reset(){self=Self()}
     mutating func sample(dx:Double,dy:Double,now:Double)->Int32 {
         guard dx.isFinite,dy.isFinite,now.isFinite else{reset();return 0}
         if let lastMotion,now-lastMotion>0.6 {reset()}
-        guard hypot(dx,dy)>=0.003 else{
-            if completed,let lastMotion,now-lastMotion>=0.12 {reset()}
-            return 0
-        }
-        if let started,now-started>4 {reset()}
+        guard hypot(dx,dy)>=0.003 else{return 0}
+        if axis==0,let started,now-started>4 {reset()}
         if started==nil {started=now}
         lastMotion=now;x+=dx;y+=dy
         if axis==0 {
-            guard max(abs(x),abs(y))>=0.3 else{return 0}
+            guard max(abs(x),abs(y))>=Self.minimumTravel else{return 0}
             if abs(y)>=1.6*abs(x) {axis=1;direction=y>0 ? 1:-1}
             else if abs(x)>=1.6*abs(y) {axis=2;direction=x>0 ? 1:-1}
             else{return 0}
+            extreme=axis==1 ? y:x;extremeCross=axis==1 ? x:y
         }
-        let primary=(axis==1 ? y:x)*direction,cross=axis==1 ? x:y
-        if completed {
-            if abs(primary)<=0.1 && abs(cross)<=0.1 {reset()}
-            return 0
-        }
-        peak=max(peak,primary)
-        // A broad sideways bend is a curve, not a nod or shake.
-        if abs(cross)>max(0.12,peak*0.6) {reset();return 0}
-        guard primary<=peak*0.35 else{return 0}
+        let primary=axis==1 ? y:x,cross=axis==1 ? x:y
+        if (primary-extreme)*direction>0 {extreme=primary;extremeCross=cross}
+        let travel=abs(extreme-strokeStart)
+        // Reject a broad bend rather than mistaking a circle for a yes/no motion.
+        if abs(cross-crossStart)>max(0.18,travel*0.65) {reset();return 0}
+        // Ethan's "every switching direction" / "corner": use a small confirmed
+        // reversal, then track the opposite stroke immediately, without a neutral
+        // reset. The travel requirement prevents tremor from adding more ratchets.
+        guard travel>=Self.minimumTravel,(extreme-primary)*direction>=Self.reversalTravel else{return 0}
+        // A rounded turn keeps travelling sideways; a nod reverses on its axis.
+        guard abs(cross-extremeCross)<=0.03+abs(extreme-primary)*0.75 else{reset();return 0}
         let step:Int32=axis==1 ? 1:-1
-        completed=true;return step
+        strokeStart=extreme;crossStart=cross;direction = -direction;extreme=primary;extremeCross=cross
+        return step
     }
 }

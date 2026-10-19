@@ -522,3 +522,29 @@ is false; installation must not change the user's existing feature-flags file.
 Only review navigation uses this classifier. It does not alter mouse, HUD or speech.
 The existing firmware navigation noise gate still applies; synthetic slow input
 tests do not establish arbitrary slow physical-motion recognition.
+
+## Review nods and shakes count each corner
+
+The optional axis mode no longer waits for the movement to return mostly to its
+starting point. After at least 0.3 degrees of travel, a confirmed 0.06-degree
+reversal emits one step and starts tracking the opposite stroke. Continuing a
+nod or shake therefore counts every corner rather than waiting for a neutral
+reset. Tiny reversals do not repeat steps, and lateral movement around a rounded
+turn rejects a circle. Quiet periods reset acquisition; the four-second bound
+applies only before an axis is acquired, not to continuous review. Tests cover
+long slow runs, both axes and starting directions, early reversal, noise and
+circle rejection. Physical comfort remains a separate check.
+
+## Tutorial freshness includes the animation
+
+Narration text and control fingerprints are not enough to validate a video: a change to tap
+timing can leave the same words while teaching a different gesture. Check the storyboard hash
+as well as final media hashes. Derive scene timing from measured audio, but use short real-time
+offsets for button patterns such as tap-then-hold.
+
+## A running receiver may be outside its LaunchAgent
+
+Restarting a LaunchAgent does not terminate a manually launched process holding the singleton
+lock. Inspect the exact running receiver and launchd state. If the authorised restart needs to
+replace an outside owner, recheck Agent Flow idle and terminate only that verified process;
+then verify the new connected receiver and unchanged independent app processes.

@@ -17,6 +17,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import device_build  # noqa: E402
 import site_build  # noqa: E402
+import tutorials_build  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -24,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def outputs() -> dict[Path, str]:
     files = device_build.artifacts()
     files.update(site_build.artifacts(device_build.identifiers()))
+    files.update(tutorials_build.artifacts(files))
     return files
 
 

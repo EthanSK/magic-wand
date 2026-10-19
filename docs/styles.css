@@ -541,3 +541,11 @@ h3 { margin: 0; font: 700 1.9rem/1 var(--display); letter-spacing: 0.01em; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
 }
+
+/* Short action guides on the home page. */
+.howto-section { margin: 48px var(--gutter); }
+.howto-section h2 { font: 700 2.6rem var(--display); margin-bottom: 8px; }
+.howto-links { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; list-style: none; padding: 0; }
+.howto-links a { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 14px; border-radius: 12px; background: var(--deep); }
+.howto-len { color: var(--haze); font: .8rem var(--mono); }
+@media(max-width: 700px) { .howto-links { grid-template-columns: 1fr; } }
