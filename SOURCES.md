@@ -233,3 +233,27 @@ are suspended. The latched follow choice stays intact; stop resets transient mot
 and click state before fresh pointer movement resumes. No recording shortcut or
 Agent Flow lifecycle change is used. Native inert-transport tests pass; physical
 acceptance remains pending.
+
+## Radial HUD, contextual holds and wake restoration
+
+`integrations/agentic-mouse/wand-radial-controls.patch` records the incremental
+change from the previously installed local integration to signed Agentic Mouse
+1.0.276 (282). One shared radial layout places Switch App in the centre and
+orders the other available actions clockwise. Native navigation, drawing and
+liquid feedback use that layout; physical mouse grids are unchanged. It remains
+a patch against the earlier unpublished wand integration, not a standalone
+Agentic Mouse distribution. The browser simulator still shows its labelled older
+grid interaction.
+
+Wand Receiver 1.2.79 (84) restores contextual Bottom holds: a confirmed scrolling
+surface scrolls; a draggable target drags. An unknown or late Accessibility
+answer stays on the scrolling path, and a finished hold cannot accept a late
+answer. The probe runs off the motion thread within the existing hold decision.
+Sleep remembers the prior mouse-follow choice; manual choices and the one-time
+recording pause take precedence. This adds no pointer buffer.
+
+The complete native check passed, including the radial navigation and render
+tests. The receiver's 18 native tests passed without skips against the candidate
+sources. Both installed binaries, versions and preserved settings were checked;
+the running radial HUD was visually inspected. Physical scroll/drag feel and
+wake behaviour still need user acceptance.

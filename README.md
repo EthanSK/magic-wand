@@ -6,6 +6,8 @@
 Mouse, HUD, scrolling and speech to text from three buttons on a wand.
 
 Turning the wand moves my Mac’s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.
+
+**The age of AI doesn’t need a keyboard.** The wand is my step toward that, with pointing, HUD cards and Agent Flow dictation.
 <!-- /wand:intro -->
 
 ![Magic Wand](docs/assets/social.png)
@@ -35,13 +37,13 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Hold while open | Hold the card; on some wheel cards, tilt to turn the wheel |
 | Double tap | Close the entire HUD |
 
-- The outline stops at the edges instead of wrapping.
+- The installed wand uses a radial HUD with Switch App in the centre. The browser demo retains its earlier grid.
 - The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.
 - The HUD has no normal inactivity timeout. Screenshot selection temporarily uses the pointer and returns to the same HUD afterward.
 - Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.
 - In VS Code, tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit, or hold it for about half a second to stage the working set and keep reviewing. Navigation stays frozen until release. The floating indicator says “(hold to commit set)”. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.
 - Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.
-- The native wand home HUD always has Play/Pause immediately to the right of Utility. It uses the Mac’s standard media key, without changing either physical mouse.
+- The native wand home HUD has Play/Pause after Utility around the ring. It uses the Mac’s standard media key, without changing either physical mouse.
 
 **Bottom** (`D1`) · Mouse
 
@@ -50,12 +52,12 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap from off | Enter high-sensitivity follow without clicking |
 | Stop after moving in HIGH | Click once after a 200 ms pause |
 | Tap while following | Stop following without clicking |
-| Hold | Drag in any direction to scroll, keep holding to continue at the initial drag speed, and drag the other way to reverse. Release stops scrolling and returns to mouse follow. |
+| Hold | Over a scroll area, drag in any direction to scroll; hold still to continue and drag the other way to reverse. A confirmed draggable target drags instead. Release stops the gesture. |
 | Tap, then hold the second press | Drag with the mouse button down; release to drop |
 | Double tap | Centre the pointer on the main screen and enable mouse follow; keep the HUD and review selection unchanged |
 
 - Control V3 keeps short taps and tap-then-hold dragging unchanged. The existing 220 ms cutoff separates a tap from a hold.
-- A plain hold only scrolls, including over text. Tap, then hold the second press to drag. The pointer stays fixed while scrolling until release.
+- A plain hold scrolls a scroll area or drags a confirmed draggable target. Unknown targets keep scrolling. Tap, then hold the second press to drag explicitly. The pointer stays fixed while scrolling until release.
 - Middle switches to the HUD. The pointer stays within real display edges.
 - Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.
 - Bottom never opens, closes or clears the Middle HUD or review selection.
@@ -83,7 +85,8 @@ Wand Receiver is a background Mac app. Its wand icon in the menu bar provides:
 
 - **Control version → V2 · Hold to scroll**: hold Bottom and start left/right for
   horizontal scrolling, or up/down for vertical scrolling. Continue in circles;
-  release to stop. A plain hold never selects text or drags a window.
+  release to stop. A plain hold scrolls a scroll area or drags a confirmed
+  draggable target; an unknown target keeps scrolling.
   To drag, tap Bottom, then press again and keep it held. Release to drop.
   Short taps retain their existing mouse behavior.
 - **Control version → V1 · Pointer** restores the previous Bottom gestures. The exact
@@ -165,8 +168,11 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: the wand HUD is a radial wheel with Switch App in the centre and the other available actions around it. Native checks and installed visual inspection passed; physical selection feel still needs acceptance.
+- Installed: Bottom hold scrolls a scrolling surface or drags a confirmed draggable target. Unknown or late target results stay on the scrolling path. Native lifecycle checks passed; physical app coverage is pending.
+- Installed: waking restores the mouse-follow choice from before rest. Manual choices and recording pauses take precedence. Native checks passed; physical acceptance is pending.
 - Control V3 replaces circular page scrolling with straight-drag velocity: continue while held still and reverse with another stroke. Automated lifecycle checks pass; physical acceptance is pending.
-- Installed: Wand Receiver 1.2.78 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.
+- Installed: Wand Receiver 1.2.79 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.
 - Review navigation uses a redesigned spatial corner detector with learned noise tolerance. Reversible quarters, rough squares, slow motion and simulated device traces pass automated checks; physical acceptance is pending.
 - A minute of confirmed desk rest turns the lights off and keeps low-rate pickup sensing. Pickup or a button restores the light. Rest never stops dictation or dismisses the open HUD.
 - Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.
@@ -183,7 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.78 (83) · device code `wand-e1ce30d7c407` · bridge `cd1c870e` · updated 19 October 2026.
+Receiver 1.2.79 (84) · device code `wand-e1ce30d7c407` · bridge `cd1c870e` · updated 19 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

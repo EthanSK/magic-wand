@@ -31,7 +31,7 @@ final class CGEvent {
  func post(tap:EventTap){Self.posted+=1}
 }
 final class Recording {var isRecording=false}
-final class Rest {func pointerActivated(){};func pointerStopped(){}}
+final class Rest {var parked=false;func pointerActivated(){parked=false};func pointerStopped(){}}
 final class Context {var isActive=false,isFresh=true;var onChange:((Bool)->Void)?;var onModeChange:((String?)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
 final class Application {var bundleIdentifier="com.microsoft.VSCode"}
 final class NSWorkspace {static let shared=NSWorkspace();var frontmostApplication:Application?=Application()}
@@ -42,6 +42,7 @@ final class Harness {
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter(),reviewTrace=Trace(),recording=Recording(),dwell=WandDwellClick()
  var deskSleep=WandDeskSleep()
  var recordingPointerPaused=false,recordingRestoreFollow:Bool?
+${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=WandRestFollowMemory()':''}
  let restDetection=Rest()
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
  var buttons=0,movementCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1000,height:1000)]
@@ -229,6 +230,7 @@ final class Recording {var isRecording=true}
 final class Harness {
  var ready=true,restoring=false,scrollActive=false,buttons=0,restDiagnosticsRemaining=0,hudSession=false
  var recordingPointerPaused=false
+${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=WandRestFollowMemory()':''}
  var motionFilter=Filter();let dwell=Dwell(),restDetection=Rest(),controls=Controls(),recording=Recording()
  struct Sleep {var sleeping=false;mutating func sample(parked:Bool,buttons:Bool,now:Double)->Bool?{sleeping=parked && !buttons;return sleeping}}
  var deskSleep=Sleep()

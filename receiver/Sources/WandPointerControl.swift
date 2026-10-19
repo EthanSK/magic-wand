@@ -900,17 +900,33 @@ final class WandHeldScroll {
         tuning.minDuration=0.06;tuning.window=1.0;tuning.idleEnd=0.35
         circle=WandCircularScroll(tuning:tuning)
     }
-    func reset(){sustained.reset();sustaining=false;active=false;dragging=false;circular=false;horizontal=false;scrollDirection=0;directionTravel=0;directionTravelX=0;sampleTime=0;winding=0;windingToScroll=0;reverseTurn=0;reverseAt=0;reverseSegments=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
-    func begin(now:Double,scrollable:Bool=true,sustain:Bool=false){reset();active=true;started=now;confirmed=now;self.scrollable=scrollable;sustaining=sustain;sustained.reset(now:now)}
+    func reset(){sustained.reset();sustaining=false;active=false;dragging=false;resolving=false;circular=false;horizontal=false;scrollDirection=0;directionTravel=0;directionTravelX=0;sampleTime=0;winding=0;windingToScroll=0;reverseTurn=0;reverseAt=0;reverseSegments=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
+    func begin(now:Double,scrollable:Bool=true,sustain:Bool=false,resolving:Bool=false){reset();active=true;started=now;confirmed=now;self.scrollable=scrollable;self.resolving=resolving && scrollable;sustaining=sustain;sustained.reset(now:now)}
     // A lease is renewed only by actual button samples, never by a timer.
     // Stop rather than keep a native drag or scroll alive after telemetry loss.
     func confirmHeld(now:Double){if active {confirmed=now}}
     func stale(now:Double)->Bool {active && now-confirmed>0.8}
-    func setTarget(scrollable:Bool){if active && !dragging {self.scrollable=scrollable}}
+    /// Ethan's smart hold: the pointer target decides scroll or native drag.
+    /// While the bounded probe is outstanding the hold behaves as a scroll
+    /// (the safe fallback) and can never start a drag. A reply only applies
+    /// before the existing tap/hold decision, so a late, cancelled or unknown
+    /// answer never flips a hold that is already acting.
+    private(set) var resolving=false
+    @discardableResult
+    func setTarget(scrollable:Bool,now:Double)->Bool {
+        guard active,resolving,!dragging,!moved,!qualified(now:now) else{return false}
+        resolving=false;self.scrollable=scrollable;return true
+    }
+    /// The original call shape, with the same safety: only an outstanding
+    /// probe at the very start of a hold can be answered.
+    @discardableResult
+    func setTarget(scrollable:Bool)->Bool {setTarget(scrollable:scrollable,now:started)}
+    /// At the tap/hold decision an unanswered probe settles on scrolling.
+    func settleTarget(now:Double){if resolving && qualified(now:now) {resolving=false}}
     func qualified(now:Double)->Bool {active && now-started>=holdSeconds}
     func elapsed(now:Double)->Double {now-started}
     func startDrag(now:Double)->Bool {
-        guard !scrollable,!dragging,qualified(now:now) else{return false}
+        guard !scrollable,!resolving,!dragging,qualified(now:now) else{return false}
         dragging=true;return true
     }
     @discardableResult
@@ -999,6 +1015,59 @@ final class WandHeldScroll {
     }
 }
 
+
+/// What a plain Bottom hold should do with the target under the pointer,
+/// judged from the Accessibility roles of the hit element and its ancestors
+/// (nearest first). Restored from the earlier contextual hold, with safer
+/// failure handling: only a positive answer can produce a native drag.
+enum WandHoldTarget:String,Equatable {
+    case scroll,drag,unknown
+    /// Explicitly draggable controls win even inside a scroll area.
+    static let draggableRoles:Set<String>=["AXScrollBar","AXValueIndicator","AXSlider","AXSplitter"]
+    /// A real scrolling surface: native scroll views and web documents.
+    static let scrollRoles:Set<String>=["AXScrollArea","AXWebArea"]
+    /// Reaching the window or app with no scroll surface means a window
+    /// background, title bar, toolbar, Dock or menu bar: a real native drag.
+    static let surfaceRoles:Set<String>=["AXWindow","AXSheet","AXDrawer","AXApplication","AXMenuBar"]
+    static func ends(at role:String)->Bool {
+        draggableRoles.contains(role) || scrollRoles.contains(role) || surfaceRoles.contains(role)
+    }
+    static func classify(roles:[String])->WandHoldTarget {
+        for role in roles {
+            if draggableRoles.contains(role) {return .drag}
+            if scrollRoles.contains(role) {return .scroll}
+            if surfaceRoles.contains(role) {return .drag}
+        }
+        // Empty, broken or timed-out chains prove nothing. Keep scrolling:
+        // an unknown answer must never select text or move a window.
+        return .unknown
+    }
+}
+
+/// Ethan: waking from rest must "return to the state it was on before
+/// sleeping". Remember the mouse-follow choice when the wand comes to rest
+/// and restore exactly that on pickup, instead of always entering mouse mode.
+/// A manual Bottom choice made meanwhile wins, and the recording pause keeps
+/// pointing off until recording or a manual choice ends it.
+struct WandRestFollowMemory {
+    private(set) var remembered:Bool?
+    /// The wand has just come to rest; `following` is the choice it had.
+    mutating func cameToRest(following:Bool) {remembered=following}
+    /// A deliberate Bottom choice replaces whatever rest remembered.
+    mutating func manualChoice() {remembered=nil}
+    /// Recording starts while resting: report the choice rest is hiding so
+    /// recording can resume it later, and stop rest from also restoring it.
+    mutating func handOverToRecording()->Bool {defer{remembered=nil};return remembered==true}
+    /// Recording ended while the wand still rests: restore on pickup instead
+    /// of starting mouse mode on the desk.
+    mutating func restoreOnPickup() {remembered=true}
+    /// Pickup: whether to switch mouse follow back on. Always forgets.
+    mutating func pickedUp(recordingPaused:Bool)->Bool {
+        defer{remembered=nil}
+        return !recordingPaused && remembered==true
+    }
+    mutating func reset() {remembered=nil}
+}
 
 /// Middle in an active review: tap cancels; a long press stages the working set.
 /// Ethan's "bucket" and "commit set" mean Better Git's selected staging set,

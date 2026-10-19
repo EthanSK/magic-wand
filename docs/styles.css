@@ -132,6 +132,8 @@ h1 { display: flex; align-items: center; gap: 18px; margin: 0; min-width: 0; }
 }
 .tagline { margin: 0; font: 650 clamp(1.1rem, 1.9vw, 1.4rem)/1.35 var(--body); }
 .summary { margin: 6px 0 0; color: var(--haze); }
+.vision { margin: 6px 0 0; color: var(--haze); }
+.vision strong { color: var(--chalk); font-weight: 650; }
 
 /* ---------------------------------------------------------------- demo */
 .demo {
@@ -438,6 +440,7 @@ h3 { margin: 0; font: 700 1.9rem/1 var(--display); letter-spacing: 0.01em; }
 .inside-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 40px; margin-top: 26px; color: var(--haze); }
 .inside-notes p { margin: 0; }
 .needs-title { margin: 40px 0 12px; }
+.grip-notes { margin-top: 0; }
 .needs { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
 .needs li { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--rule); }
 .needs a { font-weight: 650; }

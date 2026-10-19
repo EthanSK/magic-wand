@@ -682,3 +682,28 @@ on manual Bottom input, and keep the recording observer responsible only for its
 one-time transition. Remember the prior follow state only until manual input overrides
 it. Automatic desk pickup must not defeat that recording pause. Native inert tests
 exercise start, manual override, explicit off, end restoration and queued-motion reset.
+
+## Radial drawing and selection share a layout
+
+The wand wheel uses one centre/ring ordering for navigation and drawing. Keep
+angular and centre-return hysteresis in the navigator; do not overlay a radial
+picture on the old grid hit map. Cache label geometry and measured typography
+per layout/title set, not on every pointer update. Inspect crowded and odd-count
+wheels as well as the default layout.
+
+## Contextual holds must settle before input
+
+A Bottom hold starts an off-thread, bounded Accessibility hit test. Only a
+positive draggable target may select native drag before the existing hold
+decision. Unknown or late results settle on scrolling; a token invalidates
+results after release or a newer gesture. Preserve explicit tap-then-hold drag.
+Inert receiver tests cover scroll targets, drag targets, unknown targets, delayed
+answers and release. Synthetic success does not establish feel on every app.
+
+## Rest must remember the user's mouse choice
+
+A pickup event must not unconditionally turn mouse follow on. Remember follow
+at confirmed rest, clear that remembered choice on explicit Bottom input, and
+let the recording-start pause take precedence. If recording ends while the wand
+is still resting, defer restoration until pickup. Keep HUD and recording state
+out of rest ownership. Native tests cover prior ON/OFF and intervening choices.
