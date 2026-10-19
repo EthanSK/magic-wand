@@ -625,3 +625,17 @@ with the canonical Swift implementation. Queuing a Better Git command does not
 prove it executed. Live enabling, learned noise and rotated prefixes limit exact
 replay comparisons. Never publish private captures or treat synthetic traces as the
 user's recorded motion. See diagnostics/README.md for capture and replay controls.
+
+## Held scroll continuation needs fresh button ownership
+
+Control V3 owns wheel velocity in a separate pure controller; the old V2 circle
+recognizer remains available but is never called for V3. Capture a deliberate
+straight stroke's speed before deceleration, retain it while the hand rests,
+and replace it after a new coherent stroke, including an opposite direction.
+A bounded wheel timer emits at the captured pointer anchor and cannot replay a
+large delayed backlog. The existing physical-up reconciliation and button-sample
+lease own cancellation; timer activity must never renew that lease. Native tests
+exercise all directions, diagonals, reversal, quiet hands, release and telemetry
+loss, including the actual receiver timer. This is synthetic verification, not
+physical acceptance. Preserve explicitly labelled V2 tutorials against their
+immutable control snapshot instead of claiming their footage demonstrates V3.

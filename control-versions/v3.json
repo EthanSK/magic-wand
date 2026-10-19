@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": 3,
+  "name": "Control V3",
+  "parent": "control-versions/v2-manifest.json",
+  "receiver": "1.2.75",
+  "bottomHold": "Drag in any direction to scroll, keep holding to continue at the initial drag speed, and drag the other way to reverse. Release stops scrolling and returns to mouse follow.",
+  "bottomTap": "Unchanged from V2",
+  "disabledGestures": [
+    "circular page scrolling",
+    "standalone flick scrolling"
+  ],
+  "preserved": [
+    "Middle HUD and VS Code review",
+    "Top speech",
+    "Bottom taps, recenter and explicit tap-then-hold drag",
+    "rotation correction",
+    "pointer sensitivity and filtering"
+  ]
+}

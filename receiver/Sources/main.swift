@@ -47,7 +47,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var heldTargetToken=UUID()
     var heldSafetyTimer:Timer?
     var controlVersion:WandControlVersion = .pointerV1
-    var controlV1Menu:NSMenuItem?,controlV2Menu:NSMenuItem?
+    var controlV1Menu:NSMenuItem?,controlV2Menu:NSMenuItem?,controlV3Menu:NSMenuItem?
     var flickScrollEnabled=false
     var reviewAxisEnabled=false
     var reviewAxisMenuItem:NSMenuItem?
@@ -195,9 +195,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if controlVersion != selected {controlVersion=selected;heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;performPointer(pointerRouter.cancelAll());setCircleLight(false);releaseButtons();motionFilter.reset()}
         controlV1Menu?.state=selected == .pointerV1 ? .on : .off
         controlV2Menu?.state=selected == .scrollV2 ? .on : .off
+        controlV3Menu?.state=selected == .sustainedV3 ? .on : .off
         let flick=selected == .pointerV1 && options.enabled("flickScroll")
         flickMenuItem?.isEnabled=selected == .pointerV1
-        flickMenuItem?.isHidden=selected == .scrollV2
+        flickMenuItem?.isHidden=selected.usesHeldScroll
         if flickScrollEnabled != flick {if flickScroll.active {setCircleLight(false);motionFilter.reset()};flickScrollEnabled=flick;flickScroll.reset();flickAnchor=nil}
         flickMenuItem?.state=flick ? .on : .off
         rotationMenuItem?.state=enabled ? .on : .off
@@ -225,6 +226,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let versions=NSMenu(title:"Control version")
         let v1=NSMenuItem(title:"V1 · Pointer",action:#selector(selectControlV1),keyEquivalent:"");v1.target=self;versions.addItem(v1);controlV1Menu=v1
         let v2=NSMenuItem(title:"V2 · Hold to scroll",action:#selector(selectControlV2),keyEquivalent:"");v2.target=self;versions.addItem(v2);controlV2Menu=v2
+        let v3=NSMenuItem(title:"V3 · Hold to continue scrolling",action:#selector(selectControlV3),keyEquivalent:"");v3.target=self;versions.addItem(v3);controlV3Menu=v3
         let versionItem=NSMenuItem(title:"Control version",action:nil,keyEquivalent:"");versionItem.submenu=versions;menu.addItem(versionItem)
         let settings=NSMenu(title:"Options")
         let flick=NSMenuItem(title:"Flick to scroll",action:#selector(toggleFlickScroll),keyEquivalent:"")
@@ -250,6 +252,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     @objc func selectControlV1(){selectControlVersion(.pointerV1)}
     @objc func selectControlV2(){selectControlVersion(.scrollV2)}
+    @objc func selectControlV3(){selectControlVersion(.sustainedV3)}
     @objc func toggleFlickScroll(){changeOption("flickScroll")}
     @objc func toggleRotation(){changeOption("orientationCompensation")}
     @objc func toggleReviewAxes(){changeOption("reviewAxisGestures")}
@@ -521,8 +524,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // so a consumed (scrolled) hold's endpoint click is dropped by order.
                 if value=="0" || value=="1" {
                     if recognizeBottomRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
-                    if controlVersion == .scrollV2 && value=="0" {finishBottomHold(now:ProcessInfo.processInfo.systemUptime)}
-                    if controlVersion == .scrollV2 && !scrollActive {
+                    if controlVersion.usesHeldScroll && value=="0" {finishBottomHold(now:ProcessInfo.processInfo.systemUptime)}
+                    if controlVersion.usesHeldScroll && !scrollActive {
                         if value=="1" {
                             beginBottomHold(now:ProcessInfo.processInfo.systemUptime)
                         }
@@ -811,11 +814,17 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// explicit tap-then-hold gesture may press the native mouse button.
     func beginBottomHold(now:Double) {
         heldScrollAnchor=deliveryPoint ?? CGEvent(source:nil)?.location
-        heldScroll.begin(now:now,scrollable:!recenterGesture.isSecondPress)
+        heldScroll.begin(now:now,scrollable:!recenterGesture.isSecondPress,sustain:controlVersion == .sustainedV3)
         heldSafetyTimer?.invalidate()
-        heldSafetyTimer=Timer.scheduledTimer(withTimeInterval:0.1,repeats:true){[weak self] _ in
+        heldSafetyTimer=Timer.scheduledTimer(withTimeInterval:0.02,repeats:true){[weak self] _ in
             guard let self else{return};let now=ProcessInfo.processInfo.systemUptime
-            if self.heldScroll.stale(now:now){self.reconcileBottomHold(down:false,now:now,reason:"button telemetry timeout",resumeMouse:false)}
+            if self.heldScroll.stale(now:now){self.reconcileBottomHold(down:false,now:now,reason:"button telemetry timeout",resumeMouse:false);return}
+            guard self.ready,!self.restoring,AXIsProcessTrusted() else{return}
+            let lines=self.heldScroll.continuation(now:now)
+            if lines.x != 0 || lines.y != 0 {
+                self.setCircleLight(true)
+                for event in Self.wheelEvents(x:lines.x,y:lines.y,at:self.heldScrollAnchor){event.post(tap:.cghidEventTap)}
+            }
         }
         releaseButtons()
         log("BOTTOM_HOLD_TARGET",heldScroll.scrollable ? "scroll":"explicit drag")
@@ -1010,7 +1019,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func handleFrame(x:Int,y:Int,b:Int){
         // The device can finish an old release click after the global escape.
         if recenterSuppressButtons && b != 0 {return}
-        if controlVersion == .scrollV2 && (heldScroll.consumes(buttons:b) || pointerRouter.bottomHeld) {dwell.reset();scheduleDwell();return}
+        if controlVersion.usesHeldScroll && (heldScroll.consumes(buttons:b) || pointerRouter.bottomHeld) {dwell.reset();scheduleDwell();return}
         reportCount += 1
         if reportCount == 1 { log("FIRST_DEVICE_REPORT_VALIDATED") }
         let point = deliveryPoint ?? WandPointerBounds.clamp(CGEvent(source: nil)?.location ?? .zero,to:pointerDisplays)
@@ -1033,7 +1042,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if completedScroll && resumeMouse {enableMouseAfterScroll()}
     }
     func reconcileBottomHold(down:Bool,now:Double,reason:String,resumeMouse:Bool=true) {
-        guard controlVersion == .scrollV2,heldScroll.active else{return}
+        guard controlVersion.usesHeldScroll,heldScroll.active else{return}
         if down {heldScroll.confirmHeld(now:now);return}
         finishBottomHold(now:now,resumeMouse:resumeMouse)
         performPointer(pointerRouter.bottom(down:false))
@@ -1058,7 +1067,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             log("RAW_DELIVERY",rawReports,"seconds",String(format:"%.2f",now-rawWindowStart),"maxGapMs",Int(rawMaxGap*1000))
             rawWindowStart=now;rawReports=0;rawMaxGap=0
         }
-        if controlVersion == .scrollV2 && heldScroll.active {
+        if controlVersion.usesHeldScroll && heldScroll.active {
             dwell.reset();scheduleDwell()
             if heldScroll.scrollable {
                 let lines=heldScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now)
@@ -1078,7 +1087,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             }
             return
         }
-        if controlVersion == .scrollV2 && pointerRouter.bottomHeld {return}
+        if controlVersion.usesHeldScroll && pointerRouter.bottomHeld {return}
         let wasFlick=flickScroll.active
         let flick=flickScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now,
             eligible:flickScrollEnabled && dwell.following && !pointerRouter.bottomHeld && buttons==0)
