@@ -1027,8 +1027,8 @@ final class WandHeldScroll {
 /// failure handling: only a positive answer can produce a native drag.
 enum WandHoldTarget:String,Equatable {
     case scroll,drag,unknown
-    /// Explicitly draggable controls win even inside a scroll area.
-    static let draggableRoles:Set<String>=["AXScrollBar","AXValueIndicator","AXSlider","AXSplitter"]
+    /// Explicitly draggable controls and notification subroles win inside a scroll area.
+    static let draggableRoles:Set<String>=["AXScrollBar","AXValueIndicator","AXSlider","AXSplitter","AXNotificationCenterAlert"]
     /// A real scrolling surface: native scroll views and web documents.
     static let scrollRoles:Set<String>=["AXScrollArea","AXWebArea"]
     /// Reaching the window or app with no scroll surface means a window

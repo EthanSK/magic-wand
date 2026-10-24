@@ -74,6 +74,8 @@ precondition(WandHoldTarget.classify(roles:["AXDockItem","AXList","AXApplication
 precondition(WandHoldTarget.classify(roles:[]) == .unknown,"a failed hit test proves nothing")
 precondition(WandHoldTarget.classify(roles:["AXTextField","AXGroup"]) == .unknown,"a broken chain proves nothing")
 
+precondition(WandHoldTarget.classify(roles:["AXStaticText","AXGroup","AXNotificationCenterAlert","AXScrollArea"]) == .drag,"a notification is a native drag target")
+
 // The screenshot selector is an explicit drag even over a scroll area.
 // It has no tap ambiguity: down starts immediately, up captures the rectangle.
 let screenshot=Harness();screenshot.screenshotActive=true;screenshot.hudSession=true
