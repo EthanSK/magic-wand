@@ -520,7 +520,7 @@ def xiao_envelope() -> Manifold:
 
 
 # Tapered wand (profile tapered-xiao): one continuous body from a thick butt to the XIAO tip, with
-# optional double-helix ribs and a sideways thumb shelf. The double-helix and smooth versions come
+# optional double-helix ribs and a full-width top platform. The double-helix and smooth versions come
 # from the same parameters; smooth just sets the rib height to zero. All parts print upright, wide
 # end down, so the joint is mirrored: the handle carries the spigot and the lower shaft the socket.
 TP = D["tapered"]
@@ -529,7 +529,6 @@ Z_ROUND_END = Z_TONGUE - GAP_END - TP["front_transition"]  # Round taper ends; a
 Z_GLUE = TP["glue_z"]
 Z_FACE = L - J["mouth_gap"]  # Handle body ends here; the shaft's socket mouth is at L.
 Z_SPIGOT_TIP = 2 * L - Z_SPIGOT  # Mirrored spigot end, resting on the shaft's socket floor.
-SHELF_SIDE = -1.0 if TS["hand"] == "left" else 1.0  # Left hand: the holder's right, assembly -X.
 
 
 def taper_radius(z: float) -> float:
@@ -589,15 +588,19 @@ def tapered_socket(crest: float) -> Manifold:
     return union([mirror_joint(union(socket_core(crest))), roof])
 
 
-def shelf_wire_point(side: float = SHELF_SIDE) -> tuple[float, float]:
-    """(x, z) of the wire hole through the shelf's top face, just outside the body."""
+def shelf_wire_point() -> tuple[float, float]:
+    """Central wire exit through the full-width top platform."""
     z = TS["top_z"] - TS["pad_length"] / 2
-    return side * (taper_radius(z) + 4.0), z
+    return 0.0, z
 
 
-def thumb_shelf(side: float = SHELF_SIDE) -> Manifold:
-    """Sideways shelf with a blank top face. Its underside rises at 45 degrees from the body, so it
-    is gusseted into the body and prints upright without a flat overhang."""
+def shelf_top_y() -> float:
+    return taper_radius(TS["top_z"] - TS["pad_length"]) + SP["height"] + 0.5
+
+
+def thumb_shelf() -> Manifold:
+    """Ethan's horizontal platform: one blank top across both sides and the centre.
+    Rounded wings rise from the body along Z, the upright print direction."""
     z1, p = TS["top_z"], TS["protrusion"]
     u_in = taper_radius(z1) - 7.0  # Root (and its corner fillets) buried in the body.
     u_out = taper_radius(z1 - TS["pad_length"] / 2) + p
@@ -608,9 +611,12 @@ def thumb_shelf(side: float = SHELF_SIDE) -> Manifold:
     inner = Manifold.extrude(outline, t - 2 * ce).translate((0.0, 0.0, -(t - 2 * ce) / 2))
     outer = Manifold.extrude(outline.offset(-ce, mf.JoinType.Round), t).translate((0.0, 0.0, -t / 2))
     fin = Manifold.batch_hull([inner, outer])
-    # Local (u, z, w) -> assembly (side * u, -side * w, z): right-handed, and symmetric in w.
-    mat = np.array([[side, 0.0, 0.0, 0.0], [0.0, 0.0, -side, 0.0], [0.0, 1.0, 0.0, 0.0]])
-    return fin.transform(mat)
+    # Build the right wing, then mirror it across the wand's centre.
+    mat = np.array([[1.0, 0.0, 0.0, 0.0], [0.0, 0.0, -1.0, 0.0], [0.0, 1.0, 0.0, 0.0]])
+    wing = fin.transform(mat)
+    # Ethan's "horizontal thing": one flat surface across left, middle and right.
+    centre = box(-u_in - 1.0, u_in + 1.0, -t / 2, t / 2, z1 - TS["pad_length"], z1)
+    return union([wing, wing.mirror((1.0, 0.0, 0.0)), centre]).translate((0.0, shelf_top_y() - t / 2, 0.0))
 
 
 def tapered_handle(spiral: bool) -> Manifold:
@@ -618,11 +624,9 @@ def tapered_handle(spiral: bool) -> Manifold:
     xw, zw = shelf_wire_point()
     rw = TS["wire_hole"] / 2
     # Horizontal wire holes are teardrops pointing up (+Z), the print's up direction.
-    radial = Manifold.extrude(teardrop_cs(rw), abs(xw) + rw).transform(
-        np.array([[0.0, 0.0, SHELF_SIDE, 0.0], [0.0, -SHELF_SIDE, 0.0, 0.0], [1.0, 0.0, 0.0, zw]]))
-    up = Manifold.extrude(teardrop_cs(rw), TS["thickness"] / 2 + 1.0).transform(
+    up = Manifold.extrude(teardrop_cs(rw), shelf_top_y() + 1.0).transform(
         np.array([[0.0, 1.0, 0.0, xw], [0.0, 0.0, 1.0, 0.0], [1.0, 0.0, 0.0, zw]]))
-    voids = [radial, up,
+    voids = [up,
              cyl_z(H["channel_diameter"] / 2, zw - H["channel_diameter"] / 2, Z_FACE + 1.0),
              cyl_z(S["wire_bore"] / 2, Z_FACE, Z_SPIGOT_TIP + 1.0)]
     return body - union(voids)
@@ -991,19 +995,35 @@ def tapered_checks(parts: dict) -> dict:
     out["rib_peaks_deg"] = {f"z={z}": rib_peaks(a["shaft-lower-tapered-spiral"], z) for z in (180.0, 240.0)}
     out["rib_peaks_deg"].update({f"z={z}": rib_peaks(a["shaft-upper-tapered-spiral"], z) for z in (330.0, 380.0)})
     xw, zw = shelf_wire_point()
-    shelf = section_polar(a["handle-tapered-spiral"], zw)
-    reach = [float(np.max(np.where(np.abs((shelf[:, 0] - t + 180) % 360 - 180) < 3, shelf[:, 1], 0))) for t in (90.0, 270.0)]
-    left, right = thumb_shelf(-1.0).bounding_box(), thumb_shelf(1.0).bounding_box()
-    out["thumb_shelf"] = {"hand": TS["hand"], "side": "-X (holder's right)" if SHELF_SIDE < 0 else "+X (holder's left)",
+    shelf = thumb_shelf()
+    bounds = shelf.bounding_box()
+    reach = [bounds[3], -bounds[0]]
+    mirror_difference = (shelf - shelf.mirror((1.0, 0.0, 0.0))).volume()
+    # Check the actual exported handle, not just the shelf helper: every button zone
+    # has material immediately below the same top plane and nothing above it.
+    top_zones = {}
+    for style in ("smooth", "spiral"):
+        handle = a[f"handle-tapered-{style}"]
+        top_zones[style] = {}
+        for name, x in (("left", -18.0), ("centre", 0.0), ("right", 18.0)):
+            below = box(x - 0.5, x + 0.5, shelf_top_y() - 0.2, shelf_top_y(), zw - 7.5, zw - 6.5)
+            above = below.translate((0.0, 0.2, 0.0))
+            top_zones[style][name] = {"below_mm3": r4((handle ^ below).volume()),
+                                      "above_mm3": r4((handle ^ above).volume())}
+    out["thumb_shelf"] = {"hand": TS["hand"], "side": "Both sides, on top", "top_y": r4(shelf_top_y()),
+                          "width_mm": r4(bounds[3] - bounds[0]),
+                          "flat_top_zones": top_zones,
                           "section_z": r4(zw), "reach_plus_x_mm": r4(reach[0]), "reach_minus_x_mm": r4(reach[1]),
-                          "mirrors_exactly": bool(all(abs(l + r) < 1e-6 for l, r in zip(left[:1] + left[3:4], right[3:4] + right[:1]))
-                                                  and all(abs(l - r) < 1e-6 for l, r in zip(left[1:3] + left[4:6], right[1:3] + right[4:6])))}
+                          "mirrors_exactly": bool(abs(mirror_difference) < 1e-7)}
     out["volume_mm3"] = {n: r4(m.volume()) for n, m in sorted(a.items()) if not n.startswith("coupon")}
     out["spiral_extra_mm3"] = {k: r4(a[f"{k}-tapered-spiral"].volume() - a[f"{k}-tapered-smooth"].volume()) for k in ("handle", "shaft-lower", "shaft-upper")}
     peaks_ok = all(len(v) == SP["starts"] and abs(((v[1] - v[0]) % 360) - 360 / SP["starts"]) < 6 for v in out["rib_peaks_deg"].values())
     out["passed"] = bool(all(v < 0.2 for v in seams.values()) and peaks_ok
                          and max(reach[0], reach[1]) > out["radius_mm"]["handle_face"] + TS["protrusion"] - 1
-                         and min(reach[0], reach[1]) < taper_radius(zw) + SP["height"] + 0.5 and out["thumb_shelf"]["mirrors_exactly"])
+                         and min(reach[0], reach[1]) > out["radius_mm"]["handle_face"] + TS["protrusion"] - 1
+                         and out["thumb_shelf"]["mirrors_exactly"]
+                         and all(v["below_mm3"] > 0.199 and v["above_mm3"] < 0.001
+                                 for zones in top_zones.values() for v in zones.values()))
     return out
 
 
@@ -1019,7 +1039,7 @@ def wire_probe(profile: str = "puck-legacy", radius: float = 1.5) -> Manifold:
         start = [(0, low, Z_TIP - 14)]
     if profile.startswith("tapered"):  # Back down the shafts and handle, out through the thumb shelf.
         xw, zs = shelf_wire_point()
-        pts = start + [(0, low, Z_TONGUE + 4), (0, 0, Z_LAP), (0, 0, zs), (xw, 0, zs), (xw, TS["thickness"] / 2 + radius + 0.2, zs)]
+        pts = start + [(0, low, Z_TONGUE + 4), (0, 0, Z_LAP), (0, 0, zs), (xw, shelf_top_y() + radius + 0.2, zs)]
     else:
         pts = start + [(0, low, Z_TONGUE + 4), (0, 0, Z_LAP), (0, 0, Z_SPIGOT - 1), (0, 0, L - 30),
                        (0, 0, zw), (0, y_pod, zw), (0, y_pod, BUTTONS["top"])]
