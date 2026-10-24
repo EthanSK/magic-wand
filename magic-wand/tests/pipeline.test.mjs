@@ -4,8 +4,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
-import { createPipeline } from "../docs/sim/pipeline.mjs";
-import { MacScreen } from "../docs/sim/mac.mjs";
+import { createPipeline } from "../../docs/sim/pipeline.mjs";
+import { MacScreen } from "../../docs/sim/mac.mjs";
 
 const require = createRequire(import.meta.url);
 const { createWand, read } = require("./harness.cjs");

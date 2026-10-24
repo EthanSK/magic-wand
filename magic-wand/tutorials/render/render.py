@@ -27,7 +27,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import (  # noqa: E402
-    ROOT, TRANSCRIPTS, VIDEOS, WAND, control_fingerprint, storyboard_fingerprint, load_manifest, save_manifest, sha256_file, transcript,
+    ROOT, REPOSITORY, TRANSCRIPTS, VIDEOS, WAND, control_fingerprint, storyboard_fingerprint, load_manifest, save_manifest, sha256_file, transcript,
 )
 from scene import H, W, Painter, Timeline  # noqa: E402
 
@@ -120,7 +120,7 @@ def render_one(tutorial_id: str, scratch: str) -> dict:
     return {
         "id": tutorial_id,
         "render": {
-            **{key: path.relative_to(ROOT).as_posix() for key, path in targets.items()},
+            **{key: path.relative_to(REPOSITORY).as_posix() for key, path in targets.items()},
             "duration": round(float(probe["format"]["duration"]), 2),
             "codecs": sorted({stream["codec_name"] for stream in probe["streams"]}),
             "size": [W, H],

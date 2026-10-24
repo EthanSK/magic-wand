@@ -17,7 +17,8 @@ import sys
 import urllib.request
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from paths import ROOT, REPOSITORY, DOCS
 SOURCE = "https://ethansk.github.io/agentic-mouse/simulator-data.json"
 TARGET = ROOT / "data" / "agentic-mouse-hud.json"
 

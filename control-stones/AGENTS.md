@@ -1,6 +1,7 @@
 # Control Stones
 
-- Commit and push completed, checked work after every natural step. Use this Magic Wand repository and its existing remote. Never force-push or include unrelated changes.
+Inherit the shared rules in ../AGENTS.md.
+
 - Keep all existing sensors supported. Do not contaminate the Puck JavaScript, replace the V1 profile, or change the installed Wand receiver when adding Sense or other sensors.
 - Keep device-specific firmware and transports separate; share only code with the same verified behavior.
 - Maintain `docs/wiring.html`, originally created by Opus, as the wiring diagram. Do not maintain a competing diagram. Keep unverified connections marked.

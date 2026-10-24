@@ -22,8 +22,8 @@ import sys
 from html import escape
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-DOCS = ROOT / "docs"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from paths import ROOT, REPOSITORY, DOCS
 HOWTO = DOCS / "how-to"
 PAGE = HOWTO / "index.html"
 sys.path.insert(0, str(ROOT / "tutorials" / "render"))
@@ -280,7 +280,7 @@ def problems(manifest: dict | None = None, wand: dict | None = None) -> list[str
             say("not rendered; run tutorials/render/render.py")
             continue
         for key in ("video", "poster", "captions", "transcript"):
-            path = ROOT / render[key]
+            path = common.resolve_artifact(render[key])
             if not path.is_file():
                 say(f"{key} is missing: {render[key]}")
             elif common.sha256_file(path) != render["sha256"][key]:
@@ -293,10 +293,10 @@ def problems(manifest: dict | None = None, wand: dict | None = None) -> list[str
             say("wand.json changed a control this video shows; check the beats and re-render it")
         if render.get("storyboardFingerprint") != common.storyboard_fingerprint(tutorial, manifest):
             say("the storyboard changed; re-render this guide")
-        captions = ROOT / render["captions"]
+        captions = common.resolve_artifact(render["captions"])
         if captions.is_file():
             found += [f"{name}: {message}" for message in caption_problems(captions.read_text(), tutorial)]
-        transcript = ROOT / render["transcript"]
+        transcript = common.resolve_artifact(render["transcript"])
         if transcript.is_file() and transcript.read_text() != common.transcript(tutorial):
             say("transcript differs from the question, beats and steps; re-render it")
     return found

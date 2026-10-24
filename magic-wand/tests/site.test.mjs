@@ -5,8 +5,8 @@ import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import * as THREE from "../docs/lib/three-0.185.1/three.module.min.js";
-import { buildRig, makeCamera, RIG } from "../docs/wand-scene.mjs";
+import * as THREE from "../../docs/lib/three-0.185.1/three.module.min.js";
+import { buildRig, makeCamera, RIG } from "../../docs/wand-scene.mjs";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
 const python = (script, ...args) => spawnSync("python3", ["-I", script, ...args], { cwd: root, encoding: "utf8" });
@@ -19,7 +19,7 @@ for (const [script, args] of [["scripts/build.py", ["--check"]], ["scripts/vendo
 }
 
 test("the website names every manifest button and keeps the demo boundary", () => {
-  const html = readFileSync(new URL("../docs/index.html", import.meta.url), "utf8");
+  const html = readFileSync(new URL("../../docs/index.html", import.meta.url), "utf8");
   const manifest = JSON.parse(readFileSync(new URL("../wand.json", import.meta.url), "utf8"));
   for (const button of manifest.buttons) {
     assert.match(html, new RegExp(`data-button="${button.id}"[^>]*aria-keyshortcuts="${button.key}"`));

@@ -11,10 +11,11 @@ import json
 import re
 from datetime import date
 from html import escape
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-DOCS = ROOT / "docs"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from paths import ROOT, REPOSITORY, DOCS
 SITE = "https://ethansk.github.io/magic-wand/"
 ASSET_EXTENSIONS = "css|mjs|js|json|svg|png|jpg|webp|woff2|webmanifest"
 STAMP = re.compile(

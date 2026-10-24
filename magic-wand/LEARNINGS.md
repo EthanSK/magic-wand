@@ -727,3 +727,7 @@ Prefer flat text when the tilted result is not both 1.5 pt and 10% larger; tall
 slanted paragraphs remain flat. Measure each final rotated text box against the
 actual wedge and keep the normal physical-mouse grid untouched. Cache the final
 plan so pointer-focus updates do not redo the typography search.
+
+## Component source and published assets have separate roots
+
+The monorepo keeps Wand source under `magic-wand/` and the published site under root `docs/`. Use `scripts/paths.py` for those roots; resolve tutorial source records against the component and rendered `docs/` records against the repository. Run root `npm run check` to include all components and the repository-wide privacy scan. Moving files must leave device/receiver bytes and rendered media unchanged.

@@ -9,9 +9,11 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from paths import ROOT, REPOSITORY, DOCS
 DEVICE = ROOT / "device"
 GENERATED = DEVICE / "generated"
 BODY_ANCHOR = "// Adjust only"

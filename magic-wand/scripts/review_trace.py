@@ -12,7 +12,8 @@ import subprocess
 import sys
 import tempfile
 
-ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from paths import ROOT, REPOSITORY, DOCS
 SUPPORT = Path.home() / "Library/Application Support/WandReceiver"
 
 def trace_files(path: Path) -> list[Path]:

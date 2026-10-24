@@ -12,3 +12,8 @@ __pycache__/
 
 # The receiver's private device settings never belong in the repository.
 device.json
+
+# Component-local legacy scratch paths.
+/magic-wand/build/
+/magic-wand/.cache/
+/magic-wand/work/

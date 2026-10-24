@@ -4,14 +4,16 @@ from __future__ import annotations
 import hashlib
 import json
 import subprocess
+import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+from paths import ROOT, REPOSITORY, DOCS, resolve_artifact
 MANIFEST = ROOT / "tutorials" / "tutorials.json"
 WAND = ROOT / "wand.json"
 NARRATION = ROOT / "tutorials" / "narration"
-VIDEOS = ROOT / "docs" / "how-to" / "videos"
-TRANSCRIPTS = ROOT / "docs" / "how-to" / "transcripts"
+VIDEOS = DOCS / "how-to" / "videos"
+TRANSCRIPTS = DOCS / "how-to" / "transcripts"
 
 
 def load_manifest() -> dict:
