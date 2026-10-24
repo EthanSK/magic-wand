@@ -9,10 +9,10 @@ is the Git tag `prototype-v1.0.0`; its settings are in `prototypes/v1.json`.
 Use a separate branch and profile for the next physical prototype. Do not move
 this tag or silently reinterpret V1's button positions, colours or gestures.
 
-To recover this source, create a separate checkout with:
+To recover this source, run from the `magic-wand/` component directory and create a separate checkout beside the repository:
 
 ```sh
-git worktree add ../magic-wand-prototype-v1 prototype-v1.0.0
+git -C .. worktree add ../magic-wand-prototype-v1 prototype-v1.0.0
 ```
 
 Read that checkout's `BUILDING.md` and `wand.json` before building. Restore the
