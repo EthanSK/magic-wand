@@ -130,10 +130,12 @@ test('all-three chord toggles manual standby once and suppresses individual cont
  level=1;for(const pin of PINS)w.edge(pin,1);
  assert(x.asleep);assert(!c.wandChord);
  c.digitalRead=read;
- w.edge('D1',0);w.edge('D1',1);assert(x.asleep,'one button does not wake manually-off wand');
+ w.edge('D1',0);assert(!x.asleep);w.edge('D1',1);assert.equal(x.wakes,1);
+ // Turn off again, then verify the three-button wake is consumed too.
+ level=0;c.digitalRead=p=>PINS.includes(p)?level:read(p);for(const pin of PINS)w.edge(pin,0);w.advance(.401);level=1;for(const pin of PINS)w.edge(pin,1);assert(x.asleep);
  level=0;c.digitalRead=p=>PINS.includes(p)?level:read(p);
  for(const pin of PINS)w.edge(pin,0);
- assert(!x.asleep);assert.equal(x.wakes,1);assert(!c.wandPowerManual);
+ assert(!x.asleep);assert.equal(x.wakes,2);assert(!c.wandPowerManual);
  level=1;for(const pin of PINS)w.edge(pin,1);
  c.digitalRead=read;w.device.connect();w.tap('D1');assert(c.wandState().move);
 });
@@ -144,4 +146,13 @@ test('an all-three chord wakes automatic sleep without immediately sleeping agai
  for(const pin of PINS)w.edge(pin,0);
  w.advance(1);assert(!x.asleep);assert.equal(x.wakes,1);assert.equal(x.sleeps,1);
  level=1;for(const pin of PINS)w.edge(pin,1);assert(!c.wandChord);
+});
+
+for(const pin of PINS)test(`${pin} alone wakes manual-off and does not fire its normal action`,()=>{
+ const x=setup(),{w,c}=x,read=c.digitalRead;let level=0;
+ c.digitalRead=p=>PINS.includes(p)?level:read(p);for(const p of PINS)w.edge(p,0);w.advance(.401);
+ level=1;for(const p of PINS)w.edge(p,1);c.digitalRead=read;assert(x.asleep);
+ const before=w.lines.length;w.edge(pin,0);assert(!x.asleep);assert(!c.wandPowerManual);assert.equal(x.wakes,1);
+ w.device.connect();w.advance(.3);w.edge(pin,1);w.advance(.3);
+ assert(!w.lines.slice(before).some(l=>/^@(STT|MIDDLE|BOTTOM|SCROLL)/.test(l)));assert(!c.wandChord);
 });

@@ -30,7 +30,7 @@ function boot(){
 }
 test('complete flash boot starts from an empty interpreter with calibration and every program part',()=>{
  for(let i=0;i<3;i++){
-  const b=boot();assert.equal(b.c.WAND_PERSISTENT_IMAGE,manifest.image);assert.equal(b.c.WAND_POWER_POLICY_VERSION,3);
+  const b=boot();assert.equal(b.c.WAND_PERSISTENT_IMAGE,manifest.image);assert.equal(b.c.WAND_POWER_POLICY_VERSION,4);
   assert(b.c.wandState().calibrated);assert.equal(b.c.wandMotionReady,true);assert.equal(b.c.onInit,undefined);
   assert.equal(b.c.wandPowerWatches.length,3);assert(b.c.WAND_BRIDGE_REVISION);
   b.device.connect();assert(b.c.wandState().calibrated);b.device.setPin('D1',0);b.advance(.3);b.device.setPin('D1',1);b.c.setMouseFollow(true);b.advance(.3);

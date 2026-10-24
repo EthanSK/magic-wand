@@ -6,7 +6,7 @@
 // A grip press or a Mac connecting cancels the warning; a disconnect does not.
 // A repeated request never restarts it. Only actual entry prints ENTERED.
 // g is global: the short alias keeps this within the Puck's flash budget.
-if(global.WAND_POWER_POLICY_VERSION!==3)(function(g){
+if(global.WAND_POWER_POLICY_VERSION!==4)(function(g){
   if(g.wandPowerWatches){g.wandPowerWatches.forEach(function(id){try{clearWatch(id);}catch(e){}});g.wandPowerClearTimer();NRF.removeListener('disconnect',g.wandPowerDisconnected);NRF.removeListener('connect',g.wandPowerConnectedEvent);}
   g.wandPowerOfflineTimer=g.wandPowerOfflineDeepTimer=g.wandPowerWarnTimer=g.wandPowerWarnPhase=undefined;
   g.wandPowerStandby=false;
@@ -20,15 +20,14 @@ if(global.WAND_POWER_POLICY_VERSION!==3)(function(g){
   g.wandPowerWarnCancel=function(){if(g.wandPowerWarnTimer!==undefined)clearTimeout(g.wandPowerWarnTimer);g.wandPowerWarnTimer=undefined;if(g.wandPowerWarnPhase===undefined)return;g.wandPowerWarnPhase=undefined;updateLights();print('WAND_POWER_STANDBY_CANCELLED');};
   g.wandPowerConnectedEvent=function(){g.wandPowerClearTimer();if(!g.wandPowerManual){g.wandPowerWarnCancel();g.wandPowerStandby=false;}};
   // Ethan's all-three grip chord toggles power once until every button is up.
-  // Manual off needs the same chord to wake; automatic sleep retains any-button wake.
+  // Any single grip button wakes both manual and automatic sleep, without firing its action.
   g.wandPowerInputGuard=function(){
     var n=7-digitalRead(D1)-2*digitalRead(D2)-4*digitalRead(D30);
     if(g.wandChord){if(!n)g.wandChord=false;return true;}
-    if(g.wandPowerStandby&&!g.wandPowerManual&&n){g.wandChord=true;g.wandPowerStandby=false;NRF.wake();return true;}
+    if((g.wandPowerStandby||g.wandPowerManual)&&n){g.wandChord=true;g.wandPowerManual=false;g.wandPowerWarnCancel();g.wandPowerStandby=false;NRF.wake();return true;}
     if(n===7){
       g.wandChord=true;
-      if(g.wandPowerManual){g.wandPowerManual=false;g.wandPowerWarnCancel();g.wandPowerStandby=false;NRF.wake();}
-      else{g.wandPowerWarnCancel();g.wandPowerManual=true;g.wandPowerClearTimer();g.wandPowerWarnPhase=0;g.wandPowerWarn();}
+      g.wandPowerWarnCancel();g.wandPowerManual=true;g.wandPowerClearTimer();g.wandPowerWarnPhase=0;g.wandPowerWarn();
       return true;
     }
     return !!g.wandPowerManual;
@@ -39,7 +38,7 @@ if(global.WAND_POWER_POLICY_VERSION!==3)(function(g){
   NRF.on('connect',g.wandPowerConnectedEvent);
   g.wandPowerWarn=function(){var n=g.wandPowerWarnPhase;g.wandPowerWarnTimer=undefined;if(n===undefined)return;if(!g.wandPowerManual&&g.wandPowerHeld())return g.wandPowerWarnCancel();g.wandPowerWarnPhase=n+1;if(n<4){g.wandPowerLights(n&1?0:1);g.wandPowerWarnTimer=setTimeout(g.wandPowerWarn,100);return;}g.wandPowerWarnPhase=undefined;g.wandPowerClearTimer();g.wandPowerStandby=true;g.wandPowerDark();g.wandPowerSleeps=(g.wandPowerSleeps|0)+1;print('WAND_POWER_STANDBY_ENTERED');NRF.sleep();};
   g.wandEnterDeepStandby=function(){if(g.wandPowerHeld())return false;if(g.wandPowerWarnPhase===undefined&&!g.wandPowerStandby){g.wandPowerWarnPhase=0;g.wandPowerWarn();}return true;};
-  g.WAND_POWER_POLICY_VERSION=3;
+  g.WAND_POWER_POLICY_VERSION=4;
 })(global);
 if(!global.wandPowerConnected())global.wandPowerArmOffline();
 print('WAND_POWER_POLICY_READY');

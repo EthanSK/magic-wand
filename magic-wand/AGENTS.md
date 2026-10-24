@@ -149,4 +149,4 @@ through their build/check commands; never claim an illustration is physical veri
 
 - Keep the visible wand HUD anchored while Agent Flow starts or changes its panel. Capture recorder clearance when the HUD opens, and refresh on the next open or display reconfiguration; never move an active target under the wand because another app publishes temporary window bounds. User-requested — 2026-10-20.
 
-- Pressing all three custom grip buttons together toggles manual deep standby. Manual standby wakes with the same three-button chord; automatic five-minute standby still wakes with any grip button. Consume the chord until all buttons are released so it does not also trigger mouse/HUD/recording actions. User-requested — 2026-10-24.
+- Pressing all three custom grip buttons together toggles manual deep standby. Any one grip button wakes both manual standby and automatic five-minute standby. Consume the chord until all buttons are released so it does not also trigger mouse/HUD/recording actions. User-requested — 2026-10-24.

@@ -229,7 +229,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // Checking first matters even if the source guards its own version:
         // parsing the whole skipped function body can exhaust a warm Puck.
         powerPolicyReady=false
-        queue("if(global.WAND_POWER_POLICY_VERSION===3&&typeof global.wandEnterDeepStandby==='function'&&global.wandPowerWatches&&global.wandPowerWatches.length===3)print('WAND_POWER_POLICY_READY');else print('WAND_POWER_POLICY_NEEDED');")
+        queue("if(global.WAND_POWER_POLICY_VERSION===4&&typeof global.wandEnterDeepStandby==='function'&&global.wandPowerWatches&&global.wandPowerWatches.length===3)print('WAND_POWER_POLICY_READY');else print('WAND_POWER_POLICY_NEEDED');")
     }
     func loadPowerPolicy() {
         guard let url=Bundle.main.url(forResource:"wand-power-policy",withExtension:"js"),
