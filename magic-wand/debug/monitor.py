@@ -939,10 +939,13 @@ def build_snapshot(now: float, status: dict, process: dict, model: LogModel, fol
                  "detail": "Lights off and still connected. Picking it up wakes it. Deep sleep follows after five minutes resting.",
                  "since": desk_fact["t"] if desk_fact and desk_fact["value"] else None}
     elif ready:
-        resting = (model.fact("rest") or {}).get("value") is True
+        rest_fact = model.fact("rest")
+        resting = (rest_fact or {}).get("value") is True
         power = {"state": "awake", "label": "Awake", "basis": "status",
                  "detail": "Resting on the desk; lights turn off after a minute." if resting else None,
-                 "since": desk_fact["t"] if desk_fact and desk_fact["value"] is False else ready_at}
+                 # The duration beside resting refers to this rest, not receiver uptime.
+                 "since": rest_fact["t"] if resting else
+                          desk_fact["t"] if desk_fact and desk_fact["value"] is False else ready_at}
     elif connected:
         power = {"state": "awake", "label": "Awake", "basis": "status", "detail": "Loading device code.", "since": None}
     elif live and conn["state"] in ("disconnected", "bluetooth-off"):
