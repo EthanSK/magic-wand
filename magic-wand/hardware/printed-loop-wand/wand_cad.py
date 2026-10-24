@@ -1000,12 +1000,19 @@ def tapered_checks(parts: dict) -> dict:
                     step.append(abs(float(rp.mean() - rq.mean())))
             seams[f"{style} {name}"] = r4(max(step))
     out["seam_max_radius_step_mm"] = seams
-    out["rib_peaks_deg"] = {f"z={z}": rib_peaks(a["shaft-lower-tapered-spiral"], z) for z in (180.0, 240.0)}
-    out["rib_peaks_deg"].update({f"z={z}": rib_peaks(a["shaft-upper-tapered-spiral"], z) for z in (330.0, 380.0)})
+    # Sample away from crossings; the two crests intentionally merge at crossings.
+    def sample_z(lo: float, hi: float, fractions: tuple[float, ...]) -> list[float]:
+        return [SP["pitch"] * (n + f) for n in range(int(hi / SP["pitch"]) + 1) for f in fractions
+                if lo + 5 < SP["pitch"] * (n + f) < hi - 5][:2]
+    out["rib_peaks_deg"] = {f"z={z}": rib_peaks(a["shaft-lower-tapered-spiral"], z)
+                            for z in sample_z(L, Z_GLUE, (0.0, 0.125, 0.5, 0.625))}
+    out["rib_peaks_deg"].update({f"z={z}": rib_peaks(a["shaft-upper-tapered-spiral"], z)
+                                for z in sample_z(Z_GLUE, Z_ROUND_END, (0.0, 0.125, 0.5, 0.625))})
     out["rib_expected_deg"] = {key: sorted(r4(rib_angle(float(key[2:]), k) % 360) for k in range(SP["starts"]))
                                for key in out["rib_peaks_deg"]}
     out["rib_directions"] = SP["directions"]
-    out["rib_crossings"] = {f"z={z}": rib_peaks(a["shaft-lower-tapered-spiral"], z) for z in (192.5, 247.5)}
+    out["rib_crossings"] = {f"z={z}": rib_peaks(a["shaft-lower-tapered-spiral"], z)
+                            for z in sample_z(L, Z_GLUE, (0.25, 0.75))}
     xw, zw = shelf_wire_point()
     shelf = thumb_shelf()
     bounds = shelf.bounding_box()
