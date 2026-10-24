@@ -21,6 +21,13 @@ UART_SERVICE = "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
 UART_TX = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
 
 
+def is_sense_serial(port):
+    # The original Sense bootloader keeps the XIAO product name, but PID 0x0045
+    # belongs to its firmware uploader. Opening it here prevents flashing.
+    return (port.vid == 0x2886 and port.pid != 0x0045 and
+            "XIAO" in (port.product or "").upper())
+
+
 def record(sample, state, transport):
     key = "hand" if sample["sensor"] == "hand" else f"finger:{sample['channel']}"
     with LOCK:
@@ -84,7 +91,7 @@ def read_sensor():
     import serial
     from serial.tools import list_ports
     while True:
-        devices = [p for p in list_ports.comports() if "XIAO" in (p.product or "").upper() and p.vid == 0x2886]
+        devices = [p for p in list_ports.comports() if is_sense_serial(p)]
         if len(devices) != 1:
             with LOCK:
                 STATE.update(status="Waiting for one Sense over USB", sample=None)
