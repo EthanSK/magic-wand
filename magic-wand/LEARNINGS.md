@@ -778,3 +778,10 @@ Bottom-held scrolling or dragging parks passive navigation; restarting from
 a fresh origin avoids replaying that movement into the HUD. The native and
 receiver regressions cover pauses, the next real hold and Bottom isolation.
 Installation and physical acceptance are tracked separately from source tests.
+
+## Local task ledgers are not public source
+
+Per-chat outstanding-item ledgers live in the Git-ignored root `.outstanding-items/`
+directory and may contain private workspace references. The repository privacy scanner
+excludes only that root directory; equally named folders inside components remain scanned.
+A synthetic boundary test verifies both cases, and the ledgers must never be staged.

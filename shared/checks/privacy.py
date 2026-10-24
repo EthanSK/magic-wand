@@ -25,7 +25,10 @@ UUID = re.compile(r"\b[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4
 
 def repository_files():
     for directory, folders, files in os.walk(ROOT):
-        folders[:] = [name for name in folders if name not in SKIP_DIRS and not name.endswith(".noindex")]
+        # Per-chat ledgers are Git-ignored local state, not published sources.
+        # Limit this exclusion to the repository root; nested lookalikes still get scanned.
+        folders[:] = [name for name in folders if name not in SKIP_DIRS and not name.endswith(".noindex")
+                      and not (Path(directory) == ROOT and name == ".outstanding-items")]
         for name in files:
             path = Path(directory) / name
             if path.is_file() and path.suffix not in BINARY:
