@@ -19,6 +19,10 @@ opposite directions and meeting at crossings, not two same-direction helix start
 Check measured rib angles and crossing sections. Compare surfaces immediately
 beside mating faces; extra distance behind a face includes normal helix travel.
 The generator's failure result must include profile-specific geometry checks.
+When the strands have different pitches (Ethan's "one goes faster than the other"),
+derive crossing test heights from their relative angular rates. Equal-pitch test
+heights no longer identify crossings. Verify actual mesh crests both apart and at
+the crossings; different pitch values in JSON alone do not verify the printed pattern.
 
 ## The public sources reproduce the installed wand exactly
 
@@ -847,6 +851,10 @@ slot of `different_settings_to_system`. Otherwise Studio can load the named syst
 and discard the values even though the original CLI slice used them. Verify by opening and
 saving through Studio, then reading back the actual settings. This caught supports changing
 from enabled to disabled; the corrected round trip retained supports and the brim.
+The same override registration applies to infill: a CLI slice stored 20%, but Studio
+resolved the named Extra Draft base preset to 15% on opening. Register layer height,
+walls and infill alongside support/brim values, compare the saved Studio copy with
+the prepared configuration, and keep the generator's required-key check.
 
 
 ## A released Bottom must not leave an orphaned native drag

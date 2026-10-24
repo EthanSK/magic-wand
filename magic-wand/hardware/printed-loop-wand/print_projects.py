@@ -21,6 +21,13 @@ SETTINGS = HERE / "print-settings"
 EXPORTS = HERE / "exports"
 RECEIPT = OUT / "manifest.json"
 FILES = {"spiral": "tapered-double-helix.3mf", "smooth": "tapered-smooth.3mf"}
+# Explicitly retain the prepared values when Studio resolves the named base preset.
+# Otherwise its default 15% infill can replace our 20% when opening a valid CLI slice.
+PERSISTED_PROCESS_KEYS = {
+    "layer_height", "wall_loops", "sparse_infill_density", "sparse_infill_pattern",
+    "enable_support", "support_type", "support_style", "support_threshold_angle",
+    "support_on_build_plate_only", "brim_type", "brim_width", "brim_object_gap",
+}
 
 
 def arrange_parts(names: list[str], path: Path) -> None:
@@ -92,6 +99,11 @@ def inspect_project(path: Path) -> dict:
         assert config["printer_model"] == "Bambu Lab P1S"
         assert config["filament_type"] == ["PETG"]
         assert config["enable_support"] == "1"
+        process = json.loads((SETTINGS / "process.json").read_text())
+        registered = set(config["different_settings_to_system"][0].split(";"))
+        assert PERSISTED_PROCESS_KEYS <= registered, "Prepared process overrides are missing"
+        for key in PERSISTED_PROCESS_KEYS:
+            assert config[key] == process[key], f"Prepared process value changed: {key}"
         plates = [{m.attrib["key"]: m.attrib["value"] for m in p.findall("metadata")}
                   for p in ET.fromstring(archive.read("Metadata/slice_info.config")).findall("plate")]
         assert len(plates) == 1 and plates[0]["outside"] == "false"
@@ -137,12 +149,10 @@ def build(args) -> None:
             with zipfile.ZipFile(target) as archive:
                 entries = [(i, archive.read(i)) for i in archive.infolist()]
                 config = json.loads(archive.read("Metadata/project_settings.config"))
-            # Bambu otherwise discards CLI support/brim overrides when the project opens.
-            keys = {"enable_support", "support_type", "support_style", "support_threshold_angle",
-                    "support_on_build_plate_only", "brim_type", "brim_width", "brim_object_gap"}
+            # Bambu otherwise discards CLI overrides when the project opens.
             changed = config.get("different_settings_to_system", ["", "", ""])
             changed += [""] * max(0, 3 - len(changed))
-            changed[0] = ";".join(sorted(keys | set(filter(None, changed[0].split(";")))))
+            changed[0] = ";".join(sorted(PERSISTED_PROCESS_KEYS | set(filter(None, changed[0].split(";")))))
             config["different_settings_to_system"] = changed
             clean = temp / (filename + ".clean")
             with zipfile.ZipFile(clean, "w", compression=zipfile.ZIP_DEFLATED) as archive:
