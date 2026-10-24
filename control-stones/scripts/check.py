@@ -2,6 +2,8 @@
 import ast
 import json
 import os
+import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -22,4 +24,5 @@ def main(root=ROOT):
     return 0
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()
+    subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", str(ROOT / "debug"), "-p", "test_*.py"], check=True)

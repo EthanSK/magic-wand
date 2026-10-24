@@ -6,7 +6,8 @@
   "handSensor": "LSM6DS3TR-C",
   "fingerSensor": "BMI160",
   "plannedFingerCount": 5,
-  "fingerSupport": "not connected or implemented",
+  "fingerSupport": "BMI160 telemetry via TCA9548A; physical validation required",
+  "fingerChannels": {"thumb": 2, "index": 3, "middle": 4, "ring": 5, "little": 6},
   "transport": [
     "USB serial",
     "Bluetooth LE Nordic UART"
@@ -14,5 +15,5 @@
   "firmware": "firmware/imu_debug/imu_debug.ino",
   "debugWindow": "debug/index.html",
   "wiringGuide": "docs/wiring.html",
-  "mouseControl": false
+  "mouseControl": "optional hold-to-move local debug test"
 }

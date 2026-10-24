@@ -1,42 +1,53 @@
-"""USB-only Control Stones debug viewer. Does not control the mouse or flash firmware."""
+"""Local Control Stones telemetry and explicitly held mouse test. Never flashes firmware."""
 import json
 import asyncio
-import math
 import threading
 import time
+import secrets
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-import serial
-from serial.tools import list_ports
-from bleak import BleakClient, BleakScanner
+from urllib.parse import urlparse, parse_qs
+from mouse import MouseTest
+from telemetry import parse_sample, FINGERS
 
 ROOT = Path(__file__).parent
 LOCK = threading.Lock()
 STATE = {"status": "Waiting for Sense", "sample": None, "count": 0, "received": 0}
 BLE_STATE = {"status": "Searching Bluetooth", "sample": None, "count": 0, "received": 0}
+SENSORS = {}
+MOUSE = MouseTest()
+TOKEN = secrets.token_urlsafe(32)
 UART_SERVICE = "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
 UART_TX = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
-AXES = ("ax", "ay", "az", "gx", "gy", "gz")
 
-def parse_sample(line):
-    value = json.loads(line)
-    if not isinstance(value, dict):
-        raise ValueError("Not a sample")
-    if "error" in value:
-        raise ValueError(str(value["error"]))
-    if not all(type(value.get(key)) in (int, float) and math.isfinite(value[key]) for key in AXES):
-        raise ValueError("Invalid axes")
-    sample = {key: value[key] for key in (*AXES, "ms") if key in value}
-    if type(value.get("idle")) is bool:
-        sample["idle"] = value["idle"]
-        sample["sleep_ready"] = value.get("sleep_ready") is True
-    battery = value.get("battery_v")
-    if type(battery) in (int, float) and math.isfinite(battery) and 0 < battery < 6:
-        sample["battery_v"] = battery
-        sample["charging"] = value.get("charging") is True
-    return sample
+
+def record(sample, state, transport):
+    key = "hand" if sample["sensor"] == "hand" else f"finger:{sample['channel']}"
+    with LOCK:
+        state.update(status="Live", sample=sample, received=time.monotonic(), count=state["count"] + 1)
+        by_transport = SENSORS.setdefault(key, {})
+        count = by_transport.get(transport, {}).get("count", 0) + 1
+        by_transport[transport] = dict(sample=sample, received=time.monotonic(), count=count)
+        # Prefer one live transport, avoiding out-of-order duplicate movement.
+        ble = by_transport.get("Bluetooth", {})
+        if transport == "Bluetooth" or time.monotonic() - ble.get("received", 0) >= 2:
+            MOUSE.sample(key, sample)
+
+def sensor_state(key):
+    transports = SENSORS.get(key, {})
+    now = time.monotonic()
+    item = transports.get("Bluetooth")
+    transport = "Bluetooth"
+    if not item or now - item["received"] >= 2:
+        item, transport = transports.get("USB"), "USB"
+    if not item:
+        return {"status": "Waiting for sensor readings", "sample": None, "age": None, "count": 0, "transport": None}
+    age = now - item["received"]
+    return {"status": "Live" if age < 2 else "No recent readings", "sample": item["sample"] if age < 2 else None,
+            "age": age, "count": item["count"], "transport": transport}
 
 async def read_bluetooth():
+    from bleak import BleakClient, BleakScanner
     while True:
         try:
             found = await BleakScanner.discover(timeout=4, return_adv=True)
@@ -59,8 +70,7 @@ async def read_bluetooth():
                         sample = parse_sample(line)
                     except (ValueError, UnicodeError):
                         continue
-                    with LOCK:
-                        BLE_STATE.update(status="Live", sample=sample, received=time.monotonic(), count=BLE_STATE["count"] + 1)
+                    record(sample, BLE_STATE, "Bluetooth")
             async with BleakClient(matches[0]) as client:
                 await client.start_notify(UART_TX, receive)
                 while client.is_connected:
@@ -71,6 +81,8 @@ async def read_bluetooth():
             await asyncio.sleep(2)
 
 def read_sensor():
+    import serial
+    from serial.tools import list_ports
     while True:
         devices = [p for p in list_ports.comports() if "XIAO" in (p.product or "").upper() and p.vid == 0x2886]
         if len(devices) != 1:
@@ -93,8 +105,7 @@ def read_sensor():
                             with LOCK:
                                 STATE.update(status="Built-in sensor not found", sample=None)
                         continue
-                    with LOCK:
-                        STATE.update(status="Live", sample=sample, received=time.monotonic(), count=STATE["count"] + 1)
+                    record(sample, STATE, "USB")
         except (serial.SerialException, OSError):
             with LOCK:
                 STATE.update(status="USB disconnected", sample=None)
@@ -102,24 +113,50 @@ def read_sensor():
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path == "/api/sample":
+        url = urlparse(self.path)
+        if url.path == "/api/sample":
+            source = parse_qs(url.query).get("source", ["hand"])[0]
             with LOCK:
-                use_ble = BLE_STATE["sample"] is not None and time.monotonic() - BLE_STATE["received"] < 2
-                payload = dict(BLE_STATE if use_ble else STATE)
-                payload["transport"] = "Bluetooth" if use_ble else "USB"
-            payload["age"] = time.monotonic() - payload.pop("received") if payload["sample"] else None
-            if payload["age"] is not None and payload["age"] > 2:
-                payload.update(status="No recent readings", sample=None)
+                payload = sensor_state(source)
+                payload["sensors"] = {key: sensor_state(key) for key in ("hand", *(f"finger:{i}" for i in FINGERS))}
+                payload["mouse"] = MOUSE.status()
             data = json.dumps(payload, allow_nan=False).encode()
             content_type = "application/json"
         elif self.path in ("/", "/index.html"):
-            data = (ROOT / "index.html").read_bytes()
+            data = (ROOT / "index.html").read_text().replace("__CONTROL_TOKEN__", TOKEN).encode()
             content_type = "text/html; charset=utf-8"
         else:
             self.send_error(404)
             return
         self.send_response(200)
         self.send_header("Content-Type", content_type)
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def do_POST(self):
+        origin = self.headers.get("Origin")
+        if (self.path != "/api/mouse" or self.headers.get("X-Control-Token") != TOKEN or
+            origin not in (None, "http://127.0.0.1:8769", "http://localhost:8769") or
+            self.headers.get("Content-Type") != "application/json"):
+            self.send_error(403)
+            return
+        try:
+            length = int(self.headers.get("Content-Length", "0"))
+            if not 0 < length <= 2048:
+                raise ValueError("Invalid command length")
+            value = json.loads(self.rfile.read(length))
+            if not isinstance(value, dict):
+                raise ValueError("Invalid command")
+            with LOCK:
+                MOUSE.command(value)
+                data = json.dumps(MOUSE.status()).encode()
+        except (ValueError, TypeError) as error:
+            self.send_error(400, str(error))
+            return
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
         self.send_header("Cache-Control", "no-store")
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
