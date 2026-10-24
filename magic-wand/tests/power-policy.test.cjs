@@ -41,3 +41,16 @@ test('reconnecting cancels offline darkness and a reload does not add duplicate 
  w.device.disconnect();w.advance(30);w.device.connect();assert.equal(c.wandPowerOfflineTimer,undefined);
  w.advance(31);assert(!c.wandPowerStandby);
 });
+
+// Run the receiver's actual short probe, not a copied condition.
+const receiver=fs.readFileSync(path.join(__dirname,'../receiver/Sources/main.swift'),'utf8');
+const probe=receiver.match(/queue\("(if\(global\.WAND_POWER_POLICY_VERSION===1[^"\n]*)"\)/)[1];
+test('reconnect reuses the existing policy without retransmitting it',()=>{
+ const {w,c}=setup();const watches=c.wandPowerWatches.join(',');
+ for(let i=0;i<10;i++)vm.runInContext(probe,c);
+ assert.equal(c.wandPowerWatches.join(','),watches);
+ assert.equal(w.lines.filter(l=>l==='WAND_POWER_POLICY_NEEDED').length,0);
+ assert(w.lines.filter(l=>l==='WAND_POWER_POLICY_READY').length>=10);
+ vm.runInContext('global.WAND_POWER_POLICY_VERSION=0',c);vm.runInContext(probe,c);
+ assert.equal(w.lines.at(-1),'WAND_POWER_POLICY_NEEDED');
+});
