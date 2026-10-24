@@ -297,6 +297,18 @@ XIAO profile with both handles. Direct links:
 - `?profile=xiao&view=plain`: plain handle only.
 - `?profile=puck-legacy`: the four legacy Puck.js assemblies.
 
+Viewing controls (top left of the 3D view):
+
+- **Turn** (default), **Move** or **Zoom** decides what dragging and scrolling do. Scrolling over
+  the view turns the model rather than zooming, so holding the wand's Bottom button over it (which
+  the receiver sends as scrolling here) turns it too. The choice is remembered in this browser.
+- Pinch (Ctrl+scroll), **−** / **+** and two-finger pinch on a touch screen always zoom.
+  **Reset view** or a double-click restores the framing.
+- With the view focused: arrow keys turn, move or zoom by the selected mode (Shift for bigger
+  steps), + and − zoom, 0 resets, and T, M or Z choose the mode.
+- Only the 3D view takes scrolling; the sidebar scrolls normally. The page doesn't change the wand
+  receiver: there's no automatic 3D-viewer detection.
+
 ## Known limits
 
 - Nothing has been printed. Fit, strength, comfort, balance and mass are unmeasured.
