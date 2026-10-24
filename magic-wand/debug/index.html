@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Magic Wand · Monitor</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='28' y='16' width='8' height='44' rx='4' fill='%232a2833'/%3E%3Ccircle cx='32' cy='12' r='9' fill='%234469ff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/styles.css">
+<script src="/app.js" defer></script>
+</head>
+<body data-light="unknown" data-tone="unknown">
+<a class="skip" href="#activity">Skip to activity</a>
+
+<header class="masthead">
+  <div class="masthead-top">
+    <p class="brand">Magic Wand <span>Monitor</span></p>
+    <p class="feed" id="feed" data-state="waiting">Starting</p>
+  </div>
+  <div class="headline" aria-live="polite" aria-atomic="true">
+    <h1 id="headline">Checking</h1>
+    <p id="headline-detail" class="headline-detail">Reading Wand Receiver’s status.</p>
+  </div>
+  <p id="headline-since" class="headline-since"></p>
+  <dl class="freshness">
+    <div><dt>Receiver</dt><dd id="fresh-process">—</dd></div>
+    <div><dt title="status.json changes only when state changes, so its age isn’t a heartbeat.">Status changed</dt><dd id="fresh-status">—</dd></div>
+    <div><dt>Last log event</dt><dd id="fresh-log">—</dd></div>
+  </dl>
+</header>
+
+<main>
+  <section class="panel wand-panel" aria-labelledby="buttons-title">
+    <h2 id="buttons-title">Buttons</h2>
+    <div class="wandmap">
+      <div class="tip" aria-hidden="true"><span></span></div>
+      <section class="group" aria-labelledby="g-top">
+        <span class="knob" aria-hidden="true"></span>
+        <h3 id="g-top">Top</h3>
+        <ul class="lanes" data-button="Top"></ul>
+      </section>
+      <section class="group" aria-labelledby="g-middle">
+        <span class="knob" aria-hidden="true"></span>
+        <h3 id="g-middle">Middle</h3>
+        <ul class="lanes" data-button="Middle"></ul>
+      </section>
+      <section class="group" aria-labelledby="g-bottom">
+        <span class="knob" aria-hidden="true"></span>
+        <h3 id="g-bottom">Bottom</h3>
+        <ul class="lanes" data-button="Bottom"></ul>
+      </section>
+    </div>
+  </section>
+
+  <section class="panel sleep-panel" aria-labelledby="sleep-title">
+    <h2 id="sleep-title">Sleep</h2>
+    <ol class="track" id="track">
+      <li data-step="awake"><strong>Awake</strong><span>Lights show the mode</span></li>
+      <li class="gap" aria-hidden="true">1 min resting</li>
+      <li data-step="desk-idle"><strong>Desk idle</strong><span>Pickup wakes</span></li>
+      <li class="gap" aria-hidden="true">5 min resting</li>
+      <li data-step="deep-sleep"><strong>Deep sleep</strong><span>Grip button wakes</span></li>
+    </ol>
+    <p class="note" id="power-detail"></p>
+  </section>
+
+  <div class="cards">
+    <section class="panel" aria-labelledby="light-title">
+      <h2 id="light-title">Light</h2>
+      <div class="light-row">
+        <span class="swatch" id="light-swatch" aria-hidden="true"></span>
+        <div>
+          <p class="big" id="light-name">—</p>
+          <p class="note" id="light-detail"></p>
+        </div>
+      </div>
+      <dl class="facts" id="light-facts"></dl>
+    </section>
+
+    <section class="panel" aria-labelledby="delivery-title">
+      <h2 id="delivery-title">Motion Delivery</h2>
+      <p class="big" id="delivery-rate">—</p>
+      <div class="bars" id="delivery-bars" aria-hidden="true"></div>
+      <dl class="facts" id="delivery-facts"></dl>
+      <p class="note">Logged after 5 s of continuous motion. This is delivery rate, not latency.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="settings-title">
+      <h2 id="settings-title">Settings</h2>
+      <dl class="facts" id="settings-facts"></dl>
+    </section>
+
+    <section class="panel" aria-labelledby="receiver-title">
+      <h2 id="receiver-title">Receiver</h2>
+      <dl class="facts" id="receiver-facts"></dl>
+    </section>
+  </div>
+
+  <section class="panel errors-panel" aria-labelledby="errors-title">
+    <h2 id="errors-title">Errors</h2>
+    <ul class="errors" id="errors"></ul>
+    <p class="note" id="echo-note"></p>
+  </section>
+
+  <section class="panel activity" id="activity" aria-labelledby="activity-title" tabindex="-1">
+    <div class="activity-head">
+      <h2 id="activity-title">Activity</h2>
+      <div class="filters" role="group" aria-label="Show activity" id="filters"></div>
+    </div>
+    <ol class="timeline" id="timeline"></ol>
+  </section>
+
+  <details class="panel raw">
+    <summary><h2>Raw Diagnostics</h2></summary>
+    <dl class="facts" id="sources"></dl>
+    <h3>Status</h3>
+    <pre id="raw-status">—</pre>
+    <h3>Recent log lines</h3>
+    <pre id="raw-log">—</pre>
+  </details>
+</main>
+
+<footer class="footer">
+  <p>Read-only. Reads Wand Receiver’s status and log on this Mac; never connects to the wand.</p>
+</footer>
+</body>
+</html>
