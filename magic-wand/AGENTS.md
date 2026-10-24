@@ -127,7 +127,7 @@ through their build/check commands; never claim an illustration is physical veri
 
 ## Opus for UX
 
-- “Stop doing Opus UX reviews unless I ask it.” Do not automatically start Opus UX passes from a standing default. Use Opus for UX reviews only when Ethan explicitly asks; otherwise Codex handles the work. This replaces the earlier automatic “Opus for UX” instruction. User-requested — 2026-10-24.
+- Ethan: “Do any UX related stuff with Opus actually and bug fixing and stuff you do yourself and like testing and installing.” Use Opus for Magic Wand UX implementation; Codex owns bug fixes, verification and installation. Announce each use with “Opus for UX” and say why it is being used. User-requested — 2026-10-19.
 
 ## Current contextual hold and sleep behaviour
 
