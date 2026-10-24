@@ -2,7 +2,7 @@
 
 - **Author model:** Opus 5.5 (`claude-opus-5-5`), run through the Claude Agent SDK and invoked by Codex.
 - **Illustration:** `docs/wiring.html`. This is an HTML fragment for the visualize surface, built with theme tokens, with no `<html>`, `<head>` or `<body>`.
-- **Current status:** Educational diagram, not a physically validated schematic. Codex rendered and checked the original diagram at desktop and narrow widths, and checked the revised channel 2–6 labels and build-stage controls in the browser. Opus authored the original; Codex maintains subsequent requested updates. Sensor power-pad topology remains unverified.
+- **Current status:** Source-checked wiring plan, not a measurement of the assembled hardware. The power choice now follows a vendor guide whose board photographs match Kunkune's purple BMI160/6DS3 board: regulated XIAO 3V3 to each sensor's 3V3, with VIN unused. CS and SA0 connect locally to 3V3 for I²C at address 0x69. Opus authored the original; Codex maintains subsequent requested updates. Delivered-board labels, shorts, pull-ups and first sensor communication still need physical checks.
 
 ## What the illustration does
 
@@ -13,9 +13,10 @@
   4. Battery
 
   Parts that come in later stages are drawn faded (ghosted). Wires appear only once their stage is reached.
-- **Selecting a connection:** click any wire or pad chip (`CS?`, `SA0?`, `NC`, built-in IMU), or use the **Connection** dropdown, which works from the keyboard. The diagram then:
+- **Selecting a connection:** click any wire or pad chip (`CS`, `SA0`, `NC`, built-in IMU), or use the **Connection** dropdown, which works from the keyboard. The diagram then:
   - draws rings on both endpoints and fades everything else;
   - fills a card with: status, *from → to* endpoints, what the connection does, what to check, and the source.
+- **Clearing a selection:** click blank diagram/page space or press Escape outside a form control. The dropdown also has a no-selection option. The detail card and dropdown remain usable without clearing the selection, and an empty selection is preserved when changing stages.
 - **Status is shown by line style as well as label:**
   - solid = documented by a vendor or Bosch source
   - dashed = verify on the delivered board
@@ -35,7 +36,7 @@
 | # | From | To | Status |
 |---|------|----|--------|
 | 1 | XIAO USB-C | Mac USB (programs and charges) | Documented (Seeed) |
-| 2 | XIAO radio | Mac Bluetooth (BLE) | Wireless, firmware not written |
+| 2 | XIAO radio | Mac Bluetooth (BLE) | Built-in hand readings implemented; external finger support pending |
 | 3 | XIAO built-in LSM6DS3TR-C | none (on the board) | Built in. Power is gated by P1.08 per Seeed |
 | 4 | XIAO D4 / SDA (P0.04) | TCA9548A SDA | Documented |
 | 5 | XIAO D5 / SCL (P0.05) | TCA9548A SCL | Documented |
@@ -44,10 +45,10 @@
 | 8 | TCA9548A RST | not connected | Leave open (pulled high on the board; ground = reset) |
 | 9 | TCA9548A A0/A1/A2 | not connected | Leave open (pulled low on the board → 0x70) |
 | 10 | TCA9548A SD*n* / SC*n*, *n* = 2..6 | Thumb / Index / Middle / Ring / Little board SDA / SCL | Documented (Adafruit: no pull-ups on the channels) |
-| 11 | XIAO 3V3 rail | each finger board **VIN or 3V3**, not yet determined | **Verify** |
+| 11 | XIAO 3V3 rail | each finger board **3V3**; leave VIN unused | Matching-board vendor guide |
 | 12 | XIAO GND rail | each finger board GND | Documented |
-| 13 | Each finger board CS | leave as delivered | **Verify** |
-| 14 | Each finger board SA0 | leave as delivered | **Verify** |
+| 13 | Each finger board CS | same board's 3V3 | I²C mode; check no short to GND before adding local connection |
+| 14 | Each finger board SA0 | same board's 3V3 | Address 0x69; check no short to GND before adding local connection |
 | 15 | Each finger board INT1, INT2, OCS, SCX, SDX | not connected | Leave open (Bosch §4.1) |
 | 16 | LiPo + (JST-PH) via the socket pigtail | XIAO BAT+ pad (underside) | **Verify polarity** |
 | 17 | LiPo − (JST-PH) via the socket pigtail | XIAO BAT− pad (underside) | **Verify polarity** |
@@ -79,6 +80,7 @@ Notes on the wiring:
   - CHIPID register 0x00 reads 0xD1 (§2.11.1).
   - Typical current with accel and gyro both running is 925 µA.
 - **Kunkune listing:** it says 3.3 V (1.71–3.6 V), "without an onboard regulator", I²C 0x68/0x69, and modes "configurable via the PS pin". The photographed board has no PS pad, so the listing text contradicts the photos in two places: the regulator and the PS pin.
+- **[Spintend matching-board guide](https://spintend.com/products/bmi-160-module-for-diy-balanced-board-with-vesc):** its board photos match the purple BMI160/6DS3 layout in [Kunkune's listing](https://kunkune.co.uk/shop/arduino-sensors/bmi160-6-axis-motion-tracking-accelerometer-gyroscope-module/). The guide explicitly offers VIN with 5 V **or** 3V3 with regulated 3.3 V, choosing one. We use the latter. Its SA0-to-GND example selects 0x68 for VESC; our custom firmware can instead use 0x69 with SA0 high. This is matching-board documentation, not proof of the user's physical PCB revision.
 - **Board photos (the inspected supplier image):**
   - Pads: VIN, 3V3, GND, SCL, SDA, CS, SA0 on one side, and OCS, INT2, INT1, SCX, SDX on the other.
   - Parts: a 5-pin SOT-23-style part marked `S2PG` (regulator-like, not identified), several capacitors, and four resistors marked `103` (10 kΩ).
@@ -91,13 +93,9 @@ Notes on the wiring:
 
 ## Verdict on the uncertain electrical wiring
 
-1. **Finger-board power pad (VIN vs 3V3): UNRESOLVED.** With the board unpowered, meter two things:
-   - whether the S2PG part sits between VIN and 3V3;
-   - which pad the `103` pull-ups return to.
-
-   Working rule (my reasoning, not validated): feed XIAO 3V3 into the pad the pull-ups return to. If the pull-ups return to VIN, as on the related schematic, feeding only the 3V3 pad could leave SDA/SCL/CS/SA0 without powered pull-ups. Never apply battery voltage.
-2. **CS strap: UNRESOLVED.** The bare chip's internal CSB pull-up is a chip feature. It is not evidence of how the board is wired. Leave CS as delivered for the first scan. Add a strap to the board's own 3.3 V rail only if metering or a failed scan calls for it.
-3. **SA0 / address: UNRESOLVED.** The board may already strap it to 0x68 or to 0x69. Because each finger has its own mux channel, the five boards can share whichever address they have. In stage 2, scan both 0x68 and 0x69 and expect chip ID 0xD1. The related schematic's apparent CS/SA0 label swap is a reason to avoid adding straps blind.
+1. **Finger-board power pad: use 3V3; leave VIN empty.** This follows the matching-board vendor guide rather than the unrelated schematic or Kunkune's contradictory prose. VIN feeds the board's regulator; 3V3 is the regulated rail. Never apply raw battery voltage to 3V3.
+2. **CS: connect locally to 3V3.** Bosch recommends holding CSB at VDDIO from power-up for I²C. No CS wire needs to run to the controller.
+3. **SA0: connect locally to 3V3, selecting 0x69.** All five sensors may share this address behind separate mux channels. Holding both CS and SA0 high also avoids depending on the apparent label swap in the unrelated schematic. With all power disconnected, first verify neither pad is hard-shorted to GND; stop if it is. On the first powered test, select channel 2 and verify 0x69 plus CHIPID 0xD1 before adding other sensors. The [Bosch datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi160-ds000.pdf), §§3.2.1 and 3.2.3, defines these modes and addresses.
 4. **Pull-ups: PROBABLY ADEQUATE, UNVERIFIED.**
    - The mux upstream side has pull-ups per Adafruit's schematic.
    - The mux channels have none.
@@ -113,12 +111,12 @@ Notes on the wiring:
 
 - **Staging:** the build stages are the main control (four tabs). Earlier parts stay visible in later stages, and later parts appear faded in advance.
 - **Power:** drawn as explicit rails, not as net-label flags.
-- **CS and SA0:** treated as "as delivered, scan first" rather than "strap them now".
-- **Power pad:** a meter-based decision rule is offered instead of naming VIN or 3V3.
+- **CS and SA0:** explicit local 3V3 connections, with the unpowered short check and first-sensor scan still required.
+- **Power pad:** 3V3 named explicitly using the matching-board vendor guide; VIN unused.
 - **Interrupts:** INT1 is described as a possible future wake line, with no GPIO invented.
 - **Two layouts:** wide and narrow, with no fixed-width viewBox scaling.
 - **Accessibility:** the dropdown gives keyboard access to every connection, the detail card announces updates, and the SVG has a title and description.
 - **Not included:** a printable wiring table inside the visual. The table above serves that purpose instead.
 
 ## Current channel mapping (24 October 2026)
-User requested avoiding channels 0 and 1. Thumb 2, index 3, middle 4, ring 5, little 6; channel 7 spare. Both diagrams updated.
+User requested avoiding channels 0 and 1. Thumb 2, index 3, middle 4, ring 5, little 6; channel 7 spare. This is the maintained diagram.
