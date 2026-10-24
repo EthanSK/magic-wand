@@ -30,10 +30,10 @@ function boot(){
 }
 test('complete flash boot starts from an empty interpreter with calibration and every program part',()=>{
  for(let i=0;i<3;i++){
-  const b=boot();assert.equal(b.c.WAND_PERSISTENT_IMAGE,'full-20261024');assert.equal(b.c.WAND_POWER_POLICY_VERSION,2);
+  const b=boot();assert.equal(b.c.WAND_PERSISTENT_IMAGE,manifest.image);assert.equal(b.c.WAND_POWER_POLICY_VERSION,2);
   assert(b.c.wandState().calibrated);assert.equal(b.c.wandMotionReady,true);assert.equal(b.c.onInit,undefined);
   assert.equal(b.c.wandPowerWatches.length,3);assert(b.c.WAND_BRIDGE_REVISION);
-  b.device.connect();assert(b.c.wandState().calibrated);b.c.setMouseFollow(true);b.advance(.3);
+  b.device.connect();assert(b.c.wandState().calibrated);b.device.setPin('D1',0);b.advance(.3);b.device.setPin('D1',1);b.c.setMouseFollow(true);b.advance(.3);
   for(let n=0;n<20;n++){b.advance(.02);b.device.accel({x:50,y:0,z:200})}
   assert(b.lines.some(s=>s.startsWith('@RAW ')),'real saved motion code emits raw pointer data');
   b.device.setPin('D30',0);b.advance(.1);b.device.setPin('D30',1);assert(b.lines.some(s=>s.startsWith('@STT ')));

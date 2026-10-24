@@ -340,7 +340,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
         else moveGestureMode='clutch';
         wakeGyro();
       },CONFIG.tapSeconds*1000);
-      updateLights();return;
+      // No redundant terminal return: the saved flash-backed handler must
+      // finish normally at the end of its source on the Puck interpreter.
+      updateLights();
 
     };
   });
@@ -462,12 +464,13 @@ if(global.wandRawPointer)global.wandLiveMotionCallback.replaceWith(function(a) {
     var hx=(g[C.xAxis]-bias[C.xAxis])/134,hy=(g[C.yAxis]-bias[C.yAxis])/134,keep=radialKeep(hx,hy);
     hudX+=hx*keep*dt*C.xSign;hudY+=hy*keep*dt*C.ySign;
   }
-  if (!connected || !moveLatched || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging)) {
+  if (!connected || (!moveLatched && !hudOpen) || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging)) {
     G.wandSlackX=G.wandSlackY=0;
     fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;return;
   }
   if(G.wandRawBias!==bias){Bluetooth.println('@ZERO '+JSON.stringify([bias[C.xAxis],bias[C.yAxis],C.gain,C.yGain,C.fineGain,C.fineSpeed,C.fullSpeed,C.heldPointerGain,C.slackDegrees,C.slackRecentre,C.slackQuietSpeed,C.xSign,C.ySign]));G.wandRawBias=bias;}
-  var flags=(digitalRead(MOVE_PIN)?0:1)+(rawReset?2:0);G.wandRawActive=true;
+  // Bit 4 supplies HIGH sensitivity to the HUD without moving an inactive pointer.
+  var flags=(digitalRead(MOVE_PIN)?0:1)+(rawReset?2:0)+(moveLatched?0:4);G.wandRawActive=true;
   Bluetooth.println('@RAW '+M.max(1,M.round(dt*1000000))+','+g[C.xAxis]+','+g[C.yAxis]+','+flags);
 });
 if(global.wandRawPointer)global.wandMotionReady=global.wandLiveMotionCallback.toString().indexOf('@RAW ')>=0;

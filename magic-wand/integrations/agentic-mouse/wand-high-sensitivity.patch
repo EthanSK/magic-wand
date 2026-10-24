@@ -1,0 +1,213 @@
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -12,14 +12,18 @@
+     public let id: String
+     public let sequence: Int
+     public let offset: WandAngularOffset
+-    public init(_ phase: Phase, id: String, sequence: Int = 0, x: Double = 0, y: Double = 0) {
++    /// Cumulative normal HIGH mouse output for this held gesture. Only Switch App uses it.
++    public let mouseX: Double?
++    public static let maximumMouseX: Double = 7_200_000
++    public init(_ phase: Phase, id: String, sequence: Int = 0, x: Double = 0, y: Double = 0, mouseX: Double? = nil) {
+         self.phase = phase; self.id = id; self.sequence = sequence
+         self.offset = .init(x:x,y:y)
++        self.mouseX = mouseX
+     }
+     public static func decodeIfPresent(_ data: Data) throws -> Self? {
+         guard let value = try? JSONSerialization.jsonObject(with:data) as? [String:Any],
+               value["command"] as? String == "agentic_mouse_wand_control" else { return nil }
+-        guard data.count <= 512, Set(value.keys).isSubset(of:["command","version","phase","id","seq","x","y"]),
++        guard data.count <= 512, Set(value.keys).isSubset(of:["command","version","phase","id","seq","x","y","mouseX"]),
+               let v = value["version"] as? NSNumber, CFGetTypeID(v) != CFBooleanGetTypeID(), v.doubleValue == 1,
+               let phase = Phase(rawValue:value["phase"] as? String ?? ""),
+               let id = value["id"] as? String, WandSelectionCommand.isValidGestureIdentifier(id),
+@@ -32,7 +36,14 @@
+                   abs(n.doubleValue) <= 7200 else { throw WandSelectionCommandError.invalidField(key) }
+             return n.doubleValue
+         }
+-        return try .init(phase,id:id,sequence:seq.intValue,x:number("x"),y:number("y"))
++        var mouseX: Double?
++        if let raw=value["mouseX"] {
++            guard phase == .motion, let n=raw as? NSNumber, CFGetTypeID(n) != CFBooleanGetTypeID(),
++                  n.doubleValue.isFinite, abs(n.doubleValue) <= maximumMouseX
++            else { throw WandSelectionCommandError.invalidField("mouseX") }
++            mouseX=n.doubleValue
++        }
++        return try .init(phase,id:id,sequence:seq.intValue,x:number("x"),y:number("y"),mouseX:mouseX)
+     }
+ }
+ 
+@@ -52,6 +63,10 @@
+ ///   cancelled. Any new HUD input ends that wait first.
+ public final class WandPersistentController {
+     public static let followUpLinger: TimeInterval = 2
++    /// Unit conversion, not a second sensitivity curve: at the reference HIGH
++    /// gain, the existing seven-degree detent spans 604.8 mouse counts. The
++    /// receiver owns Ethan's live mouse gain/response and excludes Bottom LOW.
++    private static let switchAppReferenceGain: Double = 86.4
+     public var onAdjustStep: ((WheelChordDirection)->Bool)?
+     public var onSwitchAppStep: ((WheelChordDirection)->Bool)?
+     public var onContext: ((Bool)->Void)?
+@@ -75,6 +90,9 @@
+         var sentSteps=0
+         var netSteps=0
+         var lastStepWasUp:Bool?
++        enum SwitchMetric { case angle, mouse }
++        var switchMetric:SwitchMetric?
++        var lastMouseX:Double?
+     }
+     /// A wheel card chosen by a held release, waiting for its motion. Its
+     /// press is already delivered and stays held, as on a mouse; only
+@@ -242,7 +260,8 @@
+             } else if target.pageGeneration == current.pageGeneration, target.isWandHome, current.cell == .switchApp {
+                 // The system switcher is horizontal: moving right selects the next app.
+                 // Command is already held by the same native press lifecycle.
+-                for step in current.tracker.apply(deltaY:-dx) where onSwitchAppStep?(step.wheelDirection) == true {
++                let delta=switchAppDelta(command,angleDelta:dx,hold:&current)
++                for step in current.tracker.apply(deltaY:-delta) where onSwitchAppStep?(step.wheelDirection) == true {
+                     current.sentSteps += 1;current.netSteps += step == .physicalUp ? 1 : -1
+                     current.lastStepWasUp=step == .physicalUp
+                 }
+@@ -357,6 +376,26 @@
+         if target.isActive {showAdjustment(current)}
+     }
+ 
++    /// Reuse the existing detent hysteresis, feedback and six-step packet cap.
++    /// The first HIGH sample and every metric transition only rebase; a stale
++    /// cumulative value must never jump across apps when RAW resumes or stops.
++    private func switchAppDelta(_ command:WandPersistentCommand,angleDelta:Double,hold:inout Hold)->Double {
++        if let mouseX=command.mouseX {
++            defer {hold.switchMetric = .mouse;hold.lastMouseX=mouseX}
++            guard hold.switchMetric == .mouse, let previous=hold.lastMouseX else {
++                hold.tracker=WandAdjustDetentTracker()
++                return 0
++            }
++            return (mouseX-previous)/Self.switchAppReferenceGain
++        }
++        defer {hold.switchMetric = .angle;hold.lastMouseX=nil}
++        if hold.switchMetric == .mouse {
++            hold.tracker=WandAdjustDetentTracker()
++            return 0
++        }
++        return angleDelta
++    }
++
+     private func showAdjustment(_ current:Hold) {
+         target.setPointerFocus(.init(cell:current.cell,adjustment:.init(pull:current.tracker.progress,
+             netSteps:current.netSteps,sentSteps:current.sentSteps,lastStepWasUp:current.lastStepWasUp)))
+--- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
++++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+@@ -305,3 +305,113 @@
+     }
+ 
+ }
++
++
++extension WandPersistentControlTests {
++    func testHighMouseStreamUsesReferenceDistanceAndIgnoresRawAngle() {
++        var switched:[WheelChordDirection]=[]
++        control.onSwitchAppStep={switched.append($0);return true}
++        control.handle(.init(.choose,id:"arm-high"))
++        control.handle(.init(.navigate,id:"high-stream"))
++        control.handle(.init(.motion,id:"high-stream",sequence:1,x:100,mouseX:500))
++        XCTAssertTrue(switched.isEmpty,"the first cumulative sample is a baseline")
++        // Fine movement accumulates exactly the same travel as one fast sweep.
++        for n in 1...20 {
++            control.handle(.init(.motion,id:"high-stream",sequence:n+1,x:100+Double(n)*10,
++                                 mouseX:500+Double(n)*30.24))
++        }
++        XCTAssertEqual(switched,[.down],"604.8 HIGH counts preserve a seven-degree reference detent")
++        XCTAssertEqual(target.pointerFocus?.adjustment?.netSteps,1)
++        control.handle(.init(.motion,id:"high-stream",sequence:22,x:300,mouseX:500))
++        XCTAssertEqual(switched,[.down,.up],"opposite HIGH travel reverses without any angular motion")
++        control.handle(.init(.park,id:"high-stream",sequence:23))
++        XCTAssertFalse(control.isOpen)
++    }
++
++    func testHighMouseAndLegacyAnglesHaveEquivalentDetents() {
++        var switched:[WheelChordDirection]=[]
++        control.onSwitchAppStep={switched.append($0);return true}
++        control.handle(.init(.press,id:"legacy-reference"))
++        control.handle(.init(.motion,id:"legacy-reference",sequence:1,x:7))
++        XCTAssertEqual(switched,[.down])
++        control.handle(.init(.release,id:"legacy-reference",sequence:2))
++        control.handle(.init(.press,id:"high-reference"))
++        control.handle(.init(.motion,id:"high-reference",sequence:1,mouseX:0))
++        control.handle(.init(.motion,id:"high-reference",sequence:2,mouseX:604.8))
++        XCTAssertEqual(switched,[.down,.down])
++        control.handle(.init(.motion,id:"high-reference",sequence:3,mouseX:604.8+200_000))
++        XCTAssertEqual(switched.count,8,"one oversized sample is capped at six")
++        control.handle(.init(.motion,id:"high-reference",sequence:4,mouseX:604.8+200_000))
++        XCTAssertEqual(switched.count,8,"excess movement is dropped, not queued")
++    }
++
++    func testHighMouseMetricTransitionsRebaseWithoutJumping() {
++        var switched:[WheelChordDirection]=[]
++        control.onSwitchAppStep={switched.append($0);return true}
++        control.handle(.init(.press,id:"metric-change"))
++        control.handle(.init(.motion,id:"metric-change",sequence:1,x:7))
++        XCTAssertEqual(switched,[.down])
++        control.handle(.init(.motion,id:"metric-change",sequence:2,x:100,mouseX:20_000))
++        XCTAssertEqual(switched.count,1,"new HIGH metric only rebases")
++        control.handle(.init(.motion,id:"metric-change",sequence:3,x:100,mouseX:20_604.8))
++        XCTAssertEqual(switched,[.down,.down])
++        control.handle(.init(.motion,id:"metric-change",sequence:4,x:300))
++        XCTAssertEqual(switched.count,2,"missing stream rebases the angular metric")
++        control.handle(.init(.motion,id:"metric-change",sequence:5,x:307))
++        XCTAssertEqual(switched,[.down,.down,.down])
++        control.handle(.init(.motion,id:"metric-change",sequence:6,x:307,mouseX:-10_000))
++        XCTAssertEqual(switched.count,3,"returning stream cannot replay old cumulative travel")
++        control.handle(.init(.motion,id:"metric-change",sequence:7,x:307,mouseX:-10_604.8))
++        XCTAssertEqual(switched,[.down,.down,.down,.up])
++    }
++
++    func testHighMouseCannotBypassSequenceOrGestureIdentity() {
++        var switched:[WheelChordDirection]=[]
++        control.onSwitchAppStep={switched.append($0);return true}
++        control.handle(.init(.press,id:"high-identity"))
++        control.handle(.init(.motion,id:"high-identity",sequence:1,mouseX:0))
++        control.handle(.init(.motion,id:"wrong-identity",sequence:2,mouseX:6000))
++        control.handle(.init(.motion,id:"high-identity",sequence:1,mouseX:6000))
++        XCTAssertTrue(switched.isEmpty)
++        control.handle(.init(.motion,id:"high-identity",sequence:2,mouseX:604.8))
++        XCTAssertEqual(switched,[.down])
++        control.reset(reason:.systemSleep)
++        control.handle(.init(.motion,id:"high-identity",sequence:3,mouseX:6000))
++        XCTAssertEqual(switched.count,1)
++    }
++
++    func testHighMouseMetadataDoesNotChangeNavigationOrOtherWheelCards() {
++        var switched:[WheelChordDirection]=[]
++        control.onSwitchAppStep={switched.append($0);return true}
++        let goal=offset(to:.frontmostAppModeSelector)
++        control.handle(.init(.navigate,id:"nav-with-high"))
++        control.handle(.init(.motion,id:"nav-with-high",sequence:1,x:goal.x,y:goal.y,mouseX:100_000))
++        XCTAssertEqual(control.focusedCell,.frontmostAppModeSelector)
++        XCTAssertTrue(switched.isEmpty)
++        control.handle(.init(.park,id:"nav-with-high",sequence:2))
++        select(PhysicalCell(rawValue:1)!)
++        control.handle(.init(.press,id:"wheel-with-high"))
++        control.handle(.init(.motion,id:"wheel-with-high",sequence:1,y:-12.5,mouseX:100_000))
++        XCTAssertEqual(steps,[.down,.down])
++        XCTAssertTrue(switched.isEmpty)
++        control.handle(.init(.release,id:"wheel-with-high",sequence:2))
++        XCTAssertNil(target.activeWheelControl)
++    }
++
++    func testHighMouseWireValidationAndLegacyCompatibility() throws {
++        func wire(_ extra:String,phase:String="motion")->Data {
++            Data(("{\"command\":\"agentic_mouse_wand_control\",\"version\":1,\"phase\":\""+phase+"\",\"id\":\"wire-high\",\"seq\":1"+extra+"}").utf8)
++        }
++        XCTAssertNil(try WandPersistentCommand.decodeIfPresent(wire(""))?.mouseX)
++        XCTAssertEqual(try WandPersistentCommand.decodeIfPresent(wire(",\"mouseX\":7200000"))?.mouseX,7_200_000)
++        XCTAssertEqual(try WandPersistentCommand.decodeIfPresent(wire(",\"mouseX\":-12.5"))?.mouseX,-12.5)
++        for value in ["true","null","\"604.8\"","7200001","-7200001"] {
++            XCTAssertThrowsError(try WandPersistentCommand.decodeIfPresent(wire(",\"mouseX\":"+value)))
++        }
++        for phase in ["open","hover","navigate","qualify","park","release","choose"] {
++            XCTAssertThrowsError(try WandPersistentCommand.decodeIfPresent(wire(",\"mouseX\":0",phase:phase)))
++        }
++        // Non-finite JSON is rejected before a command exists.
++        XCTAssertNil(try WandPersistentCommand.decodeIfPresent(wire(",\"mouseX\":NaN")))
++    }
++}

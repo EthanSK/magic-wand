@@ -515,7 +515,9 @@ struct WandAngularStream {
 }
 
 final class WandMotionFilter {
-    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double}
+    // Ethan's Switch App sensitivity means normal mouse HIGH, even while
+    // Middle is held. Share the unrounded calculation; Bottom alone owns LOW.
+    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double}
     private var values:[Double] = []
     private var fx=0.0,fy=0.0,ix=0.0,iy=0.0,meanSpeed=0.0,intentTime=0.0
     private var slackX=0.0,slackY=0.0,fractionX=0.0,fractionY=0.0
@@ -566,11 +568,12 @@ final class WandMotionFilter {
             stepX=slackX*excess;stepY=slackY*excess;slackX-=stepX;slackY-=stepY
         }
         var scale=v[4]+(1-v[4])*blend*blend*(3-2*blend)
+        let highX=stepX*v[2]*scale*v[11]
         if held {scale*=v[7]}
         fractionX+=stepX*v[2]*scale*v[11];fractionY+=stepY*v[2]*v[3]*scale*v[12]
         let countX=Int(fractionX.rounded(.towardZero)),countY=Int(fractionY.rounded(.towardZero))
         fractionX-=Double(countX);fractionY-=Double(countY)
-        return .init(x:max(-4095,min(4095,countX)),y:max(-4095,min(4095,countY)),intent:active,angularX:x*v[11],angularY:y*v[12])
+        return .init(x:max(-4095,min(4095,countX)),y:max(-4095,min(4095,countY)),intent:active,angularX:x*v[11],angularY:y*v[12],highX:highX)
     }
 }
 

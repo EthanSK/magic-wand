@@ -39,3 +39,12 @@ test('native upload frees the old callback in an earlier complete statement',()=
  assert(free>=0 && replacement>free,'free old function before parsing its replacement');
  assert(!lines[free].includes("Bluetooth.println('@RAW "));
 });
+
+test('HUD-only raw motion is available without enabling the mouse',()=>{
+ const w=createWand();w.calibrate();w.ctx.wandRawPointer=true;w.loadBridge();
+ w.ctx.setMouseFollow(false);w.ctx.setHUDOpen(true);w.advance(.3);w.lines.length=0;w.frames.length=0;
+ for(let i=0;i<30;i++)w.paced(.01,{z:1200,x:-800,y:0});
+ const raw=w.lines.filter(l=>l.startsWith('@RAW '));assert(raw.length>=25);
+ assert(raw.every(l=>(Number(l.split(',').at(-1))&4)!==0));assert.equal(w.ctx.wandState().move,false);
+ assert(!w.lines.some(l=>l.startsWith('@WAND ')&&!l.includes('@WAND 0,0,0')));
+});
