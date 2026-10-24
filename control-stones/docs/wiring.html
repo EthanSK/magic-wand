@@ -19,11 +19,11 @@
 #cs-wiring-opus .w{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 #cs-wiring-opus .wire:hover .w{stroke-width:3}
 #cs-wiring-opus .wire.is-sel .w{stroke-width:3.5}
-#cs-wiring-opus .net-pwr{stroke:var(--viz-series-1)}
+#cs-wiring-opus .net-pwr{stroke:var(--red)}
 #cs-wiring-opus .net-gnd{stroke:var(--foreground)}
-#cs-wiring-opus .net-sda{stroke:var(--viz-series-2)}
-#cs-wiring-opus .net-scl{stroke:var(--viz-series-3)}
-#cs-wiring-opus .net-bat{stroke:var(--viz-series-4)}
+#cs-wiring-opus .net-sda{stroke:var(--green)}
+#cs-wiring-opus .net-scl{stroke:var(--yellow)}
+#cs-wiring-opus .net-bat{stroke:var(--red)}
 #cs-wiring-opus .net-link,#cs-wiring-opus .net-nc{stroke:var(--muted-foreground)}
 #cs-wiring-opus .st-verify{stroke-dasharray:6 4}
 #cs-wiring-opus .st-wireless{stroke-dasharray:1 5}
@@ -31,7 +31,7 @@
 #cs-wiring-opus .xmark{fill:none;stroke:var(--muted-foreground);stroke-width:1.5;stroke-linecap:round}
 #cs-wiring-opus .pin{fill:var(--card);stroke:var(--foreground);stroke-width:1.2}
 #cs-wiring-opus .ring{fill:none;stroke:var(--foreground);stroke-width:1.5}
-#cs-wiring-opus .dot-pwr{fill:var(--viz-series-1)}
+#cs-wiring-opus .dot-pwr{fill:var(--red)}
 #cs-wiring-opus .dot-gnd{fill:var(--foreground)}
 #cs-wiring-opus .chip-bg{fill:transparent;stroke:var(--border);stroke-width:1}
 #cs-wiring-opus .chip-box{fill:var(--muted);stroke:var(--border);stroke-width:1}
@@ -55,11 +55,11 @@
   <p class="csw-stage" id="csw-stage-line" aria-live="polite"></p>
 
   <div class="csw-legend text-small">
-    <span class="csw-key"><span class="csw-sw" style="--sw: var(--viz-series-1)"></span>3V3</span>
-    <span class="csw-key"><span class="csw-sw" style="--sw: var(--foreground)"></span>GND</span>
-    <span class="csw-key"><span class="csw-sw" style="--sw: var(--viz-series-2)"></span>SDA</span>
-    <span class="csw-key"><span class="csw-sw" style="--sw: var(--viz-series-3)"></span>SCL</span>
-    <span class="csw-key"><span class="csw-sw" style="--sw: var(--viz-series-4)"></span>Battery +</span>
+    <span class="csw-key"><span class="csw-sw" style="--sw: var(--red)"></span>3V3 · red wire</span>
+    <span class="csw-key"><span class="csw-sw" style="--sw: var(--foreground)"></span>GND · black wire</span>
+    <span class="csw-key"><span class="csw-sw" style="--sw: var(--green)"></span>SDA · green wire</span>
+    <span class="csw-key"><span class="csw-sw" style="--sw: var(--yellow)"></span>SCL · yellow wire</span>
+    <span class="csw-key"><span class="csw-sw" style="--sw: var(--red)"></span>Battery + · red wire</span>
     <span class="csw-key"><span class="csw-sw" style="--sw: var(--muted-foreground)"></span>USB</span>
     <span class="csw-key"><span class="csw-sw is-dot" style="--sw: var(--muted-foreground)"></span>BLE</span>
     <span class="csw-key"><span class="csw-sw is-dash" style="--sw: var(--foreground)"></span>verify on board</span>
@@ -104,6 +104,8 @@
   if (!diag || !svg || !canvas || !select || !detail || !stageLine || !panel || !tablist) return;
 
   const FINGERS = ['Thumb', 'Index', 'Middle', 'Ring', 'Little'];
+  // Physical insulation colours, not interchangeable labelled offcuts.
+  const WIRE_COLOURS = { pwr: 'red', bat: 'red', gnd: 'black', sda: 'green', scl: 'yellow' };
   const STATUS = { ok: 'Documented', verify: 'Verify on delivered board', open: 'Leave unconnected', wireless: 'Wireless', builtin: 'Built in' };
   const STAGE_NAME = { 1: 'USB only', 2: 'One sensor', 3: 'Five sensors', 4: 'Battery' };
   const STAGE_LINE = {
@@ -463,6 +465,12 @@
     const what = document.createElement('p');
     what.textContent = c.what;
     detail.append(head, ends, what);
+
+    if (WIRE_COLOURS[c.net]) {
+      const wire = document.createElement('p');
+      wire.textContent = 'Wire insulation: ' + WIRE_COLOURS[c.net] + '.';
+      detail.append(wire);
+    }
 
     if (c.check) {
       const p = document.createElement('p');
