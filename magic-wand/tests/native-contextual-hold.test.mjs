@@ -26,7 +26,7 @@ final class Harness {
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),motionFilter=WandMotionFilter(),dwell=WandDwellClick(),recenterGesture=WandRecenterGesture(),flickScroll=WandFlickScroll()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?
  var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,hudSession=false,flickScrollEnabled=false,heldScrollDiagnostics=false
- var middleHeld=false,middleMouseX=0.0,middleMouseSampleAt = -100.0
+ var screenshotActive=false,middleHeld=false,middleMouseX=0.0,middleMouseSampleAt = -100.0
  var commands:[String]=[],scrollPostedX=0,scrollPostedY=0
  var scrollAnchor:CGPoint?,scrollWatchdog:Timer?
  var rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,frames=0,downs=0,light=false
@@ -73,6 +73,16 @@ precondition(WandHoldTarget.classify(roles:["AXToolbar","AXWindow"]) == .drag,"a
 precondition(WandHoldTarget.classify(roles:["AXDockItem","AXList","AXApplication"]) == .drag)
 precondition(WandHoldTarget.classify(roles:[]) == .unknown,"a failed hit test proves nothing")
 precondition(WandHoldTarget.classify(roles:["AXTextField","AXGroup"]) == .unknown,"a broken chain proves nothing")
+
+// The screenshot selector is an explicit drag even over a scroll area.
+// It has no tap ambiguity: down starts immediately, up captures the rectangle.
+let screenshot=Harness();screenshot.screenshotActive=true;screenshot.hudSession=true
+precondition(screenshot.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
+screenshot.beginBottomHold(now:ProcessInfo.processInfo.systemUptime)
+precondition(screenshot.buttons==1 && screenshot.heldScroll.dragging,"screenshot Bottom-down begins a drag immediately")
+precondition(!screenshot.hudSession && !screenshot.heldScroll.resolving,"screenshot drag parks HUD and skips the target probe")
+screenshot.handleRaw("10000,2680,0,0")
+precondition(screenshot.buttons==0 && !screenshot.heldScroll.active,"screenshot release ends the native selection")
 
 // Over a scroll area: scrolls, never presses the mouse button.
 let scroll=press(["AXStaticText","AXScrollArea"]);wait(0.05)

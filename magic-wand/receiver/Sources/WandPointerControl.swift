@@ -930,8 +930,8 @@ final class WandHeldScroll {
     func settleTarget(now:Double){if resolving && qualified(now:now) {resolving=false}}
     func qualified(now:Double)->Bool {active && now-started>=holdSeconds}
     func elapsed(now:Double)->Double {now-started}
-    func startDrag(now:Double)->Bool {
-        guard !scrollable,!resolving,!dragging,qualified(now:now) else{return false}
+    func startDrag(now:Double,immediate:Bool=false)->Bool {
+        guard active,!scrollable,!resolving,!dragging,(immediate || qualified(now:now)) else{return false}
         dragging=true;return true
     }
     @discardableResult

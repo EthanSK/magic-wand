@@ -834,3 +834,15 @@ was cleared, and ending a hold clears its dragging flag. Keep short-tap mode
 changes, explicit tap-then-hold dragging, contextual target selection, and Middle
 HUD/Top speech independent. Native regressions exercise missing releases, late
 packets, repeat teardown and later holds; real-device acceptance is separate.
+
+
+## Screenshot selection is an explicit drag target
+
+The receiver receives the native screenshot-active state but previously routed
+Bottom through the ordinary contextual scroll/drag probe. A screenshot overlay
+is not an ordinary scroll target. While screenshot selection is active, Bottom
+parks the HUD, skips that probe and posts native left-down immediately; raw
+motion draws the rectangle and physical release posts left-up. Normal holds
+retain their existing classification cutoff. The native contextual-hold test
+failed before this change and passes afterward; actual capture still needs a
+physical check.
