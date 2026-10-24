@@ -25,6 +25,15 @@ final class Harness {
  func performPointer(_ actions:[WandPointerRouter.Action]){}
  ${['finishBottomHold','reconcileBottomHold','handleFrame'].map(method).join('\n')}
 }
+let legacy=Harness();legacy.controlVersion = .pointerV1
+_=legacy.pointerRouter.bottom(down:true);legacy.buttons=1
+legacy.reconcileBottomHold(down:false,now:1,reason:"early raw sample")
+precondition(legacy.buttons==1,"V1 does not cut a still-held drag on a pre-debounce sample")
+_=legacy.pointerRouter.bottom(down:false)
+legacy.reconcileBottomHold(down:false,now:2,reason:"released raw sample")
+precondition(legacy.buttons==0,"V1 releases an orphan after its physical up edge")
+legacy.handleFrame(x:0,y:0,b:1);legacy.handleFrame(x:0,y:0,b:0)
+precondition(legacy.transitions.suffix(2)==[1,0],"ordinary V1 click pairs remain intact")
 for version in [WandControlVersion.scrollV2,.sustainedV3] {
  let h=Harness();h.controlVersion=version
  h.buttons=1 // A native down survived an earlier state cancellation.

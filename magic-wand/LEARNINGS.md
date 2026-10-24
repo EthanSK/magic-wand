@@ -319,6 +319,15 @@ is ready; this delay applies to installation, not pointer samples or gestures.
 Recover through the existing Bluetooth owner and preserve a successful sensor
 zero. Source tests cannot reproduce the device's UART input capacity.
 
+Distinguish receiver replacement from a complete saved-device update when
+reporting installation time. The maintenance sender uses 20-byte acknowledged
+writes and additional pacing, so a whole saved module takes much longer than a
+Mac app swap. Prepare builds and verification inputs before stopping the receiver;
+do not rewrite device code for receiver-only changes. Removing pacing or increasing
+payloads is an unverified transport change, not a free speedup: preserve flow control,
+complete saved code, calibration and readback verification. Measure the interrupted
+interval separately from build/test time.
+
 
 ## First-flick scrolling is an explicit option
 
@@ -846,6 +855,21 @@ motion draws the rectangle and physical release posts left-up. Normal holds
 retain their existing classification cutoff. The native contextual-hold test
 failed before this change and passes afterward; actual capture still needs a
 physical check.
+
+
+## Cancel the device button before clearing its drag state
+
+The motion bridge's `setMouseFollow` replacement cleared the `dragging` flag
+without queuing a button-up. After a mode or recording change, the later physical
+release no longer entered the drag branch and `sentButtons` could remain one.
+Emit the up before clearing the gesture. Tests exercise both follow values with
+readable and statement-split saved bridges and verify later frames stay released.
+V1 also releases orphaned native downs on a physical-up sample after its release
+edge, while leaving a real held drag alone during switch debounce.
+
+Receiver battery reads use existing built-in APIs through the existing BLE owner;
+they do not require a second connection or a volatile firmware helper. Preserve
+sample age and describe the Puck's CR2032 estimate separately from runtime.
 
 
 ## Wand input in the printed-model viewer

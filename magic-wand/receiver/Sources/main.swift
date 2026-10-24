@@ -30,6 +30,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var lastTrusted = false, ready = false, legacySignaled = false
     var lastStatusKey = ""
     var lightMode = "unknown"
+    var batteryPercent:Int?,batteryVolts:Double?,batterySampleAt:Date?
+    var batteryRequested=Date.distantPast
     var pointerDisplays:[CGRect]=[]
     var deliveryPoint:CGPoint?
     var circleAnchor:CGPoint?,scrollAnchor:CGPoint?
@@ -204,6 +206,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if self.lastTrusted != trusted { self.lastTrusted = trusted; log("ACCESSIBILITY", trusted); self.status() }
             self.recording.refresh()
             self.refreshFeatureFlags()
+            self.requestBattery()
             self.status()
             if !self.ready && self.manager.state == .poweredOn && self.device == nil { self.connect() }
         }
@@ -372,13 +375,33 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         connectionMenuItem?.title=ready ? "Connected" : "Connecting…"
         let traceState=reviewTrace.status
         let key = "\(device?.state == .connected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(deskSleep.sleeping)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(reviewAxisEnabled)|\(motionFilter.orientationCompensation)|\(traceState["enabled"] ?? false)|\(traceState["diskError"] ?? false)"
-        guard key != lastStatusKey else { return }
-        lastStatusKey = key
-        let value: [String: Any] = ["pid": ProcessInfo.processInfo.processIdentifier, "connected": device?.state == .connected,
+        let batteryKey=key+"|"+String(batterySampleAt?.timeIntervalSince1970 ?? 0)
+        guard batteryKey != lastStatusKey else { return }
+        lastStatusKey = batteryKey
+        var value: [String: Any] = ["pid": ProcessInfo.processInfo.processIdentifier, "connected": device?.state == .connected,
             "ready": ready, "options":["controlVersion":controlVersion.rawValue,"flickScroll":flickScrollEnabled,"reviewAxisGestures":reviewAxisEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording,"deskSleeping":deskSleep.sleeping, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
             "reviewTrace":traceState,
             "updatedAt": ISO8601DateFormatter().string(from: Date())]
+        if let percent=batteryPercent,let volts=batteryVolts,let measured=batterySampleAt {
+            value["battery"]=["percent":percent,"volts":volts,"measuredAt":measured.timeIntervalSince1970]
+        }
         if let data = try? JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]) { try? data.write(to: support.appendingPathComponent("status.json"), options: .atomic) }
+    }
+    /// The Puck's own CR2032 voltage estimate, using the existing connection.
+    /// Querying built-in functions adds no firmware helper or second BLE owner.
+    func requestBattery() {
+        guard ready,!restoring,!deskSleep.deepSleeping,Date().timeIntervalSince(batteryRequested)>=60 else{return}
+        batteryRequested=Date()
+        queue("print('WAND_BATTERY '+JSON.stringify({percent:E.getBattery(),volts:NRF.getBattery()}));")
+    }
+    func handleBattery(_ payload:String) {
+        guard let data=payload.data(using:.utf8),let v=(try? JSONSerialization.jsonObject(with:data)) as? [String:Any],
+              let number=v["percent"] as? NSNumber,CFGetTypeID(number) != CFBooleanGetTypeID(),
+              number.doubleValue.rounded()==number.doubleValue,let volts=v["volts"] as? Double,
+              let percent=Int(exactly:number.doubleValue),
+              (0...100).contains(percent),volts.isFinite,(1...5).contains(volts) else{return}
+        batteryPercent=percent;batteryVolts=volts;batterySampleAt=Date()
+        log("BATTERY",percent,String(format:"%.3f",volts));status()
     }
     func centralManagerDidUpdateState(_ c: CBCentralManager) {
         log("RADIO_STATE", c.state.rawValue)
@@ -428,7 +451,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func reset() {
-        powerPolicyReady=false;loadingPowerPolicy=false
+        powerPolicyReady=false;loadingPowerPolicy=false;batteryRequested=Date.distantPast
         reviewTrace.boundary("receiver reset",mode:wandShortcutMode)
         reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset();middleReviewExit=false
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil
@@ -561,12 +584,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 guard !bridgeLoadFailed else {queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();");log("BRIDGE_LOAD_REJECTED");continue}
                 loadingBridge=false;loadingRuntime=false;ready=true;motionFilter.reset();rawLastArrival=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
                 restoreKnownCalibration();checkPowerPolicy()
+                requestBattery()
                 if let remembered=standbyResume {let resume=remembered && !recording.isRecording;standbyResume=nil;queue("setMouseFollow("+(resume ? "true":"false")+");");dwell.follow(resume);log("DEEP_STANDBY_RESUMED",resume)}
                 if context.isActive {hudSession=true;hudOpenedAt=ProcessInfo.processInfo.systemUptime}
                 if let mode=selectedReviewMode {setWandShortcut(mode)}
                 queue("global.wandRawPointer=true;global.wandRawBias=undefined;global.wandRawActive=false;global.WAND_UPDATING=false;setHUDOpen("+(context.isActive ? "true":"false")+");updateLights();")
             }
             if line.hasPrefix("WAND_DIAG ") || line.hasPrefix(">WAND_DIAG ") || line.hasPrefix("WAND_CALLBACK_MATCH ") || line.hasPrefix(">WAND_CALLBACK_MATCH ") {log("DEVICE",line)}
+            if line.hasPrefix("WAND_BATTERY ") || line.hasPrefix(">WAND_BATTERY "),let range=line.range(of:"WAND_BATTERY ") {handleBattery(String(line[range.upperBound...]))}
             if line.hasPrefix("WAND_BUTTON_STATE ") || line.hasPrefix(">WAND_BUTTON_STATE ") {log("DEVICE",line)}
             if let marker=line.range(of:"WAND_LIGHT_STATE ") {
                 let payload=String(line[marker.upperBound...])
@@ -1251,6 +1276,15 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if completedScroll && resumeMouse {enableMouseAfterScroll()}
     }
     func reconcileBottomHold(down:Bool,now:Double,reason:String,resumeMouse:Bool=true) {
+        // V1's normal click pair is synchronous. After its physical release
+        // edge, a later up sample can safely clear an orphaned device drag.
+        if !controlVersion.usesHeldScroll {
+            if !down && !pointerRouter.bottomHeld && buttons & 1 != 0 {
+                transition(to:buttons & ~1,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)
+                log("BOTTOM_HOLD_RECOVERED",reason)
+            }
+            return
+        }
         guard controlVersion.usesHeldScroll else{return}
         if down {heldScroll.confirmHeld(now:now);return}
         guard heldScroll.active || pointerRouter.bottomHeld || buttons & 1 != 0 else{return}
