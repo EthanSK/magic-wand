@@ -749,11 +749,11 @@ The monorepo keeps Wand source under `magic-wand/` and the published site under 
 Private output guards must cover the repository root, not just the component root. The replay report path check resolves paths before writing and permits only external locations or the explicitly ignored root/component `work/` folders; its regression test includes another component and the published site.
 
 Component checks are narrower than the monorepo gate: the root check command runs repository-wide privacy scanning before all components. Setup docs and error hints must name the working directory explicitly after source moves. Shared privacy scanning prunes dependency and generated-build directories; component syntax checks examine owned source rather than installed Python packages.
-# Automatic calibration and deeper standby (2026-10-24)
+
+## Automatic calibration and deeper standby (2026-10-24)
 
 The base connection callback clears its calibration while starting a new measurement. A known runtime or ready marker alone therefore does not establish usable motion after reconnection. The receiver now stores validated calibration offsets per physical device and conditionally restores them after its normal ready handshake. Never publish those private per-device records. Corrupt, mismatched or out-of-range records are rejected.
 
 Deep standby is a small separately loaded power policy so it does not replace the working base program or motion bridge. After five minutes of confirmed rest, the receiver requests radio/sensor/light shutdown only when no button, scroll, recording or explicit HUD/review is active. Retained GPIO watches wake advertising on any custom grip press. The first press wakes the device while disconnected; it must not emit a speech or pointer action. A reconnect restores the recorded pointer choice and calibration. Ordinary disconnected indication goes dark after one minute.
 
 The installed policy loaded successfully alongside the existing bridge, with calibration intact. Synthetic checks covered all three wake buttons, radio/sensor/light shutdown, retained offsets, duplicate loading and disconnected timeout. A subsequent receiver stop/start retained the accepted offsets and resumed real movement reports. Physical five-minute sleep and button wake remain unverified. Do not describe reference power figures as measured battery life.
-
