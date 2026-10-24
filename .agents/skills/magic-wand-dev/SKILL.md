@@ -20,10 +20,10 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
 
 ## Workflow
 
-1. Read [AGENTS.md](../../../AGENTS.md), the relevant [LEARNINGS.md](../../../LEARNINGS.md)
-   sections and [SOURCES.md](../../../SOURCES.md). Inspect the actual source and Git state;
+1. Read [AGENTS.md](../../../magic-wand/AGENTS.md), the relevant [LEARNINGS.md](../../../magic-wand/LEARNINGS.md)
+   sections and [SOURCES.md](../../../magic-wand/SOURCES.md). Inspect the actual source and Git state;
    preserve unrelated changes and identify the installed version before diagnosing hardware.
-2. Use [BUILDING.md](../../../BUILDING.md) for the real build and connection architecture.
+2. Use [BUILDING.md](../../../magic-wand/BUILDING.md) for the real build and connection architecture.
    This public checkout publishes sources; do not connect to, flash or restart hardware here.
    Authorized hardware changes run from the established private installation workflow.
 3. Keep one Bluetooth owner: the installed receiver. Prefer diagnostics through its existing
@@ -37,7 +37,7 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
    Table-rest detection must not stop dictation or dismiss an explicitly open HUD.
 4. Do not add intentional movement latency without Ethan's fresh explicit confirmation.
    Sensor sampling, delivered update rate and end-to-end latency are different measurements.
-5. For prototype changes, read [the prototype policy](../../../prototypes/README.md).
+5. For prototype changes, read [the prototype policy](../../../magic-wand/prototypes/README.md).
    Preserve the V1 baseline and feature flags. New hardware needs its own profile; do not
    silently redefine the original button positions, gestures, gains or colours.
 6. Verify relevant source tests and the installed version, then distinguish hardware evidence

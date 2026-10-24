@@ -26,3 +26,9 @@ These workspace commands do not require installing dependencies. Toolchain prere
 Read [AGENTS.md](AGENTS.md) for shared rules, then the component instructions. The root commit-and-push rule applies to all components.
 
 <!-- Previously Magic Wand sources, tests, scripts and instructions lived at the repository root; they now live in magic-wand/. -->
+
+## Agent instructions
+
+Shared rules are in `AGENTS.md`; component rules are in each component's `AGENTS.md`. All reusable skills live at the repository root in `.agents/skills/`. Claude Code 2.1.277 and later can read AGENTS.md directly when there is no overriding CLAUDE.md. The root `.claude/skills` is only a symbolic link for Claude's separately documented skill discovery, not another maintained skill directory.
+
+<!-- Previously magic-wand/.agents/skills; skills are centralized in root .agents/skills. -->

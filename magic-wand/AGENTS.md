@@ -90,12 +90,12 @@ Report any check the browser tool can’t do, such as real multitouch, rather th
   dictated aside into a permanent rule.
 - Keep historical findings and verified technical lessons in `LEARNINGS.md`; current controls,
   colours and tuning belong in `wand.json`. Do not use `AGENTS.md` as a transcript or task log.
-- Use [magic-wand-dev](.agents/skills/magic-wand-dev/SKILL.md) for device, receiver, integration,
-  release and prototype work. Use [learnings](.agents/skills/learnings/SKILL.md) before bug fixes
+- Use [magic-wand-dev](../.agents/skills/magic-wand-dev/SKILL.md) for device, receiver, integration,
+  release and prototype work. Use [learnings](../.agents/skills/learnings/SKILL.md) before bug fixes
   and fragile changes, and preserve useful verified lessons afterward.
-- Skills live in `.agents/skills/<name>/SKILL.md`, with `references/`, `scripts/` or `assets/`
-  only when needed. `CLAUDE.md` and `.claude/skills` point at the same canonical instructions;
-  never maintain diverging copies. Reuse the structure, not AIMVS-specific rules or tooling.
+- Skills live in the repository root `.agents/skills/<name>/SKILL.md`, with supporting files
+  only when needed. Keep component-specific instructions here; do not create component
+  `.agents/` or `.claude/` directories. Reuse the structure, not AIMVS-specific rules or tooling.
 - Preserve `prototype-v1.0.0` as the immutable original-hardware baseline. Read
   `prototypes/README.md` before changing prototype profiles; later hardware gets a separate
   profile so returning to V1 does not lose its tuned behaviour.
