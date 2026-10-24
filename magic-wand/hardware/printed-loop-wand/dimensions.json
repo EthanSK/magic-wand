@@ -1,0 +1,135 @@
+{
+  "schema": 1,
+  "name": "printed-loop-wand",
+  "units": "mm",
+  "status": "Provisional first print set. Model geometry is generated and checked; printed fit, strength, comfort and mass are not measured.",
+  "frame": "Assembly axes: +Z runs from the handle butt (z = 0) to the tip, +Y is the button side, the loop hangs toward -Y. Angles are measured from +Y toward +X, which is clockwise seen from the tip.",
+  "printer_reference": {
+    "model": "Bambu Lab P1S",
+    "nozzle": 0.4,
+    "filament": "Generic PETG",
+    "bed": [256, 256, 256],
+    "margin": 4,
+    "note": "Reference profile only; no slicing or printing was done."
+  },
+  "overall": {
+    "length": 500,
+    "note": "Butt to tip cap. Roughly matches the existing 50 cm wand; editable."
+  },
+  "section": {
+    "thickness": 22,
+    "chamfer": 4,
+    "note": "Handles are a 22 mm slab with 45-degree chamfers so they print on their side without supports."
+  },
+  "handle": {
+    "length": 140,
+    "spine_radius": 12,
+    "loop_radius": 7,
+    "variants": {
+      "round": {
+        "label": "Round",
+        "grip": "Mug-style loop for two fingers; thumb on the buttons.",
+        "circle": { "center": [88, -31], "radius": 26, "end_y": -6 }
+      },
+      "oval": {
+        "label": "Oval",
+        "grip": "Long D-loop around four fingers, so the wand stays on a relaxed hand.",
+        "points": [[16, -6], [12, -26], [24, -45], [48, -49], [96, -49], [118, -42], [127, -24], [124, -6]]
+      },
+      "angled": {
+        "label": "Angled",
+        "grip": "Raked loop, deeper at the palm, for a less bent wrist while pointing.",
+        "points": [[18, -6], [10, -30], [14, -56], [32, -66], [62, -58], [100, -44], [121, -27], [124, -6]]
+      }
+    },
+    "socket_floor": 2.5,
+    "floor_hole_diameter": 9.0,
+    "bay_diameter": 12,
+    "bay_length": 17.5,
+    "channel_diameter": 6,
+    "channel_rear": 61,
+    "rail_wire_hole": { "z": 64, "diameter": 5 },
+    "teardrop_flat": 8.0
+  },
+  "joint": {
+    "type": "Push in, then twist 38 degrees clockwise (seen from the tip) to lock.",
+    "spigot_diameter": 13.0,
+    "spigot_length": 16.0,
+    "bore_clearance": 0.4,
+    "mouth_gap": 0.5,
+    "lead_in": 0.6,
+    "spigot_chamfer": 0.4,
+    "pin_angles": [10, 190, 280],
+    "pin_width": 2.6,
+    "pin_axial": 3.0,
+    "pin_height": 1.5,
+    "pin_root": 5.8,
+    "pin_center_depth": 8.0,
+    "pin_lead_chamfer": 0.5,
+    "twist": 38,
+    "slot_clearance": 0.3,
+    "groove_radial_clearance": 0.25,
+    "groove_floor_clearance": 0.6,
+    "cam": {
+      "entry_gap": 0.3,
+      "ramp_start": 0.0,
+      "ridge": 2.0,
+      "crest_interference": 0.15,
+      "pocket_interference": 0.05,
+      "note": "The pin rides a ramp, passes a ridge and settles into a shallow pocket: the joint is pulled tight and resists turning back. Interference values are starting points to tune with the coupons."
+    },
+    "step_degrees": 1.5
+  },
+  "shaft": {
+    "across_flats": 13,
+    "print_flat": 0.4,
+    "wire_bore": 5,
+    "lap_length": 36,
+    "lap_face_gap": 0.1,
+    "lap_end_gap": 0.2,
+    "note": "Octagonal shaft in two glued half-lap sections so each fits the bed lying flat."
+  },
+  "tip": {
+    "puck_case_diameter": 36,
+    "puck_case_height": 12.5,
+    "puck_center_y": 1.75,
+    "pocket_clearance": 0.3,
+    "floor": 2.0,
+    "wall": 2.4,
+    "case_above_rim": 1.5,
+    "tongue_length": 30,
+    "cap_gap": 0.3,
+    "notch_width": 8,
+    "thumb_notch_radius": 5,
+    "note": "Puck.js v2.1 stock case documented as 36 mm by 12.5 mm; not measured here."
+  },
+  "cap": {
+    "wall": 2.0,
+    "lip": 1.6,
+    "lip_overlap": 1.5,
+    "fit_interference": 0.1,
+    "squeeze": 0.0,
+    "skirt_bottom_y": 1.0
+  },
+  "pod": {
+    "length": 70,
+    "width": 20,
+    "height": 16,
+    "front_z": 128,
+    "top_skin": 2.4,
+    "end_wall": 3.0,
+    "cavity_width": 13,
+    "button_pitch": 22,
+    "pilot_diameter": 2.0,
+    "retaining_pin_diameter": 1.9,
+    "rail": { "base": 8, "top": 14, "height": 3, "rear_z": 52, "clearance": 0.2 },
+    "stop_length": 5,
+    "note": "Generic button carrier. Switch size is unknown: the pilot holes mark button centres to drill out after measuring the real switches."
+  },
+  "coupons": {
+    "female_variants": { "a": 0.05, "b": 0.15, "c": 0.30 },
+    "female_length": 26,
+    "male_stub": 12,
+    "puck_ring_height": 6
+  }
+}

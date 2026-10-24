@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Printed loop wand</title>
+  <style>
+    :root { color-scheme: dark; --bg: #121018; --panel: #1c1926; --line: #2e2a3d; --text: #ece8f4; --muted: #a49cb8; --accent: #8f7cff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 15px/1.45 system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); display: grid; grid-template-columns: minmax(0, 1fr) 340px; height: 100vh; }
+    #view { position: relative; min-height: 320px; }
+    #view canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+    #view canvas:active { cursor: grabbing; }
+    #hint { position: absolute; left: 12px; bottom: 10px; color: var(--muted); font-size: 13px; pointer-events: none; }
+    #message { position: absolute; inset: 0; display: none; place-items: center; padding: 24px; text-align: center; color: var(--muted); }
+    aside { background: var(--panel); border-left: 1px solid var(--line); overflow-y: auto; padding: 18px; }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 22px 0 8px; }
+    .status { color: var(--muted); margin: 0; }
+    .choices { display: flex; gap: 6px; }
+    .choices button { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
+    .choices button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .grip { color: var(--muted); font-size: 13px; margin: 6px 0 0; min-height: 2.9em; }
+    label.row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
+    .joint { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; }
+    .joint output { min-width: 7.5em; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+    input[type="range"] { width: 100%; accent-color: var(--accent); }
+    input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16px; }
+    ul { margin: 0; padding-left: 18px; }
+    li { margin: 3px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    td { padding: 4px 4px 4px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+    td:last-child { text-align: right; color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .note { color: var(--muted); font-size: 13px; }
+    @media (max-width: 760px) { body { grid-template-columns: 1fr; grid-template-rows: 55vh auto; height: auto; } aside { border-left: 0; border-top: 1px solid var(--line); } }
+  </style>
+</head>
+<body>
+  <main id="view">
+    <div id="message" role="status"></div>
+    <div id="hint">Drag to turn · Scroll to zoom · Double-click resets view</div>
+  </main>
+  <aside>
+    <h1>Printed loop wand</h1>
+    <p class="status">Model geometry checked. Printed fit, strength and comfort aren't tested yet.</p>
+
+    <h2>Handle</h2>
+    <div class="choices" id="handles"></div>
+    <p class="grip" id="grip"></p>
+
+    <h2>Joint</h2>
+    <div class="joint">
+      <span>Out</span>
+      <input id="joint" type="range" min="0" max="100" value="100" aria-label="Joint position">
+      <output id="jointText" for="joint">Locked</output>
+    </div>
+    <label class="row"><input id="exploded" type="checkbox"> Exploded</label>
+    <label class="row"><input id="section" type="checkbox"> Section</label>
+
+    <h2>Model checks</h2>
+    <ul id="checks"></ul>
+
+    <h2>Parts</h2>
+    <table id="parts"></table>
+    <p class="note">STL files are in print orientation; this view shows them assembled.</p>
+  </aside>
+  <script type="module" src="./preview.mjs"></script>
+</body>
+</html>

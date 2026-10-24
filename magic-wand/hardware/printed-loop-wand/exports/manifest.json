@@ -1,0 +1,1208 @@
+{
+  "schema": 1,
+  "name": "printed-loop-wand",
+  "units": "mm",
+  "status": "Provisional first print set. Model geometry is generated and checked; printed fit, strength, comfort and mass are not measured.",
+  "frame": "Assembly axes: +Z runs from the handle butt (z = 0) to the tip, +Y is the button side, the loop hangs toward -Y. Angles are measured from +Y toward +X, which is clockwise seen from the tip.",
+  "source": {
+    "dimensions_sha256": "8e7b881414ff22b318f715597044f9565fddc65bffd14ef8201c4ac3f33f8d95",
+    "script_sha256": "6328fe8d554c9d0dcae9c82c0e1925c7616528a3607d97ed9db767aafa5cb048",
+    "tools": {
+      "manifold3d": "3.5.4",
+      "trimesh": "5.2.0",
+      "numpy": "2.4.6"
+    }
+  },
+  "printer_reference": {
+    "model": "Bambu Lab P1S",
+    "nozzle": 0.4,
+    "filament": "Generic PETG",
+    "bed": [
+      256,
+      256,
+      256
+    ],
+    "margin": 4,
+    "note": "Reference profile only; no slicing or printing was done."
+  },
+  "layout": {
+    "overall_length": 500,
+    "handle_mouth_z": 140,
+    "spigot_end_z": 124.0,
+    "lap_center_z": 289.15,
+    "tongue_rear_z": 424.3,
+    "puck_center": [
+      0.0,
+      1.75,
+      477.3
+    ],
+    "puck_case": {
+      "diameter": 36,
+      "height": 12.5
+    },
+    "buttons_z": {
+      "bottom": 71.0,
+      "middle": 93.0,
+      "top": 115.0
+    },
+    "pod_z": [
+      58,
+      128
+    ],
+    "twist_deg": 38,
+    "pin_angles_deg": [
+      10,
+      190,
+      280
+    ]
+  },
+  "assemblies": {
+    "round": {
+      "label": "Round",
+      "parts": [
+        "handle-round",
+        "button-pod-pilot",
+        "shaft-lower",
+        "shaft-upper",
+        "tip-cradle",
+        "tip-cap"
+      ]
+    },
+    "oval": {
+      "label": "Oval",
+      "parts": [
+        "handle-oval",
+        "button-pod-pilot",
+        "shaft-lower",
+        "shaft-upper",
+        "tip-cradle",
+        "tip-cap"
+      ]
+    },
+    "angled": {
+      "label": "Angled",
+      "parts": [
+        "handle-angled",
+        "button-pod-pilot",
+        "shaft-lower",
+        "shaft-upper",
+        "tip-cradle",
+        "tip-cap"
+      ]
+    }
+  },
+  "glb": {
+    "file": "assembly.glb",
+    "sha256": "8affa17589270d55c54f8f27b024d9778ddb7f7480942af1e497d7fa96dcf4c6",
+    "bytes": 319240,
+    "units": "metres, Y up, wand along +Z; handles side by side 70 mm apart"
+  },
+  "parts": [
+    {
+      "name": "coupon-male",
+      "file": "coupon-male.stl",
+      "sha256": "738b2fdc928b0f0aa9bf04f688145a7b592ea73b7feda7c6660377330b5ea26b",
+      "bytes": 52984,
+      "group": "coupon",
+      "role": "Joint coupon: shaft spigot with the three locking pins",
+      "print_orientation": "Lying on the flat +X face",
+      "supports": "None expected",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 3251.8713,
+        "area_mm2": 1963.4529,
+        "triangles": 1058,
+        "print_size_mm": [
+          28.5,
+          15.9948,
+          14.0974
+        ],
+        "downward_flat_mm2": 4.393,
+        "downward_steeper_than_45_mm2": 77.0884
+      },
+      "print_to_assembly": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          6.1
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          138.25
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "coupon-female-a",
+      "file": "coupon-female-a.stl",
+      "sha256": "98e37c7f8007d801fe9962786adf14b2da9300de5c3a07b4d270c04ed043583f",
+      "bytes": 101684,
+      "group": "coupon",
+      "role": "Joint coupon: handle socket, 0.05 mm cam interference, 1 notch",
+      "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
+      "supports": "None expected",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 11053.3696,
+        "area_mm2": 5152.3706,
+        "triangles": 2032,
+        "print_size_mm": [
+          26.0,
+          36.0,
+          22.0
+        ],
+        "downward_flat_mm2": 56.7359,
+        "downward_steeper_than_45_mm2": 30.5764
+      },
+      "print_to_assembly": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          6.0
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0,
+          127.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "coupon-female-b",
+      "file": "coupon-female-b.stl",
+      "sha256": "2c77b8b12a2a4dbf9c411bf6b0c7f0202964cae039a96ca30bc6a5b6a4376bbb",
+      "bytes": 103984,
+      "group": "coupon",
+      "role": "Joint coupon: handle socket, 0.15 mm cam interference (default), 2 notches",
+      "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
+      "supports": "None expected",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 11050.4483,
+        "area_mm2": 5157.3947,
+        "triangles": 2078,
+        "print_size_mm": [
+          26.0,
+          36.0,
+          22.0
+        ],
+        "downward_flat_mm2": 59.1416,
+        "downward_steeper_than_45_mm2": 30.5764
+      },
+      "print_to_assembly": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          6.0
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0,
+          127.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "coupon-female-c",
+      "file": "coupon-female-c.stl",
+      "sha256": "1aebf42e865d2cb218281aa52eb8c1c4559b1f19e350b6279725188601105abd",
+      "bytes": 104784,
+      "group": "coupon",
+      "role": "Joint coupon: handle socket, 0.3 mm cam interference, 3 notches",
+      "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
+      "supports": "None expected",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 11047.7539,
+        "area_mm2": 5162.7519,
+        "triangles": 2094,
+        "print_size_mm": [
+          26.0,
+          36.0,
+          22.0
+        ],
+        "downward_flat_mm2": 61.625,
+        "downward_steeper_than_45_mm2": 30.5764
+      },
+      "print_to_assembly": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          6.0
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0,
+          127.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "coupon-puck-ring",
+      "file": "coupon-puck-ring.stl",
+      "sha256": "685850b7f83fdc4218eab754a56a49aa578ca07abcf3115055fed2803dcbecb3",
+      "bytes": 38484,
+      "group": "coupon",
+      "role": "Puck pocket coupon: tip cradle pocket and rim",
+      "print_orientation": "Flat, as modelled",
+      "supports": "None",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 2140.8727,
+        "area_mm2": 2666.5537,
+        "triangles": 768,
+        "print_size_mm": [
+          41.4,
+          41.4,
+          6.0
+        ],
+        "downward_flat_mm2": 0.0,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "handle-round",
+      "file": "handle-round.stl",
+      "sha256": "25a4b131c066c4d7c6d376d82893f7c68beb15d862634f8dfb6f7491e3f67728",
+      "bytes": 202284,
+      "group": "handle",
+      "role": "Mug-style loop for two fingers; thumb on the buttons.",
+      "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
+      "supports": "None expected; bores use flattened teardrops",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 100342.103,
+        "area_mm2": 24018.7029,
+        "triangles": 4044,
+        "print_size_mm": [
+          140.0,
+          88.0,
+          22.0
+        ],
+        "downward_flat_mm2": 64.3476,
+        "downward_steeper_than_45_mm2": 41.018
+      },
+      "print_to_assembly": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -20.0
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0,
+          70.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "handle-oval",
+      "file": "handle-oval.stl",
+      "sha256": "4cdf65278dd0d7906ea93c180cf2941c8b8b387cbc85566764b454e8b17e3fa6",
+      "bytes": 214184,
+      "group": "handle",
+      "role": "Long D-loop around four fingers, so the wand stays on a relaxed hand.",
+      "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
+      "supports": "None expected; bores use flattened teardrops",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 111469.135,
+        "area_mm2": 26747.8601,
+        "triangles": 4282,
+        "print_size_mm": [
+          140.0,
+          81.1768,
+          22.0
+        ],
+        "downward_flat_mm2": 64.3476,
+        "downward_steeper_than_45_mm2": 41.018
+      },
+      "print_to_assembly": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -16.5884
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0,
+          70.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "handle-angled",
+      "file": "handle-angled.stl",
+      "sha256": "e34b1664c26ceacccacac2637dcd2f0f177da34e11e28442fc746d6a25c35e96",
+      "bytes": 219584,
+      "group": "handle",
+      "role": "Raked loop, deeper at the palm, for a less bent wrist while pointing.",
+      "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
+      "supports": "None expected; bores use flattened teardrops",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 115691.8815,
+        "area_mm2": 27700.9115,
+        "triangles": 4390,
+        "print_size_mm": [
+          140.0,
+          97.1278,
+          22.0
+        ],
+        "downward_flat_mm2": 64.3475,
+        "downward_steeper_than_45_mm2": 41.018
+      },
+      "print_to_assembly": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -24.5639
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0,
+          70.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "shaft-lower",
+      "file": "shaft-lower.stl",
+      "sha256": "701d244fb58425a031e6f66727f7409fd9b44255c366ffbf82555c1608a5ae6c",
+      "bytes": 54184,
+      "group": "shaft",
+      "role": "Lower shaft: twist-lock spigot and half-lap",
+      "print_orientation": "Lying on the flat +X face",
+      "supports": "None expected; small pin overhangs",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 19180.4661,
+        "area_mm2": 10322.8806,
+        "triangles": 1082,
+        "print_size_mm": [
+          183.15,
+          15.9948,
+          14.0974
+        ],
+        "downward_flat_mm2": 4.393,
+        "downward_steeper_than_45_mm2": 77.0884
+      },
+      "print_to_assembly": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          6.1
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          215.575
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "shaft-upper",
+      "file": "shaft-upper.stl",
+      "sha256": "71eed26fcdb41e0373827fe095b3c643583908a835db7c4138f6b9675be1bcce",
+      "bytes": 14184,
+      "group": "shaft",
+      "role": "Upper shaft: half-laps to the lower shaft and the tip",
+      "print_orientation": "Lying on the flat +X face",
+      "supports": "None expected",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 17482.9278,
+        "area_mm2": 9583.6791,
+        "triangles": 282,
+        "print_size_mm": [
+          183.15,
+          13.0,
+          12.6
+        ],
+        "downward_flat_mm2": 0.0,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          0.0,
+          0.0,
+          -1.0,
+          6.1
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          362.725
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "tip-cradle",
+      "file": "tip-cradle.stl",
+      "sha256": "770b8b5da61882db8f9124a109cc14524b9d51e73f2baa125b7a4720efb9d77c",
+      "bytes": 45484,
+      "group": "tip",
+      "role": "Tip cradle for the stock Puck.js case",
+      "print_orientation": "Pocket opening up",
+      "supports": "None expected",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 7343.2458,
+        "area_mm2": 6543.0461,
+        "triangles": 908,
+        "print_size_mm": [
+          41.4,
+          73.7,
+          13.0
+        ],
+        "downward_flat_mm2": 0.0,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -6.5
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          461.15
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "tip-cap",
+      "file": "tip-cap.stl",
+      "sha256": "959da4a6d81e175eca1d37ffca7f0d28dfd03d9cd46997dee1fd0044346df14e",
+      "bytes": 45684,
+      "group": "tip",
+      "role": "Removable cap ring; light and Puck button stay uncovered",
+      "print_orientation": "Top face down",
+      "supports": "None",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 3101.0965,
+        "area_mm2": 3738.8666,
+        "triangles": 912,
+        "print_size_mm": [
+          45.4,
+          45.4,
+          8.6
+        ],
+        "downward_flat_mm2": 0.0,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          9.6
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          477.3
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "button-pod-pilot",
+      "file": "button-pod-pilot.stl",
+      "sha256": "345900f62cfbe16e41f6d4cdffb7773ca6cc318b510ba94cbade1f07a021e825",
+      "bytes": 55184,
+      "group": "pod",
+      "role": "Button carrier with 2 mm pilot holes at the button centres",
+      "print_orientation": "Top face down",
+      "supports": "None expected",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 10778.9243,
+        "area_mm2": 8152.7767,
+        "triangles": 1102,
+        "print_size_mm": [
+          20.0,
+          70.0,
+          16.0
+        ],
+        "downward_flat_mm2": 0.0,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          28.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          93.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "button-pod-blank",
+      "file": "button-pod-blank.stl",
+      "sha256": "b8795295613503313a43c1656870055706dbf3f76378e8c5a174e1363a34a2db",
+      "bytes": 16184,
+      "group": "pod",
+      "role": "Button carrier with no holes, to mark and drill by hand",
+      "print_orientation": "Top face down",
+      "supports": "None expected",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 10801.5077,
+        "area_mm2": 8126.3752,
+        "triangles": 322,
+        "print_size_mm": [
+          20.0,
+          70.0,
+          16.0
+        ],
+        "downward_flat_mm2": 0.0,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          28.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          93.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "checks": {
+    "joint": {
+      "insertion_at_entry_angle_max_mm3": 0.0,
+      "twist_max_overlap_mm3": 0.7347,
+      "twist_max_axial_overlap_mm": 0.15,
+      "twist_profile": [
+        {
+          "angle": -38,
+          "overlap_mm3": 0.0,
+          "axial_mm": 0.0
+        },
+        {
+          "angle": -37,
+          "overlap_mm3": 0.0,
+          "axial_mm": 0.0
+        },
+        {
+          "angle": -36,
+          "overlap_mm3": 0.0,
+          "axial_mm": 0.0
+        },
+        {
+          "angle": -35,
+          "overlap_mm3": 0.0,
+          "axial_mm": 0.0
+        },
+        {
+          "angle": -34,
+          "overlap_mm3": 0.0,
+          "axial_mm": 0.0
+        },
+        {
+          "angle": -33,
+          "overlap_mm3": 0.0,
+          "axial_mm": 0.0
+        },
+        {
+          "angle": -32,
+          "overlap_mm3": 0.0,
+          "axial_mm": 0.0
+        },
+        {
+          "angle": -31,
+          "overlap_mm3": 0.0,
+          "axial_mm": 0.0
+        },
+        {
+          "angle": -30,
+          "overlap_mm3": 0.0,
+          "axial_mm": 0.0
+        },
+        {
+          "angle": -29,
+          "overlap_mm3": 0.0,
+          "axial_mm": 0.0
+        },
+        {
+          "angle": -28,
+          "overlap_mm3": 0.0048,
+          "axial_mm": 0.0283
+        },
+        {
+          "angle": -27,
+          "overlap_mm3": 0.0289,
+          "axial_mm": 0.0712
+        },
+        {
+          "angle": -26,
+          "overlap_mm3": 0.0738,
+          "axial_mm": 0.1122
+        },
+        {
+          "angle": -25,
+          "overlap_mm3": 0.1397,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -24,
+          "overlap_mm3": 0.215,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -23,
+          "overlap_mm3": 0.2898,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -22,
+          "overlap_mm3": 0.3148,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -21,
+          "overlap_mm3": 0.3398,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -20,
+          "overlap_mm3": 0.3649,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -19,
+          "overlap_mm3": 0.3899,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -18,
+          "overlap_mm3": 0.415,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -17,
+          "overlap_mm3": 0.4401,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -16,
+          "overlap_mm3": 0.4651,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -15,
+          "overlap_mm3": 0.4901,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -14,
+          "overlap_mm3": 0.5151,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -13,
+          "overlap_mm3": 0.5403,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -12,
+          "overlap_mm3": 0.5654,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -11,
+          "overlap_mm3": 0.5903,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -10,
+          "overlap_mm3": 0.6153,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -9,
+          "overlap_mm3": 0.6404,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -8,
+          "overlap_mm3": 0.6655,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -7,
+          "overlap_mm3": 0.6905,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -6,
+          "overlap_mm3": 0.7156,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -5,
+          "overlap_mm3": 0.7347,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -4,
+          "overlap_mm3": 0.7338,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -3,
+          "overlap_mm3": 0.7122,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -2,
+          "overlap_mm3": 0.6699,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": -1,
+          "overlap_mm3": 0.6198,
+          "axial_mm": 0.15
+        },
+        {
+          "angle": 0,
+          "overlap_mm3": 0.5741,
+          "axial_mm": 0.05
+        }
+      ],
+      "locked_pull_out_0_6mm_overlap_mm3": 7.4626,
+      "over_twist_6deg_overlap_mm3": 6.0739,
+      "locked_overlap_by_coupon": {
+        "a": {
+          "overlap_mm3": 0.5741,
+          "axial_mm": 0.05
+        },
+        "b": {
+          "overlap_mm3": 0.5741,
+          "axial_mm": 0.05
+        },
+        "c": {
+          "overlap_mm3": 0.5741,
+          "axial_mm": 0.05
+        }
+      },
+      "floor_contact_overlap_mm3": 0.0,
+      "partly_inserted_2deg_off_entry_overlap_mm3": 0.0,
+      "insertable_angles_deg": [
+        -40,
+        -38,
+        -36
+      ],
+      "entry_angle_deg": -38,
+      "passed": true
+    },
+    "assembly": {
+      "round": {
+        "overlaps_mm3": {
+          "handle + pod": 0.0,
+          "handle + shaft-lower": 0.5741,
+          "handle + shaft-upper": 0.0,
+          "handle + tip-cradle": 0.0,
+          "handle + tip-cap": 0.0,
+          "handle + puck-case": 0.0,
+          "pod + shaft-lower": 0.0,
+          "pod + shaft-upper": 0.0,
+          "pod + tip-cradle": 0.0,
+          "pod + tip-cap": 0.0,
+          "pod + puck-case": 0.0,
+          "shaft-lower + shaft-upper": 0.0,
+          "shaft-lower + tip-cradle": 0.0,
+          "shaft-lower + tip-cap": 0.0,
+          "shaft-lower + puck-case": 0.0,
+          "shaft-upper + tip-cradle": 0.0,
+          "shaft-upper + tip-cap": 0.0,
+          "shaft-upper + puck-case": 0.0,
+          "tip-cradle + tip-cap": 24.9289,
+          "tip-cradle + puck-case": 0.0,
+          "tip-cap + puck-case": 0.0
+        },
+        "expected_overlaps": {
+          "handle + shaft-lower": "Cam pocket preload",
+          "tip-cradle + tip-cap": "Cap press fit"
+        },
+        "unexpected": [],
+        "wire_probe_overlap_mm3": {
+          "handle": 0.0,
+          "pod": 0.0,
+          "shaft-lower": 0.0,
+          "shaft-upper": 0.0,
+          "tip-cradle": 0.0,
+          "tip-cap": 0.0
+        },
+        "opening": {
+          "length_mm": 37.9638,
+          "height_mm": 38.0,
+          "area_mm2": 1134.7547
+        },
+        "passed": true
+      },
+      "oval": {
+        "overlaps_mm3": {
+          "handle + pod": 0.0,
+          "handle + shaft-lower": 0.5741,
+          "handle + shaft-upper": 0.0,
+          "handle + tip-cradle": 0.0,
+          "handle + tip-cap": 0.0,
+          "handle + puck-case": 0.0,
+          "pod + shaft-lower": 0.0,
+          "pod + shaft-upper": 0.0,
+          "pod + tip-cradle": 0.0,
+          "pod + tip-cap": 0.0,
+          "pod + puck-case": 0.0,
+          "shaft-lower + shaft-upper": 0.0,
+          "shaft-lower + tip-cradle": 0.0,
+          "shaft-lower + tip-cap": 0.0,
+          "shaft-lower + puck-case": 0.0,
+          "shaft-upper + tip-cradle": 0.0,
+          "shaft-upper + tip-cap": 0.0,
+          "shaft-upper + puck-case": 0.0,
+          "tip-cradle + tip-cap": 24.9289,
+          "tip-cradle + puck-case": 0.0,
+          "tip-cap + puck-case": 0.0
+        },
+        "expected_overlaps": {
+          "handle + shaft-lower": "Cam pocket preload",
+          "tip-cradle + tip-cap": "Cap press fit"
+        },
+        "unexpected": [],
+        "wire_probe_overlap_mm3": {
+          "handle": 0.0,
+          "pod": 0.0,
+          "shaft-lower": 0.0,
+          "shaft-upper": 0.0,
+          "tip-cradle": 0.0,
+          "tip-cap": 0.0
+        },
+        "opening": {
+          "length_mm": 101.3848,
+          "height_mm": 31.1768,
+          "area_mm2": 2861.753
+        },
+        "passed": true
+      },
+      "angled": {
+        "overlaps_mm3": {
+          "handle + pod": 0.0,
+          "handle + shaft-lower": 0.5741,
+          "handle + shaft-upper": 0.0,
+          "handle + tip-cradle": 0.0,
+          "handle + tip-cap": 0.0,
+          "handle + puck-case": 0.0,
+          "pod + shaft-lower": 0.0,
+          "pod + shaft-upper": 0.0,
+          "pod + tip-cradle": 0.0,
+          "pod + tip-cap": 0.0,
+          "pod + puck-case": 0.0,
+          "shaft-lower + shaft-upper": 0.0,
+          "shaft-lower + tip-cradle": 0.0,
+          "shaft-lower + tip-cap": 0.0,
+          "shaft-lower + puck-case": 0.0,
+          "shaft-upper + tip-cradle": 0.0,
+          "shaft-upper + tip-cap": 0.0,
+          "shaft-upper + puck-case": 0.0,
+          "tip-cradle + tip-cap": 24.9289,
+          "tip-cradle + puck-case": 0.0,
+          "tip-cap + puck-case": 0.0
+        },
+        "expected_overlaps": {
+          "handle + shaft-lower": "Cam pocket preload",
+          "tip-cradle + tip-cap": "Cap press fit"
+        },
+        "unexpected": [],
+        "wire_probe_overlap_mm3": {
+          "handle": 0.0,
+          "pod": 0.0,
+          "shaft-lower": 0.0,
+          "shaft-upper": 0.0,
+          "tip-cradle": 0.0,
+          "tip-cap": 0.0
+        },
+        "opening": {
+          "length_mm": 99.8404,
+          "height_mm": 47.1284,
+          "area_mm2": 3422.8315
+        },
+        "passed": true
+      }
+    },
+    "meshes_passed": true
+  }
+}
