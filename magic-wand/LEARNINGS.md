@@ -157,6 +157,20 @@ of a multi-kilobyte ad-hoc maintenance command. Retain the previous bundle and b
 Validate the callback's expected motion marker and reject a later ready marker after an actual
 interpreter failure. Keep orange until validated completion; do not use a five-second timer.
 
+On the 24 October cold-start recovery, the expected runtime identifier was present while
+the registered button and motion callback lookups returned no match. Forcing the base runtime
+upload over that partial state restored a button callback, but the subsequent motion patch
+hit OUT OF MEMORY and an EOF parse error. Runtime identity alone is therefore insufficient
+startup health evidence. Inspect actual registered callbacks and retain the earlier
+console-recovery path before choosing another full upload.
+
+A later saved-program reload was followed by the Puck becoming unreachable over Bluetooth.
+The receiver restart and reload request were logged, but device reboot completion was not
+observed. Local scans saw other devices, not this Puck; a second Mac's scan lacked permission
+and was not negative radio evidence. The cause of the missing callbacks and later radio loss
+was not established; neither proves the repository refactor caused it. Preserve this distinction
+and the saved program. A lit LED proves power, not a working radio or ready motion program.
+
 At 208 Hz, test helpers that simulate a duration must derive their sample count from the selected
 rate. A hard-coded 104 sample count halves simulated elapsed time and falsely fails the unchanged
 300 ms release pause. Retain fixed-rate traces separately to compare outputs at equal times.

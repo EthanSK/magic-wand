@@ -35,6 +35,14 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
    to declare idle when the app can report it. Recheck after the warning and leave Agent
    Flow itself running. A recording=false file alone is not the authoritative probe.
    Table-rest detection must not stop dictation or dismiss an explicitly open HUD.
+   For failed startup, missing callbacks or memory errors, first read the recovery lessons in
+   `LEARNINGS.md` ("A partial live patch must not look ready" and "UART source echo is not a
+   runtime response"). A matching runtime version is not proof of intact registered handlers.
+   Prefer clearing interrupted console input and checking the actual callbacks before a full
+   upload over a partial patch. Preserve saved code and establish a recovery path before `load()`.
+   Report a receiver restart, a sent Puck reload, an observed device restart and restored cursor
+   movement as separate facts; do not call the Puck restarted from a sent command alone.
+   User-requested recovery guidance — 2026-10-24.
 4. Do not add intentional movement latency without Ethan's fresh explicit confirmation.
    Sensor sampling, delivered update rate and end-to-end latency are different measurements.
 5. For prototype changes, read [the prototype policy](../../../magic-wand/prototypes/README.md).
