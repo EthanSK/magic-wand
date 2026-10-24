@@ -17,3 +17,7 @@ device.json
 /magic-wand/build/
 /magic-wand/.cache/
 /magic-wand/work/
+
+# Local Python environments are dependencies, not project source.
+.venv/
+venv/

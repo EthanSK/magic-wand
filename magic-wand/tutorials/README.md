@@ -33,7 +33,7 @@ python3 -m pip install pillow numpy
 python3 tutorials/narrate.py --session-id "$CODEX_THREAD_ID"
 python3 tutorials/render/render.py --workers 2 --scratch /path/to/verified/scratch
 python3 scripts/build.py
-npm run check
+npm --prefix .. run check  # From magic-wand/: check all components and privacy
 node tutorials/find.mjs "How do I drag?"
 ```
 

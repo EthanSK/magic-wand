@@ -118,8 +118,9 @@ receiver re-uploads the whole runtime on the next connection.
 ```sh
 python3 scripts/build.py --check
 python3 scripts/vendor.py --check
-python3 scripts/check.py
+python3 scripts/check.py           # website checks only
 node --test tests/*.test.*
+npm --prefix .. run check          # repository-wide checks, including privacy
 ```
 
 `tests/` runs the real device code and bridge through the website’s Espruino shim with a simulated

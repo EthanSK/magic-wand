@@ -44,7 +44,7 @@ def main() -> int:
             path.write_text(content)
     if args.check:
         if stale:
-            print("Stale generated files; run python3 scripts/build.py:\n  " + "\n  ".join(stale), file=sys.stderr)
+            print("Stale generated files; from the repository root run npm run build --workspace magic-wand:\n  " + "\n  ".join(stale), file=sys.stderr)
             return 1
         print("Generated files are current")
         return 0

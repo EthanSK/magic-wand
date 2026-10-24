@@ -11,6 +11,7 @@
 
 ## Shared working rules
 
+- Work directly on `main` for this project. Do not create worktrees unless Ethan explicitly asks for one. User-requested — 2026-10-24.
 - Commit and push completed, checked work after every natural step. Preserve unrelated staged and unstaged work; never force-push. A commit is not a claim of physical acceptance. User-requested — 2026-10-24.
 - Keep all existing sensors supported as new ones are added. Keep device-specific firmware and transports separate; share code only when the same behavior is verified. Do not contaminate the Puck JavaScript when adding Sense or future sensors.
 - Save durable user rules here when they apply to every component, or in the owning component's instructions when they are specific. Use Ethan's original wording as closely as possible. Preserve verified historical lessons in the owning component's LEARNINGS.md.

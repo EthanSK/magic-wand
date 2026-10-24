@@ -23,8 +23,8 @@ source, and their tests. Read README.md, SOURCES.md and LEARNINGS.md before chan
    Don’t copy files by hand and never record the private path. If an anchor changed, update the
    sanitiser rather than weakening it.
 3. Update `wand.json`: versions, any changed control or light, tuning, `status` and `updated`.
-4. `python3 scripts/build.py`, then `npm run check` (generated files, vendored files, privacy
-   scan, every test). The manifest tests fail until `wand.json` matches the code.
+4. `python3 scripts/build.py`, then run `npm run check` from the repository root
+   (generated files, vendored files, repository-wide privacy scan, every component test). The manifest tests fail until `wand.json` matches the code.
 5. If Agentic Mouse’s Default mode changed, run `python3 scripts/sync_hud.py`.
 6. Check every changed visible string with the `write-user-facing-messages` skill. Never use the
    word “whether”. Keep the AI wording disclaimer once, in the footer.
@@ -70,7 +70,7 @@ Report any check the browser tool can’t do, such as real multitouch, rather th
   can register with Launch Services and share permissions. Compile checks use
   `swiftc -typecheck` or a bare executable in a temporary directory.
 - Never commit `device.json`, logs, receipts, readback dumps, Bluetooth identifiers, local paths,
-  order details or tokens. `scripts/check.py` scans for the patterns it can recognise; it can’t
+  order details or tokens. Root `shared/checks/privacy.py` scans for the patterns it can recognise; it can’t
   recognise everything.
 - Don’t state latency, accuracy, battery life or other performance the wand hasn’t been measured
   for. Don’t describe parts that aren’t fitted, such as researched replacement switches.

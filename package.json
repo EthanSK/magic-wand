@@ -14,7 +14,7 @@
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "check": "python3 shared/checks/privacy.py && npm run check --workspaces --if-present",
+    "check": "python3 -m unittest discover -s shared/checks/tests && python3 shared/checks/privacy.py && npm run check --workspaces --if-present",
     "serve": "npm run serve --workspace magic-wand",
     "receiver": "npm run receiver --workspace magic-wand",
     "tutorials:check": "npm run tutorials:check --workspace magic-wand"
