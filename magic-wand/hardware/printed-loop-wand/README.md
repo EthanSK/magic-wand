@@ -1,5 +1,8 @@
 # Printed loop wand
 
+Ready-to-open Bambu projects are in [Magic Wand 3D models](../../../magic-wand-3d-models/).
+Their freshness and archive privacy checks run with the repository tests.
+
 ## Tapered double-helix version
 
 Choose **Tapered wand (XIAO)** in the preview for the continuous wand shape. It has no loop or
