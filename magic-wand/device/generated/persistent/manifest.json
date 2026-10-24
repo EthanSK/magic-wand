@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "image": "full-20261024",
+  "files": [
+    {
+      "file": "base.js",
+      "storageName": "wand.boot.v4",
+      "bytes": 15000,
+      "checksum31": 1988419298,
+      "sha256": "b334feb2942ae642e61e2c392daed807662d78391fdb5e1b3224994913c7847c"
+    },
+    {
+      "file": "bridge.js",
+      "storageName": "wand.bridge.p1",
+      "bytes": 20446,
+      "checksum31": 2953459755,
+      "sha256": "65cf62d8db09f96323075ec176d199b4f4c7463ff061409b626c0e5df97a6ddc"
+    },
+    {
+      "file": "power.js",
+      "storageName": "wand.power.p1",
+      "bytes": 2107,
+      "checksum31": 62888242,
+      "sha256": "45ffe9f10aa2244f2773a361ed97dedfb752f57ef64839518b3bd3d564e550d7"
+    },
+    {
+      "file": "startup.js",
+      "storageName": ".bootcde",
+      "bytes": 1446,
+      "checksum31": 1823086205,
+      "sha256": "494c1bb9fea7f483165d21f83dc93724642393c3e8fb36dbe82056e80be177d7"
+    }
+  ],
+  "calibrationStorageName": "wand.zero",
+  "totalCodeBytes": 38999
+}

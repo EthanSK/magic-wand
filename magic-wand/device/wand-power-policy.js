@@ -1,20 +1,22 @@
 // Button-wake standby: sensors and Bluetooth off, GPIO watches retained.
 // Ethan's custom grip buttons are D1 (Bottom), D2 (Middle), D30 (Top).
 // The host requests this only after five minutes of confirmed desk rest.
-if(global.WAND_POWER_POLICY_VERSION!==1){
+if(global.WAND_POWER_POLICY_VERSION!==2){
   global.wandPowerOfflineTimer=undefined;
+  global.wandPowerOfflineDeepTimer=undefined;
   global.wandPowerStandby=false;
   global.wandPowerConnected=function(){return !!NRF.getSecurityStatus().connected;};
-  global.wandPowerClearTimer=function(){if(global.wandPowerOfflineTimer!==undefined)clearTimeout(global.wandPowerOfflineTimer);global.wandPowerOfflineTimer=undefined;};
+  global.wandPowerClearTimer=function(){if(global.wandPowerOfflineTimer!==undefined)clearTimeout(global.wandPowerOfflineTimer);if(global.wandPowerOfflineDeepTimer!==undefined)clearTimeout(global.wandPowerOfflineDeepTimer);global.wandPowerOfflineTimer=global.wandPowerOfflineDeepTimer=undefined;};
   global.wandPowerDark=function(){LED1.reset();LED2.reset();LED3.reset();Puck.accelOff();};
-  global.wandPowerArmOffline=function(){global.wandPowerClearTimer();if(!global.wandPowerConnected()&&!global.wandPowerStandby)global.wandPowerOfflineTimer=setTimeout(function(){global.wandPowerOfflineTimer=undefined;if(!global.wandPowerConnected()&&digitalRead(D1)&&digitalRead(D2)&&digitalRead(D30))global.wandPowerDark();},60000);};
+  global.wandPowerArmOffline=function(){global.wandPowerClearTimer();if(!global.wandPowerConnected()&&!global.wandPowerStandby){global.wandPowerOfflineTimer=setTimeout(function(){global.wandPowerOfflineTimer=undefined;if(!global.wandPowerConnected()&&digitalRead(D1)&&digitalRead(D2)&&digitalRead(D30))global.wandPowerDark();},60000);global.wandPowerOfflineDeepTimer=setTimeout(function(){global.wandPowerOfflineDeepTimer=undefined;if(!global.wandPowerConnected())global.wandEnterDeepStandby();},300000);}};
   global.wandPowerDisconnected=function(){if(global.wandPowerStandby)setTimeout(global.wandPowerDark,0);else global.wandPowerArmOffline();};
   global.wandPowerConnectedEvent=function(){global.wandPowerClearTimer();global.wandPowerStandby=false;};
   global.wandPowerButton=function(e){if(!e.state&&global.wandPowerStandby){global.wandPowerStandby=false;NRF.wake();}if(!global.wandPowerConnected())global.wandPowerArmOffline();};
   global.wandPowerWatches=[D1,D2,D30].map(function(pin){return setWatch(global.wandPowerButton,pin,{edge:'both',repeat:true,debounce:20});});
   NRF.on('disconnect',global.wandPowerDisconnected);
   NRF.on('connect',global.wandPowerConnectedEvent);
-  global.wandEnterDeepStandby=function(){if(!global.wandPowerConnected()||!digitalRead(D1)||!digitalRead(D2)||!digitalRead(D30))return false;global.wandPowerClearTimer();global.wandPowerStandby=true;global.wandPowerDark();NRF.sleep();return true;};
-  global.WAND_POWER_POLICY_VERSION=1;
+  global.wandEnterDeepStandby=function(){if(!digitalRead(D1)||!digitalRead(D2)||!digitalRead(D30))return false;global.wandPowerClearTimer();global.wandPowerStandby=true;global.wandPowerDark();NRF.sleep();return true;};
+  global.WAND_POWER_POLICY_VERSION=2;
 }
+if(!global.wandPowerConnected())global.wandPowerArmOffline();
 print('WAND_POWER_POLICY_READY');

@@ -58,5 +58,29 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
 
 ## Completion
 
+Ethan: “It doesn't count as working if you're doing hacks like temporary code
+splits. You either have installed the full firmware properly onto the wand, or
+you haven't.” Installation must persist the complete required device program
+and startup path on the wand so removing and reinserting its battery does not
+require reinstalling code. Temporary RAM patches are diagnostic or staging work,
+not a completed installation. Verify saved bytes and a clean startup that loads
+them without the receiver re-uploading missing firmware; check calibration and
+the requested controls afterward. Report any unverified physical power-cycle
+check explicitly. User-requested — 2026-10-24.
+
+Ethan: “Make sure this is always checked and there's a cleanup rule and it's
+properly managed and maintained.” Before a firmware install, inspect the actual
+free storage and saved versions. Keep rollback copies on the Mac; remove obsolete
+device images only after their bytes are backed up and the active startup path
+is understood. Verify enough space for the complete replacement. Never compact
+flash while running functions still reference its old locations; enter a checked
+maintenance state first, then verify the saved image after compaction and restart.
+The Puck's small storage is not a release archive. User-requested — 2026-10-24.
+
+Keep all three LEDs lit throughout a firmware installation, including after an
+interpreter reset while saved files are being written and verified. Restore the
+ordinary mode indication only when the complete saved program is running.
+User-requested — 2026-10-24.
+
 Report what is installed, what is committed/published, what was tested, and any real remaining
 physical check. Keep prototype snapshots reproducible and the working tree free of scratch.

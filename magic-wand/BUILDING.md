@@ -33,19 +33,39 @@ pull-ups, so a press reads low and no resistors are needed. If you mount the Puc
 check the gyro axes in `CONFIG` at the top of the device code: the wand maps the gyro’s z axis to
 sideways movement and its x axis to up and down.
 
-## 2. Load the base device program
+## 2. Install the complete saved device program
 
-1. Open the [Espruino Web IDE](https://www.espruino.com/ide/) and connect to the Puck.
-2. Open `device/wand-mouse-prototype.js` and send it to the Puck. The IDE supplies the
-   `ble_hid_mouse` module it uses.
-3. Save it so it runs after a restart: run `save()` in the IDE’s console, or use the IDE’s Save on
-   Send setting. The program’s `onInit` cleans up the state that `save()` restores.
-4. While the light is red, keep the wand still with no buttons pressed. Calibration needs about two
-   seconds of steady readings.
+From the repository root, run `npm ci`, then from this component run
+`python3 scripts/build.py`. The pinned minifier removes formatting without
+changing variable names or compressing behavior.
 
-Ethan’s wand keeps a boot image (`device/generated/wand-boot.js`) in Puck storage behind a short
-`.bootcde` loader. The tool that staged and verified it on his device isn’t part of this repository
-yet; the steps above are the public path.
+`device/generated/persistent/manifest.json` maps each payload to its Puck Storage
+filename and records its byte count and checksums. Install the whole set:
+
+| Payload | Puck Storage name |
+| --- | --- |
+| `base.js` | `wand.boot.v4` |
+| `bridge.js` | `wand.bridge.p1` |
+| `power.js` | `wand.power.p1` |
+| `startup.js` | `.bootcde` |
+
+Use the documented Espruino `Storage.write(name, data, offset, size)` API with
+bounded chunks. Inventory and back up an existing device before reclaiming old
+images. Read back and verify every payload; activate `.bootcde` only with its
+dependencies present. Flash compaction can move running function bodies, so do
+it in a maintenance session with the old program stopped, before the clean boot.
+Do not call `save()` over these flash-backed sources.
+
+The startup contains the HID module, initializes the base and complete motion
+bridge, loads the power policy and restores the device's `wand.zero` calibration
+record. It does not depend on an old `.varimg` interpreter snapshot. The private
+installer has been exercised on Ethan's wand; this is still not a packaged
+installer for another owner's device.
+
+Disconnect the programming console before starting the receiver. Verify a clean
+saved-program restart and then a normal receiver connection without code upload.
+Calibration is private device data, not a public firmware payload: an existing
+wand keeps its accepted values, and a new wand learns its own stationary zero.
 
 ## 3. Build the receiver
 
