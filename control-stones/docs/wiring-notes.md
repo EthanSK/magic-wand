@@ -120,3 +120,16 @@ Notes on the wiring:
 
 ## Current channel mapping (24 October 2026)
 User requested avoiding channels 0 and 1. Thumb 2, index 3, middle 4, ring 5, little 6; channel 7 spare. This is the maintained diagram.
+
+## Left-hand mounting and test target
+
+The primary Control Hand / Control Stones design is for the **left hand**, as requested on 24 October 2026. `profile.json` records that target. This is a design preference, not a claim that a mount has already been made or calibrated.
+
+- Design glove/strap routing and printed ring holders around the left hand. Check thumb opposition, thumb/index/middle access, finger bending and wire slack on that hand; do not assume a right-hand layout fits by relabelling it.
+- Put the hand reference sensor on the back of the left hand. Confirm the final board orientation and record the sensor-axis arrows, USB socket direction, and orientation of each finger board before defining motion directions.
+- Keep the logical channel mapping above: thumb 2, index 3, middle 4, ring 5, little 6. It identifies fingers, not their left-to-right order on the drawing. The existing illustration shows electrical connections; its node positions are not a physical right-hand or left-hand template.
+- The current firmware reads the IMU's own X/Y/Z axes; the reader and debug graphs preserve those values. No handedness transform or pointer mapping is implemented. Do not negate an axis merely because the wearer is left-handed.
+- Before enabling gesture or pointer mappings, test the mounted left-hand assembly: rest palm-down, tilt toward fingertips and toward wrist, tilt toward thumb and toward little finger, rotate around the forearm, and flex each finger separately. Record which axes and signs respond, then define each sensor-to-hand rotation and the intended hand-to-screen mapping from those observations. Verify mixed movements as well as single-axis movements.
+- If a right-hand variant is added, give it explicit mounting/calibration data and run the same checks separately; do not silently replace the left-hand default or reuse a guessed mirrored transform.
+
+Physical mounting, calibration and the external finger tests remain pending. This clarification changes no wiring, battery connections or installed firmware.

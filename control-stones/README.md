@@ -2,6 +2,8 @@
 
 The Control Stones hand-controller component in the motion-controller monorepo. The original Puck wand remains unchanged.
 
+The primary design and test target is the **left hand**. See the [mounting and coordinate checks](docs/wiring-notes.md#left-hand-mounting-and-test-target) before designing a holder or interpreting motion. The debug window currently shows raw sensor axes, not calibrated hand directions.
+
 - [Profile](profile.json): hardware and current scope.
 - [Live sensor window](debug/README.md): setup, USB/Bluetooth readings, battery estimate and idle behavior.
 - [Wiring diagram](docs/wiring.html): interactive HTML fragment originally made by Opus.
