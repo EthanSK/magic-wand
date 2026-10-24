@@ -145,3 +145,9 @@ through their build/check commands; never claim an illustration is physical veri
 - The wand home Enter card sends ordinary Enter, just like the normal Agentic Mouse. Do not restore the retired wand-only Command-Enter / Steer override. User-requested — 2026-10-20.
 
 - Keep the visible wand HUD anchored while Agent Flow starts or changes its panel. Capture recorder clearance when the HUD opens, and refresh on the next open or display reconfiguration; never move an active target under the wand because another app publishes temporary window bounds. User-requested — 2026-10-20.
+
+## Control Stones
+
+- Control Stones belongs in top-level `control-stones/` in this repository, not in a separate repository or under `prototypes/`. Previously `prototypes/control-stones`.
+- Keep every existing sensor supported; isolate Sense and future sensor code from the Puck JavaScript and existing receiver. Reuse shared behavior through explicit adapters instead of mixing device implementations.
+- Commit and push completed, checked Control Stones changes after each natural step. Preserve unrelated work; never force-push. User-requested — 2026-10-24.
