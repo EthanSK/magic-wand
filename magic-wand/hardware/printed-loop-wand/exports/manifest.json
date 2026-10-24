@@ -5,8 +5,8 @@
   "status": "Provisional first print set. Model geometry is generated and checked; printed fit, strength, comfort and mass are not measured.",
   "frame": "Assembly axes: +Z runs from the handle butt (z = 0) to the tip, +Y is the button side, the loop hangs toward -Y. Angles are measured from +Y toward +X, which is clockwise seen from the tip.",
   "source": {
-    "dimensions_sha256": "91fac368c07c2e0d75e57e36e095b6a24c6aabae818bb74fa26da5b1a6e2ad8b",
-    "script_sha256": "e439665f3cee3f9d221b3793a5a9021657aa3911edddfa9c26dcb6e3e19c3d73",
+    "dimensions_sha256": "85bc8b1f8b1c7542db8868aa595f2374ec1523625f3e1dd2400ca3c216936940",
+    "script_sha256": "b4f39008662de1250c768908eacc0c63204d65442b52ca98c5867e40ccd5afb8",
     "tools": {
       "manifold3d": "3.5.4",
       "trimesh": "5.2.0",
@@ -240,8 +240,8 @@
     {
       "file": "assembly-tapered-xiao.glb",
       "profile": "tapered-xiao",
-      "sha256": "97c96d4d2f1035905a409158b0606b410c319ae34a6b820efacf03530731df72",
-      "bytes": 3846400,
+      "sha256": "03fae564d58c8d76294a994605d5db34c4edd8857fe6ebfe7e83122303dcc11a",
+      "bytes": 3843844,
       "units": "metres, Y up, wand along +Z; assemblies stacked 130 mm apart in -Y"
     },
     {
@@ -1228,8 +1228,8 @@
     {
       "name": "handle-tapered-spiral",
       "file": "handle-tapered-spiral.stl",
-      "sha256": "b4c94b9d5d972b5353fd4b08ffb8637659400c94f06d6e5d6571f08998ae9c08",
-      "bytes": 1762884,
+      "sha256": "47ee45513a10de3e64e7d49ccc59f9ba8e2a9dbce78d152c656f4b352c92cba9",
+      "bytes": 1755384,
       "group": "handle",
       "role": "Tapered grip with double-helix ribs and a sideways thumb shelf",
       "profile": "tapered-xiao",
@@ -1241,23 +1241,23 @@
         "winding_consistent": true,
         "every_edge_shared_twice": true,
         "bodies": 1,
-        "volume_mm3": 88964.2387,
-        "area_mm2": 16196.0989,
-        "triangles": 35256,
+        "volume_mm3": 92827.2682,
+        "area_mm2": 18599.3783,
+        "triangles": 35106,
         "print_size_mm": [
-          42.6922,
+          53.6906,
           31.37,
           156.0
         ],
-        "downward_flat_mm2": 33.6383,
-        "downward_steeper_than_45_mm2": 0.0
+        "downward_flat_mm2": 58.1216,
+        "downward_steeper_than_45_mm2": 16.9009
       },
       "print_to_assembly": [
         [
           1.0,
           0.0,
           0.0,
-          -5.4992
+          0.0
         ],
         [
           0.0,
@@ -1282,8 +1282,8 @@
     {
       "name": "handle-tapered-smooth",
       "file": "handle-tapered-smooth.stl",
-      "sha256": "d81ccd718678840aba9711da13fee2b8bc367f491b888a0bb1e56a17699252e6",
-      "bytes": 1754484,
+      "sha256": "f32bc6203aa4baff54cc16359fe90162197cd55f7e7c78861b6a2155ab97f9d6",
+      "bytes": 1754884,
       "group": "handle",
       "role": "Tapered grip, smooth, with a sideways thumb shelf",
       "profile": "tapered-xiao",
@@ -1295,23 +1295,23 @@
         "winding_consistent": true,
         "every_edge_shared_twice": true,
         "bodies": 1,
-        "volume_mm3": 87081.7955,
-        "area_mm2": 15935.8751,
-        "triangles": 35088,
+        "volume_mm3": 90943.8339,
+        "area_mm2": 18397.3389,
+        "triangles": 35096,
         "print_size_mm": [
-          41.8176,
+          53.6906,
           29.9448,
           156.0
         ],
-        "downward_flat_mm2": 33.6383,
-        "downward_steeper_than_45_mm2": 0.0
+        "downward_flat_mm2": 58.1216,
+        "downward_steeper_than_45_mm2": 16.9009
       },
       "print_to_assembly": [
         [
           1.0,
           0.0,
           0.0,
-          -5.9364
+          0.0
         ],
         [
           0.0,
@@ -1830,23 +1830,55 @@
         ]
       },
       "thumb_shelf": {
-        "hand": "left",
-        "side": "-X (holder's right)",
+        "hand": "both",
+        "side": "Both sides, on top",
+        "top_y": 14.8215,
+        "width_mm": 53.6905,
+        "flat_top_zones": {
+          "smooth": {
+            "left": {
+              "below_mm3": 0.2,
+              "above_mm3": 0.0
+            },
+            "centre": {
+              "below_mm3": 0.2,
+              "above_mm3": 0.0
+            },
+            "right": {
+              "below_mm3": 0.2,
+              "above_mm3": 0.0
+            }
+          },
+          "spiral": {
+            "left": {
+              "below_mm3": 0.2,
+              "above_mm3": 0.0
+            },
+            "centre": {
+              "below_mm3": 0.2,
+              "above_mm3": 0.0
+            },
+            "right": {
+              "below_mm3": 0.2,
+              "above_mm3": 0.0
+            }
+          }
+        },
         "section_z": 117.0,
-        "reach_plus_x_mm": 12.9408,
-        "reach_minus_x_mm": 26.8458,
+        "reach_plus_x_mm": 26.8453,
+        "reach_minus_x_mm": 26.8453,
         "mirrors_exactly": true
       },
       "volume_mm3": {
-        "handle-tapered-smooth": 87081.7933,
-        "handle-tapered-spiral": 88964.2326,
+        "handle-tapered-smooth": 90943.8191,
+        "handle-tapered-spiral": 92827.256,
         "shaft-lower-tapered-smooth": 53090.7426,
         "shaft-lower-tapered-spiral": 54892.1134,
         "shaft-upper-tapered-smooth": 26370.6167,
         "shaft-upper-tapered-spiral": 27347.4064
       },
       "spiral_extra_mm3": {
-        "handle": 1882.4393,
+        "handle": 1883.4369,
         "shaft-lower": 1801.3708,
         "shaft-upper": 976.7897
       },

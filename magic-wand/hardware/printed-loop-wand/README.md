@@ -7,9 +7,10 @@ separate handle bulge: the body tapers from 30 mm at the butt to 14.6 mm before 
 Two rounded, 1.2 mm raised ribs wind around it at a 110 mm pitch. **Smooth** uses the same body
 and joints without the ribs, for comparison. The earlier loop and plain grips remain available.
 
-The blank thumb shelf projects 14 mm sideways and is 30 mm long along the wand. It is set for
-a left hand; `tapered.thumb_shelf.hand` mirrors it for a right hand. Actual button dimensions
-are still needed before adding mounting holes. The wire path exits through the shelf.
+The blank button platform spans 54 mm across the top, with 14 mm wings on both sides and a
+continuous flat centre. Its mounting area is 30 mm long along the wand and 4 mm thick.
+Both the spiral and smooth variants use this platform. Actual button dimensions are still
+needed before adding mounting holes. The wire path exits through the centre of the platform.
 
 This version uses its own matching handle and shaft pieces: its twist-lock is reversed for
 upright printing and does not interchange directly with the earlier handles. Use
@@ -17,8 +18,8 @@ upright printing and does not interchange directly with the earlier handles. Use
 a keyed glue joint; the existing XIAO holder joins at the tip. Nothing has been physically fitted.
 
 With identical P1S 0.4 mm, Generic PETG, 0.28 mm Extra Draft, two walls, 20% infill, tree support
-and 4 mm brim settings, the four-part spiral set estimates **2 h 43 min / 83.24 g**, versus
-**2 h 41 min / 81.80 g** smooth: about **2 minutes and 1.44 g more**. These are local slicer
+and 4 mm brim settings, the four-part spiral set estimates **2 h 51 min / 88.86 g**, versus
+**2 h 49 min / 87.29 g** smooth: about **2 minutes and 1.57 g more**. These are local slicer
 estimates, not measured print times. All parts fit one plate; no floating-region warning was
 reported. Remove support fully and check the joint coupons before a full wand. Upright printing
 and the shelf's strength still need physical testing.

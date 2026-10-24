@@ -141,15 +141,15 @@
     "glue_stub": { "radius": 5.0, "length": 15.0, "flat": 3.5, "clearance": 0.15, "extra_depth": 0.5 },
     "spiral": { "starts": 2, "pitch": 110.0, "height": 1.2, "half_width_deg": 24.0, "phase_deg": 90.0, "fade": 25.0 },
     "thumb_shelf": {
-      "hand": "left",
+      "hand": "both",
       "protrusion": 14.0,
-      "thickness": 7.0,
+      "thickness": 4.0,
       "top_z": 132.0,
       "pad_length": 30.0,
       "corner_radius": 3.0,
       "edge_chamfer": 1.0,
       "wire_hole": 3.5,
-      "note": "Flat sideways shelf for the thumb with a blank top face for side-by-side buttons. hand: left puts it on the holder's right (-X) when the wand points away; right mirrors it to +X."
+      "note": "One flat button platform across the top: left, centre and right zones on a common plane. Blank mounting surface; no guessed switch holes."
     },
     "joint_note": "Same spigot, pins, socket, cam and clearances as the other profiles, but mirrored: the handle carries the spigot and the lower shaft carries the socket, so both print upright."
   },

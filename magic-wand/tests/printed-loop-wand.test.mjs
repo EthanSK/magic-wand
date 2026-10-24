@@ -175,7 +175,16 @@ test("the tapered profile preserves a continuous body, two ribs, and a wired thu
     assert.ok(Math.abs(peaks[1] - peaks[0] - 180) < 6);
   }
   assert.equal(tapered.thumb_shelf.mirrors_exactly, true);
+  assert.equal(tapered.thumb_shelf.hand, "both");
+  assert.ok(tapered.thumb_shelf.width_mm > 50 && tapered.thumb_shelf.width_mm < 56);
   assert.ok(tapered.thumb_shelf.reach_minus_x_mm > tapered.radius_mm.handle_face + 10);
+  assert.ok(tapered.thumb_shelf.reach_plus_x_mm > tapered.radius_mm.handle_face + 10);
+  for (const [style, zones] of Object.entries(tapered.thumb_shelf.flat_top_zones)) {
+    assert.deepEqual(Object.keys(zones), ["left", "centre", "right"], style);
+    for (const [zone, v] of Object.entries(zones)) {
+      assert.ok(v.below_mm3 > 0.199 && v.above_mm3 < 0.001, `${style} ${zone}: same flat top plane`);
+    }
+  }
   assert.ok(Object.values(tapered.spiral_extra_mm3).every((v) => v > 0));
   for (const id of profile.assemblies) {
     const a = manifest.assemblies[id];
