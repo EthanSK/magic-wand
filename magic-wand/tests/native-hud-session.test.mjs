@@ -36,7 +36,7 @@ final class Context {var isActive=false,isFresh=true;var onChange:((Bool)->Void)
 final class Application {var bundleIdentifier="com.microsoft.VSCode"}
 final class NSWorkspace {static let shared=NSWorkspace();var frontmostApplication:Application?=Application()}
 final class Trace {var boundaries:[String]=[];func boundary(_ reason:String,mode:String?=nil,now:Double=0){boundaries.append(reason)}}
-final class Controls {var phases:[String]=[];func persistent(_ phase:String,x:Double=0,y:Double=0){phases.append(phase)}}
+final class Controls {var phases:[String]=[];var points:[CGPoint]=[];func persistent(_ phase:String,x:Double=0,y:Double=0){phases.append(phase);points.append(CGPoint(x:x,y:y))}}
 final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];var inputs=0;func beginDetents(mode:String,now:Double){starts.append(mode)};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{inputs+=1;return[]};func endDetents(commit:Bool)->[Int]{committed=commit;return[]}}
 final class Harness {
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter(),reviewTrace=Trace(),recording=Recording(),dwell=WandDwellClick()
@@ -96,9 +96,20 @@ let menu=Harness();menu.handleMiddle("1");menu.context.set(true);menu.middlePres
 precondition(menu.hudSession && !menu.hudActive,"a kept-open HUD waits for the next hold")
 let waiting=menu.controls.phases.count
 menu.handleNavigation("9000,0")
-precondition(menu.controls.phases.count==waiting,"an unheld HUD never moves its outline")
+precondition(Array(menu.controls.phases.suffix(2))==["hover","motion"] && menu.hudWatchdog==nil,"unheld input is passive hover; native app accepts it only for an armed Switch App")
+menu.hudLastUpdate=Date.distantPast;settle(1.1)
+precondition(menu.hudSession && !menu.controls.phases.contains("dismiss"),"passive hover must not expire after a pause")
+_=menu.pointerRouter.bottom(down:true)
+menu.handleNavigation("19000,0")
+precondition(!menu.hudActive && menu.controls.phases.last=="park","Bottom parks passive hover before scrolling or dragging")
+let parkedCount=menu.controls.phases.count
+menu.handleNavigation("29000,0")
+precondition(menu.controls.phases.count==parkedCount,"Bottom movement cannot leak into the HUD")
+_=menu.pointerRouter.bottom(down:false)
+menu.handleNavigation("39000,0")
+precondition(Array(menu.controls.phases.suffix(2))==["hover","motion"] && menu.controls.points.last==CGPoint.zero,"release starts from a new origin without replaying Bottom movement")
 menu.handleMiddle("1")
-precondition(menu.controls.phases.last=="navigate" && menu.middleHeld && !menu.controls.phases.dropFirst(waiting).contains("open"),"the next hold steers the page or adjusts the armed card")
+precondition(Array(menu.controls.phases.suffix(2))==["park","navigate"] && menu.middleHeld && menu.hudWatchdog != nil && !menu.controls.phases.dropFirst(waiting).contains("open"),"the next hold steers the page or adjusts the armed card")
 menu.handleNavigation("0,7000");menu.middlePressedAt-=0.3;menu.handleMiddle("0")
 precondition(menu.controls.phases.last=="choose")
 

@@ -767,3 +767,14 @@ The previous device had a compressed interpreter snapshot and two old boot image
 Every saved payload was checked by length and checksum. A clean saved-program boot was inspected before the receiver was started: the full image marker, current bridge, power policy and valid calibration were already present. Receiver 1.2.83 then connected without uploading a runtime or bridge. This verifies the saved startup path; it does not claim a repeated physical battery removal or measured battery life.
 
 The HID module is included in the saved startup, so no old interpreter snapshot or online module fetch is required. The build uses pinned Terser with compression and name mangling disabled; ASCII output preserves the byte offsets used by Storage writes. The complete payload and its manifest are reproducible from the readable sources, not maintained as another source copy.
+
+## Passive Switch App navigation has no held-input timeout
+
+Ethan calls the armed Switch App outline “dotted”. Unheld movement may navigate
+away from it without operating an action; a later Middle hold still operates
+the armed app switcher. This passive session must not inherit either end’s
+held-input watchdog, because a quiet pause or desk sleep is not dismissal.
+Bottom-held scrolling or dragging parks passive navigation; restarting from
+a fresh origin avoids replaying that movement into the HUD. The native and
+receiver regressions cover pauses, the next real hold and Bottom isolation.
+Installation and physical acceptance are tracked separately from source tests.
