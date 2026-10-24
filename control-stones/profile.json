@@ -6,7 +6,7 @@
   "handSensor": "LSM6DS3TR-C",
   "fingerSensor": "BMI160",
   "plannedFingerCount": 5,
-  "fingerSupport": "BMI160 telemetry via TCA9548A; physical validation required",
+  "fingerSupport": "BMI160 thumb verified via TCA9548A channel 2 and Bluetooth; channels 3-6 need physical validation",
   "fingerChannels": {"thumb": 2, "index": 3, "middle": 4, "ring": 5, "little": 6},
   "transport": [
     "USB serial",
