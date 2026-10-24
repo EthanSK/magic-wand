@@ -944,8 +944,9 @@ their existing paths.
 ## Manual power chord and sleep warning (2026-10-24)
 
 The all-three-grip power chord is consumed before the actual registered Bottom,
-Middle and Top handlers. Latch it until every button is released. Manual standby
-requires the same chord to wake; automatic standby keeps any-button wake. Consume
+Middle and Top handlers. Latch it until every button is released. Any single grip button
+wakes either manual or automatic standby; consume that wake press without
+triggering its ordinary mouse, HUD or recording action. Consume
 that first automatic-wake press until release too, otherwise a three-button wake
 can immediately turn the wand off again. Regression checks cover both sequences.
 

@@ -11,16 +11,16 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.91",
-    "receiverBuild": "96",
+    "receiver": "1.2.92",
+    "receiverBuild": "97",
     "deviceRuntime": "wand-117ffe9f4a0e",
     "bridgeRevision": "d9eb6a7b9a5c4ed0f57a3235d26546b3228773a8ddb221d86cff41ea0ab8e199",
     "agenticMouse": "1.0.283",
     "agenticMouseBuild": "289",
-    "persistentImage": "full-20261024e"
+    "persistentImage": "full-20261024f"
   },
   "status": [
-    "Installed: press all three grip buttons together to toggle deep standby. Release all buttons before repeating. Manual standby wakes with the same chord; automatic standby still wakes with any grip button. Two all-colour blinks precede sleep. Saved bytes and clean startup passed; physical chord feel is pending.",
+    "Installed: all three grip buttons turn the wand off; any single grip button wakes manual or automatic sleep. The wake press is consumed until every button is released. Five-minute automatic deep sleep and the two-blink cue are unchanged. Saved bytes and clean startup verified; physical any-button wake acceptance pending.",
     "Installed: shared click and hold cues distinguish a card action from held wheel or wand adjustments. Copy/Paste names Space explicitly. Native checks and rendered layout inspection passed; physical gesture acceptance is pending.",
     "Installed: held Switch App adjustment shares the normal HIGH mouse sensitivity calculation, including fine movement and orientation correction. Other HUD controls keep their existing angular input. Native and receiver checks pass; physical feel is awaiting acceptance.",
     "Installed: the complete saved program includes the corrected Bottom press, calibration restore and button-wake sleep. Clean startup was verified before reconnecting the receiver, with no code re-upload. A full five-minute sleep/button-wake cycle was observed on 24 October; physical battery-removal remains unverified.",
@@ -391,7 +391,7 @@
       "offMs": 100,
       "before": "five-minute deep sleep"
     },
-    "manualPowerChord": "All three grip buttons toggle deep standby; release all before toggling again."
+    "manualPowerChord": "All three grip buttons turn off; any single button wakes. Release all before another action."
   },
   "hud": {
     "source": "Agentic Mouse’s published Default mode",
