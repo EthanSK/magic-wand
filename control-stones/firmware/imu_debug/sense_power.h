@@ -41,10 +41,10 @@ static bool begin(LSM6DS3 &imu) {
   return true;
 }
 
-static void waitAndUpdate(LSM6DS3 &imu) {
+static void waitAndUpdate(LSM6DS3 &imu, bool externalActive = false) {
   // FreeRTOS may idle the CPU; BLE's own tasks remain running. Motion interrupts
   // wake this task without waiting for the one-second idle status transmission.
-  ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(idle ? 1000 : 20));
+  ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(idle && !externalActive ? 1000 : 20));
   if (enabled) {
     uint8_t source = 0;
     if (imu.readRegister(&source, 0x1B) == IMU_SUCCESS) idle = (source & 0x10) != 0;

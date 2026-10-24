@@ -3,6 +3,7 @@
 #include <Wire.h>
 #include <bluefruit.h>
 #include "sense_power.h"
+#include "finger_sensors.h"
 
 // Control Stones: the Sense's built-in hand sensor, not the external finger gyros.
 LSM6DS3 handIMU(I2C_MODE, 0x6A);
@@ -13,6 +14,11 @@ float batteryVoltage = 0;
 BLEUart sensorUart;
 // Original Sense variant: D23 is the active-low charger status on P0.17.
 constexpr uint8_t CHARGE_STATUS = 23;
+void emit(const char *frame, int length) {
+  if (length <= 0 || length >= 384) return;
+  if (Serial) Serial.write((const uint8_t*)frame, length);
+  if (Bluefruit.connected() && sensorUart.notifyEnabled()) sensorUart.write((const uint8_t*)frame, length);
+}
 
 void setup() {
   Serial.begin(115200);
@@ -24,6 +30,7 @@ void setup() {
   handIMU.settings.accelRange = 4;
   ready = handIMU.begin() == 0;
   if (ready) SensePower::begin(handIMU);
+  Fingers::begin();
   Bluefruit.autoConnLed(false);
   Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
   Bluefruit.begin();
@@ -38,8 +45,19 @@ void setup() {
 }
 
 void loop() {
-  SensePower::waitAndUpdate(handIMU);
+  SensePower::waitAndUpdate(handIMU, Fingers::any());
   lastSample = millis();
+  char frame[384];
+  Fingers::rescan();
+  for (uint8_t i = 0; i < 5; ++i) {
+    float axes[6];
+    if (!Fingers::sample(i, axes)) continue;
+    int n = snprintf(frame, sizeof(frame),
+      "{\"sensor\":\"finger\",\"channel\":%u,\"finger\":\"%s\",\"address\":%u,\"ms\":%lu,\"gx\":%.3f,\"gy\":%.3f,\"gz\":%.3f,\"ax\":%.4f,\"ay\":%.4f,\"az\":%.4f}\n",
+      Fingers::CHANNELS[i], Fingers::NAMES[i], Fingers::addresses[i], (unsigned long)millis(),
+      axes[0], axes[1], axes[2], axes[3], axes[4], axes[5]);
+    emit(frame, n);
+  }
   if (!ready) {
     Serial.println("{\"error\":\"Built-in sensor not found\"}");
     delay(1000);
@@ -54,14 +72,11 @@ void loop() {
   }
   uint8_t available = 0;
   if (!SensePower::idle && (handIMU.readRegister(&available, 0x1E) != IMU_SUCCESS || !(available & 0x02))) return;
-  char frame[256];
   int length = snprintf(frame, sizeof(frame),
-    "{\"ms\":%lu,\"ax\":%.4f,\"ay\":%.4f,\"az\":%.4f,\"gx\":%.3f,\"gy\":%.3f,\"gz\":%.3f,\"battery_v\":%.3f,\"charging\":%s,\"idle\":%s,\"sleep_ready\":%s}\n",
+    "{\"sensor\":\"hand\",\"ms\":%lu,\"ax\":%.4f,\"ay\":%.4f,\"az\":%.4f,\"gx\":%.3f,\"gy\":%.3f,\"gz\":%.3f,\"battery_v\":%.3f,\"charging\":%s,\"idle\":%s,\"sleep_ready\":%s}\n",
     (unsigned long)lastSample, handIMU.readFloatAccelX(), handIMU.readFloatAccelY(),
     handIMU.readFloatAccelZ(), SensePower::idle ? 0 : handIMU.readFloatGyroX(), SensePower::idle ? 0 : handIMU.readFloatGyroY(),
     SensePower::idle ? 0 : handIMU.readFloatGyroZ(), batteryVoltage, digitalRead(CHARGE_STATUS) == LOW ? "true" : "false",
     SensePower::idle ? "true" : "false", SensePower::enabled ? "true" : "false");
-  if (length <= 0 || length >= (int)sizeof(frame)) return;
-  if (Serial) Serial.write((uint8_t*)frame, length);
-  if (Bluefruit.connected() && sensorUart.notifyEnabled()) sensorUart.write((uint8_t*)frame, length);
+  emit(frame, length);
 }
