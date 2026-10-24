@@ -701,6 +701,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         log("HUD_CLOSED",reason)
     }
     func setScreenshotActive(_ active:Bool) {
+        // Cancelling the screenshot tool must not carry its mouse-down into
+        // the underlying app, even if Bottom has not been released yet.
+        if screenshotActive && !active {finishBottomHold(now:ProcessInfo.processInfo.systemUptime,resumeMouse:false)}
         screenshotActive=active
         if !active,screenshotHUD {
             screenshotHUD=false;hudSession=true;acceptHUDContext=true;hudOpenedAt=ProcessInfo.processInfo.systemUptime
@@ -956,7 +959,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func beginBottomHold(now:Double) {
         heldScrollAnchor=deliveryPoint ?? CGEvent(source:nil)?.location
         heldTargetToken=UUID()
-        let explicitDrag=recenterGesture.isSecondPress
+        let explicitDrag=screenshotActive || recenterGesture.isSecondPress
         heldScroll.begin(now:now,scrollable:!explicitDrag,sustain:controlVersion == .sustainedV3,resolving:!explicitDrag)
         heldSafetyTimer?.invalidate()
         heldSafetyTimer=Timer.scheduledTimer(withTimeInterval:0.02,repeats:true){[weak self] _ in
@@ -970,6 +973,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             }
         }
         releaseButtons()
+        // Screenshot selection is already an explicit drag tool. Ethan's
+        // Bottom press draws its rectangle immediately; release captures it.
+        // Park the Middle HUD and skip the ordinary scroll-target hit test.
+        if screenshotActive {
+            enterPointerMode()
+            if heldScroll.startDrag(now:now,immediate:true) {transition(to:1,at:heldScrollAnchor ?? .zero)}
+        }
         if explicitDrag {log("BOTTOM_HOLD_TARGET","explicit drag")}
     }
     /// One bounded Accessibility hit test per hold, off the main thread. The

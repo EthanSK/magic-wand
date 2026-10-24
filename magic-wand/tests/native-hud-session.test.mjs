@@ -71,6 +71,8 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  func sendReview(_ v:[Int]){}
  var traceInputs=0
  func recordReviewInput(rawX:Double,rawY:Double,dx:Double,dy:Double,now:Double,blocked:String?,step:Int32){traceInputs+=1}
+ var cancelledScreenshotHold=false
+ func finishBottomHold(now:Double,resumeMouse:Bool=true){cancelledScreenshotHold = !resumeMouse}
  func releaseButtons(){}
  init(){${callback}
 ${modeCallback}}
@@ -151,6 +153,7 @@ screenshot.setScreenshotActive(true);screenshot.enterPointerMode()
 precondition(!screenshot.hudSession && screenshot.screenshotHUD)
 precondition(!screenshot.controls.phases.contains("dismiss"))
 screenshot.setScreenshotActive(false)
+precondition(screenshot.cancelledScreenshotHold,"screenshot exit cancels any held drag before restoring the HUD")
 precondition(screenshot.hudSession && !screenshot.hudActive && !screenshot.screenshotHUD,"the HUD returns waiting, never steering unheld")
 let pinned=Harness();pinned.selectedReviewMode="changes";pinned.wandShortcutMode="changes";pinned.handleMiddle("1")
 precondition(pinned.reviewExitGesture.pending && !pinned.review.committed,"Middle-down freezes the existing working set")
