@@ -215,6 +215,7 @@ test("history survives log rotation, including lines written just before it", as
   assert.deepEqual(afterRotation.timeline.map((item) => item.event).reverse(),
     ["STARTED", "RUNTIME_READY", "RECORDING_STATE", "RECORDING_STATE", "TABLE_REST_CONFIRMED"]);
   assert.equal(afterRotation.sources.log.rotationsSeen, 1);
+  assert.equal(afterRotation.power.since, afterRotation.timeline[0].t, "rest duration starts at the rest event, not receiver startup");
   writeFileSync(log, logLines([[5, "DESK_SLEEP"]]));  // truncated and rewritten
   await sleep(500);
   const truncated = await state(port);
