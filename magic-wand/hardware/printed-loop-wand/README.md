@@ -1,8 +1,17 @@
 # Printed loop wand
 
-A fully printed body for the current three-button Puck.js wand: four interchangeable handles
-(three loops and a plain rounded grip) that plug onto one shared shaft and tip with a
-push-and-twist lock.
+A fully printed body for the three-button wand: interchangeable handles that plug onto one shared
+shaft with a push-and-twist lock.
+
+**Current profile: XIAO tip.** The wand now carries a Seeed XIAO board instead of the Puck.js, so
+the current set is the open XIAO deck (`tip-xiao`) with two handles side by side:
+
+- **Mug handle**: `handle-round`, the mug-style loop.
+- **Plain handle (no loop)**: `handle-straight`, the rounded grip with no loop.
+
+Both use the same shafts, joint, button pod and wire route. The Puck.js cradle, cap and the oval
+and angled loops stay available as the **Puck.js tip (legacy)** profile; none of their files
+changed. There is no battery holder anywhere; the battery is taped on for this prototype.
 
 **Status: first print set, not yet printed.** The model geometry is generated and checked
 (closed solids, fit on the bed, no unintended collisions, joint keyed and retained in the model).
@@ -20,24 +29,25 @@ existing three buttons and their roles are unchanged.
 | `wand_cad.py` | The one parametric geometry source. Builds, exports and checks everything. |
 | `requirements.txt` | Pinned geometry toolchain (manifold3d, trimesh, numpy). |
 | `exports/*.stl` | Binary STL per printable part, already in print orientation. |
-| `exports/assembly.glb` | All four assemblies side by side, with a Puck case reference. |
+| `exports/assembly.glb` | Current XIAO profile: mug and plain assemblies, with the XIAO outline for reference. |
+| `exports/assembly-puck-legacy.glb` | Legacy Puck.js profile: the four original assemblies with a Puck case reference. |
 | `exports/manifest.json` | Hashes, sizes, print notes, transforms and every check result. |
-| `preview/` | Browser preview of the four handles, the joint and a section view. |
+| `preview/` | Browser preview of both profiles, each handle, the joint and a section view. |
 
 ## Two pieces, more prints
 
 Ethan asked for a wand in two pieces where the wand end plugs into the handle. Those are the
 two assemblies:
 
-1. **Handle** (one of four) with its button pod. Swappable.
-2. **Wand**: lower shaft, upper shaft, tip cradle and cap, glued once into one piece.
+1. **Handle** (mug or plain) with its button pod. Swappable.
+2. **Wand**: lower shaft, upper shaft and the XIAO tip, glued once into one piece.
 
-The wand is about 360 mm long, longer than the 256 mm bed, so it prints as four parts joined by
-glued half-laps (long flat overlaps, not threaded stems). After gluing it behaves as the single
-second piece.
+The wand is longer than the 256 mm bed, so it prints as separate parts joined by glued half-laps
+(long flat overlaps, not threaded stems). After gluing it behaves as the single second piece.
 
-Default overall length is 500 mm, butt to cap, matching the existing roughly 50 cm wand. Change
-`overall.length` to resize the shaft.
+The shafts are sized from `overall.length` (500 mm, butt to the legacy Puck cap, matching the
+existing roughly 50 cm wand). With the XIAO tip on the same shafts, the board's front edge is at
+478 mm and the USB plug sticks out beyond it.
 
 ## Handles
 
@@ -75,16 +85,46 @@ Walls keep the loop handles' minimums: 2.75 mm beside the twist-lock grooves at 
 3.75 mm or more elsewhere around the socket. Change `handle.variants.straight.grip_radius` for a
 thicker grip; the section must stay larger than the socket and pod seat.
 
+## XIAO tip
+
+`tip-xiao` holds a bare XIAO board flat, component side up (the button side), USB end forward.
+It is an open U-shaped deck, not an enclosure:
+
+- The deck carries the documented 21 × 17.8 mm outline with 0.3 mm clearance. 0.6 mm side lips
+  locate the board without covering the castellated edge pins.
+- A 2 mm rear wall stops the board sliding back; a 6 mm slot through it drops the wires into the
+  shaft groove.
+- The top, USB connector and antenna end are open. The deck stops 1 mm short of the USB end so
+  a plug isn't blocked.
+- A 0.6 mm relief under the middle of the board keeps the deck off the underside, apart from a
+  1.5 mm border.
+- Two pairs of side notches take tape or a small cable tie around board and deck. There are no
+  snap tabs and nothing clamps components.
+- The rear tongue is the same as the legacy cradle's, so it laps under the unchanged upper shaft
+  and glues the same way.
+
+Assumptions, all in `dimensions.json → xiao_tip`:
+
+- Board: Seeed XIAO nRF52840 Sense or XIAO MG24 Sense. Which one this wand carries isn't
+  physically confirmed. Both document a 21 × 17.8 mm footprint in Seeed's
+  [nRF52840 documentation](https://wiki.seeedstudio.com/XIAO_BLE/) and
+  [MG24 documentation](https://wiki.seeedstudio.com/xiao_mg24_getting_started/).
+- PCB thickness 1.2 mm and component height 3.5 mm are provisional clearances, not measurements.
+  The model keeps that space above the board clear of every part.
+- The board's axis orientation relative to the wand depends on its firmware; nothing here
+  verifies the pointer directions.
+- No battery holder. Tape the battery to the shaft or handle.
+
 ## The twist-lock joint
 
 The lower shaft ends in a 13 mm spigot with three pins. The handle has a matching socket.
 
 - **Keyed entry.** The pins sit at 10°, 190° and 280° (measured from the button side, clockwise
   seen from the tip). The uneven spacing only lines up with the socket's entry slots one way,
-  so the Puck and buttons always end up on the same side.
-- **Push in.** Hold the shaft with the Puck turned 38° anticlockwise from upright and push it in
+  so the tip and buttons always end up on the same side.
+- **Push in.** Hold the shaft with the tip turned 38° anticlockwise from upright and push it in
   until the spigot end meets the socket floor. The floor is the axial stop.
-- **Twist.** Turn the shaft 38° clockwise (seen from the tip) until the Puck is upright. Each pin
+- **Twist.** Turn the shaft 38° clockwise (seen from the tip) until the tip is upright. Each pin
   rides a ramp, crosses a small ridge (0.15 mm interference by default) and drops into a
   shallower pocket (0.05 mm), pulling the spigot onto the floor. The ridge is what should resist
   turning back; the end of the groove stops over-twisting.
@@ -95,7 +135,7 @@ The lower shaft ends in a 13 mm spigot with three pins. The handle has a matchin
 The ridge and pocket rely on PETG flexing very slightly. Only the real print shows if that
 feels like a click, a firm stop or nothing, so the coupons come first.
 
-A plain friction taper would be simpler but can't key the Puck's orientation or resist
+A plain friction taper would be simpler but can't key the tip's orientation or resist
 rotation, so it isn't included. If every coupon fails, a taper is the fallback.
 
 ### What the model checks (exports/manifest.json → checks.joint)
@@ -117,11 +157,27 @@ The face-angle geometry check did not establish that those features print unsupp
 Enable supports and inspect their placement; remove them completely from the mating surfaces
 before trying the joint. Brims help the long thin shafts stay down.
 
-### First slicer comparison
+### Current XIAO slicer estimates
+
+Bambu Studio 2.8.2 with a P1S 0.4 mm nozzle, provisional Generic PETG, textured PEI,
+0.28 mm Extra Draft, two walls, 20% infill, automatic tree supports and a 4 mm outer brim:
+
+| Set | Estimated time | Estimated filament |
+| --- | --- | --- |
+| Plain handle, both shafts, XIAO holder and pilot button pod | 2 h 24 min | 72.2 g |
+| Mug handle, both shafts, XIAO holder and pilot button pod | 2 h 50 min | 88.8 g |
+| Joint samples plus XIAO holder, at 0.20 mm Standard | 1 h 16 min | 28.1 g |
+
+Each set fits one plate and slices without floating-region warnings. These are estimates,
+not measured print times, fit or strength. Select the actual loaded filament and re-slice
+before printing. The separate small holder can be fitted to the real board before gluing.
+
+### Earlier Puck slicer comparison
 
 The following are **estimates, not measured prints**, made with Bambu Studio 2.8.2, a P1S
 0.4 mm nozzle, Generic PETG, a textured PEI plate, 0.28 mm Extra Draft, two walls and 20% infill.
-Automatic tree supports and a 4 mm outer brim were enabled. Select the actual loaded filament
+Automatic tree supports and a 4 mm outer brim were enabled. These were sliced before the XIAO
+tip existed and describe the legacy Puck set. Select the actual loaded filament
 preset and re-slice before sending a print; these are provisional settings, not a strength rating.
 
 | Set | Estimated time | Estimated filament |
@@ -143,17 +199,19 @@ Print in this order:
 | --- | --- | --- | --- |
 | 1 | `coupon-male` | Flat +X face | The real shaft spigot and pins, 28 mm long. |
 | 2 | `coupon-female-a/b/c` | On its side | Real handle socket and 14 mm of button rail. 0.05 / 0.15 / 0.30 mm cam ridge; 1, 2 or 3 notches on the back. |
-| 3 | `coupon-puck-ring` | Flat | The tip pocket and rim, 6 mm tall. |
+| 3 | `tip-xiao` | Deck up | Current tip, 53 mm long. Check the bare board fits before gluing. |
 | 4 | `shaft-lower`, `shaft-upper` | Flat +X face | 183 mm each. Brim recommended. |
-| 5 | `tip-cradle`, `tip-cap` | Pocket up / cap top down | |
-| 6 | `button-pod-pilot` or `button-pod-blank` | Top down | Pilot holes mark the three button centres. |
-| 7 | `handle-straight`, `handle-round`, `handle-oval`, `handle-angled` | On its side | 140 mm long. Start with one; no loop uses the least material. |
+| 5 | `button-pod-pilot` or `button-pod-blank` | Top down | Pilot holes mark the three button centres. |
+| 6 | `handle-straight` and/or `handle-round` | On its side | Plain and mug handles, 140 mm long. |
+
+Legacy Puck.js parts, unchanged: `coupon-puck-ring`, `tip-cradle`, `tip-cap`, `handle-oval`,
+`handle-angled`.
 
 Handles and shafts print with layers along their length, which is usually the stronger
 direction for bending. Wall and infill settings are yours to choose; nothing here has been
 strength tested.
 
-## Tip and Puck
+## Legacy Puck.js tip
 
 The tip cradle holds the Puck.js v2.1 in its stock case, flat, with its top facing the button
 side, matching the website model and the device code's axis mapping. The case is documented as
@@ -169,11 +227,12 @@ side, matching the website model and the device code's axis mapping. The case is
 
 The three buttons and ground are four wires, as in [BUILDING.md](../../BUILDING.md):
 
-Puck case → rear notch in the cradle → groove under the cap → 5 mm bore through both shafts →
-spigot end → connector bay behind the socket floor (12 mm × 17.5 mm) → 6 mm channel → wire hole
+XIAO pins → slot through the deck's rear wall → groove in the tip's tongue → 5 mm bore through
+both shafts → spigot end → connector bay behind the socket floor (12 mm × 17.5 mm) → 6 mm channel → wire hole
 in the rail → inside the button pod.
 
-A 3 mm wire path through the whole route clears every part in the model. To swap handles
+The legacy Puck route starts at the cradle's rear notch instead. A 3 mm wire path through either
+route clears every part in the model. To swap handles
 without re-soldering, put a small four-way inline connector in the bay; the mated connector must
 pass the socket floor opening, 9 mm round with a peak (about 9 × 10.9 mm). No connector is specified. Thread the shaft wires
 before fitting their connector.
@@ -197,7 +256,8 @@ Coupons first:
 - [ ] Twisting back releases with deliberate force, then it pulls out.
 - [ ] Pick the best of a, b and c and set `joint.cam.crest_interference` to match. If all are loose
       or tight, adjust `joint.bore_clearance`, `joint.slot_clearance` or the cam values and reprint.
-- [ ] The stock Puck case drops into the ring coupon, sits flat and lifts out with the notches.
+- [ ] The bare XIAO board sits in `tip-xiao` between the lips, flat, without forcing; USB plugs in.
+- [ ] Tape through the notches holds the board without pressing on components.
 - [ ] A printed pod slides onto a female coupon's rail without binding or rattling.
 
 Then the full parts:
@@ -205,8 +265,9 @@ Then the full parts:
 - [ ] Glue the shaft half-laps and the tip with the flat +X faces down on a flat table. Glue
       strength on PETG is untested.
 - [ ] Each handle: reach to all three buttons, grip or loop comfort, wrist angle while pointing.
-- [ ] Balance and weight with the Puck fitted.
-- [ ] Pointer directions after mounting the Puck in the cradle.
+- [ ] Balance and weight with the XIAO and taped battery fitted.
+- [ ] Pointer directions after mounting the XIAO.
+- [ ] Legacy only: the stock Puck case drops into the ring coupon and the cradle.
 
 ## Rebuild and check
 
@@ -229,11 +290,18 @@ Serve the repository root and open the preview (it reuses the website's Three.js
 python3 -m http.server 8850 --bind 127.0.0.1   # from the repository root
 ```
 
-Then open `http://127.0.0.1:8850/magic-wand/hardware/printed-loop-wand/preview/`.
+Then open `http://127.0.0.1:8850/magic-wand/hardware/printed-loop-wand/preview/`. It opens on the
+XIAO profile with both handles. Direct links:
+
+- `?profile=xiao&view=mug`: mug handle only.
+- `?profile=xiao&view=plain`: plain handle only.
+- `?profile=puck-legacy`: the four legacy Puck.js assemblies.
 
 ## Known limits
 
 - Nothing has been printed. Fit, strength, comfort, balance and mass are unmeasured.
+- The XIAO outline is documented, not measured. Its thickness, component height, pad positions and
+  which XIAO is fitted are unconfirmed. The board's fit, tape hold and orientation are untested.
 - The Puck case size, switch sizes, button spacing and wire bundle size are documented or assumed,
   not measured.
 - The cam relies on small elastic interference; PETG may creep and loosen it over time.

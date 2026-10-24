@@ -10,16 +10,16 @@
     "filament": "Generic PETG",
     "bed": [256, 256, 256],
     "margin": 4,
-    "note": "Reference profile only; no slicing or printing was done."
+    "note": "Reference profile only. Slicer estimates are recorded in the README; nothing has been physically printed."
   },
   "overall": {
     "length": 500,
-    "note": "Butt to tip cap. Roughly matches the existing 50 cm wand; editable."
+    "note": "Butt to legacy Puck tip cap. The current XIAO tip uses the same shafts and ends slightly shorter; see the generated layout."
   },
   "section": {
     "thickness": 22,
     "chamfer": 4,
-    "note": "Handles are a 22 mm slab with 45-degree chamfers so they print on their side without supports."
+    "note": "Loop handles use a 22 mm slab with 45-degree chamfers. Shared rail and socket overhangs still need slicer support checks."
   },
   "handle": {
     "length": 140,
@@ -108,6 +108,49 @@
     "notch_width": 8,
     "thumb_notch_radius": 5,
     "note": "Puck.js v2.1 stock case documented as 36 mm by 12.5 mm; not measured here."
+  },
+  "xiao_tip": {
+    "boards": "Seeed XIAO nRF52840 Sense, or XIAO MG24 Sense; which one this wand carries is not physically confirmed. Both document a 21 x 17.8 mm footprint (Seeed wiki).",
+    "board_length": 21.0,
+    "board_width": 17.8,
+    "pcb_thickness": 1.2,
+    "component_clearance": 3.5,
+    "clearance": 0.3,
+    "shaft_gap": 0.3,
+    "deck_top_y": 0.0,
+    "lip_height": 0.6,
+    "lip_wall": 1.6,
+    "rear_wall": 2.0,
+    "rear_wall_height": 2.5,
+    "usb_setback": 1.0,
+    "relief_inset": 1.5,
+    "relief_depth": 0.6,
+    "wire_slot_width": 6.0,
+    "tape_notch": { "width": 5.0, "depth": 2.5, "at": [0.25, 0.75] },
+    "note": "Open U-shaped deck: the board lies component side up, USB end forward and uncovered, held by tape through the side notches. Only the outline comes from documentation; PCB thickness and component height are provisional clearances, not measurements. No battery holder: the battery is taped on separately."
+  },
+  "profiles": {
+    "current": "xiao",
+    "xiao": {
+      "label": "XIAO tip",
+      "tip_parts": ["tip-xiao"],
+      "reference": "xiao-board",
+      "assemblies": {
+        "mug": { "label": "Mug handle", "handle": "round" },
+        "plain": { "label": "Plain handle (no loop)", "handle": "straight" }
+      }
+    },
+    "puck-legacy": {
+      "label": "Puck.js tip (legacy)",
+      "tip_parts": ["tip-cradle", "tip-cap"],
+      "reference": "puck-case",
+      "assemblies": {
+        "round": { "label": "Round", "handle": "round" },
+        "oval": { "label": "Oval", "handle": "oval" },
+        "angled": { "label": "Angled", "handle": "angled" },
+        "straight": { "label": "No loop", "handle": "straight" }
+      }
+    }
   },
   "cap": {
     "wall": 2.0,

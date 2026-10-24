@@ -29,9 +29,11 @@ function readStl(file) {
 test("exports were built from the current parameters and source", () => {
   assert.equal(manifest.source.dimensions_sha256, sha256(readFileSync(join(folder, "dimensions.json"))));
   assert.equal(manifest.source.script_sha256, sha256(readFileSync(join(folder, "wand_cad.py"))));
-  const glb = readFileSync(join(exportsDir, manifest.glb.file));
-  assert.equal(sha256(glb), manifest.glb.sha256);
-  assert.equal(glb.readUInt32LE(0), 0x46546c67, "GLB magic");
+  for (const entry of manifest.glb) {
+    const glb = readFileSync(join(exportsDir, entry.file));
+    assert.equal(sha256(glb), entry.sha256, entry.file);
+    assert.equal(glb.readUInt32LE(0), 0x46546c67, `${entry.file} GLB magic`);
+  }
 });
 
 test("every STL matches the manifest, is closed and fits the reference bed", () => {
@@ -82,7 +84,9 @@ test("recorded geometry checks passed", () => {
     assert.equal(result.passed, true, variant);
     assert.deepEqual(result.unexpected, [], variant);
   }
-  assert.deepEqual(Object.keys(checks.assembly).sort(), Object.keys(dimensions.handle.variants).sort());
+  const expected = Object.entries(dimensions.profiles).filter(([k]) => k !== "current")
+    .flatMap(([profile, spec]) => Object.keys(spec.assemblies).map((key) => `${profile}-${key}`));
+  assert.deepEqual(Object.keys(checks.assembly).sort(), expected.sort());
 });
 
 test("the no-loop handle shares the joint and uses less material than every loop handle", () => {
@@ -94,6 +98,35 @@ test("the no-loop handle shares the joint and uses less material than every loop
     assert.ok(plain.mesh.volume_mm3 < parts[loop].mesh.volume_mm3, loop);
     assert.ok(plain.mesh.print_size_mm[1] < parts[loop].mesh.print_size_mm[1], `${loop} footprint`);
   }
-  assert.equal(manifest.checks.assembly.straight.opening, null);
-  assert.ok(Object.values(manifest.checks.assembly.straight.wire_probe_overlap_mm3).every((v) => v < 0.01));
+  for (const id of ["xiao-plain", "puck-legacy-straight"]) {
+    assert.equal(manifest.checks.assembly[id].opening, null, id);
+    assert.ok(Object.values(manifest.checks.assembly[id].wire_probe_overlap_mm3).every((v) => v < 0.01), id);
+  }
+});
+
+test("the current XIAO profile pairs the mug and plain handles with the open XIAO tip", () => {
+  assert.equal(manifest.current_profile, "xiao");
+  const profile = manifest.profiles.xiao;
+  assert.deepEqual(profile.tip_parts, ["tip-xiao"]);
+  assert.equal(profile.glb, "assembly.glb");
+  assert.deepEqual(profile.assemblies, ["xiao-mug", "xiao-plain"]);
+  assert.equal(manifest.assemblies["xiao-mug"].label, "Mug handle");
+  assert.equal(manifest.assemblies["xiao-plain"].label, "Plain handle (no loop)");
+  assert.equal(manifest.assemblies["xiao-mug"].parts[0], "handle-round");
+  assert.equal(manifest.assemblies["xiao-plain"].parts[0], "handle-straight");
+  for (const id of profile.assemblies) {
+    const parts = manifest.assemblies[id].parts;
+    assert.ok(!parts.some((p) => /puck|cradle|cap/.test(p)), `${id} has no Puck parts`);
+    const overlaps = manifest.checks.assembly[id].overlaps_mm3;
+    for (const [pair, v] of Object.entries(overlaps)) {
+      if (/xiao-(board|components)/.test(pair)) assert.equal(v, 0, `${id}: ${pair}`);
+    }
+  }
+  const tip = manifest.parts.find((p) => p.name === "tip-xiao");
+  assert.equal(tip.profile, "xiao");
+  assert.equal(tip.mesh.bodies, 1);
+  // The legacy Puck profile and its parts remain available.
+  assert.deepEqual(manifest.profiles["puck-legacy"].tip_parts, ["tip-cradle", "tip-cap"]);
+  assert.equal(manifest.layout.xiao.board_size[0], dimensions.xiao_tip.board_width);
+  assert.equal(manifest.layout.xiao.board_size[2], dimensions.xiao_tip.board_length);
 });

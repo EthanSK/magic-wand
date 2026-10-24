@@ -11,15 +11,16 @@
     #view { position: relative; min-height: 320px; }
     #view canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
     #view canvas:active { cursor: grabbing; }
+    .tag { position: absolute; transform: translate(-50%, -100%); padding: 3px 8px; border-radius: 6px; background: rgba(28, 25, 38, .85); border: 1px solid var(--line); font-size: 13px; white-space: nowrap; pointer-events: none; }
     #hint { position: absolute; left: 12px; bottom: 10px; color: var(--muted); font-size: 13px; pointer-events: none; }
     #message { position: absolute; inset: 0; display: none; place-items: center; padding: 24px; text-align: center; color: var(--muted); }
     aside { background: var(--panel); border-left: 1px solid var(--line); overflow-y: auto; padding: 18px; }
     h1 { font-size: 20px; margin: 0 0 4px; }
     h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 22px 0 8px; }
     .status { color: var(--muted); margin: 0; }
-    .choices { display: flex; gap: 6px; }
-    .choices button { flex: 1; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
-    .choices button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .choices { display: flex; gap: 6px; flex-wrap: wrap; }
+    .choices a { flex: 1 1 auto; text-align: center; text-decoration: none; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: transparent; color: var(--text); font: inherit; cursor: pointer; }
+    .choices a[aria-current="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
     .grip { color: var(--muted); font-size: 13px; margin: 6px 0 0; min-height: 2.9em; }
     label.row { display: flex; align-items: center; gap: 8px; margin: 6px 0; }
     .joint { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; }
@@ -38,14 +39,18 @@
 <body>
   <main id="view">
     <div id="message" role="status"></div>
+    <div id="tags"></div>
     <div id="hint">Drag to turn · Scroll to zoom · Double-click resets view</div>
   </main>
   <aside>
     <h1>Printed loop wand</h1>
     <p class="status">Model geometry checked. Printed fit, strength and comfort aren't tested yet.</p>
 
+    <h2>Tip</h2>
+    <nav class="choices" id="profiles" aria-label="Tip"></nav>
+
     <h2>Handle</h2>
-    <div class="choices" id="handles"></div>
+    <nav class="choices" id="handles" aria-label="Handle"></nav>
     <p class="grip" id="grip"></p>
 
     <h2>Joint</h2>
