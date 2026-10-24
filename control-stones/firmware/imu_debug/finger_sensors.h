@@ -1,5 +1,5 @@
 #pragma once
-#include <Wire.h>
+#include "timed_i2c.h"
 
 // Ethan's adapter-board wiring starts at SD2/SC2, not channel zero.
 // Wire is the external D4/D5 bus; the built-in Sense IMU uses Wire1.
@@ -11,23 +11,15 @@ static uint32_t lastScan = 0;
 static uint8_t scanIndex = 0;
 
 static bool select(uint8_t channel) {
-  Wire.beginTransmission(0x70);
-  Wire.write(uint8_t(1u << channel));
-  return Wire.endTransmission() == 0;
+  const uint8_t mask = uint8_t(1u << channel);
+  return ExternalBus::write(0x70, &mask, 1);
 }
 static bool read(uint8_t address, uint8_t reg, uint8_t *data, uint8_t count) {
-  Wire.beginTransmission(address);
-  Wire.write(reg);
-  if (Wire.endTransmission(false) != 0) return false;
-  if (Wire.requestFrom(address, count) != count) return false;
-  for (uint8_t i = 0; i < count; ++i) data[i] = Wire.read();
-  return true;
+  return ExternalBus::read(address, reg, data, count);
 }
 static bool write(uint8_t address, uint8_t reg, uint8_t value) {
-  Wire.beginTransmission(address);
-  Wire.write(reg);
-  Wire.write(value);
-  return Wire.endTransmission() == 0;
+  const uint8_t data[] = {reg, value};
+  return ExternalBus::write(address, data, 2);
 }
 static bool configure(uint8_t i) {
   addresses[i] = 0;
@@ -60,8 +52,7 @@ static bool configure(uint8_t i) {
   return true;
 }
 static void begin() {
-  Wire.begin();
-  Wire.setClock(100000);
+  ExternalBus::begin();
   for (uint8_t i = 0; i < 5; ++i) configure(i);
   lastScan = millis();
 }

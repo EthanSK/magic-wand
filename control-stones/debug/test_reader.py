@@ -19,6 +19,12 @@ def sample(ms=100, **extra):
 
 
 class ReaderTests(unittest.TestCase):
+    def test_external_timeout_count_does_not_replace_sensor_readings(self):
+        value = parse_sample(json.dumps(sample(i2c_timeouts=2)))
+        self.assertEqual(value['i2c_timeouts'], 2)
+        self.assertEqual(value['gx'], 20)
+        self.assertNotIn('i2c_timeouts', parse_sample(json.dumps(sample(i2c_timeouts=True))))
+
     def test_reader_leaves_the_firmware_upload_port_alone(self):
         import server
         from types import SimpleNamespace
