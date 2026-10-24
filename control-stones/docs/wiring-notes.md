@@ -22,7 +22,7 @@
   - dashed = verify on the delivered board
   - × stub = leave unconnected
   - dotted = wireless
-- **Net colours:** 3V3, GND, SDA, SCL and battery + each use a distinct theme series token. They are always paired with text labels.
+- **Wire colours:** red positive power, black GND, green SDA data, yellow SCL clock. Diagram labels name the physical insulation colour; ground is drawn with a contrasting line in dark mode so it stays visible.
 - **Power is drawn explicitly** as separate 3V3 and GND rails from the XIAO to every finger board. This makes it visible that the mux switches data, not power.
 - **Two layouts:**
   - wide (≥ 708 px): left-to-right signal flow
@@ -32,6 +32,21 @@
 - **Saved state:** the current stage and selection are kept through `window.openai.setWidgetState`.
 
 ## Wiring list (as drawn)
+
+### Current wire colours and materials
+
+Use **actual distinct insulation colours**, as requested on 24 October 2026:
+
+| Connection | Insulation colour |
+|---|---|
+| Positive power: regulated 3V3 distribution and positive battery pigtail | Red |
+| GND and negative battery pigtail | Black |
+| SDA data: XIAO SDA, mux SDn and sensor SDA | Green |
+| SCL clock: XIAO SCL, mux SCn and sensor SCL | Yellow |
+
+Use red insulation for local CS/SA0 links to 3V3 too. Colours identify the intended role; confirm endpoints and battery polarity rather than assuming an existing cable follows the colour code.
+
+Do not use three green wires, labelled red/green offcuts or coloured sleeves in place of these four insulation colours. This supersedes the earlier request to remove yellow. The completed order bought red and green 30AWG silicone stranded wire; that historical purchase remains unchanged. Black and yellow flexible wire are required for this plan, but stock on hand has not been verified and no additional purchase is authorised by this correction. Check existing supplies before creating a shopping list or buying duplicates. Allow slack at moving fingers and strain relief at joints; choose lengths after checking the left-hand mounting.
 
 | # | From | To | Status |
 |---|------|----|--------|
