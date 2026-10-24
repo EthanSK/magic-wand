@@ -20,8 +20,8 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
 
 ## Workflow
 
-- Read relevant sections of [LEARNINGS.md](../../../LEARNINGS.md) before changing fragile
-  behaviour. Follow [AGENTS.md](../../../AGENTS.md) and inspect current code and live evidence;
+- Read relevant sections of [LEARNINGS.md](../../../magic-wand/LEARNINGS.md) before changing fragile
+  behaviour. Follow [AGENTS.md](../../../magic-wand/AGENTS.md) and inspect current code and live evidence;
   an old incident description does not establish the current installed state.
 - Save reusable, verified technical lessons in `LEARNINGS.md` in the same task. Include the
   symptom, established cause, decision that prevents recurrence, and verification boundary.
