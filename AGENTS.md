@@ -16,6 +16,7 @@
 - Keep all existing sensors supported as new ones are added. Keep device-specific firmware and transports separate; share code only when the same behavior is verified. Do not contaminate the Puck JavaScript when adding Sense or future sensors.
 - Save durable user rules here when they apply to every component, or in the owning component's instructions when they are specific. Use Ethan's original wording as closely as possible. Preserve verified historical lessons in the owning component's LEARNINGS.md.
 - Run `npm run check` from the repository root before committing: it checks privacy across all components and runs each workspace's checks. Run a component command with `npm run <command> --workspace <component>`.
+- For now, run tests locally, not on GitHub Actions. Do not re-enable or add remote test/E2E workflows unless Ethan asks. Keep website publishing separate from tests. User-requested — 2026-10-24.
 - This public repository stores sources. Never commit device identifiers, local paths, credentials, receipts, raw logs or private settings. Never flash, reconnect or restart real hardware or installed controller apps from this checkout; use the established private installation workflow for authorized hardware work.
 - Preserve device profiles, control-version snapshots and immutable tags. Refactoring paths must not silently change runtime behavior or the published website.
 

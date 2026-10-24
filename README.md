@@ -23,6 +23,8 @@ npm run serve                          # Serve the published website locally
 
 These workspace commands do not require installing dependencies. Toolchain prerequisites are documented by each component. Component checks do not flash or reconnect hardware.
 
+Tests run locally for now. GitHub test workflows are disabled; GitHub Pages still publishes the website independently.
+
 Read [AGENTS.md](AGENTS.md) for shared rules, then the component instructions. The root commit-and-push rule applies to all components.
 
 <!-- Previously Magic Wand sources, tests, scripts and instructions lived at the repository root; they now live in magic-wand/. -->
