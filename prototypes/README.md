@@ -27,3 +27,7 @@ settings, calibration, binaries and local paths are intentionally not published.
 This baseline preserves behaviour and recovery information; it is not a claim
 that every experimental gesture has been physically accepted. Ethan subsequently confirmed table pickup and put-down both work; the acceptance
 record is kept in `v1.json` without moving the original baseline tag.
+
+## Control Stones
+
+[Control Stones](control-stones/README.md) is a separate experimental Sense/BMI160 hand-controller profile. Its firmware and debug reader do not change the original Puck wand or receiver.

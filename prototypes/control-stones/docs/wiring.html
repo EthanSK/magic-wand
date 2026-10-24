@@ -1,0 +1,582 @@
+<div id="cs-wiring-opus">
+<style>
+#cs-wiring-opus{display:flex;flex-direction:column;gap:12px}
+#cs-wiring-opus h2{margin:0}
+#cs-wiring-opus .csw-panel{display:flex;flex-direction:column;gap:12px}
+#cs-wiring-opus .csw-stage{margin:0}
+#cs-wiring-opus .csw-legend{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center;margin:0}
+#cs-wiring-opus .csw-key{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+#cs-wiring-opus .csw-sw{display:inline-block;width:18px;height:0;border-top:2px solid var(--sw)}
+#cs-wiring-opus .csw-sw.is-dash{border-top-style:dashed}
+#cs-wiring-opus .csw-sw.is-dot{border-top-style:dotted}
+#cs-wiring-opus .csw-diagram{width:100%}
+#cs-wiring-opus .csw-svg{display:block;width:100%;height:auto;overflow:visible}
+#cs-wiring-opus .csw-svg text{fill:var(--foreground);font-size:12px}
+#cs-wiring-opus .csw-svg .w5{font-weight:500}
+#cs-wiring-opus .box{fill:var(--card);stroke:var(--border);stroke-width:1}
+#cs-wiring-opus .ghost{opacity:.3}
+#cs-wiring-opus .dim{opacity:.4}
+#cs-wiring-opus .w{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#cs-wiring-opus .wire:hover .w{stroke-width:3}
+#cs-wiring-opus .wire.is-sel .w{stroke-width:3.5}
+#cs-wiring-opus .net-pwr{stroke:var(--viz-series-1)}
+#cs-wiring-opus .net-gnd{stroke:var(--foreground)}
+#cs-wiring-opus .net-sda{stroke:var(--viz-series-2)}
+#cs-wiring-opus .net-scl{stroke:var(--viz-series-3)}
+#cs-wiring-opus .net-bat{stroke:var(--viz-series-4)}
+#cs-wiring-opus .net-link,#cs-wiring-opus .net-nc{stroke:var(--muted-foreground)}
+#cs-wiring-opus .st-verify{stroke-dasharray:6 4}
+#cs-wiring-opus .st-wireless{stroke-dasharray:1 5}
+#cs-wiring-opus .hit{fill:none;stroke:transparent;stroke-width:14;pointer-events:stroke}
+#cs-wiring-opus .xmark{fill:none;stroke:var(--muted-foreground);stroke-width:1.5;stroke-linecap:round}
+#cs-wiring-opus .pin{fill:var(--card);stroke:var(--foreground);stroke-width:1.2}
+#cs-wiring-opus .ring{fill:none;stroke:var(--foreground);stroke-width:1.5}
+#cs-wiring-opus .dot-pwr{fill:var(--viz-series-1)}
+#cs-wiring-opus .dot-gnd{fill:var(--foreground)}
+#cs-wiring-opus .chip-bg{fill:transparent;stroke:var(--border);stroke-width:1}
+#cs-wiring-opus .chip-box{fill:var(--muted);stroke:var(--border);stroke-width:1}
+#cs-wiring-opus .chip.is-sel .chip-bg,#cs-wiring-opus .chip.is-sel .chip-box{fill:var(--accent);stroke:var(--foreground);stroke-width:1.5}
+#cs-wiring-opus .chip.is-sel text{fill:var(--accent-foreground)}
+#cs-wiring-opus .csw-detail p{margin:6px 0 0}
+#cs-wiring-opus .csw-ends{display:flex;flex-wrap:wrap;gap:4px 8px}
+#cs-wiring-opus .csw-w5{font-weight:500}
+</style>
+
+<h2>Control Stones wiring · one hand</h2>
+
+<div class="nav nav-pills" role="tablist" aria-label="Build stage">
+  <button class="nav-link active" id="csw-tab-1" data-stage="1" role="tab" aria-controls="csw-panel" aria-selected="true" type="button">1 · USB only</button>
+  <button class="nav-link" id="csw-tab-2" data-stage="2" role="tab" aria-controls="csw-panel" aria-selected="false" type="button">2 · One sensor</button>
+  <button class="nav-link" id="csw-tab-3" data-stage="3" role="tab" aria-controls="csw-panel" aria-selected="false" type="button">3 · Five sensors</button>
+  <button class="nav-link" id="csw-tab-4" data-stage="4" role="tab" aria-controls="csw-panel" aria-selected="false" type="button">4 · Battery</button>
+</div>
+
+<div id="csw-panel" class="csw-panel" role="tabpanel" aria-labelledby="csw-tab-1">
+  <p class="csw-stage" id="csw-stage-line" aria-live="polite"></p>
+
+  <div class="csw-legend text-small">
+    <span class="csw-key"><span class="csw-sw" style="--sw: var(--viz-series-1)"></span>3V3</span>
+    <span class="csw-key"><span class="csw-sw" style="--sw: var(--foreground)"></span>GND</span>
+    <span class="csw-key"><span class="csw-sw" style="--sw: var(--viz-series-2)"></span>SDA</span>
+    <span class="csw-key"><span class="csw-sw" style="--sw: var(--viz-series-3)"></span>SCL</span>
+    <span class="csw-key"><span class="csw-sw" style="--sw: var(--viz-series-4)"></span>Battery +</span>
+    <span class="csw-key"><span class="csw-sw" style="--sw: var(--muted-foreground)"></span>USB</span>
+    <span class="csw-key"><span class="csw-sw is-dot" style="--sw: var(--muted-foreground)"></span>BLE</span>
+    <span class="csw-key"><span class="csw-sw is-dash" style="--sw: var(--foreground)"></span>verify on board</span>
+    <span class="csw-key">× leave open</span>
+    <span class="csw-key">● joined</span>
+    <span class="csw-key">pin order is schematic, not physical</span>
+  </div>
+
+  <div class="csw-diagram" id="csw-diagram">
+    <svg class="csw-svg" id="csw-svg" role="img" aria-labelledby="csw-svg-title csw-svg-desc">
+      <title id="csw-svg-title">One-hand Control Stones wiring diagram</title>
+      <desc id="csw-svg-desc">XIAO nRF52840 Sense D4/SDA and D5/SCL go to the TCA9548A SDA and SCL. XIAO 3V3 and GND power the mux and, through shared rails, all five finger boards; the mux switches data only. Mux channels 2 to 6 go to the thumb, index, middle, ring and little boards. The battery goes to the XIAO underside BAT pads. Use the Connection list to inspect each link.</desc>
+      <g id="csw-canvas"></g>
+    </svg>
+  </div>
+
+  <div class="viz-controls">
+    <label class="form-label">Connection
+      <select class="form-select" id="csw-select"></select>
+    </label>
+  </div>
+
+  <div class="card csw-detail" id="csw-detail" aria-live="polite"></div>
+</div>
+</div>
+
+<script>
+(() => {
+  const root = document.getElementById('cs-wiring-opus');
+  if (!root) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const diag = root.querySelector('#csw-diagram');
+  const svg = root.querySelector('#csw-svg');
+  const canvas = root.querySelector('#csw-canvas');
+  const select = root.querySelector('#csw-select');
+  const detail = root.querySelector('#csw-detail');
+  const stageLine = root.querySelector('#csw-stage-line');
+  const panel = root.querySelector('#csw-panel');
+  const tablist = root.querySelector('[role="tablist"]');
+  const CHANNELS = [2,3,4,5,6];
+  const tabs = Array.from(root.querySelectorAll('[role="tab"]'));
+  if (!diag || !svg || !canvas || !select || !detail || !stageLine || !panel || !tablist) return;
+
+  const FINGERS = ['Thumb', 'Index', 'Middle', 'Ring', 'Little'];
+  const STATUS = { ok: 'Documented', verify: 'Verify on delivered board', open: 'Leave unconnected', wireless: 'Wireless', builtin: 'Built in' };
+  const STAGE_NAME = { 1: 'USB only', 2: 'One sensor', 3: 'Five sensors', 4: 'Battery' };
+  const STAGE_LINE = {
+    1: 'USB only: flash a test, read the built-in IMU, check BLE reaches the Mac. No external wiring.',
+    2: 'Thumb on channel 2 with short leads. Scan for 0x68/0x69 and chip ID 0xD1 before adding more.',
+    3: 'Channels 2–6. Add one finger at a time and rescan; reads go one channel at a time.',
+    4: 'Solder the socket pigtail with the battery unplugged, meter polarity, then plug in.'
+  };
+  const DEFAULT_SEL = { 1: 'usb', 2: 'p0', 3: 'sd1', 4: 'b-pos' };
+  const NODE_STAGE = { mac: 1, xiao: 1, mux: 2, s0: 2, s1: 3, s2: 3, s3: 3, s4: 3, bat: 4 };
+
+  const UP_PULL = 'Adafruit’s Rev C schematic shows pull-ups from mux SDA/SCL to VCC; their value wasn’t legible in the image read.';
+  const CH_PULL = 'Adafruit: channel pins have no pull-ups. The board’s four 103 (10 kΩ) resistors may supply them; meter before adding a spare 4.7 kΩ, and pull only to 3.3 V.';
+
+  const C = [
+    { id: 'usb', stage: 1, group: 'Host and hand', net: 'link', status: 'ok', title: 'USB-C to the Mac', opt: 'XIAO USB-C → Mac',
+      from: 'XIAO · USB-C', to: 'Mac · USB port',
+      what: 'Programs the XIAO and, once a battery is fitted, charges it. Stage 1 runs on USB power alone.',
+      check: 'Some USB-C cables only carry power; use one that carries data.', src: 'Seeed XIAO nRF52840 wiki' },
+    { id: 'ble', stage: 1, group: 'Host and hand', net: 'link', status: 'wireless', title: 'Bluetooth LE to the Mac', opt: 'XIAO radio → Mac (BLE, no wire)',
+      from: 'XIAO · nRF52840 radio', to: 'Mac · Bluetooth',
+      what: 'No wire. Hand and finger readings travel to the Mac over BLE.',
+      check: 'Packet format, timestamps and gesture firmware aren’t written yet.', src: 'Project plan' },
+    { id: 'imu', stage: 1, group: 'Host and hand', net: 'link', status: 'builtin', title: 'Built-in hand IMU', opt: 'Built-in IMU (hand reference)',
+      from: 'XIAO · LSM6DS3TR-C', to: 'on the XIAO (no external wire)',
+      what: 'The hand reference sensor. Seeed lists it on the Sense with power switched by P1.08, so firmware has to turn it on.',
+      check: 'The wiki doesn’t say which internal I²C bus it uses; treat it as separate from D4/D5.', src: 'Seeed XIAO nRF52840 wiki' },
+    { id: 'x-sda', stage: 2, group: 'XIAO to mux', net: 'sda', status: 'ok', title: 'Controller data (SDA)', opt: 'XIAO D4/SDA → mux SDA',
+      from: 'XIAO · D4 / SDA (P0.04)', to: 'TCA9548A · SDA',
+      what: 'The one external I²C bus. Every finger board is reached through the mux.',
+      check: UP_PULL, src: 'Seeed XIAO wiki; Adafruit Rev C schematic' },
+    { id: 'x-scl', stage: 2, group: 'XIAO to mux', net: 'scl', status: 'ok', title: 'Controller clock (SCL)', opt: 'XIAO D5/SCL → mux SCL',
+      from: 'XIAO · D5 / SCL (P0.05)', to: 'TCA9548A · SCL',
+      what: 'Clock for the same bus.',
+      check: UP_PULL, src: 'Seeed XIAO wiki; Adafruit Rev C schematic' },
+    { id: 'x-gnd', stage: 2, group: 'XIAO to mux', net: 'gnd', status: 'ok', title: 'Common ground', opt: 'XIAO GND → mux GND',
+      from: 'XIAO · GND', to: 'TCA9548A · GND',
+      what: 'One ground shared by the XIAO, the mux and every finger board.',
+      check: 'Check continuity on every ground before powering.', src: 'Adafruit TCA9548A guide' },
+    { id: 'x-pwr', stage: 2, group: 'XIAO to mux', net: 'pwr', status: 'ok', title: 'Mux power', opt: 'XIAO 3V3 → mux VIN',
+      from: 'XIAO · 3V3 (3V3_OUT)', to: 'TCA9548A · VIN',
+      what: 'Adafruit says to power the mux at the controller’s logic level, which is 3.3 V here.',
+      check: 'Never battery voltage. Seeed doesn’t publish a 3V3 current limit; five BMI160s at Bosch’s typical 925 µA plus the mux should be a few mA, but measure it.',
+      src: 'Adafruit guide; Seeed wiki; Bosch BMI160 Table 1' },
+    { id: 'm-rst', stage: 2, group: 'XIAO to mux', net: 'nc', status: 'open', title: 'Mux reset', opt: 'Mux RST (leave open)',
+      from: 'TCA9548A · RST', to: 'not connected',
+      what: 'Adafruit: RST is pulled high by default, and connecting it to ground resets the mux.',
+      check: 'No XIAO GPIO is assigned to it in this prototype.', src: 'Adafruit TCA9548A pinouts' },
+    { id: 'm-addr', stage: 2, group: 'XIAO to mux', net: 'nc', status: 'open', title: 'Mux address pins', opt: 'Mux A0–A2 (leave open)',
+      from: 'TCA9548A · A0, A1, A2', to: 'not connected',
+      what: 'Pulled low by default, giving address 0x70. Tying A0/A1/A2 to VIN adds 1/2/4 (range 0x70–0x77).',
+      check: 'Leave them open to keep 0x70.', src: 'Adafruit TCA9548A pinouts' }
+  ];
+
+  FINGERS.forEach((F, i) => {
+    const st = i === 0 ? 2 : 3;
+    const g = `${F} · channel ${CHANNELS[i]}`;
+    C.push(
+      { id: 'sd' + i, stage: st, group: g, net: 'sda', status: 'ok', title: `${F} data (SDA)`, opt: `mux SD${CHANNELS[i]} → ${F} SDA`,
+        from: `TCA9548A · SD${CHANNELS[i]}`, to: `${F} board · SDA`,
+        what: `Channel ${CHANNELS[i]}. The mux joins this pair to the XIAO bus only while channel ${CHANNELS[i]} is selected, so finger reads happen one after another.`,
+        check: CH_PULL, src: 'Adafruit TCA9548A pinouts; Kunkune photos' },
+      { id: 'sc' + i, stage: st, group: g, net: 'scl', status: 'ok', title: `${F} clock (SCL)`, opt: `mux SC${CHANNELS[i]} → ${F} SCL`,
+        from: `TCA9548A · SC${CHANNELS[i]}`, to: `${F} board · SCL`,
+        what: `Channel ${CHANNELS[i]} clock, paired with SD${CHANNELS[i]}.`,
+        check: CH_PULL, src: 'Adafruit TCA9548A pinouts; Kunkune photos' },
+      { id: 'p' + i, stage: st, group: g, net: 'pwr', status: 'verify', title: `${F} power`, opt: `3V3 rail → ${F} VIN or 3V3 (verify)`,
+        from: 'XIAO · 3V3 rail', to: `${F} board · VIN or 3V3 (unverified)`,
+        what: 'Shared regulated 3.3 V from the XIAO. The mux switches data, not power, so every finger board stays powered.',
+        check: 'Not established. With the board unpowered, meter whether the 5-pin part marked S2PG sits between VIN and 3V3, and which pad the 103 resistors return to; that pad is the likely input. Never battery voltage.',
+        src: 'Kunkune photos; Bosch BMI160 Table 1 (VDD 1.71–3.6 V)' },
+      { id: 'g' + i, stage: st, group: g, net: 'gnd', status: 'ok', title: `${F} ground`, opt: `GND rail → ${F} GND`,
+        from: 'XIAO · GND rail', to: `${F} board · GND`,
+        what: 'Common ground for this board.',
+        check: 'Check continuity before powering.', src: 'Adafruit TCA9548A guide' },
+      { id: 'cs' + i, stage: st, group: g, net: 'nc', status: 'verify', title: `${F} CS pad`, opt: `${F} CS (as delivered, verify)`,
+        from: `${F} board · CS`, to: 'as delivered (unverified)',
+        what: 'For I²C the chip’s CSB must sit at VDDIO from power-up (Bosch §3.2.1). The bare chip has a 75–150 kΩ internal pull-up, but that describes the chip, not this board’s wiring.',
+        check: 'Leave it unwired for the first scan. Add a strap to the board’s own 3.3 V rail only if metering or the scan shows it’s needed.',
+        src: 'Bosch BMI160 §3.2.1, Table 26' },
+      { id: 'sa' + i, stage: st, group: g, net: 'nc', status: 'verify', title: `${F} SA0 pad`, opt: `${F} SA0 (as delivered, verify)`,
+        from: `${F} board · SA0`, to: 'as delivered (unverified)',
+        what: 'SDO/SA0 low gives address 0x68; high gives 0x69 (Bosch §3.2.3). Each finger has its own channel, so all five can share one address.',
+        check: 'Scan each channel for 0x68 and 0x69 and read chip ID 0xD1 from register 0x00. A related vendor schematic appears to swap the CS and SA0 labels, so add no strap until the scan shows which is which.',
+        src: 'Bosch BMI160 §3.2.3, §2.11.1' },
+      { id: 'nc' + i, stage: st, group: g, net: 'nc', status: 'open', title: `${F} unused pins`, opt: `${F} INT1/INT2/OCS/SCX/SDX (leave open)`,
+        from: `${F} board · INT1, INT2, OCS, SCX, SDX`, to: 'not connected',
+        what: 'Bosch: leave unused INT1/INT2 unconnected; unused secondary-interface pins go high-impedance.',
+        check: 'INT1 could later become a wake line, but no XIAO GPIO is assigned to it.', src: 'Bosch BMI160 §4.1' }
+    );
+  });
+
+  C.push(
+    { id: 'b-pos', stage: 4, group: 'Battery', net: 'bat', status: 'verify', title: 'Battery positive', opt: 'LiPo + → XIAO BAT+',
+      from: 'LiPo + · JST-PH plug', to: 'XIAO · BAT+ pad (underside)',
+      what: 'Protected 3.7 V nominal, 4.2 V full cell. A JST-PH socket pigtail is soldered to the BAT+ pad with the battery unplugged; USB-C then charges it.',
+      check: 'Meter polarity; don’t trust wire colour or plug fit. Raw battery never goes to 3V3, sensor pads or any GPIO. Seeed: about 50 mA charge by default, about 100 mA with P0.13 driven low; check the cell’s rating first.',
+      src: 'Seeed XIAO nRF52840 wiki; project plan' },
+    { id: 'b-neg', stage: 4, group: 'Battery', net: 'gnd', status: 'verify', title: 'Battery negative', opt: 'LiPo − → XIAO BAT−',
+      from: 'LiPo − · JST-PH plug', to: 'XIAO · BAT− pad (underside)',
+      what: 'Battery return to the XIAO ground.',
+      check: 'Meter polarity before the first plug-in. Seeed warns to keep P0.14 low when reading battery voltage.',
+      src: 'Seeed XIAO nRF52840 wiki' }
+  );
+
+  const byId = {};
+  C.forEach(c => { byId[c.id] = c; });
+
+  let stage = 1;
+  let selId = 'usb';
+  let lastW = 0;
+
+  const el = (tag, attrs, parent) => {
+    const n = document.createElementNS(NS, tag);
+    Object.keys(attrs || {}).forEach(k => {
+      if (attrs[k] !== undefined && attrs[k] !== null) n.setAttribute(k, String(attrs[k]));
+    });
+    if (parent) parent.appendChild(n);
+    return n;
+  };
+  const txt = (parent, spec) => {
+    const x = spec[0], y = spec[1], s = spec[2], anchor = spec[3], bold = spec[4];
+    const t = el('text', { x: Math.round(x), y: Math.round(y), 'text-anchor': anchor || 'start' }, parent);
+    if (bold) t.setAttribute('class', 'w5');
+    t.textContent = s;
+    return t;
+  };
+
+  function addSensors(L, sX, sX2, sy) {
+    const SW = sX2 - sX, SH = 76;
+    FINGERS.forEach((F, i) => {
+      const y = sy(i), id = 's' + i;
+      L.nodes.push({ id, x: sX, y, w: SW, h: SH, t: [
+        [sX + SW / 2, y + 16, `${F} · ch ${CHANNELS[i]}`, 'middle', 1],
+        [sX + 8, y + 37, 'SDA'], [sX + 8, y + 53, 'SCL'],
+        [sX2 - 8, y + 37, 'VIN/3V3?', 'end'], [sX2 - 8, y + 53, 'GND', 'end']
+      ] });
+      L.pins.push([sX, y + 33, id], [sX, y + 49, id], [sX2, y + 33, id], [sX2, y + 49, id]);
+      L.chips['cs' + i] = { x: sX + 4, y: y + 57, w: 30, h: 16, t: [[sX + 8, y + 69, 'CS?']] };
+      L.chips['sa' + i] = { x: sX + 38, y: y + 57, w: 36, h: 16, t: [[sX + 42, y + 69, 'SA0?']] };
+      L.chips['nc' + i] = { x: sX2 - 30, y: y + 57, w: 26, h: 16, t: [[sX2 - 8, y + 69, 'NC', 'end']] };
+    });
+  }
+
+  function railTaps(L, r3, rG, sy) {
+    for (let i = 0; i < 4; i++) {
+      const st = NODE_STAGE['s' + (i + 1)];
+      L.dots.push([r3, sy(i) + 33, st, 'pwr'], [rG, sy(i) + 49, st, 'gnd']);
+    }
+  }
+
+  function wide(W) {
+    const ex = W - 708, R = Math.round;
+    const LW = 104, gLX = 36 + ex * 0.15, XW = 150 + ex * 0.1, gXM = 70 + ex * 0.25, MW = 100, gMS = 56 + ex * 0.3, SW = 140 + ex * 0.2;
+    const mx = 8, macR = mx + LW;
+    const xX = R(mx + LW + gLX), xX2 = R(xX + XW), mX = R(xX2 + gXM), mX2 = mX + MW, sX = R(mX2 + gMS), sX2 = R(sX + SW);
+    const rG = sX2 + 18, r3 = sX2 + 32, yR3 = 14, yRG = 26, jx3 = xX2 + 18, jxg = xX2 + 34;
+    const P = { pwr: 196, gnd: 218, sda: 240, scl: 262 }, yRst = 296, yAdr = 318, yBp = 300, yBn = 322;
+    const sy = i => 48 + i * 88;
+    const mY = 40, mB = sy(4) + 76 + 16;
+    const L = { H: mB + 12, nodes: [], pins: [], wires: {}, chips: {}, dots: [], labels: [] };
+
+    L.nodes.push({ id: 'mac', x: mx, y: 40, w: LW, h: 56, t: [[mx + LW / 2, 63, 'Mac', 'middle', 1], [mx + LW / 2, 81, 'BLE + USB', 'middle']] });
+    L.nodes.push({ id: 'bat', x: mx, y: 276, w: LW, h: 84, t: [
+      [mx + 8, 294, 'LiPo 3.7 V', 'start', 1], [mx + 8, 310, '4.2 V full'], [mx + 8, 326, 'protected'], [mx + 8, 342, 'JST-PH'],
+      [macR - 8, yBp + 4, '+', 'end'], [macR - 8, yBn + 4, '−', 'end']
+    ] });
+    L.nodes.push({ id: 'xiao', x: xX, y: 120, w: XW, h: 230, t: [
+      [xX + 10, 142, 'XIAO nRF52840', 'start', 1], [xX + 10, 158, 'Sense · not Plus'],
+      [xX2 - 8, P.pwr + 4, '3V3', 'end'], [xX2 - 8, P.gnd + 4, 'GND', 'end'],
+      [xX2 - 8, P.sda + 4, 'D4 · SDA', 'end'], [xX2 - 8, P.scl + 4, 'D5 · SCL', 'end'],
+      [xX + 8, yBp + 4, 'BAT+'], [xX + 8, yBn + 4, 'BAT−'], [xX + 8, 342, 'underside pads']
+    ] });
+    L.chips.imu = { box: 1, x: xX + 10, y: 170, w: 88, h: 36, t: [[xX + 54, 185, 'built-in IMU', 'middle'], [xX + 54, 201, 'hand ref', 'middle']] };
+
+    const muxT = [
+      [mX + 8, 124, 'TCA9548A', 'start', 1], [mX + 8, 140, 'Adafruit'], [mX + 8, 156, 'addr 0x70'],
+      [mX + 8, P.pwr + 4, 'VIN'], [mX + 8, P.gnd + 4, 'GND'], [mX + 8, P.sda + 4, 'SDA'], [mX + 8, P.scl + 4, 'SCL'],
+      [mX + 8, yRst + 4, 'RST'], [mX + 8, yAdr + 4, 'A0–A2'], [mX + 8, mB - 22, 'ch 0,1,7'], [mX + 8, mB - 8, 'unused']
+    ];
+    for (let i = 0; i < 5; i++) muxT.push([mX2 - 8, sy(i) + 37, 'SD' + CHANNELS[i], 'end'], [mX2 - 8, sy(i) + 53, 'SC' + CHANNELS[i], 'end']);
+    L.nodes.push({ id: 'mux', x: mX, y: mY, w: MW, h: mB - mY, t: muxT });
+    addSensors(L, sX, sX2, sy);
+
+    L.pins.push(
+      [xX2, P.pwr, 'xiao'], [xX2, P.gnd, 'xiao'], [xX2, P.sda, 'xiao'], [xX2, P.scl, 'xiao'],
+      [xX, yBp, 'xiao'], [xX, yBn, 'xiao'], [xX + 30, 120, 'xiao'],
+      [macR, yBp, 'bat'], [macR, yBn, 'bat'],
+      [mX, P.pwr, 'mux'], [mX, P.gnd, 'mux'], [mX, P.sda, 'mux'], [mX, P.scl, 'mux'], [mX, yRst, 'mux'], [mX, yAdr, 'mux']
+    );
+    for (let i = 0; i < 5; i++) L.pins.push([mX2, sy(i) + 33, 'mux'], [mX2, sy(i) + 49, 'mux']);
+
+    const Wr = L.wires;
+    Wr.usb = { d: `M${xX + 30},120V80H${macR}`, ends: [[xX + 30, 120], [macR, 80]] };
+    Wr.ble = { d: `M${xX + 100},120V56H${macR}`, ends: [[xX + 100, 120], [macR, 56]] };
+    ['pwr', 'gnd', 'sda', 'scl'].forEach(k => { Wr['x-' + k] = { d: `M${xX2},${P[k]}H${mX}`, ends: [[xX2, P[k]], [mX, P[k]]] }; });
+    Wr['m-rst'] = { d: `M${mX},${yRst}H${mX - 18}`, ends: [[mX, yRst]], x: [mX - 18, yRst] };
+    Wr['m-addr'] = { d: `M${mX},${yAdr}H${mX - 18}`, ends: [[mX, yAdr]], x: [mX - 18, yAdr] };
+    Wr['b-pos'] = { d: `M${macR},${yBp}H${xX}`, ends: [[macR, yBp], [xX, yBp]] };
+    Wr['b-neg'] = { d: `M${macR},${yBn}H${xX}`, ends: [[macR, yBn], [xX, yBn]] };
+    for (let i = 0; i < 5; i++) {
+      const y = sy(i);
+      Wr['sd' + i] = { d: `M${mX2},${y + 33}H${sX}`, ends: [[mX2, y + 33], [sX, y + 33]] };
+      Wr['sc' + i] = { d: `M${mX2},${y + 49}H${sX}`, ends: [[mX2, y + 49], [sX, y + 49]] };
+      Wr['p' + i] = { d: `M${xX2},${P.pwr}H${jx3}V${yR3}H${r3}V${y + 33}H${sX2}`, ends: [[xX2, P.pwr], [sX2, y + 33]] };
+      Wr['g' + i] = { d: `M${xX2},${P.gnd}H${jxg}V${yRG}H${rG}V${y + 49}H${sX2}`, ends: [[xX2, P.gnd], [sX2, y + 49]] };
+    }
+    L.dots.push([jx3, P.pwr, 2, 'pwr'], [jxg, P.gnd, 2, 'gnd']);
+    railTaps(L, r3, rG, sy);
+    L.labels.push([(macR + xX + 30) / 2, 75, 'USB-C', 1], [(macR + xX + 100) / 2, 51, 'BLE', 1]);
+    return L;
+  }
+
+  function narrow(W) {
+    const R = Math.round;
+    const cw = Math.min(W - 16, 480), ox = R((W - cw) / 2);
+    const bw = Math.min(124, R(cw * 0.4)), batX = ox + cw - bw, macR = ox + bw;
+    const xY = 100, xB = 220, mY = 256, MW = 128, mX2 = ox + MW;
+    const px = { sda: ox + 22, scl: ox + 50, gnd: ox + 78, pwr: ox + 106 };
+    const sX = ox + 150, sX2 = ox + cw - 36, rG = ox + cw - 24, r3 = ox + cw - 10;
+    const sy = i => 290 + i * 88;
+    const mB = sy(4) + 76 + 22;
+    const bp = batX + R(bw * 0.3), bn = batX + R(bw * 0.7), xb = ox + R(cw * 0.5), usbX = ox + 32;
+    const L = { H: mB + 28, nodes: [], pins: [], wires: {}, chips: {}, dots: [], labels: [] };
+
+    L.nodes.push({ id: 'mac', x: ox, y: 8, w: bw, h: 44, t: [[ox + bw / 2, 26, 'Mac', 'middle', 1], [ox + bw / 2, 42, 'BLE + USB', 'middle']] });
+    L.nodes.push({ id: 'bat', x: batX, y: 8, w: bw, h: 60, t: [[batX + 8, 24, 'LiPo 3.7 V', 'start', 1], [batX + 8, 40, '4.2 V full'], [batX + 8, 56, 'JST-PH']] });
+    L.nodes.push({ id: 'xiao', x: ox, y: xY, w: cw, h: xB - xY, t: [
+      [usbX, 116, 'USB-C', 'middle'], [bp, 116, 'BAT+', 'middle'], [bn, 116, 'BAT−', 'middle'], [(bp + bn) / 2, 132, 'underside', 'middle'],
+      [ox + 10, 152, 'XIAO nRF52840 Sense', 'start', 1], [ox + 10, 168, 'not Plus'],
+      [px.sda, 196, 'D4', 'middle'], [px.scl, 196, 'D5', 'middle'],
+      [px.sda, 212, 'SDA', 'middle'], [px.scl, 212, 'SCL', 'middle'], [px.gnd, 212, 'GND', 'middle'], [px.pwr, 212, '3V3', 'middle']
+    ] });
+    L.chips.imu = { box: 1, x: ox + cw - 112, y: 142, w: 102, h: 36, t: [[ox + cw - 61, 157, 'built-in IMU', 'middle'], [ox + cw - 61, 173, 'hand ref', 'middle']] };
+
+    const muxT = [
+      [px.sda, 272, 'SDA', 'middle'], [px.scl, 272, 'SCL', 'middle'], [px.gnd, 272, 'GND', 'middle'], [px.pwr, 272, 'VIN', 'middle'],
+      [ox + 8, 296, 'TCA9548A', 'start', 1], [ox + 8, 312, 'addr 0x70'],
+      [ox + 8, mB - 32, 'ch 0,1,7 unused'], [ox + 24, mB - 8, 'RST', 'middle'], [ox + 80, mB - 8, 'A0–A2', 'middle']
+    ];
+    for (let i = 0; i < 5; i++) muxT.push([mX2 - 8, sy(i) + 37, 'SD' + CHANNELS[i], 'end'], [mX2 - 8, sy(i) + 53, 'SC' + CHANNELS[i], 'end']);
+    L.nodes.push({ id: 'mux', x: ox, y: mY, w: MW, h: mB - mY, t: muxT });
+    addSensors(L, sX, sX2, sy);
+
+    L.pins.push(
+      [usbX, xY, 'xiao'], [bp, xY, 'xiao'], [bn, xY, 'xiao'],
+      [px.sda, xB, 'xiao'], [px.scl, xB, 'xiao'], [px.gnd, xB, 'xiao'], [px.pwr, xB, 'xiao'],
+      [bp, 68, 'bat'], [bn, 68, 'bat'],
+      [px.sda, mY, 'mux'], [px.scl, mY, 'mux'], [px.gnd, mY, 'mux'], [px.pwr, mY, 'mux'], [ox + 24, mB, 'mux'], [ox + 80, mB, 'mux']
+    );
+    for (let i = 0; i < 5; i++) L.pins.push([mX2, sy(i) + 33, 'mux'], [mX2, sy(i) + 49, 'mux']);
+
+    const Wr = L.wires;
+    Wr.usb = { d: `M${usbX},${xY}V52`, ends: [[usbX, xY], [usbX, 52]] };
+    Wr.ble = { d: `M${xb},${xY}V30H${macR}`, ends: [[xb, xY], [macR, 30]] };
+    ['sda', 'scl', 'gnd', 'pwr'].forEach(k => { Wr['x-' + k] = { d: `M${px[k]},${xB}V${mY}`, ends: [[px[k], xB], [px[k], mY]] }; });
+    Wr['m-rst'] = { d: `M${ox + 24},${mB}V${mB + 16}`, ends: [[ox + 24, mB]], x: [ox + 24, mB + 16] };
+    Wr['m-addr'] = { d: `M${ox + 80},${mB}V${mB + 16}`, ends: [[ox + 80, mB]], x: [ox + 80, mB + 16] };
+    Wr['b-pos'] = { d: `M${bp},68V${xY}`, ends: [[bp, 68], [bp, xY]] };
+    Wr['b-neg'] = { d: `M${bn},68V${xY}`, ends: [[bn, 68], [bn, xY]] };
+    for (let i = 0; i < 5; i++) {
+      const y = sy(i);
+      Wr['sd' + i] = { d: `M${mX2},${y + 33}H${sX}`, ends: [[mX2, y + 33], [sX, y + 33]] };
+      Wr['sc' + i] = { d: `M${mX2},${y + 49}H${sX}`, ends: [[mX2, y + 49], [sX, y + 49]] };
+      Wr['p' + i] = { d: `M${px.pwr},${xB}V232H${r3}V${y + 33}H${sX2}`, ends: [[px.pwr, xB], [sX2, y + 33]] };
+      Wr['g' + i] = { d: `M${px.gnd},${xB}V244H${rG}V${y + 49}H${sX2}`, ends: [[px.gnd, xB], [sX2, y + 49]] };
+    }
+    L.dots.push([px.pwr, 232, 2, 'pwr'], [px.gnd, 244, 2, 'gnd']);
+    railTaps(L, r3, rG, sy);
+    L.labels.push([(macR + xb) / 2, 25, 'BLE', 1]);
+    return L;
+  }
+
+  function draw() {
+    const W = Math.max(300, Math.floor(diag.clientWidth || 736));
+    lastW = W;
+    const L = W >= 708 ? wide(W) : narrow(W);
+    svg.setAttribute('viewBox', `0 0 ${W} ${L.H}`);
+    while (canvas.firstChild) canvas.removeChild(canvas.firstChild);
+    const gNodes = el('g', {}, canvas);
+    const gDim = el('g', { class: 'dim' }, canvas);
+    const gSel = el('g', {}, canvas);
+    const gTop = el('g', {}, canvas);
+
+    L.nodes.forEach(n => {
+      const g = el('g', { class: NODE_STAGE[n.id] > stage ? 'node ghost' : 'node' }, gNodes);
+      el('rect', { class: 'box', x: n.x, y: n.y, width: n.w, height: n.h, rx: 6 }, g);
+      n.t.forEach(s => txt(g, s));
+    });
+    L.labels.forEach(l => { if (l[3] <= stage) txt(gNodes, [l[0], l[1], l[2], 'middle']); });
+
+    C.forEach(c => {
+      const w = L.wires[c.id];
+      if (!w || c.stage > stage) return;
+      const on = c.id === selId;
+      const g = el('g', { class: 'wire cursor-interaction' + (on ? ' is-sel' : ''), 'data-id': c.id }, on ? gSel : gDim);
+      el('path', { class: `w net-${c.net} st-${c.status}`, d: w.d }, g);
+      if (w.x) {
+        const x = w.x[0], y = w.x[1];
+        el('path', { class: 'xmark', d: `M${x - 4},${y - 4}L${x + 4},${y + 4}M${x - 4},${y + 4}L${x + 4},${y - 4}` }, g);
+      }
+      el('path', { class: 'hit', d: w.d, 'data-tooltip': c.opt }, g);
+    });
+
+    L.dots.forEach(d => { if (d[2] <= stage) el('circle', { class: 'dot-' + d[3], cx: d[0], cy: d[1], r: 3 }, gTop); });
+    L.pins.forEach(p => { el('circle', { class: NODE_STAGE[p[2]] > stage ? 'pin ghost' : 'pin', cx: p[0], cy: p[1], r: 2.5 }, gTop); });
+
+    Object.keys(L.chips).forEach(id => {
+      const k = L.chips[id], c = byId[id];
+      if (!c) return;
+      const live = c.stage <= stage;
+      const attrs = live
+        ? { class: 'chip cursor-interaction' + (id === selId ? ' is-sel' : ''), 'data-id': id, 'data-tooltip': c.opt }
+        : { class: 'chip ghost' };
+      const g = el('g', attrs, gTop);
+      el('rect', { class: k.box ? 'chip-box' : 'chip-bg', x: k.x, y: k.y, width: k.w, height: k.h, rx: 4 }, g);
+      k.t.forEach(s => txt(g, s));
+    });
+
+    const sw = L.wires[selId];
+    if (sw && byId[selId] && byId[selId].stage <= stage) {
+      sw.ends.forEach(e => el('circle', { class: 'ring', cx: e[0], cy: e[1], r: 6 }, gTop));
+    }
+  }
+
+  function showDetail() {
+    const c = byId[selId];
+    detail.textContent = '';
+    if (!c) return;
+    const head = document.createElement('div');
+    head.className = 'viz-row';
+    const badge = document.createElement('span');
+    badge.className = 'viz-badge';
+    badge.textContent = STATUS[c.status];
+    const title = document.createElement('span');
+    title.className = 'csw-w5';
+    title.textContent = c.title;
+    head.append(badge, title);
+
+    const ends = document.createElement('p');
+    ends.className = 'csw-ends';
+    const a = document.createElement('span');
+    a.textContent = c.from;
+    const arrow = document.createElement('span');
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '→';
+    const sr = document.createElement('span');
+    sr.className = 'sr-only';
+    sr.textContent = 'to';
+    const b = document.createElement('span');
+    b.textContent = c.to;
+    ends.append(a, arrow, sr, b);
+
+    const what = document.createElement('p');
+    what.textContent = c.what;
+    detail.append(head, ends, what);
+
+    if (c.check) {
+      const p = document.createElement('p');
+      const k = document.createElement('span');
+      k.className = 'csw-w5';
+      k.textContent = 'Check: ';
+      p.append(k, document.createTextNode(c.check));
+      detail.append(p);
+    }
+    const src = document.createElement('p');
+    src.className = 'text-small';
+    src.textContent = 'Source: ' + c.src;
+    detail.append(src);
+  }
+
+  function buildOptions() {
+    select.textContent = '';
+    const groups = {};
+    C.forEach(c => {
+      if (c.stage > stage) return;
+      let og = groups[c.group];
+      if (!og) {
+        og = document.createElement('optgroup');
+        og.label = c.group;
+        groups[c.group] = og;
+        select.appendChild(og);
+      }
+      const o = document.createElement('option');
+      o.value = c.id;
+      o.textContent = c.opt;
+      og.appendChild(o);
+    });
+  }
+
+  function save() {
+    const c = byId[selId];
+    if (!c) return;
+    try {
+      const api = window.openai;
+      if (!api || typeof api.setWidgetState !== 'function') return;
+      const p = api.setWidgetState({
+        modelContent: { stage: `${stage} · ${STAGE_NAME[stage]}`, selected: c.title, endpoints: `${c.from} → ${c.to}`, status: STATUS[c.status] },
+        privateContent: { stage, selId }
+      });
+      if (p && typeof p.catch === 'function') p.catch(() => {});
+    } catch (e) { /* state is optional */ }
+  }
+
+  function setStage(s, user) {
+    s = Number(s);
+    if (!STAGE_LINE[s]) return;
+    const changed = s !== stage;
+    stage = s;
+    tabs.forEach(t => {
+      const on = Number(t.dataset.stage) === s;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    panel.setAttribute('aria-labelledby', 'csw-tab-' + s);
+    if (panel.hidden) panel.hidden = false;
+    stageLine.textContent = `Stage ${s} · ${STAGE_LINE[s]}`;
+    buildOptions();
+    if (!byId[selId] || byId[selId].stage > s || (user && changed)) selId = DEFAULT_SEL[s];
+    select.value = selId;
+    draw();
+    showDetail();
+    if (user && changed) save();
+  }
+
+  function choose(id, user) {
+    const c = byId[id];
+    if (!c || c.stage > stage) return;
+    selId = id;
+    select.value = id;
+    draw();
+    showDetail();
+    if (user) save();
+  }
+
+  function applyState(ws) {
+    const p = ws && ws.privateContent;
+    if (!p || !STAGE_LINE[Number(p.stage)]) return false;
+    if (byId[p.selId]) selId = p.selId;
+    stage = Number(p.stage);
+    setStage(stage, false);
+    return true;
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => setStage(t.dataset.stage, true)));
+  new MutationObserver(() => {
+    const t = tabs.find(x => x.getAttribute('aria-selected') === 'true');
+    if (t && Number(t.dataset.stage) !== stage) setStage(t.dataset.stage, true);
+  }).observe(tablist, { attributes: true, subtree: true, attributeFilter: ['aria-selected'] });
+  new MutationObserver(() => { if (panel.hidden) panel.hidden = false; })
+    .observe(panel, { attributes: true, attributeFilter: ['hidden'] });
+
+  select.addEventListener('change', () => choose(select.value, true));
+  svg.addEventListener('click', e => {
+    const t = e.target && e.target.closest ? e.target.closest('[data-id]') : null;
+    if (t) choose(t.getAttribute('data-id'), true);
+  });
+
+  let raf = 0;
+  if (window.ResizeObserver) {
+    new ResizeObserver(() => {
+      const w = Math.floor(diag.clientWidth);
+      if (w && w !== lastW) {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(draw);
+      }
+    }).observe(diag);
+  }
+
+  window.addEventListener('openai:set_globals', e => {
+    const ws = e && e.detail && e.detail.globals && e.detail.globals.widgetState;
+    if (ws) applyState(ws);
+  });
+  if (!applyState(window.openai && window.openai.widgetState)) setStage(1, false);
+})();
+</script>

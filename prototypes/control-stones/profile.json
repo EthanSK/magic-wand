@@ -1,0 +1,17 @@
+{
+  "id": "control-stones",
+  "status": "experimental",
+  "controller": "Seeed XIAO nRF52840 Sense",
+  "handSensor": "LSM6DS3TR-C",
+  "fingerSensor": "BMI160",
+  "plannedFingerCount": 5,
+  "fingerSupport": "not connected or implemented",
+  "transport": [
+    "USB serial",
+    "Bluetooth LE Nordic UART"
+  ],
+  "firmware": "firmware/imu_debug/imu_debug.ino",
+  "debugWindow": "debug/index.html",
+  "wiringGuide": "docs/wiring.html",
+  "mouseControl": false
+}
