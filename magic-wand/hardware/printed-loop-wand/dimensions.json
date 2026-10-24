@@ -139,7 +139,7 @@
     "front_transition": 6.0,
     "glue_z": 297.0,
     "glue_stub": { "radius": 5.0, "length": 15.0, "flat": 3.5, "clearance": 0.15, "extra_depth": 0.5 },
-    "spiral": { "starts": 2, "directions": [1, -1], "pitch": 90.0, "height": 1.2, "half_width_deg": 24.0, "phase_deg": 90.0, "fade": 25.0 },
+    "spiral": { "starts": 2, "directions": [1, -1], "pitches": [90.0, 72.0], "height": 1.2, "half_width_deg": 24.0, "phase_deg": 90.0, "fade": 25.0 },
     "thumb_shelf": {
       "hand": "both",
       "protrusion": 14.0,

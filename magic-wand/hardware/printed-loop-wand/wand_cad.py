@@ -538,7 +538,9 @@ def taper_radius(z: float) -> float:
 
 def rib_angle(z: float | np.ndarray, start: int) -> float | np.ndarray:
     # Ethan's "like DNA" / "criss-cross": one helix winds each way, not two parallel starts.
-    return SP["phase_deg"] + 360.0 * start / SP["starts"] + SP["directions"][start] * 360.0 * z / SP["pitch"]
+    # "One goes faster than the other": independent pitches rotate the crossing pattern
+    # around the shaft instead of repeating the equal-pitch diamonds in the same plane.
+    return SP["phase_deg"] + 360.0 * start / SP["starts"] + SP["directions"][start] * 360.0 * z / SP["pitches"][start]
 
 
 def rib_height(z: np.ndarray, theta: np.ndarray, spiral: bool) -> np.ndarray:
@@ -1000,19 +1002,24 @@ def tapered_checks(parts: dict) -> dict:
                     step.append(abs(float(rp.mean() - rq.mean())))
             seams[f"{style} {name}"] = r4(max(step))
     out["seam_max_radius_step_mm"] = seams
-    # Sample away from crossings; the two crests intentionally merge at crossings.
+    # Sample using relative winding, so both equal and unequal pitches are checked
+    # at actual separated crests and actual merged crossings, not old fixed heights.
+    crossing_period = 1.0 / abs(SP["directions"][0] / SP["pitches"][0]
+                                - SP["directions"][1] / SP["pitches"][1])
     def sample_z(lo: float, hi: float, fractions: tuple[float, ...]) -> list[float]:
-        return [SP["pitch"] * (n + f) for n in range(int(hi / SP["pitch"]) + 1) for f in fractions
-                if lo + 5 < SP["pitch"] * (n + f) < hi - 5][:2]
+        return [crossing_period * (n + f) for n in range(int(hi / crossing_period) + 1) for f in fractions
+                if lo + 5 < crossing_period * (n + f) < hi - 5][:2]
     out["rib_peaks_deg"] = {f"z={z}": rib_peaks(a["shaft-lower-tapered-spiral"], z)
-                            for z in sample_z(L, Z_GLUE, (0.0, 0.125, 0.5, 0.625))}
+                            for z in sample_z(L, Z_GLUE, (0.0, 0.125))}
     out["rib_peaks_deg"].update({f"z={z}": rib_peaks(a["shaft-upper-tapered-spiral"], z)
-                                for z in sample_z(Z_GLUE, Z_ROUND_END, (0.0, 0.125, 0.5, 0.625))})
+                                for z in sample_z(Z_GLUE, Z_ROUND_END, (0.0, 0.125))})
     out["rib_expected_deg"] = {key: sorted(r4(rib_angle(float(key[2:]), k) % 360) for k in range(SP["starts"]))
                                for key in out["rib_peaks_deg"]}
     out["rib_directions"] = SP["directions"]
+    out["rib_pitches_mm"] = SP["pitches"]
+    out["rib_crossing_spacing_mm"] = r4(crossing_period)
     out["rib_crossings"] = {f"z={z}": rib_peaks(a["shaft-lower-tapered-spiral"], z)
-                            for z in sample_z(L, Z_GLUE, (0.25, 0.75))}
+                            for z in sample_z(L, Z_GLUE, (0.5,))}
     xw, zw = shelf_wire_point()
     shelf = thumb_shelf()
     bounds = shelf.bounding_box()

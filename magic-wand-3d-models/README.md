@@ -10,11 +10,13 @@ On GitHub, use **Download raw file** to download a 3MF.
 - **Print 1:** [original crossed pattern, 110 mm pitch](Print-1-crossed-110mm.3mf).
   This file is frozen from the committed first version; its source commit and checksum are
   recorded in `Print-1-crossed-110mm.json`.
-- **Print 2:** [tighter crossed pattern, 90 mm pitch](tapered-double-helix.3mf).
-  Its mirror-image spirals cross more often: about 22% more turns along the same shaft.
+- **Latest print:** [uneven crossed pattern, 90 mm and 72 mm pitch](tapered-double-helix.3mf).
+  Its two opposite-winding strands turn at different rates: one makes 25% more turns,
+  moving the crossings around the shaft. This replaces the earlier equal 90 mm pitches.
 
-The hole and platform are unchanged between the two prints. Print one first, clear the bed,
-then print the other; these files are not instructions to start two jobs together.
+The hole and platform are unchanged. Open the latest print for Ethan's new pattern, or
+the frozen original for comparison. Clear the bed between jobs; these files are not
+instructions to start two jobs together.
 
 ## Current prototype
 
