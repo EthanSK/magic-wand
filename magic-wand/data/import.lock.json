@@ -13,11 +13,17 @@
       "originalSha256": "c9e0bd2d124b9fc6bc4a8cb244fd3aac42d3f97f46e1da37355f6d0722703401",
       "publicSha256": "c9e0bd2d124b9fc6bc4a8cb244fd3aac42d3f97f46e1da37355f6d0722703401"
     },
+    "device/wand-power-policy.js": {
+      "importedFrom": "wand-power-policy.js",
+      "transform": "verbatim",
+      "originalSha256": "d1ded605b7a26cfa22f3a355f92bfcfbdaf069b41ca409fd93059c912682239d",
+      "publicSha256": "d1ded605b7a26cfa22f3a355f92bfcfbdaf069b41ca409fd93059c912682239d"
+    },
     "receiver/Sources/main.swift": {
       "importedFrom": "wand-mac-receiver.swift",
       "transform": "receiver",
-      "originalSha256": "49f6936b92248e040869904e4c56512e30800b38b4a30c8d5141b5ce0907b0ed",
-      "publicSha256": "ff820b909f1668f06b1a155f560833340c7baf1ca111ec72c114928641fa25fb"
+      "originalSha256": "cf7d841b317b89ea4cb5460298ac0a46943e447160f03331834bd59521d4f0fb",
+      "publicSha256": "21dae3db1a772d98b5f5a8c30b6b0cbc2fb69f81c34e8aacf956c3501d8630f9"
     },
     "receiver/Sources/WandControlTransport.swift": {
       "importedFrom": "wand-control-transport.swift",
@@ -46,14 +52,20 @@
     "receiver/Sources/WandPointerControl.swift": {
       "importedFrom": "wand-pointer-control.swift",
       "transform": "verbatim",
-      "originalSha256": "c48ff98e0ede554e69b3b05fde6b4c0f1f443a697fc0cb29986220dab205d3c6",
-      "publicSha256": "c48ff98e0ede554e69b3b05fde6b4c0f1f443a697fc0cb29986220dab205d3c6"
+      "originalSha256": "e46938863678636a9b6bb731322c41bc46f9019159b81a80094258c1678464fa",
+      "publicSha256": "e46938863678636a9b6bb731322c41bc46f9019159b81a80094258c1678464fa"
+    },
+    "receiver/Sources/WandCalibration.swift": {
+      "importedFrom": "wand-calibration.swift",
+      "transform": "verbatim",
+      "originalSha256": "6bda1a64903e309f7eb03705d3bf5be5e70b5035273c7093d2ed852406d99f98",
+      "publicSha256": "6bda1a64903e309f7eb03705d3bf5be5e70b5035273c7093d2ed852406d99f98"
     },
     "receiver/Info.plist": {
       "importedFrom": "Wand Receiver.app/Contents/Info.plist",
       "transform": "verbatim",
-      "originalSha256": "aa592a4ac82eceb1b15464ac9525ca3344d2f3c6b91e528109bc8ee51a5ea28a",
-      "publicSha256": "aa592a4ac82eceb1b15464ac9525ca3344d2f3c6b91e528109bc8ee51a5ea28a"
+      "originalSha256": "ffbd01c92251401d1c36f32e1ae81b40fc076d5a625a5877f4dfc68fd9022d6b",
+      "publicSha256": "ffbd01c92251401d1c36f32e1ae81b40fc076d5a625a5877f4dfc68fd9022d6b"
     }
   }
 }

@@ -129,6 +129,7 @@ def artifacts() -> dict[Path, str]:
         # Saved to Puck storage and evaluated by a short .bootcde shim, so function bodies stay in flash.
         GENERATED / "wand-boot.js": "\n".join(commands[:-2]) + "\n",
         GENERATED / "wand-mode-bridge.compact.js": bridge,
+        GENERATED / "wand-power-policy.compact.js": compact_bridge((DEVICE / "wand-power-policy.js").read_text()),
     }
 
 

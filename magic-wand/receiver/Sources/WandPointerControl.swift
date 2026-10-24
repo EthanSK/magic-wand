@@ -397,9 +397,11 @@ final class WandRestDetection {
 /// detector owns the desk classification; this policy only times confirmed rest.
 struct WandDeskSleep {
     static let seconds = 60.0
+    static let deepSeconds = 300.0
     private(set) var sleeping = false
+    private(set) var deepSleeping = false
     private var restSince:Double?,lastSeen:Double?
-    mutating func reset(){sleeping=false;restSince=nil;lastSeen=nil}
+    mutating func reset(){sleeping=false;deepSleeping=false;restSince=nil;lastSeen=nil}
     /// Reuse the existing confirmed parked/pickup state. Isolated sensor noise
     /// must not postpone sleep forever. A telemetry gap cannot prove rest.
     mutating func sample(parked:Bool,buttons:Bool,now:Double)->Bool? {
@@ -407,10 +409,10 @@ struct WandDeskSleep {
         let was=sleeping
         if let last=lastSeen,now<=last || now-last>2 {restSince=nil}
         lastSeen=now
-        if buttons || !parked {sleeping=false;restSince=nil}
+        if buttons || !parked {sleeping=false;deepSleeping=false;restSince=nil}
         else {
             if restSince==nil {restSince=now}
-            if let since=restSince,now-since>=Self.seconds {sleeping=true}
+            if let since=restSince {sleeping=now-since>=Self.seconds;deepSleeping=now-since>=Self.deepSeconds}
         }
         return was==sleeping ? nil:sleeping
     }

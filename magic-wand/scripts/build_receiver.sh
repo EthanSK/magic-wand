@@ -10,6 +10,7 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$ROOT/receiver/Info.plist" "$APP/Contents/Info.plist"
 swiftc -O \
   "$ROOT/receiver/Sources/WandPointerControl.swift" \
+  "$ROOT/receiver/Sources/WandCalibration.swift" \
   "$ROOT/receiver/Sources/WandRecordingState.swift" \
   "$ROOT/receiver/Sources/WandControlTransport.swift" \
   "$ROOT/receiver/Sources/WandContextListener.swift" \
@@ -19,6 +20,7 @@ swiftc -O \
   -o "$APP/Contents/MacOS/WandReceiver"
 # The receiver sends only code over the slow UART link; the readable bridge keeps its comments.
 cp "$ROOT/device/generated/wand-mode-bridge.compact.js" "$APP/Contents/Resources/wand-mode-bridge.js"
+cp "$ROOT/device/generated/wand-power-policy.compact.js" "$APP/Contents/Resources/wand-power-policy.js"
 cp "$ROOT/device/generated/wand-commands.json" "$ROOT/device/generated/wand-runtime-version.txt" "$APP/Contents/Resources/"
 # Public original artwork, generated alongside the website icons by scripts/make_images.py.
 cp "$ROOT/receiver/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"

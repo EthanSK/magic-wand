@@ -35,6 +35,7 @@ final class Harness {
  var restFollow=WandRestFollowMemory()
  var motionFilter=Filter();let dwell=WandDwellClick(),restDetection=Rest(),controls=Controls(),recording=Recording()
  var deskSleep=WandDeskSleep()
+ var powerPolicyReady=false,standbyResume:Bool?,selectedReviewMode:String?
  var pointerRouter=WandPointerRouter(),deliveryPoint:CGPoint?
  var probeTimer:Timer?,queued:[String]=[],entered=0
  func reconcileBottomHold(down:Bool,now:Double,reason:String){};func scheduleDwell(){};func cancelCircleScroll(){};func releaseButtons(){}

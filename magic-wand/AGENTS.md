@@ -131,6 +131,7 @@ through their build/check commands; never claim an illustration is physical veri
 
 ## Current contextual hold and sleep behaviour
 
+- After five minutes of confirmed rest, use deeper button-wake sleep: switch off Bluetooth, motion sensing and lights, then wake on any of the three custom grip buttons. Pickup alone does not wake this deeper state. Preserve the prior mouse-follow choice; newer recording or manual choices win. Keep the known calibration in the Mac app per physical wand and restore it automatically after reconnect or power loss, without requiring another manual setup. User-requested — 2026-10-24.
 - Bottom hold scrolls over a scroll area and drags a confirmed draggable target.
   Unknown or late target detection must never turn scrolling into a surprise
   drag; release and lost telemetry cancel pending target results. Preserve the

@@ -61,6 +61,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let dwell=WandDwellClick()
     let restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
     var deskSleep=WandDeskSleep()
+    var powerPolicyReady=false,loadingPowerPolicy=false
+    var standbyResume:Bool?
+    func calibrationURL(for device:String)->URL {support.appendingPathComponent("calibrations").appendingPathComponent(device+".json")}
     var dwellTimer:Timer?,probeTimer:Timer?
     var restDiagnosticsRemaining=30
     let review=WandReviewGesture()
@@ -197,6 +200,25 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if !self.ready && self.manager.state == .poweredOn && self.device == nil { self.connect() }
         }
         status()
+    }
+    func restoreKnownCalibration() {
+        guard let id=device?.identifier.uuidString,
+              let value=WandCalibrationStore.read(calibrationURL(for:id),device:id),let json=value.json else{return}
+        queue("if(global.wandState&&!global.wandState().calibrated&&typeof global.restoreWandCalibration==='function')global.restoreWandCalibration("+json+");")
+        log("KNOWN_CALIBRATION_RESTORE_REQUESTED")
+    }
+    func rememberCalibration(_ line:String) {
+        guard let id=device?.identifier.uuidString,let marker=line.range(of:"WAND_CALIBRATED "),
+              let data=String(line[marker.upperBound...]).trimmingCharacters(in:.whitespacesAndNewlines).data(using:.utf8),
+              let value=try? JSONDecoder().decode(WandCalibration.self,from:data),value.valid else{return}
+        do {try WandCalibrationStore.write(value,to:calibrationURL(for:id),device:id);log("KNOWN_CALIBRATION_SAVED")}
+        catch {log("KNOWN_CALIBRATION_SAVE_FAILED",error.localizedDescription)}
+    }
+    func loadPowerPolicy() {
+        guard let url=Bundle.main.url(forResource:"wand-power-policy",withExtension:"js"),
+              let source=try? String(contentsOf:url,encoding:.utf8) else{return}
+        powerPolicyReady=false;loadingPowerPolicy=true
+        for line in source.split(separator:"\n") where !line.trimmingCharacters(in:.whitespaces).hasPrefix("//") {queue(String(line))}
     }
     func syncRecordingLight() {
         guard ready,!restoring else{return}
@@ -392,6 +414,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func reset() {
+        powerPolicyReady=false;loadingPowerPolicy=false
         reviewTrace.boundary("receiver reset",mode:wandShortcutMode)
         reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset();middleReviewExit=false
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil
@@ -412,7 +435,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         reset(); device = nil; status()
         retry?.cancel()
         let item = DispatchWorkItem { [weak self] in self?.connect() }; retry = item
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: item)
+        // Button-wake standby must be ready to reconnect promptly; active
+        // movement timing is unchanged.
+        DispatchQueue.main.asyncAfter(deadline: .now() + (standbyResume == nil ? 3 : 0.2), execute: item)
     }
     func centralManager(_ c: CBCentralManager, didConnect p: CBPeripheral) {
         guard device === p, !restoring else { c.cancelPeripheralConnection(p); return }
@@ -477,7 +502,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if let error {writing=false;log("WRITE_FAILED",error.localizedDescription);reconnect();return}
         // A GATT acknowledgement precedes the Puck parsing a large code fragment.
         // Pace installation only: FIFO_FULL otherwise drops bytes inside functions.
-        if !ready {
+        if !ready || loadingPowerPolicy {
             DispatchQueue.main.asyncAfter(deadline:.now()+0.01){[weak self] in
                 guard let self,self.device === p,!self.restoring else{return}
                 self.writing=false;self.sendNext()
@@ -521,6 +546,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line == "WAND_MODE_ROUTING_READY" || line == ">WAND_MODE_ROUTING_READY" {
                 guard !bridgeLoadFailed else {queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();");log("BRIDGE_LOAD_REJECTED");continue}
                 loadingBridge=false;loadingRuntime=false;ready=true;motionFilter.reset();rawLastArrival=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
+                restoreKnownCalibration();loadPowerPolicy()
+                if let remembered=standbyResume {let resume=remembered && !recording.isRecording;standbyResume=nil;queue("setMouseFollow("+(resume ? "true":"false")+");");dwell.follow(resume);log("DEEP_STANDBY_RESUMED",resume)}
                 if context.isActive {hudSession=true;hudOpenedAt=ProcessInfo.processInfo.systemUptime}
                 if let mode=selectedReviewMode {setWandShortcut(mode)}
                 queue("global.wandRawPointer=true;global.wandRawBias=undefined;global.wandRawActive=false;global.WAND_UPDATING=false;setHUDOpen("+(context.isActive ? "true":"false")+");updateLights();")
@@ -560,7 +587,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     if reviewTimer==nil {reviewTimer=Timer.scheduledTimer(withTimeInterval:0.2,repeats:true){[weak self] _ in guard let self else{return};self.sendReview(self.review.tick(now:ProcessInfo.processInfo.systemUptime))}}
                 }
             }
-            if line.contains("WAND_CALIBRATED") { log(line) }
+            if line.contains("WAND_CALIBRATED") { log(line);rememberCalibration(line) }
+            if line=="WAND_POWER_POLICY_READY" || line==">WAND_POWER_POLICY_READY" {loadingPowerPolicy=false;powerPolicyReady=true;log("POWER_POLICY_READY")}
+            if loadingPowerPolicy && line.contains("Uncaught ") {loadingPowerPolicy=false;powerPolicyReady=false;log("POWER_POLICY_FAILED")}
+            if line=="WAND_POWER_STANDBY_DENIED" || line==">WAND_POWER_STANDBY_DENIED" {standbyResume=nil}
             if let marker=line.range(of:"@BOTTOM ") {
                 let value=String(line[marker.upperBound...]).trimmingCharacters(in:.whitespaces)
                 // The device prints each edge before the click it emits on release,
@@ -1283,6 +1313,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                                         buttons:held==1 || scrollActive || buttons != 0,now:now) {
             queue("if(typeof setWandDeskSleeping==='function')setWandDeskSleeping("+(sleeping ? "true":"false")+");")
             log(sleeping ? "DESK_SLEEP":"DESK_WAKE")
+        }
+        // Five-minute standby is button-wake only. Keep an explicit HUD,
+        // review selection and dictation connected; sleep never owns those lanes.
+        if deskSleep.deepSleeping,powerPolicyReady,standbyResume==nil,
+           !hudSession,selectedReviewMode==nil,!recording.isRecording,!scrollActive,held==0,buttons==0 {
+            standbyResume=restFollow.remembered ?? dwell.following
+            queue("if(typeof global.wandEnterDeepStandby!=='function'||!global.wandEnterDeepStandby())print('WAND_POWER_STANDBY_DENIED');")
+            log("DEEP_STANDBY_REQUESTED")
         }
         // Rest detection owns pointer power only. It must never stop Agent Flow:
         // a still wand is not evidence that Ethan has finished speaking.

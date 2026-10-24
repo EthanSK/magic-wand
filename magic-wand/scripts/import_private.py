@@ -27,12 +27,14 @@ LOCK = ROOT / "data" / "import.lock.json"
 FILES = {
     "wand-mouse-prototype.js": ("device/wand-mouse-prototype.js", "verbatim"),
     "wand-mode-bridge.js": ("device/wand-mode-bridge.js", "verbatim"),
+    "wand-power-policy.js": ("device/wand-power-policy.js", "verbatim"),
     "wand-mac-receiver.swift": ("receiver/Sources/main.swift", "receiver"),
     "wand-control-transport.swift": ("receiver/Sources/WandControlTransport.swift", "verbatim"),
     "wand-context-listener.swift": ("receiver/Sources/WandContextListener.swift", "verbatim"),
     "wand-recording-state.swift": ("receiver/Sources/WandRecordingState.swift", "verbatim"),
     "wand-review-trace.swift": ("receiver/Sources/WandReviewTrace.swift", "verbatim"),
     "wand-pointer-control.swift": ("receiver/Sources/WandPointerControl.swift", "verbatim"),
+    "wand-calibration.swift": ("receiver/Sources/WandCalibration.swift", "verbatim"),
     "Wand Receiver.app/Contents/Info.plist": ("receiver/Info.plist", "verbatim"),
 }
 

@@ -201,7 +201,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.80 (85) · device code `wand-e1ce30d7c407` · bridge `cd1c870e` · updated 20 October 2026.
+Receiver 1.2.81 (86) · device code `wand-e1ce30d7c407` · bridge `cd1c870e` · updated 24 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
