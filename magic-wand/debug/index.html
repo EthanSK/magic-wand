@@ -17,15 +17,14 @@
     <p class="brand">Magic Wand <span>Monitor</span></p>
     <p class="feed" id="feed" data-state="waiting">Starting</p>
   </div>
+  <p class="status-row" id="status-row"></p>
   <div class="headline" aria-live="polite" aria-atomic="true">
     <h1 id="headline">Checking</h1>
     <p id="headline-detail" class="headline-detail">Reading Wand Receiver’s status.</p>
   </div>
-  <p id="headline-since" class="headline-since"></p>
   <dl class="freshness">
-    <div><dt>Receiver</dt><dd id="fresh-process">—</dd></div>
-    <div><dt title="status.json changes only when state changes, so its age isn’t a heartbeat.">Status changed</dt><dd id="fresh-status">—</dd></div>
-    <div><dt>Last log event</dt><dd id="fresh-log">—</dd></div>
+    <div><dt>Wand Receiver</dt><dd id="fresh-process">—</dd></div>
+    <div><dt>Last event</dt><dd id="fresh-log">—</dd></div>
   </dl>
 </header>
 
@@ -55,11 +54,11 @@
   <section class="panel sleep-panel" aria-labelledby="sleep-title">
     <h2 id="sleep-title">Sleep</h2>
     <ol class="track" id="track">
-      <li data-step="awake"><strong>Awake</strong><span>Lights show the mode</span></li>
-      <li class="gap" aria-hidden="true">1 min resting</li>
-      <li data-step="desk-idle"><strong>Desk idle</strong><span>Pickup wakes</span></li>
-      <li class="gap" aria-hidden="true">5 min resting</li>
-      <li data-step="deep-sleep"><strong>Deep sleep</strong><span>Grip button wakes</span></li>
+      <li data-step="awake"><strong>Awake</strong><span>Light shows the mode</span></li>
+      <li class="gap" aria-hidden="true">1 min on the desk</li>
+      <li data-step="desk-idle"><strong>Desk idle</strong><span>Lights off · pickup wakes</span></li>
+      <li class="gap" aria-hidden="true">5 min on the desk</li>
+      <li data-step="deep-sleep"><strong>Deep sleep</strong><span>Bluetooth off · grip button wakes</span></li>
     </ol>
     <p class="note" id="power-detail"></p>
   </section>
@@ -68,7 +67,7 @@
     <section class="panel" aria-labelledby="light-title">
       <h2 id="light-title">Light</h2>
       <div class="light-row">
-        <span class="swatch" id="light-swatch" aria-hidden="true"></span>
+        <span class="swatch" aria-hidden="true"></span>
         <div>
           <p class="big" id="light-name">—</p>
           <p class="note" id="light-detail"></p>
@@ -78,11 +77,11 @@
     </section>
 
     <section class="panel" aria-labelledby="delivery-title">
-      <h2 id="delivery-title">Motion Delivery</h2>
+      <h2 id="delivery-title">Motion Data</h2>
       <p class="big" id="delivery-rate">—</p>
       <div class="bars" id="delivery-bars" aria-hidden="true"></div>
       <dl class="facts" id="delivery-facts"></dl>
-      <p class="note">Logged after 5 s of continuous motion. This is delivery rate, not latency.</p>
+      <p class="note">Measured by Wand Receiver after 5 s of continuous movement. How often updates arrive, not how long they take.</p>
     </section>
 
     <section class="panel" aria-labelledby="settings-title">
@@ -99,19 +98,22 @@
   <section class="panel errors-panel" aria-labelledby="errors-title">
     <h2 id="errors-title">Errors</h2>
     <ul class="errors" id="errors"></ul>
-    <p class="note" id="echo-note"></p>
+    <details class="earlier" id="errors-earlier" hidden>
+      <summary id="errors-earlier-label">Earlier errors</summary>
+      <ul class="errors" id="errors-earlier-list"></ul>
+    </details>
   </section>
 
   <section class="panel activity" id="activity" aria-labelledby="activity-title" tabindex="-1">
     <div class="activity-head">
       <h2 id="activity-title">Activity</h2>
-      <div class="filters" role="group" aria-label="Show activity" id="filters"></div>
+      <div class="filters" role="group" aria-label="Show" id="filters"></div>
     </div>
     <ol class="timeline" id="timeline"></ol>
   </section>
 
   <details class="panel raw">
-    <summary><h2>Raw Diagnostics</h2></summary>
+    <summary><h2>Diagnostics</h2></summary>
     <dl class="facts" id="sources"></dl>
     <h3>Status</h3>
     <pre id="raw-status">—</pre>

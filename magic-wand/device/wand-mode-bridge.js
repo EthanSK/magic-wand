@@ -49,6 +49,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(connected&&(hudOpen||global.wandReviewTracking))Bluetooth.println('@NAV '+Math.round(hudX*1000)+','+Math.round(hudY*1000));
   });
   setMouseFollow.replaceWith(function(on){
+    // Release the device's native drag before forgetting its gesture state.
+    // Otherwise a recording/mode change leaves sentButtons latched at one.
+    if(dragging){dragging=false;states.push(0);pump();}
     cancelTapGesture();clearHoldClick();moveGestureMode=undefined;moveLatched=!!on;
     if(on&&global.wandDeskSleeping)global.setWandDeskSleeping(false);
     if(connected&&!global.wandDeskSleeping&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();

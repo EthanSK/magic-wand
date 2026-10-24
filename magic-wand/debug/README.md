@@ -15,6 +15,20 @@ reads a copied receiver folder instead of the live one. It needs only Python 3.9
 the standard library. The page has no npm packages and makes no remote requests; it
 reuses the published site's fonts from `../docs/fonts/`.
 
+## Reading the page
+
+- **Headline**: what the wand is doing now, in words (Pointer On, Scrolling, HUD Open,
+  Recording, Idle, Desk Idle, Deep Sleep), taken from its light and the receiver status.
+  Connection problems (Disconnected, Receiver Stopped) replace it.
+- **Buttons**: each button's jobs with a one-line reminder of how they work. "Can’t tell"
+  means the wand's single light is showing something with higher priority, or the wand
+  isn't connected; the page explains which instead of guessing.
+- **Errors**: only errors from the current connection count. Older ones stay under
+  "earlier errors" so a past failure doesn't look current.
+- **Activity**: Key events by default. Buttons adds clicks and presses; Everything also
+  shows light changes, motion samples and wand diagnostics. Clicks and quick Top taps are
+  merged into one row, and back-to-back repeats show a count.
+
 ## One Bluetooth owner
 
 The installed Wand Receiver is the wand's only Bluetooth owner. A second Bluetooth or
@@ -55,7 +69,8 @@ or off.
 | Motion delivery | `RAW_DELIVERY` | Reports, window length and largest gap from the receiver's own 5-second windows during continuous motion, with the time it was measured. It is a delivery rate, not latency, and isn't extrapolated into a live rate. |
 | Pointer moves | `MOVEMENT_REPORTS_POSTED` | Logged at the first and every 100th move since the receiver started. |
 | Errors | `DEVICE_ERROR` and receiver failure lines | Grouped and counted. |
-| Battery, raw sensor values | — | Not reported. The receiver doesn't read battery level, and live sensor values aren't logged. |
+| Battery | Receiver status | Puck voltage-based percentage and voltage, with sample age. Last reading remains labelled stale while disconnected or asleep. |
+| Raw sensor values | — | Live sensor values are not logged. |
 
 ### Freshness
 
@@ -142,3 +157,16 @@ freshness (a quiet live receiver stays connected; a stopped or different process
 doesn't), malformed and missing files, log rotation and truncation, echoed source
 versus runtime errors, deep sleep and desk idle, sanitising, local binding, refused
 hosts and methods, and the page's basic accessibility.
+
+## Battery source
+
+The receiver queries the Puck's built-in `E.getBattery()` percentage and
+`NRF.getBattery()` voltage on its existing connection, at most once per minute
+while connected and awake. The dashboard is still read-only; it never connects
+to the device or sends a battery command itself.
+
+The percentage assumes a normal CR2032 cell and is a voltage estimate, not a
+measured capacity or remaining-runtime prediction. Load and temperature affect
+it. See the [Puck battery reference](https://www.espruino.com/Puck.js#battery-level).
+Missing, invalid and future-dated readings are not presented as current; readings
+older than two minutes or from a disconnected receiver are labelled stale.

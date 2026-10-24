@@ -8,6 +8,7 @@ import { tmpdir } from "node:os";
 import { join, basename, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import http from "node:http";
+import vm from "node:vm";
 
 const component = join(dirname(fileURLToPath(import.meta.url)), "..");
 const debugDir = join(component, "debug");
@@ -305,4 +306,136 @@ test("page is accessible, local-only and has no controls that change modes", asy
   assert.ok(!/<form|method="post"|fetch\([^)]*method/i.test(html + js), "no requests that change state");
   assert.equal((js.match(/fetch\(/g) || []).length, 1);
   assert.match(js, /fetch\("\/api\/state"/);
+});
+
+test('battery level is a dated voltage estimate, never invented runtime', async()=>{
+ const dir=folder(),receiver=idleProcess();
+ const sample={percent:72,volts:2.91,measuredAt:Date.now()/1000};
+ status(dir,{pid:receiver.pid,battery:sample});
+ const {port}=await startMonitor(dir);
+ const live=await state(port);
+ assert.equal(live.battery.state,'reported');assert.equal(live.battery.percent,72);
+ assert.equal(live.battery.volts,2.91);assert.equal(live.battery.basis,'voltage-estimate');
+ status(dir,{pid:receiver.pid,battery:{...sample,measuredAt:sample.measuredAt-300}});
+ await sleep(500);assert.equal((await state(port)).battery.state,'stale');
+ status(dir,{pid:receiver.pid,battery:{percent:true,volts:2.9,measuredAt:sample.measuredAt}});
+ await sleep(500);assert.equal((await state(port)).battery.state,'not-reported');
+ status(dir,{pid:receiver.pid,battery:{...sample,measuredAt:sample.measuredAt+3600}});
+ await sleep(500);assert.equal((await state(port)).battery.state,'not-reported');
+});
+
+// A minimal DOM, enough for app.js's render(): the browser is not available to these tests.
+class FakeNode {
+  constructor(tag) { this.tagName = tag; this.children = []; this.attributes = {}; this.dataset = {}; this.style = {}; this.hidden = false; this._text = ""; }
+  append(...items) {
+    for (const item of items) {
+      if (item instanceof FakeNode && item.tagName === "#fragment") this.children.push(...item.children);
+      else this.children.push(item instanceof FakeNode ? item : new FakeText(String(item)));
+    }
+  }
+  replaceChildren(...items) { this.children = []; this._text = ""; this.append(...items); }
+  get textContent() { return this.children.length ? this.children.map((child) => child.textContent).join("") : this._text; }
+  set textContent(value) { this._text = ""; this.children = String(value) ? [new FakeText(String(value))] : []; }
+  setAttribute(name, value) { this.attributes[name] = String(value); }
+  getAttribute(name) { return this.attributes[name] ?? null; }
+  removeAttribute(name) { delete this.attributes[name]; }
+  addEventListener() {}
+  get childElementCount() { return this.children.filter((child) => !(child instanceof FakeText)).length; }
+  *walk() { yield this; for (const child of this.children) if (!(child instanceof FakeText)) yield* child.walk(); }
+}
+class FakeText extends FakeNode { constructor(text) { super("#text"); this._text = text; } }
+
+function loadPage() {
+  const ids = new Map();
+  const lanes = ["Top", "Middle", "Bottom"].map((button) => Object.assign(new FakeNode("ul"), { dataset: { button } }));
+  const steps = ["awake", "desk-idle", "deep-sleep"].map((step) => Object.assign(new FakeNode("li"), { dataset: { step } }));
+  const document = {
+    body: new FakeNode("body"), title: "", hidden: false,
+    createElement: (tag) => new FakeNode(tag),
+    createDocumentFragment: () => new FakeNode("#fragment"),
+    createTextNode: (text) => new FakeText(String(text)),
+    getElementById(id) { if (!ids.has(id)) ids.set(id, new FakeNode("div")); return ids.get(id); },
+    querySelectorAll(selector) {
+      if (selector === ".lanes") return lanes;
+      if (selector === "#track li[data-step]") return steps;
+      const key = { "[data-t]": "t", "[data-d]": "d" }[selector];
+      const found = [];
+      for (const root of [...ids.values(), ...lanes]) for (const node of root.walk()) if (key && node.dataset[key] !== undefined) found.push(node);
+      return found;
+    },
+    addEventListener() {},
+  };
+  const context = vm.createContext({ document, Node: FakeNode, Date, Math, Number, JSON, Set, Object, Array, String });
+  vm.runInContext(readFileSync(join(debugDir, "app.js"), "utf8"), context);
+  const text = (id) => document.getElementById(id).textContent;
+  return { context, document, lanes, steps, text };
+}
+
+test("page leads with plain current state, files old errors as earlier and quiets repeats", async () => {
+  const dir = folder();
+  const receiver = idleProcess();
+  const battery = { percent: 72, volts: 2.91, measuredAt: Date.now() / 1000 - 30 };
+  status(dir, { pid: receiver.pid, lightMode: "mouse", recording: true, battery });
+  writeFileSync(join(dir, "receiver.previous.log"), logLines([
+    [3000, "STARTED 1 ACCESSIBILITY true"],
+    [2990, "DEVICE_ERROR Uncaught SyntaxError: Unexpected end of Input"],
+  ]));
+  writeFileSync(join(dir, "receiver.log"), logLines([
+    [600, "STARTED 2 ACCESSIBILITY true"], [595, "RUNTIME_READY"],
+    [500, "DEVICE_LIGHT idle [0.0, 0.0, 0.0]"], [500, "SPEECH_BUTTON 1 SENT"], [500, "DEVICE_LIGHT recording [1.0, 0.0, 0.0]"],
+    [500, "SPEECH_BUTTON 0 SENT"], [500, "RECORDING_STATE true"], [500, "DEVICE WAND_RECORDING_LIGHT 1"],
+    [300, "HUD_CLOSED context ended"],
+    [200, "BOTTOM_HOLD_TARGET scroll"], [190, "BOTTOM_HOLD_TARGET scroll"], [180, "BOTTOM_HOLD_TARGET scroll"],
+    [100, "BUTTON LEFT DOWN flags 0 clickCount 1"], [100, "BUTTON LEFT UP flags 0 clickCount 1"], [100, "HIGH_DWELL_CLICK"],
+    [90, "MOVEMENT_REPORTS_POSTED 100"], [80, "RAW_DELIVERY 250 seconds 5.00 maxGapMs 40"],
+    [10, "DEVICE_LIGHT mouse [0.0, 0.0, 1.0]"],
+  ]));
+  const { port } = await startMonitor(dir);
+  const live = await state(port);
+  const page = loadPage();
+  page.context.render(live);
+
+  assert.equal(page.text("headline"), "Pointer On");
+  assert.equal(page.text("headline-detail"), "The wand is moving the pointer. Agent Flow is recording speech.");
+  assert.match(page.text("status-row"), /^Connected · \d+ min.*Battery about 72%$/);
+  assert.match(page.text("receiver-facts"), /BatteryAbout 72% · 2\.91 V voltage estimate · measured \d+ s ago/);
+  assert.equal(page.document.body.dataset.light, "mouse");
+  assert.match(page.text("errors"), /^No errors since connecting/, "an error from an earlier receiver run isn't shown as current");
+  assert.equal(page.document.getElementById("errors-earlier").hidden, false);
+  assert.equal(page.text("errors-earlier-label"), "1 earlier error, before then");
+
+  const lane = (button, index) => page.lanes.find((list) => list.dataset.button === button).children[index].textContent;
+  assert.match(lane("Top", 0), /^SpeechRecording/);
+  assert.match(lane("Middle", 0), /HUDCan’t tell.*Hidden while the light shows Pointer \(blue\)\..*HUD closed by Agentic Mouse/);
+  assert.match(lane("Bottom", 0), /^PointerOnTap Bottom to turn the pointer on or off/);
+
+  const timeline = page.text("timeline");
+  assert.match(timeline, /Agent Flow started recording/);
+  assert.match(timeline, /Bottom held: scrolling×3/);
+  for (const noise of ["Light:", "Pointer moves", "Motion data", "Recording light", "Top pressed"]) {
+    assert.ok(!timeline.includes(noise), "key events hide " + noise);
+  }
+  const buttons = page.context.prepareTimeline(live.timeline, "buttons").map((row) => row.title);
+  assert.ok(buttons.includes("Clicked by holding still"), "down, up and stop-to-click become one row");
+  assert.ok(buttons.includes("Top tapped"), "a quick Top press and release become one row");
+  assert.ok(!buttons.includes("Left button down") && !buttons.includes("Recording light on"));
+  const everything = page.context.prepareTimeline(live.timeline, "all").map((row) => row.title);
+  assert.ok(everything.some((title) => title.startsWith("Motion data: 50.0 updates a second")));
+
+  const rendered = [...page.document.getElementById("headline").walk()].length && ["headline", "headline-detail", "status-row", "errors",
+    "timeline", "power-detail", "light-name", "delivery-rate", "delivery-facts", "settings-facts", "receiver-facts", "sources"]
+    .map(page.text).join(" ") + page.lanes.map((list) => list.textContent).join(" ");
+  assert.ok(!/undefined|null|NaN|\[object/.test(rendered), "no placeholder values leak into the page");
+  assert.ok(!/\bwhether\b/i.test(rendered));
+
+  status(dir, { pid: receiver.pid, connected: false, ready: false, lightMode: "disconnected", battery });
+  appendFileSync(join(dir, "receiver.log"), logLines([[3, "DEEP_STANDBY_REQUESTED"], [2, "DISCONNECTED cleanly"]]));
+  await sleep(500);
+  page.context.render(await state(port));
+  assert.equal(page.text("headline"), "Deep Sleep");
+  assert.match(page.text("headline-detail"), /Press any grip button to wake it\. Picking it up alone won’t\./);
+  assert.equal(page.steps.find((step) => step.dataset.step === "deep-sleep").getAttribute("aria-current"), "step");
+  assert.match(page.lanes.find((list) => list.dataset.button === "Bottom").textContent, /Can’t tell.*Needs a connected wand\./);
+  assert.ok(!page.text("status-row").includes("Battery"), "an old battery reading isn't shown as current");
+  assert.match(page.text("receiver-facts"), /About 72% · 2\.91 V last reading, not current/);
 });

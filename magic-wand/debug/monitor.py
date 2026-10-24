@@ -8,6 +8,7 @@ turns them into a sanitised snapshot for the local debug page.
 from __future__ import annotations
 
 import json
+import math
 import os
 import plistlib
 import re
@@ -703,6 +704,13 @@ def read_status(path: Path) -> dict:
             ("maximumFileBytes", int), ("maximumFiles", int))},
         "updatedAt": parse_time(updated) if updated else None,
     }
+    sample = raw.get("battery")
+    if isinstance(sample, dict):
+        percent, volts, measured = (sample.get(k) for k in ("percent", "volts", "measuredAt"))
+        if (type(percent) is int and 0 <= percent <= 100
+                and type(volts) in (int, float) and math.isfinite(volts) and 1 <= volts <= 5
+                and type(measured) in (int, float) and math.isfinite(measured) and measured > 0):
+            fields["battery"] = {"percent": percent, "volts": volts, "measuredAt": measured}
     if fields["connected"] is None or fields["ready"] is None:
         return {"present": True, "valid": False, "error": "missing connected or ready", "mtime": mtime}
     return {"present": True, "valid": True, "error": None, "mtime": mtime, "fields": fields}
@@ -1073,6 +1081,13 @@ def build_snapshot(now: float, status: dict, process: dict, model: LogModel, fol
     version = options.get("controlVersion")
     published = {key: PUBLISHED_VERSIONS.get(key) for key in ("receiver", "receiverBuild", "deviceRuntime", "persistentImage")}
     auth = fields.get("bluetoothAuthorization")
+    battery = fields.get("battery")
+    if battery and battery["measuredAt"] <= now + 5:
+        age = max(0, now - battery["measuredAt"])
+        battery = {**battery, "state": "reported" if ready and age <= 120 else "stale",
+                   "age": age, "basis": "voltage-estimate"}
+    else:
+        battery = {"state": "not-reported", "detail": "No battery reading yet."}
     return {
         "schema": 1,
         "now": now,
@@ -1080,7 +1095,7 @@ def build_snapshot(now: float, status: dict, process: dict, model: LogModel, fol
         "power": power,
         "light": light,
         "lanes": lanes,
-        "battery": {"state": "not-reported", "detail": "The receiver doesn’t read battery level."},
+        "battery": battery,
         "delivery": {"latest": delivery[-1] if delivery else None, "history": delivery},
         "movement": {"total": movement["value"], "t": movement["t"]} if movement else None,
         "settings": {
