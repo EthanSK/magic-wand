@@ -146,7 +146,7 @@ async function main() {
   scene.add(wand);
   const home = new Map([pod, lower, upper, cradle, cap, puck].map((m) => [m, m.position.clone()]));
 
-  let variant = variants.includes('oval') ? 'oval' : variants[0];
+  let variant = variants.includes('straight') ? 'straight' : variants[0];
   ui.handles.replaceChildren(...variants.map((v) => {
     const button = document.createElement('button');
     button.type = 'button';

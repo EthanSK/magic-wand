@@ -5,8 +5,8 @@
   "status": "Provisional first print set. Model geometry is generated and checked; printed fit, strength, comfort and mass are not measured.",
   "frame": "Assembly axes: +Z runs from the handle butt (z = 0) to the tip, +Y is the button side, the loop hangs toward -Y. Angles are measured from +Y toward +X, which is clockwise seen from the tip.",
   "source": {
-    "dimensions_sha256": "8e7b881414ff22b318f715597044f9565fddc65bffd14ef8201c4ac3f33f8d95",
-    "script_sha256": "6328fe8d554c9d0dcae9c82c0e1925c7616528a3607d97ed9db767aafa5cb048",
+    "dimensions_sha256": "4e57d8d671fdffdabb4584fd85633d49f72dd5443ba19f2133b5cd322e1e6c3e",
+    "script_sha256": "eeeb6d3efff883962c33a750b81810cf9e2e872373477d0fe0043b98761cff5f",
     "tools": {
       "manifold3d": "3.5.4",
       "trimesh": "5.2.0",
@@ -89,12 +89,23 @@
         "tip-cradle",
         "tip-cap"
       ]
+    },
+    "straight": {
+      "label": "No loop",
+      "parts": [
+        "handle-straight",
+        "button-pod-pilot",
+        "shaft-lower",
+        "shaft-upper",
+        "tip-cradle",
+        "tip-cap"
+      ]
     }
   },
   "glb": {
     "file": "assembly.glb",
-    "sha256": "8affa17589270d55c54f8f27b024d9778ddb7f7480942af1e497d7fa96dcf4c6",
-    "bytes": 319240,
+    "sha256": "ac084c8e278a6bb2988e9fe60baee39ed3e398e10b56976fcebd6d66a37637cc",
+    "bytes": 374248,
     "units": "metres, Y up, wand along +Z; handles side by side 70 mm apart"
   },
   "parts": [
@@ -106,7 +117,7 @@
       "group": "coupon",
       "role": "Joint coupon: shaft spigot with the three locking pins",
       "print_orientation": "Lying on the flat +X face",
-      "supports": "None expected",
+      "supports": "Support under pin overhangs; Bambu Studio flags floating regions without it",
       "fits_bed": true,
       "mesh": {
         "watertight": true,
@@ -159,7 +170,7 @@
       "group": "coupon",
       "role": "Joint coupon: handle socket, 0.05 mm cam interference, 1 notch",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
-      "supports": "None expected",
+      "supports": "Support at rail/socket overhangs; remove completely before fitting",
       "fits_bed": true,
       "mesh": {
         "watertight": true,
@@ -212,7 +223,7 @@
       "group": "coupon",
       "role": "Joint coupon: handle socket, 0.15 mm cam interference (default), 2 notches",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
-      "supports": "None expected",
+      "supports": "Support at rail/socket overhangs; remove completely before fitting",
       "fits_bed": true,
       "mesh": {
         "watertight": true,
@@ -265,7 +276,7 @@
       "group": "coupon",
       "role": "Joint coupon: handle socket, 0.3 mm cam interference, 3 notches",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
-      "supports": "None expected",
+      "supports": "Support at rail/socket overhangs; remove completely before fitting",
       "fits_bed": true,
       "mesh": {
         "watertight": true,
@@ -371,7 +382,7 @@
       "group": "handle",
       "role": "Mug-style loop for two fingers; thumb on the buttons.",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
-      "supports": "None expected; bores use flattened teardrops",
+      "supports": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
       "fits_bed": true,
       "mesh": {
         "watertight": true,
@@ -424,7 +435,7 @@
       "group": "handle",
       "role": "Long D-loop around four fingers, so the wand stays on a relaxed hand.",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
-      "supports": "None expected; bores use flattened teardrops",
+      "supports": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
       "fits_bed": true,
       "mesh": {
         "watertight": true,
@@ -477,7 +488,7 @@
       "group": "handle",
       "role": "Raked loop, deeper at the palm, for a less bent wrist while pointing.",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
-      "supports": "None expected; bores use flattened teardrops",
+      "supports": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
       "fits_bed": true,
       "mesh": {
         "watertight": true,
@@ -523,6 +534,59 @@
       ]
     },
     {
+      "name": "handle-straight",
+      "file": "handle-straight.stl",
+      "sha256": "9ced549dd21b4b0951d50fdb10582b7f769491924a448ec1a2e13d21aa2af42c",
+      "bytes": 148184,
+      "group": "handle",
+      "role": "Rounded straight grip with no loop. Least material of the four; same socket, rail and wire route.",
+      "print_orientation": "Lying on its side on the -X bed flat, rail sideways",
+      "supports": "45-degree grip underside; support at shared rail/socket overhangs",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 60134.138,
+        "area_mm2": 16112.0788,
+        "triangles": 2962,
+        "print_size_mm": [
+          140.0,
+          36.0,
+          23.0
+        ],
+        "downward_flat_mm2": 64.3476,
+        "downward_steeper_than_45_mm2": 41.018
+      },
+      "print_to_assembly": [
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          6.0
+        ],
+        [
+          -1.0,
+          0.0,
+          0.0,
+          70.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
       "name": "shaft-lower",
       "file": "shaft-lower.stl",
       "sha256": "701d244fb58425a031e6f66727f7409fd9b44255c366ffbf82555c1608a5ae6c",
@@ -530,7 +594,7 @@
       "group": "shaft",
       "role": "Lower shaft: twist-lock spigot and half-lap",
       "print_orientation": "Lying on the flat +X face",
-      "supports": "None expected; small pin overhangs",
+      "supports": "Support under small pin overhangs",
       "fits_bed": true,
       "mesh": {
         "watertight": true,
@@ -1200,6 +1264,46 @@
           "height_mm": 47.1284,
           "area_mm2": 3422.8315
         },
+        "passed": true
+      },
+      "straight": {
+        "overlaps_mm3": {
+          "handle + pod": 0.0,
+          "handle + shaft-lower": 0.5741,
+          "handle + shaft-upper": 0.0,
+          "handle + tip-cradle": 0.0,
+          "handle + tip-cap": 0.0,
+          "handle + puck-case": 0.0,
+          "pod + shaft-lower": 0.0,
+          "pod + shaft-upper": 0.0,
+          "pod + tip-cradle": 0.0,
+          "pod + tip-cap": 0.0,
+          "pod + puck-case": 0.0,
+          "shaft-lower + shaft-upper": 0.0,
+          "shaft-lower + tip-cradle": 0.0,
+          "shaft-lower + tip-cap": 0.0,
+          "shaft-lower + puck-case": 0.0,
+          "shaft-upper + tip-cradle": 0.0,
+          "shaft-upper + tip-cap": 0.0,
+          "shaft-upper + puck-case": 0.0,
+          "tip-cradle + tip-cap": 24.9289,
+          "tip-cradle + puck-case": 0.0,
+          "tip-cap + puck-case": 0.0
+        },
+        "expected_overlaps": {
+          "handle + shaft-lower": "Cam pocket preload",
+          "tip-cradle + tip-cap": "Cap press fit"
+        },
+        "unexpected": [],
+        "wire_probe_overlap_mm3": {
+          "handle": 0.0,
+          "pod": 0.0,
+          "shaft-lower": 0.0,
+          "shaft-upper": 0.0,
+          "tip-cradle": 0.0,
+          "tip-cap": 0.0
+        },
+        "opening": null,
         "passed": true
       }
     },

@@ -1,7 +1,8 @@
 # Printed loop wand
 
-A fully printed body for the current three-button Puck.js wand: three interchangeable loop
-handles that plug onto one shared shaft and tip with a push-and-twist lock.
+A fully printed body for the current three-button Puck.js wand: four interchangeable handles
+(three loops and a plain rounded grip) that plug onto one shared shaft and tip with a
+push-and-twist lock.
 
 **Status: first print set, not yet printed.** The model geometry is generated and checked
 (closed solids, fit on the bed, no unintended collisions, joint keyed and retained in the model).
@@ -19,16 +20,16 @@ existing three buttons and their roles are unchanged.
 | `wand_cad.py` | The one parametric geometry source. Builds, exports and checks everything. |
 | `requirements.txt` | Pinned geometry toolchain (manifold3d, trimesh, numpy). |
 | `exports/*.stl` | Binary STL per printable part, already in print orientation. |
-| `exports/assembly.glb` | All three assemblies side by side, with a Puck case reference. |
+| `exports/assembly.glb` | All four assemblies side by side, with a Puck case reference. |
 | `exports/manifest.json` | Hashes, sizes, print notes, transforms and every check result. |
-| `preview/` | Browser preview of the three options, the joint and a section view. |
+| `preview/` | Browser preview of the four handles, the joint and a section view. |
 
 ## Two pieces, more prints
 
 Ethan asked for a wand in two pieces where the wand end plugs into the handle. Those are the
 two assemblies:
 
-1. **Handle** (one of three) with its button pod. Swappable.
+1. **Handle** (one of four) with its button pod. Swappable.
 2. **Wand**: lower shaft, upper shaft, tip cradle and cap, glued once into one piece.
 
 The wand is about 360 mm long, longer than the 256 mm bed, so it prints as four parts joined by
@@ -40,17 +41,39 @@ Default overall length is 500 mm, butt to cap, matching the existing roughly 50 
 
 ## Handles
 
-All three share the spine, socket, button rail and wire route; only the loop differs. The
-loop is a 22 mm wide bar with 45° chamfers. Opening sizes are measured from the model's
-mid-plane section.
+All four share the socket, button rail, pod stop and wire route, so every handle fits the same
+shaft and pod. The loops are a 22 mm wide bar with 45° chamfers. Opening sizes are measured
+from the model's mid-plane section.
 
 | Handle | Opening (length × height) | Intended grip |
 | --- | --- | --- |
 | Round | 38 × 38 mm | Mug-style loop for two fingers; thumb on the buttons. |
 | Oval | 101 × 31 mm | Long D-loop around four fingers, so the wand stays on a relaxed hand. |
 | Angled | 100 × 47 mm (deepest at the palm) | Raked loop for a less bent wrist while pointing. |
+| No loop | None | Rounded straight grip; the quickest one to try. |
 
-Comfort is untested; these are three distinct starting shapes to try, not ergonomic claims.
+Comfort is untested; these are distinct starting shapes to try, not ergonomic claims.
+
+### No loop
+
+`handle-straight` is the same 140 mm handle with the loop removed and a round 24 mm grip instead of
+the chamfered slab. It prints on its side like the others: the underside meets an 11.9 mm bed flat
+through 45° faces, avoiding supports under the grip itself, and a 10 mm flat on top seats the rail. The shared rail/socket overhangs still need slicer attention. The butt is
+rounded in side view.
+
+Solid model volume and bed footprint (slicer infill, walls and speed decide the real time and
+filament):
+
+| Handle | Solid volume | Footprint on the bed |
+| --- | --- | --- |
+| No loop | 60.1 cm³ | 140 × 36 mm |
+| Round | 100.3 cm³ (no loop is 40% less) | 140 × 88 mm |
+| Oval | 111.5 cm³ (46% less) | 140 × 81 mm |
+| Angled | 115.7 cm³ (48% less) | 140 × 97 mm |
+
+Walls keep the loop handles' minimums: 2.75 mm beside the twist-lock grooves at the bed flat,
+3.75 mm or more elsewhere around the socket. Change `handle.variants.straight.grip_radius` for a
+thicker grip; the section must stay larger than the socket and pod seat.
 
 ## The twist-lock joint
 
@@ -87,9 +110,32 @@ These prove the geometry does what's described. They don't prove the printed par
 
 ## Print set
 
-All parts are exported in print orientation, sitting on z = 0. Supports aren't expected on any
-part; horizontal bores use flattened teardrops so their tops bridge 1–3 mm instead of arching.
-Brims help the long thin shafts stay down. No slicing was done for this set.
+All parts are exported in print orientation, sitting on z = 0. Horizontal bores use flattened
+teardrops so their tops bridge 1–3 mm instead of arching. However, Bambu Studio 2.8.2 flags
+floating regions under the male pins and floating cantilevers around the female rail/socket.
+The face-angle geometry check did not establish that those features print unsupported.
+Enable supports and inspect their placement; remove them completely from the mating surfaces
+before trying the joint. Brims help the long thin shafts stay down.
+
+### First slicer comparison
+
+The following are **estimates, not measured prints**, made with Bambu Studio 2.8.2, a P1S
+0.4 mm nozzle, Generic PETG, a textured PEI plate, 0.28 mm Extra Draft, two walls and 20% infill.
+Automatic tree supports and a 4 mm outer brim were enabled. Select the actual loaded filament
+preset and re-slice before sending a print; these are provisional settings, not a strength rating.
+
+| Set | Estimated time | Estimated filament |
+| --- | --- | --- |
+| No-loop handle | 1 h 4 min | 31.1 g |
+| Round-loop handle | 1 h 30 min | 47.6 g |
+| No-loop handle, both shafts, tip cradle/cap, pilot button pod | 2 h 36 min | 80.1 g |
+| Five joint/Puck fit samples, at 0.20 mm Standard | 1 h 13 min | 27.1 g |
+
+The supported no-loop handle is about 29% faster than the supported round-loop handle in
+this comparison. The full six-part set fits one plate and slices without floating-region
+warnings with supports enabled. This does not prove physical fit or easy support removal.
+Print the small fit samples first. Keep printer/account settings and sliced job files locally;
+the parametric source and exported meshes are the maintained design.
 
 Print in this order:
 
@@ -101,7 +147,7 @@ Print in this order:
 | 4 | `shaft-lower`, `shaft-upper` | Flat +X face | 183 mm each. Brim recommended. |
 | 5 | `tip-cradle`, `tip-cap` | Pocket up / cap top down | |
 | 6 | `button-pod-pilot` or `button-pod-blank` | Top down | Pilot holes mark the three button centres. |
-| 7 | `handle-round`, `handle-oval`, `handle-angled` | On its side | 140 mm long. Start with one. |
+| 7 | `handle-straight`, `handle-round`, `handle-oval`, `handle-angled` | On its side | 140 mm long. Start with one; no loop uses the least material. |
 
 Handles and shafts print with layers along their length, which is usually the stronger
 direction for bending. Wall and infill settings are yours to choose; nothing here has been
@@ -158,7 +204,7 @@ Then the full parts:
 
 - [ ] Glue the shaft half-laps and the tip with the flat +X faces down on a flat table. Glue
       strength on PETG is untested.
-- [ ] Each handle: reach to all three buttons, loop comfort, wrist angle while pointing.
+- [ ] Each handle: reach to all three buttons, grip or loop comfort, wrist angle while pointing.
 - [ ] Balance and weight with the Puck fitted.
 - [ ] Pointer directions after mounting the Puck in the cradle.
 
