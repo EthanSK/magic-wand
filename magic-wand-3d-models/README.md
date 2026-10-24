@@ -1,7 +1,13 @@
 # Magic Wand 3D models
 
-Pull this repository, then open **[tapered-double-helix.3mf](tapered-double-helix.3mf)** in Bambu Studio.
-It includes all four pieces arranged on one plate, with the printer and print settings saved.
+Pull this repository, then open **[two-spiral-wands.3mf](two-spiral-wands.3mf)** in Bambu Studio.
+It includes two complete spiral wands on one plate: one straight grip and one full-hand mug loop.
+All eight pieces, their arrangement and the PETG print settings are saved in the project.
+Both handles use the exact same twist-lock and shaft parts. The shafts and holders are duplicated
+so each handle can have its own complete wand.
+
+For individual prints, [tapered-double-helix.3mf](tapered-double-helix.3mf) has the straight grip,
+and [tapered-mug-double-helix.3mf](tapered-mug-double-helix.3mf) has the mug loop.
 [tapered-smooth.3mf](tapered-smooth.3mf) has the same shape without the two spiral ridges.
 On GitHub, use **Download raw file** to download a 3MF.
 
@@ -10,12 +16,11 @@ On GitHub, use **Download raw file** to download a 3MF.
 - **Print 1:** [original crossed pattern, 110 mm pitch](Print-1-crossed-110mm.3mf).
   This file is frozen from the committed first version; its source commit and checksum are
   recorded in `Print-1-crossed-110mm.json`.
-- **Latest print:** [uneven crossed pattern, 90 mm and 36 mm pitch](tapered-double-helix.3mf).
-  Its two opposite-winding strands turn at different rates: one makes 2.5 times as many
-  turns, moving the crossings around the shaft. The pitch difference is now 54 mm,
-  three times the previous 18 mm gap between the 90 mm and 72 mm strands.
+- **Latest print:** [preferred crossed pattern, 90 mm and 72 mm pitch](tapered-double-helix.3mf).
+  Ethan chose this earlier pattern over the tighter 90/36 mm experiment.
+  The opposite-winding strands turn at different rates; one makes 25% more turns.
 
-The hole and platform are unchanged. Open the latest print for Ethan's new pattern, or
+The hole and platform are unchanged. Open the latest print for Ethan's preferred pattern, or
 the frozen original for comparison. Clear the bed between jobs; these files are not
 instructions to start two jobs together.
 

@@ -162,7 +162,8 @@ test("printable meshes stay byte-identical across profile changes", () => {
 test("the tapered profile preserves a continuous body, two ribs, and a wired thumb shelf", () => {
   const profile = manifest.profiles["tapered-xiao"];
   assert.equal(profile.joint_kind, "mirrored");
-  assert.deepEqual(profile.assemblies, ["tapered-xiao-spiral", "tapered-xiao-smooth"]);
+  assert.deepEqual(profile.assemblies, ["tapered-xiao-spiral", "tapered-xiao-mug", "tapered-xiao-smooth"]);
+  assert.deepEqual(profile.overview, ["spiral", "mug"]);
   const { tapered, tapered_joint: joint } = manifest.checks;
   assert.equal(tapered.passed, true);
   assert.equal(joint.passed, true);
@@ -172,10 +173,12 @@ test("the tapered profile preserves a continuous body, two ribs, and a wired thu
   assert.ok(Object.values(tapered.seam_max_radius_step_mm).every((r) => r < 0.2), "no handle bulge at the joins");
   assert.deepEqual(tapered.rib_directions, [1, -1], "Ethan's criss-cross means opposite winding directions");
   assert.deepEqual(tapered.rib_pitches_mm, dimensions.tapered.spiral.pitches);
-  assert.equal(tapered.rib_pitches_mm[0] - tapered.rib_pitches_mm[1], 3 * (90 - 72),
-    "Ethan asked to triple the previous 18 mm pitch difference");
-  assert.equal(tapered.rib_pitches_mm[0] / tapered.rib_pitches_mm[1], 2.5);
-  assert.equal(tapered.rib_crossing_spacing_mm, 25.7143);
+  assert.deepEqual(tapered.rib_pitches_mm, [90, 72], "Ethan preferred the previous spiral pitches");
+  assert.equal(tapered.rib_crossing_spacing_mm, 40);
+  assert.equal(tapered.mug_handle.joint_difference_mm3, 0, "mug and plain share the exact joint");
+  assert.ok(Math.abs(tapered.mug_handle.preserved_grip_mm3) < 0.001,
+    "the mug only adds a loop to the existing grip (allowing boolean round-off)");
+  assert.ok(tapered.mug_handle.opening.length_mm > 95 && tapered.mug_handle.opening.height_mm > 28);
   for (const [key, peaks] of Object.entries(tapered.rib_peaks_deg)) {
     assert.equal(peaks.length, 2);
     for (const angle of tapered.rib_expected_deg[key]) {
@@ -200,7 +203,8 @@ test("the tapered profile preserves a continuous body, two ribs, and a wired thu
     assert.equal(a.parts.length, 4);
     assert.ok(a.parts.includes("tip-xiao"));
     assert.ok(!a.parts.some((p) => p.includes("button-pod")));
-    assert.equal(manifest.checks.assembly[id].opening, null, "no mug loop on the continuous wand");
+    if (!id.endsWith("-mug")) assert.equal(manifest.checks.assembly[id].opening, null, "plain and smooth have no mug loop");
+    else assert.ok(manifest.checks.assembly[id].opening.length_mm > 95);
     assert.ok(Object.values(manifest.checks.assembly[id].wire_probe_overlap_mm3).every((v) => v < 0.01));
   }
 });

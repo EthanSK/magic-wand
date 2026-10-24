@@ -630,8 +630,13 @@ def thumb_shelf() -> Manifold:
     return union([wing, wing.mirror((1.0, 0.0, 0.0)), centre]).translate((0.0, shelf_top_y() - t / 2, 0.0))
 
 
-def tapered_handle(spiral: bool) -> Manifold:
-    body = union([tapered_body(0.0, Z_FACE, spiral), mirror_joint(spigot_end()), thumb_shelf()])
+def tapered_handle(spiral: bool, mug: bool = False) -> Manifold:
+    # Ethan's "mug handle" is the full-hand oval loop, added to the exact same
+    # tapered grip, wire route and twist-lock. It must not use the legacy socket.
+    solid = [tapered_body(0.0, Z_FACE, spiral), mirror_joint(spigot_end()), thumb_shelf()]
+    if mug:
+        solid.append(sweep(loop_path("oval"), H["loop_radius"]))
+    body = union(solid)
     xw, zw = shelf_wire_point()
     rw = TS["wire_hole"] / 2
     # Horizontal wire holes are teardrops pointing up (+Z), the print's up direction.
@@ -713,6 +718,7 @@ PARTS = [  # (name, builder, orientation, group, role). Order is the suggested p
     ("coupon-tapered-female", lambda: tapered_shaft_lower(False, L + CPN["female_length"]), "upright", "coupon",
      f"Tapered joint coupon: shaft socket, {J['cam']['crest_interference']} mm cam ridge, printed upright like the shaft"),
     ("handle-tapered-spiral", lambda: tapered_handle(True), "upright", "handle", "Tapered grip with double-helix ribs and a sideways thumb shelf"),
+    ("handle-tapered-mug-spiral", lambda: tapered_handle(True, mug=True), "upright", "handle", "Mug handle with the same spiral grip, button platform and twist-lock"),
     ("handle-tapered-smooth", lambda: tapered_handle(False), "upright", "handle", "Tapered grip, smooth, with a sideways thumb shelf"),
     ("shaft-lower-tapered-spiral", lambda: tapered_shaft_lower(True), "upright", "shaft", "Tapered lower shaft with double-helix ribs: twist-lock socket and glue stub"),
     ("shaft-lower-tapered-smooth", lambda: tapered_shaft_lower(False), "upright", "shaft", "Tapered lower shaft, smooth: twist-lock socket and glue stub"),
@@ -732,7 +738,7 @@ SUPPORTS = {
     "shaft-lower": "Support under small pin overhangs", "shaft-upper": "None expected",
     "tip-cradle": "None expected", "tip-cap": "None", "tip-xiao": "None expected; not yet sliced", "button-pod-pilot": "None expected", "button-pod-blank": "None expected",
     **{name: "Not yet sliced; designed for upright printing with 45-degree gussets and shallow ribs" for name in (
-        "coupon-tapered-male", "coupon-tapered-female", "handle-tapered-spiral", "handle-tapered-smooth",
+        "coupon-tapered-male", "coupon-tapered-female", "handle-tapered-spiral", "handle-tapered-mug-spiral", "handle-tapered-smooth",
         "shaft-lower-tapered-spiral", "shaft-lower-tapered-smooth", "shaft-upper-tapered-spiral", "shaft-upper-tapered-smooth")},
 }
 # Profiles pair a handle with a canonical component list from dimensions.json. Ethan's "mug handle"
@@ -743,7 +749,7 @@ PROFILES = D["profiles"]
 CURRENT = PROFILES["current"]
 PROFILE_NAMES = [k for k in PROFILES if k != "current"]
 PART_PROFILES = {"tip-cradle": "puck-legacy", "tip-cap": "puck-legacy", "coupon-puck-ring": "puck-legacy", "tip-xiao": "xiao",
-                 **{n: "tapered-xiao" for n in ("coupon-tapered-male", "coupon-tapered-female", "handle-tapered-spiral", "handle-tapered-smooth",
+                 **{n: "tapered-xiao" for n in ("coupon-tapered-male", "coupon-tapered-female", "handle-tapered-spiral", "handle-tapered-mug-spiral", "handle-tapered-smooth",
                                                 "shaft-lower-tapered-spiral", "shaft-lower-tapered-smooth", "shaft-upper-tapered-spiral",
                                                 "shaft-upper-tapered-smooth")}}
 
@@ -768,7 +774,7 @@ def assemblies() -> dict[str, dict]:
         for key, a in spec["assemblies"].items():
             parts = a.get("parts") or [f"handle-{a['handle']}"] + spec["components"]  # Explicit list, or handle + components.
             out[f"{profile}-{key}"] = {"label": a["label"], "profile": profile, "handle": parts[0].removeprefix("handle-"),
-                                      "loop": "handle" in a and has_loop(a["handle"]), "parts": parts,
+                                      "loop": a.get("loop", "handle" in a and has_loop(a["handle"])), "parts": parts,
                                       "reference": spec["reference"]}
     return out
 
@@ -1023,6 +1029,13 @@ def tapered_checks(parts: dict) -> dict:
     out["rib_crossing_spacing_mm"] = r4(crossing_period)
     out["rib_crossings"] = {f"z={z}": rib_peaks(a["shaft-lower-tapered-spiral"], z)
                             for z in sample_z(L, Z_GLUE, (0.5,))}
+    # The mug adds material only behind the grip. Its full joint must remain
+    # identical, so both handles can use either printed copy of the same shaft.
+    plain, mug = a["handle-tapered-spiral"], a["handle-tapered-mug-spiral"]
+    joint_region = box(-40, 40, -40, 40, Z_FACE - 1, Z_SPIGOT_TIP + 1)
+    joint_difference = ((plain - mug) ^ joint_region).volume() + ((mug - plain) ^ joint_region).volume()
+    out["mug_handle"] = {"opening": opening(mug), "joint_difference_mm3": r4(joint_difference),
+                         "preserved_grip_mm3": r4((plain - mug).volume())}
     xw, zw = shelf_wire_point()
     shelf = thumb_shelf()
     bounds = shelf.bounding_box()
@@ -1051,6 +1064,9 @@ def tapered_checks(parts: dict) -> dict:
                     for e in out["rib_expected_deg"][key]) for key, v in out["rib_peaks_deg"].items())
                 and all(len(v) == 1 for v in out["rib_crossings"].values()))
     out["passed"] = bool(all(v < 0.2 for v in seams.values()) and peaks_ok
+                         and joint_difference < 0.001 and (plain - mug).volume() < 0.001
+                         and out["mug_handle"]["opening"].get("length_mm", 0) > 95
+                         and out["mug_handle"]["opening"].get("height_mm", 0) > 28
                          and max(reach[0], reach[1]) > out["radius_mm"]["handle_face"] + TS["protrusion"] - 1
                          and min(reach[0], reach[1]) > out["radius_mm"]["handle_face"] + TS["protrusion"] - 1
                          and out["thumb_shelf"]["mirrors_exactly"]
@@ -1208,6 +1224,7 @@ def build(run_checks: bool = True) -> tuple[dict[str, bytes], dict]:
                          "view_yaw": PROFILES[k].get("view_yaw", 1.3),
                          "view_pitch": PROFILES[k].get("view_pitch", 0.22),
                          "continuous_body": PROFILES[k].get("continuous_body", False),
+                         "overview": PROFILES[k].get("overview"),
                          "glb": glbs[k][0], "assemblies": [f"{k}-{a}" for a in PROFILES[k]["assemblies"]]} for k in PROFILE_NAMES},
         "assemblies": {aid: {"label": a["label"], "profile": a["profile"], "parts": a["parts"]} for aid, a in assemblies().items()},
         "glb": [{"file": glbs[k][0], "profile": k, "sha256": sha256(glbs[k][1]), "bytes": len(glbs[k][1]),
