@@ -266,6 +266,7 @@ function middlePress(){
   hudReportStarted=true;Bluetooth.println('@MIDDLE 1');
 }
 function onHUDButton(){
+  if(global.wandPowerInputGuard&&global.wandPowerInputGuard())return;
   if(!digitalRead(HUD_PIN)&&digitalRead(MOVE_PIN)&&!scrollSuppress)chordFollowBefore=moveLatched;
   if(checkScrollChord())return;
   if(!digitalRead(HUD_PIN)){
@@ -281,6 +282,7 @@ function onHUDButton(){
   updateLights();
 }
 function onSpeechButton() {
+  if(global.wandPowerInputGuard&&global.wandPowerInputGuard())return;
   updateLights();
   if(connected)Bluetooth.println('@STT '+(digitalRead(STT_PIN)?0:1));
 }

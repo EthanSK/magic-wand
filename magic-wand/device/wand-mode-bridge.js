@@ -376,6 +376,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   });
   global.wandLiveMoveCallback();
   global.wandLiveMoveCallback.replaceWith(function(){
+    if(global.wandPowerInputGuard&&global.wandPowerInputGuard())return;
     if(connected)Bluetooth.println('@BOTTOM '+(digitalRead(MOVE_PIN)?0:1));
     if(!digitalRead(MOVE_PIN)&&digitalRead(HUD_PIN)&&!scrollSuppress)chordFollowBefore=moveLatched;
     if(checkScrollChord()){global.wandMomentaryStarted=undefined;return;}

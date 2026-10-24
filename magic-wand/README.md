@@ -177,9 +177,10 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: press all three grip buttons together to toggle deep standby. Release all buttons before repeating. Manual standby wakes with the same chord; automatic standby still wakes with any grip button. Two all-colour blinks precede sleep. Saved bytes and clean startup passed; physical chord feel is pending.
 - Installed: shared click and hold cues distinguish a card action from held wheel or wand adjustments. Copy/Paste names Space explicitly. Native checks and rendered layout inspection passed; physical gesture acceptance is pending.
 - Installed: held Switch App adjustment shares the normal HIGH mouse sensitivity calculation, including fine movement and orientation correction. Other HUD controls keep their existing angular input. Native and receiver checks pass; physical feel is awaiting acceptance.
-- Installed: the complete saved program includes the corrected Bottom press, calibration restore and button-wake sleep. Clean startup was verified before reconnecting the receiver, with no code re-upload. Physical battery-removal and full sleep/wake checks remain unverified.
+- Installed: the complete saved program includes the corrected Bottom press, calibration restore and button-wake sleep. Clean startup was verified before reconnecting the receiver, with no code re-upload. A full five-minute sleep/button-wake cycle was observed on 24 October; physical battery-removal remains unverified.
 - Installed: unheld movement can leave the dotted Switch App card without switching applications. The dotted cue appears during a qualified Middle hold; release still arms the card. Passive HUD selection survives pauses, and Bottom scrolling stays independent. Native and receiver regression checks pass; physical acceptance is pending.
 - Installed: radial text is larger, with gentle card-aligned tilt only when it earns more readable space. The visible wand HUD stays anchored while Agent Flow changes its panel; reopening refreshes recorder clearance. Native tests and rendered layout checks passed; physical acceptance is pending.
 - Installed: hold Middle to show and steer the radial HUD, then release to use the outlined card. Submenus and adjustable wheel cards stay open for the next hold. Quick tap from closed switches app once. The centre Switch App chooser still supports horizontal movement on a second hold. Native interaction tests passed; physical acceptance is pending.
@@ -204,7 +205,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.90 (95) · device code `wand-e1ce30d7c407` · bridge `38238ef5` · updated 24 October 2026.
+Receiver 1.2.91 (96) · device code `wand-117ffe9f4a0e` · bridge `d9eb6a7b` · updated 24 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

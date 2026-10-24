@@ -21,7 +21,7 @@ function boot(){
  const host={now:()=>now,setTimeout:(fn,ms)=>{timers.set(++next,{fn,at:now+ms/1000});return next},setInterval:(fn,ms)=>{timers.set(++next,{fn,at:now+ms/1000,every:ms/1000});return next},clearTimeout:id=>timers.delete(id),clearInterval:id=>timers.delete(id),emit:events=>{for(const e of events)if(e.type==='line')lines.push(e.text)},onError:e=>{throw e}};
  const c=vm.createContext({__host:host});vm.runInContext(shim,c);const device=vm.runInContext('WandEspruino.install(globalThis,__host)',c);
  const original=c.require;
- c.require=name=>name==='Storage'?{read:n=>n==='wand.boot.v4'?c.WandEspruino.prepareFirmware(files[n]+'\nonInit();').replace(/\nonInit\(\);\s*$/,''):files[n],readJSON:n=>files[n]?JSON.parse(files[n]):undefined,write:(n,v)=>{files[n]=v;return true}}:original(name);
+ c.require=name=>name==='Storage'?{read:n=>n==='wand.boot.v4'?c.WandEspruino.prepareFirmware(files[n].replace(/function ([A-Za-z_$][\w$]*)\(/g,'\nfunction $1(')+'\nonInit();').replace(/\nonInit\(\);\s*$/,''):files[n],readJSON:n=>files[n]?JSON.parse(files[n]):undefined,write:(n,v)=>{files[n]=v;return true}}:original(name);
  c.NRF.getSecurityStatus=()=>({connected:!!c.connected});
  c.NRF.sleep=()=>{asleep=true;device.disconnect()};c.NRF.wake=()=>{asleep=false;wakes++};
  vm.runInContext(files['.bootcde'],c);
@@ -30,7 +30,7 @@ function boot(){
 }
 test('complete flash boot starts from an empty interpreter with calibration and every program part',()=>{
  for(let i=0;i<3;i++){
-  const b=boot();assert.equal(b.c.WAND_PERSISTENT_IMAGE,manifest.image);assert.equal(b.c.WAND_POWER_POLICY_VERSION,2);
+  const b=boot();assert.equal(b.c.WAND_PERSISTENT_IMAGE,manifest.image);assert.equal(b.c.WAND_POWER_POLICY_VERSION,3);
   assert(b.c.wandState().calibrated);assert.equal(b.c.wandMotionReady,true);assert.equal(b.c.onInit,undefined);
   assert.equal(b.c.wandPowerWatches.length,3);assert(b.c.WAND_BRIDGE_REVISION);
   b.device.connect();assert(b.c.wandState().calibrated);b.device.setPin('D1',0);b.advance(.3);b.device.setPin('D1',1);b.c.setMouseFollow(true);b.advance(.3);

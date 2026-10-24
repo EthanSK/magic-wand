@@ -11,18 +11,19 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.90",
-    "receiverBuild": "95",
-    "deviceRuntime": "wand-e1ce30d7c407",
-    "bridgeRevision": "38238ef51b5542a7b1f3e4381c64caae7a8225ed7ad16fafca015c1ae64b6ba7",
+    "receiver": "1.2.91",
+    "receiverBuild": "96",
+    "deviceRuntime": "wand-117ffe9f4a0e",
+    "bridgeRevision": "d9eb6a7b9a5c4ed0f57a3235d26546b3228773a8ddb221d86cff41ea0ab8e199",
     "agenticMouse": "1.0.283",
     "agenticMouseBuild": "289",
-    "persistentImage": "full-20261024d"
+    "persistentImage": "full-20261024e"
   },
   "status": [
+    "Installed: press all three grip buttons together to toggle deep standby. Release all buttons before repeating. Manual standby wakes with the same chord; automatic standby still wakes with any grip button. Two all-colour blinks precede sleep. Saved bytes and clean startup passed; physical chord feel is pending.",
     "Installed: shared click and hold cues distinguish a card action from held wheel or wand adjustments. Copy/Paste names Space explicitly. Native checks and rendered layout inspection passed; physical gesture acceptance is pending.",
     "Installed: held Switch App adjustment shares the normal HIGH mouse sensitivity calculation, including fine movement and orientation correction. Other HUD controls keep their existing angular input. Native and receiver checks pass; physical feel is awaiting acceptance.",
-    "Installed: the complete saved program includes the corrected Bottom press, calibration restore and button-wake sleep. Clean startup was verified before reconnecting the receiver, with no code re-upload. Physical battery-removal and full sleep/wake checks remain unverified.",
+    "Installed: the complete saved program includes the corrected Bottom press, calibration restore and button-wake sleep. Clean startup was verified before reconnecting the receiver, with no code re-upload. A full five-minute sleep/button-wake cycle was observed on 24 October; physical battery-removal remains unverified.",
     "Installed: unheld movement can leave the dotted Switch App card without switching applications. The dotted cue appears during a qualified Middle hold; release still arms the card. Passive HUD selection survives pauses, and Bottom scrolling stays independent. Native and receiver regression checks pass; physical acceptance is pending.",
     "Installed: radial text is larger, with gentle card-aligned tilt only when it earns more readable space. The visible wand HUD stays anchored while Agent Flow changes its panel; reopening refreshes recorder clearance. Native tests and rendered layout checks passed; physical acceptance is pending.",
     "Installed: hold Middle to show and steer the radial HUD, then release to use the outlined card. Submenus and adjustable wheel cards stay open for the next hold. Quick tap from closed switches app once. The centre Switch App chooser still supports horizontal movement on a second hold. Native interaction tests passed; physical acceptance is pending.",
@@ -383,7 +384,14 @@
     "pausePointerDuringRecording": false,
     "pauseMouseOnRecordingStart": true,
     "allowManualPointerDuringRecording": true,
-    "deepSleepSeconds": 300
+    "deepSleepSeconds": 300,
+    "sleepWarning": {
+      "flashes": 2,
+      "onMs": 100,
+      "offMs": 100,
+      "before": "five-minute deep sleep"
+    },
+    "manualPowerChord": "All three grip buttons toggle deep standby; release all before toggling again."
   },
   "hud": {
     "source": "Agentic Mouse’s published Default mode",
