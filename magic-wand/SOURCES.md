@@ -302,3 +302,23 @@ changes presentation only; release still arms the card and the next hold
 operates it. Both installed binaries and preserved settings were checked after
 separate capture-idle gates. Native and receiver regressions pass; physical
 acceptance remains pending.
+## Shared HIGH sensitivity for Switch App
+
+`integrations/agentic-mouse/wand-high-sensitivity.patch` applies after
+`wand-passive-switch-app.patch` and records the native addition installed in
+Agentic Mouse 1.0.282 (288). Wand Receiver 1.2.86 (91) sends the cumulative,
+unrounded HIGH pointer calculation as optional `mouseX` motion metadata.
+Only a held Switch App card consumes it. The existing seven-degree tracker
+uses the reference gain of 86.4 counts per degree, preserving its full-speed
+spacing while inheriting the mouse's fine-motion response. Other cards retain
+angular input; metric transitions rebase rather than replaying a jump.
+
+The saved `full-20261024c` program also emits explicitly marked HUD-only raw
+samples when mouse follow is off. The receiver uses these for sensitivity and
+returns before posting any mouse event. The complete base, bridge, power and
+startup artifacts reproduce the saved payloads; their lengths and native CRC32
+checksums were verified on the device, followed by a clean saved-program start
+before the receiver reconnected. Calibration was retained. The redundant terminal
+return in the affected Bottom handler is removed in this saved bridge.
+Physical sensitivity preference, a real battery removal and the full five-minute
+sleep/wake cycle still need user acceptance.

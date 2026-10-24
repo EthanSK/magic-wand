@@ -40,6 +40,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let recenterGesture=WandRecenterGesture()
     var recenterSuppressButtons=false
     let motionFilter=WandMotionFilter()
+    // Cumulative unrounded HIGH mouse counts, scoped to the current Middle
+    // hold. Native Switch App alone consumes this; other HUD cards stay angular.
+    var middleMouseX=0.0,middleMouseSampleAt = -100.0
+    var middleMouseOffset:Double? {
+        let age=ProcessInfo.processInfo.systemUptime-middleMouseSampleAt
+        return age>=0 && age<=0.25 && middleMouseX.isFinite && abs(middleMouseX)<=7_200_000 ? middleMouseX : nil
+    }
     let options=WandUserOptions(url:support.appendingPathComponent("feature-flags.json"))
     let flickScroll=WandFlickScroll()
     let heldScroll=WandHeldScroll()
@@ -735,6 +742,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 if hudSession,acceptHUDContext,context.isActive {controls.persistent("activate");log("HUD_TAP_USED")}
             }
             middleHeld=true;middleQualified=false;hudEntryPress=false
+            middleMouseX=0;middleMouseSampleAt = -100
             if !hudSession {
                 // Holding Middle shows the HUD and steers it from Switch App.
                 acceptHUDContext=true;navStream.reset()
@@ -781,7 +789,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             let tap=now-middlePressedAt<hudHoldSeconds
             middleLastRelease=tap ? now : -100
             if hudActive {
-                hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY)
+                hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY,mouseX:middleMouseOffset)
                 controls.persistent("park")
             }
             hudActive=false;stopHUDWatchdog()
@@ -851,7 +859,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if pointerInHUD {
             handleMove("U,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000),project:false)
         }else if hudActive {
-            hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY)
+            hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY,mouseX:middleMouseOffset)
         }
     }
     func recordReviewInput(rawX:Double,rawY:Double,dx:Double,dy:Double,now:Double,blocked:String?,step:Int32) {
@@ -1238,7 +1246,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let fields=payload.split(separator:",",omittingEmptySubsequences:false)
         guard fields.count==4 else{return}
         let v=fields.compactMap{Int($0)}
-        guard v.count==4,(1...50000).contains(v[0]),(-32768...32767).contains(v[1]),(-32768...32767).contains(v[2]),(0...3).contains(v[3]) else{return}
+        guard v.count==4,(1...50000).contains(v[0]),(-32768...32767).contains(v[1]),(-32768...32767).contains(v[2]),(0...7).contains(v[3]) else{return}
         let now=ProcessInfo.processInfo.systemUptime
         let released=heldScroll.active && v[3]&1 == 0
         reconcileBottomHold(down:v[3]&1 != 0,now:now,reason:"motion button state")
@@ -1246,12 +1254,17 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let gap=rawLastArrival>0 ? now-rawLastArrival : 0
         guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:v[3]&1 != 0,resetState:v[3]&2 != 0 || gap>0.25) else{return}
         rawLastArrival=now
+        if middleHeld && !pointerRouter.bottomHeld {
+            middleMouseX+=sample.highX;middleMouseSampleAt=now
+        }
         if rawWindowStart==0 || gap>0.25 {rawWindowStart=now;rawReports=0;rawMaxGap=0}
         rawReports+=1;rawMaxGap=max(rawMaxGap,gap)
         if now-rawWindowStart>=5 {
             log("RAW_DELIVERY",rawReports,"seconds",String(format:"%.2f",now-rawWindowStart),"maxGapMs",Int(rawMaxGap*1000))
             rawWindowStart=now;rawReports=0;rawMaxGap=0
         }
+        // HUD-only raw reports share HIGH math but never post pointer input.
+        if v[3]&4 != 0 {return}
         if controlVersion.usesHeldScroll && heldScroll.active {
             dwell.reset();scheduleDwell()
             heldScroll.settleTarget(now:now)

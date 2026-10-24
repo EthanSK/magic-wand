@@ -20,6 +20,7 @@ final class Harness {
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),motionFilter=WandMotionFilter(),dwell=WandDwellClick(),recenterGesture=WandRecenterGesture(),flickScroll=WandFlickScroll()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?
  var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,hudSession=false,flickScrollEnabled=false,heldScrollDiagnostics=false
+ var middleHeld=false,middleMouseX=0.0,middleMouseSampleAt = -100.0
  var commands:[String]=[],scrollPostedX=0,scrollPostedY=0
  var scrollAnchor:CGPoint?,scrollWatchdog:Timer?
  var rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,wheels=0,frames=0,ups=0,light=false
@@ -39,6 +40,11 @@ final class Harness {
 }
 let h=Harness();precondition(h.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 let now=ProcessInfo.processInfo.systemUptime
+let hudOnly=Harness();hudOnly.middleHeld=true
+precondition(hudOnly.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
+for _ in 0..<40 {hudOnly.handleRaw("10000,2680,0,4")}
+precondition(hudOnly.middleMouseX < 0 && hudOnly.frames == 0 && hudOnly.buttons == 0,"HUD-only samples provide HIGH sensitivity without pointer events")
+
 let explicit=Harness();precondition(explicit.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 _=explicit.recenterGesture.edge(down:true,now:now-1)
 explicit.beginBottomHold(now:now-1)

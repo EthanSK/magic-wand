@@ -36,7 +36,7 @@ final class Context {var isActive=false,isFresh=true;var onChange:((Bool)->Void)
 final class Application {var bundleIdentifier="com.microsoft.VSCode"}
 final class NSWorkspace {static let shared=NSWorkspace();var frontmostApplication:Application?=Application()}
 final class Trace {var boundaries:[String]=[];func boundary(_ reason:String,mode:String?=nil,now:Double=0){boundaries.append(reason)}}
-final class Controls {var phases:[String]=[];var points:[CGPoint]=[];func persistent(_ phase:String,x:Double=0,y:Double=0){phases.append(phase);points.append(CGPoint(x:x,y:y))}}
+final class Controls {var phases:[String]=[];var points:[CGPoint]=[];func persistent(_ phase:String,x:Double=0,y:Double=0,mouseX:Double?=nil){phases.append(phase);points.append(CGPoint(x:x,y:y))}}
 final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];var inputs=0;func beginDetents(mode:String,now:Double){starts.append(mode)};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{inputs+=1;return[]};func endDetents(commit:Bool)->[Int]{committed=commit;return[]}}
 final class Harness {
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter(),reviewTrace=Trace(),recording=Recording(),dwell=WandDwellClick()
@@ -49,6 +49,7 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  var selectedReviewMode:String?,hiddenReviewOperating=false,hiddenReviewPending=false,screenshotActive=false,screenshotHUD=false
  var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleSecondTap=false,navigationOpenedHUD=false
  var middleHeld=false,middleQualified=false,hudOpenedAt=0.0;let hudHoldSeconds=0.14
+ var middleMouseX=0.0,middleMouseSampleAt = -100.0; var middleMouseOffset:Double? {let age=ProcessInfo.processInfo.systemUptime-middleMouseSampleAt;return age>=0 && age<=0.25 ? middleMouseX:nil}
  var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
  var wandShortcutCircle=WandReviewNavigation();var middleReviewExit=false
  var reviewExitGesture=WandReviewExitGesture();var reviewExitTimer:Timer?

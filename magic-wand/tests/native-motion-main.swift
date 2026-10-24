@@ -131,3 +131,18 @@ for signs in [(-1.0,-1.0),(-1.0,1.0),(1.0,-1.0),(1.0,1.0)] {
  }
 }
 print("PASS: shared HUD, operation and two-axis scroll transforms preserve gains, signs and stationary totals")
+
+for speed in [0.0,0.2,1,3,10,20,80] {
+ let high=WandMotionFilter(),low=WandMotionFilter()
+ precondition(high.configure(config) && low.configure(config))
+ var counts=0,precise=0.0,lowHigh=0.0,lowCounts=0
+ for i in 0..<200 {
+  let a=high.sample(rawX:Int(speed*134),rawY:0,microseconds:10000,held:false,resetState:i==0)!
+  let b=low.sample(rawX:Int(speed*134),rawY:0,microseconds:10000,held:true,resetState:i==0)!
+  counts+=a.x;precise+=a.highX;lowHigh+=b.highX;lowCounts+=b.x
+ }
+ precondition(abs(Double(counts)-precise)<1.00001)
+ precondition(abs(precise-lowHigh)<0.000001,"Middle HIGH must not inherit Bottom LOW")
+ precondition(abs(Double(lowCounts)*3-precise)<3.00001)
+}
+print("PASS: shared unrounded HIGH output and unchanged LOW pointer gain")

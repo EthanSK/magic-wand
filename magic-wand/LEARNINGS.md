@@ -785,3 +785,22 @@ Per-chat outstanding-item ledgers live in the Git-ignored root `.outstanding-ite
 directory and may contain private workspace references. The repository privacy scanner
 excludes only that root directory; equally named folders inside components remain scanned.
 A synthetic boundary test verifies both cases, and the ledgers must never be staged.
+
+## Switch App uses the shared HIGH mouse calculation
+
+Held Switch App used unscaled angular travel while the pointer used speed-adaptive
+sensitivity. The receiver now exposes unrounded HIGH output from the same sample,
+before Bottom's LOW multiplier. A cumulative optional mouseX field is consumed only
+by the native held Switch App branch. Existing angular navigation and other wheels
+remain independent; legacy packets still work. The native tracker rebases when the
+metric changes, preventing a discontinuity from becoming an app switch.
+
+HUD-only motion must still produce raw samples when mouse follow is off. A dedicated
+flag lets the receiver calculate shared sensitivity and then return before posting
+any pointer event. Tests exercise both that boundary and unchanged normal/LOW math.
+
+During full saved-program maintenance, stop the live handlers before verification:
+an existing handler error can otherwise abort a readback. Use the built-in CRC32
+checked against the host implementation rather than a long interpreted hash loop.
+Wait for the receiver process to exit after launchctl acknowledges its removal.
+Saved startup, bridge and power files are verified before restarting the receiver.
