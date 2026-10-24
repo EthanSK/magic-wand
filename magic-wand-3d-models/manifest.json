@@ -1,33 +1,74 @@
 {
   "schema": 1,
   "inputs": {
-    "magic-wand/hardware/printed-loop-wand/print_projects.py": "b7feaff5393bc4c526fcd43280e813978a1ee81f886da4a672a704ef8b173dc4",
-    "magic-wand/hardware/printed-loop-wand/dimensions.json": "1f384d8b1768b940a889b4fa45e173f352c2cc41d3b559463a8e264b6a31d265",
-    "magic-wand/hardware/printed-loop-wand/wand_cad.py": "c95744df0ddbe15c998e7ff85725dcab4d02be703622a0ecdf2fc803e906bf7e",
-    "magic-wand/hardware/printed-loop-wand/exports/manifest.json": "4de43b506d1fa6bee8c2ffdb268e48170dc5b57869d8a08d19dd639b7639666b",
+    "magic-wand/hardware/printed-loop-wand/print_projects.py": "1f9d2a37ddd5214420d6f4d21d07625e5c0106e599dadcd0b61ec9d1372580fa",
+    "magic-wand/hardware/printed-loop-wand/dimensions.json": "f287061e91ccea53251f41c7a2b5e2581d31d8300fbc230848d65d3752a7f0c3",
+    "magic-wand/hardware/printed-loop-wand/wand_cad.py": "e3e69990fd7a8c50b6422e5762fa986e253fc2b0f793d73d97364d87e05b098b",
+    "magic-wand/hardware/printed-loop-wand/exports/manifest.json": "c9823b04ce9dc0980fa6ef978f10e1984ae9551d53e366362b86124c375dcf87",
     "magic-wand/hardware/printed-loop-wand/print-settings/filament.json": "441e28515da573adee90f7a6b30a1bcfb34dd26fd0d12cf4b84c9960c588717f",
     "magic-wand/hardware/printed-loop-wand/print-settings/machine.json": "085304813b37822e839a8ad4efea2f43b8e5cd769ec06f1e862868bafa12371b",
     "magic-wand/hardware/printed-loop-wand/print-settings/process.json": "9f2e13334e3d719dcc95f9a9ba60d36bcc6edec93febece65a1130d6a859c3cb",
+    "magic-wand/hardware/printed-loop-wand/exports/handle-tapered-mug-spiral.stl": "229e55edd9fd7c065be96335cb7e35ca656ae79d05aed94b25ee167bd2d7e60f",
     "magic-wand/hardware/printed-loop-wand/exports/handle-tapered-smooth.stl": "f32bc6203aa4baff54cc16359fe90162197cd55f7e7c78861b6a2155ab97f9d6",
-    "magic-wand/hardware/printed-loop-wand/exports/handle-tapered-spiral.stl": "86b5219d6f0d6bf017c4ec9d5783ea2dbb8462f75cac08517f39c6b04f2c3e1e",
+    "magic-wand/hardware/printed-loop-wand/exports/handle-tapered-spiral.stl": "a5c81f763acb57b93926943ab21d56a713f2a931fcef80dd38a33b353ddb19a7",
     "magic-wand/hardware/printed-loop-wand/exports/shaft-lower-tapered-smooth.stl": "84d6cfe91d7f4481dbd1a1821258e43b43815321e2f301bd37e0db9f1bc27b11",
-    "magic-wand/hardware/printed-loop-wand/exports/shaft-lower-tapered-spiral.stl": "2c91bca90daca854b918dce044ea1e13a5418a4804c4b82fa6863164aee8e18e",
+    "magic-wand/hardware/printed-loop-wand/exports/shaft-lower-tapered-spiral.stl": "848c2c01f9e8af734c4cd6f1bfb7db423e7079426cfa576eb2f31174013c2c58",
     "magic-wand/hardware/printed-loop-wand/exports/shaft-upper-tapered-smooth.stl": "155c175734def03200a2c7d8057c8c2360500e82cdc18902104bb1ffbbd2e4c7",
-    "magic-wand/hardware/printed-loop-wand/exports/shaft-upper-tapered-spiral.stl": "080b8eb71fc8f30bcb193041d4be57cd7d6118f778efe29f8186dd388f97d33a",
+    "magic-wand/hardware/printed-loop-wand/exports/shaft-upper-tapered-spiral.stl": "f926908ef129bfe584ccb0711b3ce1cd607877db5af7be500ec42c54a8d77cca",
     "magic-wand/hardware/printed-loop-wand/exports/tip-xiao.stl": "35bc25a06cabf68ec54e7002cca8362844c03543cf56802b419cf9b4dde53e38"
   },
   "projects": {
     "spiral": {
-      "sha256": "26c19caeb263d40b5449b1ea0d71009f22407b7b41603bf1958abca30fdab0be",
-      "seconds": 10748,
-      "grams": 89.24,
-      "parts": 4
+      "sha256": "a95bb66701aa212d5b13e5eb068c456e43a4d692dda79a072d6d66d6f50b5110",
+      "seconds": 10530,
+      "grams": 88.41,
+      "parts": 4,
+      "part_names": [
+        "handle-tapered-spiral",
+        "shaft-lower-tapered-spiral",
+        "shaft-upper-tapered-spiral",
+        "tip-xiao"
+      ]
+    },
+    "mug": {
+      "sha256": "83792941bd89e07071c1db21a15754e81332b1e83aa22b315e9198c7ddfdd227",
+      "seconds": 13366,
+      "grams": 112.89,
+      "parts": 4,
+      "part_names": [
+        "handle-tapered-mug-spiral",
+        "shaft-lower-tapered-spiral",
+        "shaft-upper-tapered-spiral",
+        "tip-xiao"
+      ]
     },
     "smooth": {
-      "sha256": "74dc9ca7393066d84bdd236056fbf3db107caffaf0563669e28fa79bdf22f1b4",
+      "sha256": "bf33d0ee4ee4a62d0ffed17138494ace6066f4036dced06ccb3e9b277cde8cb2",
       "seconds": 10250,
       "grams": 87.46,
-      "parts": 4
+      "parts": 4,
+      "part_names": [
+        "handle-tapered-smooth",
+        "shaft-lower-tapered-smooth",
+        "shaft-upper-tapered-smooth",
+        "tip-xiao"
+      ]
+    },
+    "pair": {
+      "sha256": "2ed04dbf0a497f8c1a4abb069082954523840d2402adaf1165fc228e951dbc10",
+      "seconds": 22608,
+      "grams": 201.16,
+      "parts": 8,
+      "part_names": [
+        "handle-tapered-mug-spiral",
+        "handle-tapered-spiral",
+        "shaft-lower-tapered-spiral",
+        "shaft-lower-tapered-spiral",
+        "shaft-upper-tapered-spiral",
+        "shaft-upper-tapered-spiral",
+        "tip-xiao",
+        "tip-xiao"
+      ]
     }
   }
 }

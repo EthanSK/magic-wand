@@ -27,6 +27,10 @@ Skip the twist-lock's air gap in decorative spiral travel. With tight pitches,
 advancing the helix across that empty gap visibly offsets its crests at the two
 faces. Compensate the shaft phase for the gap while leaving the joint geometry
 unchanged; verify the actual face sections still align.
+The spiral mug handle composes the existing full-hand loop with the same tapered grip
+and spigot, rather than reusing the legacy mug's incompatible socket. Compare the
+actual joint solids and wire route. For two complete wands on one plate, count two
+lower shafts, two upper shafts and two XIAO holders as well as the two handles.
 
 ## The public sources reproduce the installed wand exactly
 

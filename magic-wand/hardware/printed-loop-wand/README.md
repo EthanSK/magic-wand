@@ -8,14 +8,21 @@ before an update is applied.
 
 ## Tapered double-helix version
 
-Choose **Tapered wand (XIAO)** in the preview for the continuous wand shape. It has no loop or
-separate handle bulge: the body tapers from 30 mm at the butt to 14.6 mm before the XIAO tip.
-Two rounded, 1.2 mm raised ribs wind in opposite directions at 90 mm and 36 mm pitch.
-Their 54 mm pitch difference is three times the previous 18 mm difference. The tighter
-strand makes 2.5 times as many turns, so the crossings rotate around the shaft instead
+Choose **Tapered wand (XIAO)** in the preview for the continuous wand shape. The straight version
+has no loop or separate handle bulge: the body tapers from 30 mm at the butt to 14.6 mm before the XIAO tip.
+Two rounded, 1.2 mm raised ribs wind in opposite directions at 90 mm and 72 mm pitch.
+Ethan preferred this earlier pattern to the tighter 90/36 mm experiment. The tighter
+strand makes 25% more turns, so the crossings rotate around the shaft instead
 of repeating equal diamonds in one plane. Ethan calls this the "criss-cross" or "like DNA"
 shape and asked for "one goes faster than the other". **Smooth** uses the same body
 and joints without the ribs, for comparison. The earlier loop and plain grips remain available.
+
+**Mug handle** adds the full-hand oval loop to this same spiral grip, button platform,
+wire path and twist-lock. Both current handles use the same tapered shaft parts; the old
+non-tapered mug handle uses a different joint and must not be mixed into this set.
+The viewer's **Both** choice shows the two spiral wands together; Smooth stays available separately.
+The combined [two-wand Bambu project](../../../magic-wand-3d-models/two-spiral-wands.3mf)
+contains eight pieces on one plate: two handles, four shaft sections and two XIAO holders.
 
 The blank button platform spans 54 mm across the top, with 14 mm wings on both sides and a
 continuous flat centre. Its mounting area is 30 mm long along the wand and 4 mm thick.

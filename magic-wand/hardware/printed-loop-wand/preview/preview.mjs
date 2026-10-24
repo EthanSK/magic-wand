@@ -221,7 +221,7 @@ async function main() {
       choice(p.label, { profile: key, view: 'both' }, key === state.profile)));
     const keys = profile.assemblies.map((id) => id.slice(state.profile.length + 1));
     ui.handles.replaceChildren(
-      choice(keys.length === 2 ? 'Both' : 'All', { profile: state.profile, view: 'both' }, state.view === 'both'),
+      choice((profile.overview ?? keys).length === 2 ? 'Both' : 'All', { profile: state.profile, view: 'both' }, state.view === 'both'),
       ...keys.map((k) => choice(manifest.assemblies[`${state.profile}-${k}`].label, { profile: state.profile, view: k }, state.view === k)),
     );
     ui.grip.textContent = state.view === 'both'
@@ -250,7 +250,9 @@ async function main() {
 
   function update() {
     fillPanel();
-    shown = Object.values(instances).filter((i) => i.profile === state.profile && (state.view === 'both' || i.key === state.view));
+    const overview = manifest.profiles[state.profile].overview;
+    shown = Object.values(instances).filter((i) => i.profile === state.profile &&
+      (state.view === 'both' ? !overview || overview.includes(i.key) : i.key === state.view));
     for (const i of Object.values(instances)) i.group.visible = shown.includes(i);
     shown.forEach((i, k) => { i.group.position.set(0, -STACK * k, 0); });
 

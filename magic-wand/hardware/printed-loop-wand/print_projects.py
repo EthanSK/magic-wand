@@ -20,7 +20,8 @@ OUT = ROOT / "magic-wand-3d-models"
 SETTINGS = HERE / "print-settings"
 EXPORTS = HERE / "exports"
 RECEIPT = OUT / "manifest.json"
-FILES = {"spiral": "tapered-double-helix.3mf", "smooth": "tapered-smooth.3mf"}
+FILES = {"spiral": "tapered-double-helix.3mf", "mug": "tapered-mug-double-helix.3mf",
+         "smooth": "tapered-smooth.3mf", "pair": "two-spiral-wands.3mf"}
 # Explicitly retain the prepared values when Studio resolves the named base preset.
 # Otherwise its default 15% infill can replace our 20% when opening a valid CLI slice.
 PERSISTED_PROCESS_KEYS = {
@@ -31,14 +32,18 @@ PERSISTED_PROCESS_KEYS = {
 
 
 def arrange_parts(names: list[str], path: Path) -> None:
-    """Use a generous fixed four-part layout, including room for brims and tree supports."""
+    """Arrange complete wands, including duplicate shafts, with room for supports."""
     ns = "http://schemas.microsoft.com/3dmanufacturing/core/2015/02"
     ET.register_namespace("", ns)
     tag = lambda name: f"{{{ns}}}{name}"
     model = ET.Element(tag("model"), unit="millimeter")
     resources, build = ET.SubElement(model, tag("resources")), ET.SubElement(model, tag("build"))
-    assert len(names) == 4
-    for ident, (name, centre) in enumerate(zip(names, [(60, 70), (150, 70), (60, 170), (150, 170)]), 1):
+    layouts = {4: [(60, 70), (150, 70), (60, 170), (150, 170)],
+               8: [(45, 50), (105, 50), (165, 50), (218, 50),
+                   (45, 168), (105, 168), (165, 168), (218, 168)]}
+    assert len(names) in layouts
+    footprints = []
+    for ident, (name, centre) in enumerate(zip(names, layouts[len(names)]), 1):
         data = (EXPORTS / f"{name}.stl").read_bytes()
         count = struct.unpack_from("<I", data, 80)[0]
         vertices, faces, ids = [], [], {}
@@ -62,6 +67,12 @@ def arrange_parts(names: list[str], path: Path) -> None:
         lo = [min(v[k] for v in vertices) for k in range(3)]
         hi = [max(v[k] for v in vertices) for k in range(3)]
         tx, ty = [centre[k] - (lo[k] + hi[k]) / 2 for k in range(2)]
+        footprint = (lo[0] + tx - 9, lo[1] + ty - 9, hi[0] + tx + 9, hi[1] + ty + 9)
+        assert all(4 <= edge <= 252 for edge in footprint), f"Insufficient bed margin: {name}"
+        for old in footprints:
+            assert (footprint[2] <= old[0] or old[2] <= footprint[0] or
+                    footprint[3] <= old[1] or old[3] <= footprint[1]), "Support clearance overlaps"
+        footprints.append(footprint)
         ET.SubElement(build, tag("item"), objectid=str(ident), transform=f"1 0 0 0 1 0 0 0 1 {tx} {ty} {-lo[2]}")
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as archive:
         archive.writestr("3D/3dmodel.model", ET.tostring(model, encoding="utf-8", xml_declaration=True))
@@ -85,6 +96,13 @@ def inputs() -> dict[str, str]:
     return {p.relative_to(ROOT).as_posix(): sha(p) for p in paths}
 
 
+def project_part_names(cad: dict, style: str) -> list[str]:
+    # Ethan wants two whole wands, not just a second handle: duplicate both shaft
+    # sections and the XIAO holder while composing from the same canonical parts.
+    styles = cad["profiles"]["tapered-xiao"]["overview"] if style == "pair" else [style]
+    return [part for key in styles for part in cad["assemblies"][f"tapered-xiao-{key}"]["parts"]]
+
+
 def inspect_project(path: Path) -> dict:
     with zipfile.ZipFile(path) as archive:
         # Exported archives must not leak machine-local paths or account credentials.
@@ -104,18 +122,30 @@ def inspect_project(path: Path) -> dict:
         assert PERSISTED_PROCESS_KEYS <= registered, "Prepared process overrides are missing"
         for key in PERSISTED_PROCESS_KEYS:
             assert config[key] == process[key], f"Prepared process value changed: {key}"
-        plates = [{m.attrib["key"]: m.attrib["value"] for m in p.findall("metadata")}
-                  for p in ET.fromstring(archive.read("Metadata/slice_info.config")).findall("plate")]
+        plate_nodes = ET.fromstring(archive.read("Metadata/slice_info.config")).findall("plate")
+        plates = [{m.attrib["key"]: m.attrib["value"] for m in p.findall("metadata")} for p in plate_nodes]
         assert len(plates) == 1 and plates[0]["outside"] == "false"
+        # CLI slices omit the GUI's optional per-object slice metadata. Count the
+        # actual printable build instances and resolve their names from settings.
+        settings = ET.fromstring(archive.read("Metadata/model_settings.config"))
+        by_id = {o.attrib["id"]: {m.attrib["key"]: m.attrib["value"]
+                 for m in o.findall("metadata") if "key" in m.attrib}["name"]
+                 for o in settings.findall("object")}
+        ns = {"m": "http://schemas.microsoft.com/3dmanufacturing/core/2015/02"}
+        items = ET.fromstring(archive.read("3D/3dmodel.model")).findall("m:build/m:item", ns)
+        assert items and all(i.attrib.get("printable", "1") == "1" for i in items)
+        names = sorted(by_id[i.attrib["objectid"]] for i in items)
         return {"sha256": sha(path), "seconds": int(plates[0]["prediction"]),
-                "grams": float(plates[0]["weight"]), "parts": 4}
+                "grams": float(plates[0]["weight"]), "parts": len(names), "part_names": names}
 
 
 def check() -> None:
     receipt = json.loads(RECEIPT.read_text())
     assert receipt["inputs"] == inputs(), "Print projects are stale; run print_projects.py"
+    cad = json.loads((EXPORTS / "manifest.json").read_text())
     for style, filename in FILES.items():
         assert receipt["projects"][style] == inspect_project(OUT / filename), filename
+        assert receipt["projects"][style]["part_names"] == sorted(project_part_names(cad, style))
     frozen = OUT / "Print-1-crossed-110mm.json"
     if frozen.exists():
         record = json.loads(frozen.read_text())
@@ -134,7 +164,7 @@ def build(args) -> None:
         temp = Path(temp)
         projects = {}
         for style, filename in FILES.items():
-            part_names = cad["assemblies"][f"tapered-xiao-{style}"]["parts"]
+            part_names = project_part_names(cad, style)
             target = temp / filename
             arranged = temp / f"{style}-layout.3mf"
             arrange_parts(part_names, arranged)
