@@ -23,6 +23,10 @@ When the strands have different pitches (Ethan's "one goes faster than the other
 derive crossing test heights from their relative angular rates. Equal-pitch test
 heights no longer identify crossings. Verify actual mesh crests both apart and at
 the crossings; different pitch values in JSON alone do not verify the printed pattern.
+Skip the twist-lock's air gap in decorative spiral travel. With tight pitches,
+advancing the helix across that empty gap visibly offsets its crests at the two
+faces. Compensate the shaft phase for the gap while leaving the joint geometry
+unchanged; verify the actual face sections still align.
 
 ## The public sources reproduce the installed wand exactly
 

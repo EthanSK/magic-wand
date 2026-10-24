@@ -5,8 +5,8 @@
   "status": "Provisional first print set. Model geometry is generated and checked; printed fit, strength, comfort and mass are not measured.",
   "frame": "Assembly axes: +Z runs from the handle butt (z = 0) to the tip, +Y is the button side, the loop hangs toward -Y. Angles are measured from +Y toward +X, which is clockwise seen from the tip.",
   "source": {
-    "dimensions_sha256": "88d6ee42cd6198680fbd3f18a59f665218f2fd9ec2c45ae64614f268ff70cc9d",
-    "script_sha256": "5d3c71a67ac28bf41ec75ce52599ebb3d2ca99f11b3cd1be882d00b26f9ed514",
+    "dimensions_sha256": "1f384d8b1768b940a889b4fa45e173f352c2cc41d3b559463a8e264b6a31d265",
+    "script_sha256": "c95744df0ddbe15c998e7ff85725dcab4d02be703622a0ecdf2fc803e906bf7e",
     "tools": {
       "manifold3d": "3.5.4",
       "trimesh": "5.2.0",
@@ -240,8 +240,8 @@
     {
       "file": "assembly-tapered-xiao.glb",
       "profile": "tapered-xiao",
-      "sha256": "5f48ca69d9ad61b5c517dfa0d530220f041406c20e252164f73302f169b08b6a",
-      "bytes": 3843592,
+      "sha256": "31eced783cd90b95d81938fbac5af23f63c4648793eb867230c15db0311d820a",
+      "bytes": 3845476,
       "units": "metres, Y up, wand along +Z; assemblies stacked 130 mm apart in -Y"
     },
     {
@@ -1228,8 +1228,8 @@
     {
       "name": "handle-tapered-spiral",
       "file": "handle-tapered-spiral.stl",
-      "sha256": "a5c81f763acb57b93926943ab21d56a713f2a931fcef80dd38a33b353ddb19a7",
-      "bytes": 1754684,
+      "sha256": "86b5219d6f0d6bf017c4ec9d5783ea2dbb8462f75cac08517f39c6b04f2c3e1e",
+      "bytes": 1759984,
       "group": "handle",
       "role": "Tapered grip with double-helix ribs and a sideways thumb shelf",
       "profile": "tapered-xiao",
@@ -1241,15 +1241,15 @@
         "winding_consistent": true,
         "every_edge_shared_twice": true,
         "bodies": 1,
-        "volume_mm3": 92729.6969,
-        "area_mm2": 18658.0454,
-        "triangles": 35092,
+        "volume_mm3": 92790.4631,
+        "area_mm2": 18793.9675,
+        "triangles": 35198,
         "print_size_mm": [
           53.6906,
-          31.0734,
+          31.734,
           156.0
         ],
-        "downward_flat_mm2": 58.1212,
+        "downward_flat_mm2": 56.0941,
         "downward_steeper_than_45_mm2": 16.9009
       },
       "print_to_assembly": [
@@ -1263,7 +1263,7 @@
           0.0,
           1.0,
           0.0,
-          -0.3324
+          -0.1673
         ],
         [
           0.0,
@@ -1336,7 +1336,7 @@
     {
       "name": "shaft-lower-tapered-spiral",
       "file": "shaft-lower-tapered-spiral.stl",
-      "sha256": "0e82fd121e28c912587cea557a89cdd3f087c01f72435c6cec42e6193b9b292e",
+      "sha256": "2c91bca90daca854b918dce044ea1e13a5418a4804c4b82fa6863164aee8e18e",
       "bytes": 2026484,
       "group": "shaft",
       "role": "Tapered lower shaft with double-helix ribs: twist-lock socket and glue stub",
@@ -1349,15 +1349,15 @@
         "winding_consistent": true,
         "every_edge_shared_twice": true,
         "bodies": 1,
-        "volume_mm3": 54824.4051,
-        "area_mm2": 16231.668,
+        "volume_mm3": 54809.8699,
+        "area_mm2": 16349.2738,
         "triangles": 40528,
         "print_size_mm": [
-          26.433,
-          26.5046,
+          26.687,
+          26.6336,
           172.0
         ],
-        "downward_flat_mm2": 128.0196,
+        "downward_flat_mm2": 128.02,
         "downward_steeper_than_45_mm2": 0.0
       },
       "print_to_assembly": [
@@ -1365,13 +1365,13 @@
           1.0,
           0.0,
           0.0,
-          -0.3315
+          -0.1655
         ],
         [
           0.0,
           1.0,
           0.0,
-          0.0358
+          -0.0267
         ],
         [
           0.0,
@@ -1444,8 +1444,8 @@
     {
       "name": "shaft-upper-tapered-spiral",
       "file": "shaft-upper-tapered-spiral.stl",
-      "sha256": "129336e08e25803592fe34492e9dd50dacb6f83b612833c6b468b054e4c64e33",
-      "bytes": 1537584,
+      "sha256": "080b8eb71fc8f30bcb193041d4be57cd7d6118f778efe29f8186dd388f97d33a",
+      "bytes": 1538184,
       "group": "shaft",
       "role": "Tapered upper shaft with double-helix ribs: glue socket and the tip half-lap",
       "profile": "tapered-xiao",
@@ -1457,15 +1457,15 @@
         "winding_consistent": true,
         "every_edge_shared_twice": true,
         "bodies": 1,
-        "volume_mm3": 27303.1354,
-        "area_mm2": 10640.6287,
-        "triangles": 30750,
+        "volume_mm3": 27307.8499,
+        "area_mm2": 10704.2753,
+        "triangles": 30762,
         "print_size_mm": [
-          20.6314,
-          20.5504,
+          20.9106,
+          21.062,
           157.3
         ],
-        "downward_flat_mm2": 56.1135,
+        "downward_flat_mm2": 56.1134,
         "downward_steeper_than_45_mm2": 0.0
       },
       "print_to_assembly": [
@@ -1473,13 +1473,13 @@
           1.0,
           0.0,
           0.0,
-          -0.0841
+          0.0695
         ],
         [
           0.0,
           1.0,
           0.0,
-          -0.29
+          -0.1641
         ],
         [
           0.0,
@@ -1808,43 +1808,43 @@
       "seam_max_radius_step_mm": {
         "smooth handle/shaft": 0.0096,
         "smooth glue": 0.0004,
-        "spiral handle/shaft": 0.1884,
-        "spiral glue": 0.0086
+        "spiral handle/shaft": 0.0209,
+        "spiral glue": 0.0082
       },
       "rib_peaks_deg": {
-        "z=160.0": [
-          10.5,
-          190.5
+        "z=154.78571428571428": [
+          166.19,
+          346.18
         ],
-        "z=165.0": [
-          30.0,
-          165.0
+        "z=158.0": [
+          135.0,
+          360.0
         ],
-        "z=320.0": [
-          109.75,
-          289.76
+        "z=309.07142857142856": [
+          64.73,
+          244.74
         ],
-        "z=325.0": [
-          85.81,
-          310.81
+        "z=312.2857142857143": [
+          32.09,
+          257.1
         ]
       },
       "rib_expected_deg": {
-        "z=160.0": [
-          10.0,
-          190.0
+        "z=154.78571428571428": [
+          167.1429,
+          347.1429
         ],
-        "z=165.0": [
-          30.0,
-          165.0
+        "z=158.0": [
+          0.0,
+          135.0
         ],
-        "z=320.0": [
-          110.0,
-          290.0
+        "z=309.07142857142856": [
+          64.2857,
+          244.2857
         ],
-        "z=325.0": [
-          85.0,
-          310.0
+        "z=312.2857142857143": [
+          32.1429,
+          257.1429
         ]
       },
       "rib_directions": [
@@ -1853,15 +1853,15 @@
       ],
       "rib_pitches_mm": [
         90.0,
-        72.0
+        36.0
       ],
-      "rib_crossing_spacing_mm": 40.0,
+      "rib_crossing_spacing_mm": 25.7143,
       "rib_crossings": {
-        "z=180.0": [
-          90.0
+        "z=167.64285714285714": [
+          38.46
         ],
-        "z=220.0": [
-          250.5
+        "z=193.35714285714286": [
+          141.54
         ]
       },
       "thumb_shelf": {
@@ -1906,16 +1906,16 @@
       },
       "volume_mm3": {
         "handle-tapered-smooth": 90943.8191,
-        "handle-tapered-spiral": 92729.7023,
+        "handle-tapered-spiral": 92790.444,
         "shaft-lower-tapered-smooth": 53090.7426,
-        "shaft-lower-tapered-spiral": 54824.4166,
+        "shaft-lower-tapered-spiral": 54809.8546,
         "shaft-upper-tapered-smooth": 26370.6167,
-        "shaft-upper-tapered-spiral": 27303.1412
+        "shaft-upper-tapered-spiral": 27307.8545
       },
       "spiral_extra_mm3": {
-        "handle": 1785.8832,
-        "shaft-lower": 1733.674,
-        "shaft-upper": 932.5245
+        "handle": 1846.6249,
+        "shaft-lower": 1719.1119,
+        "shaft-upper": 937.2378
       },
       "passed": true
     },

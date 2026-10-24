@@ -10,8 +10,9 @@ before an update is applied.
 
 Choose **Tapered wand (XIAO)** in the preview for the continuous wand shape. It has no loop or
 separate handle bulge: the body tapers from 30 mm at the butt to 14.6 mm before the XIAO tip.
-Two rounded, 1.2 mm raised ribs wind in opposite directions at 90 mm and 72 mm pitch.
-The tighter strand makes 25% more turns, so the crossings rotate around the shaft instead
+Two rounded, 1.2 mm raised ribs wind in opposite directions at 90 mm and 36 mm pitch.
+Their 54 mm pitch difference is three times the previous 18 mm difference. The tighter
+strand makes 2.5 times as many turns, so the crossings rotate around the shaft instead
 of repeating equal diamonds in one plane. Ethan calls this the "criss-cross" or "like DNA"
 shape and asked for "one goes faster than the other". **Smooth** uses the same body
 and joints without the ribs, for comparison. The earlier loop and plain grips remain available.

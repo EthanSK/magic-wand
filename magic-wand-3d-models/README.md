@@ -10,9 +10,10 @@ On GitHub, use **Download raw file** to download a 3MF.
 - **Print 1:** [original crossed pattern, 110 mm pitch](Print-1-crossed-110mm.3mf).
   This file is frozen from the committed first version; its source commit and checksum are
   recorded in `Print-1-crossed-110mm.json`.
-- **Latest print:** [uneven crossed pattern, 90 mm and 72 mm pitch](tapered-double-helix.3mf).
-  Its two opposite-winding strands turn at different rates: one makes 25% more turns,
-  moving the crossings around the shaft. This replaces the earlier equal 90 mm pitches.
+- **Latest print:** [uneven crossed pattern, 90 mm and 36 mm pitch](tapered-double-helix.3mf).
+  Its two opposite-winding strands turn at different rates: one makes 2.5 times as many
+  turns, moving the crossings around the shaft. The pitch difference is now 54 mm,
+  three times the previous 18 mm gap between the 90 mm and 72 mm strands.
 
 The hole and platform are unchanged. Open the latest print for Ethan's new pattern, or
 the frozen original for comparison. Clear the bed between jobs; these files are not
