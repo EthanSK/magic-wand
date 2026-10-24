@@ -22,7 +22,7 @@
   - dashed = verify on the delivered board
   - × stub = leave unconnected
   - dotted = wireless
-- **Wire colours:** red positive power, black GND, green SDA data, yellow SCL clock. Diagram labels name the physical insulation colour; ground is drawn with a contrasting line in dark mode so it stays visible.
+- **Wire colours:** preserve the assembled red SDA data and green SCL clock wires; use yellow for regulated 3V3 and black for GND. The separate battery-positive pigtail remains red. Diagram labels name the physical insulation colour; ground is drawn with a contrasting line in dark mode so it stays visible.
 - **Power is drawn explicitly** as separate 3V3 and GND rails from the XIAO to every finger board. This makes it visible that the mux switches data, not power.
 - **Two layouts:**
   - wide (≥ 708 px): left-to-right signal flow
@@ -39,14 +39,15 @@ Use **actual distinct insulation colours**, as requested on 24 October 2026:
 
 | Connection | Insulation colour |
 |---|---|
-| Positive power: regulated 3V3 distribution and positive battery pigtail | Red |
+| Regulated 3V3 distribution | Yellow |
+| Positive battery pigtail | Red, with polarity verified separately |
 | GND and negative battery pigtail | Black |
-| SDA data: XIAO SDA, mux SDn and sensor SDA | Green |
-| SCL clock: XIAO SCL, mux SCn and sensor SCL | Yellow |
+| SDA data: XIAO SDA, mux SDn and sensor SDA | Red |
+| SCL clock: XIAO SCL, mux SCn and sensor SCL | Green |
 
-Use red insulation for local CS/SA0 links to 3V3 too. Colours identify the intended role; confirm endpoints and battery polarity rather than assuming an existing cable follows the colour code.
+Use yellow insulation for local CS/SA0 links to 3V3 too. Preserve the current red-data/green-clock assembly; do not rewire it to match the superseded red-power plan. Colours identify the intended role; confirm endpoints and battery polarity rather than assuming an existing cable follows the colour code.
 
-Do not use three green wires, labelled red/green offcuts or coloured sleeves in place of these four insulation colours. This supersedes the earlier request to remove yellow. The completed order bought red and green 30AWG silicone stranded wire; that historical purchase remains unchanged. Black and yellow flexible wire are required for this plan, but stock on hand has not been verified and no additional purchase is authorised by this correction. Check existing supplies before creating a shopping list or buying duplicates. Allow slack at moving fingers and strain relief at joints; choose lengths after checking the left-hand mounting.
+Do not use three green wires, labelled red/green offcuts or coloured sleeves in place of these four insulation colours. This supersedes the earlier request to remove yellow and the earlier red-power colour plan. The completed order bought red and green 30AWG silicone stranded wire; that historical purchase remains unchanged. Black and yellow flexible wire are required for this plan. Check existing supplies before creating a shopping list or buying duplicates; a materials plan alone does not authorise a purchase. Allow slack at moving fingers and strain relief at joints; choose lengths after checking the left-hand mounting.
 
 | # | From | To | Status |
 |---|------|----|--------|
