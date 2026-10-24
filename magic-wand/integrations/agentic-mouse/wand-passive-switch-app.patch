@@ -5,7 +5,7 @@
      /// release of a Middle hold on it: the same action, except a card that
      /// needs more motion (a wheel card, Switch App) is armed instead.
 -    public enum Phase: String { case open, appSpecific, navigate, motion, park, press, release, activate, choose, dismiss, exitReview }
-+    public enum Phase: String { case open, appSpecific, hover, navigate, motion, park, press, release, activate, choose, dismiss, exitReview }
++    public enum Phase: String { case open, appSpecific, hover, navigate, qualify, motion, park, press, release, activate, choose, dismiss, exitReview }
      public let phase: Phase
      public let id: String
      public let sequence: Int
@@ -20,24 +20,25 @@
  /// * A completed action hides the HUD at once but keeps the mode alive for
  ///   `followUpLinger`, so bounded follow-up work (Codex Edit, feedback) is not
  ///   cancelled. Any new HUD input ends that wait first.
-@@ -65,6 +65,7 @@
+@@ -65,6 +65,8 @@
          var last:WandAngularOffset = .zero
          var received:TimeInterval
          var navigation:WandRadialNavigator?
 +        var passiveNavigation=false
++        var qualified=false
          let cell:PhysicalCell
          let pageGeneration:UInt64
          /// A second hold on an armed card: motion adjusts, release finishes.
-@@ -124,7 +125,7 @@
+@@ -124,7 +126,7 @@
                  // The receiver had not yet seen the close: this hold opens a
                  // fresh HUD rather than steering the hidden one.
                  finishConcealment();openHome()
 -            case .dismiss, .motion, .park, .release, .activate, .choose:
-+            case .hover, .dismiss, .motion, .park, .release, .activate, .choose:
++            case .hover, .qualify, .dismiss, .motion, .park, .release, .activate, .choose:
                  // Already hidden. Stale input from the finished hold never
                  // acts, and the follow-up work is left to finish.
                  return
-@@ -175,8 +176,18 @@
+@@ -175,8 +177,18 @@
          }
          guard isOpen else {return}
          switch command.phase {
@@ -56,19 +57,38 @@
              if let old=hold {
                  if old.id == command.id {return}
                  reset(reason:.deviceLost);return
-@@ -211,7 +222,10 @@
+@@ -194,6 +206,16 @@
+             if command.phase == .press && selected.wandReviewMode == nil {
+                 target.handle(.init(action:.select,source:.wand,physicalCell:selected,phase:.press),inputTime:clock.now)
+                 keepOutline(after:selected,generation:hold?.pageGeneration ?? target.pageGeneration)
++            }
++        case .qualify:
++            // The receiver's existing hold threshold owns this visual cue.
++            // Qualification never presses Switch App or holds Command.
++            guard var current=hold, !current.passiveNavigation, current.navigation != nil,
++                  current.id == command.id, command.sequence > current.sequence else { return }
++            current.sequence=command.sequence;current.received=clock.now;current.qualified=true
++            hold=current
++            if target.isWandHome, selected == .switchApp {
++                target.setPointerFocus(.init(cell:selected,isArmed:true))
+             }
+         case .motion:
+             guard var current=hold,current.id == command.id,command.sequence > current.sequence else {return}
+@@ -211,7 +233,12 @@
                      nav=reseated
                  }
                  nav.apply(deltaX:dx,deltaY:dy);current.navigation=nav;selected=nav.focusedCell
 -                target.setPointerFocus(nav.pointerFocus)
 +                if current.passiveNavigation, let card=armed, selected != card.cell { armed=nil }
-+                if current.passiveNavigation, armed?.cell == selected {
-+                    target.setPointerFocus(.init(cell:selected,isArmed:true))
++                if (current.passiveNavigation && armed?.cell == selected)
++                    || (current.qualified && target.isWandHome && selected == .switchApp) {
++                    target.setPointerFocus(.init(cell:selected,isArmed:true,
++                        pullX:nav.pointerFocus.pullX,pullY:nav.pointerFocus.pullY))
 +                } else { target.setPointerFocus(nav.pointerFocus) }
              } else if target.pageGeneration == current.pageGeneration, target.isWandHome, current.cell == .switchApp {
                  // The system switcher is horizontal: moving right selects the next app.
                  // Command is already held by the same native press lifecycle.
-@@ -231,6 +245,11 @@
+@@ -231,6 +258,11 @@
          case .park, .release:
              guard let current=hold,current.id == command.id,command.sequence > current.sequence else {return}
              hold=nil;lastFinished=current.id
@@ -80,7 +100,20 @@
              if current.adjusting {
                  // Letting go ends the adjustment exactly like releasing the
                  // held mouse button; the chosen card's work is then done.
-@@ -366,7 +385,7 @@
+@@ -244,7 +276,11 @@
+             if current.cell.wandReviewMode == nil && current.navigation == nil && target.pageGeneration == current.pageGeneration && target.isActive {
+                 target.handle(.init(action:.select,source:.wand,physicalCell:current.cell,phase:.release),inputTime:clock.now)
+             }
+-            keepOutline(after:current.navigation?.focusedCell ?? current.cell,generation:current.pageGeneration)
++            if current.qualified, target.isWandHome, current.navigation?.focusedCell == .switchApp {
++                target.setPointerFocus(.init(cell:.switchApp,isArmed:true))
++            } else {
++                keepOutline(after:current.navigation?.focusedCell ?? current.cell,generation:current.pageGeneration)
++            }
+         case .open, .appSpecific, .activate, .choose, .dismiss, .exitReview:break
+         }
+         if !target.isActive {ownsHUD=false;hold=nil;armed=nil;if pinnedReviewCell == nil && concealedUntil == nil {scheduler.stop()}}
+@@ -366,7 +402,7 @@
          }
          guard isOpen else {ownsHUD=false;hold=nil;armed=nil;if pinnedReviewCell == nil {scheduler.stop()};onContext?(false);return}
          // A healthy hold has no duration limit. Only missing telemetry expires it.
@@ -91,7 +124,7 @@
          onContext?(true)
 --- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
 +++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
-@@ -86,6 +86,52 @@
+@@ -86,6 +86,70 @@
          XCTAssertEqual(switched,[.down,.up,.up])
          control.handle(.init(.release,id:"switch-app-1",sequence:4))
          XCTAssertTrue(control.isOpen)
@@ -120,6 +153,24 @@
 +        control.handle(.init(.park,id:"held-switch",sequence:2))
 +        XCTAssertFalse(control.isOpen)
 +        XCTAssertNil(control.armedCell)
++    }
++    func testQualifiedHeldSwitchAppShowsDotsWithoutOperatingUntilRelease() {
++        control.handle(.init(.navigate,id:"qualifying-hold"))
++        XCTAssertFalse(target.pointerFocus?.isArmed ?? false)
++        control.handle(.init(.qualify,id:"qualifying-hold",sequence:1))
++        XCTAssertTrue(target.pointerFocus?.isArmed ?? false)
++        XCTAssertNil(control.armedCell,"only release actually arms the next hold")
++        XCTAssertTrue(clicks.isEmpty);XCTAssertTrue(presses.isEmpty);XCTAssertTrue(steps.isEmpty)
++        let goal=offset(to:.frontmostAppModeSelector)
++        control.handle(.init(.motion,id:"qualifying-hold",sequence:2,x:goal.x,y:goal.y))
++        XCTAssertFalse(target.pointerFocus?.isArmed ?? false)
++        control.handle(.init(.motion,id:"qualifying-hold",sequence:3))
++        XCTAssertTrue(target.pointerFocus?.isArmed ?? false)
++        control.handle(.init(.park,id:"qualifying-hold",sequence:4))
++        XCTAssertTrue(target.pointerFocus?.isArmed ?? false,"no plain-outline flash between park and choose")
++        control.handle(.init(.choose,id:"choose-qualified"))
++        XCTAssertEqual(control.armedCell,.switchApp)
++        XCTAssertTrue(clicks.isEmpty)
 +    }
 +    func testPassiveAimingSurvivesTelemetryPauseWithoutHoldingKeys() {
 +        control.handle(.init(.choose,id:"arm-switch"))

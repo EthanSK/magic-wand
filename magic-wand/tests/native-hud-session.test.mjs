@@ -48,7 +48,7 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  var buttons=0,movementCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1000,height:1000)]
  var selectedReviewMode:String?,hiddenReviewOperating=false,hiddenReviewPending=false,screenshotActive=false,screenshotHUD=false
  var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleSecondTap=false,navigationOpenedHUD=false
- var middleHeld=false,hudOpenedAt=0.0
+ var middleHeld=false,middleQualified=false,hudOpenedAt=0.0;let hudHoldSeconds=0.14
  var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
  var wandShortcutCircle=WandReviewNavigation();var middleReviewExit=false
  var reviewExitGesture=WandReviewExitGesture();var reviewExitTimer:Timer?
@@ -83,6 +83,11 @@ let h=Harness()
 h.handleMiddle("1")
 precondition(h.hudSession && h.middleHeld && Array(h.controls.phases.suffix(2))==["open","navigate"] && h.commands.contains("setHUDOpen(true);"),"holding Middle shows and steers the HUD")
 h.context.set(true);h.handleNavigation("8000,0")
+precondition(!h.controls.phases.contains("qualify"),"a short hold does not qualify")
+h.middlePressedAt-=0.2;h.handleNavigation("9000,0")
+precondition(h.controls.phases.filter{$0=="qualify"}.count==1,"qualify while still held")
+h.handleNavigation("10000,0")
+precondition(h.controls.phases.filter{$0=="qualify"}.count==1,"qualify once per hold")
 precondition(h.controls.phases.last=="motion","held motion steers the outline")
 h.middlePressedAt-=0.3;h.handleMiddle("0")
 precondition(Array(h.controls.phases.suffix(3))==["motion","park","choose"] && !h.middleHeld && !h.hudActive,"releasing a hold uses the outlined card at once")
