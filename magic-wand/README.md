@@ -226,9 +226,10 @@ Requires Python 3.10+ and Node.js 22+; there are no npm dependencies.
 ```sh
 python3 scripts/build.py --check   # generated files match wand.json and the sources
 python3 scripts/vendor.py --check  # Three.js and fonts match their lock
-python3 scripts/check.py           # website and privacy checks
+python3 scripts/check.py           # website checks only
 node --test tests/*.test.*          # device code, receiver and HUD ports, manifest, site
-python3 -m http.server 8848 --bind 127.0.0.1 --directory docs
+npm --prefix .. run check          # repository-wide checks, including privacy
+npm run serve
 ```
 
 Then open [127.0.0.1:8848](http://127.0.0.1:8848/). The demo needs an HTTP server because its worker loads the device code with `fetch`.

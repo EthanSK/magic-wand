@@ -305,7 +305,7 @@ def problems(manifest: dict | None = None, wand: dict | None = None) -> list[str
 def main() -> int:
     found = problems()
     if found:
-        print("How To checks failed:\n  " + "\n  ".join(found), file=sys.stderr)
+        print("How To checks failed (suggested tutorial commands run from magic-wand/):\n  " + "\n  ".join(found), file=sys.stderr)
         return 1
     count = len(common.load_manifest()["tutorials"])
     print(f"How To checks passed: {count} videos, captions, transcripts, narration and control references are current")

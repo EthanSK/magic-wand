@@ -44,7 +44,7 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
    from synthetic checks and Ethan's physical acceptance. Update `wand.json` with control,
    version or status changes. Import through `scripts/import_private.py`; do not publish
    private receipts, settings or logs. Regenerate with `python3 scripts/build.py`.
-7. Run `npm run check`; perform the applicable browser and real-device checks from AGENTS.
+7. Run `npm run check` from the repository root for every component and the privacy scan; perform the applicable browser and real-device checks from AGENTS.
    Commit completed changes regularly. For an authorized publication, verify the remote
    commit, CI and deployed assets rather than stopping at a local commit.
 

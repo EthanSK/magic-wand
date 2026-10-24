@@ -3,11 +3,12 @@
 from __future__ import annotations
 
 import re
+import os
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SKIP_DIRS = {".git", "build", ".cache", "work", "node_modules", "__pycache__"}
+SKIP_DIRS = {".git", "build", ".cache", "work", "node_modules", "__pycache__", ".venv", "venv"}
 BINARY = {".png", ".jpg", ".webp", ".woff2", ".icns"}
 PUBLIC_UUIDS = {"6E400001-B5A3-F393-E0A9-E50E24DCCA9E", "6E400002-B5A3-F393-E0A9-E50E24DCCA9E", "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"}
 PATTERNS = {
@@ -23,9 +24,12 @@ UUID = re.compile(r"\b[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4
 
 
 def repository_files():
-    for path in ROOT.rglob("*"):
-        if path.is_file() and not (set(path.relative_to(ROOT).parts) & SKIP_DIRS) and path.suffix not in BINARY:
-            yield path
+    for directory, folders, files in os.walk(ROOT):
+        folders[:] = [name for name in folders if name not in SKIP_DIRS and not name.endswith(".noindex")]
+        for name in files:
+            path = Path(directory) / name
+            if path.is_file() and path.suffix not in BINARY:
+                yield path
 
 
 def main() -> int:
