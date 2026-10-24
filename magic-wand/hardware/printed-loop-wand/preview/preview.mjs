@@ -2,6 +2,7 @@
 // its print-to-assembly transform, and shows the push-and-twist joint. Units are millimetres.
 // URL parameters: ?profile=xiao|puck-legacy and ?view=both|<assembly key>, e.g. ?view=mug.
 import * as THREE from '../../../../docs/lib/three-0.185.1/three.module.min.js';
+import { ViewInput, MODES, frameBounds } from './view-input.mjs';
 
 const EXPORTS = new URL('../exports/', import.meta.url);
 const COLORS = {
@@ -13,6 +14,12 @@ const EXPLODE = { // Offsets in mm for the exploded view.
   'tip-xiao': [0, 0, 60], 'puck-case': [0, 14, 60], 'xiao-board': [0, 16, 60],
 };
 const STACK = 130; // Assemblies shown together are stacked this far apart in -Y, mm.
+const MODE_KEY = 'printed-loop-wand-preview-mode'; // Remembers Turn/Move/Zoom for this page.
+const HINTS = {
+  turn: 'Drag or scroll to turn · Pinch to zoom',
+  move: 'Drag or scroll to move · Pinch to zoom',
+  zoom: 'Drag or scroll to zoom',
+};
 
 const view = document.getElementById('view');
 const message = document.getElementById('message');
@@ -21,6 +28,8 @@ const ui = {
   joint: document.getElementById('joint'), jointText: document.getElementById('jointText'),
   exploded: document.getElementById('exploded'), section: document.getElementById('section'),
   checks: document.getElementById('checks'), parts: document.getElementById('parts'), tags: document.getElementById('tags'),
+  modes: document.getElementById('modes'), zoomButtons: document.querySelectorAll('[data-zoom]'),
+  resetView: document.getElementById('resetView'), hint: document.getElementById('hint'),
 };
 
 function show(text) {
@@ -174,15 +183,17 @@ async function main() {
   const twist = manifest.layout.twist_deg;
   const travel = 40; // How far out the spigot starts, mm.
   const target = new THREE.Vector3();
-  const orbit = { yaw: 1.3, pitch: 0.22, distance: 900 };
+  let savedMode = null;
+  try { savedMode = localStorage.getItem(MODE_KEY); } catch { /* Storage can be unavailable. */ }
+  const input = new ViewInput({ fov: camera.fov, mode: savedMode ?? 'turn' });
   let shown = [];
 
   function navigate(next, push = true) {
     const framing = next.profile !== state.profile || next.view !== state.view;
     state = next;
     if (push) history.pushState(null, '', link(state));
-    if (framing) reset();
     update();
+    if (framing) { reset(); render(); }
   }
   function choice(text, next, current) {
     const a = document.createElement('a');
@@ -246,21 +257,18 @@ async function main() {
     render();
   }
 
-  function reset() {
-    const count = Object.values(instances).filter((i) => i.profile === state.profile && (state.view === 'both' || i.key === state.view)).length;
-    target.set(0, -10 - (STACK * (count - 1)) / 2, 250);
-    Object.assign(orbit, { yaw: 1.3, pitch: 0.22, distance: 850 + 140 * (count - 1) });
+  function reset(preserveView = false) {
+    const bounds = new THREE.Box3();
+    for (const i of shown) bounds.union(new THREE.Box3().setFromObject(i.group));
+    if (!bounds.isEmpty()) input.setHome(frameBounds(bounds.min.toArray(), bounds.max.toArray(), {
+      aspect: view.clientWidth / Math.max(view.clientHeight, 1), fov: camera.fov,
+    }), preserveView);
   }
 
   const anchor = new THREE.Vector3();
   function render() {
-    const { yaw, pitch, distance } = orbit;
-    camera.position.set(
-      target.x + distance * Math.cos(pitch) * Math.sin(yaw),
-      target.y + distance * Math.sin(pitch),
-      target.z + distance * Math.cos(pitch) * Math.cos(yaw),
-    );
-    camera.lookAt(target);
+    camera.position.set(...input.camera());
+    camera.lookAt(target.set(...input.target));
     renderer.render(scene, camera);
     const { clientWidth: w, clientHeight: h } = view;
     for (const i of Object.values(instances)) {
@@ -277,35 +285,71 @@ async function main() {
     renderer.setSize(w, h, false);
     camera.aspect = w / Math.max(h, 1);
     camera.updateProjectionMatrix();
+    reset(true);
     render();
   }
 
-  let drag = null;
   const canvas = renderer.domElement;
-  canvas.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, y: e.clientY }; canvas.setPointerCapture(e.pointerId); });
+  canvas.tabIndex = 0;
+  canvas.setAttribute('role', 'img');
+  canvas.setAttribute('aria-label', '3D view of the wand. Arrow keys turn, move or zoom by the selected mode; plus and minus zoom; 0 resets. T, M and Z choose Turn, Move or Zoom.');
+  canvas.setAttribute('aria-describedby', 'hint');
+
+  function showMode() {
+    for (const button of ui.modes.querySelectorAll('[data-mode]')) button.setAttribute('aria-pressed', String(button.dataset.mode === input.mode));
+    canvas.dataset.mode = input.mode;
+    ui.hint.textContent = HINTS[input.mode];
+  }
+  function chooseMode(mode) {
+    if (!input.setMode(mode)) return;
+    try { localStorage.setItem(MODE_KEY, mode); } catch { /* Not remembered without storage. */ }
+    showMode();
+  }
+
+  canvas.addEventListener('pointerdown', (e) => {
+    input.pointerDown(e.pointerId, e.clientX, e.clientY);
+    canvas.setPointerCapture(e.pointerId);
+  });
   canvas.addEventListener('pointermove', (e) => {
-    if (!drag) return;
-    orbit.yaw -= (e.clientX - drag.x) * 0.006;
-    orbit.pitch = Math.max(-1.45, Math.min(1.45, orbit.pitch + (e.clientY - drag.y) * 0.006));
-    drag = { x: e.clientX, y: e.clientY };
+    if (input.pointerMove(e.pointerId, e.clientX, e.clientY, view.clientHeight)) render();
+  });
+  for (const type of ['pointerup', 'pointercancel', 'lostpointercapture']) {
+    canvas.addEventListener(type, (e) => input.pointerUp(e.pointerId));
+  }
+  window.addEventListener('blur', () => input.cancel());
+  // Only the 3D view takes scrolling; the sidebar and page scroll normally.
+  canvas.addEventListener('wheel', (e) => {
+    if (input.wheel(e, view.clientHeight, window.innerHeight)) {
+      e.preventDefault();
+      render();
+    }
+  }, { passive: false });
+  canvas.addEventListener('keydown', (e) => {
+    if (e.metaKey || e.altKey || e.ctrlKey) return; // Leave browser shortcuts, such as page zoom, alone.
+    const before = input.mode;
+    if (!input.key(e, view.clientHeight)) return;
+    e.preventDefault();
+    if (input.mode !== before) chooseMode(input.mode);
     render();
   });
-  canvas.addEventListener('pointerup', () => { drag = null; });
-  canvas.addEventListener('pointercancel', () => { drag = null; });
-  canvas.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    orbit.distance = Math.max(80, Math.min(3000, orbit.distance * Math.exp(e.deltaY * 0.001)));
-    render();
-  }, { passive: false });
   canvas.addEventListener('dblclick', () => { reset(); render(); });
+  ui.modes.addEventListener('click', (e) => {
+    const mode = e.target.closest('[data-mode]')?.dataset.mode;
+    if (MODES.includes(mode)) chooseMode(mode);
+  });
+  for (const button of ui.zoomButtons) {
+    button.addEventListener('click', () => { input.zoomSteps(Number(button.dataset.zoom)); render(); });
+  }
+  ui.resetView.addEventListener('click', () => { reset(); render(); });
+  showMode();
   window.addEventListener('popstate', () => navigate(readState(manifest), false));
 
   ui.joint.addEventListener('input', update);
   ui.exploded.addEventListener('change', update);
   ui.section.addEventListener('change', update);
   new ResizeObserver(resize).observe(view);
-  reset();
   update();
+  reset();
   resize();
 }
 

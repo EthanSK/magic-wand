@@ -846,3 +846,19 @@ motion draws the rectangle and physical release posts left-up. Normal holds
 retain their existing classification cutoff. The native contextual-hold test
 failed before this change and passes afterward; actual capture still needs a
 physical check.
+
+
+## Wand input in the printed-model viewer
+
+The receiver classifies a browser web area as scrolling, so a plain Bottom hold
+reaches the 3D preview as wheel events. Mapping every wheel event to camera
+distance made intended model manipulation zoom instead. The viewer now uses
+one Turn/Move/Zoom controller for drag, wheel and keyboard input, with Turn as
+the default and deliberate zoom controls. Only the canvas captures scrolling.
+No receiver changes or automatic recognition of arbitrary 3D viewers is implied.
+
+Reset framing uses the actual model bounds and viewport aspect ratio; a fixed
+distance clipped the long shafts in a tall Codex panel. Tests project all box
+corners in wide and narrow viewports, and browser checks cover both XIAO handles,
+legacy Puck models, modes, joint controls and a narrow layout. Physical wand
+comfort and multitouch remain separate from those browser checks.

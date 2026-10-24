@@ -11,6 +11,16 @@
     #view { position: relative; min-height: 320px; }
     #view canvas { display: block; width: 100%; height: 100%; touch-action: none; cursor: grab; }
     #view canvas:active { cursor: grabbing; }
+    #view canvas[data-mode="move"] { cursor: move; }
+    #view canvas[data-mode="zoom"] { cursor: ns-resize; }
+    #view canvas:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+    #viewTools { position: absolute; top: 10px; left: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
+    #viewTools .modes { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+    #viewTools button { padding: 6px 10px; border: 0; background: rgba(28, 25, 38, .9); color: var(--text); font: inherit; font-size: 14px; cursor: pointer; }
+    #viewTools > button { border: 1px solid var(--line); border-radius: 8px; min-width: 34px; }
+    #viewTools .modes button + button { border-left: 1px solid var(--line); }
+    #viewTools button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+    #viewTools button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
     .tag { position: absolute; transform: translate(-50%, -100%); padding: 3px 8px; border-radius: 6px; background: rgba(28, 25, 38, .85); border: 1px solid var(--line); font-size: 13px; white-space: nowrap; pointer-events: none; }
     #hint { position: absolute; left: 12px; bottom: 10px; color: var(--muted); font-size: 13px; pointer-events: none; }
     #message { position: absolute; inset: 0; display: none; place-items: center; padding: 24px; text-align: center; color: var(--muted); }
@@ -40,7 +50,17 @@
   <main id="view">
     <div id="message" role="status"></div>
     <div id="tags"></div>
-    <div id="hint">Drag to turn · Scroll to zoom · Double-click resets view</div>
+    <div id="viewTools" role="toolbar" aria-label="View controls">
+      <div class="modes" id="modes" role="group" aria-label="Drag and scroll">
+        <button type="button" data-mode="turn" aria-pressed="true">Turn</button>
+        <button type="button" data-mode="move" aria-pressed="false">Move</button>
+        <button type="button" data-mode="zoom" aria-pressed="false">Zoom</button>
+      </div>
+      <button type="button" data-zoom="-1" aria-label="Zoom out">−</button>
+      <button type="button" data-zoom="1" aria-label="Zoom in">+</button>
+      <button type="button" id="resetView">Reset view</button>
+    </div>
+    <div id="hint">Drag or scroll to turn · Pinch to zoom</div>
   </main>
   <aside>
     <h1>Printed loop wand</h1>
