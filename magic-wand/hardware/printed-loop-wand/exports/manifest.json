@@ -5,8 +5,8 @@
   "status": "Provisional first print set. Model geometry is generated and checked; printed fit, strength, comfort and mass are not measured.",
   "frame": "Assembly axes: +Z runs from the handle butt (z = 0) to the tip, +Y is the button side, the loop hangs toward -Y. Angles are measured from +Y toward +X, which is clockwise seen from the tip.",
   "source": {
-    "dimensions_sha256": "4e57d8d671fdffdabb4584fd85633d49f72dd5443ba19f2133b5cd322e1e6c3e",
-    "script_sha256": "eeeb6d3efff883962c33a750b81810cf9e2e872373477d0fe0043b98761cff5f",
+    "dimensions_sha256": "80caabff3bbafde37c603a45a1409f05d812e376d533cfd11dd1d7c2c0027d12",
+    "script_sha256": "9800dedcff65ab746417d2cc2b9f90f014f01a4e720bbcb4b9d82c774792a7b2",
     "tools": {
       "manifold3d": "3.5.4",
       "trimesh": "5.2.0",
@@ -23,7 +23,7 @@
       256
     ],
     "margin": 4,
-    "note": "Reference profile only; no slicing or printing was done."
+    "note": "Reference profile only. Slicer estimates are recorded in the README; nothing has been physically printed."
   },
   "layout": {
     "overall_length": 500,
@@ -54,11 +54,80 @@
       10,
       190,
       280
-    ]
+    ],
+    "xiao": {
+      "board_center": [
+        0.0,
+        0.6,
+        467.4
+      ],
+      "board_size": [
+        17.8,
+        1.2,
+        21.0
+      ],
+      "board_front_z": 477.9,
+      "deck_top_y": 0.0,
+      "component_clearance": 3.5,
+      "boards": "Seeed XIAO nRF52840 Sense, or XIAO MG24 Sense; which one this wand carries is not physically confirmed. Both document a 21 x 17.8 mm footprint (Seeed wiki)."
+    }
+  },
+  "current_profile": "xiao",
+  "profiles": {
+    "xiao": {
+      "label": "XIAO tip",
+      "tip_parts": [
+        "tip-xiao"
+      ],
+      "reference": "xiao-board",
+      "glb": "assembly.glb",
+      "assemblies": [
+        "xiao-mug",
+        "xiao-plain"
+      ]
+    },
+    "puck-legacy": {
+      "label": "Puck.js tip (legacy)",
+      "tip_parts": [
+        "tip-cradle",
+        "tip-cap"
+      ],
+      "reference": "puck-case",
+      "glb": "assembly-puck-legacy.glb",
+      "assemblies": [
+        "puck-legacy-round",
+        "puck-legacy-oval",
+        "puck-legacy-angled",
+        "puck-legacy-straight"
+      ]
+    }
   },
   "assemblies": {
-    "round": {
+    "xiao-mug": {
+      "label": "Mug handle",
+      "profile": "xiao",
+      "parts": [
+        "handle-round",
+        "button-pod-pilot",
+        "shaft-lower",
+        "shaft-upper",
+        "tip-xiao"
+      ]
+    },
+    "xiao-plain": {
+      "label": "Plain handle (no loop)",
+      "profile": "xiao",
+      "parts": [
+        "handle-straight",
+        "button-pod-pilot",
+        "shaft-lower",
+        "shaft-upper",
+        "tip-xiao"
+      ]
+    },
+    "puck-legacy-round": {
       "label": "Round",
+      "profile": "puck-legacy",
       "parts": [
         "handle-round",
         "button-pod-pilot",
@@ -68,8 +137,9 @@
         "tip-cap"
       ]
     },
-    "oval": {
+    "puck-legacy-oval": {
       "label": "Oval",
+      "profile": "puck-legacy",
       "parts": [
         "handle-oval",
         "button-pod-pilot",
@@ -79,8 +149,9 @@
         "tip-cap"
       ]
     },
-    "angled": {
+    "puck-legacy-angled": {
       "label": "Angled",
+      "profile": "puck-legacy",
       "parts": [
         "handle-angled",
         "button-pod-pilot",
@@ -90,8 +161,9 @@
         "tip-cap"
       ]
     },
-    "straight": {
+    "puck-legacy-straight": {
       "label": "No loop",
+      "profile": "puck-legacy",
       "parts": [
         "handle-straight",
         "button-pod-pilot",
@@ -102,12 +174,22 @@
       ]
     }
   },
-  "glb": {
-    "file": "assembly.glb",
-    "sha256": "ac084c8e278a6bb2988e9fe60baee39ed3e398e10b56976fcebd6d66a37637cc",
-    "bytes": 374248,
-    "units": "metres, Y up, wand along +Z; handles side by side 70 mm apart"
-  },
+  "glb": [
+    {
+      "file": "assembly.glb",
+      "profile": "xiao",
+      "sha256": "cc03575d48ea1fbd4fbc9838dfcf5883e6920fcc67ffa1bd1de28e66602af5f3",
+      "bytes": 183664,
+      "units": "metres, Y up, wand along +Z; assemblies stacked 130 mm apart in -Y"
+    },
+    {
+      "file": "assembly-puck-legacy.glb",
+      "profile": "puck-legacy",
+      "sha256": "f299579adeca695d2968ac1e707d7d600584d2b9515030d14a8a7bfa559573fd",
+      "bytes": 374500,
+      "units": "metres, Y up, wand along +Z; assemblies stacked 130 mm apart in -Y"
+    }
+  ],
   "parts": [
     {
       "name": "coupon-male",
@@ -116,6 +198,7 @@
       "bytes": 52984,
       "group": "coupon",
       "role": "Joint coupon: shaft spigot with the three locking pins",
+      "profile": "shared",
       "print_orientation": "Lying on the flat +X face",
       "supports": "Support under pin overhangs; Bambu Studio flags floating regions without it",
       "fits_bed": true,
@@ -169,6 +252,7 @@
       "bytes": 101684,
       "group": "coupon",
       "role": "Joint coupon: handle socket, 0.05 mm cam interference, 1 notch",
+      "profile": "shared",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
       "supports": "Support at rail/socket overhangs; remove completely before fitting",
       "fits_bed": true,
@@ -222,6 +306,7 @@
       "bytes": 103984,
       "group": "coupon",
       "role": "Joint coupon: handle socket, 0.15 mm cam interference (default), 2 notches",
+      "profile": "shared",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
       "supports": "Support at rail/socket overhangs; remove completely before fitting",
       "fits_bed": true,
@@ -275,6 +360,7 @@
       "bytes": 104784,
       "group": "coupon",
       "role": "Joint coupon: handle socket, 0.3 mm cam interference, 3 notches",
+      "profile": "shared",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
       "supports": "Support at rail/socket overhangs; remove completely before fitting",
       "fits_bed": true,
@@ -328,6 +414,7 @@
       "bytes": 38484,
       "group": "coupon",
       "role": "Puck pocket coupon: tip cradle pocket and rim",
+      "profile": "puck-legacy",
       "print_orientation": "Flat, as modelled",
       "supports": "None",
       "fits_bed": true,
@@ -381,6 +468,7 @@
       "bytes": 202284,
       "group": "handle",
       "role": "Mug-style loop for two fingers; thumb on the buttons.",
+      "profile": "shared",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
       "supports": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
       "fits_bed": true,
@@ -434,6 +522,7 @@
       "bytes": 214184,
       "group": "handle",
       "role": "Long D-loop around four fingers, so the wand stays on a relaxed hand.",
+      "profile": "shared",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
       "supports": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
       "fits_bed": true,
@@ -487,6 +576,7 @@
       "bytes": 219584,
       "group": "handle",
       "role": "Raked loop, deeper at the palm, for a less bent wrist while pointing.",
+      "profile": "shared",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
       "supports": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
       "fits_bed": true,
@@ -540,6 +630,7 @@
       "bytes": 148184,
       "group": "handle",
       "role": "Rounded straight grip with no loop. Least material of the four; same socket, rail and wire route.",
+      "profile": "shared",
       "print_orientation": "Lying on its side on the -X bed flat, rail sideways",
       "supports": "45-degree grip underside; support at shared rail/socket overhangs",
       "fits_bed": true,
@@ -593,6 +684,7 @@
       "bytes": 54184,
       "group": "shaft",
       "role": "Lower shaft: twist-lock spigot and half-lap",
+      "profile": "shared",
       "print_orientation": "Lying on the flat +X face",
       "supports": "Support under small pin overhangs",
       "fits_bed": true,
@@ -646,6 +738,7 @@
       "bytes": 14184,
       "group": "shaft",
       "role": "Upper shaft: half-laps to the lower shaft and the tip",
+      "profile": "shared",
       "print_orientation": "Lying on the flat +X face",
       "supports": "None expected",
       "fits_bed": true,
@@ -699,6 +792,7 @@
       "bytes": 45484,
       "group": "tip",
       "role": "Tip cradle for the stock Puck.js case",
+      "profile": "puck-legacy",
       "print_orientation": "Pocket opening up",
       "supports": "None expected",
       "fits_bed": true,
@@ -752,6 +846,7 @@
       "bytes": 45684,
       "group": "tip",
       "role": "Removable cap ring; light and Puck button stay uncovered",
+      "profile": "puck-legacy",
       "print_orientation": "Top face down",
       "supports": "None",
       "fits_bed": true,
@@ -799,12 +894,67 @@
       ]
     },
     {
+      "name": "tip-xiao",
+      "file": "tip-xiao.stl",
+      "sha256": "35bc25a06cabf68ec54e7002cca8362844c03543cf56802b419cf9b4dde53e38",
+      "bytes": 18484,
+      "group": "tip",
+      "role": "Open deck for a bare XIAO board, taped on; USB end uncovered, no battery holder",
+      "profile": "xiao",
+      "print_orientation": "Pocket opening up",
+      "supports": "None expected; not yet sliced",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 4421.7384,
+        "area_mm2": 2859.8161,
+        "triangles": 368,
+        "print_size_mm": [
+          21.6,
+          52.6,
+          9.0
+        ],
+        "downward_flat_mm2": 0.0,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -6.5
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          450.6
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
       "name": "button-pod-pilot",
       "file": "button-pod-pilot.stl",
       "sha256": "345900f62cfbe16e41f6d4cdffb7773ca6cc318b510ba94cbade1f07a021e825",
       "bytes": 55184,
       "group": "pod",
       "role": "Button carrier with 2 mm pilot holes at the button centres",
+      "profile": "shared",
       "print_orientation": "Top face down",
       "supports": "None expected",
       "fits_bed": true,
@@ -858,6 +1008,7 @@
       "bytes": 16184,
       "group": "pod",
       "role": "Button carrier with no holes, to mark and drill by hand",
+      "profile": "shared",
       "print_orientation": "Top face down",
       "supports": "None expected",
       "fits_bed": true,
@@ -1134,7 +1285,96 @@
       "passed": true
     },
     "assembly": {
-      "round": {
+      "xiao-mug": {
+        "label": "Mug handle",
+        "profile": "xiao",
+        "handle": "round",
+        "overlaps_mm3": {
+          "handle + pod": 0.0,
+          "handle + shaft-lower": 0.5741,
+          "handle + shaft-upper": 0.0,
+          "handle + tip-xiao": 0.0,
+          "handle + xiao-board": 0.0,
+          "handle + xiao-components": 0.0,
+          "pod + shaft-lower": 0.0,
+          "pod + shaft-upper": 0.0,
+          "pod + tip-xiao": 0.0,
+          "pod + xiao-board": 0.0,
+          "pod + xiao-components": 0.0,
+          "shaft-lower + shaft-upper": 0.0,
+          "shaft-lower + tip-xiao": 0.0,
+          "shaft-lower + xiao-board": 0.0,
+          "shaft-lower + xiao-components": 0.0,
+          "shaft-upper + tip-xiao": 0.0,
+          "shaft-upper + xiao-board": 0.0,
+          "shaft-upper + xiao-components": 0.0,
+          "tip-xiao + xiao-board": 0.0,
+          "tip-xiao + xiao-components": 0.0,
+          "xiao-board + xiao-components": 0.0
+        },
+        "expected_overlaps": {
+          "handle + shaft-lower": "Cam pocket preload"
+        },
+        "unexpected": [],
+        "wire_probe_overlap_mm3": {
+          "handle": 0.0,
+          "pod": 0.0,
+          "shaft-lower": 0.0,
+          "shaft-upper": 0.0,
+          "tip-xiao": 0.0
+        },
+        "opening": {
+          "length_mm": 37.9638,
+          "height_mm": 38.0,
+          "area_mm2": 1134.7547
+        },
+        "passed": true
+      },
+      "xiao-plain": {
+        "label": "Plain handle (no loop)",
+        "profile": "xiao",
+        "handle": "straight",
+        "overlaps_mm3": {
+          "handle + pod": 0.0,
+          "handle + shaft-lower": 0.5741,
+          "handle + shaft-upper": 0.0,
+          "handle + tip-xiao": 0.0,
+          "handle + xiao-board": 0.0,
+          "handle + xiao-components": 0.0,
+          "pod + shaft-lower": 0.0,
+          "pod + shaft-upper": 0.0,
+          "pod + tip-xiao": 0.0,
+          "pod + xiao-board": 0.0,
+          "pod + xiao-components": 0.0,
+          "shaft-lower + shaft-upper": 0.0,
+          "shaft-lower + tip-xiao": 0.0,
+          "shaft-lower + xiao-board": 0.0,
+          "shaft-lower + xiao-components": 0.0,
+          "shaft-upper + tip-xiao": 0.0,
+          "shaft-upper + xiao-board": 0.0,
+          "shaft-upper + xiao-components": 0.0,
+          "tip-xiao + xiao-board": 0.0,
+          "tip-xiao + xiao-components": 0.0,
+          "xiao-board + xiao-components": 0.0
+        },
+        "expected_overlaps": {
+          "handle + shaft-lower": "Cam pocket preload"
+        },
+        "unexpected": [],
+        "wire_probe_overlap_mm3": {
+          "handle": 0.0,
+          "pod": 0.0,
+          "shaft-lower": 0.0,
+          "shaft-upper": 0.0,
+          "tip-xiao": 0.0
+        },
+        "opening": null,
+        "passed": true
+      },
+      "puck-legacy-round": {
+        "label": "Round",
+        "profile": "puck-legacy",
+        "handle": "round",
         "overlaps_mm3": {
           "handle + pod": 0.0,
           "handle + shaft-lower": 0.5741,
@@ -1178,7 +1418,10 @@
         },
         "passed": true
       },
-      "oval": {
+      "puck-legacy-oval": {
+        "label": "Oval",
+        "profile": "puck-legacy",
+        "handle": "oval",
         "overlaps_mm3": {
           "handle + pod": 0.0,
           "handle + shaft-lower": 0.5741,
@@ -1222,7 +1465,10 @@
         },
         "passed": true
       },
-      "angled": {
+      "puck-legacy-angled": {
+        "label": "Angled",
+        "profile": "puck-legacy",
+        "handle": "angled",
         "overlaps_mm3": {
           "handle + pod": 0.0,
           "handle + shaft-lower": 0.5741,
@@ -1266,7 +1512,10 @@
         },
         "passed": true
       },
-      "straight": {
+      "puck-legacy-straight": {
+        "label": "No loop",
+        "profile": "puck-legacy",
+        "handle": "straight",
         "overlaps_mm3": {
           "handle + pod": 0.0,
           "handle + shaft-lower": 0.5741,

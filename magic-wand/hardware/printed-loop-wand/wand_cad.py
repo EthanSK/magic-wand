@@ -464,6 +464,54 @@ def pod(pilots: bool) -> Manifold:
     return body - union(voids)
 
 
+# XIAO tip (current profile). It reuses the Puck tip's tongue, so the unchanged upper shaft laps
+# over it exactly as before; only the part in front of the shaft differs.
+XT = D["xiao_tip"]
+Z_DECK0 = Z_HALF_FRONT + XT["shaft_gap"]
+Z_BOARD0 = Z_DECK0 + XT["rear_wall"] + XT["clearance"]
+Z_BOARD1 = Z_BOARD0 + XT["board_length"]
+Z_DECK1 = Z_BOARD1 - XT["usb_setback"]  # Deck stops short of the USB end so a plug isn't blocked.
+Y_DECK = XT["deck_top_y"]
+HALF_POCKET = XT["board_width"] / 2 + XT["clearance"]
+HALF_DECK = HALF_POCKET + XT["lip_wall"]
+
+
+def tip_xiao() -> Manifold:
+    """Open U-shaped deck for a bare XIAO board: low side lips locate it, tape through the side
+    notches holds it, the rear wall stops it and passes the wires. No battery holder."""
+    tongue = octagon_prism(Z_TONGUE, Z_DECK0 + 1.0, "low").trim_by_plane((-1.0, 0.0, 0.0), -X_FLAT)
+    solid = [tongue,
+             box(-HALF_DECK, HALF_DECK, Y_BOT, Y_DECK, Z_DECK0, Z_DECK1),
+             box(-HALF_DECK, HALF_DECK, Y_DECK - 0.1, Y_DECK + XT["rear_wall_height"], Z_DECK0, Z_BOARD0 - XT["clearance"])]
+    for side in (-1.0, 1.0):
+        x0, x1 = sorted((side * HALF_POCKET, side * HALF_DECK))
+        solid.append(box(x0, x1, Y_DECK - 0.1, Y_DECK + XT["lip_height"], Z_DECK0, Z_DECK1))
+    body = union(solid)
+    w, n = XT["wire_slot_width"] / 2, XT["tape_notch"]
+    ri = XT["relief_inset"]
+    voids = [teardrop_z(S["wire_bore"] / 2, Z_TONGUE - 1.0, Z_DECK0 + 2.0, 270.0),
+             box(-w, w, -S["wire_bore"] / 2, Y_DECK + XT["rear_wall_height"] + 1.0, Z_HALF_FRONT - 1.0, Z_BOARD0 + 3.0),
+             box(-XT["board_width"] / 2 + ri, XT["board_width"] / 2 - ri, Y_DECK - XT["relief_depth"], Y_DECK + 0.1,
+                 Z_BOARD0 + ri, Z_BOARD1 - ri)]
+    for f in n["at"]:
+        zc = Z_BOARD0 + f * XT["board_length"]
+        for side in (-1.0, 1.0):
+            x0, x1 = sorted((side * (HALF_DECK - n["depth"]), side * (HALF_DECK + 1.0)))
+            voids.append(box(x0, x1, Y_BOT - 1.0, Y_DECK + 2.0, zc - n["width"] / 2, zc + n["width"] / 2))
+    return body - union(voids)
+
+
+def xiao_board() -> Manifold:
+    """Reference only: the documented 21 x 17.8 mm outline with a provisional PCB thickness."""
+    return box(-XT["board_width"] / 2, XT["board_width"] / 2, Y_DECK, Y_DECK + XT["pcb_thickness"], Z_BOARD0, Z_BOARD1)
+
+
+def xiao_envelope() -> Manifold:
+    """Reference only: provisional space for components above the board, kept clear of every part."""
+    top = Y_DECK + XT["pcb_thickness"]
+    return box(-XT["board_width"] / 2, XT["board_width"] / 2, top, top + XT["component_clearance"], Z_BOARD0, Z_BOARD1)
+
+
 def puck_ring() -> Manifold:
     """Print-frame coupon: the pocket and rim of the tip cradle, to test the stock case fit."""
     h = CPN["puck_ring_height"]
@@ -495,6 +543,7 @@ PARTS = [  # (name, builder, orientation, group, role). Order is the suggested p
     ("shaft-upper", shaft_upper, "x-down", "shaft", "Upper shaft: half-laps to the lower shaft and the tip"),
     ("tip-cradle", tip_cradle, "y-up", "tip", "Tip cradle for the stock Puck.js case"),
     ("tip-cap", tip_cap, "y-down", "tip", "Removable cap ring; light and Puck button stay uncovered"),
+    ("tip-xiao", tip_xiao, "y-up", "tip", "Open deck for a bare XIAO board, taped on; USB end uncovered, no battery holder"),
     ("button-pod-pilot", lambda: pod(True), "y-down", "pod", "Button carrier with 2 mm pilot holes at the button centres"),
     ("button-pod-blank", lambda: pod(False), "y-down", "pod", "Button carrier with no holes, to mark and drill by hand"),
 ]
@@ -509,11 +558,31 @@ SUPPORTS = {
     "handle-angled": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
     "handle-straight": "45-degree grip underside; support at shared rail/socket overhangs",
     "shaft-lower": "Support under small pin overhangs", "shaft-upper": "None expected",
-    "tip-cradle": "None expected", "tip-cap": "None", "button-pod-pilot": "None expected", "button-pod-blank": "None expected",
+    "tip-cradle": "None expected", "tip-cap": "None", "tip-xiao": "None expected; not yet sliced", "button-pod-pilot": "None expected", "button-pod-blank": "None expected",
 }
-ASSEMBLY_PARTS = ["pod", "shaft-lower", "shaft-upper", "tip-cradle", "tip-cap"]
-COLORS = {"handle": (124, 108, 240), "pod": (240, 163, 92), "shaft": (70, 64, 96), "tip-cradle": (217, 212, 232),
-          "tip-cap": (183, 174, 240), "puck": (236, 232, 244)}
+# Profiles pair a tip with handles. Ethan's "mug" handle is handle-round (the mug-style loop) and
+# "without the handle" means the plain no-loop grip, handle-straight; both keep the same socket.
+PROFILES = D["profiles"]
+CURRENT = PROFILES["current"]
+PROFILE_NAMES = [k for k in PROFILES if k != "current"]
+SHARED_PARTS = ["button-pod-pilot", "shaft-lower", "shaft-upper"]
+PART_PROFILES = {"tip-cradle": "puck-legacy", "tip-cap": "puck-legacy", "coupon-puck-ring": "puck-legacy", "tip-xiao": "xiao"}
+COLORS = {"handle": (124, 108, 240), "button-pod-pilot": (240, 163, 92), "shaft-lower": (70, 64, 96), "shaft-upper": (70, 64, 96),
+          "tip-cradle": (217, 212, 232), "tip-cap": (183, 174, 240), "tip-xiao": (217, 212, 232),
+          "puck-case": (236, 232, 244), "xiao-board": (64, 160, 110)}
+REFERENCES = {"puck-case": lambda: puck_dummy(), "xiao-board": lambda: xiao_board()}
+
+
+def assemblies() -> dict[str, dict]:
+    """Every (profile, handle) pairing, keyed profile-key, e.g. xiao-mug."""
+    out = {}
+    for profile in PROFILE_NAMES:
+        spec = PROFILES[profile]
+        for key, a in spec["assemblies"].items():
+            out[f"{profile}-{key}"] = {"label": a["label"], "profile": profile, "handle": a["handle"],
+                                      "parts": [f"handle-{a['handle']}"] + SHARED_PARTS + spec["tip_parts"],
+                                      "reference": spec["reference"]}
+    return out
 
 
 def rotation(deg: tuple[float, float, float]) -> np.ndarray:
@@ -664,12 +733,18 @@ def joint_checks() -> dict:
     return result
 
 
-def wire_probe(radius: float = 1.5) -> Manifold:
+def wire_probe(profile: str = "puck-legacy", radius: float = 1.5) -> Manifold:
     y_pod = POD_Y0 + RAIL["height"] + 2.0
     zw = H["rail_wire_hole"]["z"]
     low = -S["wire_bore"] / 2 + radius + 0.1  # Along the groove floor under the cap skirt.
-    pts = [(0, low, Z_TIP - 14), (0, low, Z_TONGUE + 4), (0, 0, Z_LAP), (0, 0, Z_SPIGOT - 1), (0, 0, L - 30),
-           (0, 0, zw), (0, y_pod, zw), (0, y_pod, BUTTONS["top"])]
+    if profile == "xiao":  # From above the board's rear edge, down through the rear-wall slot.
+        y_over = Y_DECK + XT["pcb_thickness"] + XT["component_clearance"] + radius + 0.2
+        z_drop = Z_DECK0 + radius + 0.1  # Drops just in front of the shaft's end, then runs back in the groove.
+        start = [(0, y_over, Z_BOARD0 + 2), (0, y_over, z_drop), (0, low, z_drop)]
+    else:
+        start = [(0, low, Z_TIP - 14)]
+    pts = start + [(0, low, Z_TONGUE + 4), (0, 0, Z_LAP), (0, 0, Z_SPIGOT - 1), (0, 0, L - 30),
+                   (0, 0, zw), (0, y_pod, zw), (0, y_pod, BUTTONS["top"])]
     ball = Manifold.sphere(radius, 24)
     return union([Manifold.batch_hull([ball.translate(a), ball.translate(b)]) for a, b in zip(pts[:-1], pts[1:])])
 
@@ -690,24 +765,30 @@ def opening(m: Manifold) -> dict:
 
 
 def assembly_checks(parts: dict) -> dict:
-    shared = {n: parts["button-pod-pilot" if n == "pod" else n]["assembly"] for n in ASSEMBLY_PARTS}
-    shared["puck-case"] = puck_dummy()
     expected = {("handle", "shaft-lower"): "Cam pocket preload", ("tip-cradle", "tip-cap"): "Cap press fit"}
-    probe = wire_probe()
+    probes = {profile: wire_probe(profile) for profile in PROFILE_NAMES}
+    refs = {"puck-case": puck_dummy(), "xiao-board": xiao_board(), "xiao-components": xiao_envelope()}
     out = {}
-    for variant in H["variants"]:
-        solids = {"handle": parts[f"handle-{variant}"]["assembly"], **shared}
+    for aid, a in assemblies().items():
+        variant, probe = a["handle"], probes[a["profile"]]
+        solids = {"handle": parts[f"handle-{variant}"]["assembly"]}
+        solids.update({("pod" if n == "button-pod-pilot" else n): parts[n]["assembly"] for n in a["parts"][1:]})
+        if a["reference"] == "xiao-board":
+            solids["xiao-board"], solids["xiao-components"] = refs["xiao-board"], refs["xiao-components"]
+        else:
+            solids["puck-case"] = refs["puck-case"]
         pairs, unexpected = {}, []
         keys = list(solids)
-        for i, a in enumerate(keys):
-            for b in keys[i + 1:]:
-                v, _ = overlap(solids[a], solids[b])
-                label = expected.get((a, b))
-                pairs[f"{a} + {b}"] = v
+        for i, x in enumerate(keys):
+            for y in keys[i + 1:]:
+                v, _ = overlap(solids[x], solids[y])
+                label = expected.get((x, y))
+                pairs[f"{x} + {y}"] = v
                 if v >= 0.01 and not label:
-                    unexpected.append(f"{a} + {b}")
-        wires = {k: overlap(probe, s)[0] for k, s in solids.items() if k != "puck-case"}
-        out[variant] = {"overlaps_mm3": pairs, "expected_overlaps": {f"{a} + {b}": t for (a, b), t in expected.items()},
+                    unexpected.append(f"{x} + {y}")
+        wires = {k: overlap(probe, s)[0] for k, s in solids.items() if k not in REFERENCES and k != "xiao-components"}
+        out[aid] = {"label": a["label"], "profile": a["profile"], "handle": variant,
+                    "overlaps_mm3": pairs, "expected_overlaps": {f"{x} + {y}": t for (x, y), t in expected.items() if x in solids and y in solids},
                         "unexpected": unexpected, "wire_probe_overlap_mm3": wires,
                         "opening": opening(solids["handle"]) if has_loop(variant) else None,
                         "passed": not unexpected and all(v < 0.01 for v in wires.values())}
@@ -716,7 +797,7 @@ def assembly_checks(parts: dict) -> dict:
 
 # ----------------------------------------------------------------------------- outputs
 
-def glb_bytes(parts: dict) -> bytes:
+def glb_bytes(parts: dict, profile: str) -> bytes:
     import trimesh
     scene = trimesh.Scene()
 
@@ -729,15 +810,16 @@ def glb_bytes(parts: dict) -> bytes:
         return mesh
 
     solids = {name: parts[name]["assembly"] for name in parts}
-    solids["puck-case-reference"] = puck_dummy()
-    for k, variant in enumerate(H["variants"]):
+    for ref, make_ref in REFERENCES.items():
+        solids[f"{ref}-reference"] = make_ref()
+    chosen = [(aid, a) for aid, a in assemblies().items() if a["profile"] == profile]
+    for k, (aid, a) in enumerate(chosen):
         offset = np.eye(4)
-        offset[0, 3] = 0.07 * k  # Assemblies side by side, 70 mm apart.
-        items = [(f"handle-{variant}", COLORS["handle"]), ("button-pod-pilot", COLORS["pod"]), ("shaft-lower", COLORS["shaft"]),
-                 ("shaft-upper", COLORS["shaft"]), ("tip-cradle", COLORS["tip-cradle"]), ("tip-cap", COLORS["tip-cap"]),
-                 ("puck-case-reference", COLORS["puck"])]
+        offset[1, 3] = -0.13 * k  # Assemblies stacked 130 mm apart, so a side view shows each handle.
+        items = [(n, COLORS["handle"] if n.startswith("handle-") else COLORS[n]) for n in a["parts"]]
+        items.append((f"{a['reference']}-reference", COLORS[a["reference"]]))
         for name, color in items:
-            node = f"{variant}/{name}"
+            node = f"{aid}/{name}"
             if name not in scene.geometry:
                 scene.add_geometry(make(name, solids[name], color), geom_name=name, node_name=node, transform=offset)
             else:
@@ -764,12 +846,15 @@ def build(run_checks: bool = True) -> tuple[dict[str, bytes], dict]:
         fits = all(s <= b - 2 * margin for s, b in zip(checks["print_size_mm"], bed))
         entries.append({
             "name": name, "file": f"{name}.stl", "sha256": sha256(data), "bytes": len(data), "group": p["group"],
-            "role": p["role"], "print_orientation": p["orientation"], "supports": SUPPORTS[name],
+            "role": p["role"], "profile": PART_PROFILES.get(name, "shared"), "print_orientation": p["orientation"], "supports": SUPPORTS[name],
             "fits_bed": fits, "mesh": checks,
             "print_to_assembly": [[r4(v) for v in row] for row in p["to_assembly"].tolist()],
         })
-    glb = glb_bytes(parts)
-    files["assembly.glb"] = glb
+    glbs = {}
+    for profile in PROFILE_NAMES:
+        name = "assembly.glb" if profile == CURRENT else f"assembly-{profile}.glb"
+        glbs[profile] = (name, glb_bytes(parts, profile))
+        files[name] = glbs[profile][1]
     manifest = {
         "schema": 1, "name": D["name"], "units": "mm", "status": D["status"], "frame": D["frame"],
         "source": {"dimensions_sha256": sha256(DIMENSIONS.read_bytes()), "script_sha256": sha256(Path(__file__).read_bytes()),
@@ -778,10 +863,17 @@ def build(run_checks: bool = True) -> tuple[dict[str, bytes], dict]:
         "layout": {"overall_length": D["overall"]["length"], "handle_mouth_z": L, "spigot_end_z": Z_SPIGOT, "lap_center_z": r4(Z_LAP),
                    "tongue_rear_z": r4(Z_TONGUE), "puck_center": [0.0, r4(Y_FLOOR + TIP["puck_case_height"] / 2), r4(Z_TIP)],
                    "puck_case": {"diameter": TIP["puck_case_diameter"], "height": TIP["puck_case_height"]},
-                   "buttons_z": BUTTONS, "pod_z": [POD_Z0, POD_Z1], "twist_deg": J["twist"], "pin_angles_deg": J["pin_angles"]},
-        "assemblies": {v: {"label": s["label"], "parts": [f"handle-{v}"] + ["button-pod-pilot", "shaft-lower", "shaft-upper", "tip-cradle", "tip-cap"]}
-                       for v, s in H["variants"].items()},
-        "glb": {"file": "assembly.glb", "sha256": sha256(glb), "bytes": len(glb), "units": "metres, Y up, wand along +Z; handles side by side 70 mm apart"},
+                   "buttons_z": BUTTONS, "pod_z": [POD_Z0, POD_Z1], "twist_deg": J["twist"], "pin_angles_deg": J["pin_angles"],
+                   "xiao": {"board_center": [0.0, r4(Y_DECK + XT["pcb_thickness"] / 2), r4((Z_BOARD0 + Z_BOARD1) / 2)],
+                            "board_size": [XT["board_width"], XT["pcb_thickness"], XT["board_length"]],
+                            "board_front_z": r4(Z_BOARD1), "deck_top_y": Y_DECK,
+                            "component_clearance": XT["component_clearance"], "boards": XT["boards"]}},
+        "current_profile": CURRENT,
+        "profiles": {k: {"label": PROFILES[k]["label"], "tip_parts": PROFILES[k]["tip_parts"], "reference": PROFILES[k]["reference"],
+                         "glb": glbs[k][0], "assemblies": [f"{k}-{a}" for a in PROFILES[k]["assemblies"]]} for k in PROFILE_NAMES},
+        "assemblies": {aid: {"label": a["label"], "profile": a["profile"], "parts": a["parts"]} for aid, a in assemblies().items()},
+        "glb": [{"file": glbs[k][0], "profile": k, "sha256": sha256(glbs[k][1]), "bytes": len(glbs[k][1]),
+                 "units": "metres, Y up, wand along +Z; assemblies stacked 130 mm apart in -Y"} for k in PROFILE_NAMES],
         "parts": entries,
     }
     if run_checks:
