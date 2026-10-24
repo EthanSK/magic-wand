@@ -13,6 +13,7 @@
 
 - Work directly on `main` for this project. Do not create worktrees unless Ethan explicitly asks for one. User-requested — 2026-10-24.
 - Commit and push completed, checked work after every natural step. Preserve unrelated staged and unstaged work; never force-push. A commit is not a claim of physical acceptance. User-requested — 2026-10-24.
+- Always commit all the wand 3D models and the code without Ethan having to ask, so they can be modified later. Keep the editable CAD sources and their regenerated print/viewer files together in each completed, checked commit, then push them to the shared repository. User-requested — 2026-10-24.
 - Keep all existing sensors supported as new ones are added. Keep device-specific firmware and transports separate; share code only when the same behavior is verified. Do not contaminate the Puck JavaScript when adding Sense or future sensors.
 - Save durable user rules here when they apply to every component, or in the owning component's instructions when they are specific. Use Ethan's original wording as closely as possible. Preserve verified historical lessons in the owning component's LEARNINGS.md.
 - Run `npm run check` from the repository root before committing: it checks privacy across all components and runs each workspace's checks. Run a component command with `npm run <command> --workspace <component>`.
