@@ -939,3 +939,24 @@ Accessibility subrole must take precedence over that ancestor when choosing
 Bottom hold behaviour. Send ordinary mouse events; do not turn a drag into a
 separate Close action. Explicit tap-then-hold and screenshot selection retain
 their existing paths.
+
+
+## Manual power chord and sleep warning (2026-10-24)
+
+The all-three-grip power chord is consumed before the actual registered Bottom,
+Middle and Top handlers. Latch it until every button is released. Manual standby
+requires the same chord to wake; automatic standby keeps any-button wake. Consume
+that first automatic-wake press until release too, otherwise a three-button wake
+can immediately turn the wand off again. Regression checks cover both sequences.
+
+All three LEDs blink on/off twice at 100 ms per phase before deep standby. A grip
+press cancels an automatic warning; an intentional manual power-off chord is not
+cancelled by its own held buttons. The complete saved image was verified by length
+and checksum, loaded from a clean interpreter with calibration, and reconnected
+without code upload. Physical button feel still needs user acceptance. The prior
+five-minute rest, disconnect and button-wake cycle was observed before this change.
+
+Persist the base through the same syntax-only minifier as the other saved parts;
+its readable source remains canonical. The cold-boot test restores line breaks
+before top-level declarations only for the simulator's replacement-function shim.
+No pointer timing or sensor rates changed.

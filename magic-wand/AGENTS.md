@@ -133,6 +133,7 @@ through their build/check commands; never claim an illustration is physical veri
 ## Current contextual hold and sleep behaviour
 
 - After five minutes of confirmed rest, use deeper button-wake sleep: switch off Bluetooth, motion sensing and lights, then wake on any of the three custom grip buttons. Pickup alone does not wake this deeper state. Preserve the prior mouse-follow choice; newer recording or manual choices win. Keep the known calibration in the Mac app per physical wand and restore it automatically after reconnect or power loss, without requiring another manual setup. User-requested — 2026-10-24.
+- Just before that deep sleep, flash all three LED colours together twice as an “I'm going to sleep” cue. Keep the one-minute light-off state unchanged; a grip-button press cancels the warning and pending sleep. User-requested — 2026-10-24.
 - Bottom hold scrolls over a scroll area and drags a confirmed draggable target.
   Unknown or late target detection must never turn scrolling into a surprise
   drag; release and lost telemetry cancel pending target results. Preserve the
@@ -147,3 +148,5 @@ through their build/check commands; never claim an illustration is physical veri
 - The wand home Enter card sends ordinary Enter, just like the normal Agentic Mouse. Do not restore the retired wand-only Command-Enter / Steer override. User-requested — 2026-10-20.
 
 - Keep the visible wand HUD anchored while Agent Flow starts or changes its panel. Capture recorder clearance when the HUD opens, and refresh on the next open or display reconfiguration; never move an active target under the wand because another app publishes temporary window bounds. User-requested — 2026-10-20.
+
+- Pressing all three custom grip buttons together toggles manual deep standby. Manual standby wakes with the same three-button chord; automatic five-minute standby still wakes with any grip button. Consume the chord until all buttons are released so it does not also trigger mouse/HUD/recording actions. User-requested — 2026-10-24.

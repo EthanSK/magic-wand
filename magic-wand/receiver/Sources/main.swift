@@ -229,7 +229,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // Checking first matters even if the source guards its own version:
         // parsing the whole skipped function body can exhaust a warm Puck.
         powerPolicyReady=false
-        queue("if(global.WAND_POWER_POLICY_VERSION===2&&typeof global.wandEnterDeepStandby==='function'&&global.wandPowerWatches&&global.wandPowerWatches.length===3)print('WAND_POWER_POLICY_READY');else print('WAND_POWER_POLICY_NEEDED');")
+        queue("if(global.WAND_POWER_POLICY_VERSION===3&&typeof global.wandEnterDeepStandby==='function'&&global.wandPowerWatches&&global.wandPowerWatches.length===3)print('WAND_POWER_POLICY_READY');else print('WAND_POWER_POLICY_NEEDED');")
     }
     func loadPowerPolicy() {
         guard let url=Bundle.main.url(forResource:"wand-power-policy",withExtension:"js"),
@@ -631,6 +631,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line=="WAND_POWER_POLICY_NEEDED" || line==">WAND_POWER_POLICY_NEEDED" {if !loadingPowerPolicy {loadPowerPolicy()}}
             if loadingPowerPolicy && line.contains("Uncaught ") {loadingPowerPolicy=false;powerPolicyReady=false;log("POWER_POLICY_FAILED")}
             if line=="WAND_POWER_STANDBY_DENIED" || line==">WAND_POWER_STANDBY_DENIED" {standbyResume=nil}
+            if line=="WAND_POWER_STANDBY_CANCELLED" || line==">WAND_POWER_STANDBY_CANCELLED" {standbyResume=nil;log("DEEP_STANDBY_CANCELLED")}
+            if line=="WAND_POWER_STANDBY_ENTERED" || line==">WAND_POWER_STANDBY_ENTERED" {log("DEEP_STANDBY_ENTERED")}
             if let marker=line.range(of:"@BOTTOM ") {
                 let value=String(line[marker.upperBound...]).trimmingCharacters(in:.whitespaces)
                 // The device prints each edge before the click it emits on release,
