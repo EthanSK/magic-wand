@@ -28,6 +28,18 @@ def trace_files(path: Path) -> list[Path]:
         raise ValueError("Trace input exceeds the 32 MiB offline replay limit.")
     return files
 
+def report_target(requested: Path) -> Path:
+    """Private reports may use external paths or explicitly ignored scratch folders."""
+    target = requested.expanduser().resolve()
+    try:
+        relative = target.relative_to(REPOSITORY)
+    except ValueError:
+        return target
+    if relative.parts[:1] == ("work",) or relative.parts[:2] == ("magic-wand", "work"):
+        return target
+    raise ValueError("Keep private reports outside the public repository, or in an ignored work folder.")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -39,6 +51,8 @@ def main() -> None:
     replay.add_argument("--source", type=Path, default=ROOT / "receiver/Sources/WandPointerControl.swift")
     replay.add_argument("--report", type=Path, help="Save a private JSON report outside the public source tree")
     args = parser.parse_args()
+    if args.command == "replay" and args.report:
+        args.report = report_target(args.report)
     if args.command == "capture":
         path = args.support.expanduser() / "review-trace.json"
         if args.state == "status":
@@ -84,13 +98,7 @@ def main() -> None:
     report["classifierSHA256"] = hashlib.sha256(source.read_bytes()).hexdigest()
     encoded = json.dumps(report, indent=2) + "\n"
     if args.report:
-        target = args.report.expanduser().resolve()
-        try:
-            relative = target.relative_to(ROOT)
-        except ValueError:
-            relative = None
-        if relative is not None and (not relative.parts or relative.parts[0] != "work"):
-            raise ValueError("Keep private reports outside the public repository, or in its ignored work folder.")
+        target = args.report
         target.parent.mkdir(parents=True, exist_ok=True)
         with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=target.parent, prefix=".review-report-", delete=False) as f:
             temporary = Path(f.name)

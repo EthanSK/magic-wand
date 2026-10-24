@@ -50,3 +50,25 @@ test('offline replay uses canonical review code and reports malformed input',{sk
   assert.equal(result.malformedRecords,1);assert.equal(result.classifierSHA256.length,64);
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
+
+test('private replay reports cannot enter another monorepo component', () => {
+ const cli = new URL('../scripts/review_trace.py', import.meta.url).pathname;
+ const code = `import runpy, sys, tempfile
+from pathlib import Path
+m = runpy.run_path(sys.argv[1], run_name='report_path_test')
+resolve = m['report_target']
+repo, component = m['REPOSITORY'], m['ROOT']
+for target in [repo / 'docs/private-report.json', repo / 'control-stones/private-report.json', component / 'private-report.json']:
+ try:
+  resolve(target)
+ except ValueError:
+  pass
+ else:
+  raise AssertionError('public report path was accepted')
+for target in [repo / 'work/report.json', component / 'work/report.json', Path(tempfile.gettempdir()) / 'wand-report.json']:
+ assert resolve(target) == target.resolve()
+print('Private report paths stay outside published sources')
+`;
+ const result = spawnSync('python3', ['-I', '-c', code, cli], {encoding:'utf8'});
+ assert.equal(result.status, 0, result.stdout + result.stderr);
+});

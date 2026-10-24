@@ -1,5 +1,13 @@
 # Building Magic Wand
 
+This is the `magic-wand/` component of the controller monorepo. Run the commands in this guide from this folder:
+
+```sh
+cd magic-wand  # From the repository root
+```
+
+The published site stays in `../docs/`; root `npm run check` checks every component.
+
 This is a source-only project. There’s no packaged, signed or notarised receiver, and no release.
 These steps describe the parts in this repository; they haven’t been rehearsed end to end on a
 second wand.
