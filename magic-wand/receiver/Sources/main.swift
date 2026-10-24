@@ -214,6 +214,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         do {try WandCalibrationStore.write(value,to:calibrationURL(for:id),device:id);log("KNOWN_CALIBRATION_SAVED")}
         catch {log("KNOWN_CALIBRATION_SAVE_FAILED",error.localizedDescription)}
     }
+    func checkPowerPolicy() {
+        // Checking first matters even if the source guards its own version:
+        // parsing the whole skipped function body can exhaust a warm Puck.
+        powerPolicyReady=false
+        queue("if(global.WAND_POWER_POLICY_VERSION===1&&typeof global.wandEnterDeepStandby==='function'&&global.wandPowerWatches&&global.wandPowerWatches.length===3)print('WAND_POWER_POLICY_READY');else print('WAND_POWER_POLICY_NEEDED');")
+    }
     func loadPowerPolicy() {
         guard let url=Bundle.main.url(forResource:"wand-power-policy",withExtension:"js"),
               let source=try? String(contentsOf:url,encoding:.utf8) else{return}
@@ -546,7 +552,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line == "WAND_MODE_ROUTING_READY" || line == ">WAND_MODE_ROUTING_READY" {
                 guard !bridgeLoadFailed else {queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();");log("BRIDGE_LOAD_REJECTED");continue}
                 loadingBridge=false;loadingRuntime=false;ready=true;motionFilter.reset();rawLastArrival=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
-                restoreKnownCalibration();loadPowerPolicy()
+                restoreKnownCalibration();checkPowerPolicy()
                 if let remembered=standbyResume {let resume=remembered && !recording.isRecording;standbyResume=nil;queue("setMouseFollow("+(resume ? "true":"false")+");");dwell.follow(resume);log("DEEP_STANDBY_RESUMED",resume)}
                 if context.isActive {hudSession=true;hudOpenedAt=ProcessInfo.processInfo.systemUptime}
                 if let mode=selectedReviewMode {setWandShortcut(mode)}
@@ -589,6 +595,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             }
             if line.contains("WAND_CALIBRATED") { log(line);rememberCalibration(line) }
             if line=="WAND_POWER_POLICY_READY" || line==">WAND_POWER_POLICY_READY" {loadingPowerPolicy=false;powerPolicyReady=true;log("POWER_POLICY_READY")}
+            if line=="WAND_POWER_POLICY_NEEDED" || line==">WAND_POWER_POLICY_NEEDED" {if !loadingPowerPolicy {loadPowerPolicy()}}
             if loadingPowerPolicy && line.contains("Uncaught ") {loadingPowerPolicy=false;powerPolicyReady=false;log("POWER_POLICY_FAILED")}
             if line=="WAND_POWER_STANDBY_DENIED" || line==">WAND_POWER_STANDBY_DENIED" {standbyResume=nil}
             if let marker=line.range(of:"@BOTTOM ") {

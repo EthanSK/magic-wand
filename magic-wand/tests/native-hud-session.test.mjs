@@ -330,7 +330,7 @@ final class Harness {
  var selectedReviewMode:String?
  var standbyResume:Bool?
  let dwell=Dwell(),recording=Recording()
- func restoreKnownCalibration(){};func loadPowerPolicy(){}
+ func restoreKnownCalibration(){};func checkPowerPolicy(){}
  func setWandShortcut(_ mode:String){}
  var sent:[String]=[];var loads=0
  func queue(_ value:String){sent.append(value)}
