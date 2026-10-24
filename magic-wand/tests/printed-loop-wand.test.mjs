@@ -172,9 +172,10 @@ test("the tapered profile preserves a continuous body, two ribs, and a wired thu
   assert.ok(Object.values(tapered.seam_max_radius_step_mm).every((r) => r < 0.2), "no handle bulge at the joins");
   assert.deepEqual(tapered.rib_directions, [1, -1], "Ethan's criss-cross means opposite winding directions");
   assert.deepEqual(tapered.rib_pitches_mm, dimensions.tapered.spiral.pitches);
-  assert.equal(tapered.rib_pitches_mm[0] / tapered.rib_pitches_mm[1], 1.25,
-    "one strand makes 25% more turns along the same shaft");
-  assert.equal(tapered.rib_crossing_spacing_mm, 40);
+  assert.equal(tapered.rib_pitches_mm[0] - tapered.rib_pitches_mm[1], 3 * (90 - 72),
+    "Ethan asked to triple the previous 18 mm pitch difference");
+  assert.equal(tapered.rib_pitches_mm[0] / tapered.rib_pitches_mm[1], 2.5);
+  assert.equal(tapered.rib_crossing_spacing_mm, 25.7143);
   for (const [key, peaks] of Object.entries(tapered.rib_peaks_deg)) {
     assert.equal(peaks.length, 2);
     for (const angle of tapered.rib_expected_deg[key]) {
