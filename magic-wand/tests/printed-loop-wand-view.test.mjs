@@ -152,6 +152,25 @@ test("keyboard follows the mode and Reset view restores the framing", () => {
   assert.deepEqual(MODES, ["turn", "move", "zoom"]);
 });
 
+test("a local model refresh restores the camera and mode without restoring held input", () => {
+  const before = view("move");
+  before.turn(60, 10);
+  before.zoomSteps(2);
+  before.move(15, 20, H);
+  before.pointerDown(1, 20, 30);
+  const saved = JSON.parse(JSON.stringify(before.snapshot()));
+  const after = view();
+  assert.equal(after.restore(saved), true);
+  assert.deepEqual(after.camera(), before.camera());
+  assert.equal(after.mode, "move");
+  assert.equal(after.pointers.size, 0);
+  const valid = after.snapshot();
+  assert.equal(after.restore({ ...saved, target: [1, null, 3] }), false);
+  assert.deepEqual(after.snapshot(), valid);
+  saved.target[0] += 100;
+  assert.deepEqual(after.snapshot(), valid, "restored coordinates do not alias the saved object");
+});
+
 test("the page wires scrolling to the 3D view only and shows the controls", () => {
   const source = readFileSync(join(preview, "preview.mjs"), "utf8");
   const html = readFileSync(join(preview, "index.html"), "utf8");

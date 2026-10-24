@@ -62,6 +62,22 @@ export class ViewInput {
     this.target = [...this.home.target];
   }
 
+  snapshot() {
+    return { yaw: this.yaw, pitch: this.pitch, distance: this.distance, target: [...this.target], mode: this.mode };
+  }
+
+  restore(value) {
+    if (!value || ![value.yaw, value.pitch, value.distance].every(Number.isFinite)
+        || !Array.isArray(value.target) || value.target.length !== 3 || !value.target.every(Number.isFinite)
+        || !MODES.includes(value.mode)) return false;
+    this.yaw = value.yaw;
+    this.pitch = Math.max(-PITCH_LIMIT, Math.min(PITCH_LIMIT, value.pitch));
+    this.distance = Math.max(this.minDistance, Math.min(this.maxDistance, value.distance));
+    this.target = [...value.target];
+    this.mode = value.mode;
+    return true;
+  }
+
   setMode(mode) {
     if (!MODES.includes(mode)) return false;
     this.mode = mode;

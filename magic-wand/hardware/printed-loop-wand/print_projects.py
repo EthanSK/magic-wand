@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import re
 import shutil
+import struct
 import subprocess
 import tempfile
 import xml.etree.ElementTree as ET
@@ -20,6 +21,45 @@ SETTINGS = HERE / "print-settings"
 EXPORTS = HERE / "exports"
 RECEIPT = OUT / "manifest.json"
 FILES = {"spiral": "tapered-double-helix.3mf", "smooth": "tapered-smooth.3mf"}
+
+
+def arrange_parts(names: list[str], path: Path) -> None:
+    """Use a generous fixed four-part layout, including room for brims and tree supports."""
+    ns = "http://schemas.microsoft.com/3dmanufacturing/core/2015/02"
+    ET.register_namespace("", ns)
+    tag = lambda name: f"{{{ns}}}{name}"
+    model = ET.Element(tag("model"), unit="millimeter")
+    resources, build = ET.SubElement(model, tag("resources")), ET.SubElement(model, tag("build"))
+    assert len(names) == 4
+    for ident, (name, centre) in enumerate(zip(names, [(60, 70), (150, 70), (60, 170), (150, 170)]), 1):
+        data = (EXPORTS / f"{name}.stl").read_bytes()
+        count = struct.unpack_from("<I", data, 80)[0]
+        vertices, faces, ids = [], [], {}
+        for t in range(count):
+            points = struct.unpack_from("<9f", data, 84 + 50 * t + 12)
+            face = []
+            for j in range(0, 9, 3):
+                point = points[j:j + 3]
+                if point not in ids:
+                    ids[point] = len(vertices)
+                    vertices.append(point)
+                face.append(ids[point])
+            faces.append(face)
+        obj = ET.SubElement(resources, tag("object"), id=str(ident), type="model", name=name)
+        mesh = ET.SubElement(obj, tag("mesh"))
+        vs, ts = ET.SubElement(mesh, tag("vertices")), ET.SubElement(mesh, tag("triangles"))
+        for x, y, z in vertices:
+            ET.SubElement(vs, tag("vertex"), x=str(x), y=str(y), z=str(z))
+        for a, b, c in faces:
+            ET.SubElement(ts, tag("triangle"), v1=str(a), v2=str(b), v3=str(c))
+        lo = [min(v[k] for v in vertices) for k in range(3)]
+        hi = [max(v[k] for v in vertices) for k in range(3)]
+        tx, ty = [centre[k] - (lo[k] + hi[k]) / 2 for k in range(2)]
+        ET.SubElement(build, tag("item"), objectid=str(ident), transform=f"1 0 0 0 1 0 0 0 1 {tx} {ty} {-lo[2]}")
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("3D/3dmodel.model", ET.tostring(model, encoding="utf-8", xml_declaration=True))
+        archive.writestr("[Content_Types].xml", '<?xml version="1.0"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="model" ContentType="application/vnd.ms-package.3dmanufacturing-3dmodel+xml"/></Types>')
+        archive.writestr("_rels/.rels", '<?xml version="1.0"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Target="/3D/3dmodel.model" Id="rel0" Type="http://schemas.microsoft.com/3dmanufacturing/2013/01/3dmodel"/></Relationships>')
 
 
 def sha(path: Path) -> str:
@@ -80,12 +120,14 @@ def build(args) -> None:
         for style, filename in FILES.items():
             part_names = cad["assemblies"][f"tapered-xiao-{style}"]["parts"]
             target = temp / filename
+            arranged = temp / f"{style}-layout.3mf"
+            arrange_parts(part_names, arranged)
             command = [executable, "--datadir", str(temp / "bambu"), "--debug", "2", "--load-settings",
                        str(SETTINGS / "machine.json") + ";" + str(SETTINGS / "process.json"),
-                       "--load-filaments", str(SETTINGS / "filament.json"), "--orient", "0", "--arrange", "1",
+                       "--load-filaments", str(SETTINGS / "filament.json"), "--orient", "0", "--arrange", "0",
                        "--slice", "0", "--export-3mf", str(target)]
-            command += [str(EXPORTS / f"{part}.stl") for part in part_names]
-            result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+            command += [str(arranged)]
+            result = subprocess.run(command, cwd=temp, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
             if result.returncode:
                 raise RuntimeError(result.stdout[-5000:])
             with zipfile.ZipFile(target) as archive:

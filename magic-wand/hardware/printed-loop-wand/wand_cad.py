@@ -536,15 +536,21 @@ def taper_radius(z: float) -> float:
     return r - max(0.0, TP["base_chamfer"] - z)
 
 
+def rib_angle(z: float | np.ndarray, start: int) -> float | np.ndarray:
+    # Ethan's "like DNA" / "criss-cross": one helix winds each way, not two parallel starts.
+    return SP["phase_deg"] + 360.0 * start / SP["starts"] + SP["directions"][start] * 360.0 * z / SP["pitch"]
+
+
 def rib_height(z: np.ndarray, theta: np.ndarray, spiral: bool) -> np.ndarray:
-    """Double-start helical ribs: a smooth cos² bump around each start, fading out before the tip."""
+    """Two counter-wound ribs: smooth cos² crests, merged where they cross, fading before the tip."""
     if not spiral:
         return np.zeros(np.broadcast(z, theta).shape)
     hw = SP["half_width_deg"]
     bump = np.zeros(np.broadcast(z, theta).shape)
     for k in range(SP["starts"]):
-        phi = SP["phase_deg"] + 360.0 * k / SP["starts"] + 360.0 * z / SP["pitch"]
+        phi = rib_angle(z, k)
         delta = (theta - phi + 180.0) % 360.0 - 180.0
+        # At a crossing, join the two crests at normal rib height rather than stacking them.
         bump = np.maximum(bump, np.where(np.abs(delta) < hw, np.cos(np.pi * delta / (2 * hw)) ** 2, 0.0))
     fade = np.clip((Z_ROUND_END - z) / SP["fade"], 0.0, 1.0) * np.clip((z - TP["base_chamfer"]) / 2.0, 0.0, 1.0)  # Not on the base.
     return SP["height"] * fade * bump
@@ -981,7 +987,9 @@ def tapered_checks(parts: dict) -> dict:
     seams = {}
     for style in ("smooth", "spiral"):
         h, lo, up = a[f"handle-tapered-{style}"], a[f"shaft-lower-tapered-{style}"], a[f"shaft-upper-tapered-{style}"]
-        for name, (p, zp), (q, zq) in (("handle/shaft", (h, Z_FACE - 0.2), (lo, L + 0.2)), ("glue", (lo, Z_GLUE - 0.2), (up, Z_GLUE + 0.2))):
+        # Sample just inside the actual mating faces. Sampling 0.2 mm back on each
+        # part measures extra helix travel as though it were a mismatch at the joint.
+        for name, (p, zp), (q, zq) in (("handle/shaft", (h, Z_FACE - 0.01), (lo, L + 0.01)), ("glue", (lo, Z_GLUE - 0.01), (up, Z_GLUE + 0.01))):
             pp, qq = section_polar(p, zp), section_polar(q, zq)
             bins = np.arange(0, 360, 15)
             step = []
@@ -994,6 +1002,10 @@ def tapered_checks(parts: dict) -> dict:
     out["seam_max_radius_step_mm"] = seams
     out["rib_peaks_deg"] = {f"z={z}": rib_peaks(a["shaft-lower-tapered-spiral"], z) for z in (180.0, 240.0)}
     out["rib_peaks_deg"].update({f"z={z}": rib_peaks(a["shaft-upper-tapered-spiral"], z) for z in (330.0, 380.0)})
+    out["rib_expected_deg"] = {key: sorted(r4(rib_angle(float(key[2:]), k) % 360) for k in range(SP["starts"]))
+                               for key in out["rib_peaks_deg"]}
+    out["rib_directions"] = SP["directions"]
+    out["rib_crossings"] = {f"z={z}": rib_peaks(a["shaft-lower-tapered-spiral"], z) for z in (192.5, 247.5)}
     xw, zw = shelf_wire_point()
     shelf = thumb_shelf()
     bounds = shelf.bounding_box()
@@ -1017,7 +1029,10 @@ def tapered_checks(parts: dict) -> dict:
                           "mirrors_exactly": bool(abs(mirror_difference) < 1e-7)}
     out["volume_mm3"] = {n: r4(m.volume()) for n, m in sorted(a.items()) if not n.startswith("coupon")}
     out["spiral_extra_mm3"] = {k: r4(a[f"{k}-tapered-spiral"].volume() - a[f"{k}-tapered-smooth"].volume()) for k in ("handle", "shaft-lower", "shaft-upper")}
-    peaks_ok = all(len(v) == SP["starts"] and abs(((v[1] - v[0]) % 360) - 360 / SP["starts"]) < 6 for v in out["rib_peaks_deg"].values())
+    peaks_ok = (SP["directions"] == [1, -1]
+                and all(len(v) == SP["starts"] and all(min(abs((p - e + 180) % 360 - 180) for p in v) < 3
+                    for e in out["rib_expected_deg"][key]) for key, v in out["rib_peaks_deg"].items())
+                and all(len(v) == 1 for v in out["rib_crossings"].values()))
     out["passed"] = bool(all(v < 0.2 for v in seams.values()) and peaks_ok
                          and max(reach[0], reach[1]) > out["radius_mm"]["handle_face"] + TS["protrusion"] - 1
                          and min(reach[0], reach[1]) > out["radius_mm"]["handle_face"] + TS["protrusion"] - 1
@@ -1209,6 +1224,8 @@ def summarize(manifest: dict) -> list[str]:
             problems.append("mesh checks")
         if not j["passed"]:
             problems.append("joint checks")
+        if not c["tapered"]["passed"] or not c["tapered_joint"]["passed"]:
+            problems.append("tapered geometry checks")
         problems += [f"assembly {v}" for v, a in c["assembly"].items() if not a["passed"]]
     return lines + ([f"FAILED: {', '.join(problems)}"] if problems else ["All geometry checks passed"])
 

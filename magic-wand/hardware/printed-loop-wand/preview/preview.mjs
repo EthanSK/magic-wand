@@ -22,6 +22,7 @@ function role(name) {
 }
 const STACK = 130; // Assemblies shown together are stacked this far apart in -Y, mm.
 const MODE_KEY = 'printed-loop-wand-preview-mode'; // Remembers Turn/Move/Zoom for this page.
+const LIVE_VIEW_KEY = 'printed-loop-wand-live-view';
 const HINTS = {
   turn: 'Drag or scroll to turn · Pinch to zoom',
   move: 'Drag or scroll to move · Pinch to zoom',
@@ -99,7 +100,7 @@ function link(state) {
 async function main() {
   let manifest;
   try {
-    manifest = await (await fetch(new URL('manifest.json', EXPORTS))).json();
+    manifest = await (await fetch(new URL('manifest.json', EXPORTS), { cache: 'no-store' })).json();
   } catch {
     show("Couldn't load the exports. Serve the repository root, as in the README.");
     return;
@@ -139,7 +140,7 @@ async function main() {
   const geometries = {};
   async function geometry(name) {
     if (!geometries[name]) {
-      geometries[name] = fetch(new URL(parts[name].file, EXPORTS)).then((r) => r.arrayBuffer()).then((buffer) => {
+      geometries[name] = fetch(new URL(parts[name].file, EXPORTS), { cache: 'no-store' }).then((r) => r.arrayBuffer()).then((buffer) => {
         const g = parseStl(buffer);
         g.applyMatrix4(matrixFrom(parts[name].print_to_assembly));
         g.computeVertexNormals();
@@ -368,6 +369,41 @@ async function main() {
   update();
   reset();
   resize();
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(LIVE_VIEW_KEY) ?? 'null');
+    sessionStorage.removeItem(LIVE_VIEW_KEY);
+    if (saved?.url === location.href) {
+      ui.joint.value = saved.joint;
+      ui.exploded.checked = saved.exploded;
+      ui.section.checked = saved.section;
+      update();
+      input.restore(saved.view);
+      showMode();
+      render();
+    }
+  } catch { /* An unavailable or malformed saved view does not block the model. */ }
+
+  // The local CAD viewer should show regenerated models without asking Ethan to reload.
+  // Preserve his camera and assembly choices, and never reload during a pointer drag.
+  if (['localhost', '127.0.0.1', '[::1]'].includes(location.hostname)) {
+    const loaded = JSON.stringify(manifest);
+    let checking = false;
+    setInterval(async () => {
+      if (checking || document.hidden || input.pointers.size) return;
+      checking = true;
+      try {
+        const response = await fetch(new URL('manifest.json', EXPORTS), { cache: 'no-store' });
+        if (!response.ok) return;
+        const next = await response.json();
+        if (JSON.stringify(next) !== loaded && !input.pointers.size) {
+          sessionStorage.setItem(LIVE_VIEW_KEY, JSON.stringify({ url: location.href, view: input.snapshot(),
+            joint: ui.joint.value, exploded: ui.exploded.checked, section: ui.section.checked }));
+          location.reload();
+        }
+      } catch { /* Keep the working view while exports are temporarily unavailable. */ }
+      finally { checking = false; }
+    }, 2000);
+  }
 }
 
 main();
