@@ -937,7 +937,7 @@ final class WandHeldScroll {
     @discardableResult
     func end(now:Double)->Bool {
         guard active else{return false}
-        active=false;sustained.reset();dropClick=moved || now-started>=0.22
+        active=false;dragging=false;sustained.reset();dropClick=moved || now-started>=0.22
         fraction=0;circle.reset();circular=false;return dropClick
     }
     func sample(x:Double=0,y:Double,dt:Double,now:Double?=nil)->Int32 {
