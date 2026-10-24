@@ -10,20 +10,32 @@
     "device/wand-mode-bridge.js": {
       "importedFrom": "wand-mode-bridge.js",
       "transform": "verbatim",
-      "originalSha256": "c9e0bd2d124b9fc6bc4a8cb244fd3aac42d3f97f46e1da37355f6d0722703401",
-      "publicSha256": "c9e0bd2d124b9fc6bc4a8cb244fd3aac42d3f97f46e1da37355f6d0722703401"
+      "originalSha256": "a49ff218b8e51786db29350deaeb7fb0806948230e27e12b7cdc401b8b991caa",
+      "publicSha256": "a49ff218b8e51786db29350deaeb7fb0806948230e27e12b7cdc401b8b991caa"
     },
     "device/wand-power-policy.js": {
       "importedFrom": "wand-power-policy.js",
       "transform": "verbatim",
-      "originalSha256": "d1ded605b7a26cfa22f3a355f92bfcfbdaf069b41ca409fd93059c912682239d",
-      "publicSha256": "d1ded605b7a26cfa22f3a355f92bfcfbdaf069b41ca409fd93059c912682239d"
+      "originalSha256": "d92155bf1be2d58a6d8525e831604c467cd3fc123a24d1611cbb479974e50817",
+      "publicSha256": "d92155bf1be2d58a6d8525e831604c467cd3fc123a24d1611cbb479974e50817"
+    },
+    "device/wand-startup.js": {
+      "importedFrom": "wand-startup.js",
+      "transform": "verbatim",
+      "originalSha256": "ee5067ad0150dbe5d94a2a56d9f97fd7d556bddac2a3cf8a295a32f112f75ebd",
+      "publicSha256": "ee5067ad0150dbe5d94a2a56d9f97fd7d556bddac2a3cf8a295a32f112f75ebd"
+    },
+    "device/modules/ble_hid_mouse.js": {
+      "importedFrom": "ble_hid_mouse.js",
+      "transform": "verbatim",
+      "originalSha256": "4ca0152cbf5c37843cf1a17970a31dd7d0f5120fee3ff5870c31c39a94986502",
+      "publicSha256": "4ca0152cbf5c37843cf1a17970a31dd7d0f5120fee3ff5870c31c39a94986502"
     },
     "receiver/Sources/main.swift": {
       "importedFrom": "wand-mac-receiver.swift",
       "transform": "receiver",
-      "originalSha256": "43f80afe767a7f60e81b28f3702c7ebdd7d5f9a8bb367ac2558e6c75823a5cc9",
-      "publicSha256": "b3c62de19f9b0abc03340fe4a1f143b05a1a334e5e7ad76aa523880eb134c937"
+      "originalSha256": "656bb631ef2a87aa8258176532aeb86f52f910cf3da72dca6a743b262dd0c9af",
+      "publicSha256": "e890f12848009325262fa2f33a929e02bbf8984597b6961fd6f5e050826f974c"
     },
     "receiver/Sources/WandControlTransport.swift": {
       "importedFrom": "wand-control-transport.swift",
@@ -64,8 +76,8 @@
     "receiver/Info.plist": {
       "importedFrom": "Wand Receiver.app/Contents/Info.plist",
       "transform": "verbatim",
-      "originalSha256": "b6afd106fa8133cc1da8ce49e44c877b8b9bba53b9cffadd9ec13aa686b6d19f",
-      "publicSha256": "b6afd106fa8133cc1da8ce49e44c877b8b9bba53b9cffadd9ec13aa686b6d19f"
+      "originalSha256": "bb4d199e60d0391c59827b4ad00e31964b72c04eeb7ea0c39a1727561ef020b6",
+      "publicSha256": "bb4d199e60d0391c59827b4ad00e31964b72c04eeb7ea0c39a1727561ef020b6"
     }
   }
 }

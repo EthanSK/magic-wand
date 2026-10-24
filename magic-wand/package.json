@@ -15,5 +15,8 @@
     "serve": "python3 -m http.server 8848 --bind 127.0.0.1 --directory ../docs",
     "receiver": "zsh scripts/build_receiver.sh",
     "tutorials:check": "python3 scripts/tutorials_build.py"
+  },
+  "devDependencies": {
+    "terser": "5.51.2"
   }
 }

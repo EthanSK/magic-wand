@@ -233,7 +233,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
         noise[k]=M.max(0.25,M.min(C.deadZone,4*M.sqrt(M.max(0,sumSquares[k]/samples-bias[k]*bias[k]))/134));
       });
       calibrationLit=false;updateLights(); lastTime=now; motionWarmup=0;
-      print('WAND_CALIBRATED',JSON.stringify(bias));
+      if(global.wandSaveCalibration)global.wandSaveCalibration(bias);print('WAND_CALIBRATED',JSON.stringify(bias));
       if (!connected || (!moveLatched && !hudOpen && digitalRead(MOVE_PIN))) sleepGyro();
     }
     return;
@@ -389,7 +389,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     global.wandSlackX=global.wandSlackY=0;
     fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;
     if(moveLatched||hudOpen)wakeGyro();else sleepGyro();updateLights();
-    print('WAND_CALIBRATED',JSON.stringify(bias));
+    if(global.wandSaveCalibration)global.wandSaveCalibration(bias);print('WAND_CALIBRATED',JSON.stringify(bias));
   };
   global.wandState=function(){return {calibrated:!!bias,move:moveLatched,hud:hudOpen,gyro:gyroAwake,bias:bias,light:lightLevels};};
   global.setWandRecording=function(active){global.wandRecording=!!active;updateLights();print('WAND_RECORDING_LIGHT '+(active?'1':'0'));};
@@ -428,7 +428,7 @@ if(global.wandRawPointer){
         noise[k]=M.max(0.25,M.min(C.deadZone,4*M.sqrt(M.max(0,sumSquares[k]/samples-bias[k]*bias[k]))/134));
       });
       calibrationLit=false;updateLights(); lastTime=now; motionWarmup=0;
-      print('WAND_CALIBRATED',JSON.stringify(bias));
+      if(global.wandSaveCalibration)global.wandSaveCalibration(bias);print('WAND_CALIBRATED',JSON.stringify(bias));
       if (!connected || (!moveLatched && !hudOpen && digitalRead(MOVE_PIN))) sleepGyro();
     }
     return;

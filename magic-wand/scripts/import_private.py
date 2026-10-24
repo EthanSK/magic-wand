@@ -28,6 +28,8 @@ FILES = {
     "wand-mouse-prototype.js": ("device/wand-mouse-prototype.js", "verbatim"),
     "wand-mode-bridge.js": ("device/wand-mode-bridge.js", "verbatim"),
     "wand-power-policy.js": ("device/wand-power-policy.js", "verbatim"),
+    "wand-startup.js": ("device/wand-startup.js", "verbatim"),
+    "ble_hid_mouse.js": ("device/modules/ble_hid_mouse.js", "verbatim"),
     "wand-mac-receiver.swift": ("receiver/Sources/main.swift", "receiver"),
     "wand-control-transport.swift": ("receiver/Sources/WandControlTransport.swift", "verbatim"),
     "wand-context-listener.swift": ("receiver/Sources/WandContextListener.swift", "verbatim"),

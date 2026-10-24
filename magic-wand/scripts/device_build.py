@@ -10,6 +10,7 @@ import hashlib
 import json
 import re
 import sys
+import subprocess
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -122,7 +123,7 @@ def artifacts() -> dict[Path, str]:
     if commands[-2] != "onInit();":
         raise ValueError("Device source must end by calling onInit();")
     bridge = compact_bridge((DEVICE / "wand-mode-bridge.js").read_text())
-    return {
+    out = {
         GENERATED / "wand-runtime-version.txt": version,
         GENERATED / "wand-commands.json": json.dumps(commands, indent=2) + "\n",
         GENERATED / "wand-runtime.js": RUNTIME_PREFIX + "eval(" + json.dumps(body) + ");" + ready + "\n",
@@ -131,6 +132,37 @@ def artifacts() -> dict[Path, str]:
         GENERATED / "wand-mode-bridge.compact.js": bridge,
         GENERATED / "wand-power-policy.compact.js": compact_bridge((DEVICE / "wand-power-policy.js").read_text()),
     }
+    manifest = json.loads((ROOT / "wand.json").read_text())
+    module = (DEVICE / "modules" / "ble_hid_mouse.js").read_text()
+    startup = (DEVICE / "wand-startup.js").read_text().replace(
+        'require("ble_hid_mouse")', '(function(){var exports={};\n' + module + '\nreturn exports;})()', 1
+    ).replace("__WAND_RUNTIME__", version).replace("__WAND_BRIDGE__", bridge_revision(bridge)).replace(
+        "__WAND_PERSISTENT__", manifest["versions"]["persistentImage"]
+    )
+    def minify(text: str) -> str:
+        return subprocess.run(["node", str(ROOT / "scripts" / "minify_device.mjs")],
+                              input=text, capture_output=True, text=True, check=True).stdout
+    payloads = {
+        "base.js": ("wand.boot.v4", out[GENERATED / "wand-boot.js"]),
+        "bridge.js": ("wand.bridge.p1", minify((DEVICE / "wand-mode-bridge.js").read_text())),
+        "power.js": ("wand.power.p1", minify((DEVICE / "wand-power-policy.js").read_text())),
+        "startup.js": (".bootcde", minify(startup)),
+    }
+    records = []
+    for filename, (storage_name, text) in payloads.items():
+        if not text.isascii():
+            raise ValueError("Flash artifacts must be ASCII for byte-accurate writes")
+        checksum = 0
+        for char in text:
+            checksum = (checksum * 31 + ord(char)) & 0xffffffff
+        out[GENERATED / "persistent" / filename] = text
+        records.append({"file": filename, "storageName": storage_name, "bytes": len(text),
+                        "checksum31": checksum, "sha256": hashlib.sha256(text.encode()).hexdigest()})
+    out[GENERATED / "persistent" / "manifest.json"] = json.dumps({
+        "schemaVersion": 1, "image": manifest["versions"]["persistentImage"], "files": records,
+        "calibrationStorageName": "wand.zero", "totalCodeBytes": sum(item["bytes"] for item in records)
+    }, indent=2) + "\n"
+    return out
 
 
 def identifiers() -> dict[str, str]:

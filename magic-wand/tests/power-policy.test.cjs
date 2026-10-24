@@ -26,9 +26,9 @@ for(const pin of ['D1','D2','D30'])test(`${pin} wakes standby without sending a 
  assert.equal(c.wandPowerOfflineTimer,undefined);assert(!c.wandPowerStandby);
  c.restoreWandCalibration({x:1,y:2,z:3});assert(c.wandState().calibrated);
 });
-test('a held grip or a missing connection refuses standby',()=>{
+test('a held grip refuses standby',()=>{
  for(const pin of ['D1','D2','D30']){const x=setup();x.w.edge(pin,0);assert.equal(x.c.wandEnterDeepStandby(),false);assert(!x.asleep)}
- const x=setup();x.w.device.disconnect();assert.equal(x.c.wandEnterDeepStandby(),false);
+
 });
 test('unexpected disconnect goes dark after one minute, including interrupted update',()=>{
  const {w,c}=setup();c.WAND_UPDATING=true;w.device.disconnect();
@@ -44,7 +44,7 @@ test('reconnecting cancels offline darkness and a reload does not add duplicate 
 
 // Run the receiver's actual short probe, not a copied condition.
 const receiver=fs.readFileSync(path.join(__dirname,'../receiver/Sources/main.swift'),'utf8');
-const probe=receiver.match(/queue\("(if\(global\.WAND_POWER_POLICY_VERSION===1[^"\n]*)"\)/)[1];
+const probe=receiver.match(/queue\("(if\(global\.WAND_POWER_POLICY_VERSION===2[^"\n]*)"\)/)[1];
 test('reconnect reuses the existing policy without retransmitting it',()=>{
  const {w,c}=setup();const watches=c.wandPowerWatches.join(',');
  for(let i=0;i<10;i++)vm.runInContext(probe,c);
@@ -53,4 +53,9 @@ test('reconnect reuses the existing policy without retransmitting it',()=>{
  assert(w.lines.filter(l=>l==='WAND_POWER_POLICY_READY').length>=10);
  vm.runInContext('global.WAND_POWER_POLICY_VERSION=0',c);vm.runInContext(probe,c);
  assert.equal(w.lines.at(-1),'WAND_POWER_POLICY_NEEDED');
+});
+
+test('an offline wand enters button-wake standby after five minutes',()=>{
+ const x=setup();x.w.device.disconnect();x.w.advance(299.9);assert(!x.asleep);x.w.advance(.2);assert(x.asleep);
+ x.w.edge('D2',0);assert(!x.asleep);assert.equal(x.wakes,1);
 });
