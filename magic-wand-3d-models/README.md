@@ -7,8 +7,8 @@ On GitHub, use **Download raw file** to download a 3MF.
 
 ## Current prototype
 
-- Continuous tapered body with **two raised spirals**, 180° apart. They can be hard to distinguish
-  from one side because one runs behind the shaft; rotate the model to see both.
+- Continuous tapered body with **two raised spirals winding in opposite directions**, crossing
+  each other. Ethan calls this the "criss-cross" or "like DNA" shape.
 - One 54 mm flat button platform across the top. Its hole routes wires into the hollow shaft.
 - Open holder for a bare XIAO board. Tape the board and battery on for this prototype.
 - Four printable pieces form two detachable assemblies: the handle and the assembled shaft.

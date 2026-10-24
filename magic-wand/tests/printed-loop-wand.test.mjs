@@ -170,10 +170,14 @@ test("the tapered profile preserves a continuous body, two ribs, and a wired thu
   const radii = Object.values(tapered.radius_mm).slice(0, 4);
   assert.ok(radii.every((r, i) => i === 0 || r < radii[i - 1]), "body gets thinner towards the tip");
   assert.ok(Object.values(tapered.seam_max_radius_step_mm).every((r) => r < 0.2), "no handle bulge at the joins");
-  for (const peaks of Object.values(tapered.rib_peaks_deg)) {
+  assert.deepEqual(tapered.rib_directions, [1, -1], "Ethan's criss-cross means opposite winding directions");
+  for (const [key, peaks] of Object.entries(tapered.rib_peaks_deg)) {
     assert.equal(peaks.length, 2);
-    assert.ok(Math.abs(peaks[1] - peaks[0] - 180) < 6);
+    for (const angle of tapered.rib_expected_deg[key]) {
+      assert.ok(peaks.some((p) => Math.abs((p - angle + 540) % 360 - 180) < 3));
+    }
   }
+  assert.ok(Object.values(tapered.rib_crossings).every((peaks) => peaks.length === 1), "the two ridges physically meet at crossings");
   assert.equal(tapered.thumb_shelf.mirrors_exactly, true);
   assert.equal(tapered.thumb_shelf.hand, "both");
   assert.ok(tapered.thumb_shelf.width_mm > 50 && tapered.thumb_shelf.width_mm < 56);

@@ -1,32 +1,32 @@
 {
   "schema": 1,
   "inputs": {
-    "magic-wand/hardware/printed-loop-wand/print_projects.py": "01ed74b5c97537b947be0a1b09359421a80a2d54b95aedc450f0520e76e7441b",
-    "magic-wand/hardware/printed-loop-wand/dimensions.json": "85bc8b1f8b1c7542db8868aa595f2374ec1523625f3e1dd2400ca3c216936940",
-    "magic-wand/hardware/printed-loop-wand/wand_cad.py": "b4f39008662de1250c768908eacc0c63204d65442b52ca98c5867e40ccd5afb8",
-    "magic-wand/hardware/printed-loop-wand/exports/manifest.json": "2631a0a73a2307e7310e192cc7533b7f7f828509a07ec2d1fd8805da76371f1c",
+    "magic-wand/hardware/printed-loop-wand/print_projects.py": "779977e89eaf7eac88c0c7983e93c7d70840060fe6a92f11ddb264bef5b2eb20",
+    "magic-wand/hardware/printed-loop-wand/dimensions.json": "5572838d7828b951fbff17796331e625742f789c97b58b366f793e86743972e1",
+    "magic-wand/hardware/printed-loop-wand/wand_cad.py": "933c295fbba082f2d8bad3be9406fa4ddd421564b7ee183bc23b75db6f47463f",
+    "magic-wand/hardware/printed-loop-wand/exports/manifest.json": "2538a387e921bbb070762257c8865281337553fdd152c18478c5f04e10815063",
     "magic-wand/hardware/printed-loop-wand/print-settings/filament.json": "441e28515da573adee90f7a6b30a1bcfb34dd26fd0d12cf4b84c9960c588717f",
     "magic-wand/hardware/printed-loop-wand/print-settings/machine.json": "085304813b37822e839a8ad4efea2f43b8e5cd769ec06f1e862868bafa12371b",
     "magic-wand/hardware/printed-loop-wand/print-settings/process.json": "9f2e13334e3d719dcc95f9a9ba60d36bcc6edec93febece65a1130d6a859c3cb",
     "magic-wand/hardware/printed-loop-wand/exports/handle-tapered-smooth.stl": "f32bc6203aa4baff54cc16359fe90162197cd55f7e7c78861b6a2155ab97f9d6",
-    "magic-wand/hardware/printed-loop-wand/exports/handle-tapered-spiral.stl": "47ee45513a10de3e64e7d49ccc59f9ba8e2a9dbce78d152c656f4b352c92cba9",
+    "magic-wand/hardware/printed-loop-wand/exports/handle-tapered-spiral.stl": "2c326dda2155b79a6e6328bd9038e297cdb4b9287c07ea4717ef2aa1052b0a13",
     "magic-wand/hardware/printed-loop-wand/exports/shaft-lower-tapered-smooth.stl": "84d6cfe91d7f4481dbd1a1821258e43b43815321e2f301bd37e0db9f1bc27b11",
-    "magic-wand/hardware/printed-loop-wand/exports/shaft-lower-tapered-spiral.stl": "0b6d97f8ef13213d21d305fda38c6a86dbb5d0d625def06212bf52f072fb7355",
+    "magic-wand/hardware/printed-loop-wand/exports/shaft-lower-tapered-spiral.stl": "be0f79f652ccbcd881f91a3097d9aaa8c4a4f0c98c9150346cf4ad481eb42bbb",
     "magic-wand/hardware/printed-loop-wand/exports/shaft-upper-tapered-smooth.stl": "155c175734def03200a2c7d8057c8c2360500e82cdc18902104bb1ffbbd2e4c7",
-    "magic-wand/hardware/printed-loop-wand/exports/shaft-upper-tapered-spiral.stl": "57569ce86f6fb5f7a11a61a665f1712458b5622a66aeeace341f6223fdab69b5",
+    "magic-wand/hardware/printed-loop-wand/exports/shaft-upper-tapered-spiral.stl": "b59468a49aeea1e581a0b82a2f0d84ef5cc75cbf3f418448923cfc65cbee22bf",
     "magic-wand/hardware/printed-loop-wand/exports/tip-xiao.stl": "35bc25a06cabf68ec54e7002cca8362844c03543cf56802b419cf9b4dde53e38"
   },
   "projects": {
     "spiral": {
-      "sha256": "5ca635a286b2f525b8cf9c8577a1127d995c105ae860edf4498b5b4994488cdc",
-      "seconds": 10234,
-      "grams": 88.86,
+      "sha256": "776ae11c265f086886f061c8161e7d67fe8ce38c5661055859c745bf7f6cf271",
+      "seconds": 10454,
+      "grams": 88.3,
       "parts": 4
     },
     "smooth": {
-      "sha256": "15e851c94910a3055d2f74fcd1e4a4450a60e673a705f3e4e25ca674a9a6823e",
-      "seconds": 10129,
-      "grams": 87.29,
+      "sha256": "954023faa8e58834b8e566a6e0402ba69c54875fa1a1dc166247a8bf8c962f48",
+      "seconds": 10250,
+      "grams": 87.46,
       "parts": 4
     }
   }

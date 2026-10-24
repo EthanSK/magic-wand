@@ -14,6 +14,12 @@ upright-printed strength remain separate checks. Compare spiral cost by slicing 
 same dimensions with the ribs disabled, using identical settings, rather than
 assuming the decoration makes a large difference.
 
+For Ethan's printed wand, "like DNA" and "criss-cross" mean two ribs winding in
+opposite directions and meeting at crossings, not two same-direction helix starts.
+Check measured rib angles and crossing sections. Compare surfaces immediately
+beside mating faces; extra distance behind a face includes normal helix travel.
+The generator's failure result must include profile-specific geometry checks.
+
 ## The public sources reproduce the installed wand exactly
 
 The runtime version is `wand-` plus the first 12 hex digits of the SHA-256 of the device program
