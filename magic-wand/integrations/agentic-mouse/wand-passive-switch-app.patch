@@ -1,0 +1,146 @@
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -7,7 +7,7 @@
+     /// `activate` is a Middle tap on the outlined card. `choose` is the
+     /// release of a Middle hold on it: the same action, except a card that
+     /// needs more motion (a wheel card, Switch App) is armed instead.
+-    public enum Phase: String { case open, appSpecific, navigate, motion, park, press, release, activate, choose, dismiss, exitReview }
++    public enum Phase: String { case open, appSpecific, hover, navigate, motion, park, press, release, activate, choose, dismiss, exitReview }
+     public let phase: Phase
+     public let id: String
+     public let sequence: Int
+@@ -45,8 +45,8 @@
+ /// * Releasing on a card that needs more motion (an adjustable wheel card)
+ ///   arms it. The next Middle hold adjusts it with motion, exactly like
+ ///   holding that mouse button and turning its wheel; releasing ends the
+-///   adjustment and closes the HUD. Switch App is an ordinary action: a
+-///   release on it switches once and closes, so a peek never leaves it open.
++///   adjustment and closes the HUD. An armed Switch App also accepts unheld
++///   aiming to leave its dotted card; only a Middle re-hold adjusts apps.
+ /// * A completed action hides the HUD at once but keeps the mode alive for
+ ///   `followUpLinger`, so bounded follow-up work (Codex Edit, feedback) is not
+ ///   cancelled. Any new HUD input ends that wait first.
+@@ -65,6 +65,7 @@
+         var last:WandAngularOffset = .zero
+         var received:TimeInterval
+         var navigation:WandRadialNavigator?
++        var passiveNavigation=false
+         let cell:PhysicalCell
+         let pageGeneration:UInt64
+         /// A second hold on an armed card: motion adjusts, release finishes.
+@@ -124,7 +125,7 @@
+                 // The receiver had not yet seen the close: this hold opens a
+                 // fresh HUD rather than steering the hidden one.
+                 finishConcealment();openHome()
+-            case .dismiss, .motion, .park, .release, .activate, .choose:
++            case .hover, .dismiss, .motion, .park, .release, .activate, .choose:
+                 // Already hidden. Stale input from the finished hold never
+                 // acts, and the follow-up work is left to finish.
+                 return
+@@ -175,8 +176,18 @@
+         }
+         guard isOpen else {return}
+         switch command.phase {
++        case .hover:
++            // Ethan's dotted Switch App: unheld aiming moves the HUD, never Command-Tab.
++            guard hold == nil, command.id != lastFinished,
++                  liveArmedCard()?.cell == .switchApp else { return }
++            selected=target.pointerFocus?.cell ?? selected
++            hold=Hold(id:command.id,sequence:command.sequence,received:clock.now,
++                      navigation:WandRadialNavigator(layout:target.wandRadialLayout,start:selected),
++                      passiveNavigation:true,cell:selected,pageGeneration:target.pageGeneration)
+         case .navigate, .press:
+             guard command.id != lastFinished else {return}
++            // A physical hold supersedes an unheld aiming stream without operating it.
++            if hold?.passiveNavigation == true { hold=nil }
+             if let old=hold {
+                 if old.id == command.id {return}
+                 reset(reason:.deviceLost);return
+@@ -211,7 +222,10 @@
+                     nav=reseated
+                 }
+                 nav.apply(deltaX:dx,deltaY:dy);current.navigation=nav;selected=nav.focusedCell
+-                target.setPointerFocus(nav.pointerFocus)
++                if current.passiveNavigation, let card=armed, selected != card.cell { armed=nil }
++                if current.passiveNavigation, armed?.cell == selected {
++                    target.setPointerFocus(.init(cell:selected,isArmed:true))
++                } else { target.setPointerFocus(nav.pointerFocus) }
+             } else if target.pageGeneration == current.pageGeneration, target.isWandHome, current.cell == .switchApp {
+                 // The system switcher is horizontal: moving right selects the next app.
+                 // Command is already held by the same native press lifecycle.
+@@ -231,6 +245,11 @@
+         case .park, .release:
+             guard let current=hold,current.id == command.id,command.sequence > current.sequence else {return}
+             hold=nil;lastFinished=current.id
++            if current.passiveNavigation {
++                if armed?.cell == selected { target.setPointerFocus(.init(cell:selected,isArmed:true)) }
++                else { keepOutline(after:selected,generation:current.pageGeneration) }
++                break
++            }
+             if current.adjusting {
+                 // Letting go ends the adjustment exactly like releasing the
+                 // held mouse button; the chosen card's work is then done.
+@@ -366,7 +385,7 @@
+         }
+         guard isOpen else {ownsHUD=false;hold=nil;armed=nil;if pinnedReviewCell == nil {scheduler.stop()};onContext?(false);return}
+         // A healthy hold has no duration limit. Only missing telemetry expires it.
+-        if let current=hold, clock.now-current.received > 1 {
++        if let current=hold, !current.passiveNavigation, clock.now-current.received > 1 {
+             reset(reason:.deviceLost);return
+         }
+         onContext?(true)
+--- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
++++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+@@ -86,6 +86,52 @@
+         XCTAssertEqual(switched,[.down,.up,.up])
+         control.handle(.init(.release,id:"switch-app-1",sequence:4))
+         XCTAssertTrue(control.isOpen)
++    }
++    func testUnheldAimingLeavesArmedSwitchAppWithoutOperatingAnything() {
++        control.handle(.init(.choose,id:"arm-switch"))
++        XCTAssertEqual(control.armedCell,.switchApp)
++        let goal=offset(to:.frontmostAppModeSelector)
++        control.handle(.init(.hover,id:"hover-switch"))
++        control.handle(.init(.motion,id:"hover-switch",sequence:1,x:goal.x,y:goal.y))
++        XCTAssertEqual(control.focusedCell,.frontmostAppModeSelector)
++        XCTAssertNil(control.armedCell)
++        control.handle(.init(.park,id:"hover-switch",sequence:2))
++        XCTAssertTrue(clicks.isEmpty);XCTAssertTrue(presses.isEmpty);XCTAssertTrue(steps.isEmpty)
++    }
++    func testStillArmedAfterUnheldRestThenHeldAdjustmentReleases() {
++        var switched:[WheelChordDirection]=[]
++        control.onSwitchAppStep={switched.append($0);return true}
++        control.handle(.init(.choose,id:"arm-switch"))
++        control.handle(.init(.hover,id:"hover-switch"))
++        control.handle(.init(.motion,id:"hover-switch",sequence:1,x:0.1,y:0.1))
++        XCTAssertEqual(control.armedCell,.switchApp)
++        control.handle(.init(.navigate,id:"held-switch"))
++        control.handle(.init(.motion,id:"held-switch",sequence:1,x:7))
++        XCTAssertEqual(switched,[.down])
++        control.handle(.init(.park,id:"held-switch",sequence:2))
++        XCTAssertFalse(control.isOpen)
++        XCTAssertNil(control.armedCell)
++    }
++    func testPassiveAimingSurvivesTelemetryPauseWithoutHoldingKeys() {
++        control.handle(.init(.choose,id:"arm-switch"))
++        control.handle(.init(.hover,id:"hover-rest"))
++        clock.advance(by:600);tick.fire()
++        XCTAssertTrue(control.isOpen)
++        XCTAssertEqual(control.armedCell,.switchApp)
++        XCTAssertTrue(clicks.isEmpty);XCTAssertTrue(presses.isEmpty)
++        let goal=offset(to:.frontmostAppModeSelector)
++        control.handle(.init(.motion,id:"hover-rest",sequence:1,x:goal.x,y:goal.y))
++        XCTAssertEqual(control.focusedCell,.frontmostAppModeSelector)
++        control.handle(.init(.dismiss,id:"dismiss-rest"))
++        XCTAssertFalse(control.isOpen)
++    }
++    func testUnheldAimingCannotOpenHiddenHUDOrActivateUnarmedCard() {
++        control.handle(.init(.hover,id:"unarmed-hover"))
++        control.handle(.init(.motion,id:"unarmed-hover",sequence:1,x:20,y:20))
++        XCTAssertEqual(control.focusedCell,.switchApp);XCTAssertTrue(clicks.isEmpty)
++        control.handle(.init(.dismiss,id:"dismiss-hover"))
++        control.handle(.init(.hover,id:"hidden-hover"))
++        XCTAssertFalse(control.isOpen);XCTAssertTrue(clicks.isEmpty)
+     }
+     func testScreenshotUsesNativePressReleaseWithoutDuplicateAction(){
+         var released:[WheelChordControl]=[]

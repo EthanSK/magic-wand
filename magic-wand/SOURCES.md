@@ -288,3 +288,14 @@ Each visible wand HUD now retains the recorder clearance it captured when it
 opened. Agent Flow startup cannot move an active target up and down; reopening
 refreshes the clearance. Both native presenters and the small review indicator
 share this policy. Agent Flow itself is not changed or restarted.
+
+## Prepared passive Switch App navigation
+
+`integrations/agentic-mouse/wand-passive-switch-app.patch` records the native
+addition prepared for Agentic Mouse 1.0.280 (286). It applies after the current
+local wand integration and adds passive hover only for the armed Switch App
+card. Wand Receiver 1.2.84 (89) starts that passive stream between holds,
+without a held-input timeout, and isolates Bottom scrolling from the outline.
+Native and receiver regression checks pass. Both installation steps are still
+pending a safe capture-idle boundary; this section is not an installed-version
+receipt or physical acceptance claim.

@@ -826,6 +826,22 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         if appMode=="vsCode" && review.isHeld && selectedReviewMode==nil {sendReview(review.motion(y:navY-reviewOriginY,now:ProcessInfo.processInfo.systemUptime));return}
         guard !restoring,!scrollActive,hudSession else{return}
+        // Ethan's Bottom mouse lane stays independent from the dotted Switch
+        // App hover. Park before a drag/scroll, then start a fresh origin so
+        // that movement cannot jump the outline when Bottom is released.
+        if !middleHeld && pointerRouter.bottomHeld {
+            if hudActive {controls.persistent("park");hudActive=false;stopHUDWatchdog()}
+            navOriginX=navX;navOriginY=navY
+            return
+        }
+        // Unheld aiming may leave a dotted Switch App card. The app accepts
+        // hover only for that armed session; it cannot operate any card.
+        // Passive hover has no hold timeout: pausing or desk rest never owns
+        // dismissal. The next real Middle hold reinstates its safety watchdog.
+        if !middleHeld,!pointerInHUD,!hudActive,acceptHUDContext,context.isActive {
+            navOriginX=navX;navOriginY=navY;hudActive=true
+            stopHUDWatchdog();controls.persistent("hover")
+        }
         if pointerInHUD {
             handleMove("U,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000),project:false)
         }else if hudActive {
@@ -844,6 +860,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func resumeHUDNavigation(){
         guard hudSession,!scrollActive,!restoring else{return}
+        if hudActive { controls.persistent("park") }
         navOriginX=navX;navOriginY=navY;hudActive=true
         controls.persistent("navigate");startHUDWatchdog()
     }
