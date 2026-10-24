@@ -560,12 +560,13 @@ SUPPORTS = {
     "shaft-lower": "Support under small pin overhangs", "shaft-upper": "None expected",
     "tip-cradle": "None expected", "tip-cap": "None", "tip-xiao": "None expected; not yet sliced", "button-pod-pilot": "None expected", "button-pod-blank": "None expected",
 }
-# Profiles pair a tip with handles. Ethan's "mug" handle is handle-round (the mug-style loop) and
-# "without the handle" means the plain no-loop grip, handle-straight; both keep the same socket.
+# Profiles pair a handle with a canonical component list from dimensions.json. Ethan's "mug handle"
+# is the full-hand loop, handle-oval (four fingers); handle-round is the small two-finger loop and
+# isn't the mug. "Without the handle" means the plain no-loop grip, handle-straight. All share the
+# same socket. The current XIAO profile has no button pod (the orange carrier) and no battery holder.
 PROFILES = D["profiles"]
 CURRENT = PROFILES["current"]
 PROFILE_NAMES = [k for k in PROFILES if k != "current"]
-SHARED_PARTS = ["button-pod-pilot", "shaft-lower", "shaft-upper"]
 PART_PROFILES = {"tip-cradle": "puck-legacy", "tip-cap": "puck-legacy", "coupon-puck-ring": "puck-legacy", "tip-xiao": "xiao"}
 COLORS = {"handle": (124, 108, 240), "button-pod-pilot": (240, 163, 92), "shaft-lower": (70, 64, 96), "shaft-upper": (70, 64, 96),
           "tip-cradle": (217, 212, 232), "tip-cap": (183, 174, 240), "tip-xiao": (217, 212, 232),
@@ -580,7 +581,7 @@ def assemblies() -> dict[str, dict]:
         spec = PROFILES[profile]
         for key, a in spec["assemblies"].items():
             out[f"{profile}-{key}"] = {"label": a["label"], "profile": profile, "handle": a["handle"],
-                                      "parts": [f"handle-{a['handle']}"] + SHARED_PARTS + spec["tip_parts"],
+                                      "parts": [f"handle-{a['handle']}"] + spec["components"],
                                       "reference": spec["reference"]}
     return out
 
@@ -869,7 +870,8 @@ def build(run_checks: bool = True) -> tuple[dict[str, bytes], dict]:
                             "board_front_z": r4(Z_BOARD1), "deck_top_y": Y_DECK,
                             "component_clearance": XT["component_clearance"], "boards": XT["boards"]}},
         "current_profile": CURRENT,
-        "profiles": {k: {"label": PROFILES[k]["label"], "tip_parts": PROFILES[k]["tip_parts"], "reference": PROFILES[k]["reference"],
+        "profiles": {k: {"label": PROFILES[k]["label"], "components": PROFILES[k]["components"],
+                         "tip_parts": [c for c in PROFILES[k]["components"] if c.startswith("tip-")], "reference": PROFILES[k]["reference"],
                          "glb": glbs[k][0], "assemblies": [f"{k}-{a}" for a in PROFILES[k]["assemblies"]]} for k in PROFILE_NAMES},
         "assemblies": {aid: {"label": a["label"], "profile": a["profile"], "parts": a["parts"]} for aid, a in assemblies().items()},
         "glb": [{"file": glbs[k][0], "profile": k, "sha256": sha256(glbs[k][1]), "bytes": len(glbs[k][1]),

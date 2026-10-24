@@ -6,11 +6,13 @@ shaft with a push-and-twist lock.
 **Current profile: XIAO tip.** The wand now carries a Seeed XIAO board instead of the Puck.js, so
 the current set is the open XIAO deck (`tip-xiao`) with two handles side by side:
 
-- **Mug handle**: `handle-round`, the mug-style loop.
+- **Mug handle**: `handle-oval`, the full-hand loop. Its opening is 101 × 31 mm, measured from the
+  model and intended for a four-finger grip. Check the actual hand fit before printing a full wand.
 - **Plain handle (no loop)**: `handle-straight`, the rounded grip with no loop.
 
-Both use the same shafts, joint, button pod and wire route. The Puck.js cradle, cap and the oval
-and angled loops stay available as the **Puck.js tip (legacy)** profile; none of their files
+Both use the same shafts, joint and wire route. The current set has no button pod (the orange
+block in earlier previews) and no battery holder. The Puck.js cradle, cap, button pods and the
+small round and angled loops stay available as the **Puck.js tip (legacy)** profile; none of their files
 changed. There is no battery holder anywhere; the battery is taped on for this prototype.
 
 **Status: first print set, not yet printed.** The model geometry is generated and checked
@@ -39,7 +41,7 @@ existing three buttons and their roles are unchanged.
 Ethan asked for a wand in two pieces where the wand end plugs into the handle. Those are the
 two assemblies:
 
-1. **Handle** (mug or plain) with its button pod. Swappable.
+1. **Handle** (mug or plain). Swappable.
 2. **Wand**: lower shaft, upper shaft and the XIAO tip, glued once into one piece.
 
 The wand is longer than the 256 mm bed, so it prints as separate parts joined by glued half-laps
@@ -57,8 +59,8 @@ from the model's mid-plane section.
 
 | Handle | Opening (length × height) | Intended grip |
 | --- | --- | --- |
-| Round | 38 × 38 mm | Mug-style loop for two fingers; thumb on the buttons. |
-| Oval | 101 × 31 mm | Long D-loop around four fingers, so the wand stays on a relaxed hand. |
+| Round (legacy) | 38 × 38 mm | Small loop for two fingers; thumb on the buttons. |
+| Oval (current mug) | 101 × 31 mm | Full-hand D-loop around four fingers, so the wand stays on a relaxed hand. |
 | Angled | 100 × 47 mm (deepest at the palm) | Raked loop for a less bent wrist while pointing. |
 | No loop | None | Rounded straight grip; the quickest one to try. |
 
@@ -164,8 +166,8 @@ Bambu Studio 2.8.2 with a P1S 0.4 mm nozzle, provisional Generic PETG, textured 
 
 | Set | Estimated time | Estimated filament |
 | --- | --- | --- |
-| Plain handle, both shafts, XIAO holder and pilot button pod | 2 h 24 min | 72.2 g |
-| Mug handle, both shafts, XIAO holder and pilot button pod | 2 h 50 min | 88.8 g |
+| Plain handle, both shafts and XIAO holder; no button pod | 2 h 05 min | 62.4 g |
+| Full-hand mug loop, both shafts and XIAO holder; no button pod | 2 h 39 min | 83.8 g |
 | Joint samples plus XIAO holder, at 0.20 mm Standard | 1 h 16 min | 28.1 g |
 
 Each set fits one plate and slices without floating-region warnings. These are estimates,
@@ -201,11 +203,10 @@ Print in this order:
 | 2 | `coupon-female-a/b/c` | On its side | Real handle socket and 14 mm of button rail. 0.05 / 0.15 / 0.30 mm cam ridge; 1, 2 or 3 notches on the back. |
 | 3 | `tip-xiao` | Deck up | Current tip, 53 mm long. Check the bare board fits before gluing. |
 | 4 | `shaft-lower`, `shaft-upper` | Flat +X face | 183 mm each. Brim recommended. |
-| 5 | `button-pod-pilot` or `button-pod-blank` | Top down | Pilot holes mark the three button centres. |
-| 6 | `handle-straight` and/or `handle-round` | On its side | Plain and mug handles, 140 mm long. |
+| 5 | `handle-straight` and/or `handle-oval` | On its side | Plain and mug handles, 140 mm long. |
 
-Legacy Puck.js parts, unchanged: `coupon-puck-ring`, `tip-cradle`, `tip-cap`, `handle-oval`,
-`handle-angled`.
+Legacy Puck.js parts, unchanged and not in the current set: `coupon-puck-ring`, `tip-cradle`,
+`tip-cap`, `handle-round`, `handle-angled`, `button-pod-pilot`, `button-pod-blank`.
 
 Handles and shafts print with layers along their length, which is usually the stronger
 direction for bending. Wall and infill settings are yours to choose; nothing here has been
@@ -229,7 +230,8 @@ The three buttons and ground are four wires, as in [BUILDING.md](../../BUILDING.
 
 XIAO pins → slot through the deck's rear wall → groove in the tip's tongue → 5 mm bore through
 both shafts → spigot end → connector bay behind the socket floor (12 mm × 17.5 mm) → 6 mm channel → wire hole
-in the rail → inside the button pod.
+in the rail on top of the handle. Without a pod, the buttons are mounted however suits this
+prototype, such as taped on; the legacy route ends inside the button pod.
 
 The legacy Puck route starts at the cradle's rear notch instead. A 3 mm wire path through either
 route clears every part in the model. To swap handles
@@ -237,9 +239,9 @@ without re-soldering, put a small four-way inline connector in the bay; the mate
 pass the socket floor opening, 9 mm round with a peak (about 9 × 10.9 mm). No connector is specified. Thread the shaft wires
 before fitting their connector.
 
-## Button pod
+## Button pod (legacy)
 
-The pod slides onto the dovetail rail from the back of the handle until it meets the stop, and a
+The current XIAO set doesn't use it. The pod slides onto the dovetail rail from the back of the handle until it meets the stop, and a
 short piece of 1.75 mm filament through its back end pins it to the rail. The pod has a 13 mm
 wide, 10 mm deep cavity. The real switch sizes are unknown, so there are no switch holes:
 `button-pod-pilot` has 2 mm pilot holes at the Bottom, Middle and Top centres (22 mm apart,

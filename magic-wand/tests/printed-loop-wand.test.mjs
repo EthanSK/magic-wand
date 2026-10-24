@@ -108,15 +108,22 @@ test("the current XIAO profile pairs the mug and plain handles with the open XIA
   assert.equal(manifest.current_profile, "xiao");
   const profile = manifest.profiles.xiao;
   assert.deepEqual(profile.tip_parts, ["tip-xiao"]);
+  assert.deepEqual(profile.components, dimensions.profiles.xiao.components);
   assert.equal(profile.glb, "assembly.glb");
   assert.deepEqual(profile.assemblies, ["xiao-mug", "xiao-plain"]);
   assert.equal(manifest.assemblies["xiao-mug"].label, "Mug handle");
   assert.equal(manifest.assemblies["xiao-plain"].label, "Plain handle (no loop)");
-  assert.equal(manifest.assemblies["xiao-mug"].parts[0], "handle-round");
-  assert.equal(manifest.assemblies["xiao-plain"].parts[0], "handle-straight");
+  // Ethan's mug is the full-hand loop, not the small two-finger round loop.
+  assert.deepEqual(manifest.assemblies["xiao-mug"].parts, ["handle-oval", "shaft-lower", "shaft-upper", "tip-xiao"]);
+  assert.deepEqual(manifest.assemblies["xiao-plain"].parts, ["handle-straight", "shaft-lower", "shaft-upper", "tip-xiao"]);
+  const mug = manifest.checks.assembly["xiao-mug"].opening;
+  assert.ok(mug.length_mm > 95 && mug.height_mm > 28, `mug opening ${mug.length_mm} × ${mug.height_mm} mm`);
+  assert.ok(mug.area_mm2 > 2 * manifest.checks.assembly["puck-legacy-round"].opening.area_mm2);
   for (const id of profile.assemblies) {
     const parts = manifest.assemblies[id].parts;
     assert.ok(!parts.some((p) => /puck|cradle|cap/.test(p)), `${id} has no Puck parts`);
+    assert.ok(!parts.some((p) => p.startsWith("button-pod")), `${id} has no button pod`);
+    assert.ok(!Object.keys(manifest.checks.assembly[id].overlaps_mm3).some((pair) => pair.includes("pod")), `${id} checks no pod`);
     const overlaps = manifest.checks.assembly[id].overlaps_mm3;
     for (const [pair, v] of Object.entries(overlaps)) {
       if (/xiao-(board|components)/.test(pair)) assert.equal(v, 0, `${id}: ${pair}`);
@@ -127,6 +134,27 @@ test("the current XIAO profile pairs the mug and plain handles with the open XIA
   assert.equal(tip.mesh.bodies, 1);
   // The legacy Puck profile and its parts remain available.
   assert.deepEqual(manifest.profiles["puck-legacy"].tip_parts, ["tip-cradle", "tip-cap"]);
+  for (const id of manifest.profiles["puck-legacy"].assemblies) {
+    assert.ok(manifest.assemblies[id].parts.includes("button-pod-pilot"), `${id} keeps its button pod`);
+  }
   assert.equal(manifest.layout.xiao.board_size[0], dimensions.xiao_tip.board_width);
   assert.equal(manifest.layout.xiao.board_size[2], dimensions.xiao_tip.board_length);
+});
+
+test("printable meshes stay byte-identical across profile changes", () => {
+  // Changing which parts a profile assembles must not regenerate any printable part.
+  const pinned = {
+    "coupon-male.stl": "738b2fdc928b0f0a", "coupon-female-a.stl": "98e37c7f8007d801",
+    "coupon-female-b.stl": "2c77b8b12a2a4dbf", "coupon-female-c.stl": "1aebf42e865d2cb2",
+    "coupon-puck-ring.stl": "685850b7f83fdc42", "handle-round.stl": "25a4b131c066c4d7",
+    "handle-oval.stl": "4cdf65278dd0d790", "handle-angled.stl": "e34b1664c26ceacc",
+    "handle-straight.stl": "9ced549dd21b4b09", "shaft-lower.stl": "701d244fb58425a0",
+    "shaft-upper.stl": "71eed26fcdb41e03", "tip-cradle.stl": "770b8b5da61882db",
+    "tip-cap.stl": "959da4a6d81e175e", "tip-xiao.stl": "35bc25a06cabf68e",
+    "button-pod-pilot.stl": "345900f62cfbe16e", "button-pod-blank.stl": "b879529561350331",
+  };
+  assert.deepEqual(manifest.parts.map((p) => p.file).sort(), Object.keys(pinned).sort());
+  for (const [file, prefix] of Object.entries(pinned)) {
+    assert.equal(sha256(readFileSync(join(exportsDir, file))).slice(0, 16), prefix, file);
+  }
 });
