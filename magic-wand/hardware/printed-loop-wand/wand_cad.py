@@ -307,8 +307,8 @@ def swept_groove(stations: list[tuple[float, float]]) -> Manifold:
     return closed_mesh(verts, tris, "groove")
 
 
-def socket_void(crest: float) -> Manifold:
-    """Everything removed from a handle (or female coupon) for the twist-lock socket and wiring."""
+def socket_core(crest: float) -> list[Manifold]:
+    """Twist-lock socket, floor hole and connector bay, opening at z = L toward +Z."""
     voids = [cyl_z(R_BORE, Z_SPIGOT, L + 1.0),
              teardrop_z(R_BORE, Z_SPIGOT, L + 1.0, 90.0, H["teardrop_flat"]),
              cyl_z(R_BORE, L - J["lead_in"], L + 0.01, R_BORE + J["lead_in"] + 0.01)]
@@ -319,8 +319,15 @@ def socket_void(crest: float) -> Manifold:
     floor_z = Z_SPIGOT - H["socket_floor"]
     bay_z = floor_z - H["bay_length"]
     voids += [teardrop_z(H["floor_hole_diameter"] / 2, floor_z - 0.5, Z_SPIGOT + 0.5, 90.0),
-              teardrop_z(H["bay_diameter"] / 2, bay_z, floor_z, 90.0, H["teardrop_flat"]),
-              teardrop_z(H["channel_diameter"] / 2, H["channel_rear"], bay_z + 1.0, 90.0),
+              teardrop_z(H["bay_diameter"] / 2, bay_z, floor_z, 90.0, H["teardrop_flat"])]
+    return voids
+
+
+def socket_void(crest: float) -> Manifold:
+    """Everything removed from a handle (or female coupon) for the twist-lock socket and wiring."""
+    bay_z = Z_SPIGOT - H["socket_floor"] - H["bay_length"]
+    voids = socket_core(crest)
+    voids += [teardrop_z(H["channel_diameter"] / 2, H["channel_rear"], bay_z + 1.0, 90.0),
               teardrop_y(H["rail_wire_hole"]["diameter"] / 2, 0.0, POD_Y0 + RAIL["height"] + 0.5, H["rail_wire_hole"]["z"]),
               cyl_y(POD["retaining_pin_diameter"] / 2, POD_Y0 - 4.0, POD_Y0 + RAIL["height"] + 0.5, z=Z_RETAIN)]
     return union(voids)
@@ -512,6 +519,146 @@ def xiao_envelope() -> Manifold:
     return box(-XT["board_width"] / 2, XT["board_width"] / 2, top, top + XT["component_clearance"], Z_BOARD0, Z_BOARD1)
 
 
+# Tapered wand (profile tapered-xiao): one continuous body from a thick butt to the XIAO tip, with
+# optional double-helix ribs and a sideways thumb shelf. The double-helix and smooth versions come
+# from the same parameters; smooth just sets the rib height to zero. All parts print upright, wide
+# end down, so the joint is mirrored: the handle carries the spigot and the lower shaft the socket.
+TP = D["tapered"]
+SP, TS, GS = TP["spiral"], TP["thumb_shelf"], TP["glue_stub"]
+Z_ROUND_END = Z_TONGUE - GAP_END - TP["front_transition"]  # Round taper ends; a short hull meets the tip lap.
+Z_GLUE = TP["glue_z"]
+Z_FACE = L - J["mouth_gap"]  # Handle body ends here; the shaft's socket mouth is at L.
+Z_SPIGOT_TIP = 2 * L - Z_SPIGOT  # Mirrored spigot end, resting on the shaft's socket floor.
+SHELF_SIDE = -1.0 if TS["hand"] == "left" else 1.0  # Left hand: the holder's right, assembly -X.
+
+
+def taper_radius(z: float) -> float:
+    r = TP["butt_radius"] + (TP["front_radius"] - TP["butt_radius"]) * z / Z_ROUND_END
+    return r - max(0.0, TP["base_chamfer"] - z)
+
+
+def rib_height(z: np.ndarray, theta: np.ndarray, spiral: bool) -> np.ndarray:
+    """Double-start helical ribs: a smooth cos² bump around each start, fading out before the tip."""
+    if not spiral:
+        return np.zeros(np.broadcast(z, theta).shape)
+    hw = SP["half_width_deg"]
+    bump = np.zeros(np.broadcast(z, theta).shape)
+    for k in range(SP["starts"]):
+        phi = SP["phase_deg"] + 360.0 * k / SP["starts"] + 360.0 * z / SP["pitch"]
+        delta = (theta - phi + 180.0) % 360.0 - 180.0
+        bump = np.maximum(bump, np.where(np.abs(delta) < hw, np.cos(np.pi * delta / (2 * hw)) ** 2, 0.0))
+    fade = np.clip((Z_ROUND_END - z) / SP["fade"], 0.0, 1.0) * np.clip((z - TP["base_chamfer"]) / 2.0, 0.0, 1.0)  # Not on the base.
+    return SP["height"] * fade * bump
+
+
+def tapered_body(z0: float, z1: float, spiral: bool) -> Manifold:
+    """Closed ring mesh of the tapered body between z0 and z1 (one generator for every piece)."""
+    n = TP["segments"]
+    steps = max(1, int(math.ceil((z1 - z0) / TP["ring_step"])))
+    zs = sorted(set([z0 + (z1 - z0) * i / steps for i in range(steps + 1)] + ([TP["base_chamfer"]] if z0 < TP["base_chamfer"] < z1 else [])))
+    theta = 360.0 * np.arange(n) / n
+    verts = []
+    for z in zs:
+        r = taper_radius(z) + rib_height(np.full(n, z), theta, spiral)
+        x, y = r * np.sin(np.radians(theta)), r * np.cos(np.radians(theta))
+        verts += [(float(a), float(b), z) for a, b in zip(x, y)]
+    c0, c1 = len(verts), len(verts) + 1
+    verts += [(0.0, 0.0, zs[0]), (0.0, 0.0, zs[-1])]
+    tris = []
+    for i in range(len(zs) - 1):
+        a, b = n * i, n * (i + 1)
+        for j in range(n):
+            j1 = (j + 1) % n
+            tris += [(a + j, a + j1, b + j1), (a + j, b + j1, b + j)]
+    top = n * (len(zs) - 1)
+    for j in range(n):
+        j1 = (j + 1) % n
+        tris += [(c0, j1, j), (c1, top + j, top + j1)]
+    return closed_mesh(verts, tris, "tapered body")
+
+
+def mirror_joint(m: Manifold) -> Manifold:
+    """Mirror across the joint plane z = L: the socket moves to the shaft and the spigot to the handle."""
+    return m.mirror((0.0, 0.0, 1.0)).translate((0.0, 0.0, 2 * L))
+
+
+def tapered_socket(crest: float) -> Manifold:
+    """Mirrored twist-lock socket and connector bay, with a 45-degree bay roof so it prints upright."""
+    bay_top = 2 * L - (Z_SPIGOT - H["socket_floor"] - H["bay_length"])
+    roof = cyl_z(H["bay_diameter"] / 2, bay_top - 0.01, bay_top + H["bay_diameter"] / 2 - S["wire_bore"] / 2, S["wire_bore"] / 2)
+    return union([mirror_joint(union(socket_core(crest))), roof])
+
+
+def shelf_wire_point(side: float = SHELF_SIDE) -> tuple[float, float]:
+    """(x, z) of the wire hole through the shelf's top face, just outside the body."""
+    z = TS["top_z"] - TS["pad_length"] / 2
+    return side * (taper_radius(z) + 4.0), z
+
+
+def thumb_shelf(side: float = SHELF_SIDE) -> Manifold:
+    """Sideways shelf with a blank top face. Its underside rises at 45 degrees from the body, so it
+    is gusseted into the body and prints upright without a flat overhang."""
+    z1, p = TS["top_z"], TS["protrusion"]
+    u_in = taper_radius(z1) - 7.0  # Root (and its corner fillets) buried in the body.
+    u_out = taper_radius(z1 - TS["pad_length"] / 2) + p
+    z0 = z1 - TS["pad_length"] - (u_out - u_in)
+    outline = CrossSection([[(u_in, z0), (u_out, z0 + (u_out - u_in)), (u_out, z1), (u_in, z1)]])
+    rc, ce, t = TS["corner_radius"], TS["edge_chamfer"], TS["thickness"]
+    outline = outline.offset(-rc, mf.JoinType.Round).offset(rc, mf.JoinType.Round)
+    inner = Manifold.extrude(outline, t - 2 * ce).translate((0.0, 0.0, -(t - 2 * ce) / 2))
+    outer = Manifold.extrude(outline.offset(-ce, mf.JoinType.Round), t).translate((0.0, 0.0, -t / 2))
+    fin = Manifold.batch_hull([inner, outer])
+    # Local (u, z, w) -> assembly (side * u, -side * w, z): right-handed, and symmetric in w.
+    mat = np.array([[side, 0.0, 0.0, 0.0], [0.0, 0.0, -side, 0.0], [0.0, 1.0, 0.0, 0.0]])
+    return fin.transform(mat)
+
+
+def tapered_handle(spiral: bool) -> Manifold:
+    body = union([tapered_body(0.0, Z_FACE, spiral), mirror_joint(spigot_end()), thumb_shelf()])
+    xw, zw = shelf_wire_point()
+    rw = TS["wire_hole"] / 2
+    # Horizontal wire holes are teardrops pointing up (+Z), the print's up direction.
+    radial = Manifold.extrude(teardrop_cs(rw), abs(xw) + rw).transform(
+        np.array([[0.0, 0.0, SHELF_SIDE, 0.0], [0.0, -SHELF_SIDE, 0.0, 0.0], [1.0, 0.0, 0.0, zw]]))
+    up = Manifold.extrude(teardrop_cs(rw), TS["thickness"] / 2 + 1.0).transform(
+        np.array([[0.0, 1.0, 0.0, xw], [0.0, 0.0, 1.0, 0.0], [1.0, 0.0, 0.0, zw]]))
+    voids = [radial, up,
+             cyl_z(H["channel_diameter"] / 2, zw - H["channel_diameter"] / 2, Z_FACE + 1.0),
+             cyl_z(S["wire_bore"] / 2, Z_FACE, Z_SPIGOT_TIP + 1.0)]
+    return body - union(voids)
+
+
+def glue_d(radius: float, flat: float, z0: float, z1: float) -> Manifold:
+    """D-shaped stub or socket: round with a flat on the +Y side, so the pieces only glue one way."""
+    return cyl_z(radius, z0, z1) ^ box(-radius - 1, radius + 1, -radius - 1, flat, z0 - 1, z1 + 1)
+
+
+def tapered_shaft_lower(spiral: bool, z_to: float | None = None) -> Manifold:
+    if z_to is not None:  # Female coupon: just the socket end.
+        return tapered_body(L, z_to, spiral) - tapered_socket(J["cam"]["crest_interference"])
+    stub = glue_d(GS["radius"], GS["flat"], Z_GLUE - 0.5, Z_GLUE + GS["length"])
+    body = union([tapered_body(L, Z_GLUE, spiral), stub])
+    bay_top = 2 * L - (Z_SPIGOT - H["socket_floor"] - H["bay_length"])
+    return body - union([tapered_socket(J["cam"]["crest_interference"]),
+                         cyl_z(S["wire_bore"] / 2, bay_top, Z_GLUE + GS["length"] + 1.0)])
+
+
+def tapered_shaft_upper(spiral: bool) -> Manifold:
+    front = Z_TONGUE - GAP_END
+    ring = cyl_z(taper_radius(Z_ROUND_END), Z_ROUND_END - 0.01, Z_ROUND_END)
+    transition = Manifold.batch_hull([ring, octagon_prism(front, front + 0.01)])
+    lap = union([transition, octagon_prism(front, Z_HALF_FRONT, "high")]).trim_by_plane((-1.0, 0.0, 0.0), -X_FLAT)
+    body = union([tapered_body(Z_GLUE, Z_ROUND_END, spiral), lap])
+    c = GS["clearance"]
+    socket = glue_d(GS["radius"] + c, GS["flat"] + c, Z_GLUE - 1.0, Z_GLUE + GS["length"] + GS["extra_depth"])
+    return body - union([socket, cyl_z(S["wire_bore"] / 2, Z_GLUE, Z_ROUND_END),
+                         teardrop_z(S["wire_bore"] / 2, Z_ROUND_END - 1.0, Z_HALF_FRONT + 1.0, 270.0)])
+
+
+def tapered_coupon_male() -> Manifold:
+    return union([tapered_body(L - 12.0, Z_FACE, False), mirror_joint(spigot_end())]) - cyl_z(S["wire_bore"] / 2, L - 13.0, Z_SPIGOT_TIP + 1.0)
+
+
 def puck_ring() -> Manifold:
     """Print-frame coupon: the pocket and rim of the tip cradle, to test the stock case fit."""
     h = CPN["puck_ring_height"]
@@ -527,6 +674,7 @@ ORIENT = {  # Assembly -> print rotation (degrees about one axis) and its meanin
     "y-up": ((90.0, 0.0, 0.0), "Pocket opening up"),
     "y-down": ((-90.0, 0.0, 0.0), "Top face down"),
     "as-is": ((0.0, 0.0, 0.0), "Flat, as modelled"),
+    "upright": ((0.0, 0.0, 0.0), "Upright, wide end down"),
 }
 V = CPN["female_variants"]
 PARTS = [  # (name, builder, orientation, group, role). Order is the suggested print order.
@@ -546,6 +694,15 @@ PARTS = [  # (name, builder, orientation, group, role). Order is the suggested p
     ("tip-xiao", tip_xiao, "y-up", "tip", "Open deck for a bare XIAO board, taped on; USB end uncovered, no battery holder"),
     ("button-pod-pilot", lambda: pod(True), "y-down", "pod", "Button carrier with 2 mm pilot holes at the button centres"),
     ("button-pod-blank", lambda: pod(False), "y-down", "pod", "Button carrier with no holes, to mark and drill by hand"),
+    ("coupon-tapered-male", tapered_coupon_male, "upright", "coupon", "Tapered joint coupon: handle top with the spigot, printed upright like the handle"),
+    ("coupon-tapered-female", lambda: tapered_shaft_lower(False, L + CPN["female_length"]), "upright", "coupon",
+     f"Tapered joint coupon: shaft socket, {J['cam']['crest_interference']} mm cam ridge, printed upright like the shaft"),
+    ("handle-tapered-spiral", lambda: tapered_handle(True), "upright", "handle", "Tapered grip with double-helix ribs and a sideways thumb shelf"),
+    ("handle-tapered-smooth", lambda: tapered_handle(False), "upright", "handle", "Tapered grip, smooth, with a sideways thumb shelf"),
+    ("shaft-lower-tapered-spiral", lambda: tapered_shaft_lower(True), "upright", "shaft", "Tapered lower shaft with double-helix ribs: twist-lock socket and glue stub"),
+    ("shaft-lower-tapered-smooth", lambda: tapered_shaft_lower(False), "upright", "shaft", "Tapered lower shaft, smooth: twist-lock socket and glue stub"),
+    ("shaft-upper-tapered-spiral", lambda: tapered_shaft_upper(True), "upright", "shaft", "Tapered upper shaft with double-helix ribs: glue socket and the tip half-lap"),
+    ("shaft-upper-tapered-smooth", lambda: tapered_shaft_upper(False), "upright", "shaft", "Tapered upper shaft, smooth: glue socket and the tip half-lap"),
 ]
 SUPPORTS = {
     "coupon-male": "Support under pin overhangs; Bambu Studio flags floating regions without it",
@@ -559,6 +716,9 @@ SUPPORTS = {
     "handle-straight": "45-degree grip underside; support at shared rail/socket overhangs",
     "shaft-lower": "Support under small pin overhangs", "shaft-upper": "None expected",
     "tip-cradle": "None expected", "tip-cap": "None", "tip-xiao": "None expected; not yet sliced", "button-pod-pilot": "None expected", "button-pod-blank": "None expected",
+    **{name: "Not yet sliced; designed for upright printing with 45-degree gussets and shallow ribs" for name in (
+        "coupon-tapered-male", "coupon-tapered-female", "handle-tapered-spiral", "handle-tapered-smooth",
+        "shaft-lower-tapered-spiral", "shaft-lower-tapered-smooth", "shaft-upper-tapered-spiral", "shaft-upper-tapered-smooth")},
 }
 # Profiles pair a handle with a canonical component list from dimensions.json. Ethan's "mug handle"
 # is the full-hand loop, handle-oval (four fingers); handle-round is the small two-finger loop and
@@ -567,7 +727,18 @@ SUPPORTS = {
 PROFILES = D["profiles"]
 CURRENT = PROFILES["current"]
 PROFILE_NAMES = [k for k in PROFILES if k != "current"]
-PART_PROFILES = {"tip-cradle": "puck-legacy", "tip-cap": "puck-legacy", "coupon-puck-ring": "puck-legacy", "tip-xiao": "xiao"}
+PART_PROFILES = {"tip-cradle": "puck-legacy", "tip-cap": "puck-legacy", "coupon-puck-ring": "puck-legacy", "tip-xiao": "xiao",
+                 **{n: "tapered-xiao" for n in ("coupon-tapered-male", "coupon-tapered-female", "handle-tapered-spiral", "handle-tapered-smooth",
+                                                "shaft-lower-tapered-spiral", "shaft-lower-tapered-smooth", "shaft-upper-tapered-spiral",
+                                                "shaft-upper-tapered-smooth")}}
+
+
+def role(name: str) -> str:
+    """Generic role of a part in an assembly, so checks and colours work for every profile."""
+    for prefix, r in (("handle-", "handle"), ("button-pod", "pod"), ("shaft-lower", "shaft-lower"), ("shaft-upper", "shaft-upper")):
+        if name.startswith(prefix):
+            return r
+    return name
 COLORS = {"handle": (124, 108, 240), "button-pod-pilot": (240, 163, 92), "shaft-lower": (70, 64, 96), "shaft-upper": (70, 64, 96),
           "tip-cradle": (217, 212, 232), "tip-cap": (183, 174, 240), "tip-xiao": (217, 212, 232),
           "puck-case": (236, 232, 244), "xiao-board": (64, 160, 110)}
@@ -580,8 +751,9 @@ def assemblies() -> dict[str, dict]:
     for profile in PROFILE_NAMES:
         spec = PROFILES[profile]
         for key, a in spec["assemblies"].items():
-            out[f"{profile}-{key}"] = {"label": a["label"], "profile": profile, "handle": a["handle"],
-                                      "parts": [f"handle-{a['handle']}"] + spec["components"],
+            parts = a.get("parts") or [f"handle-{a['handle']}"] + spec["components"]  # Explicit list, or handle + components.
+            out[f"{profile}-{key}"] = {"label": a["label"], "profile": profile, "handle": parts[0].removeprefix("handle-"),
+                                      "loop": "handle" in a and has_loop(a["handle"]), "parts": parts,
                                       "reference": spec["reference"]}
     return out
 
@@ -734,18 +906,123 @@ def joint_checks() -> dict:
     return result
 
 
+def tapered_joint_checks() -> dict:
+    """The mirrored joint: the shaft (socket) part turns onto the handle's spigot."""
+    male = tapered_coupon_male()
+    female = tapered_shaft_lower(False, L + CPN["female_length"])
+    tw = J["twist"]
+    pins = (L + 0.2, L + D_GROOVE + 0.5)
+
+    def pose(angle: float, lift: float) -> Manifold:
+        return spin(female, angle).translate((0.0, 0.0, lift))
+
+    insertion = [overlap(pose(tw, d), male)[0] for d in np.arange(0.0, J["spigot_length"] + 1.0, 0.5)]
+    turn = [(a, *overlap(pose(a, 0.0), male, pins)) for a in range(tw, -1, -1)]
+    pulled = overlap(pose(0.0, 0.6), male)[0]
+    over = overlap(pose(-6.0, 0.0), male)[0]
+    open_angles = [a for a in range(-180, 180, 2) if overlap(pose(a, 3.0), male)[0] < 0.05]
+    locked = overlap(pose(0.0, 0.0), male, pins)
+    floor = overlap(pose(0.0, 0.0), male, (Z_SPIGOT_TIP - 1.0, Z_SPIGOT_TIP + 1.0))[0]
+    result = {
+        "entry_angle_deg": tw, "lock_turn": "Shaft turns 38 degrees anticlockwise, seen from the tip",
+        "insertion_at_entry_angle_max_mm3": max(insertion),
+        "twist_max_axial_overlap_mm": max(t[2] for t in turn),
+        "locked_overlap": {"overlap_mm3": locked[0], "axial_mm": locked[1]},
+        "locked_pull_out_0_6mm_overlap_mm3": pulled, "over_twist_6deg_overlap_mm3": over,
+        "floor_contact_overlap_mm3": floor, "insertable_angles_deg": open_angles,
+    }
+    result["passed"] = bool(result["insertion_at_entry_angle_max_mm3"] < 0.01
+                            and result["twist_max_axial_overlap_mm"] <= J["cam"]["crest_interference"] + 0.02
+                            and locked[1] <= J["cam"]["pocket_interference"] + 0.01 and pulled > 1.0 and over > 1.0 and floor < 0.01
+                            and open_angles and all(abs(a - tw) <= 4 for a in open_angles))
+    return result
+
+
+def section_polar(m: Manifold, z: float) -> np.ndarray:
+    """(angle in wand degrees, radius) of every vertex on a section's outer boundary."""
+    polys = m.slice(z).to_polygons()
+
+    def area(q: np.ndarray) -> float:
+        return 0.5 * float(np.dot(q[:, 0], np.roll(q[:, 1], -1)) - np.dot(q[:, 1], np.roll(q[:, 0], -1)))
+
+    outer = max(polys, key=area)
+    return np.stack([np.degrees(np.arctan2(outer[:, 0], outer[:, 1])) % 360.0, np.hypot(outer[:, 0], outer[:, 1])], axis=1)
+
+
+def rib_peaks(m: Manifold, z: float) -> list[float]:
+    """Angles of the raised rib regions in one section."""
+    polar = section_polar(m, z)
+    order = np.argsort(polar[:, 0])
+    ang, raised = polar[order, 0], polar[order, 1] > taper_radius(z) + SP["height"] / 2
+    groups, current = [], []
+    for a, up in zip(ang, raised):
+        if up:
+            current.append(a)
+        elif current:
+            groups.append(current)
+            current = []
+    if current:
+        if groups and raised[0]:
+            groups[0] = [a - 360.0 for a in current] + groups[0]  # Wraps past 0 degrees.
+        else:
+            groups.append(current)
+    return sorted(round(float(np.mean(g)) % 360.0, 2) for g in groups)
+
+
+def tapered_checks(parts: dict) -> dict:
+    """Geometry evidence for the tapered profile: continuity, ribs, shelf and volumes."""
+    a = {n: parts[n]["assembly"] for n in parts if "tapered" in n}
+    out = {"radius_mm": {"butt": r4(TP["butt_radius"]), "handle_face": r4(taper_radius(Z_FACE)), "glue_joint": r4(taper_radius(Z_GLUE)),
+                         "round_end": r4(taper_radius(Z_ROUND_END)), "round_end_z": r4(Z_ROUND_END)}}
+    seams = {}
+    for style in ("smooth", "spiral"):
+        h, lo, up = a[f"handle-tapered-{style}"], a[f"shaft-lower-tapered-{style}"], a[f"shaft-upper-tapered-{style}"]
+        for name, (p, zp), (q, zq) in (("handle/shaft", (h, Z_FACE - 0.2), (lo, L + 0.2)), ("glue", (lo, Z_GLUE - 0.2), (up, Z_GLUE + 0.2))):
+            pp, qq = section_polar(p, zp), section_polar(q, zq)
+            bins = np.arange(0, 360, 15)
+            step = []
+            for b in bins:  # Compare the outline radius in matching angular bins either side of the seam.
+                rp = pp[np.abs((pp[:, 0] - b + 180) % 360 - 180) < 2.0, 1]
+                rq = qq[np.abs((qq[:, 0] - b + 180) % 360 - 180) < 2.0, 1]
+                if len(rp) and len(rq):
+                    step.append(abs(float(rp.mean() - rq.mean())))
+            seams[f"{style} {name}"] = r4(max(step))
+    out["seam_max_radius_step_mm"] = seams
+    out["rib_peaks_deg"] = {f"z={z}": rib_peaks(a["shaft-lower-tapered-spiral"], z) for z in (180.0, 240.0)}
+    out["rib_peaks_deg"].update({f"z={z}": rib_peaks(a["shaft-upper-tapered-spiral"], z) for z in (330.0, 380.0)})
+    xw, zw = shelf_wire_point()
+    shelf = section_polar(a["handle-tapered-spiral"], zw)
+    reach = [float(np.max(np.where(np.abs((shelf[:, 0] - t + 180) % 360 - 180) < 3, shelf[:, 1], 0))) for t in (90.0, 270.0)]
+    left, right = thumb_shelf(-1.0).bounding_box(), thumb_shelf(1.0).bounding_box()
+    out["thumb_shelf"] = {"hand": TS["hand"], "side": "-X (holder's right)" if SHELF_SIDE < 0 else "+X (holder's left)",
+                          "section_z": r4(zw), "reach_plus_x_mm": r4(reach[0]), "reach_minus_x_mm": r4(reach[1]),
+                          "mirrors_exactly": bool(all(abs(l + r) < 1e-6 for l, r in zip(left[:1] + left[3:4], right[3:4] + right[:1]))
+                                                  and all(abs(l - r) < 1e-6 for l, r in zip(left[1:3] + left[4:6], right[1:3] + right[4:6])))}
+    out["volume_mm3"] = {n: r4(m.volume()) for n, m in sorted(a.items()) if not n.startswith("coupon")}
+    out["spiral_extra_mm3"] = {k: r4(a[f"{k}-tapered-spiral"].volume() - a[f"{k}-tapered-smooth"].volume()) for k in ("handle", "shaft-lower", "shaft-upper")}
+    peaks_ok = all(len(v) == SP["starts"] and abs(((v[1] - v[0]) % 360) - 360 / SP["starts"]) < 6 for v in out["rib_peaks_deg"].values())
+    out["passed"] = bool(all(v < 0.2 for v in seams.values()) and peaks_ok
+                         and max(reach[0], reach[1]) > out["radius_mm"]["handle_face"] + TS["protrusion"] - 1
+                         and min(reach[0], reach[1]) < taper_radius(zw) + SP["height"] + 0.5 and out["thumb_shelf"]["mirrors_exactly"])
+    return out
+
+
 def wire_probe(profile: str = "puck-legacy", radius: float = 1.5) -> Manifold:
     y_pod = POD_Y0 + RAIL["height"] + 2.0
     zw = H["rail_wire_hole"]["z"]
     low = -S["wire_bore"] / 2 + radius + 0.1  # Along the groove floor under the cap skirt.
-    if profile == "xiao":  # From above the board's rear edge, down through the rear-wall slot.
+    if PROFILES[profile]["reference"] == "xiao-board":  # From above the board's rear edge, down through the rear-wall slot.
         y_over = Y_DECK + XT["pcb_thickness"] + XT["component_clearance"] + radius + 0.2
         z_drop = Z_DECK0 + radius + 0.1  # Drops just in front of the shaft's end, then runs back in the groove.
         start = [(0, y_over, Z_BOARD0 + 2), (0, y_over, z_drop), (0, low, z_drop)]
     else:
         start = [(0, low, Z_TIP - 14)]
-    pts = start + [(0, low, Z_TONGUE + 4), (0, 0, Z_LAP), (0, 0, Z_SPIGOT - 1), (0, 0, L - 30),
-                   (0, 0, zw), (0, y_pod, zw), (0, y_pod, BUTTONS["top"])]
+    if profile.startswith("tapered"):  # Back down the shafts and handle, out through the thumb shelf.
+        xw, zs = shelf_wire_point()
+        pts = start + [(0, low, Z_TONGUE + 4), (0, 0, Z_LAP), (0, 0, zs), (xw, 0, zs), (xw, TS["thickness"] / 2 + radius + 0.2, zs)]
+    else:
+        pts = start + [(0, low, Z_TONGUE + 4), (0, 0, Z_LAP), (0, 0, Z_SPIGOT - 1), (0, 0, L - 30),
+                       (0, 0, zw), (0, y_pod, zw), (0, y_pod, BUTTONS["top"])]
     ball = Manifold.sphere(radius, 24)
     return union([Manifold.batch_hull([ball.translate(a), ball.translate(b)]) for a, b in zip(pts[:-1], pts[1:])])
 
@@ -772,8 +1049,7 @@ def assembly_checks(parts: dict) -> dict:
     out = {}
     for aid, a in assemblies().items():
         variant, probe = a["handle"], probes[a["profile"]]
-        solids = {"handle": parts[f"handle-{variant}"]["assembly"]}
-        solids.update({("pod" if n == "button-pod-pilot" else n): parts[n]["assembly"] for n in a["parts"][1:]})
+        solids = {role(n): parts[n]["assembly"] for n in a["parts"]}
         if a["reference"] == "xiao-board":
             solids["xiao-board"], solids["xiao-components"] = refs["xiao-board"], refs["xiao-components"]
         else:
@@ -791,7 +1067,7 @@ def assembly_checks(parts: dict) -> dict:
         out[aid] = {"label": a["label"], "profile": a["profile"], "handle": variant,
                     "overlaps_mm3": pairs, "expected_overlaps": {f"{x} + {y}": t for (x, y), t in expected.items() if x in solids and y in solids},
                         "unexpected": unexpected, "wire_probe_overlap_mm3": wires,
-                        "opening": opening(solids["handle"]) if has_loop(variant) else None,
+                        "opening": opening(solids["handle"]) if a["loop"] else None,
                         "passed": not unexpected and all(v < 0.01 for v in wires.values())}
     return out
 
@@ -817,7 +1093,9 @@ def glb_bytes(parts: dict, profile: str) -> bytes:
     for k, (aid, a) in enumerate(chosen):
         offset = np.eye(4)
         offset[1, 3] = -0.13 * k  # Assemblies stacked 130 mm apart, so a side view shows each handle.
-        items = [(n, COLORS["handle"] if n.startswith("handle-") else COLORS[n]) for n in a["parts"]]
+        continuous = PROFILES[profile].get("continuous_body", False)
+        items = [(n, COLORS["handle"] if role(n) == "handle" or (continuous and role(n).startswith("shaft-"))
+                  else COLORS.get(n, COLORS.get(role(n)))) for n in a["parts"]]
         items.append((f"{a['reference']}-reference", COLORS[a["reference"]]))
         for name, color in items:
             node = f"{aid}/{name}"
@@ -871,7 +1149,13 @@ def build(run_checks: bool = True) -> tuple[dict[str, bytes], dict]:
                             "component_clearance": XT["component_clearance"], "boards": XT["boards"]}},
         "current_profile": CURRENT,
         "profiles": {k: {"label": PROFILES[k]["label"], "components": PROFILES[k]["components"],
-                         "tip_parts": [c for c in PROFILES[k]["components"] if c.startswith("tip-")], "reference": PROFILES[k]["reference"],
+                         "tip_parts": sorted({c for aid, a in assemblies().items() if a["profile"] == k for c in a["parts"] if c.startswith("tip-")},
+                                             key=lambda c: (PROFILES[k]["components"] + [c]).index(c)),
+                         "reference": PROFILES[k]["reference"],
+                         "joint_kind": PROFILES[k].get("joint_kind", "standard"),
+                         "view_yaw": PROFILES[k].get("view_yaw", 1.3),
+                         "view_pitch": PROFILES[k].get("view_pitch", 0.22),
+                         "continuous_body": PROFILES[k].get("continuous_body", False),
                          "glb": glbs[k][0], "assemblies": [f"{k}-{a}" for a in PROFILES[k]["assemblies"]]} for k in PROFILE_NAMES},
         "assemblies": {aid: {"label": a["label"], "profile": a["profile"], "parts": a["parts"]} for aid, a in assemblies().items()},
         "glb": [{"file": glbs[k][0], "profile": k, "sha256": sha256(glbs[k][1]), "bytes": len(glbs[k][1]),
@@ -879,7 +1163,8 @@ def build(run_checks: bool = True) -> tuple[dict[str, bytes], dict]:
         "parts": entries,
     }
     if run_checks:
-        manifest["checks"] = {"joint": joint_checks(), "assembly": assembly_checks(parts),
+        manifest["checks"] = {"joint": joint_checks(), "tapered_joint": tapered_joint_checks(), "tapered": tapered_checks(parts),
+                              "assembly": assembly_checks(parts),
                               "meshes_passed": all(e["mesh"]["watertight"] and e["mesh"]["winding_consistent"] and e["mesh"]["every_edge_shared_twice"]
                                                    and e["mesh"]["bodies"] == 1 and e["mesh"]["volume_mm3"] > 0 and e["fits_bed"] for e in entries)}
     files["manifest.json"] = (json.dumps(manifest, indent=2) + "\n").encode()

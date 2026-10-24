@@ -1,5 +1,17 @@
 # Verified lessons
 
+## Tapered printed prototypes need profile-specific joints
+
+The tapered profile reverses the twist-lock's male/female placement so its long parts
+can stand on their wider ends for printing. It retains the cam clearances but is a
+separate matching set, not interchangeable with earlier grips. Keep this explicit in
+the profile and render its opposite insertion/turn direction; a shared slider must
+not assume every physical joint turns the same way. Shape checks cover the seam
+radius, two rib starts, shelf mirroring and continuous wire path. Physical fit and
+upright-printed strength remain separate checks. Compare spiral cost by slicing the
+same dimensions with the ribs disabled, using identical settings, rather than
+assuming the decoration makes a large difference.
+
 ## The public sources reproduce the installed wand exactly
 
 The runtime version is `wand-` plus the first 12 hex digits of the SHA-256 of the device program

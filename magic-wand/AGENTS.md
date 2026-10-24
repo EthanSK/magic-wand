@@ -128,7 +128,7 @@ through their build/check commands; never claim an illustration is physical veri
 ## Opus for UX
 
 - Ethan: “Do any UX related stuff with Opus actually and bug fixing and stuff you do yourself and like testing and installing.” Use Opus for Magic Wand UX implementation; Codex owns bug fixes, verification and installation. Announce each use with “Opus for UX” and say why it is being used. User-requested — 2026-10-19.
-- Ethan: “You should start using Opus for the model from now on.” Use Opus for the wand's 3D model design and CAD implementation; Codex checks the geometry, preview and print files. User-requested — 2026-10-24.
+- Ethan: “Can you just stop using Opus and do it yourself? I'm sick of waiting for this shit.” Use Codex directly for wand 3D model design, CAD implementation and verification unless Ethan explicitly requests Opus again. This replaces the earlier same-day Opus-for-models preference. User-requested — 2026-10-24.
 
 ## Current contextual hold and sleep behaviour
 

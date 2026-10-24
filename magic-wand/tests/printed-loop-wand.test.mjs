@@ -153,8 +153,36 @@ test("printable meshes stay byte-identical across profile changes", () => {
     "tip-cap.stl": "959da4a6d81e175e", "tip-xiao.stl": "35bc25a06cabf68e",
     "button-pod-pilot.stl": "345900f62cfbe16e", "button-pod-blank.stl": "b879529561350331",
   };
-  assert.deepEqual(manifest.parts.map((p) => p.file).sort(), Object.keys(pinned).sort());
+  for (const file of Object.keys(pinned)) assert.ok(manifest.parts.some((p) => p.file === file), `${file} remains exported`);
   for (const [file, prefix] of Object.entries(pinned)) {
     assert.equal(sha256(readFileSync(join(exportsDir, file))).slice(0, 16), prefix, file);
+  }
+});
+
+test("the tapered profile preserves a continuous body, two ribs, and a wired thumb shelf", () => {
+  const profile = manifest.profiles["tapered-xiao"];
+  assert.equal(profile.joint_kind, "mirrored");
+  assert.deepEqual(profile.assemblies, ["tapered-xiao-spiral", "tapered-xiao-smooth"]);
+  const { tapered, tapered_joint: joint } = manifest.checks;
+  assert.equal(tapered.passed, true);
+  assert.equal(joint.passed, true);
+  assert.ok(joint.entry_angle_deg > 0, "preview must use the mirrored entry direction");
+  const radii = Object.values(tapered.radius_mm).slice(0, 4);
+  assert.ok(radii.every((r, i) => i === 0 || r < radii[i - 1]), "body gets thinner towards the tip");
+  assert.ok(Object.values(tapered.seam_max_radius_step_mm).every((r) => r < 0.2), "no handle bulge at the joins");
+  for (const peaks of Object.values(tapered.rib_peaks_deg)) {
+    assert.equal(peaks.length, 2);
+    assert.ok(Math.abs(peaks[1] - peaks[0] - 180) < 6);
+  }
+  assert.equal(tapered.thumb_shelf.mirrors_exactly, true);
+  assert.ok(tapered.thumb_shelf.reach_minus_x_mm > tapered.radius_mm.handle_face + 10);
+  assert.ok(Object.values(tapered.spiral_extra_mm3).every((v) => v > 0));
+  for (const id of profile.assemblies) {
+    const a = manifest.assemblies[id];
+    assert.equal(a.parts.length, 4);
+    assert.ok(a.parts.includes("tip-xiao"));
+    assert.ok(!a.parts.some((p) => p.includes("button-pod")));
+    assert.equal(manifest.checks.assembly[id].opening, null, "no mug loop on the continuous wand");
+    assert.ok(Object.values(manifest.checks.assembly[id].wire_probe_overlap_mm3).every((v) => v < 0.01));
   }
 });

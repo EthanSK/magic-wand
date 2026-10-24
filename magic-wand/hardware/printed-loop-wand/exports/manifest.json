@@ -5,8 +5,8 @@
   "status": "Provisional first print set. Model geometry is generated and checked; printed fit, strength, comfort and mass are not measured.",
   "frame": "Assembly axes: +Z runs from the handle butt (z = 0) to the tip, +Y is the button side, the loop hangs toward -Y. Angles are measured from +Y toward +X, which is clockwise seen from the tip.",
   "source": {
-    "dimensions_sha256": "0e19545410404a48e918ce9f667b2b2afd07a47b041d6bc886dd490f80f8b411",
-    "script_sha256": "013a89c4046ac795d169e748baeecff582805ef02ce0f9f69436fa1c2e5b7cb5",
+    "dimensions_sha256": "91fac368c07c2e0d75e57e36e095b6a24c6aabae818bb74fa26da5b1a6e2ad8b",
+    "script_sha256": "e439665f3cee3f9d221b3793a5a9021657aa3911edddfa9c26dcb6e3e19c3d73",
     "tools": {
       "manifold3d": "3.5.4",
       "trimesh": "5.2.0",
@@ -85,10 +85,31 @@
         "tip-xiao"
       ],
       "reference": "xiao-board",
+      "joint_kind": "standard",
+      "view_yaw": 1.3,
+      "view_pitch": 0.22,
+      "continuous_body": false,
       "glb": "assembly.glb",
       "assemblies": [
         "xiao-mug",
         "xiao-plain"
+      ]
+    },
+    "tapered-xiao": {
+      "label": "Tapered wand (XIAO)",
+      "components": [],
+      "tip_parts": [
+        "tip-xiao"
+      ],
+      "reference": "xiao-board",
+      "joint_kind": "mirrored",
+      "view_yaw": -0.85,
+      "view_pitch": 0.55,
+      "continuous_body": true,
+      "glb": "assembly-tapered-xiao.glb",
+      "assemblies": [
+        "tapered-xiao-spiral",
+        "tapered-xiao-smooth"
       ]
     },
     "puck-legacy": {
@@ -105,6 +126,10 @@
         "tip-cap"
       ],
       "reference": "puck-case",
+      "joint_kind": "standard",
+      "view_yaw": 1.3,
+      "view_pitch": 0.22,
+      "continuous_body": false,
       "glb": "assembly-puck-legacy.glb",
       "assemblies": [
         "puck-legacy-round",
@@ -132,6 +157,26 @@
         "handle-straight",
         "shaft-lower",
         "shaft-upper",
+        "tip-xiao"
+      ]
+    },
+    "tapered-xiao-spiral": {
+      "label": "Double helix",
+      "profile": "tapered-xiao",
+      "parts": [
+        "handle-tapered-spiral",
+        "shaft-lower-tapered-spiral",
+        "shaft-upper-tapered-spiral",
+        "tip-xiao"
+      ]
+    },
+    "tapered-xiao-smooth": {
+      "label": "Smooth",
+      "profile": "tapered-xiao",
+      "parts": [
+        "handle-tapered-smooth",
+        "shaft-lower-tapered-smooth",
+        "shaft-upper-tapered-smooth",
         "tip-xiao"
       ]
     },
@@ -190,6 +235,13 @@
       "profile": "xiao",
       "sha256": "4eef6ba256c5b648eaf45bf1e15c4ba4b5b5d8a1b860969bda159ba371e8c7a3",
       "bytes": 167256,
+      "units": "metres, Y up, wand along +Z; assemblies stacked 130 mm apart in -Y"
+    },
+    {
+      "file": "assembly-tapered-xiao.glb",
+      "profile": "tapered-xiao",
+      "sha256": "97c96d4d2f1035905a409158b0606b410c319ae34a6b820efacf03530731df72",
+      "bytes": 3846400,
       "units": "metres, Y up, wand along +Z; assemblies stacked 130 mm apart in -Y"
     },
     {
@@ -1064,6 +1116,438 @@
           1.0
         ]
       ]
+    },
+    {
+      "name": "coupon-tapered-male",
+      "file": "coupon-tapered-male.stl",
+      "sha256": "a445b718e4cddadc997d3393ca900d4bfcc8ada4847ea81c62be0b8474041304",
+      "bytes": 210784,
+      "group": "coupon",
+      "role": "Tapered joint coupon: handle top with the spigot, printed upright like the handle",
+      "profile": "tapered-xiao",
+      "print_orientation": "Upright, wide end down",
+      "supports": "Not yet sliced; designed for upright printing with 45-degree gussets and shallow ribs",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 7342.365,
+        "area_mm2": 3035.3032,
+        "triangles": 4214,
+        "print_size_mm": [
+          25.2854,
+          25.2854,
+          28.0
+        ],
+        "downward_flat_mm2": 25.013,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          128.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "coupon-tapered-female",
+      "file": "coupon-tapered-female.stl",
+      "sha256": "7154d85c82c70c9ab85fd4d443c087be9c34e1e7caca7f56a140612a4c602ef5",
+      "bytes": 422684,
+      "group": "coupon",
+      "role": "Tapered joint coupon: shaft socket, 0.15 mm cam ridge, printed upright like the shaft",
+      "profile": "tapered-xiao",
+      "print_orientation": "Upright, wide end down",
+      "supports": "Not yet sliced; designed for upright printing with 45-degree gussets and shallow ribs",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 8417.3355,
+        "area_mm2": 4024.4968,
+        "triangles": 8452,
+        "print_size_mm": [
+          24.8434,
+          24.8434,
+          26.0
+        ],
+        "downward_flat_mm2": 120.1095,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          140.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "handle-tapered-spiral",
+      "file": "handle-tapered-spiral.stl",
+      "sha256": "b4c94b9d5d972b5353fd4b08ffb8637659400c94f06d6e5d6571f08998ae9c08",
+      "bytes": 1762884,
+      "group": "handle",
+      "role": "Tapered grip with double-helix ribs and a sideways thumb shelf",
+      "profile": "tapered-xiao",
+      "print_orientation": "Upright, wide end down",
+      "supports": "Not yet sliced; designed for upright printing with 45-degree gussets and shallow ribs",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 88964.2387,
+        "area_mm2": 16196.0989,
+        "triangles": 35256,
+        "print_size_mm": [
+          42.6922,
+          31.37,
+          156.0
+        ],
+        "downward_flat_mm2": 33.6383,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -5.4992
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "handle-tapered-smooth",
+      "file": "handle-tapered-smooth.stl",
+      "sha256": "d81ccd718678840aba9711da13fee2b8bc367f491b888a0bb1e56a17699252e6",
+      "bytes": 1754484,
+      "group": "handle",
+      "role": "Tapered grip, smooth, with a sideways thumb shelf",
+      "profile": "tapered-xiao",
+      "print_orientation": "Upright, wide end down",
+      "supports": "Not yet sliced; designed for upright printing with 45-degree gussets and shallow ribs",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 87081.7955,
+        "area_mm2": 15935.8751,
+        "triangles": 35088,
+        "print_size_mm": [
+          41.8176,
+          29.9448,
+          156.0
+        ],
+        "downward_flat_mm2": 33.6383,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -5.9364
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "shaft-lower-tapered-spiral",
+      "file": "shaft-lower-tapered-spiral.stl",
+      "sha256": "0b6d97f8ef13213d21d305fda38c6a86dbb5d0d625def06212bf52f072fb7355",
+      "bytes": 2026484,
+      "group": "shaft",
+      "role": "Tapered lower shaft with double-helix ribs: twist-lock socket and glue stub",
+      "profile": "tapered-xiao",
+      "print_orientation": "Upright, wide end down",
+      "supports": "Not yet sliced; designed for upright printing with 45-degree gussets and shallow ribs",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 54892.0798,
+        "area_mm2": 16216.3104,
+        "triangles": 40528,
+        "print_size_mm": [
+          26.3226,
+          27.0458,
+          172.0
+        ],
+        "downward_flat_mm2": 128.0196,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          140.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "shaft-lower-tapered-smooth",
+      "file": "shaft-lower-tapered-smooth.stl",
+      "sha256": "84d6cfe91d7f4481dbd1a1821258e43b43815321e2f301bd37e0db9f1bc27b11",
+      "bytes": 2026484,
+      "group": "shaft",
+      "role": "Tapered lower shaft, smooth: twist-lock socket and glue stub",
+      "profile": "tapered-xiao",
+      "print_orientation": "Upright, wide end down",
+      "supports": "Not yet sliced; designed for upright printing with 45-degree gussets and shallow ribs",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 53090.7084,
+        "area_mm2": 15877.9578,
+        "triangles": 40528,
+        "print_size_mm": [
+          24.8434,
+          24.8434,
+          172.0
+        ],
+        "downward_flat_mm2": 128.0196,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          140.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "shaft-upper-tapered-spiral",
+      "file": "shaft-upper-tapered-spiral.stl",
+      "sha256": "57569ce86f6fb5f7a11a61a665f1712458b5622a66aeeace341f6223fdab69b5",
+      "bytes": 1537584,
+      "group": "shaft",
+      "role": "Tapered upper shaft with double-helix ribs: glue socket and the tip half-lap",
+      "profile": "tapered-xiao",
+      "print_orientation": "Upright, wide end down",
+      "supports": "Not yet sliced; designed for upright printing with 45-degree gussets and shallow ribs",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 27347.3822,
+        "area_mm2": 10636.1136,
+        "triangles": 30750,
+        "print_size_mm": [
+          20.2516,
+          21.2462,
+          157.3
+        ],
+        "downward_flat_mm2": 56.1131,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          297.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "shaft-upper-tapered-smooth",
+      "file": "shaft-upper-tapered-smooth.stl",
+      "sha256": "155c175734def03200a2c7d8057c8c2360500e82cdc18902104bb1ffbbd2e4c7",
+      "bytes": 1537584,
+      "group": "shaft",
+      "role": "Tapered upper shaft, smooth: glue socket and the tip half-lap",
+      "profile": "tapered-xiao",
+      "print_orientation": "Upright, wide end down",
+      "supports": "Not yet sliced; designed for upright printing with 45-degree gussets and shallow ribs",
+      "fits_bed": true,
+      "mesh": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 26370.5927,
+        "area_mm2": 10400.6242,
+        "triangles": 30750,
+        "print_size_mm": [
+          19.0606,
+          19.0606,
+          157.3
+        ],
+        "downward_flat_mm2": 56.1134,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          297.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
     }
   ],
   "checks": {
@@ -1294,6 +1778,80 @@
       "entry_angle_deg": -38,
       "passed": true
     },
+    "tapered_joint": {
+      "entry_angle_deg": 38,
+      "lock_turn": "Shaft turns 38 degrees anticlockwise, seen from the tip",
+      "insertion_at_entry_angle_max_mm3": 0.0,
+      "twist_max_axial_overlap_mm": 0.15,
+      "locked_overlap": {
+        "overlap_mm3": 0.5741,
+        "axial_mm": 0.05
+      },
+      "locked_pull_out_0_6mm_overlap_mm3": 7.4626,
+      "over_twist_6deg_overlap_mm3": 6.0739,
+      "floor_contact_overlap_mm3": 0.0,
+      "insertable_angles_deg": [
+        36,
+        38,
+        40
+      ],
+      "passed": true
+    },
+    "tapered": {
+      "radius_mm": {
+        "butt": 15.0,
+        "handle_face": 12.4309,
+        "glue_joint": 9.5303,
+        "round_end": 7.3,
+        "round_end_z": 418.1
+      },
+      "seam_max_radius_step_mm": {
+        "smooth handle/shaft": 0.0166,
+        "smooth glue": 0.0074,
+        "spiral handle/shaft": 0.1651,
+        "spiral glue": 0.0613
+      },
+      "rib_peaks_deg": {
+        "z=180.0": [
+          139.5,
+          319.5
+        ],
+        "z=240.0": [
+          154.5,
+          334.5
+        ],
+        "z=330.0": [
+          88.87,
+          268.87
+        ],
+        "z=380.0": [
+          72.92,
+          252.92
+        ]
+      },
+      "thumb_shelf": {
+        "hand": "left",
+        "side": "-X (holder's right)",
+        "section_z": 117.0,
+        "reach_plus_x_mm": 12.9408,
+        "reach_minus_x_mm": 26.8458,
+        "mirrors_exactly": true
+      },
+      "volume_mm3": {
+        "handle-tapered-smooth": 87081.7933,
+        "handle-tapered-spiral": 88964.2326,
+        "shaft-lower-tapered-smooth": 53090.7426,
+        "shaft-lower-tapered-spiral": 54892.1134,
+        "shaft-upper-tapered-smooth": 26370.6167,
+        "shaft-upper-tapered-spiral": 27347.4064
+      },
+      "spiral_extra_mm3": {
+        "handle": 1882.4393,
+        "shaft-lower": 1801.3708,
+        "shaft-upper": 976.7897
+      },
+      "passed": true
+    },
     "assembly": {
       "xiao-mug": {
         "label": "Mug handle",
@@ -1337,6 +1895,74 @@
         "label": "Plain handle (no loop)",
         "profile": "xiao",
         "handle": "straight",
+        "overlaps_mm3": {
+          "handle + shaft-lower": 0.5741,
+          "handle + shaft-upper": 0.0,
+          "handle + tip-xiao": 0.0,
+          "handle + xiao-board": 0.0,
+          "handle + xiao-components": 0.0,
+          "shaft-lower + shaft-upper": 0.0,
+          "shaft-lower + tip-xiao": 0.0,
+          "shaft-lower + xiao-board": 0.0,
+          "shaft-lower + xiao-components": 0.0,
+          "shaft-upper + tip-xiao": 0.0,
+          "shaft-upper + xiao-board": 0.0,
+          "shaft-upper + xiao-components": 0.0,
+          "tip-xiao + xiao-board": 0.0,
+          "tip-xiao + xiao-components": 0.0,
+          "xiao-board + xiao-components": 0.0
+        },
+        "expected_overlaps": {
+          "handle + shaft-lower": "Cam pocket preload"
+        },
+        "unexpected": [],
+        "wire_probe_overlap_mm3": {
+          "handle": 0.0,
+          "shaft-lower": 0.0,
+          "shaft-upper": 0.0,
+          "tip-xiao": 0.0
+        },
+        "opening": null,
+        "passed": true
+      },
+      "tapered-xiao-spiral": {
+        "label": "Double helix",
+        "profile": "tapered-xiao",
+        "handle": "tapered-spiral",
+        "overlaps_mm3": {
+          "handle + shaft-lower": 0.5741,
+          "handle + shaft-upper": 0.0,
+          "handle + tip-xiao": 0.0,
+          "handle + xiao-board": 0.0,
+          "handle + xiao-components": 0.0,
+          "shaft-lower + shaft-upper": 0.0,
+          "shaft-lower + tip-xiao": 0.0,
+          "shaft-lower + xiao-board": 0.0,
+          "shaft-lower + xiao-components": 0.0,
+          "shaft-upper + tip-xiao": 0.0,
+          "shaft-upper + xiao-board": 0.0,
+          "shaft-upper + xiao-components": 0.0,
+          "tip-xiao + xiao-board": 0.0,
+          "tip-xiao + xiao-components": 0.0,
+          "xiao-board + xiao-components": 0.0
+        },
+        "expected_overlaps": {
+          "handle + shaft-lower": "Cam pocket preload"
+        },
+        "unexpected": [],
+        "wire_probe_overlap_mm3": {
+          "handle": 0.0,
+          "shaft-lower": 0.0,
+          "shaft-upper": 0.0,
+          "tip-xiao": 0.0
+        },
+        "opening": null,
+        "passed": true
+      },
+      "tapered-xiao-smooth": {
+        "label": "Smooth",
+        "profile": "tapered-xiao",
+        "handle": "tapered-smooth",
         "overlaps_mm3": {
           "handle + shaft-lower": 0.5741,
           "handle + shaft-upper": 0.0,
