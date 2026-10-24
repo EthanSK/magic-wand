@@ -731,3 +731,5 @@ plan so pointer-focus updates do not redo the typography search.
 ## Component source and published assets have separate roots
 
 The monorepo keeps Wand source under `magic-wand/` and the published site under root `docs/`. Use `scripts/paths.py` for those roots; resolve tutorial source records against the component and rendered `docs/` records against the repository. Run root `npm run check` to include all components and the repository-wide privacy scan. Moving files must leave device/receiver bytes and rendered media unchanged.
+
+Private output guards must cover the repository root, not just the component root. The replay report path check resolves paths before writing and permits only external locations or the explicitly ignored root/component `work/` folders; its regression test includes another component and the published site.

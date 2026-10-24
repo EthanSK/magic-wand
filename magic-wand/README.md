@@ -1,5 +1,13 @@
 # [Magic Wand ↗](https://ethansk.github.io/magic-wand/)
 
+This is the `magic-wand/` component of the controller monorepo. Run the commands in this guide from this folder:
+
+```sh
+cd magic-wand  # From the repository root
+```
+
+The published site stays in `../docs/`; root `npm run check` checks every component.
+
 [Try the wand](https://ethansk.github.io/magic-wand/) · [Ethan’s setup](https://ethansk.github.io/ethan-setup/) · [Agentic Mouse](https://ethansk.github.io/agentic-mouse/) · [Agent Flow](https://ethansk.github.io/AgentFlow/)
 
 <!-- wand:intro -->
