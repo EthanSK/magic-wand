@@ -30,7 +30,6 @@ void setup() {
   handIMU.settings.accelRange = 4;
   ready = handIMU.begin() == 0;
   if (ready) SensePower::begin(handIMU);
-  Fingers::begin();
   Bluefruit.autoConnLed(false);
   Bluefruit.configPrphBandwidth(BANDWIDTH_MAX);
   Bluefruit.begin();
@@ -42,6 +41,7 @@ void setup() {
   Bluefruit.Advertising.restartOnDisconnect(true);
   Bluefruit.Advertising.setInterval(32, 244);
   Bluefruit.Advertising.start(0);
+  Fingers::begin();
 }
 
 void loop() {
@@ -73,10 +73,10 @@ void loop() {
   uint8_t available = 0;
   if (!SensePower::idle && (handIMU.readRegister(&available, 0x1E) != IMU_SUCCESS || !(available & 0x02))) return;
   int length = snprintf(frame, sizeof(frame),
-    "{\"sensor\":\"hand\",\"ms\":%lu,\"ax\":%.4f,\"ay\":%.4f,\"az\":%.4f,\"gx\":%.3f,\"gy\":%.3f,\"gz\":%.3f,\"battery_v\":%.3f,\"charging\":%s,\"idle\":%s,\"sleep_ready\":%s}\n",
+    "{\"sensor\":\"hand\",\"ms\":%lu,\"ax\":%.4f,\"ay\":%.4f,\"az\":%.4f,\"gx\":%.3f,\"gy\":%.3f,\"gz\":%.3f,\"battery_v\":%.3f,\"charging\":%s,\"idle\":%s,\"sleep_ready\":%s,\"i2c_timeouts\":%lu}\n",
     (unsigned long)lastSample, handIMU.readFloatAccelX(), handIMU.readFloatAccelY(),
     handIMU.readFloatAccelZ(), SensePower::idle ? 0 : handIMU.readFloatGyroX(), SensePower::idle ? 0 : handIMU.readFloatGyroY(),
     SensePower::idle ? 0 : handIMU.readFloatGyroZ(), batteryVoltage, digitalRead(CHARGE_STATUS) == LOW ? "true" : "false",
-    SensePower::idle ? "true" : "false", SensePower::enabled ? "true" : "false");
+    SensePower::idle ? "true" : "false", SensePower::enabled ? "true" : "false", (unsigned long)ExternalBus::timeouts);
   emit(frame, length);
 }

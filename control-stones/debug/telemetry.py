@@ -29,6 +29,8 @@ def parse_sample(line):
     if type(value.get("idle")) is bool:
         sample["idle"] = value["idle"]
         sample["sleep_ready"] = value.get("sleep_ready") is True
+    if type(value.get("i2c_timeouts")) is int and value["i2c_timeouts"] >= 0:
+        sample["i2c_timeouts"] = value["i2c_timeouts"]
     battery = value.get("battery_v")
     if type(battery) in (int, float) and math.isfinite(battery) and 0 < battery < 6:
         sample["battery_v"] = battery
