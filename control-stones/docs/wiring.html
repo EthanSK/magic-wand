@@ -108,7 +108,7 @@
   const STAGE_NAME = { 1: 'USB only', 2: 'One sensor', 3: 'Five sensors', 4: 'Battery' };
   const STAGE_LINE = {
     1: 'USB only: flash a test, read the built-in IMU, check BLE reaches the Mac. No external wiring.',
-    2: 'Thumb on channel 2 with short leads. Scan for 0x68/0x69 and chip ID 0xD1 before adding more.',
+    2: 'Thumb on channel 2 with short leads. CS and SA0 connect locally to 3V3. Check address 0x69 and chip ID 0xD1 before adding more.',
     3: 'Channels 2–6. Add one finger at a time and rescan; reads go one channel at a time.',
     4: 'Solder the socket pigtail with the battery unplugged, meter polarity, then plug in.'
   };
@@ -126,7 +126,7 @@
     { id: 'ble', stage: 1, group: 'Host and hand', net: 'link', status: 'wireless', title: 'Bluetooth LE to the Mac', opt: 'XIAO radio → Mac (BLE, no wire)',
       from: 'XIAO · nRF52840 radio', to: 'Mac · Bluetooth',
       what: 'No wire. Hand and finger readings travel to the Mac over BLE.',
-      check: 'Packet format, timestamps and gesture firmware aren’t written yet.', src: 'Project plan' },
+      check: 'The built-in hand sensor already streams over BLE. External finger readings still need wiring and firmware support.', src: 'Control Stones firmware and debug reader' },
     { id: 'imu', stage: 1, group: 'Host and hand', net: 'link', status: 'builtin', title: 'Built-in hand IMU', opt: 'Built-in IMU (hand reference)',
       from: 'XIAO · LSM6DS3TR-C', to: 'on the XIAO (no external wire)',
       what: 'The hand reference sensor. Seeed lists it on the Sense with power switched by P1.08, so firmware has to turn it on.',
@@ -170,28 +170,28 @@
         from: `TCA9548A · SC${CHANNELS[i]}`, to: `${F} board · SCL`,
         what: `Channel ${CHANNELS[i]} clock, paired with SD${CHANNELS[i]}.`,
         check: CH_PULL, src: 'Adafruit TCA9548A pinouts; Kunkune photos' },
-      { id: 'p' + i, stage: st, group: g, net: 'pwr', status: 'verify', title: `${F} power`, opt: `3V3 rail → ${F} VIN or 3V3 (verify)`,
-        from: 'XIAO · 3V3 rail', to: `${F} board · VIN or 3V3 (unverified)`,
+      { id: 'p' + i, stage: st, group: g, net: 'pwr', status: 'ok', title: `${F} power`, opt: `3V3 rail → ${F} 3V3`,
+        from: 'XIAO · 3V3 rail', to: `${F} board · 3V3`,
         what: 'Shared regulated 3.3 V from the XIAO. The mux switches data, not power, so every finger board stays powered.',
-        check: 'Not established. With the board unpowered, meter whether the 5-pin part marked S2PG sits between VIN and 3V3, and which pad the 103 resistors return to; that pad is the likely input. Never battery voltage.',
-        src: 'Kunkune photos; Bosch BMI160 Table 1 (VDD 1.71–3.6 V)' },
+        check: 'Use the 3V3 pad with the regulated XIAO supply; leave VIN unconnected. Spintend documents this connection for the matching purple BMI160/6DS3 board. Check that the printed pad labels match your board; never connect raw battery voltage here.',
+        src: 'Spintend BMI160 wiring guide and matching board photo; Kunkune board photos; Bosch BMI160 supply limits' },
       { id: 'g' + i, stage: st, group: g, net: 'gnd', status: 'ok', title: `${F} ground`, opt: `GND rail → ${F} GND`,
         from: 'XIAO · GND rail', to: `${F} board · GND`,
         what: 'Common ground for this board.',
         check: 'Check continuity before powering.', src: 'Adafruit TCA9548A guide' },
-      { id: 'cs' + i, stage: st, group: g, net: 'nc', status: 'verify', title: `${F} CS pad`, opt: `${F} CS (as delivered, verify)`,
-        from: `${F} board · CS`, to: 'as delivered (unverified)',
-        what: 'For I²C the chip’s CSB must sit at VDDIO from power-up (Bosch §3.2.1). The bare chip has a 75–150 kΩ internal pull-up, but that describes the chip, not this board’s wiring.',
-        check: 'Leave it unwired for the first scan. Add a strap to the board’s own 3.3 V rail only if metering or the scan shows it’s needed.',
-        src: 'Bosch BMI160 §3.2.1, Table 26' },
-      { id: 'sa' + i, stage: st, group: g, net: 'nc', status: 'verify', title: `${F} SA0 pad`, opt: `${F} SA0 (as delivered, verify)`,
-        from: `${F} board · SA0`, to: 'as delivered (unverified)',
-        what: 'SDO/SA0 low gives address 0x68; high gives 0x69 (Bosch §3.2.3). Each finger has its own channel, so all five can share one address.',
-        check: 'Scan each channel for 0x68 and 0x69 and read chip ID 0xD1 from register 0x00. A related vendor schematic appears to swap the CS and SA0 labels, so add no strap until the scan shows which is which.',
-        src: 'Bosch BMI160 §3.2.3, §2.11.1' },
-      { id: 'nc' + i, stage: st, group: g, net: 'nc', status: 'open', title: `${F} unused pins`, opt: `${F} INT1/INT2/OCS/SCX/SDX (leave open)`,
-        from: `${F} board · INT1, INT2, OCS, SCX, SDX`, to: 'not connected',
-        what: 'Bosch: leave unused INT1/INT2 unconnected; unused secondary-interface pins go high-impedance.',
+      { id: 'cs' + i, stage: st, group: g, net: 'pwr', status: 'ok', title: `${F} CS to 3V3`, opt: `${F} CS → local 3V3`,
+        from: `${F} board · CS`, to: `${F} board · 3V3`,
+        what: 'A short local connection holds CS high from power-up, selecting I²C. No separate CS wire runs back to the XIAO.',
+        check: 'With all power disconnected, check CS is not shorted to GND before joining it to 3V3. Bosch recommends hard-wiring CSB to VDDIO for I²C.',
+        src: 'Bosch BMI160 §3.2.1, Table 25; Kunkune board labels' },
+      { id: 'sa' + i, stage: st, group: g, net: 'pwr', status: 'ok', title: `${F} SA0 to 3V3`, opt: `${F} SA0 → local 3V3 (0x69)`,
+        from: `${F} board · SA0`, to: `${F} board · 3V3`,
+        what: 'A short local connection holds the address pin high, selecting 0x69. All five sensors can use 0x69 because they have separate mux channels.',
+        check: 'With all power disconnected, check SA0 is not shorted to GND before joining it to 3V3. On the first powered test, expect address 0x69 and chip ID 0xD1 at register 0x00.',
+        src: 'Bosch BMI160 §3.2.3, §2.11.1; matching Spintend board labels' },
+      { id: 'nc' + i, stage: st, group: g, net: 'nc', status: 'open', title: `${F} unused pins`, opt: `${F} VIN/INT1/INT2/OCS/SCX/SDX (leave open)`,
+        from: `${F} board · VIN, INT1, INT2, OCS, SCX, SDX`, to: 'not connected',
+        what: 'VIN stays empty because power enters through 3V3. Leave unused interrupt and secondary-interface pins unconnected.',
         check: 'INT1 could later become a wake line, but no XIAO GPIO is assigned to it.', src: 'Bosch BMI160 §4.1' }
     );
   });
@@ -239,11 +239,11 @@
       L.nodes.push({ id, x: sX, y, w: SW, h: SH, t: [
         [sX + SW / 2, y + 16, `${F} · ch ${CHANNELS[i]}`, 'middle', 1],
         [sX + 8, y + 37, 'SDA'], [sX + 8, y + 53, 'SCL'],
-        [sX2 - 8, y + 37, 'VIN/3V3?', 'end'], [sX2 - 8, y + 53, 'GND', 'end']
+        [sX2 - 8, y + 37, '3V3', 'end'], [sX2 - 8, y + 53, 'GND', 'end']
       ] });
       L.pins.push([sX, y + 33, id], [sX, y + 49, id], [sX2, y + 33, id], [sX2, y + 49, id]);
-      L.chips['cs' + i] = { x: sX + 4, y: y + 57, w: 30, h: 16, t: [[sX + 8, y + 69, 'CS?']] };
-      L.chips['sa' + i] = { x: sX + 38, y: y + 57, w: 36, h: 16, t: [[sX + 42, y + 69, 'SA0?']] };
+      L.chips['cs' + i] = { x: sX + 4, y: y + 57, w: 30, h: 16, t: [[sX + 8, y + 69, 'CS']] };
+      L.chips['sa' + i] = { x: sX + 38, y: y + 57, w: 36, h: 16, t: [[sX + 42, y + 69, 'SA0']] };
       L.chips['nc' + i] = { x: sX2 - 30, y: y + 57, w: 26, h: 16, t: [[sX2 - 8, y + 69, 'NC', 'end']] };
     });
   }
@@ -384,7 +384,7 @@
     svg.setAttribute('viewBox', `0 0 ${W} ${L.H}`);
     while (canvas.firstChild) canvas.removeChild(canvas.firstChild);
     const gNodes = el('g', {}, canvas);
-    const gDim = el('g', { class: 'dim' }, canvas);
+    const gDim = el('g', { class: selId ? 'dim' : '' }, canvas);
     const gSel = el('g', {}, canvas);
     const gTop = el('g', {}, canvas);
 
@@ -432,7 +432,10 @@
   function showDetail() {
     const c = byId[selId];
     detail.textContent = '';
-    if (!c) return;
+    if (!c) {
+      detail.textContent = 'Select a connection to see its details.';
+      return;
+    }
     const head = document.createElement('div');
     head.className = 'viz-row';
     const badge = document.createElement('span');
@@ -477,6 +480,10 @@
 
   function buildOptions() {
     select.textContent = '';
+    const none = document.createElement('option');
+    none.value = '';
+    none.textContent = 'No connection selected';
+    select.appendChild(none);
     const groups = {};
     C.forEach(c => {
       if (c.stage > stage) return;
@@ -496,12 +503,11 @@
 
   function save() {
     const c = byId[selId];
-    if (!c) return;
     try {
       const api = window.openai;
       if (!api || typeof api.setWidgetState !== 'function') return;
       const p = api.setWidgetState({
-        modelContent: { stage: `${stage} · ${STAGE_NAME[stage]}`, selected: c.title, endpoints: `${c.from} → ${c.to}`, status: STATUS[c.status] },
+        modelContent: { stage: `${stage} · ${STAGE_NAME[stage]}`, selected: c ? c.title : null, endpoints: c ? `${c.from} → ${c.to}` : null, status: c ? STATUS[c.status] : null },
         privateContent: { stage, selId }
       });
       if (p && typeof p.catch === 'function') p.catch(() => {});
@@ -522,7 +528,7 @@
     if (panel.hidden) panel.hidden = false;
     stageLine.textContent = `Stage ${s} · ${STAGE_LINE[s]}`;
     buildOptions();
-    if (!byId[selId] || byId[selId].stage > s || (user && changed)) selId = DEFAULT_SEL[s];
+    if (selId && (!byId[selId] || byId[selId].stage > s || (user && changed))) selId = DEFAULT_SEL[s];
     select.value = selId;
     draw();
     showDetail();
@@ -531,7 +537,7 @@
 
   function choose(id, user) {
     const c = byId[id];
-    if (!c || c.stage > stage) return;
+    if (id !== '' && (!c || c.stage > stage)) return;
     selId = id;
     select.value = id;
     draw();
@@ -542,7 +548,8 @@
   function applyState(ws) {
     const p = ws && ws.privateContent;
     if (!p || !STAGE_LINE[Number(p.stage)]) return false;
-    if (byId[p.selId]) selId = p.selId;
+    if (p.selId === '' || p.selId === null) selId = '';
+    else if (byId[p.selId]) selId = p.selId;
     stage = Number(p.stage);
     setStage(stage, false);
     return true;
@@ -557,9 +564,23 @@
     .observe(panel, { attributes: true, attributeFilter: ['hidden'] });
 
   select.addEventListener('change', () => choose(select.value, true));
-  svg.addEventListener('click', e => {
-    const t = e.target && e.target.closest ? e.target.closest('[data-id]') : null;
-    if (t) choose(t.getAttribute('data-id'), true);
+  document.addEventListener('click', e => {
+    const target = e.target;
+    if (!target || !target.closest) return;
+    const connection = target.closest('[data-id]');
+    if (connection && svg.contains(connection)) {
+      choose(connection.getAttribute('data-id'), true);
+      return;
+    }
+    // Click-away clears the diagram without interrupting controls or detail text.
+    if (target.closest('a, button, input, select, textarea, label, [contenteditable], [role="button"], [role="tab"], #csw-detail')) return;
+    if (selId) choose('', true);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape' || e.defaultPrevented || !selId) return;
+    const target = e.target;
+    if (target && target.closest && target.closest('input, select, textarea, [contenteditable], [role="combobox"]')) return;
+    choose('', true);
   });
 
   let raf = 0;
