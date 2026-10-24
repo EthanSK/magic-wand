@@ -19,6 +19,16 @@ def sample(ms=100, **extra):
 
 
 class ReaderTests(unittest.TestCase):
+    def test_reader_leaves_the_firmware_upload_port_alone(self):
+        import server
+        from types import SimpleNamespace
+        def port(pid, vid=0x2886, product='XIAO nRF52840 Sense'):
+            return SimpleNamespace(pid=pid, vid=vid, product=product)
+        self.assertTrue(server.is_sense_serial(port(0x8045)))
+        self.assertFalse(server.is_sense_serial(port(0x0045)))
+        self.assertFalse(server.is_sense_serial(port(0x8045, vid=0x1234)))
+        self.assertFalse(server.is_sense_serial(port(0x8045, product=None)))
+
     def test_unseen_sensor_does_not_claim_a_usb_connection(self):
         import server
         with server.LOCK:
