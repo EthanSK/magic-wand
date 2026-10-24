@@ -900,3 +900,20 @@ distance clipped the long shafts in a tall Codex panel. Tests project all box
 corners in wide and narrow viewports, and browser checks cover both XIAO handles,
 legacy Puck models, modes, joint controls and a narrow layout. Physical wand
 comfort and multitouch remain separate from those browser checks.
+
+
+## Native movement needs relative distance as well as position
+
+The receiver created mouse-move and drag events with an absolute destination
+but left their delta fields at zero. A passive session event tap observed
+153 receiver movement events with zero deltas while physical-mouse movement
+reported nonzero deltas. Preserve both the destination and the actual clamped
+movement in mouseEventDeltaX and mouseEventDeltaY. The native constructor test
+checks move, left/right drag, display-edge movement and no movement. Live
+notification dismissal still requires a physical check.
+
+A notification banner is a native drag target inside a scroll container. Its
+Accessibility subrole must take precedence over that ancestor when choosing
+Bottom hold behaviour. Send ordinary mouse events; do not turn a drag into a
+separate Close action. Explicit tap-then-hold and screenshot selection retain
+their existing paths.

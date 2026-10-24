@@ -10,7 +10,7 @@ import {spawnSync} from 'node:child_process';
 test('native HUD close cancels actions, rejects stale context and closes any child', {skip:process.platform!=='darwin'},()=>{
  const source=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.url),'utf8');
  const method=(name)=>{
-  const start=source.indexOf('    func '+name+'(');assert(start>=0,name);
+  const start=source.indexOf('    '+(name==='mouseMovementEvent'?'static ':'')+'func '+name+'(');assert(start>=0,name);
   const open=source.indexOf('{',start);let depth=1,end=open+1;
   while(depth){if(source[end]==='{')depth++;if(source[end]==='}')depth--;end++;}
   return source.slice(start,end);
@@ -24,10 +24,12 @@ func AXIsProcessTrusted()->Bool {true}
 func log(_ parts:Any...) {}
 enum CGEventType {case leftMouseDragged,rightMouseDragged,mouseMoved}
 enum CGMouseButton {case left,right}
+enum CGEventField {case mouseEventDeltaX,mouseEventDeltaY}
 enum EventTap {case cghidEventTap}
 final class CGEvent {
  static var posted=0
  init?(mouseEventSource:Int?,mouseType:CGEventType,mouseCursorPosition:CGPoint,mouseButton:CGMouseButton){}
+ func setIntegerValueField(_ field:CGEventField,value:Int64){}
  func post(tap:EventTap){Self.posted+=1}
 }
 final class Recording {var isRecording=false}
@@ -76,7 +78,7 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  func releaseButtons(){}
  init(){${callback}
 ${modeCallback}}
- ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
+ ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','mouseMovementEvent','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 // Ethan's hold-to-show HUD. Holding Middle shows and steers it; releasing

@@ -1030,6 +1030,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         AXUIElementSetMessagingTimeout(system,0.02)
         var hit:AXUIElement?
         guard AXUIElementCopyElementAtPosition(system,Float(point.x),Float(point.y),&hit) == .success else{return []}
+        var owner:pid_t=0
+        let notificationCenter=hit.map{AXUIElementGetPid($0,&owner) == .success && NSRunningApplication(processIdentifier:owner)?.bundleIdentifier=="com.apple.notificationcenterui"} ?? false
         var roles:[String]=[]
         var current=hit
         for _ in 0..<24 {
@@ -1039,6 +1041,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             guard AXUIElementCopyAttributeValue(item,kAXRoleAttribute as CFString,&role) == .success,
                   let name=role as? String else{break}
             roles.append(name)
+            // Ethan's notification drag is an ordinary mouse drag. A banner
+            // sits inside a scroll area, but is itself a draggable target.
+            if notificationCenter,name=="AXGroup" {
+                var subrole:CFTypeRef?
+                if AXUIElementCopyAttributeValue(item,kAXSubroleAttribute as CFString,&subrole) == .success,
+                   let value=subrole as? String,value=="AXNotificationCenterAlert" {roles.append(value);break}
+            }
             if WandHoldTarget.ends(at:name) {break}
             var parent:CFTypeRef?
             guard AXUIElementCopyAttributeValue(item,kAXParentAttribute as CFString,&parent) == .success,
@@ -1228,9 +1237,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // on release; an open, unheld HUD and independent review stay separate.
         guard !(hudSession && (middleHeld || hudEntryPress || pointerInHUD)) else{return point}
         let newPoint=WandPointerBounds.clamp(CGPoint(x:point.x+CGFloat(dx),y:point.y+CGFloat(dy)),to:pointerDisplays)
-        let kind:CGEventType = buttons & 1 != 0 ? .leftMouseDragged : (buttons & 2 != 0 ? .rightMouseDragged : .mouseMoved)
-        let button:CGMouseButton = buttons & 1 != 0 ? .left : (buttons & 2 != 0 ? .right : .left)
-        CGEvent(mouseEventSource:nil,mouseType:kind,mouseCursorPosition:newPoint,mouseButton:button)?.post(tap:.cghidEventTap)
+        Self.mouseMovementEvent(buttons:buttons,from:point,to:newPoint)?.post(tap:.cghidEventTap)
         movementCount += 1
         if movementCount == 1 || movementCount % 100 == 0 { log("MOVEMENT_REPORTS_POSTED", movementCount) }
         return newPoint
@@ -1423,6 +1430,16 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// Ethan's "normal click": a plain single click, never inherited Command-click
     /// or an OS double-click made from two independent stop-to-click gestures.
     /// Bottom double-tap is classified by the wand router (recenter), not here.
+    /// Ordinary native pointer motion includes relative distance as well as
+    /// position. Some draggable controls consume deltaX/deltaY, not location.
+    static func mouseMovementEvent(buttons:Int,from start:CGPoint,to end:CGPoint)->CGEvent? {
+        let kind:CGEventType = buttons & 1 != 0 ? .leftMouseDragged : (buttons & 2 != 0 ? .rightMouseDragged : .mouseMoved)
+        let button:CGMouseButton = buttons & 1 != 0 ? .left : (buttons & 2 != 0 ? .right : .left)
+        guard let event=CGEvent(mouseEventSource:nil,mouseType:kind,mouseCursorPosition:end,mouseButton:button) else{return nil}
+        event.setIntegerValueField(.mouseEventDeltaX,value:Int64((end.x-start.x).rounded()))
+        event.setIntegerValueField(.mouseEventDeltaY,value:Int64((end.y-start.y).rounded()))
+        return event
+    }
     static func mouseButtonEvent(button:CGMouseButton,down:Bool,at point:CGPoint)->CGEvent? {
         let kind:CGEventType = button == .left ? (down ? .leftMouseDown:.leftMouseUp) : (down ? .rightMouseDown:.rightMouseUp)
         guard let event=CGEvent(mouseEventSource:nil,mouseType:kind,mouseCursorPosition:point,mouseButton:button) else{return nil}
