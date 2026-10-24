@@ -5,6 +5,17 @@ It includes all four pieces arranged on one plate, with the printer and print se
 [tapered-smooth.3mf](tapered-smooth.3mf) has the same shape without the two spiral ridges.
 On GitHub, use **Download raw file** to download a 3MF.
 
+## Two-print comparison
+
+- **Print 1:** [original crossed pattern, 110 mm pitch](Print-1-crossed-110mm.3mf).
+  This file is frozen from the committed first version; its source commit and checksum are
+  recorded in `Print-1-crossed-110mm.json`.
+- **Print 2:** [tighter crossed pattern, 90 mm pitch](tapered-double-helix.3mf).
+  Its mirror-image spirals cross more often: about 22% more turns along the same shaft.
+
+The hole and platform are unchanged between the two prints. Print one first, clear the bed,
+then print the other; these files are not instructions to start two jobs together.
+
 ## Current prototype
 
 - Continuous tapered body with **two raised spirals winding in opposite directions**, crossing

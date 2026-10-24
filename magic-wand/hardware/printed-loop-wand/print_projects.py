@@ -104,6 +104,10 @@ def check() -> None:
     assert receipt["inputs"] == inputs(), "Print projects are stale; run print_projects.py"
     for style, filename in FILES.items():
         assert receipt["projects"][style] == inspect_project(OUT / filename), filename
+    frozen = OUT / "Print-1-crossed-110mm.json"
+    if frozen.exists():
+        record = json.loads(frozen.read_text())
+        assert sha(OUT / record["file"]) == record["sha256"], "The frozen first print changed"
     print("Shared Bambu projects match the current CAD and print settings")
 
 

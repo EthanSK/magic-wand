@@ -10,7 +10,7 @@ before an update is applied.
 
 Choose **Tapered wand (XIAO)** in the preview for the continuous wand shape. It has no loop or
 separate handle bulge: the body tapers from 30 mm at the butt to 14.6 mm before the XIAO tip.
-Two rounded, 1.2 mm raised ribs wind in opposite directions at a 110 mm pitch, crossing each other.
+Two rounded, 1.2 mm raised ribs wind in opposite directions at a 90 mm pitch, crossing each other.
 Ethan calls this the "criss-cross" or "like DNA" shape. **Smooth** uses the same body
 and joints without the ribs, for comparison. The earlier loop and plain grips remain available.
 
@@ -25,8 +25,8 @@ upright printing and does not interchange directly with the earlier handles. Use
 a keyed glue joint; the existing XIAO holder joins at the tip. Nothing has been physically fitted.
 
 With identical P1S 0.4 mm, Generic PETG, 0.28 mm Extra Draft, two walls, 20% infill, tree support
-and 4 mm brim settings, the four-part spiral set estimates **2 h 54 min / 88.30 g**, versus
-**2 h 51 min / 87.46 g** smooth: **3 minutes 24 seconds and 0.84 g more**. These are local slicer
+and 4 mm brim settings, the four-part spiral set estimates **2 h 55 min / 88.60 g**, versus
+**2 h 51 min / 87.46 g** smooth: **3 minutes 44 seconds and 1.14 g more**. These are local slicer
 estimates, not measured print times. All parts fit one plate; no floating-region warning was
 reported. Remove support fully and check the joint coupons before a full wand. Upright printing
 and the shelf's strength still need physical testing.
