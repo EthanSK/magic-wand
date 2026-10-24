@@ -239,7 +239,7 @@ print("PASS: hold-to-show HUD, native close, kept-open next hold, tap and double
 
 test('complete published receiver typechecks together', {skip:process.platform!=='darwin'},()=>{
  const directory=new URL('../receiver/Sources/',import.meta.url);
- const files=['WandPointerControl.swift','WandRecordingState.swift','WandControlTransport.swift','WandContextListener.swift','WandReviewTrace.swift','WandDeviceConfiguration.swift','main.swift'].map(name=>new URL(name,directory).pathname);
+ const files=['WandPointerControl.swift','WandCalibration.swift','WandRecordingState.swift','WandControlTransport.swift','WandContextListener.swift','WandReviewTrace.swift','WandDeviceConfiguration.swift','main.swift'].map(name=>new URL(name,directory).pathname);
  const result=spawnSync('swiftc',['-typecheck',...files],{encoding:'utf8'});
  assert.equal(result.status,0,result.stderr);
 });
@@ -262,7 +262,8 @@ final class Harness {
  var recordingPointerPaused=false
 ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=WandRestFollowMemory()':''}
  var motionFilter=Filter();let dwell=Dwell(),restDetection=Rest(),controls=Controls(),recording=Recording()
- struct Sleep {var sleeping=false;mutating func sample(parked:Bool,buttons:Bool,now:Double)->Bool?{sleeping=parked && !buttons;return sleeping}}
+ var powerPolicyReady=true,standbyResume:Bool?,selectedReviewMode:String?
+ struct Sleep {var sleeping=false,deepSleeping=true;mutating func sample(parked:Bool,buttons:Bool,now:Double)->Bool?{sleeping=parked && !buttons;return sleeping}}
  var deskSleep=Sleep()
  var probeTimer:Timer?,queued:[String]=[],entered=0
  func reconcileBottomHold(down:Bool,now:Double,reason:String){};func scheduleDwell(){};func cancelCircleScroll(){};func releaseButtons(){}
@@ -272,9 +273,11 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
 let h=Harness();h.handleIMU("0,0,8192,0,0,0,0")
 precondition(!h.dwell.following && h.entered==1)
 precondition(h.controls.speechEvents==0 && h.recording.isRecording)
+precondition(!h.queued.contains{$0.contains("wandEnterDeepStandby")},"recording blocks radio-off sleep")
 let hud=Harness();hud.hudSession=true;hud.handleIMU("0,0,8192,0,0,0,0")
 precondition(hud.hudSession && hud.entered==0 && !hud.restDetection.sawButtons)
 precondition(hud.controls.speechEvents==0 && hud.recording.isRecording)
+precondition(!hud.queued.contains{$0.contains("wandEnterDeepStandby")},"an explicit HUD blocks radio-off sleep")
 precondition(hud.deskSleep.sleeping && hud.queued.contains{ $0.contains("setWandDeskSleeping(true)") },"desk sleep preserves HUD and recording")
 print("PASS: table rest cannot stop recording or dismiss open HUD")
 `;
@@ -319,10 +322,15 @@ import AppKit
 func log(_ values:Any...) {}
 struct Filter {func reset(){}}
 struct Context {var isActive=false}
+final class Dwell {func follow(_ on:Bool){}}
+struct Recording {var isRecording=false}
 final class Harness {
  var loadingBridge=false,loadingRuntime=false,bridgeLoadFailed=false,ready=false,lightMode="",generation=0,rawLastArrival=0.0,hudSession=false,hudOpenedAt=0.0
  let commands=["PROGRAM"],modeBridge="bridge",context=Context(),motionFilter=Filter()
  var selectedReviewMode:String?
+ var standbyResume:Bool?
+ let dwell=Dwell(),recording=Recording()
+ func restoreKnownCalibration(){};func loadPowerPolicy(){}
  func setWandShortcut(_ mode:String){}
  var sent:[String]=[];var loads=0
  func queue(_ value:String){sent.append(value)}

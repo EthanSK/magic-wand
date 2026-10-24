@@ -105,6 +105,7 @@ test("micro-circle tuning matches native geometry and preserves pointer noise gu
     ["reviewNoiseSegmentFactor",/noiseSegment = ([\d.]+)/],
   ]) assert.equal(number(re,review,key),t[key]);
   assert.equal(number(/static let seconds = ([\d.]+)/,pointer,"desk sleep"),manifest.tuning.deskSleepSeconds);
+  assert.equal(number(/static let deepSeconds = ([\d.]+)/,pointer,"deep sleep"),manifest.tuning.deepSleepSeconds);
 });
 
 test("light modes, priority and RGB levels match the bridge", () => {

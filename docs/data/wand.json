@@ -7,12 +7,12 @@
     "headline": "The age of AI doesn’t need a keyboard.",
     "detail": "The wand is my step toward that, with pointing, HUD cards and Agent Flow dictation."
   },
-  "updated": "2026-10-20",
+  "updated": "2026-10-24",
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.80",
-    "receiverBuild": "85",
+    "receiver": "1.2.81",
+    "receiverBuild": "86",
     "deviceRuntime": "wand-e1ce30d7c407",
     "bridgeRevision": "cd1c870efd9e4c3c875314113b0e6129fb54853c63c446d474931403b27163b6",
     "agenticMouse": "1.0.278",
@@ -378,7 +378,8 @@
     "deskSleepSeconds": 60,
     "pausePointerDuringRecording": false,
     "pauseMouseOnRecordingStart": true,
-    "allowManualPointerDuringRecording": true
+    "allowManualPointerDuringRecording": true,
+    "deepSleepSeconds": 300
   },
   "hud": {
     "source": "Agentic Mouse’s published Default mode",
