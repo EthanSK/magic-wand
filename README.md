@@ -238,6 +238,7 @@ Code is MIT licensed. Three.js keeps its MIT licence and the fonts their SIL Ope
 The original wand is [Prototype V1](prototypes/README.md), preserved at
 [`prototype-v1.0.0`](https://github.com/EthanSK/magic-wand/tree/prototype-v1.0.0).
 New hardware prototypes get separate profiles so the V1 controls remain recoverable.
+[Control Stones](prototypes/control-stones/README.md) contains the separate Sense hand-controller prototype and live sensor debug window.
 
 ## How-to videos
 
