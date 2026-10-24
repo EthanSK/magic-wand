@@ -16,6 +16,22 @@ def load(relative):
     return module
 
 class SourceBoundaryTests(unittest.TestCase):
+    def test_privacy_excludes_only_root_local_ledgers(self):
+        scanner = load('shared/checks/privacy.py')
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            scanner.ROOT = root
+            private_value = str(PurePosixPath("/", "Users", "fixture-user", "private.txt"))
+            local = root / '.outstanding-items' / 'task'
+            local.mkdir(parents=True)
+            (local / 'outstanding-items.json').write_text(private_value)
+            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(scanner.main(), 0)
+                nested = root / 'component' / '.outstanding-items'
+                nested.mkdir(parents=True)
+                (nested / 'source.txt').write_text(private_value)
+                self.assertEqual(scanner.main(), 1)
+
     def test_privacy_ignores_dependencies_but_checks_sibling_components(self):
         scanner = load('shared/checks/privacy.py')
         with tempfile.TemporaryDirectory() as temporary:
