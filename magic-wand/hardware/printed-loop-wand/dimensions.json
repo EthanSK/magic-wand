@@ -129,6 +129,30 @@
     "tape_notch": { "width": 5.0, "depth": 2.5, "at": [0.25, 0.75] },
     "note": "Open U-shaped deck: the board lies component side up, USB end forward and uncovered, held by tape through the side notches. Only the outline comes from documentation; PCB thickness and component height are provisional clearances, not measurements. No battery holder: the battery is taped on separately."
   },
+  "tapered": {
+    "note": "One continuous tapered wand with no separate handle bulge. Every tapered part prints upright, wide end down. The double-helix and smooth versions share these values; the smooth one sets the rib height to zero.",
+    "butt_radius": 15.0,
+    "front_radius": 7.3,
+    "base_chamfer": 1.5,
+    "segments": 120,
+    "ring_step": 1.0,
+    "front_transition": 6.0,
+    "glue_z": 297.0,
+    "glue_stub": { "radius": 5.0, "length": 15.0, "flat": 3.5, "clearance": 0.15, "extra_depth": 0.5 },
+    "spiral": { "starts": 2, "pitch": 110.0, "height": 1.2, "half_width_deg": 24.0, "phase_deg": 90.0, "fade": 25.0 },
+    "thumb_shelf": {
+      "hand": "left",
+      "protrusion": 14.0,
+      "thickness": 7.0,
+      "top_z": 132.0,
+      "pad_length": 30.0,
+      "corner_radius": 3.0,
+      "edge_chamfer": 1.0,
+      "wire_hole": 3.5,
+      "note": "Flat sideways shelf for the thumb with a blank top face for side-by-side buttons. hand: left puts it on the holder's right (-X) when the wand points away; right mirrors it to +X."
+    },
+    "joint_note": "Same spigot, pins, socket, cam and clearances as the other profiles, but mirrored: the handle carries the spigot and the lower shaft carries the socket, so both print upright."
+  },
   "profiles": {
     "current": "xiao",
     "xiao": {
@@ -139,6 +163,19 @@
       "assemblies": {
         "mug": { "label": "Mug handle", "handle": "oval" },
         "plain": { "label": "Plain handle (no loop)", "handle": "straight" }
+      }
+    },
+    "tapered-xiao": {
+      "label": "Tapered wand (XIAO)",
+      "joint_kind": "mirrored",
+      "view_yaw": -0.85,
+      "view_pitch": 0.55,
+      "continuous_body": true,
+      "reference": "xiao-board",
+      "components": [],
+      "assemblies": {
+        "spiral": { "label": "Double helix", "parts": ["handle-tapered-spiral", "shaft-lower-tapered-spiral", "shaft-upper-tapered-spiral", "tip-xiao"] },
+        "smooth": { "label": "Smooth", "parts": ["handle-tapered-smooth", "shaft-lower-tapered-smooth", "shaft-upper-tapered-smooth", "tip-xiao"] }
       }
     },
     "puck-legacy": {

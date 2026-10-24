@@ -13,6 +13,13 @@ const EXPLODE = { // Offsets in mm for the exploded view.
   'button-pod-pilot': [0, 30, 0], 'shaft-upper': [0, 0, 30], 'tip-cradle': [0, 0, 60], 'tip-cap': [0, 28, 60],
   'tip-xiao': [0, 0, 60], 'puck-case': [0, 14, 60], 'xiao-board': [0, 16, 60],
 };
+// Generic part role, so every profile's parts get the right colour and exploded offset.
+function role(name) {
+  for (const [prefix, r] of [['handle-', 'handle'], ['button-pod', 'button-pod-pilot'], ['shaft-lower', 'shaft-lower'], ['shaft-upper', 'shaft-upper']]) {
+    if (name.startsWith(prefix)) return r;
+  }
+  return name;
+}
 const STACK = 130; // Assemblies shown together are stacked this far apart in -Y, mm.
 const MODE_KEY = 'printed-loop-wand-preview-mode'; // Remembers Turn/Move/Zoom for this page.
 const HINTS = {
@@ -57,7 +64,8 @@ function matrixFrom(rows) {
 }
 
 function describeChecks(manifest, profile) {
-  const { joint, meshes_passed: meshes } = manifest.checks;
+  const { meshes_passed: meshes } = manifest.checks;
+  const joint = manifest.checks[manifest.profiles[profile].joint_kind === 'mirrored' ? 'tapered_joint' : 'joint'];
   const assembly = Object.values(manifest.checks.assembly).filter((a) => a.profile === profile);
   const angles = joint.insertable_angles_deg.map((a) => a - joint.entry_angle_deg);
   const spread = Math.max(...angles.map(Math.abs));
@@ -163,7 +171,9 @@ async function main() {
     const group = new THREE.Group();
     const wand = new THREE.Group();
     const meshes = await Promise.all(a.parts.map(async (name) => {
-      const mesh = new THREE.Mesh(await geometry(name), material(name.startsWith('handle-') ? 'handle' : name, COLORS[name] ?? COLORS.handle));
+      const continuous = manifest.profiles[a.profile].continuous_body && role(name).startsWith('shaft-');
+      const materialKey = continuous || role(name) === 'handle' ? 'handle' : name;
+      const mesh = new THREE.Mesh(await geometry(name), material(materialKey, continuous ? COLORS.handle : COLORS[name] ?? COLORS[role(name)] ?? COLORS.handle));
       mesh.name = name;
       return mesh;
     }));
@@ -214,14 +224,17 @@ async function main() {
       ...keys.map((k) => choice(manifest.assemblies[`${state.profile}-${k}`].label, { profile: state.profile, view: k }, state.view === k)),
     );
     ui.grip.textContent = state.view === 'both'
-      ? (state.profile === 'xiao' ? 'Green is the documented XIAO outline, for reference only.' : 'Legacy Puck.js tip, kept for the original wand.')
+      ? (profile.reference === 'xiao-board' ? 'Green is the documented XIAO outline, for reference only.' : 'Legacy Puck.js tip, kept for the original wand.')
       : parts[manifest.assemblies[`${state.profile}-${state.view}`].parts[0]].role;
     ui.checks.replaceChildren(...describeChecks(manifest, state.profile).map((text) => {
       const li = document.createElement('li');
       li.textContent = text;
       return li;
     }));
-    const usesPart = (p) => p.profile === state.profile || (p.profile === 'shared' && (p.group !== 'pod' || profile.components.includes(p.name)));
+    const used = new Set(profile.assemblies.flatMap((id) => manifest.assemblies[id].parts));
+    const pods = [...used].some((n) => role(n) === 'button-pod-pilot');
+    const usesPart = (p) => used.has(p.name) || (p.group === 'pod' && pods)
+      || (p.group === 'coupon' && (p.profile === state.profile || (p.profile === 'shared' && !state.profile.startsWith('tapered'))));
     ui.parts.replaceChildren(...manifest.parts.filter(usesPart).map((part) => {
       const row = document.createElement('tr');
       const name = document.createElement('td');
@@ -243,13 +256,14 @@ async function main() {
     const t = Number(ui.joint.value) / 100;
     const push = Math.min(t / 0.5, 1);
     const turn = Math.max((t - 0.5) / 0.5, 0);
-    const angle = -twist * (1 - turn); // Wand angle: clockwise seen from the tip is positive.
+    const entry = manifest.profiles[state.profile].joint_kind === 'mirrored' ? twist : -twist;
+    const angle = entry * (1 - turn); // The mirrored socket turns in the opposite direction.
     for (const i of shown) {
       i.wand.rotation.z = THREE.MathUtils.degToRad(-angle);
       i.wand.position.z = travel * (1 - push);
       const spread = ui.exploded.checked;
       for (const [mesh, base] of i.home) {
-        const offset = spread ? EXPLODE[mesh.name] ?? [0, 0, 0] : [0, 0, 0];
+        const offset = spread ? EXPLODE[mesh.name] ?? EXPLODE[role(mesh.name)] ?? [0, 0, 0] : [0, 0, 0];
         mesh.position.set(base.x + offset[0], base.y + offset[1], base.z + offset[2]);
       }
     }
@@ -263,6 +277,8 @@ async function main() {
     for (const i of shown) bounds.union(new THREE.Box3().setFromObject(i.group));
     if (!bounds.isEmpty()) input.setHome(frameBounds(bounds.min.toArray(), bounds.max.toArray(), {
       aspect: view.clientWidth / Math.max(view.clientHeight, 1), fov: camera.fov,
+      yaw: manifest.profiles[state.profile].view_yaw ?? 1.3,
+      pitch: manifest.profiles[state.profile].view_pitch ?? 0.22,
     }), preserveView);
   }
 
