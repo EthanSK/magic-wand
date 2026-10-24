@@ -84,3 +84,16 @@ test("recorded geometry checks passed", () => {
   }
   assert.deepEqual(Object.keys(checks.assembly).sort(), Object.keys(dimensions.handle.variants).sort());
 });
+
+test("the no-loop handle shares the joint and uses less material than every loop handle", () => {
+  const parts = Object.fromEntries(manifest.parts.map((p) => [p.name, p]));
+  const plain = parts["handle-straight"];
+  assert.ok(plain, "handle-straight is exported");
+  assert.equal(plain.mesh.bodies, 1);
+  for (const loop of ["handle-round", "handle-oval", "handle-angled"]) {
+    assert.ok(plain.mesh.volume_mm3 < parts[loop].mesh.volume_mm3, loop);
+    assert.ok(plain.mesh.print_size_mm[1] < parts[loop].mesh.print_size_mm[1], `${loop} footprint`);
+  }
+  assert.equal(manifest.checks.assembly.straight.opening, null);
+  assert.ok(Object.values(manifest.checks.assembly.straight.wire_probe_overlap_mm3).every((v) => v < 0.01));
+});

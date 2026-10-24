@@ -346,10 +346,36 @@ def spigot_end() -> Manifold:
 
 # ----------------------------------------------------------------------------- parts (assembly frame)
 
+def has_loop(variant: str) -> bool:
+    return "grip_radius" not in H["variants"][variant]
+
+
+def rounded_spine(radius: float) -> Manifold:
+    """No-loop grip: round section printed on its side. The -X side is a flat on the bed, reached by
+    45-degree tangent faces so the rounded underside needs no support. The butt is rounded in side view."""
+    flat = T / 2  # Same bed plane as the slab handles, so the rail stop still reaches the bed.
+    t = radius / math.sqrt(2)
+    a = 2 * t - flat
+    seat = RAIL["top"] / 2 - 2.0  # Flat on top where the rail sits, so the wire hole stays inside the rail.
+    profile = (CrossSection.circle(radius, SEG) + CrossSection([[(0.0, 0.0), (-flat, a), (-flat, -a)]])
+               + CrossSection([[(0.0, 0.0), (seat, radius), (-seat, radius)]])).hull()
+    profile = profile ^ CrossSection.square((2 * radius + flat + 2, 2 * radius + 2)).translate((-flat, -radius - 1))
+    body = Manifold.extrude(profile, L)
+    side = CrossSection.circle(radius, SEG).translate((radius, 0.0)) + CrossSection.square((L, 2 * radius + 2)).translate((radius, -radius - 1))
+    # Side-view outline (local x = wand Z, local y = wand Y) extruded across the grip along -X.
+    end = Manifold.extrude(side, 2 * radius + 4).transform(np.array([[0.0, 0.0, -1.0, radius + 2],
+                                                                     [0.0, 1.0, 0.0, 0.0],
+                                                                     [1.0, 0.0, 0.0, 0.0]]))
+    return body ^ end
+
+
 def handle(variant: str | None, z_from: float | None = None, crest: float | None = None, marks: int = 0) -> Manifold:
     r = H["spine_radius"]
-    solid = [chain([(r, 0.0), (L + r, 0.0)], r).trim_by_plane((0.0, 0.0, -1.0), -L)]
-    if variant:
+    if variant and not has_loop(variant):
+        solid = [rounded_spine(H["variants"][variant]["grip_radius"])]
+    else:
+        solid = [chain([(r, 0.0), (L + r, 0.0)], r).trim_by_plane((0.0, 0.0, -1.0), -L)]
+    if variant and has_loop(variant):
         solid.append(sweep(loop_path(variant), H["loop_radius"]))
     solid.append(prism_z(rail_polygon(), RAIL["rear_z"], POD_Z1 + 0.5))
     # Pod stop: full slab width so it stands on the bed when the handle prints on its side.
@@ -449,6 +475,7 @@ def puck_ring() -> Manifold:
 ORIENT = {  # Assembly -> print rotation (degrees about one axis) and its meaning.
     "x-down": ((0.0, 90.0, 0.0), "Lying on the flat +X face"),
     "x-up": ((0.0, -90.0, 0.0), "Lying on its side (-X face down), loop flat on the bed"),
+    "x-up-grip": ((0.0, -90.0, 0.0), "Lying on its side on the -X bed flat, rail sideways"),
     "y-up": ((90.0, 0.0, 0.0), "Pocket opening up"),
     "y-down": ((-90.0, 0.0, 0.0), "Top face down"),
     "as-is": ((0.0, 0.0, 0.0), "Flat, as modelled"),
@@ -463,6 +490,7 @@ PARTS = [  # (name, builder, orientation, group, role). Order is the suggested p
     ("handle-round", lambda: handle("round"), "x-up", "handle", H["variants"]["round"]["grip"]),
     ("handle-oval", lambda: handle("oval"), "x-up", "handle", H["variants"]["oval"]["grip"]),
     ("handle-angled", lambda: handle("angled"), "x-up", "handle", H["variants"]["angled"]["grip"]),
+    ("handle-straight", lambda: handle("straight"), "x-up-grip", "handle", H["variants"]["straight"]["grip"]),
     ("shaft-lower", shaft_lower, "x-down", "shaft", "Lower shaft: twist-lock spigot and half-lap"),
     ("shaft-upper", shaft_upper, "x-down", "shaft", "Upper shaft: half-laps to the lower shaft and the tip"),
     ("tip-cradle", tip_cradle, "y-up", "tip", "Tip cradle for the stock Puck.js case"),
@@ -471,12 +499,16 @@ PARTS = [  # (name, builder, orientation, group, role). Order is the suggested p
     ("button-pod-blank", lambda: pod(False), "y-down", "pod", "Button carrier with no holes, to mark and drill by hand"),
 ]
 SUPPORTS = {
-    "coupon-male": "None expected",
-    "coupon-female-a": "None expected", "coupon-female-b": "None expected", "coupon-female-c": "None expected",
+    "coupon-male": "Support under pin overhangs; Bambu Studio flags floating regions without it",
+    "coupon-female-a": "Support at rail/socket overhangs; remove completely before fitting",
+    "coupon-female-b": "Support at rail/socket overhangs; remove completely before fitting",
+    "coupon-female-c": "Support at rail/socket overhangs; remove completely before fitting",
     "coupon-puck-ring": "None",
-    "handle-round": "None expected; bores use flattened teardrops", "handle-oval": "None expected; bores use flattened teardrops",
-    "handle-angled": "None expected; bores use flattened teardrops",
-    "shaft-lower": "None expected; small pin overhangs", "shaft-upper": "None expected",
+    "handle-round": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
+    "handle-oval": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
+    "handle-angled": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
+    "handle-straight": "45-degree grip underside; support at shared rail/socket overhangs",
+    "shaft-lower": "Support under small pin overhangs", "shaft-upper": "None expected",
     "tip-cradle": "None expected", "tip-cap": "None", "button-pod-pilot": "None expected", "button-pod-blank": "None expected",
 }
 ASSEMBLY_PARTS = ["pod", "shaft-lower", "shaft-upper", "tip-cradle", "tip-cap"]
@@ -677,7 +709,7 @@ def assembly_checks(parts: dict) -> dict:
         wires = {k: overlap(probe, s)[0] for k, s in solids.items() if k != "puck-case"}
         out[variant] = {"overlaps_mm3": pairs, "expected_overlaps": {f"{a} + {b}": t for (a, b), t in expected.items()},
                         "unexpected": unexpected, "wire_probe_overlap_mm3": wires,
-                        "opening": opening(solids["handle"]),
+                        "opening": opening(solids["handle"]) if has_loop(variant) else None,
                         "passed": not unexpected and all(v < 0.01 for v in wires.values())}
     return out
 

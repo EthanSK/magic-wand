@@ -804,3 +804,17 @@ an existing handler error can otherwise abort a readback. Use the built-in CRC32
 checked against the host implementation rather than a long interpreted hash loop.
 Wait for the receiver process to exit after launchctl acknowledges its removal.
 Saved startup, bridge and power files are verified before restarting the receiver.
+
+## Printed wand slicing: model geometry is not a print verdict
+
+The first loop-wand meshes pass solid, collision and joint checks, but Bambu Studio 2.8.2 still
+flags pin floating regions and rail/socket cantilevers. Inspect the real slice and enable
+removable support where needed; the face-angle summary alone does not establish a support-free
+print. Test the mating coupons before claiming printed fit.
+
+Bambu CLI profiles must be fully resolved rather than raw bundled files with `inherits`.
+When packaging a local 3MF with altered process values, register those keys in the process
+slot of `different_settings_to_system`. Otherwise Studio can load the named system preset
+and discard the values even though the original CLI slice used them. Verify by opening and
+saving through Studio, then reading back the actual settings. This caught supports changing
+from enabled to disabled; the corrected round trip retained supports and the brim.

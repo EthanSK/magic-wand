@@ -40,6 +40,12 @@
         "label": "Angled",
         "grip": "Raked loop, deeper at the palm, for a less bent wrist while pointing.",
         "points": [[18, -6], [10, -30], [14, -56], [32, -66], [62, -58], [100, -44], [121, -27], [124, -6]]
+      },
+      "straight": {
+        "label": "No loop",
+        "grip": "Rounded straight grip with no loop. Least material of the four; same socket, rail and wire route.",
+        "grip_radius": 12,
+        "note": "24 mm round section. Prints on its side on an 11.9 mm flat reached by 45-degree faces; a 10 mm flat on top seats the rail."
       }
     },
     "socket_floor": 2.5,
