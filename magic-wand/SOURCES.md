@@ -289,13 +289,16 @@ opened. Agent Flow startup cannot move an active target up and down; reopening
 refreshes the clearance. Both native presenters and the small review indicator
 share this policy. Agent Flow itself is not changed or restarted.
 
-## Prepared passive Switch App navigation
+## Passive Switch App navigation and held qualification
 
 `integrations/agentic-mouse/wand-passive-switch-app.patch` records the native
-addition prepared for Agentic Mouse 1.0.280 (286). It applies after the current
+addition installed in Agentic Mouse 1.0.281 (287). It applies after the earlier
 local wand integration and adds passive hover only for the armed Switch App
 card. Wand Receiver 1.2.84 (89) starts that passive stream between holds,
 without a held-input timeout, and isolates Bottom scrolling from the outline.
-Native and receiver regression checks pass. Both installation steps are still
-pending a safe capture-idle boundary; this section is not an installed-version
-receipt or physical acceptance claim.
+Its existing hold threshold also sends one qualification signal while Middle
+remains held, so the dotted outline appears before release. Qualification
+changes presentation only; release still arms the card and the next hold
+operates it. Both installed binaries and preserved settings were checked after
+separate capture-idle gates. Native and receiver regressions pass; physical
+acceptance remains pending.

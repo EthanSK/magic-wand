@@ -100,7 +100,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var hudEntryPressStarted=0.0
     // Ethan's hold-to-show HUD: true from Middle down to Middle up while the
     // HUD is steering. Agentic Mouse decides on release whether it stays open.
-    var middleHeld=false,hudOpenedAt=0.0
+    var middleHeld=false,middleQualified=false,hudOpenedAt=0.0
+    let hudHoldSeconds=0.14 // Existing received-Middle hold cutoff; firmware already waits 80 ms.
     var navX=0.0,navY=0.0,navOriginX=0.0,navOriginY=0.0,operationOriginX=0.0,operationOriginY=0.0
     var middleX=0.0,middleY=0.0
     var middleHold:Timer?, middleTap:Timer?
@@ -733,7 +734,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 pending.invalidate();middleTap=nil
                 if hudSession,acceptHUDContext,context.isActive {controls.persistent("activate");log("HUD_TAP_USED")}
             }
-            middleHeld=true;hudEntryPress=false
+            middleHeld=true;middleQualified=false;hudEntryPress=false
             if !hudSession {
                 // Holding Middle shows the HUD and steers it from Switch App.
                 acceptHUDContext=true;navStream.reset()
@@ -773,11 +774,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             finishWandShortcut(commit:true)
             if middleDoubleConsumed {middleDoubleConsumed=false;return}
             guard middleHeld else{return}
-            middleHeld=false;navigationOpenedHUD=false
+            middleHeld=false;middleQualified=false;navigationOpenedHUD=false
             // Firmware delays a held Middle down by 80 ms to arbitrate the scroll
             // chord, so under 140 ms here is a physical tap under 220 ms.
             let now=ProcessInfo.processInfo.systemUptime
-            let tap=now-middlePressedAt<0.14
+            let tap=now-middlePressedAt<hudHoldSeconds
             middleLastRelease=tap ? now : -100
             if hudActive {
                 hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY)
@@ -826,6 +827,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         if appMode=="vsCode" && review.isHeld && selectedReviewMode==nil {sendReview(review.motion(y:navY-reviewOriginY,now:ProcessInfo.processInfo.systemUptime));return}
         guard !restoring,!scrollActive,hudSession else{return}
+        // Ethan wants the dotted Switch App outline while the first hold is
+        // still down. Qualify the current gesture; release still owns choose.
+        if middleHeld && !middleQualified && ProcessInfo.processInfo.systemUptime-middlePressedAt>=hudHoldSeconds {
+            middleQualified=true;controls.persistent("qualify")
+        }
         // Ethan's Bottom mouse lane stays independent from the dotted Switch
         // App hover. Park before a drag/scroll, then start a fresh origin so
         // that movement cannot jump the outline when Bottom is released.

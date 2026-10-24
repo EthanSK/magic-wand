@@ -177,7 +177,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Prepared, not yet installed: unheld movement can leave the dotted Switch App card without switching applications. Passive HUD selection survives pauses, and Bottom scrolling stays independent. Receiver and native regression checks pass; coordinated installation is waiting for capture idle.
+- Installed: unheld movement can leave the dotted Switch App card without switching applications. The dotted cue appears during a qualified Middle hold; release still arms the card. Passive HUD selection survives pauses, and Bottom scrolling stays independent. Native and receiver regression checks pass; physical acceptance is pending.
 - Installed: radial text is larger, with gentle card-aligned tilt only when it earns more readable space. The visible wand HUD stays anchored while Agent Flow changes its panel; reopening refreshes recorder clearance. Native tests and rendered layout checks passed; physical acceptance is pending.
 - Installed: hold Middle to show and steer the radial HUD, then release to use the outlined card. Submenus and adjustable wheel cards stay open for the next hold. Quick tap from closed switches app once. The centre Switch App chooser still supports horizontal movement on a second hold. Native interaction tests passed; physical acceptance is pending.
 - Installed: larger mixed-case radial labels, a continuous liquid centre-to-ring transition, and ordinary Enter in the wand home HUD. Native layout, morph continuity and key-output checks passed; real-device feel remains for user acceptance.
