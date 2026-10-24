@@ -28,12 +28,12 @@
     "variants": {
       "round": {
         "label": "Round",
-        "grip": "Mug-style loop for two fingers; thumb on the buttons.",
+        "grip": "Small loop for two fingers; thumb on the buttons.",
         "circle": { "center": [88, -31], "radius": 26, "end_y": -6 }
       },
       "oval": {
         "label": "Oval",
-        "grip": "Long D-loop around four fingers, so the wand stays on a relaxed hand.",
+        "grip": "Full-hand mug loop around four fingers, so the wand stays on a relaxed hand.",
         "points": [[16, -6], [12, -26], [24, -45], [48, -49], [96, -49], [118, -42], [127, -24], [124, -6]]
       },
       "angled": {
@@ -133,16 +133,17 @@
     "current": "xiao",
     "xiao": {
       "label": "XIAO tip",
-      "tip_parts": ["tip-xiao"],
+      "components": ["shaft-lower", "shaft-upper", "tip-xiao"],
+      "note": "No button pod and no battery holder on the current XIAO wand.",
       "reference": "xiao-board",
       "assemblies": {
-        "mug": { "label": "Mug handle", "handle": "round" },
+        "mug": { "label": "Mug handle", "handle": "oval" },
         "plain": { "label": "Plain handle (no loop)", "handle": "straight" }
       }
     },
     "puck-legacy": {
       "label": "Puck.js tip (legacy)",
-      "tip_parts": ["tip-cradle", "tip-cap"],
+      "components": ["button-pod-pilot", "shaft-lower", "shaft-upper", "tip-cradle", "tip-cap"],
       "reference": "puck-case",
       "assemblies": {
         "round": { "label": "Round", "handle": "round" },

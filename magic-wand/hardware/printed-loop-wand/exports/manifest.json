@@ -5,8 +5,8 @@
   "status": "Provisional first print set. Model geometry is generated and checked; printed fit, strength, comfort and mass are not measured.",
   "frame": "Assembly axes: +Z runs from the handle butt (z = 0) to the tip, +Y is the button side, the loop hangs toward -Y. Angles are measured from +Y toward +X, which is clockwise seen from the tip.",
   "source": {
-    "dimensions_sha256": "80caabff3bbafde37c603a45a1409f05d812e376d533cfd11dd1d7c2c0027d12",
-    "script_sha256": "9800dedcff65ab746417d2cc2b9f90f014f01a4e720bbcb4b9d82c774792a7b2",
+    "dimensions_sha256": "0e19545410404a48e918ce9f667b2b2afd07a47b041d6bc886dd490f80f8b411",
+    "script_sha256": "013a89c4046ac795d169e748baeecff582805ef02ce0f9f69436fa1c2e5b7cb5",
     "tools": {
       "manifold3d": "3.5.4",
       "trimesh": "5.2.0",
@@ -76,6 +76,11 @@
   "profiles": {
     "xiao": {
       "label": "XIAO tip",
+      "components": [
+        "shaft-lower",
+        "shaft-upper",
+        "tip-xiao"
+      ],
       "tip_parts": [
         "tip-xiao"
       ],
@@ -88,6 +93,13 @@
     },
     "puck-legacy": {
       "label": "Puck.js tip (legacy)",
+      "components": [
+        "button-pod-pilot",
+        "shaft-lower",
+        "shaft-upper",
+        "tip-cradle",
+        "tip-cap"
+      ],
       "tip_parts": [
         "tip-cradle",
         "tip-cap"
@@ -107,8 +119,7 @@
       "label": "Mug handle",
       "profile": "xiao",
       "parts": [
-        "handle-round",
-        "button-pod-pilot",
+        "handle-oval",
         "shaft-lower",
         "shaft-upper",
         "tip-xiao"
@@ -119,7 +130,6 @@
       "profile": "xiao",
       "parts": [
         "handle-straight",
-        "button-pod-pilot",
         "shaft-lower",
         "shaft-upper",
         "tip-xiao"
@@ -178,8 +188,8 @@
     {
       "file": "assembly.glb",
       "profile": "xiao",
-      "sha256": "cc03575d48ea1fbd4fbc9838dfcf5883e6920fcc67ffa1bd1de28e66602af5f3",
-      "bytes": 183664,
+      "sha256": "4eef6ba256c5b648eaf45bf1e15c4ba4b5b5d8a1b860969bda159ba371e8c7a3",
+      "bytes": 167256,
       "units": "metres, Y up, wand along +Z; assemblies stacked 130 mm apart in -Y"
     },
     {
@@ -467,7 +477,7 @@
       "sha256": "25a4b131c066c4d7c6d376d82893f7c68beb15d862634f8dfb6f7491e3f67728",
       "bytes": 202284,
       "group": "handle",
-      "role": "Mug-style loop for two fingers; thumb on the buttons.",
+      "role": "Small loop for two fingers; thumb on the buttons.",
       "profile": "shared",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
       "supports": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
@@ -521,7 +531,7 @@
       "sha256": "4cdf65278dd0d7906ea93c180cf2941c8b8b387cbc85566764b454e8b17e3fa6",
       "bytes": 214184,
       "group": "handle",
-      "role": "Long D-loop around four fingers, so the wand stays on a relaxed hand.",
+      "role": "Full-hand mug loop around four fingers, so the wand stays on a relaxed hand.",
       "profile": "shared",
       "print_orientation": "Lying on its side (-X face down), loop flat on the bed",
       "supports": "Support at rail/socket overhangs; Bambu Studio flags a floating cantilever without it",
@@ -1288,19 +1298,13 @@
       "xiao-mug": {
         "label": "Mug handle",
         "profile": "xiao",
-        "handle": "round",
+        "handle": "oval",
         "overlaps_mm3": {
-          "handle + pod": 0.0,
           "handle + shaft-lower": 0.5741,
           "handle + shaft-upper": 0.0,
           "handle + tip-xiao": 0.0,
           "handle + xiao-board": 0.0,
           "handle + xiao-components": 0.0,
-          "pod + shaft-lower": 0.0,
-          "pod + shaft-upper": 0.0,
-          "pod + tip-xiao": 0.0,
-          "pod + xiao-board": 0.0,
-          "pod + xiao-components": 0.0,
           "shaft-lower + shaft-upper": 0.0,
           "shaft-lower + tip-xiao": 0.0,
           "shaft-lower + xiao-board": 0.0,
@@ -1318,15 +1322,14 @@
         "unexpected": [],
         "wire_probe_overlap_mm3": {
           "handle": 0.0,
-          "pod": 0.0,
           "shaft-lower": 0.0,
           "shaft-upper": 0.0,
           "tip-xiao": 0.0
         },
         "opening": {
-          "length_mm": 37.9638,
-          "height_mm": 38.0,
-          "area_mm2": 1134.7547
+          "length_mm": 101.3848,
+          "height_mm": 31.1768,
+          "area_mm2": 2861.753
         },
         "passed": true
       },
@@ -1335,17 +1338,11 @@
         "profile": "xiao",
         "handle": "straight",
         "overlaps_mm3": {
-          "handle + pod": 0.0,
           "handle + shaft-lower": 0.5741,
           "handle + shaft-upper": 0.0,
           "handle + tip-xiao": 0.0,
           "handle + xiao-board": 0.0,
           "handle + xiao-components": 0.0,
-          "pod + shaft-lower": 0.0,
-          "pod + shaft-upper": 0.0,
-          "pod + tip-xiao": 0.0,
-          "pod + xiao-board": 0.0,
-          "pod + xiao-components": 0.0,
           "shaft-lower + shaft-upper": 0.0,
           "shaft-lower + tip-xiao": 0.0,
           "shaft-lower + xiao-board": 0.0,
@@ -1363,7 +1360,6 @@
         "unexpected": [],
         "wire_probe_overlap_mm3": {
           "handle": 0.0,
-          "pod": 0.0,
           "shaft-lower": 0.0,
           "shaft-upper": 0.0,
           "tip-xiao": 0.0

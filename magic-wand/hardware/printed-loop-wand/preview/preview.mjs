@@ -221,7 +221,8 @@ async function main() {
       li.textContent = text;
       return li;
     }));
-    ui.parts.replaceChildren(...manifest.parts.filter((p) => p.profile === 'shared' || p.profile === state.profile).map((part) => {
+    const usesPart = (p) => p.profile === state.profile || (p.profile === 'shared' && (p.group !== 'pod' || profile.components.includes(p.name)));
+    ui.parts.replaceChildren(...manifest.parts.filter(usesPart).map((part) => {
       const row = document.createElement('tr');
       const name = document.createElement('td');
       name.textContent = part.name;
