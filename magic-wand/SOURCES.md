@@ -322,3 +322,24 @@ before the receiver reconnected. Calibration was retained. The redundant termina
 return in the affected Bottom handler is removed in this saved bridge.
 Physical sensitivity preference, a real battery removal and the full five-minute
 sleep/wake cycle still need user acceptance.
+
+## Shared click and hold cues
+
+`integrations/agentic-mouse/wand-gesture-language.patch` preserves the incremental
+change from the local Agentic Mouse 1.0.282 (288) baseline to installed 1.0.283
+(289), after `wand-high-sensitivity.patch`. Apply with `git apply --unidiff-zero`
+against that baseline; it does not apply to the older public Agentic Mouse main
+branch and is not a standalone distribution. Its SHA-256 is
+`a370776fe1288857a5f3a0a734fc786e48d379c08a543fc96b774248b52a4edd`.
+The published patch omits unchanged context, including a private historical
+chat reference; its 22 resulting source files match the checked local patch.
+
+Typed gesture metadata supplies action labels and held wheel/wand adjustment
+cues to both grid and radial presenters. Copy/Paste names Space explicitly;
+source-specific titles keep mouse and wand capabilities distinct. The patch
+also includes the matching exporter, preview wording and tests. It was applied
+to the retained pre-change source and all 22 resulting files matched the native
+checkout. The installed build passed 1,058 native tests with two existing skips,
+16 showcase tests and native rendered-layout checks; browser interaction and
+physical wand acceptance remain unverified. The shared demo snapshot still
+tracks the published Agentic Mouse site, which has not deployed this change.
