@@ -1,6 +1,6 @@
 # Control Stones
 
-The Control Stones hand-controller component in the Magic Wand repository. The original Puck wand remains unchanged.
+The Control Stones hand-controller component in the motion-controller monorepo. The original Puck wand remains unchanged.
 
 - [Profile](profile.json): hardware and current scope.
 - [Live sensor window](debug/README.md): setup, USB/Bluetooth readings, battery estimate and idle behavior.
@@ -12,3 +12,5 @@ The built-in Sense sensor has been read over USB and Bluetooth. Hardware idle an
 The diagram is an HTML fragment for the Codex visualization viewer, not a standalone web page. The debug window is served by the local Python reader; it uses real sensor values and never simulates a connection.
 
 <!-- Previously prototypes/control-stones; promoted to the top-level Control Stones component at Ethan's request. -->
+
+Run `npm run check --workspace control-stones` from the repository root for source syntax and profile checks. This does not compile firmware or verify hardware.

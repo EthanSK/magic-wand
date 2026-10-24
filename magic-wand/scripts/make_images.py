@@ -10,12 +10,13 @@ for public use. The card uses the vendored fonts.
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-ROOT = Path(__file__).resolve().parents[1]
-DOCS = ROOT / "docs"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from paths import ROOT, REPOSITORY, DOCS
 MANIFEST = json.loads((ROOT / "wand.json").read_text())
 NIGHT = "#1f173d"
 DISPLAY = {light["mode"]: light["display"] for light in MANIFEST["lights"]}

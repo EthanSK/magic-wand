@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { PointerRouter, DwellClick } from "../docs/sim/pointer.mjs";
+import { PointerRouter, DwellClick } from "../../docs/sim/pointer.mjs";
 test("optional zero-buffer LOW motion has no delay or release replay", () => {
   const router = new PointerRouter({lowDelay:0});
   router.bottom(true);

@@ -18,7 +18,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
-from common import ROOT
+from common import ROOT, DOCS
 
 S = 2
 W, H = 1280, 720
@@ -43,7 +43,7 @@ AIM_FROM_POINTER = (30.0, 22.0)  # Degrees of wand travel across the whole simul
 TRAIL_SECONDS = 0.8
 ROLL_SECONDS = 3.0
 
-FONT_DIR = ROOT / "docs" / "fonts"
+FONT_DIR = DOCS / "fonts"
 SYMBOL_FONTS = [Path("/System/Library/Fonts/Apple Symbols.ttf"), Path("/System/Library/Fonts/Supplemental/Arial Unicode.ttf")]
 
 

@@ -5,7 +5,7 @@ const path = require("path");
 const vm = require("vm");
 
 const ROOT = path.resolve(__dirname, "..");
-const read = (relative) => fs.readFileSync(path.join(ROOT, relative), "utf8");
+const read = (relative) => fs.readFileSync(path.join(relative.startsWith("docs/") ? path.dirname(ROOT) : ROOT, relative), "utf8");
 
 /**
  * @param {{bridge?: "readable" | "fragments" | false, strict?: boolean}} options

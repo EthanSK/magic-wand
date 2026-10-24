@@ -1,0 +1,8 @@
+{
+  "name": "control-stones",
+  "private": true,
+  "description": "XIAO Sense hand controller firmware and local sensor viewer.",
+  "scripts": {
+    "check": "python3 scripts/check.py"
+  }
+}

@@ -21,8 +21,8 @@ import tarfile
 import urllib.request
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-DOCS = ROOT / "docs"
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from paths import ROOT, REPOSITORY, DOCS
 LOCK = ROOT / "data" / "vendor.lock.json"
 THREE_VERSION = "0.185.1"  # Last npm release with minified builds; matches Agentic Mouse.
 THREE_DIR = f"lib/three-{THREE_VERSION}"

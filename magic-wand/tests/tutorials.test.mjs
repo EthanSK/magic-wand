@@ -2,9 +2,10 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
-import { findGuides } from '../docs/how-to/gallery.mjs';
+import { findGuides } from '../../docs/how-to/gallery.mjs';
 const root = new URL('../', import.meta.url);
-const index = () => JSON.parse(readFileSync(new URL('docs/how-to/tutorials.json', root)));
+const repository = new URL('../../', import.meta.url);
+const index = () => JSON.parse(readFileSync(new URL('docs/how-to/tutorials.json', repository)));
 test('guide search finds distinct user actions and handles empty and absent matches', () => {
  const guides = index().guides;
  assert.equal(guides.length, 12);
@@ -17,10 +18,10 @@ test('guide search finds distinct user actions and handles empty and absent matc
 test('each guide has public assets, a stable direct link and optional-review guidance', () => {
  for (const guide of index().guides) {
   assert.equal(guide.url, `https://ethansk.github.io/magic-wand/how-to/#${guide.id}`);
-  for (const field of ['video','poster','captions','transcript']) assert.ok(existsSync(new URL(guide[field].replace('https://ethansk.github.io/magic-wand/','docs/'),root)));
+  for (const field of ['video','poster','captions','transcript']) assert.ok(existsSync(new URL(guide[field].replace('https://ethansk.github.io/magic-wand/','docs/'),repository)));
   if (['review-changes','stage-files'].includes(guide.id)) assert.match(guide.optionNote,/nods and shakes/);
  }
- const html=readFileSync(new URL('docs/how-to/index.html',root),'utf8');
+ const html=readFileSync(new URL('docs/how-to/index.html',repository),'utf8');
  assert.match(html,/<dialog id="player" aria-labelledby="player-title">/);
  assert.match(html,/<video[^>]*controls[^>]*playsinline/);
  assert.equal((html.match(/class="howto-card"/g)||[]).length,12);

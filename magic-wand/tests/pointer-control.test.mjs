@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { CircularScroll } from "../docs/sim/pointer.mjs";
+import { CircularScroll } from "../../docs/sim/pointer.mjs";
 
 function trace(clockwise, hz = 35, radius = 80, loops = 3) {
   let x = radius, y = 0;

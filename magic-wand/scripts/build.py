@@ -19,7 +19,7 @@ import device_build  # noqa: E402
 import site_build  # noqa: E402
 import tutorials_build  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[1]
+from paths import ROOT, REPOSITORY, DOCS
 
 
 def outputs() -> dict[Path, str]:
@@ -38,7 +38,7 @@ def main() -> int:
         current = path.read_text() if path.exists() else None
         if current == content:
             continue
-        stale.append(path.relative_to(ROOT).as_posix())
+        stale.append(path.relative_to(REPOSITORY).as_posix())
         if not args.check:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(content)
