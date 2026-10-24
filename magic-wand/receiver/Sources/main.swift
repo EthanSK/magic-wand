@@ -1210,6 +1210,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // The device can finish an old release click after the global escape.
         if recenterSuppressButtons && b != 0 {return}
         if controlVersion.usesHeldScroll && (heldScroll.consumes(buttons:b) || pointerRouter.bottomHeld) {dwell.reset();scheduleDwell();return}
+        // V2/V3 owns native drags in the physical Bottom hold. Firmware's
+        // legacy drag/click queue must never relatch the Mac after release.
+        if controlVersion.usesHeldScroll && b != 0 {return}
         reportCount += 1
         if reportCount == 1 { log("FIRST_DEVICE_REPORT_VALIDATED") }
         let point = deliveryPoint ?? WandPointerBounds.clamp(CGEvent(source: nil)?.location ?? .zero,to:pointerDisplays)
@@ -1224,6 +1227,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func finishBottomHold(now:Double,resumeMouse:Bool=true) {
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldTargetToken=UUID()
+        // Ethan: dragging is only while holding Bottom. Release an orphaned
+        // native down too, even if another path already cleared the hold.
+        if buttons & 1 != 0 {transition(to:buttons & ~1,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)}
         guard heldScroll.active else{return}
         let completedScroll=heldScroll.scrollable && !heldScroll.dragging && heldScroll.qualified(now:now)
         if heldScrollDiagnostics && heldScroll.sustaining && completedScroll {
@@ -1235,8 +1241,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if completedScroll && resumeMouse {enableMouseAfterScroll()}
     }
     func reconcileBottomHold(down:Bool,now:Double,reason:String,resumeMouse:Bool=true) {
-        guard controlVersion.usesHeldScroll,heldScroll.active else{return}
+        guard controlVersion.usesHeldScroll else{return}
         if down {heldScroll.confirmHeld(now:now);return}
+        guard heldScroll.active || pointerRouter.bottomHeld || buttons & 1 != 0 else{return}
         finishBottomHold(now:now,resumeMouse:resumeMouse)
         performPointer(pointerRouter.bottom(down:false))
         dwell.reset();scheduleDwell();log("BOTTOM_HOLD_RECOVERED",reason)

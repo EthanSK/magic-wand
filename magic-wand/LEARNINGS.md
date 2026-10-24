@@ -818,3 +818,19 @@ slot of `different_settings_to_system`. Otherwise Studio can load the named syst
 and discard the values even though the original CLI slice used them. Verify by opening and
 saving through Studio, then reading back the actual settings. This caught supports changing
 from enabled to disabled; the corrected round trip retained supports and the brim.
+
+
+## A released Bottom must not leave an orphaned native drag
+
+The V2/V3 receiver handled physical-up recovery only while its held-scroll state
+was active. After teardown, a stray legacy button-down packet could reach the
+ordinary pointer router, leave the native left button down, and evade later
+physical-up recovery. The native handler regression reproduces that state; it
+is not proof that it caused a particular user-reported incident.
+
+In V2/V3, the native hold owns dragging; late firmware button-down frames cannot
+start it. Physical-up recovery releases a native left button even after the hold
+was cleared, and ending a hold clears its dragging flag. Keep short-tap mode
+changes, explicit tap-then-hold dragging, contextual target selection, and Middle
+HUD/Top speech independent. Native regressions exercise missing releases, late
+packets, repeat teardown and later holds; real-device acceptance is separate.
