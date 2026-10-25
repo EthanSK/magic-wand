@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Control Hand · All six sensors</title>
+<link rel="icon" href="data:,">
+<style>
+:root{color-scheme:dark;--bg:#101419;--panel:#192129;--line:#34414d;--muted:#aebdca;--x:#7bc8ff;--y:#89e0b4;--z:#dfb4ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f0f4f8;font:15px system-ui,sans-serif}main{max-width:1500px;margin:auto;padding:24px}header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}h1{font-size:26px;letter-spacing:-.6px;margin:0 0 6px}header p{margin:0;color:var(--muted);font-size:14px}.overview{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.chip{border:1px solid #435363;border-radius:20px;padding:7px 10px;font-size:12px;white-space:nowrap}.chip.live{border-color:#347153;color:#89e0b4}.chip.idle{border-color:#806d3e;color:#edce87}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.sensor{min-width:0;background:var(--panel);border:1px solid #32414e;border-top:3px solid var(--accent);border-radius:14px;padding:16px}.card-head{display:grid;gap:6px}.card-head .chip{justify-self:start}.sensor h2{margin:0;font-size:19px;letter-spacing:-.3px}.subtitle{color:var(--muted);font-size:12px;margin:4px 0 12px}.sensor .chip{font-size:11px;padding:5px 8px}.metric+.metric{border-top:1px solid var(--line);margin-top:13px;padding-top:13px}.metric-head{display:flex;justify-content:space-between;gap:6px;align-items:baseline}.metric h3{font-size:13px;font-weight:600;margin:0}.unit{font-size:11px;color:var(--muted)}.values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:10px 0 5px}.axis{font-size:11px}.axis strong{display:block;font:clamp(14px,1.7vw,22px) ui-monospace,SFMono-Regular,monospace;color:#f0f4f8;margin-top:4px;white-space:nowrap}.x{color:var(--x)}.y{color:var(--y)}.z{color:var(--z)}canvas{display:block;width:100%;height:55px}.note{color:var(--muted);font-size:11px;min-height:28px;margin:10px 0 0;line-height:1.4}footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);line-height:1.5;margin-top:17px}a{color:var(--x)}a:focus-visible{outline:2px solid var(--x);outline-offset:4px}#reader-note{min-height:18px;color:var(--muted);font-size:12px;margin:0 0 14px}@media(max-width:620px){main{padding:14px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.sensor{padding:12px}.axis strong{font-size:16px}}@media(max-width:380px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body><main>
+<header><div><h1>Control Hand</h1><p>Main Sense and all five fingers, together.</p></div><div class="overview"><span class="chip" id="transport">Connecting to reader</span><span class="chip" id="summary" role="status">0 / 6 live</span></div></header>
+<p id="reader-note" role="status">Waiting for sensor readings.</p>
+<div class="grid" id="sensors" aria-label="All six motion sensors"></div>
+<footer><span id="battery">Battery: waiting for a reading</span><span>Raw axes · acceleration includes gravity · matching graphs share a scale.</span><a href="http://127.0.0.1:8769/" target="_blank" rel="noopener">Original dashboard ↗</a></footer>
+</main>
+<script>
+'use strict';
+const definitions=[
+ {key:'hand',id:'hand',name:'Main Sense',detail:'Built-in LSM6DS3',accent:'#7bc8ff'},
+ {key:'finger:2',id:'thumb',name:'Thumb',detail:'BMI160 · SD2 / SC2',accent:'#89e0b4'},
+ {key:'finger:3',id:'index',name:'Index',detail:'BMI160 · SD3 / SC3',accent:'#dfb4ff'},
+ {key:'finger:4',id:'middle',name:'Middle',detail:'BMI160 · SD4 / SC4',accent:'#edce87'},
+ {key:'finger:5',id:'ring',name:'Ring',detail:'BMI160 · SD5 / SC5',accent:'#f1a9b9'},
+ {key:'finger:6',id:'little',name:'Little',detail:'BMI160 · SD6 / SC6',accent:'#97b5f7'}
+];
+const el=id=>document.getElementById(id),axes=['gx','gy','gz','ax','ay','az'],colors=['#7bc8ff','#89e0b4','#dfb4ff'],histories=new Map();
+for(const sensor of definitions){
+ const card=document.createElement('section');card.className='sensor';card.style.setProperty('--accent',sensor.accent);card.setAttribute('aria-labelledby',sensor.id+'-title');
+ const metric=(label,unit,kind,keys)=>`<div class="metric"><div class="metric-head"><h3>${label}</h3><span class="unit">${unit} · <span id="${sensor.id}-${kind}-scale">—</span></span></div><div class="values">${keys.map((key,i)=>`<div class="axis ${['x','y','z'][i]}">${['X','Y','Z'][i]}<strong id="${sensor.id}-${key}">—</strong></div>`).join('')}</div><canvas id="${sensor.id}-${kind}" aria-label="${sensor.name} ${label.toLowerCase()}"></canvas></div>`;
+ card.innerHTML=`<div class="card-head"><h2 id="${sensor.id}-title">${sensor.name}</h2><span class="chip" id="${sensor.id}-status">Waiting</span></div><p class="subtitle">${sensor.detail}</p>${metric('Rotation','°/s','gyro',['gx','gy','gz'])}${metric('Acceleration','g','accel',['ax','ay','az'])}<p class="note" id="${sensor.id}-note">Waiting for readings.</p>`;
+ el('sensors').append(card);
+}
+function live(state){return state?.status==='Live'&&state.sample&&axes.every(key=>Number.isFinite(state.sample[key]))}
+function samplesFor(key,state){
+ let history=histories.get(key);if(!history){history={stamp:null,transport:null,samples:[]};histories.set(key,history)}
+ if(!live(state)){history.samples=[];history.stamp=null;history.transport=null;return []}
+ if(history.transport!==state.transport||(history.stamp!==null&&state.sample.ms<history.stamp))history.samples=[];
+ if(history.stamp!==state.sample.ms||history.transport!==state.transport){history.samples.push(state.sample);if(history.samples.length>150)history.samples.shift()}
+ history.stamp=state.sample.ms;history.transport=state.transport;return history.samples;
+}
+function draw(id,samples,keys,scale){
+ const canvas=el(id),rect=canvas.getBoundingClientRect(),ratio=devicePixelRatio||1;canvas.width=Math.round(rect.width*ratio);canvas.height=Math.round(rect.height*ratio);const ctx=canvas.getContext('2d');ctx.scale(ratio,ratio);const w=rect.width,h=rect.height;
+ ctx.strokeStyle='#34414d';ctx.beginPath();ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();
+ keys.forEach((key,i)=>{ctx.strokeStyle=colors[i];ctx.lineWidth=1.7;ctx.beginPath();samples.forEach((sample,n)=>{const x=n*w/149,y=h/2-sample[key]*(h*.43)/scale;if(n)ctx.lineTo(x,y);else ctx.moveTo(x,y)});ctx.stroke()});
+}
+function render(states,unavailable=false){
+ const data=definitions.map(sensor=>({sensor,state:states[sensor.key],samples:samplesFor(sensor.key,states[sensor.key])}));
+ let gyroScale=30,accelScale=1.5;for(const entry of data)for(const sample of entry.samples){for(const key of ['gx','gy','gz'])gyroScale=Math.max(gyroScale,Math.abs(sample[key]));for(const key of ['ax','ay','az'])accelScale=Math.max(accelScale,Math.abs(sample[key]))}
+ let count=0;const transports=new Set();
+ for(const {sensor,state,samples} of data){
+  const ready=!!live(state),idle=ready&&state.sample.idle,id=sensor.id,status=el(id+'-status');if(ready){count++;if(state.transport)transports.add(state.transport)}
+  status.textContent=unavailable?'Reader offline':ready?(state.transport||'Connected')+(idle?' · Idle':' · Live'):state?.age!=null?'No recent data':'Waiting';status.className='chip'+(ready?(idle?' idle':' live'):'');
+  for(const key of axes)el(id+'-'+key).textContent=ready?state.sample[key].toFixed(2):'—';
+  el(id+'-gyro-scale').textContent='±'+Math.ceil(gyroScale);el(id+'-accel-scale').textContent='±'+accelScale.toFixed(1);
+  draw(id+'-gyro',samples,['gx','gy','gz'],gyroScale);draw(id+'-accel',samples,['ax','ay','az'],accelScale);
+  el(id+'-note').textContent=unavailable?'The dashboard will reconnect to the reader automatically.':ready?(idle?'Gyro resting. Move the Sense to wake it.':'Live rotation and acceleration.'):state?.age!=null?'Last reading '+(state.age<60?Math.floor(state.age)+'s':state.age<3600?Math.floor(state.age/60)+'m':Math.floor(state.age/3600)+'h')+' ago.':'No readings received yet.';
+ }
+ const summary=el('summary');summary.textContent=count+' / 6 live';summary.className='chip'+(count?' live':'');el('transport').textContent=unavailable?'Reader unavailable':transports.size?[...transports].join(' + '):'Waiting for sensors';
+ el('reader-note').textContent=unavailable?'Cannot reach the existing reader. This dashboard will keep trying.':count===6?'All six sensors are sending readings.':count?count+' sensors sending readings. The remaining panels will appear live when data arrives.':'Reader is running. Waiting for sensor readings.';
+ const hand=states.hand?.sample;if(live(states.hand)&&Number.isFinite(hand.battery_v))el('battery').textContent='Battery: '+hand.battery_v.toFixed(2)+' V'+(hand.charging?' · Charging':'');else el('battery').textContent='Battery: waiting for a reading';
+}
+async function poll(){
+ try{const response=await fetch('/api/sample',{cache:'no-store',signal:AbortSignal.timeout(3000)});if(!response.ok)throw new Error('Reader unavailable');const payload=await response.json();render(payload.sensors||{})}catch{render({},true)}finally{setTimeout(poll,100)}
+}
+render({});poll();
+</script>
+</body>
+</html>
