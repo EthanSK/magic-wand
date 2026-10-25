@@ -1,0 +1,1137 @@
+--- a/Sources/AgenticMouseApp/AppDelegate.swift
++++ b/Sources/AgenticMouseApp/AppDelegate.swift
+@@ -231 +231 @@
+-        wandPersistentController?.refreshContext()
++        wandPersistentController?.refreshContext(screenshotActive:isActive)
+@@ -1608 +1608 @@
+-            WandContextSender.send(active:active,appMode:active && coordinator?.page == .appSpecific ? coordinator?.appSpecificTarget?.rawValue : nil,reviewMode:active ? persistent?.reviewMode : nil,reviewSelection:selected,screenshotActive:self.selectedAreaScreenshotController.isCapturing)
++            WandContextSender.send(active:active,appMode:active && coordinator?.page == .appSpecific ? coordinator?.appSpecificTarget?.rawValue : nil,reviewMode:active ? persistent?.reviewMode : nil,reviewSelection:selected,screenshotActive:self.mouseCommandsAllowed && self.selectedAreaScreenshotController.isCapturing)
+@@ -2734,0 +2735,6 @@
++                if let command = try? WandScreenshotStartCommand.decode(data) {
++                    if let result=self.selectedAreaScreenshotController.handleWandStart(command) {
++                        self.handleScreenshotTriggerResult(result,source:.wand)
++                    }
++                    return
++                }
+--- a/Sources/AgenticMouseApp/SelectedAreaScreenshotController.swift
++++ b/Sources/AgenticMouseApp/SelectedAreaScreenshotController.swift
+@@ -484,0 +485,3 @@
++    // Bounded retry history survives capture completion/cancel, so a delayed
++    // duplicate triple-click request cannot reopen the screenshot overlay.
++    private var recentWandStarts:[UUID] = []
+@@ -516,0 +520,9 @@
++    }
++
++    func handleWandStart(_ command:WandScreenshotStartCommand) -> TriggerResult? {
++        guard inputAllowed() else { return .blocked }
++        guard let id=UUID(uuidString:command.id),!recentWandStarts.contains(id) else { return nil }
++        recentWandStarts.append(id)
++        if recentWandStarts.count > 64 { recentWandStarts.removeFirst() }
++        guard activeProcess == nil else { return nil }
++        return startCapture(from:.wand)
+--- a/Sources/ScimitarKit/App/SelectedAreaScreenshotCommand.swift
++++ b/Sources/ScimitarKit/App/SelectedAreaScreenshotCommand.swift
+@@ -34,0 +35,23 @@
++
++
++/// Receiver-only start for Ethan's Bottom triple-click. Retries never toggle
++/// an existing native selection off. The ordinary mouse toggle is unchanged.
++public struct WandScreenshotStartCommand: Decodable, Equatable, Sendable {
++    public static let commandName = "agentic_mouse_wand_screenshot_start"
++    public let command:String
++    public let version:Int
++    public let id:String
++
++    public static func decode(_ data:Data) throws -> Self {
++        guard data.count <= 256,
++              let fields=try JSONSerialization.jsonObject(with:data) as? [String:Any],
++              Set(fields.keys) == ["command","version","id"] else {
++            throw DecodingError.dataCorrupted(.init(codingPath:[],debugDescription:"invalid wand screenshot request"))
++        }
++        let value=try JSONDecoder().decode(Self.self,from:data)
++        guard value.command == commandName,value.version == 1,UUID(uuidString:value.id) != nil else {
++            throw DecodingError.dataCorrupted(.init(codingPath:[],debugDescription:"invalid wand screenshot request"))
++        }
++        return value
++    }
++}
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -111,0 +112,2 @@
++    // Screenshot aiming outlives the hidden HUD; keep its receiver lease fresh.
++    private var screenshotInteractionActive=false
+@@ -132 +134 @@
+-        hold=nil;armed=nil;concealedUntil=nil;ownsHUD=false;scheduler.stop()
++        hold=nil;armed=nil;concealedUntil=nil;ownsHUD=false;screenshotInteractionActive=false;scheduler.stop()
+@@ -138 +140 @@
+-        if ownsHUD && !target.isActive {ownsHUD=false;hold=nil;armed=nil;if pinnedReviewCell == nil {scheduler.stop()}}
++        if ownsHUD && !target.isActive {ownsHUD=false;hold=nil;armed=nil;if pinnedReviewCell == nil && !screenshotInteractionActive {scheduler.stop()}}
+@@ -162 +164 @@
+-            if pinnedReviewCell == nil {scheduler.stop()} else {startWatchdog()}
++            if pinnedReviewCell == nil && !screenshotInteractionActive {scheduler.stop()} else {startWatchdog()}
+@@ -305 +307 @@
+-        if !target.isActive {ownsHUD=false;hold=nil;armed=nil;if pinnedReviewCell == nil && concealedUntil == nil {scheduler.stop()}}
++        if !target.isActive {ownsHUD=false;hold=nil;armed=nil;if pinnedReviewCell == nil && concealedUntil == nil && !screenshotInteractionActive {scheduler.stop()}}
+@@ -431 +433,7 @@
+-    public func refreshContext() { onContext?(isOpen) }
++    public func refreshContext(screenshotActive:Bool = false) {
++        screenshotInteractionActive=screenshotActive
++        if screenshotActive { startWatchdog() }
++        else if !isOpen && concealedUntil == nil && pinnedReviewCell == nil { scheduler.stop() }
++        // Publish termination immediately as well as renewing active capture.
++        onContext?(isOpen)
++    }
+@@ -439 +447,4 @@
+-            guard clock.now >= until else {return}
++            guard clock.now >= until else {
++                if screenshotInteractionActive { onContext?(isOpen) }
++                return
++            }
+@@ -442 +453 @@
+-        guard isOpen else {ownsHUD=false;hold=nil;armed=nil;if pinnedReviewCell == nil {scheduler.stop()};onContext?(false);return}
++        guard isOpen else {ownsHUD=false;hold=nil;armed=nil;if pinnedReviewCell == nil && !screenshotInteractionActive {scheduler.stop()};onContext?(false);return}
+--- a/Sources/ScimitarUI/ColorProofHUDView.swift
++++ b/Sources/ScimitarUI/ColorProofHUDView.swift
+@@ -385,2 +385,3 @@
+-/// Wand navigation cursor. Solid while moving; dashed once a held-wheel card
+-/// is armed for tilt adjustment; a coloured ratchet ring while it is adjusted.
++/// Wand navigation cursor. Solid while moving; marching dashes once a
++/// held-wheel card is armed for tilt adjustment; a coloured ratchet ring
++/// while it is adjusted.
+@@ -389,0 +391 @@
++    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+@@ -395,7 +397,13 @@
+-            WandLiquidOutline(pullX: focus.pullX, pullY: focus.pullY)
+-                .stroke(
+-                    LinearGradient(colors: [.white, .white.opacity(0.65), .white],
+-                                   startPoint: .topLeading, endPoint: .bottomTrailing),
+-                    style: StrokeStyle(
+-                        lineWidth: ModeHUDPointerFocusMetrics.lineWidth,
+-                        dash: focus.isArmed ? ModeHUDPointerFocusMetrics.armedDash : []
++            // Ticks only while armed dots are marching (`WandArmedOutlineStyle`).
++            TimelineView(WandArmedOutlineStyle.schedule(for: focus, reduceMotion: reduceMotion)) { timeline in
++                WandLiquidOutline(pullX: focus.pullX, pullY: focus.pullY)
++                    .stroke(
++                        LinearGradient(colors: [.white, .white.opacity(0.65), .white],
++                                       startPoint: .topLeading, endPoint: .bottomTrailing),
++                        style: StrokeStyle(
++                            lineWidth: ModeHUDPointerFocusMetrics.lineWidth,
++                            dash: focus.isArmed ? WandArmedOutlineStyle.dash : [],
++                            dashPhase: focus.isArmed
++                                ? WandArmedOutlineStyle.dashPhase(at: timeline.date, reduceMotion: reduceMotion)
++                                : 0
++                        )
+@@ -403,4 +411,4 @@
+-                )
+-                .padding(-ModeHUDPointerFocusMetrics.outset)
+-                .shadow(color: Color.white.opacity(0.75), radius: 6)
+-                .allowsHitTesting(false)
++            }
++            .padding(-ModeHUDPointerFocusMetrics.outset)
++            .shadow(color: Color.white.opacity(0.75), radius: 6)
++            .allowsHitTesting(false)
+@@ -440 +448,2 @@
+-    /// only the mouse grid retains that panel background.
++    /// only the mouse grid retains that panel background. The same glass now
++    /// shows through each wheel card alone (`WandWheelBacking`).
+@@ -446 +455 @@
+-            WandRadialWheel(model: model, reduceMotion: reduceMotion)
++            WandRadialWheel(model: model, reduceMotion: reduceMotion, usesNativeGlass: usesNativeGlass)
+@@ -559 +568 @@
+-                if let focus = model.pointerFocus, focus.cell == item.cell {
++                if model.isActive, let focus = model.pointerFocus, focus.cell == item.cell {
+@@ -619 +628 @@
+-                shape.fill(Color(white: 0.11))
++                shape.fill(ModeHUDNativeGlass.offscreenStandIn)
+@@ -717,20 +726 @@
+-        if #available(macOS 26.0, *) {
+-            let glass = NSGlassEffectView()
+-            // Clear is AppKit's most transparent native glass style. Leaving
+-            // the tint nil and the substrate unobscured preserves the full
+-            // system-provided lensing response to desktop content behind this
+-            // transparent, non-activating HUD window.
+-            glass.style = .clear
+-            glass.tintColor = nil
+-            glass.cornerRadius = cornerRadius
+-            glass.contentView = NSView()
+-            return glass
+-        }
+-
+-        let fallback = NSVisualEffectView()
+-        fallback.material = .hudWindow
+-        fallback.blendingMode = .behindWindow
+-        fallback.state = .active
+-        fallback.wantsLayer = true
+-        fallback.layer?.cornerRadius = cornerRadius
+-        return fallback
++        ModeHUDNativeGlass.makeEffectView(cornerRadius: cornerRadius)
+@@ -740,7 +730 @@
+-        if #available(macOS 26.0, *), let glass = nsView as? NSGlassEffectView {
+-            glass.style = .clear
+-            glass.tintColor = nil
+-            glass.cornerRadius = cornerRadius
+-        } else {
+-            nsView.layer?.cornerRadius = cornerRadius
+-        }
++        ModeHUDNativeGlass.update(nsView, cornerRadius: cornerRadius)
+--- a/Sources/ScimitarUI/WandAdjustRing.swift
++++ b/Sources/ScimitarUI/WandAdjustRing.swift
+@@ -52,0 +53,38 @@
++    }
++}
++
++/// Ethan: "make the dotted outline ... like moving dynamics, like cool, like
++/// a snake around it". An armed card keeps its dotted ring, and the dots
++/// travel clockwise around it like marching ants. Hover stays solid and the
++/// adjustment ratchet keeps its own detent notches. Both wand outline views
++/// (wheel and grid) read this one policy.
++///
++/// The phase is a pure function of time, so every outline marches in step
++/// and Reduce Motion shows the same dots standing still. Nothing ticks
++/// unless an armed card is actually showing its dots.
++enum WandArmedOutlineStyle {
++    static let dash: [CGFloat] = ModeHUDPointerFocusMetrics.armedDash
++    static var dashPeriod: CGFloat { dash.reduce(0, +) }
++    /// Points per second the dots travel along the outline.
++    static let speed: CGFloat = 28
++    /// Caps redraws on high-refresh displays; the motion is a gentle march.
++    static let frameInterval: TimeInterval = 1.0 / 60
++
++    /// Armed and waiting: the only state whose dots move.
++    static func marches(_ focus: ModeHUDPointerFocus, reduceMotion: Bool) -> Bool {
++        focus.isArmed && focus.adjustment == nil && !reduceMotion
++    }
++
++    static func schedule(for focus: ModeHUDPointerFocus, reduceMotion: Bool) -> AnimationTimelineSchedule {
++        .animation(minimumInterval: frameInterval, paused: !marches(focus, reduceMotion: reduceMotion))
++    }
++
++    /// Dash phase at `date`, in (−period, 0]. Outlines are drawn clockwise,
++    /// and a falling phase moves the dots forward along the path, so they
++    /// travel clockwise. Reduce Motion keeps them still.
++    static func dashPhase(at date: Date, reduceMotion: Bool) -> CGFloat {
++        guard !reduceMotion, dashPeriod > 0, speed > 0 else { return 0 }
++        let cycle = Double(dashPeriod / speed)
++        var elapsed = date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: cycle)
++        if elapsed < 0 { elapsed += cycle }
++        return -CGFloat(elapsed) * speed
+--- /dev/null
++++ b/Sources/ScimitarUI/WandCardLift.swift
+@@ -0,0 +1,90 @@
++import CoreGraphics
++import SwiftUI
++
++/// Ethan: "when each HUD item is selected, it should sort of do like a nice
++/// animation where it like zooms in a bit gradually for that wedge", and "can
++/// we have a wedge animate to be higher". The outlined card grows a little and
++/// rises outward from the wheel centre; the centre card only grows.
++///
++/// One pose drives the card, its text, its outline and its glass mask, so they
++/// never separate. The lift is modest: a lifted ring card still stays inside
++/// the wheel frame and clear of the centre card, and it changes no selection
++/// geometry (navigation keeps using the resting layout).
++enum WandCardLift {
++    static let scale: CGFloat = 1.05
++    /// Outward travel of a lifted ring card, in points.
++    static let rise: CGFloat = 7
++
++    struct Pose: Equatable {
++        var scale: CGFloat
++        /// Scale origin, in the wheel frame's unit coordinates.
++        var anchor: UnitPoint
++        var offset: CGSize
++    }
++
++    /// The pose for the card in `slot`. Ring cards anchor on their own middle
++    /// so they grow in place; `angle` lets the moving outline follow its own
++    /// centre angle instead of a card's.
++    static func pose(for slot: WandWheelGeometry.Slot, lifted: Bool, in geometry: WandWheelGeometry,
++                     angle: Double? = nil) -> Pose {
++        let size = max(geometry.size, 1)
++        switch slot {
++        case .center:
++            return Pose(scale: lifted ? scale : 1, anchor: .center, offset: .zero)
++        case .ring(let index):
++            let direction = WandWedge.radial(angle ?? geometry.layout.angle(at: index))
++            let middle = (WandWheelMetrics.innerRadius + WandWheelMetrics.outerRadius) / 2
++            let anchor = UnitPoint(x: (geometry.center.x + direction.x * middle) / size,
++                                   y: (geometry.center.y + direction.y * middle) / size)
++            let offset = lifted ? CGSize(width: direction.x * rise, height: direction.y * rise) : .zero
++            return Pose(scale: lifted ? scale : 1, anchor: anchor, offset: offset)
++        }
++    }
++
++    /// The same pose as an affine transform in wheel-frame points, matching
++    /// `scaleEffect(_:anchor:)` followed by `offset(_:)`.
++    static func transform(_ pose: Pose, size: CGFloat) -> CGAffineTransform {
++        let anchor = CGPoint(x: pose.anchor.x * size, y: pose.anchor.y * size)
++        return CGAffineTransform(translationX: -anchor.x, y: -anchor.y)
++            .concatenating(CGAffineTransform(scaleX: pose.scale, y: pose.scale))
++            .concatenating(CGAffineTransform(translationX: anchor.x + pose.offset.width,
++                                             y: anchor.y + pose.offset.height))
++    }
++
++    /// A gentle one-shot settle; nothing repeats. Reduce Motion lifts the card
++    /// at once without travel.
++    static func animation(reduceMotion: Bool) -> Animation? {
++        reduceMotion ? nil : .spring(response: 0.34, dampingFraction: 0.78)
++    }
++}
++
++extension View {
++    /// Applies a lift pose: scale about its anchor, then rise. Animates only
++    /// when the pose changes, so a resting wheel does no work.
++    func wandCardLift(_ pose: WandCardLift.Pose, reduceMotion: Bool) -> some View {
++        scaleEffect(pose.scale, anchor: pose.anchor)
++            .offset(pose.offset)
++            .animation(WandCardLift.animation(reduceMotion: reduceMotion), value: pose)
++    }
++}
++
++/// Ethan: "the text is still a bit hard to read. Maybe you can give it like a
++/// thin black outline or an outline that works well for its color". A tight
++/// halo in the colour opposite the text traces each glyph, and a softer one
++/// separates it from busy artwork or desktop behind the glass. It is applied
++/// per text run, never to a whole-wheel layer.
++struct WandCardTextHalo: ViewModifier {
++    /// True for the black text on a selected review card.
++    let foregroundIsDark: Bool
++
++    static func haloColor(foregroundIsDark: Bool) -> Color {
++        foregroundIsDark ? .white : .black
++    }
++
++    func body(content: Content) -> some View {
++        let halo = Self.haloColor(foregroundIsDark: foregroundIsDark)
++        content
++            .shadow(color: halo.opacity(foregroundIsDark ? 0.5 : 0.7), radius: 0.8)
++            .shadow(color: halo.opacity(foregroundIsDark ? 0.25 : 0.4), radius: 2.5)
++    }
++}
+--- a/Sources/ScimitarUI/WandRadialHUDView.swift
++++ b/Sources/ScimitarUI/WandRadialHUDView.swift
+@@ -11,0 +12,3 @@
++    /// Live HUDs show native glass through each card; offscreen renders use
++    /// the shared neutral stand-in, like `ModeHUDView`.
++    var usesNativeGlass = true
+@@ -28,0 +32,3 @@
++        let drawsCenter = plan.center != nil && (geometry.layout.center.map { item(for: $0) != nil } ?? false)
++        let drawnRing = geometry.layout.ring.indices.filter { item(for: geometry.layout.ring[$0]) != nil && $0 < plan.ring.count }
++        let lifted = model.pointerFocus.flatMap { geometry.slot(for: $0.cell) }
+@@ -29,0 +36,7 @@
++            // Exactly the cards drawn below, so no gutter or corner is backed.
++            WandWheelBacking(
++                silhouette: WandWheelSilhouette(geometry: geometry, includesCenter: drawsCenter, ringIndices: drawnRing,
++                                                lifted: lifted),
++                size: geometry.size,
++                usesNativeGlass: usesNativeGlass
++            )
+@@ -33,0 +47,3 @@
++                    .wandCardLift(WandCardLift.pose(for: .center, lifted: lifted == .center, in: geometry),
++                                  reduceMotion: reduceMotion)
++                    .zIndex(lifted == .center ? 1 : 0)
+@@ -40,0 +57,3 @@
++                        .wandCardLift(WandCardLift.pose(for: .ring(index), lifted: lifted == .ring(index), in: geometry),
++                                      reduceMotion: reduceMotion)
++                        .zIndex(lifted == .ring(index) ? 1 : 0)
+@@ -43,0 +63 @@
++                .zIndex(2)
+@@ -140,0 +161 @@
++                        .modifier(WandCardTextHalo(foregroundIsDark: reviewSelected))
+@@ -149,0 +171 @@
++                        .modifier(WandCardTextHalo(foregroundIsDark: reviewSelected))
+@@ -158,0 +181 @@
++                    .modifier(WandCardTextHalo(foregroundIsDark: reviewSelected))
+@@ -194 +217 @@
+-            if let focus = model.pointerFocus, let slot = geometry.slot(for: focus.cell) {
++            if model.isActive, let focus = model.pointerFocus, let slot = geometry.slot(for: focus.cell) {
+@@ -196,8 +219,17 @@
+-                // centre and the ring morphs instead of fading.
+-                WandRadialFocusOutline(
+-                    focus: focus,
+-                    onCenter: slot == .center,
+-                    wedge: geometry.wedge(at: 0, angle: model.wandFocusAngle),
+-                    accent: accent(for: focus.cell),
+-                    reduceMotion: reduceMotion
+-                )
++                // centre and the ring morphs instead of fading. The timeline
++                // is always present (arming never swaps the outline's
++                // identity) but it ticks only while an armed card marches.
++                TimelineView(WandArmedOutlineStyle.schedule(for: focus, reduceMotion: reduceMotion)) { timeline in
++                    WandRadialFocusOutline(
++                        focus: focus,
++                        onCenter: slot == .center,
++                        wedge: geometry.wedge(at: 0, angle: model.wandFocusAngle),
++                        accent: accent(for: focus.cell),
++                        reduceMotion: reduceMotion,
++                        armedDashPhase: WandArmedOutlineStyle.dashPhase(at: timeline.date, reduceMotion: reduceMotion)
++                    )
++                }
++                // Rides with the lifted card it outlines, on its own angle
++                // so a slide round the ring carries the lift with it.
++                .wandCardLift(WandCardLift.pose(for: slot, lifted: true, in: geometry, angle: model.wandFocusAngle),
++                              reduceMotion: reduceMotion)
+@@ -230,3 +262,3 @@
+-/// Solid while moving, dashed when a wheel card is armed, and a coloured
+-/// ratchet while that card is being adjusted, matching the grid outline's
+-/// meaning in the wheel's own shapes.
++/// Solid while moving, marching dashes when a wheel card is armed, and a
++/// coloured ratchet while that card is being adjusted, matching the grid
++/// outline's meaning in the wheel's own shapes.
+@@ -238,0 +271 @@
++    let armedDashPhase: CGFloat
+@@ -271 +304,2 @@
+-            dash: focus.isArmed ? ModeHUDPointerFocusMetrics.armedDash : []
++            dash: focus.isArmed ? WandArmedOutlineStyle.dash : [],
++            dashPhase: focus.isArmed ? armedDashPhase : 0
+--- /dev/null
++++ b/Sources/ScimitarUI/WandWheelBacking.swift
+@@ -0,0 +1,237 @@
++import AppKit
++import CoreGraphics
++import QuartzCore
++import SwiftUI
++
++/// The native glass configuration every Agentic Mouse HUD surface uses. The
++/// grid's outer panel and the wand wheel's card-shaped backing share it, so the
++/// clear, untinted Liquid Glass contract lives in one place.
++enum ModeHUDNativeGlass {
++    /// ImageRenderer cannot draw AppKit glass. Offscreen visual checks use
++    /// this neutral fill wherever a live HUD shows native glass.
++    static let offscreenStandIn = Color(white: 0.11)
++
++    static func makeEffectView(cornerRadius: CGFloat) -> NSView {
++        if #available(macOS 26.0, *) {
++            let glass = NSGlassEffectView()
++            // Clear is AppKit's most transparent native glass style. Leaving
++            // the tint nil and the substrate unobscured preserves the full
++            // system-provided lensing response to desktop content behind this
++            // transparent, non-activating HUD window.
++            glass.style = .clear
++            glass.tintColor = nil
++            glass.cornerRadius = cornerRadius
++            glass.contentView = NSView()
++            return glass
++        }
++
++        let fallback = NSVisualEffectView()
++        fallback.material = .hudWindow
++        fallback.blendingMode = .behindWindow
++        fallback.state = .active
++        fallback.wantsLayer = true
++        fallback.layer?.cornerRadius = cornerRadius
++        return fallback
++    }
++
++    static func update(_ view: NSView, cornerRadius: CGFloat) {
++        if #available(macOS 26.0, *), let glass = view as? NSGlassEffectView {
++            glass.style = .clear
++            glass.tintColor = nil
++            glass.cornerRadius = cornerRadius
++        } else {
++            view.layer?.cornerRadius = cornerRadius
++        }
++    }
++}
++
++// MARK: - Silhouette
++
++/// Every card the wheel draws, as one shape: the centre disc and each ring
++/// wedge, in the wheel frame's own coordinates. Gutters, the gap between the
++/// disc and the ring, and everything outside the ring are not part of it.
++/// Cards never overlap, so their outlines simply combine.
++struct WandWheelSilhouette: Shape {
++    let geometry: WandWheelGeometry
++    let includesCenter: Bool
++    let ringIndices: [Int]
++    /// The outlined card is backed in its lifted pose (`WandCardLift`). The
++    /// mask settles there at once while the card springs to it.
++    var lifted: WandWheelGeometry.Slot? = nil
++
++    func path(in rect: CGRect) -> Path {
++        var path = Path()
++        func add(_ card: Path, slot: WandWheelGeometry.Slot) {
++            guard slot == lifted else { return path.addPath(card) }
++            let pose = WandCardLift.pose(for: slot, lifted: true, in: geometry)
++            path.addPath(card.applying(WandCardLift.transform(pose, size: geometry.size)))
++        }
++        if includesCenter {
++            add(WandCenterDiscShape(radius: WandWheelMetrics.centerRadius).path(in: rect), slot: .center)
++        }
++        for index in ringIndices {
++            add(WandWedgeShape(wedge: geometry.wedge(at: index)).path(in: rect), slot: .ring(index))
++        }
++        return path
++    }
++}
++
++/// Rasterizes the silhouette as a mask: opaque inside a card, transparent
++/// everywhere else. `path` uses SwiftUI's y-down coordinates within `canvas`;
++/// the returned image's first row is the top of the wheel.
++enum WandWheelMask {
++    static func image(of path: CGPath, canvas: CGSize, size: CGSize, scale: CGFloat) -> CGImage? {
++        let width = Int((size.width * scale).rounded(.up))
++        let height = Int((size.height * scale).rounded(.up))
++        guard width > 0, height > 0, canvas.width > 0, canvas.height > 0,
++              let context = CGContext(
++                data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0,
++                space: CGColorSpaceCreateDeviceRGB(),
++                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
++              ) else { return nil }
++        // Bitmap contexts are y-up. Flip once so the y-down path lands with
++        // the wheel's top in the image's first row.
++        context.translateBy(x: 0, y: CGFloat(height))
++        context.scaleBy(x: CGFloat(width) / canvas.width, y: -CGFloat(height) / canvas.height)
++        context.addPath(path)
++        context.setFillColor(CGColor(gray: 1, alpha: 1))
++        context.fillPath()
++        return context.makeImage()
++    }
++}
++
++// MARK: - Backing
++
++/// Ethan: each wedge's background "should still be as if it were on top of
++/// the normal background that we just removed ... just for that wedge, it's
++/// like masked". One shared glass surface, the same one the grid panel uses,
++/// sits under the whole wheel and shows only through the cards. Card fills,
++/// artwork and borders draw above it exactly as they did over the old panel.
++struct WandWheelBacking: View {
++    let silhouette: WandWheelSilhouette
++    let size: CGFloat
++    let usesNativeGlass: Bool
++
++    var body: some View {
++        Group {
++            if usesNativeGlass {
++                WandWheelGlassBacking(
++                    silhouette: silhouette.path(in: CGRect(x: 0, y: 0, width: size, height: size)).cgPath,
++                    canvas: CGSize(width: size, height: size)
++                )
++            } else {
++                silhouette.fill(ModeHUDNativeGlass.offscreenStandIn)
++            }
++        }
++        .frame(width: size, height: size)
++        .allowsHitTesting(false)
++    }
++}
++
++private struct WandWheelGlassBacking: NSViewRepresentable {
++    let silhouette: CGPath
++    let canvas: CGSize
++
++    func makeNSView(context: Context) -> WandMaskedGlassView {
++        let view = WandMaskedGlassView(frame: NSRect(origin: .zero, size: canvas))
++        view.setSilhouette(silhouette, canvas: canvas)
++        return view
++    }
++
++    func updateNSView(_ nsView: WandMaskedGlassView, context: Context) {
++        nsView.setSilhouette(silhouette, canvas: canvas)
++    }
++}
++
++/// Native glass clipped to the wheel's cards. SwiftUI clipping is not relied
++/// on for a hosted AppKit view: macOS 26 glass is masked by its container's
++/// layer, and the older visual-effect fallback uses its documented
++/// `maskImage`. Both masks come from the same image, whose orientation is
++/// fixed when it is drawn. Without a usable mask the glass stays hidden, so
++/// the wheel can never fall back to a square or circular plate.
++final class WandMaskedGlassView: NSView {
++    private let effect = ModeHUDNativeGlass.makeEffectView(cornerRadius: 0)
++    private let maskLayer = CALayer()
++    private var silhouette: CGPath?
++    private var canvas: CGSize = .zero
++
++    /// The mask is rebuilt only when the cards, size or backing scale change,
++    /// never while the outline moves.
++    private struct MaskKey: Equatable {
++        let path: CGPath
++        let canvas: CGSize
++        let size: CGSize
++        let scale: CGFloat
++
++        static func == (lhs: MaskKey, rhs: MaskKey) -> Bool {
++            CFEqual(lhs.path, rhs.path) && lhs.canvas == rhs.canvas && lhs.size == rhs.size && lhs.scale == rhs.scale
++        }
++    }
++    private var appliedMask: MaskKey?
++
++    override init(frame frameRect: NSRect) {
++        super.init(frame: frameRect)
++        wantsLayer = true
++        effect.isHidden = true
++        effect.frame = bounds
++        effect.autoresizingMask = [.width, .height]
++        addSubview(effect)
++    }
++
++    @available(*, unavailable)
++    required init?(coder: NSCoder) { nil }
++
++    func setSilhouette(_ path: CGPath, canvas: CGSize) {
++        if let silhouette, CFEqual(silhouette, path), canvas == self.canvas { return }
++        silhouette = path
++        self.canvas = canvas
++        needsLayout = true
++    }
++
++    override func viewDidChangeBackingProperties() {
++        super.viewDidChangeBackingProperties()
++        needsLayout = true
++    }
++
++    override func viewDidMoveToWindow() {
++        super.viewDidMoveToWindow()
++        needsLayout = true
++    }
++
++    override func setFrameSize(_ newSize: NSSize) {
++        super.setFrameSize(newSize)
++        needsLayout = true
++    }
++
++    override func layout() {
++        super.layout()
++        effect.frame = bounds
++        applyMask()
++    }
++
++    private func applyMask() {
++        let scale = window?.backingScaleFactor ?? NSScreen.main?.backingScaleFactor ?? 2
++        guard let silhouette, bounds.width > 0, bounds.height > 0 else {
++            effect.isHidden = true
++            return
++        }
++        let key = MaskKey(path: silhouette, canvas: canvas, size: bounds.size, scale: scale)
++        guard key != appliedMask else { return }
++        guard let image = WandWheelMask.image(of: silhouette, canvas: canvas, size: bounds.size, scale: scale) else {
++            effect.isHidden = true
++            appliedMask = nil
++            return
++        }
++        if #available(macOS 26.0, *) {
++            maskLayer.contents = image
++            maskLayer.contentsGravity = .resize
++            maskLayer.contentsScale = scale
++            maskLayer.frame = layer?.bounds ?? bounds
++            layer?.mask = maskLayer
++        } else if let fallback = effect as? NSVisualEffectView {
++            fallback.maskImage = NSImage(cgImage: image, size: bounds.size)
++        }
++        effect.isHidden = false
++        appliedMask = key
++    }
++}
+--- a/Tests/AgenticMouseAppTests/SelectedAreaScreenshotControllerTests.swift
++++ b/Tests/AgenticMouseAppTests/SelectedAreaScreenshotControllerTests.swift
+@@ -9,0 +10,33 @@
++    func testWandTripleClickStartIsIdempotentAndUsesExistingCaptureLifecycle() throws {
++        let process=RecordingScreenshotProcess()
++        let clipboard=RecordingScreenshotClipboardCoordinator()
++        let controller=SelectedAreaScreenshotController(makeProcess:{process},clipboardCoordinator:clipboard)
++        func command(_ id:String) throws -> WandScreenshotStartCommand {
++            try WandScreenshotStartCommand.decode(Data(("{\"command\":\"agentic_mouse_wand_screenshot_start\",\"version\":1,\"id\":\""+id+"\"}").utf8))
++        }
++        let first=try command(UUID().uuidString),second=try command(UUID().uuidString)
++        var states:[Bool]=[];controller.onStateChange={states.append(controller.isCapturing)}
++        XCTAssertEqual(controller.handleWandStart(first),.started)
++        XCTAssertNil(controller.handleWandStart(first))
++        XCTAssertNil(controller.handleWandStart(second),"a fresh request cannot cancel an active capture either")
++        XCTAssertEqual(process.runCount,1);XCTAssertEqual(process.cancelCount,0)
++        XCTAssertTrue(controller.isCapturing)
++        controller.cancel()
++        XCTAssertEqual(states.last,false)
++        XCTAssertNil(controller.handleWandStart(first),"a late retry cannot reopen after cancellation")
++        XCTAssertNil(controller.handleWandStart(second))
++        XCTAssertEqual(controller.handleWandStart(try command(UUID().uuidString)),.started)
++        XCTAssertEqual(process.runCount,2)
++    }
++
++    func testWandScreenshotStartRejectsMalformedOrExpandedCommands() throws {
++        let valid="{\"command\":\"agentic_mouse_wand_screenshot_start\",\"version\":1,\"id\":\"AC1718F8-B050-47BB-B763-5BA765D69F93\"}"
++        XCTAssertNoThrow(try WandScreenshotStartCommand.decode(Data(valid.utf8)))
++        for payload in [valid.replacingOccurrences(of:"\"version\":1",with:"\"version\":true"),
++                        valid.replacingOccurrences(of:"\"version\":1",with:"\"version\":2"),
++                        valid.replacingOccurrences(of:"AC1718F8-B050-47BB-B763-5BA765D69F93",with:"bad-id"),
++                        valid.dropLast()+",\"extra\":1}"] {
++            XCTAssertThrowsError(try WandScreenshotStartCommand.decode(Data(payload.utf8)))
++        }
++    }
++
+--- /dev/null
++++ b/Tests/AgenticMouseAppTests/WandClipboardRoutingTests.swift
+@@ -0,0 +1,87 @@
++import XCTest
++import ScimitarKit
++@testable import AgenticMouseApp
++
++/// Receiver-shaped Middle gestures through the real coordinator, virtual
++/// wheel policy and Copy/Paste executor. Keyboard output is captured, never
++/// posted into Ethan's live app or clipboard.
++@MainActor
++final class WandClipboardRoutingTests: XCTestCase {
++    func testArmedMiddleHoldRoutesUpCopyDownPasteAndNeverSpace() throws {
++        let clock=ManualClock(now:100)
++        let target=ModePickerCoordinator(lease:WandModeLease(),hud:RecordingModeHUDPresenter(),
++            scheduler:ManualTickScheduler(),log:Log(category:"test",sink:NullLogSink()))
++        let wheel=WandVirtualWheel(clock:clock)
++        var events:[[SyntheticKeyboardChordPoster.Event]]=[]
++        var actions:[ModeUtilityAction]=[]
++        var spaces=0
++        let executor=ModeUtilityActionExecutor(postKeyboardChord:{events.append($0);return true},
++            accessibilityTrusted:{true},inputAllowed:{true})
++        target.onWheelControlChange={_,control in wheel.setActive(control)}
++        target.onWheelControlRelease={_,control in
++            if let release=wheel.release(control),release.control == .clipboard,!release.didObserveWheelInput {spaces+=1}
++        }
++        let persistent=WandPersistentController(target:target,scheduler:ManualTickScheduler(),clock:clock)
++        persistent.onAdjustStep={direction in
++            guard let step=wheel.step(direction),let action=step.control.topLevelSystemAction(for:step.direction) else{return false}
++            actions.append(action)
++            if case .success = executor.perform(action) {return true};return false
++        }
++        persistent.handle(.init(.open,id:"clipboard-open"))
++        let cell=PhysicalCell.clipboardWheelControl
++        let layout=target.wandRadialLayout
++        let start=WandRadialNavigator.restingPosition(of:.switchApp,in:layout)
++        let goal=WandRadialNavigator.restingPosition(of:cell,in:layout)
++        persistent.handle(.init(.navigate,id:"clipboard-aim"))
++        persistent.handle(.init(.motion,id:"clipboard-aim",sequence:1,x:goal.x-start.x,y:goal.y-start.y))
++        persistent.handle(.init(.park,id:"clipboard-aim",sequence:2))
++        persistent.handle(.init(.choose,id:"clipboard-arm"))
++        XCTAssertEqual(persistent.armedCell,cell)
++        XCTAssertEqual(wheel.activeControl,.clipboard)
++        XCTAssertTrue(actions.isEmpty);XCTAssertEqual(spaces,0)
++        // Unheld movement is not an adjustment.
++        persistent.handle(.init(.hover,id:"clipboard-hover"))
++        persistent.handle(.init(.motion,id:"clipboard-hover",sequence:1,y:-50))
++        XCTAssertTrue(actions.isEmpty)
++        persistent.handle(.init(.navigate,id:"clipboard-adjust"))
++        persistent.handle(.init(.motion,id:"clipboard-adjust",sequence:1,y:-7))
++        XCTAssertEqual(actions,[.copy],"Up means Copy")
++        persistent.handle(.init(.motion,id:"clipboard-adjust",sequence:2,y:0))
++        XCTAssertEqual(actions,[.copy,.paste],"Down immediately reverses to Paste")
++        persistent.handle(.init(.park,id:"clipboard-adjust",sequence:3))
++        persistent.handle(.init(.choose,id:"clipboard-done"))
++        XCTAssertEqual(actions,[.copy,.paste]);XCTAssertEqual(spaces,0)
++        XCTAssertFalse(persistent.isOpen);XCTAssertNil(wheel.activeControl)
++        XCTAssertEqual(events.map{$0.filter{$0.type == .keyDown}.map(\.keyCode)},[[8],[9]])
++        for chord in events {
++            XCTAssertEqual(chord.count,4)
++            XCTAssertEqual(chord.first?.flags,.maskCommand)
++            XCTAssertEqual(chord.last?.flags,[])
++        }
++    }
++    func testClipboardTapKeepsSingleSpaceReleaseAndNoWheelAction() {
++        let clock=ManualClock(now:100)
++        let target=ModePickerCoordinator(lease:WandModeLease(),hud:RecordingModeHUDPresenter(),
++            scheduler:ManualTickScheduler(),log:Log(category:"test",sink:NullLogSink()))
++        let wheel=WandVirtualWheel(clock:clock)
++        var spaces=0
++        target.onWheelControlChange={_,control in wheel.setActive(control)}
++        target.onWheelControlRelease={_,control in
++            if let release=wheel.release(control),release.control == .clipboard,!release.didObserveWheelInput {spaces+=1}
++        }
++        let persistent=WandPersistentController(target:target,scheduler:ManualTickScheduler(),clock:clock)
++        persistent.handle(.init(.open,id:"space-open"))
++        let layout=target.wandRadialLayout
++        let start=WandRadialNavigator.restingPosition(of:.switchApp,in:layout)
++        let goal=WandRadialNavigator.restingPosition(of:.clipboardWheelControl,in:layout)
++        persistent.handle(.init(.navigate,id:"space-aim"))
++        persistent.handle(.init(.motion,id:"space-aim",sequence:1,x:goal.x-start.x,y:goal.y-start.y))
++        persistent.handle(.init(.park,id:"space-aim",sequence:2))
++        persistent.handle(.init(.activate,id:"space-tap"))
++        persistent.handle(.init(.activate,id:"space-tap"))
++        XCTAssertEqual(spaces,1)
++        XCTAssertNil(wheel.activeControl)
++        XCTAssertFalse(persistent.isOpen)
++    }
++
++}
+--- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
++++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+@@ -417,0 +418,30 @@
++
++
++extension WandPersistentControlTests {
++    func testScreenshotContextRenewsAfterHiddenHUDAndPublishesTermination() {
++        var contexts:[Bool]=[]
++        control.onContext={contexts.append($0)}
++        control.refreshContext(screenshotActive:true)
++        control.handle(.init(.activate,id:"hide-during-capture"))
++        XCTAssertTrue(control.isConcealed)
++        let initial=contexts.count
++        clock.advance(by:0.5);tick.fire()
++        XCTAssertGreaterThan(contexts.count,initial,"renew screenshot while HUD follow-up lingers")
++        clock.advance(by:4);tick.fire()
++        XCTAssertFalse(control.isOpen)
++        XCTAssertTrue(tick.isRunning,"capture retains receiver context beyond two-second HUD linger")
++        let before=contexts.count
++        clock.advance(by:20);tick.fire()
++        XCTAssertGreaterThan(contexts.count,before)
++        control.refreshContext(screenshotActive:false)
++        XCTAssertEqual(contexts.last,false)
++        XCTAssertFalse(tick.isRunning,"completion/cancel stops screenshot-only heartbeat")
++    }
++
++    func testScreenshotContextCannotOutliveLockReset() {
++        control.refreshContext(screenshotActive:true)
++        control.reset(reason:.systemSleep)
++        XCTAssertFalse(tick.isRunning)
++        XCTAssertFalse(control.isOpen)
++    }
++}
+--- /dev/null
++++ b/Tests/ScimitarUITests/WandBusyBackdropTests.swift
+@@ -0,0 +1,63 @@
++import AppKit
++import ScimitarKit
++import SwiftUI
++@testable import ScimitarUI
++import XCTest
++
++@MainActor
++final class WandBusyBackdropTests: XCTestCase {
++    func testWandCardsStayReadableOverBusyHighContrastBackdrop() throws {
++        let hud=RecordingModeHUDPresenter()
++        let coordinator=ModePickerCoordinator(lease:WandModeLease(),hud:hud,
++            scheduler:ManualTickScheduler(),log:Log(category:"test",sink:NullLogSink()))
++        coordinator.enterWandHome(source:.wand,pointerFocus:.init(cell:.clipboardWheelControl,isArmed:true))
++        let model=ModeHUDViewModel(source:.wand)
++        model.apply(try XCTUnwrap(hud.snapshots.last))
++        let content=ModeHUDView(model:model,usesNativeGlass:false)
++            .environment(\.colorScheme,.dark)
++        let base=ImageRenderer(content:content)
++        let size=try XCTUnwrap(base.nsImage).size
++        let renderer=ImageRenderer(content:content.background {
++            Canvas { context,size in
++                for y in stride(from:0,to:Int(size.height),by:16) {
++                    for x in stride(from:0,to:Int(size.width),by:16) {
++                        let light=(x/16+y/16)%2 == 0
++                        context.fill(Path(CGRect(x:x,y:y,width:16,height:16)),with:.color(light ? .white : .black))
++                    }
++                }
++                for y in stride(from:8,to:Int(size.height),by:35) {
++                    context.draw(Text("let value = window.selected + 12345 // busy desktop")
++                        .font(.system(size:13,design:.monospaced)).foregroundColor(.cyan),
++                        at:CGPoint(x:size.width/2,y:CGFloat(y)))
++                }
++            }.frame(width:size.width,height:size.height)
++        })
++        renderer.scale=1
++        let bitmap=try XCTUnwrap(NSBitmapImageRep(data:XCTUnwrap(renderer.nsImage?.tiffRepresentation)))
++        // Offscreen backing is opaque inside each card; the busy backdrop
++        // must not alter a neutral interior even at opposing checker colours.
++        let transparent=ImageRenderer(content:content)
++        let bare=try XCTUnwrap(NSBitmapImageRep(data:XCTUnwrap(transparent.nsImage?.tiffRepresentation)))
++        let geometry=WandWheelGeometry(layout:model.wandRadialLayout ?? .inferred(legend:model.legend))
++        for index in geometry.layout.ring.indices {
++            let wedge=geometry.wedge(at:index)
++            let direction=WandWedge.radial(wedge.centerAngle)
++            let radius=wedge.inner+10
++            let x=Int(WandWheelMetrics.panelPadding+geometry.center.x+direction.x*radius)
++            let y=Int(WandWheelMetrics.panelPadding+geometry.center.y+direction.y*radius)
++            let sample=try XCTUnwrap(bare.colorAt(x:x,y:y))
++            XCTAssertGreaterThan(sample.alphaComponent,0.99,"wedge backing is opaque in renderer")
++            let busy=try XCTUnwrap(bitmap.colorAt(x:x,y:y))
++            let a=try XCTUnwrap(sample.usingColorSpace(.deviceRGB))
++            let b=try XCTUnwrap(busy.usingColorSpace(.deviceRGB))
++            XCTAssertEqual(a.redComponent,b.redComponent,accuracy:0.02)
++            XCTAssertEqual(a.greenComponent,b.greenComponent,accuracy:0.02)
++            XCTAssertEqual(a.blueComponent,b.blueComponent,accuracy:0.02)
++        }
++        if let folder=ProcessInfo.processInfo.environment["WAND_TRANSPARENCY_OUTPUT"] {
++            try FileManager.default.createDirectory(atPath:folder,withIntermediateDirectories:true)
++            try XCTUnwrap(bitmap.representation(using:.png,properties:[:]))
++                .write(to:URL(fileURLWithPath:folder).appendingPathComponent("wand-busy.png"))
++        }
++    }
++}
+--- /dev/null
++++ b/Tests/ScimitarUITests/WandCardLiftTests.swift
+@@ -0,0 +1,104 @@
++import AppKit
++import ScimitarKit
++import SwiftUI
++@testable import ScimitarUI
++import XCTest
++
++/// Ethan: the outlined wedge should "zoom in a bit gradually" and "animate
++/// to be higher", and card text needs an outline that suits its colour.
++final class WandCardLiftTests: XCTestCase {
++    /// Default home without VS Code: thirteen ring cards, the most crowded
++    /// ordinary wheel.
++    private let layout = WandRadialLayout(
++        center: .switchApp,
++        ring: PhysicalCell.all.filter { $0 != .switchApp } + [.wandPlayPause, .wandReviewChanges]
++    )
++    private var geometry: WandWheelGeometry { WandWheelGeometry(layout: layout) }
++
++    private func lifted(_ index: Int) -> [CGPoint] {
++        let pose = WandCardLift.pose(for: .ring(index), lifted: true, in: geometry)
++        let transform = WandCardLift.transform(pose, size: geometry.size)
++        return geometry.wedge(at: index).outline().map { point in
++            let absolute = CGPoint(x: point.x + geometry.center.x, y: point.y + geometry.center.y).applying(transform)
++            return CGPoint(x: absolute.x - geometry.center.x, y: absolute.y - geometry.center.y)
++        }
++    }
++
++    func testRestingCardsDoNotMove() {
++        for slot in [WandWheelGeometry.Slot.center, .ring(0), .ring(5)] {
++            let pose = WandCardLift.pose(for: slot, lifted: false, in: geometry)
++            XCTAssertEqual(pose.scale, 1)
++            XCTAssertEqual(pose.offset, .zero)
++            XCTAssertTrue(WandCardLift.transform(pose, size: geometry.size).isIdentity)
++        }
++    }
++
++    func testALiftedRingCardRisesAndGrowsWithoutLeavingTheWheelOrTouchingItsNeighbours() {
++        for index in layout.ring.indices {
++            let wedge = geometry.wedge(at: index)
++            let points = lifted(index)
++            let radii = points.map { hypot($0.x, $0.y) }
++            // The window includes the panel padding and nothing clips the
++            // wheel, so the lifted outline and its glow must stay inside it.
++            XCTAssertLessThan(radii.max()! + WandWheelMetrics.focusOutset + ModeHUDPointerFocusMetrics.lineWidth,
++                              geometry.size / 2 + WandWheelMetrics.panelPadding - 8,
++                              "card \(index) and its outline stay inside the panel")
++            XCTAssertGreaterThan(radii.min()!, WandWheelMetrics.centerRadius * WandCardLift.scale + 8,
++                                 "card \(index) stays clear of a lifted centre card")
++            XCTAssertGreaterThan(radii.max()!, WandWheelMetrics.outerRadius, "it really rises")
++            for point in points {
++                let offset = WandRadialLayout.angularDifference(
++                    WandRadialLayout.angle(x: Double(point.x), y: Double(point.y)), wedge.centerAngle)
++                XCTAssertLessThan(abs(offset), wedge.halfWidth, "card \(index) never crosses into a neighbour's sector")
++            }
++        }
++    }
++
++    func testTheCentreOnlyGrowsAndTheOutlineRidesWithItsCard() {
++        let centre = WandCardLift.pose(for: .center, lifted: true, in: geometry)
++        XCTAssertEqual(centre.offset, .zero)
++        XCTAssertEqual(centre.anchor, .center)
++        XCTAssertLessThan(WandWheelMetrics.centerRadius * centre.scale, WandWheelMetrics.innerRadius)
++        for index in layout.ring.indices {
++            XCTAssertEqual(WandCardLift.pose(for: .ring(index), lifted: true, in: geometry, angle: layout.angle(at: index)),
++                           WandCardLift.pose(for: .ring(index), lifted: true, in: geometry))
++        }
++    }
++
++    func testTheTransformMatchesScaleAboutTheAnchorThenRise() {
++        let pose = WandCardLift.pose(for: .ring(3), lifted: true, in: geometry)
++        let anchor = CGPoint(x: pose.anchor.x * geometry.size, y: pose.anchor.y * geometry.size)
++        let moved = anchor.applying(WandCardLift.transform(pose, size: geometry.size))
++        XCTAssertEqual(moved.x, anchor.x + pose.offset.width, accuracy: 1e-9)
++        XCTAssertEqual(moved.y, anchor.y + pose.offset.height, accuracy: 1e-9)
++        XCTAssertEqual(hypot(pose.offset.width, pose.offset.height), WandCardLift.rise, accuracy: 1e-9)
++    }
++
++    /// The glass behind a lifted card follows it, so the card never slides
++    /// off its own backing.
++    func testTheMaskBacksTheLiftedPose() throws {
++        let size = CGSize(width: geometry.size, height: geometry.size)
++        func alpha(lifted: WandWheelGeometry.Slot?, at point: CGPoint) throws -> CGFloat {
++            let silhouette = WandWheelSilhouette(geometry: geometry, includesCenter: true,
++                                                 ringIndices: Array(layout.ring.indices), lifted: lifted)
++            let image = try XCTUnwrap(WandWheelMask.image(of: silhouette.path(in: CGRect(origin: .zero, size: size)).cgPath,
++                                                           canvas: size, size: size, scale: 1))
++            return NSBitmapImageRep(cgImage: image).colorAt(x: Int(point.x), y: Int(point.y))?.alphaComponent ?? -1
++        }
++        let direction = WandWedge.radial(layout.angle(at: 2))
++        let beyondRest = CGPoint(x: geometry.center.x + direction.x * (WandWheelMetrics.outerRadius + 4),
++                                 y: geometry.center.y + direction.y * (WandWheelMetrics.outerRadius + 4))
++        XCTAssertLessThan(try alpha(lifted: nil, at: beyondRest), 0.05)
++        XCTAssertGreaterThan(try alpha(lifted: .ring(2), at: beyondRest), 0.95)
++    }
++
++    func testReduceMotionLiftsWithoutTravel() {
++        XCTAssertNil(WandCardLift.animation(reduceMotion: true))
++        XCTAssertNotNil(WandCardLift.animation(reduceMotion: false))
++    }
++
++    func testTheHaloContrastsWithItsText() {
++        XCTAssertEqual(WandCardTextHalo.haloColor(foregroundIsDark: false), .black, "white card text gets a dark outline")
++        XCTAssertEqual(WandCardTextHalo.haloColor(foregroundIsDark: true), .white, "selected review text is black")
++    }
++}
+--- /dev/null
++++ b/Tests/ScimitarUITests/WandLivePreviewTests.swift
+@@ -0,0 +1,57 @@
++import AppKit
++import ScimitarKit
++import SwiftUI
++@testable import ScimitarUI
++import XCTest
++
++/// Opt-in manual visual harness. It creates only two click-through preview
++/// panels on the built-in display and never dispatches an input action.
++@MainActor
++final class WandLivePreviewTests: XCTestCase {
++    func testNativeGlassOverBusyDesktop() async throws {
++        guard let folder=ProcessInfo.processInfo.environment["WAND_LIVE_PREVIEW_OUTPUT"] else {
++            throw XCTSkip("Opt-in native glass visual harness")
++        }
++        let screen=try XCTUnwrap(NSScreen.screens.first{$0.localizedName == "Built-in Retina Display"})
++        let area=screen.visibleFrame.insetBy(dx:screen.visibleFrame.width*0.1,dy:screen.visibleFrame.height*0.1)
++        let size=CGSize(width:min(860,area.width),height:min(820,area.height))
++        let frame=CGRect(x:area.midX-size.width/2,y:area.midY-size.height/2,width:size.width,height:size.height)
++        let background=HUDPanel(contentRect:frame)
++        background.title="Wand visual backdrop"
++        background.level = .floating
++        background.contentView=NSHostingView(rootView:Canvas {context,size in
++            for y in stride(from:0,to:Int(size.height),by:18) {
++                for x in stride(from:0,to:Int(size.width),by:18) {
++                    context.fill(Path(CGRect(x:x,y:y,width:18,height:18)),with:.color((x/18+y/18)%2 == 0 ? .white : .black))
++                }
++            }
++            for y in stride(from:10,to:Int(size.height),by:35) {
++                context.draw(Text("let selected = window.value + 12345 // busy desktop")
++                    .font(.system(size:14,design:.monospaced)).foregroundColor(.cyan),at:CGPoint(x:size.width/2,y:CGFloat(y)))
++            }
++        })
++        let recorder=RecordingModeHUDPresenter()
++        let target=ModePickerCoordinator(lease:WandModeLease(),hud:recorder,
++            scheduler:ManualTickScheduler(),log:Log(category:"test",sink:NullLogSink()))
++        target.enterWandHome(source:.wand,pointerFocus:.init(cell:.clipboardWheelControl,isArmed:true))
++        let model=ModeHUDViewModel(source:.wand)
++        model.apply(try XCTUnwrap(recorder.snapshots.last))
++        let hosting=ScaledHUDHostingView(rootView:ModeHUDView(model:model).environment(\.colorScheme,.dark),scale:0.8)
++        let hudSize=hosting.fittingSize
++        let panel=HUDPanel(contentRect:CGRect(x:frame.midX-hudSize.width/2,y:frame.midY-hudSize.height/2,
++            width:hudSize.width,height:hudSize.height))
++        panel.title="Wand native glass visual proof"
++        panel.level = .floating
++        panel.contentView=hosting
++        defer {panel.close();background.close()}
++        background.orderFrontRegardless();panel.orderFrontRegardless()
++        try FileManager.default.createDirectory(atPath:folder,withIntermediateDirectories:true)
++        let info:[String:Any]=["hudWindow":panel.windowNumber,"backdropWindow":background.windowNumber,
++            "rect":[frame.minX,frame.minY,frame.width,frame.height],
++            "captureRect":[frame.minX,(NSScreen.screens.first?.frame.maxY ?? 0)-frame.maxY,frame.width,frame.height]]
++        try JSONSerialization.data(withJSONObject:info).write(to:URL(fileURLWithPath:folder).appendingPathComponent("live-window.json"))
++        try await Task.sleep(nanoseconds:20_000_000_000)
++        model.pointerFocus = .init(cell:PhysicalCell(rawValue:7)!)
++        try await Task.sleep(nanoseconds:8_000_000_000)
++    }
++}
+--- a/Tests/ScimitarUITests/WandRadialHUDTests.swift
++++ b/Tests/ScimitarUITests/WandRadialHUDTests.swift
+@@ -278 +278 @@
+-                let content = WandRadialWheel(model: model, reduceMotion: false)
++                let content = WandRadialWheel(model: model, reduceMotion: false, usesNativeGlass: false)
+@@ -592 +592 @@
+-                WandRadialWheel(model: model, reduceMotion: true)
++                WandRadialWheel(model: model, reduceMotion: true, usesNativeGlass: false)
+--- /dev/null
++++ b/Tests/ScimitarUITests/WandWheelBackingTests.swift
+@@ -0,0 +1,108 @@
++import AppKit
++import ScimitarKit
++import SwiftUI
++@testable import ScimitarUI
++import XCTest
++
++/// Ethan: each wedge's background "should still be as if it were on top of
++/// the normal background that we just removed ... just for that wedge, it's
++/// like masked". The backing covers exactly the drawn cards.
++final class WandWheelBackingTests: XCTestCase {
++    private let layout = WandRadialLayout(center: .modeExit, ring: PhysicalCell.all.filter { $0 != .modeExit })
++    private var geometry: WandWheelGeometry { WandWheelGeometry(layout: layout) }
++
++    private func mask(ring: [Int]? = nil, center: Bool = true, scale: CGFloat = 1) throws -> NSBitmapImageRep {
++        let size = CGSize(width: geometry.size, height: geometry.size)
++        let silhouette = WandWheelSilhouette(geometry: geometry, includesCenter: center,
++                                             ringIndices: ring ?? Array(layout.ring.indices))
++        let path = silhouette.path(in: CGRect(origin: .zero, size: size)).cgPath
++        let image = try XCTUnwrap(WandWheelMask.image(of: path, canvas: size, size: size, scale: scale))
++        return NSBitmapImageRep(cgImage: image)
++    }
++
++    private func point(angle: Double, radius: CGFloat) -> CGPoint {
++        let direction = WandWedge.radial(angle)
++        return CGPoint(x: geometry.center.x + direction.x * radius, y: geometry.center.y + direction.y * radius)
++    }
++
++    private func alpha(_ bitmap: NSBitmapImageRep, _ point: CGPoint, scale: CGFloat = 1) -> CGFloat {
++        bitmap.colorAt(x: Int(point.x * scale), y: Int(point.y * scale))?.alphaComponent ?? -1
++    }
++
++    private var middle: CGFloat { (WandWheelMetrics.innerRadius + WandWheelMetrics.outerRadius) / 2 }
++
++    func testMaskCoversEveryCardAndNothingBetweenThem() throws {
++        let bitmap = try mask()
++        for index in layout.ring.indices {
++            XCTAssertGreaterThan(alpha(bitmap, point(angle: layout.angle(at: index), radius: middle)), 0.95, "card \(index)")
++            let gutter = layout.angle(at: index) + layout.sectorWidth / 2
++            XCTAssertLessThan(alpha(bitmap, point(angle: gutter, radius: middle)), 0.05, "gutter after \(index)")
++        }
++        XCTAssertGreaterThan(alpha(bitmap, geometry.center), 0.95, "centre card")
++        let ringGap = (WandWheelMetrics.centerRadius + WandWheelMetrics.innerRadius) / 2
++        XCTAssertLessThan(alpha(bitmap, point(angle: layout.angle(at: 0), radius: ringGap)), 0.05,
++                          "the gap between the centre and the ring stays clear")
++        XCTAssertLessThan(alpha(bitmap, CGPoint(x: 6, y: 6)), 0.05, "no square plate")
++        XCTAssertLessThan(alpha(bitmap, point(angle: 0.3, radius: WandWheelMetrics.outerRadius + 8)), 0.05,
++                          "no circular plate beyond the ring")
++    }
++
++    /// With an odd ring the wheel is not vertically symmetric: a card's
++    /// vertical mirror lands exactly in a gutter. An upside-down mask would
++    /// back the gutters and leave the cards bare.
++    func testMaskIsTheRightWayUp() throws {
++        XCTAssertEqual(layout.ring.count % 2, 1)
++        let bitmap = try mask()
++        let card = point(angle: layout.angle(at: 0), radius: middle)
++        XCTAssertGreaterThan(alpha(bitmap, card), 0.95)
++        XCTAssertLessThan(alpha(bitmap, CGPoint(x: card.x, y: geometry.size - card.y)), 0.05)
++    }
++
++    func testMaskFollowsOnlyTheDrawnCardsAtEveryScale() throws {
++        let bitmap = try mask(ring: [0, 2], center: false, scale: 2)
++        XCTAssertEqual(bitmap.pixelsWide, Int(geometry.size * 2))
++        XCTAssertGreaterThan(alpha(bitmap, point(angle: layout.angle(at: 0), radius: middle), scale: 2), 0.95)
++        XCTAssertLessThan(alpha(bitmap, point(angle: layout.angle(at: 1), radius: middle), scale: 2), 0.05,
++                          "a card that is not drawn is not backed")
++        XCTAssertLessThan(alpha(bitmap, geometry.center, scale: 2), 0.05)
++    }
++}
++
++/// Ethan: "make the dotted outline ... like moving dynamics, like cool, like
++/// a snake around it".
++final class WandArmedOutlineStyleTests: XCTestCase {
++    private let cell = PhysicalCell(rawValue: 4)!
++
++    func testOnlyAnArmedWaitingCardMarches() {
++        XCTAssertTrue(WandArmedOutlineStyle.marches(.init(cell: cell, isArmed: true), reduceMotion: false))
++        XCTAssertFalse(WandArmedOutlineStyle.marches(.init(cell: cell), reduceMotion: false), "hover stays solid")
++        XCTAssertFalse(WandArmedOutlineStyle.marches(.init(cell: cell, adjustment: ModeHUDWheelAdjustment()), reduceMotion: false),
++                       "the adjustment ratchet keeps its own detent notches")
++        XCTAssertFalse(WandArmedOutlineStyle.marches(.init(cell: cell, isArmed: true), reduceMotion: true))
++    }
++
++    func testDotsKeepTheirPatternAndTravelSteadily() {
++        XCTAssertEqual(WandArmedOutlineStyle.dash, ModeHUDPointerFocusMetrics.armedDash)
++        XCTAssertEqual(WandArmedOutlineStyle.dashPeriod, ModeHUDPointerFocusMetrics.armedDash.reduce(0, +))
++        let period = WandArmedOutlineStyle.dashPeriod
++        let cycle = Double(period / WandArmedOutlineStyle.speed)
++        let start = Date(timeIntervalSinceReferenceDate: 1_000.13)
++        for offset in stride(from: 0.0, through: 2.0, by: 0.07) {
++            let phase = WandArmedOutlineStyle.dashPhase(at: start.addingTimeInterval(offset), reduceMotion: false)
++            XCTAssertLessThanOrEqual(phase, 0)
++            XCTAssertGreaterThan(phase, -period)
++        }
++        let a = WandArmedOutlineStyle.dashPhase(at: start, reduceMotion: false)
++        XCTAssertEqual(WandArmedOutlineStyle.dashPhase(at: start.addingTimeInterval(cycle), reduceMotion: false), a, accuracy: 0.001)
++        let b = WandArmedOutlineStyle.dashPhase(at: start.addingTimeInterval(0.05), reduceMotion: false)
++        var travelled = (a - b).truncatingRemainder(dividingBy: period)
++        if travelled < 0 { travelled += period }
++        XCTAssertEqual(travelled, WandArmedOutlineStyle.speed * 0.05, accuracy: 0.001, "a falling phase moves the dots clockwise")
++    }
++
++    func testReduceMotionShowsTheSameDotsStandingStill() {
++        for seconds in [0.0, 12.34, 99.9] {
++            XCTAssertEqual(WandArmedOutlineStyle.dashPhase(at: Date(timeIntervalSinceReferenceDate: seconds), reduceMotion: true), 0)
++        }
++    }
++}

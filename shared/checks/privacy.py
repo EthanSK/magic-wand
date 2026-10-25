@@ -10,7 +10,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SKIP_DIRS = {".git", "build", ".cache", "work", "node_modules", "__pycache__", ".venv", "venv"}
 BINARY = {".png", ".jpg", ".webp", ".woff2", ".icns"}
-PUBLIC_UUIDS = {"6E400001-B5A3-F393-E0A9-E50E24DCCA9E", "6E400002-B5A3-F393-E0A9-E50E24DCCA9E", "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"}
+PUBLIC_UUIDS = {
+    "6E400001-B5A3-F393-E0A9-E50E24DCCA9E", "6E400002-B5A3-F393-E0A9-E50E24DCCA9E", "6E400003-B5A3-F393-E0A9-E50E24DCCA9E",
+    # Synthetic request fixture in the Agentic Mouse screenshot decoder tests;
+    # this is not a Bluetooth device identifier or a real capture request.
+    "AC1718F8-B050-47BB-B763-5BA765D69F93",
+}
 PATTERNS = {
     "home directory path": re.compile(r"/Users/[A-Za-z0-9._-]+"),
     "private temporary path": re.compile(r"/private/(?:tmp|var)/"),
