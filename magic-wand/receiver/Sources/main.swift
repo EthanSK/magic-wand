@@ -793,7 +793,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 case .commit: commitSelectedReview()
                 case .none: break
                 }
-                // Held movement is never replayed into the next working set.
+                // Held movement is never replayed into the next working selection.
                 wandShortcutCircle.reset()
                 return
             }

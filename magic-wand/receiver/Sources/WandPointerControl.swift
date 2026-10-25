@@ -1074,8 +1074,9 @@ struct WandRestFollowMemory {
     mutating func reset() {remembered=nil}
 }
 
-/// Middle in an active review: tap cancels; a long press stages the working set.
-/// Ethan's "bucket" and "commit set" mean Better Git's selected staging set,
+/// Middle in an active review: tap cancels; a long press stages the working selection.
+/// Ethan now calls this the "selection"; former "bucket" / "commit set"
+/// mean Better Git's pending staging selection,
 /// not a Git commit. Formerly a double-click action. Pointer motion is unbuffered.
 struct WandReviewExitGesture {
     enum Release { case none, cancel, commit }
