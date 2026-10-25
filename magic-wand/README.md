@@ -177,6 +177,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: the Review changes and Stage files indicators say “Hold to commit selection”. Selection is the current term for the pending group; holding stages it without making a Git commit. Native tests and both rendered indicators passed.
 - Installed: all three grip buttons turn the wand off; any single grip button wakes manual or automatic sleep. The wake press is consumed until every button is released. Five-minute automatic deep sleep and the two-blink cue are unchanged. Saved bytes and clean startup verified; physical any-button wake acceptance pending.
 - Installed: shared click and hold cues distinguish a card action from held wheel or wand adjustments. Copy/Paste names Space explicitly. Native checks and rendered layout inspection passed; physical gesture acceptance is pending.
 - Installed: held Switch App adjustment shares the normal HIGH mouse sensitivity calculation, including fine movement and orientation correction. Other HUD controls keep their existing angular input. Native and receiver checks pass; physical feel is awaiting acceptance.
