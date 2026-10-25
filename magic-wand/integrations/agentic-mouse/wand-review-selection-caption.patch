@@ -1,0 +1,19 @@
+--- a/Sources/ScimitarUI/WandReviewIndicator.swift
++++ b/Sources/ScimitarUI/WandReviewIndicator.swift
+@@ -37,2 +37,2 @@
+-            // Ethan calls staging the selected working set "commit set".
+-            Text("(hold to commit set)")
++            // Ethan calls this "commit selection" (formerly "commit set"): stage the selection, not a Git commit.
++            Text("(Hold to commit selection)")
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -118 +118 @@
+-- In wand Review changes or Stage files, hold Middle for about half a second to stage the working set and remain in the same mode. While Middle is down, wand motion must not add or remove items, even after staging. A short Middle tap cancels and exits without staging. The mini indicator says `(hold to commit set)`. “Commit set” means stage, not a Git commit. User-requested — 2026-10-19.
++- In wand Review changes or Stage files, hold Middle for about half a second to stage the selection and remain in the same mode. While Middle is down, wand motion must not add or remove items, even after staging. A short Middle tap cancels and exits without staging. The mini indicator says `(Hold to commit selection)`. “Commit selection” (formerly “commit set”) means stage the selection, not a Git commit. Use selection for this pending group throughout user-facing wording. User-requested — 2026-10-19; terminology updated 2026-10-25.
+--- a/LEARNINGS.md
++++ b/LEARNINGS.md
+@@ -3182,0 +3183,4 @@
++
++## 2026-10-25 — Review selection terminology
++
++Ethan replaced the wand review caption “hold to commit set” with “Hold to commit selection” and requested selection throughout the related user-facing wording. The pending selection is still staged by the same Middle hold; this does not create a Git commit. The old phrase remains only in historical notes or mapping comments for searchability; unrelated Set types are unchanged.
