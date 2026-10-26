@@ -1018,3 +1018,10 @@ packet identity, cancel, and one final commit.
 ## Hollow print geometry still needs sliced-path checks (2026-10-26)
 
 The lightweight Print V3 grip passed solid and wire-route tests, but its first tree-support slice routed support branches through the hollow grip and button cable space despite internal support-contact blockers. Checking only blocker presence did not protect the finished route. Per-object normal supports from the build plate eliminated those internal paths and the unsupported-region warnings in the final P1S PETG slice. The recorded 0.5 mm-step path scan covers the grip, shafts, battery reference, button outlets, board, solder and USB clearances; it does not prove printed fit or strength. Keep the support type in the portable 3MF recipe and inspect the sliced extrusion paths after geometry/support changes. Compare actual slicer mass under matching material/layer/wall/infill settings: a percentage reduction in solid CAD volume overstates the gain against a sparsely filled old model.
+
+
+## Preserve visible print identity while hollowing (2026-10-26)
+
+The V3 candidate removed the original helix and used narrow spans between wider joint collars. That failed the requested lighter-wand revision even though its mechanisms passed geometry checks. V4 restores the two counter-wound 90/72 mm ridges and continuously decreasing shaft core, with thicker annular joint anchors inside the silhouette. Verify actual rib material, sample the shaft-radius profile, and compare assembled original/new views before delivery. These checks establish geometry, not printed strength.
+
+A complete V4 project contains both handed grips as build instances, plus one shared set of other parts, matching V2's contents. A right-hand STL beside a left-only 3MF does not satisfy that requirement. Verify the opened archive's build list. The project-specific print-design skill and component instructions retain this explicit user correction.

@@ -1,0 +1,116 @@
+{
+  "version": "Print V4 candidate",
+  "design_revision": "H410-R1",
+  "physical_fit_verified": false,
+  "files": {
+    "magic-wand/hardware/printed-loop-wand/v4/README.md": "cf5cad066b85b42f5391ee87ce09128eb7904551b32dcbf488be79d203f7a5df",
+    "magic-wand/hardware/printed-loop-wand/v4/check_geometry.py": "07a8858af6848167669ced920015bbf5ac2ab254230f1d9fa7841e00193fd73c",
+    "magic-wand/hardware/printed-loop-wand/v4/check_sliced_paths.py": "c096681af7aa9411c7434caa9100d458dd96c7f3d7a796b79f028a57f222d98a",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Battery_Sled.stl": "856663d11ae7b5dbdf5f8b87c08e768f0a77142d586a5882103ef3461ae30af9",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Battery_Twist_Cap.stl": "85e73fd87ed1b11936c518730c3f5b795066aa46b5f31d4d9f082a7c95125baa",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Choc_Socket_Carrier.stl": "42822fd9c3dff597993a5f603bd8e48b3c26d0a03573646e8ed02533f4ee8161",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Choc_Socket_Keeper.stl": "63d38127c81735ae2090d39dc4a1813db2c1c8f321b77262236c8811b3926c4f",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Existing_Handle_Left.stl": "11dba550efefc481e0ccc79e7a844d55408cacd5b539bd8f22bfdb28b5cb79e1",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Existing_Handle_Right.stl": "3bbcbab4a997a5c1635035687b2ddf2346fd6d20c3a30dd84b978c2dacf92c29",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Fit_Test_Female.stl": "62d96fab3ae4a062af62d9e9a79f46bb59ca2b8f21ec12c72a453d4abc0ca1e6",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Fit_Test_Male.stl": "333328af1ef65c394dbac7fb48c74cdba9c13cc1fec36de7805906ccb20c6a20",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Handle_Left.stl": "18be32e2961551a1973f7bd5cce639a517cbffce86ee21cccfd7cec817de94ca",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Handle_Right.stl": "c9e7d587651d4e79f1eb3e5ca356ef4ef9c1579687fd61b83b13c03d3ad4aee6",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Lower_Shaft.stl": "7b69be6c099b60e7402f8df4889e787c7fec5a2c6bf5fd7e7cb71ce54daa75a8",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Lower_Shaft_Existing_Handle.stl": "90db1129b005d1fd17f937bf5e9cfd2746ca04c3c7390c3cde41e40a71ef26b9",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Sense_Head_Base.stl": "b8613a662c529ae3eb2370a7fcfd42b254a7774338f7aa30335ee7e58d3cf8a5",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Sense_Sliding_Cover.stl": "49fe1d614dcb6fe1e4038442a1f7fcc7945bdabd790f3f81e6e4f29f151ecfac",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/Upper_Shaft.stl": "10d7218f4543a906b4a396a9c80f2ecd46db73a3713b09ef777a8c9529e71517",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/fit-checks.json": "80d88c7f50fb568fdd0f7dcd75b6a5043f0d3e1ff5fac24d79628c154b6885e9",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/manifest.json": "4bb62aa403dfaaada583c813e959f397688d1767a24ea481452d363c306a36f7",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/print-comparison.json": "309dfd24e76a259d56c2364257087e80d1fceade2ac9d24690af8246f6196fb4",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/print-layout.json": "b63722cacf30b9b97b564037e8ecbb36ee108fe9ceb398bcf33d037d5efde575",
+    "magic-wand/hardware/printed-loop-wand/v4/exports/sliced-clearance-check.json": "726ea3d1d4cdb4c9d09882a4059afaf88baca537a30530d51073f55d7861523a",
+    "magic-wand/hardware/printed-loop-wand/v4/preview/index.html": "806ed2ef051b0f35984461f0d9d4848afbf217c6ebff520a66b46d4b5e7aeb63",
+    "magic-wand/hardware/printed-loop-wand/v4/preview/preview.mjs": "2be2a6623e242c2c2dc4ff5cf8389e2f39e2e447d55ccc0f5793f473c9d57350",
+    "magic-wand/hardware/printed-loop-wand/v4/print-settings/filament.json": "441e28515da573adee90f7a6b30a1bcfb34dd26fd0d12cf4b84c9960c588717f",
+    "magic-wand/hardware/printed-loop-wand/v4/print-settings/machine.json": "085304813b37822e839a8ad4efea2f43b8e5cd769ec06f1e862868bafa12371b",
+    "magic-wand/hardware/printed-loop-wand/v4/print-settings/process.json": "98b56e5f239da3627084758da7bbf0c44493fb98b869e9247cb089edf6debf26",
+    "magic-wand/hardware/printed-loop-wand/v4/print-settings/project.json": "88220cf470fc22cad44f39d691ac8537d5dfc673ed740e54baf7b0df03a31702",
+    "magic-wand/hardware/printed-loop-wand/v4/print_projects.py": "d49d59c2ebba7d93d8bf15d4b2f83525bdcf9e5240c50ca01a91b5ca1f97c342",
+    "magic-wand/hardware/printed-loop-wand/v4/requirements.txt": "c69ae59a6a1f25d1c6371710280e6e1979ccff6e8ff66dadf95a55c6d16155d0",
+    "magic-wand/hardware/printed-loop-wand/v4/verify_release.py": "36692e85f402e4b7efcf0194603aabff94eb9ebd884f75767e2812fa8650e385",
+    "magic-wand/hardware/printed-loop-wand/v4/wand_cad.py": "52857f3eb7560cdcde113dd4873c67a36b28619d7b9b31623700424e4c137721",
+    "magic-wand-3d-models/Print-4-upper-only-helix-410mm.3mf": "482df63d6abae10081020c92ccdab2745f5f0050c576a1335293f10572501973",
+    "magic-wand-3d-models/Print-4-complete-left-right-helix-410mm.3mf": "892354a2ce0c39b5b5bf211d6b5e6f04c4237b71ac3ec6efa0cd7fb146658b7b",
+    "magic-wand-3d-models/Print-4-left-handle-comparison.3mf": "1acb1d668fc868f7ca4096d0c380152df824c1030806f82901adf0b9bd6f5e04",
+    "magic-wand-3d-models/Print-4-right-handle-comparison.3mf": "1cf7960db4aa1457a5abc9e8982af920333ff5463318ff4771f95e3f543337d1",
+    "magic-wand-3d-models/Print-4-compact-button-fit-test.3mf": "ba46aea61513fa67be756e018a6429aae942e6f580feb131c4cc8316403e3d57",
+    "magic-wand-3d-models/Print-4-slim-bayonet-fit-test.3mf": "b71d27340852ffbff7f6f8c14b44a74eee7cd76fdecde5b49d136701f10db8a1",
+    "magic-wand-3d-models/Print-4-README.md": "63bb9eeef7f8d79cb0e7b86ba435810681e623ec17d3aa50e416a822deef80b5",
+    "magic-wand/tests/printed-wand-v4.test.mjs": "45990a5debff18356bf6f029f5d7023c914c2e19952a284627ad6bf02d93c73e"
+  },
+  "projects": {
+    "Print-4-upper-only-helix-410mm.3mf": {
+      "sha256": "482df63d6abae10081020c92ccdab2745f5f0050c576a1335293f10572501973",
+      "parts": 4,
+      "part_names": [
+        "Lower_Shaft_Existing_Handle",
+        "Sense_Head_Base",
+        "Sense_Sliding_Cover",
+        "Upper_Shaft"
+      ],
+      "contains_gcode": true
+    },
+    "Print-4-complete-left-right-helix-410mm.3mf": {
+      "sha256": "892354a2ce0c39b5b5bf211d6b5e6f04c4237b71ac3ec6efa0cd7fb146658b7b",
+      "parts": 14,
+      "part_names": [
+        "Battery_Sled",
+        "Battery_Twist_Cap",
+        "Choc_Socket_Carrier",
+        "Choc_Socket_Carrier",
+        "Choc_Socket_Carrier",
+        "Choc_Socket_Keeper",
+        "Choc_Socket_Keeper",
+        "Choc_Socket_Keeper",
+        "Handle_Left",
+        "Handle_Right",
+        "Lower_Shaft",
+        "Sense_Head_Base",
+        "Sense_Sliding_Cover",
+        "Upper_Shaft"
+      ],
+      "contains_gcode": true
+    },
+    "Print-4-left-handle-comparison.3mf": {
+      "sha256": "1acb1d668fc868f7ca4096d0c380152df824c1030806f82901adf0b9bd6f5e04",
+      "parts": 1,
+      "part_names": [
+        "Handle_Left"
+      ],
+      "contains_gcode": true
+    },
+    "Print-4-right-handle-comparison.3mf": {
+      "sha256": "1cf7960db4aa1457a5abc9e8982af920333ff5463318ff4771f95e3f543337d1",
+      "parts": 1,
+      "part_names": [
+        "Handle_Right"
+      ],
+      "contains_gcode": true
+    },
+    "Print-4-compact-button-fit-test.3mf": {
+      "sha256": "ba46aea61513fa67be756e018a6429aae942e6f580feb131c4cc8316403e3d57",
+      "parts": 2,
+      "part_names": [
+        "Choc_Socket_Carrier",
+        "Choc_Socket_Keeper"
+      ],
+      "contains_gcode": true
+    },
+    "Print-4-slim-bayonet-fit-test.3mf": {
+      "sha256": "b71d27340852ffbff7f6f8c14b44a74eee7cd76fdecde5b49d136701f10db8a1",
+      "parts": 2,
+      "part_names": [
+        "Fit_Test_Female",
+        "Fit_Test_Male"
+      ],
+      "contains_gcode": true
+    }
+  }
+}
