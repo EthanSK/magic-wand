@@ -1,5 +1,15 @@
 # Magic Wand 3D models
 
+**Current print: [Print V2 — 340 mm diamond mug wand](Print-2-README.md).**
+
+Open the [full V2 Bambu project](Print-2-diamond-mug-wand.3mf), or start with the
+[head and retaining-clip fit test](Print-2-diamond-head-fit-test.3mf). The
+[editable CAD and assembly guide](../magic-wand/hardware/printed-loop-wand/v2/README.md)
+are committed with the print files. The full project contains two grip choices and one shared
+set of remaining parts; choose one grip for a working wand. Physical fit remains unverified.
+
+## Earlier print projects
+
 Pull this repository, then open **[two-spiral-wands.3mf](two-spiral-wands.3mf)** in Bambu Studio.
 It includes two complete spiral wands on one plate: one straight grip and one full-hand mug loop.
 All eight pieces, their arrangement and the PETG print settings are saved in the project.
@@ -11,12 +21,12 @@ and [tapered-mug-double-helix.3mf](tapered-mug-double-helix.3mf) has the mug loo
 [tapered-smooth.3mf](tapered-smooth.3mf) has the same shape without the two spiral ridges.
 On GitHub, use **Download raw file** to download a 3MF.
 
-## Two-print comparison
+## Earlier two-print comparison
 
 - **Print 1:** [original crossed pattern, 110 mm pitch](Print-1-crossed-110mm.3mf).
   This file is frozen from the committed first version; its source commit and checksum are
   recorded in `Print-1-crossed-110mm.json`.
-- **Latest print:** [preferred crossed pattern, 90 mm and 72 mm pitch](tapered-double-helix.3mf).
+- **Later V1 pattern:** [preferred crossed pattern, 90 mm and 72 mm pitch](tapered-double-helix.3mf).
   Ethan chose this earlier pattern over the tighter 90/36 mm experiment.
   The opposite-winding strands turn at different rates; one makes 25% more turns.
 
@@ -24,7 +34,7 @@ The hole and platform are unchanged. Open the latest print for Ethan's preferred
 the frozen original for comparison. Clear the bed between jobs; these files are not
 instructions to start two jobs together.
 
-## Current prototype
+## Earlier prototype
 
 - Continuous tapered body with **two raised spirals winding in opposite directions**, crossing
   each other. Ethan calls this the "criss-cross" or "like DNA" shape.
@@ -44,7 +54,7 @@ The previous loop and plain handles use a different joint orientation; do not mi
 with this tapered set. Other models and the full assembly guide are in the
 [CAD folder](../magic-wand/hardware/printed-loop-wand/README.md).
 
-## Source and maintenance
+## Rebuild the earlier projects
 
 These 3MFs are generated exports. Edit the
 [canonical dimensions and CAD](../magic-wand/hardware/printed-loop-wand/), not these copies.

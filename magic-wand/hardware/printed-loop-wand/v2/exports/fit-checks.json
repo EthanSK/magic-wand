@@ -1,0 +1,63 @@
+{
+  "resting_board_overlap_mm3": 0.0,
+  "body_cover_overlap_mm3": 0.0,
+  "rigid_board_stop_overlap_mm3": {
+    "left": 1.1152149532710487,
+    "right": 1.115214953271049,
+    "up": 0.8959999999999869,
+    "down": 2.5599999999996688,
+    "out_of_seats": 1.2
+  },
+  "released_board_pivot_overlap_mm3": {
+    "0": 0.0,
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "5": 0.0,
+    "8": 0.0,
+    "10": 0.0
+  },
+  "cover_released_slide_overlap_mm3": {
+    "0.25": 0.0,
+    "0.5": 0.0,
+    "1": 0.0,
+    "2": 0.0,
+    "5": 0.0,
+    "10": 0.0,
+    "20": 0.0,
+    "35": 0.0
+  },
+  "usb_12x6_plug_overlap_mm3": {
+    "base": 0.0,
+    "cover": 0.0
+  },
+  "rear_solder_space_overlap_mm3": {
+    "base": 0.0,
+    "cover": 0.0
+  },
+  "head_9mm_wire_probe_overlap_mm3": 0.0,
+  "head_forward_6mm_wire_probe_overlap_mm3": 0.0,
+  "thumb_mount": {
+    "left": {
+      "loop_overlap_mm3": 0.0,
+      "minimum_loop_gap_mm": 5.0,
+      "includes": "24mm pad face, actual socket carrier/keeper, conservative 20x20x10mm keycap envelope"
+    },
+    "right": {
+      "loop_overlap_mm3": 0.0,
+      "minimum_loop_gap_mm": 5.0,
+      "includes": "24mm pad face, actual socket carrier/keeper, conservative 20x20x10mm keycap envelope"
+    }
+  },
+  "flexed_clip_status": "Error.NoError",
+  "board_pivot_with_1_3mm_clip_deflection_mm3": {
+    "0": 0.0,
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "5": 0.0,
+    "8": 0.0,
+    "10": 0.0
+  },
+  "physical_fit_verified": false
+}

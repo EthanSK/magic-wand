@@ -1,0 +1,401 @@
+{
+  "schema": 1,
+  "name": "printed-loop-wand",
+  "units": "mm",
+  "status": "Provisional first print set. Model geometry is generated and checked; printed fit, strength, comfort and mass are not measured.",
+  "frame": "Assembly axes: +Z runs from the handle butt (z = 0) to the tip, +Y is the button side, the loop hangs toward -Y. Angles are measured from +Y toward +X, which is clockwise seen from the tip.",
+  "printer_reference": {
+    "model": "Bambu Lab P1S",
+    "nozzle": 0.4,
+    "filament": "Generic PETG",
+    "bed": [
+      256,
+      256,
+      256
+    ],
+    "margin": 4,
+    "note": "Reference profile only. Slicer estimates are recorded in the README; nothing has been physically printed."
+  },
+  "overall": {
+    "length": 500,
+    "note": "Butt to legacy Puck tip cap. The current XIAO tip uses the same shafts and ends slightly shorter; see the generated layout."
+  },
+  "section": {
+    "thickness": 22,
+    "chamfer": 4,
+    "note": "Loop handles use a 22 mm slab with 45-degree chamfers. Shared rail and socket overhangs still need slicer support checks."
+  },
+  "handle": {
+    "length": 140,
+    "spine_radius": 12,
+    "loop_radius": 7,
+    "variants": {
+      "round": {
+        "label": "Round",
+        "grip": "Small loop for two fingers; thumb on the buttons.",
+        "circle": {
+          "center": [
+            88,
+            -31
+          ],
+          "radius": 26,
+          "end_y": -6
+        }
+      },
+      "oval": {
+        "label": "Oval",
+        "grip": "Full-hand mug loop around four fingers, so the wand stays on a relaxed hand.",
+        "points": [
+          [
+            16,
+            -6
+          ],
+          [
+            12,
+            -26
+          ],
+          [
+            24,
+            -45
+          ],
+          [
+            48,
+            -49
+          ],
+          [
+            96,
+            -49
+          ],
+          [
+            118,
+            -42
+          ],
+          [
+            127,
+            -24
+          ],
+          [
+            124,
+            -6
+          ]
+        ]
+      },
+      "angled": {
+        "label": "Angled",
+        "grip": "Raked loop, deeper at the palm, for a less bent wrist while pointing.",
+        "points": [
+          [
+            18,
+            -6
+          ],
+          [
+            10,
+            -30
+          ],
+          [
+            14,
+            -56
+          ],
+          [
+            32,
+            -66
+          ],
+          [
+            62,
+            -58
+          ],
+          [
+            100,
+            -44
+          ],
+          [
+            121,
+            -27
+          ],
+          [
+            124,
+            -6
+          ]
+        ]
+      },
+      "straight": {
+        "label": "No loop",
+        "grip": "Rounded straight grip with no loop. Least material of the four; same socket, rail and wire route.",
+        "grip_radius": 12,
+        "note": "24 mm round section. Prints on its side on an 11.9 mm flat reached by 45-degree faces; a 10 mm flat on top seats the rail."
+      }
+    },
+    "socket_floor": 2.5,
+    "floor_hole_diameter": 10.4,
+    "bay_diameter": 14.0,
+    "bay_length": 17.5,
+    "channel_diameter": 10.4,
+    "channel_rear": 61,
+    "rail_wire_hole": {
+      "z": 64,
+      "diameter": 5
+    },
+    "teardrop_flat": 8.0
+  },
+  "joint": {
+    "type": "Push in, then twist 38 degrees clockwise (seen from the tip) to lock.",
+    "spigot_diameter": 16.0,
+    "spigot_length": 16.0,
+    "bore_clearance": 0.4,
+    "mouth_gap": 0.2,
+    "lead_in": 0.6,
+    "spigot_chamfer": 0.4,
+    "pin_angles": [
+      10,
+      190,
+      280
+    ],
+    "pin_width": 2.6,
+    "pin_axial": 3.0,
+    "pin_height": 1.5,
+    "pin_root": 7.3,
+    "pin_center_depth": 8.0,
+    "pin_lead_chamfer": 0.5,
+    "twist": 38,
+    "slot_clearance": 0.3,
+    "groove_radial_clearance": 0.25,
+    "groove_floor_clearance": 0.6,
+    "cam": {
+      "entry_gap": 0.3,
+      "ramp_start": 0.0,
+      "ridge": 2.0,
+      "crest_interference": 0.15,
+      "pocket_interference": 0.05,
+      "note": "The pin rides a ramp, passes a ridge and settles into a shallow pocket: the joint is pulled tight and resists turning back. Interference values are starting points to tune with the coupons."
+    },
+    "step_degrees": 1.5
+  },
+  "shaft": {
+    "across_flats": 13,
+    "print_flat": 0.4,
+    "wire_bore": 10.4,
+    "lap_length": 36,
+    "lap_face_gap": 0.1,
+    "lap_end_gap": 0.2,
+    "note": "Octagonal shaft in two glued half-lap sections so each fits the bed lying flat."
+  },
+  "tip": {
+    "puck_case_diameter": 36,
+    "puck_case_height": 12.5,
+    "puck_center_y": 1.75,
+    "pocket_clearance": 0.3,
+    "floor": 2.0,
+    "wall": 2.4,
+    "case_above_rim": 1.5,
+    "tongue_length": 30,
+    "cap_gap": 0.3,
+    "notch_width": 8,
+    "thumb_notch_radius": 5,
+    "note": "Puck.js v2.1 stock case documented as 36 mm by 12.5 mm; not measured here."
+  },
+  "xiao_tip": {
+    "boards": "Seeed XIAO nRF52840 Sense, or XIAO MG24 Sense; which one this wand carries is not physically confirmed. Both document a 21 x 17.8 mm footprint (Seeed wiki).",
+    "board_length": 21.0,
+    "board_width": 17.8,
+    "pcb_thickness": 1.2,
+    "component_clearance": 3.5,
+    "clearance": 0.3,
+    "shaft_gap": 0.3,
+    "deck_top_y": 0.0,
+    "lip_height": 0.6,
+    "lip_wall": 1.6,
+    "rear_wall": 2.0,
+    "rear_wall_height": 2.5,
+    "usb_setback": 1.0,
+    "relief_inset": 1.5,
+    "relief_depth": 0.6,
+    "wire_slot_width": 6.0,
+    "tape_notch": {
+      "width": 5.0,
+      "depth": 2.5,
+      "at": [
+        0.25,
+        0.75
+      ]
+    },
+    "note": "Open U-shaped deck: the board lies component side up, USB end forward and uncovered, held by tape through the side notches. Only the outline comes from documentation; PCB thickness and component height are provisional clearances, not measurements. No battery holder: the battery is taped on separately."
+  },
+  "tapered": {
+    "note": "One continuous tapered wand with no separate handle bulge. Every tapered part prints upright, wide end down. The double-helix and smooth versions share these values; the smooth one sets the rib height to zero.",
+    "butt_radius": 15.0,
+    "front_radius": 7.3,
+    "base_chamfer": 1.5,
+    "segments": 120,
+    "ring_step": 1.0,
+    "front_transition": 6.0,
+    "glue_z": 297.0,
+    "glue_stub": {
+      "radius": 5.0,
+      "length": 15.0,
+      "flat": 3.5,
+      "clearance": 0.15,
+      "extra_depth": 0.5
+    },
+    "spiral": {
+      "starts": 2,
+      "directions": [
+        1,
+        -1
+      ],
+      "pitches": [
+        90.0,
+        72.0
+      ],
+      "height": 1.2,
+      "half_width_deg": 24.0,
+      "phase_deg": 90.0,
+      "fade": 25.0
+    },
+    "thumb_shelf": {
+      "hand": "both",
+      "protrusion": 14.0,
+      "thickness": 4.0,
+      "top_z": 132.0,
+      "pad_length": 30.0,
+      "corner_radius": 3.0,
+      "edge_chamfer": 1.0,
+      "wire_hole": 3.5,
+      "note": "One flat button platform across the top: left, centre and right zones on a common plane. Blank mounting surface; no guessed switch holes."
+    },
+    "joint_note": "Same spigot, pins, socket, cam and clearances as the other profiles, but mirrored: the handle carries the spigot and the lower shaft carries the socket, so both print upright."
+  },
+  "profiles": {
+    "current": "xiao",
+    "xiao": {
+      "label": "XIAO tip",
+      "components": [
+        "shaft-lower",
+        "shaft-upper",
+        "tip-xiao"
+      ],
+      "note": "No button pod and no battery holder on the current XIAO wand.",
+      "reference": "xiao-board",
+      "assemblies": {
+        "mug": {
+          "label": "Mug handle",
+          "handle": "oval"
+        },
+        "plain": {
+          "label": "Plain handle (no loop)",
+          "handle": "straight"
+        }
+      }
+    },
+    "tapered-xiao": {
+      "label": "Tapered wand (XIAO)",
+      "joint_kind": "mirrored",
+      "view_yaw": -0.85,
+      "view_pitch": 0.55,
+      "continuous_body": true,
+      "reference": "xiao-board",
+      "components": [],
+      "overview": [
+        "spiral",
+        "mug"
+      ],
+      "assemblies": {
+        "spiral": {
+          "label": "Double helix",
+          "parts": [
+            "handle-tapered-spiral",
+            "shaft-lower-tapered-spiral",
+            "shaft-upper-tapered-spiral",
+            "tip-xiao"
+          ]
+        },
+        "mug": {
+          "label": "Mug handle",
+          "loop": true,
+          "parts": [
+            "handle-tapered-mug-spiral",
+            "shaft-lower-tapered-spiral",
+            "shaft-upper-tapered-spiral",
+            "tip-xiao"
+          ]
+        },
+        "smooth": {
+          "label": "Smooth",
+          "parts": [
+            "handle-tapered-smooth",
+            "shaft-lower-tapered-smooth",
+            "shaft-upper-tapered-smooth",
+            "tip-xiao"
+          ]
+        }
+      }
+    },
+    "puck-legacy": {
+      "label": "Puck.js tip (legacy)",
+      "components": [
+        "button-pod-pilot",
+        "shaft-lower",
+        "shaft-upper",
+        "tip-cradle",
+        "tip-cap"
+      ],
+      "reference": "puck-case",
+      "assemblies": {
+        "round": {
+          "label": "Round",
+          "handle": "round"
+        },
+        "oval": {
+          "label": "Oval",
+          "handle": "oval"
+        },
+        "angled": {
+          "label": "Angled",
+          "handle": "angled"
+        },
+        "straight": {
+          "label": "No loop",
+          "handle": "straight"
+        }
+      }
+    }
+  },
+  "cap": {
+    "wall": 2.0,
+    "lip": 1.6,
+    "lip_overlap": 1.5,
+    "fit_interference": 0.1,
+    "squeeze": 0.0,
+    "skirt_bottom_y": 1.0
+  },
+  "pod": {
+    "length": 70,
+    "width": 20,
+    "height": 16,
+    "front_z": 128,
+    "top_skin": 2.4,
+    "end_wall": 3.0,
+    "cavity_width": 13,
+    "button_pitch": 22,
+    "pilot_diameter": 2.0,
+    "retaining_pin_diameter": 1.9,
+    "rail": {
+      "base": 8,
+      "top": 14,
+      "height": 3,
+      "rear_z": 52,
+      "clearance": 0.2
+    },
+    "stop_length": 5,
+    "note": "Generic button carrier. Switch size is unknown: the pilot holes mark button centres to drill out after measuring the real switches."
+  },
+  "coupons": {
+    "female_variants": {
+      "a": 0.05,
+      "b": 0.15,
+      "c": 0.3
+    },
+    "female_length": 26,
+    "male_stub": 12,
+    "puck_ring_height": 6
+  }
+}
