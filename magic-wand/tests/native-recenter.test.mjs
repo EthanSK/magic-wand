@@ -21,6 +21,7 @@ func CGWarpMouseCursorPosition(_ point:CGPoint){warped=point}
 final class Rest {var activated=false;func pointerActivated(){activated=true}}
 final class Harness {
  let pointerRouter=WandPointerRouter(),recenterGesture=WandRecenterGesture(),dwell=WandDwellClick(),motionFilter=WandMotionFilter(),restDetection=Rest()
+ let screenshot=WandScreenshotGesture();var pendingRecenter:Timer?
  var ready=true,restoring=false,recenterSuppressButtons=false,deliveryPoint:CGPoint?,commands:[String]=[]
  var hud=false,scroll=false,buttons=0,appMode:String?
  func queue(_ text:String){commands.append(text)}
@@ -40,15 +41,22 @@ for mode in ["off","mouse","hud","scroll","vsCode","drag"] {
  // Mode teardown caused by the first tap must not erase the global gesture.
  h.cancelCircleScroll()
  precondition(!h.recognizeBottomRecenter(down:true,now:1.18))
+ warped = .zero
  precondition(h.recognizeBottomRecenter(down:false,now:1.26),mode)
- precondition(warped==CGPoint(x:700,y:200) && h.deliveryPoint==warped,mode)
+ // Ethan's triple-click shares these clicks: centre once its window passes.
+ precondition(warped == .zero && h.pendingRecenter != nil && h.dwell.following == (mode=="mouse"),"no centre before the third-press window "+mode)
+ RunLoop.main.run(until:Date().addingTimeInterval(WandTripleClick.window+0.03))
+ precondition(h.pendingRecenter==nil && warped==CGPoint(x:700,y:200) && h.deliveryPoint==warped,mode)
  precondition(h.dwell.following && !h.pointerRouter.bottomHeld && h.buttons==0,mode)
  precondition(h.hud==(mode=="hud") && !h.scroll && h.appMode==(mode=="vsCode" ? "vsCode":nil) && h.restDetection.activated,mode)
  precondition(h.recenterSuppressButtons && h.commands.last!.contains("setMouseFollow(true)"))
 }
 let hold=Harness();_=hold.recognizeBottomRecenter(down:true,now:2);_=hold.recognizeBottomRecenter(down:false,now:2.08);_=hold.recognizeBottomRecenter(down:true,now:2.18)
 precondition(!hold.recognizeBottomRecenter(down:false,now:2.6),"long second press remains a hold")
-print("PASS: global centre/follow from off, mouse, HUD, scrolling, VS Code and drag; holds preserved")
+precondition(hold.pendingRecenter==nil)
+let busy=Harness();_=busy.screenshot.requestShortcut(now:3);warped = .zero;busy.recenterPointer()
+precondition(warped == .zero,"screenshot mode is never recentred")
+print("PASS: global centre/follow (after the triple-click window) from off, mouse, HUD, scrolling, VS Code and drag; holds preserved")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-recenter-'));
  try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',['-O',new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}

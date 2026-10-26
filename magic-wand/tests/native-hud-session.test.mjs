@@ -41,9 +41,11 @@ final class Trace {var boundaries:[String]=[];func boundary(_ reason:String,mode
 final class Controls {var phases:[String]=[];var points:[CGPoint]=[];func persistent(_ phase:String,x:Double=0,y:Double=0,mouseX:Double?=nil){phases.append(phase);points.append(CGPoint(x:x,y:y))}}
 final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];var inputs=0;func beginDetents(mode:String,now:Double){starts.append(mode)};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{inputs+=1;return[]};func endDetents(commit:Bool)->[Int]{committed=commit;return[]}}
 final class Harness {
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter(),reviewTrace=Trace(),recording=Recording(),dwell=WandDwellClick()
  var deskSleep=WandDeskSleep()
  var recordingPointerPaused=false,recordingRestoreFollow:Bool?
+ var clickFollowChoice:(following:Bool,paused:Bool,restore:Bool?,rest:WandRestFollowMemory)?
 ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=WandRestFollowMemory()':''}
  let restDetection=Rest()
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
@@ -75,6 +77,8 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  func recordReviewInput(rawX:Double,rawY:Double,dx:Double,dy:Double,now:Double,blocked:String?,step:Int32){traceInputs+=1}
  var cancelledScreenshotHold=false
  func finishBottomHold(now:Double,resumeMouse:Bool=true){cancelledScreenshotHold = !resumeMouse}
+ var screenshotContexts:[Bool]=[]
+ func screenshotContextChanged(_ active:Bool){screenshotContexts.append(active)}
  func releaseButtons(){}
  init(){${callback}
 ${modeCallback}}
@@ -157,6 +161,8 @@ precondition(!screenshot.controls.phases.contains("dismiss"))
 screenshot.setScreenshotActive(false)
 precondition(screenshot.cancelledScreenshotHold,"screenshot exit cancels any held drag before restoring the HUD")
 precondition(screenshot.hudSession && !screenshot.hudActive && !screenshot.screenshotHUD,"the HUD returns waiting, never steering unheld")
+precondition(screenshot.screenshotContexts==[true,false],"the context reaches screenshot ownership")
+precondition(screenshot.commands.last=="setHUDOpen(true);" && !screenshot.commands.contains{$0.contains("setMouseFollow")},"returning to the HUD leaves the mouse-follow choice alone")
 let pinned=Harness();pinned.selectedReviewMode="changes";pinned.wandShortcutMode="changes";pinned.handleMiddle("1")
 precondition(pinned.reviewExitGesture.pending && !pinned.review.committed,"Middle-down freezes the existing working set")
 for i in 1...80 {pinned.handleNavigation("\\(i*1000),\\(i*2000)")}
@@ -280,6 +286,7 @@ final class Rest {var parked=false;var deskQuietSince:Double?;var hasReference=t
 final class Controls {var speechEvents=0;func speech(down:Bool)->Bool{speechEvents+=1;return true}}
 final class Recording {var isRecording=true}
 final class Harness {
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  var ready=true,restoring=false,scrollActive=false,buttons=0,restDiagnosticsRemaining=0,hudSession=false
  var recordingPointerPaused=false
 ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=WandRestFollowMemory()':''}

@@ -32,7 +32,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap | Start Agent Flow dictation |
 | Tap again | Stop and paste |
 
-- Recording stays red when no other mode is active. Mouse mode stays blue, including while recording.
+- Recording stays red in mouse mode. HUD, review, scrolling and loading keep their own indication.
 - Putting the wand down never stops dictation. Use Top to stop and paste.
 
 **Middle** (`D2`) · Agentic Mouse HUD
@@ -63,7 +63,8 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap while following | Stop following without clicking |
 | Hold | Over a scroll area, drag in any direction to scroll; hold still to continue and drag the other way to reverse. A confirmed draggable target drags instead. Release stops the gesture. |
 | Tap, then hold the second press | Drag with the mouse button down; release to drop |
-| Double tap | Centre the pointer on the main screen and enable mouse follow; keep the HUD and review selection unchanged |
+| Double tap | Centre the pointer on the main screen and enable mouse follow after the 300 ms triple-tap window; keep HUD and review selection unchanged |
+| Triple tap | Start screenshot selection; move to select the area, then stop to capture |
 
 - Control V3 keeps short taps and tap-then-hold dragging unchanged. The existing 220 ms cutoff separates a tap from a hold.
 - A plain hold scrolls a scroll area or drags a confirmed draggable target. Unknown targets keep scrolling. Tap, then hold the second press to drag explicitly. The pointer stays fixed while scrolling until release.
@@ -71,20 +72,22 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.
 - Bottom never opens, closes or clears the Middle HUD or review selection.
 - V3 uses straight strokes in either axis, including diagonals. Holding still continues the captured speed; a new stroke can change speed or reverse without releasing. Circular page-scroll recognition is disabled; V2 remains selectable.
+- Keep moving the wand slightly while you are not certain about placement so it does not click. Stop when you are ready. The pointer must still be moving; tiny movements filtered out as hand noise do not prevent a click.
+- Screenshot temporarily moves the pointer even with mouse follow off. From the HUD Screenshot action, tap Bottom once to start selecting; stopping after movement ends the selection. Triple tap starts selection without another tap. Finishing or cancelling restores the previous mouse-follow choice.
 
 **Lights**, highest priority first
 
 | Light | Shows |
 | --- | --- |
-| Updating | Receiver is updating the device code |
+| Updating | Blinks orange while loading or updating the device code |
 | Disconnected | Orange while unavailable |
 | Calibrating | Keep it still with no buttons pressed for two seconds |
 | Sleeping | Off after a minute on the desk; pickup restores the light |
 | Scrolling | Cyan |
 | App review | Green for app review; purple for VS Code file staging |
-| Pointer | Steady blue, including while recording |
+| Pointer | Steady blue; recording takes priority and shows red |
 | HUD | Orange |
-| Recording | Steady red while idle. Mouse, HUD and scrolling keep their own colours. |
+| Recording | Steady red while recording, including mouse mode. HUD, review, scrolling and loading keep their own colours. |
 | Idle | Off |
 <!-- /wand:controls -->
 
@@ -177,7 +180,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: the circular Wand HUD has no outer rectangular glass background or border. Cards, text and selection feedback remain; ordinary mouse HUD backgrounds are unchanged. Transparent pixel and native-panel checks, rendered inspection and the native suite passed.
+- Installed: triple Bottom starts screenshot selection; the HUD Screenshot action uses one Bottom tap, movement and the existing stop-to-click detector to finish. Double-tap centering waits up to 300 ms to distinguish a third tap. Pointer movement is not buffered. Recording red takes priority over mouse blue, and loading blinks orange. Complete saved bytes and clean startup with calibration passed; physical screenshot acceptance remains pending.
+- Installed: each circular Wand HUD wedge has its own masked glass backing, clearer text and a gentle selection lift. Gaps and space around the wheel stay transparent. The armed dotted outline moves; Reduce Motion keeps it static. Native rendering and interaction checks passed; physical Copy/Paste acceptance remains pending.
 - Installed: the Review changes and Stage files indicators say “Hold to commit selection”. Selection is the current term for the pending group; holding stages it without making a Git commit. Native tests and both rendered indicators passed.
 - Installed: all three grip buttons turn the wand off; any single grip button wakes manual or automatic sleep. The wake press is consumed until every button is released. Five-minute automatic deep sleep and the two-blink cue are unchanged. Saved bytes and clean startup verified; physical any-button wake acceptance pending.
 - Installed: shared click and hold cues distinguish a card action from held wheel or wand adjustments. Copy/Paste names Space explicitly. Native checks and rendered layout inspection passed; physical gesture acceptance is pending.
@@ -207,7 +211,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.92 (97) · device code `wand-117ffe9f4a0e` · bridge `d9eb6a7b` · updated 24 October 2026.
+Receiver 1.2.93 (98) · device code `wand-441472ce965b` · bridge `f8639252` · updated 25 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

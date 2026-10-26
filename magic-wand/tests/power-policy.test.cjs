@@ -80,7 +80,9 @@ test('a Mac connecting during an offline warning cancels it',()=>{
 });
 test('unexpected disconnect goes dark after one minute, including interrupted update',()=>{
  const {w,c}=setup();c.WAND_UPDATING=true;w.device.disconnect();
- w.advance(59.9);assert(w.colors().some(Boolean));w.advance(.2);assert.deepEqual(w.colors(),[0,0,0]);
+ w.advance(59.4);const beforeSleep=[];for(let n=0;n<6;n++){beforeSleep.push(w.colors());w.advance(.1)}
+ assert(beforeSleep.some(v=>v.some(Boolean)),"loading still has a lit phase before the one-minute cutoff");
+ w.advance(.1);assert.deepEqual(w.colors(),[0,0,0]);w.advance(1);assert.deepEqual(w.colors(),[0,0,0]);
  assert(!w.device.awake);assert.equal(c.wandPowerOfflineTimer,undefined);
 });
 test('reconnecting cancels offline darkness and a reload does not add duplicate watches',()=>{

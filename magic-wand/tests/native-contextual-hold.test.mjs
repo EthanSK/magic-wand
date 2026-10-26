@@ -22,6 +22,7 @@ enum Tap {case cghidEventTap}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?){ };func post(tap:Tap){}}
 final class Rest {var activated=false;func pointerActivated(){activated=true}}
 final class Harness {
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  let restDetection=Rest()
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),motionFilter=WandMotionFilter(),dwell=WandDwellClick(),recenterGesture=WandRecenterGesture(),flickScroll=WandFlickScroll()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?
@@ -76,15 +77,17 @@ precondition(WandHoldTarget.classify(roles:["AXTextField","AXGroup"]) == .unknow
 
 precondition(WandHoldTarget.classify(roles:["AXStaticText","AXGroup","AXNotificationCenterAlert","AXScrollArea"]) == .drag,"a notification is a native drag target")
 
-// The screenshot selector is an explicit drag even over a scroll area.
-// It has no tap ambiguity: down starts immediately, up captures the rectangle.
-let screenshot=Harness();screenshot.screenshotActive=true;screenshot.hudSession=true
-precondition(screenshot.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
-screenshot.beginBottomHold(now:ProcessInfo.processInfo.systemUptime)
-precondition(screenshot.buttons==1 && screenshot.heldScroll.dragging,"screenshot Bottom-down begins a drag immediately")
-precondition(!screenshot.hudSession && !screenshot.heldScroll.resolving,"screenshot drag parks HUD and skips the target probe")
-screenshot.handleRaw("10000,2680,0,0")
-precondition(screenshot.buttons==0 && !screenshot.heldScroll.active,"screenshot release ends the native selection")
+// Screenshot mode owns Bottom before any ordinary hold (native-screenshot
+// test). A screenshot context alone never turns an ordinary hold into a press.
+let shot=Harness();shot.screenshotActive=true
+precondition(shot.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
+shot.beginBottomHold(now:ProcessInfo.processInfo.systemUptime)
+precondition(shot.buttons==0 && !shot.heldScroll.dragging && shot.heldScroll.resolving,"an ordinary hold keeps its target probe")
+shot.finishBottomHold(now:ProcessInfo.processInfo.systemUptime)
+let owned=Harness();precondition(owned.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
+owned.heldScroll.begin(now:ProcessInfo.processInfo.systemUptime);_=owned.screenshot.requestShortcut(now:ProcessInfo.processInfo.systemUptime)
+owned.handleRaw("10000,0,0,0")
+precondition(owned.screenshotRaw==1 && owned.heldScroll.active,"screenshot ownership precedes the raw button-up reconciliation")
 
 // Over a scroll area: scrolls, never presses the mouse button.
 let scroll=press(["AXStaticText","AXScrollArea"]);wait(0.05)

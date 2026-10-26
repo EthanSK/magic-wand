@@ -1,5 +1,17 @@
 # Verified lessons
 
+## Temporary gestures must preserve newer recording choices
+
+A triple-click starts by remembering mouse follow before its first tap. If recording
+starts or stops before the third tap, blindly restoring that remembered snapshot
+undoes the newer recording pause or resume. Advance the pending snapshot through the
+same recording transition, including its pre-tap follow state and desk-rest memory.
+The receiver-method regression covers both transitions between taps; ordinary
+recording, HUD and pickup tests still pass. Screenshot ownership also uses its own
+instance of the existing dwell detector so previously accumulated travel cannot end
+a fresh selection immediately. These checks establish simulated state transitions,
+not physical screenshot acceptance. Verified 25 October 2026.
+
 ## Tapered printed prototypes need profile-specific joints
 
 The tapered profile reverses the twist-lock's male/female placement so its long parts

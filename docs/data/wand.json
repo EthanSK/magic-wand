@@ -7,20 +7,21 @@
     "headline": "The age of AI doesn’t need a keyboard.",
     "detail": "The wand is my step toward that, with pointing, HUD cards and Agent Flow dictation."
   },
-  "updated": "2026-10-24",
+  "updated": "2026-10-25",
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.92",
-    "receiverBuild": "97",
-    "deviceRuntime": "wand-117ffe9f4a0e",
-    "bridgeRevision": "d9eb6a7b9a5c4ed0f57a3235d26546b3228773a8ddb221d86cff41ea0ab8e199",
-    "agenticMouse": "1.0.285",
-    "agenticMouseBuild": "291",
-    "persistentImage": "full-20261024f"
+    "receiver": "1.2.93",
+    "receiverBuild": "98",
+    "deviceRuntime": "wand-441472ce965b",
+    "bridgeRevision": "f8639252338ec51e176d36c4d467442d1acf0c06f4a14f10c11408d132f53416",
+    "agenticMouse": "1.0.286",
+    "agenticMouseBuild": "292",
+    "persistentImage": "full-20261025a"
   },
   "status": [
-    "Installed: the circular Wand HUD has no outer rectangular glass background or border. Cards, text and selection feedback remain; ordinary mouse HUD backgrounds are unchanged. Transparent pixel and native-panel checks, rendered inspection and the native suite passed.",
+    "Installed: triple Bottom starts screenshot selection; the HUD Screenshot action uses one Bottom tap, movement and the existing stop-to-click detector to finish. Double-tap centering waits up to 300 ms to distinguish a third tap. Pointer movement is not buffered. Recording red takes priority over mouse blue, and loading blinks orange. Complete saved bytes and clean startup with calibration passed; physical screenshot acceptance remains pending.",
+    "Installed: each circular Wand HUD wedge has its own masked glass backing, clearer text and a gentle selection lift. Gaps and space around the wheel stay transparent. The armed dotted outline moves; Reduce Motion keeps it static. Native rendering and interaction checks passed; physical Copy/Paste acceptance remains pending.",
     "Installed: the Review changes and Stage files indicators say “Hold to commit selection”. Selection is the current term for the pending group; holding stages it without making a Git commit. Native tests and both rendered indicators passed.",
     "Installed: all three grip buttons turn the wand off; any single grip button wakes manual or automatic sleep. The wake press is consumed until every button is released. Five-minute automatic deep sleep and the two-blink cue are unchanged. Saved bytes and clean startup verified; physical any-button wake acceptance pending.",
     "Installed: shared click and hold cues distinguish a card action from held wheel or wand adjustments. Copy/Paste names Space explicitly. Native checks and rendered layout inspection passed; physical gesture acceptance is pending.",
@@ -88,7 +89,7 @@
         ]
       ],
       "notes": [
-        "Recording stays red when no other mode is active. Mouse mode stays blue, including while recording.",
+        "Recording stays red in mouse mode. HUD, review, scrolling and loading keep their own indication.",
         "Putting the wand down never stops dictation. Use Top to stop and paste."
       ]
     },
@@ -162,7 +163,11 @@
         ],
         [
           "Double tap",
-          "Centre the pointer on the main screen and enable mouse follow; keep the HUD and review selection unchanged"
+          "Centre the pointer on the main screen and enable mouse follow after the 300 ms triple-tap window; keep HUD and review selection unchanged"
+        ],
+        [
+          "Triple tap",
+          "Start screenshot selection; move to select the area, then stop to capture"
         ]
       ],
       "notes": [
@@ -171,7 +176,9 @@
         "Middle switches to the HUD. The pointer stays within real display edges.",
         "Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.",
         "Bottom never opens, closes or clears the Middle HUD or review selection.",
-        "V3 uses straight strokes in either axis, including diagonals. Holding still continues the captured speed; a new stroke can change speed or reverse without releasing. Circular page-scroll recognition is disabled; V2 remains selectable."
+        "V3 uses straight strokes in either axis, including diagonals. Holding still continues the captured speed; a new stroke can change speed or reverse without releasing. Circular page-scroll recognition is disabled; V2 remains selectable.",
+        "Keep moving the wand slightly while you are not certain about placement so it does not click. Stop when you are ready. The pointer must still be moving; tiny movements filtered out as hand noise do not prevent a click.",
+        "Screenshot temporarily moves the pointer even with mouse follow off. From the HUD Screenshot action, tap Bottom once to start selecting; stopping after movement ends the selection. Triple tap starts selection without another tap. Finishing or cancelling restores the previous mouse-follow choice."
       ]
     }
   ],
@@ -186,7 +193,7 @@
         0.45
       ],
       "display": "#ff8a20",
-      "detail": "Receiver is updating the device code"
+      "detail": "Blinks orange while loading or updating the device code"
     },
     {
       "mode": "disconnected",
@@ -263,7 +270,7 @@
         1
       ],
       "display": "#4469ff",
-      "detail": "Steady blue, including while recording"
+      "detail": "Steady blue; recording takes priority and shows red"
     },
     {
       "mode": "hud",
@@ -285,7 +292,7 @@
         0
       ],
       "display": "#ff2e3a",
-      "detail": "Steady red while idle. Mouse, HUD and scrolling keep their own colours."
+      "detail": "Steady red while recording, including mouse mode. HUD, review, scrolling and loading keep their own colours."
     },
     {
       "mode": "idle",

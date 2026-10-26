@@ -12,6 +12,7 @@ const code=`import Foundation
 func log(_ v:Any...) {}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?) {}}
 final class Harness {
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),dwell=WandDwellClick()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?
  var controlVersion=WandControlVersion.sustainedV3,heldScrollDiagnostics=false,buttons=0,recenterSuppressButtons=false

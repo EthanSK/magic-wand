@@ -152,3 +152,17 @@ through their build/check commands; never claim an illustration is physical veri
 - Pressing all three custom grip buttons together toggles manual deep standby. Any one grip button wakes both manual standby and automatic five-minute standby. Consume the chord until all buttons are released so it does not also trigger mouse/HUD/recording actions. User-requested — 2026-10-24.
 
 - Call the pending reviewed/staging group the “selection” everywhere in current user-facing wording. Ethan previously called it a “set” or “bucket”; keep those aliases beside the owning code for future lookup. “Commit selection” stages that selection and does not create a Git commit. User-requested — 2026-10-25.
+
+- While the wand is restarting or loading, blink the existing orange installation indication instead of showing it steadily, so loading is obvious. Restore the ordinary mode indication when ready, and leave no loading-blink timer running during ordinary operation or sleep. This is separate from the two-blink pre-sleep cue. User-requested — 2026-10-25.
+
+## Screenshot selection
+
+- In Screenshot mode, let the wand move the pointer even when normal mouse mode was off. This is temporary screenshot aiming, not a change to normal mouse mode. One Bottom click starts the held mouse selection; the physical button can then be released. Reuse normal stop-to-click detection to end the selection when movement stops. Cancellation and lost connection must release the native button, and leaving Screenshot restores the ordinary mouse-mode choice. This replaces the earlier hold-Bottom/release-to-capture behavior. User-requested — 2026-10-25.
+
+- Bottom triple-click is a shortcut into screenshot selection for Agent Flow. Keep the same temporary aiming and stop-to-finish behavior as the Screenshot action. User-requested — 2026-10-25.
+
+- While recording and in mouse mode, recording red takes priority over mouse blue. Ethan can tell mouse mode is on because the pointer moves; the light must confirm recording. Do not reintroduce red/blue flashing. Loading remains the separate orange indication. This replaces the earlier steady-blue-while-recording preference. User-requested — 2026-10-25.
+
+- Double Top starts dictation into a new chat in the configured harness (Codex in Ethan’s setup; also support Claude Code). Bring that harness frontmost, focus the new empty composer and show a small “Creating chat…” indicator while opening. Reuse normal stop/paste behavior and preserve normal single-Top recording. User-requested — 2026-10-25.
+
+- Explicit timing exception: double-click-to-centre may wait up to 300 ms after the second release to distinguish the screenshot triple-click. Normal pointer movement remains immediate. This is only approval for centering, not for movement buffering or other new delays. User-confirmed — 2026-10-25.
