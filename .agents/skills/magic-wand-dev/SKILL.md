@@ -45,7 +45,7 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
    User-requested recovery guidance — 2026-10-24.
 4. Do not add intentional movement latency without Ethan's fresh explicit confirmation.
    Sensor sampling, delivered update rate and end-to-end latency are different measurements.
-5. For prototype changes, read [the prototype policy](../../../magic-wand/prototypes/README.md).
+5. For wand CAD, mechanical previews or print projects, first read [magic-wand-print-design](../magic-wand-print-design/SKILL.md). Preserve the helix, monotonic shaft taper and both handed handles in the actual complete 3MF. For prototype changes, read [the prototype policy](../../../magic-wand/prototypes/README.md).
    Preserve the V1 baseline and feature flags. New hardware needs its own profile; do not
    silently redefine the original button positions, gestures, gains or colours.
 6. Verify relevant source tests and the installed version, then distinguish hardware evidence

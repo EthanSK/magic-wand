@@ -1,8 +1,10 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V3 — lighter 410 mm wand](Print-3-README.md).**
+**Latest candidate: [Print V4 — 410 mm helix wand, both hands](Print-4-README.md).**
 
-Choose the complete hollow left-hand revision or just the upper replacement that fits your printed V2 handle. Both preserve the earlier design for comparison. Physical fit and strength still need a trial.
+Restored crossed helix and a continuous taper, with hollow interiors and both handed handles in the complete project. The upper-only alternative retains a printed V2 handle. Earlier versions remain unchanged. Physical fit and strength still need a trial.
+
+**Earlier candidate: [Print V3 — 410 mm mechanical revision](Print-3-README.md).** Its smooth shafts and left-only complete plate were superseded by V4.
 
 **Previous print: [Print V2 — 340 mm diamond mug wand](Print-2-README.md).**
 

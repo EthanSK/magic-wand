@@ -1,0 +1,160 @@
+{
+  "resting_board_overlap_mm3": 0.0,
+  "body_cover_overlap_mm3": 0.0,
+  "rigid_board_stop_overlap_mm3": {
+    "left": 1.115214953271054,
+    "right": 1.1152149532710578,
+    "up": 0.8959999999998874,
+    "down": 2.5599999999996688,
+    "out_of_seats": 1.2
+  },
+  "released_board_pivot_overlap_mm3": {
+    "0": 0.0,
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "5": 0.0,
+    "8": 0.0,
+    "10": 0.0
+  },
+  "cover_released_slide_overlap_mm3": {
+    "0.25": 0.0,
+    "0.5": 0.0,
+    "1": 0.0,
+    "2": 0.0,
+    "5": 0.0,
+    "10": 0.0,
+    "20": 0.0,
+    "35": 0.0
+  },
+  "usb_12x6_plug_overlap_mm3": {
+    "base": 0.0,
+    "cover": 0.0
+  },
+  "rear_solder_space_overlap_mm3": {
+    "base": 0.0,
+    "cover": 0.0
+  },
+  "head_9mm_wire_probe_overlap_mm3": 0.0,
+  "head_forward_6mm_wire_probe_overlap_mm3": 0.0,
+  "thumb_mount": {
+    "left": {
+      "loop_overlap_mm3": 0.0,
+      "minimum_loop_gap_mm": 3.762613050279927,
+      "includes": "purchased slim keycap footprint plus 3mm stroke envelope; insert is deliberately recessed into the grip"
+    },
+    "right": {
+      "loop_overlap_mm3": 0.0,
+      "minimum_loop_gap_mm": 3.762613050279927,
+      "includes": "purchased slim keycap footprint plus 3mm stroke envelope; insert is deliberately recessed into the grip"
+    }
+  },
+  "flexed_clip_status": "Error.NoError",
+  "board_pivot_with_1_3mm_clip_deflection_mm3": {
+    "0": 0.0,
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "5": 0.0,
+    "8": 0.0,
+    "10": 0.0
+  },
+  "physical_fit_verified": false,
+  "existing_handle_locked_overlap_mm3": 0.5620242466305091,
+  "new_handle_locked_overlap_mm3": 0.5620242466304983,
+  "slim_joint": {
+    "middle": {
+      "cam_path_overlap_mm3": {
+        "-38": -2.8015784137025435e-16,
+        "-30": 0.03475526660601883,
+        "-20": 0.22177776185149417,
+        "-10": 0.35322884316797376,
+        "0": 0.3650801424999415,
+        "5": 2.4115711964255646
+      },
+      "entry_insertion_mm3": {
+        "14": 0.0,
+        "10": 0.0,
+        "5": 0.0,
+        "1": 0.0,
+        "0": -2.8015784137025435e-16
+      },
+      "locked_pull_overlap_mm3": 14.967394587954207,
+      "wire_9_9mm_overlap_mm3": 0.0
+    },
+    "head": {
+      "cam_path_overlap_mm3": {
+        "-38": -3.552713678800501e-15,
+        "-30": 0.034755266606015724,
+        "-20": 0.22177776185151524,
+        "-10": 0.353228843167949,
+        "0": 0.3650801424999022,
+        "5": 2.4115711964255584
+      },
+      "entry_insertion_mm3": {
+        "14": 0.0,
+        "10": 0.0,
+        "5": 0.0,
+        "1": 0.0,
+        "0": -3.552713678800501e-15
+      },
+      "locked_pull_overlap_mm3": 14.967394587954194,
+      "wire_9_9mm_overlap_mm3": 0.0
+    }
+  },
+  "envelopes": {
+    "new_length_mm": 410,
+    "old_length_mm": 340,
+    "main_bore_mm": 10.4,
+    "span_minimum_wall_mm": 1.2,
+    "slim_spigot_wall_mm": 1.4,
+    "slim_socket_groove_wall_mm": 1.2,
+    "loop_shell_mm": 1.6,
+    "grip_shell_mm": 1.2,
+    "diamond_edge_round_mm": 1.2
+  },
+  "cover_side_pull_blocked_mm3": {
+    "0.3": 0.5479354401968817,
+    "0.5": 5.138099360285081,
+    "1.0": 14.730618499534884
+  },
+  "compact_button_insert": {
+    "thumb": {
+      "rest_overlap_mm3": 0.0,
+      "rear_stop_overlap_mm3": 15.279999999999927,
+      "front_lip_overlap_mm3": 1.2599999999999554
+    },
+    "index": {
+      "rest_overlap_mm3": 0.0,
+      "rear_stop_overlap_mm3": 15.279999999999955,
+      "front_lip_overlap_mm3": 1.2600000000000373
+    },
+    "middle": {
+      "rest_overlap_mm3": 0.0,
+      "rear_stop_overlap_mm3": 15.27999999999995,
+      "front_lip_overlap_mm3": 1.2600000000000269
+    }
+  },
+  "shaft_taper": {
+    "140.0": {
+      "start_diameter_mm": 24.843338914135373,
+      "middle_diameter_mm": 19.8,
+      "top_diameter_mm": 17.9,
+      "maximum_outward_step_mm": -0.0005728997758946974
+    },
+    "160.0": {
+      "start_diameter_mm": 24.843338914135373,
+      "middle_diameter_mm": 19.8,
+      "top_diameter_mm": 17.9,
+      "maximum_outward_step_mm": -0.0007343552256955377
+    }
+  },
+  "helix_material_probe_mm3": {
+    "lower": 0.006181661265160034,
+    "upper": 0.0061816612651593925
+  },
+  "thin_hollow_shaft_overlap_mm3": {
+    "lower": 0.0,
+    "upper": 0.0
+  }
+}

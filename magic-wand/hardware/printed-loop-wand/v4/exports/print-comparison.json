@@ -1,0 +1,87 @@
+{
+  "scope": "Bambu slicer estimates including supports/brims; not weighed prints. Identical P1S 0.4 mm PETG, 0.2 mm layer, 3-wall and 20% infill settings; support strategy changed to normal for hollow new handles. Full projects both contain two handles plus shared parts.",
+  "new_projects": {
+    "Print-4-right-handle-comparison.3mf": {
+      "parts": 1,
+      "grams": 49.1522331237793,
+      "seconds": 12381.4560546875,
+      "warnings": ""
+    },
+    "Print-4-upper-only-helix-410mm.3mf": {
+      "parts": 4,
+      "grams": 44.17738723754883,
+      "seconds": 9895.0966796875,
+      "warnings": ""
+    },
+    "Print-4-slim-bayonet-fit-test.3mf": {
+      "parts": 2,
+      "grams": 5.493426322937012,
+      "seconds": 1924.30029296875,
+      "warnings": ""
+    },
+    "Print-4-compact-button-fit-test.3mf": {
+      "parts": 2,
+      "grams": 0.9133785963058472,
+      "seconds": 832.4053955078125,
+      "warnings": ""
+    },
+    "Print-4-left-handle-comparison.3mf": {
+      "parts": 1,
+      "grams": 49.15528869628906,
+      "seconds": 12412.9970703125,
+      "warnings": ""
+    },
+    "Print-4-complete-left-right-helix-410mm.3mf": {
+      "parts": 14,
+      "grams": 146.12582397460938,
+      "seconds": 23110.40234375,
+      "warnings": ""
+    }
+  },
+  "comparisons": {
+    "left_handle": {
+      "baseline": {
+        "grams": 76.88983917236328,
+        "seconds": 12893.859375
+      },
+      "new": {
+        "parts": 1,
+        "grams": 49.15528869628906,
+        "seconds": 12412.9970703125,
+        "warnings": ""
+      },
+      "grams_saved": 27.73455047607422,
+      "mass_reduction_percent": 36.07050134921198
+    },
+    "upper_four": {
+      "baseline": {
+        "grams": 49.424041748046875,
+        "seconds": 8690.0244140625
+      },
+      "new": {
+        "parts": 4,
+        "grams": 44.17738723754883,
+        "seconds": 9895.0966796875,
+        "warnings": ""
+      },
+      "grams_saved": 5.246654510498047,
+      "mass_reduction_percent": 10.615591774635435
+    },
+    "complete_both_hands": {
+      "baseline": {
+        "grams": 213.49,
+        "seconds": 29896.0,
+        "parts": 14
+      },
+      "new": {
+        "parts": 14,
+        "grams": 146.12582397460938,
+        "seconds": 23110.40234375,
+        "warnings": ""
+      },
+      "grams_saved": 67.36417602539063,
+      "mass_reduction_percent": 31.553785200894946
+    }
+  },
+  "physical_mass_measured": false
+}

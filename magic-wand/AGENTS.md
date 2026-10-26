@@ -168,3 +168,8 @@ through their build/check commands; never claim an illustration is physical veri
 - Explicit timing exception: double-click-to-centre may wait up to 300 ms after the second release to distinguish the screenshot triple-click. Normal pointer movement remains immediate. This is only approval for centering, not for movement buffering or other new delays. User-confirmed — 2026-10-25.
 
 - Keeping Middle held on the wand-home centre Switch App item enters its existing chooser after a deliberate 0.5-second continuous dwell after qualification, without a release and re-hold. Moving away resets the dwell; fresh telemetry and the same page are required. Retain the first-hold navigation and quicker-release/second-hold paths. No pre-arm motion replay. User-requested — 2026-10-26.
+
+## Printed wand design identity
+
+- For every wand CAD or Bambu print-project revision, read [magic-wand-print-design](../.agents/skills/magic-wand-print-design/SKILL.md). Preserve the counter-wound helix and continuous tapered wand silhouette; weight reduction means hollow interiors and thinner walls, not removing the pattern or creating a waist that widens at joints. Reinforce internally. User-corrected — 2026-10-26.
+- A complete wand print project always includes both the left- and right-hand handles. A separate right STL does not make a left-only Bambu project complete. Keep both in the opened complete project and preserve earlier revisions for comparison. User-requested — 2026-10-26.
