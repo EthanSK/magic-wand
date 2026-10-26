@@ -6,7 +6,7 @@ This test is isolated from the existing Magic Wand/Puck runtime. It reads the or
 
 `../firmware/imu_debug/imu_debug.ino` uses Seeed nRF52 core 1.1.13 and Seeed Arduino LSM6DS3 2.0.7. Compile for `Seeeduino:nrf52:xiaonRF52840Sense`.
 
-The firmware generates JSON lines roughly every 20 ms, sent over open USB serial and subscribed Nordic UART BLE. `ax`, `ay`, `az` are acceleration in g; `gx`, `gy`, `gz` are rotation speed in degrees per second; `ms` is the board clock. `sensor` is `hand` or `finger`; finger packets include the physical mux `channel`. Acceleration includes gravity. Rotation speed is not absolute orientation. Actual receive rate depends on the transport.
+The firmware samples roughly every 20 ms and sends motion JSON lines over open USB serial. The recovery build limits Nordic UART Bluetooth motion publication to 20 Hz, with a leading newline to recover framing after a failed notification. `ax`, `ay`, `az` are acceleration in g; `gx`, `gy`, `gz` are rotation speed in degrees per second; `ms` is the board clock. `sensor` is `hand` or `finger`; finger packets include the physical mux `channel`. Acceleration includes gravity. Rotation speed is not absolute orientation. Actual receive rate depends on the transport.
 
 `finger_sensors.h` uses the external D4/SDA and D5/SCL bus (TWIM0), separate from the built-in IMU (`Wire1`). It selects one mux channel at a time, accepts BMI160 chip ID 0xD1 at 0x68 or 0x69, and checks configuration readback. `timed_i2c.h` bounds each external transfer wait to 20 ms and recovers the controller and bus on timeout; a failed external transfer must not block the built-in sensor indefinitely. Hand telemetry includes `i2c_timeouts` for diagnosis. Sensors run at 100 Hz with ±4 g and ±1000 degrees/s; telemetry is read at about 50 Hz. Missing channels are periodically rescanned. Power and wiring must follow the [wiring notes](../docs/wiring-notes.md); the driver cannot prove a correct physical connection from a label or a lit LED.
 
@@ -53,3 +53,35 @@ Ethan confirmed the comparison working. Ten host tests now include simulated
 stalled transfers and recovery. This is the working Control Hand snapshot in
 the component README. The exact original stall cause remains unproven;
 timeout counts are diagnostics, not proof of a particular wiring fault.
+
+## Finger recovery revision — 26 October 2026
+
+The old driver retained a detected sensor's address when data-ready stayed
+clear indefinitely. Periodic discovery skipped that cached address, so an
+acknowledging sensor that lost its sampling configuration could remain silent.
+The host regression reproduces this failure with the old driver and passes
+with the revision. This is a verified software fault, not proof of what caused
+an interruption on a particular physical assembly.
+
+The revised driver invalidates a sensor after one second without measurements,
+reconfigures missing/stale sensors independently, and deselects the mux after
+each configuration/read attempt. It makes at most one reconfiguration per scan
+pass. Healthy sensors are not reset merely because another finger is stale.
+
+One `sensor: health` packet per second identifies firmware
+`cs-recovery-20261026`, the five channel states, successful reinitialisation
+counts, external I2C timeouts and failed Bluetooth writes. Channel states are
+0 missing, 1 live, 2 no fresh measurements, 3 bus error, 4 configuration failure,
+5 ambiguous addresses, and 6 starting. The reader exposes fresh diagnostics as
+`health` in `/api/sample`; diagnostics never become motion packets or move the
+pointer. A null health field means no recent diagnostic packet was received.
+
+Local regression checks and firmware compilation passed. Physical acceptance
+must require this firmware marker plus fresh readings; compilation or an
+uploader's zero exit status is insufficient. A physical short, absent power or
+unreachable sensor cannot be repaired by retrying software.
+
+For authorised uploads, the reader's optional `--resume-file PATH` keeps HTTP
+available but postpones USB/Bluetooth ownership until that new signal file
+exists. The six-sensor dashboard can remain open while the uploader owns the
+USB port. The bootloader port remains excluded from normal serial reading.
