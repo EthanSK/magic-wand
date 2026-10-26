@@ -1,0 +1,146 @@
+{
+  "scope": "Exactly one complete wand per row, excluding electronics, battery, bought switches, sockets and caps. PETG model mass derived from positive extruding moves, excluding support/brim and start/end custom code. Slicer estimates; no weighed print.",
+  "matched_settings": "P1S 0.4 mm PETG, 0.2 mm layers, 3 walls, 20% infill; normal supports on grips; other parts retain their geometry-specific support strategy.",
+  "versions": {
+    "V1_mug_90_72_helix": {
+      "archive_sha256": "0f932afba70df0ea2342e53c7d79e2f075f61ec9e79dd3d5555714c413ed60bc",
+      "build_instances": 4,
+      "printed_parts_g": 124.19,
+      "supports_and_brim_g": 10.139,
+      "total_slicer_g": 134.42,
+      "accounted_g": 134.328,
+      "startup_and_rounding_g": 0.092,
+      "features_g": {
+        "Support": 9.397412360423937,
+        "Brim": 0.22554524969885625,
+        "Outer wall": 23.508024482379682,
+        "Inner wall": 49.477405977726306,
+        "Bottom surface": 0.24894776465918736,
+        "Gap infill": 0.07143981408083704,
+        "Internal solid infill": 2.371130592061298,
+        "Sparse infill": 44.965824610310705,
+        "Floating vertical shell": 1.9393459692966555,
+        "Bridge": 0.8725749523186428,
+        "Top surface": 0.5997384853767511,
+        "Support transition": 0.12819967910787158,
+        "Support interface": 0.38738667218653033,
+        "Overhang wall": 0.13507286370807967
+      },
+      "settings": {
+        "printer_model": "Bambu Lab P1S",
+        "filament_type": [
+          "PETG"
+        ],
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "support_type": "normal(auto)"
+      }
+    },
+    "V2_left_diamond": {
+      "archive_sha256": "575065ab4c24ddf4c77e82d020111b9239c484db0712c64a3e15bd0211c233c1",
+      "build_instances": 13,
+      "printed_parts_g": 126.621,
+      "supports_and_brim_g": 7.999,
+      "total_slicer_g": 134.72,
+      "accounted_g": 134.619,
+      "startup_and_rounding_g": 0.101,
+      "features_g": {
+        "Brim": 1.0146706507709673,
+        "Outer wall": 28.283172774820812,
+        "Inner wall": 55.901145985740364,
+        "Gap infill": 2.0760113744639974,
+        "Bottom surface": 0.5315171421725798,
+        "Support transition": 0.1541959771625987,
+        "Support": 6.332392753661909,
+        "Internal solid infill": 5.673985485692977,
+        "Support interface": 0.49742708984937345,
+        "Top surface": 1.5880846708144785,
+        "Sparse infill": 28.69869895872873,
+        "Floating vertical shell": 2.4450296904441093,
+        "Overhang wall": 0.2947267792629338,
+        "Bridge": 1.1282210195460805
+      },
+      "settings": {
+        "printer_model": "Bambu Lab P1S",
+        "filament_type": [
+          "PETG"
+        ],
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "support_type": "normal(auto)"
+      }
+    },
+    "V5_left_top_slide": {
+      "archive_sha256": "8fc9d48a5a49bb7273c353e119b0abbd8e88c177a26cbe409e0bee044c564616",
+      "build_instances": 10,
+      "printed_parts_g": 90.986,
+      "supports_and_brim_g": 6.343,
+      "total_slicer_g": 97.42,
+      "accounted_g": 97.329,
+      "startup_and_rounding_g": 0.091,
+      "features_g": {
+        "Brim": 0.6031023298062725,
+        "Outer wall": 35.485437919559445,
+        "Inner wall": 32.66888239499134,
+        "Bottom surface": 0.13003620009358757,
+        "Support": 5.2901632606093125,
+        "Gap infill": 10.860520618899335,
+        "Support transition": 0.11050775743696926,
+        "Internal solid infill": 4.904520154644302,
+        "Overhang wall": 0.368999010225702,
+        "Bridge": 1.1337135983268547,
+        "Support interface": 0.33885264700111134,
+        "Sparse infill": 3.252510343025382,
+        "Top surface": 1.245405727142519,
+        "Floating vertical shell": 0.9363520925213905
+      },
+      "settings": {
+        "printer_model": "Bambu Lab P1S",
+        "filament_type": [
+          "PETG"
+        ],
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "support_type": "tree(auto)"
+      }
+    }
+  },
+  "physical_mass_measured": false,
+  "original_V1_project_settings": {
+    "archive_sha256": "83792941bd89e07071c1db21a15754e81332b1e83aa22b315e9198c7ddfdd227",
+    "build_instances": 4,
+    "printed_parts_g": 103.878,
+    "supports_and_brim_g": 8.917,
+    "total_slicer_g": 112.89,
+    "accounted_g": 112.795,
+    "startup_and_rounding_g": 0.095,
+    "features_g": {
+      "Support": 8.314297556048825,
+      "Brim": 0.3600818594207365,
+      "Outer wall": 22.398368114575756,
+      "Inner wall": 23.87522720212463,
+      "Bottom surface": 0.2989384273457122,
+      "Gap infill": 0.04824969296647809,
+      "Internal solid infill": 3.0617460900480764,
+      "Sparse infill": 49.897268472353225,
+      "Floating vertical shell": 2.045604597383908,
+      "Bridge": 1.2287246694369358,
+      "Support interface": 0.24234122551870899,
+      "Top surface": 0.8491327872487106,
+      "Overhang wall": 0.17463380638538778
+    },
+    "settings": {
+      "printer_model": "Bambu Lab P1S",
+      "filament_type": [
+        "PETG"
+      ],
+      "layer_height": "0.28",
+      "wall_loops": "2",
+      "sparse_infill_density": "20%",
+      "support_type": "tree(auto)"
+    }
+  }
+}

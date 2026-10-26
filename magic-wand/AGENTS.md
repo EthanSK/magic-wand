@@ -173,3 +173,5 @@ through their build/check commands; never claim an illustration is physical veri
 
 - For every wand CAD or Bambu print-project revision, read [magic-wand-print-design](../.agents/skills/magic-wand-print-design/SKILL.md). Preserve the counter-wound helix and continuous tapered wand silhouette; weight reduction means hollow interiors and thinner walls, not removing the pattern or creating a waist that widens at joints. Reinforce internally. User-corrected — 2026-10-26.
 - A complete wand print project always includes both the left- and right-hand handles. A separate right STL does not make a left-only Bambu project complete. Keep both in the opened complete project and preserve earlier revisions for comparison. User-requested — 2026-10-26.
+
+- Button mounting uses a thin rounded plate sliding down from above directly into integral grip guides. Do not reintroduce bulky cassette boxes, loose printed keepers/caps or glue. Distinguish the bought keycap from printable parts. Compare mass per one complete wand, never a two-grip plate. User-corrected — 2026-10-26.
