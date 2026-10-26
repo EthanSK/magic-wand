@@ -1025,3 +1025,8 @@ The lightweight Print V3 grip passed solid and wire-route tests, but its first t
 The V3 candidate removed the original helix and used narrow spans between wider joint collars. That failed the requested lighter-wand revision even though its mechanisms passed geometry checks. V4 restores the two counter-wound 90/72 mm ridges and continuously decreasing shaft core, with thicker annular joint anchors inside the silhouette. Verify actual rib material, sample the shaft-radius profile, and compare assembled original/new views before delivery. These checks establish geometry, not printed strength.
 
 A complete V4 project contains both handed grips as build instances, plus one shared set of other parts, matching V2's contents. A right-hand STL beside a left-only 3MF does not satisfy that requirement. Verify the opened archive's build list. The project-specific print-design skill and component instructions retain this explicit user correction.
+
+
+## Check triangle output after coincident Boolean seams (2026-10-26)
+
+Raising the V6 side-button pair left the right grip as one valid Manifold body, but the extracted triangle soup contained unpaired edges at coincident Boolean seams. A 0.00001 mm simplification before grip mesh extraction restored closed exported surfaces without changing fit dimensions; all thirteen non-grip meshes remained byte-identical to V5. Keep actual triangle watertightness and edge-count checks, rather than accepting Manifold status alone. Do not move a requested feature or enlarge its clearance just to hide an export seam. This establishes the generated geometry, not printed strength.
