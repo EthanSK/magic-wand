@@ -1,0 +1,368 @@
+--- a/LEARNINGS.md
++++ b/LEARNINGS.md
+@@ -3206,3 +3206,10 @@
+ Keep Creating chat, repeat-key hints and review reminders in the same native non-activating slot. Creating chat has priority, then the Keys hint, then the latest review selection. Keys arrows, Space and Backspace finish their key-up lifecycle while retaining the same HUD card; other one-shot actions still close it.
+ 
+ Ethan's double Middle review toggle uses the existing persistent selection and context transition, not a separate selection store or synthetic staging event. Receiver owns the approved up-to-300ms click disambiguation and cancellation of a pending Better Git session; native toggleReview only changes changes/files while VS Code is frontmost. Keep a bounded history of toggle IDs: remembering only the latest ID permits an older duplicate arriving after a newer toggle to flip the mode again.
++
++
++## 2026-10-26 — Held-centre Switch App and creation audit
++
++The native wand controller can promote the same qualified navigate hold into Switch App adjustment after0.75seconds continuously centred after qualification. Reuse the existing0.25second watchdog and require telemetry no older than0.5seconds, same page generation and live home navigation. Leaving the centre or a telemetry gap restarts residence. Carry the same gesture ID, sequence and last cumulative angle across arming; reset HIGH metric state so the first mouse count is only a baseline. Ordinary release ends Command once and consumes the receiver's trailing choose, while shorter holds keep the existing second-hold flow. No receiver or mouse mapping change is needed.
++
++Unexpected Codex Voice activation cannot be attributed from New Chat and Voice mappings alone. Log accepted Codex newTask and toggleVoiceMode requests with source, cell and native/app transport through the coordinator's existing notice sink. This captures requested actions rather than claiming Voice actually started; never log prompt text or recorded speech. The retained16October incident still lacks its initiating input.
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -18,9 +18,9 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.287</string>
++	<string>1.0.288</string>
+ 	<key>CFBundleVersion</key>
+-	<string>293</string>
++	<string>294</string>
+ 	<key>LSMinimumSystemVersion</key>
+ 	<string>13.0</string>
+ 
+--- a/Sources/ScimitarKit/App/ModePickerCoordinator.swift
++++ b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
+@@ -699,6 +699,13 @@
+                appSpecificInput?(source, target, cell, phase, inputTime) == true,
+                phase == .press {
+                 recordSelection(cell: cell)
++                // Ethan's unexpected "New voice chat": retain the requested
++                // control/transport for correlation, never prompt or voice text.
++                if target == .codex, let action = CodexModeAction.action(for: cell),
++                   action == .newTask || action == .toggleVoiceMode {
++                    let transport = nativeOutputHandled ? "native" : "app"
++                    log.notice("Codex \(action.rawValue) requested via \(transport) route, source \(source.rawValue), cell \(cell.rawValue)")
++                }
+             }
+         case .chromeWebsites:
+             guard phase == .press else { return }
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -59,7 +59,11 @@
+ ///   arms it. The next Middle hold adjusts it with motion, exactly like
+ ///   holding that mouse button and turning its wheel; releasing ends the
+ ///   adjustment and closes the HUD. An armed Switch App also accepts unheld
+-///   aiming to leave its dotted card; only a Middle re-hold adjusts apps.
++///   aiming to leave its dotted card; a Middle re-hold adjusts apps immediately.
++/// * Ethan: holding Middle still on the home centre "should just enter the
++///   switch app choose mode without me having to let go and then hold it
++///   again ... But don't be too fast about it." After `switchAppDwell` the
++///   same hold becomes the Switch App adjustment, as if armed and re-held.
+ /// * A completed action hides the HUD at once but keeps the mode alive for
+ ///   `followUpLinger`, so bounded follow-up work (Codex Edit, feedback) is not
+ ///   cancelled. Any new HUD input ends that wait first.
+@@ -69,6 +73,11 @@
+     /// gain, the existing seven-degree detent spans 604.8 mouse counts. The
+     /// receiver owns Ethan's live mouse gain/response and excludes Bottom LOW.
+     private static let switchAppReferenceGain: Double = 86.4
++    /// Continuous qualified dwell on the home centre before Switch App's
++    /// choose mode starts within the same hold. Deliberately unhurried.
++    public static let switchAppDwell: TimeInterval = 0.75
++    /// The dwell acts only on live telemetry; a silent hold never arms.
++    private static let switchAppDwellFreshness: TimeInterval = 0.5
+     public var onAdjustStep: ((WheelChordDirection)->Bool)?
+     public var onSwitchAppStep: ((WheelChordDirection)->Bool)?
+     public var onContext: ((Bool)->Void)?
+@@ -95,6 +104,8 @@
+         enum SwitchMetric { case angle, mouse }
+         var switchMetric:SwitchMetric?
+         var lastMouseX:Double?
++        /// When the qualified hold's focus last settled on home Switch App.
++        var centreDwellSince:TimeInterval?
+     }
+     /// A wheel card chosen by a held release, waiting for its motion. Its
+     /// press is already delivered and stays held, as on a mouse; only
+@@ -252,12 +263,14 @@
+             guard var current=hold, !current.passiveNavigation, current.navigation != nil,
+                   current.id == command.id, command.sequence > current.sequence else { return }
+             current.sequence=command.sequence;current.received=clock.now;current.qualified=true
++            if target.isWandHome, selected == .switchApp {
++                current.centreDwellSince=clock.now
++                target.setPointerFocus(.init(cell:selected,isArmed:true))
++            }
+             hold=current
+-            if target.isWandHome, selected == .switchApp {
+-                target.setPointerFocus(.init(cell:selected,isArmed:true))
+-            }
+         case .motion:
+             guard var current=hold,current.id == command.id,command.sequence > current.sequence else {return}
++            if clock.now-current.received > Self.switchAppDwellFreshness { current.centreDwellSince=nil }
+             if current.cell.wandReviewMode != nil && !target.wandRadialLayout.contains(current.cell) {
+                 hold=nil;target.setPointerFocus(.init(cell:target.wandRadialLayout.center ?? .switchApp));return
+             }
+@@ -273,6 +286,12 @@
+                 }
+                 nav.apply(deltaX:dx,deltaY:dy);current.navigation=nav;selected=nav.focusedCell
+                 if current.passiveNavigation, let card=armed, selected != card.cell { armed=nil }
++                // Leaving the centre ends the dwell; returning starts a new one.
++                if current.qualified, !current.passiveNavigation, target.isWandHome, selected == .switchApp {
++                    if current.centreDwellSince == nil { current.centreDwellSince=clock.now }
++                } else {
++                    current.centreDwellSince=nil
++                }
+                 if (current.passiveNavigation && armed?.cell == selected)
+                     || (current.qualified && target.isWandHome && selected == .switchApp) {
+                     target.setPointerFocus(.init(cell:selected,isArmed:true,
+@@ -295,6 +314,7 @@
+                 if target.isActive {showAdjustment(current)}
+             }
+             hold=current
++            armHeldSwitchAppAfterDwell()
+         case .park, .release:
+             guard let current=hold,current.id == command.id,command.sequence > current.sequence else {return}
+             hold=nil;lastFinished=current.id
+@@ -422,6 +442,32 @@
+         if target.isActive {showAdjustment(current)}
+     }
+ 
++    /// Turns a qualified hold resting on home Switch App into its choose
++    /// adjustment once the dwell has passed. The same native press as the
++    /// re-hold path holds Command; the hold keeps its id, sequence and last
++    /// cumulative angle, so no earlier motion is replayed, and a fresh metric
++    /// makes the first HIGH sample only a baseline. Release finishes it once.
++    private func armHeldSwitchAppAfterDwell() {
++        guard isOpen, allowed(), target.isWandHome, var current=hold,
++              current.qualified, !current.passiveNavigation, !current.adjusting,
++              current.navigation?.focusedCell == .switchApp,
++              target.pageGeneration == current.pageGeneration,
++              clock.now-current.received <= Self.switchAppDwellFreshness,
++              let since=current.centreDwellSince, clock.now-since >= Self.switchAppDwell else { return }
++        current.centreDwellSince=nil
++        hold=current
++        target.handle(.init(action:.select,source:.wand,physicalCell:.switchApp,phase:.press),inputTime:clock.now)
++        // A press that changed or ended the page must not leave an adjusting hold behind.
++        guard target.isActive, target.isWandHome, target.pageGeneration == current.pageGeneration else { return }
++        armed=nil
++        let next=Hold(id:current.id,sequence:current.sequence,last:current.last,received:current.received,
++                      navigation:nil,qualified:true,cell:.switchApp,pageGeneration:current.pageGeneration,
++                      adjusting:true)
++        hold=next
++        selected = .switchApp
++        showAdjustment(next)
++    }
++
+     /// Reuse the existing detent hysteresis, feedback and six-step packet cap.
+     /// The first HIGH sample and every metric transition only rebase; a stale
+     /// cumulative value must never jump across apps when RAW resumes or stops.
+@@ -500,6 +546,8 @@
+         if let current=hold, !current.passiveNavigation, clock.now-current.received > 1 {
+             reset(reason:.deviceLost);return
+         }
++        // A motionless hold still reaches the dwell on the next tick.
++        armHeldSwitchAppAfterDwell()
+         onContext?(true)
+     }
+ }
+--- a/Tests/ScimitarKitTests/ModePickerTests.swift
++++ b/Tests/ScimitarKitTests/ModePickerTests.swift
+@@ -3194,6 +3194,35 @@
+         }
+     }
+ 
++    func testCodexCreationAuditDistinguishesAcceptedNewChatAndNativeVoiceWithoutExtraDispatch() {
++        let sink = RecordingLogSink()
++        let coordinator = ModePickerCoordinator(lease: RecordingModePickerLease(),
++            hud: RecordingModeHUDPresenter(), scheduler: ManualTickScheduler(),
++            log: Log(category: "test", sink: sink))
++        coordinator.resolveFrontmostApp = {
++            FrontmostAppModeContext(target: .codex, displayName: "Codex", bundleIdentifier: CodexMode.bundleIdentifier)
++        }
++        var appInputs: [PhysicalCell] = [], nativeInputs: [PhysicalCell] = []
++        coordinator.onAppSpecificInput = { _, _, cell, phase, _ in
++            if phase == .press { appInputs.append(cell) }; return true
++        }
++        coordinator.onNativeAppSpecificInput = { _, _, cell, phase, _ in
++            if phase == .press { nativeInputs.append(cell) }; return true
++        }
++        coordinator.enterAppSpecific(source: .razer)
++        for phase in [ModePickerCommand.Phase.press, .release] {
++            coordinator.handle(.init(action: .select, source: .razer, physicalCell: CodexModeAction.newTask.cell, phase: phase))
++            coordinator.handle(.init(action: .selectNative, source: .razer, physicalCell: CodexModeAction.toggleVoiceMode.cell, phase: phase))
++        }
++        coordinator.handle(.init(action: .selectNative, source: .corsair, physicalCell: CodexModeAction.toggleVoiceMode.cell, phase: .press))
++        XCTAssertEqual(appInputs, [CodexModeAction.newTask.cell])
++        XCTAssertEqual(nativeInputs, [CodexModeAction.toggleVoiceMode.cell])
++        XCTAssertEqual(sink.entries.map(\.message).filter { $0.contains("requested via") }, [
++            "Codex newTask requested via app route, source razer, cell 5",
++            "Codex toggleVoiceMode requested via native route, source razer, cell 12"
++        ])
++    }
++
+     private func makeCoordinator(
+         lease: RecordingModePickerLease = RecordingModePickerLease(),
+         hud: RecordingModeHUDPresenter = RecordingModeHUDPresenter(),
+--- a/Tests/ScimitarKitTests/WandHoldToShowTests.swift
++++ b/Tests/ScimitarKitTests/WandHoldToShowTests.swift
+@@ -359,6 +359,167 @@
+         XCTAssertFalse(control.repeatKeysHintVisible)
+     }
+ 
++    // MARK: Held centre enters Switch App choose mode
++
++    /// Middle down from closed, then the receiver's ordinary hold threshold.
++    private func qualifiedHoldFromClosed() -> String {
++        let id = holdFromClosed()
++        clock.advance(by: 0.2)
++        control.handle(.init(.qualify, id: id, sequence: 1))
++        return id
++    }
++
++    func testHoldingStillOnTheCentreEntersChooseModeWithoutReleasing() {
++        let id = qualifiedHoldFromClosed()
++        XCTAssertTrue(buttonPhases.isEmpty, "qualification alone holds no key")
++        clock.advance(by: 0.5)
++        control.handle(.init(.motion, id: id, sequence: 2))
++        tick.fire()
++        XCTAssertTrue(buttonPhases.isEmpty, "not too fast")
++        XCTAssertNil(target.pointerFocus?.adjustment)
++        clock.advance(by: 0.3)
++        control.handle(.init(.motion, id: id, sequence: 3))
++        XCTAssertEqual(buttonPhases, ["press"], "Command goes down once, in the same hold")
++        XCTAssertNotNil(target.pointerFocus?.adjustment, "the ratchet ring shows choose mode")
++        XCTAssertTrue(switchSteps.isEmpty, "earlier motion is never replayed")
++        control.handle(.init(.motion, id: id, sequence: 4, x: 7))
++        XCTAssertEqual(switchSteps, [.down])
++        control.handle(.init(.park, id: id, sequence: 5))
++        control.handle(.init(.choose, id: nextID("choose")))
++        XCTAssertEqual(buttonPhases, ["press", "release"], "release ends the Command lifecycle once")
++        XCTAssertFalse(control.isOpen)
++        XCTAssertNil(control.armedCell, "the trailing choose never re-arms")
++        XCTAssertEqual(switchSteps.count, 1)
++        XCTAssertTrue(homeActions.isEmpty)
++    }
++
++    func testAMotionlessHeartbeatReachesTheDwellOnTheWatchdogTick() {
++        let id = qualifiedHoldFromClosed()
++        clock.advance(by: 0.4)
++        control.handle(.init(.motion, id: id, sequence: 2))
++        clock.advance(by: 0.4)
++        tick.fire()
++        XCTAssertEqual(buttonPhases, ["press"])
++    }
++
++    func testLeavingTheCentreResetsTheDwellAndReturningStartsAgain() {
++        let id = qualifiedHoldFromClosed()
++        clock.advance(by: 0.5)
++        aim(id, at: .wandPlayPause, sequence: 2)
++        clock.advance(by: 0.5)
++        control.handle(.init(.motion, id: id, sequence: 3, x: 0, y: 0))
++        XCTAssertEqual(control.focusedCell, .switchApp)
++        XCTAssertTrue(buttonPhases.isEmpty, "time away from the centre never counts")
++        clock.advance(by: 0.5)
++        control.handle(.init(.motion, id: id, sequence: 4))
++        XCTAssertTrue(buttonPhases.isEmpty)
++        clock.advance(by: 0.3)
++        control.handle(.init(.motion, id: id, sequence: 5))
++        XCTAssertEqual(buttonPhases, ["press"])
++    }
++
++    func testReleasingBeforeTheDwellKeepsTheOrdinaryArmedSwitchApp() {
++        let id = qualifiedHoldFromClosed()
++        clock.advance(by: 0.5)
++        releaseHold(id)
++        XCTAssertTrue(buttonPhases.isEmpty)
++        XCTAssertEqual(control.armedCell, .switchApp, "a quicker release still arms the next hold")
++        XCTAssertTrue(control.isOpen)
++    }
++
++    func testTheFirstHighMouseSampleAfterArmingOnlyRebases() {
++        let id = qualifiedHoldFromClosed()
++        clock.advance(by: 0.4)
++        control.handle(.init(.motion, id: id, sequence: 2, x: 3))
++        clock.advance(by: 0.4)
++        control.handle(.init(.motion, id: id, sequence: 3, x: 3))
++        XCTAssertEqual(buttonPhases, ["press"])
++        control.handle(.init(.motion, id: id, sequence: 4, x: 3, mouseX: 5_000))
++        XCTAssertTrue(switchSteps.isEmpty, "the first HIGH sample is a baseline")
++        control.handle(.init(.motion, id: id, sequence: 5, x: 3, mouseX: 5_604.8))
++        XCTAssertEqual(switchSteps, [.down])
++    }
++
++    func testOtherCardsChildPagesAndSilentHoldsNeverArm() {
++        let card = qualifiedHoldFromClosed()
++        clock.advance(by: 0.1)
++        aim(card, at: .wandPlayPause, sequence: 2)
++        let start = WandRadialNavigator.restingPosition(of: .switchApp, in: target.wandRadialLayout)
++        let goal = WandRadialNavigator.restingPosition(of: .wandPlayPause, in: target.wandRadialLayout)
++        for sequence in 3...10 {
++            clock.advance(by: 0.25)
++            control.handle(.init(.motion, id: card, sequence: sequence, x: goal.x-start.x, y: goal.y-start.y))
++            tick.fire()
++        }
++        XCTAssertTrue(buttonPhases.isEmpty, "dwelling on another card is ordinary hover")
++        control.handle(.init(.dismiss, id: nextID("dismiss")))
++
++        openKeys()
++        let child = hold()
++        clock.advance(by: 0.2)
++        control.handle(.init(.qualify, id: child, sequence: 1))
++        for sequence in 2...10 { clock.advance(by: 0.25); control.handle(.init(.motion, id: child, sequence: sequence)); tick.fire() }
++        XCTAssertTrue(buttonPhases.isEmpty, "a child page's centre is its exit, never Switch App")
++        XCTAssertTrue(control.isOpen)
++        XCTAssertTrue(keysActions.isEmpty)
++        control.handle(.init(.dismiss, id: nextID("dismiss")))
++
++        let silent = qualifiedHoldFromClosed()
++        clock.advance(by: 0.8)
++        tick.fire()
++        XCTAssertTrue(buttonPhases.isEmpty, "stale telemetry never arms")
++        clock.advance(by: 0.4)
++        tick.fire()
++        XCTAssertFalse(target.isActive, "and still closes as a lost hold")
++        control.handle(.init(.motion, id: silent, sequence: 9))
++        XCTAssertTrue(buttonPhases.isEmpty)
++    }
++
++    func testLockDuringTheDwellCancelsIt() {
++        let id = qualifiedHoldFromClosed()
++        clock.advance(by: 0.5)
++        allowed = false
++        tick.fire()
++        allowed = true
++        clock.advance(by: 0.5)
++        control.handle(.init(.motion, id: id, sequence: 2))
++        XCTAssertTrue(buttonPhases.isEmpty)
++        XCTAssertFalse(target.isActive)
++    }
++
++    func testTelemetryGapRestartsCentreDwellInsteadOfCountingMissingTime() {
++        let id = qualifiedHoldFromClosed()
++        clock.advance(by: 0.8)
++        control.handle(.init(.motion, id: id, sequence: 2))
++        XCTAssertTrue(buttonPhases.isEmpty)
++        clock.advance(by: 0.4)
++        control.handle(.init(.motion, id: id, sequence: 3))
++        XCTAssertTrue(buttonPhases.isEmpty)
++        clock.advance(by: 0.4)
++        control.handle(.init(.motion, id: id, sequence: 4))
++        XCTAssertEqual(buttonPhases, ["press"])
++    }
++
++    func testUnqualifiedNavigationNeverAutoArmsAndStalePageCannotArm() {
++        let id = holdFromClosed()
++        for seq in 1...8 {
++            clock.advance(by: 0.25)
++            control.handle(.init(.motion, id: id, sequence: seq))
++            tick.fire()
++        }
++        XCTAssertTrue(buttonPhases.isEmpty)
++        control.handle(.init(.qualify, id: id, sequence: 9))
++        target.exit(reason: .userRequested)
++        target.enterKeys(source: .wand)
++        for seq in 10...14 {
++            clock.advance(by: 0.25)
++            control.handle(.init(.motion, id: id, sequence: seq))
++            tick.fire()
++        }
++        XCTAssertTrue(buttonPhases.isEmpty)
++        XCTAssertTrue(keysActions.isEmpty)
++    }
++
+     func testTheWireAcceptsChoose() throws {
+         let json = #"{"command":"agentic_mouse_wand_control","version":1,"phase":"choose","id":"choose-0001","seq":0}"#
+         XCTAssertEqual(try WandPersistentCommand.decodeIfPresent(Data(json.utf8))?.phase, .choose)
