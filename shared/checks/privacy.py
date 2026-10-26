@@ -15,6 +15,8 @@ PUBLIC_UUIDS = {
     # Synthetic request fixture in the Agentic Mouse screenshot decoder tests;
     # this is not a Bluetooth device identifier or a real capture request.
     "AC1718F8-B050-47BB-B763-5BA765D69F93",
+    # Fixed synthetic request in the native chat-status decoder tests.
+    "24EE96E1-744B-474F-875B-68D2D85736AA",
 }
 PATTERNS = {
     "home directory path": re.compile(r"/Users/[A-Za-z0-9._-]+"),

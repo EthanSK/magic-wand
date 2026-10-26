@@ -1,0 +1,1456 @@
+--- a/LEARNINGS.md
++++ b/LEARNINGS.md
+@@ -3197,3 +3197,12 @@
+ The Screenshot interaction can outlive the HUD's two-second follow-up linger. Renew screenshotActive on the existing controller heartbeat through the hidden selection, then publish false immediately on completion/cancellation; locked-session output is false. Keep the existing native screenshot controller/event-tap lifecycle. The receiver's Bottom triple-click uses a strict version1 UUID start-only command; retries never toggle capture off, and recent64 event IDs remain consumed after completion/cancel. The physical mouse screenshot toggle is unchanged.
+ 
+ Receiver-shaped tests through the real wand coordinator, virtual wheel and keyboard executor confirm negative vertical tilt (Up) emits Command-C and opposite tilt emits Command-V; an unused tap remains Space and unheld hover cannot operate clipboard. This check did not reproduce Ethan's reported physical Copy/Paste failure; do not invent a direction reversal or call it a proven physical repair.
++
++
++## 2026-10-26 — Wand chat readiness and shared reminders
++
++A fresh-chat result is a point-in-time input-focus proof, not a replayable grant to record. Retire successful operation IDs, reject stale requests, check cancellation after each asynchronous boundary and before activation, and never retry an indeterminate create. Keep Terminal Apple Events on a serial queue with no embedded activation; a cancelled queued script must not run. The coordinator renews the display lease and bounds an unresponsive create separately. Claude Code readiness must inspect the newest prompt, since a previous empty prompt above a trust choice or typed draft is not ready. The installed CLI's empty prompt can contain the non-editable Try placeholder.
++
++Keep Creating chat, repeat-key hints and review reminders in the same native non-activating slot. Creating chat has priority, then the Keys hint, then the latest review selection. Keys arrows, Space and Backspace finish their key-up lifecycle while retaining the same HUD card; other one-shot actions still close it.
++
++Ethan's double Middle review toggle uses the existing persistent selection and context transition, not a separate selection store or synthetic staging event. Receiver owns the approved up-to-300ms click disambiguation and cancellation of a pending Better Git session; native toggleReview only changes changes/files while VS Code is frontmost. Keep a bounded history of toggle IDs: remembering only the latest ID permits an older duplicate arriving after a newer toggle to flip the mode again.
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -18,9 +18,9 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.286</string>
++	<string>1.0.287</string>
+ 	<key>CFBundleVersion</key>
+-	<string>292</string>
++	<string>293</string>
+ 	<key>LSMinimumSystemVersion</key>
+ 	<string>13.0</string>
+ 
+--- a/Sources/AgenticMouseApp/AppDelegate.swift
++++ b/Sources/AgenticMouseApp/AppDelegate.swift
+@@ -59,6 +59,23 @@
+     private var wandSelectionController: WandSelectionController?
+     private var wandPersistentController: WandPersistentController?
+     private let wandReviewIndicator = WandReviewIndicator()
++    private lazy var wandChatCreationStatus: WandChatCreationStatusController = {
++        let controller = WandChatCreationStatusController(
++            scheduler: DispatchTickScheduler(), clock: SystemMonotonicClock(),
++            allowed: { [weak self] in self?.mouseCommandsAllowed == true })
++        controller.onVisibilityChange = { [weak self] visible in
++            self?.wandReviewIndicator.setCreatingChat(visible)
++        }
++        return controller
++    }()
++    private lazy var wandNewChatService = WandNewChatService(
++        allowed: { [weak self] in self?.mouseCommandsAllowed == true },
++        status: wandChatCreationStatus,
++        createCodex: { [weak self] in
++            guard let self else { return false }
++            if case .success = self.codexModeActionExecutor.perform(.newTask) { return true }
++            return false
++        })
+     private let wandHeldKeys = WandHeldKeys()
+     private let wandVirtualWheel = WandVirtualWheel()
+     private var wandRejectedPayloadCount = 0
+@@ -325,6 +342,8 @@
+ 
+     /// Runs on every exit path, including signals.
+     private func teardown() {
++        wandNewChatService.stop()
++        wandChatCreationStatus.reset()
+         codexPinNotifications.stop()
+         spotifySongRadioController.cancel()
+         organizeWindowsController.cancel()
+@@ -434,6 +453,8 @@
+     }
+ 
+     private func handleSessionLocked() {
++        wandNewChatService.reset()
++        wandChatCreationStatus.reset()
+         wandSelectionController?.reset(reason: .systemSleep)
+         wandPersistentController?.reset(reason: .systemSleep)
+         floatingMouseClutch.cancel(resetButton: true)
+@@ -494,6 +515,8 @@
+     }
+ 
+     @objc private func systemWillSleep(_ notification: Notification) {
++        wandNewChatService.reset()
++        wandChatCreationStatus.reset()
+         wandSelectionController?.reset(reason: .systemSleep)
+         wandPersistentController?.reset(reason: .systemSleep)
+         codexModeActionExecutor.cancelPendingActions()
+@@ -1561,6 +1584,7 @@
+             modePickerCoordinators[source] = coordinator
+         }
+         startWandSelection()
++        wandNewChatService.start()
+     }
+ 
+     // MARK: - Wand selection
+@@ -1605,6 +1629,7 @@
+             guard let self else { return }
+             let selected = self.mouseCommandsAllowed ? persistent?.selectedReviewMode : nil
+             self.wandReviewIndicator.update(mode:selected)
++            self.wandReviewIndicator.setRepeatKeysHint(persistent?.repeatKeysHintVisible == true)
+             WandContextSender.send(active:active,appMode:active && coordinator?.page == .appSpecific ? coordinator?.appSpecificTarget?.rawValue : nil,reviewMode:active ? persistent?.reviewMode : nil,reviewSelection:selected,screenshotActive:self.mouseCommandsAllowed && self.selectedAreaScreenshotController.isCapturing)
+         }
+         wandPersistentController = persistent
+@@ -2694,6 +2719,10 @@
+                     return
+                 }
+                 if self.floatingMouseClutch.handle(data, inputTime: inputTime) { return }
++                if let command = try? WandChatCreationStatusCommand.decode(data) {
++                    self.wandChatCreationStatus.handle(command)
++                    return
++                }
+                 if let command = try? ModePickerCommand.decode(data) {
+                     self.modePickerCoordinators[command.source]?.handle(command, inputTime: inputTime)
+                     return
+--- /dev/null
++++ b/Sources/AgenticMouseApp/WandNewChatService.swift
+@@ -0,0 +1,401 @@
++import AppKit
++import ApplicationServices
++import ScimitarKit
++
++enum WandNewChatTarget: String, Sendable { case codex, claudeCode }
++
++struct WandNewChatRequest: Equatable, Sendable {
++    let id: UUID
++    let target: WandNewChatTarget
++
++    static func decode(object: String?, info: [AnyHashable: Any]?, now: TimeInterval) -> Self? {
++        guard let object, let id = UUID(uuidString: object), let info,
++              Set(info.keys.compactMap { $0 as? String }) == ["version", "target", "sentAt"], info.count == 3,
++              let version = info["version"] as? NSNumber, CFGetTypeID(version) != CFBooleanGetTypeID(), version.doubleValue == 1,
++              let raw = info["target"] as? String, let target = WandNewChatTarget(rawValue: raw),
++              let timestamp = info["sentAt"] as? NSNumber, CFGetTypeID(timestamp) != CFBooleanGetTypeID(),
++              timestamp.doubleValue.isFinite, now - timestamp.doubleValue <= 10, timestamp.doubleValue - now <= 2
++        else { return nil }
++        return Self(id: id, target: target)
++    }
++}
++
++enum WandNewChatFailure: String, Error, Sendable {
++    case sessionInactive, cancelled, timedOut, requestInProgress, requestMismatch, alreadyCompleted
++    case codexUnavailable, accessibilityDenied, focusChanged, shortcutFailed, composerNotConfirmed
++    case claudeCodeUnavailable, workingDirectoryUnavailable, terminalUnavailable, terminalNotConfirmed, automationDenied
++}
++
++struct WandNewChatReceipt: Equatable, Sendable {
++    let pid: pid_t
++    var tty: String? = nil
++}
++
++/// One request owns a single create attempt. No launch/shortcut retries occur,
++/// and cancelled asynchronous work may not report ready or steal focus later.
++@MainActor
++final class WandNewChatCoordinator {
++    typealias Outcome = Result<WandNewChatReceipt, WandNewChatFailure>
++    typealias Adapter = (WandNewChatRequest, @escaping () -> Bool) async -> Outcome
++    var onResult: ((WandNewChatRequest, Outcome) -> Void)?
++    var onProgress: ((UUID, Bool) -> Void)?
++    private let allowed: () -> Bool
++    private let adapter: Adapter
++    private let scheduler: TickScheduler
++    private let clock: MonotonicClock
++    private var started: TimeInterval = 0
++    private var renewed: TimeInterval = 0
++    private var active: WandNewChatRequest?
++    private var task: Task<Void, Never>?
++    private var finished: [(WandNewChatRequest, Outcome)] = []
++    private var cancelled: [UUID] = []
++
++    init(allowed: @escaping () -> Bool, scheduler: TickScheduler = DispatchTickScheduler(),
++         clock: MonotonicClock = SystemMonotonicClock(), adapter: @escaping Adapter) {
++        self.allowed = allowed; self.adapter = adapter; self.scheduler = scheduler; self.clock = clock
++    }
++
++    func handle(_ request: WandNewChatRequest) {
++        guard allowed() else { onResult?(request, .failure(.sessionInactive)); return }
++        if cancelled.contains(request.id) { onResult?(request, .failure(.cancelled)); return }
++        if let prior = finished.first(where: { $0.0.id == request.id }) {
++            guard prior.0 == request else { onResult?(request, .failure(.requestMismatch)); return }
++            // Ready is a point-in-time focus proof, never a reusable recording grant.
++            if case .success = prior.1 { onResult?(request, .failure(.alreadyCompleted)) }
++            else { onResult?(request, prior.1) }
++            return
++        }
++        if let active {
++            if active.id == request.id {
++                if active != request { onResult?(request, .failure(.requestMismatch)) }
++            } else { finish(request, .failure(.requestInProgress)) }
++            return
++        }
++        active = request
++        started = clock.now; renewed = started
++        onProgress?(request.id, true)
++        scheduler.start(interval: 0.25) { [weak self] in self?.tick() }
++        task = Task { [weak self] in
++            guard let self else { return }
++            let result = await adapter(request) { [weak self] in
++                self?.active == request && self?.allowed() == true && !Task.isCancelled
++            }
++            guard active == request else { return }
++            active = nil; task = nil; scheduler.stop()
++            onProgress?(request.id, false)
++            finish(request, allowed() && !Task.isCancelled ? result : .failure(.cancelled))
++        }
++    }
++
++    func cancel(_ id: UUID) {
++        if !cancelled.contains(id) { cancelled.append(id); if cancelled.count > 64 { cancelled.removeFirst() } }
++        guard let request = active, request.id == id else { return }
++        active = nil; task?.cancel(); task = nil; scheduler.stop()
++        onProgress?(id, false)
++        finish(request, .failure(.cancelled))
++    }
++
++    func reset() { if let id = active?.id { cancel(id) } }
++
++    private func tick() {
++        guard let request = active else { scheduler.stop(); return }
++        guard allowed() else { cancel(request.id); return }
++        if clock.now - started >= 25 {
++            active = nil; task?.cancel(); task = nil; scheduler.stop()
++            if !cancelled.contains(request.id) { cancelled.append(request.id); if cancelled.count > 64 { cancelled.removeFirst() } }
++            onProgress?(request.id, false)
++            finish(request, .failure(.timedOut))
++        } else if clock.now - renewed >= 3 {
++            renewed = clock.now
++            onProgress?(request.id, true)
++        }
++    }
++
++    private func finish(_ request: WandNewChatRequest, _ result: Outcome) {
++        finished.append((request, result)); if finished.count > 64 { finished.removeFirst() }
++        onResult?(request, result)
++    }
++}
++
++/// Local DistributedNotificationCenter boundary agreed with Agent Flow. It
++/// carries only bounded operation IDs/targets/results, never dictated text.
++@MainActor
++final class WandNewChatService {
++    static let requestName = Notification.Name("com.ethansk.AgenticMouse.newChat.v1")
++    static let resultName = Notification.Name("com.ethansk.AgenticMouse.newChat.result.v1")
++    static let cancelName = Notification.Name("com.ethansk.AgenticMouse.newChat.cancel.v1")
++    static let flowProgressName = Notification.Name("com.ethansk.AgentFlow.newChatRecording.result.v1")
++    private var observers: [NSObjectProtocol] = []
++    private let coordinator: WandNewChatCoordinator
++    private let status: WandChatCreationStatusController
++
++    init(allowed: @escaping () -> Bool, status: WandChatCreationStatusController,
++         createCodex: @escaping () -> Bool) {
++        self.status = status
++        let native = WandNewChatAdapter(createCodex: createCodex)
++        coordinator = WandNewChatCoordinator(allowed: allowed, adapter: native.perform)
++        coordinator.onProgress = { [weak status] id, visible in
++            status?.handle(.init(id: id, phase: visible ? .show : .hide))
++        }
++        coordinator.onResult = { request, result in
++            var info: [String: Any] = ["version": 1, "target": request.target.rawValue, "sentAt": Date().timeIntervalSince1970]
++            switch result {
++            case .success(let receipt):
++                info["status"] = "ready"; info["reason"] = ""; info["pid"] = receipt.pid
++                if let tty = receipt.tty { info["tty"] = tty }
++            case .failure(let error): info["status"] = "failed"; info["reason"] = error.rawValue
++            }
++            DistributedNotificationCenter.default().postNotificationName(Self.resultName,
++                object: request.id.uuidString, userInfo: info, deliverImmediately: true)
++        }
++    }
++
++    func start() {
++        guard observers.isEmpty else { return }
++        let center = DistributedNotificationCenter.default()
++        observers.append(center.addObserver(forName: Self.requestName, object: nil, queue: .main) { [weak self] note in
++            guard let request = WandNewChatRequest.decode(object: note.object as? String, info: note.userInfo,
++                now: Date().timeIntervalSince1970) else { return }
++            Task { @MainActor in self?.coordinator.handle(request) }
++        })
++        observers.append(center.addObserver(forName: Self.cancelName, object: nil, queue: .main) { [weak self] note in
++            guard let value = note.object as? String, let id = UUID(uuidString: value) else { return }
++            Task { @MainActor in self?.coordinator.cancel(id) }
++        })
++        observers.append(center.addObserver(forName: Self.flowProgressName, object: nil, queue: .main) { [weak self] note in
++            guard let value = note.object as? String, let id = UUID(uuidString: value),
++                  let phase = note.userInfo?["phase"] as? String, ["creating", "ready", "failed"].contains(phase) else { return }
++            Task { @MainActor in self?.status.handle(.init(id: id, phase: phase == "creating" ? .show : .hide)) }
++        })
++    }
++
++    func reset() { coordinator.reset(); status.reset() }
++    func stop() {
++        observers.forEach { DistributedNotificationCenter.default().removeObserver($0) }
++        observers.removeAll(); reset()
++    }
++}
++
++@MainActor
++final class WandNewChatAdapter {
++    private let createCodex: () -> Bool
++    private let terminal = WandTerminalAppleScript()
++    init(createCodex: @escaping () -> Bool) { self.createCodex = createCodex }
++
++    func perform(_ request: WandNewChatRequest, valid: @escaping () -> Bool) async -> WandNewChatCoordinator.Outcome {
++        guard valid() else { return .failure(.cancelled) }
++        switch request.target {
++        case .codex: return await codex(valid: valid)
++        case .claudeCode: return await claudeCode(request.id, valid: valid)
++        }
++    }
++
++    private func codex(valid: @escaping () -> Bool) async -> WandNewChatCoordinator.Outcome {
++        let origin = NSWorkspace.shared.frontmostApplication?.processIdentifier
++        guard AXIsProcessTrusted() else { return .failure(.accessibilityDenied) }
++        guard let app = await runningApplication(bundle: CodexMode.bundleIdentifier, valid: valid) else { return .failure(.codexUnavailable) }
++        guard valid() else { return .failure(.cancelled) }
++        guard NSWorkspace.shared.frontmostApplication?.processIdentifier == origin || app.isActive else { return .failure(.focusChanged) }
++        app.activate(options: [.activateIgnoringOtherApps])
++        guard await wait(valid: valid, check: { app.isActive }) else { return .failure(.focusChanged) }
++        let before = await WandComposerProbe.snapshot(pid: app.processIdentifier)
++        guard valid(), app.isActive, createCodex() else { return .failure(.shortcutFailed) }
++        let end = ProcessInfo.processInfo.systemUptime + 5
++        var ready = false
++        while valid(), app.isActive, ProcessInfo.processInfo.systemUptime < end {
++            let snapshot = await WandComposerProbe.snapshot(pid: app.processIdentifier)
++            guard valid(), app.isActive else { return .failure(.cancelled) }
++            if let input = snapshot.input, snapshot.empty, snapshot.ownsKeyboard,
++               before.input.map({ !CFEqual($0,input) }) == true || snapshot.newChatWindow {
++                ready = true; break
++            }
++            try? await Task.sleep(nanoseconds: 80_000_000)
++        }
++        guard valid() else { return .failure(.cancelled) }
++        return ready ? .success(.init(pid: app.processIdentifier)) : .failure(.composerNotConfirmed)
++    }
++
++    private func claudeCode(_ id: UUID, valid: @escaping () -> Bool) async -> WandNewChatCoordinator.Outcome {
++        let origin = NSWorkspace.shared.frontmostApplication?.processIdentifier
++        guard let executable = Self.claudeExecutable() else { return .failure(.claudeCodeUnavailable) }
++        let cwd = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Projects").resolvingSymlinksInPath()
++        var directory: ObjCBool = false
++        guard FileManager.default.fileExists(atPath: cwd.path, isDirectory: &directory), directory.boolValue,
++              FileManager.default.isReadableFile(atPath: cwd.path) else { return .failure(.workingDirectoryUnavailable) }
++        guard let app = await runningApplication(bundle: "com.apple.Terminal", valid: valid) else { return .failure(.terminalUnavailable) }
++        guard valid() else { return .failure(.cancelled) }
++        let shell = Self.claudeShell(executable: executable.path, cwd: cwd.path, id: id)
++        let launched = await terminal.run("""
++        with timeout of 5 seconds
++            tell application id "com.apple.Terminal"
++                set createdTab to do script \(Self.appleScriptLiteral(shell))
++                return tty of createdTab
++            end tell
++        end timeout
++        """)
++        guard valid() else { return .failure(.cancelled) }
++        guard case .success(let tty) = launched, tty.hasPrefix("/dev/tty"), tty.count < 64 else {
++            if case .failure(let code) = launched, code.code == -1743 { return .failure(.automationDenied) }
++            return .failure(.terminalNotConfirmed)
++        }
++        guard NSWorkspace.shared.frontmostApplication?.processIdentifier == origin || app.isActive else { return .failure(.focusChanged) }
++        app.activate(options: [.activateIgnoringOtherApps])
++        guard await wait(valid: valid, check: { app.isActive }) else { return .failure(.focusChanged) }
++        let end = ProcessInfo.processInfo.systemUptime + 12
++        while valid(), ProcessInfo.processInfo.systemUptime < end {
++            guard NSWorkspace.shared.frontmostApplication?.processIdentifier == app.processIdentifier else { return .failure(.focusChanged) }
++            let state = await terminal.run(Self.terminalProbeScript(tty: tty))
++            guard valid() else { return .failure(.cancelled) }
++            if case .success(let text) = state, Self.terminalReady(text),
++               NSWorkspace.shared.frontmostApplication?.processIdentifier == app.processIdentifier {
++                return .success(.init(pid: app.processIdentifier, tty: tty))
++            }
++            try? await Task.sleep(nanoseconds: 150_000_000)
++        }
++        return .failure(valid() ? .terminalNotConfirmed : .cancelled)
++    }
++
++    private func runningApplication(bundle: String, valid: @escaping () -> Bool) async -> NSRunningApplication? {
++        if let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundle).first { return app }
++        guard valid(), let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundle) else { return nil }
++        let configuration = NSWorkspace.OpenConfiguration(); configuration.activates = false
++        return await withCheckedContinuation { continuation in
++            NSWorkspace.shared.openApplication(at: url, configuration: configuration) { app, _ in continuation.resume(returning: app) }
++        }
++    }
++
++    private func wait(valid: @escaping () -> Bool, check: () -> Bool) async -> Bool {
++        let end = ProcessInfo.processInfo.systemUptime + 5
++        repeat {
++            guard valid() else { return false }
++            if check() { return true }
++            try? await Task.sleep(nanoseconds: 80_000_000)
++        } while ProcessInfo.processInfo.systemUptime < end
++        return false
++    }
++
++    static func claudeExecutable() -> URL? {
++        let home = FileManager.default.homeDirectoryForCurrentUser
++        return [home.appendingPathComponent(".local/bin/claude"), URL(fileURLWithPath: "/opt/homebrew/bin/claude"), URL(fileURLWithPath: "/usr/local/bin/claude")]
++            .first { FileManager.default.isExecutableFile(atPath: $0.path) }
++    }
++
++    static func shellQuote(_ text: String) -> String { "'" + text.replacingOccurrences(of: "'", with: "'\\''") + "'" }
++    static func appleScriptLiteral(_ text: String) -> String {
++        "\"" + text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"") + "\""
++    }
++    static func claudeShell(executable: String, cwd: String, id: UUID) -> String {
++        "cd -- " + shellQuote(cwd) + " && exec " + shellQuote(executable) + " --session-id " + shellQuote(id.uuidString)
++    }
++    static func terminalReady(_ text: String) -> Bool {
++        let parts = text.components(separatedBy: "\u{1f}")
++        guard parts.count == 2, parts[0].lowercased().contains("claude") else { return false }
++        // Only the newest prompt counts. An empty shell/CLI prompt above a
++        // later trust choice or typed draft is not a recording destination.
++        guard let prompt = parts[1].components(separatedBy: .newlines)
++            .map({ $0.trimmingCharacters(in: .whitespaces) })
++            .last(where: { $0.hasPrefix("❯") }) else { return false }
++        let tail = prompt.dropFirst().trimmingCharacters(in: .whitespaces)
++        return tail.isEmpty || tail.hasPrefix("Try ")
++    }
++    static func terminalProbeScript(tty: String) -> String {
++        """
++        with timeout of 2 seconds
++            tell application id "com.apple.Terminal"
++                set currentTab to selected tab of front window
++                if tty of currentTab is not \(appleScriptLiteral(tty)) then error number -128
++                set AppleScript's text item delimiters to ","
++                set runningNames to processes of currentTab as text
++                return runningNames & (ASCII character 31) & contents of currentTab
++            end tell
++        end timeout
++        """
++    }
++}
++
++/// Small, bounded AX checks reuse the focused-composer ownership pattern used
++/// by Model Bar. No draft content is logged or retained beyond an empty check.
++private struct WandComposerSnapshot: @unchecked Sendable {
++    let input: AXUIElement?
++    let empty: Bool
++    let newChatWindow: Bool
++    let ownsKeyboard: Bool
++}
++
++private enum WandComposerProbe {
++    private static let queue = DispatchQueue(label: "com.ethan.agentic-mouse.wand-composer",qos:.userInitiated)
++    static func snapshot(pid:pid_t) async -> WandComposerSnapshot {
++        await withCheckedContinuation { continuation in
++            queue.async { continuation.resume(returning: read(pid:pid)) }
++        }
++    }
++    private static func attribute(_ element:AXUIElement,_ key:String)->CFTypeRef? {
++        var value:CFTypeRef?
++        return AXUIElementCopyAttributeValue(element,key as CFString,&value) == .success ? value:nil
++    }
++    private static func element(_ root:AXUIElement,_ key:String)->AXUIElement? {
++        guard let raw=attribute(root,key),CFGetTypeID(raw)==AXUIElementGetTypeID() else{return nil}
++        return unsafeBitCast(raw,to:AXUIElement.self)
++    }
++    private static func read(pid:pid_t)->WandComposerSnapshot {
++        let app=AXUIElementCreateApplication(pid)
++        AXUIElementSetMessagingTimeout(app,0.1)
++        // Same Chromium assistive-client opt-in used by the installed Model Bar.
++        _=AXUIElementSetAttributeValue(app,"AXManualAccessibility" as CFString,kCFBooleanTrue)
++        let window=element(app,kAXFocusedWindowAttribute)
++        var input=element(app,kAXFocusedUIElementAttribute)
++        if input.map({attribute($0,kAXRoleAttribute) as? String == kAXTextAreaRole as String}) != true {
++            input=nil
++            // Chromium sometimes gives app focus to a group while the actual
++            // composer still has AXFocused. Search only that focused window.
++            var nodes=window.map{[$0]} ?? [];var index=0
++            let deadline=ProcessInfo.processInfo.systemUptime+0.35
++            while index<nodes.count,index<2000,ProcessInfo.processInfo.systemUptime<deadline {
++                let item=nodes[index];index+=1
++                if attribute(item,kAXRoleAttribute) as? String == kAXTextAreaRole as String,
++                   attribute(item,kAXFocusedAttribute) as? Bool == true {input=item;break}
++                nodes += attribute(item,kAXChildrenAttribute) as? [AXUIElement] ?? []
++            }
++        }
++        let value=input.flatMap{attribute($0,kAXValueAttribute) as? String}
++        let placeholder=input.flatMap{attribute($0,kAXTitleAttribute) as? String}
++        let empty=value.map{$0.trimmingCharacters(in:.whitespacesAndNewlines).isEmpty || $0 == placeholder} ?? false
++        let title=window.flatMap{attribute($0,kAXTitleAttribute) as? String}?.lowercased() ?? ""
++        var keyboardPID:pid_t=0
++        let system=AXUIElementCreateSystemWide();AXUIElementSetMessagingTimeout(system,0.1)
++        if let focused=element(system,kAXFocusedUIElementAttribute){_=AXUIElementGetPid(focused,&keyboardPID)}
++        return WandComposerSnapshot(input:input,empty:empty,
++            newChatWindow:title.hasPrefix("new chat") || title.hasPrefix("new task"),ownsKeyboard:keyboardPID==pid)
++    }
++}
++
++/// Apple Events stay on one private queue, following the Spotify adapter.
++/// No activation is embedded in a queued script: cancellation is checked on
++/// the main actor before any explicit foreground activation.
++private struct WandTerminalScriptFailure: Error { let code: Int }
++
++private final class WandScriptTicket: @unchecked Sendable {
++    private let lock=NSLock()
++    private var cancelled=false
++    func cancel(){lock.lock();cancelled=true;lock.unlock()}
++    var isActive:Bool {lock.lock();defer{lock.unlock()};return !cancelled}
++}
++
++private final class WandTerminalAppleScript: @unchecked Sendable {
++    private let queue = DispatchQueue(label: "com.ethan.agentic-mouse.wand-terminal")
++    func run(_ source:String) async -> Result<String,WandTerminalScriptFailure> {
++        let ticket=WandScriptTicket()
++        return await withTaskCancellationHandler(operation: {
++            await withCheckedContinuation { continuation in
++                queue.async {
++                    guard ticket.isActive else {continuation.resume(returning:.failure(.init(code:-128)));return}
++                    var error:NSDictionary?
++                    let result=NSAppleScript(source:source)?.executeAndReturnError(&error)
++                    if let code=error?["NSAppleScriptErrorNumber"] as? Int {continuation.resume(returning:.failure(.init(code:code)))}
++                    else if let value=result?.stringValue {continuation.resume(returning:.success(value))}
++                    else {continuation.resume(returning:.failure(.init(code:-1)))}
++                }
++            }
++        },onCancel:{ticket.cancel()})
++    }
++}
+--- a/Sources/ScimitarKit/App/KeysMode.swift
++++ b/Sources/ScimitarKit/App/KeysMode.swift
+@@ -72,6 +72,19 @@
+         }
+     }
+ 
++    /// Wand only: ordinary navigation and text keys that Ethan clicks over and
++    /// over keep the open Keys HUD on the same card. One-shot or stateful keys
++    /// (Undo, Save, Hold Shift) still finish and hide it. Physical mice are
++    /// unaffected: they have no HUD selection to keep.
++    public var keepsWandHUDOpen: Bool {
++        switch self {
++        case .arrowUp, .arrowDown, .arrowLeft, .arrowRight, .insertSpace, .pressBackspace:
++            return true
++        case .undo, .save, .holdShift:
++            return false
++        }
++    }
++
+     public static func action(
+         for cell: PhysicalCell,
+         source: MouseSource = .corsair
+--- /dev/null
++++ b/Sources/ScimitarKit/App/WandChatCreationStatus.swift
+@@ -0,0 +1,104 @@
++import Foundation
++
++/// Double Top's external progress display only. Agent Flow owns the actual
++/// new-chat/focus/recording operation; this packet never dispatches an input.
++public struct WandChatCreationStatusCommand: Decodable, Equatable, Sendable {
++    public static let commandName = "agentic_mouse_wand_chat_creation_status"
++    public enum Phase: String, Decodable, Sendable { case show, hide }
++    public let command: String
++    public let version: Int
++    public let id: UUID
++    public let phase: Phase
++
++    public init(id: UUID, phase: Phase) {
++        command = Self.commandName
++        version = 1
++        self.id = id
++        self.phase = phase
++    }
++
++    public static func decode(_ data: Data) throws -> Self {
++        guard data.count <= 256,
++              let fields = try JSONSerialization.jsonObject(with: data) as? [String: Any],
++              Set(fields.keys) == ["command", "version", "id", "phase"] else {
++            throw DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "invalid wand chat status"))
++        }
++        let value = try JSONDecoder().decode(Self.self, from: data)
++        guard value.command == commandName, value.version == 1 else {
++            throw DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "invalid wand chat status"))
++        }
++        return value
++    }
++}
++
++/// A bounded display lease. A late completion cannot hide a newer operation,
++/// and late show packets cannot resurrect a completed or expired operation.
++public final class WandChatCreationStatusController {
++    public static let leaseDuration: TimeInterval = 10
++    private static let retiredLimit = 64
++    public var onVisibilityChange: ((Bool) -> Void)?
++    public private(set) var currentID: UUID?
++    public var isVisible: Bool { currentID != nil }
++    private var deadline: TimeInterval?
++    private var retired: [UUID] = []
++    private let scheduler: TickScheduler
++    private let clock: MonotonicClock
++    private let allowed: () -> Bool
++
++    public init(scheduler: TickScheduler, clock: MonotonicClock, allowed: @escaping () -> Bool = { true }) {
++        self.scheduler = scheduler
++        self.clock = clock
++        self.allowed = allowed
++    }
++
++    public func handle(_ command: WandChatCreationStatusCommand) {
++        guard allowed() else { reset(); return }
++        expireIfNeeded()
++        switch command.phase {
++        case .show:
++            guard !retired.contains(command.id) else { return }
++            let wasVisible = isVisible
++            if let old = currentID, old != command.id { retire(old) }
++            currentID = command.id
++            deadline = clock.now + Self.leaseDuration
++            if !wasVisible { onVisibilityChange?(true) }
++            if !scheduler.isRunning {
++                scheduler.start(interval: 0.25) { [weak self] in self?.tick() }
++            }
++        case .hide:
++            retire(command.id)
++            guard command.id == currentID else { return }
++            clear()
++        }
++    }
++
++    public func reset() {
++        if let id = currentID { retire(id) }
++        clear()
++    }
++
++    private func tick() {
++        guard allowed() else { reset(); return }
++        expireIfNeeded()
++    }
++
++    private func expireIfNeeded() {
++        guard let deadline, clock.now >= deadline else { return }
++        if let id = currentID { retire(id) }
++        clear()
++    }
++
++    private func clear() {
++        let wasVisible = isVisible
++        currentID = nil
++        deadline = nil
++        scheduler.stop()
++        if wasVisible { onVisibilityChange?(false) }
++    }
++
++    private func retire(_ id: UUID) {
++        guard !retired.contains(id) else { return }
++        retired.append(id)
++        if retired.count > Self.retiredLimit { retired.removeFirst() }
++    }
++}
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -7,7 +7,9 @@
+     /// `activate` is a Middle tap on the outlined card. `choose` is the
+     /// release of a Middle hold on it: the same action, except a card that
+     /// needs more motion (a wheel card, Switch App) is armed instead.
+-    public enum Phase: String { case open, appSpecific, hover, navigate, qualify, motion, park, press, release, activate, choose, dismiss, exitReview }
++    /// `toggleReview` is the receiver's short double Middle while a review
++    /// mode is selected: it flips Review changes ⇄ Stage files and nothing else.
++    public enum Phase: String { case open, appSpecific, hover, navigate, qualify, motion, park, press, release, activate, choose, dismiss, exitReview, toggleReview }
+     public let phase: Phase
+     public let id: String
+     public let sequence: Int
+@@ -107,10 +109,20 @@
+     private var armed:ArmedCard?
+     private var concealedUntil:TimeInterval?
+     private var lastFinished:String?
++    /// The last applied review toggle; a duplicate datagram never flips back.
++    private var recentReviewToggles:[String]=[]
+     private var selected:PhysicalCell = .switchApp
+     private var ownsHUD=false
+     // Screenshot aiming outlives the hidden HUD; keep its receiver lease fresh.
+     private var screenshotInteractionActive=false
++    /// The Keys page generation on which a repeatable key kept the HUD open.
++    private var repeatKeysGeneration:UInt64?
++    /// Ethan's "Double-click to exit" reminder: only while an open Keys page is
++    /// repeating keys. Any page change, close or reopen ends it.
++    public var repeatKeysHintVisible:Bool {
++        guard isOpen, let generation=repeatKeysGeneration else { return false }
++        return target.page == .keys && !target.isWandHome && target.pageGeneration == generation
++    }
+     public private(set) var pinnedReviewCell: PhysicalCell?
+     public var selectedReviewMode: String? { target.wandReviewAvailable ? pinnedReviewCell?.wandReviewMode : nil }
+     public func clearReviewSelection() { pinnedReviewCell=nil;target.setWandReviewSelection(nil);if !isOpen && concealedUntil == nil {scheduler.stop()};onContext?(isOpen) }
+@@ -131,7 +143,7 @@
+     }
+     public func reset(reason:ModePickerExitReason = .shuttingDown) {
+         pinnedReviewCell=nil;target.setWandReviewSelection(nil)
+-        hold=nil;armed=nil;concealedUntil=nil;ownsHUD=false;screenshotInteractionActive=false;scheduler.stop()
++        hold=nil;armed=nil;concealedUntil=nil;ownsHUD=false;screenshotInteractionActive=false;repeatKeysGeneration=nil;scheduler.stop()
+         if target.isActive {target.exit(reason:reason)}
+         onContext?(false)
+     }
+@@ -139,6 +151,13 @@
+         guard allowed() else {reset(reason:.systemSleep);return}
+         if ownsHUD && !target.isActive {ownsHUD=false;hold=nil;armed=nil;if pinnedReviewCell == nil && !screenshotInteractionActive {scheduler.stop()}}
+         defer {onContext?(isOpen)}
++        // Ethan's double click while in review mode: switch to the other mode.
++        // It belongs to the independent review lane, so it never opens, closes
++        // or steers the full HUD and never ends another action's follow-up.
++        if command.phase == .toggleReview {
++            toggleReview(id:command.id)
++            return
++        }
+         if concealedUntil != nil {
+             switch command.phase {
+             case .open, .appSpecific, .exitReview: finishConcealment()
+@@ -146,7 +165,7 @@
+                 // The receiver had not yet seen the close: this hold opens a
+                 // fresh HUD rather than steering the hidden one.
+                 finishConcealment();openHome()
+-            case .hover, .qualify, .dismiss, .motion, .park, .release, .activate, .choose:
++            case .hover, .qualify, .dismiss, .motion, .park, .release, .activate, .choose, .toggleReview:
+                 // Already hidden. Stale input from the finished hold never
+                 // acts, and the follow-up work is left to finish.
+                 return
+@@ -154,12 +173,12 @@
+         }
+         // Middle exits the independent review lane without opening another HUD.
+         if command.phase == .exitReview {
+-            clearReviewSelection();hold=nil;armed=nil;ownsHUD=false
++            clearReviewSelection();hold=nil;armed=nil;ownsHUD=false;repeatKeysGeneration=nil
+             if target.isActive {target.exit(reason:.userRequested)}
+             scheduler.stop();onContext?(false);return
+         }
+         if command.phase == .dismiss {
+-            hold=nil;armed=nil;ownsHUD=false
++            hold=nil;armed=nil;ownsHUD=false;repeatKeysGeneration=nil
+             if target.isActive {target.exit(reason:.userRequested)}
+             if pinnedReviewCell == nil && !screenshotInteractionActive {scheduler.stop()} else {startWatchdog()}
+             return
+@@ -302,9 +321,25 @@
+             } else {
+                 keepOutline(after:current.navigation?.focusedCell ?? current.cell,generation:current.pageGeneration)
+             }
+-        case .open, .appSpecific, .activate, .choose, .dismiss, .exitReview:break
++        case .open, .appSpecific, .activate, .choose, .dismiss, .exitReview, .toggleReview:break
+         }
+         if !target.isActive {ownsHUD=false;hold=nil;armed=nil;if pinnedReviewCell == nil && concealedUntil == nil && !screenshotInteractionActive {scheduler.stop()}}
++    }
++
++    // MARK: Review lane
++
++    /// Flips the pinned review card through the same selection path the home
++    /// cards use. Requires a live selection with VS Code frontmost. It sends
++    /// no wheel, commit or staging command; the receiver's context change
++    /// owns ending any pending review session.
++    private func toggleReview(id:String) {
++        guard !recentReviewToggles.contains(id), target.wandReviewAvailable,
++              let pinned=pinnedReviewCell, pinned.wandReviewMode != nil else { return }
++        recentReviewToggles.append(id)
++        if recentReviewToggles.count > 64 { recentReviewToggles.removeFirst() }
++        pinnedReviewCell = pinned == .wandReviewChanges ? .wandReviewFiles : .wandReviewChanges
++        target.setWandReviewSelection(pinnedReviewCell)
++        startWatchdog()
+     }
+ 
+     // MARK: Using the outlined card
+@@ -348,6 +383,15 @@
+     private func finishAction(_ cell:PhysicalCell,generation:UInt64) {
+         guard target.isActive else {return}
+         if target.pageGeneration != generation {
++            keepOutline(after:cell,generation:generation)
++            return
++        }
++        if target.page == .keys, !target.isWandHome,
++           KeysModeAction.action(for:cell,source:.wand)?.keepsWandHUDOpen == true {
++            // Arrows, Space and Backspace repeat: press and release are both
++            // sent, so nothing stays held; keep the same card for the next click.
++            // The receiver's existing double-Middle dismiss exits.
++            repeatKeysGeneration=generation
+             keepOutline(after:cell,generation:generation)
+             return
+         }
+@@ -406,6 +450,7 @@
+     private func openHome() {
+         selected = .switchApp
+         armed=nil
++        repeatKeysGeneration=nil
+         target.enterWandHome(source:.wand,pointerFocus:.init(cell:selected))
+         ownsHUD=target.isActive
+         if ownsHUD {startWatchdog()}
+@@ -413,7 +458,7 @@
+ 
+     /// Hide the HUD for a completed action; keep the mode for its follow-up.
+     private func conceal() {
+-        hold=nil;armed=nil;ownsHUD=false
++        hold=nil;armed=nil;ownsHUD=false;repeatKeysGeneration=nil
+         target.concealWandHUD()
+         concealedUntil=clock.now+Self.followUpLinger
+         startWatchdog()
+--- a/Sources/ScimitarUI/WandReviewIndicator.swift
++++ b/Sources/ScimitarUI/WandReviewIndicator.swift
+@@ -1,46 +1,141 @@
+ import AppKit
+ import SwiftUI
+ 
+-/// A non-activating reminder of the wand's selected VS Code review mode.
+-/// The controller owns its lifetime; hiding the main HUD does not clear it.
++/// What the wand's bottom-centre reminder shows. Review selections are
++/// "changes" or "files"; the create-chat status and the repeat-keys exit hint
++/// temporarily take the slot.
++enum WandIndicatorContent: Equatable {
++    case review(String)
++    case creatingChat
++    case repeatKeysHint
++}
++
++/// A non-activating reminder of the wand's selected VS Code review mode, and
++/// the same slot for the brief Creating chat… status and the Keys repeat
++/// hint. Precedence: Creating chat…, then the hint, then the review mode. The
++/// controller owns its lifetime; hiding the main HUD does not clear it.
+ public final class WandReviewIndicator {
+     private var panel:NSPanel?
+-    private var current:String?
++    private var hosting:NSHostingView<WandReviewIndicatorView>?
++    private var shown:WandIndicatorContent?
++    /// The selected review mode is kept while an overlay covers it.
++    private var reviewMode:String?
++    private var creatingChat=false
++    private var repeatKeysHint=false
+     private var placementAnchor: WandHUDPlacement.Anchor?
++    private var screenProvider:()->NSScreen? = {NSScreen.main}
++    private var present:(NSPanel)->Void = {$0.orderFrontRegardless()}
+     public init() {}
++    init(screenProvider:@escaping ()->NSScreen?,present:@escaping (NSPanel)->Void) {
++        self.screenProvider=screenProvider;self.present=present
++    }
+     public func update(mode:String?) {
+-        guard let mode, ["changes","files"].contains(mode), let screen=NSScreen.main else {
+-            current=nil;panel?.orderOut(nil);panel=nil;placementAnchor=nil;return
++        reviewMode = mode.flatMap { ["changes","files"].contains($0) ? $0 : nil }
++        render()
++    }
++    /// Shows Creating chat… in the review slot. False restores the current
++    /// review selection, or hides the reminder when there is none.
++    public func setCreatingChat(_ active:Bool) {
++        creatingChat=active
++        render()
++    }
++    /// Shows Double-click to exit while the wand's Keys HUD is repeating keys.
++    /// False restores whatever lower-priority content remains, or hides.
++    public func setRepeatKeysHint(_ active:Bool) {
++        guard repeatKeysHint != active else { return }
++        repeatKeysHint=active
++        render()
++    }
++    var isVisible:Bool { panel != nil }
++    var currentContent:WandIndicatorContent? { shown }
++    private var desired:WandIndicatorContent? {
++        if creatingChat { return .creatingChat }
++        if repeatKeysHint { return .repeatKeysHint }
++        return reviewMode.map(WandIndicatorContent.review)
++    }
++    private func render() {
++        guard let content=desired, let screen=screenProvider() else {
++            shown=nil;hosting=nil;panel?.orderOut(nil);panel=nil;placementAnchor=nil;return
+         }
+-        let frame=indicatorFrame(on:screen)
+-        if current == mode,let panel {panel.setFrameOrigin(frame.origin);return}
+-        current=mode
+-        panel?.orderOut(nil);panel=nil
++        let frame=indicatorFrame(on:screen,size:WandReviewIndicatorView.size(for:content))
++        if let panel {
++            // Same panel and anchor: swapping content keeps the capsule's
++            // centre; only the three-line review reminder is a little taller.
++            if panel.frame.size != frame.size { panel.setFrame(frame,display:true) }
++            else { panel.setFrameOrigin(frame.origin) }
++            if shown != content {shown=content;hosting?.rootView=WandReviewIndicatorView(content:content)}
++            return
++        }
++        shown=content
+         let p=NSPanel(contentRect:frame,styleMask:[.borderless,.nonactivatingPanel],backing:.buffered,defer:false)
+         p.isOpaque=false;p.backgroundColor = .clear;p.hasShadow=true;p.level = NSWindow.Level(rawValue:NSWindow.Level.floating.rawValue+2)
+         p.hidesOnDeactivate=false;p.ignoresMouseEvents=true;p.collectionBehavior=[.canJoinAllSpaces,.fullScreenAuxiliary]
+-        p.contentView=NSHostingView(rootView:WandReviewIndicatorView(mode:mode))
+-        panel=p;p.orderFrontRegardless()
++        let view=NSHostingView(rootView:WandReviewIndicatorView(content:content))
++        p.contentView=view;hosting=view
++        panel=p;present(p)
+     }
+-    private func indicatorFrame(on screen:NSScreen)->NSRect {
++    private func indicatorFrame(on screen:NSScreen,size:NSSize)->NSRect {
+         if placementAnchor == nil { placementAnchor = .init() }
+-        return placementAnchor!.frame(size:NSSize(width:210,height:52),on:screen)
++        return placementAnchor!.frame(size:size,on:screen)
+     }
+ 
+ }
+ struct WandReviewIndicatorView:View {
+-    let mode:String
++    let content:WandIndicatorContent
++    init(mode:String) { content = .review(mode) }
++    init(content:WandIndicatorContent) { self.content = content }
++    var mode:String? {
++        if case .review(let mode)=content { return mode }
++        return nil
++    }
++    /// Status overlays keep their compact capsule; the review reminder adds
++    /// one line for its double-click destination.
++    static func size(for content:WandIndicatorContent)->NSSize {
++        if case .review = content { return NSSize(width:210,height:62) }
++        return NSSize(width:210,height:52)
++    }
++    /// The mode a double click switches to from `mode`.
++    static func toggleDestination(for mode:String)->String {
++        mode == "changes" ? "Stage files" : "Review changes"
++    }
+     var body:some View {
+-        VStack(spacing:3) {
+-            Label(mode == "changes" ? "Review changes" : "Stage files",systemImage:mode == "changes" ? "eye" : "doc.on.doc")
+-                .font(.system(size:12,weight:.semibold,design:.rounded))
+-            // Ethan calls this "commit selection" (formerly "commit set"): stage the selection, not a Git commit.
+-            Text("(Hold to commit selection)")
+-                .font(.system(size:10,weight:.medium,design:.rounded))
++        let size=Self.size(for:content)
++        Group {
++            switch content {
++            case .review(let mode):
++                VStack(spacing:3) {
++                    Label(mode == "changes" ? "Review changes" : "Stage files",systemImage:mode == "changes" ? "eye" : "doc.on.doc")
++                        .font(.system(size:12,weight:.semibold,design:.rounded))
++                    // Ethan calls this "commit selection" (formerly "commit set"): stage the selection, not a Git commit.
++                    Text("(Hold to commit selection)")
++                        .font(.system(size:10,weight:.medium,design:.rounded))
++                    // Ethan: double click toggles review ⇄ stage files, "back and forth".
++                    Text("Double-click for \(Self.toggleDestination(for:mode))")
++                        .font(.system(size:10,weight:.medium,design:.rounded))
++                }
++            case .creatingChat:
++                // Progress, not a promise: Agent Flow owns the actual chat.
++                Label("Creating chat…",systemImage:"square.and.pencil")
++                    .font(.system(size:12,weight:.semibold,design:.rounded))
++            case .repeatKeysHint:
++                // Ethan: "double click to exit so you don't get stuck".
++                Label("Double-click to exit",systemImage:"cursorarrow.click.2")
++                    .font(.system(size:12,weight:.semibold,design:.rounded))
++            }
+         }
+             .foregroundStyle(Color.black)
+-            .padding(.horizontal,14).frame(width:210,height:52)
+-            .background(mode == "changes" ? Color.green : Color(red:0.78,green:0.6,blue:1),in:Capsule())
++            .padding(.horizontal,14).frame(width:size.width,height:size.height)
++            .background(fill,in:Capsule())
+             .overlay(Capsule().strokeBorder(.white.opacity(0.28),lineWidth:1))
++            .accessibilityElement(children:.combine)
++    }
++    private var fill:Color {
++        switch content {
++        case .review(let mode): return mode == "changes" ? Color.green : Color(red:0.78,green:0.6,blue:1)
++        // The HUD's existing legend-toggle cyan: calm, distinct, legible in black.
++        case .creatingChat: return Color(red:0,green:205.0/255,blue:1)
++        // The arrow-key family's orange, matching the cards being repeated.
++        case .repeatKeysHint: return Color(red:1,green:170.0/255,blue:28.0/255)
++        }
+     }
+ }
+--- /dev/null
++++ b/Tests/AgenticMouseAppTests/WandNewChatServiceTests.swift
+@@ -0,0 +1,130 @@
++import XCTest
++import ScimitarKit
++@testable import AgenticMouseApp
++
++@MainActor
++final class WandNewChatServiceTests: XCTestCase {
++    func testRequestBoundaryRejectsStaleAndMalformedNotifications() {
++        let id = UUID().uuidString
++        let valid: [AnyHashable: Any] = ["version": 1, "target": "codex", "sentAt": 100.0]
++        XCTAssertEqual(WandNewChatRequest.decode(object: id, info: valid, now: 100)?.target, .codex)
++        for replacement in ["version": true, "target": "claude", "sentAt": true] as [String: Any] {
++            var fields = valid; fields[replacement.key] = replacement.value
++            XCTAssertNil(WandNewChatRequest.decode(object: id, info: fields, now: 100))
++        }
++        XCTAssertNil(WandNewChatRequest.decode(object: id, info: valid, now: 111))
++        XCTAssertNil(WandNewChatRequest.decode(object: id, info: valid, now: 97))
++        XCTAssertNil(WandNewChatRequest.decode(object: "bad", info: valid, now: 100))
++        var expanded = valid; expanded["script"] = "unexpected"
++        XCTAssertNil(WandNewChatRequest.decode(object: id, info: expanded, now: 100))
++    }
++
++    func testDuplicatePendingRequestCreatesOnceAndCancellationVetoesLateReady() async {
++        let request = WandNewChatRequest(id: UUID(), target: .codex)
++        var attempts = 0
++        var release: CheckedContinuation<Void, Never>?
++        var outcomes: [WandNewChatCoordinator.Outcome] = []
++        var didActAfterCancel = false
++        let coordinator = WandNewChatCoordinator(allowed: { true }) { _, valid in
++            attempts += 1
++            await withCheckedContinuation { release = $0 }
++            if valid() { didActAfterCancel = true }
++            return .success(.init(pid: 123))
++        }
++        coordinator.onResult = { _, result in outcomes.append(result) }
++        coordinator.handle(request)
++        for _ in 0..<10 { await Task.yield() }
++        coordinator.handle(request)
++        XCTAssertEqual(attempts, 1)
++        coordinator.cancel(request.id)
++        release?.resume()
++        for _ in 0..<10 { await Task.yield() }
++        XCTAssertFalse(didActAfterCancel)
++        XCTAssertEqual(outcomes, [.failure(.cancelled)])
++        coordinator.handle(request)
++        XCTAssertEqual(attempts, 1)
++        XCTAssertEqual(outcomes.last, .failure(.cancelled))
++    }
++
++    func testCompletedRequestCannotLaunchOrReuseAnOldReadyGrant() async {
++        var attempts = 0
++        var outcomes: [WandNewChatCoordinator.Outcome] = []
++        let coordinator = WandNewChatCoordinator(allowed: { true }) { _, _ in
++            attempts += 1; return .success(.init(pid: 123))
++        }
++        coordinator.onResult = { _, result in outcomes.append(result) }
++        let request = WandNewChatRequest(id: UUID(), target: .codex)
++        coordinator.handle(request)
++        for _ in 0..<10 { await Task.yield() }
++        coordinator.handle(request)
++        XCTAssertEqual(attempts, 1)
++        XCTAssertEqual(outcomes, [.success(.init(pid: 123)), .failure(.alreadyCompleted)])
++    }
++
++    func testCancellationBeforeRequestAndInactiveSessionNeverLaunch() async {
++        var attempts = 0
++        var allowed = true
++        let coordinator = WandNewChatCoordinator(allowed: { allowed }) { _, _ in
++            attempts += 1; return .failure(.shortcutFailed)
++        }
++        let request = WandNewChatRequest(id: UUID(), target: .codex)
++        coordinator.cancel(request.id)
++        coordinator.handle(request)
++        allowed = false
++        coordinator.handle(.init(id: UUID(), target: .claudeCode))
++        for _ in 0..<10 { await Task.yield() }
++        XCTAssertEqual(attempts, 0)
++    }
++
++    func testHungCreateRenewsProgressThenTimesOutWithoutLateReady() async {
++        let clock = ManualClock(), scheduler = ManualTickScheduler()
++        var release: CheckedContinuation<Void, Never>?
++        var outcomes: [WandNewChatCoordinator.Outcome] = []
++        var progress: [Bool] = []
++        var actedAfterTimeout = false
++        let coordinator = WandNewChatCoordinator(allowed: { true }, scheduler: scheduler, clock: clock) { _, valid in
++            await withCheckedContinuation { release = $0 }
++            actedAfterTimeout = valid()
++            return .success(.init(pid: 123))
++        }
++        coordinator.onResult = { _, result in outcomes.append(result) }
++        coordinator.onProgress = { _, visible in progress.append(visible) }
++        coordinator.handle(.init(id: UUID(), target: .codex))
++        for _ in 0..<10 { await Task.yield() }
++        clock.advance(by: 3); scheduler.fire()
++        XCTAssertEqual(progress, [true, true])
++        clock.advance(by: 22); scheduler.fire()
++        XCTAssertEqual(progress, [true, true, false])
++        XCTAssertEqual(outcomes, [.failure(.timedOut)])
++        XCTAssertFalse(scheduler.isRunning)
++        release?.resume()
++        for _ in 0..<10 { await Task.yield() }
++        XCTAssertFalse(actedAfterTimeout)
++        XCTAssertEqual(outcomes, [.failure(.timedOut)])
++    }
++
++    func testClaudeCodeShellUsesFreshSessionAndQuotesLiteralArguments() throws {
++        let id = UUID()
++        let cwd = "/tmp/a'b $(printf injected)"
++        let shell = WandNewChatAdapter.claudeShell(executable: "/tmp/Claude Code", cwd: cwd, id: id)
++        XCTAssertTrue(shell.contains(" --session-id '" + id.uuidString + "'"))
++        XCTAssertFalse(shell.contains("--resume")); XCTAssertFalse(shell.contains("--continue"))
++        let process = Process()
++        process.executableURL = URL(fileURLWithPath: "/bin/sh")
++        process.arguments = ["-c", "printf '%s' " + WandNewChatAdapter.shellQuote(cwd)]
++        let output = Pipe(); process.standardOutput = output
++        try process.run(); process.waitUntilExit()
++        XCTAssertEqual(process.terminationStatus, 0)
++        XCTAssertEqual(String(data: output.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8), cwd)
++    }
++
++    func testClaudeCodeReadinessRejectsTrustLoginAndNonemptyInputs() {
++        XCTAssertTrue(WandNewChatAdapter.terminalReady("zsh,claude\u{1f}Claude Code\n❯ \n"))
++        XCTAssertFalse(WandNewChatAdapter.terminalReady("zsh,claude\u{1f}❯ 1. Yes, I trust this folder"))
++        XCTAssertFalse(WandNewChatAdapter.terminalReady("zsh,claude\u{1f}❯ 1. Log in"))
++        XCTAssertFalse(WandNewChatAdapter.terminalReady("zsh,claude\u{1f}❯ user already typed"))
++        XCTAssertFalse(WandNewChatAdapter.terminalReady("zsh\u{1f}❯"))
++        XCTAssertFalse(WandNewChatAdapter.terminalReady("zsh,claude\u{1f}❯\nTrust this folder?\n❯ 1. Yes, I trust this folder"))
++        XCTAssertFalse(WandNewChatAdapter.terminalReady("zsh,claude\u{1f}❯\n❯ already typed"))
++    }
++}
+--- /dev/null
++++ b/Tests/ScimitarKitTests/WandChatCreationStatusTests.swift
+@@ -0,0 +1,103 @@
++import XCTest
++@testable import ScimitarKit
++
++final class WandChatCreationStatusTests: XCTestCase {
++    private var clock: ManualClock!
++    private var tick: ManualTickScheduler!
++    private var controller: WandChatCreationStatusController!
++    private var changes: [Bool] = []
++    private var allowed = true
++
++    override func setUp() {
++        clock = ManualClock(now: 100)
++        tick = ManualTickScheduler()
++        controller = WandChatCreationStatusController(scheduler: tick, clock: clock,
++            allowed: { [unowned self] in allowed })
++        controller.onVisibilityChange = { [unowned self] in changes.append($0) }
++    }
++
++    func testShowRenewAndMatchingHideUseOneVisibilityLifecycle() {
++        let id = UUID()
++        controller.handle(.init(id: id, phase: .show))
++        XCTAssertEqual(changes, [true])
++        clock.advance(by: 9)
++        controller.handle(.init(id: id, phase: .show))
++        clock.advance(by: 9)
++        tick.fire()
++        XCTAssertTrue(controller.isVisible)
++        XCTAssertEqual(changes, [true], "renewal never recreates or flashes the panel")
++        controller.handle(.init(id: id, phase: .hide))
++        controller.handle(.init(id: id, phase: .hide))
++        XCTAssertEqual(changes, [true, false])
++        XCTAssertFalse(tick.isRunning)
++    }
++
++    func testOldCompletionCannotHideNewerOperation() {
++        let old = UUID(), current = UUID()
++        controller.handle(.init(id: old, phase: .show))
++        controller.handle(.init(id: current, phase: .show))
++        controller.handle(.init(id: old, phase: .hide))
++        controller.handle(.init(id: old, phase: .show))
++        XCTAssertEqual(controller.currentID, current)
++        XCTAssertEqual(changes, [true])
++    }
++
++    func testCompletionBeforeShowAndLateRetriesNeverResurrectStatus() {
++        let id = UUID()
++        controller.handle(.init(id: id, phase: .hide))
++        controller.handle(.init(id: id, phase: .show))
++        XCTAssertFalse(controller.isVisible)
++        XCTAssertTrue(changes.isEmpty)
++    }
++
++    func testSenderLossExpiresAndRetiresTheOperation() {
++        let id = UUID()
++        controller.handle(.init(id: id, phase: .show))
++        clock.advance(by: WandChatCreationStatusController.leaseDuration)
++        tick.fire()
++        XCTAssertEqual(changes, [true, false])
++        XCTAssertFalse(tick.isRunning)
++        controller.handle(.init(id: id, phase: .show))
++        XCTAssertFalse(controller.isVisible)
++    }
++
++    func testExpiredLeaseCannotBeRevivedBeforeTheNextTimerTick() {
++        let id = UUID()
++        controller.handle(.init(id: id, phase: .show))
++        clock.advance(by: 11)
++        controller.handle(.init(id: id, phase: .show))
++        XCTAssertFalse(controller.isVisible)
++        XCTAssertEqual(changes, [true, false])
++    }
++
++    func testLockAndExplicitResetHideWithoutReplaying() {
++        let id = UUID()
++        controller.handle(.init(id: id, phase: .show))
++        allowed = false
++        tick.fire()
++        XCTAssertFalse(controller.isVisible)
++        XCTAssertFalse(tick.isRunning)
++        controller.handle(.init(id: UUID(), phase: .show))
++        XCTAssertFalse(controller.isVisible)
++        allowed = true
++        controller.handle(.init(id: id, phase: .show))
++        XCTAssertFalse(controller.isVisible)
++        controller.handle(.init(id: UUID(), phase: .show))
++        controller.reset()
++        XCTAssertEqual(changes, [true, false, true, false])
++    }
++
++    func testStrictWireContractRejectsExpandedAndMalformedPackets() throws {
++        let valid = #"{"command":"agentic_mouse_wand_chat_creation_status","version":1,"id":"24EE96E1-744B-474F-875B-68D2D85736AA","phase":"show"}"#
++        let parsed = try WandChatCreationStatusCommand.decode(Data(valid.utf8))
++        XCTAssertEqual(parsed.phase, .show)
++        for bad in [valid.replacingOccurrences(of: ":1,", with: ":true,"),
++                    valid.replacingOccurrences(of: ":1,", with: ":2,"),
++                    valid.replacingOccurrences(of: "24EE96E1-744B-474F-875B-68D2D85736AA", with: "bad-id"),
++                    valid.replacingOccurrences(of: "\"show\"", with: "\"startRecording\""),
++                    String(valid.dropLast()) + ",\"text\":\"unexpected\"}",
++                    valid + String(repeating: " ", count: 257)] {
++            XCTAssertThrowsError(try WandChatCreationStatusCommand.decode(Data(bad.utf8)))
++        }
++    }
++}
+--- a/Tests/ScimitarKitTests/WandHoldToShowTests.swift
++++ b/Tests/ScimitarKitTests/WandHoldToShowTests.swift
+@@ -274,6 +274,91 @@
+         XCTAssertEqual(homeActions, [.wandPlayPause])
+     }
+ 
++    // MARK: Repeatable Keys
++
++    private func openKeys() {
++        let id = holdFromClosed()
++        aim(id, at: .keysModeSelector)
++        releaseHold(id)
++        XCTAssertEqual(target.page, .keys)
++    }
++
++    /// A tap after aiming: park past the aim's sequence, then the delayed tap.
++    private func tapAimed(_ id: String) {
++        control.handle(.init(.park, id: id, sequence: 9))
++        control.handle(.init(.activate, id: nextID("activate")))
++    }
++
++    func testOnlyNavigationAndTextKeysRepeatOnTheWand() {
++        XCTAssertEqual(KeysModeAction.allCases.filter(\.keepsWandHUDOpen),
++                       [.arrowUp, .arrowDown, .arrowLeft, .arrowRight, .insertSpace, .pressBackspace])
++    }
++
++    func testArrowTapsAndHeldReleasesRepeatOnTheSameCardWithoutClosing() {
++        openKeys()
++        XCTAssertFalse(control.repeatKeysHintVisible, "no hint before a key repeats")
++        let up = PhysicalCell(rawValue: 5)!
++        let first = hold()
++        aim(first, at: up)
++        tapAimed(first)
++        XCTAssertEqual(keysActions, [.arrowUp])
++        XCTAssertTrue(control.isOpen)
++        XCTAssertFalse(control.isConcealed)
++        XCTAssertEqual(target.page, .keys)
++        XCTAssertEqual(control.focusedCell, up, "the same card waits for the next click")
++        XCTAssertTrue(control.repeatKeysHintVisible)
++
++        tap(hold())
++        tap(hold())
++        XCTAssertEqual(keysActions, [.arrowUp, .arrowUp, .arrowUp], "click, click, click")
++        releaseHold(hold())
++        XCTAssertEqual(keysActions.count, 4, "a held release repeats too")
++        XCTAssertTrue(control.isOpen)
++        XCTAssertEqual(control.focusedCell, up)
++        XCTAssertTrue(hud.isVisible)
++    }
++
++    func testAOneShotKeyStillClosesAndEndsTheHint() {
++        openKeys()
++        let space = hold()
++        aim(space, at: PhysicalCell(rawValue: 8)!)
++        tapAimed(space)
++        XCTAssertEqual(keysActions, [.insertSpace])
++        XCTAssertTrue(control.repeatKeysHintVisible)
++        let save = hold()
++        aim(save, at: PhysicalCell(rawValue: 12)!)
++        releaseHold(save)
++        XCTAssertEqual(keysActions, [.insertSpace, .save])
++        XCTAssertFalse(control.isOpen, "Save is one-shot and closes as before")
++        XCTAssertFalse(control.repeatKeysHintVisible)
++    }
++
++    func testDismissExitAndReopenNeverInheritTheHint() {
++        openKeys()
++        let left = hold()
++        aim(left, at: PhysicalCell(rawValue: 1)!)
++        tapAimed(left)
++        XCTAssertTrue(control.repeatKeysHintVisible)
++        control.handle(.init(.dismiss, id: nextID("dismiss")))
++        XCTAssertFalse(control.isOpen)
++        XCTAssertFalse(control.repeatKeysHintVisible)
++        openKeys()
++        XCTAssertFalse(control.repeatKeysHintVisible, "a reopened Keys page starts without the hint")
++        let down = hold()
++        aim(down, at: PhysicalCell(rawValue: 4)!)
++        tapAimed(down)
++        XCTAssertTrue(control.repeatKeysHintVisible)
++        tap(hold()) // still on Down: repeats
++        let exit = hold()
++        aim(exit, at: .modeExit)
++        tapAimed(exit)
++        XCTAssertTrue(target.isWandHome, "the centre still goes back")
++        XCTAssertFalse(control.repeatKeysHintVisible, "leaving Keys ends the hint")
++        allowed = false
++        tick.fire()
++        XCTAssertFalse(control.repeatKeysHintVisible)
++    }
++
+     func testTheWireAcceptsChoose() throws {
+         let json = #"{"command":"agentic_mouse_wand_control","version":1,"phase":"choose","id":"choose-0001","seq":0}"#
+         XCTAssertEqual(try WandPersistentCommand.decodeIfPresent(Data(json.utf8))?.phase, .choose)
+--- a/Tests/ScimitarKitTests/WandPersistentControlTests.swift
++++ b/Tests/ScimitarKitTests/WandPersistentControlTests.swift
+@@ -445,3 +445,65 @@
+         XCTAssertFalse(control.isOpen)
+     }
+ }
++
++extension WandPersistentControlTests {
++    private func selectReview(_ cell:PhysicalCell) {
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
++        select(cell)
++        control.handle(.init(.activate,id:"select-review-\(cell.rawValue)"))
++        XCTAssertFalse(control.isOpen)
++    }
++
++    func testDoubleMiddleTogglesReviewModesBackAndForthWithTheHUDHidden() {
++        selectReview(.wandReviewChanges)
++        XCTAssertEqual(control.selectedReviewMode,"changes")
++        var contexts:[Bool]=[];control.onContext={contexts.append($0)}
++        control.handle(.init(.toggleReview,id:"toggle-review-1"))
++        XCTAssertEqual(control.selectedReviewMode,"files")
++        XCTAssertEqual(control.pinnedReviewCell,.wandReviewFiles)
++        XCTAssertEqual(contexts.last,false,"context is republished with the HUD still hidden")
++        XCTAssertFalse(control.isOpen);XCTAssertFalse(target.isActive)
++        control.handle(.init(.toggleReview,id:"toggle-review-1"))
++        XCTAssertEqual(control.selectedReviewMode,"files","a duplicate datagram never flips back")
++        control.handle(.init(.toggleReview,id:"toggle-review-2"))
++        XCTAssertEqual(control.selectedReviewMode,"changes")
++        control.handle(.init(.toggleReview,id:"toggle-review-1"))
++        XCTAssertEqual(control.selectedReviewMode,"changes","a delayed older duplicate also stays inert")
++        XCTAssertTrue(tick.isRunning,"the selected mode keeps its heartbeat")
++        XCTAssertTrue(clicks.isEmpty);XCTAssertTrue(presses.isEmpty);XCTAssertTrue(steps.isEmpty,
++            "toggling never fabricates a wheel, commit or card action")
++    }
++
++    func testToggleNeedsALiveSelectionInVSCode() {
++        control.handle(.init(.toggleReview,id:"toggle-none"))
++        XCTAssertNil(control.selectedReviewMode)
++        XCTAssertTrue(control.isOpen,"an unrelated toggle leaves the open HUD alone")
++        XCTAssertEqual(control.focusedCell,.switchApp)
++        selectReview(.wandReviewFiles)
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.chrome,displayName:"Chrome",bundleIdentifier:"com.google.Chrome")}
++        control.handle(.init(.toggleReview,id:"toggle-chrome"))
++        XCTAssertEqual(control.pinnedReviewCell,.wandReviewFiles,"no toggle outside VS Code")
++        target.resolveFrontmostApp={FrontmostAppModeContext(target:.vsCode,displayName:"VS Code",bundleIdentifier:"com.microsoft.VSCode")}
++        XCTAssertEqual(control.selectedReviewMode,"files")
++        control.handle(.init(.exitReview,id:"exit-review-1"))
++        control.handle(.init(.toggleReview,id:"toggle-after-exit"))
++        XCTAssertNil(control.selectedReviewMode,"exit stays a single, final exit")
++    }
++
++    func testToggleDoesNotCutAnotherActionsFollowUpShort() {
++        selectReview(.wandReviewChanges)
++        control.handle(.init(.open,id:"open-again"))
++        control.handle(.init(.activate,id:"tap-switch-app"))
++        XCTAssertTrue(control.isConcealed)
++        control.handle(.init(.toggleReview,id:"toggle-while-hidden"))
++        XCTAssertTrue(control.isConcealed)
++        XCTAssertEqual(control.selectedReviewMode,"files")
++    }
++
++    func testTheWireAcceptsToggleReviewOnly() throws {
++        let json=#"{"command":"agentic_mouse_wand_control","version":1,"phase":"toggleReview","id":"toggle-0001","seq":0}"#
++        XCTAssertEqual(try WandPersistentCommand.decodeIfPresent(Data(json.utf8))?.phase,.toggleReview)
++        let withMouse=json.dropLast()+",\"mouseX\":0}"
++        XCTAssertThrowsError(try WandPersistentCommand.decodeIfPresent(Data(withMouse.utf8)))
++    }
++}
+--- /dev/null
++++ b/Tests/ScimitarUITests/WandCreatingChatIndicatorTests.swift
+@@ -0,0 +1,103 @@
++import AppKit
++import SwiftUI
++@testable import ScimitarUI
++import XCTest
++
++/// Ethan's double-Top create-chat status reuses the review reminder's slot.
++@MainActor
++final class WandCreatingChatIndicatorTests: XCTestCase {
++    func testRenderStatusCapsulesForVisualInspection() throws {
++        guard let path = ProcessInfo.processInfo.environment["AGENTIC_MOUSE_WAND_STATUS_RENDER"] else {
++            throw XCTSkip("opt-in visual artifact")
++        }
++        let view = VStack(spacing: 18) {
++            WandReviewIndicatorView(content: .review("changes"))
++            WandReviewIndicatorView(content: .review("files"))
++            WandReviewIndicatorView(content: .creatingChat)
++            WandReviewIndicatorView(content: .repeatKeysHint)
++        }.padding(24).background(Color(white: 0.14))
++        let renderer = ImageRenderer(content: view)
++        renderer.scale = 2
++        let image = try XCTUnwrap(renderer.nsImage)
++        let representation = try XCTUnwrap(image.tiffRepresentation.flatMap(NSBitmapImageRep.init(data:)))
++        let data = try XCTUnwrap(representation.representation(using: .png, properties: [:]))
++        try data.write(to: URL(fileURLWithPath: path))
++    }
++
++    private func indicator() throws -> WandReviewIndicator {
++        guard NSScreen.main != nil else { throw XCTSkip("no screen") }
++        return WandReviewIndicator(screenProvider:{NSScreen.main},present:{_ in})
++    }
++
++    func testCreatingChatShowsAloneAndHidesWithNoReview() throws {
++        let slot = try indicator()
++        slot.setCreatingChat(true)
++        XCTAssertEqual(slot.currentContent, .creatingChat)
++        XCTAssertTrue(slot.isVisible)
++        slot.setCreatingChat(false)
++        XCTAssertNil(slot.currentContent)
++        XCTAssertFalse(slot.isVisible)
++    }
++
++    func testCreatingChatCoversThenRestoresTheLatestReviewSelection() throws {
++        let slot = try indicator()
++        slot.update(mode: "changes")
++        XCTAssertEqual(slot.currentContent, .review("changes"))
++        slot.setCreatingChat(true)
++        XCTAssertEqual(slot.currentContent, .creatingChat)
++        slot.update(mode: "files")
++        XCTAssertEqual(slot.currentContent, .creatingChat, "review changes wait underneath")
++        slot.setCreatingChat(false)
++        XCTAssertEqual(slot.currentContent, .review("files"))
++        slot.update(mode: nil)
++        XCTAssertFalse(slot.isVisible)
++    }
++
++    func testClearedReviewDuringCreatingChatHidesAfterward() throws {
++        let slot = try indicator()
++        slot.update(mode: "changes"); slot.setCreatingChat(true); slot.update(mode: nil)
++        XCTAssertEqual(slot.currentContent, .creatingChat)
++        slot.setCreatingChat(false)
++        XCTAssertFalse(slot.isVisible)
++        XCTAssertEqual(WandReviewIndicatorView(mode: "files").mode, "files", "existing review initializer still works")
++    }
++
++    func testRepeatHintSitsBetweenCreatingChatAndReview() throws {
++        let slot = try indicator()
++        slot.update(mode: "changes")
++        slot.setRepeatKeysHint(true)
++        XCTAssertEqual(slot.currentContent, .repeatKeysHint)
++        slot.setCreatingChat(true)
++        XCTAssertEqual(slot.currentContent, .creatingChat, "Creating chat… wins")
++        slot.setCreatingChat(false)
++        XCTAssertEqual(slot.currentContent, .repeatKeysHint)
++        slot.setRepeatKeysHint(false)
++        XCTAssertEqual(slot.currentContent, .review("changes"), "the review selection returns")
++        slot.update(mode: nil)
++        XCTAssertFalse(slot.isVisible)
++    }
++
++    func testRepeatHintAloneShowsAndHides() throws {
++        let slot = try indicator()
++        slot.setRepeatKeysHint(true)
++        XCTAssertEqual(slot.currentContent, .repeatKeysHint)
++        XCTAssertTrue(slot.isVisible)
++        slot.setRepeatKeysHint(false)
++        XCTAssertNil(slot.currentContent)
++        XCTAssertFalse(slot.isVisible)
++    }
++
++    func testReviewReminderNamesItsDoubleClickDestinationAndOnlyItGrows() throws {
++        XCTAssertEqual(WandReviewIndicatorView.toggleDestination(for: "changes"), "Stage files")
++        XCTAssertEqual(WandReviewIndicatorView.toggleDestination(for: "files"), "Review changes")
++        let review = WandReviewIndicatorView.size(for: .review("changes"))
++        XCTAssertEqual(WandReviewIndicatorView.size(for: .creatingChat), NSSize(width: 210, height: 52))
++        XCTAssertEqual(WandReviewIndicatorView.size(for: .repeatKeysHint), NSSize(width: 210, height: 52))
++        XCTAssertEqual(review.width, 210)
++        XCTAssertGreaterThan(review.height, 52, "the third line gets just enough room")
++        let slot = try indicator()
++        slot.update(mode: "changes")
++        slot.update(mode: "files")
++        XCTAssertEqual(slot.currentContent, .review("files"), "toggling swaps content in the same slot")
++    }
++}
