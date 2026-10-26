@@ -28,3 +28,6 @@ Before work, read the applicable stored lessons here and in magic-wand/LEARNINGS
 
 - 2026-10-26 — Explicit user correction: the V3 candidate lost the helix and used narrow spans between wider joint collars. Preserve the helix and a monotonic shaft silhouette while hollowing/thinning the interior. Source geometry and assembled preview establish the regression; neither the old nor replacement design is physically strength-verified.
 - 2026-10-26 — Explicit project requirement: complete means both handed handles. Exporting a right-hand STL separately does not meet that requirement if the opened complete 3MF has only the left handle.
+
+- 2026-10-26 — Explicit button-mount correction: use a small rounded thin plate that slides down from above directly into integral wand guides. No bulky cassette, separate printed cap/keeper or glue. Keep the bought keycap distinct from printed parts. Back the socket recess and use a small cable outlet rather than a generic large opening into the hollow grip. Check the full insertion path in both hands and past neighbouring buttons; an assembled pose alone is insufficient.
+- 2026-10-26 — Mass comparisons must contain exactly one complete wand per row (one handed grip plus matching shared parts). Report printed-parts mass separately from support/brim and keep original print settings distinct from a matched-settings comparison.

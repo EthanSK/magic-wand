@@ -1,0 +1,68 @@
+{
+  "extruder_offset_mm": [
+    0,
+    2
+  ],
+  "sample_step_mm": 0.5,
+  "path_samples": 3703725,
+  "features": {
+    "Brim": 15387,
+    "Outer wall": 1399429,
+    "Inner wall": 1145917,
+    "Bottom surface": 2485,
+    "Support": 191481,
+    "Gap infill": 536906,
+    "Support transition": 4954,
+    "Internal solid infill": 176006,
+    "Overhang wall": 14862,
+    "Bridge": 31531,
+    "Support interface": 16426,
+    "Sparse infill": 96150,
+    "Top surface": 43811,
+    "Floating vertical shell": 28380
+  },
+  "clearance_extrusion_samples": {
+    "Handle_Left": {
+      "main_9mm_clearance": {},
+      "battery_clearance": {},
+      "thumb_6mm_clearance": {},
+      "thumb_socket_clearance": {},
+      "index_6mm_clearance": {},
+      "index_socket_clearance": {},
+      "middle_6mm_clearance": {},
+      "middle_socket_clearance": {}
+    },
+    "Handle_Right": {
+      "main_9mm_clearance": {},
+      "battery_clearance": {},
+      "thumb_6mm_clearance": {},
+      "thumb_socket_clearance": {},
+      "index_6mm_clearance": {},
+      "index_socket_clearance": {},
+      "middle_6mm_clearance": {},
+      "middle_socket_clearance": {}
+    },
+    "Lower_Shaft": {
+      "main_9mm_clearance": {}
+    },
+    "Upper_Shaft": {
+      "main_9mm_clearance": {}
+    },
+    "Sense_Head_Base": {
+      "main_9mm_clearance": {},
+      "forward_wire_5_4mm": {},
+      "pcb_inner_clearance": {},
+      "central_solder_space": {},
+      "usb_plug_12x6": {}
+    },
+    "Sense_Sliding_Cover": {
+      "main_9mm_clearance": {},
+      "forward_wire_5_4mm": {},
+      "pcb_inner_clearance": {},
+      "central_solder_space": {},
+      "usb_plug_12x6": {}
+    }
+  },
+  "project_sha256": "c08ee764294c8cd851d172fcf78f7bcfa41b09e79a1325c662b98fa7cede3e4b",
+  "note": "Checks extrusion centerlines through both handed handles, both shafts and the two head parts in conservative interior clearances; excludes custom start/end G-code. Not a physical-print test."
+}

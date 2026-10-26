@@ -1,8 +1,10 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V4 — 410 mm helix wand, both hands](Print-4-README.md).**
+**Latest candidate: [Print V5 — thin top-slide buttons, both hands](Print-5-README.md).**
 
-Restored crossed helix and a continuous taper, with hollow interiors and both handed handles in the complete project. The upper-only alternative retains a printed V2 handle. Earlier versions remain unchanged. Physical fit and strength still need a trial.
+Thin top-slide button plates fit directly into rounded surrounds built into the wand. The crossed helix, continuous taper, hollow interiors and both handed handles are preserved. The upper-only alternative retains a printed V2 handle. Earlier versions remain unchanged. Physical fit and strength still need a trial.
+
+**Previous candidate: [Print V4 — helix wand](Print-4-README.md). Its cassette/keeper button fittings are replaced in V5.
 
 **Earlier candidate: [Print V3 — 410 mm mechanical revision](Print-3-README.md).** Its smooth shafts and left-only complete plate were superseded by V4.
 
