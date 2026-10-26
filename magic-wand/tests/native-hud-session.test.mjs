@@ -41,7 +41,7 @@ final class Application {var bundleIdentifier="com.microsoft.VSCode"}
 final class NSWorkspace {static let shared=NSWorkspace();var frontmostApplication:Application?=Application()}
 final class Trace {var boundaries:[String]=[];func boundary(_ reason:String,mode:String?=nil,now:Double=0){boundaries.append(reason)}}
 final class Controls {var phases:[String]=[];var points:[CGPoint]=[];func persistent(_ phase:String,x:Double=0,y:Double=0,mouseX:Double?=nil){phases.append(phase);points.append(CGPoint(x:x,y:y))}}
-final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];var inputs=0;func beginDetents(mode:String,now:Double){starts.append(mode)};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{inputs+=1;return[]};func endDetents(commit:Bool)->[Int]{committed=commit;return[]}}
+final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];var modeChanges:[String]=[];var endings:[Bool]=[];var inputs=0;func beginDetents(mode:String,now:Double){starts.append(mode)};func changeMode(_ mode:String,now:Double)->[Int]{modeChanges.append(mode);return[]};func tick(now:Double)->[Int]{[]};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{inputs+=1;return[]};func endDetents(commit:Bool)->[Int]{endings.append(commit);committed=commit;return[]}}
 final class Harness {
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter(),reviewTrace=Trace(),recording=Recording(),dwell=WandDwellClick()
@@ -72,7 +72,6 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  var hudLastUpdate=Date.distantPast,commands:[String]=[]
  var hudDoubleClickInterval:Double {0.3}
  func queue(_ s:String){commands.append(s)}
- func setWandShortcut(_ mode:String?){wandShortcutMode=mode}
  func cancelCircleScroll(){}
  func sendReview(_ v:[Int]){}
  var traceInputs=0
@@ -85,7 +84,7 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  init(){${callback}
 ${modeCallback}
 ${selectionCallback}}
- ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','scheduleReviewTapTimeout','expireReviewTap','cancelReviewTap','requestReviewToggle','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','mouseMovementEvent','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
+ ${['setScreenshotActive','setWandShortcut','switchWandShortcut','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','scheduleReviewTapTimeout','expireReviewTap','cancelReviewTap','requestReviewToggle','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','mouseMovementEvent','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 // Ethan's hold-to-show HUD. Holding Middle shows and steers it; releasing
@@ -212,6 +211,7 @@ for expected in ["files","changes","files"] {
  precondition(toggled.selectedReviewMode==expected && !toggled.controls.phases.contains("exitReview"),"old tap timer cannot exit new mode")
 }
 precondition(toggled.controls.phases.filter{$0=="toggleReview"}.count==3)
+precondition(toggled.review.modeChanges==["files","changes","files"] && toggled.review.endings.isEmpty && toggled.review.starts.isEmpty,"mode switches preserve the live review transaction: no cancel, finish or begin")
 let secondHold=Harness();secondHold.selectedReviewMode="files";secondHold.wandShortcutMode="files"
 secondHold.handleMiddle("1");secondHold.handleMiddle("0");secondHold.handleMiddle("1")
 secondHold.commitReviewHold(now:ProcessInfo.processInfo.systemUptime+0.6);secondHold.handleMiddle("0");settle(0.35)
