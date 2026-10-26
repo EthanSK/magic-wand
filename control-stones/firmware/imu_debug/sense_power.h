@@ -3,12 +3,13 @@
 #include <FreeRTOS.h>
 #include <task.h>
 
-// Sense-only policy. Does not change the Puck or future external sensor drivers.
-// ST AN5130 §5.6: accelerometer automatically drops to 12.5 Hz while idle.
+// Register owner for the internal Sense IMU; motion_idle.h decides when the
+// whole assembly rests. The Puck and other sensor drivers are unaffected.
 namespace SensePower {
 static TaskHandle_t readerTask = nullptr;
 static bool enabled = false;
 static bool idle = false;
+static uint8_t activeAccel = 0, activeControl4 = 0, activeControl6 = 0;
 
 static void onMotionInterrupt() {
   BaseType_t wake = pdFALSE;
@@ -18,12 +19,14 @@ static void onMotionInterrupt() {
 
 static bool begin(LSM6DS3 &imu) {
   readerTask = xTaskGetCurrentTaskHandle();
-  // 4 * 512 / 416 Hz = 4.92 seconds still before sleep.
-  // ±4 g range gives a 62.5 mg wake threshold with one threshold unit.
+  // Keep the hardware wake interrupt, but disable autonomous inactivity:
+  // finger motion must keep the internal gyro awake too. AN5130 §§3.4/3.5/5.2.
   const uint8_t registers[] = {0x5C, 0x5B, 0x58, 0x5E};
-  const uint8_t values[] = {0x04, 0x01, 0xC0, 0xA0};
-  enabled = true;
-  for (unsigned i = 0; i < sizeof(registers); ++i) {
+  const uint8_t values[] = {0x00, 0x01, 0x80, 0x20};
+  enabled = imu.readRegister(&activeAccel, 0x10) == IMU_SUCCESS &&
+    imu.readRegister(&activeControl4, 0x13) == IMU_SUCCESS &&
+    imu.readRegister(&activeControl6, 0x15) == IMU_SUCCESS;
+  for (unsigned i = 0; enabled && i < sizeof(registers); ++i) {
     uint8_t actual = 0;
     if (imu.writeRegister(registers[i], values[i]) != IMU_SUCCESS ||
         imu.readRegister(&actual, registers[i]) != IMU_SUCCESS || actual != values[i]) {
@@ -41,13 +44,33 @@ static bool begin(LSM6DS3 &imu) {
   return true;
 }
 
-static void waitAndUpdate(LSM6DS3 &imu, bool externalActive = false) {
-  // FreeRTOS may idle the CPU; BLE's own tasks remain running. Motion interrupts
-  // wake this task without waiting for the one-second idle status transmission.
-  ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(idle && !externalActive ? 1000 : 20));
-  if (enabled) {
-    uint8_t source = 0;
-    if (imu.readRegister(&source, 0x1B) == IMU_SUCCESS) idle = (source & 0x10) != 0;
+static bool setIdle(LSM6DS3 &imu, bool sleeping) {
+  if (!enabled || idle == sleeping) return enabled;
+  const uint8_t registers[] = {0x13, 0x15, 0x10};
+  const uint8_t values[] = {
+    uint8_t(sleeping ? activeControl4 | 0x40 : activeControl4),
+    uint8_t(sleeping ? activeControl6 | 0x10 : activeControl6),
+    uint8_t(sleeping ? (activeAccel & 0x0F) | 0x10 : activeAccel)
+  };
+  for (uint8_t i = 0; i < 3; ++i) {
+    uint8_t actual = 0;
+    if (imu.writeRegister(registers[i], values[i]) != IMU_SUCCESS ||
+        imu.readRegister(&actual, registers[i]) != IMU_SUCCESS || actual != values[i]) {
+      // Restore the known active setup rather than calling a partial change sleep.
+      imu.writeRegister(0x10, activeAccel);
+      imu.writeRegister(0x15, activeControl6);
+      imu.writeRegister(0x13, activeControl4);
+      idle = false;
+      enabled = false;
+      return false;
+    }
   }
+  idle = sleeping;
+  return true;
+}
+static bool waitAndUpdate(LSM6DS3 &imu, uint32_t waitMs) {
+  ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(waitMs));
+  uint8_t source = 0;
+  return enabled && imu.readRegister(&source, 0x1B) == IMU_SUCCESS && (source & 0x08);
 }
 }
