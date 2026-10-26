@@ -16,6 +16,7 @@ SHA-256; the private directory’s path isn’t recorded.
 | `receiver/Sources/WandContextListener.swift` | Agentic Mouse HUD context | None |
 | `receiver/Sources/WandRecordingState.swift` | Agent Flow recording state | None |
 | `receiver/Sources/WandReviewTrace.swift` | Bounded opt-in local review point capture | None |
+| `receiver/Sources/WandUART.swift` | Shared receiver and saved-program-console packet sizing | None |
 | `receiver/Sources/WandPointerControl.swift` | Display bounds, LOW routing, rough loops, HIGH dwell clicks and desk inference | None |
 | `receiver/Info.plist` | Receiver bundle 1.2.33 (38) | None |
 | `receiver/Sources/WandDeviceConfiguration.swift` | Written for this repository | New |

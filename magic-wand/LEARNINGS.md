@@ -364,13 +364,23 @@ Recover through the existing Bluetooth owner and preserve a successful sensor
 zero. Source tests cannot reproduce the device's UART input capacity.
 
 Distinguish receiver replacement from a complete saved-device update when
-reporting installation time. The maintenance sender uses 20-byte acknowledged
+reporting installation time. The maintenance sender uses acknowledged
 writes and additional pacing, so a whole saved module takes much longer than a
 Mac app swap. Prepare builds and verification inputs before stopping the receiver;
 do not rewrite device code for receiver-only changes. Removing pacing or increasing
 payloads is an unverified transport change, not a free speedup: preserve flow control,
 complete saved code, calibration and readback verification. Measure the interrupted
 interval separately from build/test time.
+
+The receiver and saved-program console now share `WandUART` packet sizing.
+Bound packets by both CoreBluetooth write limits and the Puck.js 2v27 UART's
+50-byte value capacity (MTU 53 minus three bytes). The acknowledged limit alone
+can report 512 bytes because it includes long writes; it does not establish
+that the UART supports a 512-byte value. Keep acknowledged writes, XOFF/XON,
+and the existing installation pacing. On the installed receiver, the negotiated
+single-packet limit was 50 bytes and a 1,024-byte read-only challenge returned
+the expected length and CRC32. All four saved program checksums were unchanged.
+This verifies packet integrity on that connection, not full-install time savings.
 
 
 ## First-flick scrolling is an explicit option
