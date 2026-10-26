@@ -1,6 +1,10 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V8 — ergonomic lower loop, higher controls and air to the hand, both hands](Print-8-README.md).**
+**Latest candidate: [Print V10 — solid helix with independent slots and detachable loop, both hands](Print-10-README.md).**
+
+The continuous supporting tube and complete raised spiral strips are retained. Separate narrow slots avoid the spirals and longitudinal lands; the loop has elongated slots and remains removable. One left wand estimates 76.072 g printed PETG with its loop or 65.902 g without. Hardware is unweighed. The V9 open-braid experiment was rejected and is not a current print recommendation.
+
+**Previous candidate: [Print V8 — ergonomic lower loop, higher controls and air to the hand, both hands](Print-8-README.md).**
 
 The loop sits at the butt, all controls move up 10 mm and its upper arm slopes down away from the index-side root. Loop ports now reach the inner contact surface. One left wand estimates 75.821 g of printed PETG; bought hardware remains unweighed.
 
