@@ -1,6 +1,10 @@
 # Magic Wand 3D models
 
-**Current print: [Print V2 — 340 mm diamond mug wand](Print-2-README.md).**
+**Latest candidate: [Print V3 — lighter 410 mm wand](Print-3-README.md).**
+
+Choose the complete hollow left-hand revision or just the upper replacement that fits your printed V2 handle. Both preserve the earlier design for comparison. Physical fit and strength still need a trial.
+
+**Previous print: [Print V2 — 340 mm diamond mug wand](Print-2-README.md).**
 
 Open the [full V2 Bambu project](Print-2-diamond-mug-wand.3mf), or start with the
 [head and retaining-clip fit test](Print-2-diamond-head-fit-test.3mf). The
