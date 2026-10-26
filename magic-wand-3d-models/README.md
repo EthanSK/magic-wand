@@ -1,8 +1,10 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V5 — thin top-slide buttons, both hands](Print-5-README.md).**
+**Latest candidate: [Print V6 — side buttons raised 14 mm, both hands](Print-6-README.md).**
 
-Thin top-slide button plates fit directly into rounded surrounds built into the wand. The crossed helix, continuous taper, hollow interiors and both handed handles are preserved. The upper-only alternative retains a printed V2 handle. Earlier versions remain unchanged. Physical fit and strength still need a trial.
+The side-button pair is 14 mm higher, with its upper centre 4 mm below the unchanged thumb. Side angles and radial placement are unchanged. Thin top-slide button plates fit directly into rounded surrounds built into the wand. The crossed helix, continuous taper, hollow interiors and both handed handles are preserved. The upper-only alternative retains a printed V2 handle. Earlier versions remain unchanged. Physical fit and strength still need a trial.
+
+**Previous candidate: [Print V5 — thin top-slide buttons](Print-5-README.md).** V6 changes the two side-button heights.
 
 **Previous candidate: [Print V4 — helix wand](Print-4-README.md). Its cassette/keeper button fittings are replaced in V5.
 
