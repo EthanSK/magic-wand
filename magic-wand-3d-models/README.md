@@ -1,6 +1,10 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V10 — solid helix with independent slots and detachable loop, both hands](Print-10-README.md).**
+**Latest candidate: [Print V11 — ribbed shell with broad open cells, both hands](Print-11-README.md).**
+
+Larger rounded hexagonal windows, four continuous axial rails, the complete original raised spiral strips and a more open detachable loop. One left wand estimates 70.754 g printed PETG (6.99% below V10); hardware is unweighed. The taper, controls and mating interfaces stay unchanged.
+
+**Previous candidate: [Print V10 — solid helix with independent slots and detachable loop, both hands](Print-10-README.md).**
 
 The continuous supporting tube and complete raised spiral strips are retained. Separate narrow slots avoid the spirals and longitudinal lands; the loop has elongated slots and remains removable. One left wand estimates 76.072 g printed PETG with its loop or 65.902 g without. Hardware is unweighed. The V9 open-braid experiment was rejected and is not a current print recommendation.
 
