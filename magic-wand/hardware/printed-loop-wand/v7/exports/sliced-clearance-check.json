@@ -1,0 +1,98 @@
+{
+  "extruder_offset_mm": [
+    0,
+    2
+  ],
+  "sample_step_mm": 0.5,
+  "path_samples": 3324488,
+  "features": {
+    "Brim": 15381,
+    "Outer wall": 1329495,
+    "Inner wall": 730418,
+    "Bottom surface": 2402,
+    "Support": 196731,
+    "Gap infill": 694204,
+    "Support transition": 5052,
+    "Internal solid infill": 156277,
+    "Overhang wall": 13930,
+    "Bridge": 29312,
+    "Support interface": 17192,
+    "Sparse infill": 66006,
+    "Top surface": 41803,
+    "Floating vertical shell": 26285
+  },
+  "clearance_extrusion_samples": {
+    "Handle_Left": {
+      "main_9mm_clearance": {},
+      "battery_clearance": {},
+      "thumb_6mm_clearance": {},
+      "thumb_socket_clearance": {},
+      "index_6mm_clearance": {},
+      "index_socket_clearance": {},
+      "middle_6mm_clearance": {},
+      "middle_socket_clearance": {},
+      "flute_vent_0": {},
+      "flute_vent_1": {},
+      "flute_vent_2": {},
+      "flute_vent_3": {},
+      "flute_vent_4": {},
+      "flute_vent_5": {},
+      "loop_air_hole_62.0": {},
+      "loop_air_hole_82.0": {},
+      "loop_air_hole_102.0": {},
+      "loop_air_hole_122.0": {}
+    },
+    "Handle_Right": {
+      "main_9mm_clearance": {},
+      "battery_clearance": {},
+      "thumb_6mm_clearance": {},
+      "thumb_socket_clearance": {},
+      "index_6mm_clearance": {},
+      "index_socket_clearance": {},
+      "middle_6mm_clearance": {},
+      "middle_socket_clearance": {},
+      "flute_vent_0": {},
+      "flute_vent_1": {},
+      "flute_vent_2": {},
+      "flute_vent_3": {},
+      "flute_vent_4": {},
+      "flute_vent_5": {},
+      "loop_air_hole_62.0": {},
+      "loop_air_hole_82.0": {},
+      "loop_air_hole_102.0": {},
+      "loop_air_hole_122.0": {}
+    },
+    "Lower_Shaft": {
+      "main_9mm_clearance": {},
+      "flute_vent_0": {},
+      "flute_vent_1": {},
+      "flute_vent_2": {},
+      "flute_vent_3": {}
+    },
+    "Upper_Shaft": {
+      "main_9mm_clearance": {},
+      "flute_vent_0": {},
+      "flute_vent_1": {},
+      "flute_vent_2": {},
+      "flute_vent_3": {},
+      "flute_vent_4": {},
+      "flute_vent_5": {}
+    },
+    "Sense_Head_Base": {
+      "main_9mm_clearance": {},
+      "forward_wire_5_4mm": {},
+      "pcb_inner_clearance": {},
+      "central_solder_space": {},
+      "usb_plug_12x6": {}
+    },
+    "Sense_Sliding_Cover": {
+      "main_9mm_clearance": {},
+      "forward_wire_5_4mm": {},
+      "pcb_inner_clearance": {},
+      "central_solder_space": {},
+      "usb_plug_12x6": {}
+    }
+  },
+  "project_sha256": "f8cac75e719ca8596a8f7139676d0a5c0fc52b572d9f59c2098ba877a6f560a3",
+  "note": "Checks extrusion centerlines through both handed handles, both shafts and the two head parts in conservative interior clearances; excludes custom start/end G-code. Not a physical-print test."
+}

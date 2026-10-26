@@ -1030,3 +1030,15 @@ A complete V4 project contains both handed grips as build instances, plus one sh
 ## Check triangle output after coincident Boolean seams (2026-10-26)
 
 Raising the V6 side-button pair left the right grip as one valid Manifold body, but the extracted triangle soup contained unpaired edges at coincident Boolean seams. A 0.00001 mm simplification before grip mesh extraction restored closed exported surfaces without changing fit dimensions; all thirteen non-grip meshes remained byte-identical to V5. Keep actual triangle watertightness and edge-count checks, rather than accepting Manifold status alone. Do not move a requested feature or enlarge its clearance just to hide an export seam. This establishes the generated geometry, not printed strength.
+
+
+## Handed ventilation and complete-wand mass budgets (2026-10-26)
+
+The V7 button angles mirror for handed grips, while the established crossed helix does not. Recompute ventilation angles against each grip's actual button keepouts and the common rib geometry; simply mirroring the left hole positions can cut the right-hand helix. Check that holes connect through the skin, leave continuous ribs and roots, and remain clear in the actual sliced extrusion paths.
+
+A target for a complete wand includes the board, battery, bought switches/sockets/keycaps, wires and insulation. V7's matched PETG slice estimates 75.688 g for printed parts, leaving 4.312 g for unweighed hardware at an 80 g target or 24.312 g at a 100 g ceiling. Do not describe the print-only estimate or waste-inclusive filament use as a verified all-up weight. Local hollowing/clearance tests and sliced mass do not establish PETG strength or a weighed result.
+
+
+## Hollowing can expose previously supported board-pocket lips (2026-10-26)
+
+The first hollow V7 head remained a single watertight body, yet its upright PETG slice flagged floating regions at the upper board-pocket lips. Narrow sloped struts removed the sampled layer islands. Enabling normal support cleared the slicer warning but routed support through the cable and USB passages despite contact blockers. The finished V7 retains the hollow V6 shell and original support strategy, with narrow sloped struts for the upper board-pocket lips; slimming and ventilation remain in the handle and shafts. A warning-free slice alone is insufficient: keep the layer-island guard and inspect the actual extrusion paths through all functional clearances. These checks do not establish physical strength.
