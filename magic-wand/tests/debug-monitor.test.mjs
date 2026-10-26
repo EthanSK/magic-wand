@@ -254,7 +254,18 @@ test("deep sleep, desk idle and runtime errors come from the receiver's own evid
   assert.equal(s.errors.groups.length, 1);
   assert.equal(s.errors.groups[0].summary, "Uncaught SyntaxError: Unexpected end of Input");
   assert.equal(s.errors.echoes, 1);
-  for (const leaked of [DEVICE, HOME, "12.25", "998.75", "-4.5", "0.99"]) assert.ok(!response.body.includes(leaked), leaked + " leaked");
+  // Check exposed text, not numeric timestamps whose fractional digits can
+  // coincidentally contain a redacted sensor value such as "0.99".
+  const exposedText = [], exposedNumbers = [];
+  const collectText = value => {
+    if (typeof value === "string") exposedText.push(value);
+    else if (typeof value === "number") exposedNumbers.push(value);
+    else if (Array.isArray(value)) value.forEach(collectText);
+    else if (value && typeof value === "object") Object.values(value).forEach(collectText);
+  };
+  collectText(s);
+  for (const leaked of [DEVICE, HOME, "12.25", "998.75", "-4.5", "0.99"]) assert.ok(!exposedText.some(text => text.includes(leaked)), leaked + " leaked");
+  for (const value of [12.25, 998.75, -4.5, 0.99]) assert.ok(!exposedNumbers.includes(value), value + " leaked as a number");
   assert.ok(!/\/Users\/|calibrations\//.test(response.body));
 
   status(dir, { pid: receiver.pid, connected: true, ready: true, deskSleeping: true, lightMode: "sleep" });

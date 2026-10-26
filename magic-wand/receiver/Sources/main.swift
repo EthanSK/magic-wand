@@ -195,7 +195,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         context.onReviewChange = {_ in }
         context.onSelectionChange = {[weak self] mode in
             guard let self else{return}
-            self.reviewExitTimer?.invalidate();self.reviewExitTimer=nil;self.reviewExitGesture.reset()
+            // Agentic Mouse alone owns the selection. Its acknowledgement of our
+            // own Review/Stage toggle keeps presses made since; any other change
+            // is newer than the review gesture and cancels it.
+            if self.reviewExitGesture.acknowledgeToggle(from:self.selectedReviewMode,to:mode,now:ProcessInfo.processInfo.systemUptime) {
+                log("WAND_REVIEW_TOGGLED",mode ?? "none")
+            } else {
+                self.reviewExitTimer?.invalidate();self.reviewExitTimer=nil;self.reviewExitGesture.reset()
+            }
             self.selectedReviewMode=mode
             self.setWandShortcut(mode)
         }
@@ -753,6 +760,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// `notifyNative` is false when Agentic Mouse itself closed the HUD.
     func closeHUD(reason:String,notifyNative:Bool=true) {
         finishWandShortcut(commit:false)
+        // An explicit close is newer than a waiting review tap: it never exits later.
+        if notifyNative {cancelReviewTap("HUD closed")}
         hiddenReviewPending=false;hiddenReviewOperating=false
         screenshotHUD=false
         acceptHUDContext=false
@@ -926,7 +935,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         switch payload.trimmingCharacters(in:.whitespaces){
         case "1":
             let now=ProcessInfo.processInfo.systemUptime;middlePressedAt=now
+            // A first tap whose double-click window already ended (its timer ran
+            // late) exits now, exactly as on time, before this press is judged.
+            if selectedReviewMode != nil,reviewExitGesture.expiredTap(now:now) {expireReviewTap()}
             if selectedReviewMode != nil {
+                guard !reviewExitGesture.pending else{return}
                 middleReviewExit=true;middleLastRelease = -100
                 reviewExitTimer?.invalidate();reviewExitTimer=nil
                 beginReviewCommitHold(now:now)
@@ -965,8 +978,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if middleReviewExit {
                 middleReviewExit=false
                 reviewExitTimer?.invalidate();reviewExitTimer=nil
-                switch reviewExitGesture.up(now:ProcessInfo.processInfo.systemUptime) {
-                case .cancel: exitSelectedReview(commit:false)
+                let now=ProcessInfo.processInfo.systemUptime
+                // One short click exits unstaged once its double-click window
+                // ends; a second short click toggles; a 0.5 s hold still stages.
+                switch reviewExitGesture.up(now:now,window:hudDoubleClickInterval) {
+                case .wait: scheduleReviewTapTimeout()
+                case .toggle: requestReviewToggle(now:now)
                 case .commit: commitSelectedReview()
                 case .none: break
                 }
@@ -986,6 +1003,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 controls.persistent("open");queue("setHUDOpen(true);");resumeHUDNavigation()
                 middleLastRelease=ProcessInfo.processInfo.systemUptime;return
             }
+            // A bounced or duplicate release in a selected review set is not a
+            // gesture: it must neither stage the set nor end a waiting tap.
+            if selectedReviewMode != nil && !middleHeld {middleDoubleConsumed=false;return}
             finishWandShortcut(commit:true)
             if middleDoubleConsumed {middleDoubleConsumed=false;return}
             guard middleHeld else{return}
@@ -1027,7 +1047,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             let dx=navX-wandShortcutX,dy=navY-wandShortcutY
             wandShortcutX=navX;wandShortcutY=navY;wandShortcutTime=now
             // Bottom retains its mouse gesture. Never interpret that held movement as review.
+            // Review also holds still while one Middle tap may become a double
+            // click, and until Agentic Mouse acknowledges the resulting toggle.
             let blocked = pointerRouter.bottomHeld ? "bottom held" : reviewExitGesture.pending ? "middle held" :
+                reviewExitGesture.awaitingSecond ? "double click pending" : reviewExitGesture.toggling(now:now) ? "toggle pending" :
                 (!ready || restoring) ? "receiver unavailable" : !context.isFresh ? "context expired" :
                 NSWorkspace.shared.frontmostApplication?.bundleIdentifier != "com.microsoft.VSCode" ? "app not frontmost" : nil
             if let blocked {
@@ -1352,6 +1375,40 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func commitReviewHold(now:Double) {
         guard selectedReviewMode != nil,reviewExitGesture.commitIfHeld(now:now) else{return}
         commitSelectedReview()
+    }
+    /// Ethan's single Middle click in review waits out the double-click window
+    /// (at most 0.3 s, approved) before exiting. Only review navigation pauses
+    /// meanwhile; pointer motion is never buffered or delayed.
+    func scheduleReviewTapTimeout() {
+        guard let deadline=reviewExitGesture.tapDeadline else{return}
+        reviewExitTimer?.invalidate()
+        reviewExitTimer=Timer.scheduledTimer(withTimeInterval:max(0.001,deadline-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
+            // A superseded timer finds another deadline, or none, and does nothing.
+            guard let self,self.reviewExitGesture.tapTimedOut(deadline:deadline) else{return}
+            self.expireReviewTap()
+        }
+    }
+    /// The window ended with one tap: leave the set unstaged, as a single
+    /// click always did. This stays the local escape even if the context is stale.
+    func expireReviewTap() {
+        reviewExitTimer?.invalidate();reviewExitTimer=nil
+        guard selectedReviewMode != nil,!restoring else{reviewExitGesture.reset();return}
+        exitSelectedReview(commit:false)
+    }
+    func cancelReviewTap(_ reason:String) {
+        guard reviewExitGesture.cancelTap() else{return}
+        reviewExitTimer?.invalidate();reviewExitTimer=nil
+        log("WAND_REVIEW_TAP_CANCELLED",reason)
+    }
+    /// A second short click asks Agentic Mouse, the one selection owner, to
+    /// switch Review changes and Stage files. Nothing is staged here, and the
+    /// local mode changes only on its selection acknowledgement.
+    func requestReviewToggle(now:Double) {
+        guard let mode=selectedReviewMode,ready,!restoring,context.isFresh else{log("WAND_REVIEW_TOGGLE_DROPPED");return}
+        reviewExitGesture.toggleRequested(now:now)
+        reviewTrace.boundary("toggle request",mode:wandShortcutMode,now:now)
+        controls.persistent("toggleReview")
+        log("WAND_REVIEW_TOGGLE_REQUESTED",mode)
     }
     func commitSelectedReview() {
         reviewExitTimer?.invalidate();reviewExitTimer=nil

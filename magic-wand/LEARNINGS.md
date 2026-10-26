@@ -983,3 +983,19 @@ Persist the base through the same syntax-only minifier as the other saved parts;
 its readable source remains canonical. The cold-boot test restores line breaks
 before top-level declarations only for the simulator's replacement-function shim.
 No pointer timing or sensor rates changed.
+
+
+## Review-mode double-click and native request identity (2026-10-26)
+
+Middle clicks in Review changes and Stage files are separate from the normal HUD
+click handler. A first short release waits at most 300 ms (explicitly approved)
+for a second press. Only a second short release toggles; holding either press
+for 500 ms still stages the selection once and stays in the selected mode. Ignore
+duplicate releases, cancel superseded timers, and keep pointer movement immediate.
+
+Agentic Mouse owns the selected review mode and acknowledges it through its
+existing selection context. Each toggleReview request needs a fresh transport
+identity: reusing the previous persistent identity makes later toggles look like
+duplicates to the native receiver. Tests exercise alternating modes, native
+acknowledgements, duplicate edges, late timers, and a held second press. These
+checks do not establish physical button acceptance.
