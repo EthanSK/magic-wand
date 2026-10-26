@@ -1042,3 +1042,12 @@ A target for a complete wand includes the board, battery, bought switches/socket
 ## Hollowing can expose previously supported board-pocket lips (2026-10-26)
 
 The first hollow V7 head remained a single watertight body, yet its upright PETG slice flagged floating regions at the upper board-pocket lips. Narrow sloped struts removed the sampled layer islands. Enabling normal support cleared the slicer warning but routed support through the cable and USB passages despite contact blockers. The finished V7 retains the hollow V6 shell and original support strategy, with narrow sloped struts for the upper board-pocket lips; slimming and ventilation remain in the handle and shafts. A warning-free slice alone is insufficient: keep the layer-island guard and inspect the actual extrusion paths through all functional clearances. These checks do not establish physical strength.
+
+
+## Ventilation follows skin contact; assess the whole grip layout (2026-10-26)
+
+V7's loop bores crossed its broad X faces rather than its inner contact edge, and its 20 mm loop uplift placed the loop too high relative to the controls. V8 uses each loop station's inward normal in the YZ plane for outside-to-contact passages, rear grip outlets near the fingers, and separate outside intakes. The viewer's arrows and amber contact markers distinguish the functional direction from decorative perforation. Solid probes verify the four loop passages in both hands; this is not a cooling measurement.
+
+The revised loop removes the 20 mm uplift and uses an upper arm rising toward the index-finger attachment. All buttons shift up 10 mm while retaining their 4/26 mm vertical spacing and original side/radial placement. Judge the assembled loop, fingers and control relationship together; checking button coordinates alone did not establish the intended fit. PETG comfort and reach remain physical acceptance tests.
+
+A port-mouth support blocker did not prevent a normal-support column descending through the lowest outside opening: the first two slices each contained 13 sampled support points in that passage per hand. Blocking the support landing-source regions above the ports removed those points in the third slice, with all protected paths clear and no object warnings. Keep side support available around these narrow shadows. Inspect actual sliced extrusion; a contact blocker is not a guarantee that the space below it stays empty. This is slicer evidence, not a physical print result.

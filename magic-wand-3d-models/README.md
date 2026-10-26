@@ -1,6 +1,10 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V7 — slimmer ventilated wand, both hands](Print-7-README.md).**
+**Latest candidate: [Print V8 — ergonomic lower loop, higher controls and air to the hand, both hands](Print-8-README.md).**
+
+The loop sits at the butt, all controls move up 10 mm and its upper arm slopes down away from the index-side root. Loop ports now reach the inner contact surface. One left wand estimates 75.821 g of printed PETG; bought hardware remains unweighed.
+
+**Previous candidate: [Print V7 — slimmer ventilated wand, both hands](Print-7-README.md).**
 
 Slimmer hollow grip/loop and flute-like air holes. One left wand estimates 75.688 g of printed PETG, 16.85% less than V6; bought hardware remains unweighed.
 
