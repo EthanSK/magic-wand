@@ -6,41 +6,80 @@
 <title>Control Stones · Sensor comparison</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%2357b8ed' d='M16 8h32l14 18-30 34L2 26z'/%3E%3C/svg%3E">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#101419;color:#f0f4f8;font:16px system-ui,sans-serif}main{max-width:1200px;margin:auto;padding:28px}header,.sensor-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}h1{font-size:26px;font-weight:600;margin:0}p{color:#aebdca}h2{font-size:20px;margin:0}h3{font-size:15px;font-weight:500;margin:0}.status{padding:8px 12px;border:1px solid #435363;border-radius:20px;font-size:13px}.status.live{color:#7fe1ad;border-color:#347153}.comparison{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:20px}.panel,.battery,.mouse-panel{background:#192129;border:1px solid #32414e;border-radius:16px;padding:20px}.sensor-heading{display:block;min-height:80px}.sensor-heading .status{display:inline-block;margin-top:10px}.panel.internal{border-top:3px solid #7bc8ff}.panel.external{border-top:3px solid #dfb4ff}.sensor-subtitle,.units,.hint{color:#aebdca;font-size:13px}.sensor-subtitle{margin:8px 0 18px}.metric+.metric{border-top:1px solid #34414d;margin-top:20px;padding-top:20px}.metric-heading{display:block}.metric-heading .units{display:block;margin-top:4px}.values{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}.axis{font-size:13px}.axis strong{display:block;font:clamp(16px,2.5vw,24px) ui-monospace,monospace;margin-top:6px;color:#f0f4f8}.x{color:#7bc8ff}.y{color:#89e0b4}.z{color:#dfb4ff}canvas{width:100%;height:120px;display:block}.hint{min-height:32px;margin:16px 0 0}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin:16px 0}.controls label{display:grid;gap:6px;font-size:14px}select,button,input{font:inherit;color:inherit;background:#253341;border:1px solid #607586;border-radius:8px;padding:9px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #7bc8ff}input[type=checkbox]{width:18px;height:18px}#hold{touch-action:none;background:#21523c}.battery{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:14px 20px;margin-top:20px}.battery h2{font-size:16px}.mouse-panel{margin-top:20px}#mouse-note{min-height:24px;font-size:14px}.sensor-list{display:flex;gap:8px;flex-wrap:wrap;font-size:12px}.sensor-list span{padding:5px 8px;border:1px solid #435363;border-radius:12px}.sensor-list .live{border-color:#347153;color:#7fe1ad}footer{margin-top:20px;color:#aebdca;font-size:13px}@media(max-width:700px){main{padding:16px}.panel{padding:16px}.panel h2{font-size:18px}.values{gap:8px}canvas{height:100px}}@media(max-width:479px){.comparison{grid-template-columns:1fr}.sensor-heading{min-height:0}}
+*{box-sizing:border-box}
+body{margin:0;background:#101419;color:#f0f4f8;font:16px system-ui,sans-serif}
+main{max-width:1600px;margin:auto;padding:16px}
+header,.sensor-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+h1{font-size:26px;font-weight:600;margin:0}header p{color:#aebdca;margin:8px 0}
+h2{font-size:17px;margin:0}h3{font-size:13px;font-weight:500;margin:0}
+.status{padding:8px 12px;border:1px solid #435363;border-radius:20px;font-size:13px}
+.status.live{color:#7fe1ad;border-color:#347153}
+.comparison{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.panel,.battery,.mouse-panel{background:#192129;border:1px solid #32414e;border-radius:16px;padding:12px;min-width:0}
+.sensor-heading .status{padding:4px 7px;font-size:11px}
+.panel.internal{border-top:3px solid #7bc8ff}.panel.external{border-top:3px solid #dfb4ff}
+.sensor-subtitle,.units,.hint{color:#aebdca;font-size:12px}.sensor-subtitle{margin:5px 0 10px}
+.metric+.metric{border-top:1px solid #34414d;margin-top:8px;padding-top:8px}
+.metric-heading{display:flex;justify-content:space-between;gap:6px;align-items:baseline}
+.metric-heading .units{font-size:11px;white-space:nowrap}
+.values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:4px 0}
+.axis{font-size:11px}.axis strong{display:inline;margin-left:6px;font:15px ui-monospace,monospace;color:#f0f4f8}
+.x{color:#7bc8ff}.y{color:#89e0b4}.z{color:#dfb4ff}
+canvas{width:100%;height:36px;display:block}
+.hint{margin:6px 0 0;font-size:11px}
+.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin:16px 0}
+.controls label{display:grid;gap:6px;font-size:14px}
+select,button,input{font:inherit;color:inherit;background:#253341;border:1px solid #607586;border-radius:8px;padding:9px}
+button{cursor:pointer}button:disabled{opacity:.45;cursor:default}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #7bc8ff}
+input[type=checkbox]{width:18px;height:18px}#hold{touch-action:none;background:#21523c}
+.battery{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:10px 12px;margin-top:8px}.battery h2{font-size:16px}
+.mouse-panel{margin-top:16px;padding:16px}#mouse-note{min-height:24px;font-size:14px}
+footer{margin-top:20px;color:#aebdca;font-size:13px}
+@media(max-width:1050px){.comparison{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){main{padding:14px}.panel{padding:10px}.panel h2{font-size:16px}.sensor-heading{display:block;min-height:48px}.sensor-heading .status{display:inline-block;margin-top:6px}.axis strong{font-size:13px;margin-left:3px}.metric-heading{display:block}.metric-heading .units{display:block;margin-top:3px}}
+@media(max-width:479px){.comparison{grid-template-columns:1fr}}
 </style>
 </head>
 <body><main>
-<header><div><h1>Control Stones</h1><p>Internal and external motion, side by side.</p></div><div id="status" class="status" role="status">Waiting for sensor readings</div></header>
+<header><div><h1>Control Stones</h1><p>All six motion sensors, side by side.</p></div><div id="status" class="status" role="status">Waiting for sensor readings</div></header>
 <!-- Bench labels: Ethan is comparing an external gyro with the internal motion sensor; channel 2 is not assumed to be mounted on a thumb. -->
-<div class="controls"><label>External sensor<select id="source"><option value="finger:2">External gyro · channel 2</option><option value="finger:3">External gyro · channel 3</option><option value="finger:4">External gyro · channel 4</option><option value="finger:5">External gyro · channel 5</option><option value="finger:6">External gyro · channel 6</option></select></label></div>
-<div class="sensor-list" id="sensors"></div>
 <div class="battery"><h2>Battery <span id="battery">—</span></h2><span id="battery-note" class="units">Waiting for battery voltage</span></div>
-<div class="comparison">
-<section class="panel internal" aria-labelledby="internal-title">
-<div class="sensor-heading"><h2 id="internal-title">Internal Motion Sensor</h2><span id="internal-status" class="status">Waiting</span></div><p class="sensor-subtitle">Built into the Sense · LSM6DS3</p>
-<div class="metric"><div class="metric-heading"><h3>Rotation speed</h3><span class="units">Degrees/s · <span id="internal-gyro-scale">—</span></span></div><div class="values"><div class="axis x">X<strong id="internal-gx">—</strong></div><div class="axis y">Y<strong id="internal-gy">—</strong></div><div class="axis z">Z<strong id="internal-gz">—</strong></div></div><canvas id="internal-gyro" aria-label="Internal sensor rotation speed"></canvas></div>
-<div class="metric"><div class="metric-heading"><h3>Acceleration</h3><span class="units">g · <span id="internal-accel-scale">—</span></span></div><div class="values"><div class="axis x">X<strong id="internal-ax">—</strong></div><div class="axis y">Y<strong id="internal-ay">—</strong></div><div class="axis z">Z<strong id="internal-az">—</strong></div></div><canvas id="internal-accel" aria-label="Internal sensor acceleration"></canvas></div><p id="internal-hint" class="hint">Waiting for internal readings.</p>
+<div class="comparison" id="comparison"></div>
+<template id="sensor-panel">
+<section class="panel">
+<div class="sensor-heading"><h2 data-title></h2><span data-status class="status">Waiting</span></div><p class="sensor-subtitle" data-subtitle></p>
+<div class="metric"><div class="metric-heading"><h3>Rotation speed</h3><span class="units">Degrees/s · <span data-scale="gyro">—</span></span></div><div class="values"><div class="axis x">X<strong data-axis="gx">—</strong></div><div class="axis y">Y<strong data-axis="gy">—</strong></div><div class="axis z">Z<strong data-axis="gz">—</strong></div></div><canvas data-chart="gyro"></canvas></div>
+<div class="metric"><div class="metric-heading"><h3>Acceleration</h3><span class="units">g · <span data-scale="accel">—</span></span></div><div class="values"><div class="axis x">X<strong data-axis="ax">—</strong></div><div class="axis y">Y<strong data-axis="ay">—</strong></div><div class="axis z">Z<strong data-axis="az">—</strong></div></div><canvas data-chart="accel"></canvas></div><p data-hint class="hint">Waiting for sensor readings.</p>
 </section>
-<section class="panel external" aria-labelledby="external-title">
-<div class="sensor-heading"><h2 id="external-title">External Gyro</h2><span id="external-status" class="status">Waiting</span></div><p class="sensor-subtitle">BMI160 · <span id="external-channel">channel 2</span></p>
-<div class="metric"><div class="metric-heading"><h3>Rotation speed</h3><span class="units">Degrees/s · <span id="external-gyro-scale">—</span></span></div><div class="values"><div class="axis x">X<strong id="external-gx">—</strong></div><div class="axis y">Y<strong id="external-gy">—</strong></div><div class="axis z">Z<strong id="external-gz">—</strong></div></div><canvas id="external-gyro" aria-label="External gyro rotation speed"></canvas></div>
-<div class="metric"><div class="metric-heading"><h3>Acceleration</h3><span class="units">g · <span id="external-accel-scale">—</span></span></div><div class="values"><div class="axis x">X<strong id="external-ax">—</strong></div><div class="axis y">Y<strong id="external-ay">—</strong></div><div class="axis z">Z<strong id="external-az">—</strong></div></div><canvas id="external-accel" aria-label="External gyro acceleration"></canvas></div><p id="external-hint" class="hint">Waiting for external readings.</p>
-</section>
-</div>
-<section class="mouse-panel"><h2>Mouse Test</h2><div class="controls"><label>Mouse sensor<select id="mouse-source"><option value="external">External gyro</option><option value="hand">Internal motion sensor</option></select></label><label>Horizontal axis<select id="horizontal"><option>gz</option><option>gy</option><option>gx</option></select></label><label>Vertical axis<select id="vertical"><option>gx</option><option>gy</option><option>gz</option></select></label><label>Sensitivity<input id="gain" type="number" value="3" min="0.1" max="10" step="0.1"></label><label>Invert horizontal<input id="invert-x" type="checkbox"></label><label>Invert vertical<input id="invert-y" type="checkbox"></label><button id="calibrate" type="button">Calibrate while still</button><button id="hold" type="button" disabled>Hold to move mouse</button></div><p id="mouse-note" role="status">Mouse test is off.</p></section>
+</template>
+<section class="mouse-panel"><h2>Mouse Test</h2><div class="controls"><label>Mouse sensor<select id="mouse-source"></select></label><label>Horizontal axis<select id="horizontal"><option>gz</option><option>gy</option><option>gx</option></select></label><label>Vertical axis<select id="vertical"><option>gx</option><option>gy</option><option>gz</option></select></label><label>Sensitivity<input id="gain" type="number" value="3" min="0.1" max="10" step="0.1"></label><label>Invert horizontal<input id="invert-x" type="checkbox"></label><label>Invert vertical<input id="invert-y" type="checkbox"></label><button id="calibrate" type="button">Calibrate while still</button><button id="hold" type="button" disabled>Hold to move mouse</button></div><p id="mouse-note" role="status">Mouse test is off.</p></section>
 <footer>Matching graphs use the same range. Acceleration includes gravity. Live readings only; hold the mouse-test button to move, release to stop. No clicks or gestures are sent.</footer>
 </main>
 <script>
 const el=id=>document.getElementById(id),axes=['gx','gy','gz','ax','ay','az'],colors=['#7bc8ff','#89e0b4','#dfb4ff'],histories=new Map();
+// Ethan's default view shows all sensors at once; selection only controls the mouse test.
+const sensors=[{key:'hand',title:'Internal Motion Sensor',subtitle:'Built into the Sense · LSM6DS3'},...[2,3,4,5,6].map(channel=>({key:'finger:'+channel,title:'External Gyro · '+channel,subtitle:'BMI160 · channel '+channel}))];
+const panels=new Map();
+for(const sensor of sensors){
+ const panel=el('sensor-panel').content.firstElementChild.cloneNode(true),internal=sensor.key==='hand',heading=panel.querySelector('[data-title]');
+ panel.classList.add(internal?'internal':'external');panel.dataset.sensor=sensor.key;
+ heading.id=internal?'internal-title':'external-'+sensor.key.split(':')[1]+'-title';heading.textContent=sensor.title;panel.setAttribute('aria-labelledby',heading.id);
+ panel.querySelector('[data-subtitle]').textContent=sensor.subtitle;
+ for(const [metric,label] of [['gyro','rotation speed'],['accel','acceleration']])panel.querySelector('[data-chart="'+metric+'"]').setAttribute('aria-label',sensor.title+' '+label);
+ panels.set(sensor.key,panel);el('comparison').append(panel);
+ const option=document.createElement('option');option.value=sensor.key;option.textContent=internal?'Internal motion sensor':'External gyro · channel '+sensor.key.split(':')[1];el('mouse-source').append(option);
+}
+el('mouse-source').value='finger:2';
 let held=false,holdTimer=null,commandBusy=false,pendingHold=Promise.resolve();
 function batteryPercent(v){const points=[[3.3,0],[3.5,5],[3.6,10],[3.7,25],[3.8,50],[3.9,70],[4.0,85],[4.1,95],[4.2,100]];if(v<=3.3)return 0;for(let i=1;i<points.length;i++){const [hi,p]=points[i],[lo,q]=points[i-1];if(v<=hi)return Math.round(q+(v-lo)/(hi-lo)*(p-q))}return 100}
-function mouseKey(){return el('mouse-source').value==='hand'?'hand':el('source').value}
+function mouseKey(){return el('mouse-source').value}
 async function command(action){const response=await fetch('/api/mouse',{method:'POST',headers:{'Content-Type':'application/json','X-Control-Token':'__CONTROL_TOKEN__'},body:JSON.stringify({action,source:mouseKey(),horizontal:el('horizontal').value,vertical:el('vertical').value,gain:Number(el('gain').value),invert_x:el('invert-x').checked,invert_y:el('invert-y').checked})});if(!response.ok)throw new Error('Mouse command failed. Check sensor and Accessibility access.');return response.json()}
 async function configure(){await stop();try{await command('configure')}catch(e){el('mouse-note').textContent=e.message}}
 async function stop(){held=false;clearInterval(holdTimer);holdTimer=null;try{await pendingHold;await command('stop')}catch{}}
 async function renew(){if(!held||commandBusy)return;commandBusy=true;try{pendingHold=command('hold');await pendingHold}catch(e){held=false;clearInterval(holdTimer);el('mouse-note').textContent=e.message}finally{commandBusy=false}}
 function start(){if(el('hold').disabled||held)return;held=true;renew();holdTimer=setInterval(renew,200)}
-for(const id of ['source','mouse-source','horizontal','vertical','gain','invert-x','invert-y'])el(id).addEventListener('change',configure);
+for(const id of ['mouse-source','horizontal','vertical','gain','invert-x','invert-y'])el(id).addEventListener('change',configure);
 el('calibrate').onclick=async()=>{await stop();try{await command('calibrate')}catch(e){el('mouse-note').textContent=e.message}};
 el('hold').onpointerdown=e=>{el('hold').setPointerCapture(e.pointerId);start()};
 for(const event of ['pointerup','pointercancel','lostpointercapture'])el('hold').addEventListener(event,stop);
@@ -48,19 +87,26 @@ el('hold').onkeydown=e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();sta
 window.addEventListener('blur',stop);document.addEventListener('visibilitychange',()=>{if(document.hidden)stop()});
 function live(state){return state?.status==='Live'&&!!state.sample}
 function samplesFor(key,state){let record=histories.get(key);if(!record){record={count:-1,transport:null,ms:null,samples:[]};histories.set(key,record)}if(live(state)&&(record.count!==state.count||record.transport!==state.transport||record.ms!==state.sample.ms)){record.count=state.count;record.transport=state.transport;record.ms=state.sample.ms;record.samples.push(state.sample);if(record.samples.length>150)record.samples.shift()}return live(state)?record.samples:[]}
-function draw(id,samples,keys,scale){const c=el(id),r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;const ctx=c.getContext('2d');ctx.scale(d,d);const w=r.width,h=r.height;ctx.strokeStyle='#34414d';ctx.beginPath();ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();keys.forEach((key,i)=>{ctx.strokeStyle=colors[i];ctx.lineWidth=2;ctx.beginPath();samples.forEach((s,n)=>{const x=n*w/149,y=h/2-s[key]*(h*.44)/scale;n?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()})}
-function renderSensor(slot,state,samples,gyroScale,accelScale){const ready=live(state);el(slot+'-status').textContent=ready?state.transport+(state.sample.idle?' · Idle':' · Live'):(state?.status||'Waiting');el(slot+'-status').classList.toggle('live',ready);for(const key of axes)el(slot+'-'+key).textContent=ready?state.sample[key].toFixed(2):'—';el(slot+'-hint').textContent=ready?(state.sample.idle?'Internal gyro asleep. Move the Sense to wake it.':'Live gyro and accelerometer readings.'):(slot==='internal'?'No internal readings. Check the Sense connection.':'No external readings. Check power and the selected mux channel.');el(slot+'-gyro-scale').textContent='±'+gyroScale.toFixed(0);el(slot+'-accel-scale').textContent='±'+accelScale.toFixed(1);draw(slot+'-gyro',samples,['gx','gy','gz'],gyroScale);draw(slot+'-accel',samples,['ax','ay','az'],accelScale)}
+function draw(c,samples,keys,scale){const r=c.getBoundingClientRect(),d=devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;const ctx=c.getContext('2d');ctx.scale(d,d);const w=r.width,h=r.height;ctx.strokeStyle='#34414d';ctx.beginPath();ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();keys.forEach((key,i)=>{ctx.strokeStyle=colors[i];ctx.lineWidth=2;ctx.beginPath();samples.forEach((s,n)=>{const x=n*w/149,y=h/2-s[key]*(h*.44)/scale;n?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke()})}
+function renderSensor(sensor,state,samples,gyroScale,accelScale){
+ const panel=panels.get(sensor.key),ready=live(state),status=panel.querySelector('[data-status]');
+ status.textContent=ready?state.transport+(state.sample.idle?' · Idle':' · Live'):(state?.status||'Waiting');status.classList.toggle('live',ready);
+ for(const key of axes)panel.querySelector('[data-axis="'+key+'"]').textContent=ready?state.sample[key].toFixed(2):'—';
+ panel.querySelector('[data-hint]').textContent=ready?(state.sample.idle?'Internal gyro asleep. Move the Sense to wake it.':'Live gyro and accelerometer readings.'):(sensor.key==='hand'?'No internal readings. Check the Sense connection.':'No external readings. Check power and this mux channel.');
+ panel.querySelector('[data-scale="gyro"]').textContent='±'+gyroScale.toFixed(0);panel.querySelector('[data-scale="accel"]').textContent='±'+accelScale.toFixed(1);
+ draw(panel.querySelector('[data-chart="gyro"]'),samples,['gx','gy','gz'],gyroScale);draw(panel.querySelector('[data-chart="accel"]'),samples,['ax','ay','az'],accelScale);
+}
 async function poll(){try{
- const externalKey=el('source').value,s=await(await fetch('/api/sample?source='+encodeURIComponent(externalKey),{cache:'no-store'})).json();if(el('source').value!==externalKey)return;
- const internal=s.sensors?.hand,external=s.sensors?.[externalKey],internalSamples=samplesFor('hand',internal),externalSamples=samplesFor(externalKey,external),combined=[...internalSamples,...externalSamples];
+ const s=await(await fetch('/api/sample',{cache:'no-store'})).json(),internal=s.sensors?.hand;
+ const historiesNow=sensors.map(sensor=>samplesFor(sensor.key,s.sensors?.[sensor.key])),combined=historiesNow.flat();
  const gyroScale=Math.max(30,...combined.flatMap(v=>[Math.abs(v.gx),Math.abs(v.gy),Math.abs(v.gz)])),accelScale=Math.max(1.5,...combined.flatMap(v=>[Math.abs(v.ax),Math.abs(v.ay),Math.abs(v.az)]));
- renderSensor('internal',internal,internalSamples,gyroScale,accelScale);renderSensor('external',external,externalSamples,gyroScale,accelScale);el('external-channel').textContent='channel '+externalKey.split(':')[1];
- const readyCount=Number(live(internal))+Number(live(external));el('status').textContent=readyCount===2?'Both sensors live':readyCount===1?'1 of 2 sensors live':'Waiting for sensor readings';el('status').classList.toggle('live',readyCount===2);
- el('sensors').replaceChildren(...Object.entries(s.sensors||{}).map(([key,state])=>{const badge=document.createElement('span');badge.textContent=(key==='hand'?'Internal':'Channel '+key.split(':')[1])+(live(state)?' · live':' · no readings');badge.className=live(state)?'live':'';return badge}));
+ sensors.forEach((sensor,i)=>renderSensor(sensor,s.sensors?.[sensor.key],historiesNow[i],gyroScale,accelScale));
+ const readyCount=sensors.filter(sensor=>live(s.sensors?.[sensor.key])).length;
+ el('status').textContent=readyCount===sensors.length?'All six sensors live':readyCount?readyCount+' of '+sensors.length+' sensors live':'Waiting for sensor readings';el('status').classList.toggle('live',readyCount===sensors.length);
  const v=internal?.sample?.battery_v;el('battery').textContent=v==null?'—':'≈ '+batteryPercent(v)+'%';el('battery-note').textContent=v==null?'Waiting for battery voltage':v.toFixed(2)+' V · '+(internal.sample.charging?'Charging · ':'')+'Voltage estimate, not measured capacity.';
  const mouseReady=live(s.sensors?.[mouseKey()]);el('hold').disabled=!mouseReady||!s.mouse?.available||s.mouse.calibrating;el('calibrate').disabled=!mouseReady||s.mouse?.calibrating;if(!mouseReady&&held)stop();
  el('mouse-note').textContent=s.mouse?.calibrating?'Keep the selected mouse sensor still for 50 readings.':!s.mouse?.available?'Mouse test needs Accessibility access for the reader’s Python in System Settings.':s.mouse.active?'Mouse test active. Release the button to stop.':s.mouse.calibrated?'Calibrated. Hold the button to test mouse movement.':'Mouse test off. Calibrate the selected mouse sensor while still, then hold the button.';
- }catch{el('status').textContent='Debug reader unavailable';el('status').classList.remove('live');el('hold').disabled=true;el('calibrate').disabled=true;stop();for(const slot of ['internal','external'])renderSensor(slot,null,[],30,1.5)}finally{setTimeout(poll,100)}}
+ }catch{el('status').textContent='Debug reader unavailable';el('status').classList.remove('live');el('hold').disabled=true;el('calibrate').disabled=true;stop();for(const sensor of sensors)renderSensor(sensor,null,[],30,1.5)}finally{setTimeout(poll,100)}}
 configure().then(poll);
 </script>
 </body></html>

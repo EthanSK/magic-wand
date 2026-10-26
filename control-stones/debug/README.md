@@ -42,7 +42,7 @@ Toolchain downloads and builds for this session are on the SD card under `AgentS
 
 To avoid the multiplexer pins on the opposite side: thumb uses SD2/SC2, index SD3/SC3, middle SD4/SC4, ring SD5/SC5 and little SD6/SC6. Channels 0, 1 and 7 are unused. The firmware, viewer and wiring diagram use this mapping.
 
-The viewer shows the internal Sense sensor and one selected external gyro together, each with its own rotation and acceleration values and history. Matching graphs share their vertical range. The external selector starts at channel 2 and can show channels 3–6; these are labelled by channel rather than assuming the sensor is already mounted on a finger. Select a **Mouse sensor**, keep it still and choose **Calibrate while still**. Calibration averages 50 readings; a hand sensor already in idle sends fewer readings. Adjust the horizontal/vertical axes and their inversion to suit the actual mounting. Hold **Hold to move mouse**, or hold Space/Enter while that button is focused. Release, lose focus, or stop renewing the hold for 0.6 seconds to stop movement. Fresh packets are required; duplicate USB/BLE packets, stale gaps and device-clock resets do not replay movement. A local per-run token protects mouse commands against unrelated websites. The reader's Python needs macOS Accessibility access; the page reports when it is unavailable without prompting or changing settings.
+The default viewer shows all six sensors together: the internal Sense sensor and external channels 2–6. Every card has its own rotation and acceleration values and history; matching graphs share their vertical range across all six cards. External sensors are labelled by channel rather than assuming they are already mounted on fingers. The independent Mouse sensor selector chooses which of the six sensors controls the optional pointer test without hiding any cards. Select a **Mouse sensor**, keep it still and choose **Calibrate while still**. Calibration averages 50 readings; a hand sensor already in idle sends fewer readings. Adjust the horizontal/vertical axes and their inversion to suit the actual mounting. Hold **Hold to move mouse**, or hold Space/Enter while that button is focused. Release, lose focus, or stop renewing the hold for 0.6 seconds to stop movement. Fresh packets are required; duplicate USB/BLE packets, stale gaps and device-clock resets do not replay movement. A local per-run token protects mouse commands against unrelated websites. The reader's Python needs macOS Accessibility access; the page reports when it is unavailable without prompting or changing settings.
 
 The BMI160 build compiled (129,292 bytes flash / 14,624 bytes RAM). Eight host tests cover packet validation, channel numbering, calibration, hold expiry, duplicate/stale samples, connection status, bootloader exclusion and command access. The firmware upload reported `Device programmed`; the installed build then sent changing six-axis thumb readings on channel 2 over Bluetooth, alongside the built-in hand sensor. The browser displayed both as live, and a brief hold/release test returned pointer control to off. The user's preferred pointer directions, calibration and battery-only operation with this build still need hands-on acceptance. Only one external sensor was connected; channels 3–6 have not been physically tested. Uploading this build over Bluetooth is not implemented. Earlier verification above describes the previous hand-only installed build.
 
@@ -53,6 +53,13 @@ Ethan confirmed the comparison working. Ten host tests now include simulated
 stalled transfers and recovery. This is the working Control Hand snapshot in
 the component README. The exact original stall cause remains unproven;
 timeout counts are diagnostics, not proof of a particular wiring fault.
+
+## All-sensor dashboard — 26 October 2026
+
+The default dashboard now shows the internal sensor and all five external
+channels together, with independent values and history. All six streams were
+observed live over Bluetooth in the desktop and in-chat views. The mouse test
+retains its separate sensor choice and remains off until deliberately held.
 
 ## Finger recovery revision — 26 October 2026
 
