@@ -1,0 +1,41 @@
+{
+  "material": "PETG",
+  "printer": "Bambu P1S 0.4mm",
+  "layer_mm": 0.2,
+  "walls": 3,
+  "infill": "20%",
+  "includes_support_brim": true,
+  "measured_physical_mass": false,
+  "old_upper": {
+    "grams": 49.424,
+    "seconds": 8285
+  },
+  "new_upper": {
+    "grams": 40.086,
+    "seconds": 8673
+  },
+  "old_left_handle": {
+    "grams": 76.89,
+    "seconds": 12489
+  },
+  "new_left_handle": {
+    "grams": 47.106,
+    "seconds": 11484
+  },
+  "new_full_left": {
+    "grams": 90.71,
+    "seconds": 15505
+  },
+  "new_compact_button_trial": {
+    "grams": 0.913,
+    "seconds": 427
+  },
+  "new_bayonet_trial": {
+    "grams": 5.493,
+    "seconds": 1519
+  },
+  "limitations": "Slicer estimates only; force, strength and actual PETG fit are not measured.",
+  "upper_mass_reduction_percent": 18.9,
+  "handle_mass_reduction_percent": 38.7,
+  "handle_support": "normal(auto), build plate only; internal contact blockers"
+}

@@ -1014,3 +1014,7 @@ Reset only the review-circle geometry across a mode switch, keeping the NAV
 stream, heartbeat and tracking intact. The existing hold-to-commit ends the same
 selection normally. Tests cover both directions, first-motion-free switching,
 packet identity, cancel, and one final commit.
+
+## Hollow print geometry still needs sliced-path checks (2026-10-26)
+
+The lightweight Print V3 grip passed solid and wire-route tests, but its first tree-support slice routed support branches through the hollow grip and button cable space despite internal support-contact blockers. Checking only blocker presence did not protect the finished route. Per-object normal supports from the build plate eliminated those internal paths and the unsupported-region warnings in the final P1S PETG slice. The recorded 0.5 mm-step path scan covers the grip, shafts, battery reference, button outlets, board, solder and USB clearances; it does not prove printed fit or strength. Keep the support type in the portable 3MF recipe and inspect the sliced extrusion paths after geometry/support changes. Compare actual slicer mass under matching material/layer/wall/infill settings: a percentage reduction in solid CAD volume overstates the gain against a sparsely filled old model.
