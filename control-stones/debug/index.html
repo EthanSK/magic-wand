@@ -92,7 +92,7 @@ function renderSensor(sensor,state,samples,gyroScale,accelScale){
  const panel=panels.get(sensor.key),ready=live(state),status=panel.querySelector('[data-status]');
  status.textContent=ready?state.transport+(state.sample.idle?' · Idle':' · Live'):(state?.status||'Waiting');status.classList.toggle('live',ready);
  for(const key of axes)panel.querySelector('[data-axis="'+key+'"]').textContent=ready?state.sample[key].toFixed(2):'—';
- panel.querySelector('[data-hint]').textContent=ready?(state.sample.idle?'Internal gyro asleep. Move the Sense to wake it.':'Live gyro and accelerometer readings.'):(sensor.key==='hand'?'No internal readings. Check the Sense connection.':'No external readings. Check power and this mux channel.');
+ panel.querySelector('[data-hint]').textContent=ready?(state.sample.idle?'Gyro asleep; accelerometer watching for movement.':'Live gyro and accelerometer readings.'):(sensor.key==='hand'?'No internal readings. Check the Sense connection.':'No external readings. Check power and this mux channel.');
  panel.querySelector('[data-scale="gyro"]').textContent='±'+gyroScale.toFixed(0);panel.querySelector('[data-scale="accel"]').textContent='±'+accelScale.toFixed(1);
  draw(panel.querySelector('[data-chart="gyro"]'),samples,['gx','gy','gz'],gyroScale);draw(panel.querySelector('[data-chart="accel"]'),samples,['ax','ay','az'],accelScale);
 }

@@ -4,6 +4,7 @@
 #include <bluefruit.h>
 #include "sense_power.h"
 #include "finger_sensors.h"
+#include "motion_idle.h"
 
 // Control Stones: the Sense's built-in hand sensor, not the external finger gyros.
 LSM6DS3 handIMU(I2C_MODE, 0x6A);
@@ -14,6 +15,7 @@ float batteryVoltage = 0;
 uint32_t lastHealth = 0, lastBluetooth = 0, bluetoothDrops = 0;
 constexpr int FRAME_SIZE = 512;
 BLEUart sensorUart;
+MotionIdle motionIdle;
 // Original Sense variant: D23 is the active-low charger status on P0.17.
 constexpr uint8_t CHARGE_STATUS = 23;
 void emit(const char *frame, int length, bool wireless = true) {
@@ -32,7 +34,7 @@ void reportHealth(char *frame) {
   if (uint32_t(millis() - lastHealth) < 1000) return;
   lastHealth = millis();
   int n = snprintf(frame, FRAME_SIZE,
-    "{\"sensor\":\"health\",\"firmware\":\"cs-recovery-20261026\",\"ms\":%lu,\"finger_state\":[%u,%u,%u,%u,%u],\"finger_restarts\":[%lu,%lu,%lu,%lu,%lu],\"i2c_timeouts\":%lu,\"ble_drops\":%lu}\n",
+    "{\"sensor\":\"health\",\"firmware\":\"cs-assembly-sleep-20261026\",\"ms\":%lu,\"finger_state\":[%u,%u,%u,%u,%u],\"finger_restarts\":[%lu,%lu,%lu,%lu,%lu],\"i2c_timeouts\":%lu,\"ble_drops\":%lu}\n",
     (unsigned long)lastHealth,
     Fingers::health[0], Fingers::health[1], Fingers::health[2], Fingers::health[3], Fingers::health[4],
     (unsigned long)Fingers::restarts[0], (unsigned long)Fingers::restarts[1], (unsigned long)Fingers::restarts[2],
@@ -63,26 +65,67 @@ void setup() {
   Bluefruit.Advertising.setInterval(32, 244);
   Bluefruit.Advertising.start(0);
   Fingers::begin();
+  motionIdle.restart(millis());
 }
 
 void loop() {
-  SensePower::waitAndUpdate(handIMU, Fingers::any());
+  const bool wakeInterrupt = SensePower::waitAndUpdate(handIMU,
+    SensePower::idle ? MotionIdle::IDLE_POLL_MS : 20);
   lastSample = millis();
   static char frame[FRAME_SIZE];
-  // Sample and stream USB at the original rate; bound the five-finger radio load.
-  const bool publishBluetooth = uint32_t(lastSample - lastBluetooth) >= 50;
-  if (publishBluetooth) lastBluetooth = lastSample;
+  static float fingerAxes[5][6] = {}, handAxes[6] = {};
+  static uint32_t fingerTime[5] = {}, handTime = 0;
+  bool fingerReady[5] = {}, handReady = false, moved = wakeInterrupt && SensePower::idle;
   Fingers::rescan();
   for (uint8_t i = 0; i < 5; ++i) {
-    float axes[6];
-    if (!Fingers::sample(i, axes)) continue;
+    fingerReady[i] = Fingers::sample(i, fingerAxes[i]);
+    if (fingerReady[i]) {
+      fingerTime[i] = millis();
+      moved |= motionIdle.observe(i + 1, fingerAxes[i], !Fingers::idle, fingerTime[i]);
+    }
+  }
+  uint8_t available = 0;
+  const uint8_t handMask = SensePower::idle ? 0x01 : 0x03;
+  if (ready && handIMU.readRegister(&available, 0x1E) == IMU_SUCCESS && (available & handMask) == handMask) {
+    handAxes[0] = SensePower::idle ? 0 : handIMU.readFloatGyroX();
+    handAxes[1] = SensePower::idle ? 0 : handIMU.readFloatGyroY();
+    handAxes[2] = SensePower::idle ? 0 : handIMU.readFloatGyroZ();
+    handAxes[3] = handIMU.readFloatAccelX();
+    handAxes[4] = handIMU.readFloatAccelY();
+    handAxes[5] = handIMU.readFloatAccelZ();
+    handReady = true;
+    handTime = millis();
+    moved |= motionIdle.observe(0, handAxes, !SensePower::idle, handTime);
+  }
+  if (moved) motionIdle.restart(millis());
+  const bool wantIdle = SensePower::enabled && motionIdle.shouldSleep(millis());
+  if (wantIdle != SensePower::idle) {
+    const bool changed = SensePower::setIdle(handIMU, wantIdle);
+    Fingers::setIdle(changed && wantIdle);
+    if (!wantIdle) motionIdle.restart(millis());
+    // The batch mode switch waits for BMI160 gyro startup. Drop pre-switch
+    // readings, including stale gyro output, and collect fresh values next loop.
+    memset(fingerTime, 0, sizeof(fingerTime));
+    handTime = 0;
+    lastBluetooth = millis() - 1000;
+    return;
+  }
+  // Keep the connection alive, but send only one snapshot/second while resting.
+  // The accelerometers still watch at 12.5 Hz independently of this radio rate.
+  const bool publishBluetooth = uint32_t(lastSample - lastBluetooth) >= (SensePower::idle ? 1000 : 50);
+  if (publishBluetooth) lastBluetooth = lastSample;
+  reportHealth(frame);
+  if (SensePower::idle && !publishBluetooth) return;
+  for (uint8_t i = 0; i < 5; ++i) {
+    if (!Fingers::addresses[i] || (!fingerReady[i] &&
+        !(SensePower::idle && fingerTime[i] && uint32_t(millis() - fingerTime[i]) < 250))) continue;
+    const float *axes = fingerAxes[i];
     int n = snprintf(frame, sizeof(frame),
-      "{\"sensor\":\"finger\",\"channel\":%u,\"finger\":\"%s\",\"address\":%u,\"ms\":%lu,\"gx\":%.3f,\"gy\":%.3f,\"gz\":%.3f,\"ax\":%.4f,\"ay\":%.4f,\"az\":%.4f}\n",
-      Fingers::CHANNELS[i], Fingers::NAMES[i], Fingers::addresses[i], (unsigned long)millis(),
-      axes[0], axes[1], axes[2], axes[3], axes[4], axes[5]);
+      "{\"sensor\":\"finger\",\"channel\":%u,\"finger\":\"%s\",\"address\":%u,\"ms\":%lu,\"gx\":%.3f,\"gy\":%.3f,\"gz\":%.3f,\"ax\":%.4f,\"ay\":%.4f,\"az\":%.4f,\"idle\":%s,\"sleep_ready\":true}\n",
+      Fingers::CHANNELS[i], Fingers::NAMES[i], Fingers::addresses[i], (unsigned long)fingerTime[i],
+      axes[0], axes[1], axes[2], axes[3], axes[4], axes[5], Fingers::idle ? "true" : "false");
     emit(frame, n, publishBluetooth);
   }
-  reportHealth(frame);
   if (!ready) {
     Serial.println("{\"error\":\"Built-in sensor not found\"}");
     delay(1000);
@@ -95,13 +138,11 @@ void loop() {
     // Original Sense's 1 MΩ / 510 kΩ divider and the selected 3.0 V reference.
     batteryVoltage = (total / 8.0f) * (3.0f / 4096.0f) * (1510.0f / 510.0f);
   }
-  uint8_t available = 0;
-  if (!SensePower::idle && (handIMU.readRegister(&available, 0x1E) != IMU_SUCCESS || !(available & 0x02))) return;
+  if (!handReady && !(SensePower::idle && handTime && uint32_t(millis() - handTime) < 250)) return;
   int length = snprintf(frame, sizeof(frame),
     "{\"sensor\":\"hand\",\"ms\":%lu,\"ax\":%.4f,\"ay\":%.4f,\"az\":%.4f,\"gx\":%.3f,\"gy\":%.3f,\"gz\":%.3f,\"battery_v\":%.3f,\"charging\":%s,\"idle\":%s,\"sleep_ready\":%s,\"i2c_timeouts\":%lu}\n",
-    (unsigned long)lastSample, handIMU.readFloatAccelX(), handIMU.readFloatAccelY(),
-    handIMU.readFloatAccelZ(), SensePower::idle ? 0 : handIMU.readFloatGyroX(), SensePower::idle ? 0 : handIMU.readFloatGyroY(),
-    SensePower::idle ? 0 : handIMU.readFloatGyroZ(), batteryVoltage, digitalRead(CHARGE_STATUS) == LOW ? "true" : "false",
+    (unsigned long)handTime, handAxes[3], handAxes[4], handAxes[5], handAxes[0], handAxes[1],
+    handAxes[2], batteryVoltage, digitalRead(CHARGE_STATUS) == LOW ? "true" : "false",
     SensePower::idle ? "true" : "false", SensePower::enabled ? "true" : "false", (unsigned long)ExternalBus::timeouts);
   emit(frame, length, publishBluetooth);
 }

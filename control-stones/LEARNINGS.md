@@ -1,5 +1,23 @@
 # Control Stones learnings
 
+## Whole-assembly sleep needs a separate movement policy
+
+2026-10-26: The hand-only hardware inactivity mode did not stop external
+BMI160 gyros, and a detected finger kept the reader polling at 50 Hz. Keep
+per-sensor resting acceleration references and one assembly activity timer;
+gravity, missing packets and a stale gyro register are not new movement.
+The new host tests cover finger-only wake, cumulative slow tilt, timer wrap,
+idle mode register readback, active-mode restoration, and recovery while idle.
+They do not prove battery savings or physical gesture sensitivity.
+
+BMI160 low power requires ACC_CONF undersampling before the low-power command.
+Commands occupy CMD while executing: wait after accelerometer commands, start
+all waking gyros before one shared startup wait, and verify PMU/configuration.
+Read accelerometer-only data while suspended and explicitly mark zero gyro
+values as idle. Clear cached samples at each transition so old active values
+cannot be relabelled as sleep data. Never infer a completed firmware upload
+from a successful Bluetooth stream running an earlier build.
+
 ## Acknowledgement is not evidence that a sensor is still sampling
 
 2026-10-26: `Fingers::sample` returned early when BMI160 data-ready bits were

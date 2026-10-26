@@ -17,7 +17,9 @@ bool write(uint8_t address,const uint8_t* data,uint8_t count){
  const auto reg=data[0],value=data[1];
  if(reg==0x7e&&value==0xb6){std::memset(s.regs,0,256);s.ready=true;++s.resets;}
  else if(reg==0x7e&&value==0x11)s.regs[3]=(s.regs[3]&~0x30)|0x10;
+ else if(reg==0x7e&&value==0x12)s.regs[3]=(s.regs[3]&~0x30)|0x20;
  else if(reg==0x7e&&value==0x15)s.regs[3]=(s.regs[3]&~0x0c)|0x04;
+ else if(reg==0x7e&&value==0x14)s.regs[3]&=~0x0c;
  else s.regs[reg]=value;
  return true;
 }
@@ -26,8 +28,9 @@ bool read(uint8_t address,uint8_t reg,uint8_t* data,uint8_t count){
  unsigned channel=0;while(!(selected&(1u<<channel)))++channel;
  auto& s=sensors[channel];if(!s.present)return false;
  if(reg==0&&count==1){*data=0xd1;return true;}
- if(reg==0x1b&&count==1){*data=s.ready?0xc0:0;return true;}
+ if(reg==0x1b&&count==1){*data=s.ready?((s.regs[3]&0x0c)?0xc0:0x80):0;return true;}
  if(reg==0x0c&&count==12){std::memset(data,0,12);data[9]=0x20;return true;}
+ if(reg==0x12&&count==6){std::memset(data,0,6);data[3]=0x20;return true;}
  std::memcpy(data,s.regs+reg,count);return true;
 }
 }
@@ -56,5 +59,31 @@ int main(){
  FakeBus::sensors[6].present=true;littleSamples=0;
  for(unsigned i=0;i<150;++i){now+=20;Fingers::rescan();if(Fingers::sample(4,axes))++littleSamples;}
  assert(littleSamples>0);
+ const auto beforeSleep=now;
+ Fingers::setIdle(true);
+ assert(FakeBus::selected==0);
+ assert(now-beforeSleep<100);
+ assert(Fingers::sample(0,axes));
+ assert(axes[0]==0&&axes[1]==0&&axes[2]==0&&axes[4]==1);
+ for(unsigned channel=2;channel<=6;++channel){
+  assert(FakeBus::sensors[channel].regs[0x40]==0xa5);
+  assert(FakeBus::sensors[channel].regs[3]==0x20);
+ }
+ // Loss/recovery while asleep stays low-power, and leaves its neighbours alone.
+ const auto healthyResets=FakeBus::sensors[2].resets;
+ FakeBus::sensors[6].ready=false;now+=1200;assert(!Fingers::sample(4,axes));
+ now+=1200;assert(Fingers::configure(4));assert(Fingers::sample(4,axes));
+ assert(FakeBus::sensors[6].regs[3]==0x20);
+ assert(FakeBus::sensors[2].resets==healthyResets);
+ const auto beforeWake=now;
+ Fingers::setIdle(false);
+ assert(now-beforeWake<150&&"gyro startup must overlap across fingers");
+ assert(Fingers::sample(0,axes));
+ for(unsigned channel=2;channel<=6;++channel){
+  assert(FakeBus::sensors[channel].regs[0x40]==0x28);
+  assert(FakeBus::sensors[channel].regs[3]==0x14);
+ }
+ assert(FakeBus::sensors[2].resets==healthyResets&&"sleep/wake must not reset sensors");
+ assert(FakeBus::selected==0);
  std::cout<<"Stale sensor reinitialises, healthy sensor continues, mux isolates channels, and reconnect recovers\n";
 }
