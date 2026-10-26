@@ -34,8 +34,8 @@
     "receiver/Sources/main.swift": {
       "importedFrom": "wand-mac-receiver.swift",
       "transform": "receiver",
-      "originalSha256": "42e282b4afb643d3c57f466db044248c13ace8e2b6d5793a55471cf282248d6f",
-      "publicSha256": "dc95b5ceb5a306ddce21636248f81e35e2cd5816beb384a4bcc37b1dea69d7ac"
+      "originalSha256": "8ec081e4c83de6ab624ac43b8dc7c6cba32277cf470e4ebe07aa1c0def783084",
+      "publicSha256": "7a849b0e8a36b4d8fb2cbe1ae9d39d33c006da677773019946d170c79a01fa33"
     },
     "receiver/Sources/WandControlTransport.swift": {
       "importedFrom": "wand-control-transport.swift",
@@ -73,11 +73,17 @@
       "originalSha256": "6bda1a64903e309f7eb03705d3bf5be5e70b5035273c7093d2ed852406d99f98",
       "publicSha256": "6bda1a64903e309f7eb03705d3bf5be5e70b5035273c7093d2ed852406d99f98"
     },
+    "receiver/Sources/WandUART.swift": {
+      "importedFrom": "wand-uart.swift",
+      "transform": "verbatim",
+      "originalSha256": "088b29bfd624be94a85e012e7e0f3a5ea50fd09f8da9fbc4438de1a7e513e4a4",
+      "publicSha256": "088b29bfd624be94a85e012e7e0f3a5ea50fd09f8da9fbc4438de1a7e513e4a4"
+    },
     "receiver/Info.plist": {
       "importedFrom": "Wand Receiver.app/Contents/Info.plist",
       "transform": "verbatim",
-      "originalSha256": "630483c867c8b4e25acc250298595dbbee126723a3faa4d334ab728c098e375f",
-      "publicSha256": "630483c867c8b4e25acc250298595dbbee126723a3faa4d334ab728c098e375f"
+      "originalSha256": "86748fe31bab93e093183b868eacbd60bbffd4c252c71df3824385400538c0a6",
+      "publicSha256": "86748fe31bab93e093183b868eacbd60bbffd4c252c71df3824385400538c0a6"
     }
   }
 }

@@ -37,6 +37,7 @@ FILES = {
     "wand-review-trace.swift": ("receiver/Sources/WandReviewTrace.swift", "verbatim"),
     "wand-pointer-control.swift": ("receiver/Sources/WandPointerControl.swift", "verbatim"),
     "wand-calibration.swift": ("receiver/Sources/WandCalibration.swift", "verbatim"),
+    "wand-uart.swift": ("receiver/Sources/WandUART.swift", "verbatim"),
     "Wand Receiver.app/Contents/Info.plist": ("receiver/Info.plist", "verbatim"),
 }
 

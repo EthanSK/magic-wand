@@ -267,7 +267,7 @@ print("PASS: hold-to-show HUD, native close, kept-open next hold, tap and double
 
 test('complete published receiver typechecks together', {skip:process.platform!=='darwin'},()=>{
  const directory=new URL('../receiver/Sources/',import.meta.url);
- const files=['WandPointerControl.swift','WandCalibration.swift','WandRecordingState.swift','WandControlTransport.swift','WandContextListener.swift','WandReviewTrace.swift','WandDeviceConfiguration.swift','main.swift'].map(name=>new URL(name,directory).pathname);
+ const files=['WandPointerControl.swift','WandCalibration.swift','WandUART.swift','WandRecordingState.swift','WandControlTransport.swift','WandContextListener.swift','WandReviewTrace.swift','WandDeviceConfiguration.swift','main.swift'].map(name=>new URL(name,directory).pathname);
  const result=spawnSync('swiftc',['-typecheck',...files],{encoding:'utf8'});
  assert.equal(result.status,0,result.stderr);
 });

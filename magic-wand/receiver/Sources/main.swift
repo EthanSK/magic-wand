@@ -534,6 +534,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard device === p else { return }
         guard error == nil, c.isNotifying else { log("NOTIFY_FAILED"); reconnect(); return }
         guard !configuring else { return }; configuring = true
+        let acknowledged=p.maximumWriteValueLength(for:.withResponse)
+        let unacknowledged=p.maximumWriteValueLength(for:.withoutResponse)
+        log("UART_WRITE_LIMIT",WandUART.payloadLimit(acknowledged:acknowledged,unacknowledged:unacknowledged),"acknowledged",acknowledged,"unacknowledged",unacknowledged)
         // One-shot local recovery: start from saved flash before loading a bridge.
         // A fresh connection is needed when memory exhaustion left UART XOFF stuck.
         let resetPath=support.appendingPathComponent("reload-on-connect").path
@@ -557,8 +560,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         queue(handshake)
     }
     func queue(_ command: String) {
-        let data = Data(("\u{10}" + command + "\n").utf8)
-        for offset in stride(from: 0, to: data.count, by: 20) { chunks.append(data.subdata(in: offset..<min(offset + 20, data.count))) }
+        chunks += WandUART.packets(command,
+            acknowledged:device?.maximumWriteValueLength(for:.withResponse) ?? 0,
+            unacknowledged:device?.maximumWriteValueLength(for:.withoutResponse) ?? 0)
         sendNext()
     }
     func sendNext() {
