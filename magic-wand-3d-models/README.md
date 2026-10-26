@@ -1,6 +1,10 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V6 — side buttons raised 14 mm, both hands](Print-6-README.md).**
+**Latest candidate: [Print V7 — slimmer ventilated wand, both hands](Print-7-README.md).**
+
+Slimmer hollow grip/loop and flute-like air holes. One left wand estimates 75.688 g of printed PETG, 16.85% less than V6; bought hardware remains unweighed.
+
+**Previous candidate: [Print V6 — side buttons raised 14 mm, both hands](Print-6-README.md).**
 
 The side-button pair is 14 mm higher, with its upper centre 4 mm below the unchanged thumb. Side angles and radial placement are unchanged. Thin top-slide button plates fit directly into rounded surrounds built into the wand. The crossed helix, continuous taper, hollow interiors and both handed handles are preserved. The upper-only alternative retains a printed V2 handle. Earlier versions remain unchanged. Physical fit and strength still need a trial.
 
