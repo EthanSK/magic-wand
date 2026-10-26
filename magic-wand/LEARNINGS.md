@@ -999,3 +999,18 @@ identity: reusing the previous persistent identity makes later toggles look like
 duplicates to the native receiver. Tests exercise alternating modes, native
 acknowledgements, duplicate edges, late timers, and a held second press. These
 checks do not establish physical button acceptance.
+
+
+## Review mode changes preserve the live selection (2026-10-26)
+
+Review changes and Stage files share Better Git's existing selection. Do not end
+and begin the wand transaction just to toggle its mode: cancellation discards
+the membership, while finishing stages it. Send a `mode` packet with the same
+transaction ID and the next sequence. If no navigation has created a transaction
+yet, send `begin` then `mode`, without a `step`; this includes the current file
+without moving to another one. Better Git 1.2.135 adds this protocol.
+
+Reset only the review-circle geometry across a mode switch, keeping the NAV
+stream, heartbeat and tracking intact. The existing hold-to-commit ends the same
+selection normally. Tests cover both directions, first-motion-free switching,
+packet identity, cancel, and one final commit.

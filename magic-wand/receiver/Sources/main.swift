@@ -1331,8 +1331,16 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func setWandShortcut(_ mode:String?) {
         guard let mode else {finishWandShortcut(commit:false);return}
         guard ready,!restoring,context.isFresh,["changes","files"].contains(mode),
-              NSWorkspace.shared.frontmostApplication?.bundleIdentifier=="com.microsoft.VSCode" else{return}
+              NSWorkspace.shared.frontmostApplication?.bundleIdentifier=="com.microsoft.VSCode" else{
+            // A live session that cannot follow the newly selected mode is
+            // cancelled now, never left running in the old one.
+            if wandShortcutMode != nil && wandShortcutMode != mode {finishWandShortcut(commit:false)}
+            return
+        }
         if wandShortcutMode==mode{return}
+        // Ethan's Review/Stage toggle keeps the same selection: switch the live
+        // session in place rather than cancel it and start an empty one.
+        if wandShortcutMode != nil {switchWandShortcut(to:mode);return}
         finishWandShortcut(commit:false)
         let now=ProcessInfo.processInfo.systemUptime
         wandShortcutMode=mode;wandShortcutX=navX;wandShortcutY=navY;wandShortcutTime=now
@@ -1350,6 +1358,17 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             self.sendReview(self.review.tick(now:now))
         }
         log("WAND_REVIEW_SHORTCUT",mode)
+    }
+    /// Better Git keeps the existing selection and adds the file being
+    /// viewed. Only the review circle restarts: the NAV stream, tracking
+    /// light, heartbeat timer and transaction ID all carry on, so the next
+    /// ratchet and the hold commit act in the new mode.
+    func switchWandShortcut(to mode:String) {
+        let now=ProcessInfo.processInfo.systemUptime
+        sendReview(review.changeMode(mode,now:now))
+        wandShortcutMode=mode;wandShortcutCircle.reset()
+        reviewTrace.boundary("mode",mode:mode,now:now)
+        log("WAND_REVIEW_MODE",mode)
     }
     func finishWandShortcut(commit:Bool) {
         guard wandShortcutMode != nil else{return}

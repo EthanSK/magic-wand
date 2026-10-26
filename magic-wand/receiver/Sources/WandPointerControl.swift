@@ -464,6 +464,22 @@ final class WandReviewGesture {
         for _ in 0..<min(12,abs(Int(count))) {result.append(request("step",direction:step))}
         return result
     }
+    /// Ethan's Review/Stage toggle keeps one selection (formerly set). A live Better Git
+    /// transaction only switches mode (same ID, next sequence) and adds the
+    /// file being viewed; it is never finished, cancelled or begun again.
+    /// Without one, begin it in the current mode and then switch, so
+    /// the viewed file joins even before any ratchet. No step is sent.
+    func changeMode(_ target:String,now:Double)->[Request] {
+        guard target=="changes" || target=="files" else{return []}
+        let next=target=="files"
+        guard next != files else{return []}
+        guard held else{files=next;return []}
+        var result:[Request]=[]
+        if id==nil {id=UUID().uuidString;seq=0;lastPulse=now;result.append(request("begin",direction:direction))}
+        files=next;lastInput=now
+        result.append(request("mode",direction:direction))
+        return result
+    }
     func endDetents(commit:Bool)->[Request] {held=false;lastTap = -100;return finish(commit ? "finish":"cancel")}
     func tick(now:Double)->[Request] {
         guard held,id != nil else{return []}
