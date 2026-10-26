@@ -166,3 +166,5 @@ through their build/check commands; never claim an illustration is physical veri
 - Double Top starts dictation into a new chat in the configured harness (Codex in Ethan’s setup; also support Claude Code). Bring that harness frontmost, focus the new empty composer and show a small “Creating chat…” indicator while opening. Reuse normal stop/paste behavior and preserve normal single-Top recording. User-requested — 2026-10-25.
 
 - Explicit timing exception: double-click-to-centre may wait up to 300 ms after the second release to distinguish the screenshot triple-click. Normal pointer movement remains immediate. This is only approval for centering, not for movement buffering or other new delays. User-confirmed — 2026-10-25.
+
+- Keeping Middle held on the wand-home centre Switch App item enters its existing chooser after a deliberate 0.75-second continuous dwell after qualification, without a release and re-hold. Moving away resets the dwell; fresh telemetry and the same page are required. Retain the first-hold navigation and quicker-release/second-hold paths. No pre-arm motion replay. User-requested — 2026-10-26.
