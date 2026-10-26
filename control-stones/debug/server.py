@@ -8,13 +8,14 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 from mouse import MouseTest
-from telemetry import parse_sample, FINGERS
+from telemetry import parse_sample, parse_packet, FINGERS
 
 ROOT = Path(__file__).parent
 LOCK = threading.Lock()
 STATE = {"status": "Waiting for Sense", "sample": None, "count": 0, "received": 0}
 BLE_STATE = {"status": "Searching Bluetooth", "sample": None, "count": 0, "received": 0}
 SENSORS = {}
+HEALTH = {}
 MOUSE = MouseTest()
 TOKEN = secrets.token_urlsafe(32)
 UART_SERVICE = "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
@@ -29,6 +30,10 @@ def is_sense_serial(port):
 
 
 def record(sample, state, transport):
+    if sample['sensor'] == 'health':
+        with LOCK:
+            HEALTH[transport] = dict(sample=sample, received=time.monotonic())
+        return
     key = "hand" if sample["sensor"] == "hand" else f"finger:{sample['channel']}"
     with LOCK:
         state.update(status="Live", sample=sample, received=time.monotonic(), count=state["count"] + 1)
@@ -53,6 +58,14 @@ def sensor_state(key):
     return {"status": "Live" if age < 2 else "No recent readings", "sample": item["sample"] if age < 2 else None,
             "age": age, "count": item["count"], "transport": transport}
 
+def health_state():
+    now = time.monotonic()
+    for transport in ('Bluetooth', 'USB'):
+        item = HEALTH.get(transport)
+        if item and now - item['received'] < 3:
+            return dict(item['sample'], age=now-item['received'], transport=transport)
+    return None
+
 async def read_bluetooth():
     from bleak import BleakClient, BleakScanner
     while True:
@@ -74,7 +87,7 @@ async def read_bluetooth():
                     line, _, rest = buffer.partition(b"\n")
                     buffer[:] = rest
                     try:
-                        sample = parse_sample(line)
+                        sample = parse_packet(line)
                     except (ValueError, UnicodeError):
                         continue
                     record(sample, BLE_STATE, "Bluetooth")
@@ -106,7 +119,7 @@ def read_sensor():
                     if not line:
                         continue
                     try:
-                        sample = parse_sample(line)
+                        sample = parse_packet(line)
                     except (ValueError, UnicodeError) as error:
                         if str(error) == "Built-in sensor not found":
                             with LOCK:
@@ -127,6 +140,7 @@ class Handler(BaseHTTPRequestHandler):
                 payload = sensor_state(source)
                 payload["sensors"] = {key: sensor_state(key) for key in ("hand", *(f"finger:{i}" for i in FINGERS))}
                 payload["mouse"] = MOUSE.status()
+                payload["health"] = health_state()
             data = json.dumps(payload, allow_nan=False).encode()
             content_type = "application/json"
         elif self.path in ("/", "/index.html"):
@@ -173,8 +187,16 @@ class Handler(BaseHTTPRequestHandler):
         pass
 
 if __name__ == "__main__":
-    threading.Thread(target=read_sensor, daemon=True).start()
-    threading.Thread(target=lambda: asyncio.run(read_bluetooth()), daemon=True).start()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--resume-file', type=Path, help='Keep HTTP available while an authorised firmware upload owns the transports')
+    options = parser.parse_args()
+    def start_readers():
+        while options.resume_file and not options.resume_file.exists():
+            time.sleep(0.1)
+        threading.Thread(target=read_sensor, daemon=True).start()
+        threading.Thread(target=lambda: asyncio.run(read_bluetooth()), daemon=True).start()
+    threading.Thread(target=start_readers, daemon=True).start()
     server = ThreadingHTTPServer(("127.0.0.1", 8769), Handler)
     print("Control Stones debug: http://127.0.0.1:8769/", flush=True)
     server.serve_forever()

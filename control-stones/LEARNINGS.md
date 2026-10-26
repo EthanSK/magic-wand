@@ -1,5 +1,21 @@
 # Control Stones learnings
 
+## Acknowledgement is not evidence that a sensor is still sampling
+
+2026-10-26: `Fingers::sample` returned early when BMI160 data-ready bits were
+clear but retained the cached sensor address. `rescan` only configured entries
+without an address. A device acknowledging I2C while no longer sampling could
+therefore remain silent indefinitely. A host simulation of this exact state
+fails against the prior production driver and recovers with the one-second
+measurement watchdog. The same regression verifies that the healthy thumb is
+not reinitialised and that a returning sensor can recover without a board reset.
+
+Keep channel discovery, successful measurements and recovery diagnostics
+distinct. Deselect the mux between sensor operations, and report fresh firmware
+health separately from motion. The triggering physical cause of the observed
+intermittent readings remains unproven; this test does not diagnose soldering,
+power integrity, pull-ups or a permanent short.
+
 ## Keep an external bus fault from blocking the internal sensor
 
 2026-10-24: Seeed nRF52 core 1.1.13's `Wire` implementation waits for TWIM
