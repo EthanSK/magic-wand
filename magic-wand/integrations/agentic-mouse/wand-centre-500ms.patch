@@ -1,0 +1,84 @@
+--- a/LEARNINGS.md
++++ b/LEARNINGS.md
+@@ -3213,3 +3213,8 @@
+ The native wand controller can promote the same qualified navigate hold into Switch App adjustment after0.75seconds continuously centred after qualification. Reuse the existing0.25second watchdog and require telemetry no older than0.5seconds, same page generation and live home navigation. Leaving the centre or a telemetry gap restarts residence. Carry the same gesture ID, sequence and last cumulative angle across arming; reset HIGH metric state so the first mouse count is only a baseline. Ordinary release ends Command once and consumes the receiver's trailing choose, while shorter holds keep the existing second-hold flow. No receiver or mouse mapping change is needed.
+ 
+ Unexpected Codex Voice activation cannot be attributed from New Chat and Voice mappings alone. Log accepted Codex newTask and toggleVoiceMode requests with source, cell and native/app transport through the coordinator's existing notice sink. This captures requested actions rather than claiming Voice actually started; never log prompt text or recorded speech. The retained16October incident still lacks its initiating input.
++
++
++## 2026-10-26 — Shorter held-centre dwell
++
++Ethan shortened switchAppDwell from750ms to500ms of continuous home-centre residence AFTER receiver hold qualification. This changes only the dwell parameter: pointer timing, freshness500ms, watchdog250ms, HIGH baseline and release lifecycle stay unchanged. Preserve boundary coverage just below500ms and just after it, plus leaving/returning and pre-threshold release. The earlier750ms note is historical, not the current setting.
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -18,9 +18,9 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.288</string>
++	<string>1.0.289</string>
+ 	<key>CFBundleVersion</key>
+-	<string>294</string>
++	<string>295</string>
+ 	<key>LSMinimumSystemVersion</key>
+ 	<string>13.0</string>
+ 
+--- a/Sources/ScimitarKit/App/WandPersistentControl.swift
++++ b/Sources/ScimitarKit/App/WandPersistentControl.swift
+@@ -75,7 +75,7 @@
+     private static let switchAppReferenceGain: Double = 86.4
+     /// Continuous qualified dwell on the home centre before Switch App's
+     /// choose mode starts within the same hold. Deliberately unhurried.
+-    public static let switchAppDwell: TimeInterval = 0.75
++    public static let switchAppDwell: TimeInterval = 0.5
+     /// The dwell acts only on live telemetry; a silent hold never arms.
+     private static let switchAppDwellFreshness: TimeInterval = 0.5
+     public var onAdjustStep: ((WheelChordDirection)->Bool)?
+--- a/Tests/ScimitarKitTests/WandHoldToShowTests.swift
++++ b/Tests/ScimitarKitTests/WandHoldToShowTests.swift
+@@ -372,12 +372,12 @@
+     func testHoldingStillOnTheCentreEntersChooseModeWithoutReleasing() {
+         let id = qualifiedHoldFromClosed()
+         XCTAssertTrue(buttonPhases.isEmpty, "qualification alone holds no key")
+-        clock.advance(by: 0.5)
++        clock.advance(by: 0.499)
+         control.handle(.init(.motion, id: id, sequence: 2))
+         tick.fire()
+-        XCTAssertTrue(buttonPhases.isEmpty, "not too fast")
++        XCTAssertTrue(buttonPhases.isEmpty, "must not arm before 500 milliseconds")
+         XCTAssertNil(target.pointerFocus?.adjustment)
+-        clock.advance(by: 0.3)
++        clock.advance(by: 0.0011)
+         control.handle(.init(.motion, id: id, sequence: 3))
+         XCTAssertEqual(buttonPhases, ["press"], "Command goes down once, in the same hold")
+         XCTAssertNotNil(target.pointerFocus?.adjustment, "the ratchet ring shows choose mode")
+@@ -410,17 +410,17 @@
+         control.handle(.init(.motion, id: id, sequence: 3, x: 0, y: 0))
+         XCTAssertEqual(control.focusedCell, .switchApp)
+         XCTAssertTrue(buttonPhases.isEmpty, "time away from the centre never counts")
+-        clock.advance(by: 0.5)
++        clock.advance(by: 0.499)
+         control.handle(.init(.motion, id: id, sequence: 4))
+         XCTAssertTrue(buttonPhases.isEmpty)
+-        clock.advance(by: 0.3)
++        clock.advance(by: 0.0011)
+         control.handle(.init(.motion, id: id, sequence: 5))
+         XCTAssertEqual(buttonPhases, ["press"])
+     }
+ 
+     func testReleasingBeforeTheDwellKeepsTheOrdinaryArmedSwitchApp() {
+         let id = qualifiedHoldFromClosed()
+-        clock.advance(by: 0.5)
++        clock.advance(by: 0.499)
+         releaseHold(id)
+         XCTAssertTrue(buttonPhases.isEmpty)
+         XCTAssertEqual(control.armedCell, .switchApp, "a quicker release still arms the next hold")
+@@ -477,7 +477,7 @@
+ 
+     func testLockDuringTheDwellCancelsIt() {
+         let id = qualifiedHoldFromClosed()
+-        clock.advance(by: 0.5)
++        clock.advance(by: 0.3)
+         allowed = false
+         tick.fire()
+         allowed = true
