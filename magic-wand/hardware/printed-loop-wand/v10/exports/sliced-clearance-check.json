@@ -1,0 +1,103 @@
+{
+  "extruder_offset_mm": [
+    0,
+    2
+  ],
+  "sample_step_mm": 0.5,
+  "path_samples": 3009005,
+  "features": {
+    "Brim": 15160,
+    "Outer wall": 1161707,
+    "Support": 109140,
+    "Inner wall": 757572,
+    "Bottom surface": 4341,
+    "Gap infill": 594297,
+    "Support transition": 3353,
+    "Internal solid infill": 174798,
+    "Overhang wall": 8281,
+    "Bridge": 32283,
+    "Support interface": 8166,
+    "Sparse infill": 70691,
+    "Top surface": 40589,
+    "Floating vertical shell": 28627
+  },
+  "clearance_extrusion_samples": {
+    "Handle_Left": {
+      "main_9mm_clearance": {},
+      "battery_clearance": {},
+      "loop_mount_slide_0": {},
+      "loop_mount_slide_1": {},
+      "thumb_6mm_clearance": {},
+      "thumb_socket_clearance": {},
+      "index_6mm_clearance": {},
+      "index_socket_clearance": {},
+      "middle_6mm_clearance": {},
+      "middle_socket_clearance": {},
+      "body_slot_0": {},
+      "body_slot_1": {},
+      "body_slot_2": {},
+      "body_slot_3": {},
+      "body_slot_4": {}
+    },
+    "Handle_Right": {
+      "main_9mm_clearance": {},
+      "battery_clearance": {},
+      "loop_mount_slide_0": {},
+      "loop_mount_slide_1": {},
+      "thumb_6mm_clearance": {},
+      "thumb_socket_clearance": {},
+      "index_6mm_clearance": {},
+      "index_socket_clearance": {},
+      "middle_6mm_clearance": {},
+      "middle_socket_clearance": {},
+      "body_slot_0": {},
+      "body_slot_1": {},
+      "body_slot_2": {},
+      "body_slot_3": {},
+      "body_slot_4": {}
+    },
+    "Lower_Shaft": {
+      "main_9mm_clearance": {},
+      "body_slot_0": {},
+      "body_slot_1": {},
+      "body_slot_2": {},
+      "body_slot_3": {},
+      "body_slot_4": {},
+      "body_slot_5": {},
+      "body_slot_6": {}
+    },
+    "Upper_Shaft": {
+      "main_9mm_clearance": {},
+      "body_slot_0": {},
+      "body_slot_1": {},
+      "body_slot_2": {},
+      "body_slot_3": {},
+      "body_slot_4": {},
+      "body_slot_5": {},
+      "body_slot_6": {}
+    },
+    "Sense_Head_Base": {
+      "main_9mm_clearance": {},
+      "forward_wire_5_4mm": {},
+      "pcb_inner_clearance": {},
+      "central_solder_space": {},
+      "usb_plug_12x6": {}
+    },
+    "Sense_Sliding_Cover": {
+      "main_9mm_clearance": {},
+      "forward_wire_5_4mm": {},
+      "pcb_inner_clearance": {},
+      "central_solder_space": {},
+      "usb_plug_12x6": {}
+    },
+    "Removable_Finger_Loop": {
+      "main_9mm_clearance": {},
+      "loop_contact_airflow_0": {},
+      "loop_contact_airflow_1": {},
+      "loop_contact_airflow_2": {},
+      "loop_contact_airflow_3": {}
+    }
+  },
+  "project_sha256": "eced7e10354a204decd1f4c685cc25a5a83c340b754d810be59d3136812de50d",
+  "note": "Checks extrusion centerlines through both handed handles, both shafts and the two head parts in conservative interior clearances; excludes custom start/end G-code. Not a physical-print test."
+}
