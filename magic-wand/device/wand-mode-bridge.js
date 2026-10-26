@@ -19,8 +19,11 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     global.wandLightWatches.forEach(function(id){try{clearWatch(id);}catch(e){}watches=watches.filter(function(w){return w!==id;});});
     delete global.wandLightWatches;
   }
+  // Remove the retired recording animation when updating a running bridge.
+  // The receiver's prelude has already replaced the old light function, so
+  // this single cleanup cannot be undone later in the upload.
   if(global.wandRecordingBlinkTimer!==undefined)clearInterval(global.wandRecordingBlinkTimer);
-  global.wandRecordingBlinkTimer=undefined;global.wandRecordingBlinkRed=false;
+  delete global.wandRecordingBlinkTimer;delete global.wandRecordingBlinkRed;
   global.wandMomentaryStarted=undefined;global.wandLastLightState=undefined;
   // A brief receiver update must not discard a good sensor zero. Without this,
   // holding a button during reconnect can time out calibration and disable only
@@ -170,7 +173,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(!gyroAwake){global.wandPowerDownGyro();return;}
     global.wandSleepTimer=setTimeout(function(){
       global.wandSleepTimer=undefined;
-      if(!moveLatched&&!hudOpen&&!scrollHeld&&!global.wandReviewTracking)global.wandPowerDownGyro();
+      if(!moveLatched&&!hudOpen&&!scrollHeld&&!global.wandReviewTracking&&!global.wandShot)global.wandPowerDownGyro();
     },1000);
   });
   // A minute of confirmed desk rest is timed by the existing Mac detector.
@@ -290,19 +293,20 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   scrollReport.replaceWith(function(phase){
     if(connected)Bluetooth.println('@SCROLL '+phase+','+Math.round(scrollX*1000*global.wandHorizontalScrollBoost)+','+Math.round(scrollY*1000));
   });
-  // These are mode indicators, not just button-down lights. Recording remains
-  // red after release only if neither pointer, HUD nor scroll has priority.
-  // Remove the prior animation when updating a running bridge.
-  if(global.wandRecordingBlinkTimer!==undefined){clearInterval(global.wandRecordingBlinkTimer);delete global.wandRecordingBlinkTimer;}
-  delete global.wandRecordingBlinkRed;
+  // These are mode indicators, not just button-down lights. Ethan: "while I'm
+  // recording and in mouse mode ... I want it to be red ... I want to know it's
+  // recording" - recording red replaces mouse blue (steady, never alternating).
+  // HUD, scroll, app, sleep and loading keep their priority over recording.
+  // Update blinks the orange through the base loadingLight(); others are steady.
   global.wandLastFollow=undefined;
   updateLights.replaceWith(function(){
     if(connected&&global.wandLastFollow!==moveLatched){global.wandLastFollow=moveLatched;Bluetooth.println('@FOLLOW '+(moveLatched?1:0));}
-    var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN);
-    var mode=(global.WAND_UPDATING||global.wandMotionReady===false)?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':global.wandDeskSleeping?'sleep':(scrollHeld||global.wandCircleScrolling)?'scroll':global.wandAppMode?'app':move?'mouse':hud?'hud':(global.wandRecording||!digitalRead(STT_PIN))?'recording':'idle';
+    var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN),rec=global.wandRecording||!digitalRead(STT_PIN);
+    var mode=(global.WAND_UPDATING||global.wandMotionReady===false)?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':global.wandDeskSleeping?'sleep':(scrollHeld||global.wandCircleScrolling)?'scroll':global.wandAppMode?'app':move&&!rec?'mouse':!move&&hud?'hud':rec?'recording':'idle';
     lightLevels=mode==='update'||mode==='calibration'||mode==='disconnected'?[0.45,0.45,0.45]:mode==='recording'?[1,0,0]:mode==='scroll'?[0,1,1]:mode==='app'?(global.wandReviewFiles?[1,0,1]:[0,1,0]):mode==='mouse'?[0,0,1]:mode==='hud'?[1,0.2,0]:[0,0,0];
-    writeLight(LED1,lightLevels[0]);writeLight(LED2,lightLevels[1]);writeLight(LED3,lightLevels[2]);
     if(connected&&mode!==global.wandLastLightState){global.wandLastLightState=mode;print('WAND_LIGHT_STATE '+mode+' '+JSON.stringify(lightLevels));}
+    if(mode==='update')return loadingLight();
+    writeLight(LED1,lightLevels[0]);writeLight(LED2,lightLevels[1]);writeLight(LED3,lightLevels[2]);
   });
   // From mouse-off: a short tap enters latched follow without clicking. A hold
   // moves temporarily, then release clicks once at the endpoint and stops.
@@ -384,7 +388,8 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     global.wandSlackX=global.wandSlackY=0;
     // Discovery marker for the registered watch.
     if(false)clearHoldClick();
-    if(!digitalRead(MOVE_PIN))global.wandBottomPress();else global.wandBottomRelease();
+    // Screenshot mode (receiver-set wandShot) owns Bottom: report the edge only.
+    if(!global.wandShot){if(!digitalRead(MOVE_PIN))global.wandBottomPress();else global.wandBottomRelease();}
   });
   // Expose the same scoped functions to receiver commands; never a second copy
   // of mode state. Recording changes do not wake the motion sensor.
@@ -468,7 +473,8 @@ if(global.wandRawPointer)global.wandLiveMotionCallback.replaceWith(function(a) {
     var hx=(g[C.xAxis]-bias[C.xAxis])/134,hy=(g[C.yAxis]-bias[C.yAxis])/134,keep=radialKeep(hx,hy);
     hudX+=hx*keep*dt*C.xSign;hudY+=hy*keep*dt*C.ySign;
   }
-  if (!connected || (!moveLatched && !hudOpen) || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging)) {
+  // wandShot: the receiver's temporary screenshot motion, independent of follow.
+  if (!connected || (!moveLatched && !hudOpen && !G.wandShot) || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging)) {
     G.wandSlackX=G.wandSlackY=0;
     fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;return;
   }

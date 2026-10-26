@@ -72,7 +72,7 @@ test("tuning matches the running device code and the receiver", () => {
   assert.equal(Math.round(Number(guard[1]) * 1000), t.releaseGuardMs);
   assert.equal(Math.round(Number(guard[2]) * 1000), t.pressGuardMs);
   assert.equal(Math.round(number(/wandMotionReadyAt=lastTime\+([\d.]+)/, bridge, "cold settle") * 1000), t.coldSettleMs);
-  assert.equal(number(/if\(!moveLatched&&!hudOpen&&!scrollHeld&&!global\.wandReviewTracking\)global\.wandPowerDownGyro\(\);\s*\},(\d+)\)/, bridge, "sensor grace"), t.sensorIdleGraceMs);
+  assert.equal(number(/if\(!moveLatched&&!hudOpen&&!scrollHeld&&!global\.wandReviewTracking&&!global\.wandShot\)global\.wandPowerDownGyro\(\);\s*\},(\d+)\)/, bridge, "sensor grace"), t.sensorIdleGraceMs);
   assert.equal(number(/NRF\.setConnectionInterval\((\d+)\)/, device, "connection interval"), t.bluetoothIntervalMs);
   assert.equal(number(/if\(hudHeld\)middlePress\(\);\},(\d+)\)/, device, "middle delay"), t.middleReportDelayMs);
   assert.equal(number(/hudTimer=setInterval\(function\(\)\{hudReport\(\);\},(\d+)\)/, device, "HUD report"), t.reportIntervalMs);

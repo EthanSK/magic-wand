@@ -600,6 +600,131 @@ final class WandRecenterGesture {
     }
 }
 
+/// Ethan's Bottom triple-click screenshot shortcut. A click is the existing
+/// short press (under 220 ms) and each further press follows the previous
+/// release within the double click's 300 ms window. A held press is never a
+/// click, so tap-then-hold remains the explicit drag. A gap under 30 ms is
+/// switch bounce and starts a fresh run instead. The third press is recognised
+/// on its down edge; the caller consumes its release. Nothing here moves,
+/// buffers or delays the pointer.
+struct WandTripleClick {
+    enum Event {case none,first,third}
+    static let window=0.3,tapSeconds=0.22,bounceSeconds=0.03
+    private var clicks=0
+    private var pressedAt:Double?,lastRelease:Double?
+    mutating func cancel(){clicks=0;pressedAt=nil;lastRelease=nil}
+    /// `.first` marks the press that starts a possible run, before any of its
+    /// side effects; `.third` is the shortcut itself.
+    mutating func edge(down:Bool,now:Double)->Event {
+        if down {
+            guard pressedAt==nil else{return .none}
+            let gap=lastRelease.map{now-$0} ?? -1
+            let continues=gap>=Self.bounceSeconds && gap<=Self.window
+            if continues && clicks==2 {cancel();return .third}
+            pressedAt=now
+            if continues {return .none}
+            clicks=0;lastRelease=nil;return .first
+        }
+        guard let start=pressedAt else{return .none}
+        pressedAt=nil
+        let held=now-start
+        if held>=0 && held<Self.tapSeconds {clicks+=1;lastRelease=now}
+        else {clicks=0;lastRelease=nil}
+        return .none
+    }
+}
+
+/// Ethan's screenshot mode: "the mouse should move around, even if I wasn't in
+/// mouse mode ... you click the bottom button once ... that starts the hold ...
+/// when you stop moving it ... that's when we end the drag of the screenshot".
+/// Pure ownership state for the receiver. It owns the pointer and Bottom only
+/// while Agentic Mouse's native selection is active, or while a triple-click
+/// start waits for it, and never changes the ordinary mouse-follow choice.
+///
+/// `settle` is a separately owned WandDwellClick: the same stop-to-click
+/// algorithm and timing (0.2 s pause after 12 counts of travel), so ending the
+/// selection adds no new delay, and the ordinary dwell, which may already be
+/// armed, can never end it. A latched drag ends exactly once: by `settle`, by a
+/// fresh Bottom press, or by any cancellation (`end`). Physical release of the
+/// latching tap never ends it.
+final class WandScreenshotGesture {
+    enum Phase {case idle,pending,aiming,dragging,done}
+    enum Bottom {case pass,consumed,anchor,finish}
+    /// Agentic Mouse must report its native selection this soon after a
+    /// triple-click request; the wand's motion telemetry must keep arriving.
+    static let startSeconds=2.0,telemetrySeconds=0.8
+    private(set) var phase:Phase = .idle
+    private(set) var shortcut=false
+    private(set) var anchorRequested=false
+    /// The physical press that entered, latched or ended screenshot mode. Its
+    /// release, even after the mode has ended, is never an ordinary Bottom edge.
+    private(set) var consumeRelease=false
+    private(set) var since=0.0,lastTelemetry=0.0
+    let settle=WandDwellClick()
+    var ownsPointer:Bool {phase == .pending || phase == .aiming || phase == .dragging}
+    var dragging:Bool {phase == .dragging}
+    /// Triple-click: the native selection was requested and its drag will
+    /// anchor at the pointer as soon as macOS shows the selector.
+    func requestShortcut(now:Double)->Bool {
+        guard phase == .idle else{return false}
+        phase = .pending;shortcut=true;anchorRequested=true;consumeRelease=true;since=now;lastTelemetry=now
+        return true
+    }
+    /// Agentic Mouse reports an active native selection. Its repeated heartbeat
+    /// never resets progress; a spent (`done`) selection is never re-entered.
+    /// True when this call hands the pointer to screenshot aiming.
+    func contextActive(now:Double,pressed:Bool)->Bool {
+        switch phase {
+        case .idle:
+            phase = .aiming;shortcut=false;anchorRequested=false;consumeRelease=consumeRelease || pressed
+        case .pending:
+            phase = .aiming
+        default: return false
+        }
+        since=now;lastTelemetry=now;return true
+    }
+    func telemetry(now:Double){if ownsPointer {lastTelemetry=now}}
+    /// Why screenshot mode must return the pointer now, if it must.
+    func expired(now:Double)->String? {
+        if phase == .pending && now-since>Self.startSeconds {return "native start timed out"}
+        if ownsPointer && now-lastTelemetry>Self.telemetrySeconds {return "telemetry lost"}
+        return nil
+    }
+    /// The release of a consumed triple-click press that could not start.
+    func holdRelease(){consumeRelease=true}
+    /// One Bottom edge. While aiming, a press asks for the anchor; while
+    /// dragging, a fresh press finishes now. Releases are always consumed.
+    func bottom(down:Bool)->Bottom {
+        guard ownsPointer else {
+            if !down && consumeRelease {consumeRelease=false;return .consumed}
+            if down {consumeRelease=false}
+            return .pass
+        }
+        guard down else{consumeRelease=false;return .consumed}
+        defer{consumeRelease=true}
+        if phase == .dragging {return consumeRelease ? .consumed : .finish}
+        if anchorRequested {return .consumed}
+        anchorRequested=true;return .anchor
+    }
+    /// macOS shows the selector: the receiver presses at the shown pointer.
+    func latch(now:Double)->Bool {
+        guard phase == .aiming,anchorRequested else{return false}
+        phase = .dragging;anchorRequested=false;since=now
+        settle.follow(false);settle.follow(true)
+        return true
+    }
+    /// Return the pointer. True when a native button-down must be lifted.
+    /// While the native selection is still active the mode is spent (`done`).
+    @discardableResult
+    func end(contextActive:Bool,forgetPress:Bool=false)->Bool {
+        let wasDragging=phase == .dragging
+        phase = contextActive && phase != .idle ? .done : .idle
+        anchorRequested=false;shortcut=false;settle.follow(false)
+        if forgetPress {consumeRelease=false}
+        return wasDragging
+    }
+}
+
 /// A fast upward cue followed by its slow return scrolls up in released-button
 /// HIGH mode. No sample buffer: only the recognised gesture owns the pointer.
 final class WandFlickScroll {

@@ -16,6 +16,7 @@ enum Tap {case cghidEventTap}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?){ };func post(tap:Tap){}}
 final class Rest {var activated=false;func pointerActivated(){activated=true}}
 final class Harness {
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  let restDetection=Rest()
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),motionFilter=WandMotionFilter(),dwell=WandDwellClick(),recenterGesture=WandRecenterGesture(),flickScroll=WandFlickScroll()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?

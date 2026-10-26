@@ -20,8 +20,10 @@ GENERATED = DEVICE / "generated"
 BODY_ANCHOR = "// Adjust only"
 
 # Stops the previous program, then makes mouse reports travel over the Bluetooth UART link.
+# No light write here: red is only for recording. The receiver handshake has already started
+# the orange loading light, and the base's first updateLights() shows it on a cold start.
 RUNTIME_PREFIX = (
-    "delete global.WAND_RUNTIME_VERSION;global.WAND_UPDATING=true;LED1.set();LED2.reset();LED3.reset(); "
+    "delete global.WAND_RUNTIME_VERSION;global.WAND_UPDATING=true; "
     "if(global.wandPinProbe){global.wandPinProbe.forEach(function(id){clearWatch(id);});delete global.wandPinProbe;} "
     "Puck.removeListener('accel',onMotion); NRF.removeListener('connect',onConnect); NRF.removeListener('disconnect',onDisconnect); "
     "watches.forEach(function(id){clearWatch(id);}); if(sendTimer!==undefined)clearInterval(sendTimer); "

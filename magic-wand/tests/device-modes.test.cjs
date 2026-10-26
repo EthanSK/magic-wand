@@ -99,7 +99,10 @@ for (const bridge of ["readable", "fragments"]) {
     ctx.setWandRecording(true);
     assert.deepEqual(w.colors(), [1, 0, 0], "idle recording stays red after speech release");
     ctx.moveLatched = true; ctx.updateLights();
-    assert.deepEqual(w.colors(), [0, 0, 1], "pointer blue overrides recording red");
+    assert.deepEqual(w.colors(), [1, 0, 0], "recording red replaces pointer blue");
+    ctx.setWandRecording(false);
+    assert.deepEqual(w.colors(), [0, 0, 1], "pointer is blue again once recording stops");
+    ctx.setWandRecording(true);
     ctx.moveLatched=false;ctx.setHUDOpen(true); ctx.updateLights();
     assert.deepEqual(w.colors(), [1, 0.2, 0], "HUD orange overrides recording red");
     ctx.scrollHeld = true; ctx.updateLights();

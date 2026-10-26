@@ -13,8 +13,9 @@ if(global.WAND_POWER_POLICY_VERSION!==4)(function(g){
   g.wandPowerConnected=function(){return !!NRF.getSecurityStatus().connected;};
   g.wandPowerHeld=function(){return !digitalRead(D1)||!digitalRead(D2)||!digitalRead(D30);};
   g.wandPowerClearTimer=function(){if(g.wandPowerOfflineTimer!==undefined)clearTimeout(g.wandPowerOfflineTimer);if(g.wandPowerOfflineDeepTimer!==undefined)clearTimeout(g.wandPowerOfflineDeepTimer);g.wandPowerOfflineTimer=g.wandPowerOfflineDeepTimer=undefined;};
-  g.wandPowerLights=function(v){writeLight(LED1,v);writeLight(LED2,v);writeLight(LED3,v);};
-  g.wandPowerDark=function(){g.wandPowerLights(0);Puck.accelOff();};
+  // allLights is the base program's shared three-LED writer; writing also ends
+  // any loading blink, so darkness and the sleep warning own the lights.
+  g.wandPowerDark=function(){allLights(0);Puck.accelOff();};
   g.wandPowerArmOffline=function(){g.wandPowerClearTimer();if(!g.wandPowerConnected()&&!g.wandPowerStandby){g.wandPowerOfflineTimer=setTimeout(function(){g.wandPowerOfflineTimer=undefined;if(!g.wandPowerConnected()&&!g.wandPowerHeld())g.wandPowerDark();},60000);g.wandPowerOfflineDeepTimer=setTimeout(function(){g.wandPowerOfflineDeepTimer=undefined;if(!g.wandPowerConnected())g.wandEnterDeepStandby();},300000);}};
   g.wandPowerDisconnected=function(){if(g.wandPowerStandby)setTimeout(g.wandPowerDark,0);else g.wandPowerArmOffline();};
   g.wandPowerWarnCancel=function(){if(g.wandPowerWarnTimer!==undefined)clearTimeout(g.wandPowerWarnTimer);g.wandPowerWarnTimer=undefined;if(g.wandPowerWarnPhase===undefined)return;g.wandPowerWarnPhase=undefined;updateLights();print('WAND_POWER_STANDBY_CANCELLED');};
@@ -36,7 +37,7 @@ if(global.WAND_POWER_POLICY_VERSION!==4)(function(g){
   g.wandPowerWatches=[D1,D2,D30].map(function(pin){return setWatch(g.wandPowerButton,pin,{edge:'both',repeat:true,debounce:20});});
   NRF.on('disconnect',g.wandPowerDisconnected);
   NRF.on('connect',g.wandPowerConnectedEvent);
-  g.wandPowerWarn=function(){var n=g.wandPowerWarnPhase;g.wandPowerWarnTimer=undefined;if(n===undefined)return;if(!g.wandPowerManual&&g.wandPowerHeld())return g.wandPowerWarnCancel();g.wandPowerWarnPhase=n+1;if(n<4){g.wandPowerLights(n&1?0:1);g.wandPowerWarnTimer=setTimeout(g.wandPowerWarn,100);return;}g.wandPowerWarnPhase=undefined;g.wandPowerClearTimer();g.wandPowerStandby=true;g.wandPowerDark();g.wandPowerSleeps=(g.wandPowerSleeps|0)+1;print('WAND_POWER_STANDBY_ENTERED');NRF.sleep();};
+  g.wandPowerWarn=function(){var n=g.wandPowerWarnPhase;g.wandPowerWarnTimer=undefined;if(n===undefined)return;if(!g.wandPowerManual&&g.wandPowerHeld())return g.wandPowerWarnCancel();g.wandPowerWarnPhase=n+1;if(n<4){allLights(n&1?0:1);g.wandPowerWarnTimer=setTimeout(g.wandPowerWarn,100);return;}g.wandPowerWarnPhase=undefined;g.wandPowerClearTimer();g.wandPowerStandby=true;g.wandPowerDark();g.wandPowerSleeps=(g.wandPowerSleeps|0)+1;print('WAND_POWER_STANDBY_ENTERED');NRF.sleep();};
   g.wandEnterDeepStandby=function(){if(g.wandPowerHeld())return false;if(g.wandPowerWarnPhase===undefined&&!g.wandPowerStandby){g.wandPowerWarnPhase=0;g.wandPowerWarn();}return true;};
   g.WAND_POWER_POLICY_VERSION=4;
 })(global);

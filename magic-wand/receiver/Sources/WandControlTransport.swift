@@ -83,6 +83,15 @@ final class WandControlTransport {
         _=send(packet,path:agenticPath,limit:512)
     }
 
+    /// Ethan's Bottom triple-click. Agentic Mouse starts its native selected-area
+    /// screenshot for a fresh identity and ignores a repeated one; this request
+    /// never cancels an active selection and sends no keyboard shortcut itself.
+    @discardableResult
+    func screenshotStart(id: String = UUID().uuidString) -> Bool {
+        send(["command":"agentic_mouse_wand_screenshot_start", "version":1, "id":id],
+             path:agenticPath, limit:256)
+    }
+
     func speech(down: Bool) -> Bool {
         guard down != speechPressed else { return true }
         let sent = send(["version":1, "action":"primaryRecordingMouse", "source":"wand",

@@ -30,8 +30,10 @@ final class Rest {
 final class Controls {var speechEvents=0}
 final class Recording {var isRecording=false}
 final class Harness {
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  var ready=true,restoring=false,scrollActive=false,buttons=0,restDiagnosticsRemaining=0,hudSession=false
  var recordingPointerPaused=false,recordingRestoreFollow:Bool?
+ var clickFollowChoice:(following:Bool,paused:Bool,restore:Bool?,rest:WandRestFollowMemory)?
  var restFollow=WandRestFollowMemory()
  var motionFilter=Filter();let dwell=WandDwellClick(),restDetection=Rest(),controls=Controls(),recording=Recording()
  var deskSleep=WandDeskSleep()

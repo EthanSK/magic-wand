@@ -12,13 +12,22 @@ var HUD_PIN=D2, STT_PIN=D30;
 var hudHeld=false, hudX=0, hudY=0, hudTimer;
 var MOVE_PIN=D1; // Bottom pointer button.
 var calibrationLit=false;
-var lightLevels=[0,0,0];
+var lightLevels=[0,0,0],loadTimer,loadLit;
 function writeLight(pin, level) {
+  // Any other light write ends a pending loading step (below). Timer ids are
+  // never 0; clearTimeout returns undefined, which also restarts the phase on.
+  if(loadTimer)loadTimer=loadLit=clearTimeout(loadTimer);
   if(level>0 && level<1)analogWrite(pin,level,{freq:200});
   else {pinMode(pin,"output");pin.write(level);}
 }
+function allLights(v){writeLight(LED1,v);writeLight(LED2,v);writeLight(LED3,v);}
+// Ethan: "While it's restarting, instead of being orange, it should be blinking
+// orange, just so I know it's loading." Loading and updating use the established
+// orange (all three LEDs at 0.45), on 250 ms then off 250 ms. Each step asks
+// updateLights again, so ready, normal, sleep or darkness leaves no timer.
+function loadingLight(){if(!loadTimer){allLights((loadLit=!loadLit)?0.45:0);loadTimer=setTimeout(function(){loadTimer=0;updateLights();},250);}}
 function updateLights() {
-  if(global.WAND_UPDATING){writeLight(LED1,1);writeLight(LED2,0);writeLight(LED3,0);return;}
+  if(global.WAND_UPDATING)return loadingLight();
   // Button-edge feedback only: no animation or idle polling timer.
   var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN),speech=!digitalRead(STT_PIN);
   // White pointer, orange HUD/disconnected, red speech. Hardware PWM mixes the LEDs.
