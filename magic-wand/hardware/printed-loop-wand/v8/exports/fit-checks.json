@@ -1,0 +1,364 @@
+{
+  "resting_board_overlap_mm3": 0.0,
+  "body_cover_overlap_mm3": 0.0,
+  "rigid_board_stop_overlap_mm3": {
+    "left": 1.115214953271054,
+    "right": 1.1152149532710578,
+    "up": 0.8959999999998874,
+    "down": 2.5599999999996688,
+    "out_of_seats": 1.2
+  },
+  "released_board_pivot_overlap_mm3": {
+    "0": 0.0,
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "5": 0.0,
+    "8": 0.0,
+    "10": 0.0
+  },
+  "cover_released_slide_overlap_mm3": {
+    "0.25": 0.0,
+    "0.5": 0.0,
+    "1": 0.0,
+    "2": 0.0,
+    "5": 0.0,
+    "10": 0.0,
+    "20": 0.0,
+    "35": 0.0
+  },
+  "usb_12x6_plug_overlap_mm3": {
+    "base": 0.0,
+    "cover": 0.0
+  },
+  "rear_solder_space_overlap_mm3": {
+    "base": 0.0,
+    "cover": 0.0
+  },
+  "head_9mm_wire_probe_overlap_mm3": 0.0,
+  "head_forward_6mm_wire_probe_overlap_mm3": 0.0,
+  "thumb_mount": {
+    "left": {
+      "loop_overlap_mm3": 0.0,
+      "minimum_loop_gap_mm": 4.333534854581248,
+      "includes": "purchased slim keycap footprint plus 3mm stroke envelope; insert is deliberately recessed into the grip"
+    },
+    "right": {
+      "loop_overlap_mm3": 0.0,
+      "minimum_loop_gap_mm": 4.333534854581248,
+      "includes": "purchased slim keycap footprint plus 3mm stroke envelope; insert is deliberately recessed into the grip"
+    }
+  },
+  "flexed_clip_status": "Error.NoError",
+  "board_pivot_with_1_3mm_clip_deflection_mm3": {
+    "0": 0.0,
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "5": 0.0,
+    "8": 0.0,
+    "10": 0.0
+  },
+  "physical_fit_verified": false,
+  "existing_handle_locked_overlap_mm3": 0.5620242466305189,
+  "new_handle_locked_overlap_mm3": 0.5620242466304904,
+  "slim_joint": {
+    "middle": {
+      "cam_path_overlap_mm3": {
+        "-38": 2.9397057704771967e-15,
+        "-30": 0.034755266606014835,
+        "-20": 0.221777761851486,
+        "-10": 0.3532288431679788,
+        "0": 0.36508014249994714,
+        "5": 2.4115711964255713
+      },
+      "entry_insertion_mm3": {
+        "14": 0.0,
+        "10": 0.0,
+        "5": 0.0,
+        "1": 0.0,
+        "0": 2.9397057704771967e-15
+      },
+      "locked_pull_overlap_mm3": 14.967394587954205,
+      "wire_9_9mm_overlap_mm3": 0.0
+    },
+    "head": {
+      "cam_path_overlap_mm3": {
+        "-38": -3.552713678800501e-15,
+        "-30": 0.034755266606015724,
+        "-20": 0.22177776185151524,
+        "-10": 0.353228843167949,
+        "0": 0.3650801424999022,
+        "5": 2.4115711964255584
+      },
+      "entry_insertion_mm3": {
+        "14": 0.0,
+        "10": 0.0,
+        "5": 0.0,
+        "1": 0.0,
+        "0": -3.552713678800501e-15
+      },
+      "locked_pull_overlap_mm3": 14.967394587954194,
+      "wire_9_9mm_overlap_mm3": 0.0
+    }
+  },
+  "envelopes": {
+    "new_length_mm": 410,
+    "old_length_mm": 340,
+    "main_bore_mm": 10.4,
+    "span_minimum_wall_mm": 1.0,
+    "slim_spigot_wall_mm": 1.4,
+    "slim_socket_groove_wall_mm": 1.2,
+    "loop_shell_mm": 1.2,
+    "grip_shell_mm": 1.0,
+    "diamond_edge_round_mm": 1.2
+  },
+  "cover_side_pull_blocked_mm3": {
+    "0.3": 0.5479354401968817,
+    "0.5": 5.138099360285081,
+    "1.0": 14.730618499534884
+  },
+  "top_slide_button": {
+    "left_thumb": {
+      "upward_release_path_mm3": {
+        "0": 0.0,
+        "0.25": 0.0,
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "6": 0.0,
+        "8.4": 0.0,
+        "10.0": 0.0
+      },
+      "radial_pull_blocked_mm3": 0.5271538787624215,
+      "downward_stop_mm3": 0.5263029936523245
+    },
+    "left_index": {
+      "upward_release_path_mm3": {
+        "0": 0.0,
+        "0.25": 0.0,
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "6": 0.0,
+        "8.4": 0.0,
+        "10.0": 0.0
+      },
+      "radial_pull_blocked_mm3": 0.5271538787624191,
+      "downward_stop_mm3": 0.5263029936523219
+    },
+    "left_middle": {
+      "upward_release_path_mm3": {
+        "0": 0.0,
+        "0.25": 0.0,
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "6": 0.0,
+        "8.4": 0.0,
+        "10.0": 0.0
+      },
+      "radial_pull_blocked_mm3": 0.5271538787624187,
+      "downward_stop_mm3": 0.5263029936523235
+    },
+    "right_thumb": {
+      "upward_release_path_mm3": {
+        "0": 0.0,
+        "0.25": 0.0,
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "6": 0.0,
+        "8.4": 0.0,
+        "10.0": 0.0
+      },
+      "radial_pull_blocked_mm3": 0.5271538787624219,
+      "downward_stop_mm3": 0.5263029936523252
+    },
+    "right_index": {
+      "upward_release_path_mm3": {
+        "0": 0.0,
+        "0.25": 0.0,
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "6": 0.0,
+        "8.4": 0.0,
+        "10.0": 0.0
+      },
+      "radial_pull_blocked_mm3": 0.5271538787624177,
+      "downward_stop_mm3": 0.5263029936523198
+    },
+    "right_middle": {
+      "upward_release_path_mm3": {
+        "0": 0.0,
+        "0.25": 0.0,
+        "1": 0.0,
+        "2": 0.0,
+        "4": 0.0,
+        "6": 0.0,
+        "8.4": 0.0,
+        "10.0": 0.0
+      },
+      "radial_pull_blocked_mm3": 0.5271538787624214,
+      "downward_stop_mm3": 0.526302993652325
+    }
+  },
+  "socket_and_switch": {
+    "thumb": {
+      "socket_rest_mm3": -1.259409243559162e-15,
+      "switch_housing_rest_mm3": 0.0,
+      "switch_up_1mm_stop_mm3": 6.503624999999739
+    },
+    "index": {
+      "socket_rest_mm3": 0.0,
+      "switch_housing_rest_mm3": 0.0,
+      "switch_up_1mm_stop_mm3": 6.503624999999439
+    },
+    "middle": {
+      "socket_rest_mm3": 1.5959455978986625e-16,
+      "switch_housing_rest_mm3": 0.0,
+      "switch_up_1mm_stop_mm3": 6.5036249999998255
+    }
+  },
+  "button_neighbour_clearance": {
+    "left_thumb": {
+      "0": 0.0,
+      "2.0": 0.0,
+      "4.0": 0.0,
+      "6.0": 0.0,
+      "8.4": 0.0
+    },
+    "left_index": {
+      "0": 0.0,
+      "2.0": 0.0,
+      "4.0": 0.0,
+      "6.0": 0.0,
+      "8.4": 0.0
+    },
+    "left_middle": {
+      "0": 0.0,
+      "2.0": 0.0,
+      "4.0": 0.0,
+      "6.0": 0.0,
+      "8.4": 0.0
+    },
+    "right_thumb": {
+      "0": 0.0,
+      "2.0": 0.0,
+      "4.0": 0.0,
+      "6.0": 0.0,
+      "8.4": 0.0
+    },
+    "right_index": {
+      "0": 0.0,
+      "2.0": 0.0,
+      "4.0": 0.0,
+      "6.0": 0.0,
+      "8.4": 0.0
+    },
+    "right_middle": {
+      "0": 0.0,
+      "2.0": 0.0,
+      "4.0": 0.0,
+      "6.0": 0.0,
+      "8.4": 0.0
+    }
+  },
+  "thin_plate": {
+    "face_thickness_mm": 1.3,
+    "face_size_mm": [
+      16.4,
+      17.2
+    ],
+    "including_rear_rails_mm": 2.5,
+    "separate_keeper": false,
+    "no_glue_required": true
+  },
+  "shaft_taper": {
+    "140.0": {
+      "start_diameter_mm": 24.843338914135373,
+      "middle_diameter_mm": 19.0,
+      "top_diameter_mm": 17.9,
+      "maximum_outward_step_mm": -0.0006637760442789187
+    },
+    "160.0": {
+      "start_diameter_mm": 23.24333891413537,
+      "middle_diameter_mm": 19.0,
+      "top_diameter_mm": 17.9,
+      "maximum_outward_step_mm": -0.0005802369532048601
+    }
+  },
+  "helix_material_probe_mm3": {
+    "lower": 0.006181661265160045,
+    "upper": 0.006181661265159344
+  },
+  "thin_hollow_shaft_overlap_mm3": {
+    "lower": 0.0,
+    "upper": 0.0
+  },
+  "vent_openings": {
+    "left_0": 0.0,
+    "left_1": 0.0,
+    "left_2": 0.0,
+    "left_3": 0.0,
+    "left_4": 0.0,
+    "left_5": 0.0,
+    "right_0": 0.0,
+    "right_1": 0.0,
+    "right_2": 0.0,
+    "right_3": 0.0,
+    "right_4": 0.0,
+    "right_5": 0.0,
+    "lower_0": 0.0,
+    "lower_1": 0.0,
+    "lower_2": 0.0,
+    "lower_3": 0.0,
+    "upper_0": 0.0,
+    "upper_1": 0.0,
+    "upper_2": 0.0,
+    "upper_3": 0.0,
+    "upper_4": 0.0,
+    "upper_5": 0.0
+  },
+  "helix_preserved_at_vents": {
+    "grip_64.0_0": 0.00357735026918964,
+    "grip_64.0_1": 0.003577350269189651,
+    "grip_80.0_0": 0.0035773502691896753,
+    "grip_80.0_1": 0.003577350269189686,
+    "grip_96.0_0": 0.0035773502691897443,
+    "grip_96.0_1": 0.0035773502691897417,
+    "lower_194.0_0": 0.0035773502691899203,
+    "lower_194.0_1": 0.0035773502691897018,
+    "lower_214.0_0": 0.0035773502691897816,
+    "lower_214.0_1": 0.003577350269189785,
+    "upper_277.0_0": 0.0035773502691905067,
+    "upper_277.0_1": 0.0035773502691904407,
+    "upper_297.0_0": 0.003577350269190531,
+    "upper_297.0_1": 0.003577350269190597,
+    "upper_319.0_0": 0.00357735026919051,
+    "upper_319.0_1": 0.0035773502691905518
+  },
+  "loop_contact_airflow": {
+    "left_0": 0.0,
+    "left_1": 0.0,
+    "left_2": 0.0,
+    "left_3": 0.0,
+    "right_0": 0.0,
+    "right_1": 0.0,
+    "right_2": 0.0,
+    "right_3": 0.0
+  },
+  "vent_design": {
+    "grip_holes_left": 6,
+    "grip_holes_right": 6,
+    "shaft_holes": 10,
+    "loop_through_holes": 4,
+    "loop_axis": "local inward normal, outside to finger-contact face",
+    "button_upshift_from_V7_mm": 10.0,
+    "loop_shift_mm": 0.0,
+    "edge_mouth_flare_mm": 0.35,
+    "battery_and_joint_zones_unperforated": true
+  },
+  "head_layer_islands": []
+}

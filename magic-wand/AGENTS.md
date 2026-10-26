@@ -175,3 +175,6 @@ through their build/check commands; never claim an illustration is physical veri
 - A complete wand print project always includes both the left- and right-hand handles. A separate right STL does not make a left-only Bambu project complete. Keep both in the opened complete project and preserve earlier revisions for comparison. User-requested — 2026-10-26.
 
 - Button mounting uses a thin rounded plate sliding down from above directly into integral grip guides. Do not reintroduce bulky cassette boxes, loose printed keepers/caps or glue. Distinguish the bought keycap from printable parts. Compare mass per one complete wand, never a two-grip plate. User-corrected — 2026-10-26.
+
+- Handle ventilation must expose the skin-facing contact surface to air. Run loop openings from outside through the inner finger-contact face; generic sideways holes through its broad faces do not meet this requirement. Show the direction against the contact area and check the actual passage. User-corrected — 2026-10-26.
+- Keep the mug loop at the butt of the wand, with clearance for the removable battery cap. The arm near the index finger is higher and slopes down away from the pole, like an ergonomic mug handle. Controls sit higher and clear of the loop; preserve their relative spacing unless explicitly changed. Mirror both hands. User-corrected — 2026-10-26.

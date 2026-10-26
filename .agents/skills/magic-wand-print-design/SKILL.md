@@ -20,7 +20,7 @@ Read this skill before any wand CAD, print-layout or mechanical preview change. 
 
 Map each requested change to a source parameter or feature and a check. Compare old/new assembled views, not just the print plate. Check the core-radius profile for monotonic taper; explicitly check the helix is generated. Inspect both handed handles and count both in the actual 3MF build. Check new joints inside the chosen silhouette instead of making the silhouette fit arbitrary collars.
 
-Run manifold, wire/board/USB, joint motion and lid capture checks as applicable. Slice in the actual PETG setup and compare like-for-like material estimates, including supports. Support contact blockers do not alone stop tree branches entering hollow passages; inspect sliced paths. Separate CAD clearance, slicer evidence and physical print acceptance. If the battery product is still unknown, retain its provisional status rather than inventing a fit.
+Run manifold, wire/board/USB, joint motion and lid capture checks as applicable. Slice in the actual PETG setup and compare like-for-like material estimates, including supports. Support contact blockers do not alone stop tree branches or descending normal-support columns entering hollow passages; block their landing-source regions where needed and inspect sliced paths. Separate CAD clearance, slicer evidence and physical print acceptance. If the battery product is still unknown, retain its provisional status rather than inventing a fit.
 
 ## Maintain verified learnings
 
@@ -31,3 +31,5 @@ Before work, read the applicable stored lessons here and in magic-wand/LEARNINGS
 
 - 2026-10-26 — Explicit button-mount correction: use a small rounded thin plate that slides down from above directly into integral wand guides. No bulky cassette, separate printed cap/keeper or glue. Keep the bought keycap distinct from printed parts. Back the socket recess and use a small cable outlet rather than a generic large opening into the hollow grip. Check the full insertion path in both hands and past neighbouring buttons; an assembled pose alone is insufficient.
 - 2026-10-26 — Mass comparisons must contain exactly one complete wand per row (one handed grip plus matching shared parts). Report printed-parts mass separately from support/brim and keep original print settings distinct from a matched-settings comparison.
+
+- 2026-10-26 — Explicit handle correction: keep the mug loop at the butt with removable-cap clearance, controls above and clear of it, and the upper index-side arm sloping down away from the pole. Vent holes must reach the inner hand-contact face, not only the broad side faces. Check both hands and the whole assembled relationship; isolated button coordinates are insufficient. CAD passage probes and sampled sliced paths establish clearance, not physical comfort or cooling.
