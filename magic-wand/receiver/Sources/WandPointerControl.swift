@@ -1204,26 +1204,72 @@ struct WandRestFollowMemory {
 /// mean Better Git's pending staging selection,
 /// not a Git commit. Formerly a double-click action. Pointer motion is unbuffered.
 struct WandReviewExitGesture {
-    enum Release { case none, cancel, commit }
+    // Middle in Ethan's selected Review changes / Stage files set. A 0.5 s
+    // hold stages and stays. One short click waits out the double-click
+    // window (at most 0.3 s) and then exits; a second short press inside it
+    // asks Agentic Mouse to toggle the set instead. That second press can
+    // still be held to stage: its down alone never toggles.
+    enum Release { case none, wait, toggle, commit }
     static let holdSeconds = 0.5
+    static let doubleClickSeconds = 0.3
+    /// Review navigation waits this long, at most, for the toggle's acknowledgement.
+    static let toggleAcknowledgementSeconds = 1.0
     private var pressedAt: Double?
     private var committed = false
+    private var secondPress = false
+    private var toggledAt: Double?
+    /// When one short click exits unless a second press arrives first.
+    private(set) var tapDeadline: Double?
+    /// Middle is down.
     var pending: Bool { pressedAt != nil }
+    /// One short click is waiting for a possible second press.
+    var awaitingSecond: Bool { tapDeadline != nil }
+    func toggling(now: Double) -> Bool {
+        guard let toggledAt else { return false }
+        return now >= toggledAt && now - toggledAt < Self.toggleAcknowledgementSeconds
+    }
     mutating func down(now: Double) {
         guard pressedAt == nil else { return }
+        secondPress = tapDeadline.map { now <= $0 } ?? false
+        tapDeadline = nil
         pressedAt = now; committed = false
     }
     mutating func commitIfHeld(now: Double) -> Bool {
         guard let pressedAt, !committed, now - pressedAt >= Self.holdSeconds else { return false }
         committed = true; return true
     }
-    mutating func up(now: Double) -> Release {
+    mutating func up(now: Double, window: Double = WandReviewExitGesture.doubleClickSeconds) -> Release {
         guard let pressedAt else { return .none }
-        defer { reset() }
-        if committed { return .none }
-        return now - pressedAt >= Self.holdSeconds ? .commit : .cancel
+        let second = secondPress, held = committed
+        self.pressedAt = nil; committed = false; secondPress = false
+        if held { return .none }
+        if now - pressedAt >= Self.holdSeconds { return .commit }
+        if second { return .toggle }
+        tapDeadline = now + max(0, min(Self.doubleClickSeconds, window))
+        return .wait
     }
-    mutating func reset() { pressedAt = nil; committed = false }
+    /// A waiting tap whose window has passed (its timer ran late) ends now.
+    mutating func expiredTap(now: Double) -> Bool {
+        guard pressedAt == nil, let tapDeadline, now > tapDeadline else { return false }
+        self.tapDeadline = nil; return true
+    }
+    /// The tap timer for `deadline`; a superseded timer finds another or none.
+    mutating func tapTimedOut(deadline: Double) -> Bool {
+        guard pressedAt == nil, tapDeadline == deadline else { return false }
+        tapDeadline = nil; return true
+    }
+    mutating func cancelTap() -> Bool {
+        guard tapDeadline != nil else { return false }
+        tapDeadline = nil; return true
+    }
+    mutating func toggleRequested(now: Double) { toggledAt = now }
+    /// Agentic Mouse's change from one set to the other answers our own recent
+    /// toggle; presses made since then belong to the new set.
+    mutating func acknowledgeToggle(from: String?, to: String?, now: Double) -> Bool {
+        guard toggling(now: now), let from, let to, from != to else { return false }
+        toggledAt = nil; return true
+    }
+    mutating func reset() { pressedAt = nil; committed = false; secondPress = false; tapDeadline = nil; toggledAt = nil }
 }
 
 /// Ethan's "eyes mode" = Review changes; "bang mode" / "!" = Stage files.

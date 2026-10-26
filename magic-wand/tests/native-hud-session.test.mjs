@@ -19,6 +19,8 @@ test('native HUD close cancels actions, rejects stale context and closes any chi
  const callback=source.slice(a,b);
  const modeStart=source.indexOf('        context.onModeChange = '),modeEnd=source.indexOf('        // Review selection',modeStart);
  const modeCallback=source.slice(modeStart,modeEnd);
+ const selectionStart=source.indexOf('        context.onSelectionChange = '),selectionEnd=source.indexOf('        context.onScreenshotChange',selectionStart);
+ const selectionCallback=source.slice(selectionStart,selectionEnd);
  const code=`import Foundation
 func AXIsProcessTrusted()->Bool {true}
 func log(_ parts:Any...) {}
@@ -34,7 +36,7 @@ final class CGEvent {
 }
 final class Recording {var isRecording=false}
 final class Rest {var parked=false;func pointerActivated(){parked=false};func pointerStopped(){}}
-final class Context {var isActive=false,isFresh=true;var onChange:((Bool)->Void)?;var onModeChange:((String?)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
+final class Context {var isActive=false,isFresh=true;var onChange:((Bool)->Void)?;var onModeChange:((String?)->Void)?;var onSelectionChange:((String?)->Void)?;func set(_ v:Bool){isActive=v;onChange?(v)}}
 final class Application {var bundleIdentifier="com.microsoft.VSCode"}
 final class NSWorkspace {static let shared=NSWorkspace();var frontmostApplication:Application?=Application()}
 final class Trace {var boundaries:[String]=[];func boundary(_ reason:String,mode:String?=nil,now:Double=0){boundaries.append(reason)}}
@@ -81,8 +83,9 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  func screenshotContextChanged(_ active:Bool){screenshotContexts.append(active)}
  func releaseButtons(){}
  init(){${callback}
-${modeCallback}}
- ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','mouseMovementEvent','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
+${modeCallback}
+${selectionCallback}}
+ ${['setScreenshotActive','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','scheduleReviewTapTimeout','expireReviewTap','cancelReviewTap','requestReviewToggle','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','mouseMovementEvent','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 // Ethan's hold-to-show HUD. Holding Middle shows and steers it; releasing
@@ -186,12 +189,36 @@ pinned.context.isFresh=false;pinned.handleNavigation("163000,326000")
 precondition(pinned.review.inputs==1,"expired context cannot deliver a review step")
 pinned.context.isFresh=true
 pinned.handleMiddle("1");pinned.handleMiddle("0")
+precondition(pinned.selectedReviewMode=="changes" && pinned.reviewExitGesture.awaitingSecond,"single review tap waits for double-click")
+settle(0.35)
 precondition(pinned.selectedReviewMode==nil && !pinned.review.committed,"a later short tap cancels and exits")
 let cancel=Harness();cancel.selectedReviewMode="files";cancel.wandShortcutMode="files";cancel.handleMiddle("1");cancel.handleMiddle("0");settle(0.6)
 precondition(cancel.selectedReviewMode==nil && cancel.wandShortcutMode==nil && !cancel.review.committed,"short tap cancels the timer without staging later")
 let late=Harness();late.selectedReviewMode="files";late.wandShortcutMode="files";late.middleReviewExit=true
 late.beginReviewCommitHold(now:ProcessInfo.processInfo.systemUptime-0.6);late.handleMiddle("0")
 precondition(late.review.committed && late.review.starts==["files"] && late.selectedReviewMode=="files","long release works even when the timer was delayed")
+let toggled=Harness();toggled.selectedReviewMode="changes";toggled.wandShortcutMode="changes"
+for expected in ["files","changes","files"] {
+ toggled.handleMiddle("1");toggled.handleMiddle("0")
+ precondition(toggled.reviewExitGesture.awaitingSecond && toggled.selectedReviewMode != nil)
+ let before=toggled.review.inputs;toggled.handleNavigation("1000,1000")
+ precondition(toggled.review.inputs==before,"waiting double-click freezes review, not pointer")
+ toggled.handleMiddle("1");toggled.handleMiddle("0")
+ precondition(toggled.controls.phases.last=="toggleReview" && !toggled.review.committed,"double click requests mode toggle without staging")
+ precondition(toggled.selectedReviewMode != expected,"only native acknowledgement changes local mode")
+ toggled.context.onSelectionChange?(expected)
+ precondition(toggled.selectedReviewMode==expected && toggled.wandShortcutMode==expected)
+ settle(0.32)
+ precondition(toggled.selectedReviewMode==expected && !toggled.controls.phases.contains("exitReview"),"old tap timer cannot exit new mode")
+}
+precondition(toggled.controls.phases.filter{$0=="toggleReview"}.count==3)
+let secondHold=Harness();secondHold.selectedReviewMode="files";secondHold.wandShortcutMode="files"
+secondHold.handleMiddle("1");secondHold.handleMiddle("0");secondHold.handleMiddle("1")
+secondHold.commitReviewHold(now:ProcessInfo.processInfo.systemUptime+0.6);secondHold.handleMiddle("0");settle(0.35)
+precondition(secondHold.review.committed && secondHold.selectedReviewMode=="files" && !secondHold.controls.phases.contains("toggleReview"),"long second press stages and stays")
+let changed=Harness();changed.selectedReviewMode="changes";changed.wandShortcutMode="changes"
+changed.handleMiddle("1");changed.handleMiddle("0");changed.context.onSelectionChange?(nil);settle(0.35)
+precondition(changed.selectedReviewMode==nil && !changed.controls.phases.contains("exitReview"),"native cancellation clears pending exit")
 let submenu=Harness();submenu.hudSession=true;submenu.context.set(true);submenu.resumeHUDNavigation()
 let navigationStarts=submenu.controls.phases.filter{$0=="navigate"}.count
 submenu.context.onModeChange?("vsCode")
@@ -334,6 +361,10 @@ precondition(ids[0]==ids[1] && ids[1]==ids[2],"navigation packets must share ide
 precondition(ids[3] != ids[2],"selection after navigation must not be rejected as duplicate")
 precondition(ids[4] != ids[3],"a second physical tap must be independently selectable")
 precondition(t.packets[3]["seq"] as! Int==1 && t.packets[4]["seq"] as! Int==1)
+t.persistent("toggleReview");t.persistent("toggleReview")
+let toggles=t.packets.filter{$0["phase"] as? String == "toggleReview"}
+precondition(toggles.count==2 && toggles[0]["id"] as! String != toggles[1]["id"] as! String,"every review toggle must have a fresh identity")
+precondition(toggles.allSatisfy{$0["seq"] as? Int == 1},"toggle sequences start independently")
 print("PASS: real receiver generates independent selection identities")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-tap-id-'));
