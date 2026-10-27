@@ -20,11 +20,11 @@ Read this skill before any wand CAD, print-layout or mechanical preview change. 
 
 ## Fixed ergonomic priorities
 
-Read the frozen [V19 design principles](../../../magic-wand/hardware/printed-loop-wand/v19/design-principles.json) before the next revision. They define the butt reference, lower mount, mount spacing and button offsets. Preserve these relationships until the user explicitly changes them; do not derive a new hand position from a convenient connector location.
+Read the frozen [V20 design principles](../../../magic-wand/hardware/printed-loop-wand/v20/design-principles.json) before the next revision. They define the butt reference, lower mount, mount spacing and button offsets. Preserve these relationships until the user explicitly changes them; do not derive a new hand position from a convenient connector location.
 
 - Keep the removable finger loop at the butt, with only the clearance needed for the cap and release motion. Removing an unwanted tail must not lift the whole handle higher up the wand. V18 failed this: preserving its high mount positions was the wrong priority.
 - Keep all three buttons positioned relative to the loop as one ergonomic group, mirrored for both hands. Moving the loop requires moving the group by the same amount. Preserve button angles and their relative height spacing.
-- The loop is a slim solid band, not a thick hollow tube. Keep reinforcement local to the locking ends. Do not preserve obsolete tubular cavities or perforations after this explicit change.
+- The loop is a slim solid band, not a thick hollow tube. Keep reinforcement local to the locking ends. Do not preserve obsolete tubular cavities or perforations after this explicit change. The current V20 band is 9 × 4 mm with 1.4 mm rounded edges and gradual 23 mm flares into the wider fitted pads. A request to widen/smooth the loop does not authorize changing its butt anchors, button layout or compatible locking geometry.
 - A requested 5–10 mm grip reduction is a substantial size change, not another 1 mm adjustment. Report measured axes honestly. Keep battery space and the wire route, and disclose a wider battery section rather than claiming a circular diameter reduction where none exists.
 - Locking interfaces serve the approved grip position and silhouette. Do not silently sacrifice those priorities to reuse old pegs, cap dimensions or joint heights. Verify the cap, buttons, cell, wires and complete attachment path after resolving the packaging.
 
