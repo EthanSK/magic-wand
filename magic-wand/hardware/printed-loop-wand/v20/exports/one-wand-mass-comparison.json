@@ -1,0 +1,329 @@
+{
+  "scope": "Exactly one complete wand per row, excluding electronics, battery, bought switches, sockets and caps. PETG model mass derived from positive extruding moves, excluding support/brim and start/end custom code. Slicer estimates; no weighed print.",
+  "matched_settings": "P1S 0.4 mm PETG, 0.2 mm layers, 3 walls, 20% infill; normal supports on grips; other parts retain their geometry-specific support strategy.",
+  "versions": {
+    "V19_left_art_nouveau": {
+      "archive_sha256": "839f27116c68dda42df7f7d11774381ad4189974c394f963d67bcdb5c5ef8e26",
+      "build_instances": 11,
+      "printed_parts_g": 61.305,
+      "supports_and_brim_g": 3.574,
+      "total_slicer_g": 64.98,
+      "accounted_g": 64.879,
+      "startup_and_rounding_g": 0.101,
+      "features_g": {
+        "Support": 2.211635948980632,
+        "Support interface": 0.4737726531217855,
+        "Support transition": 0.2019296077626375,
+        "Inner wall": 20.81913082503214,
+        "Outer wall": 23.233635093543104,
+        "Bottom surface": 0.12736800431275624,
+        "Brim": 0.6868394207151385,
+        "Gap infill": 5.762407673874716,
+        "Overhang wall": 0.2766585175686777,
+        "Internal solid infill": 3.6054341968736465,
+        "Bridge": 0.6006711488177442,
+        "Sparse infill": 5.011610060414867,
+        "Top surface": 0.914508700514955,
+        "Floating vertical shell": 0.9538397153224742
+      },
+      "object_features_g": {
+        "Removable_Finger_Loop": {
+          "Support": 1.6639011788503744,
+          "Support interface": 0.34118225894924437,
+          "Support transition": 0.1291075994142109,
+          "Inner wall": 2.4691948743462455,
+          "Outer wall": 1.2957258400848801,
+          "Bottom surface": 0.002276918235447213,
+          "Overhang wall": 0.09702250467483321,
+          "Internal solid infill": 0.12603935907608765,
+          "Sparse infill": 2.966176251753993,
+          "Gap infill": 0.030791639738659542,
+          "Floating vertical shell": 0.3375632547620094,
+          "Top surface": 0.11910682149979375
+        },
+        "Battery_Sled": {
+          "Brim": 0.12622532969801772,
+          "Outer wall": 0.28552612101018093,
+          "Gap infill": 0.10261378107049433,
+          "Internal solid infill": 0.0002911136706621045
+        },
+        "Sense_Head_Base": {
+          "Brim": 0.06077524812198251,
+          "Outer wall": 3.0744478102130235,
+          "Gap infill": 0.8239293997448095,
+          "Inner wall": 4.309358690972018,
+          "Internal solid infill": 0.7662944830693195,
+          "Top surface": 0.04486125813770647,
+          "Overhang wall": 0.025255928481186716,
+          "Bridge": 0.0017547770001243015,
+          "Sparse infill": 0.3230793263193934,
+          "Floating vertical shell": 0.24672268481819046
+        },
+        "Sense_Sliding_Cover": {
+          "Support": 0.2828363895380792,
+          "Brim": 0.03260781636921728,
+          "Outer wall": 0.7854997681685456,
+          "Inner wall": 1.3775982456004296,
+          "Bottom surface": 0.012019176213367708,
+          "Overhang wall": 0.01619068543326456,
+          "Internal solid infill": 0.4372637302832155,
+          "Bridge": 0.1820771522303925,
+          "Sparse infill": 0.2907188496554622,
+          "Floating vertical shell": 0.1883623971853508,
+          "Top surface": 0.12603108081745756,
+          "Gap infill": 0.09409230659040604
+        },
+        "Battery_Twist_Cap": {
+          "Brim": 0.0870298522836476,
+          "Outer wall": 0.33360716354897796,
+          "Inner wall": 0.5182243971074606,
+          "Bottom surface": 0.11307190986394133,
+          "Internal solid infill": 0.6280205908671505,
+          "Sparse infill": 0.07933620366661724,
+          "Gap infill": 0.006879507845730609,
+          "Top surface": 0.19101150104129594,
+          "Floating vertical shell": 0.05929374529790706,
+          "Overhang wall": 0.0031764686419170616,
+          "Bridge": 0.0073162394458833845
+        },
+        "Upper_Shaft": {
+          "Brim": 0.06255653998738882,
+          "Outer wall": 5.102462116060395,
+          "Inner wall": 3.3292582315247987,
+          "Gap infill": 1.5674669192915864,
+          "Internal solid infill": 0.1844750063548378,
+          "Top surface": 0.0416790466447837,
+          "Overhang wall": 0.01854106939567319,
+          "Bridge": 0.009485051565855973,
+          "Sparse infill": 0.11556348242926726,
+          "Floating vertical shell": 0.0264802554402777
+        },
+        "Lower_Shaft": {
+          "Brim": 0.06266339367259093,
+          "Outer wall": 4.149012822964895,
+          "Inner wall": 3.044875090600143,
+          "Gap infill": 1.359631797323192,
+          "Internal solid infill": 0.24724430675315595,
+          "Top surface": 0.04737384709394674,
+          "Overhang wall": 0.019321058531736806,
+          "Bridge": 0.013511859268656662,
+          "Sparse infill": 0.1047325876208056,
+          "Floating vertical shell": 0.043485051097762184
+        },
+        "Choc_Recessed_Plate": {
+          "Brim": 0.20728243365324167,
+          "Outer wall": 0.27623913670986194,
+          "Gap infill": 0.05783185369907436,
+          "Inner wall": 0.0910665572403091,
+          "Top surface": 0.016926045285714564
+        },
+        "Handle_Left": {
+          "Support": 0.26489838059216453,
+          "Support transition": 0.07282200834842592,
+          "Brim": 0.047698806929046836,
+          "Outer wall": 7.931114314780168,
+          "Inner wall": 5.679554737644172,
+          "Gap infill": 1.7191704685706282,
+          "Support interface": 0.13259039417253954,
+          "Internal solid infill": 1.2158056067992247,
+          "Overhang wall": 0.09715080241006739,
+          "Top surface": 0.3275190999942507,
+          "Bridge": 0.3865260693068296,
+          "Sparse infill": 1.1320033589691083,
+          "Floating vertical shell": 0.05193232672097353
+        }
+      },
+      "object_mass_mapping_available": true,
+      "object_printed_parts_g": {
+        "Removable_Finger_Loop": 7.444,
+        "Battery_Sled": 0.388,
+        "Sense_Head_Base": 9.616,
+        "Sense_Sliding_Cover": 3.51,
+        "Battery_Twist_Cap": 1.94,
+        "Upper_Shaft": 10.395,
+        "Lower_Shaft": 9.029,
+        "Choc_Recessed_Plate": 0.442,
+        "Handle_Left": 18.541
+      },
+      "settings": {
+        "printer_model": "Bambu Lab P1S",
+        "filament_type": [
+          "PETG"
+        ],
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "support_type": "tree(auto)"
+      }
+    },
+    "V20_left_art_nouveau": {
+      "archive_sha256": "5c6d0a4ca34fc0882c64807a66a1e0a873c8b97b148d3ba17516d15ec5e6c470",
+      "build_instances": 11,
+      "printed_parts_g": 63.26,
+      "supports_and_brim_g": 3.394,
+      "total_slicer_g": 66.75,
+      "accounted_g": 66.654,
+      "startup_and_rounding_g": 0.096,
+      "features_g": {
+        "Support": 1.9411948007555362,
+        "Support transition": 0.20543662635526103,
+        "Support interface": 0.5604667319040807,
+        "Inner wall": 21.285016771992336,
+        "Outer wall": 23.445635706956665,
+        "Bottom surface": 0.13420227193327694,
+        "Gap infill": 5.7720104233391165,
+        "Brim": 0.6868393901680587,
+        "Overhang wall": 0.25616570360221635,
+        "Internal solid infill": 3.7005522133101763,
+        "Bridge": 0.6234100895631968,
+        "Sparse infill": 6.2578312418531254,
+        "Top surface": 0.9192977800475215,
+        "Floating vertical shell": 0.8657982659435844
+      },
+      "object_features_g": {
+        "Removable_Finger_Loop": {
+          "Support": 1.3934600306252818,
+          "Support transition": 0.13261461800683527,
+          "Support interface": 0.4278763377315352,
+          "Inner wall": 2.9350808213065354,
+          "Outer wall": 1.5077264534984185,
+          "Bottom surface": 0.009111185855967882,
+          "Gap infill": 0.040394389203052786,
+          "Overhang wall": 0.07652969070837165,
+          "Internal solid infill": 0.221157375512611,
+          "Bridge": 0.022738940745452667,
+          "Sparse infill": 4.212397433192263,
+          "Floating vertical shell": 0.24952177483604063,
+          "Top surface": 0.12389590103236398
+        },
+        "Battery_Sled": {
+          "Brim": 0.12622529915093791,
+          "Outer wall": 0.28552612101018093,
+          "Gap infill": 0.10261378107049433,
+          "Internal solid infill": 0.0002911136706621045
+        },
+        "Sense_Head_Base": {
+          "Brim": 0.06077524812198251,
+          "Outer wall": 3.0744478102130235,
+          "Gap infill": 0.8239293997448095,
+          "Inner wall": 4.309358690972018,
+          "Internal solid infill": 0.7662944830693195,
+          "Top surface": 0.04486125813770647,
+          "Overhang wall": 0.025255928481186716,
+          "Bridge": 0.0017547770001243015,
+          "Sparse infill": 0.3230793263193934,
+          "Floating vertical shell": 0.24672268481819043
+        },
+        "Sense_Sliding_Cover": {
+          "Support": 0.2828363895380792,
+          "Brim": 0.03260781636921728,
+          "Outer wall": 0.7854997681685456,
+          "Inner wall": 1.3775982456004296,
+          "Bottom surface": 0.012019176213367708,
+          "Overhang wall": 0.01619068543326456,
+          "Internal solid infill": 0.4372637302832155,
+          "Bridge": 0.1820771522303925,
+          "Sparse infill": 0.2907188496554622,
+          "Floating vertical shell": 0.18836242773243064,
+          "Top surface": 0.12603108081745756,
+          "Gap infill": 0.09409230659040604
+        },
+        "Battery_Twist_Cap": {
+          "Brim": 0.0870298522836476,
+          "Outer wall": 0.33360716354897796,
+          "Inner wall": 0.5182243971074606,
+          "Bottom surface": 0.11307190986394133,
+          "Internal solid infill": 0.6280205908671505,
+          "Sparse infill": 0.07933620366661724,
+          "Gap infill": 0.006879507845730609,
+          "Top surface": 0.19101150104129594,
+          "Floating vertical shell": 0.05929374529790706,
+          "Overhang wall": 0.0031764686419170616,
+          "Bridge": 0.0073162394458833845
+        },
+        "Upper_Shaft": {
+          "Brim": 0.06255653998738882,
+          "Outer wall": 5.102462116060395,
+          "Inner wall": 3.3292582315247987,
+          "Gap infill": 1.5674669192915864,
+          "Internal solid infill": 0.1844750063548378,
+          "Top surface": 0.0416790466447837,
+          "Overhang wall": 0.01854106939567319,
+          "Bridge": 0.009485051565855973,
+          "Sparse infill": 0.11556348242926726,
+          "Floating vertical shell": 0.0264802554402777
+        },
+        "Lower_Shaft": {
+          "Brim": 0.06266339367259093,
+          "Outer wall": 4.149012822964895,
+          "Inner wall": 3.044875090600143,
+          "Gap infill": 1.359631797323192,
+          "Internal solid infill": 0.24724430675315595,
+          "Top surface": 0.04737384709394674,
+          "Overhang wall": 0.019321058531736806,
+          "Bridge": 0.013511859268656662,
+          "Sparse infill": 0.1047325876208056,
+          "Floating vertical shell": 0.043485051097762184
+        },
+        "Choc_Recessed_Plate": {
+          "Brim": 0.20728243365324167,
+          "Outer wall": 0.27623913670986194,
+          "Gap infill": 0.05783185369907436,
+          "Inner wall": 0.0910665572403091,
+          "Top surface": 0.016926045285714564
+        },
+        "Handle_Left": {
+          "Support": 0.26489838059216453,
+          "Support transition": 0.07282200834842592,
+          "Brim": 0.047698806929046836,
+          "Outer wall": 7.931114314780168,
+          "Inner wall": 5.679554737644172,
+          "Gap infill": 1.7191704685706282,
+          "Support interface": 0.13259039417253954,
+          "Internal solid infill": 1.2158056067992247,
+          "Overhang wall": 0.09715080241006739,
+          "Top surface": 0.3275190999942507,
+          "Bridge": 0.3865260693068296,
+          "Sparse infill": 1.1320033589691083,
+          "Floating vertical shell": 0.05193232672097353
+        }
+      },
+      "object_mass_mapping_available": true,
+      "object_printed_parts_g": {
+        "Removable_Finger_Loop": 9.399,
+        "Battery_Sled": 0.388,
+        "Sense_Head_Base": 9.616,
+        "Sense_Sliding_Cover": 3.51,
+        "Battery_Twist_Cap": 1.94,
+        "Upper_Shaft": 10.395,
+        "Lower_Shaft": 9.029,
+        "Choc_Recessed_Plate": 0.442,
+        "Handle_Left": 18.541
+      },
+      "settings": {
+        "printer_model": "Bambu Lab P1S",
+        "filament_type": [
+          "PETG"
+        ],
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "support_type": "tree(auto)"
+      }
+    }
+  },
+  "solid_band_print_policy": "V20 loop and matching handle-foot coupon use 100% infill; other parts use the retained global 20% setting.",
+  "physical_mass_measured": false,
+  "weight_budget": {
+    "aim_complete_wand_g": 80.0,
+    "ceiling_complete_wand_g": 100.0,
+    "printed_parts_estimate_g": 63.26,
+    "unweighed_hardware_allowance_for_80g": 16.74,
+    "unweighed_hardware_allowance_for_100g": 36.74,
+    "printed_parts_reduction_percent_from_V19": -3.19,
+    "actual_electronics_battery_switches_keycaps_and_wires_g": null,
+    "complete_wand_mass_verified": false
+  },
+  "without_loop_printed_parts_g": 53.861,
+  "printed_parts_change_from_V19_g": 1.955
+}
