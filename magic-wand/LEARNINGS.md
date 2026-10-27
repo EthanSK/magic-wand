@@ -1164,3 +1164,12 @@ Comparison viewers must request fresh manifests and estimates and key STL URLs b
 ## Continuous lightweight shaft (2026-10-27)
 
 The two upper sections of Two wide spirals fit as one 206 mm print in the checked P1S profile's 250 mm height, allowing openings across the former middle joint. Keep the original grip-side lock and detachable loop; the narrowed tip uses its own matching scaled cradle connector. Check the real sliced wire route and cradle clearances after changing this joint. CAD and sliced paths do not establish physical strength, fit or retention.
+## Keep ergonomic anchors independent of mechanism convenience (2026-10-27)
+
+V18 removed the lower tail but kept the old elevated locking mounts, raising the visible bottom of the loop and leaving an unwanted gap. The user reiterated that the loop belongs at the butt and controls follow it as a group. Freeze the butt reference and button offsets as design inputs, then fit the mechanism around them. Do not let an older receiver position become an ergonomic requirement. The user also explicitly replaced the thick hollow loop with a slim solid band and requested a 5–10 mm grip reduction. An oval battery zone can preserve cell width while reducing hand-contact depth; distinguish those measured axes from a circular diameter reduction. CAD clearance and slicer mass still do not establish physical comfort or strength.
+
+## Sweep broad rotating locks locally (2026-10-27)
+
+A global convex hull around every pose of a rotating shoulder/head can fill the intended concave sweep and erase a retaining lip or thin the inner pocket floor. In the slimmer V19 trial, insertion remained clear but radial capture was weak and a floor probe entered the overcut. Hull only adjacent half-degree poses, union those local sweeps and test the full route, independent capture stops and actual floor material. Reset inherited mesh face relations before simplifying/exporting Boolean seams. These are geometry checks, not PETG strength measurements.
+
+Bambu retains the `Sparse infill` extrusion-feature label even for an object configured at 100% infill. Identical geometry with a 20% versus 100% loop setting deposited 5.378 versus 7.444 g in the loop, while the feature label remained. Verify the object's setting and actual extrusion evidence; the label alone does not establish density.
