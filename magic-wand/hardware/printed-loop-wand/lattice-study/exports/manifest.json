@@ -1,0 +1,1509 @@
+{
+  "version": "Lattice studies on Print V18",
+  "baseline": "Print V18 / S410-R14",
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "variants": {
+    "diamond": {
+      "label": "Diamond net",
+      "color": "#397f9b",
+      "strands": 3,
+      "band_mm": 2.7,
+      "loop_width_mm": 13.5,
+      "loop_radius_mm": 4.8,
+      "loop_wall_mm": 1.15,
+      "kind": "net",
+      "parts": [
+        {
+          "name": "Handle_Left",
+          "file": "Handle_Left.stl",
+          "sha256": "e75fff5ade733b2e41b48ff4ed6de2a9df3482ee74c0c5f103a767857b2b60d2",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 19061.2029,
+            "area_mm2": 23759.1681,
+            "triangles": 35334,
+            "print_size_mm": [
+              31.2856,
+              30.5346,
+              172.8
+            ],
+            "downward_flat_mm2": 1299.5011,
+            "downward_steeper_than_45_mm2": 507.8837
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.06801652908325195
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.3188624382019043
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              3.200000047683716
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Handle_Right",
+          "file": "Handle_Right.stl",
+          "sha256": "180e2ad380bd1ece5e1240227fe96a95ff51a5bef1b1ae6a8f7a9cbae5068de8",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 19058.4053,
+            "area_mm2": 23755.9357,
+            "triangles": 35390,
+            "print_size_mm": [
+              31.2856,
+              30.5346,
+              172.8
+            ],
+            "downward_flat_mm2": 1297.7348,
+            "downward_steeper_than_45_mm2": 507.6566
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.06801652908325195
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.3188624382019043
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              3.200000047683716
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Lower_Shaft",
+          "file": "Lower_Shaft.stl",
+          "sha256": "1f9cb202b5ac94e92b50fe092904ecde7e8e1c62b60f8ba248e0f34738fa14ed",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 8069.801,
+            "area_mm2": 10275.1378,
+            "triangles": 19134,
+            "print_size_mm": [
+              22.6272,
+              23.8792,
+              100.0
+            ],
+            "downward_flat_mm2": 234.3919,
+            "downward_steeper_than_45_mm2": 213.5233
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.30681514739990234
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.03542041778564453
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              160.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Upper_Shaft",
+          "file": "Upper_Shaft.stl",
+          "sha256": "7005c6fa6abbea9576bffaf814c06833198e4d6fd2880129389433af04a5f50b",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 8378.3403,
+            "area_mm2": 11011.5812,
+            "triangles": 19138,
+            "print_size_mm": [
+              21.1356,
+              21.1354,
+              120.0
+            ],
+            "downward_flat_mm2": 147.9342,
+            "downward_steeper_than_45_mm2": 253.4892
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0953516960144043
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.11475849151611328
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              246.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Removable_Finger_Loop",
+          "file": "Removable_Finger_Loop.stl",
+          "sha256": "fef8097d4d59e5d5bcde420d33f8f75a9844fa8ae6e4665e18fcab1d893c27d0",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 11011.8275,
+            "area_mm2": 8553.0888,
+            "triangles": 9024,
+            "print_size_mm": [
+              103.2064,
+              46.9742,
+              18.0
+            ],
+            "downward_flat_mm2": 347.8442,
+            "downward_steeper_than_45_mm2": 327.0011
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              0.0,
+              0.0,
+              1.0,
+              -9.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -30.3599635076078
+            ],
+            [
+              -1.0,
+              0.0,
+              0.0,
+              87.08083152770996
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "checks": {
+        "physical_strength_verified": false,
+        "interfaces": {
+          "Handle_Left": 1.1226212669122053e-07,
+          "Handle_Right": 1.1226213039565506e-07,
+          "Lower_Shaft": 7.908478024010525e-10,
+          "Upper_Shaft": 2.6655359696391157e-08,
+          "loop_roots_lost_mm3": 7.151397529714387e-15,
+          "loop_root_extra_reinforcement_mm3": 226.63327024496425
+        },
+        "wire_clearance": {
+          "Handle_Left": 0.0,
+          "Handle_Right": 0.0,
+          "Lower_Shaft": 0.0,
+          "Upper_Shaft": 0.0
+        },
+        "loops": {
+          "Left": {
+            "max_turn_overlap_mm3": 0.0,
+            "max_slide_overlap_mm3": 0.0,
+            "hard_stops_mm3": [
+              3.552748548308918,
+              9.53265782208556,
+              1.5666148684657077
+            ]
+          },
+          "Right": {
+            "max_turn_overlap_mm3": 0.0,
+            "max_slide_overlap_mm3": 0.0,
+            "hard_stops_mm3": [
+              3.552748548308917,
+              9.532657822085563,
+              1.5666148684657066
+            ]
+          }
+        },
+        "gauge_check": "Run verify_models.py against exported meshes",
+        "floating_layer_starts": {
+          "Lower_Shaft": [],
+          "Upper_Shaft": []
+        },
+        "skin_open_samples": {
+          "grip": {
+            "sampled_open_fraction": 0.4785,
+            "samples": 4608
+          },
+          "lower": {
+            "sampled_open_fraction": 0.5023,
+            "samples": 1728
+          },
+          "upper": {
+            "sampled_open_fraction": 0.4853,
+            "samples": 2448
+          }
+        }
+      },
+      "loop_section_mm": [
+        13.5,
+        9.6
+      ],
+      "loop_skin_mm": 1.15,
+      "loop_section_reduction_percent": 40.0
+    },
+    "helix": {
+      "label": "Open helix",
+      "color": "#98714e",
+      "strands": 1,
+      "band_mm": 5.0,
+      "loop_width_mm": 14.5,
+      "loop_radius_mm": 5.0,
+      "loop_wall_mm": 1.2,
+      "kind": "net",
+      "parts": [
+        {
+          "name": "Handle_Left",
+          "file": "Handle_Left.stl",
+          "sha256": "1828b8219a10559d482ececa99bc85cd97c220c3781cc75119432eab60e42c81",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 18774.3316,
+            "area_mm2": 22148.6234,
+            "triangles": 30438,
+            "print_size_mm": [
+              31.2856,
+              30.5346,
+              172.8
+            ],
+            "downward_flat_mm2": 1290.09,
+            "downward_steeper_than_45_mm2": 284.8895
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.06801652908325195
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.3188624382019043
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              3.200000047683716
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Handle_Right",
+          "file": "Handle_Right.stl",
+          "sha256": "49192a9855fca000b219eeddebbc616839556684f78dbf9b4c90bac7fb187b7d",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 18771.5364,
+            "area_mm2": 22145.3904,
+            "triangles": 30500,
+            "print_size_mm": [
+              31.2856,
+              30.5346,
+              172.8
+            ],
+            "downward_flat_mm2": 1288.3238,
+            "downward_steeper_than_45_mm2": 284.6624
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.06801652908325195
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.3188624382019043
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              3.200000047683716
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Lower_Shaft",
+          "file": "Lower_Shaft.stl",
+          "sha256": "f3975920f6be7dd54e8d1036712e052e58eb51c95d7f95a2c8c73f1a7b8bb3ce",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 7781.7504,
+            "area_mm2": 9169.406,
+            "triangles": 16464,
+            "print_size_mm": [
+              22.6272,
+              23.8792,
+              100.0
+            ],
+            "downward_flat_mm2": 214.8907,
+            "downward_steeper_than_45_mm2": 80.5886
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.30681514739990234
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.03542041778564453
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              160.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Upper_Shaft",
+          "file": "Upper_Shaft.stl",
+          "sha256": "3570bb10516ce6d4552aedcdcfd883574e01366e3b3ced6c78bd45286a501c52",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 8019.4463,
+            "area_mm2": 9602.9785,
+            "triangles": 15594,
+            "print_size_mm": [
+              21.1356,
+              21.1354,
+              120.0
+            ],
+            "downward_flat_mm2": 136.4516,
+            "downward_steeper_than_45_mm2": 82.5591
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0953516960144043
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.11475849151611328
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              246.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Removable_Finger_Loop",
+          "file": "Removable_Finger_Loop.stl",
+          "sha256": "3b27b8d015f71a0cc8e5e21c08b6d830c85223704ae1b2a70951ddb5bda8de7a",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 11450.0704,
+            "area_mm2": 9115.2198,
+            "triangles": 8974,
+            "print_size_mm": [
+              103.2064,
+              47.1742,
+              18.0
+            ],
+            "downward_flat_mm2": 392.8117,
+            "downward_steeper_than_45_mm2": 325.4033
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              0.0,
+              0.0,
+              1.0,
+              -9.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -30.459961981728895
+            ],
+            [
+              -1.0,
+              0.0,
+              0.0,
+              87.08083152770996
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "checks": {
+        "physical_strength_verified": false,
+        "interfaces": {
+          "Handle_Left": 8.67404685735821e-08,
+          "Handle_Right": 8.674046037055925e-08,
+          "Lower_Shaft": 1.635497293150934e-14,
+          "Upper_Shaft": 2.658563645922471e-08,
+          "loop_roots_lost_mm3": 7.151397529714387e-15,
+          "loop_root_extra_reinforcement_mm3": 230.5922738450439
+        },
+        "wire_clearance": {
+          "Handle_Left": 0.0,
+          "Handle_Right": 0.0,
+          "Lower_Shaft": 0.0,
+          "Upper_Shaft": 0.0
+        },
+        "loops": {
+          "Left": {
+            "max_turn_overlap_mm3": 0.0,
+            "max_slide_overlap_mm3": 0.0,
+            "hard_stops_mm3": [
+              3.552748548308918,
+              9.532657822085575,
+              1.5666148684657077
+            ]
+          },
+          "Right": {
+            "max_turn_overlap_mm3": 0.0,
+            "max_slide_overlap_mm3": 0.0,
+            "hard_stops_mm3": [
+              3.552748548308917,
+              9.532657822085568,
+              1.5666148684657066
+            ]
+          }
+        },
+        "gauge_check": "Run verify_models.py against exported meshes",
+        "floating_layer_starts": {
+          "Lower_Shaft": [],
+          "Upper_Shaft": []
+        },
+        "skin_open_samples": {
+          "grip": {
+            "sampled_open_fraction": 0.5256,
+            "samples": 4608
+          },
+          "lower": {
+            "sampled_open_fraction": 0.5932,
+            "samples": 1728
+          },
+          "upper": {
+            "sampled_open_fraction": 0.585,
+            "samples": 2448
+          }
+        }
+      },
+      "loop_section_mm": [
+        14.5,
+        10.0
+      ],
+      "loop_skin_mm": 1.2,
+      "loop_section_reduction_percent": 32.87
+    },
+    "truss": {
+      "label": "Cross braced",
+      "color": "#68866c",
+      "strands": 2,
+      "band_mm": 3.4,
+      "loop_width_mm": 14.5,
+      "loop_radius_mm": 5.1,
+      "loop_wall_mm": 1.2,
+      "kind": "net",
+      "parts": [
+        {
+          "name": "Handle_Left",
+          "file": "Handle_Left.stl",
+          "sha256": "f41d8f5258e47aa61dc8c64eb0f936b905e1b5ee573bb283738f3710b98c4836",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 18873.6481,
+            "area_mm2": 22889.6082,
+            "triangles": 32614,
+            "print_size_mm": [
+              31.2856,
+              30.5346,
+              172.8
+            ],
+            "downward_flat_mm2": 1292.507,
+            "downward_steeper_than_45_mm2": 395.79
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.06801652908325195
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.3188624382019043
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              3.200000047683716
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Handle_Right",
+          "file": "Handle_Right.stl",
+          "sha256": "1c845a4cfbd08324599ee1bf38536569f3fd83933a329740c9c300b42acaffe1",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 18870.8552,
+            "area_mm2": 22886.3585,
+            "triangles": 32670,
+            "print_size_mm": [
+              31.2856,
+              30.5346,
+              172.8
+            ],
+            "downward_flat_mm2": 1290.7409,
+            "downward_steeper_than_45_mm2": 395.5629
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.06801652908325195
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.3188624382019043
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              3.200000047683716
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Lower_Shaft",
+          "file": "Lower_Shaft.stl",
+          "sha256": "23eecc0cf5ed28e7535321f3d2fa983be9e9437bd32ee030ee4a4aaade7b62c2",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 7918.7054,
+            "area_mm2": 9772.8671,
+            "triangles": 17638,
+            "print_size_mm": [
+              22.6272,
+              23.8792,
+              100.0
+            ],
+            "downward_flat_mm2": 211.3742,
+            "downward_steeper_than_45_mm2": 162.6822
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.30681514739990234
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.03542041778564453
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              160.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Upper_Shaft",
+          "file": "Upper_Shaft.stl",
+          "sha256": "461b484977ce11553fc5934c7fa202feb2d7a6c063710ed8e7a9c4018e42a7f5",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 8198.5263,
+            "area_mm2": 10303.6702,
+            "triangles": 17082,
+            "print_size_mm": [
+              21.1356,
+              21.1354,
+              120.0
+            ],
+            "downward_flat_mm2": 150.5203,
+            "downward_steeper_than_45_mm2": 163.3449
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0953516960144043
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.11475849151611328
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              246.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Removable_Finger_Loop",
+          "file": "Removable_Finger_Loop.stl",
+          "sha256": "6e20c6f7557ce54bac9cc1c2c1e1c97edbf89c0f13b8c3547f465c52ebbc4993",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 11498.049,
+            "area_mm2": 9198.793,
+            "triangles": 8940,
+            "print_size_mm": [
+              103.2064,
+              47.2742,
+              18.0
+            ],
+            "downward_flat_mm2": 415.905,
+            "downward_steeper_than_45_mm2": 325.397
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              0.0,
+              0.0,
+              1.0,
+              -9.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -30.509963126138075
+            ],
+            [
+              -1.0,
+              0.0,
+              0.0,
+              87.08083152770996
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "checks": {
+        "physical_strength_verified": false,
+        "interfaces": {
+          "Handle_Left": 2.0837669308619027e-07,
+          "Handle_Right": 2.0837669034414824e-07,
+          "Lower_Shaft": 2.0058607552719824e-14,
+          "Upper_Shaft": 4.05938455679683e-08,
+          "loop_roots_lost_mm3": 7.151397529714387e-15,
+          "loop_root_extra_reinforcement_mm3": 222.92052482385037
+        },
+        "wire_clearance": {
+          "Handle_Left": 0.0,
+          "Handle_Right": 0.0,
+          "Lower_Shaft": 0.0,
+          "Upper_Shaft": 0.0
+        },
+        "loops": {
+          "Left": {
+            "max_turn_overlap_mm3": 0.0,
+            "max_slide_overlap_mm3": 0.0,
+            "hard_stops_mm3": [
+              3.552748548308918,
+              9.53265782208557,
+              1.5666148684657073
+            ]
+          },
+          "Right": {
+            "max_turn_overlap_mm3": 0.0,
+            "max_slide_overlap_mm3": 0.0,
+            "hard_stops_mm3": [
+              3.552748548308917,
+              9.532657822085561,
+              1.5666148684657062
+            ]
+          }
+        },
+        "gauge_check": "Run verify_models.py against exported meshes",
+        "floating_layer_starts": {
+          "Lower_Shaft": [],
+          "Upper_Shaft": []
+        },
+        "skin_open_samples": {
+          "grip": {
+            "sampled_open_fraction": 0.5046,
+            "samples": 4608
+          },
+          "lower": {
+            "sampled_open_fraction": 0.5347,
+            "samples": 1728
+          },
+          "upper": {
+            "sampled_open_fraction": 0.5319,
+            "samples": 2448
+          }
+        }
+      },
+      "loop_section_mm": [
+        14.5,
+        10.2
+      ],
+      "loop_skin_mm": 1.2,
+      "loop_section_reduction_percent": 31.53
+    },
+    "leaf": {
+      "label": "Leaf shell",
+      "color": "#8b668f",
+      "strands": 1,
+      "band_mm": 0,
+      "loop_width_mm": 15.0,
+      "loop_radius_mm": 5.2,
+      "loop_wall_mm": 1.15,
+      "kind": "leaf",
+      "parts": [
+        {
+          "name": "Handle_Left",
+          "file": "Handle_Left.stl",
+          "sha256": "cf71ee9e59776d0f427b22762f3e5a481da624ad3ef2ac9b43d981a136834cc7",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 20545.804,
+            "area_mm2": 24919.3723,
+            "triangles": 36186,
+            "print_size_mm": [
+              31.2856,
+              30.5346,
+              172.8
+            ],
+            "downward_flat_mm2": 1263.6273,
+            "downward_steeper_than_45_mm2": 243.9631
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.06801652908325195
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.3188624382019043
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              3.200000047683716
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Handle_Right",
+          "file": "Handle_Right.stl",
+          "sha256": "897d8aaadca9fa39478b97bc8f1ab8bebc8f5a1ea83b42f938b877f389908f12",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 20543.0072,
+            "area_mm2": 24916.1235,
+            "triangles": 36254,
+            "print_size_mm": [
+              31.2856,
+              30.5346,
+              172.8
+            ],
+            "downward_flat_mm2": 1261.8612,
+            "downward_steeper_than_45_mm2": 243.736
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.06801652908325195
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.3188624382019043
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              3.200000047683716
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Lower_Shaft",
+          "file": "Lower_Shaft.stl",
+          "sha256": "e787eaa34a7215d2590a6637ce3b40fcf940a14c67fb0843dd829632923a40ff",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 8887.0774,
+            "area_mm2": 10913.3549,
+            "triangles": 20452,
+            "print_size_mm": [
+              22.6272,
+              23.8792,
+              100.0
+            ],
+            "downward_flat_mm2": 190.57,
+            "downward_steeper_than_45_mm2": 72.9039
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.30681514739990234
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -0.03542041778564453
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              160.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Upper_Shaft",
+          "file": "Upper_Shaft.stl",
+          "sha256": "7e2cff1b387a88977efba774efacca0780201f39a1ea2087ff5eff6707060f91",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 9591.3804,
+            "area_mm2": 12115.1278,
+            "triangles": 17788,
+            "print_size_mm": [
+              21.1356,
+              21.1354,
+              120.0
+            ],
+            "downward_flat_mm2": 103.056,
+            "downward_steeper_than_45_mm2": 85.1898
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0953516960144043
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              0.11475849151611328
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              246.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        },
+        {
+          "name": "Removable_Finger_Loop",
+          "file": "Removable_Finger_Loop.stl",
+          "sha256": "4c8c9dd8e402208643143bead7064b8c6aa12db736ca5ec4e86d952c38a32b4a",
+          "checks": {
+            "watertight": true,
+            "winding_consistent": true,
+            "every_edge_shared_twice": true,
+            "bodies": 1,
+            "volume_mm3": 11562.9112,
+            "area_mm2": 9477.4262,
+            "triangles": 8814,
+            "print_size_mm": [
+              103.2064,
+              47.3742,
+              18.0
+            ],
+            "downward_flat_mm2": 441.1664,
+            "downward_steeper_than_45_mm2": 312.8006
+          },
+          "zero_volume_sheet_cleanup_mm3": 0.0,
+          "print_to_assembly": [
+            [
+              0.0,
+              0.0,
+              1.0,
+              -9.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0,
+              -30.559962363198622
+            ],
+            [
+              -1.0,
+              0.0,
+              0.0,
+              87.08083152770996
+            ],
+            [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+            ]
+          ]
+        }
+      ],
+      "checks": {
+        "physical_strength_verified": false,
+        "interfaces": {
+          "Handle_Left": 4.4551697889051917e-07,
+          "Handle_Right": 4.455169763566543e-07,
+          "Lower_Shaft": 1.0410904196025972e-09,
+          "Upper_Shaft": 8.934033624008464e-09,
+          "loop_roots_lost_mm3": 7.149426616395024e-15,
+          "loop_root_extra_reinforcement_mm3": 206.99108573990682
+        },
+        "wire_clearance": {
+          "Handle_Left": 0.0,
+          "Handle_Right": 0.0,
+          "Lower_Shaft": 0.0,
+          "Upper_Shaft": 0.0
+        },
+        "loops": {
+          "Left": {
+            "max_turn_overlap_mm3": 0.0,
+            "max_slide_overlap_mm3": 0.0,
+            "hard_stops_mm3": [
+              3.552748548308918,
+              9.53265782208556,
+              1.5666148684657073
+            ]
+          },
+          "Right": {
+            "max_turn_overlap_mm3": 0.0,
+            "max_slide_overlap_mm3": 0.0,
+            "hard_stops_mm3": [
+              3.552748548308917,
+              9.53265782208555,
+              1.5666148684657062
+            ]
+          }
+        },
+        "gauge_check": "Run verify_models.py against exported meshes",
+        "floating_layer_starts": {
+          "Lower_Shaft": [],
+          "Upper_Shaft": []
+        },
+        "skin_open_samples": {
+          "grip": {
+            "sampled_open_fraction": 0.3444,
+            "samples": 4608
+          },
+          "lower": {
+            "sampled_open_fraction": 0.2726,
+            "samples": 1728
+          },
+          "upper": {
+            "sampled_open_fraction": 0.1944,
+            "samples": 2448
+          }
+        }
+      },
+      "loop_section_mm": [
+        15.0,
+        10.4
+      ],
+      "loop_skin_mm": 1.15,
+      "loop_section_reduction_percent": 27.78
+    }
+  },
+  "source": {
+    "wand_cad.py": "d19924cc3c4b33881ccde2536d4503654bae9bd4e4bbd9087d45cc2475b5db33",
+    "variations.json": "86b03302806361e2a64b91fb4dbb06cf77fa71e7358f8b468b13014480cf2502"
+  },
+  "baseline_source": {
+    "../v18/wand_cad.py": "8e7f29bbeebd5a3cee42ad27cde0a4bc18901af8c471c20e063b489f8aa1042d",
+    "../v18/exports/manifest.json": "ddcc6e00fd33ade4297640e08875cbbb3eeb43ea013b798143453ce613afb49e"
+  },
+  "shared_parts": [
+    {
+      "name": "Sense_Head_Base",
+      "file": "../../v18/exports/Sense_Head_Base.stl",
+      "sha256": "28634c92abb5f7eba2b3379204553b9dff1f0b284dc49c4581c9074ac3226cbb",
+      "checks": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 8836.4316,
+        "area_mm2": 8381.7019,
+        "triangles": 3270,
+        "print_size_mm": [
+          40.0,
+          30.7308,
+          58.0
+        ],
+        "downward_flat_mm2": 88.2328,
+        "downward_steeper_than_45_mm2": 99.9184
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -3.134619318635613
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          352.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "Sense_Sliding_Cover",
+      "file": "../../v18/exports/Sense_Sliding_Cover.stl",
+      "sha256": "49fe1d614dcb6fe1e4038442a1f7fcc7945bdabd790f3f81e6e4f29f151ecfac",
+      "checks": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 3528.2951,
+        "area_mm2": 2849.1775,
+        "triangles": 472,
+        "print_size_mm": [
+          40.0,
+          26.5468,
+          14.9872
+        ],
+        "downward_flat_mm2": 0.0,
+        "downward_steeper_than_45_mm2": 272.6686
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.431135187789,
+          -0.902287343284,
+          15.448797435697713
+        ],
+        [
+          0.0,
+          0.902287343284,
+          0.431135187789,
+          382.7456486948547
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "Battery_Twist_Cap",
+      "file": "../../v18/exports/Battery_Twist_Cap.stl",
+      "sha256": "bbee7b6f0848d9a9f43e63de5b7aea419f9bccef93ad5b8a34883aa2e55a623d",
+      "checks": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 2328.3103,
+        "area_mm2": 2922.303,
+        "triangles": 1212,
+        "print_size_mm": [
+          30.0,
+          30.0,
+          10.8
+        ],
+        "downward_flat_mm2": 22.286,
+        "downward_steeper_than_45_mm2": 152.0085
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "Battery_Sled",
+      "file": "../../v18/exports/Battery_Sled.stl",
+      "sha256": "856663d11ae7b5dbdf5f8b87c08e768f0a77142d586a5882103ef3461ae30af9",
+      "checks": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 346.5601,
+        "area_mm2": 939.0401,
+        "triangles": 96,
+        "print_size_mm": [
+          20.6,
+          45.0,
+          7.6
+        ],
+        "downward_flat_mm2": 0.0,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -4.1
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          35.5
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "Choc_Recessed_Plate",
+      "file": "../../v18/exports/Choc_Recessed_Plate.stl",
+      "sha256": "f8431735cc9685939977f701aa432b5d7d0c7b7fc3d41a5d392c4e3c6c4ff9d0",
+      "checks": {
+        "watertight": true,
+        "winding_consistent": true,
+        "every_edge_shared_twice": true,
+        "bodies": 1,
+        "volume_mm3": 120.1535,
+        "area_mm2": 368.0677,
+        "triangles": 104,
+        "print_size_mm": [
+          16.4,
+          17.2,
+          2.5
+        ],
+        "downward_flat_mm2": 0.0,
+        "downward_steeper_than_45_mm2": 0.0
+      },
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          -0.0,
+          -1.0,
+          1.3
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ]
+}

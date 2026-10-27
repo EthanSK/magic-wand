@@ -1,0 +1,250 @@
+{
+  "kind": "Checks on actual exported STL solids",
+  "physical_strength_verified": false,
+  "variants": {
+    "diamond": {
+      "physical_strength_verified": false,
+      "interfaces": {
+        "Handle_Left": 0.09617352490705686,
+        "Handle_Right": 0.09961113907185686,
+        "Lower_Shaft": 0.30657823958426766,
+        "Upper_Shaft": 0.03399870335209432,
+        "loop_roots_lost_mm3": 0.01264930370226183,
+        "loop_root_extra_reinforcement_mm3": 226.64281439571863
+      },
+      "wire_clearance": {
+        "Handle_Left": 0.0,
+        "Handle_Right": 0.0,
+        "Lower_Shaft": 0.0,
+        "Upper_Shaft": 0.0
+      },
+      "loops": {
+        "Left": {
+          "max_turn_overlap_mm3": 2.6555081320503468e-05,
+          "max_slide_overlap_mm3": 2.4957395506899954e-05,
+          "hard_stops_mm3": [
+            3.5560465095229983,
+            9.533666442785847,
+            1.566827547776778
+          ]
+        },
+        "Right": {
+          "max_turn_overlap_mm3": 2.6555081320503468e-05,
+          "max_slide_overlap_mm3": 2.4957395506899954e-05,
+          "hard_stops_mm3": [
+            3.555929643098309,
+            9.533666442785847,
+            1.566827547776778
+          ]
+        }
+      },
+      "gauge_check": "Run verify_models.py against exported meshes",
+      "floating_layer_starts": {
+        "Lower_Shaft": [],
+        "Upper_Shaft": []
+      },
+      "exported_interface_volume_tolerance_mm3": 0.75,
+      "minimum_members": {
+        "grip": {
+          "sampled_min_radial_material_mm": 1.0002,
+          "probes": 30
+        },
+        "lower": {
+          "sampled_min_radial_material_mm": 0.9986,
+          "probes": 30
+        },
+        "upper": {
+          "sampled_min_radial_material_mm": 1.0011,
+          "probes": 30
+        },
+        "loop": {
+          "sampled_mean_of_two_broad_skins_min_mm": 1.15,
+          "probes": 3
+        }
+      }
+    },
+    "helix": {
+      "physical_strength_verified": false,
+      "interfaces": {
+        "Handle_Left": 0.09078058612547021,
+        "Handle_Right": 0.09508492086555112,
+        "Lower_Shaft": 0.30933328514332653,
+        "Upper_Shaft": 0.05241493670220546,
+        "loop_roots_lost_mm3": 0.011795794779787452,
+        "loop_root_extra_reinforcement_mm3": 230.60192848439425
+      },
+      "wire_clearance": {
+        "Handle_Left": 0.0,
+        "Handle_Right": 0.0,
+        "Lower_Shaft": 0.0,
+        "Upper_Shaft": 0.0
+      },
+      "loops": {
+        "Left": {
+          "max_turn_overlap_mm3": 2.7852518705837062e-05,
+          "max_slide_overlap_mm3": 2.8920292579859528e-05,
+          "hard_stops_mm3": [
+            3.5560464304233776,
+            9.533680955329803,
+            1.5668299268556622
+          ]
+        },
+        "Right": {
+          "max_turn_overlap_mm3": 2.7852518705837062e-05,
+          "max_slide_overlap_mm3": 2.8920292579859528e-05,
+          "hard_stops_mm3": [
+            3.5559295639820463,
+            9.533680955329803,
+            1.5668299268556622
+          ]
+        }
+      },
+      "gauge_check": "Run verify_models.py against exported meshes",
+      "floating_layer_starts": {
+        "Lower_Shaft": [],
+        "Upper_Shaft": []
+      },
+      "exported_interface_volume_tolerance_mm3": 0.75,
+      "minimum_members": {
+        "grip": {
+          "sampled_min_radial_material_mm": 1.5998,
+          "probes": 18
+        },
+        "lower": {
+          "sampled_min_radial_material_mm": 1.7999,
+          "probes": 18
+        },
+        "upper": {
+          "sampled_min_radial_material_mm": 1.7998,
+          "probes": 18
+        },
+        "loop": {
+          "sampled_mean_of_two_broad_skins_min_mm": 1.2,
+          "probes": 3
+        }
+      }
+    },
+    "truss": {
+      "physical_strength_verified": false,
+      "interfaces": {
+        "Handle_Left": 0.09116635630459385,
+        "Handle_Right": 0.0970422437551407,
+        "Lower_Shaft": 0.30692076024352394,
+        "Upper_Shaft": 0.042833301077740235,
+        "loop_roots_lost_mm3": 0.012520097315799209,
+        "loop_root_extra_reinforcement_mm3": 222.93239434815487
+      },
+      "wire_clearance": {
+        "Handle_Left": 0.0,
+        "Handle_Right": 0.0,
+        "Lower_Shaft": 0.0,
+        "Upper_Shaft": 0.0
+      },
+      "loops": {
+        "Left": {
+          "max_turn_overlap_mm3": 2.655509165584714e-05,
+          "max_slide_overlap_mm3": 2.7587455207779415e-05,
+          "hard_stops_mm3": [
+            3.5560899291750374,
+            9.533664939406787,
+            1.566827059818481
+          ]
+        },
+        "Right": {
+          "max_turn_overlap_mm3": 2.655509165584714e-05,
+          "max_slide_overlap_mm3": 2.7587455207779415e-05,
+          "hard_stops_mm3": [
+            3.5559730627503487,
+            9.533664939406787,
+            1.566827059818481
+          ]
+        }
+      },
+      "gauge_check": "Run verify_models.py against exported meshes",
+      "floating_layer_starts": {
+        "Lower_Shaft": [],
+        "Upper_Shaft": []
+      },
+      "exported_interface_volume_tolerance_mm3": 0.75,
+      "minimum_members": {
+        "grip": {
+          "sampled_min_radial_material_mm": 1.0005,
+          "probes": 24
+        },
+        "lower": {
+          "sampled_min_radial_material_mm": 1.0005,
+          "probes": 24
+        },
+        "upper": {
+          "sampled_min_radial_material_mm": 1.0067,
+          "probes": 24
+        },
+        "loop": {
+          "sampled_mean_of_two_broad_skins_min_mm": 1.2,
+          "probes": 3
+        }
+      }
+    },
+    "leaf": {
+      "physical_strength_verified": false,
+      "interfaces": {
+        "Handle_Left": 0.08517020200002,
+        "Handle_Right": 0.09112596695540252,
+        "Lower_Shaft": 0.3021702493639259,
+        "Upper_Shaft": 0.02296444740739578,
+        "loop_roots_lost_mm3": 0.011765118712940418,
+        "loop_root_extra_reinforcement_mm3": 206.9995639131602
+      },
+      "wire_clearance": {
+        "Handle_Left": 0.0,
+        "Handle_Right": 0.0,
+        "Lower_Shaft": 0.0,
+        "Upper_Shaft": 0.0
+      },
+      "loops": {
+        "Left": {
+          "max_turn_overlap_mm3": 2.785422115179901e-05,
+          "max_slide_overlap_mm3": 2.5932017314410446e-05,
+          "hard_stops_mm3": [
+            3.556046430423376,
+            9.533680088590348,
+            1.5668285577220251
+          ]
+        },
+        "Right": {
+          "max_turn_overlap_mm3": 2.785422115179901e-05,
+          "max_slide_overlap_mm3": 2.5932017314410446e-05,
+          "hard_stops_mm3": [
+            3.5559295639820445,
+            9.533680088590348,
+            1.5668285577220251
+          ]
+        }
+      },
+      "gauge_check": "Run verify_models.py against exported meshes",
+      "floating_layer_starts": {
+        "Lower_Shaft": [],
+        "Upper_Shaft": []
+      },
+      "exported_interface_volume_tolerance_mm3": 0.75,
+      "minimum_members": {
+        "grip": {
+          "sampled_min_radial_material_mm": 1.5998,
+          "probes": 12
+        },
+        "lower": {
+          "sampled_min_radial_material_mm": 1.7999,
+          "probes": 12
+        },
+        "upper": {
+          "sampled_min_radial_material_mm": 1.7998,
+          "probes": 12
+        },
+        "loop": {
+          "sampled_mean_of_two_broad_skins_min_mm": 1.15,
+          "probes": 3
+        }
+      }
+    }
+  }
+}

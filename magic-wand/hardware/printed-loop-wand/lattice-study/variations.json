@@ -1,0 +1,45 @@
+{
+  "baseline": "Print V18 / S410-R14",
+  "variants": {
+    "diamond": {
+      "label": "Diamond net",
+      "color": "#397f9b",
+      "strands": 3,
+      "band_mm": 2.7,
+      "loop_width_mm": 13.5,
+      "loop_radius_mm": 4.8,
+      "loop_wall_mm": 1.15,
+      "kind": "net"
+    },
+    "helix": {
+      "label": "Open helix",
+      "color": "#98714e",
+      "strands": 1,
+      "band_mm": 5.0,
+      "loop_width_mm": 14.5,
+      "loop_radius_mm": 5.0,
+      "loop_wall_mm": 1.2,
+      "kind": "net"
+    },
+    "truss": {
+      "label": "Cross braced",
+      "color": "#68866c",
+      "strands": 2,
+      "band_mm": 3.4,
+      "loop_width_mm": 14.5,
+      "loop_radius_mm": 5.1,
+      "loop_wall_mm": 1.2,
+      "kind": "net"
+    },
+    "leaf": {
+      "label": "Leaf shell",
+      "color": "#8b668f",
+      "strands": 1,
+      "band_mm": 0,
+      "loop_width_mm": 15.0,
+      "loop_radius_mm": 5.2,
+      "loop_wall_mm": 1.15,
+      "kind": "leaf"
+    }
+  }
+}
