@@ -5,7 +5,7 @@ from collections import Counter
 import argparse,hashlib,importlib.util,json,zipfile,xml.etree.ElementTree as E
 HERE=Path(__file__).resolve().parent;ROOT=HERE.parents[3];RECEIPT=HERE/'exports/release.json';NS={'m':'http://schemas.microsoft.com/3dmanufacturing/core/2015/02'}
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
-def files():return sorted(p for p in HERE.rglob('*') if p.is_file() and '__pycache__' not in p.parts and p!=RECEIPT)+sorted((ROOT/'magic-wand-3d-models').glob('Print-Continuous-Two-Wide-*.3mf'))
+def files():return sorted(p for p in HERE.rglob('*') if p.is_file() and '__pycache__' not in p.parts and p!=RECEIPT)+[ROOT/'magic-wand-3d-models'/f'Print-Continuous-Two-Wide-{name}.3mf' for name in ('complete','one-left')]
 def snapshot(p):p.write_text(json.dumps({'files':{str(q.relative_to(ROOT)):sha(q) for q in files()}},indent=2)+'\n')
 def check():
     receipt=json.loads(RECEIPT.read_text());assert receipt['files']=={str(p.relative_to(ROOT)):sha(p) for p in files()},'Continuous design files changed without rebuilding'
