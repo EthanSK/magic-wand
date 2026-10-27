@@ -95,18 +95,19 @@ export class LightBoard {
     const scale = canvas.width / this.mac.width;
     const now = performance.now();
     c.setTransform(1, 0, 0, 1, 0, 0);
-    c.fillStyle = "#0c0919";
+    c.fillStyle = "#0e0d13";
     c.fillRect(0, 0, canvas.width, canvas.height);
     c.setTransform(scale, 0, 0, scale, -this.scrollX * scale, -this.scrollY * scale);
 
-    // Dot grid and coordinates, so scrolling in either direction is visible.
+    // Dot grid and coordinates, so scrolling in either direction is visible. Kept quiet so the
+    // pointer, strokes and HUD stay the brightest things on the screen.
     const left = Math.floor(this.scrollX / GRID) * GRID;
     const top = Math.floor(this.scrollY / GRID) * GRID;
-    c.fillStyle = "rgba(174, 167, 207, 0.22)";
+    c.fillStyle = "rgba(196, 192, 214, 0.16)";
     for (let x = left; x <= this.scrollX + this.mac.width; x += GRID) {
       for (let y = top; y <= this.scrollY + this.mac.height; y += GRID) c.fillRect(x - 2, y - 2, 4, 4);
     }
-    c.fillStyle = "rgba(174, 167, 207, 0.32)";
+    c.fillStyle = "rgba(196, 192, 214, 0.24)";
     c.font = "600 34px 'Atkinson Hyperlegible Mono', monospace";
     const labelLeft = Math.floor(this.scrollX / LABEL_GRID) * LABEL_GRID;
     const labelTop = Math.floor(this.scrollY / LABEL_GRID) * LABEL_GRID;
@@ -115,7 +116,7 @@ export class LightBoard {
         c.fillText(`${COLUMNS[x / LABEL_GRID] || ""}${y / LABEL_GRID + 1}`, x + 18, y + 46);
       }
     }
-    c.strokeStyle = "rgba(174, 167, 207, 0.4)";
+    c.strokeStyle = "rgba(196, 192, 214, 0.3)";
     c.lineWidth = 3;
     c.strokeRect(0, 0, this.width, this.height);
 

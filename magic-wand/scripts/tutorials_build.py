@@ -135,13 +135,17 @@ def html_data(manifest: dict, wand: dict) -> str:
     return f'<script type="application/json" id="guide-data">\n{data}\n</script>'
 
 
-def html_home_list(manifest: dict) -> str:
+def html_home_list(manifest: dict, wand: dict) -> str:
+    """The home page's question list. Each link carries the light colour of the button it uses."""
+    lights = {button["id"]: button["light"] for button in wand["buttons"]}
     items = [
-        f'<li><a href="./how-to/#{tutorial["id"]}"><span class="howto-q">{escape(tutorial["question"])}</span>'
+        f'<li data-light="{lights[tutorial["buttons"][0]]}"><a href="./how-to/#{tutorial["id"]}">'
+        f'<span class="swatch" aria-hidden="true"></span><span class="howto-q">{escape(tutorial["question"])}</span>'
         f'<span class="howto-len">{duration(tutorial["render"]["duration"])}</span></a></li>'
         for tutorial in rendered(manifest)
     ]
-    return '<ul class="howto-links">\n' + "\n".join(items) + "\n</ul>"
+    scope = f'<p class="fine">Illustrated with Control V{manifest["controlVersion"]}.</p>'
+    return '<ul class="howto-links">\n' + "\n".join(items) + "\n</ul>\n" + scope
 
 
 def agent_index(manifest: dict, wand: dict) -> str:
@@ -185,7 +189,7 @@ def artifacts(contents: dict[Path, str]) -> dict[Path, str]:
         out[PAGE] = stamp(page, {**contents, **out})
     home = DOCS / "index.html"
     if home in contents:
-        out[home] = replace_markers(contents[home], {"howto": html_home_list(manifest)})
+        out[home] = replace_markers(contents[home], {"howto": html_home_list(manifest, wand)})
     return out
 
 

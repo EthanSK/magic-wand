@@ -112,13 +112,13 @@ export function makeCamera(THREE, aspect) {
   return camera;
 }
 
-/** Soft violet studio for reflections on the clear-coated shaft. */
+/** A dim, faintly violet room for reflections on the clear-coated shaft. */
 function environment(THREE) {
   const scene = new THREE.Scene();
   const geometry = new THREE.SphereGeometry(5, 32, 16);
   const colors = [];
-  const low = new THREE.Color(0x0a0716);
-  const high = new THREE.Color(0x5d4fa0);
+  const low = new THREE.Color(0x0b0a10);
+  const high = new THREE.Color(0x56526a);
   const position = geometry.attributes.position;
   for (let i = 0; i < position.count; i++) {
     const t = (position.getY(i) / 5 + 1) / 2;
@@ -176,11 +176,11 @@ export async function createWandScene(canvas) {
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(environment(THREE), 0.04).texture;
   pmrem.dispose();
-  scene.add(new THREE.HemisphereLight(0xcfc7ff, 0x120d26, 0.7));
+  scene.add(new THREE.HemisphereLight(0xd8d4ea, 0x121019, 0.7));
   const key = new THREE.DirectionalLight(0xffffff, 1.5);
   key.position.set(-0.6, 1, 0.5);
   scene.add(key);
-  const rim = new THREE.DirectionalLight(0x9a88ff, 1.1);
+  const rim = new THREE.DirectionalLight(0xb3acd6, 1.1);
   rim.position.set(0.7, 0.25, -1);
   scene.add(rim);
 
