@@ -1,0 +1,469 @@
+--- a/Sources/ScimitarKit/Lighting/ICUESession.swift
++++ b/Sources/ScimitarKit/Lighting/ICUESession.swift
+@@ -110,9 +110,9 @@
+ /// separate axis: `requestKeyControl` can take `CAL_ExclusiveKeyEventsListening`
+ /// for one device id, which is documented as "exclusive key events, but shared
+ /// lightings" and is what makes multi-tap mode genuinely modal.
+-/// SDK entry points are used on the main thread. The vendor's callbacks may
+-/// arrive on arbitrary threads, but they copy their payload and dispatch it to
+-/// the main queue before touching this object's mutable Swift state.
++/// Swift state stays on the main thread. Potentially blocking vendor calls
++/// run on one bounded worker so a stalled iCUE server cannot freeze both mice.
++/// Callbacks copy payloads and return to the main queue before changing state.
+ public final class ICUESession: @unchecked Sendable {
+     public static let shared = ICUESession()
+ 
+@@ -149,6 +149,9 @@
+     public var onKeyEvent: ((ICUEKeyEvent) -> Void)?
+     public var onDeviceConnectionChange: ((String, Bool) -> Void)?
+ 
++    private let vendorCalls = ICUEVendorCallExecutor()
++    private let vendorUnavailable = Int32(SC_ICUE_NOT_CONNECTED.rawValue)
++
+     private var isConnected = false
+     private var isSubscribed = false
+     private var sessionCallbackGeneration: UInt64 = 0
+@@ -226,6 +229,7 @@
+     public func connect() -> Result<Void, LightingError> {
+         guard isLibraryLoaded else { return .failure(.sdkUnavailable("SDK not loaded")) }
+         guard !isConnected else { return .success(()) }
++        guard !vendorCalls.isBusy else { return .failure(.writeFailed(vendorUnavailable)) }
+ 
+         var error = beginVendorConnection()
+         if ICUEConnectRecoveryPolicy.shouldResetAndRetry(error: error) {
+@@ -239,6 +243,7 @@
+         }
+ 
+         guard error == Int32(SC_ICUE_SUCCESS.rawValue) else {
++            sessionCallbackGeneration &+= 1
+             retireSessionCallbackContext()
+             log.error("CorsairConnect failed with code \(error)")
+             return .failure(.writeFailed(error))
+@@ -252,14 +257,14 @@
+         let callbackContext = CallbackContext(session: self, generation: sessionCallbackGeneration)
+         sessionCallbackContext = callbackContext
+         let context = Unmanaged.passUnretained(callbackContext).toOpaque()
+-        return sc_icue_connect({ context, event in
++        return vendorCalls.perform(fallback: vendorUnavailable) { sc_icue_connect({ context, event in
+             guard let context, let event else { return }
+             let callback = Unmanaged<CallbackContext>.fromOpaque(context).takeUnretainedValue()
+             callback.session?.handleSessionState(
+                 Int32(event.pointee.state),
+                 generation: callback.generation
+             )
+-        }, context)
++        }, context) }
+     }
+ 
+     private func retireSessionCallbackContext() {
+@@ -272,18 +277,21 @@
+     public func subscribeToEvents() -> Result<Void, LightingError> {
+         guard isLibraryLoaded else { return .failure(.sdkUnavailable("SDK not loaded")) }
+         guard !isSubscribed else { return .success(()) }
++        guard !vendorCalls.isBusy else { return .failure(.writeFailed(vendorUnavailable)) }
+ 
+         eventCallbackGeneration &+= 1
+         let callbackContext = CallbackContext(session: self, generation: eventCallbackGeneration)
+         eventCallbackContext = callbackContext
+         let context = Unmanaged.passUnretained(callbackContext).toOpaque()
+-        let error = sc_icue_subscribe_for_events({ context, event in
++        let error = vendorCalls.perform(fallback: vendorUnavailable) { sc_icue_subscribe_for_events({ context, event in
+             guard let context, let event else { return }
+             let callback = Unmanaged<CallbackContext>.fromOpaque(context).takeUnretainedValue()
+             callback.session?.handleEvent(event.pointee, generation: callback.generation)
+-        }, context)
++        }, context) }
+ 
+         guard error == Int32(SC_ICUE_SUCCESS.rawValue) else {
++            eventCallbackGeneration &+= 1
++            if let eventCallbackContext { retiredCallbackContexts.append(eventCallbackContext) }
+             eventCallbackContext = nil
+             log.error("CorsairSubscribeForEvents failed with code \(error)")
+             return .failure(.writeFailed(error))
+@@ -297,7 +305,7 @@
+         guard isSubscribed else { return }
+         eventCallbackGeneration &+= 1
+         let oldContext = eventCallbackContext
+-        _ = sc_icue_unsubscribe_from_events()
++        _ = vendorCalls.perform(fallback: vendorUnavailable) { sc_icue_unsubscribe_from_events() }
+         isSubscribed = false
+         eventCallbackContext = nil
+         if let oldContext { retiredCallbackContexts.append(oldContext) }
+@@ -323,9 +331,9 @@
+         let oldSessionContext = sessionCallbackContext
+         let oldEventContext = eventCallbackContext
+         if isSubscribed {
+-            _ = sc_icue_unsubscribe_from_events()
++            _ = vendorCalls.perform(fallback: vendorUnavailable) { sc_icue_unsubscribe_from_events() }
+         }
+-        _ = sc_icue_disconnect()
++        _ = vendorCalls.perform(fallback: vendorUnavailable) { sc_icue_disconnect() }
+         isConnected = false
+         isSubscribed = false
+         state = .closed
+@@ -337,16 +345,18 @@
+ 
+     public func sessionDetails() -> ICUESessionDetails? {
+         guard isLibraryLoaded else { return nil }
+-        var raw = sc_icue_session_details()
+-        guard sc_icue_get_session_details(&raw) == Int32(SC_ICUE_SUCCESS.rawValue) else { return nil }
+-        func convert(_ version: sc_icue_version) -> ICUEVersion {
+-            ICUEVersion(major: Int(version.major), minor: Int(version.minor), patch: Int(version.patch))
++        return vendorCalls.perform(fallback: nil) {
++            var raw = sc_icue_session_details()
++            guard sc_icue_get_session_details(&raw) == Int32(SC_ICUE_SUCCESS.rawValue) else { return nil }
++            func convert(_ version: sc_icue_version) -> ICUEVersion {
++                ICUEVersion(major: Int(version.major), minor: Int(version.minor), patch: Int(version.patch))
++            }
++            return ICUESessionDetails(
++                client: convert(raw.client_version),
++                server: convert(raw.server_version),
++                host: convert(raw.server_host_version)
++            )
+         }
+-        return ICUESessionDetails(
+-            client: convert(raw.client_version),
+-            server: convert(raw.server_version),
+-            host: convert(raw.server_host_version)
+-        )
+     }
+ 
+     // MARK: - Devices
+@@ -354,22 +364,24 @@
+     /// Enumerates devices matching `typeMask` (default: mice only).
+     public func devices(typeMask: Int32 = Int32(SC_ICUE_DEVICE_TYPE_MOUSE)) -> [ICUEDevice] {
+         guard isLibraryLoaded, state.isUsable else { return [] }
+-        var filter = sc_icue_device_filter(device_type_mask: typeMask)
+-        var count: Int32 = 0
+-        var buffer = [sc_icue_device_info](repeating: sc_icue_device_info(), count: Int(SC_ICUE_DEVICE_COUNT_MAX))
++        return vendorCalls.perform(fallback: []) {
++            var filter = sc_icue_device_filter(device_type_mask: typeMask)
++            var count: Int32 = 0
++            var buffer = [sc_icue_device_info](repeating: sc_icue_device_info(), count: Int(SC_ICUE_DEVICE_COUNT_MAX))
+ 
+-        let error = sc_icue_get_devices(&filter, Int32(SC_ICUE_DEVICE_COUNT_MAX), &buffer, &count)
+-        guard error == Int32(SC_ICUE_SUCCESS.rawValue), count > 0 else { return [] }
++            let error = sc_icue_get_devices(&filter, Int32(SC_ICUE_DEVICE_COUNT_MAX), &buffer, &count)
++            guard error == Int32(SC_ICUE_SUCCESS.rawValue), count > 0 else { return [] }
+ 
+-        return (0..<Int(count)).map { index in
+-            var info = buffer[index]
+-            return ICUEDevice(
+-                identifier: Self.string(from: &info.id),
+-                model: Self.string(from: &info.model),
+-                ledCount: Int(info.led_count),
+-                channelCount: Int(info.channel_count),
+-                typeMask: info.type
+-            )
++            return (0..<Int(count)).map { index in
++                var info = buffer[index]
++                return ICUEDevice(
++                    identifier: Self.string(from: &info.id),
++                    model: Self.string(from: &info.model),
++                    ledCount: Int(info.led_count),
++                    channelCount: Int(info.channel_count),
++                    typeMask: info.type
++                )
++            }
+         }
+     }
+ 
+@@ -377,23 +389,25 @@
+     /// `AccentSelector` always picks the same physical zone.
+     public func leds(of deviceIdentifier: String) -> [ICUELed] {
+         guard isLibraryLoaded, state.isUsable else { return [] }
+-        var count: Int32 = 0
+-        var buffer = [sc_icue_led_position](
+-            repeating: sc_icue_led_position(),
+-            count: Int(SC_ICUE_DEVICE_LEDCOUNT_MAX)
+-        )
+-        let error = deviceIdentifier.withCString { pointer in
+-            sc_icue_get_led_positions(pointer, Int32(SC_ICUE_DEVICE_LEDCOUNT_MAX), &buffer, &count)
+-        }
+-        guard error == Int32(SC_ICUE_SUCCESS.rawValue), count > 0 else { return [] }
+-
+-        return (0..<Int(count))
+-            .map { ICUELed(luid: buffer[$0].id, x: buffer[$0].cx, y: buffer[$0].cy) }
+-            .sorted { lhs, rhs in
+-                if lhs.y != rhs.y { return lhs.y < rhs.y }
+-                if lhs.x != rhs.x { return lhs.x < rhs.x }
+-                return lhs.luid < rhs.luid
++        return vendorCalls.perform(fallback: []) {
++            var count: Int32 = 0
++            var buffer = [sc_icue_led_position](
++                repeating: sc_icue_led_position(),
++                count: Int(SC_ICUE_DEVICE_LEDCOUNT_MAX)
++            )
++            let error = deviceIdentifier.withCString { pointer in
++                sc_icue_get_led_positions(pointer, Int32(SC_ICUE_DEVICE_LEDCOUNT_MAX), &buffer, &count)
+             }
++            guard error == Int32(SC_ICUE_SUCCESS.rawValue), count > 0 else { return [] }
++
++            return (0..<Int(count))
++                .map { ICUELed(luid: buffer[$0].id, x: buffer[$0].cx, y: buffer[$0].cy) }
++                .sorted { lhs, rhs in
++                    if lhs.y != rhs.y { return lhs.y < rhs.y }
++                    if lhs.x != rhs.x { return lhs.x < rhs.x }
++                    return lhs.luid < rhs.luid
++                }
++        }
+     }
+ 
+     /// Reads the programmable macro (G/M/S) keys a device reports, if any.
+@@ -404,40 +418,44 @@
+     /// workable input route.
+     public func macroKeyIdentifiers(of deviceIdentifier: String) -> [Int] {
+         guard isLibraryLoaded, state.isUsable else { return [] }
+-        var property = sc_icue_make_empty_property()
+-        let error = deviceIdentifier.withCString { pointer in
+-            sc_icue_read_device_property(
+-                pointer,
+-                Int32(SC_ICUE_PROPERTY_MACRO_KEY_ARRAY.rawValue),
+-                0,
+-                &property
+-            )
+-        }
+-        guard error == Int32(SC_ICUE_SUCCESS.rawValue) else { return [] }
+-        defer { _ = sc_icue_free_property(&property) }
++        return vendorCalls.perform(fallback: []) {
++            var property = sc_icue_make_empty_property()
++            let error = deviceIdentifier.withCString { pointer in
++                sc_icue_read_device_property(
++                    pointer,
++                    Int32(SC_ICUE_PROPERTY_MACRO_KEY_ARRAY.rawValue),
++                    0,
++                    &property
++                )
++            }
++            guard error == Int32(SC_ICUE_SUCCESS.rawValue) else { return [] }
++            defer { _ = sc_icue_free_property(&property) }
+ 
+-        guard property.type == Int32(SC_ICUE_DATA_INT32_ARRAY.rawValue) else { return [] }
+-        let array = property.value.array
+-        guard let items = array.items, array.count > 0 else { return [] }
+-        let typed = items.assumingMemoryBound(to: Int32.self)
+-        return (0..<Int(array.count)).map { Int(typed[$0]) }
++            guard property.type == Int32(SC_ICUE_DATA_INT32_ARRAY.rawValue) else { return [] }
++            let array = property.value.array
++            guard let items = array.items, array.count > 0 else { return [] }
++            let typed = items.assumingMemoryBound(to: Int32.self)
++            return (0..<Int(array.count)).map { Int(typed[$0]) }
++        }
+     }
+ 
+     public func batteryLevel(of deviceIdentifier: String) -> Int? {
+         guard isLibraryLoaded, state.isUsable else { return nil }
+-        var property = sc_icue_make_empty_property()
+-        let error = deviceIdentifier.withCString { pointer in
+-            sc_icue_read_device_property(
+-                pointer,
+-                Int32(SC_ICUE_PROPERTY_BATTERY_LEVEL.rawValue),
+-                0,
+-                &property
+-            )
++        return vendorCalls.perform(fallback: nil) {
++            var property = sc_icue_make_empty_property()
++            let error = deviceIdentifier.withCString { pointer in
++                sc_icue_read_device_property(
++                    pointer,
++                    Int32(SC_ICUE_PROPERTY_BATTERY_LEVEL.rawValue),
++                    0,
++                    &property
++                )
++            }
++            guard error == Int32(SC_ICUE_SUCCESS.rawValue) else { return nil }
++            defer { _ = sc_icue_free_property(&property) }
++            guard property.type == Int32(SC_ICUE_DATA_INT32.rawValue) else { return nil }
++            return Int(property.value.int32)
+         }
+-        guard error == Int32(SC_ICUE_SUCCESS.rawValue) else { return nil }
+-        defer { _ = sc_icue_free_property(&property) }
+-        guard property.type == Int32(SC_ICUE_DATA_INT32.rawValue) else { return nil }
+-        return Int(property.value.int32)
+     }
+ 
+     // MARK: - Lighting (shared layer only)
+@@ -448,7 +466,7 @@
+     @discardableResult
+     public func setLayerPriority(_ priority: UInt32) -> Int32 {
+         guard isLibraryLoaded else { return Int32(SC_ICUE_LIBRARY_NOT_LOADED.rawValue) }
+-        return sc_icue_set_layer_priority(min(priority, UInt32(SC_ICUE_LAYER_PRIORITY_MAX)))
++        return vendorCalls.perform(fallback: vendorUnavailable) { sc_icue_set_layer_priority(min(priority, UInt32(SC_ICUE_LAYER_PRIORITY_MAX))) }
+     }
+ 
+     public func setColors(deviceIdentifier: String, colors: [(luid: UInt32, color: RGBColor)]) -> Int32 {
+@@ -464,9 +482,11 @@
+                 a: $0.color.alpha
+             )
+         }
+-        return deviceIdentifier.withCString { pointer in
+-            payload.withUnsafeBufferPointer { buffer in
+-                sc_icue_set_led_colors(pointer, Int32(buffer.count), buffer.baseAddress)
++        return vendorCalls.perform(fallback: vendorUnavailable) {
++            deviceIdentifier.withCString { pointer in
++                payload.withUnsafeBufferPointer { buffer in
++                    sc_icue_set_led_colors(pointer, Int32(buffer.count), buffer.baseAddress)
++                }
+             }
+         }
+     }
+@@ -482,7 +502,7 @@
+     ///   * `CE_DeviceNotFound`  — the mouse went away mid-transaction.
+     public func requestKeyControl(deviceIdentifier: String, level: ICUEAccessLevel) -> Int32 {
+         guard isLibraryLoaded else { return Int32(SC_ICUE_LIBRARY_NOT_LOADED.rawValue) }
+-        return deviceIdentifier.withCString { sc_icue_request_key_control($0, level.rawValue) }
++        return vendorCalls.perform(fallback: vendorUnavailable) { deviceIdentifier.withCString { sc_icue_request_key_control($0, level.rawValue) } }
+     }
+ 
+     /// Returns the device to the default shared access level. Safe to call even
+@@ -490,7 +510,7 @@
+     @discardableResult
+     public func releaseControl(deviceIdentifier: String) -> Int32 {
+         guard isLibraryLoaded else { return Int32(SC_ICUE_LIBRARY_NOT_LOADED.rawValue) }
+-        return deviceIdentifier.withCString { sc_icue_release_control($0) }
++        return vendorCalls.perform(fallback: vendorUnavailable) { deviceIdentifier.withCString { sc_icue_release_control($0) } }
+     }
+ 
+     /// Marks one macro key as intercepted (`true`) or released back to all SDK
+@@ -502,12 +522,14 @@
+         intercepted: Bool
+     ) -> Int32 {
+         guard isLibraryLoaded else { return Int32(SC_ICUE_LIBRARY_NOT_LOADED.rawValue) }
+-        var config = sc_icue_key_event_configuration(
+-            key_id: Int32(macroKeyId),
+-            is_intercepted: intercepted
+-        )
+-        return deviceIdentifier.withCString { pointer in
+-            sc_icue_configure_key_event(pointer, &config)
++        return vendorCalls.perform(fallback: vendorUnavailable) {
++            var config = sc_icue_key_event_configuration(
++                key_id: Int32(macroKeyId),
++                is_intercepted: intercepted
++            )
++            return deviceIdentifier.withCString { pointer in
++                sc_icue_configure_key_event(pointer, &config)
++            }
+         }
+     }
+ 
+--- a/Sources/ScimitarKit/Lighting/ICUEVendorCallExecutor.swift
++++ b/Sources/ScimitarKit/Lighting/ICUEVendorCallExecutor.swift
+@@ -0,0 +1,49 @@
++import Foundation
++
++/// The vendor can wait forever for an iCUE reply. Keep that wait off the input
++/// thread, admit at most one call, and fail promptly while that call is stuck.
++/// A timed-out operation owns its buffers until it actually returns.
++final class ICUEVendorCallExecutor: @unchecked Sendable {
++    private let queue = DispatchQueue(label: "com.ethan.agentic-mouse.icue-calls")
++    private let lock = NSLock()
++    private var busy = false
++    private let timeout: TimeInterval
++
++    init(timeout: TimeInterval = 0.2) { self.timeout = timeout }
++
++    var isBusy: Bool {
++        lock.lock(); defer { lock.unlock() }
++        return busy
++    }
++
++    private final class Work<Value>: @unchecked Sendable {
++        let operation: () -> Value
++        let finished = DispatchSemaphore(value: 0)
++        private let lock = NSLock()
++        private var value: Value?
++        init(_ operation: @escaping () -> Value) { self.operation = operation }
++        func run() {
++            let result = operation()
++            lock.lock(); value = result; lock.unlock()
++        }
++        func result(or fallback: Value) -> Value {
++            lock.lock(); defer { lock.unlock() }
++            return value ?? fallback
++        }
++    }
++
++    func perform<Value>(fallback: Value, _ operation: @escaping () -> Value) -> Value {
++        lock.lock()
++        guard !busy else { lock.unlock(); return fallback }
++        busy = true
++        lock.unlock()
++        let work = Work(operation)
++        queue.async { [self, work] in
++            work.run()
++            lock.lock(); busy = false; lock.unlock()
++            work.finished.signal()
++        }
++        guard work.finished.wait(timeout: .now() + timeout) == .success else { return fallback }
++        return work.result(or: fallback)
++    }
++}
+--- a/Tests/ScimitarKitTests/ICUEVendorCallExecutorTests.swift
++++ b/Tests/ScimitarKitTests/ICUEVendorCallExecutorTests.swift
+@@ -0,0 +1,39 @@
++import XCTest
++@testable import ScimitarKit
++
++final class ICUEVendorCallExecutorTests: XCTestCase {
++    func testVendorWorkRunsOffTheMainThreadAndReturnsItsValue() {
++        let executor = ICUEVendorCallExecutor(timeout: 0.1)
++        XCTAssertEqual(executor.perform(fallback: false) { !Thread.isMainThread }, true)
++        XCTAssertEqual(executor.perform(fallback: 0) { 42 }, 42)
++    }
++
++    func testHungRequestTimesOutRejectsBacklogAndRecoversOnlyAfterCompletion() {
++        let executor = ICUEVendorCallExecutor(timeout: 0.03)
++        let release = DispatchSemaphore(value: 0)
++        let entered = DispatchSemaphore(value: 0)
++        let finished = DispatchSemaphore(value: 0)
++        let start = Date()
++        let result = executor.perform(fallback: -1) {
++            entered.signal()
++            release.wait()
++            finished.signal()
++            return 99
++        }
++        XCTAssertEqual(result, -1)
++        XCTAssertLessThan(Date().timeIntervalSince(start), 0.3)
++        XCTAssertEqual(entered.wait(timeout: .now() + 0.2), .success)
++        for _ in 0..<100 {
++            XCTAssertEqual(executor.perform(fallback: -2) { XCTFail("must not queue work behind the hung SDK"); return 0 }, -2)
++        }
++        release.signal()
++        XCTAssertEqual(finished.wait(timeout: .now() + 0.5), .success)
++        var recovered = -1
++        for _ in 0..<100 where recovered == -1 {
++            recovered = executor.perform(fallback: -1) { 7 }
++            if recovered == -1 { Thread.sleep(forTimeInterval: 0.001) }
++        }
++        XCTAssertEqual(recovered, 7)
++        XCTAssertEqual(result, -1, "late SDK completion never changes the returned fallback")
++    }
++}
+--- a/LEARNINGS.md
++++ b/LEARNINGS.md
+@@ -3218,3 +3218,10 @@
+ ## 2026-10-26 — Shorter held-centre dwell
+ 
+ Ethan shortened switchAppDwell from750ms to500ms of continuous home-centre residence AFTER receiver hold qualification. This changes only the dwell parameter: pointer timing, freshness500ms, watchdog250ms, HIGH baseline and release lifecycle stay unchanged. Preserve boundary coverage just below500ms and just after it, plus leaving/returning and pre-threshold release. The earlier750ms note is historical, not the current setting.
++
++
++## 2026-10-27 — A stalled iCUE request must not freeze mouse input
++
++A live sample found the main thread permanently waiting inside CorsairGetDevices, called by the two-second recovery probe. Both mice stopped because the main thread also owns input dispatch and the unlocked-session heartbeat. Restarting only the hung Agentic Mouse process restored a responsive event loop.
++
++Run vendor IPC through the single bounded ICUEVendorCallExecutor. Each call owns its C buffers on the worker, waits at most200ms at the synchronous boundary, and admits no backlog while a prior operation remains stuck. Later completion must not overwrite the caller's fallback or dereference expired buffers. Keep Swift session state on its existing main queue; retire and invalidate callback contexts when connection/subscription fails or times out. All disconnect, device/property reads, lighting and key-control requests use the same executor. Library loading itself only resolves the C entry points.
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -18,9 +18,9 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.289</string>
++	<string>1.0.290</string>
+ 	<key>CFBundleVersion</key>
+-	<string>295</string>
++	<string>296</string>
+ 	<key>LSMinimumSystemVersion</key>
+ 	<string>13.0</string>
+ 

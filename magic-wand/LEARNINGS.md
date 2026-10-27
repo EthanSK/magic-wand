@@ -1123,3 +1123,15 @@ Print the thin plate with its broad front face on the bed and rear feet upwards.
 ## Check the attached handle silhouette, not only its mechanism (2026-10-27)
 
 The V16 removable loop ended at a flat crop plane, with a separate diagonal bridge connecting it to the lower stud. This left a permanent blunt toe below the attachment. It was real printed material and the user rejected it. Keep the approved upper reach, plane and recessed cam locations, but merge the lower attachment into the curved return. V17 uses a broad curvature above the sweep's minimum bend radius and a rounded housing enclosing the stud collar. Tests check that the old toe region contains no material and the complete collar is inside that curved housing, alongside both-handed attachment/release and cap/button clearance. Both stems and all other assembled wand parts match V16, allowing a loop-only replacement. Geometry and slicing do not certify strength or comfort.
+
+## Native input can stall independently of the wand transport (2026-10-27)
+
+A live Agentic Mouse sample proved that its main thread was waiting for a
+Corsair device-enumeration reply. Both physical mice stopped because the same
+thread dispatches their input. This did not establish a wand Bluetooth fault.
+Keep potentially blocking vendor requests on the bounded worker recorded in
+`integrations/agentic-mouse/icue-hang.patch`, retain C buffers until actual
+completion and reject queued requests while the worker is stuck. A responsive
+main thread after installation does not prove iCUE reconnection or lighting
+recovery; those require separate evidence. Do not change the Puck or receiver
+just to publish a native input fix.
