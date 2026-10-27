@@ -1,5 +1,7 @@
 # Printed loop wand
 
+Latest candidate: [V17 — smooth lower handle attachment](v17/README.md). Replacement-loop-only and complete both-handed projects are included; V16 stems remain compatible.
+
 Ready-to-open Bambu projects are in [Magic Wand 3D models](../../../magic-wand-3d-models/).
 Their freshness and archive privacy checks run with the repository tests.
 When served locally, the preview checks for new exports every two seconds and reloads changed
@@ -364,4 +366,4 @@ Viewing controls (top left of the 3D view):
 - Overhang figures in the manifest are a simple face-angle count, not a slicer's verdict.
 
 
-Latest candidate: [V16 — recessed switches without square surrounds, both hands](v16/README.md). Thin switch plates now print flat. Print the matching pocket coupon before the stems; physical fit remains unverified.
+Previous candidate: [V16 — recessed switches without square surrounds, both hands](v16/README.md). Thin switch plates now print flat. Print the matching pocket coupon before the stems; physical fit remains unverified.
