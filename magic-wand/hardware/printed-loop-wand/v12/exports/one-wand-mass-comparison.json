@@ -1,0 +1,113 @@
+{
+  "scope": "Exactly one complete wand per row, excluding electronics, battery, bought switches, sockets and caps. PETG model mass derived from positive extruding moves, excluding support/brim and start/end custom code. Slicer estimates; no weighed print.",
+  "matched_settings": "P1S 0.4 mm PETG, 0.2 mm layers, 3 walls, 20% infill; normal supports on grips; other parts retain their geometry-specific support strategy.",
+  "versions": {
+    "V11_left_ribbed_windows": {
+      "archive_sha256": "6b999949272ccf9852428f50b2882d38c839ec519595e8585d121c7fd757b9a4",
+      "build_instances": 11,
+      "printed_parts_g": 70.754,
+      "supports_and_brim_g": 3.953,
+      "total_slicer_g": 74.8,
+      "accounted_g": 74.708,
+      "startup_and_rounding_g": 0.092,
+      "features_g": {
+        "Support": 2.6178782032965953,
+        "Inner wall": 24.213409310179106,
+        "Outer wall": 28.466005264691084,
+        "Bottom surface": 0.17846960319808924,
+        "Gap infill": 7.39615078996899,
+        "Brim": 0.5966042327991432,
+        "Support transition": 0.15730203478553592,
+        "Internal solid infill": 5.17781366699447,
+        "Overhang wall": 0.26165113436630955,
+        "Bridge": 1.0094019515381716,
+        "Support interface": 0.5816037226897346,
+        "Sparse infill": 2.023837695265356,
+        "Top surface": 1.2755496771478034,
+        "Floating vertical shell": 0.7520301881305982
+      },
+      "object_mass_mapping_available": true,
+      "object_printed_parts_g": {
+        "Removable_Finger_Loop": 9.079,
+        "Battery_Sled": 0.392,
+        "Sense_Head_Base": 9.616,
+        "Sense_Sliding_Cover": 3.51,
+        "Battery_Twist_Cap": 2.69,
+        "Upper_Shaft": 10.171,
+        "Lower_Shaft": 10.473,
+        "Choc_Top_Slide_Plate": 0.385,
+        "Handle_Left": 24.439
+      },
+      "settings": {
+        "printer_model": "Bambu Lab P1S",
+        "filament_type": [
+          "PETG"
+        ],
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "support_type": "tree(auto)"
+      }
+    },
+    "V12_left_art_nouveau": {
+      "archive_sha256": "5d2df136f6757184cb0df6eb04041e983dc9044af1363c523b20f55042708afb",
+      "build_instances": 11,
+      "printed_parts_g": 75.875,
+      "supports_and_brim_g": 4.465,
+      "total_slicer_g": 80.44,
+      "accounted_g": 80.34,
+      "startup_and_rounding_g": 0.1,
+      "features_g": {
+        "Support": 3.1687494864883465,
+        "Inner wall": 27.769479426060304,
+        "Outer wall": 29.864011769944337,
+        "Bottom surface": 0.1806805397411303,
+        "Gap infill": 7.285321402328983,
+        "Brim": 0.5966042327991432,
+        "Support transition": 0.15060046367974284,
+        "Internal solid infill": 5.405229100561022,
+        "Overhang wall": 0.2740553870678584,
+        "Bridge": 1.018762248830052,
+        "Support interface": 0.5495051261410736,
+        "Sparse infill": 2.0227309134694034,
+        "Top surface": 1.304206595307568,
+        "Floating vertical shell": 0.7500874854954357
+      },
+      "object_mass_mapping_available": true,
+      "object_printed_parts_g": {
+        "Removable_Finger_Loop": 11.315,
+        "Battery_Sled": 0.392,
+        "Sense_Head_Base": 9.616,
+        "Sense_Sliding_Cover": 3.51,
+        "Battery_Twist_Cap": 2.69,
+        "Upper_Shaft": 11.085,
+        "Lower_Shaft": 11.358,
+        "Choc_Top_Slide_Plate": 0.385,
+        "Handle_Left": 25.523
+      },
+      "settings": {
+        "printer_model": "Bambu Lab P1S",
+        "filament_type": [
+          "PETG"
+        ],
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "support_type": "tree(auto)"
+      }
+    }
+  },
+  "physical_mass_measured": false,
+  "weight_budget": {
+    "aim_complete_wand_g": 80.0,
+    "ceiling_complete_wand_g": 100.0,
+    "printed_parts_estimate_g": 75.875,
+    "unweighed_hardware_allowance_for_80g": 4.125,
+    "unweighed_hardware_allowance_for_100g": 24.125,
+    "printed_parts_reduction_percent_from_V11": -7.24,
+    "actual_electronics_battery_switches_keycaps_and_wires_g": null,
+    "complete_wand_mass_verified": false
+  },
+  "without_loop_printed_parts_g": 64.56,
+  "printed_parts_change_from_V11_g": 5.121
+}
