@@ -1,8 +1,10 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V14 — lift-and-left-turn cam-lock loop, both hands](Print-14-README.md).**
+**Latest candidate: [Print V15 — recessed handle attachment, both hands](Print-15-README.md).**
 
-The detachable loop lifts upward and turns left 12° into a rising cam seat, spring preload and a positive reverse-turn catch. Both handed stems are included. The final loop pose, curved Art Nouveau leaf shell, full original raised helix, taper and controls are retained. One left wand estimates 77.003 g printed PETG; hardware and physical fit remain unverified. Use the matching V14 stem and loop, and print its small mount test first.
+The removable loop carries all pegs and release hardware; its receivers sit inside the original wand surface. With the loop off, the stem has no projecting attachment brackets. A 4 mm upward keyhole slide and 12° left cam turn lock the handle. The full raised helix, taper, controls and both handed stems are retained. One left wand estimates 76.139 g printed PETG; hardware and physical fit remain unverified.
+
+**Superseded candidate: [V14 — projecting cam receivers](Print-14-README.md).** Its external housings were rejected for use without the loop.
 
 **Previous candidates: [V13 — upward-seating loop](Print-13-README.md), [V12 — rounded reinforced leaf shell](Print-12-README.md), [V11 — broad curved cells](Print-11-README.md).**
 
