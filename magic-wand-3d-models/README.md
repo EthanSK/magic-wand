@@ -1,6 +1,6 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V11 — ribbed shell with broad open cells, both hands](Print-11-README.md).**
+**Latest candidate: [Print V12 — curved leaves and fuller rounded rails, both hands](Print-12-README.md).**
 
 Larger rounded hexagonal windows, four continuous axial rails, the complete original raised spiral strips and a more open detachable loop. One left wand estimates 70.754 g printed PETG (6.99% below V10); hardware is unweighed. The taper, controls and mating interfaces stay unchanged.
 
