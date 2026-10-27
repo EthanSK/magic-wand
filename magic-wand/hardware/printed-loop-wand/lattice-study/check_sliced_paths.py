@@ -44,9 +44,9 @@ def samples(project):
 
 def inspect(key,manifest,project):
     c=s.configure(key);A,F=samples(project);records={p['name']:p for p in manifest['variants'][key]['parts']+manifest['shared_parts']};checks={}
-    layout=json.loads((HERE/'exports/projects.json').read_text())[key]['complete']
+    layout=json.loads((HERE/'exports/projects.json').read_text())[key]['complete'];external_support_bases={}
     for name,center in zip(layout['part_names'],layout['positions']):
-        if name not in ('Handle_Left','Handle_Right','Lower_Shaft','Upper_Shaft','Removable_Finger_Loop'):continue
+        if name not in ('Handle_Left','Handle_Right','Lower_Shaft','Upper_Shaft','Removable_Finger_Loop','Sense_Open_Cradle'):continue
         transform=np.asarray(records[name]['print_to_assembly']);p=A+[0.,2.,0.]-[*center,0.];xyz=p@transform[:3,:3].T+transform[:3,3];x,y,z=xyz.T
         z0,z1=(61.,173.5) if name.startswith('Handle_') else (160.5,259.5) if name=='Lower_Shaft' else (246.5,365.5) if name=='Upper_Shaft' else (0.,0.)
         areas={'wire_bore_9mm':(x*x+y*y<4.5**2)&(z>z0)&(z<z1)}
@@ -64,6 +64,22 @@ def inspect(key,manifest,project):
                 areas[button+'_wire']=(t*t+(z-zz)**2<3**2)&(r>0)&(r<18)
                 areas[button+'_socket']=(t>-8.1)&(t<-1.5)&(zz-z>-7.6)&(zz-z<2.2)&(r>c.BUTTON_ORIGIN-4.2)&(r<c.BUTTON_ORIGIN-2.8)
                 areas[button+'_clip']=(abs(t)>7.5)&(abs(t)<8.1)&(zz-z>4.5)&(zz-z<7.5)&(r>c.BUTTON_ORIGIN-1.5)&(r<c.BUTTON_ORIGIN-.9)
+        if name=='Sense_Open_Cradle':
+            areas={'head_wire_9mm':(x*x+y*y<4.5**2)&(z>352.5)&(z<374.8),'forward_wire':(x*x+(y-2.)**2<2.7**2)&(z>375)&(z<387.5),'board':(abs(x)<8.6)&(y>c.BOARD_Y+.3)&(y<c.BOARD_Y+c.BOARD_T-.3)&(z>c.BOARD0+.3)&(z<c.BOARD0+20.7),'solder':(abs(x)<5.1)&(y>c.BOARD_Y-5.5)&(y<c.BOARD_Y-.4)&(z>c.BOARD0+3.5)&(z<c.BOARD0+17.5),'usb':(abs(x)<5.7)&(y>c.BOARD_Y-.8)&(y<c.BOARD_Y+4.8)&(z>c.BOARD0+21.3)&(z<411.)}
+        if name=='Sense_Open_Cradle':
+            # The exposed back permits removable support feet on the build
+            # plate below the soldered-board space. These are not supports
+            # trapped inside a hole: require support-only first-layer paths,
+            # at least 0.5 mm outside the actual local back of the holder.
+            candidate=areas['solder']&np.isin(F,['Support','Support transition','Support interface'])&(p[:,2]<=.4)
+            external=np.zeros(len(A),bool);head=s.open_head(c)
+            for zz in np.unique(np.round(z[candidate],5)):
+                section=head.slice(float(zz))
+                if not section.is_empty():
+                    back=section.bounds()[1]
+                    external|=candidate&(abs(z-zz)<.00001)&(y<back-.5)
+            external_support_bases[name]=dict(collections.Counter(F[external]))
+            areas['solder']&=~external
         if name=='Removable_Finger_Loop':
             for i,port in enumerate(c.loop_air_ports()):
                 delta=xyz-np.asarray(port['center']);n=np.asarray(port['inward']);axial=delta@n;cross=delta-axial[:,None]*n;t=delta@np.asarray(port['tangent'])
@@ -71,7 +87,7 @@ def inspect(key,manifest,project):
                 areas[f'broad_face_{i}']=((t/6.5)**2+(axial/1.5)**2<1)&(abs(x)<c.LOOP_WIDTH/2+.3)
         checks[name]={label:dict(collections.Counter(F[mask])) for label,mask in areas.items()}
     assert all(not hits for part in checks.values() for hits in part.values()),(key,checks)
-    return {'project_sha256':s.sha(project),'sample_step_mm':.5,'extruder_offset_mm':[0,2],'path_samples':len(A),'clearance_extrusion_samples':checks}
+    return {'project_sha256':s.sha(project),'sample_step_mm':.5,'extruder_offset_mm':[0,2],'path_samples':len(A),'clearance_extrusion_samples':checks,'removable_support_bases_outside_open_back':external_support_bases}
 
 def main(out):
     manifest=json.loads((HERE/'exports/manifest.json').read_text());report={}

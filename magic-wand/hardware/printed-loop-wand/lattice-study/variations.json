@@ -40,6 +40,62 @@
       "loop_radius_mm": 5.2,
       "loop_wall_mm": 1.15,
       "kind": "leaf"
+    },
+    "one-wide": {
+      "strands": 3,
+      "band_mm": 2.7,
+      "loop_width_mm": 15.0,
+      "loop_radius_mm": 5.2,
+      "loop_wall_mm": 1.45,
+      "kind": "net",
+      "main_depth_mm": 1.8,
+      "label": "One wide spiral",
+      "color": "#50769c",
+      "main_band_mm": 8.0,
+      "wide_strands": [
+        0
+      ],
+      "tip_band_scale": 0.62,
+      "tip_depth_mm": 1.3,
+      "open_head": true
+    },
+    "two-wide": {
+      "strands": 3,
+      "band_mm": 2.7,
+      "loop_width_mm": 15.0,
+      "loop_radius_mm": 5.2,
+      "loop_wall_mm": 1.45,
+      "kind": "net",
+      "main_depth_mm": 1.8,
+      "label": "Two wide spirals",
+      "color": "#3f8a79",
+      "main_band_mm": 7.0,
+      "wide_strands": [
+        0,
+        1
+      ],
+      "tip_band_scale": 0.62,
+      "tip_depth_mm": 1.3,
+      "open_head": true
+    },
+    "broad-frame": {
+      "strands": 3,
+      "band_mm": 3.4,
+      "loop_width_mm": 15.0,
+      "loop_radius_mm": 5.2,
+      "loop_wall_mm": 1.45,
+      "kind": "net",
+      "main_depth_mm": 2.0,
+      "label": "Broad diamond frame",
+      "color": "#946c57",
+      "main_band_mm": 10.0,
+      "wide_strands": [
+        0,
+        1
+      ],
+      "tip_band_scale": 0.62,
+      "tip_depth_mm": 1.3,
+      "open_head": true
     }
   }
 }
