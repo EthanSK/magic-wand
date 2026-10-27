@@ -1147,6 +1147,20 @@ main thread after installation does not prove iCUE reconnection or lighting
 recovery; those require separate evidence. Do not change the Puck or receiver
 just to publish a native input fix.
 
+## Display roles and window identity are separate checks (2026-10-27)
+
+The Split layout incident retained the saved display identifier; the attended
+native probe instead reproduced rejected Chrome windows whose WindowServer and
+Accessibility titles differed among identical frames. Resolve the main external
+workspace role from live screens, while preserving the runtime display identity
+and geometry guards against changed-display writes. For windows, the existing
+unique public Accessibility main-window fallback must also handle a nonempty
+unmatched title. Never guess between remaining candidates; skip a nonstandard
+popover with no matching standard window frame. The native delta is preserved in
+`integrations/agentic-mouse/display-role.patch`. Automated and attended native
+checks do not establish physical mouse acceptance or authorize changing another
+app's saved display layout.
+
 
 ## Lightweight studies must preserve full roots and support landing clearance (2026-10-27)
 

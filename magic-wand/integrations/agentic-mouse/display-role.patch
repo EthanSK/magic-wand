@@ -1,0 +1,249 @@
+--- a/Sources/AgenticMouseApp/ChromeVSCodeLayoutController.swift
++++ b/Sources/AgenticMouseApp/ChromeVSCodeLayoutController.swift
+@@ -3,43 +3,27 @@
+ import ScimitarKit
+ 
+ struct ChromeVSCodeLayoutDisplay: Equatable {
+-    static let preferenceKey = "chromeVSCodeLayoutDisplayUUID"
+-    static let sizePreferenceKey = "chromeVSCodeLayoutDisplaySize"
+-
+     struct Candidate {
+         let display: ChromeVSCodeLayoutDisplay
+-        let name: String
+         let isBuiltIn: Bool
++        let isMain: Bool
+     }
+ 
+-    /// A display UUID can change across a dock/capture-device reconnection.
+-    /// Recover only a unique external display with the saved dimensions.
+-    static func resolve(_ candidates: [Candidate], defaults: UserDefaults) -> Self? {
++    /// Ethan's "Dell" means the main external workspace display. Follow that
++    /// role on every request, independent of dock names, UUIDs and scaling.
++    /// With the menu bar on the laptop, only a sole external is unambiguous.
++    static func resolve(_ candidates: [Candidate]) -> Self? {
+         let external = candidates.filter { !$0.isBuiltIn }
+-        let savedID = defaults.string(forKey: preferenceKey)
+-        let exact = external.filter { $0.display.uuid == savedID }
+-        let savedSize = defaults.dictionary(forKey: sizePreferenceKey)
+-        let width = savedSize?["width"] as? Double
+-        let height = savedSize?["height"] as? Double
+-        let dimensions = external.filter {
+-            $0.display.bounds.width == width && $0.display.bounds.height == height
+-        }
+-        let named = external.filter { $0.name.localizedCaseInsensitiveContains("Dell") }
+-        let matches = !exact.isEmpty ? exact : (!dimensions.isEmpty ? dimensions : named)
++        let main = external.filter(\.isMain)
++        let matches = main.isEmpty ? external : main
+         guard matches.count == 1, let match = matches.first else { return nil }
+-        let display = match.display
+-        if savedID != display.uuid { defaults.set(display.uuid, forKey: preferenceKey) }
+-        if width != display.bounds.width || height != display.bounds.height {
+-            defaults.set(["width": Double(display.bounds.width), "height": Double(display.bounds.height)],
+-                         forKey: sizePreferenceKey)
+-        }
+-        return display
++        return match.display
+     }
+     let uuid: String
+     let bounds: CGRect
+     let visibleFrame: CGRect
+ 
+-    static func current(defaults: UserDefaults = .standard) -> Self? {
++    static func current() -> Self? {
+         guard let primary = NSScreen.screens.first else { return nil }
+         func quartz(_ rect: CGRect) -> CGRect {
+             CGRect(x: rect.minX, y: primary.frame.maxY - rect.maxY,
+@@ -51,9 +35,9 @@
+             else { return nil }
+             return Candidate(display: Self(uuid: uuid, bounds: quartz(screen.frame),
+                                            visibleFrame: quartz(screen.visibleFrame)),
+-                             name: screen.localizedName, isBuiltIn: CGDisplayIsBuiltin(id) != 0)
++                             isBuiltIn: CGDisplayIsBuiltin(id) != 0, isMain: id == CGMainDisplayID())
+         }
+-        return resolve(candidates, defaults: defaults)
++        return resolve(candidates)
+     }
+ 
+     private static func identifier(_ screen: NSScreen) -> String? {
+@@ -94,12 +78,20 @@
+             candidates[$0].title == title
+         }
+         if matchingTitles.count == 1 { return matchingTitles[0] }
+-        let main = matchingTitles.filter { candidates[$0].isMain }
++        // Browser titles can acquire a profile suffix or change before the
++        // WindowServer snapshot catches up. A unique public main-window
++        // identity still identifies a same-frame window on this display.
++        let main = (matchingTitles.isEmpty ? matchingFrames : matchingTitles)
++            .filter { candidates[$0].isMain }
+         return main.count == 1 ? main[0] : nil
+     }
+ }
+ 
+ struct AccessibilityChromeVSCodeLayoutAccess: ChromeVSCodeLayoutAccess {
++    var diagnostic: (String) -> Void = { message in
++        Log(category: "split-layout", sink: OSLogSink()).notice(message)
++    }
++
+     func window(bundleID: String, on display: CGRect) -> WindowResizeTarget? {
+         guard AXIsProcessTrusted(),
+               let app = NSRunningApplication.runningApplications(withBundleIdentifier: bundleID).first,
+@@ -120,6 +112,7 @@
+                 title: AccessibilityWindowResizeAccess.attribute(window, kAXTitleAttribute) as? String ?? "",
+                 isMain: mainWindow.map { CFEqual($0, window) } ?? false))
+         }
++        diagnostic("\(bundleID): AX windows=\(axWindows.count), resizable=\(candidates.count)")
+         // Match the frontmost normal window on this display, without activating
+         // the app. A title or main-window match disambiguates restored frames.
+         for info in windows {
+@@ -129,9 +122,17 @@
+                   let frame = CGRect(dictionaryRepresentation: raw),
+                   frame.width >= 120, frame.height >= 80,
+                   display.contains(CGPoint(x: frame.midX, y: frame.midY)) else { continue }
++            // Normal-layer popovers can precede the real editor/browser. They
++            // have no standard AX window; do not report the app as absent.
++            guard candidates.contains(where: {
++                WindowResizeGeometry.approximatelyEqual($0.1.frame, frame)
++            }) else { continue }
+             guard let index = ChromeVSCodeLayoutWindowMatcher.index(
+                 frame: frame, title: info[kCGWindowName as String] as? String ?? "",
+-                candidates: candidates.map(\.1)) else { return nil }
++                candidates: candidates.map(\.1)) else {
++                diagnostic("\(bundleID): unmatched visible frame=\(frame), AX frames=\(candidates.map { $0.1.frame })")
++                return nil
++            }
+             return candidates[index].0
+         }
+         return nil
+--- a/Sources/ScimitarKit/App/ModePickerCoordinator.swift
++++ b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
+@@ -1230,7 +1230,8 @@
+         PhysicalCell.all.map { cell in
+             if let control = WheelChordControl.extraUtilitiesControl(for: cell) {
+                 return ModeHUDLegendItem(cell: cell, gesture: control.hudGesture,
+-                                         accent: control.hudAccent)
++                                         accent: control.hudAccent,
++                                         controlStatus: control == .chromeVSCodeLayout ? .reportedBroken : .normal)
+             }
+             if let action = ModeUtilityAction.extraUtilitiesAction(for: cell) {
+                 return ModeHUDLegendItem(
+--- a/Tests/AgenticMouseAppTests/ChromeVSCodeLayoutTests.swift
++++ b/Tests/AgenticMouseAppTests/ChromeVSCodeLayoutTests.swift
+@@ -1,4 +1,5 @@
+ import XCTest
++import ApplicationServices
+ @testable import AgenticMouseApp
+ import ScimitarKit
+ 
+@@ -97,6 +98,8 @@
+         for source in MouseSource.allCases {
+             XCTAssertEqual(ModePickerCoordinator.extraUtilitiesLegend(for: source).first { $0.cell.rawValue == 6 }?.actionTitle,
+                            "Split Chrome / VS Code")
++            XCTAssertEqual(ModePickerCoordinator.extraUtilitiesLegend(for: source).first { $0.cell.rawValue == 6 }?.controlStatus,
++                           .reportedBroken, "Only Ethan's physical acceptance clears a reported failure")
+         }
+     }
+ 
+@@ -113,6 +116,9 @@
+         XCTAssertEqual(ChromeVSCodeLayoutWindowMatcher.index(
+             frame: frame, title: "", candidates: windows), 1,
+             "Accessibility main window resolves hidden WindowServer titles")
++        XCTAssertEqual(ChromeVSCodeLayoutWindowMatcher.index(
++            frame: frame, title: "Stale browser tab title", candidates: windows), 1,
++            "A nonempty stale/decorated title must not discard the main-window identity")
+     }
+ 
+     func testWindowMatchingDoesNotGuessBetweenUnidentifiedDuplicates() {
+@@ -126,36 +132,39 @@
+         XCTAssertNil(ChromeVSCodeLayoutWindowMatcher.index(frame: frame.offsetBy(dx: 2000, dy: 0), title: "Same title", candidates: windows))
+     }
+ 
+-    func testDisplayDimensionsRecoverChangedUUIDAfterRestart() {
+-        let suite = "layout-test-\(UUID().uuidString)"
+-        let defaults = UserDefaults(suiteName: suite)!
+-        defer { defaults.removePersistentDomain(forName: suite) }
+-        defaults.set("old-id", forKey: ChromeVSCodeLayoutDisplay.preferenceKey)
+-        func candidate(_ id: String, _ width: CGFloat, _ height: CGFloat, builtIn: Bool = false)
+-            -> ChromeVSCodeLayoutDisplay.Candidate {
+-            .init(display: .init(uuid: id, bounds: CGRect(x: 0, y: 0, width: width, height: height),
+-                                 visibleFrame: .zero), name: "Capture device", isBuiltIn: builtIn)
+-        }
+-        XCTAssertEqual(ChromeVSCodeLayoutDisplay.resolve([candidate("old-id", 3440, 1440)], defaults: defaults)?.uuid, "old-id")
+-        let reloaded = UserDefaults(suiteName: suite)!
++    private func candidate(_ id: String, builtIn: Bool = false, main: Bool = false,
++                           size: CGSize = CGSize(width: 3440, height: 1440)) -> ChromeVSCodeLayoutDisplay.Candidate {
++        .init(display: .init(uuid: id, bounds: CGRect(origin: .zero, size: size),
++                             visibleFrame: CGRect(origin: .zero, size: size)),
++              isBuiltIn: builtIn, isMain: main)
++    }
++
++    func testMainExternalRoleSurvivesIdentityResolutionAndEnumerationChanges() {
++        let secondary = candidate("secondary") // Equal dimensions must not override the role.
+         XCTAssertEqual(ChromeVSCodeLayoutDisplay.resolve([
+-            candidate("laptop", 3440, 1440, builtIn: true),
+-            candidate("portrait", 1920, 1080), candidate("new-id", 3440, 1440)
+-        ], defaults: reloaded)?.uuid, "new-id")
+-        XCTAssertEqual(reloaded.string(forKey: ChromeVSCodeLayoutDisplay.preferenceKey), "new-id")
+-        XCTAssertNil(ChromeVSCodeLayoutDisplay.resolve([
+-            candidate("a", 3440, 1440), candidate("b", 3440, 1440)
+-        ], defaults: reloaded), "Identical external displays are ambiguous")
+-        XCTAssertNil(ChromeVSCodeLayoutDisplay.resolve([candidate("portrait", 1920, 1080)], defaults: reloaded))
++            secondary, candidate("old-id", main: true), candidate("laptop", builtIn: true)
++        ])?.uuid, "old-id")
++        XCTAssertEqual(ChromeVSCodeLayoutDisplay.resolve([
++            candidate("laptop", builtIn: true), candidate("new-id", main: true,
++                size: CGSize(width: 2560, height: 1080)), secondary
++        ])?.uuid, "new-id")
+     }
+ 
++    func testLaptopMainUsesOnlyAnUnambiguousExternalAndNeverTheLaptop() {
++        let laptop = candidate("laptop", builtIn: true, main: true)
++        XCTAssertNil(ChromeVSCodeLayoutDisplay.resolve([laptop]))
++        XCTAssertEqual(ChromeVSCodeLayoutDisplay.resolve([laptop, candidate("external")])?.uuid, "external")
++        XCTAssertNil(ChromeVSCodeLayoutDisplay.resolve([laptop, candidate("a"), candidate("b")]))
++        XCTAssertNil(ChromeVSCodeLayoutDisplay.resolve([candidate("a", main: true), candidate("b", main: true)]))
++    }
++
+     func testNativeLayoutRoundTripWhenExplicitlyRequested() throws {
+         guard ProcessInfo.processInfo.environment["AGENTIC_LAYOUT_LIVE_PROBE"] == "1" else {
+             throw XCTSkip("Requires an attended native-window test")
+         }
+-        let display = try XCTUnwrap(ChromeVSCodeLayoutDisplay.current(
+-            defaults: UserDefaults(suiteName: "com.ethan.agentic-mouse")!))
+-        let access = AccessibilityChromeVSCodeLayoutAccess()
++        let display = try XCTUnwrap(ChromeVSCodeLayoutDisplay.current())
++        let access = AccessibilityChromeVSCodeLayoutAccess(diagnostic: { print($0) })
++        print("Layout probe: trusted=\(AXIsProcessTrusted()) display=\(display.bounds)")
+         let code = try XCTUnwrap(access.window(bundleID: "com.microsoft.VSCode", on: display.bounds))
+         let chrome = try XCTUnwrap(access.window(bundleID: "com.google.Chrome", on: display.bounds))
+         let codeBefore = try XCTUnwrap(code.frame()), chromeBefore = try XCTUnwrap(chrome.frame())
+--- a/LEARNINGS.md
++++ b/LEARNINGS.md
+@@ -3225,3 +3225,14 @@
+ A live sample found the main thread permanently waiting inside CorsairGetDevices, called by the two-second recovery probe. Both mice stopped because the main thread also owns input dispatch and the unlocked-session heartbeat. Restarting only the hung Agentic Mouse process restored a responsive event loop.
+ 
+ Run vendor IPC through the single bounded ICUEVendorCallExecutor. Each call owns its C buffers on the worker, waits at most200ms at the synchronous boundary, and admits no backlog while a prior operation remains stuck. Later completion must not overwrite the caller's fallback or dereference expired buffers. Keep Swift session state on its existing main queue; retire and invalidate callback contexts when connection/subscription fails or times out. All disconnect, device/property reads, lighting and key-control requests use the same executor. Library loading itself only resolves the C entry points.
++
++
++## 2026-10-27 — Split layout follows the main external workspace role
++
++Ethan's “Dell” split is the main external workspace display. Resolve that role from the current primary display, excluding the built-in panel; if the primary is built-in, accept only a sole external display. Do not persist or match its name, UUID or dimensions. Runtime UUID and geometry remain a transaction identity so a hotplug/reconfiguration cancels old writes. Equal-size external screens are safe when one has the primary role; multiple external screens with a built-in primary remain ambiguous.
++
++This incident's saved UUID still matched. The native probe reproduced an independent lookup failure: several Chrome windows had identical frames, and WindowServer titles differed from Accessibility titles. The old matcher discarded a unique public AX main-window identity whenever a nonempty title had no exact match. Apply the existing main-window fallback to that case too; never guess when multiple candidates remain. Skip normal-layer popovers with no standard AX-window frame rather than declaring the app absent. Diagnostics record only app bundle, counts and geometry, never window titles.
++
++The final native probe swapped both half-screen layouts four times, checked their frames and restored both originals. Hardware-free regressions cover changed UUID/resolution/enumeration, primary-role changes, equal-size external screens, laptop-only/ambiguous layouts and stale window titles. Physical mouse acceptance remains separate.
++
++Monitor audit: all mouse/keypad HUDs enumerate current NSScreen instances and reconcile screen-parameter changes; wand HUD/reminder placement uses live screens/recorder geometry; hovered window resizing uses current window coordinates; Chrome Space restoration resolves current Space membership; Brightness/Spaces/Mission Control/App Exposé/Magnet use system shortcuts rather than persisted monitor IDs. Stay's saved layouts belong to Stay and its supported repair workflow, not this selector. No other persisted screen-ID selector exists in Agentic Mouse Sources/Scripts.
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -18,9 +18,9 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.290</string>
++	<string>1.0.291</string>
+ 	<key>CFBundleVersion</key>
+-	<string>296</string>
++	<string>297</string>
+ 	<key>LSMinimumSystemVersion</key>
+ 	<string>13.0</string>
+ 

@@ -373,3 +373,29 @@ The same Agentic Mouse process then connected, subscribed to events, found the
 lighting target and received real Corsair Utility and HUD show/hide button events.
 The original vendor stall trigger and physical lighting appearance remain unverified.
 The 500 ms qualified Switch App dwell, receiver and saved Puck program are unchanged.
+
+## Split layout follows the current main external display
+
+`integrations/agentic-mouse/display-role.patch` preserves the five-file incremental
+change from local Agentic Mouse 1.0.290 (296) to installed 1.0.291 (297). Apply it
+after `icue-hang.patch` and the preceding local integration patches. It is not a
+complete distribution and does not apply directly to the older public Agentic
+Mouse main branch. Its SHA-256 is
+`708b15e2a0b3062b0ab6b560875181617a9a221ac665ea945ca02c153fe1aea0`.
+
+Split Chrome / VS Code resolves the main external workspace display afresh on each
+request. If the built-in display is primary, only a sole external display is
+accepted. Saved display names, identifiers and dimensions no longer select the
+target. Runtime identity and geometry still cancel a transaction if its display
+changes. A unique public Accessibility main-window identity can resolve same-frame
+Chrome windows whose WindowServer and Accessibility titles differ; ambiguous
+windows remain rejected, and unmatched nonstandard popovers are skipped.
+
+The patch reproduced all five native source files from the retained baseline. The
+installed Developer ID signature and executable matched the release receipt. The
+native suite reported 1,123 tests, four skips and no failures; the 12-case attended
+probe included four layout swaps and exact restoration of both original frames.
+Physical mouse acceptance remains unverified, so Split retains its reported-broken
+indicator. The monitor audit found no other persisted monitor selector in Agentic
+Mouse. Stay's saved layouts, Better Git, Wand Receiver and the saved Puck program
+were not changed by this delta.
