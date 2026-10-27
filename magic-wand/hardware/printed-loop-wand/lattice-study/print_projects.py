@@ -20,7 +20,7 @@ def centers(both=True,open_head=False):
 
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 
-def prepare_layout(path,key,both,c,record):
+def prepare_layout(path,key,both,c,record,*,support_start=352.,plate_version="V18"):
     """The open studies need supports where V18's closed shaft did not."""
     with zipfile.ZipFile(path) as z:files={i.filename:z.read(i.filename) for i in z.infolist()}
     cfg=ET.fromstring(files['Metadata/model_settings.config'])
@@ -35,7 +35,7 @@ def prepare_layout(path,key,both,c,record):
         # Only the low back of the flat cradle needs removable supports. Auto
         # support filled the board slot despite blockers; limit landing sources
         # to these explicit back-facing patches, away from all functional gaps.
-        zones=[c.box(-10,10,-9.6,-6.85,352.,369.),c.box(-14,14,-7.2,-6.85,374.8,375.6)]
+        zones=[c.box(-10,10,-9.6,-6.85,support_start,369.),c.box(-14,14,-7.2,-6.85,374.8,375.6)]
         for sign in (-1,1):zones.append(c.box(sign*11.5-3.,sign*11.5+3.,-8.2,-6.85,369.,399.))
         support=c.union(zones).to_mesh()
         t=np.linalg.inv(np.asarray(next(p for p in record['parts'] if p['name']=='Sense_Open_Cradle')['print_to_assembly']))
@@ -51,7 +51,7 @@ def prepare_layout(path,key,both,c,record):
         part=ET.SubElement(target,'part',id=str(newid),subtype='support_enforcer');ET.SubElement(part,'metadata',key='name',value='Support low back only')
         files['3D/3dmodel.model']=ET.tostring(model,encoding='utf-8',xml_declaration=True)
     for m in cfg.findall('./plate/metadata'):
-        if m.get('key')=='plater_name':m.set('value',f'Print V18 {key} - '+('both handed stems' if both else 'one left wand'))
+        if m.get('key')=='plater_name':m.set('value',f'Print {plate_version} {key} - '+('both handed stems' if both else 'one left wand'))
     files['Metadata/model_settings.config']=ET.tostring(cfg,encoding='utf-8',xml_declaration=True)
     with zipfile.ZipFile(path,'w',zipfile.ZIP_DEFLATED) as z:
         for name,data in files.items():z.writestr(name,data)
