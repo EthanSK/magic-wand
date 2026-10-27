@@ -1,6 +1,6 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V17 — smooth lower handle attachment, both hands](Print-17-README.md).**
+**Latest candidate: [Print V18 — direct seated handle, slimmer grip, both hands](Print-18-README.md).**
 
 The curved lower return encloses its stud collar, removing V16’s exposed diagonal bridge and hanging toe. Only the universal removable loop needs reprinting; V16 stems still fit. One left wand estimates 75.048 g printed PETG. Physical fit and strength remain unverified.
 

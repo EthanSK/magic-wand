@@ -1122,7 +1122,7 @@ Print the thin plate with its broad front face on the bed and rear feet upwards.
 
 ## Check the attached handle silhouette, not only its mechanism (2026-10-27)
 
-The V16 removable loop ended at a flat crop plane, with a separate diagonal bridge connecting it to the lower stud. This left a permanent blunt toe below the attachment. It was real printed material and the user rejected it. Keep the approved upper reach, plane and recessed cam locations, but merge the lower attachment into the curved return. V17 uses a broad curvature above the sweep's minimum bend radius and a rounded housing enclosing the stud collar. Tests check that the old toe region contains no material and the complete collar is inside that curved housing, alongside both-handed attachment/release and cap/button clearance. Both stems and all other assembled wand parts match V16, allowing a loop-only replacement. Geometry and slicing do not certify strength or comfort.
+The V16 lower loop left a permanent toe below a separate bridge. V17 removed that toe but replaced it with a rounded U return and a visible gap around the small stud; the user rejected that interpretation too. The current requirement is matching direct inward arms at both ends, broad shoulders seated in recessed wand openings, and substantial captured pegs that lock by an upward lift and short turn. The bare wand must remain usable without projecting mounts. Preserve this explicit correction over the older curved-return interpretation. V18 keeps the 10.4 mm route and the battery cap while reducing the grip core diameter by a further 1.6 mm. Geometry and slicing do not certify strength or comfort.
 
 ## Native input can stall independently of the wand transport (2026-10-27)
 
