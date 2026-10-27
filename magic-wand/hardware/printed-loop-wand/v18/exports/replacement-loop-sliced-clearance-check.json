@@ -1,0 +1,36 @@
+{
+  "extruder_offset_mm": [
+    0,
+    2
+  ],
+  "sample_step_mm": 0.5,
+  "path_samples": 301600,
+  "features": {
+    "Support interface": 4678,
+    "Support": 19387,
+    "Support transition": 1725,
+    "Inner wall": 99608,
+    "Outer wall": 85790,
+    "Gap infill": 19699,
+    "Bottom surface": 1007,
+    "Internal solid infill": 15832,
+    "Overhang wall": 1932,
+    "Bridge": 4389,
+    "Sparse infill": 30780,
+    "Floating vertical shell": 11396,
+    "Top surface": 5377
+  },
+  "clearance_extrusion_samples": {
+    "Removable_Finger_Loop": {
+      "main_9mm_clearance": {},
+      "loop_contact_airflow_0": {},
+      "loop_broad_face_0": {},
+      "loop_contact_airflow_1": {},
+      "loop_broad_face_1": {},
+      "loop_contact_airflow_2": {},
+      "loop_broad_face_2": {}
+    }
+  },
+  "project_sha256": "1c91e3aa3cebab99773297bf6af7b8b94a5e965fb5a8737cbafe5cd7edc7dc26",
+  "note": "Checks extrusion centerlines through both handed handles, both shafts and the two head parts in conservative interior clearances; excludes custom start/end G-code. Not a physical-print test."
+}
