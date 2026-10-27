@@ -238,6 +238,147 @@
         "support_type": "tree(auto)"
       },
       "printed_parts_reduction_percent": 3.88
+    },
+    "one-wide": {
+      "archive_sha256": "654e5865f551af9889b2afdb7ec62ae3cc1ddfe85c348da77470578ff5d72842",
+      "build_instances": 10,
+      "printed_parts_g": 57.47,
+      "supports_and_brim_g": 3.646,
+      "total_slicer_g": 61.21,
+      "accounted_g": 61.116,
+      "startup_and_rounding_g": 0.094,
+      "features_g": {
+        "Support": 2.356453086773857,
+        "Support interface": 0.5242527411211457,
+        "Support transition": 0.18589260468793548,
+        "Inner wall": 22.20754731894972,
+        "Outer wall": 21.797822697540095,
+        "Bottom surface": 0.13614445526808247,
+        "Gap infill": 4.542963360021662,
+        "Brim": 0.5794943551870857,
+        "Internal solid infill": 3.3610721903837777,
+        "Overhang wall": 0.43994151784711144,
+        "Bridge": 0.7483994538647104,
+        "Sparse infill": 2.3343935130836053,
+        "Top surface": 1.0843057739232496,
+        "Floating vertical shell": 0.8178145158539952
+      },
+      "object_mass_mapping_available": true,
+      "object_printed_parts_g": {
+        "Removable_Finger_Loop": 10.051,
+        "Battery_Sled": 0.392,
+        "Sense_Open_Cradle": 2.895,
+        "Battery_Twist_Cap": 2.69,
+        "Upper_Shaft": 9.923,
+        "Lower_Shaft": 9.59,
+        "Choc_Recessed_Plate": 0.436,
+        "Handle_Left": 21.493
+      },
+      "settings": {
+        "printer_model": "Bambu Lab P1S",
+        "filament_type": [
+          "PETG"
+        ],
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "support_type": "tree(auto)"
+      },
+      "printed_parts_reduction_percent": 20.63
+    },
+    "two-wide": {
+      "archive_sha256": "9bb952bcaffd05cd2d5faa27a10b2ff02cd926ddacbd8d0166d9d2b11014cae8",
+      "build_instances": 10,
+      "printed_parts_g": 58.291,
+      "supports_and_brim_g": 2.798,
+      "total_slicer_g": 61.18,
+      "accounted_g": 61.089,
+      "startup_and_rounding_g": 0.091,
+      "features_g": {
+        "Support": 1.5304998208028284,
+        "Support interface": 0.49297320342363954,
+        "Support transition": 0.16913798961415763,
+        "Inner wall": 22.843806060131566,
+        "Outer wall": 22.00463947150816,
+        "Bottom surface": 0.13614445526808247,
+        "Gap infill": 4.535149080986447,
+        "Brim": 0.6054080233909069,
+        "Internal solid infill": 3.366208834590523,
+        "Overhang wall": 0.43377418462024947,
+        "Bridge": 0.7483994538647104,
+        "Sparse infill": 2.3343935130836053,
+        "Top surface": 1.070744947685646,
+        "Floating vertical shell": 0.8177475566550351
+      },
+      "object_mass_mapping_available": true,
+      "object_printed_parts_g": {
+        "Removable_Finger_Loop": 10.051,
+        "Battery_Sled": 0.392,
+        "Sense_Open_Cradle": 2.895,
+        "Battery_Twist_Cap": 2.69,
+        "Upper_Shaft": 10.143,
+        "Lower_Shaft": 9.866,
+        "Choc_Recessed_Plate": 0.436,
+        "Handle_Left": 21.818
+      },
+      "settings": {
+        "printer_model": "Bambu Lab P1S",
+        "filament_type": [
+          "PETG"
+        ],
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "support_type": "tree(auto)"
+      },
+      "printed_parts_reduction_percent": 19.5
+    },
+    "broad-frame": {
+      "archive_sha256": "490942506139b8faf6300e660c6bda93f30f26a89df4c62a583c59d5ad00f828",
+      "build_instances": 10,
+      "printed_parts_g": 60.079,
+      "supports_and_brim_g": 2.687,
+      "total_slicer_g": 62.86,
+      "accounted_g": 62.766,
+      "startup_and_rounding_g": 0.094,
+      "features_g": {
+        "Support": 1.4155390628054414,
+        "Support interface": 0.4901756102127008,
+        "Support transition": 0.1676321102203875,
+        "Inner wall": 23.60107391166248,
+        "Outer wall": 22.725692110372314,
+        "Bottom surface": 0.13614445526808247,
+        "Gap infill": 4.852369233020118,
+        "Brim": 0.613195146072179,
+        "Internal solid infill": 3.3681930201600747,
+        "Overhang wall": 0.4281534608396421,
+        "Bridge": 0.7486445636331672,
+        "Sparse infill": 2.336073755208974,
+        "Top surface": 1.0639501163451694,
+        "Floating vertical shell": 0.8189536775545546
+      },
+      "object_mass_mapping_available": true,
+      "object_printed_parts_g": {
+        "Removable_Finger_Loop": 10.051,
+        "Battery_Sled": 0.392,
+        "Sense_Open_Cradle": 2.895,
+        "Battery_Twist_Cap": 2.69,
+        "Upper_Shaft": 10.667,
+        "Lower_Shaft": 10.414,
+        "Choc_Recessed_Plate": 0.436,
+        "Handle_Left": 22.535
+      },
+      "settings": {
+        "printer_model": "Bambu Lab P1S",
+        "filament_type": [
+          "PETG"
+        ],
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "support_type": "tree(auto)"
+      },
+      "printed_parts_reduction_percent": 17.03
     }
   },
   "physical_mass_measured": false,

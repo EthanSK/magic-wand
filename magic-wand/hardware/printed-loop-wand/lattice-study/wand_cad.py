@@ -62,25 +62,30 @@ def ribbon(c, zone, start, phase, strand, width):
         for z in (float(a),d):
             rad=c.radius(z) if zone=='grip' else c.shaft_radius(z,start)
             theta=float(c.b.rib_angle(z,strand))+phase
-            half=math.degrees(width/(2*rad))
+            half=math.degrees((width(z) if callable(width) else width)/(2*rad))
             verts += [(0.,0.,z)] + [(40*math.sin(math.radians(t)),40*math.cos(math.radians(t)),z)
                                     for t in (theta-half,theta+half)]
         pieces.append(Manifold.hull_points(verts))
     return c.union(pieces)
 
 def configure(key):
-    spec=SPECS['variants'][key]; c=load_base(key)
+    spec=SPECS['variants'][key]; c=load_base(key); c.study_spec=spec
     original_slots=c.body_slots; original_rails=c.axial_rails
     # Keep V18's proven connection rails; lightening removes the spans between
     # them. Do not thin the load path under a recessed lock or socket.
     # The loop's exterior AND skin get thinner. Solid mounting roots are retained.
     c.LOOP_WIDTH=spec['loop_width_mm']; c.LOOP_RADIUS=spec['loop_radius_mm'];c.LOOP_WALL=spec['loop_wall_mm']
     guard=hardware_guard(c)
+    def taper(z):
+        # Ethan's 'less material towards the tip': wide bands stay full near
+        # the hand and taper through the shaft. Original four studies stay exact.
+        return 1.-(1.-spec.get('tip_band_scale',1.))*max(0.,min(1.,(z-c.HANDLE_END)/(c.TOP-c.HANDLE_END)))
     if spec['kind']=='net':
         @lru_cache(None)
         def slots(zone,start=c.HANDLE_END):
             z0,z1=extent(c,zone,start)
-            keep=[ribbon(c,zone,start,360*k/spec['strands'],strand,spec['band_mm'])
+            keep=[ribbon(c,zone,start,360*k/spec['strands'],strand,
+                         (lambda z:spec['main_band_mm']*taper(z)) if k==0 and strand in spec.get('wide_strands',[]) else spec['band_mm'])
                   for k in range(spec['strands']) for strand in (0,1)]
             # Four continuous axial paths connect both collars. Depth is added
             # after cavity subtraction by V18's canonical rail generator.
@@ -89,6 +94,20 @@ def configure(key):
             eligible=c.cyl(40.,z0,z1)-(guard if zone=='grip' else Manifold())
             return (eligible-c.union(keep))+(original_slots(zone,start)-eligible)
         c.body_slots=slots
+        if spec.get('main_depth_mm'):
+            @lru_cache(None)
+            def reinforced_rails(zone,start=c.HANDLE_END):
+                z0,z1=extent(c,zone,start)
+                radial=lambda z:c.radius(z) if zone=='grip' else c.shaft_radius(z,start)
+                # Add backing inside the selected wide strips after hollowing.
+                # Keep a 0.15 mm margin beyond the original 10.4 mm wire route.
+                depth=lambda z:spec.get('tip_depth_mm',spec['main_depth_mm'])+(spec['main_depth_mm']-spec.get('tip_depth_mm',spec['main_depth_mm']))*max(0.,min(1.,(c.TOP-z)/(c.TOP-c.HANDLE_END)))
+                shell=c.cyl(radial(z0)-.8,z0,z1,radial(z1)-.8)-c.cyl(max(5.35,radial(z0)-depth(z0)),z0,z1,max(5.35,radial(z1)-depth(z1)))
+                wide=c.union([ribbon(c,zone,start,0.,strand,lambda z:spec['main_band_mm']*taper(z)) for strand in spec['wide_strands']])
+                backing=shell^wide
+                if zone=='grip':backing-=guard
+                return original_rails(zone,start)+backing
+            c.axial_rails=reinforced_rails
     else:
         # A supporting-shell option retains V18's full spiral strips, but opens
         # longer curved cells. Hardware-region holes remain exactly V18.
@@ -122,7 +141,30 @@ def models_for(c):
     # Add the canonical solid roots to the slimmer loop without splicing nearly
     # coincident curved tube skins. Stem/shaft interfaces are protected upstream.
     models['Removable_Finger_Loop'] += reference_part(c,'Removable_Finger_Loop')^protected_region(c,'Removable_Finger_Loop')
+    if c.study_spec.get('open_head'):models['Sense_Open_Cradle']=open_head(c)
     return models
+
+def open_head(c):
+    # Ethan's 'not so bulky' tip: an open holder, not the decorative diamond
+    # shell. The lower bayonet, PCB corner pockets and bridge spring are reused.
+    neck=c.head_base()^c.cyl(30.,c.TOP,c.TOP+17.)
+    guides=c.board_corner_guides()^c.box(-11.2,11.2,-7.4,-2.1,374.5,399.)
+    clip=c.board_release_clip()
+    def rod(points,radii):
+        spheres=[Manifold.sphere(r,16).translate(p) for p,r in zip(points,radii)]
+        return c.union([Manifold.batch_hull([a,b]) for a,b in zip(spheres,spheres[1:])])
+    arms=[];seats=[]
+    for sign in (-1,1):
+        pts=[(sign*8.,-4.8,367.),(sign*13.2,-6.3,374.8),(sign*10.6,-6.3,382.),(sign*10.6,-6.3,395.),(sign*10.,-4.,399.),(sign*9.,0.,403.),(sign*7.4,3.4,409.)]
+        arms.append(rod(pts,[1.9,1.65,1.5,1.45,1.3,1.1,1.]))
+        # Back supports meet short PCB ends/corners. Leave long solder pads open.
+        for z in (c.BOARD0+1.,c.BOARD0+16.):
+            seats.append(Manifold.batch_hull([c.box(sign*6.3-.5,sign*6.3+.5,c.BOARD_Y-.8,c.BOARD_Y,z-.45,z+.45),c.box(sign*10.6-.6,sign*10.6+.6,-7.4,-5.5,z-.9,z+.9)]))
+        seats.append(c.box(sign*10.4-1.2,sign*10.4+1.2,-7.4,-5.5,375.6,398.4))
+        upper=c.box(6.25,11.5,-7.4,-5.5,397.2,398.2)+c.box(6.25,7.65,-7.4,-2.1,397.2,398.2)
+        seats.append(upper if sign>0 else upper.mirror((1,0,0)))
+    frame=c.union([guides,clip]+arms+seats)^c.box(-30,30,-30,30,369.,411.)
+    return (neck+frame).simplify(.0001)
 
 def solid_difference(a,b): return abs((a-b).volume())+abs((b-a).volume())
 
@@ -173,6 +215,15 @@ def checks(c, models, interface_tolerance=.03):
                 if p.area()>.01 and (p^prev).area()<.001:islands.append(round(float(z),3))
         out['floating_layer_starts'][name]=islands
         assert not islands,(name,'floating starts',islands[:10])
+    if 'Sense_Open_Cradle' in models:
+        head=models['Sense_Open_Cradle'];ref=c.head_base()
+        probes={'board':c.box(-8.9,8.9,c.BOARD_Y,c.BOARD_Y+c.BOARD_T,c.BOARD0,c.BOARD0+21.),'solder':c.box(-5.4,5.4,c.BOARD_Y-6.,c.BOARD_Y-.25,c.BOARD0+3.,c.BOARD0+18.),'usb':c.box(-5.7,5.7,c.BOARD_Y-.8,c.BOARD_Y+4.8,c.BOARD0+21.3,411.),'wire':c.cyl(2.7,375.,387.5).translate((0.,2.,0.))}
+        out['open_head']={'clearances_mm3':{n:abs((head^q).volume()) for n,q in probes.items()},'neck_difference_mm3':solid_difference(ref^c.cyl(30,c.TOP,c.TOP+16.5),head^c.cyl(30,c.TOP,c.TOP+16.5)),'clip_material_lost_mm3':abs((c.board_release_clip()-head).volume()),'bounds_mm':list(head.bounding_box()),'physical_retention_verified':False}
+        pockets=c.union([c.box(-10.5,10.5,-6.3,-2.1,a,b) for a,b in [(375.05,375.8),(376.15,377.35),(395.65,398.2)]])
+        out['open_head']['corner_pocket_material_lost_mm3']=abs(((c.board_corner_guides()^pockets)-head).volume())
+        assert out['open_head']['corner_pocket_material_lost_mm3']<interface_tolerance,out['open_head']
+        assert max(out['open_head']['clearances_mm3'].values())<interface_tolerance,out['open_head']
+        assert out['open_head']['neck_difference_mm3']<interface_tolerance and out['open_head']['clip_material_lost_mm3']<interface_tolerance,out['open_head']
     return out
 
 def export_part(c,name,m,dest):
@@ -186,7 +237,7 @@ def export_part(c,name,m,dest):
         empty_volume+=sum(abs(p.volume()) for p in empty)
         assert empty_volume<1e-5,(name,'nonempty disconnected pieces')
         m=c.union([p for p in parts if abs(p.volume())>=1e-6]).simplify(.001)
-    rot=(0,-90,0) if name=='Removable_Finger_Loop' else (0,0,0)
+    rot=(0,-90,0) if name=='Removable_Finger_Loop' else (90,0,0) if name=='Sense_Open_Cradle' else (0,0,0)
     p=m.rotate(rot); bb=p.bounding_box(); shift=(-(bb[0]+bb[3])/2,-(bb[1]+bb[4])/2,-bb[2]);p=p.translate(shift)
     tri=c.b.canonical_triangles(p);report=c.b.mesh_checks(tri,len(m.decompose()))
     assert m.status()==mf.Error.NoError and report['watertight'] and report['winding_consistent'] and report['every_edge_shared_twice'] and report['bodies']==1,(name,report)
@@ -222,6 +273,7 @@ def build(out, selected=None):
         records=[export_part(c,n,m,folder) for n,m in models.items()]
         report=checks(c,models);report['skin_open_samples']=opening_fraction(c,models)
         record=dict(spec,parts=records,checks=report)
+        record['omit_shared_parts']=['Sense_Head_Base','Sense_Sliding_Cover'] if spec.get('open_head') else []
         record['loop_section_mm']=[c.LOOP_WIDTH,2*c.LOOP_RADIUS];record['loop_skin_mm']=c.LOOP_WALL
         record['loop_section_reduction_percent']=round(100*(1-(c.LOOP_WIDTH*2*c.LOOP_RADIUS)/(18*12)),2)
         result['variants'][key]=record

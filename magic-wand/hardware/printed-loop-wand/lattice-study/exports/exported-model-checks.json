@@ -245,6 +245,336 @@
           "probes": 3
         }
       }
+    },
+    "one-wide": {
+      "physical_strength_verified": false,
+      "interfaces": {
+        "Handle_Left": 0.09507069175189019,
+        "Handle_Right": 0.09849636500947406,
+        "Lower_Shaft": 0.30644570396636583,
+        "Upper_Shaft": 0.03525798596433805,
+        "loop_roots_lost_mm3": 0.011765118712940418,
+        "loop_root_extra_reinforcement_mm3": 271.8830154451131
+      },
+      "wire_clearance": {
+        "Handle_Left": 0.0,
+        "Handle_Right": 0.0,
+        "Lower_Shaft": 0.0,
+        "Upper_Shaft": 0.0
+      },
+      "loops": {
+        "Left": {
+          "max_turn_overlap_mm3": 2.7852508378431475e-05,
+          "max_slide_overlap_mm3": 2.5932006461891984e-05,
+          "hard_stops_mm3": [
+            3.556046430423376,
+            9.533679157655458,
+            1.5668286722691749
+          ]
+        },
+        "Right": {
+          "max_turn_overlap_mm3": 2.7852508378431475e-05,
+          "max_slide_overlap_mm3": 2.5932006461891984e-05,
+          "hard_stops_mm3": [
+            3.5559295639820445,
+            9.533679157655458,
+            1.5668286722691749
+          ]
+        }
+      },
+      "gauge_check": "Run verify_models.py against exported meshes",
+      "floating_layer_starts": {
+        "Lower_Shaft": [],
+        "Upper_Shaft": []
+      },
+      "open_head": {
+        "clearances_mm3": {
+          "board": 0.0,
+          "solder": 0.0,
+          "usb": 0.0,
+          "wire": 0.0
+        },
+        "neck_difference_mm3": 0.020179993852792608,
+        "clip_material_lost_mm3": 0.0003595862964595446,
+        "bounds_mm": [
+          -14.850000381469727,
+          -9.342434883117676,
+          352.0,
+          14.850000381469727,
+          9.3424654006958,
+          410.0
+        ],
+        "physical_retention_verified": false,
+        "corner_pocket_material_lost_mm3": 0.00021723761287914092
+      },
+      "exported_interface_volume_tolerance_mm3": 0.75,
+      "minimum_members": {
+        "grip": {
+          "sampled_min_radial_material_mm": 1.0002,
+          "probes": 30
+        },
+        "lower": {
+          "sampled_min_radial_material_mm": 0.9986,
+          "probes": 30
+        },
+        "upper": {
+          "sampled_min_radial_material_mm": 1.0011,
+          "probes": 30
+        },
+        "loop": {
+          "sampled_mean_of_two_broad_skins_min_mm": 1.45,
+          "probes": 3
+        }
+      },
+      "reinforcement": {
+        "lost_original_net_material_mm3": {
+          "Handle_Left": 0.009274497530915563,
+          "Handle_Right": 0.009604140753696018,
+          "Lower_Shaft": 0.008419265416518443,
+          "Upper_Shaft": 0.00403539635021344
+        },
+        "section_material_area": {
+          "Handle_Left": {
+            "z_mm": 75.0,
+            "diamond_net_mm2": 50.882,
+            "reinforced_mm2": 54.555,
+            "increase_percent": 7.22
+          },
+          "Lower_Shaft": {
+            "z_mm": 211.0,
+            "diamond_net_mm2": 49.118,
+            "reinforced_mm2": 58.855,
+            "increase_percent": 19.82
+          },
+          "Upper_Shaft": {
+            "z_mm": 299.0,
+            "diamond_net_mm2": 43.876,
+            "reinforced_mm2": 46.155,
+            "increase_percent": 5.19
+          }
+        },
+        "physical_strength_verified": false
+      }
+    },
+    "two-wide": {
+      "physical_strength_verified": false,
+      "interfaces": {
+        "Handle_Left": 0.09569039961421,
+        "Handle_Right": 0.09807743098908445,
+        "Lower_Shaft": 0.30757910956321743,
+        "Upper_Shaft": 0.03563047050999943,
+        "loop_roots_lost_mm3": 0.011765118712940418,
+        "loop_root_extra_reinforcement_mm3": 271.8830154451131
+      },
+      "wire_clearance": {
+        "Handle_Left": 0.0,
+        "Handle_Right": 0.0,
+        "Lower_Shaft": 0.0,
+        "Upper_Shaft": 0.0
+      },
+      "loops": {
+        "Left": {
+          "max_turn_overlap_mm3": 2.7852508378431475e-05,
+          "max_slide_overlap_mm3": 2.5932006461891984e-05,
+          "hard_stops_mm3": [
+            3.556046430423376,
+            9.533679157655458,
+            1.5668286722691749
+          ]
+        },
+        "Right": {
+          "max_turn_overlap_mm3": 2.7852508378431475e-05,
+          "max_slide_overlap_mm3": 2.5932006461891984e-05,
+          "hard_stops_mm3": [
+            3.5559295639820445,
+            9.533679157655458,
+            1.5668286722691749
+          ]
+        }
+      },
+      "gauge_check": "Run verify_models.py against exported meshes",
+      "floating_layer_starts": {
+        "Lower_Shaft": [],
+        "Upper_Shaft": []
+      },
+      "open_head": {
+        "clearances_mm3": {
+          "board": 0.0,
+          "solder": 0.0,
+          "usb": 0.0,
+          "wire": 0.0
+        },
+        "neck_difference_mm3": 0.020179993852792608,
+        "clip_material_lost_mm3": 0.0003595862964595446,
+        "bounds_mm": [
+          -14.850000381469727,
+          -9.342434883117676,
+          352.0,
+          14.850000381469727,
+          9.3424654006958,
+          410.0
+        ],
+        "physical_retention_verified": false,
+        "corner_pocket_material_lost_mm3": 0.00021723761287914092
+      },
+      "exported_interface_volume_tolerance_mm3": 0.75,
+      "minimum_members": {
+        "grip": {
+          "sampled_min_radial_material_mm": 1.0002,
+          "probes": 30
+        },
+        "lower": {
+          "sampled_min_radial_material_mm": 0.9986,
+          "probes": 30
+        },
+        "upper": {
+          "sampled_min_radial_material_mm": 1.0011,
+          "probes": 30
+        },
+        "loop": {
+          "sampled_mean_of_two_broad_skins_min_mm": 1.45,
+          "probes": 3
+        }
+      },
+      "reinforcement": {
+        "lost_original_net_material_mm3": {
+          "Handle_Left": 0.023826713692960605,
+          "Handle_Right": 0.024154129360709237,
+          "Lower_Shaft": 0.029900971685311754,
+          "Upper_Shaft": 0.00786344548471699
+        },
+        "section_material_area": {
+          "Handle_Left": {
+            "z_mm": 75.0,
+            "diamond_net_mm2": 50.882,
+            "reinforced_mm2": 56.944,
+            "increase_percent": 11.91
+          },
+          "Lower_Shaft": {
+            "z_mm": 211.0,
+            "diamond_net_mm2": 49.118,
+            "reinforced_mm2": 63.945,
+            "increase_percent": 30.19
+          },
+          "Upper_Shaft": {
+            "z_mm": 299.0,
+            "diamond_net_mm2": 43.876,
+            "reinforced_mm2": 48.312,
+            "increase_percent": 10.11
+          }
+        },
+        "physical_strength_verified": false
+      }
+    },
+    "broad-frame": {
+      "physical_strength_verified": false,
+      "interfaces": {
+        "Handle_Left": 0.09424276044399485,
+        "Handle_Right": 0.104290550046906,
+        "Lower_Shaft": 0.3066558540350302,
+        "Upper_Shaft": 0.03461964414594593,
+        "loop_roots_lost_mm3": 0.011765118712940418,
+        "loop_root_extra_reinforcement_mm3": 271.8830154451131
+      },
+      "wire_clearance": {
+        "Handle_Left": 0.0,
+        "Handle_Right": 0.0,
+        "Lower_Shaft": 0.0,
+        "Upper_Shaft": 0.0
+      },
+      "loops": {
+        "Left": {
+          "max_turn_overlap_mm3": 2.7852505658884648e-05,
+          "max_slide_overlap_mm3": 2.6785717457960977e-05,
+          "hard_stops_mm3": [
+            3.556046430423376,
+            9.533679790016713,
+            1.5668286722688707
+          ]
+        },
+        "Right": {
+          "max_turn_overlap_mm3": 2.7852505658884648e-05,
+          "max_slide_overlap_mm3": 2.6785717457960977e-05,
+          "hard_stops_mm3": [
+            3.5559295639820445,
+            9.533679790016713,
+            1.5668286722688707
+          ]
+        }
+      },
+      "gauge_check": "Run verify_models.py against exported meshes",
+      "floating_layer_starts": {
+        "Lower_Shaft": [],
+        "Upper_Shaft": []
+      },
+      "open_head": {
+        "clearances_mm3": {
+          "board": 0.0,
+          "solder": 0.0,
+          "usb": 0.0,
+          "wire": 0.0
+        },
+        "neck_difference_mm3": 0.020179993852792608,
+        "clip_material_lost_mm3": 0.0003595862964595446,
+        "bounds_mm": [
+          -14.850000381469727,
+          -9.342434883117676,
+          352.0,
+          14.850000381469727,
+          9.3424654006958,
+          410.0
+        ],
+        "physical_retention_verified": false,
+        "corner_pocket_material_lost_mm3": 0.00021723761287914092
+      },
+      "exported_interface_volume_tolerance_mm3": 0.75,
+      "minimum_members": {
+        "grip": {
+          "sampled_min_radial_material_mm": 1.0001,
+          "probes": 30
+        },
+        "lower": {
+          "sampled_min_radial_material_mm": 0.999,
+          "probes": 30
+        },
+        "upper": {
+          "sampled_min_radial_material_mm": 1.0013,
+          "probes": 30
+        },
+        "loop": {
+          "sampled_mean_of_two_broad_skins_min_mm": 1.45,
+          "probes": 3
+        }
+      },
+      "reinforcement": {
+        "lost_original_net_material_mm3": {
+          "Handle_Left": 0.05323623510068121,
+          "Handle_Right": 0.047326185422341405,
+          "Lower_Shaft": 0.07969390240641272,
+          "Upper_Shaft": 0.030267534557796367
+        },
+        "section_material_area": {
+          "Handle_Left": {
+            "z_mm": 75.0,
+            "diamond_net_mm2": 50.882,
+            "reinforced_mm2": 64.283,
+            "increase_percent": 26.34
+          },
+          "Lower_Shaft": {
+            "z_mm": 211.0,
+            "diamond_net_mm2": 49.118,
+            "reinforced_mm2": 72.078,
+            "increase_percent": 46.75
+          },
+          "Upper_Shaft": {
+            "z_mm": 299.0,
+            "diamond_net_mm2": 43.876,
+            "reinforced_mm2": 51.162,
+            "increase_percent": 16.61
+          }
+        },
+        "physical_strength_verified": false
+      }
     }
   }
 }

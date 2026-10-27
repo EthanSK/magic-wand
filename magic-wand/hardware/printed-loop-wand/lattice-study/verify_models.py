@@ -58,6 +58,7 @@ def main(out):
     refs={p['name']:solid(p,s.BASE/'exports'/p['file']) for p in ref['parts'] if p['name'] in s.CHANGED}
     s.reference_part=lambda c,name:refs[name]
     report={'kind':'Checks on actual exported STL solids','physical_strength_verified':False,'variants':{}}
+    diamond={p['name']:solid(p,HERE/'exports/diamond'/p['file']) for p in manifest['variants']['diamond']['parts']}
     for key,spec in manifest['variants'].items():
         c=s.configure(key);models={p['name']:solid(p,HERE/'exports'/key/p['file']) for p in spec['parts']}
         # Exported references have different triangulation after 0.001 mm
@@ -65,6 +66,19 @@ def main(out):
         # are checked separately at 0.03 mm3; bound this STL volume residual.
         checks=s.checks(c,models,interface_tolerance=.75)
         checks['exported_interface_volume_tolerance_mm3']=.75;checks['minimum_members']=gauges(c,models,spec)
+        if spec.get('wide_strands'):
+            # Ethan asked for wide strands so the open sections have more
+            # support. Verify this adds body material instead of removing any
+            # of the original Diamond net's paths. This is not a load rating.
+            # The wider main paths taper towards the tip but remain wider than
+            # the Diamond reference. Check retained shell paths, not old backing.
+            lost={n:abs((diamond[n]-models[n]).volume()) for n in ['Handle_Left','Handle_Right','Lower_Shaft','Upper_Shaft']}
+            assert max(lost.values())<.75,('Lost original net material',key,lost)
+            areas={}
+            for name,z in [('Handle_Left',75.),('Lower_Shaft',211.),('Upper_Shaft',299.)]:
+                before=diamond[name].slice(z).area();after=models[name].slice(z).area();assert after>before*1.05,(key,name,'no meaningful reinforcement')
+                areas[name]={'z_mm':z,'diamond_net_mm2':round(before,3),'reinforced_mm2':round(after,3),'increase_percent':round(100*(after/before-1),2)}
+            checks['reinforcement']={'lost_original_net_material_mm3':lost,'section_material_area':areas,'physical_strength_verified':False}
         report['variants'][key]=checks
         print(key+' exported STL checks passed',flush=True)
     out.write_text(json.dumps(report,indent=2)+'\n')
