@@ -46,9 +46,9 @@ def inspect(key,manifest,project):
     c=s.configure(key);A,F=samples(project);records={p['name']:p for p in manifest['variants'][key]['parts']+manifest['shared_parts']};checks={}
     layout=json.loads((HERE/'exports/projects.json').read_text())[key]['complete'];external_support_bases={}
     for name,center in zip(layout['part_names'],layout['positions']):
-        if name not in ('Handle_Left','Handle_Right','Lower_Shaft','Upper_Shaft','Removable_Finger_Loop','Sense_Open_Cradle'):continue
+        if name not in ('Handle_Left','Handle_Right','Lower_Shaft','Upper_Shaft','Continuous_Shaft','Removable_Finger_Loop','Sense_Open_Cradle'):continue
         transform=np.asarray(records[name]['print_to_assembly']);p=A+[0.,2.,0.]-[*center,0.];xyz=p@transform[:3,:3].T+transform[:3,3];x,y,z=xyz.T
-        z0,z1=(61.,173.5) if name.startswith('Handle_') else (160.5,259.5) if name=='Lower_Shaft' else (246.5,365.5) if name=='Upper_Shaft' else (0.,0.)
+        z0,z1=(61.,173.5) if name.startswith('Handle_') else (160.5,259.5) if name=='Lower_Shaft' else (246.5,365.5) if name=='Upper_Shaft' else (160.5,365.5) if name=='Continuous_Shaft' else (0.,0.)
         areas={'wire_bore_9mm':(x*x+y*y<4.5**2)&(z>z0)&(z<z1)}
         if name.startswith('Handle_'):
             areas['battery']=(abs(x)<9.3)&(abs(y)<3.5)&(z>15)&(z<58)

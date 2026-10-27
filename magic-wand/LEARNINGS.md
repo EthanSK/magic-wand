@@ -1160,3 +1160,7 @@ Open shaft variants need their own support strategy. Enabling normal supports wi
 Automatic support in a slim open cradle filled its wire passage upright, and its board slot when laid flat, despite support blockers. The checked lattice-study projects lay the cradle on its back and use manual landing patches on the low back only. Keep the board, USB, wire route and central solder space in the sliced-path checks; do not re-enable automatic head supports without repeating them. The only allowed solder-space samples are removable support feet within 0.4 mm of the build plate, at least 0.5 mm outside the actual local back surface. Record them separately rather than hiding them among clear channels. These are toolpath checks, not a physical retention or spring-flex test.
 
 Comparison viewers must request fresh manifests and estimates and key STL URLs by their recorded hashes. Browser caching otherwise showed old weights alongside new geometry. Offer print links only when the project hash matches its sliced-clearance receipt.
+
+## Continuous lightweight shaft (2026-10-27)
+
+The two upper sections of Two wide spirals fit as one 206 mm print in the checked P1S profile's 250 mm height, allowing openings across the former middle joint. Keep the original grip-side lock and detachable loop; the narrowed tip uses its own matching scaled cradle connector. Check the real sliced wire route and cradle clearances after changing this joint. CAD and sliced paths do not establish physical strength, fit or retention.

@@ -1,0 +1,33 @@
+{
+  "geometry": "actual exported STL solids",
+  "grip_joint_difference_mm3": 0.041882177198311,
+  "wire_clearance_mm3": {
+    "shaft": 0.0,
+    "head": 0.0
+  },
+  "clip_lost_mm3": 7.575988813000751e-06,
+  "board_pockets_lost_mm3": 5.275655237349337e-05,
+  "loop_paths_reused": {
+    "Left": {
+      "max_turn_overlap_mm3": 2.7852508378431475e-05,
+      "max_slide_overlap_mm3": 2.5932006461891984e-05,
+      "hard_stops_mm3": [
+        3.556046430423376,
+        9.533679157655458,
+        1.5668286722691749
+      ]
+    },
+    "Right": {
+      "max_turn_overlap_mm3": 2.7852508378431475e-05,
+      "max_slide_overlap_mm3": 2.5932006461891984e-05,
+      "hard_stops_mm3": [
+        3.5559295639820445,
+        9.533679157655458,
+        1.5668286722691749
+      ]
+    }
+  },
+  "floating_layer_starts": [],
+  "physical_fit_verified": false,
+  "physical_strength_verified": false
+}
