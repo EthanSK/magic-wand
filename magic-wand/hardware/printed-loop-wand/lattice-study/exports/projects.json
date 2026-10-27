@@ -1,0 +1,2082 @@
+{
+  "diamond": {
+    "complete": {
+      "file": "Print-Lattice-diamond-complete.3mf",
+      "sha256": "2168571f7ce76f712f31794b6f19f590dda46256f5838d977771ea31ee6bedbb",
+      "part_names": [
+        "Handle_Left",
+        "Handle_Right",
+        "Lower_Shaft",
+        "Upper_Shaft",
+        "Sense_Head_Base",
+        "Sense_Sliding_Cover",
+        "Battery_Twist_Cap",
+        "Battery_Sled",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Removable_Finger_Loop"
+      ],
+      "positions": [
+        [
+          35,
+          55
+        ],
+        [
+          80,
+          55
+        ],
+        [
+          125,
+          55
+        ],
+        [
+          160,
+          55
+        ],
+        [
+          215,
+          55
+        ],
+        [
+          207,
+          100
+        ],
+        [
+          156,
+          100
+        ],
+        [
+          231,
+          160
+        ],
+        [
+          25,
+          100
+        ],
+        [
+          55,
+          100
+        ],
+        [
+          85,
+          100
+        ],
+        [
+          75,
+          190
+        ]
+      ],
+      "slice": {
+        "feature_type_times": {
+          "Bottom surface": 33.893341064453125,
+          "Bridge": 230.7300567626953,
+          "Brim": 148.58987426757812,
+          "Custom": 360.27569580078125,
+          "Flush": 29.0,
+          "Gap infill": 2149.8232421875,
+          "Inner wall": 4530.02001953125,
+          "Internal solid infill": 990.2034912109375,
+          "Outer wall": 5960.3994140625,
+          "Overhang wall": 558.6949462890625,
+          "Sparse infill": 536.4921875,
+          "Support": 520.1527099609375,
+          "Support interface": 63.88173294067383,
+          "Support transition": 50.822898864746094,
+          "Top surface": 321.8083190917969,
+          "Travel": 5156.86279296875,
+          "Undefined": 5143.5185546875
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 90.25102233886719,
+            "total_used_g": 90.25102233886719
+          }
+        ],
+        "generate_support_material_time": 282,
+        "id": 1,
+        "infill_time": 253,
+        "layer_filament_change": 0,
+        "main_predication": 21229.564453125,
+        "make_perimeters_time": 943,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 19.357200622558594,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Handle_Left",
+            "triangle_count": 35334
+          },
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 64.3572006225586,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Handle_Right",
+            "triangle_count": 35390
+          },
+          {
+            "bbox": {
+              "depth": 23.87919807434082,
+              "height": 100.0,
+              "width": 22.627197265625,
+              "x": 113.6864013671875,
+              "y": 43.060401916503906,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Lower_Shaft",
+            "triangle_count": 19134
+          },
+          {
+            "bbox": {
+              "depth": 21.135398864746094,
+              "height": 120.0,
+              "width": 21.13559341430664,
+              "x": 149.4322052001953,
+              "y": 44.43230056762695,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "Upper_Shaft",
+            "triangle_count": 19138
+          },
+          {
+            "bbox": {
+              "depth": 30.730802536010742,
+              "height": 58.0,
+              "width": 40.0,
+              "x": 195.0,
+              "y": 39.63459777832031,
+              "z": 0.0
+            },
+            "id": 21,
+            "name": "Sense_Head_Base",
+            "triangle_count": 3270
+          },
+          {
+            "bbox": {
+              "depth": 26.546798706054688,
+              "height": 14.987199783325195,
+              "width": 40.0,
+              "x": 187.0,
+              "y": 86.72660064697266,
+              "z": -1.4210854715202004e-14
+            },
+            "id": 25,
+            "name": "Sense_Sliding_Cover",
+            "triangle_count": 472
+          },
+          {
+            "bbox": {
+              "depth": 30.0,
+              "height": 10.800000190734863,
+              "width": 30.0,
+              "x": 141.0,
+              "y": 85.0,
+              "z": 0.0
+            },
+            "id": 29,
+            "name": "Battery_Twist_Cap",
+            "triangle_count": 1212
+          },
+          {
+            "bbox": {
+              "depth": 45.0,
+              "height": 7.599999904632568,
+              "width": 20.60000228881836,
+              "x": 220.6999969482422,
+              "y": 137.5,
+              "z": 0.0
+            },
+            "id": 33,
+            "name": "Battery_Sled",
+            "triangle_count": 96
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 16.799999237060547,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 37,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 46.79999923706055,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 41,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.39999771118164,
+              "x": 76.80000305175781,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 45,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 46.974205017089844,
+              "height": 18.0,
+              "width": 103.2063980102539,
+              "x": 23.396800994873047,
+              "y": 166.5128936767578,
+              "z": 0.0
+            },
+            "id": 49,
+            "name": "Removable_Finger_Loop",
+            "triangle_count": 9024
+          }
+        ],
+        "sliced_time": 9372,
+        "sliced_time_with_cache": 7515,
+        "total_predication": 21634.466796875,
+        "triangle_count": 123382,
+        "warning_message": ""
+      }
+    },
+    "one-left": {
+      "file": "Print-Lattice-diamond-one-left.3mf",
+      "sha256": "806be279b1946cdfad91a360b67f33640efdfdef68c65d4c23d9c8f71d0fba08",
+      "part_names": [
+        "Handle_Left",
+        "Lower_Shaft",
+        "Upper_Shaft",
+        "Sense_Head_Base",
+        "Sense_Sliding_Cover",
+        "Battery_Twist_Cap",
+        "Battery_Sled",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Removable_Finger_Loop"
+      ],
+      "positions": [
+        [
+          35,
+          55
+        ],
+        [
+          125,
+          55
+        ],
+        [
+          160,
+          55
+        ],
+        [
+          215,
+          55
+        ],
+        [
+          207,
+          100
+        ],
+        [
+          156,
+          100
+        ],
+        [
+          231,
+          160
+        ],
+        [
+          25,
+          100
+        ],
+        [
+          55,
+          100
+        ],
+        [
+          85,
+          100
+        ],
+        [
+          75,
+          190
+        ]
+      ],
+      "slice": {
+        "feature_type_times": {
+          "Bottom surface": 33.893341064453125,
+          "Bridge": 155.4652862548828,
+          "Brim": 133.34715270996094,
+          "Custom": 360.4735412597656,
+          "Flush": 29.0,
+          "Gap infill": 1837.6602783203125,
+          "Inner wall": 4164.984375,
+          "Internal solid infill": 865.10009765625,
+          "Outer wall": 5219.40478515625,
+          "Overhang wall": 402.52874755859375,
+          "Sparse infill": 514.5194091796875,
+          "Support": 486.60552978515625,
+          "Support interface": 55.281986236572266,
+          "Support transition": 38.5714111328125,
+          "Top surface": 253.75936889648438,
+          "Travel": 3887.56005859375,
+          "Undefined": 3874.216552734375
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 69.05952453613281,
+            "total_used_g": 69.05952453613281
+          }
+        ],
+        "generate_support_material_time": 239,
+        "id": 1,
+        "infill_time": 219,
+        "layer_filament_change": 0,
+        "main_predication": 18022.37890625,
+        "make_perimeters_time": 620,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 19.357200622558594,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Handle_Left",
+            "triangle_count": 35334
+          },
+          {
+            "bbox": {
+              "depth": 23.87919807434082,
+              "height": 100.0,
+              "width": 22.627197265625,
+              "x": 113.6864013671875,
+              "y": 43.060401916503906,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Lower_Shaft",
+            "triangle_count": 19134
+          },
+          {
+            "bbox": {
+              "depth": 21.135398864746094,
+              "height": 120.0,
+              "width": 21.13559341430664,
+              "x": 149.4322052001953,
+              "y": 44.43230056762695,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Upper_Shaft",
+            "triangle_count": 19138
+          },
+          {
+            "bbox": {
+              "depth": 30.730802536010742,
+              "height": 58.0,
+              "width": 40.0,
+              "x": 195.0,
+              "y": 39.63459777832031,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "Sense_Head_Base",
+            "triangle_count": 3270
+          },
+          {
+            "bbox": {
+              "depth": 26.546798706054688,
+              "height": 14.987199783325195,
+              "width": 40.0,
+              "x": 187.0,
+              "y": 86.72660064697266,
+              "z": -1.4210854715202004e-14
+            },
+            "id": 21,
+            "name": "Sense_Sliding_Cover",
+            "triangle_count": 472
+          },
+          {
+            "bbox": {
+              "depth": 30.0,
+              "height": 10.800000190734863,
+              "width": 30.0,
+              "x": 141.0,
+              "y": 85.0,
+              "z": 0.0
+            },
+            "id": 25,
+            "name": "Battery_Twist_Cap",
+            "triangle_count": 1212
+          },
+          {
+            "bbox": {
+              "depth": 45.0,
+              "height": 7.599999904632568,
+              "width": 20.60000228881836,
+              "x": 220.6999969482422,
+              "y": 137.5,
+              "z": 0.0
+            },
+            "id": 29,
+            "name": "Battery_Sled",
+            "triangle_count": 96
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 16.799999237060547,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 33,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 46.79999923706055,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 37,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.39999771118164,
+              "x": 76.80000305175781,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 41,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 46.974205017089844,
+              "height": 18.0,
+              "width": 103.2063980102539,
+              "x": 23.396800994873047,
+              "y": 166.5128936767578,
+              "z": 0.0
+            },
+            "id": 45,
+            "name": "Removable_Finger_Loop",
+            "triangle_count": 9024
+          }
+        ],
+        "sliced_time": 7840,
+        "sliced_time_with_cache": 6477,
+        "total_predication": 18427.478515625,
+        "triangle_count": 87992,
+        "warning_message": ""
+      }
+    }
+  },
+  "helix": {
+    "complete": {
+      "file": "Print-Lattice-helix-complete.3mf",
+      "sha256": "2cf68c3081d53fc169e4d15a9a1c11cc469b2bc6d68ffb1d2ad996c90976b788",
+      "part_names": [
+        "Handle_Left",
+        "Handle_Right",
+        "Lower_Shaft",
+        "Upper_Shaft",
+        "Sense_Head_Base",
+        "Sense_Sliding_Cover",
+        "Battery_Twist_Cap",
+        "Battery_Sled",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Removable_Finger_Loop"
+      ],
+      "positions": [
+        [
+          35,
+          55
+        ],
+        [
+          80,
+          55
+        ],
+        [
+          125,
+          55
+        ],
+        [
+          160,
+          55
+        ],
+        [
+          215,
+          55
+        ],
+        [
+          207,
+          100
+        ],
+        [
+          156,
+          100
+        ],
+        [
+          231,
+          160
+        ],
+        [
+          25,
+          100
+        ],
+        [
+          55,
+          100
+        ],
+        [
+          85,
+          100
+        ],
+        [
+          75,
+          190
+        ]
+      ],
+      "slice": {
+        "feature_type_times": {
+          "Bottom surface": 33.89359664916992,
+          "Bridge": 235.9095916748047,
+          "Brim": 155.27122497558594,
+          "Custom": 360.27569580078125,
+          "Flush": 29.0,
+          "Gap infill": 1955.6734619140625,
+          "Inner wall": 4709.04296875,
+          "Internal solid infill": 1000.7134399414062,
+          "Outer wall": 5681.6767578125,
+          "Overhang wall": 474.8810119628906,
+          "Sparse infill": 536.8007202148438,
+          "Support": 324.763671875,
+          "Support interface": 52.861270904541016,
+          "Support transition": 44.91128921508789,
+          "Top surface": 318.9922790527344,
+          "Travel": 4703.83203125,
+          "Undefined": 4690.48779296875
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 88.0650863647461,
+            "total_used_g": 88.06509399414062
+          }
+        ],
+        "generate_support_material_time": 234,
+        "id": 1,
+        "infill_time": 291,
+        "layer_filament_change": 0,
+        "main_predication": 20206.595703125,
+        "make_perimeters_time": 916,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 19.357200622558594,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Handle_Left",
+            "triangle_count": 30438
+          },
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 64.3572006225586,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Handle_Right",
+            "triangle_count": 30500
+          },
+          {
+            "bbox": {
+              "depth": 23.87919807434082,
+              "height": 100.0,
+              "width": 22.627197265625,
+              "x": 113.6864013671875,
+              "y": 43.060401916503906,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Lower_Shaft",
+            "triangle_count": 16464
+          },
+          {
+            "bbox": {
+              "depth": 21.135398864746094,
+              "height": 120.0,
+              "width": 21.13559341430664,
+              "x": 149.4322052001953,
+              "y": 44.43230056762695,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "Upper_Shaft",
+            "triangle_count": 15594
+          },
+          {
+            "bbox": {
+              "depth": 30.730802536010742,
+              "height": 58.0,
+              "width": 40.0,
+              "x": 195.0,
+              "y": 39.63459777832031,
+              "z": 0.0
+            },
+            "id": 21,
+            "name": "Sense_Head_Base",
+            "triangle_count": 3270
+          },
+          {
+            "bbox": {
+              "depth": 26.546798706054688,
+              "height": 14.987199783325195,
+              "width": 40.0,
+              "x": 187.0,
+              "y": 86.72660064697266,
+              "z": -1.4210854715202004e-14
+            },
+            "id": 25,
+            "name": "Sense_Sliding_Cover",
+            "triangle_count": 472
+          },
+          {
+            "bbox": {
+              "depth": 30.0,
+              "height": 10.800000190734863,
+              "width": 30.0,
+              "x": 141.0,
+              "y": 85.0,
+              "z": 0.0
+            },
+            "id": 29,
+            "name": "Battery_Twist_Cap",
+            "triangle_count": 1212
+          },
+          {
+            "bbox": {
+              "depth": 45.0,
+              "height": 7.599999904632568,
+              "width": 20.60000228881836,
+              "x": 220.6999969482422,
+              "y": 137.5,
+              "z": 0.0
+            },
+            "id": 33,
+            "name": "Battery_Sled",
+            "triangle_count": 96
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 16.799999237060547,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 37,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 46.79999923706055,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 41,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.39999771118164,
+              "x": 76.80000305175781,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 45,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 47.1741943359375,
+              "height": 18.0,
+              "width": 103.2063980102539,
+              "x": 23.396800994873047,
+              "y": 166.41290283203125,
+              "z": 0.0
+            },
+            "id": 49,
+            "name": "Removable_Finger_Loop",
+            "triangle_count": 8974
+          }
+        ],
+        "sliced_time": 7920,
+        "sliced_time_with_cache": 6139,
+        "total_predication": 20611.498046875,
+        "triangle_count": 107332,
+        "warning_message": ""
+      }
+    },
+    "one-left": {
+      "file": "Print-Lattice-helix-one-left.3mf",
+      "sha256": "922418b11f559d31c4c02e2fcccaa0200ba74e5d9686164ba5304361efeab465",
+      "part_names": [
+        "Handle_Left",
+        "Lower_Shaft",
+        "Upper_Shaft",
+        "Sense_Head_Base",
+        "Sense_Sliding_Cover",
+        "Battery_Twist_Cap",
+        "Battery_Sled",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Removable_Finger_Loop"
+      ],
+      "positions": [
+        [
+          35,
+          55
+        ],
+        [
+          125,
+          55
+        ],
+        [
+          160,
+          55
+        ],
+        [
+          215,
+          55
+        ],
+        [
+          207,
+          100
+        ],
+        [
+          156,
+          100
+        ],
+        [
+          231,
+          160
+        ],
+        [
+          25,
+          100
+        ],
+        [
+          55,
+          100
+        ],
+        [
+          85,
+          100
+        ],
+        [
+          75,
+          190
+        ]
+      ],
+      "slice": {
+        "feature_type_times": {
+          "Bottom surface": 33.89359664916992,
+          "Bridge": 160.6455535888672,
+          "Brim": 140.0421600341797,
+          "Custom": 360.4737548828125,
+          "Flush": 29.0,
+          "Gap infill": 1713.6409912109375,
+          "Inner wall": 4367.18017578125,
+          "Internal solid infill": 881.7297973632812,
+          "Outer wall": 5040.0009765625,
+          "Overhang wall": 344.8163757324219,
+          "Sparse infill": 516.622314453125,
+          "Support": 290.53326416015625,
+          "Support interface": 44.23714828491211,
+          "Support transition": 32.66160583496094,
+          "Top surface": 251.17344665527344,
+          "Travel": 3549.36865234375,
+          "Undefined": 3536.025146484375
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 67.15512084960938,
+            "total_used_g": 67.15512084960938
+          }
+        ],
+        "generate_support_material_time": 208,
+        "id": 1,
+        "infill_time": 218,
+        "layer_filament_change": 0,
+        "main_predication": 17339.85546875,
+        "make_perimeters_time": 746,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 19.357200622558594,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Handle_Left",
+            "triangle_count": 30438
+          },
+          {
+            "bbox": {
+              "depth": 23.87919807434082,
+              "height": 100.0,
+              "width": 22.627197265625,
+              "x": 113.6864013671875,
+              "y": 43.060401916503906,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Lower_Shaft",
+            "triangle_count": 16464
+          },
+          {
+            "bbox": {
+              "depth": 21.135398864746094,
+              "height": 120.0,
+              "width": 21.13559341430664,
+              "x": 149.4322052001953,
+              "y": 44.43230056762695,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Upper_Shaft",
+            "triangle_count": 15594
+          },
+          {
+            "bbox": {
+              "depth": 30.730802536010742,
+              "height": 58.0,
+              "width": 40.0,
+              "x": 195.0,
+              "y": 39.63459777832031,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "Sense_Head_Base",
+            "triangle_count": 3270
+          },
+          {
+            "bbox": {
+              "depth": 26.546798706054688,
+              "height": 14.987199783325195,
+              "width": 40.0,
+              "x": 187.0,
+              "y": 86.72660064697266,
+              "z": -1.4210854715202004e-14
+            },
+            "id": 21,
+            "name": "Sense_Sliding_Cover",
+            "triangle_count": 472
+          },
+          {
+            "bbox": {
+              "depth": 30.0,
+              "height": 10.800000190734863,
+              "width": 30.0,
+              "x": 141.0,
+              "y": 85.0,
+              "z": 0.0
+            },
+            "id": 25,
+            "name": "Battery_Twist_Cap",
+            "triangle_count": 1212
+          },
+          {
+            "bbox": {
+              "depth": 45.0,
+              "height": 7.599999904632568,
+              "width": 20.60000228881836,
+              "x": 220.6999969482422,
+              "y": 137.5,
+              "z": 0.0
+            },
+            "id": 29,
+            "name": "Battery_Sled",
+            "triangle_count": 96
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 16.799999237060547,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 33,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 46.79999923706055,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 37,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.39999771118164,
+              "x": 76.80000305175781,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 41,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 47.1741943359375,
+              "height": 18.0,
+              "width": 103.2063980102539,
+              "x": 23.396800994873047,
+              "y": 166.41290283203125,
+              "z": 0.0
+            },
+            "id": 45,
+            "name": "Removable_Finger_Loop",
+            "triangle_count": 8974
+          }
+        ],
+        "sliced_time": 6237,
+        "sliced_time_with_cache": 4797,
+        "total_predication": 17744.955078125,
+        "triangle_count": 76832,
+        "warning_message": ""
+      }
+    }
+  },
+  "truss": {
+    "complete": {
+      "file": "Print-Lattice-truss-complete.3mf",
+      "sha256": "c0c1216f17a46de731f800e6be957bb68b56cdfeb487d257c700dbb19e1ff629",
+      "part_names": [
+        "Handle_Left",
+        "Handle_Right",
+        "Lower_Shaft",
+        "Upper_Shaft",
+        "Sense_Head_Base",
+        "Sense_Sliding_Cover",
+        "Battery_Twist_Cap",
+        "Battery_Sled",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Removable_Finger_Loop"
+      ],
+      "positions": [
+        [
+          35,
+          55
+        ],
+        [
+          80,
+          55
+        ],
+        [
+          125,
+          55
+        ],
+        [
+          160,
+          55
+        ],
+        [
+          215,
+          55
+        ],
+        [
+          207,
+          100
+        ],
+        [
+          156,
+          100
+        ],
+        [
+          231,
+          160
+        ],
+        [
+          25,
+          100
+        ],
+        [
+          55,
+          100
+        ],
+        [
+          85,
+          100
+        ],
+        [
+          75,
+          190
+        ]
+      ],
+      "slice": {
+        "feature_type_times": {
+          "Bottom surface": 33.893287658691406,
+          "Bridge": 236.72860717773438,
+          "Brim": 150.54408264160156,
+          "Custom": 360.27569580078125,
+          "Flush": 29.0,
+          "Gap infill": 2078.567626953125,
+          "Inner wall": 4583.130859375,
+          "Internal solid infill": 998.931640625,
+          "Outer wall": 5801.36328125,
+          "Overhang wall": 524.74560546875,
+          "Sparse infill": 534.7797241210938,
+          "Support": 438.59130859375,
+          "Support interface": 59.973182678222656,
+          "Support transition": 48.062076568603516,
+          "Top surface": 320.23431396484375,
+          "Travel": 4898.99609375,
+          "Undefined": 4885.65185546875
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 89.4295425415039,
+            "total_used_g": 89.4295425415039
+          }
+        ],
+        "generate_support_material_time": 249,
+        "id": 1,
+        "infill_time": 293,
+        "layer_filament_change": 0,
+        "main_predication": 20687.15234375,
+        "make_perimeters_time": 930,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 19.357200622558594,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Handle_Left",
+            "triangle_count": 32614
+          },
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 64.3572006225586,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Handle_Right",
+            "triangle_count": 32670
+          },
+          {
+            "bbox": {
+              "depth": 23.87919807434082,
+              "height": 100.0,
+              "width": 22.627197265625,
+              "x": 113.6864013671875,
+              "y": 43.060401916503906,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Lower_Shaft",
+            "triangle_count": 17638
+          },
+          {
+            "bbox": {
+              "depth": 21.135398864746094,
+              "height": 120.0,
+              "width": 21.13559341430664,
+              "x": 149.4322052001953,
+              "y": 44.43230056762695,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "Upper_Shaft",
+            "triangle_count": 17082
+          },
+          {
+            "bbox": {
+              "depth": 30.730802536010742,
+              "height": 58.0,
+              "width": 40.0,
+              "x": 195.0,
+              "y": 39.63459777832031,
+              "z": 0.0
+            },
+            "id": 21,
+            "name": "Sense_Head_Base",
+            "triangle_count": 3270
+          },
+          {
+            "bbox": {
+              "depth": 26.546798706054688,
+              "height": 14.987199783325195,
+              "width": 40.0,
+              "x": 187.0,
+              "y": 86.72660064697266,
+              "z": -1.4210854715202004e-14
+            },
+            "id": 25,
+            "name": "Sense_Sliding_Cover",
+            "triangle_count": 472
+          },
+          {
+            "bbox": {
+              "depth": 30.0,
+              "height": 10.800000190734863,
+              "width": 30.0,
+              "x": 141.0,
+              "y": 85.0,
+              "z": 0.0
+            },
+            "id": 29,
+            "name": "Battery_Twist_Cap",
+            "triangle_count": 1212
+          },
+          {
+            "bbox": {
+              "depth": 45.0,
+              "height": 7.599999904632568,
+              "width": 20.60000228881836,
+              "x": 220.6999969482422,
+              "y": 137.5,
+              "z": 0.0
+            },
+            "id": 33,
+            "name": "Battery_Sled",
+            "triangle_count": 96
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 16.799999237060547,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 37,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 46.79999923706055,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 41,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.39999771118164,
+              "x": 76.80000305175781,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 45,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 47.274200439453125,
+              "height": 18.0,
+              "width": 103.2063980102539,
+              "x": 23.396800994873047,
+              "y": 166.36289978027344,
+              "z": 0.0
+            },
+            "id": 49,
+            "name": "Removable_Finger_Loop",
+            "triangle_count": 8940
+          }
+        ],
+        "sliced_time": 8248,
+        "sliced_time_with_cache": 6399,
+        "total_predication": 21092.0546875,
+        "triangle_count": 114306,
+        "warning_message": ""
+      }
+    },
+    "one-left": {
+      "file": "Print-Lattice-truss-one-left.3mf",
+      "sha256": "8a0c4c3582d0c2e834f068dd04fe053b6fe65de62f744330d01cce345f4b280d",
+      "part_names": [
+        "Handle_Left",
+        "Lower_Shaft",
+        "Upper_Shaft",
+        "Sense_Head_Base",
+        "Sense_Sliding_Cover",
+        "Battery_Twist_Cap",
+        "Battery_Sled",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Removable_Finger_Loop"
+      ],
+      "positions": [
+        [
+          35,
+          55
+        ],
+        [
+          125,
+          55
+        ],
+        [
+          160,
+          55
+        ],
+        [
+          215,
+          55
+        ],
+        [
+          207,
+          100
+        ],
+        [
+          156,
+          100
+        ],
+        [
+          231,
+          160
+        ],
+        [
+          25,
+          100
+        ],
+        [
+          55,
+          100
+        ],
+        [
+          85,
+          100
+        ],
+        [
+          75,
+          190
+        ]
+      ],
+      "slice": {
+        "feature_type_times": {
+          "Bottom surface": 33.893287658691406,
+          "Bridge": 161.46397399902344,
+          "Brim": 135.31507873535156,
+          "Custom": 360.470947265625,
+          "Flush": 29.0,
+          "Gap infill": 1801.8446044921875,
+          "Inner wall": 4227.3955078125,
+          "Internal solid infill": 875.25439453125,
+          "Outer wall": 5125.26025390625,
+          "Overhang wall": 380.8038024902344,
+          "Sparse infill": 513.8385620117188,
+          "Support": 405.1767578125,
+          "Support interface": 51.43846893310547,
+          "Support transition": 35.889747619628906,
+          "Top surface": 254.2938232421875,
+          "Travel": 3691.228515625,
+          "Undefined": 3677.885009765625
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 68.43253326416016,
+            "total_used_g": 68.43253326416016
+          }
+        ],
+        "generate_support_material_time": 230,
+        "id": 1,
+        "infill_time": 205,
+        "layer_filament_change": 0,
+        "main_predication": 17666.369140625,
+        "make_perimeters_time": 649,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 19.357200622558594,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Handle_Left",
+            "triangle_count": 32614
+          },
+          {
+            "bbox": {
+              "depth": 23.87919807434082,
+              "height": 100.0,
+              "width": 22.627197265625,
+              "x": 113.6864013671875,
+              "y": 43.060401916503906,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Lower_Shaft",
+            "triangle_count": 17638
+          },
+          {
+            "bbox": {
+              "depth": 21.135398864746094,
+              "height": 120.0,
+              "width": 21.13559341430664,
+              "x": 149.4322052001953,
+              "y": 44.43230056762695,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Upper_Shaft",
+            "triangle_count": 17082
+          },
+          {
+            "bbox": {
+              "depth": 30.730802536010742,
+              "height": 58.0,
+              "width": 40.0,
+              "x": 195.0,
+              "y": 39.63459777832031,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "Sense_Head_Base",
+            "triangle_count": 3270
+          },
+          {
+            "bbox": {
+              "depth": 26.546798706054688,
+              "height": 14.987199783325195,
+              "width": 40.0,
+              "x": 187.0,
+              "y": 86.72660064697266,
+              "z": -1.4210854715202004e-14
+            },
+            "id": 21,
+            "name": "Sense_Sliding_Cover",
+            "triangle_count": 472
+          },
+          {
+            "bbox": {
+              "depth": 30.0,
+              "height": 10.800000190734863,
+              "width": 30.0,
+              "x": 141.0,
+              "y": 85.0,
+              "z": 0.0
+            },
+            "id": 25,
+            "name": "Battery_Twist_Cap",
+            "triangle_count": 1212
+          },
+          {
+            "bbox": {
+              "depth": 45.0,
+              "height": 7.599999904632568,
+              "width": 20.60000228881836,
+              "x": 220.6999969482422,
+              "y": 137.5,
+              "z": 0.0
+            },
+            "id": 29,
+            "name": "Battery_Sled",
+            "triangle_count": 96
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 16.799999237060547,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 33,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 46.79999923706055,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 37,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.39999771118164,
+              "x": 76.80000305175781,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 41,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 47.274200439453125,
+              "height": 18.0,
+              "width": 103.2063980102539,
+              "x": 23.396800994873047,
+              "y": 166.36289978027344,
+              "z": 0.0
+            },
+            "id": 45,
+            "name": "Removable_Finger_Loop",
+            "triangle_count": 8940
+          }
+        ],
+        "sliced_time": 6739,
+        "sliced_time_with_cache": 5381,
+        "total_predication": 18071.46484375,
+        "triangle_count": 81636,
+        "warning_message": ""
+      }
+    }
+  },
+  "leaf": {
+    "complete": {
+      "file": "Print-Lattice-leaf-complete.3mf",
+      "sha256": "7723bff8c89dcf593817ef7e82dffe2e556cec26b465a2a7ebcf09643503d1b9",
+      "part_names": [
+        "Handle_Left",
+        "Handle_Right",
+        "Lower_Shaft",
+        "Upper_Shaft",
+        "Sense_Head_Base",
+        "Sense_Sliding_Cover",
+        "Battery_Twist_Cap",
+        "Battery_Sled",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Removable_Finger_Loop"
+      ],
+      "positions": [
+        [
+          35,
+          55
+        ],
+        [
+          80,
+          55
+        ],
+        [
+          125,
+          55
+        ],
+        [
+          160,
+          55
+        ],
+        [
+          215,
+          55
+        ],
+        [
+          207,
+          100
+        ],
+        [
+          156,
+          100
+        ],
+        [
+          231,
+          160
+        ],
+        [
+          25,
+          100
+        ],
+        [
+          55,
+          100
+        ],
+        [
+          85,
+          100
+        ],
+        [
+          75,
+          190
+        ]
+      ],
+      "slice": {
+        "feature_type_times": {
+          "Bottom surface": 33.89318084716797,
+          "Bridge": 238.05657958984375,
+          "Brim": 156.236083984375,
+          "Custom": 360.27569580078125,
+          "Flush": 29.0,
+          "Gap infill": 2290.926025390625,
+          "Inner wall": 4761.07080078125,
+          "Internal solid infill": 987.604736328125,
+          "Outer wall": 5923.1708984375,
+          "Overhang wall": 403.60986328125,
+          "Sparse infill": 532.426025390625,
+          "Support": 300.9640197753906,
+          "Support interface": 52.86857223510742,
+          "Support transition": 43.92792510986328,
+          "Top surface": 286.4306335449219,
+          "Travel": 4886.27392578125,
+          "Undefined": 4872.9296875
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 95.17310333251953,
+            "total_used_g": 95.173095703125
+          }
+        ],
+        "generate_support_material_time": 227,
+        "id": 1,
+        "infill_time": 282,
+        "layer_filament_change": 0,
+        "main_predication": 20876.517578125,
+        "make_perimeters_time": 1088,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 19.357200622558594,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Handle_Left",
+            "triangle_count": 36186
+          },
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 64.3572006225586,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Handle_Right",
+            "triangle_count": 36254
+          },
+          {
+            "bbox": {
+              "depth": 23.87919807434082,
+              "height": 100.0,
+              "width": 22.627197265625,
+              "x": 113.6864013671875,
+              "y": 43.060401916503906,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Lower_Shaft",
+            "triangle_count": 20452
+          },
+          {
+            "bbox": {
+              "depth": 21.135398864746094,
+              "height": 120.0,
+              "width": 21.13559341430664,
+              "x": 149.4322052001953,
+              "y": 44.43230056762695,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "Upper_Shaft",
+            "triangle_count": 17788
+          },
+          {
+            "bbox": {
+              "depth": 30.730802536010742,
+              "height": 58.0,
+              "width": 40.0,
+              "x": 195.0,
+              "y": 39.63459777832031,
+              "z": 0.0
+            },
+            "id": 21,
+            "name": "Sense_Head_Base",
+            "triangle_count": 3270
+          },
+          {
+            "bbox": {
+              "depth": 26.546798706054688,
+              "height": 14.987199783325195,
+              "width": 40.0,
+              "x": 187.0,
+              "y": 86.72660064697266,
+              "z": -1.4210854715202004e-14
+            },
+            "id": 25,
+            "name": "Sense_Sliding_Cover",
+            "triangle_count": 472
+          },
+          {
+            "bbox": {
+              "depth": 30.0,
+              "height": 10.800000190734863,
+              "width": 30.0,
+              "x": 141.0,
+              "y": 85.0,
+              "z": 0.0
+            },
+            "id": 29,
+            "name": "Battery_Twist_Cap",
+            "triangle_count": 1212
+          },
+          {
+            "bbox": {
+              "depth": 45.0,
+              "height": 7.599999904632568,
+              "width": 20.60000228881836,
+              "x": 220.6999969482422,
+              "y": 137.5,
+              "z": 0.0
+            },
+            "id": 33,
+            "name": "Battery_Sled",
+            "triangle_count": 96
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 16.799999237060547,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 37,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 46.79999923706055,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 41,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.39999771118164,
+              "x": 76.80000305175781,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 45,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 47.374202728271484,
+              "height": 18.0,
+              "width": 103.2063980102539,
+              "x": 23.396800994873047,
+              "y": 166.31289672851562,
+              "z": 0.0
+            },
+            "id": 49,
+            "name": "Removable_Finger_Loop",
+            "triangle_count": 8814
+          }
+        ],
+        "sliced_time": 10106,
+        "sliced_time_with_cache": 8060,
+        "total_predication": 21281.419921875,
+        "triangle_count": 124856,
+        "warning_message": ""
+      }
+    },
+    "one-left": {
+      "file": "Print-Lattice-leaf-one-left.3mf",
+      "sha256": "656f141f2fa4fbced1aed49dfd0c1ad8c3c159c3e1de5af0b3cc99214da99bc3",
+      "part_names": [
+        "Handle_Left",
+        "Lower_Shaft",
+        "Upper_Shaft",
+        "Sense_Head_Base",
+        "Sense_Sliding_Cover",
+        "Battery_Twist_Cap",
+        "Battery_Sled",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Choc_Recessed_Plate",
+        "Removable_Finger_Loop"
+      ],
+      "positions": [
+        [
+          35,
+          55
+        ],
+        [
+          125,
+          55
+        ],
+        [
+          160,
+          55
+        ],
+        [
+          215,
+          55
+        ],
+        [
+          207,
+          100
+        ],
+        [
+          156,
+          100
+        ],
+        [
+          231,
+          160
+        ],
+        [
+          25,
+          100
+        ],
+        [
+          55,
+          100
+        ],
+        [
+          85,
+          100
+        ],
+        [
+          75,
+          190
+        ]
+      ],
+      "slice": {
+        "feature_type_times": {
+          "Bottom surface": 33.89318084716797,
+          "Bridge": 162.79188537597656,
+          "Brim": 141.0642852783203,
+          "Custom": 360.4710388183594,
+          "Flush": 29.0,
+          "Gap infill": 1947.754638671875,
+          "Inner wall": 4315.73193359375,
+          "Internal solid infill": 863.2454833984375,
+          "Outer wall": 5244.33203125,
+          "Overhang wall": 297.08746337890625,
+          "Sparse infill": 508.6355285644531,
+          "Support": 266.5610656738281,
+          "Support interface": 44.292781829833984,
+          "Support transition": 31.674558639526367,
+          "Top surface": 232.55763244628906,
+          "Travel": 3672.5087890625,
+          "Undefined": 3659.165283203125
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 72.226318359375,
+            "total_used_g": 72.22631072998047
+          }
+        ],
+        "generate_support_material_time": 205,
+        "id": 1,
+        "infill_time": 213,
+        "layer_filament_change": 0,
+        "main_predication": 17735.623046875,
+        "make_perimeters_time": 800,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 30.53459930419922,
+              "height": 172.8000030517578,
+              "width": 31.285598754882812,
+              "x": 19.357200622558594,
+              "y": 39.73270034790039,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Handle_Left",
+            "triangle_count": 36186
+          },
+          {
+            "bbox": {
+              "depth": 23.87919807434082,
+              "height": 100.0,
+              "width": 22.627197265625,
+              "x": 113.6864013671875,
+              "y": 43.060401916503906,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Lower_Shaft",
+            "triangle_count": 20452
+          },
+          {
+            "bbox": {
+              "depth": 21.135398864746094,
+              "height": 120.0,
+              "width": 21.13559341430664,
+              "x": 149.4322052001953,
+              "y": 44.43230056762695,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Upper_Shaft",
+            "triangle_count": 17788
+          },
+          {
+            "bbox": {
+              "depth": 30.730802536010742,
+              "height": 58.0,
+              "width": 40.0,
+              "x": 195.0,
+              "y": 39.63459777832031,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "Sense_Head_Base",
+            "triangle_count": 3270
+          },
+          {
+            "bbox": {
+              "depth": 26.546798706054688,
+              "height": 14.987199783325195,
+              "width": 40.0,
+              "x": 187.0,
+              "y": 86.72660064697266,
+              "z": -1.4210854715202004e-14
+            },
+            "id": 21,
+            "name": "Sense_Sliding_Cover",
+            "triangle_count": 472
+          },
+          {
+            "bbox": {
+              "depth": 30.0,
+              "height": 10.800000190734863,
+              "width": 30.0,
+              "x": 141.0,
+              "y": 85.0,
+              "z": 0.0
+            },
+            "id": 25,
+            "name": "Battery_Twist_Cap",
+            "triangle_count": 1212
+          },
+          {
+            "bbox": {
+              "depth": 45.0,
+              "height": 7.599999904632568,
+              "width": 20.60000228881836,
+              "x": 220.6999969482422,
+              "y": 137.5,
+              "z": 0.0
+            },
+            "id": 29,
+            "name": "Battery_Sled",
+            "triangle_count": 96
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 16.799999237060547,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 33,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.400001525878906,
+              "x": 46.79999923706055,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 37,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 17.19999885559082,
+              "height": 2.5,
+              "width": 16.39999771118164,
+              "x": 76.80000305175781,
+              "y": 91.4000015258789,
+              "z": 0.0
+            },
+            "id": 41,
+            "name": "Choc_Recessed_Plate",
+            "triangle_count": 104
+          },
+          {
+            "bbox": {
+              "depth": 47.374202728271484,
+              "height": 18.0,
+              "width": 103.2063980102539,
+              "x": 23.396800994873047,
+              "y": 166.31289672851562,
+              "z": 0.0
+            },
+            "id": 45,
+            "name": "Removable_Finger_Loop",
+            "triangle_count": 8814
+          }
+        ],
+        "sliced_time": 7104,
+        "sliced_time_with_cache": 5595,
+        "total_predication": 18140.720703125,
+        "triangle_count": 88602,
+        "warning_message": ""
+      }
+    }
+  }
+}

@@ -1146,3 +1146,10 @@ completion and reject queued requests while the worker is stuck. A responsive
 main thread after installation does not prove iCUE reconnection or lighting
 recovery; those require separate evidence. Do not change the Puck or receiver
 just to publish a native input fix.
+
+
+## Lightweight studies must preserve full roots and support landing clearance (2026-10-27)
+
+When thinning a detachable loop, preserve each complete direct seating arm. Clipping the old root at a tangent to the narrower tube left a real detached sliver (about 0.015 mm³); keeping the full root region removed it without discarding material as mesh cleanup. Check actual exported STL components as well as the source solid.
+
+Open shaft variants need their own support strategy. Enabling normal supports with only the old small wire-bore blocker allowed descending support columns into the route. Extend the blocker over the hollow interior's support landing sources and check actual straight and arc extrusion samples, including support features. The lattice-study reports cover four candidates and both handed stems; slicer clearance does not establish physical print quality or breaking strength. Keep exploratory studies separate from numbered models so a concurrent collaborator's next version cannot overwrite them.
