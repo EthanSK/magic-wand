@@ -1,0 +1,32 @@
+{
+  "units": "mm",
+  "butt_is_z0": true,
+  "length": 410.0,
+  "loop_lower_mount_z": 14.0,
+  "loop_mount_spacing": 90.0,
+  "button_offsets_from_upper_loop_mount": {
+    "thumb": 7.0,
+    "index": 3.0,
+    "middle": -23.0
+  },
+  "button_angles": {
+    "thumb": 90.0,
+    "index": -35.0,
+    "middle": -35.0
+  },
+  "loop_solid_band_section": [
+    7.0,
+    4.0
+  ],
+  "minimum_grip_depth_reduction_from_v18": 5.0,
+  "preserve": [
+    "both_hands",
+    "full_raised_helix",
+    "continuous_taper",
+    "10.4mm_wire_route",
+    "recessed_bare_wand_mounts",
+    "direct_matching_handle_seats",
+    "upward_entry_left_turn_lock"
+  ],
+  "change_policy": "Only a new explicit user instruction may change these relationships. A mechanism revision must not lift the loop or controls away from the butt."
+}
