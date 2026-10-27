@@ -1,0 +1,295 @@
+{
+  "geometry": "actual exported STL solids",
+  "grip_joint_difference_mm3": 0.05151200181706421,
+  "wire_clearance_mm3": {
+    "shaft": 0.0,
+    "head": 0.0
+  },
+  "clip_lost_mm3": 7.031249585543264e-05,
+  "board_pockets_lost_mm3": 0.00012849371937089004,
+  "loop_paths_reused": {
+    "left": {
+      "radial_preload_float_proof": {
+        "0.0": {
+          "rigid_overlap_mm3": 0.0,
+          "nominal_spring_overlap_mm3": 0.21719738991966664
+        },
+        "0.1": {
+          "rigid_overlap_mm3": 0.0,
+          "nominal_spring_overlap_mm3": 0.14875825969945344
+        },
+        "0.15": {
+          "rigid_overlap_mm3": 0.0,
+          "nominal_spring_overlap_mm3": 0.11938108589747065
+        },
+        "0.2": {
+          "rigid_overlap_mm3": 0.0,
+          "nominal_spring_overlap_mm3": 0.09323217296757136
+        },
+        "0.25": {
+          "rigid_overlap_mm3": 0.16440413629891715,
+          "nominal_spring_overlap_mm3": 0.2347156572086721
+        },
+        "0.3": {
+          "rigid_overlap_mm3": 0.6125659796093106,
+          "nominal_spring_overlap_mm3": 0.6631851093333316
+        },
+        "0.35": {
+          "rigid_overlap_mm3": 1.2550815557634267,
+          "nominal_spring_overlap_mm3": 1.2892365551737957
+        },
+        "0.4": {
+          "rigid_overlap_mm3": 2.0895320665111745,
+          "nominal_spring_overlap_mm3": 2.110451196479975
+        },
+        "0.5": {
+          "rigid_overlap_mm3": 4.246929771656132,
+          "nominal_spring_overlap_mm3": 4.251061945358043
+        }
+      },
+      "rest_overlap_mm3": 1.2916728098104834e-05,
+      "rigid_rest_overlap_mm3": 0.0,
+      "nominal_spring_preload_overlap_mm3": 0.21719738991966664,
+      "released_turn_mm3": {
+        "0.0": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "1.5": 0.0,
+        "2.0": 0.0,
+        "2.5": 0.0,
+        "3.0": 0.0,
+        "3.5": 0.0,
+        "4.0": 0.0,
+        "4.5": 0.0,
+        "5.0": 0.0,
+        "5.5": 0.0,
+        "6.0": 0.0,
+        "6.5": 0.0,
+        "7.0": 0.0,
+        "7.5": 0.0,
+        "8.0": 0.0,
+        "8.5": 0.0,
+        "9.0": 0.0,
+        "9.5": 0.0,
+        "10.0": 0.0,
+        "10.5": 0.0,
+        "11.0": 0.0,
+        "11.5": 0.0,
+        "12.0": 0.0
+      },
+      "released_slide_mm3": {
+        "0.0": 0.0,
+        "0.25": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "2.0": 0.0,
+        "3.0": 0.0,
+        "4.0": 0.0
+      },
+      "radial_capture_mm3": 13.919243620097365,
+      "upward_hard_stop_mm3": 7.435321602858567,
+      "locked_downward_capture_without_latch_mm3": 1.442004952214072,
+      "reverse_catch_mm3": {
+        "0.5": 0.0,
+        "1.0": 0.17524781368745898,
+        "2.0": 0.6520048436337172,
+        "3.0": 1.0370744526344817
+      },
+      "left_turn_end_stop_mm3": 2.1650845767644213,
+      "keycap_and_battery_turn_path_mm3": {
+        "0.0": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "1.5": 0.0,
+        "2.0": 0.0,
+        "2.5": 0.0,
+        "3.0": 0.0,
+        "3.5": 0.0,
+        "4.0": 0.0,
+        "4.5": 0.0,
+        "5.0": 0.0,
+        "5.5": 0.0,
+        "6.0": 0.0,
+        "6.5": 0.0,
+        "7.0": 0.0,
+        "7.5": 0.0,
+        "8.0": 0.0,
+        "8.5": 0.0,
+        "9.0": 0.0,
+        "9.5": 0.0,
+        "10.0": 0.0,
+        "10.5": 0.0,
+        "11.0": 0.0,
+        "11.5": 0.0,
+        "12.0": 0.0
+      },
+      "keycap_and_battery_slide_path_mm3": {
+        "0.0": 0.0,
+        "0.25": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "2.0": 0.0,
+        "3.0": 0.0,
+        "4.0": 0.0
+      },
+      "outward_removal_after_downward_slide_mm3": {
+        "0.0": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "2.0": 0.0,
+        "5.0": 0.0,
+        "10.0": 0.0,
+        "20.0": 0.0,
+        "35.0": 0.0
+      },
+      "entry_clockwise_deg": 12.0,
+      "left_locking_turn_deg": 12.0,
+      "cam_draw_mm": 0.6,
+      "seated_latch_deflection_mm": 0.65,
+      "released_latch_deflection_mm": 3.2
+    },
+    "right": {
+      "radial_preload_float_proof": {
+        "0.0": {
+          "rigid_overlap_mm3": 0.0,
+          "nominal_spring_overlap_mm3": 0.21719738991966664
+        },
+        "0.1": {
+          "rigid_overlap_mm3": 0.0,
+          "nominal_spring_overlap_mm3": 0.14875825969945344
+        },
+        "0.15": {
+          "rigid_overlap_mm3": 0.0,
+          "nominal_spring_overlap_mm3": 0.11938108589747065
+        },
+        "0.2": {
+          "rigid_overlap_mm3": 0.0,
+          "nominal_spring_overlap_mm3": 0.09323217296757136
+        },
+        "0.25": {
+          "rigid_overlap_mm3": 0.16440413629891729,
+          "nominal_spring_overlap_mm3": 0.2347156572086718
+        },
+        "0.3": {
+          "rigid_overlap_mm3": 0.6125659796093108,
+          "nominal_spring_overlap_mm3": 0.6631851093333319
+        },
+        "0.35": {
+          "rigid_overlap_mm3": 1.2550815557634258,
+          "nominal_spring_overlap_mm3": 1.2892365551737948
+        },
+        "0.4": {
+          "rigid_overlap_mm3": 2.089532066511175,
+          "nominal_spring_overlap_mm3": 2.1104511964799753
+        },
+        "0.5": {
+          "rigid_overlap_mm3": 4.246929771656133,
+          "nominal_spring_overlap_mm3": 4.251061945358046
+        }
+      },
+      "rest_overlap_mm3": 1.2916728098104834e-05,
+      "rigid_rest_overlap_mm3": 0.0,
+      "nominal_spring_preload_overlap_mm3": 0.21719738991966664,
+      "released_turn_mm3": {
+        "0.0": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "1.5": 0.0,
+        "2.0": 0.0,
+        "2.5": 0.0,
+        "3.0": 0.0,
+        "3.5": 0.0,
+        "4.0": 0.0,
+        "4.5": 0.0,
+        "5.0": 0.0,
+        "5.5": 0.0,
+        "6.0": 0.0,
+        "6.5": 0.0,
+        "7.0": 0.0,
+        "7.5": 0.0,
+        "8.0": 0.0,
+        "8.5": 0.0,
+        "9.0": 0.0,
+        "9.5": 0.0,
+        "10.0": 0.0,
+        "10.5": 0.0,
+        "11.0": 0.0,
+        "11.5": 0.0,
+        "12.0": 0.0
+      },
+      "released_slide_mm3": {
+        "0.0": 0.0,
+        "0.25": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "2.0": 0.0,
+        "3.0": 0.0,
+        "4.0": 0.0
+      },
+      "radial_capture_mm3": 13.919243620097369,
+      "upward_hard_stop_mm3": 7.435321602858563,
+      "locked_downward_capture_without_latch_mm3": 1.4420049522140719,
+      "reverse_catch_mm3": {
+        "0.5": 0.0,
+        "1.0": 0.17524781368745898,
+        "2.0": 0.6520048436337172,
+        "3.0": 1.0370744526344817
+      },
+      "left_turn_end_stop_mm3": 1.9959929321232568,
+      "keycap_and_battery_turn_path_mm3": {
+        "0.0": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "1.5": 0.0,
+        "2.0": 0.0,
+        "2.5": 0.0,
+        "3.0": 0.0,
+        "3.5": 0.0,
+        "4.0": 0.0,
+        "4.5": 0.0,
+        "5.0": 0.0,
+        "5.5": 0.0,
+        "6.0": 0.0,
+        "6.5": 0.0,
+        "7.0": 0.0,
+        "7.5": 0.0,
+        "8.0": 0.0,
+        "8.5": 0.0,
+        "9.0": 0.0,
+        "9.5": 0.0,
+        "10.0": 0.0,
+        "10.5": 0.0,
+        "11.0": 0.0,
+        "11.5": 0.0,
+        "12.0": 0.0
+      },
+      "keycap_and_battery_slide_path_mm3": {
+        "0.0": 0.0,
+        "0.25": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "2.0": 0.0,
+        "3.0": 0.0,
+        "4.0": 0.0
+      },
+      "outward_removal_after_downward_slide_mm3": {
+        "0.0": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "2.0": 0.0,
+        "5.0": 0.0,
+        "10.0": 0.0,
+        "20.0": 0.0,
+        "35.0": 0.0
+      },
+      "entry_clockwise_deg": 12.0,
+      "left_locking_turn_deg": 12.0,
+      "cam_draw_mm": 0.6,
+      "seated_latch_deflection_mm": 0.65,
+      "released_latch_deflection_mm": 3.2
+    }
+  },
+  "floating_layer_starts": [],
+  "physical_fit_verified": false,
+  "physical_strength_verified": false
+}
