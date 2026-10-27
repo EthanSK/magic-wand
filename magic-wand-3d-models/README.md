@@ -1,6 +1,10 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V16 — borderless recessed switches, both hands](Print-16-README.md).**
+**Latest candidate: [Print V17 — smooth lower handle attachment, both hands](Print-17-README.md).**
+
+The curved lower return encloses its stud collar, removing V16’s exposed diagonal bridge and hanging toe. Only the universal removable loop needs reprinting; V16 stems still fit. One left wand estimates 75.048 g printed PETG. Physical fit and strength remain unverified.
+
+**Previous candidate: [Print V16 — borderless recessed switches, both hands](Print-16-README.md).**
 
 Square surrounds are removed, the bought switch/socket assemblies sit 3.4 mm deeper and the thin plates print flat. Two small side clips and lower stops retain the plates. The original helix, taper and recessed detachable-loop lock remain. Print the matching small switch test first; physical fit is unverified. One left wand estimates 75.226 g printed PETG, excluding bought hardware.
 
