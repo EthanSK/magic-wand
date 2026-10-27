@@ -362,3 +362,6 @@ Viewing controls (top left of the 3D view):
 - The spigot stops on a socket floor ring about 1.6 mm wide, narrow so the connector can pass;
   its wear is unknown.
 - Overhang figures in the manifest are a simple face-angle count, not a slicer's verdict.
+
+
+Latest candidate: [V16 — recessed switches without square surrounds, both hands](v16/README.md). Thin switch plates now print flat. Print the matching pocket coupon before the stems; physical fit remains unverified.
