@@ -18,6 +18,16 @@ Read this skill before any wand CAD, print-layout or mechanical preview change. 
 - When the loop is removed, the stem must remain completely usable as a normal wand, with no projecting brackets, receivers, rails or release tabs. Put the receivers inside the existing surface and keep projecting pegs and release hardware on the removable loop. Inspect and verify the bare-wand state alongside the attached state in both hands. V14’s external cam housings were rejected despite its working geometric lock; retain that model only for history. User-corrected — 2026-10-27.
 - Keep prior models and delivered files unchanged. New revisions and supporting files go to Downloads; editable sources and regenerated exports are committed together under the repository rules.
 
+## Fixed ergonomic priorities
+
+Read the frozen [V19 design principles](../../../magic-wand/hardware/printed-loop-wand/v19/design-principles.json) before the next revision. They define the butt reference, lower mount, mount spacing and button offsets. Preserve these relationships until the user explicitly changes them; do not derive a new hand position from a convenient connector location.
+
+- Keep the removable finger loop at the butt, with only the clearance needed for the cap and release motion. Removing an unwanted tail must not lift the whole handle higher up the wand. V18 failed this: preserving its high mount positions was the wrong priority.
+- Keep all three buttons positioned relative to the loop as one ergonomic group, mirrored for both hands. Moving the loop requires moving the group by the same amount. Preserve button angles and their relative height spacing.
+- The loop is a slim solid band, not a thick hollow tube. Keep reinforcement local to the locking ends. Do not preserve obsolete tubular cavities or perforations after this explicit change.
+- A requested 5–10 mm grip reduction is a substantial size change, not another 1 mm adjustment. Report measured axes honestly. Keep battery space and the wire route, and disclose a wider battery section rather than claiming a circular diameter reduction where none exists.
+- Locking interfaces serve the approved grip position and silhouette. Do not silently sacrifice those priorities to reuse old pegs, cap dimensions or joint heights. Verify the cap, buttons, cell, wires and complete attachment path after resolving the packaging.
+
 ## Before calling it final
 
 Map each requested change to a source parameter or feature and a check. Compare old/new assembled views, not just the print plate. Check the core-radius profile for monotonic taper; explicitly check the helix is generated. Inspect both handed handles and count both in the actual 3MF build. Check new joints inside the chosen silhouette instead of making the silhouette fit arbitrary collars.
