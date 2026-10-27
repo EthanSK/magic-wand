@@ -1,0 +1,37 @@
+--- a/Sources/ScimitarKit/App/ModePickerCoordinator.swift
++++ b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
+@@ -1230,8 +1230,7 @@
+         PhysicalCell.all.map { cell in
+             if let control = WheelChordControl.extraUtilitiesControl(for: cell) {
+                 return ModeHUDLegendItem(cell: cell, gesture: control.hudGesture,
+-                                         accent: control.hudAccent,
+-                                         controlStatus: control == .chromeVSCodeLayout ? .reportedBroken : .normal)
++                                         accent: control.hudAccent)
+             }
+             if let action = ModeUtilityAction.extraUtilitiesAction(for: cell) {
+                 return ModeHUDLegendItem(
+--- a/Tests/AgenticMouseAppTests/ChromeVSCodeLayoutTests.swift
++++ b/Tests/AgenticMouseAppTests/ChromeVSCodeLayoutTests.swift
+@@ -99,7 +99,7 @@
+             XCTAssertEqual(ModePickerCoordinator.extraUtilitiesLegend(for: source).first { $0.cell.rawValue == 6 }?.actionTitle,
+                            "Split Chrome / VS Code")
+             XCTAssertEqual(ModePickerCoordinator.extraUtilitiesLegend(for: source).first { $0.cell.rawValue == 6 }?.controlStatus,
+-                           .reportedBroken, "Only Ethan's physical acceptance clears a reported failure")
++                           .normal, "Ethan physically accepted Split after the monitor-role fix")
+         }
+     }
+ 
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -18,9 +18,9 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.291</string>
++	<string>1.0.292</string>
+ 	<key>CFBundleVersion</key>
+-	<string>297</string>
++	<string>298</string>
+ 	<key>LSMinimumSystemVersion</key>
+ 	<string>13.0</string>
+ 

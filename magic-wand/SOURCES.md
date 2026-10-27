@@ -395,7 +395,24 @@ The patch reproduced all five native source files from the retained baseline. Th
 installed Developer ID signature and executable matched the release receipt. The
 native suite reported 1,123 tests, four skips and no failures; the 12-case attended
 probe included four layout swaps and exact restoration of both original frames.
-Physical mouse acceptance remains unverified, so Split retains its reported-broken
-indicator. The monitor audit found no other persisted monitor selector in Agentic
+At that release, physical mouse acceptance was unverified, so Split retained its
+reported-broken indicator. The monitor audit found no other persisted monitor selector in Agentic
 Mouse. Stay's saved layouts, Better Git, Wand Receiver and the saved Puck program
 were not changed by this delta.
+
+## Split physical acceptance and status indicator
+
+Ethan confirmed that Split Chrome / VS Code works after installed 1.0.291 (297).
+`integrations/agentic-mouse/split-accepted.patch` preserves the three-file
+increment from that release to installed 1.0.292 (298), after `display-role.patch`.
+It removes only the reported-broken HUD indicator, updates its focused assertion
+and advances the app version. Split behavior and mouse mappings are unchanged.
+Its SHA-256 is
+`75b5eb5806f5a9167c9c0fe7399d6d742f994c54ae602875c220cfc790460a7c`.
+
+All three resulting files matched the native checkout after applying the patch to
+the retained 297 baseline. The installed Developer ID signature and executable
+matched the release receipt, and the focused status assertion passed. The prior
+1,123-test gate and attended layout probes apply to the unchanged Split behavior;
+they were not rerun for this indicator-only delta. This is an incremental source
+patch, not a complete Agentic Mouse distribution.
