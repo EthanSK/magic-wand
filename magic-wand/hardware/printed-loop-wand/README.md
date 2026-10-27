@@ -1,6 +1,6 @@
 # Printed loop wand
 
-Latest candidate: [V18 — direct seated handle and slimmer grip](v18/README.md). Complete both-handed projects and small fit tests are included. New stems and loop are required for the larger seated mounts; earlier versions remain unchanged.
+Latest candidate: [V19 — solid band at the butt and substantially slimmer grip](v19/README.md). Both hands and small fit tests are included. The butt reference and button offsets are frozen in the versioned design principles; earlier versions remain unchanged.
 
 Ready-to-open Bambu projects are in [Magic Wand 3D models](../../../magic-wand-3d-models/).
 Their freshness and archive privacy checks run with the repository tests.
