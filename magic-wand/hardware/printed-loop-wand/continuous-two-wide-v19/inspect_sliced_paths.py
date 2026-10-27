@@ -42,13 +42,13 @@ def samples(project):
         position=nxt
     return np.concatenate(points),np.asarray(kinds)
 
-def inspect(key,manifest,project):
+def inspect(key,manifest,project,*,shaft_end=365.5,extra_areas=None):
     c=s.configure(key);A,F=samples(project);records={p['name']:p for p in manifest['variants'][key]['parts']+manifest['shared_parts']};checks={}
     layout=json.loads((HERE/'exports/projects.json').read_text())[key]['complete'];external_support_bases={}
     for name,center in zip(layout['part_names'],layout['positions']):
         if name not in ('Handle_Left','Handle_Right','Lower_Shaft','Upper_Shaft','Continuous_Shaft','Removable_Finger_Loop','Sense_Open_Cradle'):continue
         transform=np.asarray(records[name]['print_to_assembly']);p=A+[0.,2.,0.]-[*center,0.];xyz=p@transform[:3,:3].T+transform[:3,3];x,y,z=xyz.T
-        z0,z1=(61.,173.5) if name.startswith('Handle_') else (160.5,259.5) if name=='Lower_Shaft' else (246.5,365.5) if name=='Upper_Shaft' else (160.5,365.5) if name=='Continuous_Shaft' else (0.,0.)
+        z0,z1=(61.,173.5) if name.startswith('Handle_') else (160.5,259.5) if name=='Lower_Shaft' else (246.5,365.5) if name=='Upper_Shaft' else (160.5,shaft_end) if name=='Continuous_Shaft' else (0.,0.)
         areas={'wire_bore_9mm':(x*x+y*y<4.5**2)&(z>z0)&(z<z1)}
         if name.startswith('Handle_'):
             areas['battery']=(abs(x)<9.3)&(abs(y)<3.5)&(z>15)&(z<58)
@@ -95,6 +95,7 @@ def inspect(key,manifest,project):
                 delta=xyz-np.asarray(port['center']);n=np.asarray(port['inward']);axial=delta@n;cross=delta-axial[:,None]*n;t=delta@np.asarray(port['tangent'])
                 areas[f'contact_airflow_{i}']=(np.sum(cross*cross,axis=1)<.8**2)&(abs(axial)<8.)
                 areas[f'broad_face_{i}']=((t/6.5)**2+(axial/1.5)**2<1)&(abs(x)<c.LOOP_WIDTH/2+.3)
+        if extra_areas:areas.update(extra_areas(name,x,y,z))
         checks[name]={label:dict(collections.Counter(F[mask])) for label,mask in areas.items()}
     assert all(not hits for part in checks.values() for hits in part.values()),(key,checks)
     return {'project_sha256':s.sha(project),'sample_step_mm':.5,'extruder_offset_mm':[0,2],'path_samples':len(A),'clearance_extrusion_samples':checks,'removable_support_bases_outside_open_back':external_support_bases}
