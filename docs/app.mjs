@@ -148,12 +148,15 @@ async function main() {
 
   let lightMode = "idle";
   let currentLight = { display: lights.idle.display, strength: 0 };
+  // The page's Lights list marks the light the demo is showing.
+  const legend = [...document.querySelectorAll(".lights [data-light]")];
   function setLight(mode) {
     const light = lights[mode] || lights.idle;
     const strength = mode === "idle" ? 0 : mode === "disconnected" ? 0.35 : 1;
     currentLight = { display: light.display, strength };
     root.style.setProperty("--led-lit", light.display);
     root.style.setProperty("--led-strength", String(strength));
+    for (const item of legend) item.classList.toggle("lit", strength > 0 && item.dataset.light === mode);
     wand.setLight(light.display, strength);
     if (mode !== lightMode) {
       lightMode = mode;

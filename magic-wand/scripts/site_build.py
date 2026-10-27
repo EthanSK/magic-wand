@@ -22,6 +22,8 @@ STAMP = re.compile(
     r"(?<=[\"'(])(?P<prefix>https://ethansk\.github\.io/magic-wand/|/magic-wand/|\./)?"
     r"(?P<path>[A-Za-z0-9_\-][A-Za-z0-9_\-./]*\.(?:" + ASSET_EXTENSIONS + r"))\?v=[0-9a-f]*"
 )
+# The buttons in the order they sit on the grip, from the butt toward the shaft.
+GRIP_ORDER = ("bottom", "middle", "top")
 
 
 def load_manifest(identifiers: dict[str, str]) -> dict:
@@ -52,13 +54,19 @@ def html_meta(manifest: dict) -> str:
     ])
 
 
+def html_vision(manifest: dict) -> str:
+    """Ethan's vision line, set as the home page's headline inside its h1."""
+    return f'<span class="hero-vision">{escape(manifest["vision"]["headline"])}</span>'
+
+
 def html_intro(manifest: dict) -> str:
-    vision = manifest["vision"]
-    return (
-        f'<p class="tagline">{escape(manifest["tagline"])}</p>\n'
-        f'<p class="summary">{escape(manifest["summary"])}</p>\n'
-        f'<p class="vision"><strong>{escape(vision["headline"])}</strong> {escape(vision["detail"])}</p>'
-    )
+    """What the wand is, beside the headline. The vision's longer detail stays in the README."""
+    return f'<p class="tagline">{escape(manifest["tagline"])}</p>'
+
+
+def html_summary(manifest: dict) -> str:
+    """How it works in one breath; leads the How It Works section."""
+    return f'<p class="section-lead">{escape(manifest["summary"])}</p>'
 
 
 def md_intro(manifest: dict) -> str:
@@ -83,8 +91,13 @@ def grip_angle_notes(manifest: dict) -> list[str]:
 
 
 def html_grip_angle(manifest: dict) -> str:
-    notes = "\n".join(f"  <p>{escape(note)}</p>" for note in grip_angle_notes(manifest))
-    return f'<h3 class="needs-title" id="grip-angle">Grip Angle</h3>\n<div class="inside-notes grip-notes">\n{notes}\n</div>'
+    notes = "\n".join(f"    <p>{escape(note)}</p>" for note in grip_angle_notes(manifest))
+    return (
+        '<details class="more" id="grip-angle">\n'
+        "  <summary>Grip Angle</summary>\n"
+        f'  <div class="more-body grip-notes">\n{notes}\n  </div>\n'
+        "</details>"
+    )
 
 
 def html_grip(manifest: dict) -> str:
@@ -119,20 +132,33 @@ def html_control(item: dict, pin: str | None, keys: str) -> str:
     )
     notes = ""
     if item.get("notes"):
-        notes = '\n  <ul class="notes">' + "".join(f"<li>{escape(note)}</li>" for note in item["notes"]) + "</ul>"
+        # Every note stays published; the long ones sit behind one disclosure per control.
+        items = "".join(f"<li>{escape(note)}</li>" for note in item["notes"])
+        notes = f'\n  <details class="more">\n    <summary>Details</summary>\n    <ul class="notes">{items}</ul>\n  </details>'
     meta = (f'<span class="pin">{pin}</span>' if pin else "") + keys
     return (
-        f'<div class="control" data-light="{item["light"]}">\n'
-        f'  <div class="control-head"><h3>{escape(item["name"])}</h3><p class="control-meta">{meta}</p></div>\n'
+        f'<article class="control" id="control-{item["id"]}" data-light="{item["light"]}">\n'
+        f'  <header class="control-head"><h3>{escape(item["name"])}</h3><p class="control-meta">{meta}</p></header>\n'
         f'  <p class="control-role"><span class="swatch" aria-hidden="true"></span>{escape(item["role"])}</p>\n'
         f'  <dl class="gestures">\n{rows}\n  </dl>{notes}\n'
-        "</div>"
+        "</article>"
     )
+
+
+def grip_order(manifest: dict) -> list[dict]:
+    """Buttons as they sit on the grip, from the butt toward the shaft."""
+    buttons = {button["id"]: button for button in manifest["buttons"]}
+    ordered = [buttons[button_id] for button_id in GRIP_ORDER if button_id in buttons]
+    return ordered + [button for button in manifest["buttons"] if button["id"] not in GRIP_ORDER]
 
 
 def html_controls(manifest: dict) -> str:
     names = {button["id"]: button for button in manifest["buttons"]}
-    parts = [html_control(button, button["pin"], f"<kbd>{button['key']}</kbd>") for button in manifest["buttons"]]
+    buttons = grip_order(manifest)
+    # Decorative grip seen from the side: one cap per column, then the shaft and the Puck.
+    caps = "".join(f'<span class="grip-cap" data-light="{button["light"]}"></span>' for button in buttons)
+    parts = [f'<div class="grip-bar" aria-hidden="true">{caps}<span class="grip-shaft"></span><span class="grip-puck"></span></div>']
+    parts += [html_control(button, button["pin"], f"<kbd>{button['key']}</kbd>") for button in buttons]
     for chord in manifest["chords"]:
         keys = "+".join(f"<kbd>{names[item]['key']}</kbd>" for item in chord["buttons"])
         parts.append(html_control(chord, None, keys))
@@ -160,7 +186,7 @@ def html_dependencies(manifest: dict) -> str:
 def schematic(manifest: dict) -> str:
     """Side view of the wand. Proportions, spacing and the wire route are illustrative."""
     buttons = {button["id"]: button for button in manifest["buttons"]}
-    order = [("bottom", 82), ("middle", 142), ("top", 202)]  # Top sits nearest the shaft.
+    order = list(zip(GRIP_ORDER, (82, 142, 202)))  # Top sits nearest the shaft.
     caps = []
     wires = []
     for index, (button_id, x) in enumerate(order):
@@ -247,14 +273,17 @@ def html_tuning(manifest: dict) -> str:
 
 def html_status(manifest: dict) -> str:
     versions = manifest["versions"]
-    items = "\n".join(f"  <li>{escape(line)}</li>" for line in manifest["status"])
+    items = "\n".join(f"    <li>{escape(line)}</li>" for line in manifest["status"])
     return (
-        f'<ul class="status-list">\n{items}\n</ul>\n'
         '<p class="versions">'
         f'<span>Receiver {versions["receiver"]} ({versions["receiverBuild"]})</span> '
         f'<span>Device code {versions["deviceRuntime"]}</span> '
         f'<span>Bridge {versions["bridgeRevision"][:8]}</span></p>\n'
-        f'<p class="fine">Updated {long_date(manifest["updated"])}</p>'
+        f'<p class="fine">Updated {long_date(manifest["updated"])}</p>\n'
+        '<details class="more">\n'
+        "  <summary>Status notes</summary>\n"
+        f'  <ul class="status-list">\n{items}\n  </ul>\n'
+        "</details>"
     )
 
 
@@ -341,7 +370,8 @@ def artifacts(identifiers: dict[str, str]) -> dict[Path, str]:
     out[css_path] = stamp(css, out)
 
     html_fragments = {
-        "meta": html_meta(manifest), "intro": html_intro(manifest), "grip": html_grip(manifest),
+        "meta": html_meta(manifest), "vision": html_vision(manifest), "intro": html_intro(manifest),
+        "summary": html_summary(manifest), "grip": html_grip(manifest),
         "controls": html_controls(manifest), "lights": html_lights(manifest), "dependencies": html_dependencies(manifest),
         "hardware": html_hardware(manifest), "tuning": html_tuning(manifest), "status": html_status(manifest),
         "gripAngle": html_grip_angle(manifest),

@@ -2,146 +2,166 @@
 <html lang="en-GB">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>How To · Magic Wand</title>
   <meta name="description" content="Short illustrated videos for pointing, scrolling, the HUD, dictation and reviewing changes with Magic Wand.">
-  <meta name="theme-color" content="#1f173d">
+  <meta name="theme-color" content="#121019">
   <link rel="canonical" href="https://ethansk.github.io/magic-wand/how-to/">
-  <link rel="icon" href="../icon.svg?v=6a86fd3df6">
-  <link rel="stylesheet" href="../styles.css?v=288e2c8eeb">
-  <link rel="stylesheet" href="./how-to.css?v=845395df0a">
+  <link rel="icon" href="../icon.svg?v=6a86fd3df6" type="image/svg+xml">
+  <link rel="preload" href="../fonts/atkinson-hyperlegible-next.woff2?v=1e4cea71d7" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../styles.css?v=6f79a79666">
+  <link rel="stylesheet" href="./how-to.css?v=f7b95646dc">
 </head>
-<body>
+<body class="howto-page">
   <a class="skip-link" href="#guides">Skip to the videos</a>
   <header class="topbar">
     <a class="brand" href="../"><img src="../icon.svg?v=6a86fd3df6" width="28" height="28" alt="">Magic Wand</a>
-    <nav class="topnav" aria-label="Sections"><a href="../#controls">Controls</a><a href="../#build">Setup</a><a href="https://github.com/EthanSK/magic-wand">GitHub ↗</a></nav>
+    <nav class="topnav" aria-label="Sections">
+      <a href="../#controls">Controls</a>
+      <a class="keep" href="./" aria-current="page">How To</a>
+      <a href="../#build">Build</a>
+      <a class="external" href="https://github.com/EthanSK/magic-wand">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
   </header>
-  <main class="howto-main" id="top">
-    <header class="howto-intro">
-      <p class="eyebrow">THE THREE-BUTTON GUIDE</p>
-      <h1>How do I…?</h1>
-      <p>Pick an action. See the buttons, the wand movement and what happens on screen.</p>
-      <p class="fine">Illustrated guides for Control V2. The current V3 uses straight drags and keeps scrolling while Bottom is held; the circle-scroll clips show the older selectable V2. Each clip has narration, captions and a transcript.</p>
+  <main id="top">
+    <header class="howto-intro room">
+      <div class="howto-intro-inner">
+        <h1>How do I…?</h1>
+        <div>
+          <p class="tagline">Pick an action. See the buttons, the wand movement and what happens on screen.</p>
+          <p class="fine">Illustrated guides for Control V2. The current V3 uses straight drags and keeps scrolling while Bottom is held; the circle-scroll clips show the older selectable V2. Each clip has narration, captions and a transcript.</p>
+        </div>
+        <form class="howto-search" role="search">
+          <label for="howto-q">Find an action</label>
+          <div class="howto-search-row"><input id="howto-q" name="q" type="search" placeholder="Try “scroll sideways” or “drag”…" autocomplete="off"><button type="reset" id="howto-clear">Clear</button></div>
+          <p id="howto-count" role="status" aria-live="polite"></p>
+        </form>
+      </div>
     </header>
-    <form class="howto-search" role="search">
-      <label for="howto-q">Find an action</label>
-      <div class="howto-search-row"><input id="howto-q" name="q" type="search" placeholder="Try “scroll sideways” or “drag”…" autocomplete="off"><button type="reset" id="howto-clear">Clear</button></div>
-      <p id="howto-count" role="status" aria-live="polite"></p>
-    </form>
-    <noscript><p>Choose a title to play its video. Search needs JavaScript.</p></noscript>
-    <ul class="howto-grid" id="guides" aria-label="How-to videos">
-      <!-- wand:howto-cards -->
-      <li class="howto-card" id="point-and-click" data-id="point-and-click" data-buttons="bottom">
-        <div class="howto-thumb"><img src="videos/point-and-click.jpg?v=5e1e82d07f" width="1280" height="720" loading="eager" decoding="async" alt=""><time class="howto-time" datetime="PT17S">0:17</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/point-and-click.mp4?v=ced1c7acae" data-guide="point-and-click">How do I move the pointer and click?</a></h2>
-          <p class="howto-summary">Tap Bottom to follow, stop to click once, tap again to stop.</p>
-          <p class="howto-buttons"><span data-light="mouse"><span class="swatch" aria-hidden="true"></span>Bottom</span></p>
-        </div>
-      </li>
-      <li class="howto-card" id="drag" data-id="drag" data-buttons="bottom">
-        <div class="howto-thumb"><img src="videos/drag.jpg?v=ebc0b0ab10" width="1280" height="720" loading="eager" decoding="async" alt=""><time class="howto-time" datetime="PT16S">0:16</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/drag.mp4?v=24e4c11cbd" data-guide="drag">How do I drag something?</a></h2>
-          <p class="howto-summary">Tap Bottom, then hold the second press to drag; release to drop.</p>
-          <p class="howto-buttons"><span data-light="mouse"><span class="swatch" aria-hidden="true"></span>Bottom</span></p>
-        </div>
-      </li>
-      <li class="howto-card" id="recenter" data-id="recenter" data-buttons="bottom">
-        <div class="howto-thumb"><img src="videos/recenter.jpg?v=4d408455e6" width="1280" height="720" loading="eager" decoding="async" alt=""><time class="howto-time" datetime="PT12S">0:12</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/recenter.mp4?v=284531b9de" data-guide="recenter">How do I get the pointer back to the middle?</a></h2>
-          <p class="howto-summary">Double tap Bottom to centre the pointer with mouse follow on.</p>
-          <p class="howto-buttons"><span data-light="mouse"><span class="swatch" aria-hidden="true"></span>Bottom</span></p>
-        </div>
-      </li>
-      <li class="howto-card" id="scroll-up-down" data-id="scroll-up-down" data-buttons="bottom">
-        <div class="howto-thumb"><img src="videos/scroll-up-down.jpg?v=dd1e8a689a" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT19S">0:19</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/scroll-up-down.mp4?v=c534c7d913" data-guide="scroll-up-down">How do I scroll up and down?</a></h2>
-          <p class="howto-summary">Hold Bottom, move up or down, then keep circling; release to stop.</p>
-          <p class="howto-buttons"><span data-light="mouse"><span class="swatch" aria-hidden="true"></span>Bottom</span></p>
-        </div>
-      </li>
-      <li class="howto-card" id="scroll-sideways" data-id="scroll-sideways" data-buttons="bottom">
-        <div class="howto-thumb"><img src="videos/scroll-sideways.jpg?v=e180a2e0d9" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT15S">0:15</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/scroll-sideways.mp4?v=118948a1b0" data-guide="scroll-sideways">How do I scroll sideways?</a></h2>
-          <p class="howto-summary">Hold Bottom, start left or right, then keep circling; release to stop.</p>
-          <p class="howto-buttons"><span data-light="mouse"><span class="swatch" aria-hidden="true"></span>Bottom</span></p>
-        </div>
-      </li>
-      <li class="howto-card" id="hud-cards" data-id="hud-cards" data-buttons="middle">
-        <div class="howto-thumb"><img src="videos/hud-cards.jpg?v=6bc42ca43e" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT20S">0:20</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/hud-cards.mp4?v=35ed48321c" data-guide="hud-cards">How do I open the HUD and use a card?</a></h2>
-          <p class="howto-summary">Tap Middle, turn to a card, tap to use it; double tap to close.</p>
-          <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
-        </div>
-      </li>
-      <li class="howto-card" id="hud-pages" data-id="hud-pages" data-buttons="middle">
-        <div class="howto-thumb"><img src="videos/hud-pages.jpg?v=b0b358e578" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT17S">0:17</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/hud-pages.mp4?v=cdcbff1c11" data-guide="hud-pages">How do I open a HUD page and go back?</a></h2>
-          <p class="howto-summary">Tap Middle on a page card; its exit card goes back one page.</p>
-          <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
-        </div>
-      </li>
-      <li class="howto-card" id="switch-apps" data-id="switch-apps" data-buttons="middle">
-        <div class="howto-thumb"><img src="videos/switch-apps.jpg?v=8089300958" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT15S">0:15</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/switch-apps.mp4?v=e5d1db4c2c" data-guide="switch-apps">How do I switch apps?</a></h2>
-          <p class="howto-summary">Tap Switch App for your last app, or hold and turn to pick one.</p>
-          <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
-        </div>
-      </li>
-      <li class="howto-card" id="dictate" data-id="dictate" data-buttons="top">
-        <div class="howto-thumb"><img src="videos/dictate.jpg?v=6c67175aaf" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT18S">0:18</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/dictate.mp4?v=10122d28e3" data-guide="dictate">How do I dictate?</a></h2>
-          <p class="howto-summary">Tap Top to start Agent Flow and tap again to stop and paste.</p>
-          <p class="howto-buttons"><span data-light="recording"><span class="swatch" aria-hidden="true"></span>Top</span></p>
-        </div>
-      </li>
-      <li class="howto-card" id="review-changes" data-id="review-changes" data-buttons="middle">
-        <div class="howto-thumb"><img src="videos/review-changes.jpg?v=b3127ca013" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT36S">0:36</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/review-changes.mp4?v=2c601dbbb8" data-guide="review-changes">How do I review my changes in VS Code?</a></h2>
-          <p class="howto-summary">Choose Review changes, quarter-turn through changes, hold Middle to stage the set.</p>
-          <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
-        </div>
-      </li>
-      <li class="howto-card" id="stage-files" data-id="stage-files" data-buttons="middle">
-        <div class="howto-thumb"><img src="videos/stage-files.jpg?v=9c43fffe05" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT32S">0:32</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/stage-files.mp4?v=99e7f9ee52" data-guide="stage-files">How do I stage files in VS Code?</a></h2>
-          <p class="howto-summary">Choose Stage files, circle to build a set, hold Middle to stage it.</p>
-          <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
-        </div>
-      </li>
-      <li class="howto-card" id="play-pause" data-id="play-pause" data-buttons="middle">
-        <div class="howto-thumb"><img src="videos/play-pause.jpg?v=ea56a3e38b" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT15S">0:15</time></div>
-        <div class="howto-body">
-          <h2><a href="videos/play-pause.mp4?v=39a94ebc41" data-guide="play-pause">How do I play or pause music?</a></h2>
-          <p class="howto-summary">Open the HUD and use Play/Pause, right of Utility on the top row.</p>
-          <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
-        </div>
-      </li>
-      <!-- /wand:howto-cards -->
-    </ul>
-    <p id="howto-empty" hidden>No matching videos. Try a button name or a shorter action.</p>
-    <aside class="howto-options">
-      <h2>Using nods and shakes for review?</h2>
-      <p>The review videos show the default circles and nudges. With <strong>Options → Review with nods and shakes</strong> on, move up and down for next, or side to side for previous. Each clear change of direction makes one step. Entry, exit and holding Middle to stage the set work the same way.</p>
-    </aside>
+    <div class="howto-main">
+      <noscript><p>Choose a title to play its video. Search needs JavaScript.</p></noscript>
+      <ul class="howto-grid" id="guides" aria-label="How-to videos">
+        <!-- wand:howto-cards -->
+        <li class="howto-card" id="point-and-click" data-id="point-and-click" data-buttons="bottom">
+          <div class="howto-thumb"><img src="videos/point-and-click.jpg?v=5e1e82d07f" width="1280" height="720" loading="eager" decoding="async" alt=""><time class="howto-time" datetime="PT17S">0:17</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/point-and-click.mp4?v=ced1c7acae" data-guide="point-and-click">How do I move the pointer and click?</a></h2>
+            <p class="howto-summary">Tap Bottom to follow, stop to click once, tap again to stop.</p>
+            <p class="howto-buttons"><span data-light="mouse"><span class="swatch" aria-hidden="true"></span>Bottom</span></p>
+          </div>
+        </li>
+        <li class="howto-card" id="drag" data-id="drag" data-buttons="bottom">
+          <div class="howto-thumb"><img src="videos/drag.jpg?v=ebc0b0ab10" width="1280" height="720" loading="eager" decoding="async" alt=""><time class="howto-time" datetime="PT16S">0:16</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/drag.mp4?v=24e4c11cbd" data-guide="drag">How do I drag something?</a></h2>
+            <p class="howto-summary">Tap Bottom, then hold the second press to drag; release to drop.</p>
+            <p class="howto-buttons"><span data-light="mouse"><span class="swatch" aria-hidden="true"></span>Bottom</span></p>
+          </div>
+        </li>
+        <li class="howto-card" id="recenter" data-id="recenter" data-buttons="bottom">
+          <div class="howto-thumb"><img src="videos/recenter.jpg?v=4d408455e6" width="1280" height="720" loading="eager" decoding="async" alt=""><time class="howto-time" datetime="PT12S">0:12</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/recenter.mp4?v=284531b9de" data-guide="recenter">How do I get the pointer back to the middle?</a></h2>
+            <p class="howto-summary">Double tap Bottom to centre the pointer with mouse follow on.</p>
+            <p class="howto-buttons"><span data-light="mouse"><span class="swatch" aria-hidden="true"></span>Bottom</span></p>
+          </div>
+        </li>
+        <li class="howto-card" id="scroll-up-down" data-id="scroll-up-down" data-buttons="bottom">
+          <div class="howto-thumb"><img src="videos/scroll-up-down.jpg?v=dd1e8a689a" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT19S">0:19</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/scroll-up-down.mp4?v=c534c7d913" data-guide="scroll-up-down">How do I scroll up and down?</a></h2>
+            <p class="howto-summary">Hold Bottom, move up or down, then keep circling; release to stop.</p>
+            <p class="howto-buttons"><span data-light="mouse"><span class="swatch" aria-hidden="true"></span>Bottom</span></p>
+          </div>
+        </li>
+        <li class="howto-card" id="scroll-sideways" data-id="scroll-sideways" data-buttons="bottom">
+          <div class="howto-thumb"><img src="videos/scroll-sideways.jpg?v=e180a2e0d9" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT15S">0:15</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/scroll-sideways.mp4?v=118948a1b0" data-guide="scroll-sideways">How do I scroll sideways?</a></h2>
+            <p class="howto-summary">Hold Bottom, start left or right, then keep circling; release to stop.</p>
+            <p class="howto-buttons"><span data-light="mouse"><span class="swatch" aria-hidden="true"></span>Bottom</span></p>
+          </div>
+        </li>
+        <li class="howto-card" id="hud-cards" data-id="hud-cards" data-buttons="middle">
+          <div class="howto-thumb"><img src="videos/hud-cards.jpg?v=6bc42ca43e" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT20S">0:20</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/hud-cards.mp4?v=35ed48321c" data-guide="hud-cards">How do I open the HUD and use a card?</a></h2>
+            <p class="howto-summary">Tap Middle, turn to a card, tap to use it; double tap to close.</p>
+            <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
+          </div>
+        </li>
+        <li class="howto-card" id="hud-pages" data-id="hud-pages" data-buttons="middle">
+          <div class="howto-thumb"><img src="videos/hud-pages.jpg?v=b0b358e578" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT17S">0:17</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/hud-pages.mp4?v=cdcbff1c11" data-guide="hud-pages">How do I open a HUD page and go back?</a></h2>
+            <p class="howto-summary">Tap Middle on a page card; its exit card goes back one page.</p>
+            <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
+          </div>
+        </li>
+        <li class="howto-card" id="switch-apps" data-id="switch-apps" data-buttons="middle">
+          <div class="howto-thumb"><img src="videos/switch-apps.jpg?v=8089300958" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT15S">0:15</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/switch-apps.mp4?v=e5d1db4c2c" data-guide="switch-apps">How do I switch apps?</a></h2>
+            <p class="howto-summary">Tap Switch App for your last app, or hold and turn to pick one.</p>
+            <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
+          </div>
+        </li>
+        <li class="howto-card" id="dictate" data-id="dictate" data-buttons="top">
+          <div class="howto-thumb"><img src="videos/dictate.jpg?v=6c67175aaf" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT18S">0:18</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/dictate.mp4?v=10122d28e3" data-guide="dictate">How do I dictate?</a></h2>
+            <p class="howto-summary">Tap Top to start Agent Flow and tap again to stop and paste.</p>
+            <p class="howto-buttons"><span data-light="recording"><span class="swatch" aria-hidden="true"></span>Top</span></p>
+          </div>
+        </li>
+        <li class="howto-card" id="review-changes" data-id="review-changes" data-buttons="middle">
+          <div class="howto-thumb"><img src="videos/review-changes.jpg?v=b3127ca013" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT36S">0:36</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/review-changes.mp4?v=2c601dbbb8" data-guide="review-changes">How do I review my changes in VS Code?</a></h2>
+            <p class="howto-summary">Choose Review changes, quarter-turn through changes, hold Middle to stage the set.</p>
+            <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
+          </div>
+        </li>
+        <li class="howto-card" id="stage-files" data-id="stage-files" data-buttons="middle">
+          <div class="howto-thumb"><img src="videos/stage-files.jpg?v=9c43fffe05" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT32S">0:32</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/stage-files.mp4?v=99e7f9ee52" data-guide="stage-files">How do I stage files in VS Code?</a></h2>
+            <p class="howto-summary">Choose Stage files, circle to build a set, hold Middle to stage it.</p>
+            <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
+          </div>
+        </li>
+        <li class="howto-card" id="play-pause" data-id="play-pause" data-buttons="middle">
+          <div class="howto-thumb"><img src="videos/play-pause.jpg?v=ea56a3e38b" width="1280" height="720" loading="lazy" decoding="async" alt=""><time class="howto-time" datetime="PT15S">0:15</time></div>
+          <div class="howto-body">
+            <h2><a href="videos/play-pause.mp4?v=39a94ebc41" data-guide="play-pause">How do I play or pause music?</a></h2>
+            <p class="howto-summary">Open the HUD and use Play/Pause, right of Utility on the top row.</p>
+            <p class="howto-buttons"><span data-light="hud"><span class="swatch" aria-hidden="true"></span>Middle</span></p>
+          </div>
+        </li>
+        <!-- /wand:howto-cards -->
+      </ul>
+      <p id="howto-empty" hidden>No videos found. Try a button name or a shorter action.</p>
+      <aside class="howto-options" data-light="app">
+        <h2><span class="swatch" aria-hidden="true"></span>Using nods and shakes for review?</h2>
+        <p>The review videos show the default circles and nudges. With <strong>Options → Review with nods and shakes</strong> on, move up and down for next, or side to side for previous. Each clear change of direction makes one step. Entry, exit and holding Middle to stage the set work the same way.</p>
+      </aside>
+    </div>
   </main>
   <dialog id="player" aria-labelledby="player-title">
-    <form method="dialog" class="player-header"><h2 id="player-title"></h2><button aria-label="Close video" value="close">Close ×</button></form>
+    <form method="dialog" class="player-header"><h2 id="player-title"></h2><button type="submit" aria-label="Close video" value="close">Close ×</button></form>
     <video id="player-video" controls playsinline preload="metadata"></video>
-    <div class="player-body"><p id="player-summary"></p><ol id="player-steps"></ol><p><a id="player-transcript">Read transcript</a> · <a id="player-download" download>Download video</a> · <a id="player-link">Link to this guide</a></p></div>
+    <div class="player-body"><p id="player-summary"></p><ol id="player-steps"></ol><p class="player-links"><a id="player-transcript">Transcript</a><a id="player-download" download>Download video</a><a id="player-link">Link to this guide</a></p></div>
   </dialog>
-  <footer class="footer"><a href="../">Magic Wand</a> · <a href="https://ethansk.github.io/ethan-setup/">Ethan’s setup</a><p class="fine">All the wording on this website is AI generated, so sorry if it’s cringe.</p></footer>
+  <footer class="footer">
+    <p class="footer-links">
+      <a href="../">Magic Wand</a>
+      <a href="https://ethansk.github.io/ethan-setup/">Ethan’s setup <span aria-hidden="true">↗</span></a>
+      <a href="https://ethansk.github.io/agentic-mouse/">Agentic Mouse <span aria-hidden="true">↗</span></a>
+      <a href="https://ethansk.github.io/AgentFlow/">Agent Flow <span aria-hidden="true">↗</span></a>
+      <a href="https://github.com/EthanSK/magic-wand">GitHub <span aria-hidden="true">↗</span></a>
+    </p>
+    <p class="disclaimer">All the wording on this website is AI generated, so sorry if it’s cringe.</p>
+  </footer>
   <!-- wand:howto-data -->
   <script type="application/json" id="guide-data">
   [

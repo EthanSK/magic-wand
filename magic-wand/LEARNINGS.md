@@ -80,6 +80,17 @@ The three@0.186.1 npm package has no `build/*.min.js`, and the GitHub `r186` tag
 three@0.185.1 includes them, and its files are byte-identical to the copies Agentic Mouse vendors,
 so the site pins 0.185.1.
 
+## Website presentation must retain the control-version boundary
+
+The home-page demo runs Control V1, while the illustrated tutorials show V2 and the
+current receiver offers later controls. A visual redesign must keep those limits
+beside each surface, even when longer status and control notes move into disclosures.
+Build the headline, controls, light legend and version notes from their canonical
+manifests; do not maintain a second hand-edited set in the HTML. The demo's light
+legend uses the same displayed light state as the wand illustration. Desktop and
+phone checks verified that feedback, disclosures, guide search and video playback;
+they do not establish physical wand behavior. Verified 27 October 2026.
+
 ## Hidden recording indicator
 
 An explicit flex display overrides the browser’s default hidden-attribute style. The recording

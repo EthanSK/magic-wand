@@ -9,7 +9,7 @@
   <meta property="og:description" content="Mouse, HUD, scrolling and speech to text from three buttons on a wand.">
   <meta name="twitter:description" content="Mouse, HUD, scrolling and speech to text from three buttons on a wand.">
   <!-- /wand:meta -->
-  <meta name="theme-color" content="#1f173d">
+  <meta name="theme-color" content="#121019">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Magic Wand">
   <meta property="og:url" content="https://ethansk.github.io/magic-wand/">
@@ -21,16 +21,16 @@
   <link rel="canonical" href="https://ethansk.github.io/magic-wand/">
   <link rel="icon" href="./icon.svg?v=6a86fd3df6" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./assets/icon-180.png?v=9e9ed22acc">
-  <link rel="manifest" href="./site.webmanifest?v=7cccaabea0">
+  <link rel="manifest" href="./site.webmanifest?v=7e7871b304">
   <link rel="preload" href="./fonts/big-shoulders-display.woff2?v=203dd8ba4a" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="./fonts/atkinson-hyperlegible-next.woff2?v=1e4cea71d7" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./styles.css?v=288e2c8eeb">
+  <link rel="stylesheet" href="./styles.css?v=6f79a79666">
   <script type="importmap">
   {
     "imports": {
       "three": "./lib/three-0.185.1/three.module.min.js",
-      "./board.mjs": "./board.mjs?v=185d26c5da",
-      "./wand-scene.mjs": "./wand-scene.mjs?v=68bf658fc1",
+      "./board.mjs": "./board.mjs?v=ab38ba6731",
+      "./wand-scene.mjs": "./wand-scene.mjs?v=0cb7eb823d",
       "./sim/pipeline.mjs": "./sim/pipeline.mjs?v=5d25bab12d",
       "./sim/hud.mjs": "./sim/hud.mjs?v=b6afc5840e",
       "./sim/receiver.mjs": "./sim/receiver.mjs?v=0d106dbbf5",
@@ -49,13 +49,13 @@
   }
   </script>
 </head>
-<body>
+<body class="home">
   <a class="skip-link" href="#controls">Skip to the controls</a>
   <header class="topbar">
     <a class="brand" href="./"><img src="./icon.svg?v=6a86fd3df6" width="28" height="28" alt="">Magic Wand</a>
     <nav class="topnav" aria-label="Sections">
       <a href="#controls">Controls</a>
-      <a href="./how-to/">How To</a>
+      <a class="keep" href="./how-to/">How To</a>
       <a href="#inside">How It Works</a>
       <a href="#hardware">Hardware</a>
       <a href="#build">Build</a>
@@ -64,14 +64,21 @@
   </header>
 
   <main id="top">
-    <section class="hero" aria-labelledby="title">
+    <section class="hero room" aria-labelledby="title">
       <div class="hero-head">
-        <h1 id="title"><span class="wordmark">Magic Wand</span><span class="shaft" aria-hidden="true"><span class="tip"></span></span></h1>
-        <!-- wand:intro -->
-        <p class="tagline">Mouse, HUD, scrolling and speech to text from three buttons on a wand.</p>
-        <p class="summary">Turning the wand moves my Mac’s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.</p>
-        <p class="vision"><strong>The age of AI doesn’t need a keyboard.</strong> The wand is my step toward that, with pointing, HUD cards and Agent Flow dictation.</p>
-        <!-- /wand:intro -->
+        <h1 id="title" class="hero-title">
+          <span class="sr-only">Magic Wand: </span>
+          <!-- wand:vision -->
+          <span class="hero-vision">The age of AI doesn’t need a keyboard.</span>
+          <!-- /wand:vision -->
+        </h1>
+        <div class="hero-copy">
+          <!-- wand:intro -->
+          <p class="tagline">Mouse, HUD, scrolling and speech to text from three buttons on a wand.</p>
+          <!-- /wand:intro -->
+          <p class="lounge">Lean back and use your Mac without keeping an arm on a desk mouse.</p>
+          <p class="hero-links"><a class="button-link" href="./how-to/">How-to videos</a></p>
+        </div>
       </div>
 
       <div class="demo" id="demo" data-state="loading">
@@ -112,37 +119,20 @@
           <button type="button" class="reset" id="reset">Reset</button>
           <p class="sr-only" id="announcer" aria-live="polite"></p>
         </div>
-        <p class="boundary" id="demo-boundary">Shows Control V1 using the wand’s own device code in your browser. V2 needs the native receiver. Nothing connects to a wand, Bluetooth or your Mac.</p>
+        <p class="boundary" id="demo-boundary">Shows Control V1 using the wand’s own device code in your browser. Later control versions need the native receiver. Nothing connects to a wand, Bluetooth or your Mac.</p>
       </div>
     </section>
 
     <section class="section controls" id="controls" aria-labelledby="controls-title">
-      <h2 id="controls-title">Controls</h2>
+      <div class="section-head">
+        <h2 id="controls-title">Controls</h2>
+        <p class="section-lead">Each button has its own job and light colour. They work independently, so you can keep pointing while you dictate.</p>
+      </div>
       <div class="control-grid">
         <!-- wand:controls -->
-        <div class="control" data-light="recording">
-          <div class="control-head"><h3>Top</h3><p class="control-meta"><span class="pin">D30</span><kbd>T</kbd></p></div>
-          <p class="control-role"><span class="swatch" aria-hidden="true"></span>Speech to text</p>
-          <dl class="gestures">
-            <div><dt>Tap</dt><dd>Start Agent Flow dictation</dd></div>
-            <div><dt>Tap again</dt><dd>Stop and paste</dd></div>
-          </dl>
-          <ul class="notes"><li>Recording stays red in mouse mode. HUD, review, scrolling and loading keep their own indication.</li><li>Putting the wand down never stops dictation. Use Top to stop and paste.</li></ul>
-        </div>
-        <div class="control" data-light="hud">
-          <div class="control-head"><h3>Middle</h3><p class="control-meta"><span class="pin">D2</span><kbd>M</kbd></p></div>
-          <p class="control-role"><span class="swatch" aria-hidden="true"></span>Agentic Mouse HUD</p>
-          <dl class="gestures">
-            <div><dt>Quick tap from closed</dt><dd>Switch app once</dd></div>
-            <div><dt>Hold, turn, release</dt><dd>Open the HUD, point to a card and use it on release</dd></div>
-            <div><dt>Choose a submenu</dt><dd>Keep the submenu open; hold Middle again to choose within it</dd></div>
-            <div><dt>Choose a wheel control</dt><dd>Keep it selected; hold Middle again and turn the wand to adjust it</dd></div>
-            <div><dt>Double tap</dt><dd>Close the entire HUD</dd></div>
-          </dl>
-          <ul class="notes"><li>The installed wand uses a radial HUD with Switch App in the centre. The browser demo retains its earlier grid.</li><li>The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.</li><li>Ordinary actions close the HUD on release. Submenus and selected wheel controls stay open for the next hold; they have no inactivity timeout. Bottom and speech remain independent.</li><li>Keep Middle held on Switch App for 0.5 seconds after hold qualification to enter its chooser directly, then move left or right; release finishes. A quicker release still selects it for the next hold. Moving away resets the wait. A quick tap from closed switches once and closes.</li><li>Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.</li><li>In VS Code, tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit after at most 300 ms, double-click to switch between Review changes and Stage files, retaining the selection and including the current file without staging, or hold it for about half a second to stage the working selection and keep reviewing. Navigation stays frozen until release. The floating indicator says “(Hold to commit selection)” and names the mode a double-click will enter. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.</li><li>Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.</li><li>The native wand home HUD has Play/Pause after Utility around the ring. It uses the Mac’s standard media key, without changing either physical mouse.</li></ul>
-        </div>
-        <div class="control" data-light="mouse">
-          <div class="control-head"><h3>Bottom</h3><p class="control-meta"><span class="pin">D1</span><kbd>B</kbd></p></div>
+        <div class="grip-bar" aria-hidden="true"><span class="grip-cap" data-light="mouse"></span><span class="grip-cap" data-light="hud"></span><span class="grip-cap" data-light="recording"></span><span class="grip-shaft"></span><span class="grip-puck"></span></div>
+        <article class="control" id="control-bottom" data-light="mouse">
+          <header class="control-head"><h3>Bottom</h3><p class="control-meta"><span class="pin">D1</span><kbd>B</kbd></p></header>
           <p class="control-role"><span class="swatch" aria-hidden="true"></span>Mouse</p>
           <dl class="gestures">
             <div><dt>Tap from off</dt><dd>Enter high-sensitivity follow without clicking</dd></div>
@@ -153,8 +143,38 @@
             <div><dt>Double tap</dt><dd>Centre the pointer on the main screen and enable mouse follow after the 300 ms triple-tap window; keep HUD and review selection unchanged</dd></div>
             <div><dt>Triple tap</dt><dd>Start screenshot selection; move to select the area, then stop to capture</dd></div>
           </dl>
-          <ul class="notes"><li>Control V3 keeps short taps and tap-then-hold dragging unchanged. The existing 220 ms cutoff separates a tap from a hold.</li><li>A plain hold scrolls a scroll area or drags a confirmed draggable target. Unknown targets keep scrolling. Tap, then hold the second press to drag explicitly. The pointer stays fixed while scrolling until release.</li><li>Middle switches to the HUD. The pointer stays within real display edges.</li><li>Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.</li><li>Bottom never opens, closes or clears the Middle HUD or review selection.</li><li>V3 uses straight strokes in either axis, including diagonals. Holding still continues the captured speed; a new stroke can change speed or reverse without releasing. Circular page-scroll recognition is disabled; V2 remains selectable.</li><li>Keep moving the wand slightly while you are not certain about placement so it does not click. Stop when you are ready. The pointer must still be moving; tiny movements filtered out as hand noise do not prevent a click.</li><li>Screenshot temporarily moves the pointer even with mouse follow off. From the HUD Screenshot action, tap Bottom once to start selecting; stopping after movement ends the selection. Triple tap starts selection without another tap. Finishing or cancelling restores the previous mouse-follow choice.</li></ul>
-        </div>
+          <details class="more">
+            <summary>Details</summary>
+            <ul class="notes"><li>Control V3 keeps short taps and tap-then-hold dragging unchanged. The existing 220 ms cutoff separates a tap from a hold.</li><li>A plain hold scrolls a scroll area or drags a confirmed draggable target. Unknown targets keep scrolling. Tap, then hold the second press to drag explicitly. The pointer stays fixed while scrolling until release.</li><li>Middle switches to the HUD. The pointer stays within real display edges.</li><li>Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.</li><li>Bottom never opens, closes or clears the Middle HUD or review selection.</li><li>V3 uses straight strokes in either axis, including diagonals. Holding still continues the captured speed; a new stroke can change speed or reverse without releasing. Circular page-scroll recognition is disabled; V2 remains selectable.</li><li>Keep moving the wand slightly while you are not certain about placement so it does not click. Stop when you are ready. The pointer must still be moving; tiny movements filtered out as hand noise do not prevent a click.</li><li>Screenshot temporarily moves the pointer even with mouse follow off. From the HUD Screenshot action, tap Bottom once to start selecting; stopping after movement ends the selection. Triple tap starts selection without another tap. Finishing or cancelling restores the previous mouse-follow choice.</li></ul>
+          </details>
+        </article>
+        <article class="control" id="control-middle" data-light="hud">
+          <header class="control-head"><h3>Middle</h3><p class="control-meta"><span class="pin">D2</span><kbd>M</kbd></p></header>
+          <p class="control-role"><span class="swatch" aria-hidden="true"></span>Agentic Mouse HUD</p>
+          <dl class="gestures">
+            <div><dt>Quick tap from closed</dt><dd>Switch app once</dd></div>
+            <div><dt>Hold, turn, release</dt><dd>Open the HUD, point to a card and use it on release</dd></div>
+            <div><dt>Choose a submenu</dt><dd>Keep the submenu open; hold Middle again to choose within it</dd></div>
+            <div><dt>Choose a wheel control</dt><dd>Keep it selected; hold Middle again and turn the wand to adjust it</dd></div>
+            <div><dt>Double tap</dt><dd>Close the entire HUD</dd></div>
+          </dl>
+          <details class="more">
+            <summary>Details</summary>
+            <ul class="notes"><li>The installed wand uses a radial HUD with Switch App in the centre. The browser demo retains its earlier grid.</li><li>The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.</li><li>Ordinary actions close the HUD on release. Submenus and selected wheel controls stay open for the next hold; they have no inactivity timeout. Bottom and speech remain independent.</li><li>Keep Middle held on Switch App for 0.5 seconds after hold qualification to enter its chooser directly, then move left or right; release finishes. A quicker release still selects it for the next hold. Moving away resets the wait. A quick tap from closed switches once and closes.</li><li>Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.</li><li>In VS Code, tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit after at most 300 ms, double-click to switch between Review changes and Stage files, retaining the selection and including the current file without staging, or hold it for about half a second to stage the working selection and keep reviewing. Navigation stays frozen until release. The floating indicator says “(Hold to commit selection)” and names the mode a double-click will enter. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.</li><li>Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.</li><li>The native wand home HUD has Play/Pause after Utility around the ring. It uses the Mac’s standard media key, without changing either physical mouse.</li></ul>
+          </details>
+        </article>
+        <article class="control" id="control-top" data-light="recording">
+          <header class="control-head"><h3>Top</h3><p class="control-meta"><span class="pin">D30</span><kbd>T</kbd></p></header>
+          <p class="control-role"><span class="swatch" aria-hidden="true"></span>Speech to text</p>
+          <dl class="gestures">
+            <div><dt>Tap</dt><dd>Start Agent Flow dictation</dd></div>
+            <div><dt>Tap again</dt><dd>Stop and paste</dd></div>
+          </dl>
+          <details class="more">
+            <summary>Details</summary>
+            <ul class="notes"><li>Recording stays red in mouse mode. HUD, review, scrolling and loading keep their own indication.</li><li>Putting the wand down never stops dictation. Use Top to stop and paste.</li></ul>
+          </details>
+        </article>
         <!-- /wand:controls -->
       </div>
       <h3 class="lights-title" id="lights">Lights</h3>
@@ -175,8 +195,38 @@
       <!-- /wand:lights -->
     </section>
 
+    <section class="section howto-home" id="how-to" aria-labelledby="howto-title">
+      <div class="section-head">
+        <h2 id="howto-title">How do I…?</h2>
+        <p class="section-lead">Pick an action to see the buttons, the wand movement and what happens on screen.</p>
+      </div>
+      <!-- wand:howto -->
+      <ul class="howto-links">
+      <li data-light="mouse"><a href="./how-to/#point-and-click"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I move the pointer and click?</span><span class="howto-len">0:17</span></a></li>
+      <li data-light="mouse"><a href="./how-to/#drag"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I drag something?</span><span class="howto-len">0:16</span></a></li>
+      <li data-light="mouse"><a href="./how-to/#recenter"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I get the pointer back to the middle?</span><span class="howto-len">0:12</span></a></li>
+      <li data-light="mouse"><a href="./how-to/#scroll-up-down"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I scroll up and down?</span><span class="howto-len">0:19</span></a></li>
+      <li data-light="mouse"><a href="./how-to/#scroll-sideways"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I scroll sideways?</span><span class="howto-len">0:15</span></a></li>
+      <li data-light="hud"><a href="./how-to/#hud-cards"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I open the HUD and use a card?</span><span class="howto-len">0:20</span></a></li>
+      <li data-light="hud"><a href="./how-to/#hud-pages"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I open a HUD page and go back?</span><span class="howto-len">0:17</span></a></li>
+      <li data-light="hud"><a href="./how-to/#switch-apps"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I switch apps?</span><span class="howto-len">0:15</span></a></li>
+      <li data-light="recording"><a href="./how-to/#dictate"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I dictate?</span><span class="howto-len">0:18</span></a></li>
+      <li data-light="hud"><a href="./how-to/#review-changes"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I review my changes in VS Code?</span><span class="howto-len">0:36</span></a></li>
+      <li data-light="hud"><a href="./how-to/#stage-files"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I stage files in VS Code?</span><span class="howto-len">0:32</span></a></li>
+      <li data-light="hud"><a href="./how-to/#play-pause"><span class="swatch" aria-hidden="true"></span><span class="howto-q">How do I play or pause music?</span><span class="howto-len">0:15</span></a></li>
+      </ul>
+      <p class="fine">Illustrated with Control V2.</p>
+      <!-- /wand:howto -->
+      <p class="section-link"><a class="button-link" href="./how-to/">All videos</a></p>
+    </section>
+
     <section class="section inside" id="inside" aria-labelledby="inside-title">
-      <h2 id="inside-title">How It Works</h2>
+      <div class="section-head">
+        <h2 id="inside-title">How It Works</h2>
+        <!-- wand:summary -->
+        <p class="section-lead">Turning the wand moves my Mac’s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.</p>
+        <!-- /wand:summary -->
+      </div>
       <ol class="flow">
         <li>
           <h3>Puck.js</h3>
@@ -199,13 +249,6 @@
         <p>The Puck also advertises as a Bluetooth mouse, but macOS pairing stalled, so the receiver routes mouse reports over the UART link instead.</p>
         <p>Small device-code updates go through the running receiver, so the wand doesn’t need reflashing or reconnecting. It lights orange while updating.</p>
       </div>
-      <!-- wand:gripAngle -->
-      <h3 class="needs-title" id="grip-angle">Grip Angle</h3>
-      <div class="inside-notes grip-notes">
-        <p>Roll the wand to a comfortable grip: Wand Receiver’s Options → Rotation-independent controls reads gravity from the Puck’s accelerometer, so directions stay upright on screen. Sideways speed also holds as the tip rises, with up to 2× correction.</p>
-        <p>It’s off by default and still needs a physical check. It can’t read roll with the tip pointing almost straight up or down, and it isn’t full 3D tracking. Wrist training with different grip angles is an idea to study, not a tested benefit.</p>
-      </div>
-      <!-- /wand:gripAngle -->
       <h3 class="needs-title">Needs</h3>
       <!-- wand:dependencies -->
       <ul class="needs">
@@ -214,6 +257,15 @@
         <li><a href="https://www.espruino.com/">Espruino <span aria-hidden="true">↗</span></a> <span class="need-role">JavaScript firmware on the Puck.js.</span> <span class="need-status">Public. The first upload uses the Espruino Web IDE.</span></li>
       </ul>
       <!-- /wand:dependencies -->
+      <!-- wand:gripAngle -->
+      <details class="more" id="grip-angle">
+        <summary>Grip Angle</summary>
+        <div class="more-body grip-notes">
+          <p>Roll the wand to a comfortable grip: Wand Receiver’s Options → Rotation-independent controls reads gravity from the Puck’s accelerometer, so directions stay upright on screen. Sideways speed also holds as the tip rises, with up to 2× correction.</p>
+          <p>It’s off by default and still needs a physical check. It can’t read roll with the tip pointing almost straight up or down, and it isn’t full 3D tracking. Wrist training with different grip angles is an idea to study, not a tested benefit.</p>
+        </div>
+      </details>
+      <!-- /wand:gripAngle -->
     </section>
 
     <section class="section hardware" id="hardware" aria-labelledby="hardware-title">
@@ -252,7 +304,7 @@
         <p><a href="https://www.espruino.com/Puck.js">Puck.js v2.1 <span aria-hidden="true">↗</span></a></p>
       </div>
       <!-- /wand:hardware -->
-      <details class="tuning">
+      <details class="more tuning">
         <summary>Tuning</summary>
         <!-- wand:tuning -->
         <table class="spec">
@@ -283,7 +335,7 @@
     <section class="section build" id="build" aria-labelledby="build-title">
       <h2 id="build-title">Build Your Own</h2>
       <div class="build-columns">
-        <div>
+        <div class="build-copy">
           <p>The repository has the device code, the bridge, the receiver source and the tests. You’ll need a Puck.js v2.1, three momentary buttons, a tube and a Mac.</p>
           <p><a class="button-link" href="https://github.com/EthanSK/magic-wand/blob/main/magic-wand/BUILDING.md">Build guide <span aria-hidden="true">↗</span></a></p>
           <p class="fine">Source only: there’s no packaged app or signed release.</p>
@@ -291,65 +343,50 @@
         <div class="status">
           <h3>Status</h3>
           <!-- wand:status -->
-          <ul class="status-list">
-            <li>Installed: staying on the centre Switch App item for 0.5 seconds after hold qualification enters its chooser without releasing Middle. Moving away restarts that dwell; stale telemetry prevents entry. Motion before arming is discarded, and releasing finishes the same gesture. Native checks pass; physical gesture acceptance remains pending.</li>
-            <li>Installed: Review changes and Stage files switch within the same pending Better Git selection and include the current file. No files are staged by switching. Better Git 1.2.135 is released and active; receiver 1.2.96 is installed with settings preserved. Receiver and Mini checks pass. The device remained asleep during installation; physical gesture acceptance remains pending.</li>
-            <li>Installed: double-click Middle toggles Review changes and Stage files without staging. The floating indicator names the other mode. A single click cancels and exits after at most 300 ms; holding for half a second still stages the selection and stays in that mode. Pointer movement is unchanged. Receiver, native interaction and timer checks pass; physical button acceptance remains pending.</li>
-            <li>Installed: triple Bottom starts screenshot selection; the HUD Screenshot action uses one Bottom tap, movement and the existing stop-to-click detector to finish. Double-tap centering waits up to 300 ms to distinguish a third tap. Pointer movement is not buffered. Recording red takes priority over mouse blue, and loading blinks orange. Complete saved bytes and clean startup with calibration passed; physical screenshot acceptance remains pending.</li>
-            <li>Installed: each circular Wand HUD wedge has its own masked glass backing, clearer text and a gentle selection lift. Gaps and space around the wheel stay transparent. The armed dotted outline moves; Reduce Motion keeps it static. Native rendering and interaction checks passed; physical Copy/Paste acceptance remains pending.</li>
-            <li>Installed: the Review changes and Stage files indicators say “Hold to commit selection”. Selection is the current term for the pending group; holding stages it without making a Git commit. Native tests and both rendered indicators passed.</li>
-            <li>Installed: all three grip buttons turn the wand off; any single grip button wakes manual or automatic sleep. The wake press is consumed until every button is released. Five-minute automatic deep sleep and the two-blink cue are unchanged. Saved bytes and clean startup verified; physical any-button wake acceptance pending.</li>
-            <li>Installed: shared click and hold cues distinguish a card action from held wheel or wand adjustments. Copy/Paste names Space explicitly. Native checks and rendered layout inspection passed; physical gesture acceptance is pending.</li>
-            <li>Installed: held Switch App adjustment shares the normal HIGH mouse sensitivity calculation, including fine movement and orientation correction. Other HUD controls keep their existing angular input. Native and receiver checks pass; physical feel is awaiting acceptance.</li>
-            <li>Installed: the complete saved program includes the corrected Bottom press, calibration restore and button-wake sleep. Clean startup was verified before reconnecting the receiver, with no code re-upload. A full five-minute sleep/button-wake cycle was observed on 24 October; physical battery-removal remains unverified.</li>
-            <li>Installed: unheld movement can leave the dotted Switch App card without switching applications. The dotted cue appears during a qualified Middle hold; release still arms the card. Passive HUD selection survives pauses, and Bottom scrolling stays independent. Native and receiver regression checks pass; physical acceptance is pending.</li>
-            <li>Installed: radial text is larger, with gentle card-aligned tilt only when it earns more readable space. The visible wand HUD stays anchored while Agent Flow changes its panel; reopening refreshes recorder clearance. Native tests and rendered layout checks passed; physical acceptance is pending.</li>
-            <li>Installed: hold Middle to show and steer the radial HUD, then release to use the outlined card. Submenus and adjustable wheel cards stay open for the next hold. Quick tap from closed switches app once. The centre Switch App chooser still supports horizontal movement on a second hold. Native interaction tests passed; physical acceptance is pending.</li>
-            <li>Installed: larger mixed-case radial labels, a continuous liquid centre-to-ring transition, and ordinary Enter in the wand home HUD. Native layout, morph continuity and key-output checks passed; real-device feel remains for user acceptance.</li>
-            <li>Installed: the wand HUD is a radial wheel with Switch App in the centre and the other available actions around it. Native checks and installed visual inspection passed; physical selection feel still needs acceptance.</li>
-            <li>Installed: Bottom hold scrolls a scrolling surface or drags a confirmed draggable target. Unknown or late target results stay on the scrolling path. Native lifecycle checks passed; physical app coverage is pending.</li>
-            <li>Installed: waking restores the mouse-follow choice from before rest. Manual choices and recording pauses take precedence. Native checks passed; physical acceptance is pending.</li>
-            <li>Control V3 replaces circular page scrolling with straight-drag velocity: continue while held still and reverse with another stroke. Automated lifecycle checks pass; physical acceptance is pending.</li>
-            <li>Installed: Wand Receiver 1.2.79 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.</li>
-            <li>Review navigation uses a redesigned spatial corner detector with learned noise tolerance. Reversible quarters, rough squares, slow motion and simulated device traces pass automated checks; physical acceptance is pending.</li>
-            <li>A minute of confirmed desk rest turns the lights off and keeps low-rate pickup sensing. Pickup or a button restores the light. Rest never stops dictation or dismisses the open HUD.</li>
-            <li>Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.</li>
-            <li>Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.</li>
-            <li>HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.</li>
-            <li>Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.</li>
-            <li>Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling in V1 passes automated checks; physical gesture acceptance is pending.</li>
-            <li>Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.</li>
-            <li>Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.</li>
-            <li>Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.</li>
-            <li>Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.</li>
-            <li>Ethan confirmed automatic pickup and put-down both work on receiver 1.2.35.</li>
-            <li>HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.</li>
-            <li>End-to-end latency, accuracy and battery life haven’t been measured.</li>
-          </ul>
           <p class="versions"><span>Receiver 1.2.96 (101)</span> <span>Device code wand-441472ce965b</span> <span>Bridge f8639252</span></p>
           <p class="fine">Updated 27 October 2026</p>
+          <details class="more">
+            <summary>Status notes</summary>
+            <ul class="status-list">
+              <li>Installed: staying on the centre Switch App item for 0.5 seconds after hold qualification enters its chooser without releasing Middle. Moving away restarts that dwell; stale telemetry prevents entry. Motion before arming is discarded, and releasing finishes the same gesture. Native checks pass; physical gesture acceptance remains pending.</li>
+              <li>Installed: Review changes and Stage files switch within the same pending Better Git selection and include the current file. No files are staged by switching. Better Git 1.2.135 is released and active; receiver 1.2.96 is installed with settings preserved. Receiver and Mini checks pass. The device remained asleep during installation; physical gesture acceptance remains pending.</li>
+              <li>Installed: double-click Middle toggles Review changes and Stage files without staging. The floating indicator names the other mode. A single click cancels and exits after at most 300 ms; holding for half a second still stages the selection and stays in that mode. Pointer movement is unchanged. Receiver, native interaction and timer checks pass; physical button acceptance remains pending.</li>
+              <li>Installed: triple Bottom starts screenshot selection; the HUD Screenshot action uses one Bottom tap, movement and the existing stop-to-click detector to finish. Double-tap centering waits up to 300 ms to distinguish a third tap. Pointer movement is not buffered. Recording red takes priority over mouse blue, and loading blinks orange. Complete saved bytes and clean startup with calibration passed; physical screenshot acceptance remains pending.</li>
+              <li>Installed: each circular Wand HUD wedge has its own masked glass backing, clearer text and a gentle selection lift. Gaps and space around the wheel stay transparent. The armed dotted outline moves; Reduce Motion keeps it static. Native rendering and interaction checks passed; physical Copy/Paste acceptance remains pending.</li>
+              <li>Installed: the Review changes and Stage files indicators say “Hold to commit selection”. Selection is the current term for the pending group; holding stages it without making a Git commit. Native tests and both rendered indicators passed.</li>
+              <li>Installed: all three grip buttons turn the wand off; any single grip button wakes manual or automatic sleep. The wake press is consumed until every button is released. Five-minute automatic deep sleep and the two-blink cue are unchanged. Saved bytes and clean startup verified; physical any-button wake acceptance pending.</li>
+              <li>Installed: shared click and hold cues distinguish a card action from held wheel or wand adjustments. Copy/Paste names Space explicitly. Native checks and rendered layout inspection passed; physical gesture acceptance is pending.</li>
+              <li>Installed: held Switch App adjustment shares the normal HIGH mouse sensitivity calculation, including fine movement and orientation correction. Other HUD controls keep their existing angular input. Native and receiver checks pass; physical feel is awaiting acceptance.</li>
+              <li>Installed: the complete saved program includes the corrected Bottom press, calibration restore and button-wake sleep. Clean startup was verified before reconnecting the receiver, with no code re-upload. A full five-minute sleep/button-wake cycle was observed on 24 October; physical battery-removal remains unverified.</li>
+              <li>Installed: unheld movement can leave the dotted Switch App card without switching applications. The dotted cue appears during a qualified Middle hold; release still arms the card. Passive HUD selection survives pauses, and Bottom scrolling stays independent. Native and receiver regression checks pass; physical acceptance is pending.</li>
+              <li>Installed: radial text is larger, with gentle card-aligned tilt only when it earns more readable space. The visible wand HUD stays anchored while Agent Flow changes its panel; reopening refreshes recorder clearance. Native tests and rendered layout checks passed; physical acceptance is pending.</li>
+              <li>Installed: hold Middle to show and steer the radial HUD, then release to use the outlined card. Submenus and adjustable wheel cards stay open for the next hold. Quick tap from closed switches app once. The centre Switch App chooser still supports horizontal movement on a second hold. Native interaction tests passed; physical acceptance is pending.</li>
+              <li>Installed: larger mixed-case radial labels, a continuous liquid centre-to-ring transition, and ordinary Enter in the wand home HUD. Native layout, morph continuity and key-output checks passed; real-device feel remains for user acceptance.</li>
+              <li>Installed: the wand HUD is a radial wheel with Switch App in the centre and the other available actions around it. Native checks and installed visual inspection passed; physical selection feel still needs acceptance.</li>
+              <li>Installed: Bottom hold scrolls a scrolling surface or drags a confirmed draggable target. Unknown or late target results stay on the scrolling path. Native lifecycle checks passed; physical app coverage is pending.</li>
+              <li>Installed: waking restores the mouse-follow choice from before rest. Manual choices and recording pauses take precedence. Native checks passed; physical acceptance is pending.</li>
+              <li>Control V3 replaces circular page scrolling with straight-drag velocity: continue while held still and reverse with another stroke. Automated lifecycle checks pass; physical acceptance is pending.</li>
+              <li>Installed: Wand Receiver 1.2.79 emits plain single-button clicks with no modifier flags. Ordinary clicks cannot accumulate an OS double-click count. Synthetic event checks pass; the reported Codex new-window symptom still needs a physical check.</li>
+              <li>Review navigation uses a redesigned spatial corner detector with learned noise tolerance. Reversible quarters, rough squares, slow motion and simulated device traces pass automated checks; physical acceptance is pending.</li>
+              <li>A minute of confirmed desk rest turns the lights off and keeps low-rate pickup sensing. Pickup or a button restores the light. Rest never stops dictation or dismisses the open HUD.</li>
+              <li>Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.</li>
+              <li>Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.</li>
+              <li>HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.</li>
+              <li>Releasing a completed page-scroll gesture enables mouse follow even if it started off. Automated checks passed; physical acceptance is pending.</li>
+              <li>Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling in V1 passes automated checks; physical gesture acceptance is pending.</li>
+              <li>Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.</li>
+              <li>Held scrolling now stays locked until release; Bottom double tap recenters the pointer. Automated checks passed; these changes still need a physical check.</li>
+              <li>Ethan confirmed the latest native pointing feels much smoother; the other experimental gestures still need a physical check.</li>
+              <li>Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.</li>
+              <li>Ethan confirmed automatic pickup and put-down both work on receiver 1.2.35.</li>
+              <li>HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.</li>
+              <li>End-to-end latency, accuracy and battery life haven’t been measured.</li>
+            </ul>
+          </details>
           <!-- /wand:status -->
         </div>
       </div>
     </section>
-<section class="howto-section" aria-labelledby="howto-title"><h2 id="howto-title">How do I…?</h2><p>Short videos for the buttons, gestures and what happens on screen. <a href="./how-to/">Search all guides →</a></p>
-<!-- wand:howto -->
-<ul class="howto-links">
-<li><a href="./how-to/#point-and-click"><span class="howto-q">How do I move the pointer and click?</span><span class="howto-len">0:17</span></a></li>
-<li><a href="./how-to/#drag"><span class="howto-q">How do I drag something?</span><span class="howto-len">0:16</span></a></li>
-<li><a href="./how-to/#recenter"><span class="howto-q">How do I get the pointer back to the middle?</span><span class="howto-len">0:12</span></a></li>
-<li><a href="./how-to/#scroll-up-down"><span class="howto-q">How do I scroll up and down?</span><span class="howto-len">0:19</span></a></li>
-<li><a href="./how-to/#scroll-sideways"><span class="howto-q">How do I scroll sideways?</span><span class="howto-len">0:15</span></a></li>
-<li><a href="./how-to/#hud-cards"><span class="howto-q">How do I open the HUD and use a card?</span><span class="howto-len">0:20</span></a></li>
-<li><a href="./how-to/#hud-pages"><span class="howto-q">How do I open a HUD page and go back?</span><span class="howto-len">0:17</span></a></li>
-<li><a href="./how-to/#switch-apps"><span class="howto-q">How do I switch apps?</span><span class="howto-len">0:15</span></a></li>
-<li><a href="./how-to/#dictate"><span class="howto-q">How do I dictate?</span><span class="howto-len">0:18</span></a></li>
-<li><a href="./how-to/#review-changes"><span class="howto-q">How do I review my changes in VS Code?</span><span class="howto-len">0:36</span></a></li>
-<li><a href="./how-to/#stage-files"><span class="howto-q">How do I stage files in VS Code?</span><span class="howto-len">0:32</span></a></li>
-<li><a href="./how-to/#play-pause"><span class="howto-q">How do I play or pause music?</span><span class="howto-len">0:15</span></a></li>
-</ul>
-<!-- /wand:howto -->
-</section>
   </main>
 
   <footer class="footer">
@@ -363,6 +400,6 @@
     <p class="disclaimer">All the wording on this website is AI generated, so sorry if it’s cringe.</p>
   </footer>
 
-  <script type="module" src="./app.mjs?v=ee8df8c8f2"></script>
+  <script type="module" src="./app.mjs?v=0609a20085"></script>
 </body>
 </html>
