@@ -14,6 +14,7 @@ Read this skill before any wand CAD, print-layout or mechanical preview change. 
 - A complete Bambu project always contains **both left- and right-hand handles**. One shared set of shaft/head parts is acceptable, as in Print V2; state the contents clearly. A left-only file may be an explicitly labelled optional subset, never the complete delivery.
 - Preserve purchased switch/socket holes and their alignment when reducing the surrounding insert. Recess compact mounts into the grip; use the purchased caps rather than adding visible printed squares or cap covers.
 - Preserve board retention, upward USB access, battery solder/wire clearance, cable routes and handed button positions unless the user changes them.
+- The detachable finger loop attaches by moving **upward relative to the wand**, into closed upper stops; it releases downward after deliberate unlatching. For normal tip-up use while holding the loop, the wand’s downward load must seat against the stops, independent of the latch. Check both hands, reversed release motion and battery-cap clearance. This reverses the former top-entry loop mount; button plates and diamond-cover directions are separate interfaces. User-requested — 2026-10-27.
 - Keep prior models and delivered files unchanged. New revisions and supporting files go to Downloads; editable sources and regenerated exports are committed together under the repository rules.
 
 ## Before calling it final
