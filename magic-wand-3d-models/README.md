@@ -1,6 +1,10 @@
 # Magic Wand 3D models
 
-**Latest candidate: [Print V15 — recessed handle attachment, both hands](Print-15-README.md).**
+**Latest candidate: [Print V16 — borderless recessed switches, both hands](Print-16-README.md).**
+
+Square surrounds are removed, the bought switch/socket assemblies sit 3.4 mm deeper and the thin plates print flat. Two small side clips and lower stops retain the plates. The original helix, taper and recessed detachable-loop lock remain. Print the matching small switch test first; physical fit is unverified. One left wand estimates 75.226 g printed PETG, excluding bought hardware.
+
+**Previous candidate: [Print V15 — recessed handle attachment, both hands](Print-15-README.md).**
 
 The removable loop carries all pegs and release hardware; its receivers sit inside the original wand surface. With the loop off, the stem has no projecting attachment brackets. A 4 mm upward keyhole slide and 12° left cam turn lock the handle. The full raised helix, taper, controls and both handed stems are retained. One left wand estimates 76.139 g printed PETG; hardware and physical fit remain unverified.
 
