@@ -344,3 +344,32 @@ checkout. The installed build passed 1,058 native tests with two existing skips,
 16 showcase tests and native rendered-layout checks; browser interaction and
 physical wand acceptance remain unverified. The shared demo snapshot still
 tracks the published Agentic Mouse site, which has not deployed this change.
+
+
+## Bounded iCUE requests
+
+`integrations/agentic-mouse/icue-hang.patch` preserves the five-file incremental
+change from local Agentic Mouse 1.0.289 (295) to installed 1.0.290 (296). Apply
+it after `wand-centre-500ms.patch` and the preceding local integration patches.
+It is not a complete Agentic Mouse distribution and does not apply directly to
+the older public Agentic Mouse main branch. Its SHA-256 is
+`75eb77225e509f03e8857cd14a0a1bf53bba453b7450c08ab1ed0234769f103d`.
+
+A live process sample found mouse input blocked by a vendor device-enumeration
+request on the main thread. All iCUE requests now use one worker, with a 200 ms
+caller timeout and no backlog while an earlier request remains busy. Each
+operation retains its own buffers until it really completes; failed connection
+and subscription attempts invalidate their callback generations. This timeout
+is a bound on the vendor request, not a pointer movement buffer.
+
+The patch reproduced all five installed-source files from the retained baseline.
+The native suite reported 1,122 tests, four skips and no failures. The installed
+Developer ID signature and executable matched the release receipt; protected
+configuration and SDK hashes were unchanged. A subsequent process sample showed
+a responsive main thread. The iCUE service initially still timed out; separate
+recovery found an orphaned local SDK socket. After verifying it had no owner and
+refused connections, the native owner preserved that socket and relaunched iCUE.
+The same Agentic Mouse process then connected, subscribed to events, found the
+lighting target and received real Corsair Utility and HUD show/hide button events.
+The original vendor stall trigger and physical lighting appearance remain unverified.
+The 500 ms qualified Switch App dwell, receiver and saved Puck program are unchanged.
