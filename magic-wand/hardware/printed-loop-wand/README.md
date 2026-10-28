@@ -1,6 +1,6 @@
 # Printed loop wand
 
-Latest candidate: [V19 — solid band at the butt and substantially slimmer grip](v19/README.md). Both hands and small fit tests are included. The butt reference and button offsets are frozen in the versioned design principles; earlier versions remain unchanged.
+Latest main-branch candidate: [Shard Tube R2 — repaired handle, integral switch seats and open bottom-loading battery](shard-tube-r2/README.md), with [interactive CAD preview](shard-tube-r2/preview/). Both handed grips, small fit tests and light/heavier screw-cap options are included. The butt reference, button offsets, helix, shaft and open cradle are retained. Printed fit and actual cell dimensions remain unverified. Earlier numbered designs and the separate V20 snapshot remain unchanged.
 
 Ready-to-open Bambu projects are in [Magic Wand 3D models](../../../magic-wand-3d-models/).
 Their freshness and archive privacy checks run with the repository tests.

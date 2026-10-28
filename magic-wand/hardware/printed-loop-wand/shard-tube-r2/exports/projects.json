@@ -1,0 +1,1115 @@
+{
+  "complete-both-hands": {
+    "file": "Print-Shard-R2-complete-both-hands.3mf",
+    "sha256": "9183ff18a0c2989f26532f4cea251ae25cba8ab723b46e23b3bc33d294725d74",
+    "parts": [
+      "Grip_Left",
+      "Grip_Right",
+      "Continuous_Shaft",
+      "Sense_Open_Cradle",
+      "Battery_Sled",
+      "Removable_Finger_Loop",
+      "Loop_Keeper_Key",
+      "Battery_Screw_Cap_Light",
+      "Battery_Screw_Cap_Weighted"
+    ],
+    "centers": [
+      [
+        35,
+        55
+      ],
+      [
+        80,
+        55
+      ],
+      [
+        125,
+        55
+      ],
+      [
+        175,
+        55
+      ],
+      [
+        225,
+        170
+      ],
+      [
+        75,
+        185
+      ],
+      [
+        160,
+        145
+      ],
+      [
+        220,
+        55
+      ],
+      [
+        220,
+        100
+      ]
+    ],
+    "return_code": 0,
+    "warnings": [],
+    "slice": {
+      "feature_type_times": {
+        "Bottom surface": 45.39921569824219,
+        "Bridge": 110.70306396484375,
+        "Brim": 175.5619659423828,
+        "Custom": 358.580322265625,
+        "Flush": 29.0,
+        "Gap infill": 2405.18798828125,
+        "Inner wall": 3924.46435546875,
+        "Internal solid infill": 656.21142578125,
+        "Outer wall": 5880.87939453125,
+        "Overhang wall": 313.33245849609375,
+        "Sparse infill": 1435.777099609375,
+        "Support": 87.1548843383789,
+        "Support interface": 45.368499755859375,
+        "Support transition": 24.588359832763672,
+        "Top surface": 197.6909637451172,
+        "Travel": 4448.82861328125,
+        "Undefined": 4437.3369140625
+      },
+      "filament_change_times": 0,
+      "filaments": [
+        {
+          "filament_id": "GFG99",
+          "id": 1,
+          "main_used_g": 74.8508071899414,
+          "total_used_g": 74.85079956054688
+        }
+      ],
+      "id": 1,
+      "layer_filament_change": 0,
+      "main_predication": 19725.33984375,
+      "obj_cached_cnt": 0,
+      "objects": [
+        {
+          "bbox": {
+            "depth": 30.077598571777344,
+            "height": 170.8000030517578,
+            "width": 31.285598754882812,
+            "x": 19.357200622558594,
+            "y": 39.96120071411133,
+            "z": 0.0
+          },
+          "id": 5,
+          "name": "Grip_Left",
+          "triangle_count": 33960
+        },
+        {
+          "bbox": {
+            "depth": 30.077598571777344,
+            "height": 170.8000030517578,
+            "width": 31.285598754882812,
+            "x": 64.3572006225586,
+            "y": 39.96120071411133,
+            "z": 0.0
+          },
+          "id": 9,
+          "name": "Grip_Right",
+          "triangle_count": 33990
+        },
+        {
+          "bbox": {
+            "depth": 20.286598205566406,
+            "height": 192.0,
+            "width": 19.766401290893555,
+            "x": 115.1167984008789,
+            "y": 44.8567008972168,
+            "z": 0.0
+          },
+          "id": 13,
+          "name": "Continuous_Shaft",
+          "triangle_count": 32672
+        },
+        {
+          "bbox": {
+            "depth": 67.0,
+            "height": 18.399999618530273,
+            "width": 29.70000648498535,
+            "x": 160.14999389648438,
+            "y": 21.5,
+            "z": 0.0
+          },
+          "id": 17,
+          "name": "Sense_Open_Cradle",
+          "triangle_count": 2724
+        },
+        {
+          "bbox": {
+            "depth": 54.60000228881836,
+            "height": 7.599999904632568,
+            "width": 20.60000228881836,
+            "x": 214.6999969482422,
+            "y": 142.6999969482422,
+            "z": 0.0
+          },
+          "id": 21,
+          "name": "Battery_Sled",
+          "triangle_count": 414
+        },
+        {
+          "bbox": {
+            "depth": 45.9949951171875,
+            "height": 9.0,
+            "width": 105.2229995727539,
+            "x": 22.388500213623047,
+            "y": 162.00250244140625,
+            "z": 0.0
+          },
+          "id": 25,
+          "name": "Removable_Finger_Loop",
+          "triangle_count": 17360
+        },
+        {
+          "bbox": {
+            "depth": 5.600003242492676,
+            "height": 8.199999809265137,
+            "width": 5.0,
+            "x": 157.5,
+            "y": 142.1999969482422,
+            "z": 0.0
+          },
+          "id": 29,
+          "name": "Loop_Keeper_Key",
+          "triangle_count": 540
+        },
+        {
+          "bbox": {
+            "depth": 29.0,
+            "height": 9.300000190734863,
+            "width": 29.0,
+            "x": 205.5,
+            "y": 40.5,
+            "z": 0.0
+          },
+          "id": 33,
+          "name": "Battery_Screw_Cap_Light",
+          "triangle_count": 7002
+        },
+        {
+          "bbox": {
+            "depth": 29.0,
+            "height": 27.299999237060547,
+            "width": 29.0,
+            "x": 205.5,
+            "y": 85.5,
+            "z": 0.0
+          },
+          "id": 37,
+          "name": "Battery_Screw_Cap_Weighted",
+          "triangle_count": 7034
+        }
+      ],
+      "times": {
+        "conflict_check_time": 2969,
+        "detect_overhangs_time": 597,
+        "export_gcode_time": 33617,
+        "flush_plan_time": 0,
+        "generate_support_material_time": 2976,
+        "infill_generate_time": 1173,
+        "infill_time": 3168,
+        "ironing_time": 0,
+        "make_perimeters_time": 13472,
+        "multifilament_segment_2d_time": 0,
+        "other_slice_time": 10,
+        "prepare_infill_time": 1987,
+        "region_split_time": 19,
+        "skirt_brim_time": 136,
+        "slice_layers_time": 2142,
+        "sliced_time": 61673,
+        "sliced_time_with_cache": 33753,
+        "support_detect_time": 183,
+        "support_interface_time": 22,
+        "support_normal_generate_time": 133,
+        "support_toolpath_time": 31,
+        "support_tree_generate_time": 0,
+        "toolpath_time": 4350,
+        "wall_time": 11311,
+        "wipe_tower_time": 237
+      },
+      "total_predication": 20130.3984375,
+      "triangle_count": 135696,
+      "warning_message": ""
+    }
+  },
+  "one-left-light": {
+    "file": "Print-Shard-R2-one-left-light.3mf",
+    "sha256": "702464b199b71a7a57bfcfabafe7fa553d79a55153112723c20957efe2997d8e",
+    "parts": [
+      "Grip_Left",
+      "Continuous_Shaft",
+      "Sense_Open_Cradle",
+      "Battery_Sled",
+      "Removable_Finger_Loop",
+      "Loop_Keeper_Key",
+      "Battery_Screw_Cap_Light"
+    ],
+    "centers": [
+      [
+        35,
+        55
+      ],
+      [
+        125,
+        55
+      ],
+      [
+        175,
+        55
+      ],
+      [
+        225,
+        170
+      ],
+      [
+        75,
+        185
+      ],
+      [
+        160,
+        145
+      ],
+      [
+        220,
+        55
+      ]
+    ],
+    "return_code": 0,
+    "warnings": [],
+    "slice": {
+      "feature_type_times": {
+        "Bottom surface": 25.331920623779297,
+        "Bridge": 70.86436462402344,
+        "Brim": 141.74505615234375,
+        "Custom": 358.580322265625,
+        "Flush": 29.0,
+        "Gap infill": 2079.44677734375,
+        "Inner wall": 3430.010498046875,
+        "Internal solid infill": 478.5176086425781,
+        "Outer wall": 5238.56298828125,
+        "Overhang wall": 230.9547882080078,
+        "Sparse infill": 522.5906372070312,
+        "Support": 87.1548843383789,
+        "Support interface": 45.368499755859375,
+        "Support transition": 24.588359832763672,
+        "Top surface": 139.03494262695312,
+        "Travel": 3183.1982421875,
+        "Undefined": 3171.706787109375
+      },
+      "filament_change_times": 0,
+      "filaments": [
+        {
+          "filament_id": "GFG99",
+          "id": 1,
+          "main_used_g": 46.36511993408203,
+          "total_used_g": 46.365116119384766
+        }
+      ],
+      "id": 1,
+      "layer_filament_change": 0,
+      "main_predication": 15669.880859375,
+      "obj_cached_cnt": 0,
+      "objects": [
+        {
+          "bbox": {
+            "depth": 30.077598571777344,
+            "height": 170.8000030517578,
+            "width": 31.285598754882812,
+            "x": 19.357200622558594,
+            "y": 39.96120071411133,
+            "z": 0.0
+          },
+          "id": 5,
+          "name": "Grip_Left",
+          "triangle_count": 33960
+        },
+        {
+          "bbox": {
+            "depth": 20.286598205566406,
+            "height": 192.0,
+            "width": 19.766401290893555,
+            "x": 115.1167984008789,
+            "y": 44.8567008972168,
+            "z": 0.0
+          },
+          "id": 9,
+          "name": "Continuous_Shaft",
+          "triangle_count": 32672
+        },
+        {
+          "bbox": {
+            "depth": 67.0,
+            "height": 18.399999618530273,
+            "width": 29.70000648498535,
+            "x": 160.14999389648438,
+            "y": 21.5,
+            "z": 0.0
+          },
+          "id": 13,
+          "name": "Sense_Open_Cradle",
+          "triangle_count": 2724
+        },
+        {
+          "bbox": {
+            "depth": 54.60000228881836,
+            "height": 7.599999904632568,
+            "width": 20.60000228881836,
+            "x": 214.6999969482422,
+            "y": 142.6999969482422,
+            "z": 0.0
+          },
+          "id": 17,
+          "name": "Battery_Sled",
+          "triangle_count": 414
+        },
+        {
+          "bbox": {
+            "depth": 45.9949951171875,
+            "height": 9.0,
+            "width": 105.2229995727539,
+            "x": 22.388500213623047,
+            "y": 162.00250244140625,
+            "z": 0.0
+          },
+          "id": 21,
+          "name": "Removable_Finger_Loop",
+          "triangle_count": 17360
+        },
+        {
+          "bbox": {
+            "depth": 5.600003242492676,
+            "height": 8.199999809265137,
+            "width": 5.0,
+            "x": 157.5,
+            "y": 142.1999969482422,
+            "z": 0.0
+          },
+          "id": 25,
+          "name": "Loop_Keeper_Key",
+          "triangle_count": 540
+        },
+        {
+          "bbox": {
+            "depth": 29.0,
+            "height": 9.300000190734863,
+            "width": 29.0,
+            "x": 205.5,
+            "y": 40.5,
+            "z": 0.0
+          },
+          "id": 29,
+          "name": "Battery_Screw_Cap_Light",
+          "triangle_count": 7002
+        }
+      ],
+      "times": {
+        "conflict_check_time": 860,
+        "detect_overhangs_time": 256,
+        "export_gcode_time": 35839,
+        "flush_plan_time": 0,
+        "generate_support_material_time": 1527,
+        "infill_generate_time": 705,
+        "infill_time": 2328,
+        "ironing_time": 0,
+        "make_perimeters_time": 9321,
+        "multifilament_segment_2d_time": 0,
+        "other_slice_time": 7,
+        "prepare_infill_time": 1621,
+        "region_split_time": 5,
+        "skirt_brim_time": 52,
+        "slice_layers_time": 1615,
+        "sliced_time": 52643,
+        "sliced_time_with_cache": 35891,
+        "support_detect_time": 72,
+        "support_interface_time": 3,
+        "support_normal_generate_time": 96,
+        "support_toolpath_time": 20,
+        "support_tree_generate_time": 0,
+        "toolpath_time": 2319,
+        "wall_time": 7701,
+        "wipe_tower_time": 87
+      },
+      "total_predication": 16074.939453125,
+      "triangle_count": 94672,
+      "warning_message": ""
+    }
+  },
+  "one-left-weighted": {
+    "file": "Print-Shard-R2-one-left-weighted.3mf",
+    "sha256": "0c8b2372817c486fc118149febadca5285d8e088d77097015ba2ce643d8edbf2",
+    "parts": [
+      "Grip_Left",
+      "Continuous_Shaft",
+      "Sense_Open_Cradle",
+      "Battery_Sled",
+      "Removable_Finger_Loop",
+      "Loop_Keeper_Key",
+      "Battery_Screw_Cap_Weighted"
+    ],
+    "centers": [
+      [
+        35,
+        55
+      ],
+      [
+        125,
+        55
+      ],
+      [
+        175,
+        55
+      ],
+      [
+        225,
+        170
+      ],
+      [
+        75,
+        185
+      ],
+      [
+        160,
+        145
+      ],
+      [
+        220,
+        55
+      ]
+    ],
+    "return_code": 0,
+    "warnings": [],
+    "slice": {
+      "feature_type_times": {
+        "Bottom surface": 25.33185577392578,
+        "Bridge": 70.72256469726562,
+        "Brim": 141.74510192871094,
+        "Custom": 358.580322265625,
+        "Flush": 29.0,
+        "Gap infill": 2050.661865234375,
+        "Inner wall": 3549.510498046875,
+        "Internal solid infill": 495.8008117675781,
+        "Outer wall": 5276.994140625,
+        "Overhang wall": 230.9550018310547,
+        "Sparse infill": 1391.250244140625,
+        "Support": 86.99038696289062,
+        "Support interface": 45.26441192626953,
+        "Support transition": 24.591522216796875,
+        "Top surface": 138.69729614257812,
+        "Travel": 3275.041015625,
+        "Undefined": 3263.549560546875
+      },
+      "filament_change_times": 0,
+      "filaments": [
+        {
+          "filament_id": "GFG99",
+          "id": 1,
+          "main_used_g": 54.25015640258789,
+          "total_used_g": 54.25015640258789
+        }
+      ],
+      "id": 1,
+      "layer_filament_change": 0,
+      "main_predication": 16775.302734375,
+      "obj_cached_cnt": 0,
+      "objects": [
+        {
+          "bbox": {
+            "depth": 30.077598571777344,
+            "height": 170.8000030517578,
+            "width": 31.285598754882812,
+            "x": 19.357200622558594,
+            "y": 39.96120071411133,
+            "z": 0.0
+          },
+          "id": 5,
+          "name": "Grip_Left",
+          "triangle_count": 33960
+        },
+        {
+          "bbox": {
+            "depth": 20.286598205566406,
+            "height": 192.0,
+            "width": 19.766401290893555,
+            "x": 115.1167984008789,
+            "y": 44.8567008972168,
+            "z": 0.0
+          },
+          "id": 9,
+          "name": "Continuous_Shaft",
+          "triangle_count": 32672
+        },
+        {
+          "bbox": {
+            "depth": 67.0,
+            "height": 18.399999618530273,
+            "width": 29.70000648498535,
+            "x": 160.14999389648438,
+            "y": 21.5,
+            "z": 0.0
+          },
+          "id": 13,
+          "name": "Sense_Open_Cradle",
+          "triangle_count": 2724
+        },
+        {
+          "bbox": {
+            "depth": 54.60000228881836,
+            "height": 7.599999904632568,
+            "width": 20.60000228881836,
+            "x": 214.6999969482422,
+            "y": 142.6999969482422,
+            "z": 0.0
+          },
+          "id": 17,
+          "name": "Battery_Sled",
+          "triangle_count": 414
+        },
+        {
+          "bbox": {
+            "depth": 45.9949951171875,
+            "height": 9.0,
+            "width": 105.2229995727539,
+            "x": 22.388500213623047,
+            "y": 162.00250244140625,
+            "z": 0.0
+          },
+          "id": 21,
+          "name": "Removable_Finger_Loop",
+          "triangle_count": 17360
+        },
+        {
+          "bbox": {
+            "depth": 5.600003242492676,
+            "height": 8.199999809265137,
+            "width": 5.0,
+            "x": 157.5,
+            "y": 142.1999969482422,
+            "z": 0.0
+          },
+          "id": 25,
+          "name": "Loop_Keeper_Key",
+          "triangle_count": 540
+        },
+        {
+          "bbox": {
+            "depth": 29.0,
+            "height": 27.299999237060547,
+            "width": 29.0,
+            "x": 205.5,
+            "y": 40.5,
+            "z": 0.0
+          },
+          "id": 29,
+          "name": "Battery_Screw_Cap_Weighted",
+          "triangle_count": 7034
+        }
+      ],
+      "times": {
+        "conflict_check_time": 1051,
+        "detect_overhangs_time": 159,
+        "export_gcode_time": 35768,
+        "flush_plan_time": 0,
+        "generate_support_material_time": 1519,
+        "infill_generate_time": 629,
+        "infill_time": 2354,
+        "ironing_time": 0,
+        "make_perimeters_time": 9519,
+        "multifilament_segment_2d_time": 0,
+        "other_slice_time": 7,
+        "prepare_infill_time": 1723,
+        "region_split_time": 22,
+        "skirt_brim_time": 231,
+        "slice_layers_time": 1418,
+        "sliced_time": 52966,
+        "sliced_time_with_cache": 35999,
+        "support_detect_time": 60,
+        "support_interface_time": 3,
+        "support_normal_generate_time": 65,
+        "support_toolpath_time": 11,
+        "support_tree_generate_time": 0,
+        "toolpath_time": 2264,
+        "wall_time": 8079,
+        "wipe_tower_time": 32
+      },
+      "total_predication": 17180.361328125,
+      "triangle_count": 94704,
+      "warning_message": ""
+    }
+  },
+  "replacement-lower-both-hands": {
+    "file": "Print-Shard-R2-replacement-lower-both-hands.3mf",
+    "sha256": "35a298fd53e9c12ae7601e7a6096f8da94acc6f0770072687cc4c6cca0776ef2",
+    "parts": [
+      "Grip_Left",
+      "Grip_Right",
+      "Battery_Sled",
+      "Removable_Finger_Loop",
+      "Loop_Keeper_Key",
+      "Battery_Screw_Cap_Light",
+      "Battery_Screw_Cap_Weighted"
+    ],
+    "centers": [
+      [
+        35,
+        55
+      ],
+      [
+        80,
+        55
+      ],
+      [
+        225,
+        170
+      ],
+      [
+        75,
+        185
+      ],
+      [
+        160,
+        145
+      ],
+      [
+        220,
+        55
+      ],
+      [
+        220,
+        100
+      ]
+    ],
+    "return_code": 0,
+    "warnings": [],
+    "slice": {
+      "feature_type_times": {
+        "Bottom surface": 45.39930725097656,
+        "Bridge": 82.517578125,
+        "Brim": 158.7272186279297,
+        "Custom": 360.71728515625,
+        "Flush": 29.0,
+        "Gap infill": 1888.497314453125,
+        "Inner wall": 3239.025390625,
+        "Internal solid infill": 508.3083190917969,
+        "Outer wall": 5141.59521484375,
+        "Overhang wall": 165.4102020263672,
+        "Sparse infill": 1431.4451904296875,
+        "Top surface": 157.3087615966797,
+        "Travel": 2915.39453125,
+        "Undefined": 2901.8232421875
+      },
+      "filament_change_times": 0,
+      "filaments": [
+        {
+          "filament_id": "GFG99",
+          "id": 1,
+          "main_used_g": 57.1170768737793,
+          "total_used_g": 57.1170768737793
+        }
+      ],
+      "id": 1,
+      "layer_filament_change": 0,
+      "main_predication": 15705.267578125,
+      "obj_cached_cnt": 0,
+      "objects": [
+        {
+          "bbox": {
+            "depth": 30.077598571777344,
+            "height": 170.8000030517578,
+            "width": 31.285598754882812,
+            "x": 19.357200622558594,
+            "y": 39.96120071411133,
+            "z": 0.0
+          },
+          "id": 5,
+          "name": "Grip_Left",
+          "triangle_count": 33960
+        },
+        {
+          "bbox": {
+            "depth": 30.077598571777344,
+            "height": 170.8000030517578,
+            "width": 31.285598754882812,
+            "x": 64.3572006225586,
+            "y": 39.96120071411133,
+            "z": 0.0
+          },
+          "id": 9,
+          "name": "Grip_Right",
+          "triangle_count": 33990
+        },
+        {
+          "bbox": {
+            "depth": 54.60000228881836,
+            "height": 7.599999904632568,
+            "width": 20.60000228881836,
+            "x": 214.6999969482422,
+            "y": 142.6999969482422,
+            "z": 0.0
+          },
+          "id": 13,
+          "name": "Battery_Sled",
+          "triangle_count": 414
+        },
+        {
+          "bbox": {
+            "depth": 45.9949951171875,
+            "height": 9.0,
+            "width": 105.2229995727539,
+            "x": 22.388500213623047,
+            "y": 162.00250244140625,
+            "z": 0.0
+          },
+          "id": 17,
+          "name": "Removable_Finger_Loop",
+          "triangle_count": 17360
+        },
+        {
+          "bbox": {
+            "depth": 5.600003242492676,
+            "height": 8.199999809265137,
+            "width": 5.0,
+            "x": 157.5,
+            "y": 142.1999969482422,
+            "z": 0.0
+          },
+          "id": 21,
+          "name": "Loop_Keeper_Key",
+          "triangle_count": 540
+        },
+        {
+          "bbox": {
+            "depth": 29.0,
+            "height": 9.300000190734863,
+            "width": 29.0,
+            "x": 205.5,
+            "y": 40.5,
+            "z": 0.0
+          },
+          "id": 25,
+          "name": "Battery_Screw_Cap_Light",
+          "triangle_count": 7002
+        },
+        {
+          "bbox": {
+            "depth": 29.0,
+            "height": 27.299999237060547,
+            "width": 29.0,
+            "x": 205.5,
+            "y": 85.5,
+            "z": 0.0
+          },
+          "id": 29,
+          "name": "Battery_Screw_Cap_Weighted",
+          "triangle_count": 7034
+        }
+      ],
+      "times": {
+        "conflict_check_time": 993,
+        "detect_overhangs_time": 293,
+        "export_gcode_time": 31655,
+        "flush_plan_time": 0,
+        "generate_support_material_time": 1541,
+        "infill_generate_time": 615,
+        "infill_time": 2634,
+        "ironing_time": 0,
+        "make_perimeters_time": 9138,
+        "multifilament_segment_2d_time": 0,
+        "other_slice_time": 11,
+        "prepare_infill_time": 2014,
+        "region_split_time": 13,
+        "skirt_brim_time": 52,
+        "slice_layers_time": 1202,
+        "sliced_time": 48920,
+        "sliced_time_with_cache": 31707,
+        "support_detect_time": 0,
+        "support_interface_time": 0,
+        "support_normal_generate_time": 0,
+        "support_toolpath_time": 0,
+        "support_tree_generate_time": 0,
+        "toolpath_time": 2443,
+        "wall_time": 7919,
+        "wipe_tower_time": 107
+      },
+      "total_predication": 16110.3828125,
+      "triangle_count": 100300,
+      "warning_message": ""
+    }
+  },
+  "fit-tests": {
+    "file": "Print-Shard-R2-fit-tests.3mf",
+    "sha256": "3c9060f8d849fe926cd0b847b6136b1810b507d9e6604b325b597d5f3e23b7b4",
+    "parts": [
+      "Switch_Fit_Test",
+      "Loop_Upper_Socket_Test",
+      "Loop_Upper_Hook_Test",
+      "Loop_Keeper_Key",
+      "Thread_Gauge",
+      "Battery_Screw_Cap_Light"
+    ],
+    "centers": [
+      [
+        35,
+        45
+      ],
+      [
+        80,
+        45
+      ],
+      [
+        125,
+        45
+      ],
+      [
+        170,
+        45
+      ],
+      [
+        70,
+        110
+      ],
+      [
+        120,
+        110
+      ]
+    ],
+    "return_code": 0,
+    "warnings": [],
+    "slice": {
+      "feature_type_times": {
+        "Bottom surface": 23.197860717773438,
+        "Bridge": 37.71906661987305,
+        "Brim": 56.699527740478516,
+        "Custom": 362.6300354003906,
+        "Flush": 29.0,
+        "Gap infill": 215.25045776367188,
+        "Inner wall": 639.4358520507812,
+        "Internal solid infill": 203.3870849609375,
+        "Outer wall": 790.3462524414062,
+        "Overhang wall": 59.14202117919922,
+        "Sparse infill": 104.38545989990234,
+        "Top surface": 72.5627212524414,
+        "Travel": 643.9102783203125,
+        "Undefined": 628.2443237304688
+      },
+      "filament_change_times": 0,
+      "filaments": [
+        {
+          "filament_id": "GFG99",
+          "id": 1,
+          "main_used_g": 11.469284057617188,
+          "total_used_g": 11.469284057617188
+        }
+      ],
+      "id": 1,
+      "layer_filament_change": 0,
+      "main_predication": 2816.874267578125,
+      "obj_cached_cnt": 0,
+      "objects": [
+        {
+          "bbox": {
+            "depth": 23.860000610351562,
+            "height": 22.0,
+            "width": 24.183799743652344,
+            "x": 22.908100128173828,
+            "y": 33.06999969482422,
+            "z": 0.0
+          },
+          "id": 5,
+          "name": "Switch_Fit_Test",
+          "triangle_count": 7214
+        },
+        {
+          "bbox": {
+            "depth": 16.321998596191406,
+            "height": 25.0,
+            "width": 24.18380355834961,
+            "x": 67.90809631347656,
+            "y": 36.8390007019043,
+            "z": 0.0
+          },
+          "id": 9,
+          "name": "Loop_Upper_Socket_Test",
+          "triangle_count": 6404
+        },
+        {
+          "bbox": {
+            "depth": 25.947998046875,
+            "height": 9.0,
+            "width": 15.110796928405762,
+            "x": 117.4446029663086,
+            "y": 32.0260009765625,
+            "z": 0.0
+          },
+          "id": 13,
+          "name": "Loop_Upper_Hook_Test",
+          "triangle_count": 3948
+        },
+        {
+          "bbox": {
+            "depth": 5.59999942779541,
+            "height": 8.199999809265137,
+            "width": 5.0,
+            "x": 167.5,
+            "y": 42.20000076293945,
+            "z": 0.0
+          },
+          "id": 17,
+          "name": "Loop_Keeper_Key",
+          "triangle_count": 540
+        },
+        {
+          "bbox": {
+            "depth": 29.0,
+            "height": 8.199999809265137,
+            "width": 29.0,
+            "x": 55.5,
+            "y": 95.5,
+            "z": 0.0
+          },
+          "id": 21,
+          "name": "Thread_Gauge",
+          "triangle_count": 4296
+        },
+        {
+          "bbox": {
+            "depth": 29.0,
+            "height": 9.300000190734863,
+            "width": 29.0,
+            "x": 105.5,
+            "y": 95.5,
+            "z": 0.0
+          },
+          "id": 25,
+          "name": "Battery_Screw_Cap_Light",
+          "triangle_count": 7002
+        }
+      ],
+      "times": {
+        "conflict_check_time": 235,
+        "detect_overhangs_time": 224,
+        "export_gcode_time": 15377,
+        "flush_plan_time": 0,
+        "generate_support_material_time": 220,
+        "infill_generate_time": 401,
+        "infill_time": 1314,
+        "ironing_time": 0,
+        "make_perimeters_time": 2267,
+        "multifilament_segment_2d_time": 0,
+        "other_slice_time": 5,
+        "prepare_infill_time": 912,
+        "region_split_time": 2,
+        "skirt_brim_time": 24,
+        "slice_layers_time": 501,
+        "sliced_time": 20277,
+        "sliced_time_with_cache": 15401,
+        "support_detect_time": 0,
+        "support_interface_time": 0,
+        "support_normal_generate_time": 0,
+        "support_toolpath_time": 0,
+        "support_tree_generate_time": 0,
+        "toolpath_time": 493,
+        "wall_time": 1764,
+        "wipe_tower_time": 62
+      },
+      "total_predication": 3221.8076171875,
+      "triangle_count": 29404,
+      "warning_message": ""
+    }
+  },
+  "weighted-cap-only": {
+    "file": "Print-Shard-R2-weighted-cap-only.3mf",
+    "sha256": "84405f5abb9f0705770cc6539e04c57811d272e1f146539228d7b2369f22aa6b",
+    "parts": [
+      "Battery_Screw_Cap_Weighted"
+    ],
+    "centers": [
+      [
+        128,
+        128
+      ]
+    ],
+    "return_code": 0,
+    "warnings": [],
+    "slice": {
+      "feature_type_times": {
+        "Bottom surface": 20.06732940673828,
+        "Bridge": 22.919109344482422,
+        "Brim": 16.1323184967041,
+        "Custom": 362.3461608886719,
+        "Flush": 29.0,
+        "Gap infill": 36.3132209777832,
+        "Inner wall": 438.19757080078125,
+        "Internal solid infill": 81.11882781982422,
+        "Outer wall": 337.04534912109375,
+        "Overhang wall": 0.7086782455444336,
+        "Sparse infill": 954.266357421875,
+        "Top surface": 15.32088565826416,
+        "Travel": 116.2308349609375,
+        "Undefined": 100.94469451904297
+      },
+      "filament_change_times": 0,
+      "filaments": [
+        {
+          "filament_id": "GFG99",
+          "id": 1,
+          "main_used_g": 10.689804077148438,
+          "total_used_g": 10.689804077148438
+        }
+      ],
+      "id": 1,
+      "layer_filament_change": 0,
+      "main_predication": 2009.3126220703125,
+      "obj_cached_cnt": 0,
+      "objects": [
+        {
+          "bbox": {
+            "depth": 29.0,
+            "height": 27.299999237060547,
+            "width": 29.0,
+            "x": 113.5,
+            "y": 113.5,
+            "z": 0.0
+          },
+          "id": 5,
+          "name": "Battery_Screw_Cap_Weighted",
+          "triangle_count": 7034
+        }
+      ],
+      "times": {
+        "conflict_check_time": 0,
+        "detect_overhangs_time": 14,
+        "export_gcode_time": 1593,
+        "flush_plan_time": 0,
+        "generate_support_material_time": 110,
+        "infill_generate_time": 52,
+        "infill_time": 220,
+        "ironing_time": 0,
+        "make_perimeters_time": 297,
+        "multifilament_segment_2d_time": 0,
+        "other_slice_time": 14,
+        "prepare_infill_time": 168,
+        "region_split_time": 0,
+        "skirt_brim_time": 4,
+        "slice_layers_time": 54,
+        "sliced_time": 2368,
+        "sliced_time_with_cache": 1597,
+        "support_detect_time": 0,
+        "support_interface_time": 0,
+        "support_normal_generate_time": 0,
+        "support_toolpath_time": 0,
+        "support_tree_generate_time": 0,
+        "toolpath_time": 65,
+        "wall_time": 243,
+        "wipe_tower_time": 46
+      },
+      "total_predication": 2414.342041015625,
+      "triangle_count": 7034,
+      "warning_message": ""
+    }
+  }
+}
