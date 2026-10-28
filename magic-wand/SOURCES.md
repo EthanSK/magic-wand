@@ -442,3 +442,40 @@ before the final cancellation wiring; it was not rerun after that wiring.
 Actual Codex acceptance and physical mouse gesture acceptance remain unverified.
 The receiver, saved Puck program, physical mouse positions and polarity are
 unchanged by this delta. Later native work is not part of this frozen release.
+
+## Background staging holds across application changes
+
+`integrations/agentic-mouse/background-stage.patch` preserves a public derivative of the
+frozen 14-file increment from Agentic Mouse 1.0.293 (299) to installed 1.0.294 (300).
+Apply it after `reasoning-bar.patch` and the preceding integration patches.
+The public archive SHA-256 is
+`a321a603b2c12e896972d3d8bcb178e53e3a3a8baa40054cbe2d00672dbf4144`.
+
+The original frozen patch and its hash remain private installation evidence.
+The public derivative removes only historical `(Codex task: UUID)` annotations
+inside Python and Swift comments; executable code is unchanged. Normalize those
+annotations in the retained baseline comments before applying this archive;
+that step is idempotent for an already sanitized public baseline. All 14
+resulting files match the frozen native source with that same normalization.
+
+Physical staging holds retain the original Code window and review when another
+application comes forward. Default Karabiner and selected VS Code mode share
+Better Git background-hold protocol 1, introduced in 1.2.136; that protocol
+must be active before the generated physical-mouse rules are installed.
+Physical release owns Finish and the adjacent Undo input owns Cancel. Lock,
+sleep, disconnect and explicit teardown abandon the hold without staging or
+Undo. Existing wheel classification and its 300 ms idle cutoff remain in place.
+The private connection is bounded and same-user; an unavailable or ambiguous
+endpoint cannot fall back to keyboard input in another application.
+The independent Magic Wand transport is unchanged.
+
+All 14 frozen files applied to their retained baseline without fuzz. The three
+known changed-file seams from the preceding published 299 patch match that
+baseline exactly. The frozen candidate logs report 1,138 native cases with four
+skips and no failures, 12 final protocol/socket cases, 31 generator cases and 23
+installation fixtures. The installed Developer ID signature and executable
+matched the 300 release receipt, and the native owner verified the active
+Better Git 1.2.136 background-hold protocol. Ordinary input activation and
+physical mouse gesture acceptance remain unverified; these automated checks
+do not establish either. This is an
+incremental archive, not a complete distribution.

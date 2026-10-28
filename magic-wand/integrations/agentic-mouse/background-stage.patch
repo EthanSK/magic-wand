@@ -1,0 +1,4118 @@
+--- a/Karabiner/generated/agentic-mouse-runtime.json
++++ b/Karabiner/generated/agentic-mouse-runtime.json
+@@ -7799,19 +7799,16 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "cancel"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+@@ -7823,69 +7820,13 @@
+               ]
+             },
+             {
+-              "key_code": "f16",
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            },
+-            {
+               "set_variable": {
+                 "name": "agentic_mouse_corsair_vscode_hold_5",
+                 "value": 3
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            }
+-          ],
+-          "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
++            }
++          ],
++          "conditions": [
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+@@ -7893,7 +7834,7 @@
+             },
+             {
+               "type": "expression_if",
+-              "expression": "agentic_mouse_corsair_vscode_hold_5 == 1 or agentic_mouse_corsair_vscode_hold_5 == 2 or agentic_mouse_corsair_vscode_hold_5 == 3"
++              "expression": "agentic_mouse_corsair_vscode_hold_5 == 1 or agentic_mouse_corsair_vscode_hold_5 == 2"
+             },
+             {
+               "type": "device_if",
+@@ -8061,19 +8002,16 @@
+               }
+             },
+             {
+-              "key_code": "f17",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "begin"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+@@ -8100,24 +8038,19 @@
+               ]
+             },
+             {
+-              "key_code": "f20",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "ready"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_5 == 1 or agentic_mouse_corsair_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -8141,15 +8074,8 @@
+               "repeat": false,
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_5 == 1 or agentic_mouse_corsair_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -8168,15 +8094,8 @@
+               },
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_5 == 1 or agentic_mouse_corsair_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -8224,11 +8143,14 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "short-release"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -8237,12 +8159,6 @@
+                   "value": 1
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -8253,11 +8169,14 @@
+               ]
+             },
+             {
+-              "key_code": "f19",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "finish"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -8266,12 +8185,6 @@
+                   "value": 2
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -8282,35 +8195,27 @@
+               ]
+             },
+             {
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "owner-release"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
++                }
++              ]
++            },
++            {
+               "set_variable": {
+                 "name": "agentic_mouse_corsair_vscode_hold_5",
+                 "value": 0
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+             }
+           ],
+           "conditions": [
+@@ -8474,19 +8379,16 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "cancel"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+@@ -8498,69 +8400,13 @@
+               ]
+             },
+             {
+-              "key_code": "f16",
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            },
+-            {
+               "set_variable": {
+                 "name": "agentic_mouse_corsair_vscode_hold_8",
+                 "value": 3
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            }
+-          ],
+-          "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
++            }
++          ],
++          "conditions": [
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+@@ -8568,7 +8414,7 @@
+             },
+             {
+               "type": "expression_if",
+-              "expression": "agentic_mouse_corsair_vscode_hold_8 == 1 or agentic_mouse_corsair_vscode_hold_8 == 2 or agentic_mouse_corsair_vscode_hold_8 == 3"
++              "expression": "agentic_mouse_corsair_vscode_hold_8 == 1 or agentic_mouse_corsair_vscode_hold_8 == 2"
+             },
+             {
+               "type": "device_if",
+@@ -8736,19 +8582,16 @@
+               }
+             },
+             {
+-              "key_code": "f13",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "begin"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+@@ -8775,24 +8618,19 @@
+               ]
+             },
+             {
+-              "key_code": "f20",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "ready"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_8 == 1 or agentic_mouse_corsair_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -8816,15 +8654,8 @@
+               "repeat": false,
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_8 == 1 or agentic_mouse_corsair_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -8843,15 +8674,8 @@
+               },
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_8 == 1 or agentic_mouse_corsair_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -8899,11 +8723,14 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "short-release"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -8912,12 +8739,6 @@
+                   "value": 1
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -8928,11 +8749,14 @@
+               ]
+             },
+             {
+-              "key_code": "f18",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "finish"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -8941,12 +8765,6 @@
+                   "value": 2
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -8957,35 +8775,27 @@
+               ]
+             },
+             {
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "owner-release"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
++                }
++              ]
++            },
++            {
+               "set_variable": {
+                 "name": "agentic_mouse_corsair_vscode_hold_8",
+                 "value": 0
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+             }
+           ],
+           "conditions": [
+@@ -9609,12 +9419,6 @@
+           ],
+           "conditions": [
+             {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
+-            {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+               "value": 1
+@@ -9898,12 +9702,6 @@
+             }
+           ],
+           "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+@@ -10203,19 +10001,16 @@
+               }
+             },
+             {
+-              "key_code": "f17",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "begin"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+@@ -10242,23 +10037,19 @@
+               ]
+             },
+             {
+-              "key_code": "f20",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "ready"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_5 == 1 or agentic_mouse_razer_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -10282,15 +10073,8 @@
+               "repeat": false,
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_5 == 1 or agentic_mouse_razer_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -10309,15 +10093,8 @@
+               },
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_5 == 1 or agentic_mouse_razer_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -10365,11 +10142,14 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "short-release"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -10378,12 +10158,6 @@
+                   "value": 1
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -10394,11 +10168,14 @@
+               ]
+             },
+             {
+-              "key_code": "f19",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "finish"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -10407,12 +10184,6 @@
+                   "value": 2
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -10423,34 +10194,27 @@
+               ]
+             },
+             {
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "owner-release"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
++                }
++              ]
++            },
++            {
+               "set_variable": {
+                 "name": "agentic_mouse_razer_vscode_hold_5",
+                 "value": 0
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+             }
+           ],
+           "conditions": [
+@@ -10615,19 +10379,16 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "cancel"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+@@ -10639,68 +10400,13 @@
+               ]
+             },
+             {
+-              "key_code": "f16",
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            },
+-            {
+               "set_variable": {
+                 "name": "agentic_mouse_razer_vscode_hold_5",
+                 "value": 3
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            }
+-          ],
+-          "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
++            }
++          ],
++          "conditions": [
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+@@ -10708,7 +10414,7 @@
+             },
+             {
+               "type": "expression_if",
+-              "expression": "agentic_mouse_razer_vscode_hold_5 == 1 or agentic_mouse_razer_vscode_hold_5 == 2 or agentic_mouse_razer_vscode_hold_5 == 3"
++              "expression": "agentic_mouse_razer_vscode_hold_5 == 1 or agentic_mouse_razer_vscode_hold_5 == 2"
+             },
+             {
+               "type": "device_if",
+@@ -10877,19 +10583,16 @@
+               }
+             },
+             {
+-              "key_code": "f13",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "begin"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+@@ -10916,23 +10619,19 @@
+               ]
+             },
+             {
+-              "key_code": "f20",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "ready"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_8 == 1 or agentic_mouse_razer_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -10956,15 +10655,8 @@
+               "repeat": false,
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_8 == 1 or agentic_mouse_razer_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -10983,15 +10675,8 @@
+               },
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_8 == 1 or agentic_mouse_razer_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -11039,11 +10724,14 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "short-release"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -11052,12 +10740,6 @@
+                   "value": 1
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -11068,11 +10750,14 @@
+               ]
+             },
+             {
+-              "key_code": "f18",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "finish"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -11081,12 +10766,6 @@
+                   "value": 2
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -11097,34 +10776,27 @@
+               ]
+             },
+             {
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "owner-release"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
++                }
++              ]
++            },
++            {
+               "set_variable": {
+                 "name": "agentic_mouse_razer_vscode_hold_8",
+                 "value": 0
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+             }
+           ],
+           "conditions": [
+@@ -11289,19 +10961,16 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "cancel"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+@@ -11313,68 +10982,13 @@
+               ]
+             },
+             {
+-              "key_code": "f16",
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            },
+-            {
+               "set_variable": {
+                 "name": "agentic_mouse_razer_vscode_hold_8",
+                 "value": 3
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            }
+-          ],
+-          "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
++            }
++          ],
++          "conditions": [
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+@@ -11382,7 +10996,7 @@
+             },
+             {
+               "type": "expression_if",
+-              "expression": "agentic_mouse_razer_vscode_hold_8 == 1 or agentic_mouse_razer_vscode_hold_8 == 2 or agentic_mouse_razer_vscode_hold_8 == 3"
++              "expression": "agentic_mouse_razer_vscode_hold_8 == 1 or agentic_mouse_razer_vscode_hold_8 == 2"
+             },
+             {
+               "type": "device_if",
+@@ -11886,12 +11500,6 @@
+           ],
+           "conditions": [
+             {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
+-            {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+               "value": 1
+@@ -12176,12 +11784,6 @@
+             }
+           ],
+           "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+--- a/Karabiner/generated/agentic-mouse.json
++++ b/Karabiner/generated/agentic-mouse.json
+@@ -972,19 +972,16 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "cancel"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+@@ -996,69 +993,13 @@
+               ]
+             },
+             {
+-              "key_code": "f16",
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            },
+-            {
+               "set_variable": {
+                 "name": "agentic_mouse_corsair_vscode_hold_5",
+                 "value": 3
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            }
+-          ],
+-          "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
++            }
++          ],
++          "conditions": [
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+@@ -1066,7 +1007,7 @@
+             },
+             {
+               "type": "expression_if",
+-              "expression": "agentic_mouse_corsair_vscode_hold_5 == 1 or agentic_mouse_corsair_vscode_hold_5 == 2 or agentic_mouse_corsair_vscode_hold_5 == 3"
++              "expression": "agentic_mouse_corsair_vscode_hold_5 == 1 or agentic_mouse_corsair_vscode_hold_5 == 2"
+             },
+             {
+               "type": "device_if",
+@@ -1234,19 +1175,16 @@
+               }
+             },
+             {
+-              "key_code": "f17",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "begin"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+@@ -1273,24 +1211,19 @@
+               ]
+             },
+             {
+-              "key_code": "f20",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "ready"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_5 == 1 or agentic_mouse_corsair_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -1314,15 +1247,8 @@
+               "repeat": false,
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_5 == 1 or agentic_mouse_corsair_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -1341,15 +1267,8 @@
+               },
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_5 == 1 or agentic_mouse_corsair_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -1397,11 +1316,14 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "short-release"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -1410,12 +1332,6 @@
+                   "value": 1
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -1426,11 +1342,14 @@
+               ]
+             },
+             {
+-              "key_code": "f19",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "finish"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -1439,12 +1358,6 @@
+                   "value": 2
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -1455,35 +1368,27 @@
+               ]
+             },
+             {
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "previous",
++                  "phase": "owner-release"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
++                }
++              ]
++            },
++            {
+               "set_variable": {
+                 "name": "agentic_mouse_corsair_vscode_hold_5",
+                 "value": 0
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+             }
+           ],
+           "conditions": [
+@@ -1647,19 +1552,16 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "cancel"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+@@ -1671,69 +1573,13 @@
+               ]
+             },
+             {
+-              "key_code": "f16",
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            },
+-            {
+               "set_variable": {
+                 "name": "agentic_mouse_corsair_vscode_hold_8",
+                 "value": 3
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            }
+-          ],
+-          "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
++            }
++          ],
++          "conditions": [
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+@@ -1741,7 +1587,7 @@
+             },
+             {
+               "type": "expression_if",
+-              "expression": "agentic_mouse_corsair_vscode_hold_8 == 1 or agentic_mouse_corsair_vscode_hold_8 == 2 or agentic_mouse_corsair_vscode_hold_8 == 3"
++              "expression": "agentic_mouse_corsair_vscode_hold_8 == 1 or agentic_mouse_corsair_vscode_hold_8 == 2"
+             },
+             {
+               "type": "device_if",
+@@ -1909,19 +1755,16 @@
+               }
+             },
+             {
+-              "key_code": "f13",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "begin"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+@@ -1948,24 +1791,19 @@
+               ]
+             },
+             {
+-              "key_code": "f20",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "ready"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_8 == 1 or agentic_mouse_corsair_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -1989,15 +1827,8 @@
+               "repeat": false,
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_8 == 1 or agentic_mouse_corsair_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -2016,15 +1847,8 @@
+               },
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_corsair_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_corsair_vscode_hold_8 == 1 or agentic_mouse_corsair_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -2072,11 +1896,14 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "short-release"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -2085,12 +1912,6 @@
+                   "value": 1
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -2101,11 +1922,14 @@
+               ]
+             },
+             {
+-              "key_code": "f18",
+-              "modifiers": [
+-                "left_control",
+-                "left_command"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "finish"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -2114,12 +1938,6 @@
+                   "value": 2
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -2130,35 +1948,27 @@
+               ]
+             },
+             {
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "corsair",
++                  "direction": "next",
++                  "phase": "owner-release"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
++                }
++              ]
++            },
++            {
+               "set_variable": {
+                 "name": "agentic_mouse_corsair_vscode_hold_8",
+                 "value": 0
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_control",
+-                "left_option",
+-                "left_command"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_corsair_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_corsair_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+             }
+           ],
+           "conditions": [
+@@ -2712,12 +2522,6 @@
+           ],
+           "conditions": [
+             {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
+-            {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+               "value": 1
+@@ -2985,12 +2789,6 @@
+             }
+           ],
+           "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+@@ -3258,19 +3056,16 @@
+               }
+             },
+             {
+-              "key_code": "f17",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "begin"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+@@ -3297,23 +3092,19 @@
+               ]
+             },
+             {
+-              "key_code": "f20",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "ready"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_5 == 1 or agentic_mouse_razer_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -3337,15 +3128,8 @@
+               "repeat": false,
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_5 == 1 or agentic_mouse_razer_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -3364,15 +3148,8 @@
+               },
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_5 == 1 or agentic_mouse_razer_vscode_hold_5 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -3420,11 +3197,14 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "short-release"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -3433,12 +3213,6 @@
+                   "value": 1
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -3449,11 +3223,14 @@
+               ]
+             },
+             {
+-              "key_code": "f19",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "finish"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -3462,12 +3239,6 @@
+                   "value": 2
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -3478,34 +3249,27 @@
+               ]
+             },
+             {
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "owner-release"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
++                }
++              ]
++            },
++            {
+               "set_variable": {
+                 "name": "agentic_mouse_razer_vscode_hold_5",
+                 "value": 0
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+             }
+           ],
+           "conditions": [
+@@ -3670,19 +3434,16 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "previous",
++                  "phase": "cancel"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+@@ -3694,68 +3455,13 @@
+               ]
+             },
+             {
+-              "key_code": "f16",
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_5",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            },
+-            {
+               "set_variable": {
+                 "name": "agentic_mouse_razer_vscode_hold_5",
+                 "value": 3
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            }
+-          ],
+-          "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
++            }
++          ],
++          "conditions": [
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+@@ -3763,7 +3469,7 @@
+             },
+             {
+               "type": "expression_if",
+-              "expression": "agentic_mouse_razer_vscode_hold_5 == 1 or agentic_mouse_razer_vscode_hold_5 == 2 or agentic_mouse_razer_vscode_hold_5 == 3"
++              "expression": "agentic_mouse_razer_vscode_hold_5 == 1 or agentic_mouse_razer_vscode_hold_5 == 2"
+             },
+             {
+               "type": "device_if",
+@@ -3932,19 +3638,16 @@
+               }
+             },
+             {
+-              "key_code": "f13",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "begin"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+@@ -3971,23 +3674,19 @@
+               ]
+             },
+             {
+-              "key_code": "f20",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "ready"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_8 == 1 or agentic_mouse_razer_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -4011,15 +3710,8 @@
+               "repeat": false,
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_8 == 1 or agentic_mouse_razer_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -4038,15 +3730,8 @@
+               },
+               "conditions": [
+                 {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
++                  "type": "expression_if",
++                  "expression": "agentic_mouse_razer_vscode_hold_8 == 1 or agentic_mouse_razer_vscode_hold_8 == 2"
+                 },
+                 {
+                   "type": "expression_unless",
+@@ -4094,11 +3779,14 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "short-release"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -4107,12 +3795,6 @@
+                   "value": 1
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -4123,11 +3805,14 @@
+               ]
+             },
+             {
+-              "key_code": "f18",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "finish"
++                }
++              },
+               "repeat": false,
+               "conditions": [
+                 {
+@@ -4136,12 +3821,6 @@
+                   "value": 2
+                 },
+                 {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+                 },
+@@ -4152,34 +3831,27 @@
+               ]
+             },
+             {
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "owner-release"
++                }
++              },
++              "repeat": false,
++              "conditions": [
++                {
++                  "type": "expression_if",
++                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
++                }
++              ]
++            },
++            {
+               "set_variable": {
+                 "name": "agentic_mouse_razer_vscode_hold_8",
+                 "value": 0
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+             }
+           ],
+           "conditions": [
+@@ -4344,19 +4016,16 @@
+               }
+             },
+             {
+-              "key_code": "f14",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
++              "send_user_command": {
++                "payload": {
++                  "command": "agentic_mouse_vscode_stage_hold",
++                  "source": "razer",
++                  "direction": "next",
++                  "phase": "cancel"
++                }
++              },
++              "repeat": false,
++              "conditions": [
+                 {
+                   "type": "expression_unless",
+                   "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+@@ -4368,68 +4037,13 @@
+               ]
+             },
+             {
+-              "key_code": "f16",
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "variable_unless",
+-                  "name": "agentic_mouse_razer_vscode_hold_8",
+-                  "value": 3
+-                },
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            },
+-            {
+               "set_variable": {
+                 "name": "agentic_mouse_razer_vscode_hold_8",
+                 "value": 3
+               }
+-            },
+-            {
+-              "key_code": "f15",
+-              "modifiers": [
+-                "left_command",
+-                "left_shift"
+-              ],
+-              "repeat": false,
+-              "conditions": [
+-                {
+-                  "type": "frontmost_application_if",
+-                  "bundle_identifiers": [
+-                    "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-                  ]
+-                },
+-                {
+-                  "type": "expression_unless",
+-                  "expression": "(agentic_mouse_mode_picker_razer_expires_at > system.now.milliseconds) and (agentic_mouse_mode_picker_razer_expires_at <= system.now.milliseconds + 15000)"
+-                },
+-                {
+-                  "type": "expression_if",
+-                  "expression": "(agentic_mouse_session_unlocked_expires_at > system.now.milliseconds) and (agentic_mouse_session_unlocked_expires_at <= system.now.milliseconds + 15000)"
+-                }
+-              ]
+-            }
+-          ],
+-          "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
++            }
++          ],
++          "conditions": [
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+@@ -4437,7 +4051,7 @@
+             },
+             {
+               "type": "expression_if",
+-              "expression": "agentic_mouse_razer_vscode_hold_8 == 1 or agentic_mouse_razer_vscode_hold_8 == 2 or agentic_mouse_razer_vscode_hold_8 == 3"
++              "expression": "agentic_mouse_razer_vscode_hold_8 == 1 or agentic_mouse_razer_vscode_hold_8 == 2"
+             },
+             {
+               "type": "device_if",
+@@ -4911,12 +4525,6 @@
+           ],
+           "conditions": [
+             {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
+-            {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+               "value": 1
+@@ -5185,12 +4793,6 @@
+             }
+           ],
+           "conditions": [
+-            {
+-              "type": "frontmost_application_if",
+-              "bundle_identifiers": [
+-                "^com\\.microsoft\\.VSCode(?:Insiders)?$"
+-              ]
+-            },
+             {
+               "type": "variable_unless",
+               "name": "agentic_mouse_vscode_legacy_stage_chords_enabled",
+--- a/LEARNINGS.md
++++ b/LEARNINGS.md
+@@ -3245,3 +3245,9 @@
+ Route mouse reasoning through strict `reasoning-up` / `reasoning-down` Model Bar actions. Keep mouse physical-cell ownership, polarity and detent reconstruction in Agentic Mouse; keep composer selection, draft preservation, actual configured reasoning keys and focus restoration in the existing Model Bar implementation. Share the established nonactivating URL relay with speed, require the existing session/Accessibility gates before dispatch, and report only sent until Codex acceptance is observed. Retain the dedicated keyboard bindings for ordinary keyboard compatibility; they are no longer the mouse reasoning transport.
+ 
+ The focused Codex executor suite passed 20 tests before cancellation wiring. The broader suite passed 1,124 tests with four skips and zero failures before the last cancellation wiring. The final focused executor run passed all 21 cases, including release/teardown cancellation after lock, blocked-session/permission cases, both reasoning directions, a missing handler, nonactivating transport and absence of raw reasoning keyboard events. Live installation and actual Codex acceptance must be recorded separately from these checks.
++
++## Physical BetterGit staging across app switches (2026-10-28)
++
++- A physical staging hold belongs to the Code window/review captured at Begin. App focus changes must not stage, clear, re-target or emit fallback keyboard input. Default Karabiner and entered VS Code mode use the same private per-window socket lifecycle; Magic Wand retains its existing transport. BetterGit background-hold protocol 1 (introduced in 1.2.136) must be active before these generated rules are installed.
++- Physical release owns Finish; short release owns its existing boundary; adjacent Undo owns Cancel. Lock, sleep, disconnect and explicit teardown abandon without staging or Undo. Keep heartbeats while held, source ownership until physical up, FIFO admission replies and the existing 300 ms wheel-idle cutoff. Probe only while selecting a new window; never rediscover a live gesture.
++- Gallery-installed extension is not proof of active code. Developer: Restart Extension Host may terminate an unrelated API debugging session; preserve the debugger and report that activation boundary rather than forcing Restart Anyway. Tests prove the native state machine/private socket contract, not a physical mouse acceptance.
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -18,9 +18,9 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.293</string>
++	<string>1.0.294</string>
+ 	<key>CFBundleVersion</key>
+-	<string>299</string>
++	<string>300</string>
+ 	<key>LSMinimumSystemVersion</key>
+ 	<string>13.0</string>
+ 
+--- a/Scripts/generate-karabiner.py
++++ b/Scripts/generate-karabiner.py
+@@ -81,67 +81,60 @@
+ 
+ 
+ def vscode_hold_templates(binding: dict[str, Any]) -> list[dict[str, Any]]:
+-    """Capture on press, choose navigation or staging on release, and keep Undo atomic."""
++    """Keep Karabiner's physical classifier; relay the hold to its captured Code socket."""
+     source = binding["id"].split("-", 1)[0]
+     cell = 8 if "next" in binding["action"] else 5
++    direction = "next" if cell == 8 else "previous"
+     pending = f"agentic_mouse_{source}_vscode_hold_{cell}"
+     wheel_armed = f"{pending}_wheel_armed"
+     frontmost = {"type": "frontmost_application_if", "bundle_identifiers": [r"^com\.microsoft\.VSCode(?:Insiders)?$"]}
+-    output_conditions = [frontmost, {"type": "expression_unless", "expression": _active_expression(f"agentic_mouse_mode_picker_{source}_expires_at")}]
+-    enabled = [frontmost, {"type": "variable_unless", "name": VSCODE_LEGACY_STAGE_FLAG, "value": 1}]
+-    feedback_modifiers = ["left_command", "left_shift"] if source == "razer" else ["left_control", "left_option", "left_command"]
+-    navigation_modifiers = ["left_command", "left_shift"] if source == "razer" else ["left_control", "left_command"]
+-    cancel_origin = {"key_code": "f14", "modifiers": navigation_modifiers, "repeat": False, "conditions": copy.deepcopy(output_conditions)}
+-    clear_feedback = {"key_code": "f15", "modifiers": feedback_modifiers, "repeat": False, "conditions": copy.deepcopy(output_conditions)}
++    # Only Begin requires foreground. Already-owned phases never inject keys into another app.
++    output_conditions = [{"type": "expression_unless", "expression": _active_expression(f"agentic_mouse_mode_picker_{source}_expires_at")}]
++    enabled = [{"type": "variable_unless", "name": VSCODE_LEGACY_STAGE_FLAG, "value": 1}]
++    def hold_command(phase: str, conditions: list[dict[str, Any]]) -> dict[str, Any]:
++        return {"send_user_command": {"payload": {
++            "command": "agentic_mouse_vscode_stage_hold", "source": source,
++            "direction": direction, "phase": phase,
++        }}, "repeat": False, "conditions": copy.deepcopy(conditions)}
+     def wheel_command(phase: str, conditions: list[dict[str, Any]]) -> dict[str, Any]:
+-        return {
+-            "send_user_command": {"payload": {
+-                "command": "agentic_mouse_wheel_chord",
+-                "control": "vsCodeStageRange",
+-                "source": source,
+-                "phase": phase,
+-            }},
+-            "repeat": False,
+-            "conditions": copy.deepcopy(conditions),
+-        }
+-    not_cancelled = {"type": "variable_unless", "name": pending, "value": 3}
++        return {"send_user_command": {"payload": {
++            "command": "agentic_mouse_wheel_chord", "control": "vsCodeStageRange",
++            "source": source, "phase": phase,
++        }}, "repeat": False, "conditions": copy.deepcopy(conditions)}
++    live = {"type": "expression_if", "expression": f"{pending} == 1 or {pending} == 2"}
+     if "-while-" in binding["action"]:
+         return [{
+-            "conditions": enabled + [{"type": "expression_if", "expression": f"{pending} == 1 or {pending} == 2 or {pending} == 3"}],
+-            "to": [
+-                wheel_command("release", []),
+-                {"set_variable": {"name": wheel_armed, "value": 0}},
+-                copy.deepcopy(cancel_origin),
+-                {"key_code": "f16", "repeat": False, "conditions": [{"type": "variable_unless", "name": pending, "value": 3}] + copy.deepcopy(output_conditions)},
+-                {"set_variable": {"name": pending, "value": 3}},
+-                copy.deepcopy(clear_feedback),
+-            ],
++            "conditions": enabled + [live],
++            "to": [wheel_command("release", []),
++                   {"set_variable": {"name": wheel_armed, "value": 0}},
++                   hold_command("cancel", output_conditions),
++                   {"set_variable": {"name": pending, "value": 3}}],
+         }]
+     short = {"type": "variable_if", "name": pending, "value": 1}
+     held = {"type": "variable_if", "name": pending, "value": 2}
+     return [{
+-        "conditions": enabled,
++        "conditions": [frontmost] + enabled,
+         "parameters": {"basic.to_if_held_down_threshold_milliseconds": 200, "basic.to_if_alone_timeout_milliseconds": 200},
+         "to": [
+             {"set_variable": {"name": pending, "value": 1}},
+             {"set_variable": {"name": wheel_armed, "value": 0}},
+-            {"key_code": "f13" if cell == 8 else "f17", "modifiers": navigation_modifiers, "repeat": False, "conditions": copy.deepcopy(output_conditions)},
++            hold_command("begin", output_conditions),
+         ],
+         "to_if_held_down": [
+             {"set_variable": {"name": pending, "value": 2}, "conditions": [short]},
+-            {"key_code": "f20", "modifiers": feedback_modifiers, "repeat": False, "conditions": [not_cancelled] + copy.deepcopy(output_conditions)},
+-            wheel_command("press", [not_cancelled] + output_conditions),
+-            {"set_variable": {"name": wheel_armed, "value": 1}, "conditions": [not_cancelled] + copy.deepcopy(output_conditions)},
+-        ],  # Better Git needs an explicit readiness event to change fire to explosion before release; this command never stages.
+-        "to_if_alone": [{"set_variable": {"name": pending, "value": 1}, "conditions": [{"type": "expression_if", "expression": f"{pending} == 1 or {pending} == 2"}]}],  # Karabiner checks original event duration before after-key-up output; a delayed hold timer must not stage a fast click.
++            hold_command("ready", [live] + output_conditions),
++            wheel_command("press", [live] + output_conditions),
++            {"set_variable": {"name": wheel_armed, "value": 1}, "conditions": [live] + output_conditions},
++        ],
++        "to_if_alone": [{"set_variable": {"name": pending, "value": 1}, "conditions": [live]}],
+         "to_after_key_up": [
+             wheel_command("release", []),
+             {"set_variable": {"name": wheel_armed, "value": 0}},
+-            {**copy.deepcopy(cancel_origin), "conditions": [short] + copy.deepcopy(output_conditions)},
+-            {"key_code": "f18" if cell == 8 else "f19", "modifiers": navigation_modifiers, "repeat": False, "conditions": [held] + copy.deepcopy(output_conditions)},
++            hold_command("short-release", [short] + output_conditions),
++            hold_command("finish", [held] + output_conditions),
++            hold_command("owner-release", []),
+             {"set_variable": {"name": pending, "value": 0}},
+-            copy.deepcopy(clear_feedback),
+-        ],  # Every hold stages independently. Undo is only the held adjacent-button chord; never restore double-hold undo.
++        ],
+     }]
+ 
+ 
+@@ -169,7 +162,6 @@
+         }
+     return {
+         "conditions": [
+-            {"type": "frontmost_application_if", "bundle_identifiers": [r"^com\.microsoft\.VSCode(?:Insiders)?$"]},
+             {"type": "variable_unless", "name": VSCODE_LEGACY_STAGE_FLAG, "value": 1},
+             {"type": "expression_if", "expression": f"{pending} == 1 or {pending} == 2"},
+         ],
+--- a/Sources/AgenticMouseApp/AppDelegate.swift
++++ b/Sources/AgenticMouseApp/AppDelegate.swift
+@@ -342,6 +342,7 @@
+ 
+     /// Runs on every exit path, including signals.
+     private func teardown() {
++        vsCodeBackgroundHoldController.abandonAll()
+         wandNewChatService.stop()
+         wandChatCreationStatus.reset()
+         codexPinNotifications.stop()
+@@ -453,6 +454,7 @@
+     }
+ 
+     private func handleSessionLocked() {
++        vsCodeBackgroundHoldController.abandonAll()
+         wandNewChatService.reset()
+         wandChatCreationStatus.reset()
+         wandSelectionController?.reset(reason: .systemSleep)
+@@ -515,6 +517,7 @@
+     }
+ 
+     @objc private func systemWillSleep(_ notification: Notification) {
++        vsCodeBackgroundHoldController.abandonAll()
+         wandNewChatService.reset()
+         wandChatCreationStatus.reset()
+         wandSelectionController?.reset(reason: .systemSleep)
+@@ -766,6 +769,7 @@
+             colorProofCoordinator?.handleLightingUnavailable(.corsair)
+             floatingMouseClutch.cancel(resetButton: true)
+             modePickerCoordinators[.corsair]?.handleDeviceLost(.corsair)
++            vsCodeBackgroundHoldController.abandon(.corsair)
+             corsairRecoveryMonitor?.stop()
+             corsairRecoveryMonitor = nil
+             selectedDevice = nil
+@@ -843,6 +847,7 @@
+             colorProofCoordinator?.handleDeviceLost(.corsair)
+             floatingMouseClutch.cancel(resetButton: true)
+             modePickerCoordinators[.corsair]?.handleDeviceLost(.corsair)
++            vsCodeBackgroundHoldController.abandon(.corsair)
+         }
+ 
+         if currentIdentifier != nil {
+@@ -898,6 +903,7 @@
+             colorProofCoordinator?.handleDeviceLost(.corsair)
+             floatingMouseClutch.cancel(resetButton: true)
+             modePickerCoordinators[.corsair]?.handleDeviceLost(.corsair)
++            vsCodeBackgroundHoldController.abandon(.corsair)
+             lightingCoordinator?.handleSessionLost()
+ 
+         case .lightingUnavailable:
+@@ -1018,6 +1024,7 @@
+                 controller?.handleDeviceLost()
+                 self?.colorProofCoordinator?.handleDeviceLost(.razer)
+                 self?.modePickerCoordinators[.razer]?.handleDeviceLost(.razer)
++                self?.vsCodeBackgroundHoldController.abandon(.razer)
+                 self?.refreshStatus()
+             },
+             onRecovered: { [weak self] in
+@@ -1118,10 +1125,15 @@
+                 )
+             }
+             vsCodeGestures.onStageRangeNavigationChange = { [weak self] active in
++                if source.isPhysicalAdapter, !active,
++                   self?.vsCodeModeGestureClassifiers[source]?.isHoldingNavigation == false { return }
+                 self?.performVSCodeStagePreviewMode(active, source: source)
+             }
+             coordinator.shouldRouteVSCodeCursorHistoryAsButton = { [weak self] requestedSource in
+                 self?.wheelChordMonitor?.activeControl(for: requestedSource) == .vsCodeStageRange
++            }
++            coordinator.shouldDeferFrontmostAppUpdate = { [weak self] in
++                self?.vsCodeBackgroundHoldController.owns(source) == true
+             }
+             coordinator.onAppearanceChange = { [weak self] modeColor, actionColor in
+                 guard let self else { return [] }
+@@ -1286,6 +1298,7 @@
+                             guard let self, self.mouseCommandsAllowed else { return }
+                             self.performVSCodeModeCommand(command, source: source)
+                         }
++                        if phase == .release { self.vsCodeBackgroundHoldController.ownerReleased(source) }
+                     } else if phase == .press {
+                         classifier.handlePress(action: action) { [weak self] command in
+                             self?.performVSCodeModeCommand(command, source: source)
+@@ -1714,6 +1727,7 @@
+         _ command: VSCodeModeCommand,
+         source: MouseSource
+     ) {
++        if vsCodeBackgroundHoldController.handleMode(command, source: source) { return }
+         if command == .toggleTerminal {
+             vsCodeCommandBridge.perform(.toggleTerminal) { [weak self] result in
+                 guard case .failure(let error) = result else { return }
+@@ -1739,6 +1753,20 @@
+     }
+ 
+     // MARK: - Karabiner commands
++
++    private lazy var vsCodeBackgroundHoldController: VSCodeBackgroundHoldController = {
++        let controller = VSCodeBackgroundHoldController(allowed: { [weak self] in
++            self?.mouseCommandsAllowed == true && AXIsProcessTrusted()
++        })
++        controller.onFailure = { [weak self] source in
++            self?.log.error("Better Git background hold connection failed for \(source.displayName); no fallback input sent")
++        }
++        controller.onOwnerReleased = { [weak self] source in
++            guard let self else { return }
++            self.modePickerCoordinators[source]?.updateFrontmostApp(self.currentFrontmostAppModeContext())
++        }
++        return controller
++    }()
+ 
+     private lazy var windowResizeController: WindowResizeController = {
+         let controller = WindowResizeController()
+@@ -2018,6 +2046,9 @@
+             )
+         }
+         monitor.onClear = { [weak self] source, nextControl in
++            if nextControl != .vsCodeStageRange, self?.vsCodeBackgroundHoldController.owns(source) == true {
++                self?.vsCodeBackgroundHoldController.abandon(source)
++            }
+             if self?.activeWheelControl(for: source) == .codexResponseSpeed {
+                 self?.codexModeActionExecutor.cancelResponseSpeed()
+             }
+@@ -2331,6 +2362,11 @@
+                   self.activeWheelControl(for: step.source)
+                     == .vsCodeStageRange
+             else { return }
++            if step.source.isPhysicalAdapter {
++                let sent = self.vsCodeBackgroundHoldController.step(direction == .down ? "next" : "previous", mode: "files", source: step.source)
++                self.flashWheelActionFeedback(step, outcome: sent ? .sent : .couldNotBeSent)
++                return
++            }
+             self.vsCodeCommandBridge.performStageSelection(
+                 direction,
+                 source: step.source
+@@ -2362,6 +2398,11 @@
+                   self.activeWheelControl(for: step.source)
+                     == .vsCodeStageRange
+             else { return }
++            if step.source.isPhysicalAdapter {
++                let sent = self.vsCodeBackgroundHoldController.step(direction.rawValue, mode: "changes", source: step.source)
++                self.flashWheelActionFeedback(step, outcome: sent ? .sent : .couldNotBeSent)
++                return
++            }
+             self.vsCodeCommandBridge.performStagePreviewNavigation(
+                 direction,
+                 source: step.source
+@@ -2388,6 +2429,10 @@
+         guard mouseCommandsAllowed,
+               wheelChordMonitor?.activeControl(for: source) == .vsCodeStageRange,
+               isVSCodeStagePreviewNavigationActive(for: source) else { return }
++        if source.isPhysicalAdapter {
++            _ = vsCodeBackgroundHoldController.step(direction.rawValue, mode: "changes", source: source)
++            return
++        }
+         vsCodeCommandBridge.performStagePreviewNavigation(direction, source: source) { [weak self] result in
+             guard let self else { return }
+             switch result {
+@@ -2403,6 +2448,10 @@
+         guard mouseCommandsAllowed,
+               !active || wheelChordMonitor?.activeControl(for: source) == .vsCodeStageRange
+         else { return }
++        if source.isPhysicalAdapter {
++            _ = vsCodeBackgroundHoldController.mode(active, source: source)
++            return
++        }
+         vsCodeCommandBridge.performStagePreviewMode(active, source: source) { [weak self] result in
+             switch result {
+             case .success:
+@@ -2732,6 +2781,10 @@
+                     self.modePickerCoordinators[command.source]?.handle(command, inputTime: inputTime)
+                     return
+                 }
++                if let command = try? VSCodeStageHoldCommand.decode(data) {
++                    self.vsCodeBackgroundHoldController.handle(command)
++                    return
++                }
+                 if let command = try? WheelChordCommand.decodeTopLevel(data) {
+                     if command.control == .vsCodeStageRange, command.phase == .release {
+                         // Even a short owner hold must clear a click latched
+@@ -3019,12 +3072,14 @@
+         monitor.onFocusChange = { [weak self] in
+             guard let self else { return }
+             self.multiTapCoordinators.values.forEach { $0.handleFocusChange() }
+-            self.vsCodeModeGestureClassifiers.values.forEach { $0.cancel() } // Leaving VS Code during a held button can strand its release in another mode; never reuse that press on return.
++            for (source, classifier) in self.vsCodeModeGestureClassifiers
++                where !self.vsCodeBackgroundHoldController.owns(source) { classifier.cancel() }
+             for source in MouseSource.allCases
+-                where self.vsCodeStagePreviewModifier.isActive(for: source)
+-                    || self.activeWheelControl(for: source) == .vsCodeStageRange {
++                where !self.vsCodeBackgroundHoldController.owns(source)
++                    && (self.vsCodeStagePreviewModifier.isActive(for: source)
++                        || self.activeWheelControl(for: source) == .vsCodeStageRange) {
+                 self.wheelChordMonitor?.clear(source: source)
+-            } // Focus loss must also clear a Default-layer latch before its owner releases.
++            } // Captured physical holds stay on their original private connection; other focus cleanup is unchanged.
+             let context = self.currentFrontmostAppModeContext()
+             for (source, coordinator) in self.modePickerCoordinators {
+                 if coordinator.followsFrontmostApp,
+--- /dev/null
++++ b/Sources/AgenticMouseApp/VSCodeBackgroundHoldController.swift
+@@ -0,0 +1,235 @@
++import AppKit
++import Foundation
++import ScimitarKit
++
++/// Ethan's held staging button keeps its original review when another app comes forward.
++/// Only physical owner release can finish; focus changes never stage or abandon it.
++@MainActor
++final class VSCodeBackgroundHoldController {
++    typealias Endpoint = VSCodeBackgroundHoldTransport.Endpoint
++    struct Packet: Sendable {
++        let phase: String
++        let direction: String
++        let mode: String
++        var terminal: Bool { ["finish", "cancel", "abandon", "boundary"].contains(phase) }
++    }
++    @MainActor private final class Hold {
++        let id = UUID().uuidString
++        let direction: VSCodeStageHoldCommand.Direction
++        var endpoint: Endpoint?
++        let pressedAt = ProcessInfo.processInfo.systemUptime
++        var discovering = false
++        var sequence = 0
++        var queue: [Packet] = []
++        var inFlight = false
++        var failed = false
++        var ending = false
++        var shortRelease = false
++        var mode = "changes"
++        var lastStepAt: TimeInterval = 0
++        init(_ direction: VSCodeStageHoldCommand.Direction) { self.direction = direction }
++    }
++    private let worker = DispatchQueue(label: "com.ethansk.agentic-mouse.better-git-hold")
++    private let discover: @Sendable () -> Endpoint?
++    private let exchange: @Sendable (Endpoint, [String: Any]) -> [String: Any]?
++    private let allowed: () -> Bool
++    private let canBegin: () -> Bool
++    private var holds: [MouseSource: Hold] = [:]
++    private var pipelines: [MouseSource: [Hold]] = [:]
++    private var owners = Set<MouseSource>()
++    private var timer: Timer?
++    var onFailure: ((MouseSource) -> Void)?
++    var onOwnerReleased: ((MouseSource) -> Void)?
++
++    init(allowed: @escaping () -> Bool,
++         canBegin: @escaping () -> Bool = { NSWorkspace.shared.frontmostApplication?.bundleIdentifier == "com.microsoft.VSCode" },
++         discover: @escaping @Sendable () -> Endpoint? = { VSCodeBackgroundHoldTransport().discover() },
++         exchange: @escaping @Sendable (Endpoint, [String: Any]) -> [String: Any]? = { VSCodeBackgroundHoldTransport().exchange($0, object: $1) }) {
++        self.allowed = allowed; self.canBegin = canBegin; self.discover = discover; self.exchange = exchange
++    }
++
++    func owns(_ source: MouseSource) -> Bool { owners.contains(source) }
++
++    @discardableResult
++    func handle(_ command: VSCodeStageHoldCommand) -> Bool {
++        guard command.source.isPhysicalAdapter else { return false }
++        if command.phase == .begin { return begin(command.source, direction: command.direction) }
++        guard holds[command.source]?.direction == command.direction else { return true }
++        switch command.phase {
++        case .begin: break
++        case .ready: enqueue("ready", source: command.source)
++        case .shortRelease:
++            holds[command.source]?.shortRelease = true
++            enqueue("short-release", source: command.source)
++        case .finish: enqueue("finish", source: command.source)
++        case .cancel: enqueue("cancel", source: command.source)
++        case .ownerRelease: ownerReleased(command.source)
++        }
++        return true
++    }
++
++    @discardableResult
++    func handleMode(_ command: VSCodeModeCommand, source: MouseSource) -> Bool {
++        guard source.isPhysicalAdapter else { return false }
++        switch command {
++        case .beginNextChangeHold: return begin(source, direction: .next)
++        case .beginPreviousChangeHold: return begin(source, direction: .previous)
++        case .stageHoldReady: enqueue("ready", source: source)
++        case .cancelNavigationHold:
++            holds[source]?.shortRelease = true
++            enqueue("short-release", source: source)
++        case .finishNextChangeHold:
++            if holds[source]?.direction == .next { enqueue("finish", source: source) }
++        case .finishPreviousChangeHold:
++            if holds[source]?.direction == .previous { enqueue("finish", source: source) }
++        case .stageHoldClear: break // The explicit physical edge owns the boundary, not decoration cleanup.
++        case .undoLastStageAndAdvance:
++            guard owns(source) else { return false }
++            enqueue("cancel", source: source)
++        default: return false
++        }
++        return true
++    }
++
++    @discardableResult
++    func step(_ direction: String, mode: String, source: MouseSource) -> Bool {
++        enqueue("step", direction: direction, mode: mode, source: source)
++    }
++
++    @discardableResult
++    func mode(_ active: Bool, source: MouseSource) -> Bool {
++        enqueue("mode", mode: active ? "changes" : "files", source: source)
++    }
++
++    func ownerReleased(_ source: MouseSource) {
++        guard owners.remove(source) != nil else { return }
++        if let hold = holds[source], hold.shortRelease && !hold.ending && !hold.failed {
++            enqueue("boundary", source: source)
++        }
++        if let hold = holds[source], hold.failed || (hold.ending && !hold.inFlight && hold.queue.isEmpty) { holds[source] = nil }
++        stopTimerIfIdle()
++        onOwnerReleased?(source)
++    }
++
++    func abandonAll() {
++        for source in Set(holds.keys).union(pipelines.keys) { abandon(source, includingReleased: true) }
++    }
++
++    func abandon(_ source: MouseSource, includingReleased: Bool = false) {
++        guard includingReleased || owns(source) else { return }
++        let current = holds[source]
++        let queued = (pipelines[source] ?? []).filter { includingReleased || $0 === current }
++        pipelines[source]?.removeAll { item in queued.contains(where: { $0 === item }) }
++        holds[source] = nil
++        owners.remove(source)
++        for hold in queued where !hold.failed {
++            guard let endpoint = hold.endpoint else { continue }
++            let sequence = hold.sequence + 1
++            let object: [String: Any] = ["version": 1, "phase": "abandon", "id": hold.id, "seq": sequence,
++                "source": source.rawValue, "direction": hold.direction.rawValue, "mode": hold.mode]
++            worker.async { _ = self.exchange(endpoint, object) }
++        }
++        stopTimerIfIdle()
++        startNext(source)
++    }
++
++    private func begin(_ source: MouseSource, direction: VSCodeStageHoldCommand.Direction) -> Bool {
++        guard allowed(), canBegin() else { return true } // Consume a rejected hold; never fall back to foreground keys.
++        guard !owns(source) else { return true }
++        let hold = Hold(direction)
++        holds[source] = hold; owners.insert(source)
++        hold.queue = [Packet(phase: "begin", direction: direction.rawValue, mode: "changes")]
++        guard (pipelines[source]?.count ?? 0) < 4 else { hold.failed = true; onFailure?(source); return true }
++        pipelines[source, default: []].append(hold)
++        if timer == nil {
++            timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
++                MainActor.assumeIsolated { self?.heartbeat() }
++            }
++        }
++        startNext(source)
++        return true
++    }
++
++    private func startNext(_ source: MouseSource) {
++        guard let hold = pipelines[source]?.first, !hold.discovering, hold.endpoint == nil else { return }
++        hold.discovering = true
++        worker.async {
++            let endpoint = self.discover()
++            DispatchQueue.main.async {
++                guard self.pipelines[source]?.first === hold else { return }
++                guard self.allowed(), let endpoint, ProcessInfo.processInfo.systemUptime - hold.pressedAt < 0.5 else {
++                    self.fail(source, hold: hold); return
++                }
++                hold.endpoint = endpoint
++                self.pump(source, hold: hold)
++            }
++        }
++    }
++
++    @discardableResult
++    private func enqueue(_ phase: String, direction: String? = nil, mode: String? = nil, source: MouseSource) -> Bool {
++        guard allowed(), let hold = holds[source], !hold.failed, !hold.ending else { return false }
++        guard hold.queue.count < 64 else { fail(source, hold: hold); return false }
++        if phase == "step" { hold.lastStepAt = ProcessInfo.processInfo.systemUptime }
++        if let mode { hold.mode = mode }
++        let packet = Packet(phase: phase, direction: direction ?? hold.direction.rawValue, mode: hold.mode)
++        hold.queue.append(packet)
++        if packet.terminal { hold.ending = true }
++        pump(source, hold: hold)
++        return true
++    }
++
++    private func pump(_ source: MouseSource, hold: Hold) {
++        guard pipelines[source]?.first === hold, !hold.inFlight, !hold.failed,
++              let endpoint = hold.endpoint, !hold.queue.isEmpty else { return }
++        guard allowed() else { abandon(source); return }
++        let packet = hold.queue.removeFirst()
++        if packet.phase == "step", ProcessInfo.processInfo.systemUptime - hold.lastStepAt > 0.3 {
++            pump(source, hold: hold)
++            return // Preserve Better Git's wheel-idle cutoff before transport delays can make old input look fresh.
++        }
++        hold.sequence += 1
++        let sequence = hold.sequence
++        let object: [String: Any] = ["version": 1, "phase": packet.phase, "id": hold.id, "seq": sequence,
++            "source": source.rawValue, "direction": packet.direction, "mode": packet.mode]
++        hold.inFlight = true
++        worker.async {
++            let maySend = DispatchQueue.main.sync { self.pipelines[source]?.first === hold && self.allowed() }
++            let reply = maySend ? self.exchange(endpoint, object) : nil
++            DispatchQueue.main.async {
++                guard self.pipelines[source]?.first === hold else { return }
++                hold.inFlight = false
++                guard reply?["accepted"] as? Bool == true, reply?["id"] as? String == hold.id,
++                      reply?["seq"] as? Int == sequence else { self.fail(source, hold: hold); return }
++                if packet.terminal {
++                    self.retire(source, hold: hold)
++                } else { self.pump(source, hold: hold) }
++            }
++        }
++    }
++
++    private func heartbeat() {
++        guard allowed() else { abandonAll(); return }
++        for source in owners {
++            guard let hold = holds[source], !hold.failed, !hold.ending,
++                  !hold.queue.contains(where: { $0.phase == "heartbeat" }) else { continue }
++            enqueue("heartbeat", source: source)
++        }
++    }
++
++    private func fail(_ source: MouseSource, hold: Hold) {
++        hold.failed = true; hold.queue.removeAll()
++        retire(source, hold: hold)
++        onFailure?(source) // Keep consuming the old physical hold until its release; never redirect it.
++    }
++
++    private func retire(_ source: MouseSource, hold: Hold) {
++        pipelines[source]?.removeAll { $0 === hold }
++        if holds[source] === hold && !owns(source) { holds[source] = nil }
++        startNext(source)
++    }
++
++    private func stopTimerIfIdle() {
++        if owners.isEmpty { timer?.invalidate(); timer = nil }
++    }
++}
+--- /dev/null
++++ b/Sources/AgenticMouseApp/VSCodeBackgroundHoldTransport.swift
+@@ -0,0 +1,106 @@
++import Darwin
++import Foundation
++
++/// Bounded, same-user transport to Better Git's original VS Code window.
++/// Socket paths are never created here or rediscovered after a hold begins.
++struct VSCodeBackgroundHoldTransport: Sendable {
++    struct Endpoint: Equatable, Sendable {
++        let path: String
++        let device: Int32
++        let inode: UInt64
++    }
++
++    let directory: String
++    init(directory: String = "/tmp/better-git-mouse-\(getuid())") { self.directory = directory }
++
++    func discover() -> Endpoint? {
++        guard validDirectory(), let names = try? FileManager.default.contentsOfDirectory(atPath: directory), names.count <= 64 else { return nil }
++        var available: [Endpoint] = []
++        let deadline = ProcessInfo.processInfo.systemUptime + 0.35
++        for name in names.sorted() where name.hasPrefix("vscode-") && name.hasSuffix(".sock") && !name.contains("/") {
++            guard ProcessInfo.processInfo.systemUptime < deadline else { return nil }
++            let path = directory + "/" + name
++            guard let endpoint = endpoint(at: path),
++                  let reply = exchange(endpoint, object: ["version": 1, "phase": "probe"]),
++                  reply["version"] as? Int == 1,
++                  reply["backgroundHold"] as? Bool == true,
++                  reply["canBegin"] as? Bool == true else { continue }
++            available.append(endpoint)
++            if available.count > 1 { return nil }
++        }
++        return available.first
++    }
++
++    func exchange(_ target: Endpoint, object: [String: Any]) -> [String: Any]? {
++        guard validDirectory(), endpoint(at: target.path) == target,
++              let body = try? JSONSerialization.data(withJSONObject: object), body.count <= 2_048 else { return nil }
++        let fd = socket(AF_UNIX, SOCK_STREAM, 0)
++        guard fd >= 0 else { return nil }
++        defer { close(fd) }
++        var one: Int32 = 1
++        _ = setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &one, socklen_t(MemoryLayout.size(ofValue: one)))
++        _ = fcntl(fd, F_SETFL, O_NONBLOCK)
++        var address = sockaddr_un()
++        address.sun_family = sa_family_t(AF_UNIX)
++        address.sun_len = UInt8(MemoryLayout<sockaddr_un>.size)
++        let bytes = Array(target.path.utf8) + [0]
++        guard bytes.count <= MemoryLayout.size(ofValue: address.sun_path) else { return nil }
++        withUnsafeMutableBytes(of: &address.sun_path) { $0.copyBytes(from: bytes) }
++        let deadline = ProcessInfo.processInfo.systemUptime + 0.25
++        func wait(_ events: Int16) -> Bool {
++            let remaining = deadline - ProcessInfo.processInfo.systemUptime
++            guard remaining > 0 else { return false }
++            var item = pollfd(fd: fd, events: events, revents: 0)
++            return poll(&item, 1, Int32(max(1, remaining * 1_000))) > 0
++                && item.revents & events != 0
++        }
++        let result = withUnsafePointer(to: &address) {
++            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) { Darwin.connect(fd, $0, socklen_t(MemoryLayout<sockaddr_un>.size)) }
++        }
++        if result != 0 {
++            guard errno == EINPROGRESS || errno == EAGAIN, wait(Int16(POLLOUT)) else { return nil }
++            var error: Int32 = 0
++            var size = socklen_t(MemoryLayout.size(ofValue: error))
++            guard getsockopt(fd, SOL_SOCKET, SO_ERROR, &error, &size) == 0, error == 0 else { return nil }
++        }
++        var uid: uid_t = 0, gid: gid_t = 0
++        guard getpeereid(fd, &uid, &gid) == 0, uid == getuid() else { return nil }
++        let data = body + Data([10])
++        var offset = 0
++        while offset < data.count {
++            guard wait(Int16(POLLOUT)) else { return nil }
++            let sent = data.withUnsafeBytes { Darwin.send(fd, $0.baseAddress!.advanced(by: offset), data.count - offset, 0) }
++            if sent < 0, errno == EAGAIN || errno == EWOULDBLOCK { continue }
++            guard sent > 0 else { return nil }
++            offset += sent
++        }
++        var reply = Data()
++        var buffer = [UInt8](repeating: 0, count: 512)
++        while reply.count <= 4_096 {
++            guard wait(Int16(POLLIN)) else { return nil }
++            let received = recv(fd, &buffer, buffer.count, 0)
++            if received < 0, errno == EAGAIN || errno == EWOULDBLOCK { continue }
++            guard received > 0 else { return nil }
++            reply.append(contentsOf: buffer.prefix(received))
++            if let newline = reply.firstIndex(of: 10) {
++                guard newline <= 4_096 else { return nil }
++                return (try? JSONSerialization.jsonObject(with: reply.prefix(upTo: newline))) as? [String: Any]
++            }
++        }
++        return nil
++    }
++
++    private func validDirectory() -> Bool {
++        var info = stat()
++        return lstat(directory, &info) == 0 && info.st_uid == getuid()
++            && info.st_mode & S_IFMT == S_IFDIR && info.st_mode & 0o777 == 0o700
++    }
++
++    private func endpoint(at path: String) -> Endpoint? {
++        guard path.hasPrefix(directory + "/") else { return nil }
++        var info = stat()
++        guard lstat(path, &info) == 0, info.st_uid == getuid(),
++              info.st_mode & S_IFMT == S_IFSOCK, info.st_mode & 0o777 == 0o600 else { return nil }
++        return Endpoint(path: path, device: info.st_dev, inode: info.st_ino)
++    }
++}
+--- a/Sources/ScimitarKit/App/ModePickerCoordinator.swift
++++ b/Sources/ScimitarKit/App/ModePickerCoordinator.swift
+@@ -155,6 +155,7 @@
+     public var onAppSpecificInput: ((MouseSource, AppSpecificTarget, PhysicalCell, ModePickerCommand.Phase, TimeInterval) -> Bool)?
+     public var onNativeAppSpecificInput: ((MouseSource, AppSpecificTarget, PhysicalCell, ModePickerCommand.Phase, TimeInterval) -> Bool)?
+     public var shouldRouteVSCodeCursorHistoryAsButton: ((MouseSource) -> Bool)?
++    public var shouldDeferFrontmostAppUpdate: (() -> Bool)?
+     public var onChromeWebsiteInput: ((MouseSource, ChromeWebsiteAction) -> Bool)?
+     public var resolveFrontmostApp: (() -> FrontmostAppModeContext)?
+     public var resolveAppSpecificDefinition: ((AppSpecificTarget) -> AppSpecificModeDefinition)?
+@@ -441,6 +442,8 @@
+     /// Refreshes only the direct frontmost-app journey. A manually selected
+     /// target remains locked until the user exits or chooses another app.
+     public func updateFrontmostApp(_ context: FrontmostAppModeContext) {
++        // A physical staging hold owns the captured VS Code review until release.
++        if shouldDeferFrontmostAppUpdate?() == true { return }
+         if isActive, isWandHome {
+             // Switch App from the wand changes the frontmost app while Default
+             // is still showing; redraw its current-app card truthfully.
+--- a/Sources/ScimitarKit/App/VSCodeMode.swift
++++ b/Sources/ScimitarKit/App/VSCodeMode.swift
+@@ -119,6 +119,37 @@
+     case navigateForward
+ }
+ 
++/// The staging button's physical lifecycle, before any app-specific delivery.
++/// Karabiner keeps its duration classifier; the app owns the captured background connection.
++public struct VSCodeStageHoldCommand: Codable, Equatable, Sendable {
++    public static let commandName = "agentic_mouse_vscode_stage_hold"
++    public enum Direction: String, Codable, Sendable { case next, previous }
++    public enum Phase: String, Codable, Sendable {
++        case begin, ready, finish, cancel
++        case shortRelease = "short-release"
++        case ownerRelease = "owner-release"
++    }
++    public let command: String
++    public let source: MouseSource
++    public let direction: Direction
++    public let phase: Phase
++
++    public init(source: MouseSource, direction: Direction, phase: Phase) {
++        command = Self.commandName
++        self.source = source
++        self.direction = direction
++        self.phase = phase
++    }
++
++    public static func decode(_ data: Data) throws -> Self {
++        let value = try JSONDecoder().decode(Self.self, from: data)
++        guard value.command == commandName, value.source.isPhysicalAdapter else {
++            throw DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "Unsupported physical staging command"))
++        }
++        return value
++    }
++}
++
+ /// Owns runtime-page holds and the separate Stage button's existing double click.
+ /// Default navigation uses native Karabiner holds; runtime pages dispatch to their
+ /// selected app, so they use this source-owned classifier instead. Both share the
+@@ -149,6 +180,7 @@
+     public var isStageRangeNavigationActive: Bool {
+         stageRangeWheelArmed && stageRangeNavigationChordDown
+     }
++    public var isHoldingNavigation: Bool { heldNavigation != nil }
+ 
+     public init(
+         clock: MonotonicClock,
+--- /dev/null
++++ b/Tests/AgenticMouseAppTests/VSCodeBackgroundHoldControllerTests.swift
+@@ -0,0 +1,163 @@
++import Foundation
++import ScimitarKit
++import XCTest
++@testable import AgenticMouseApp
++
++private final class HoldWire: @unchecked Sendable {
++    typealias Endpoint = VSCodeBackgroundHoldTransport.Endpoint
++    let endpoint = Endpoint(path: "/test/original.sock", device: 1, inode: 1)
++    let lock = NSLock()
++    var packets: [(Endpoint, [String: Any])] = []
++    var discoveries = 0
++    var rejectStep = false
++    var delay: useconds_t = 0
++    func discover() -> Endpoint? { lock.lock(); defer { lock.unlock() }; discoveries += 1; return endpoint }
++    func send(_ endpoint: Endpoint, _ packet: [String: Any]) -> [String: Any]? {
++        lock.lock(); packets.append((endpoint, packet)); let reject = rejectStep && packet["phase"] as? String == "step"; let delay = delay; lock.unlock()
++        if delay > 0 { usleep(delay) }
++        if reject { return nil }
++        return ["accepted": true, "id": packet["id"]!, "seq": packet["seq"]!]
++    }
++    func snapshot() -> [[String: Any]] { lock.lock(); defer { lock.unlock() }; return packets.map(\.1) }
++    func phases() -> [String] { snapshot().compactMap { $0["phase"] as? String } }
++    func countDiscoveries() -> Int { lock.lock(); defer { lock.unlock() }; return discoveries }
++}
++
++@MainActor
++final class VSCodeBackgroundHoldControllerTests: XCTestCase {
++    private func waitFor(_ condition: () -> Bool) async {
++        let deadline = Date().addingTimeInterval(2)
++        while !condition(), Date() < deadline { try? await Task.sleep(nanoseconds: 5_000_000) }
++        XCTAssertTrue(condition())
++    }
++
++    func testHoldKeepsOriginalWindowAndSelectionUntilPhysicalRelease() async {
++        for source in [MouseSource.corsair, .razer] {
++            let wire = HoldWire()
++            var focused = true
++            let client = VSCodeBackgroundHoldController(allowed: { true }, canBegin: { focused }, discover: { wire.discover() }, exchange: { wire.send($0, $1) })
++            client.handle(.init(source: source, direction: .next, phase: .begin))
++            await waitFor { wire.phases().contains("begin") }
++            focused = false
++            client.handle(.init(source: source, direction: .next, phase: .ready))
++            XCTAssertTrue(client.step("previous", mode: "changes", source: source))
++            XCTAssertTrue(client.mode(false, source: source))
++            XCTAssertTrue(client.step("next", mode: "files", source: source))
++            await waitFor { wire.phases().filter { $0 == "step" }.count == 2 }
++            XCTAssertTrue(client.owns(source))
++            XCTAssertFalse(wire.phases().contains("finish"))
++            XCTAssertFalse(wire.phases().contains("boundary"))
++            await waitFor { wire.phases().contains("heartbeat") }
++            client.handle(.init(source: source, direction: .next, phase: .finish))
++            client.handle(.init(source: source, direction: .next, phase: .ownerRelease))
++            await waitFor { wire.phases().contains("finish") }
++            XCTAssertFalse(client.owns(source))
++            XCTAssertEqual(wire.countDiscoveries(), 1, "Focus changes must never rediscover another Code window")
++            let packets = wire.snapshot()
++            XCTAssertEqual(Set(packets.compactMap { $0["id"] as? String }).count, 1)
++            XCTAssertEqual(packets.compactMap { $0["seq"] as? Int }, Array(1...packets.count))
++            XCTAssertEqual(packets.filter { $0["phase"] as? String == "step" }.compactMap { $0["mode"] as? String }, ["changes", "files"])
++            client.handle(.init(source: source, direction: .next, phase: .begin))
++            XCTAssertFalse(client.owns(source), "A fresh background hold must be rejected")
++            client.abandonAll()
++        }
++    }
++
++    func testShortReleaseAndAdjacentUndoKeepTheirTransactionBoundary() async {
++        for cancel in [false, true] {
++            let wire = HoldWire()
++            let client = VSCodeBackgroundHoldController(allowed: { true }, canBegin: { true }, discover: { wire.discover() }, exchange: { wire.send($0, $1) })
++            client.handle(.init(source: .corsair, direction: .previous, phase: .begin))
++            client.handle(.init(source: .corsair, direction: .previous, phase: .shortRelease))
++            if cancel { client.handle(.init(source: .corsair, direction: .previous, phase: .cancel)) }
++            client.handle(.init(source: .corsair, direction: .previous, phase: .ownerRelease))
++            await waitFor { wire.phases().last == (cancel ? "cancel" : "boundary") }
++            XCTAssertEqual(wire.phases(), ["begin", "short-release", cancel ? "cancel" : "boundary"])
++            XCTAssertFalse(wire.phases().contains("finish"))
++            client.abandonAll()
++        }
++    }
++
++    func testConsecutiveHoldsNeverLoseThePreviousFinish() async {
++        let wire = HoldWire(); wire.delay = 15_000
++        let client = VSCodeBackgroundHoldController(allowed: { true }, canBegin: { true }, discover: { wire.discover() }, exchange: { wire.send($0, $1) })
++        for _ in 0..<2 {
++            client.handle(.init(source: .razer, direction: .next, phase: .begin))
++            client.handle(.init(source: .razer, direction: .next, phase: .ready))
++            client.handle(.init(source: .razer, direction: .next, phase: .finish))
++            client.handle(.init(source: .razer, direction: .next, phase: .ownerRelease))
++        }
++        await waitFor { wire.phases().filter { $0 == "finish" }.count == 2 }
++        XCTAssertEqual(wire.phases(), ["begin", "ready", "finish", "begin", "ready", "finish"])
++        XCTAssertEqual(Set(wire.snapshot().compactMap { $0["id"] as? String }).count, 2)
++        client.abandonAll()
++    }
++
++    func testConnectionFailureCannotRetargetOrFinish() async {
++        let wire = HoldWire(); wire.rejectStep = true
++        var failures = 0
++        let client = VSCodeBackgroundHoldController(allowed: { true }, canBegin: { true }, discover: { wire.discover() }, exchange: { wire.send($0, $1) })
++        client.onFailure = { _ in failures += 1 }
++        client.handle(.init(source: .corsair, direction: .next, phase: .begin))
++        client.step("next", mode: "files", source: .corsair)
++        await waitFor { failures == 1 }
++        client.handle(.init(source: .corsair, direction: .next, phase: .finish))
++        client.ownerReleased(.corsair)
++        XCTAssertFalse(wire.phases().contains("finish"))
++        XCTAssertEqual(wire.countDiscoveries(), 1)
++        XCTAssertFalse(client.owns(.corsair))
++        client.abandonAll()
++    }
++
++    func testLockDiscardsQueuedFinishWithoutStageOrUndo() async {
++        let wire = HoldWire(); wire.delay = 35_000
++        var allowed = true
++        let client = VSCodeBackgroundHoldController(allowed: { allowed }, canBegin: { true }, discover: { wire.discover() }, exchange: { wire.send($0, $1) })
++        client.handle(.init(source: .corsair, direction: .next, phase: .begin))
++        await waitFor { wire.phases().contains("begin") }
++        client.step("next", mode: "files", source: .corsair)
++        client.handle(.init(source: .corsair, direction: .next, phase: .finish))
++        allowed = false; client.abandonAll()
++        await waitFor { wire.phases().contains("abandon") }
++        XCTAssertFalse(wire.phases().contains("finish"))
++        XCTAssertFalse(wire.phases().contains("cancel"))
++        XCTAssertFalse(client.owns(.corsair))
++    }
++
++    func testWireCommandRejectsForeignNamespaceAndWand() throws {
++        let value = VSCodeStageHoldCommand(source: .razer, direction: .previous, phase: .ownerRelease)
++        XCTAssertEqual(try VSCodeStageHoldCommand.decode(JSONEncoder().encode(value)), value)
++        XCTAssertThrowsError(try VSCodeStageHoldCommand.decode(Data(#"{"command":"other","source":"razer","direction":"previous","phase":"finish"}"#.utf8)))
++        XCTAssertThrowsError(try VSCodeStageHoldCommand.decode(JSONEncoder().encode(VSCodeStageHoldCommand(source: .wand, direction: .next, phase: .begin))))
++    }
++
++    func testReplacingCurrentHoldPreservesEarlierReleasedFinish() async {
++        let wire = HoldWire(); wire.delay = 15_000
++        let client = VSCodeBackgroundHoldController(allowed: { true }, canBegin: { true }, discover: { wire.discover() }, exchange: { wire.send($0, $1) })
++        client.handle(.init(source: .corsair, direction: .next, phase: .begin))
++        client.handle(.init(source: .corsair, direction: .next, phase: .ready))
++        client.handle(.init(source: .corsair, direction: .next, phase: .finish))
++        client.ownerReleased(.corsair)
++        client.handle(.init(source: .corsair, direction: .previous, phase: .begin))
++        client.abandon(.corsair)
++        await waitFor { wire.phases().contains("finish") }
++        XCTAssertEqual(wire.phases(), ["begin", "ready", "finish"])
++        XCTAssertFalse(client.owns(.corsair))
++        client.abandonAll()
++    }
++
++    func testNativeQueueExpiresOldWheelStepsWithoutCreatingSequenceGaps() async {
++        let wire = HoldWire(); wire.delay = 70_000
++        let client = VSCodeBackgroundHoldController(allowed: { true }, canBegin: { true }, discover: { wire.discover() }, exchange: { wire.send($0, $1) })
++        client.handle(.init(source: .razer, direction: .next, phase: .begin))
++        await waitFor { wire.phases().contains("begin") }
++        for _ in 0..<10 { client.step("next", mode: "files", source: .razer) }
++        client.handle(.init(source: .razer, direction: .next, phase: .finish))
++        client.ownerReleased(.razer)
++        await waitFor { wire.phases().contains("finish") }
++        XCTAssertLessThan(wire.phases().filter { $0 == "step" }.count, 10)
++        let packets = wire.snapshot()
++        XCTAssertEqual(packets.compactMap { $0["seq"] as? Int }, Array(1...packets.count))
++        client.abandonAll()
++    }
++}
+--- /dev/null
++++ b/Tests/AgenticMouseAppTests/VSCodeBackgroundHoldTransportTests.swift
+@@ -0,0 +1,80 @@
++import Darwin
++import Foundation
++import XCTest
++@testable import AgenticMouseApp
++
++private final class HoldSocketFixture {
++    let directory = URL(fileURLWithPath: "/tmp", isDirectory: true).appendingPathComponent("bg-hold-" + UUID().uuidString)
++    let process = Process()
++    init(oversized: Bool = false) throws {
++        guard FileManager.default.isExecutableFile(atPath: "/usr/bin/python3") else { throw XCTSkip("Python is unavailable for the local Unix socket fixture") }
++        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false, attributes: [.posixPermissions: 0o700])
++        process.executableURL = URL(fileURLWithPath: "/usr/bin/python3")
++        process.arguments = ["-u", "-c", #"""
++import socket,os,json,sys,pathlib
++root=sys.argv[1]
++server=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM)
++server.bind(root+'/vscode-fixture.sock')
++os.chmod(root+'/vscode-fixture.sock',0o600)
++server.listen(8)
++pathlib.Path(root+'/ready').write_text('ready')
++while True:
++ c,_=server.accept()
++ q=json.loads(c.recv(4096).decode())
++ r={'version':1,'extensionVersion':'1.2.136','backgroundHold':True,'canBegin':True} if q['phase']=='probe' else {'accepted':True,'id':q['id'],'seq':q['seq']}
++ if sys.argv[2]=='large':r['padding']='x'*6000
++ c.sendall((json.dumps(r)+'\n').encode())
++ c.close()
++"""#, directory.path, oversized ? "large" : "normal"]
++        process.standardOutput = FileHandle.nullDevice; process.standardError = FileHandle.nullDevice
++        try process.run()
++        let deadline = Date().addingTimeInterval(2)
++        while !FileManager.default.fileExists(atPath: directory.appendingPathComponent("ready").path), process.isRunning, Date() < deadline { usleep(10_000) }
++        guard FileManager.default.fileExists(atPath: directory.appendingPathComponent("ready").path) else {
++            stop(); throw NSError(domain: "HoldSocketFixture", code: 1)
++        }
++        // The native discovery bound counts this file too, but only .sock entries are probed.
++    }
++    func stop() {
++        if process.isRunning { process.terminate(); process.waitUntilExit() }
++        try? FileManager.default.removeItem(at: directory)
++    }
++}
++
++final class VSCodeBackgroundHoldTransportTests: XCTestCase {
++    func testActualUnixProbeAndAdmissionUseTheValidatedEndpoint() throws {
++        let fixture = try HoldSocketFixture(); defer { fixture.stop() }
++        let transport = VSCodeBackgroundHoldTransport(directory: fixture.directory.path)
++        let endpoint = try XCTUnwrap(transport.discover())
++        let id = UUID().uuidString
++        let reply = try XCTUnwrap(transport.exchange(endpoint, object: ["version": 1, "phase": "begin", "id": id,
++            "seq": 1, "source": "corsair", "direction": "next", "mode": "changes"]))
++        XCTAssertEqual(reply["accepted"] as? Bool, true)
++        XCTAssertEqual(reply["id"] as? String, id)
++        XCTAssertEqual(reply["seq"] as? Int, 1)
++    }
++
++    func testSymlinkAndPublicDirectoryAreRejectedWithoutConnecting() throws {
++        let fixture = try HoldSocketFixture(); defer { fixture.stop() }
++        let alias = fixture.directory.appendingPathExtension("alias")
++        try FileManager.default.createSymbolicLink(at: alias, withDestinationURL: fixture.directory)
++        defer { try? FileManager.default.removeItem(at: alias) }
++        XCTAssertNil(VSCodeBackgroundHoldTransport(directory: alias.path).discover())
++        try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: fixture.directory.path)
++        XCTAssertNil(VSCodeBackgroundHoldTransport(directory: fixture.directory.path).discover())
++    }
++
++    func testReplacedSocketCannotReceiveAnExistingGesture() throws {
++        let fixture = try HoldSocketFixture(); defer { fixture.stop() }
++        let transport = VSCodeBackgroundHoldTransport(directory: fixture.directory.path)
++        let endpoint = try XCTUnwrap(transport.discover())
++        try FileManager.default.moveItem(atPath: endpoint.path, toPath: endpoint.path + ".old")
++        _ = FileManager.default.createFile(atPath: endpoint.path, contents: Data(), attributes: [.posixPermissions: 0o600])
++        XCTAssertNil(transport.exchange(endpoint, object: ["version": 1, "phase": "probe"]))
++    }
++
++    func testOversizedReplyFailsClosed() throws {
++        let fixture = try HoldSocketFixture(oversized: true); defer { fixture.stop() }
++        XCTAssertNil(VSCodeBackgroundHoldTransport(directory: fixture.directory.path).discover())
++    }
++}
+--- a/Tests/KarabinerGeneratorTests/test_vscode_hold.py
++++ b/Tests/KarabinerGeneratorTests/test_vscode_hold.py
+@@ -90,139 +90,111 @@
+             self.events(rule["to_if_alone"])
+         self.events(rule["to_after_key_up"])
+ 
+-    def test_short_release_and_every_long_release_are_independent(self):
+-        for source in ("corsair", "razer"):
+-            for cell, navigation, stage in ((5, "f17", "f19"), (8, "f13", "f18")):
++    def holds(self):
++        return [p for p in self.user_commands if p.get("command") == "agentic_mouse_vscode_stage_hold"]
++
++    def phases(self):
++        return [p["phase"] for p in self.holds()]
++
++    def test_short_and_consecutive_long_releases_keep_the_physical_classifier(self):
++        for source in ("corsair", "razer"):
++            for cell in (5, 8):
+                 self.setUp()
+-                for duration in (199, 200, 400, 201):
++                for duration in (70, 200, 500, 240):
+                     self.press(source, cell, duration)
+-                self.assertEqual(self.keys, [navigation, navigation, stage, navigation, stage, navigation, stage])
++                self.assertEqual(self.phases(), ["begin", "short-release", "owner-release"] + ["begin", "ready", "finish", "owner-release"] * 3)
++                self.assertEqual({p["source"] for p in self.holds()}, {source})
++                self.assertEqual({p["direction"] for p in self.holds()}, {"next" if cell == 8 else "previous"})
++                self.assertEqual(self.keys, [], "The new foreground app must never receive staging keys")
+ 
+     def test_original_short_duration_overrides_a_premature_hold_timer(self):
+         for _ in range(20):
+             self.press("corsair", 8, 60, delayed_timer=True)
+-        self.assertEqual(self.keys, ["f13"] * 20)
+-        self.assertEqual([key for key, _ in self.feedback], ["f20", "f14", "f15"] * 20)
+-        self.assertEqual(
+-            [command["phase"] for command in self.user_commands],
+-            ["press", "release"] * 20,
+-        )
+-
+-    def test_ready_is_feedback_only_and_release_clears_each_mouse(self):
+-        for source in ("corsair", "razer"):
+-            for cell, navigation, stage in ((5, "f17", "f19"), (8, "f13", "f18")):
+-                self.setUp()
+-                rule = self.rule(source, cell)
+-                self.assertEqual(rule["parameters"]["basic.to_if_held_down_threshold_milliseconds"], 200)
+-                self.assertEqual(rule["parameters"]["basic.to_if_alone_timeout_milliseconds"], 200)
++        self.assertEqual(self.phases().count("short-release"), 20)
++        self.assertNotIn("finish", self.phases())
++        self.assertEqual(self.variables["agentic_mouse_corsair_vscode_hold_8"], 0)
++
++    def test_focus_change_neither_finishes_nor_clears_an_existing_hold(self):
++        for source in ("corsair", "razer"):
++            for cell in (5, 8):
++                self.setUp(); rule = self.rule(source, cell)
+                 self.events(rule["to"])
+-                self.assertEqual(self.feedback, [])
++                self.frontmost = False
++                self.assertEqual(self.phases(), ["begin"])
+                 self.events(rule["to_if_held_down"])
+-                self.assertEqual(self.keys, [navigation])
+-                self.assertEqual([command["phase"] for command in self.user_commands], ["press"])
++                self.assertEqual(self.phases(), ["begin", "ready"])
++                self.assertEqual(self.variables[f"agentic_mouse_{source}_vscode_hold_{cell}"], 2)
+                 self.events(rule["to_after_key_up"])
+-                self.assertEqual(self.keys, [navigation, stage])
+-                self.assertEqual([command["phase"] for command in self.user_commands], ["press", "release"])
+-                self.assertEqual([key for key, _ in self.feedback], ["f20", "f15"])
+-                expected = ["left_command", "left_shift"] if source == "razer" else ["left_control", "left_option", "left_command"]
+-                self.assertTrue(all(modifiers == expected for key, modifiers in self.feedback if key != "f14"))
+-
+-    def test_ready_does_not_depend_on_same_list_pending_mutation(self):
+-        for source in ("corsair", "razer"):
+-            for cell in (5, 8):
+-                held = f"agentic_mouse_{source}_vscode_hold_{cell}"
+-                ready = self.rule(source, cell)["to_if_held_down"][1]
+-                self.assertFalse(any(
+-                    condition.get("type") == "variable_if"
+-                    and condition.get("name") == held
+-                    and condition.get("value") == 2
+-                    for condition in ready.get("conditions", [])
+-                ))
+-
+-    def test_feedback_cannot_complete_voiceink_modifier_chord_in_any_order(self):
+-        # A full Hyper chord looked distinct but Karabiner briefly pressed
+-        # Control+Shift+Option before Command, starting VoiceInk (sourcePID 0).
+-        voiceink = {"left_control", "left_shift", "left_option"}
+-        for source in ("corsair", "razer"):
+-            for cell in (5, 8):
+-                self.setUp()
+-                self.press(source, cell, 600)
+-                self.assertTrue(self.feedback)
+-                for _, modifiers in self.feedback:
+-                    self.assertFalse(voiceink.issubset(modifiers))
+-
+-    def test_undo_consumes_both_buttons_before_or_after_hold_threshold(self):
+-        for source in ("corsair", "razer"):
+-            for cell in (5, 8):
+-                for long in (False, True):
+-                    self.setUp()
+-                    nav = self.rule(source, cell)
+-                    chord = self.rule(source, cell, chord=True)
+-                    self.events(nav["to"])
+-                    if long:
+-                        self.events(nav["to_if_held_down"])
+-                    self.assertEqual(self.keys, ["f13" if cell == 8 else "f17"])
+-                    self.assertTrue(self.matches(chord["conditions"]))
+-                    self.events(chord["to"])
+-                    self.events(chord["to"])
+-                    self.events(nav["to_if_held_down"])
+-                    self.events(nav["to_if_alone"])
+-                    self.events(nav["to_after_key_up"])
+-                    self.assertEqual(self.keys, ["f13" if cell == 8 else "f17", "f16"])
+-                    self.assertFalse(self.matches(chord["conditions"]))
+-                    expected_phases = (["press"] if long else []) + ["release"] * 3
+-                    self.assertEqual(
+-                        [command["phase"] for command in self.user_commands],
+-                        expected_phases,
+-                    )
+-
+-    def test_other_mouse_cannot_undo_and_release_leaves_no_late_window(self):
+-        self.events(self.rule("corsair", 8)["to"])
+-        self.assertFalse(self.matches(self.rule("razer", 8, chord=True)["conditions"]))
+-        self.events(self.rule("corsair", 8)["to_after_key_up"])
+-        self.assertFalse(self.matches(self.rule("corsair", 8, chord=True)["conditions"]))
+-
+-    def test_adjacent_tap_toggles_preview_and_preserves_stage_hold(self):
+-        partners = (
++                self.assertEqual(self.phases(), ["begin", "ready", "finish", "owner-release"])
++                self.assertEqual(self.variables[f"agentic_mouse_{source}_vscode_hold_{cell}"], 0)
++                self.assertEqual(self.keys, [])
++                self.assertFalse(self.matches(rule["conditions"]), "A new staging hold still needs VS Code foreground")
++
++    def test_adjacent_cancel_is_source_owned_and_consumed_while_background(self):
++        for source in ("corsair", "razer"):
++            for long in (False, True):
++                self.setUp(); rule = self.rule(source, 8)
++                self.events(rule["to"])
++                if long: self.events(rule["to_if_held_down"])
++                self.frontmost = False
++                chord = self.rule(source, 8, chord=True)
++                self.assertTrue(self.matches(chord["conditions"]))
++                self.assertFalse(self.matches(self.rule("razer" if source == "corsair" else "corsair", 8, chord=True)["conditions"]))
++                self.events(chord["to"])
++                self.assertFalse(self.matches(chord["conditions"]), "Repeat adjacent presses are consumed")
++                self.events(rule["to_if_held_down"])
++                self.events(rule["to_after_key_up"])
++                self.assertEqual(self.phases(), ["begin"] + (["ready"] if long else []) + ["cancel", "owner-release"])
++                self.assertEqual(self.keys, [])
++
++    def test_adjacent_preview_stays_on_the_hold_in_another_app(self):
++        for binding, source, cell, direction in [
+             ("corsair-side-09-keys-mode", "corsair", 8, "next"),
+             ("corsair-side-06-youtube-scrub-wheel", "corsair", 5, "previous"),
+             ("razer-side-07-keys-mode", "razer", 8, "next"),
+             ("razer-side-04-youtube-scrub-wheel", "razer", 5, "previous"),
+-        )
+-        for binding_id, source, cell, direction in partners:
+-            self.setUp()
+-            template = generator.vscode_preview_partner_template({"id": binding_id})
+-            self.assertIsNotNone(template)
+-            self.assertFalse(self.matches(template["conditions"]))
+-            self.events(self.rule(source, cell)["to"])
++        ]:
++            self.setUp(); self.events(self.rule(source, cell)["to"]); self.frontmost = False
++            template = generator.vscode_preview_partner_template({"id": binding})
+             self.assertTrue(self.matches(template["conditions"]))
+-            self.assertEqual(template["to"][0]["send_user_command"]["payload"], {
+-                "command": "agentic_mouse_vscode_stage_preview_modifier",
+-                "source": source,
+-                "event": "toggle",
+-            })
+-            self.assertEqual(template["to"][1]["send_user_command"]["payload"], {
+-                "command": "agentic_mouse_vscode_stage_preview",
+-                "source": source,
+-                "direction": direction,
+-            })
++            self.events(template["to"])
++            self.assertEqual(self.user_commands[-2:], [
++                {"command": "agentic_mouse_vscode_stage_preview_modifier", "source": source, "event": "toggle"},
++                {"command": "agentic_mouse_vscode_stage_preview", "source": source, "direction": direction},
++            ])
+             self.assertNotIn("to_after_key_up", template)
+-            self.assertEqual(self.variables[f"agentic_mouse_{source}_vscode_hold_{cell}"], 1)
+-
+-            # Each new tap toggles the modifier and previews one change. The
+-            # physical up edge has no output, so releasing adjacent leaves the
+-            # stage owner and its range selection untouched.
+-            self.events(template["to"])
+-            self.events(template["to"])
+-            self.assertEqual(
+-                [command.get("event") for command in self.user_commands],
+-                ["toggle", None, "toggle", None],
+-            )
+-            self.assertEqual(self.variables[f"agentic_mouse_{source}_vscode_hold_{cell}"], 1)
+-            self.events(self.rule(source, cell)["to_if_held_down"])
+-            self.assertTrue(self.matches(template["conditions"]))
+-            self.events(self.rule(source, cell)["to_after_key_up"])
+-            self.assertFalse(self.matches(template["conditions"]))
++
++    def test_release_disarms_wheel_before_any_stage_decision(self):
++        for source in ("corsair", "razer"):
++            rule = self.rule(source, 8)
++            events = rule["to_after_key_up"]
++            self.assertEqual(events[0]["send_user_command"]["payload"], {"command": "agentic_mouse_wheel_chord", "control": "vsCodeStageRange", "source": source, "phase": "release"})
++            self.assertEqual([e["send_user_command"]["payload"]["phase"] for e in events if "send_user_command" in e], ["release", "short-release", "finish", "owner-release"])
++            self.assertFalse(any("key_code" in e for key in ("to", "to_if_held_down", "to_after_key_up") for e in rule[key]))
++
++    def test_late_threshold_after_release_cannot_rearm_or_finish(self):
++        rule = self.rule("corsair", 8)
++        self.press("corsair", 8, 60)
++        before = list(self.user_commands)
++        self.events(rule["to_if_held_down"])
++        self.assertEqual(self.user_commands, before)
++        self.assertEqual(self.variables["agentic_mouse_corsair_vscode_hold_8_wheel_armed"], 0)
++
++    def test_ready_accepts_both_live_pending_values_and_never_stages(self):
++        rule = self.rule("razer", 5)
++        self.events(rule["to"])
++        for value in (1, 2):
++            self.variables["agentic_mouse_razer_vscode_hold_5"] = value
++            self.events(rule["to_if_held_down"])
++        self.assertNotIn("finish", self.phases())
++        self.assertEqual(self.phases(), ["begin", "ready", "ready"])
++
++    def test_legacy_flag_still_disables_the_new_native_gestures(self):
++        self.variables[generator.VSCODE_LEGACY_STAGE_FLAG] = 1
++        self.press("corsair", 8, 550)
++        self.variables["agentic_mouse_corsair_vscode_hold_8"] = 1
++        self.assertFalse(self.matches(self.rule("corsair", 8, chord=True)["conditions"]))
++        self.assertEqual(self.user_commands, [])
+ 
+     def test_enter_then_command_and_command_then_enter_emit_one_chord(self):
+         for source, enter_id in (("corsair", "corsair-side-07-enter"),
+@@ -254,85 +226,7 @@
+             self.assertEqual(self.keys, ["return_or_enter"])
+             self.assertEqual(self.outputs[0], ("key", "return_or_enter", ("left_command",)))
+ 
+-    def test_legacy_flag_disables_both_new_native_gestures(self):
+-        self.variables[generator.VSCODE_LEGACY_STAGE_FLAG] = 1
+-        self.press("corsair", 8, 550)
+-        self.variables["agentic_mouse_corsair_vscode_hold_8"] = 1
+-        self.assertFalse(self.matches(self.rule("corsair", 8, chord=True)["conditions"]))
+-        self.assertEqual(self.keys, [])
+-
+-    def test_other_frontmost_app_cannot_receive_release_stage(self):
+-        rule = self.rule("corsair", 8)
+-        self.events(rule["to"])
+-        self.frontmost = False
+-        self.events(rule["to_if_held_down"])
+-        self.events(rule["to_after_key_up"])
+-        self.assertEqual(self.keys, ["f13"])
+-
+-    def test_stage_range_command_is_readiness_only_and_exact_source(self):
+-        for source in ("corsair", "razer"):
+-            for cell in (5, 8):
+-                self.setUp()
+-                rule = self.rule(source, cell)
+-                self.events(rule["to"])
+-                self.assertEqual(self.user_commands, [])
+-                self.events(rule["to_if_held_down"])
+-                self.assertEqual(self.user_commands, [{
+-                    "command": "agentic_mouse_wheel_chord",
+-                    "control": "vsCodeStageRange",
+-                    "source": source,
+-                    "phase": "press",
+-                }])
+-                self.events(rule["to_after_key_up"])
+-                self.assertEqual(
+-                    [command["phase"] for command in self.user_commands],
+-                    ["press", "release"],
+-                )
+-
+-    def test_ordered_transport_captures_before_readiness_and_releases_wheel_before_decision(self):
+-        for source in ("corsair", "razer"):
+-            for cell, begin, finish in ((5, "f17", "f19"), (8, "f13", "f18")):
+-                self.setUp()
+-                modifiers = (
+-                    ("left_command", "left_shift")
+-                    if source == "razer"
+-                    else ("left_control", "left_command")
+-                )
+-                feedback = (
+-                    ("left_command", "left_shift")
+-                    if source == "razer"
+-                    else ("left_control", "left_option", "left_command")
+-                )
+-                rule = self.rule(source, cell)
+-                self.events(rule["to"])
+-                self.events(rule["to_if_held_down"])
+-                self.events(rule["to_after_key_up"])
+-                self.assertEqual(self.outputs, [
+-                    ("key", begin, modifiers),
+-                    ("key", "f20", feedback),
+-                    ("command", "vsCodeStageRange", "press", source),
+-                    ("command", "vsCodeStageRange", "release", source),
+-                    ("key", finish, modifiers),
+-                    ("key", "f15", feedback),
+-                ])
+-
+-                self.setUp()
+-                rule = self.rule(source, cell)
+-                self.events(rule["to"])
+-                self.events(rule["to_if_alone"])
+-                self.events(rule["to_after_key_up"])
+-                self.assertEqual(self.outputs, [
+-                    ("key", begin, modifiers),
+-                    ("command", "vsCodeStageRange", "release", source),
+-                    ("key", "f14", modifiers),
+-                    ("key", "f15", feedback),
+-                ])
+-
+-    def test_cancelled_hold_cannot_rearm_from_a_late_threshold_callback(self):
+-        rule = self.rule("corsair", 8)
+-        chord = self.rule("corsair", 8, chord=True)
+-        self.events(rule["to"])
+-        self.events(chord["to"])
+-        self.events(rule["to_if_held_down"])
+-        self.events(rule["to_after_key_up"])
+-        self.assertEqual([c["phase"] for c in self.user_commands], ["release", "release"])
++
++
++if __name__ == "__main__":
++    unittest.main()
+--- a/Tests/ScimitarKitTests/ModePickerTests.swift
++++ b/Tests/ScimitarKitTests/ModePickerTests.swift
+@@ -1856,6 +1856,22 @@
+         XCTAssertEqual(hud.snapshots.last?.modeTitle, "Chrome mode")
+         XCTAssertEqual(hud.snapshots.last?.accent, ChromeMode.accent)
+         XCTAssertEqual(hud.snapshots.last?.presentationStyle, .boldOpaque)
++    }
++
++    func testCapturedStageHoldDefersAppRetargetOnlyUntilItsPhysicalRelease() {
++        let hud = RecordingModeHUDPresenter()
++        let coordinator = makeCoordinator(hud: hud)
++        coordinator.resolveFrontmostApp = { .init(target: .vsCode, displayName: "VS Code", bundleIdentifier: AppSpecificTarget.vsCode.bundleIdentifier) }
++        var holding = true
++        coordinator.shouldDeferFrontmostAppUpdate = { holding }
++        coordinator.enterAppSpecific(source: .corsair)
++        let chrome = FrontmostAppModeContext(target: .chrome, displayName: "Chrome", bundleIdentifier: AppSpecificTarget.chrome.bundleIdentifier)
++        coordinator.updateFrontmostApp(chrome)
++        XCTAssertEqual(coordinator.appSpecificTarget, .vsCode)
++        holding = false
++        coordinator.updateFrontmostApp(chrome)
++        XCTAssertEqual(coordinator.appSpecificTarget, .chrome)
++        XCTAssertTrue(coordinator.isActive)
+     }
+ 
+     func testUnknownAppIdentityColourIsStableAndBundleSpecific() {
