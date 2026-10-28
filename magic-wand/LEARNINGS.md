@@ -1219,3 +1219,9 @@ Full loading clearance and no floating starts still do not prove sensible unsupp
 A Three.js canvas with a device pixel ratio above 1 and `setSize(width, height, false)` can render outside its CSS viewport unless its display width and height are explicitly constrained. In the slim-loop comparison this made models appear cut off even though the labels and data loaded; check the actual rendered screenshot on the target display, not just the DOM.
 
 A clear opening core with zero extrusion samples is meaningful only after confirming that neighbouring paths actually reach that region. The slim-loop study checks nearby path samples as well as intrusions, but those checks and warning-free slicing do not prove a bridged opening will print cleanly or a thin band will resist repeated flexing.
+
+## Frozen native releases and public comment provenance (2026-10-28)
+
+A native release patch can include private historical task identifiers in unchanged or removed comments. Preserve the exact raw patch privately as installation evidence, then derive the public archive by normalizing only the identified comment annotations in both retained before and after sources. Apply the derived patch without fuzz and compare every resulting file with the equivalently normalized frozen source. Keep the raw and public hashes distinct; never change executable code, the signed candidate or later canonical source to sanitize a publication.
+
+An isolated copy on a volume whose name contains spaces exposed existing test helpers that pass `new URL(...).pathname` directly to Swift or Python. That value retains `%20`, so child processes reported missing source files even though the files existed. Use `fileURLToPath` when maintaining those helpers; a failed path lookup is not evidence of a firmware regression. For this publication, the required full gate runs from the canonical project path. Keep raw failed-run evidence separate from the final gate result.
