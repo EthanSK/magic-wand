@@ -1,0 +1,652 @@
+{
+  "actual_exported_stls_checked": true,
+  "mesh_checks": {
+    "Grip_Left": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 213.74530233698118,
+      "print_height_mm": 170.8000030517578,
+      "first_layer_section_mm2": 215.10087402855913,
+      "manual_low_back_support": false,
+      "wire_bore_probe_mm3": 0.0
+    },
+    "Grip_Right": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 213.74530233698118,
+      "print_height_mm": 170.8000030517578,
+      "first_layer_section_mm2": 215.10087281108702,
+      "manual_low_back_support": false,
+      "wire_bore_probe_mm3": 0.0
+    },
+    "Removable_Finger_Loop": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 301.03190596351277,
+      "print_height_mm": 9.0,
+      "first_layer_section_mm2": 439.2832654388539,
+      "manual_low_back_support": false
+    },
+    "Loop_Keeper_Key": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 12.74268106708557,
+      "print_height_mm": 8.199999809265137,
+      "first_layer_section_mm2": 12.74268106718936,
+      "manual_low_back_support": false
+    },
+    "Battery_Screw_Cap_Light": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 571.6348432244349,
+      "print_height_mm": 9.300000190734863,
+      "first_layer_section_mm2": 582.269954772807,
+      "manual_low_back_support": false
+    },
+    "Battery_Screw_Cap_Weighted": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 571.6348432244349,
+      "print_height_mm": 27.299999237060547,
+      "first_layer_section_mm2": 582.2699633210552,
+      "manual_low_back_support": false
+    },
+    "Battery_Sled": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 170.25481466889926,
+      "print_height_mm": 7.599999904632568,
+      "first_layer_section_mm2": 174.3515212432244,
+      "manual_low_back_support": false
+    },
+    "Continuous_Shaft": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 87.50609576423903,
+      "print_height_mm": 192.0,
+      "first_layer_section_mm2": 90.86675297676501,
+      "manual_low_back_support": false
+    },
+    "Sense_Open_Cradle": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 0.0,
+      "print_height_mm": 18.399999618530273,
+      "first_layer_section_mm2": 25.226993369945756,
+      "manual_low_back_support": true
+    },
+    "Thread_Gauge": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 159.6951210127829,
+      "print_height_mm": 8.199999809265137,
+      "first_layer_section_mm2": 159.69395428704792,
+      "manual_low_back_support": false
+    },
+    "Switch_Fit_Test": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 115.61977429168098,
+      "print_height_mm": 22.0,
+      "first_layer_section_mm2": 114.9979722147884,
+      "manual_low_back_support": false
+    },
+    "Loop_Upper_Socket_Test": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 51.71023231640636,
+      "print_height_mm": 25.0,
+      "first_layer_section_mm2": 51.68342214184726,
+      "manual_low_back_support": false
+    },
+    "Loop_Upper_Hook_Test": {
+      "bodies": 1,
+      "watertight": true,
+      "bed_contact_mm2": 102.47358829527813,
+      "print_height_mm": 9.0,
+      "first_layer_section_mm2": 124.12027084239685,
+      "manual_low_back_support": false
+    }
+  },
+  "switches": {
+    "Left": {
+      "thumb": {
+        "hardware_clearance_mm3": {
+          "switch": 1.181398912691472e-05,
+          "switch_housing": 0.0,
+          "factory_clips": 0.0,
+          "switch_pins": 0.0,
+          "socket": 0.0001518111312815248,
+          "socket_body": 8.585947533201124e-05,
+          "socket_posts": 0.0,
+          "socket_solder_tabs": 0.0
+        },
+        "continuous_socket_route_mm3": {
+          "centred_entry": 0.0,
+          "subface_alignment": 0.0,
+          "post_seating": 0.00022888046853094737
+        },
+        "post_bores_mm3": {
+          "(0.0, 0.0)": 0.0,
+          "(0.0, 5.5)": 0.0,
+          "(0.0, -5.5)": 0.0,
+          "(-5.9, 0.0)": 0.0,
+          "(-3.8, -5.0)": 0.0
+        },
+        "captures": {
+          "socket_floor_inward_stop_mm3": 16.270077512308163,
+          "factory_hook_lift_capture_mm3": 0.704952621459964,
+          "switch_flange_press_stop_mm3": 21.256376726867845,
+          "socket_outward_stop_against_installed_switch_mm3": 10.412000000000036
+        },
+        "factory_hook_reference_is_simplified": true,
+        "physical_fit_verified": false
+      },
+      "index": {
+        "hardware_clearance_mm3": {
+          "switch": 0.00015460099150582047,
+          "switch_housing": 0.0,
+          "factory_clips": 0.0,
+          "switch_pins": 0.0,
+          "socket": 0.0004631890634483935,
+          "socket_body": 0.0004470946295352874,
+          "socket_posts": 0.0,
+          "socket_solder_tabs": 0.0
+        },
+        "continuous_socket_route_mm3": {
+          "centred_entry": 0.0,
+          "subface_alignment": 0.0,
+          "post_seating": 0.0004604368459153688
+        },
+        "post_bores_mm3": {
+          "(0.0, 0.0)": 0.0,
+          "(0.0, 5.5)": 0.0,
+          "(0.0, -5.5)": 0.0,
+          "(-5.9, 0.0)": 0.0,
+          "(-3.8, -5.0)": 0.0
+        },
+        "captures": {
+          "socket_floor_inward_stop_mm3": 16.269609828434795,
+          "factory_hook_lift_capture_mm3": 0.705064675558567,
+          "switch_flange_press_stop_mm3": 21.255363736821806,
+          "socket_outward_stop_against_installed_switch_mm3": 10.412000000000036
+        },
+        "factory_hook_reference_is_simplified": true,
+        "physical_fit_verified": false
+      },
+      "middle": {
+        "hardware_clearance_mm3": {
+          "switch": 0.00015460099151774482,
+          "switch_housing": 0.0,
+          "factory_clips": 0.0,
+          "switch_pins": 0.0,
+          "socket": 0.0003079025924465579,
+          "socket_body": 0.0002952139643269834,
+          "socket_posts": 0.0,
+          "socket_solder_tabs": 0.0
+        },
+        "continuous_socket_route_mm3": {
+          "centred_entry": 0.0,
+          "subface_alignment": 0.0,
+          "post_seating": 0.0003044771221677114
+        },
+        "post_bores_mm3": {
+          "(0.0, 0.0)": 0.0,
+          "(0.0, 5.5)": 0.0,
+          "(0.0, -5.5)": 0.0,
+          "(-5.9, 0.0)": 0.0,
+          "(-3.8, -5.0)": 0.0
+        },
+        "captures": {
+          "socket_floor_inward_stop_mm3": 16.269424106300903,
+          "factory_hook_lift_capture_mm3": 0.7050646755585653,
+          "switch_flange_press_stop_mm3": 21.255363739136172,
+          "socket_outward_stop_against_installed_switch_mm3": 10.412000000000036
+        },
+        "factory_hook_reference_is_simplified": true,
+        "physical_fit_verified": false
+      }
+    },
+    "Right": {
+      "thumb": {
+        "hardware_clearance_mm3": {
+          "switch": 0.0,
+          "switch_housing": 0.0,
+          "factory_clips": 0.0,
+          "switch_pins": 0.0,
+          "socket": 0.0,
+          "socket_body": 0.0,
+          "socket_posts": 0.0,
+          "socket_solder_tabs": 0.0
+        },
+        "continuous_socket_route_mm3": {
+          "centred_entry": 0.0,
+          "subface_alignment": 0.0,
+          "post_seating": 0.0
+        },
+        "post_bores_mm3": {
+          "(0.0, 0.0)": 0.0,
+          "(0.0, 5.5)": 0.0,
+          "(0.0, -5.5)": 0.0,
+          "(-5.9, 0.0)": 0.0,
+          "(-3.8, -5.0)": 0.0
+        },
+        "captures": {
+          "socket_floor_inward_stop_mm3": 16.26838006691838,
+          "factory_hook_lift_capture_mm3": 0.705049896240241,
+          "switch_flange_press_stop_mm3": 21.252836431435796,
+          "socket_outward_stop_against_installed_switch_mm3": 10.41200000000004
+        },
+        "factory_hook_reference_is_simplified": true,
+        "physical_fit_verified": false
+      },
+      "index": {
+        "hardware_clearance_mm3": {
+          "switch": 2.1498394016513135e-05,
+          "switch_housing": 0.0,
+          "factory_clips": 0.0,
+          "switch_pins": 0.0,
+          "socket": 0.0006363332779042595,
+          "socket_body": 0.0006353622288156828,
+          "socket_posts": 0.0,
+          "socket_solder_tabs": 0.0
+        },
+        "continuous_socket_route_mm3": {
+          "centred_entry": 0.0,
+          "subface_alignment": 0.0,
+          "post_seating": 0.0006354767828895057
+        },
+        "post_bores_mm3": {
+          "(0.0, 0.0)": 0.0,
+          "(0.0, 5.5)": 0.0,
+          "(0.0, -5.5)": 0.0,
+          "(-5.9, 0.0)": 0.0,
+          "(-3.8, -5.0)": 0.0
+        },
+        "captures": {
+          "socket_floor_inward_stop_mm3": 16.269646431675387,
+          "factory_hook_lift_capture_mm3": 0.7050010980941402,
+          "switch_flange_press_stop_mm3": 21.254558689902805,
+          "socket_outward_stop_against_installed_switch_mm3": 10.411999999999939
+        },
+        "factory_hook_reference_is_simplified": true,
+        "physical_fit_verified": false
+      },
+      "middle": {
+        "hardware_clearance_mm3": {
+          "switch": 2.1498394014621413e-05,
+          "switch_housing": 0.0,
+          "factory_clips": 0.0,
+          "switch_pins": 0.0,
+          "socket": 0.0006744395971952193,
+          "socket_body": 0.000671925842008576,
+          "socket_posts": 0.0,
+          "socket_solder_tabs": 0.0
+        },
+        "continuous_socket_route_mm3": {
+          "centred_entry": 0.0,
+          "subface_alignment": 0.0,
+          "post_seating": 0.0006735399070243937
+        },
+        "post_bores_mm3": {
+          "(0.0, 0.0)": 0.0,
+          "(0.0, 5.5)": 0.0,
+          "(0.0, -5.5)": 0.0,
+          "(-5.9, 0.0)": 0.0,
+          "(-3.8, -5.0)": 0.0
+        },
+        "captures": {
+          "socket_floor_inward_stop_mm3": 16.269729475989898,
+          "factory_hook_lift_capture_mm3": 0.7050010980941227,
+          "switch_flange_press_stop_mm3": 21.25455868990268,
+          "socket_outward_stop_against_installed_switch_mm3": 10.411999999999946
+        },
+        "factory_hook_reference_is_simplified": true,
+        "physical_fit_verified": false
+      }
+    }
+  },
+  "handle": {
+    "Left": {
+      "rest_mm3": 0.0,
+      "slide_mm3": {
+        "0.0": 0.0,
+        "0.25": 0.0,
+        "0.5": 0.0,
+        "0.75": 0.0,
+        "1.0": 0.0,
+        "1.25": 0.0,
+        "1.5": 0.0,
+        "1.75": 0.0,
+        "2.0": 0.0,
+        "2.25": 0.0,
+        "2.5": 0.0,
+        "2.75": 0.0,
+        "3.0": 0.0,
+        "3.25": 0.0,
+        "3.5": 0.0,
+        "3.75": 0.0,
+        "4.0": 0.0
+      },
+      "radial_entry_mm3": {
+        "0.0": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "1.5": 0.0,
+        "2.0": 0.0,
+        "2.5": 0.0,
+        "3.0": 0.0,
+        "3.5": 0.0,
+        "4.0": 0.0,
+        "4.5": 0.0,
+        "5.0": 0.0,
+        "5.5": 0.0,
+        "6.0": 0.0,
+        "6.5": 0.0,
+        "7.0": 0.0,
+        "7.5": 0.0,
+        "8.0": 0.0,
+        "8.5": 0.0,
+        "9.0": 0.0,
+        "9.5": 0.0,
+        "10.0": 0.0,
+        "10.5": 0.0,
+        "11.0": 0.0,
+        "11.5": 0.0,
+        "12.0": 0.0,
+        "12.5": 0.0,
+        "13.0": 0.0,
+        "13.5": 0.0,
+        "14.0": 0.0,
+        "14.5": 0.0,
+        "15.0": 0.0,
+        "15.5": 0.0,
+        "16.0": 0.0,
+        "16.5": 0.0,
+        "17.0": 0.0,
+        "17.5": 0.0,
+        "18.0": 0.0
+      },
+      "key_entry_mm3": {
+        "0.0": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "1.5": 0.0,
+        "2.0": 0.0,
+        "2.5": 0.0,
+        "3.0": 0.0,
+        "3.5": 0.0,
+        "4.0": 0.0,
+        "4.5": 0.0,
+        "5.0": 0.0,
+        "5.5": 0.0,
+        "6.0": 0.0,
+        "6.5": 0.0,
+        "7.0": 0.0,
+        "7.5": 0.0,
+        "8.0": 0.0,
+        "8.5": 0.0,
+        "9.0": 0.0,
+        "9.5": 0.0,
+        "10.0": 0.0,
+        "10.5": 0.0,
+        "11.0": 0.0,
+        "11.5": 0.0,
+        "12.0": 0.0,
+        "12.5": 0.0,
+        "13.0": 0.0,
+        "13.5": 0.0,
+        "14.0": 0.0,
+        "14.5": 0.0,
+        "15.0": 0.0,
+        "15.5": 0.0,
+        "16.0": 0.0
+      },
+      "key_quarter_turn_mm3": {
+        "0.0": 0.0,
+        "5.0": 0.0,
+        "10.0": 0.0,
+        "15.0": 0.0,
+        "20.0": 0.0,
+        "25.0": 0.0,
+        "30.0": 0.0,
+        "35.0": 0.0,
+        "40.0": 0.0,
+        "45.0": 0.0,
+        "50.0": 0.0,
+        "55.0": 0.0,
+        "60.0": 0.0,
+        "65.0": 0.0,
+        "70.0": 0.0,
+        "75.0": 0.0,
+        "80.0": 0.0,
+        "85.0": 0.0,
+        "90.0": 0.0
+      },
+      "key_pull_to_index_mm3": {
+        "0.0": 0.0,
+        "0.05": 0.0,
+        "0.1": 0.0,
+        "0.15000000000000002": 0.0,
+        "0.2": 0.0,
+        "0.25": 0.0,
+        "0.30000000000000004": 0.0,
+        "0.35000000000000003": 0.0,
+        "0.4": 0.0,
+        "0.45": 0.0,
+        "0.5": 0.0,
+        "0.55": 0.0,
+        "0.6000000000000001": 0.0,
+        "0.65": 0.0
+      },
+      "key_index_rotation_stops_mm3": {
+        "75.0": 0.16990997023576374,
+        "105.0": 0.1699099701744816
+      },
+      "key_press_to_turn_travel_mm": 0.65,
+      "rigid_capture_mm3": {
+        "out": 15.591618244192532,
+        "up": 18.570910075904504
+      },
+      "keeper_downward_stop_mm3": 2.544591404671123,
+      "key_positive_axial_capture_mm3": {
+        "out_at_1mm": 2.2239959632900943,
+        "in_after_deliberate_press_plus_1mm": 10.414946526980257
+      },
+      "clearance_per_surface_mm": 0.4,
+      "mounts_z_mm": [
+        14.0,
+        104.0
+      ],
+      "slide_mm": 4.0,
+      "loop_print_bed_assembly_x_mm": -4.5,
+      "band_print_bed_gap_mm": 0.0,
+      "physical_fit_verified": false,
+      "cap_locked_overlap_mm3": 0.0,
+      "cap_entry_overlap_mm3": 0.5072883902237271,
+      "remove_cap_to_attach": true
+    },
+    "Right": {
+      "rest_mm3": 0.0,
+      "slide_mm3": {
+        "0.0": 0.0,
+        "0.25": 0.0,
+        "0.5": 0.0,
+        "0.75": 0.0,
+        "1.0": 0.0,
+        "1.25": 0.0,
+        "1.5": 0.0,
+        "1.75": 0.0,
+        "2.0": 0.0,
+        "2.25": 0.0,
+        "2.5": 0.0,
+        "2.75": 0.0,
+        "3.0": 0.0,
+        "3.25": 0.0,
+        "3.5": 0.0,
+        "3.75": 0.0,
+        "4.0": 0.0
+      },
+      "radial_entry_mm3": {
+        "0.0": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "1.5": 0.0,
+        "2.0": 0.0,
+        "2.5": 0.0,
+        "3.0": 0.0,
+        "3.5": 0.0,
+        "4.0": 0.0,
+        "4.5": 0.0,
+        "5.0": 0.0,
+        "5.5": 0.0,
+        "6.0": 0.0,
+        "6.5": 0.0,
+        "7.0": 0.0,
+        "7.5": 0.0,
+        "8.0": 0.0,
+        "8.5": 0.0,
+        "9.0": 0.0,
+        "9.5": 0.0,
+        "10.0": 0.0,
+        "10.5": 0.0,
+        "11.0": 0.0,
+        "11.5": 0.0,
+        "12.0": 0.0,
+        "12.5": 0.0,
+        "13.0": 0.0,
+        "13.5": 0.0,
+        "14.0": 0.0,
+        "14.5": 0.0,
+        "15.0": 0.0,
+        "15.5": 0.0,
+        "16.0": 0.0,
+        "16.5": 0.0,
+        "17.0": 0.0,
+        "17.5": 0.0,
+        "18.0": 0.0
+      },
+      "key_entry_mm3": {
+        "0.0": 0.0,
+        "0.5": 0.0,
+        "1.0": 0.0,
+        "1.5": 0.0,
+        "2.0": 0.0,
+        "2.5": 0.0,
+        "3.0": 0.0,
+        "3.5": 0.0,
+        "4.0": 0.0,
+        "4.5": 0.0,
+        "5.0": 0.0,
+        "5.5": 0.0,
+        "6.0": 0.0,
+        "6.5": 0.0,
+        "7.0": 0.0,
+        "7.5": 0.0,
+        "8.0": 0.0,
+        "8.5": 0.0,
+        "9.0": 0.0,
+        "9.5": 0.0,
+        "10.0": 0.0,
+        "10.5": 0.0,
+        "11.0": 0.0,
+        "11.5": 0.0,
+        "12.0": 0.0,
+        "12.5": 0.0,
+        "13.0": 0.0,
+        "13.5": 0.0,
+        "14.0": 0.0,
+        "14.5": 0.0,
+        "15.0": 0.0,
+        "15.5": 0.0,
+        "16.0": 0.0
+      },
+      "key_quarter_turn_mm3": {
+        "0.0": 0.0,
+        "5.0": 0.0,
+        "10.0": 0.0,
+        "15.0": 0.0,
+        "20.0": 0.0,
+        "25.0": 0.0,
+        "30.0": 0.0,
+        "35.0": 0.0,
+        "40.0": 0.0,
+        "45.0": 0.0,
+        "50.0": 0.0,
+        "55.0": 0.0,
+        "60.0": 0.0,
+        "65.0": 0.0,
+        "70.0": 0.0,
+        "75.0": 0.0,
+        "80.0": 0.0,
+        "85.0": 0.0,
+        "90.0": 0.0
+      },
+      "key_pull_to_index_mm3": {
+        "0.0": 0.0,
+        "0.05": 0.0,
+        "0.1": 0.0,
+        "0.15000000000000002": 0.0,
+        "0.2": 0.0,
+        "0.25": 0.0,
+        "0.30000000000000004": 0.0,
+        "0.35000000000000003": 0.0,
+        "0.4": 0.0,
+        "0.45": 0.0,
+        "0.5": 0.0,
+        "0.55": 0.0,
+        "0.6000000000000001": 0.0,
+        "0.65": 0.0
+      },
+      "key_index_rotation_stops_mm3": {
+        "75.0": 0.16990997023576374,
+        "105.0": 0.1699099701744816
+      },
+      "key_press_to_turn_travel_mm": 0.65,
+      "rigid_capture_mm3": {
+        "out": 15.591618244192532,
+        "up": 18.391508051256704
+      },
+      "keeper_downward_stop_mm3": 2.544591404671123,
+      "key_positive_axial_capture_mm3": {
+        "out_at_1mm": 2.2239959632900943,
+        "in_after_deliberate_press_plus_1mm": 10.414946526980257
+      },
+      "clearance_per_surface_mm": 0.4,
+      "mounts_z_mm": [
+        14.0,
+        104.0
+      ],
+      "slide_mm": 4.0,
+      "loop_print_bed_assembly_x_mm": -4.5,
+      "band_print_bed_gap_mm": 0.0,
+      "physical_fit_verified": false,
+      "cap_locked_overlap_mm3": 0.0,
+      "cap_entry_overlap_mm3": 0.5072883902237271,
+      "remove_cap_to_attach": true
+    }
+  },
+  "nominal_keycap_3mm_stroke_collision_mm3": {
+    "Left": {
+      "thumb": 0.0,
+      "index": 0.0,
+      "middle": 0.0
+    },
+    "Right": {
+      "thumb": 0.0,
+      "index": 0.0,
+      "middle": 0.0
+    }
+  },
+  "unchanged_main_upper": {
+    "Continuous_Shaft": {
+      "symmetric_geometry_difference_mm3": 0.001969297260207558
+    },
+    "Sense_Open_Cradle": {
+      "symmetric_geometry_difference_mm3": 0.0001244179824800196
+    }
+  },
+  "physical_fit_verified": false,
+  "strength_verified": false,
+  "battery_product_dimensions_verified": false
+}

@@ -1,0 +1,1331 @@
+{
+  "complete": {
+    "projects": [
+      {
+        "project": "Print-Shard-R2-complete-both-hands.3mf",
+        "sha256": "9183ff18a0c2989f26532f4cea251ae25cba8ab723b46e23b3bc33d294725d74",
+        "manifest_sha256": "0dbdfcb179c8d6a62ea5b04095df8330ab01f8e31e2992dfe40b378a91055874",
+        "used_part_stl_sha256": {
+          "Grip_Left": "828f8aaa5990e074d46deaf23f3811f188e42329a3e188793ee3b637ea13abf2",
+          "Grip_Right": "cfd2be652b425535aed056bb66657e47aaa57fd4dd5f7e15aa4ab92a2f6493ea",
+          "Continuous_Shaft": "fbc59910ea6adf7171bd531096fea73df9542f19df81934ef6a1bd9efcf96790",
+          "Sense_Open_Cradle": "41f339617e4440a86dd6b1722b03b0f25f5e76117f0d8355870331cfb5dc11b5",
+          "Battery_Sled": "7c4506c4d1dbc1e6c1f6b6b1e863c8e15eeb6b5de0fab84cdd564b918c19c89f",
+          "Removable_Finger_Loop": "d2e7bd8bb61b0f457c857efda1d5027d1fafef950395b3e3629c28942ad2ea76",
+          "Loop_Keeper_Key": "44f396b28e2374dcc7e392ba6280fdd4588a8dff0c2dce1956e75b8edecf28ad",
+          "Battery_Screw_Cap_Light": "9fc26cba3ea4d328ad3c09ef2c5e2802b92a66f20927b464bcff3b4d43b06150",
+          "Battery_Screw_Cap_Weighted": "663e9611144a97f0d9c82465a99ec66a84da2b5bd77b0c7831cdc23e46bc3271"
+        },
+        "checker_sha256": "8a1cc5b7d4d900ac50f1206d3876240e4f90353b426794427d6e50c520f12b1b",
+        "region_source_hashes": {
+          "wand_cad.py": "d5b336761d65d13c3108b9ca7bf8f7ff7c0599b1981acf01795a1e81a2d3f829",
+          "direct_switches.py": "08083422ab348a7992b68f964a3f09338bda31803be9b4c3e44f16a5fa39b4df",
+          "handle_design.py": "2afdb9f1b98c891b8b8e449f6de36af0e55232705e2ab6922d169d68c38afbf2",
+          "cap_design.py": "16138f76b976f60370069058ec76fa61035fd872d1a101b1ca983cb1e22ba9ed"
+        },
+        "path_sample_step_mm": 0.35,
+        "extruder_offset_mm": [
+          0.0,
+          2.0
+        ],
+        "bead_check": {
+          "line_width": "actual per-move LINE_WIDTH, full circular XY footprint",
+          "height": "actual LAYER_HEIGHT; layer-middle discs",
+          "xy_boundary_tolerance_mm": 0.12,
+          "z_boundary_tolerance_mm": 0.1,
+          "z_quantisation_mm": 0.05,
+          "maximum_full_width_rounding_mm": 0.05
+        },
+        "path_samples": 3273781,
+        "stats": {
+          "straight_extruding_moves": 430116,
+          "arc_extruding_moves": 206927,
+          "support_extruding_moves": 2229,
+          "feature_samples": {
+            "Brim": 33933,
+            "Outer wall": 1215810,
+            "Gap infill": 416354,
+            "Inner wall": 956182,
+            "Bottom surface": 6533,
+            "Support interface": 9759,
+            "Support": 13891,
+            "Overhang wall": 14716,
+            "Internal solid infill": 163623,
+            "Support transition": 3908,
+            "Bridge": 17052,
+            "Sparse infill": 364649,
+            "Top surface": 32920,
+            "Floating vertical shell": 24451
+          }
+        },
+        "global_enable_support": "0",
+        "manual_head_supports_only": true,
+        "parts": {
+          "2:Grip_Left": {
+            "layer_start_audit": {
+              "checked_layers": 854,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 92.0,
+                  "unbacked_mesh_area_mm2": 39.4185,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 99.4,
+                  "unbacked_mesh_area_mm2": 38.043,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 95.4,
+                  "unbacked_mesh_area_mm2": 32.8894,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 9.2,
+                  "unbacked_mesh_area_mm2": 31.2036,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 69.4,
+                  "unbacked_mesh_area_mm2": 27.0442,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 103.4,
+                  "unbacked_mesh_area_mm2": 19.0628,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 13.4,
+                  "unbacked_mesh_area_mm2": 18.3906,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 111.0,
+                  "unbacked_mesh_area_mm2": 18.1058,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 7.2,
+                  "unbacked_mesh_area_mm2": 17.8657,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 85.0,
+                  "unbacked_mesh_area_mm2": 16.9621,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 115.0,
+                  "unbacked_mesh_area_mm2": 16.962,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 70.0,
+                  "unbacked_mesh_area_mm2": 14.1238,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 0.000959,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 803449,
+            "sliced_top_error_mm": 0.0,
+            "checks": {
+              "full_bottom_cell_sled_loading": {
+                "checked_samples": 243848,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "main_10_4mm_wire_bore": {
+                "checked_samples": 49955,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "female_screw_mouth_and_groove": {
+                "checked_samples": 58053,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "handle_hooks_and_keeper": {
+                "checked_samples": 99225,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_all_baked_switch_clearances": {
+                "checked_samples": 39072,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_socket_installation_sweep": {
+                "checked_samples": 7851,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_purchased_hardware": {
+                "checked_samples": 28924,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_all_baked_switch_clearances": {
+                "checked_samples": 32007,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_socket_installation_sweep": {
+                "checked_samples": 8974,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_purchased_hardware": {
+                "checked_samples": 26270,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "middle_all_baked_switch_clearances": {
+                "checked_samples": 33825,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "middle_socket_installation_sweep": {
+                "checked_samples": 10000,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "middle_purchased_hardware": {
+                "checked_samples": 27308,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              }
+            }
+          },
+          "4:Grip_Right": {
+            "layer_start_audit": {
+              "checked_layers": 854,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 92.0,
+                  "unbacked_mesh_area_mm2": 39.4186,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 99.4,
+                  "unbacked_mesh_area_mm2": 38.0728,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 95.4,
+                  "unbacked_mesh_area_mm2": 32.8565,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 9.2,
+                  "unbacked_mesh_area_mm2": 31.2036,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 69.4,
+                  "unbacked_mesh_area_mm2": 27.0679,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 103.4,
+                  "unbacked_mesh_area_mm2": 18.4657,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 13.4,
+                  "unbacked_mesh_area_mm2": 18.3906,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 111.0,
+                  "unbacked_mesh_area_mm2": 18.1057,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 7.2,
+                  "unbacked_mesh_area_mm2": 17.8657,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 115.0,
+                  "unbacked_mesh_area_mm2": 16.962,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 85.0,
+                  "unbacked_mesh_area_mm2": 16.9619,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 70.0,
+                  "unbacked_mesh_area_mm2": 14.1269,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 0.000962,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 804663,
+            "sliced_top_error_mm": 0.0,
+            "checks": {
+              "full_bottom_cell_sled_loading": {
+                "checked_samples": 243834,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "main_10_4mm_wire_bore": {
+                "checked_samples": 53099,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "female_screw_mouth_and_groove": {
+                "checked_samples": 58142,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "handle_hooks_and_keeper": {
+                "checked_samples": 98351,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_all_baked_switch_clearances": {
+                "checked_samples": 38785,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_socket_installation_sweep": {
+                "checked_samples": 8390,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_purchased_hardware": {
+                "checked_samples": 29152,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_all_baked_switch_clearances": {
+                "checked_samples": 39268,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_socket_installation_sweep": {
+                "checked_samples": 11959,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_purchased_hardware": {
+                "checked_samples": 24399,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "middle_all_baked_switch_clearances": {
+                "checked_samples": 35406,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "middle_socket_installation_sweep": {
+                "checked_samples": 12017,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "middle_purchased_hardware": {
+                "checked_samples": 24033,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              }
+            }
+          },
+          "6:Continuous_Shaft": {
+            "layer_start_audit": {
+              "checked_layers": 960,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 14.2,
+                  "unbacked_mesh_area_mm2": 49.741,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 9.2,
+                  "unbacked_mesh_area_mm2": 17.5155,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 19.2,
+                  "unbacked_mesh_area_mm2": 15.8669,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 187.2,
+                  "unbacked_mesh_area_mm2": 13.9681,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 20.8,
+                  "unbacked_mesh_area_mm2": 4.5606,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 22.4,
+                  "unbacked_mesh_area_mm2": 2.4089,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 41.8,
+                  "unbacked_mesh_area_mm2": 2.3281,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 38.8,
+                  "unbacked_mesh_area_mm2": 2.2403,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 37.4,
+                  "unbacked_mesh_area_mm2": 2.1997,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 65.8,
+                  "unbacked_mesh_area_mm2": 2.1881,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 26.8,
+                  "unbacked_mesh_area_mm2": 2.1824,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 23.8,
+                  "unbacked_mesh_area_mm2": 2.1598,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 0.000349,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 620370,
+            "sliced_top_error_mm": 0.0,
+            "checks": {
+              "wire_bore": {
+                "checked_samples": 60183,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "lower_bayonet_socket": {
+                "checked_samples": 44521,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              }
+            }
+          },
+          "8:Sense_Open_Cradle": {
+            "layer_start_audit": {
+              "checked_layers": 92,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [
+                {
+                  "layer_top_mm": 1.4,
+                  "area_mm2": 0.7002,
+                  "print_xy_bounds_mm": [
+                    12.3333,
+                    -0.7,
+                    13.4514,
+                    2.012
+                  ],
+                  "assembly_centre_mm": [
+                    12.8923,
+                    -7.9,
+                    375.844
+                  ],
+                  "actual_support_top_z_mm": 1.0
+                },
+                {
+                  "layer_top_mm": 1.4,
+                  "area_mm2": 0.7002,
+                  "print_xy_bounds_mm": [
+                    -13.4514,
+                    -0.7,
+                    -12.3333,
+                    2.012
+                  ],
+                  "assembly_centre_mm": [
+                    -12.8923,
+                    -7.9,
+                    375.844
+                  ],
+                  "actual_support_top_z_mm": 1.0
+                }
+              ],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 2.0,
+                  "unbacked_mesh_area_mm2": 151.9167,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 1.6,
+                  "unbacked_mesh_area_mm2": 48.4334,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 14.6,
+                  "unbacked_mesh_area_mm2": 27.3787,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 1.8,
+                  "unbacked_mesh_area_mm2": 24.1815,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 2.4,
+                  "unbacked_mesh_area_mm2": 20.1818,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 0.4,
+                  "unbacked_mesh_area_mm2": 18.9646,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 14.4,
+                  "unbacked_mesh_area_mm2": 16.2347,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 0.6,
+                  "unbacked_mesh_area_mm2": 14.104,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 6.6,
+                  "unbacked_mesh_area_mm2": 12.8218,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 0.8,
+                  "unbacked_mesh_area_mm2": 12.7821,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 1.4,
+                  "unbacked_mesh_area_mm2": 11.0551,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 1.2,
+                  "unbacked_mesh_area_mm2": 11.0303,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": true,
+            "printing_helpers": [
+              {
+                "type": "support_enforcer",
+                "name": "PRINT SUPPORT ONLY - low back"
+              },
+              {
+                "type": "support_blocker",
+                "name": "KEEP PRINT SUPPORT OUT - board USB wire and lock"
+              }
+            ],
+            "normal_mesh_difference_mm3": 6.5e-05,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 213786,
+            "sliced_top_error_mm": 0.0,
+            "checks": {
+              "sleeve_and_wire_route": {
+                "checked_samples": 78877,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "board": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              },
+              "solder": {
+                "checked_samples": 228,
+                "violations": {},
+                "removable_external_support_samples": 170,
+                "external_support_exception": "Support-only bead entirely behind assemblyY=-7.8, accessible and removed before electronics; no printed material exception",
+                "examples": []
+              },
+              "usb": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              },
+              "forward_wires": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              },
+              "sleeve_tabs_entry_and_turn": {
+                "checked_samples": 15794,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              }
+            }
+          },
+          "12:Battery_Sled": {
+            "layer_start_audit": {
+              "checked_layers": 38,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 8e-06,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 13874,
+            "sliced_top_error_mm": 0.0,
+            "checks": {}
+          },
+          "14:Removable_Finger_Loop": {
+            "layer_start_audit": {
+              "checked_layers": 45,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 0.4,
+                  "unbacked_mesh_area_mm2": 26.2187,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 2.4,
+                  "unbacked_mesh_area_mm2": 11.5971,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 7.8,
+                  "unbacked_mesh_area_mm2": 4.9501,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 3.8e-05,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 252688,
+            "sliced_top_error_mm": 0.0,
+            "checks": {
+              "quarter_turn_key_hole": {
+                "checked_samples": 3257,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              }
+            }
+          },
+          "16:Loop_Keeper_Key": {
+            "layer_start_audit": {
+              "checked_layers": 41,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 0.0,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 5734,
+            "sliced_top_error_mm": 0.0,
+            "checks": {}
+          },
+          "18:Battery_Screw_Cap_Light": {
+            "layer_start_audit": {
+              "checked_layers": 47,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 2.6,
+                  "unbacked_mesh_area_mm2": 2.1582,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 3e-06,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 99519,
+            "sliced_top_error_mm": 0.1,
+            "checks": {
+              "open_neck_above_closed_floor": {
+                "checked_samples": 26113,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              }
+            }
+          },
+          "20:Battery_Screw_Cap_Weighted": {
+            "layer_start_audit": {
+              "checked_layers": 136,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 20.6,
+                  "unbacked_mesh_area_mm2": 2.1582,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 1.3e-05,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 445410,
+            "sliced_top_error_mm": 0.1,
+            "checks": {
+              "open_neck_above_closed_floor": {
+                "checked_samples": 25402,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              }
+            }
+          }
+        },
+        "physical_fit_verified": false,
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "limitations": "Sampled extrusion paths with actual XY bead-width envelopes and explicit boundary guards. Does not certify printed fit, strength, full bead cross-section or thermal sag."
+  },
+  "fit_tests": {
+    "projects": [
+      {
+        "project": "Print-Shard-R2-fit-tests.3mf",
+        "sha256": "3c9060f8d849fe926cd0b847b6136b1810b507d9e6604b325b597d5f3e23b7b4",
+        "manifest_sha256": "0dbdfcb179c8d6a62ea5b04095df8330ab01f8e31e2992dfe40b378a91055874",
+        "used_part_stl_sha256": {
+          "Switch_Fit_Test": "57fcf539e8d0cccd281e6c2dac963e258164505e9e6af4a146fcfb8cf71b8a85",
+          "Loop_Upper_Socket_Test": "86d288b259962feb4b3c6dbecca4f2ea7816cbe5ffc593c835e4ed5cab526da3",
+          "Loop_Upper_Hook_Test": "3512ebf24400467146b9c926434bb7b553be997064842ea2a45348de74271754",
+          "Loop_Keeper_Key": "44f396b28e2374dcc7e392ba6280fdd4588a8dff0c2dce1956e75b8edecf28ad",
+          "Thread_Gauge": "f79425b832126ed72d15039e773d3f640c677785e329f7798ec06cc8e284aede",
+          "Battery_Screw_Cap_Light": "9fc26cba3ea4d328ad3c09ef2c5e2802b92a66f20927b464bcff3b4d43b06150"
+        },
+        "checker_sha256": "8a1cc5b7d4d900ac50f1206d3876240e4f90353b426794427d6e50c520f12b1b",
+        "region_source_hashes": {
+          "wand_cad.py": "d5b336761d65d13c3108b9ca7bf8f7ff7c0599b1981acf01795a1e81a2d3f829",
+          "direct_switches.py": "08083422ab348a7992b68f964a3f09338bda31803be9b4c3e44f16a5fa39b4df",
+          "handle_design.py": "2afdb9f1b98c891b8b8e449f6de36af0e55232705e2ab6922d169d68c38afbf2",
+          "cap_design.py": "16138f76b976f60370069058ec76fa61035fd872d1a101b1ca983cb1e22ba9ed"
+        },
+        "path_sample_step_mm": 0.35,
+        "extruder_offset_mm": [
+          0.0,
+          2.0
+        ],
+        "bead_check": {
+          "line_width": "actual per-move LINE_WIDTH, full circular XY footprint",
+          "height": "actual LAYER_HEIGHT; layer-middle discs",
+          "xy_boundary_tolerance_mm": 0.12,
+          "z_boundary_tolerance_mm": 0.1,
+          "z_quantisation_mm": 0.05,
+          "maximum_full_width_rounding_mm": 0.05
+        },
+        "path_samples": 469874,
+        "stats": {
+          "straight_extruding_moves": 66769,
+          "arc_extruding_moves": 15577,
+          "support_extruding_moves": 0,
+          "feature_samples": {
+            "Brim": 10808,
+            "Outer wall": 165301,
+            "Inner wall": 150584,
+            "Gap infill": 40413,
+            "Bottom surface": 3289,
+            "Internal solid infill": 47107,
+            "Overhang wall": 2932,
+            "Top surface": 11675,
+            "Sparse infill": 29427,
+            "Floating vertical shell": 2652,
+            "Bridge": 5686
+          }
+        },
+        "global_enable_support": "0",
+        "manual_head_supports_only": true,
+        "parts": {
+          "2:Switch_Fit_Test": {
+            "layer_start_audit": {
+              "checked_layers": 110,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 2.6,
+                  "unbacked_mesh_area_mm2": 38.0487,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 6.6,
+                  "unbacked_mesh_area_mm2": 19.063,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 14.2,
+                  "unbacked_mesh_area_mm2": 18.1059,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 18.2,
+                  "unbacked_mesh_area_mm2": 16.962,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 14.6,
+                  "unbacked_mesh_area_mm2": 11.7495,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 18.6,
+                  "unbacked_mesh_area_mm2": 11.7495,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 3.2,
+                  "unbacked_mesh_area_mm2": 8.7481,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 2.8,
+                  "unbacked_mesh_area_mm2": 7.7557,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 3.0,
+                  "unbacked_mesh_area_mm2": 6.8364,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 20.6,
+                  "unbacked_mesh_area_mm2": 6.835,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 16.6,
+                  "unbacked_mesh_area_mm2": 5.9518,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 12.8,
+                  "unbacked_mesh_area_mm2": 2.6517,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 6.2e-05,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 119981,
+            "sliced_top_error_mm": 0.0,
+            "checks": {
+              "full_bottom_cell_sled_loading": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              },
+              "main_10_4mm_wire_bore": {
+                "checked_samples": 19359,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "female_screw_mouth_and_groove": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              },
+              "handle_hooks_and_keeper": {
+                "checked_samples": 19928,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_all_baked_switch_clearances": {
+                "checked_samples": 39054,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_socket_installation_sweep": {
+                "checked_samples": 7904,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_purchased_hardware": {
+                "checked_samples": 28867,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_all_baked_switch_clearances": {
+                "checked_samples": 30876,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_socket_installation_sweep": {
+                "checked_samples": 9095,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_purchased_hardware": {
+                "checked_samples": 24561,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "middle_all_baked_switch_clearances": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              },
+              "middle_socket_installation_sweep": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              },
+              "middle_purchased_hardware": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              }
+            }
+          },
+          "4:Loop_Upper_Socket_Test": {
+            "layer_start_audit": {
+              "checked_layers": 125,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 2.2,
+                  "unbacked_mesh_area_mm2": 39.4188,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 9.6,
+                  "unbacked_mesh_area_mm2": 34.7101,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 13.6,
+                  "unbacked_mesh_area_mm2": 19.0628,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 6.2,
+                  "unbacked_mesh_area_mm2": 10.4915,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 5.6,
+                  "unbacked_mesh_area_mm2": 9.3696,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 10.2,
+                  "unbacked_mesh_area_mm2": 8.7511,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 10.0,
+                  "unbacked_mesh_area_mm2": 6.589,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 9.8,
+                  "unbacked_mesh_area_mm2": 6.3902,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 6.0,
+                  "unbacked_mesh_area_mm2": 5.6236,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 5.8,
+                  "unbacked_mesh_area_mm2": 4.6398,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 23.6,
+                  "unbacked_mesh_area_mm2": 4.2821,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 21.2,
+                  "unbacked_mesh_area_mm2": 3.8755,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 7.2e-05,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 108626,
+            "sliced_top_error_mm": 0.0,
+            "checks": {
+              "full_bottom_cell_sled_loading": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              },
+              "main_10_4mm_wire_bore": {
+                "checked_samples": 22329,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "female_screw_mouth_and_groove": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              },
+              "handle_hooks_and_keeper": {
+                "checked_samples": 27879,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_all_baked_switch_clearances": {
+                "checked_samples": 24296,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_socket_installation_sweep": {
+                "checked_samples": 3660,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "thumb_purchased_hardware": {
+                "checked_samples": 20960,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_all_baked_switch_clearances": {
+                "checked_samples": 17450,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_socket_installation_sweep": {
+                "checked_samples": 8232,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "index_purchased_hardware": {
+                "checked_samples": 14082,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              },
+              "middle_all_baked_switch_clearances": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              },
+              "middle_socket_installation_sweep": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              },
+              "middle_purchased_hardware": {
+                "checked_samples": 0,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "examples": []
+              }
+            }
+          },
+          "6:Loop_Upper_Hook_Test": {
+            "layer_start_audit": {
+              "checked_layers": 45,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 2.4,
+                  "unbacked_mesh_area_mm2": 5.7986,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 7.8,
+                  "unbacked_mesh_area_mm2": 4.9501,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                },
+                {
+                  "layer_top_mm": 0.4,
+                  "unbacked_mesh_area_mm2": 4.638,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 7e-06,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 60600,
+            "sliced_top_error_mm": 0.0,
+            "checks": {
+              "quarter_turn_key_hole": {
+                "checked_samples": 3221,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              }
+            }
+          },
+          "8:Loop_Keeper_Key": {
+            "layer_start_audit": {
+              "checked_layers": 41,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 0.0,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 5735,
+            "sliced_top_error_mm": 0.0,
+            "checks": {}
+          },
+          "10:Thread_Gauge": {
+            "layer_start_audit": {
+              "checked_layers": 41,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 7.2,
+                  "unbacked_mesh_area_mm2": 19.6407,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 1e-06,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 69910,
+            "sliced_top_error_mm": 0.0,
+            "checks": {
+              "female_thread_core_and_groove": {
+                "checked_samples": 52787,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              }
+            }
+          },
+          "12:Battery_Screw_Cap_Light": {
+            "layer_start_audit": {
+              "checked_layers": 47,
+              "overlap_allowance_mm": 0.25,
+              "minimum_island_area_mm2": 0.15,
+              "floating_components": [],
+              "support_backed_islands": [],
+              "largest_unbacked_layers": [
+                {
+                  "layer_top_mm": 2.6,
+                  "unbacked_mesh_area_mm2": 2.1582,
+                  "note": "partial overhang/bridge review; not alone a floating start"
+                }
+              ],
+              "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+            },
+            "support_enabled": false,
+            "printing_helpers": [],
+            "normal_mesh_difference_mm3": 3e-06,
+            "prepared_bbox_error_mm": 0.0,
+            "candidate_samples": 99518,
+            "sliced_top_error_mm": 0.1,
+            "checks": {
+              "open_neck_above_closed_floor": {
+                "checked_samples": 26113,
+                "violations": {},
+                "removable_external_support_samples": 0,
+                "external_support_exception": null,
+                "examples": []
+              }
+            }
+          }
+        },
+        "physical_fit_verified": false,
+        "passed": true
+      }
+    ],
+    "passed": true,
+    "limitations": "Sampled extrusion paths with actual XY bead-width envelopes and explicit boundary guards. Does not certify printed fit, strength, full bead cross-section or thermal sag."
+  }
+}
