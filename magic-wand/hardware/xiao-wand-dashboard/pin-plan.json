@@ -1,0 +1,27 @@
+{
+  "board": "Seeed XIAO nRF52840 Sense (original)",
+  "input_mode": "INPUT_PULLUP",
+  "pressed_level": "LOW",
+  "buttons": [
+    {
+      "name": "thumb",
+      "board_pin": "D8",
+      "silkscreen": "8",
+      "mcu_pin": "P1.13"
+    },
+    {
+      "name": "index",
+      "board_pin": "D9",
+      "silkscreen": "9",
+      "mcu_pin": "P1.14"
+    },
+    {
+      "name": "middle",
+      "board_pin": "D10",
+      "silkscreen": "10",
+      "mcu_pin": "P1.15"
+    }
+  ],
+  "common": "GND",
+  "power_to_switches": false
+}
