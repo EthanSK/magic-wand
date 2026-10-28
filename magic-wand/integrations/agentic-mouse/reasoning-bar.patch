@@ -1,0 +1,269 @@
+--- a/LEARNINGS.md
++++ b/LEARNINGS.md
+@@ -3236,3 +3236,12 @@
+ The final native probe swapped both half-screen layouts four times, checked their frames and restored both originals. Hardware-free regressions cover changed UUID/resolution/enumeration, primary-role changes, equal-size external screens, laptop-only/ambiguous layouts and stale window titles. Physical mouse acceptance remains separate.
+ 
+ Monitor audit: all mouse/keypad HUDs enumerate current NSScreen instances and reconcile screen-parameter changes; wand HUD/reminder placement uses live screens/recorder geometry; hovered window resizing uses current window coordinates; Chrome Space restoration resolves current Space membership; Brightness/Spaces/Mission Control/App Exposé/Magnet use system shortcuts rather than persisted monitor IDs. Stay's saved layouts belong to Stay and its supported repair workflow, not this selector. No other persisted screen-ID selector exists in Agentic Mouse Sources/Scripts.
++
++
++## 2026-10-28 — Mouse reasoning must use Model Bar's focus path
++
++Agentic Mouse speed already sends background `codex-model-bar://speed-up` and `speed-down` requests into Model Bar's `SpeedSwitcher`, which owns intended main/side composer discovery and `SpeedInputFocus`. Reasoning still posted Hyper-F18/F19 directly, bypassing the toolbar reasoning slider's focus handoff. A direct shortcut does not establish that the intended composer owns keyboard focus.
++
++Route mouse reasoning through strict `reasoning-up` / `reasoning-down` Model Bar actions. Keep mouse physical-cell ownership, polarity and detent reconstruction in Agentic Mouse; keep composer selection, draft preservation, actual configured reasoning keys and focus restoration in the existing Model Bar implementation. Share the established nonactivating URL relay with speed, require the existing session/Accessibility gates before dispatch, and report only sent until Codex acceptance is observed. Retain the dedicated keyboard bindings for ordinary keyboard compatibility; they are no longer the mouse reasoning transport.
++
++The focused Codex executor suite passed 20 tests before cancellation wiring. The broader suite passed 1,124 tests with four skips and zero failures before the last cancellation wiring. The final focused executor run passed all 21 cases, including release/teardown cancellation after lock, blocked-session/permission cases, both reasoning directions, a missing handler, nonactivating transport and absence of raw reasoning keyboard events. Live installation and actual Codex acceptance must be recorded separately from these checks.
+--- a/Resources/Info.plist
++++ b/Resources/Info.plist
+@@ -18,9 +18,9 @@
+ 	<key>CFBundlePackageType</key>
+ 	<string>APPL</string>
+ 	<key>CFBundleShortVersionString</key>
+-	<string>1.0.292</string>
++	<string>1.0.293</string>
+ 	<key>CFBundleVersion</key>
+-	<string>298</string>
++	<string>299</string>
+ 	<key>LSMinimumSystemVersion</key>
+ 	<string>13.0</string>
+ 
+--- a/Sources/AgenticMouseApp/CodexModeActionExecutor.swift
++++ b/Sources/AgenticMouseApp/CodexModeActionExecutor.swift
+@@ -55,7 +55,10 @@
+     private let accessibilityTrusted: AccessibilityTrustProvider
+     private let inputAllowed: InputAllowedProvider
+     private let requestResponseSpeed: @MainActor (CodexResponseSpeedAction) -> Bool
++    private let requestReasoningEffort: @MainActor (CodexReasoningEffortAction) -> Bool
++    private let cancelReasoningRequest: @MainActor () -> Bool
+     private var responseSpeedPending = false
++    private var reasoningEffortPending = false
+ 
+     init(
+         targetProcessResolver: @escaping TargetProcessResolver = {
+@@ -77,6 +80,12 @@
+         voiceSessionVerifier: CodexVoiceSessionVerifier? = nil,
+         requestResponseSpeed: @escaping @MainActor (CodexResponseSpeedAction) -> Bool = { action in
+             CodexModeActionExecutor.sendResponseSpeedRequest(action)
++        },
++        requestReasoningEffort: @escaping @MainActor (CodexReasoningEffortAction) -> Bool = { action in
++            CodexModeActionExecutor.sendModelBarRequest(action.modelBarURL)
++        },
++        cancelReasoningRequest: @escaping @MainActor () -> Bool = {
++            CodexModeActionExecutor.sendModelBarRequest(URL(string: "codex-model-bar://reasoning-cancel")!)
+         }
+     ) {
+         self.shortcutDispatcher = ApplicationShortcutDispatcher(
+@@ -98,6 +107,8 @@
+         self.accessibilityTrusted = accessibilityTrusted
+         self.inputAllowed = inputAllowed
+         self.requestResponseSpeed = requestResponseSpeed
++        self.requestReasoningEffort = requestReasoningEffort
++        self.cancelReasoningRequest = cancelReasoningRequest
+     }
+ 
+     func perform(
+@@ -175,7 +186,15 @@
+ 
+     func cancelPendingActions() {
+         cancelResponseSpeed()
++        cancelReasoningEffort()
+         cancelPendingVerifications()
++    }
++
++    func cancelReasoningEffort() {
++        guard reasoningEffortPending else { return }
++        reasoningEffortPending = false
++        // Release and teardown cancel only queued ratchets, including after lock.
++        _ = cancelReasoningRequest()
+     }
+ 
+     func cancelResponseSpeed() {
+@@ -215,23 +234,42 @@
+             NSWorkspace.shared.open(urls, withApplicationAt: application, configuration: configuration)
+         }
+     ) -> Bool {
+-        guard let application = resolveHandler(action.modelBarURL) else { return false }
++        sendModelBarRequest(action.modelBarURL, resolveHandler: resolveHandler, open: open)
++    }
++
++    /// Extraction of the existing sendResponseSpeedRequest background relay.
++    /// Ethan's speed and reasoning controls now both use Model Bar's own focus
++    /// code; Agentic Mouse never copies its composer lookup or sends reasoning keys.
++    static func sendModelBarRequest(
++        _ url: URL,
++        resolveHandler: (URL) -> URL? = { NSWorkspace.shared.urlForApplication(toOpen: $0) },
++        open: ([URL], URL, NSWorkspace.OpenConfiguration) -> Void = { urls, application, configuration in
++            NSWorkspace.shared.open(urls, withApplicationAt: application, configuration: configuration)
++        }
++    ) -> Bool {
++        guard let application = resolveHandler(url) else { return false }
+         let configuration = NSWorkspace.OpenConfiguration()
+         configuration.activates = false
+         configuration.promptsUserIfNeeded = false
+         configuration.addsToRecentItems = false
+-        open([action.modelBarURL], application, configuration)
++        open([url], application, configuration)
+         return true
+     }
+ 
+     func performReasoningEffort(
+         _ action: CodexReasoningEffortAction
+     ) -> Result<Void, ActionError> {
+-        postShortcut(
+-            action == .increase
+-                ? Self.increaseReasoningEffortShortcut
+-                : Self.decreaseReasoningEffortShortcut
+-        )
++        guard inputAllowed() else {
++            return .failure(ActionError(description: "Mouse commands are disabled while macOS is locked"))
++        }
++        guard accessibilityTrusted() else {
++            return .failure(ActionError(description: "Accessibility permission is required for Codex shortcuts"))
++        }
++        guard requestReasoningEffort(action) else {
++            return .failure(ActionError(description: "Could not open Codex Model Bar"))
++        }
++        reasoningEffortPending = true
++        return .success(())
+     }
+ 
+     func performChatHistory(
+--- a/Sources/AgenticMouseApp/AppDelegate.swift
++++ b/Sources/AgenticMouseApp/AppDelegate.swift
+@@ -2021,6 +2021,9 @@
+             if self?.activeWheelControl(for: source) == .codexResponseSpeed {
+                 self?.codexModeActionExecutor.cancelResponseSpeed()
+             }
++            if self?.activeWheelControl(for: source) == .codexReasoningEffort {
++                self?.codexModeActionExecutor.cancelReasoningEffort()
++            }
+             // An adjacent click can arrive before the 200 ms range timer.
+             // Preserve its latch only when that same range is being armed.
+             if nextControl != .vsCodeStageRange {
+@@ -2037,6 +2040,8 @@
+             switch release.control {
+             case .codexResponseSpeed:
+                 self?.codexModeActionExecutor.cancelResponseSpeed()
++            case .codexReasoningEffort:
++                self?.codexModeActionExecutor.cancelReasoningEffort()
+             case .windowWidth, .windowHeight:
+                 self?.windowResizeController.cancel(source: release.source)
+             case .youtubeScrub:
+@@ -2066,7 +2071,7 @@
+             case .horizontalScroll, .youtubeVolume, .brightness, .zoom,
+                  .systemOverview, .applicationWindows, .magnetWindow, .spaces,
+                  .chromeTabs, .spotifyVolume, .vsCodeCursorHistory, .vsCodeStageRange,
+-                 .codexReasoningEffort, .codexChatHistory, .claudeTabs:
++                 .codexChatHistory, .claudeTabs:
+                 return
+             }
+         }
+--- a/Sources/ScimitarKit/App/WheelChord.swift
++++ b/Sources/ScimitarKit/App/WheelChord.swift
+@@ -598,6 +598,13 @@
+ public enum CodexReasoningEffortAction: Equatable, Sendable {
+     case increase
+     case decrease
++
++    public var modelBarURL: URL {
++        switch self {
++        case .increase: return URL(string: "codex-model-bar://reasoning-up")!
++        case .decrease: return URL(string: "codex-model-bar://reasoning-down")!
++        }
++    }
+ }
+ 
+ public enum CodexResponseSpeedAction: Equatable, Sendable {
+--- a/Tests/AgenticMouseAppTests/CodexModeActionExecutorTests.swift
++++ b/Tests/AgenticMouseAppTests/CodexModeActionExecutorTests.swift
+@@ -111,27 +111,69 @@
+         }
+     }
+ 
+-    func testReasoningEffortWheelUsesTheExistingAdditiveShortcuts() {
+-        var events: [(pid_t, CGKeyCode, CGEventFlags, Bool)] = []
+-        let executor = CodexModeActionExecutor(
+-            targetProcessResolver: { 4242 },
+-            postEvent: { events.append(($0, $1, $2, $3)); return true },
+-            accessibilityTrusted: { true }
+-        )
+-
+-        guard case .success = executor.performReasoningEffort(.increase),
+-              case .success = executor.performReasoningEffort(.decrease)
+-        else { return XCTFail("both Reasoning Effort wheel directions should dispatch") }
+-
+-        XCTAssertEqual(events.map(\.0), [4242, 4242, 4242, 4242])
+-        XCTAssertEqual(events.map(\.1), [79, 79, 80, 80])
+-        XCTAssertEqual(events.map(\.2), [
+-            CodexModeActionExecutor.hyper,
+-            CodexModeActionExecutor.hyper,
+-            CodexModeActionExecutor.hyper,
+-            CodexModeActionExecutor.hyper,
+-        ])
+-        XCTAssertEqual(events.map(\.3), [true, false, true, false])
++    func testReasoningWheelUsesModelBarWithoutPostingUnfocusedShortcuts() {
++        for (allowed, trusted) in [(true, true), (false, true), (true, false)] {
++            var requests: [CodexReasoningEffortAction] = []
++            var events = 0
++            let executor = CodexModeActionExecutor(
++                postEvent: { _, _, _, _ in events += 1; return true },
++                accessibilityTrusted: { trusted }, inputAllowed: { allowed },
++                requestReasoningEffort: { requests.append($0); return true }
++            )
++            for action in [CodexReasoningEffortAction.increase, .decrease] {
++                let result = executor.performReasoningEffort(action)
++                if allowed && trusted {
++                    guard case .success = result else { return XCTFail("Expected Model Bar relay") }
++                } else {
++                    guard case .failure = result else { return XCTFail("Input gate must reject reasoning") }
++                }
++            }
++            XCTAssertEqual(requests, allowed && trusted ? [.increase, .decrease] : [])
++            XCTAssertEqual(events, 0, "Reasoning must let Model Bar focus before sending any key")
++        }
++    }
++
++    func testReasoningRelayUsesTheSharedNonactivatingTransportAndReportsMissingHandler() {
++        let handler = URL(fileURLWithPath: "/test/Codex Model Bar.app")
++        var dispatched: [String] = []
++        for action in [CodexReasoningEffortAction.increase, .decrease] {
++            XCTAssertTrue(CodexModeActionExecutor.sendModelBarRequest(action.modelBarURL,
++                resolveHandler: { _ in handler },
++                open: { urls, application, configuration in
++                    XCTAssertEqual(application, handler)
++                    XCTAssertFalse(configuration.activates)
++                    XCTAssertFalse(configuration.promptsUserIfNeeded)
++                    XCTAssertFalse(configuration.addsToRecentItems)
++                    XCTAssertEqual(urls.count, 1)
++                    dispatched += urls.map(\.absoluteString)
++                }))
++        }
++        XCTAssertEqual(dispatched, ["codex-model-bar://reasoning-up", "codex-model-bar://reasoning-down"])
++        XCTAssertFalse(CodexModeActionExecutor.sendModelBarRequest(CodexReasoningEffortAction.increase.modelBarURL,
++            resolveHandler: { _ in nil },
++            open: { _, _, _ in XCTFail("Do not guess a different handler") }))
++        let executor = CodexModeActionExecutor(accessibilityTrusted: { true }, requestReasoningEffort: { _ in false })
++        guard case .failure = executor.performReasoningEffort(.increase) else {
++            return XCTFail("A rejected relay must not be reported as sent")
++        }
++    }
++
++    func testReasoningReleaseCancelsOnlyAdmittedWorkEvenAfterLock() {
++        var allowed = true
++        var cancellations = 0
++        let executor = CodexModeActionExecutor(
++            accessibilityTrusted: { true }, inputAllowed: { allowed },
++            requestReasoningEffort: { _ in true },
++            cancelReasoningRequest: { cancellations += 1; return true })
++        executor.cancelReasoningEffort()
++        XCTAssertEqual(cancellations, 0, "An unused hold must not launch Model Bar")
++        guard case .success = executor.performReasoningEffort(.increase) else {
++            return XCTFail("Expected admitted reasoning request")
++        }
++        allowed = false
++        executor.cancelPendingActions()
++        executor.cancelReasoningEffort()
++        XCTAssertEqual(cancellations, 1, "Release/teardown must clear queued ratchets once")
+     }
+ 
+     func testChatHistoryBindingsOccupyCodexNativeMenuSlots() throws {

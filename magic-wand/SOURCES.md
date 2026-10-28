@@ -416,3 +416,29 @@ matched the release receipt, and the focused status assertion passed. The prior
 1,123-test gate and attended layout probes apply to the unchanged Split behavior;
 they were not rerun for this indicator-only delta. This is an incremental source
 patch, not a complete Agentic Mouse distribution.
+
+## Reasoning shares Model Bar's composer focus
+
+`integrations/agentic-mouse/reasoning-bar.patch` preserves the exact six-file
+increment from local Agentic Mouse 1.0.292 (298) to installed 1.0.293 (299).
+Apply it after `split-accepted.patch` and the preceding integration patches.
+It is not a complete distribution and does not apply directly to the older
+public Agentic Mouse main branch. Its SHA-256 is
+`edc869cbe4e922f66bb627262439f17916bcfa2bfd8da68fd929ce548d879284`.
+
+Speed and reasoning both use the existing nonactivating Model Bar URL relay.
+Reasoning now requires Model Bar 1.2.57's `reasoning-up`, `reasoning-down` and
+`reasoning-cancel` actions, which use its existing `ReasoningSwitcher.change`
+and `SpeedInputFocus` path. Agentic Mouse retains the physical control mapping,
+direction and detent handling; it no longer sends the reasoning keyboard
+shortcuts directly. Session and Accessibility checks gate dispatch, while
+release and teardown cancel admitted pending reasoning requests.
+
+The frozen patch applied to all six retained 298 source files without fuzz.
+The installed Developer ID signature and executable matched the 299 release
+receipt. The final focused executor suite passed 21 tests with no failures.
+The broader native suite passed 1,124 tests with four skips and no failures
+before the final cancellation wiring; it was not rerun after that wiring.
+Actual Codex acceptance and physical mouse gesture acceptance remain unverified.
+The receiver, saved Puck program, physical mouse positions and polarity are
+unchanged by this delta. Later native work is not part of this frozen release.
