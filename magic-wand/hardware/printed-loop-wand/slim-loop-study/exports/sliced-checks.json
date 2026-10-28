@@ -1,0 +1,42 @@
+{
+  "source": "R2 clearance and layer-start checker on each one-left project before metadata-only repackaging",
+  "checked_projects": {
+    "slim": {
+      "passed": true,
+      "slice_sha256": "0aa98ad8fe820fe89346761b6da2f4e80e500364d2458d3784f272e50560925f",
+      "gcode_sha256": "1fe5f76e4a485897298d444c8a487cb53073dffd4f25aa7b635d8180fb125d3b"
+    },
+    "petal": {
+      "passed": true,
+      "slice_sha256": "2b32acc0337814bea0630f7ed19fb6a3c47b41aef531b2206c6314d1cb334c1d",
+      "gcode_sha256": "abcf6f7b0f0f1149da13e97a82b36e0bcaae4d42addec40c08c1ed4f051c9c83"
+    },
+    "leaf": {
+      "passed": true,
+      "slice_sha256": "21ba52068b6671b94d29834a88cdf017ee33d7a1a053b717edcd81350d639d8f",
+      "gcode_sha256": "6fa8c90b47c42b9a3bee86c4ff8b04de05ce2d3c400f3be5f16a52829ab6ab04"
+    }
+  },
+  "opening_cores": {
+    "petal": {
+      "checked": 3,
+      "nearby_samples": [
+        7063,
+        6682,
+        7311
+      ],
+      "violations": 0
+    },
+    "leaf": {
+      "checked": 4,
+      "nearby_samples": [
+        7947,
+        7759,
+        7592,
+        8308
+      ],
+      "violations": 0
+    }
+  },
+  "physical_fit_verified": false
+}
