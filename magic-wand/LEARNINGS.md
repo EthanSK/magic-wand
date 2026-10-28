@@ -1213,3 +1213,9 @@ The unchanged open cradle still needs its original back-flat/manual low-back pri
 A cropped fitting coupon needs its own first-layer check. R2's isolated switch lip had a cantilever, while a short actual grip section printed without floating starts. Its outer brim then crossed the crop-exposed service opening; the upper receiver coupon's brim also entered its open half-bore. Disable brim on those two cropped grip coupons and verify the sliced paths again. Keep full-grip brims separate; “no supports” alone does not establish a clear first-layer opening.
 
 Full loading clearance and no floating starts still do not prove sensible unsupported roofs. A later layer-area review caught a residual 0.6 mm annulus between the cap core ending Z11.4 and general hollowing starting Z12.0. Its crescent roofs could require roughly 22.6 mm bridge chords even though the rectangular cell route was clear. A final radius12.2 cylinder over Z11.3..12.1 joins those cavities with overlap, preserves the actual threaded region, and leaves the lower hook's retaining lands and all motion stops. Review broad unbacked areas rather than treating a warning-free slice as manufacturing acceptance.
+
+## Retina CAD viewers and small openings (2026-10-28)
+
+A Three.js canvas with a device pixel ratio above 1 and `setSize(width, height, false)` can render outside its CSS viewport unless its display width and height are explicitly constrained. In the slim-loop comparison this made models appear cut off even though the labels and data loaded; check the actual rendered screenshot on the target display, not just the DOM.
+
+A clear opening core with zero extrusion samples is meaningful only after confirming that neighbouring paths actually reach that region. The slim-loop study checks nearby path samples as well as intrusions, but those checks and warning-free slicing do not prove a bridged opening will print cleanly or a thin band will resist repeated flexing.
