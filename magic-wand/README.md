@@ -182,7 +182,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: Wand Receiver 1.2.104 build 109 has the always-visible Wand Guide, about 8 ms causal Sense pointer smoothing, tiny-motion stopping, and no replay of merged historical readings during normal pointing. Agentic Mouse 1.0.297 build 303 provides free submenu aiming and locked dotted adjustment. Source checks and manual guide close/show/hide passed; pointer feel awaits physical acceptance. Firmware e compiles but is not flashed because USB is absent.
+- Installed receiver 1.2.105 build 110 keeps connection heartbeats, stop-to-click, button safety and gesture deadlines running while menus are open. Sense orientation correction rejects unreliable gravity readings during jerks, twists and near-vertical poses. The existing roughly 8 ms smoothing, quiet stopping and no historical replay remain. Local checks passed. Live menu and physical pointing checks remain pending; faster firmware e still needs USB.
 - Installed: hold to aim and release to select an action or enter a submenu. In a submenu, move the wand without holding to aim, then click or hold-aim-release to select. Choosing an adjustment enters dotted mode; unheld motion changes only that control and clicking exits. A freely aiming outline stays plain, even after holding. Switch App also supports circular continuation. Source checks passed; physical acceptance remains.
 - Installed: Review changes and Stage files switch within the same pending Better Git selection and include the current file. No files are staged by switching. Better Git 1.2.135 is released and active; receiver 1.2.96 is installed with settings preserved. Receiver and Mini checks pass. The device remained asleep during installation; physical gesture acceptance remains pending.
 - Installed: double-click Middle toggles Review changes and Stage files without staging. The floating indicator names the other mode. A single click cancels and exits after at most 300 ms; holding for half a second still stages the selection and stays in that mode. Pointer movement is unchanged. Receiver, native interaction and timer checks pass; physical button acceptance remains pending.
@@ -214,7 +214,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.104 (109) · device code `wand-441472ce965b` · bridge `f8639252` · updated 29 October 2026.
+Receiver 1.2.105 (110) · device code `wand-441472ce965b` · bridge `f8639252` · updated 29 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

@@ -1,3 +1,4 @@
+import {fileURLToPath as wandSourcePath} from 'node:url';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdtempSync,rmSync} from 'node:fs';
@@ -13,7 +14,7 @@ const source=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.u
 const transport=readFileSync(new URL('../receiver/Sources/WandControlTransport.swift',import.meta.url),'utf8');
 function method(name){const a=source.indexOf('    func '+name+'(');assert(a>=0,name);let b=source.indexOf('{',a)+1,depth=1;while(depth){if(source[b]==='{')depth++;if(source[b]==='}')depth--;b++;}return source.slice(a,b);}
 function block(from,to){const a=source.indexOf(from),b=source.indexOf(to,a);assert(a>=0&&b>a,from);return source.slice(a,b);}
-const swiftc=(dir,code,extra=[])=>{writeFileSync(join(dir,'main.swift'),code);const built=spawnSync('swiftc',['-Onone',...extra,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(built.status,0,built.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);return run.stdout;};
+const swiftc=(dir,code,extra=[])=>{writeFileSync(join(dir,'main.swift'),code);const built=spawnSync('swiftc',[wandSourcePath(new URL('../receiver/Sources/WandRunLoop.swift',import.meta.url)),'-Onone',...extra,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(built.status,0,built.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);return run.stdout;};
 
 test('screenshot mode: follow-independent aim, one-tap latch, shared settle release, triple-click start',{skip:process.platform!=='darwin'},()=>{
  const bottom=block('            if let marker=line.range(of:"@BOTTOM ")','            if let marker=line.range(of:"@MIDDLE ")');

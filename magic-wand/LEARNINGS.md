@@ -1320,3 +1320,34 @@ Recorded real pointing with firmware c over Bluetooth (about 16,000 follow readi
 Firmware c always sends one reading per frame, so merged-run replay never ran on it. Late
 backlog (over 75 ms behind the best delivery) is now dropped from normal pointing, and a
 pointer step never covers more than 25 ms. Simulation is not hand-to-screen latency.
+
+## Menus pause default-mode timers; Puck and Sense readings compared (2026-10-29)
+
+- Opening the receiver's menu-bar menu runs AppKit's event-tracking run-loop mode. A
+  `Timer.scheduledTimer` stops there, so the Sense heartbeat stopped, the board ended its
+  session after its 2 s host timeout (orange, no readings) and the receiver reconnected when
+  the menu closed. The Puck has no host heartbeat, so it never showed this. Session-critical
+  timers use `WandRunLoop.commonTimer`; the same applies to recording refresh, dwell clicks,
+  held-button safety and gesture deadlines. Both repeating and one-shot timers keep their
+  existing intervals. Main-queue work and dispatch timers already run. The regression also
+  checks that a one-shot deadline fires once during tracking and is not replayed on close.
+- An Oct 17 Puck diagnostic trace (receiver 1.2.37, about 26 s, raw readings) and recorded Sense
+  pointing (firmware c, about 6 minutes) compared in true deg/s at equal spacing: slow-aim
+  jitter 3.8 vs 3.4 deg/s and still noise 0.6 vs 0.8 deg/s. Units and spacing were normalized,
+  but the motions, mounting and software versions were not a controlled paired experiment:
+  these numbers do not establish equal hardware noise or rule out Mac scheduling. They do
+  show different delivery and filtering. Puck notifications usually held one reading, with
+  a median 15 ms gap (about 49 readings per second overall), while firmware c usually
+  delivers three readings in bursts with a median 30 ms gap. Replaying the same
+  Sense readings through the receiver gave 7.3 slow-aim direction reversals per second on the
+  direct path versus 4.1 through the Puck's tuned filter, whose 0.2 degree slack hides tremor
+  at the cost of slow-speed delay. A smaller slack trades delay for smoothness and needs Ethan's
+  approval; it is not implemented.
+- Gravity is sampled from one reading every 100 ms. Sense samples taken during a jerk, twist or
+  near-vertical pose flipped the orientation basis by more than 30 degrees about every 27 s of
+  pointing. Strict Sense acceptance (0.9-1.1 g, away from vertical, rotation at most 45 in
+  program units) left 2 of 15 such flips and needs no waiting.
+- Five isolated single-reading spikes of 40-170 deg/s occurred in about 37,000 Sense readings,
+  none at button edges, with block data update already on. A filter that confirms these
+  against both neighbours needs the next reading (lookahead). That extra delay is not
+  implemented without approval; these traces alone do not prove data corruption.

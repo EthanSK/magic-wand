@@ -79,7 +79,7 @@ test("tuning matches the running device code and the receiver", () => {
   assert.equal(number(/scrollTimer=setInterval\(function\(\)\{scrollReport\('U'\);\},(\d+)\)/, device, "scroll report"), t.reportIntervalMs);
   assert.match(device, new RegExp(`samples>=CONFIG\\.sampleRate\\*${t.calibrationSeconds}\\)`));
   assert.equal(number(/scrollFractionX\+=\(x\/1000-scrollX\)\*([\d.]+)/, swift, "host scroll gain"), t.hostScrollGain);
-  assert.equal(Math.round(number(/middleHold=Timer\.scheduledTimer\(withTimeInterval:([\d.]+)/, swift, "receiver hold") * 1000), t.receiverHoldMs);
+  assert.equal(Math.round(number(/middleHold=WandRunLoop\.commonTimer\(interval:([\d.]+)/, swift, "receiver hold") * 1000), t.receiverHoldMs);
 });
 
 test("micro-circle tuning matches native geometry and preserves pointer noise guards", () => {

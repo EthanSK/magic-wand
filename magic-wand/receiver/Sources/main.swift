@@ -265,7 +265,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         manager = CBCentralManager(delegate: self, queue: nil)
         if isSense { connect() }
-        heartbeat = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+        heartbeat = WandRunLoop.commonTimer(interval: 5, repeats: true) { [weak self] _ in
             guard let self else { return }
             let trusted = AXIsProcessTrusted()
             if self.lastTrusted != trusted { self.lastTrusted = trusted; log("ACCESSIBILITY", trusted); self.status() }
@@ -393,6 +393,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             reviewAxisEnabled=reviewAxes;wandShortcutCircle.useAxisGestures=reviewAxes;wandShortcutCircle.reset()
         }
         reviewAxisMenuItem?.state=reviewAxes ? .on : .off
+        // Sense: gravity samples taken mid-jerk or mid-twist never set the basis.
+        motionFilter.orientation.strictGravity=isSense
         if motionFilter.orientationCompensation != enabled {
             motionFilter.orientationCompensation=enabled;motionFilter.reset()
             log("ORIENTATION_COMPENSATION",enabled)
@@ -771,7 +773,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     sendReview(review.button(down:value=="1",now:ProcessInfo.processInfo.systemUptime))
                     if value=="0" {resumeHUDNavigation()}
                     if wasFiles != review.files {queue("global.wandReviewFiles="+(review.files ? "true":"false")+";updateLights();");log("VSCODE_REVIEW_MODE",review.mode)}
-                    if reviewTimer==nil {reviewTimer=Timer.scheduledTimer(withTimeInterval:0.2,repeats:true){[weak self] _ in guard let self else{return};self.sendReview(self.review.tick(now:ProcessInfo.processInfo.systemUptime))}}
+                    if reviewTimer==nil {reviewTimer=WandRunLoop.commonTimer(interval:0.2,repeats:true){[weak self] _ in guard let self else{return};self.sendReview(self.review.tick(now:ProcessInfo.processInfo.systemUptime))}}
                 }
             }
             if line.contains("WAND_CALIBRATED") { log(line);rememberCalibration(line) }
@@ -847,7 +849,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             guard context.isActive || hudSession else{return}
             pointerInHUD=true;middleOperating=false
             middleSecondTap=false
-            middleHold=Timer.scheduledTimer(withTimeInterval:0.22,repeats:false){[weak self] _ in
+            middleHold=WandRunLoop.commonTimer(interval:0.22,repeats:false){[weak self] _ in
                 guard let self,self.pointerInHUD,(self.context.isActive || self.hudSession) else{return}
                 self.middleOperating=true;self.controls.persistent("press")
                 self.controls.persistent("motion",x:self.middleX,y:self.middleY)
@@ -861,7 +863,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             middleHold?.invalidate();middleHold=nil;stopHUDWatchdog()
             if middleOperating {controls.persistent("motion",x:middleX,y:middleY);controls.persistent("release");resumeHUDNavigation()}
             else {
-                middleTap=Timer.scheduledTimer(withTimeInterval:hudDoubleClickInterval,repeats:false){[weak self] _ in
+                middleTap=WandRunLoop.commonTimer(interval:hudDoubleClickInterval,repeats:false){[weak self] _ in
                     guard let self else{return};self.middleTap=nil
                     guard self.hudSession,self.acceptHUDContext,self.context.isActive,!self.restoring else{return}
                     self.controls.persistent("activate");self.resumeHUDNavigation()
@@ -967,7 +969,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// start, lost telemetry and the selector-ready anchor. It never moves the pointer.
     func superviseScreenshot() {
         if screenshotTimer==nil {
-            screenshotTimer=Timer.scheduledTimer(withTimeInterval:0.05,repeats:true){[weak self] _ in self?.checkScreenshot()}
+            screenshotTimer=WandRunLoop.commonTimer(interval:0.05,repeats:true){[weak self] _ in self?.checkScreenshot()}
         }
         latchScreenshotIfReady()
     }
@@ -1014,7 +1016,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func scheduleScreenshotSettle() {
         screenshotSettleTimer?.invalidate();screenshotSettleTimer=nil
         guard screenshot.dragging,let due=screenshot.settle.nextDue else{return}
-        screenshotSettleTimer=Timer.scheduledTimer(withTimeInterval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
+        screenshotSettleTimer=WandRunLoop.commonTimer(interval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             guard let self else{return};self.screenshotSettleTimer=nil
             guard self.screenshot.dragging,self.screenshot.settle.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
             self.finishScreenshotDrag(reason:"settled")
@@ -1139,7 +1141,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if tap {
                 // A tap uses the outlined card once the double-click window
                 // passes, so a double click can still dismiss without acting.
-                middleTap=Timer.scheduledTimer(withTimeInterval:hudDoubleClickInterval,repeats:false){[weak self] _ in
+                middleTap=WandRunLoop.commonTimer(interval:hudDoubleClickInterval,repeats:false){[weak self] _ in
                     guard let self else{return};self.middleTap=nil
                     guard self.hudSession,self.acceptHUDContext,self.context.isActive,!self.restoring else{return}
                     self.controls.persistent("activate");log("HUD_TAP_USED")
@@ -1254,7 +1256,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func startHUDWatchdog() {
         hudLastUpdate=Date();hudWatchdog?.invalidate()
-        hudWatchdog=Timer.scheduledTimer(withTimeInterval:0.25,repeats:true){[weak self] timer in
+        hudWatchdog=WandRunLoop.commonTimer(interval:0.25,repeats:true){[weak self] timer in
             guard let self else{timer.invalidate();return}
             if self.deskSleep.sleeping {return}
             if Date().timeIntervalSince(self.hudLastUpdate)>0.8 {
@@ -1284,7 +1286,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             scrollActive=true;scrollX=x/1000;scrollY=y/1000;scrollFractionX=0;scrollFractionY=0
             scrollPostedX=0;scrollPostedY=0
             scrollUpdated=Date();log("SCROLL_BEGIN")
-            scrollWatchdog=Timer.scheduledTimer(withTimeInterval:0.25,repeats:true){[weak self] _ in
+            scrollWatchdog=WandRunLoop.commonTimer(interval:0.25,repeats:true){[weak self] _ in
                 guard let self else{return};if Date().timeIntervalSince(self.scrollUpdated)>0.8{self.finishScroll()}
             }
         case "U","E":
@@ -1309,7 +1311,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let explicitDrag=recenterGesture.isSecondPress
         heldScroll.begin(now:now,scrollable:!explicitDrag,sustain:controlVersion == .sustainedV3,resolving:!explicitDrag)
         heldSafetyTimer?.invalidate()
-        heldSafetyTimer=Timer.scheduledTimer(withTimeInterval:0.02,repeats:true){[weak self] _ in
+        heldSafetyTimer=WandRunLoop.commonTimer(interval:0.02,repeats:true){[weak self] _ in
             guard let self else{return};let now=ProcessInfo.processInfo.systemUptime
             if self.heldScroll.stale(now:now){self.reconcileBottomHold(down:false,now:now,reason:"button telemetry timeout",released:false);return}
             guard self.ready,!self.restoring,!self.actionPause.paused,AXIsProcessTrusted() else{return}
@@ -1420,7 +1422,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if down {recenterSuppressButtons=false}
         guard recenterGesture.edge(down:down,now:now) else{return false}
         pendingRecenter?.invalidate()
-        pendingRecenter=Timer.scheduledTimer(withTimeInterval:WandTripleClick.window,repeats:false){[weak self] _ in
+        pendingRecenter=WandRunLoop.commonTimer(interval:WandTripleClick.window,repeats:false){[weak self] _ in
             guard let self else{return};self.pendingRecenter=nil;self.recenterPointer()
         }
         return true
@@ -1449,7 +1451,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if !active {circleAnchor=nil}
         if ready && !restoring {queue("global.wandCircleScrolling="+(active ? "true":"false")+";updateLights();")}
         if active && circleTimer == nil {
-            circleTimer=Timer.scheduledTimer(withTimeInterval:0.1,repeats:true){[weak self] _ in
+            circleTimer=WandRunLoop.commonTimer(interval:0.1,repeats:true){[weak self] _ in
                 guard let self else{return}
                 self.performPointer(self.pointerRouter.tick(now:ProcessInfo.processInfo.systemUptime))
             }
@@ -1479,7 +1481,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         review.beginDetents(mode:mode,now:now)
         reviewTrace.boundary("begin",mode:mode,now:now)
         queue("setWandReviewTracking(true);")
-        reviewTimer=Timer.scheduledTimer(withTimeInterval:0.2,repeats:true){[weak self] _ in
+        reviewTimer=WandRunLoop.commonTimer(interval:0.2,repeats:true){[weak self] _ in
             guard let self else{return}
             let now=ProcessInfo.processInfo.systemUptime
             if !self.context.isFresh || NSWorkspace.shared.frontmostApplication?.bundleIdentifier != "com.microsoft.VSCode" || now-self.wandShortcutTime>0.8 {
@@ -1518,7 +1520,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         reviewTrace.boundary("middle down",mode:wandShortcutMode,now:now)
         reviewExitGesture.down(now:now)
         wandShortcutCircle.reset()
-        reviewExitTimer=Timer.scheduledTimer(withTimeInterval:WandReviewExitGesture.holdSeconds,repeats:false){[weak self] _ in
+        reviewExitTimer=WandRunLoop.commonTimer(interval:WandReviewExitGesture.holdSeconds,repeats:false){[weak self] _ in
             self?.commitReviewHold(now:ProcessInfo.processInfo.systemUptime)
         }
     }
@@ -1532,7 +1534,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func scheduleReviewTapTimeout() {
         guard let deadline=reviewExitGesture.tapDeadline else{return}
         reviewExitTimer?.invalidate()
-        reviewExitTimer=Timer.scheduledTimer(withTimeInterval:max(0.001,deadline-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
+        reviewExitTimer=WandRunLoop.commonTimer(interval:max(0.001,deadline-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             // A superseded timer finds another deadline, or none, and does nothing.
             guard let self,self.reviewExitGesture.tapTimedOut(deadline:deadline) else{return}
             self.expireReviewTap()
@@ -1609,7 +1611,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func scheduleLowDelay() {
         lowDelayTimer?.invalidate();lowDelayTimer=nil
         guard let due=pointerRouter.nextDue else{return}
-        lowDelayTimer=Timer.scheduledTimer(withTimeInterval:max(0,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
+        lowDelayTimer=WandRunLoop.commonTimer(interval:max(0,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             guard let self else{return}
             self.lowDelayTimer=nil
             self.performPointer(self.pointerRouter.drain(now:ProcessInfo.processInfo.systemUptime))
@@ -1780,7 +1782,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func scheduleDwell(){
         dwellTimer?.invalidate();dwellTimer=nil
         guard ready,!restoring,!actionPause.paused,!recordingPointerPaused,!screenshot.ownsPointer,let due=dwell.nextDue else{return}
-        dwellTimer=Timer.scheduledTimer(withTimeInterval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
+        dwellTimer=WandRunLoop.commonTimer(interval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             guard let self else{return};self.dwellTimer=nil
             guard self.ready,!self.restoring,!self.actionPause.paused,!self.recordingPointerPaused,!self.screenshot.ownsPointer,!self.heldScroll.active,!self.pointerRouter.bottomHeld,!self.hudSession,!self.scrollActive,self.buttons==0,AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
             let point=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:self.pointerDisplays)
@@ -1796,7 +1798,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             reconcileBottomHold(down:mask&1 != 0,now:now,reason:"sensor button state")
         } else if held==0 {reconcileBottomHold(down:false,now:now,reason:"all buttons released")}
         if !motionFilter.configured,parts.count>=6,parts[5]=="0" || parts[5]=="1" {dwell.intent(parts[5]=="1",now:now);scheduleDwell()}
-        motionFilter.observeGravity(x:x/8192,y:y/8192,z:z/8192)
+        motionFilter.observeGravity(x:x/8192,y:y/8192,z:z/8192,rotation:gyro/100)
         if restDiagnosticsRemaining>0 {
             restDiagnosticsRemaining-=1
             log("REST_SAMPLE",x/8192,y/8192,z/8192,"gyro",gyro/100,"held",held,"follow",dwell.following,"parked",restDetection.parked)
@@ -1812,7 +1814,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             switch event {
             case .probe:
                 queue("wakeGyro();")
-                probeTimer?.invalidate();probeTimer=Timer.scheduledTimer(withTimeInterval:1.5,repeats:false){[weak self] _ in self?.queue("if(global.wandDeskSleeping)global.wandPowerDownGyro();else if(!moveLatched&&!hudOpen&&!scrollHeld)sleepGyro();")}
+                probeTimer?.invalidate();probeTimer=WandRunLoop.commonTimer(interval:1.5,repeats:false){[weak self] _ in self?.queue("if(global.wandDeskSleeping)global.wandPowerDownGyro();else if(!moveLatched&&!hudOpen&&!scrollHeld)sleepGyro();")}
             case .pickedUp:
                 probeTimer?.invalidate();probeTimer=nil
                 // Ethan: waking returns to the state before rest. Mouse mode
