@@ -1,6 +1,6 @@
 import unittest,json
 from types import SimpleNamespace
-from bridge import Store,Framer,validate,matching_port
+from bridge import Store,Framer,validate,matching_port,ReceiverObserver
 
 def packet(seq=1):return {'schema':1,'sensor':'wand','seq':seq,'ms':seq*20,'buttons':dict(thumb=False,index=False,middle=False),'imu':dict(ax=0,ay=0,az=1,gx=0,gy=0,gz=0)}
 class BridgeTests(unittest.TestCase):
@@ -22,4 +22,25 @@ class BridgeTests(unittest.TestCase):
  def test_match_original_sense_but_not_unrelated_board(self):
   for pid in [0x8045,0x0045]:self.assertTrue(matching_port(SimpleNamespace(vid=0x2886,pid=pid,product='XIAO nRF52840 Sense')))
   self.assertFalse(matching_port(SimpleNamespace(vid=0x2886,pid=0x9999,product='XIAO MG24')))
+ def test_receiver_observer_reads_owner_packets_without_hardware(self):
+  # No socket is bound here: only the datagram handling is exercised.
+  s=Store();o=object.__new__(ReceiverObserver);o.store=s;o.sessions={}
+  o.receive(json.dumps({'type':'packet','transport':'USB','session':3,'packet':packet(1)}).encode())
+  o.receive(json.dumps({'type':'packet','transport':'USB','session':3,'packet':packet(2)}).encode())
+  snap=s.snapshot(0);self.assertEqual(snap['status'],'live');self.assertEqual(snap['transport'],'USB');self.assertEqual(len(snap['packets']),2)
+  o.receive(json.dumps({'type':'packet','transport':'Bluetooth','session':4,'packet':packet(1)}).encode())
+  self.assertEqual(s.snapshot()['transport'],'Bluetooth');self.assertEqual(s.snapshot()['session'],2,'a receiver session change is a new dashboard session')
+  o.receive(b'not json');o.receive(json.dumps({'type':'packet','transport':'Serial','session':5,'packet':packet(9)}).encode())
+  bad=packet(10);bad['sensor']='hand';o.receive(json.dumps({'type':'packet','transport':'Bluetooth','session':4,'packet':bad}).encode())
+  self.assertEqual(s.cursor,3)
+  o.receive(json.dumps({'type':'status','state':'searching','session':4}).encode());self.assertEqual(s.status,'searching')
+ def test_restarted_receiver_session_number_is_a_new_browser_sequence(self):
+  s=Store();o=object.__new__(ReceiverObserver);o.store=s;o.sessions={}
+  def receive(v):o.receive(json.dumps(v).encode())
+  receive({'type':'packet','transport':'USB','session':1,'packet':packet(900)})
+  old=s.session
+  receive({'type':'status','state':'live','transport':'USB','session':1})
+  receive({'type':'packet','transport':'USB','session':1,'packet':packet(1)})
+  self.assertGreater(s.session,old);self.assertEqual(s.snapshot()['packets'][0]['packet']['seq'],1)
+  self.assertTrue(s.usb_present)
 if __name__=='__main__':unittest.main()

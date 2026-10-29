@@ -1225,3 +1225,21 @@ A clear opening core with zero extrusion samples is meaningful only after confir
 A native release patch can include private historical task identifiers in unchanged or removed comments. Preserve the exact raw patch privately as installation evidence, then derive the public archive by normalizing only the identified comment annotations in both retained before and after sources. Apply the derived patch without fuzz and compare every resulting file with the equivalently normalized frozen source. Keep the raw and public hashes distinct; never change executable code, the signed candidate or later canonical source to sanitize a publication.
 
 An isolated copy on a volume whose name contains spaces exposed existing test helpers that pass `new URL(...).pathname` directly to Swift or Python. That value retains `%20`, so child processes reported missing source files even though the files existed. Use `fileURLToPath` when maintaining those helpers; a failed path lookup is not evidence of a firmware regression. For this publication, the required full gate runs from the canonical project path. Keep raw failed-run evidence separate from the final gate result.
+
+
+## Sense: compare power deadlines against a current clock reading
+
+The first Sense control installation connected and calibrated, then entered deep sleep while USB was still attached. A grip press brought it back with the System OFF wake reason. The loop captured `now` before commands refreshed `hostAt`; subtracting a newer timestamp from that older unsigned value looked almost 49 days old. Ending that session could similarly refresh `offlineSince` after the captured time and immediately satisfy the five-minute sleep test.
+
+Refresh the clock after command/session transitions and use the bounded `wandElapsed` helper for short deadlines. A future tick counts as zero elapsed time; a real counter wrap still advances normally. The compiled C++ regression checks both the future-tick case and wrap, plus a genuine five-minute timeout. The corrected saved image then reconnected with its per-device calibration restored and sustained real USB pointer reports. A full intentional five-minute sleep/wake cycle and battery-powered Bluetooth remain separate physical acceptance checks.
+
+## Sense: finish framing before callbacks can reset the connection
+
+The native framer is mutable Swift state. Dispatching a rejected identity from inside its mutation could close the connection and reset the same framer recursively. Collect complete lines first, then dispatch them after framing finishes. Ignore callbacks from an earlier Bluetooth peripheral, and bound connection discovery time so a failed fallback cannot remain pending forever. USB command write failures must end the session rather than silently lose a sensor/sleep command or replay partial commands later. Source type-checking and canonical-program tests cover the implementation; arbitrary physical radio failures are not proven by those tests.
+
+
+## Sense: verify radio startup and reset observer sessions on receiver restart
+
+The radio needs an explicit one-peripheral, one-vendor-UUID service configuration that fits the core’s reserved SoftDevice RAM. The checked configuration uses one vendor UUID, a 2 KiB attribute table and the existing maximum-bandwidth connection profile. Record the return from stack startup, UART service registration and advertising data/start calls; expose those states over the existing USB diagnostic path. After this configuration was installed, USB readback reported stack ready, UART success and advertising active, and the Mac then discovered and received 397 real Bluetooth sensor packets. USB-powered radio testing alone does not prove battery-powered operation or native automatic fallback.
+
+A receiver process restarts its numeric session counter. The dashboard observer must treat a new live boundary as a new local session even when that counter is again 1; otherwise the browser can reject the restarted sequence as old data. A searching boundary clears the mapping too. The regression covers a sequence of 900 followed by a restarted receiver’s sequence 1. The observer remains read-only and never takes hardware ownership.
