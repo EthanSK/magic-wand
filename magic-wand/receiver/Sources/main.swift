@@ -58,7 +58,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // hold. Native Switch App alone consumes this; other HUD cards stay angular.
     var middleMouseX=0.0,middleMouseSampleAt = -100.0
     // Ethan's Switch App winding while Agentic Mouse reports dotted app switching.
-    let switchAppWinding=WandSwitchAppWinding()
     var middleMouseOffset:Double? {
         let age=ProcessInfo.processInfo.systemUptime-middleMouseSampleAt
         return age>=0 && age<=0.25 && middleMouseX.isFinite && abs(middleMouseX)<=7_200_000 ? middleMouseX : nil
@@ -157,6 +156,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var senseTransport: WandSenseLink.Transport?
     var senseSession=WandSenseSession(),senseClock=WandSenseClock(),senseSessionNumber=0,senseLastReading = -Double.infinity
     var senseBottomTimer=WandSenseBottomTimer()
+    var recenterOrigin=WandRecenterOrigin()
     /// Late readings kept out of normal pointing this session (`WandSenseStaleness`).
     var senseStaleReadings=0
     let senseDashboard=WandSenseDashboardTap(path:support.appendingPathComponent("sense-dashboard.sock").path)
@@ -245,7 +245,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // or replays. (The log key keeps its historical DOTTED name.)
         context.onSwitchAppAdjustingChange = {[weak self] adjusting in
             guard let self else{return}
-            self.switchAppWinding.reset();self.middleMouseX=0;self.middleMouseSampleAt = -100
+            self.middleMouseX=0;self.middleMouseSampleAt = -100
             log("SWITCH_APP_DOTTED",adjusting)
         }
         recording.onChange = {[weak self] active in
@@ -698,8 +698,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// Extraction of the existing Puck UART line handler, unchanged, so the
     /// Sense profile's virtual Puck output reaches exactly the same code.
     func receiveText(_ text:String) {
-        deliveryPoint=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays)
-        defer {deliveryPoint=nil}
+        deliveryPoint=recenterOrigin.origin(system:WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays),
+                                            now:ProcessInfo.processInfo.systemUptime)
+        defer {if let point=deliveryPoint {recenterOrigin.moved(to:point)};deliveryPoint=nil}
         input += text.replacingOccurrences(of: "\r", with: "")
         if input.count > 16384 { input = String(input.suffix(4096)) }
         while let newline = input.firstIndex(of: "\n") {
@@ -1422,8 +1423,16 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let bounds=CGDisplayBounds(CGMainDisplayID())
         let point=CGPoint(x:bounds.midX,y:bounds.midY)
         CGWarpMouseCursorPosition(point)
+        settleRecenteredCursor(at:point)
+        recenterOrigin.begin(at:point,now:ProcessInfo.processInfo.systemUptime)
         deliveryPoint=point
         log("POINTER_RECENTER")
+    }
+    /// One ordinary move to the centre through the same input queue as the
+    /// wand's earlier events, so anything posted before the warp lands first
+    /// and the cursor finishes at the centre.
+    func settleRecenteredCursor(at point:CGPoint) {
+        Self.mouseMovementEvent(buttons:0,from:point,to:point)?.post(tap:.cghidEventTap)
     }
     func refreshPointerDisplays() {
         var ids=[CGDirectDisplayID](repeating:0,count:32),count:UInt32=0
@@ -1713,11 +1722,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let gap=rawLastArrival>0 ? now-rawLastArrival : 0
         guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:v[3]&1 != 0,resetState:v[3]&2 != 0 || gap>0.25) else{return}
         rawLastArrival=now
-        if context.switchAppAdjusting && hudSession && middleHeld && !pointerRouter.bottomHeld {
-            // Switch App is Ethan's held-only exception: the same HIGH mouse
-            // sensitivity, with winding continuing the initial direction.
-            middleMouseX+=switchAppWinding.update(dx:sample.highX,dy:sample.highY,now:now);middleMouseSampleAt=now
-        } else if middleHeld && !pointerRouter.bottomHeld {
+        // Held Switch App moves straight forward and back with real left/right
+        // HIGH motion, reversals included. Ethan removed its circular latch:
+        // "Just do normal scroll forward and backwards for the switch app
+        // thing" (2026-10-29).
+        if middleHeld && !pointerRouter.bottomHeld {
             middleMouseX+=sample.highX;middleMouseSampleAt=now
         }
         if rawWindowStart==0 || gap>0.25 {rawWindowStart=now;rawReports=0;rawMaxGap=0}

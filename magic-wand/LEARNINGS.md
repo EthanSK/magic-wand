@@ -1279,9 +1279,9 @@ captures (restored gain) showed the tuned path passing 85–91% of total travel 
 motion below 2°/s; in 41% of the mixed capture's readings a direct pointer moved and the tuned one did not.
 Its 0.2° slack delayed the first count of a steady 2°/s turn to 173 ms and swallowed 0.5–1°/s
 entirely. The same filter is what made stop-to-click possible: hand tremor and a 0.2–0.5°/s
-zero error kept direct counts flowing in that initial unfiltered path. At that stage tuned stop
-detection kept dwell and screenshot settling usable; the later quiet-stop path supersedes that
-coupling (see “Stop-to-click must judge the visible pointer” below). Both captures also implied about 18% missing sample intervals in firmware c
+zero error kept direct counts flowing in that initial unfiltered path. Tuned stop
+detection kept dwell and screenshot settling usable. Receiver 112 tried the posted-count stop
+path described below; Ethan rejected its physical feel, so113 keeps the111 tuned stop signal. Both captures also implied about 18% missing sample intervals in firmware c
 (not a sensor-side loss counter) and arrived in observed bursts every 30 ms; those transport limits are separate from the filter.
 
 ## Sensor motion is not evidence of actual pointer use (2026-10-29)
@@ -1369,7 +1369,7 @@ wheel (`wandAdjustableControl`), presses it on Middle down and consumes the gest
 click or release once it has adjusted. A press with no adjustment still resolves through the
 same click/held-release rules, from the press already down, so dual cards never act twice.
 
-## Stop-to-click must judge the visible pointer (2026-10-29)
+## Posted-count stop-to-click experiment, reverted after physical feedback (2026-10-29)
 
 The direct Sense pointer kept stop-to-click on the tuned filter's counts and intent, so the
 two disagreed. A replay of recorded use through the real receiver classes, matching 128 of 134
@@ -1378,3 +1378,33 @@ counts never armed, or kept trickling while the pointer was frozen by the quiet 
 clicks while the pointer still crept or wobbled, which then disarmed the real stop on a small
 target. In that replay, using the posted counts clicked every qualifying stop about 200 ms
 after it, never during visible motion. Clicks were already plain left down/up events at the current position.
+
+
+The replay result above did not establish acceptable physical feel. Ethan subsequently
+reported that receiver112 was more erratic and explicitly requested the old click behaviour.
+Receiver 113 retains 111's tuned counts and intent for stop-to-click; do not restore the
+posted-count change merely because its synthetic check passed. New fine aiming is tested
+against that retained stop signal, including coherent slow approach followed by one settled
+click. Ethan reports113 working well; that is general feedback, not exhaustive gesture coverage.
+
+## Sense: classify short Bottom releases in device time (2026-10-29)
+
+A host hold timer can fire before a short physical release arrives over Bluetooth. Fixing
+only the virtual button handler left a second host scroll-release path that could re-enable
+mouse follow. Both layers now consult the physical duration: the virtual handler restores
+a short tap's pointer classification, and the native held-scroll release rejects a short tap
+as a completed scroll. Preserve the physical cutoff; do not hide transport timing by raising it.
+Synthetic late-release and long-hold checks pass. Live readback also observed a 179 ms physical
+tap leaving follow off. Keep actual button duration separate from arrival delay and genuine
+long presses.
+
+## Small-motion tuning needs real-use replay and physical feedback (2026-10-29)
+
+Matching gyro chips do not establish matching host delivery or processed motion. Replay the
+current-reading pointer and the retained stop signal together on bounded real-use captures.
+Check still-hand creep, back-and-forth wobble and coherent slow approach, not only total
+travel. A lower fine-motion floor improved slow response but crept while still; the selected
+floor reduced frozen slow motion while posting nothing in the still-hand portion and
+retaining all 228 baseline clicks in that recording. Do not generalise those capture metrics
+to guaranteed accuracy or end-to-end latency. Keep approved tiny-motion confirmation separate
+from normal-movement smoothing, and never replay historical pointer displacement.

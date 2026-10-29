@@ -25,6 +25,8 @@ final class Harness {
  let pointerRouter=WandPointerRouter(),recenterGesture=WandRecenterGesture(),dwell=WandDwellClick(),motionFilter=WandMotionFilter(),restDetection=Rest()
  let screenshot=WandScreenshotGesture();var pendingRecenter:Timer?
  var ready=true,restoring=false,recenterSuppressButtons=false,deliveryPoint:CGPoint?,commands:[String]=[]
+ var recenterOrigin=WandRecenterOrigin(),settled:CGPoint?
+ func settleRecenteredCursor(at point:CGPoint){settled=point}
  var hud=false,scroll=false,buttons=0,appMode:String?
  func queue(_ text:String){commands.append(text)}
  func closeHUD(reason:String){hud=false;appMode=nil}
@@ -58,6 +60,29 @@ precondition(!hold.recognizeBottomRecenter(down:false,now:2.6),"long second pres
 precondition(hold.pendingRecenter==nil)
 let busy=Harness();_=busy.screenshot.requestShortcut(now:3);warped = .zero;busy.recenterPointer()
 precondition(warped == .zero,"screenshot mode is never recentred")
+// Ethan: "It came to the center and then it jumped back." After the centre,
+// stale motion state, residuals and a lagging system cursor never restore
+// the old position.
+do {
+ let h=Harness()
+ precondition(h.motionFilter.configure([0,0,86.4*1.52425,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,1]));h.motionFilter.path = .direct
+ var carried=0
+ for _ in 0..<40 {carried+=abs(h.motionFilter.sample(rawX:6000,rawY:-4000,microseconds:9615,held:false,resetState:false)!.x)}
+ precondition(carried>0,"the hand was moving fast before the double tap")
+ h.recenterPointer()
+ let centre=CGPoint(x:700,y:200)
+ precondition(warped==centre && h.settled==centre,"the centre is also posted through the input queue")
+ let first=h.motionFilter.sample(rawX:0,rawY:0,microseconds:9615,held:false,resetState:false)!
+ precondition(first.x==0 && first.y==0,"no smoothed or subpixel residual from before the centre")
+ let old=CGPoint(x:1250,y:540)
+ var now=10.0;h.recenterOrigin.begin(at:centre,now:now)
+ precondition(h.recenterOrigin.origin(system:old,now:now+0.02)==centre,"a lagging or stale old location never becomes the origin")
+ h.recenterOrigin.moved(to:CGPoint(x:705,y:198))
+ precondition(h.recenterOrigin.origin(system:old,now:now+0.05)==CGPoint(x:705,y:198),"the next movement chains from the centre")
+ precondition(h.recenterOrigin.origin(system:CGPoint(x:705,y:198),now:now+0.08)==CGPoint(x:705,y:198) && h.recenterOrigin.point==nil,"once the system agrees, ordinary tracking resumes")
+ now=20;h.recenterOrigin.begin(at:centre,now:now)
+ precondition(h.recenterOrigin.origin(system:old,now:now+WandRecenterOrigin.settle+0.01)==old && h.recenterOrigin.point==nil,"bounded: never overrides the real cursor indefinitely")
+}
 print("PASS: global centre/follow (after the triple-click window) from off, mouse, HUD, scrolling, VS Code and drag; holds preserved")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-recenter-'));

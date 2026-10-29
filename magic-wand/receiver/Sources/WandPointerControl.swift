@@ -151,43 +151,6 @@ final class WandCircularScroll {
     }
 }
 
-/// Ethan's Switch App continuation uses the same direction lock and U-turn
-/// classifier as the old V2 held scroll (WandHeldScroll), rather than another
-/// circle implementation. HIGH counts retain the native app-switch sensitivity.
-/// The first sideways stroke chooses direction; its returning arc cannot undo
-/// it while a circle is being acquired. A long straight stroke starts afresh.
-final class WandSwitchAppWinding {
-    static let countsPerApp = 7 * 86.4
-    private let scroll=WandHeldScroll(linesPerDegree:1,holdSeconds:0)
-    private var seeded=false,seedX=0.0,straightTravel=0.0
-    var winding:Bool {scroll.circular}
-    func reset(){scroll.reset();seeded=false;seedX=0;straightTravel=0}
-    /// One HIGH pointer-space increment, not a delayed pointer frame.
-    func update(dx:Double,dy:Double,now:Double)->Double {
-        guard dx.isFinite,dy.isFinite,now.isFinite else{return 0}
-        let gain=86.4,dt=0.01
-        if !seeded {
-            let alreadyReported=seedX;seedX+=dx
-            // Ordinary sub-detent horizontal aiming is still reported at once.
-            guard abs(seedX)>=0.12*gain else{return dx}
-            scroll.begin(now:now)
-            _=scroll.sample(x:seedX/gain/dt,y:0,dt:dt,now:now)
-            seeded=true
-            return scroll.directionalTravel*gain-alreadyReported
-        }
-        scroll.confirmHeld(now:now)
-        // Convert increments to the V2 angular input; dt cancels in its sample.
-        // Undo the same 1.4 vertical ratio used by the HIGH pointer contract.
-        _=scroll.sample(x:dx/gain/dt,y:dy/gain/1.4/dt,dt:dt,now:now)
-        if scroll.circular {
-            if abs(scroll.latestTurn)>0.005 {straightTravel=0}
-            else {straightTravel+=hypot(dx,dy/1.4)}
-            if straightTravel>3*Self.countsPerApp {reset();return update(dx:dx,dy:dy,now:now)}
-        }
-        return scroll.directionalTravel*gain
-    }
-}
-
 /// Pure routing of the device's `@BOTTOM` edges and `@WAND x,y,buttons` frames.
 /// The receiver performs the returned actions in order and owns only CGEvent posting.
 ///
@@ -741,6 +704,29 @@ final class WandMotionFilter {
 
 }
 
+
+/// Ethan: "I just double clicked. It came to the center and then it jumped
+/// back" (2026-10-29). A warp bypasses macOS's input queue: events posted
+/// before it can still land after it, and the system cursor location can lag
+/// it, so the next movement started from the old position. After a centre,
+/// pointer movement chains from the centre until the system cursor reports
+/// where we last put it (or a short settle passes). Nothing is replayed.
+struct WandRecenterOrigin {
+    static let settle=0.5
+    static let tolerance:CGFloat=2
+    private(set) var point:CGPoint?
+    private var until=0.0
+    mutating func begin(at center:CGPoint,now:Double){point=center;until=now+Self.settle}
+    /// The point the next movement starts from.
+    mutating func origin(system:CGPoint,now:Double)->CGPoint {
+        guard let expected=point else{return system}
+        if now>until || hypot(system.x-expected.x,system.y-expected.y)<=Self.tolerance {point=nil;return system}
+        return expected
+    }
+    /// Where our own posted movement left the pointer.
+    mutating func moved(to next:CGPoint){if point != nil {point=next}}
+    mutating func cancel(){point=nil}
+}
 
 /// Short second release recenters; a held second press remains a real drag.
 final class WandRecenterGesture {
