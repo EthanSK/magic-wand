@@ -187,3 +187,15 @@ test("debug pause holds full-rate sensing for the dashboard without changing the
   s.api.holdSensor(false);
   assert.equal(s.imu.at(-1), 1, "resume returns the board to the program's rate");
 });
+
+// A delayed Bluetooth release keeps its physical duration even if the Mac's
+// hold timer ran first. It must not trap the user in mouse follow.
+test("a short physical release wins over an early host hold timer", () => {
+  const s=createSense({zero:'{"x":0,"y":0,"z":0}'});
+  s.api.repl("moveLatched=true;");
+  s.frames(1,1); const down=s.now;
+  s.advance(0.24);
+  assert.equal(s.ctx.moveGestureMode,"clutch");
+  s.api.deliver(down+0.20,0,null,null);
+  assert.equal(s.ctx.moveLatched,false,"the 200 ms physical tap exits mouse follow");
+});

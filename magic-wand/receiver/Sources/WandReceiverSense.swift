@@ -45,7 +45,7 @@ extension WandReceiver {
             log("SENSE_PROGRAM_UNAVAILABLE"); senseLink?.drop("program unavailable"); return
         }
         senseSessionNumber += 1
-        senseInfo = info; senseTransport = transport; senseSession.reset(); senseClock.reset(); senseLastReading = -.infinity; senseStaleReadings = 0
+        senseInfo = info; senseTransport = transport; senseSession.reset(); senseClock.reset(); senseLastReading = -.infinity; senseStaleReadings = 0; senseBottomTimer.reset()
         restDetection = WandRestDetection(cache: support.appendingPathComponent("desk-reference-sense-\(info.id).json"))
         virtual.onText = { [weak self, weak virtual] text in
             guard let self, let virtual, self.senseVirtual === virtual else { return }
@@ -88,9 +88,15 @@ extension WandReceiver {
         guard senseVirtual != nil || senseTransport != nil else { return }
         reset()
         senseVirtual?.teardown(); senseVirtual = nil
-        senseInfo = nil; senseTransport = nil; senseSession.reset(); senseClock.reset()
+        senseInfo = nil; senseTransport = nil; senseSession.reset(); senseClock.reset(); senseBottomTimer.reset()
         senseDashboard.status(["type": "status", "state": "searching", "session": senseSessionNumber])
         status()
+    }
+
+    /// The last Bottom press's physical duration from Sense frame times, or
+    /// nil without a live Sense link (the Puck keeps arrival timing).
+    func bottomPhysicalTapDuration() -> Double? {
+        senseTransport == nil ? nil : senseBottomTimer.lastPressDuration
     }
 
     func senseLine(_ line: WandSenseLine, _ arrival: Double) {
@@ -126,6 +132,7 @@ extension WandReceiver {
                 return nil
             }
             for step in steps {
+                senseBottomTimer.note(mask: step.mask, at: time, synthetic: step.synthetic)
                 if step.synthetic { log("SENSE_SHORT_PRESS_RESTORED"); virtual.deliver(time: time, mask: step.mask, accel: nil, gyro: nil) }
                 else {
                     for at in times.dropLast() { virtual.deliver(time: at, mask: step.mask, accel: accel, gyro: motion(at: at)) }

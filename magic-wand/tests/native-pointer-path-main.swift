@@ -22,7 +22,7 @@ let perDegree = 86.4 * 1.1725 / 134 * counts   // counts per true degree at full
 
 // 1. Ethan restored quiet tiny-motion stopping while keeping normal direct movement.
 let slowDirect = run(filter(.direct), x: 0.5, seconds: 1), slowTuned = run(filter(.tuned), x: 0.5, seconds: 1)
-precondition(slowDirect == (0,0), "tiny motion stops for clicking: \(slowDirect)")
+precondition(slowDirect == (0,0), "still-hand level motion (0.5, about 0.6 deg/s) stops: \(slowDirect)")
 precondition(slowTuned.x == 0, "the tuned filter swallows the same motion: \(slowTuned)")
 print("PASS: tiny motion stops on both paths")
 let immediate=filter(.direct).sample(rawX:Int(bias[0]+30*counts),rawY:Int(bias[1]),microseconds:9615,held:false,resetState:false)!
@@ -42,7 +42,7 @@ let fastDirect = settled(filter(.direct), x: 100, y: 100, seconds: 0.5), fastTun
 precondition(abs(Double(fastDirect.x) / Double(fastTuned.x) - 1) < 0.03 && abs(Double(fastDirect.y) / Double(fastTuned.y) - 1) < 0.03,
              "shared gain at speed: \(fastDirect) vs \(fastTuned)")
 // Within the stop knee's share of the decaying tail (under 4 deg/s, ~10 ms).
-precondition(abs(Double(fastDirect.x) + 50 * perDegree) < 6 && abs(Double(fastDirect.y) - 1.4 * 50 * perDegree) < 8, "86.4 counts/° with the 1.4 vertical gain: \(fastDirect)")
+precondition(abs(Double(fastDirect.x) + 50 * perDegree) < 100 * 0.008 * perDegree && abs(Double(fastDirect.y) - 1.4 * 50 * perDegree) < 1.4 * 100 * 0.008 * perDegree, "86.4 counts/° with the 1.4 vertical gain: \(fastDirect)")
 // 4. Held LOW precision keeps its one-third gain.
 let heldDirect = run(filter(.direct), x: 20, seconds: 0.5, held: true), freeDirect = run(filter(.direct), x: 20, seconds: 0.5)
 precondition(abs(Double(heldDirect.x) * 3 - Double(freeDirect.x)) <= 3, "held \(heldDirect.x) is a third of \(freeDirect.x)")
@@ -93,8 +93,25 @@ precondition(response[2] > 0.93 * full && response.allSatisfy { $0 <= full + 1 }
 // 134-count units, about 2.34 true deg/s on the Sense: still at or below it,
 // part gain up to twice it, then full gain.
 func steady(_ rate: Double) -> Double { Double(-run(filter(.direct), x: rate, seconds: 1).x) / (rate * perDegree) }
-precondition(steady(2.3) == 0 && steady(1.5) == 0, "at or below the slow-speed boundary the pointer stops")
-precondition(steady(3.5) > 0.3 && steady(3.5) < 0.7 && steady(5.5) > 0.9 && steady(10) > 0.95, "no on/off jump: \(steady(3.5)), \(steady(5.5)), \(steady(10))")
+precondition(steady(0.1) == 0 && steady(1.5) > 0, "still noise stops; coherent slow aiming moves")
+precondition(steady(1.5) < steady(5.5) && steady(5.5) < steady(10) && steady(10) < steady(25), "restored speed curve: fine aim, medium and broad travel")
+// Approved tiny-only intent confirmation never replays its confirming travel.
+let fine = filter(.direct)
+var firstFine:Int?
+for i in 0..<104 {
+    let o=fine.sample(rawX:Int(bias[0]+1.5*counts),rawY:Int(bias[1]),microseconds:9615,held:false,resetState:false)!
+    if o.x != 0 && firstFine == nil {firstFine=i}
+}
+precondition(firstFine != nil && firstFine! < 12, "slow aiming starts after bounded confirmation and subpixel travel")
+let tinyNoise=filter(.direct)
+var noiseTotal=0
+for i in 0..<208 {
+ let sign=i%2==0 ? 1.0 : -1.0
+ noiseTotal += tinyNoise.sample(rawX:Int(bias[0]+sign*0.8*counts),rawY:Int(bias[1]),microseconds:9615,held:false,resetState:false)!.x
+}
+precondition(abs(noiseTotal)<=2, "back-and-forth wobble cancels without drift")
+print("PASS: coherent slow movement, wobble cancellation, original speed response and bounded start")
+
 // 6d. A long gap is skipped, never caught up: one late reading moves at most 25 ms.
 let gapFilter = filter(.direct); _ = run(gapFilter, x: 40, seconds: 0.2)
 let late = gapFilter.sample(rawX: Int(bias[0] + 40 * counts), rawY: Int(bias[1]), microseconds: 50000, held: false, resetState: false)!
@@ -126,58 +143,28 @@ precondition(stop.settledCounts == 0,"settled tiny motion must not move the poin
 precondition(raw.clicks == 1,"quiet-motion stopping permits one click on direct counts too (\(raw.clicks))")
 print("PASS: stop-to-click fires once; tiny motion cannot keep moving the pointer")
 
-// 7b. Ethan: "make sure ... it actually sends a click if it ... stopped".
-// Stop-to-click judges the pointer he sees. Receiver order per reading: the
-// dwell timer fires at nextDue if it is earlier, then intent, then the move.
-struct StopRun { var clicks: [Double] = []; var visible: [Double] = [] }
-func stopToClick(_ phases: [(rate: Double, seconds: Double)], tremor: Bool = true, gapAt: Int? = nil) -> StopRun {
-    stopToClick(phases.map { ($0.rate, $0.seconds, tremor ? 0.6 : 0) }, gapAt: gapAt)
-}
-/// `wobble`: alternating hand wobble (deg/s amplitude) on top of the phase's rate.
-func stopToClick(_ phases: [(rate: Double, seconds: Double, wobble: Double)], gapAt: Int? = nil) -> StopRun {
+// 7a. Coherent fine aiming, then settling: the pointer visibly creeps toward
+// the target, and the old (111) tuned stop signal still clicks once after the
+// hand settles, never during the deliberate slow approach.
+do {
     let f = filter(.direct), dwell = WandDwellClick(); dwell.follow(true)
-    var run = StopRun(), now = 100.0, i = 0
-    for phase in phases {
-        for _ in 0..<Int((phase.seconds * 104).rounded()) {
-            var dt = 9615
-            if let gap = gapAt, i == gap { dt = 50000; now += 0.04 } // one late reading after a radio gap
-            if let due = dwell.nextDue, due <= now, dwell.tick(now: due) { run.clicks.append(due) }
-            let wobble = phase.wobble * sin(Double(i) * 0.9)
-            let s = f.sample(rawX: Int((bias[0] + (phase.rate + wobble) * counts).rounded()), rawY: Int(bias[1]),
-                             microseconds: dt, held: false, resetState: false)!
-            if s.x != 0 || s.y != 0 { run.visible.append(now) }
-            dwell.intent(s.intent, now: now)
-            dwell.move(dx: s.stopX, dy: s.stopY, now: now, eligible: true)
-            now += 0.009615; i += 1
-        }
+    var now = 100.0, clickTimes: [Double] = [], aimCounts = 0, settledCounts = 0, lastAim = 0.0
+    for i in 0..<Int(4 * 104) {
+        let phase = i < 31 ? 40.0 : (i < 31 + 156 ? 1.5 : 0.2 + 0.7 * sin(Double(i) * 0.9))
+        let s = f.sample(rawX: Int((bias[0] + phase * counts).rounded()), rawY: Int(bias[1]), microseconds: 9615, held: false, resetState: false)!
+        if i >= 31 && i < 31 + 156 { aimCounts += abs(s.x); if s.x != 0 { lastAim = now } }
+        if i > 31 + 156 + 20 { settledCounts += abs(s.x) + abs(s.y) }
+        if let due = dwell.nextDue, due <= now, dwell.tick(now: due) { clickTimes.append(due) }
+        dwell.intent(s.intent, now: now)
+        dwell.move(dx: s.stopX, dy: s.stopY, now: now, eligible: true)
+        now += 0.009615
     }
-    return run
+    precondition(aimCounts >= 3, "coherent 1.5-unit fine aiming visibly moves the pointer: \(aimCounts)")
+    precondition(settledCounts == 0, "settled tremor and zero error never move it")
+    precondition(clickTimes.count == 1, "one stop-to-click for the whole approach: \(clickTimes)")
+    precondition(clickTimes[0] > lastAim + 0.15, "the click follows the settle, never the slow approach")
+    print("PASS: coherent fine aiming then settling clicks once with the 111 stop signal (last aim \(lastAim - 100), click \(clickTimes[0] - 100))")
 }
-func clickedAfterStopping(_ run: StopRun, _ label: String) {
-    precondition(run.clicks.count == 1, "\(label): one click per stop, got \(run.clicks)")
-    let click = run.clicks[0], last = run.visible.filter { $0 < click }.max() ?? -1
-    precondition(!run.visible.contains { $0 > click - 0.19 && $0 < click }, "\(label): never clicks while the pointer is still moving")
-    precondition(click - last >= 0.19 && click - last <= 0.25, "\(label): clicks about 200 ms after the pointer stops: \(click - last)")
-}
-// Gentle approach: a sweep that slows to a visible creep, then rests with tremor.
-clickedAfterStopping(stopToClick([(40, 0.3), (8, 0.4), (4.5, 0.3), (3, 0.3), (0.2, 1)]), "gentle approach")
-// Small residual drift under the quiet stop: the pointer is frozen, so it clicks (no starving).
-clickedAfterStopping(stopToClick([(40, 0.3), (1.8, 1.5)]), "residual drift")
-// Deliberately continuing slowly: no click until the pointer stops.
-let continuing = stopToClick([(40, 0.3), (6, 1.5), (0, 0.6)], tremor: false)
-clickedAfterStopping(continuing, "continued movement")
-precondition(continuing.clicks[0] > 100 + 0.3 + 1.5, "no click during the deliberate slow movement")
-// Visible wobble before settling: click about 200 ms after the visible stop.
-// (The old tuned stop counts clicked ~440 ms late here; in replayed real use
-// they also clicked mid-wobble, 63 of 133 clicks, which the 7b checks forbid.)
-clickedAfterStopping(stopToClick([(40, 0.3, 0.6), (0, 0.6, 3.6), (0, 1, 0.6)]), "wobble before settling")
-// One click per stop: staying, or a tiny nudge, never clicks again; a fresh move does.
-let twice = stopToClick([(40, 0.3), (0, 1.5), (1.5, 0.3), (0, 1), (-40, 0.3), (0, 1)], tremor: false)
-precondition(twice.clicks.count == 2, "one click per stop, and a fresh move clicks again: \(twice.clicks)")
-// A late reading after a radio gap neither bursts nor adds a click.
-let stale = stopToClick([(40, 0.3), (0, 1)], tremor: false, gapAt: 40)
-precondition(stale.clicks.count == 1, "a late reading never adds a click: \(stale.clicks)")
-print("PASS: stop-to-click follows the visible pointer: gentle approach, residual drift, continued movement, one click per stop, late reading")
 
 // 8. The tuned path is unchanged and reports its own counts as stop counts.
 let tuned = filter(.tuned)

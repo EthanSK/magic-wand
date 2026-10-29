@@ -16,6 +16,7 @@ final class Harness {
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),dwell=WandDwellClick()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?
  var controlVersion=WandControlVersion.sustainedV3,heldScrollDiagnostics=false,buttons=0,recenterSuppressButtons=false
+ var physicalTapDuration:Double?=nil;func bottomPhysicalTapDuration()->Double?{physicalTapDuration}
  var reportCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1920,height:1080)],recordingPointerPaused=false,hudSession=false,scrollActive=false
  var transitions:[Int]=[]
  func transition(to next:Int,at:CGPoint){buttons=next;transitions.append(next)}

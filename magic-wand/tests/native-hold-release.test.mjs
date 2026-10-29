@@ -26,6 +26,7 @@ final class Harness {
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),motionFilter=WandMotionFilter(),dwell=WandDwellClick(),recenterGesture=WandRecenterGesture(),flickScroll=WandFlickScroll()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?
  var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,hudSession=false,flickScrollEnabled=false,heldScrollDiagnostics=false
+ var physicalTapDuration:Double?=nil;func bottomPhysicalTapDuration()->Double?{physicalTapDuration}
  var screenshotActive=false,middleHeld=false,middleMouseX=0.0,middleMouseSampleAt = -100.0
  var commands:[String]=[],scrollPostedX=0,scrollPostedY=0
  var recordingPointerPaused=false
@@ -122,6 +123,12 @@ for prior in [false,true] {
  // Short taps, native drags and lost telemetry keep the device's own follow choice.
  let tap=Harness();tap.dwell.follow(prior);tap.heldScroll.begin(now:100);tap.finishBottomHold(now:100.05)
  precondition(tap.dwell.following==prior && tap.commands.isEmpty,"short taps retain their existing meaning")
+ // A 207 ms physical tap whose release arrived late (Mac sees 0.4 s) is still a tap:
+ // it never turns mouse follow back on, so Bottom can exit mouse mode.
+ let late=Harness();late.dwell.follow(prior);late.physicalTapDuration=0.207;late.heldScroll.begin(now:100);late.finishBottomHold(now:100.4)
+ precondition(late.dwell.following==prior && !late.commands.contains{$0.contains("setMouseFollow")},"a physically short tap is never a completed scroll")
+ let longHold=Harness();longHold.dwell.follow(prior);longHold.physicalTapDuration=0.4;longHold.heldScroll.begin(now:100);longHold.finishBottomHold(now:100.4)
+ precondition(longHold.dwell.following && longHold.commands.contains{$0.contains("setMouseFollow(true)")},"a physically long hold still completes its scroll")
  let drag=Harness();drag.dwell.follow(prior);drag.heldScroll.begin(now:100,scrollable:false);_=drag.heldScroll.startDrag(now:100.3);drag.finishBottomHold(now:101)
  precondition(drag.dwell.following==prior && !drag.commands.contains{$0.contains("setMouseFollow")},"native dragging is not a scroll gesture")
  let lost=Harness();lost.dwell.follow(prior);lost.heldScroll.begin(now:100);lost.reconcileBottomHold(down:false,now:101,reason:"timeout",released:false)

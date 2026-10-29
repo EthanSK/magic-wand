@@ -602,9 +602,9 @@ enum WandPointerPath: String {
 final class WandMotionFilter {
     // Ethan's Switch App sensitivity means normal mouse HIGH, even while
     // Middle is held. Share the unrounded calculation; Bottom alone owns LOW.
-    // stopX/stopY: the counts stop-to-click (dwell) and screenshot settling
-    // judge. Both paths now report their own posted counts: the direct path's
-    // quiet knee keeps tremor and small zero error out of them (2026-10-29).
+    // stopX/stopY: the tuned filter's counts, used only to decide stop-to-click
+    // (dwell) and screenshot settling, so a direct pointer cannot disable or
+    // flood those clicks with tremor- or bias-level counts. Equal to x/y when tuned.
     struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0;var highY=0.0}
     var path:WandPointerPath = .tuned
     private var directX=0.0,directY=0.0,smoothX=0.0,smoothY=0.0
@@ -625,6 +625,21 @@ final class WandMotionFilter {
     /// readings, a radio stall, a dropped stale reading) is skipped, never
     /// caught up from the next reading's rate. One missing reading still fits.
     static let directMaxStep=0.025
+    // Ethan: tiny coherent motion means intentional aiming; back-and-forth
+    // wobble should cancel. Only this formerly frozen slow band waits for
+    // directional evidence (approved 60 ms on 2026-10-29, tiny slow motion
+    // only; normal movement keeps the ~8 ms smoothing). Never replay its
+    // accumulated displacement: after confirmation, output this reading only.
+    private var fineSamples:[(x:Double,y:Double,time:Double)] = []
+    private var fineDuration=0.0
+    static let fineConfirmation=0.060
+    /// Smoothed rate below which nothing counts as aiming, in the program's
+    /// 134-count units (0.85 is about 1.0 true deg/s). Replayed over 25 min of
+    /// Ethan's real Sense use (2026-10-29, firmware c, gain 1.52425): 0.85
+    /// posted nothing while the hand was still (0.2 crept 250 counts), leaked
+    /// less wobble than receiver 111, and cut frozen deliberate slow motion
+    /// from 66% to 37%. Stop-to-click is unchanged (it judges tuned counts).
+    static let fineFloor=0.85
     private var values:[Double] = []
     private var fx=0.0,fy=0.0,ix=0.0,iy=0.0,meanSpeed=0.0,intentTime=0.0
     private var slackX=0.0,slackY=0.0,fractionX=0.0,fractionY=0.0
@@ -647,7 +662,7 @@ final class WandMotionFilter {
               abs(v[11])==1,abs(v[12])==1 else{return false}
         values=v;reset();return true
     }
-    func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0;directX=0;directY=0;smoothX=0;smoothY=0}
+    func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0;directX=0;directY=0;smoothX=0;smoothY=0;fineSamples=[];fineDuration=0}
     func sample(rawX:Int,rawY:Int,microseconds:Int,held:Bool,resetState:Bool)->Result? {
         guard configured,(-65535...65535).contains(rawX),(-65535...65535).contains(rawY),
               (1...50000).contains(microseconds) else{return nil}
@@ -694,25 +709,36 @@ final class WandMotionFilter {
         // Reuse the existing slow-speed boundary; click timing keeps tuned quiet counts.
         let smoothSpeed=sqrt(smoothX*smoothX+smoothY*smoothY)
         let knee=v[5]>0 ? min(1,max(0,(smoothSpeed-v[5])/(v[5]*(Self.directKneeFactor-1)))) : 1
-        if knee==0 {directX=0;directY=0}
+        let coherent=fineMovement(speed:smoothSpeed,knee:knee,dt:min(dt,Self.directMaxStep))
+        // Restore the original speed-based sensitivity curve, not its radial
+        // slack or drift decay: fine aiming is precise, broad travel is fast.
+        let response=v[4]+(1-v[4])*blend*blend*(3-2*blend)
+        let amount=max(knee,coherent ? 1 : 0)
+        let step=min(dt,Self.directMaxStep)*response*amount
+        if amount==0 {directX=0;directY=0}
         else {
-            let step=min(dt,Self.directMaxStep)*gain*knee
-            directX+=smoothX*step*v[11];directY+=smoothY*step*v[3]*v[12]
+            directX+=smoothX*step*gain*v[11];directY+=smoothY*step*gain*v[3]*v[12]
         }
         let directCountX=Int(directX.rounded(.towardZero)),directCountY=Int(directY.rounded(.towardZero))
         directX-=Double(directCountX);directY-=Double(directCountY)
-        // Stop-to-click and screenshot settling judge the pointer Ethan sees:
-        // "if it stopped, click". The quiet knee already stops it below the
-        // slow-speed boundary, so the posted counts are the stop counts and
-        // the tuned filter's intent lease does not apply. Recorded Sense use
-        // (receiver 111, ~15 min, replay matched 128 of 134 logged clicks): the
-        // tuned counts clicked during only 57% of visible stops and half their
-        // clicks came while the pointer was still visibly moving; the posted
-        // counts clicked during 89%, ~200 ms after the stop, never mid-motion.
-        let postedX=max(-4095,min(4095,directCountX)),postedY=max(-4095,min(4095,directCountY))
-        return .init(x:postedX,y:postedY,intent:false,
-                     angularX:x*v[11],angularY:y*v[12],highX:x*dt*v[2]*v[11],stopX:postedX,stopY:postedY,highY:y*dt*v[2]*v[3]*v[12])
+        return .init(x:max(-4095,min(4095,directCountX)),y:max(-4095,min(4095,directCountY)),intent:active,
+                     angularX:x*v[11],angularY:y*v[12],highX:smoothX*step*v[2]*v[11],stopX:tunedX,stopY:tunedY,highY:smoothY*step*v[2]*v[3]*v[12])
     }
+    private func fineMovement(speed:Double,knee:Double,dt:Double)->Bool {
+        guard knee<1,speed>Self.fineFloor else {fineSamples=[];fineDuration=0;return false}
+        fineSamples.append((smoothX*dt,smoothY*dt,dt));fineDuration+=dt
+        while fineSamples.count>1,fineDuration-fineSamples[0].time>=Self.fineConfirmation {
+            fineDuration-=fineSamples.removeFirst().time
+        }
+        let x=fineSamples.reduce(0){$0+$1.x},y=fineSamples.reduce(0){$0+$1.y}
+        let distance=hypot(x,y),travel=fineSamples.reduce(0){$0+hypot($1.x,$1.y)}
+        let aligned=distance>0 && (smoothX*x+smoothY*y)>=0.85*speed*distance
+        guard travel>0,distance/travel>=0.85,aligned else {
+            fineSamples=[(smoothX*dt,smoothY*dt,dt)];fineDuration=dt;return false
+        }
+        return fineDuration>=max(0,Self.fineConfirmation-dt)
+    }
+
 }
 
 
