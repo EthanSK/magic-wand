@@ -29,6 +29,24 @@ receiver's accepted packets through a same-user datagram socket, opens no hardwa
 sends nothing back, so it cannot compete for the board or move the pointer. `--hardware` remains
 for the diagnostic sketch only; the two modes cannot be combined.
 
+In this mode **Pause wand actions** temporarily stops Wand Receiver's outward actions while readings
+continue. The page sends one JSON request to `POST /api/actions` (same origin only); the server writes
+a private request file for the receiver and shows only the state the receiver reports in
+`status.json`. When Wand Receiver is unavailable the control is disabled. Closing the page doesn't
+resume actions; **Resume wand actions** or a receiver restart does. The Data check panel's
+**Pointer filtering** row shows the receiver's actual pointer path, so readings are compared knowingly.
+
+Receiver mode automatically saves recent readings in private `WandReceiver/DebugReadings`
+storage (eight rotating files, up to 8 MiB each). File writing runs off the receive path;
+queue drops and write errors are reported by `/api/wand` under `capture`. `--no-record`
+disables this temporary diagnostic history; `--record-dir` chooses its private destination.
+It records sensor readings, button states and receiver mode/posted-pointer counters, never
+screen video, microphone audio, application titles or text. A moving gyro alone is not proof
+of mouse use. From build 105, `measure.py --input <recording-directory> --active-only`
+selects intervals where both issued pointer events and actual posted travel increased.
+Older captures without those counters cannot establish actual pointer use. Keep the original
+recordings when comparing paths; selection changes the analysis, not the saved data.
+
 With the observer running, `python3 -I measure.py --seconds 60` reports cadence, missing readings,
 arrival grouping, clipping, the held gravity frame and a gyro scale check from that same read-only
 feed. Its arrival times include host scheduling; they are not end-to-end latency.

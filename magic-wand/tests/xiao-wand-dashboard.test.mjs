@@ -67,3 +67,23 @@ test('an unexpected Bluetooth disconnect clears handlers and reports the end wit
  const device={addEventListener:(k,v)=>deviceListeners.set(k,v),removeEventListener:k=>deviceListeners.delete(k),gatt:{connect:async()=>({getPrimaryService:async()=>({getCharacteristic:async()=>characteristic})}),disconnect:()=>{}}};
  await openBluetooth(device,()=>{},()=>++ended);deviceListeners.get('gattserverdisconnected')();assert.equal(ended,1);assert.equal(listeners.size,0);assert.equal(deviceListeners.size,0);
 });
+
+test('debug pause control starts hidden and shows only the receiver-reported state',()=>{
+ const html=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/index.html',import.meta.url),'utf8');
+ const app=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/app.mjs',import.meta.url),'utf8');
+ assert.match(html,/<button id="actions" hidden disabled>Pause wand actions<\/button>/);
+ assert.match(html,/<p id="actions-notice" class="notice demo" role="status" hidden><\/p>/);
+ assert.match(app,/Resume wand actions/);
+ const posts=[...app.matchAll(/fetch\(([^,]+),\{method:'POST'/g)].map(m=>m[1]);
+ assert.deepEqual(posts,["'/api/actions'"],'the only write is the pause request');
+ assert.match(app,/body:JSON\.stringify\(\{paused:actions\.paused!==true\}\)/);
+ assert(!/sendBeacon|beforeunload|pagehide[^\n]*actions/.test(app),'closing a tab never resumes actions');
+ assert(!/whether/i.test(html+app));
+});
+
+test('debug page names the receiver-reported pointer path only',()=>{
+ const html=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/index.html',import.meta.url),'utf8');
+ const app=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/app.mjs',import.meta.url),'utf8');
+ assert.match(html,/<div id="pointer-row" hidden><dt>Pointer filtering<\/dt><dd id="pointer-path">Unknown<\/dd><\/div>/);
+ assert.match(app,/actions\.pointerPath==='direct'\?'Off · direct':actions\.pointerPath==='tuned'\?'On · Puck tuning':'Unknown'/);
+});

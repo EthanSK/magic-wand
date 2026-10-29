@@ -1271,3 +1271,27 @@ older failed send after that boundary. One sender owns every BLE UART write, inc
 identity/battery/link reports, because a split notification can otherwise interleave lines.
 Tests cover rejected cross-boundary retries and tuning after repeated maintenance reloads;
 these source checks do not establish physical radio performance.
+
+## Sense: the tuned pointer filter hid slow motion and zero error (2026-10-29)
+
+Running the unchanged Puck filter and a direct conversion over two passive firmware-c Bluetooth
+captures (restored gain) showed the tuned path passing 85–91% of total travel but only 8–26% of
+motion below 2°/s; in 41% of the mixed capture's readings a direct pointer moved and the tuned one did not.
+Its 0.2° slack delayed the first count of a steady 2°/s turn to 173 ms and swallowed 0.5–1°/s
+entirely. The same filter is what made stop-to-click possible: hand tremor and a 0.2–0.5°/s
+zero error keep direct counts flowing, so a direct pointer must keep the tuned stop detection
+for dwell and screenshot settling. Both captures also implied about 18% missing sample intervals in firmware c
+(not a sensor-side loss counter) and arrived in observed bursts every 30 ms; those transport limits are separate from the filter.
+
+## Sensor motion is not evidence of actual pointer use (2026-10-29)
+
+The observer's short in-memory history and a manually timed capture could contain
+unused or sensor-only periods. Keep bounded private rolling readings automatically
+while the receiver observer is running. Tag them with actual posted pointer event
+and distance counters, follow/pause/recording state and pointer path. Select real-use
+analysis intervals only from increasing posted travel in the same session; missing
+context, resets and paused intervals establish no use. Never infer use merely from
+gyro activity or a follow flag, and never label sensor logs as screen video. Writer
+queues and rotation stay outside native input delivery, with explicit loss/error
+metadata. Tests use private temporary files and exercise rotation, privacy and
+actual-use selection; physical movement acceptance remains separate.

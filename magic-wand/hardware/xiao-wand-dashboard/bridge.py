@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Local Sense dashboard. --hardware reads the diagnostic sketch; --receiver observes Wand Receiver. Importing opens nothing."""
-import argparse, asyncio, collections, json, math, threading, time, os, socket, queue
+import argparse, asyncio, collections, ctypes, json, math, threading, time, os, socket, stat, uuid, queue, logging, logging.handlers
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
@@ -24,10 +24,64 @@ def validate(p):
         result['presses']={k:p['presses'][k] for k in KEYS}
     for k in ('device','firmware'):
         if isinstance(p.get(k),str) and len(p[k])<=64 and p[k].isalnum():result[k]=p[k]
+    for k,low,high in [('imuFlags',0,3),('sampleCount',1,255),('firstMicros',0,0xffffffff)]:
+        if k in p:
+            if type(p[k]) is not int or not low<=p[k]<=high:raise ValueError('Invalid sample metadata')
+            result[k]=p[k]
     return result
 
+def accepted_usage(value):
+    # Actual posted pointer travel, not inferred use from a moving gyro.
+    if not isinstance(value,dict):return None
+    if type(value.get('pointerPosts')) is not int or value['pointerPosts']<0:return None
+    travel=value.get('pointerTravel')
+    if type(travel) not in (int,float) or not math.isfinite(travel) or travel<0:return None
+    if not all(type(value.get(k)) is bool for k in ('follow','paused','recording','hud')):return None
+    if value.get('pointerPath') not in ('direct','tuned'):return None
+    return {k:value[k] for k in ('pointerPosts','pointerTravel','follow','paused','recording','hud','pointerPath')}
+
+class PrivateReadingsHandler(logging.handlers.RotatingFileHandler):
+    failed=False
+    def _open(self):
+        fd=os.open(self.baseFilename,os.O_WRONLY|os.O_CREAT|os.O_APPEND|os.O_NOFOLLOW,0o600)
+        info=os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_uid!=os.geteuid():
+            os.close(fd);raise OSError('Private readings file required')
+        os.fchmod(fd,0o600)
+        return os.fdopen(fd,'a',encoding='utf-8')
+    def handleError(self,record):self.failed=True
+
+class RollingReadings:
+    """Automatic recent sensor history; bounded, private, off the receive path.
+
+    Ethan's 'real life footage' means readings from actual use. Keep the raw
+    history and explicit pointer-post counters, so still/unused time is never
+    mislabeled as a mouse test. No screen, audio, text or app titles are captured.
+    """
+    def __init__(self,path,max_bytes=8*1024*1024,backups=7):
+        path=Path(path);path.mkdir(parents=True,exist_ok=True,mode=0o700)
+        self.queue=queue.Queue(maxsize=1024);self.dropped=0;self.error=False
+        self.handler=PrivateReadingsHandler(path/'readings.jsonl',maxBytes=max_bytes,backupCount=backups,encoding='utf-8')
+        self.thread=threading.Thread(target=self.run,daemon=True);self.thread.start()
+    def record(self,row):
+        value={k:v for k,v in row.items() if k!='received'}
+        value.update(poll=row['received'],age_ms=0,wallTime=time.time(),captureDrops=self.dropped)
+        try:self.queue.put_nowait(value)
+        except queue.Full:self.dropped+=1
+    def run(self):
+        while True:
+            value=self.queue.get()
+            try:
+                if value is None:return
+                self.handler.emit(logging.LogRecord('wand-readings',logging.INFO,'',0,json.dumps(value,allow_nan=False,separators=(',',':')),(),None))
+            except Exception:self.error=True
+            finally:self.queue.task_done()
+    def close(self):
+        self.queue.join();self.queue.put(None);self.thread.join(timeout=2);self.handler.close()
+
 class Store:
-    def __init__(self,clock=time.monotonic):
+    def __init__(self,clock=time.monotonic,recorder=None):
+        self.recorder=recorder
         self.clock=clock;self.lock=threading.Lock();self.rows=collections.deque(maxlen=512);self.cursor=0;self.session=0
         self.status='starting';self.message='Starting local reader';self.usb_present=False;self.bluetooth='Standby';self.transport=None;self.observer=None
     def set(self,status,message,**values):
@@ -36,20 +90,24 @@ class Store:
             for k,v in values.items():setattr(self,k,v)
     def begin(self,transport):
         with self.lock:self.session+=1;self.transport=transport;self.status='waiting';self.message=f'{transport} open; waiting for wand button packets';return self.session
-    def record(self,p,transport,session):
+    def record(self,p,transport,session,usage=None):
         p=validate(p)
         with self.lock:
             if session!=self.session or transport=='Bluetooth' and self.usb_present:return False
-            self.cursor+=1;self.rows.append({'id':self.cursor,'session':session,'transport':transport,'packet':p,'received':self.clock()})
+            self.cursor+=1;row={'id':self.cursor,'session':session,'transport':transport,'packet':p,'received':self.clock()}
+            context=accepted_usage(usage)
+            if context is not None:row['usage']=context
+            self.rows.append(row)
             self.status='live';self.message=f'Real {transport} readings'
-            return True
+        if self.recorder:self.recorder.record(row)
+        return True
     def snapshot(self,after=-1):
         with self.lock:
             now=self.clock();rows=list(self.rows)
             selected=rows[-1:] if after<0 else [r for r in rows if r['id']>after]
             age=(now-rows[-1]['received'])*1000 if rows and rows[-1]['session']==self.session else None
             live=self.status=='live' and age is not None and age<1500
-            return {'bridge':'wand-local-v1','status':'live' if live else 'stale' if self.status=='live' else self.status,'message':self.message if live or self.status!='live' else 'No recent wand readings','transport':self.transport,'usb_present':self.usb_present,'bluetooth':self.bluetooth,'session':self.session,'cursor':self.cursor,'age_ms':age,'packets':[{k:v for k,v in r.items() if k!='received'}|{'age_ms':max(0,(now-r['received'])*1000)} for r in selected]}
+            return {'bridge':'wand-local-v1','status':'live' if live else 'stale' if self.status=='live' else self.status,'message':self.message if live or self.status!='live' else 'No recent wand readings','transport':self.transport,'usb_present':self.usb_present,'bluetooth':self.bluetooth,'session':self.session,'cursor':self.cursor,'age_ms':age,'capture':{'enabled':self.recorder is not None,'dropped':self.recorder.dropped if self.recorder else 0,'error':bool(self.recorder and (self.recorder.error or self.recorder.handler.failed))},'packets':[{k:v for k,v in r.items() if k!='received'}|{'age_ms':max(0,(now-r['received'])*1000)} for r in selected]}
 
 class Framer:
     def __init__(self,receive):self.buffer=bytearray();self.receive=receive;self.dropping=False
@@ -165,18 +223,101 @@ class ReceiverObserver:
         if local is None:
             local=self.store.begin(transport);self.sessions={session:local}
             with self.store.lock:self.store.usb_present=transport=='USB'
-        try:self.store.record(value.get('packet'),transport,local)
+        try:self.store.record(value.get('packet'),transport,local,value.get('usage'))
         except (ValueError,TypeError):pass
     def close(self):
         self.sock.close();self.path.unlink(missing_ok=True)
 
-def make_handler(store,assets,port):
+RECEIVER_SUPPORT=RECEIVER_SOCKET.parent
+ACTION_REQUEST='actions-pause.request'
+
+def receiver_running(pid):
+    """True only for a live process whose executable is Wand Receiver; no signal is sent."""
+    if type(pid) is not int or pid<=1:return False
+    try:
+        buffer=ctypes.create_string_buffer(4096)
+        if ctypes.CDLL('/usr/lib/libproc.dylib').proc_pidpath(pid,buffer,4096)<=0:return False
+    except OSError:return False
+    return os.path.basename(buffer.value.decode(errors='replace'))=='WandReceiver'
+
+def read_receiver_status(support):
+    """The receiver's own status.json: same-user regular file only."""
+    path=support/'status.json'
+    try:
+        info=os.lstat(path)
+        if not stat.S_ISREG(info.st_mode) or info.st_uid!=os.geteuid() or info.st_size>65536:return None
+        value=json.loads(path.read_bytes())
+    except (OSError,ValueError,UnicodeError):return None
+    return value if isinstance(value,dict) else None
+
+class ActionControl:
+    """Ethan's debug pause, owned by Wand Receiver, not this page.
+
+    The page only displays the receiver's reported state. A request is a private
+    same-user file in the receiver's directory; the receiver applies it and echoes
+    its id in status.json. No code, hardware connection or new port is involved.
+    """
+    def __init__(self,support=RECEIVER_SUPPORT,alive=receiver_running,clock=time.monotonic,sleep=time.sleep):
+        self.support=support;self.alive=alive;self.clock=clock;self.sleep=sleep;self.lock=threading.Lock()
+    def state(self,status=None):
+        status=read_receiver_status(self.support) if status is None else status
+        pid=status.get('pid') if status else None
+        if type(pid) is not int or not self.alive(pid):return {'available':False,'paused':None}
+        paused=status.get('actionsPaused')
+        # A receiver without this feature is unavailable, never reported as paused or active.
+        if type(paused) is not bool:return {'available':False,'paused':None}
+        since=status.get('actionsPausedAt')
+        path=status.get('pointerPath')
+        return {'available':True,'paused':paused,'since':since if paused and type(since) in (int,float) else None,'ready':status.get('ready') is True,
+                'pointerPath':path if path in ('direct','tuned') else None}
+    def request(self,paused,timeout=2.0):
+        with self.lock:
+            if not self.state()['available']:return 503,{'available':False,'paused':None,'confirmed':False}
+            request=uuid.uuid4().hex
+            data=json.dumps({'version':1,'paused':paused,'id':request},separators=(',',':')).encode()
+            target=self.support/ACTION_REQUEST;temporary=self.support/f'.{ACTION_REQUEST}.{request}'
+            try:
+                fd=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_EXCL|getattr(os,'O_NOFOLLOW',0),0o600)
+                try:os.write(fd,data)
+                finally:os.close(fd)
+                os.replace(temporary,target)
+            except OSError:
+                try:os.unlink(temporary)
+                except OSError:pass
+                return 503,{**self.state(),'confirmed':False}
+            end=self.clock()+timeout
+            while self.clock()<end:
+                status=read_receiver_status(self.support)
+                if status and status.get('actionsRequest')==request:return 200,{**self.state(status),'confirmed':True}
+                self.sleep(.05)
+            # Never leave an unapplied request for a later receiver to act on.
+            try:
+                if target.read_bytes()==data:target.unlink()
+            except OSError:pass
+            return 504,{**self.state(),'confirmed':False}
+
+def parse_action_post(headers,body,port):
+    """Validate one same-origin pause request. Returns (status, paused or error)."""
+    origins=(f'http://127.0.0.1:{port}',f'http://localhost:{port}')
+    if headers.get('Host') not in (f'127.0.0.1:{port}',f'localhost:{port}'):return 403,'host'
+    if headers.get('Origin') not in origins or headers.get('Origin') != f"http://{headers.get('Host')}":return 403,'origin'
+    if headers.get('Sec-Fetch-Site') not in (None,'same-origin'):return 403,'site'
+    if (headers.get('Content-Type') or '').split(';')[0].strip().lower()!='application/json':return 415,'type'
+    if body is None or len(body)>64:return 413,'size'
+    try:value=json.loads(body)
+    except (ValueError,UnicodeError):return 400,'json'
+    if not isinstance(value,dict) or set(value)!={'paused'} or type(value['paused']) is not bool:return 400,'shape'
+    return 200,value['paused']
+
+def make_handler(store,assets,port,actions=None):
     files={'/':('index.html','text/html; charset=utf-8'),'/index.html':('index.html','text/html; charset=utf-8'),'/styles.css':('styles.css','text/css'),'/app.mjs':('app.mjs','text/javascript'),'/model.mjs':('model.mjs','text/javascript'),'/transports.mjs':('transports.mjs','text/javascript')}
     class Handler(BaseHTTPRequestHandler):
         def do_GET(self):
             if self.headers.get('Host') not in (f'127.0.0.1:{port}',f'localhost:{port}'):self.send_error(403);return
             uri=urlparse(self.path)
-            if uri.path=='/api/wand':
+            if uri.path=='/api/actions':
+                data=json.dumps(actions.state() if actions else {'available':False,'paused':None},allow_nan=False).encode();mime='application/json'
+            elif uri.path=='/api/wand':
                 try:after=int(parse_qs(uri.query).get('after',['-1'])[0])
                 except ValueError:self.send_error(400);return
                 data=json.dumps(store.snapshot(after),allow_nan=False).encode();mime='application/json'
@@ -189,8 +330,23 @@ def make_handler(store,assets,port):
             self.send_response(200);self.send_header('Content-Type',mime);self.send_header('Content-Length',str(len(data)));self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff');self.send_header('Cross-Origin-Resource-Policy','same-origin');self.end_headers()
             try:self.wfile.write(data)
             except (BrokenPipeError,ConnectionResetError):pass
-        def do_POST(self):self.send_error(405)
-        do_PUT=do_PATCH=do_DELETE=do_POST
+        def reply(self,code,value):
+            data=json.dumps(value,allow_nan=False).encode()
+            self.send_response(code);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(data)));self.send_header('Cache-Control','no-store');self.send_header('X-Content-Type-Options','nosniff');self.send_header('Cross-Origin-Resource-Policy','same-origin');self.end_headers()
+            try:self.wfile.write(data)
+            except (BrokenPipeError,ConnectionResetError):pass
+        def do_POST(self):
+            # Only the debug pause is writable, and only in --receiver mode.
+            if urlparse(self.path).path!='/api/actions':self.send_error(405);return
+            if actions is None:self.send_error(409);return
+            try:length=int(self.headers.get('Content-Length',''))
+            except ValueError:self.send_error(411);return
+            body=self.rfile.read(length) if 0<=length<=64 else None
+            code,value=parse_action_post(self.headers,body,port)
+            if code!=200:self.send_error(code);return
+            self.reply(*actions.request(value))
+        def do_PUT(self):self.send_error(405)
+        do_PATCH=do_DELETE=do_PUT
         def log_message(self,*_):pass
     return Handler
 
@@ -198,8 +354,12 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--port',type=int,default=8872);parser.add_argument('--assets',type=Path,default=Path(__file__).parent);parser.add_argument('--hardware',action='store_true',help='Explicitly own the Sense USB/Bluetooth connections in a private installation')
     parser.add_argument('--receiver',action='store_true',help='Observe Wand Receiver, the control firmware board owner; opens no hardware')
     parser.add_argument('--receiver-socket',type=Path,default=RECEIVER_SOCKET,help=argparse.SUPPRESS)
-    args=parser.parse_args();store=Store();halt=threading.Event();server=ThreadingHTTPServer(('127.0.0.1',args.port),make_handler(store,args.assets,args.port));server.daemon_threads=True
+    parser.add_argument('--record-dir',type=Path,default=RECEIVER_SUPPORT/'DebugReadings',help='Private rolling sensor recordings in receiver mode')
+    parser.add_argument('--no-record',action='store_true',help='Disable automatic receiver-mode readings history')
+    args=parser.parse_args()
     if args.hardware and args.receiver:parser.error('choose --hardware (diagnostic sketch) or --receiver (control firmware), not both')
+    recorder=RollingReadings(args.record_dir) if args.receiver and not args.no_record else None
+    store=Store(recorder=recorder);halt=threading.Event();server=ThreadingHTTPServer(('127.0.0.1',args.port),make_handler(store,args.assets,args.port,ActionControl(args.receiver_socket.parent) if args.receiver else None));server.daemon_threads=True
     if args.receiver:store.observer=ReceiverObserver(args.receiver_socket,store,halt)
     threading.Thread(target=server.serve_forever,daemon=True).start();print(f'Magic Wand live dashboard: http://127.0.0.1:{args.port}/',flush=True)
     try:
@@ -214,4 +374,5 @@ def main():
     finally:
         halt.set();server.shutdown();server.server_close()
         if store.observer:store.observer.close()
+        if recorder:recorder.close()
 if __name__=='__main__':main()

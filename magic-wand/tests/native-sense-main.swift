@@ -49,7 +49,7 @@ wide = WandSenseInfo(firmware: wide.firmware, id: wide.id, gyroDpsPerLsb: 0.0175
 precondition(WandSenseUnits.gyro([0, 32767, 0], info: wide, axes: .standard)[0] == -65534, "500 dps range keeps headroom above the Puck's 286.7 dps clip")
 let legacy = WandSenseUnits.migrateLegacyZero(WandCalibration(x: 339.16, y: 252.41, z: -56.09))
 precondition(abs(legacy.x - 289.26) < 0.05 && abs(legacy.z + 47.84) < 0.05, "134-per-dps zero converted to Puck counts: \(legacy)")
-precondition(WandSenseTuning.defaultPointerGain * 86.4 * WandSenseUnits.gyroCountsPerDps / 134 > 107.9, "25% above the installed Sense build's 86.4 counts per degree")
+precondition(abs(WandSenseTuning.defaultPointerGain * 86.4 * WandSenseUnits.gyroCountsPerDps / 134 - 86.4) < 0.01, "the installed firmware-c-era Sense feel: 86.4 counts per degree")
 precondition(WandSenseUnits.accel([0, 0, 8196], info: info, axes: .standard) == [0, 0, 8191])
 print("PASS: rotation-only axis map, Puck units and saturation")
 

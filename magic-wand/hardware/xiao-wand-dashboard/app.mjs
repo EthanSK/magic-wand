@@ -104,4 +104,41 @@ async function pollLocal(){
 }
 if(localMode){notice('Looking for the connected Sense through the local reader…');pollLocal();}
 
+// Ethan's debug pause: Wand Receiver owns the state. The page shows only what
+// the receiver reports and never assumes a request worked. Every tab polls the
+// same state; closing a tab never resumes actions.
+let actions=null,actionsBusy=false,actionsProblem='',actionsProblemUntil=0;
+const PAUSED_TEXT='WAND ACTIONS PAUSED · Readings continue, but the wand doesn\u2019t move the pointer, click, scroll, or send HUD, review, screenshot or dictation commands. A recording already in progress keeps going.';
+function renderActions(){
+  const button=$('actions'),banner=$('actions-notice'),available=actions?.available===true,paused=available&&actions.paused===true;
+  button.hidden=!localMode;button.disabled=actionsBusy||!available;
+  button.textContent=paused?'Resume wand actions':'Pause wand actions';
+  button.classList.toggle('primary',paused);
+  button.title=available?'':'Wand Receiver is unavailable';
+  if(actionsProblem&&Date.now()>actionsProblemUntil)actionsProblem='';
+  const text=actionsProblem||(paused?PAUSED_TEXT:'');
+  banner.hidden=!text;banner.className=`notice ${actionsProblem?'problem':'demo'}`;
+  if(banner.textContent!==text)banner.textContent=text;
+  // The receiver's actual pointer conversion, so readings are compared knowingly.
+  $('pointer-row').hidden=!localMode;
+  $('pointer-path').textContent=!available?'Unknown':actions.pointerPath==='direct'?'Off · direct':actions.pointerPath==='tuned'?'On · Puck tuning':'Unknown';
+}
+async function pollActions(){
+  try{const response=await fetch('/api/actions',{cache:'no-store'});actions=response.ok?await response.json():null;}
+  catch{actions=null;}
+  renderActions();setTimeout(pollActions,1000);
+}
+$('actions').addEventListener('click',async()=>{
+  if(actionsBusy||actions?.available!==true)return;
+  actionsBusy=true;actionsProblem='';renderActions();
+  try{
+    const response=await fetch('/api/actions',{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({paused:actions.paused!==true})});
+    const value=await response.json().catch(()=>null);
+    if(value&&typeof value.available==='boolean')actions=value;
+    if(!value?.confirmed)throw Error('unconfirmed');
+  }catch{actionsProblem='Wand Receiver didn\u2019t confirm the change. Showing its current state.';actionsProblemUntil=Date.now()+4000;}
+  finally{actionsBusy=false;renderActions();}
+});
+if(localMode)pollActions();
+
 window.addEventListener('pagehide',()=>{++generation;closeCurrent();});

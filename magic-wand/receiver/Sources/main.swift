@@ -26,6 +26,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var chunks: [Data] = []
     var writing = false, configuring = false, uartPaused = false
     var input = "", buttons = 0, reportCount = 0, movementCount = 0
+    // Real-life debug recordings: gyro motion alone does not prove mouse use.
+    // This grows only when a native pointer event actually changes its position.
+    var pointerTravel = 0.0
     var restoring = false, bridgeLoadFailed = false, loadingBridge = false, loadingRuntime = false, generation = 0, retry: DispatchWorkItem?
     var lastTrusted = false, ready = false, legacySignaled = false
     var lastStatusKey = ""
@@ -67,6 +70,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var controlVersion:WandControlVersion = .pointerV1
     var controlV1Menu:NSMenuItem?,controlV2Menu:NSMenuItem?,controlV3Menu:NSMenuItem?
     var flickScrollEnabled=false
+    var pointerFilterMenuItem:NSMenuItem?
     // Opt-in: one local line per Control V3 hold with stroke counts and wheel
     // rates, never positions. Off unless feature-flags.json enables it.
     var heldScrollDiagnostics=false
@@ -103,6 +107,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var circleLight=false
     var circleTimer:Timer?,lowDelayTimer:Timer?
     var heartbeat: Timer?
+    // Ethan's debug pause (WandActionPause / WandReceiverActions.swift): memory only.
+    var actionPause=WandActionPause()
+    var actionRequestSource:DispatchSourceFileSystemObject?
+    var actionPauseGeneration=0
     let controls = WandControlTransport()
     let context = WandContextListener()
     let recording = WandRecordingState(cache:support.appendingPathComponent("recording-state.json"))
@@ -248,7 +256,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             self.requestBattery()
             self.status()
             if !self.ready && (self.isSense || (self.manager.state == .poweredOn && self.device == nil)) { self.connect() }
+            self.readActionRequest()
         }
+        startActionRequests()
         status()
     }
     func restoreKnownCalibration() {
@@ -338,6 +348,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         flickMenuItem?.state=flick ? .on : .off
         heldScrollDiagnostics=options.enabled("heldScrollDiagnostics")
         rotationMenuItem?.state=enabled ? .on : .off
+        // Sense only: the direct pointer is the default; "sensePointer":"tuned"
+        // returns to the Puck filter. A Puck always keeps the tuned filter.
+        let pointerPath:WandPointerPath = isSense ? WandPointerPath.read(options.read()["sensePointer"],default:.direct) : .tuned
+        if motionFilter.path != pointerPath {
+            motionFilter.path=pointerPath;motionFilter.reset();dwell.reset();scheduleDwell();log("POINTER_PATH",pointerPath.rawValue)
+        }
+        pointerFilterMenuItem?.state=pointerPath == .tuned ? .on : .off
         let reviewAxes=options.enabled("reviewAxisGestures")
         if reviewAxisEnabled != reviewAxes {
             reviewTrace.record(.init(kind:"boundary",t:ProcessInfo.processInfo.systemUptime,
@@ -371,6 +388,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let rotation=NSMenuItem(title:"Rotation-independent controls",action:#selector(toggleRotation),keyEquivalent:"")
         rotation.target=self;rotation.toolTip="Keep mouse, HUD and scroll directions upright when you rotate the wand."
         settings.addItem(rotation);rotationMenuItem=rotation
+        let pointer=NSMenuItem(title:"Pointer filtering",action:#selector(togglePointerFiltering),keyEquivalent:"")
+        pointer.target=self;pointer.isHidden = !isSense
+        pointer.toolTip="Puck smoothing, slack and slower speed for small movements. Off moves the pointer straight from the gyro."
+        settings.addItem(pointer);pointerFilterMenuItem=pointer
         let reviewAxes=NSMenuItem(title:"Review with nods and shakes",action:#selector(toggleReviewAxes),keyEquivalent:"")
         reviewAxes.target=self
         reviewAxes.toolTip="Up/down goes next; side-to-side goes previous. Replaces review circles and flicks."
@@ -391,6 +412,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     @objc func selectControlV3(){selectControlVersion(.sustainedV3)}
     @objc func toggleFlickScroll(){changeOption("flickScroll")}
     @objc func toggleRotation(){changeOption("orientationCompensation")}
+    @objc func togglePointerFiltering(){
+        do {try options.setValue("sensePointer",motionFilter.path == .tuned ? "direct" : "tuned");refreshFeatureFlags();status();log("OPTION_CHANGED","sensePointer",motionFilter.path.rawValue)}
+        catch {connectionMenuItem?.title="Couldn’t save option";log("OPTION_SAVE_FAILED","sensePointer",error)}
+    }
     @objc func toggleReviewAxes(){changeOption("reviewAxisGestures")}
     // Developer maintenance uses the existing BLE owner, so diagnosis and small
     // device updates do not disconnect the user's working pointer. Only consume
@@ -426,9 +451,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         } else {queue(command)}
     }
     func status() {
-        connectionMenuItem?.title=ready ? "Connected" : "Connecting…"
+        connectionMenuItem?.title=ready ? (actionPause.paused ? "Connected · Wand actions paused" : "Connected") : "Connecting…"
         let traceState=reviewTrace.status
-        let key = "\(isSense)|\(senseTransport?.rawValue ?? "")|\(deviceConnected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(deskSleep.sleeping)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(reviewAxisEnabled)|\(motionFilter.orientationCompensation)|\(traceState["enabled"] ?? false)|\(traceState["diskError"] ?? false)"
+        let key = "\(isSense)|\(senseTransport?.rawValue ?? "")|\(deviceConnected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(deskSleep.sleeping)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(reviewAxisEnabled)|\(motionFilter.orientationCompensation)|\(traceState["enabled"] ?? false)|\(traceState["diskError"] ?? false)|\(actionPause.paused)|\(actionPause.lastRequest ?? "")|\(motionFilter.path.rawValue)"
         let batteryKey=key+"|"+String(batterySampleAt?.timeIntervalSince1970 ?? 0)
         guard batteryKey != lastStatusKey else { return }
         lastStatusKey = batteryKey
@@ -437,7 +462,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             "motionSensor": isSense ? (senseInfo?.motion ?? false) : true,
             "ready": ready, "options":["controlVersion":controlVersion.rawValue,"flickScroll":flickScrollEnabled,"reviewAxisGestures":reviewAxisEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording,"deskSleeping":deskSleep.sleeping, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
             "reviewTrace":traceState,
+            // The debug pause's actual state; the dashboard only displays this.
+            "actionsPaused":actionPause.paused,
+            // The ordinary pointer conversion actually in use (WandPointerPath).
+            "pointerPath":motionFilter.path.rawValue,
             "updatedAt": ISO8601DateFormatter().string(from: Date())]
+        if let since=actionPause.since {value["actionsPausedAt"]=since.timeIntervalSince1970}
+        if let request=actionPause.lastRequest {value["actionsRequest"]=request}
         if let percent=batteryPercent,let volts=batteryVolts,let measured=batterySampleAt {
             value["battery"]=["percent":percent,"volts":volts,"measuredAt":measured.timeIntervalSince1970]
         }
@@ -684,8 +715,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 }
             }
             if line.hasSuffix("WAND_RECORDING_LIGHT 0") || line.hasSuffix("WAND_RECORDING_LIGHT 1") {log("DEVICE",line)}
-            if line.hasSuffix("@POINTER_MODE") {manualPointerDuringRecording();enterPointerMode()}
-            if let marker=line.range(of:"@FOLLOW ") {
+            // Debug pause: telemetry and status lines continue; action lines stop here.
+            let paused=actionPause.paused
+            if line.hasSuffix("@POINTER_MODE"), !paused {manualPointerDuringRecording();enterPointerMode()}
+            if let marker=line.range(of:"@FOLLOW "), !paused {
                 let value=line[marker.upperBound...].trimmingCharacters(in:.whitespaces)
                 if value=="0" || value=="1", !recordingPointerPaused, !screenshot.ownsPointer {
                     if value=="1" {restDetection.pointerActivated()}else{restDetection.pointerStopped();flickScroll.reset();flickAnchor=nil;setCircleLight(false)}
@@ -693,10 +726,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 }
             }
             if let marker=line.range(of:"@ZERO "),let data=String(line[marker.upperBound...]).data(using:.utf8),let config=try? JSONDecoder().decode([Double].self,from:data) {log("NATIVE_MOTION_CONFIG",motionFilter.configure(config))}
-            if let marker=line.range(of:"@RAW "){handleRaw(String(line[marker.upperBound...]))}
+            if let marker=line.range(of:"@RAW "), !paused {handleRaw(String(line[marker.upperBound...]))}
             if let marker=line.range(of:"@IMU ") {handleIMU(String(line[marker.upperBound...]))}
             // Legacy held app-page packets never own a selected persistent review set.
-            if let marker=line.range(of:"@REVIEW "),appMode=="vsCode",selectedReviewMode==nil {
+            if let marker=line.range(of:"@REVIEW "),!paused,appMode=="vsCode",selectedReviewMode==nil {
                 let value=line[marker.upperBound...].trimmingCharacters(in:.whitespaces)
                 if value=="0" || value=="1" {
                     if value=="1" {reviewOriginY=navY;if hudActive {controls.persistent("park");hudActive=false;stopHUDWatchdog()}}
@@ -719,6 +752,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // The device prints each edge before the click it emits on release,
                 // so a consumed (scrolled) hold's endpoint click is dropped by order.
                 if value=="0" || value=="1" {
+                    guard actionPause.admit(.bottom,down:value=="1") else {continue}
                     if screenshotBottom(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
                     if value=="1" {manualPointerDuringRecording()}
                     if recognizeBottomRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
@@ -735,16 +769,23 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     if endedLegacyScroll {enableMouseAfterScroll()}
                 }
             }
-            if let marker=line.range(of:"@MIDDLE "){handleMiddle(String(line[marker.upperBound...]))}
-            if let marker=line.range(of:"@NAV "){handleNavigation(String(line[marker.upperBound...]))}
-            if let marker = line.range(of: "@SCROLL ") { handleScroll(String(line[marker.upperBound...])) }
-            if let marker = line.range(of: "@MOVE ") { handleMove(String(line[marker.upperBound...])) }
-            if let marker = line.range(of: "@HUD ") { handleHUD(String(line[marker.upperBound...])) }
+            if let marker=line.range(of:"@MIDDLE "){
+                let value=String(line[marker.upperBound...])
+                if actionPause.admit(.middle,down:value.trimmingCharacters(in:.whitespaces)=="1") {handleMiddle(value)}
+            }
+            if let marker=line.range(of:"@NAV "), !paused {handleNavigation(String(line[marker.upperBound...]))}
+            if let marker = line.range(of: "@SCROLL "), !paused { handleScroll(String(line[marker.upperBound...])) }
+            if let marker = line.range(of: "@MOVE "), !paused { handleMove(String(line[marker.upperBound...])) }
+            if let marker = line.range(of: "@HUD "), !paused { handleHUD(String(line[marker.upperBound...])) }
             if let marker = line.range(of: "@STT "), !restoring, AXIsProcessTrusted() {
                 let value=String(line[marker.upperBound...]).trimmingCharacters(in: .whitespaces)
-                if value == "0" || value == "1" { log("SPEECH_BUTTON", value, controls.speech(down:value == "1") ? "SENT" : "UNAVAILABLE") }
+                // Paused: nothing reaches Agent Flow, so a running recording keeps going.
+                if value == "0" || value == "1" {
+                    guard actionPause.admit(.top,down:value=="1") else {log("SPEECH_BUTTON",value,"PAUSED");continue}
+                    log("SPEECH_BUTTON", value, controls.speech(down:value == "1") ? "SENT" : "UNAVAILABLE")
+                }
             }
-            if let marker = line.range(of: "@WAND ") { handle(String(line[marker.upperBound...])) }
+            if let marker = line.range(of: "@WAND "), !paused { handle(String(line[marker.upperBound...])) }
             if restoring && line.contains("WAND_BRIDGE_RESTORED") { log("STOPPED"); exit(0) }
         }
     }
@@ -829,7 +870,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// never permission for an ordinary click in the app underneath.
     func screenshotContextChanged(_ active:Bool) {
         guard active else{endScreenshot(reason:"capture ended",contextActive:false);return}
-        guard ready,!restoring,screenshot.contextActive(now:ProcessInfo.processInfo.systemUptime,pressed:pointerRouter.bottomHeld) else{return}
+        guard ready,!restoring,!actionPause.paused,screenshot.contextActive(now:ProcessInfo.processInfo.systemUptime,pressed:pointerRouter.bottomHeld) else{return}
         takeScreenshotPointer(follow:"moveLatched")
         enterPointerMode()
         log("SCREENSHOT_MODE",screenshot.shortcut ? "shortcut":"selection")
@@ -903,7 +944,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// The anchor waits only for macOS's own selector, never for motion: a
     /// press before the selector exists would click the app underneath.
     func latchScreenshotIfReady() {
-        guard screenshot.phase == .aiming,screenshot.anchorRequested,AXIsProcessTrusted(),Self.screenshotSelectorVisible() else{return}
+        guard !actionPause.paused,screenshot.phase == .aiming,screenshot.anchorRequested,AXIsProcessTrusted(),Self.screenshotSelectorVisible() else{return}
         let point=deliveryPoint ?? WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays)
         guard screenshot.latch(now:ProcessInfo.processInfo.systemUptime) else{return}
         transition(to:buttons|1,at:point);scheduleScreenshotSettle()
@@ -925,7 +966,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         rawLastArrival=now
         if screenshot.dragging {
             screenshot.settle.intent(sample.intent,now:now)
-            screenshot.settle.move(dx:sample.x,dy:sample.y,now:now,eligible:true)
+            screenshot.settle.move(dx:sample.stopX,dy:sample.stopY,now:now,eligible:true)
             scheduleScreenshotSettle()
         }
         guard sample.x != 0 || sample.y != 0 else{return}
@@ -1232,7 +1273,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         heldSafetyTimer=Timer.scheduledTimer(withTimeInterval:0.02,repeats:true){[weak self] _ in
             guard let self else{return};let now=ProcessInfo.processInfo.systemUptime
             if self.heldScroll.stale(now:now){self.reconcileBottomHold(down:false,now:now,reason:"button telemetry timeout",resumeMouse:false);return}
-            guard self.ready,!self.restoring,AXIsProcessTrusted() else{return}
+            guard self.ready,!self.restoring,!self.actionPause.paused,AXIsProcessTrusted() else{return}
             let lines=self.heldScroll.continuation(now:now)
             if lines.x != 0 || lines.y != 0 {
                 self.setCircleLight(true)
@@ -1303,6 +1344,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         return events
     }
     func postScroll(x:Int32,y:Int32){
+        guard !actionPause.paused else{return}
         for event in Self.wheelEvents(x:x,y:y,at:scrollAnchor ?? circleAnchor) {event.post(tap:.cghidEventTap)}
         scrollPostedX+=Int(x);scrollPostedY+=Int(y)
     }
@@ -1335,7 +1377,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     /// Recenter only the Bottom pointer lane; preserve Middle HUD/review and speech.
     func recenterPointer() {
-        guard ready,!restoring,!screenshot.ownsPointer,AXIsProcessTrusted() else{return}
+        guard ready,!restoring,!actionPause.paused,!screenshot.ownsPointer,AXIsProcessTrusted() else{return}
         cancelCircleScroll();finishScroll();performPointer(pointerRouter.cancelAll());releaseButtons();motionFilter.reset()
         recenterSuppressButtons=true
         dwell.follow(true);restDetection.pointerActivated();scheduleDwell()
@@ -1482,7 +1524,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         log("WAND_REVIEW_COMMIT",mode,"continue")
     }
     func sendReview(_ requests:[WandReviewGesture.Request]){
-        for request in requests {
+        // Paused: only a cancellation may close an existing Better Git transaction.
+        for request in requests where !actionPause.paused || request.phase == "cancel" {
             guard let app=NSRunningApplication.runningApplications(withBundleIdentifier:"com.microsoft.VSCode").first,
                   app.isActive,let application=app.bundleURL else{continue}
             var url=URLComponents();url.scheme="vscode";url.host="ethansk.better-git-vscode";url.path="/wand-review/"+request.phase
@@ -1524,6 +1567,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     @discardableResult
     func postPointerMove(dx:Int,dy:Int,from point:CGPoint)->CGPoint {
+        guard !actionPause.paused else{return point}
         guard !recordingPointerPaused || screenshot.ownsPointer else{return point}
         // Ethan's "switch app button": Middle operates the selected HUD card.
         // Keep horizontal card input, but drop concurrent mouse-mode movement
@@ -1532,7 +1576,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // on release; an open, unheld HUD and independent review stay separate.
         guard !(hudSession && (middleHeld || hudEntryPress || pointerInHUD)) else{return point}
         let newPoint=WandPointerBounds.clamp(CGPoint(x:point.x+CGFloat(dx),y:point.y+CGFloat(dy)),to:pointerDisplays)
-        Self.mouseMovementEvent(buttons:buttons,from:point,to:newPoint)?.post(tap:.cghidEventTap)
+        if let event=Self.mouseMovementEvent(buttons:buttons,from:point,to:newPoint) {
+            event.post(tap:.cghidEventTap)
+            pointerTravel += abs(newPoint.x-point.x)+abs(newPoint.y-point.y)
+        }
         movementCount += 1
         if movementCount == 1 || movementCount % 100 == 0 { log("MOVEMENT_REPORTS_POSTED", movementCount) }
         return newPoint
@@ -1543,7 +1590,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
               (-4095...4095).contains(x), (-4095...4095).contains(y), (0...3).contains(b), !restoring, !scrollActive, AXIsProcessTrusted() else { return }
         handleFrame(x:x,y:y,b:b)
     }
-    func handleFrame(x:Int,y:Int,b:Int){
+    func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil){
         // Screenshot mode owns Bottom and the native button; the wand's legacy
         // button frames carry no motion in raw mode and must never act here.
         if screenshot.ownsPointer {return}
@@ -1559,7 +1606,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // The router may drop a consumed hold's endpoint click; button changes are
         // applied before motion, at the position already shown.
         let routed=pointerRouter.frame(dx:x,dy:y,buttons:b,hud:false,now:ProcessInfo.processInfo.systemUptime)
-        dwell.move(dx:x,dy:y,now:ProcessInfo.processInfo.systemUptime,eligible:!recordingPointerPaused && !pointerRouter.bottomHeld && b==0 && !hudSession && !scrollActive)
+        // Stop-to-click follows the tuned stop counts on either pointer path.
+        dwell.move(dx:stopX ?? x,dy:stopY ?? y,now:ProcessInfo.processInfo.systemUptime,eligible:!recordingPointerPaused && !pointerRouter.bottomHeld && b==0 && !hudSession && !scrollActive)
         scheduleDwell()
         if routed.buttons != b {log("CONSUMED_HOLD_CLICK_DROPPED")}
         transition(to: routed.buttons, at: point)
@@ -1661,14 +1709,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         flickAnchor=nil
         if wasFlick {setCircleLight(false);motionFilter.reset();dwell.reset();scheduleDwell();return}
         dwell.intent(sample.intent,now:now)
-        handleFrame(x:sample.x,y:sample.y,b:buttons)
+        handleFrame(x:sample.x,y:sample.y,b:buttons,stopX:sample.stopX,stopY:sample.stopY)
     }
     func scheduleDwell(){
         dwellTimer?.invalidate();dwellTimer=nil
-        guard ready,!restoring,!recordingPointerPaused,!screenshot.ownsPointer,let due=dwell.nextDue else{return}
+        guard ready,!restoring,!actionPause.paused,!recordingPointerPaused,!screenshot.ownsPointer,let due=dwell.nextDue else{return}
         dwellTimer=Timer.scheduledTimer(withTimeInterval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             guard let self else{return};self.dwellTimer=nil
-            guard self.ready,!self.restoring,!self.recordingPointerPaused,!self.screenshot.ownsPointer,!self.heldScroll.active,!self.pointerRouter.bottomHeld,!self.hudSession,!self.scrollActive,self.buttons==0,AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
+            guard self.ready,!self.restoring,!self.actionPause.paused,!self.recordingPointerPaused,!self.screenshot.ownsPointer,!self.heldScroll.active,!self.pointerRouter.bottomHeld,!self.hudSession,!self.scrollActive,self.buttons==0,AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
             let point=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:self.pointerDisplays)
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
         }
@@ -1703,6 +1751,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 probeTimer?.invalidate();probeTimer=nil
                 // Ethan: waking returns to the state before rest. Mouse mode
                 // comes back only if it was on, never while recording paused it.
+                // Paused: rest detection still runs, but never changes follow or the HUD.
+                guard !actionPause.paused else{log("AUTO_PICKUP_PAUSED");continue}
                 let resume=restFollow.pickedUp(recordingPaused:recordingPointerPaused)
                 guard !hudSession,resume else{log("AUTO_PICKUP_KEPT_STATE",dwell.following);continue}
                 enterPointerMode();dwell.follow(true);queue("setMouseFollow(true);");log("AUTO_PICKUP")
@@ -1710,7 +1760,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 dwell.inhibit(until:now+3);scheduleDwell()
             case .putDown:
                 // Rest may sleep the LEDs, but an explicit HUD remains open.
-                guard !hudSession else{continue}
+                guard !hudSession,!actionPause.paused else{continue}
                 cancelCircleScroll();enterPointerMode();dwell.follow(false);releaseButtons();queue("setMouseFollow(false);setHUDOpen(false);");log("AUTO_PUT_DOWN")
             }
         }
@@ -1752,6 +1802,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         return event
     }
     func transition(to next: Int, at point: CGPoint) {
+        // Paused: a held native button may still be released, never pressed.
+        let next = actionPause.paused ? next & buttons : next
         for (mask, button) in [(1, CGMouseButton.left), (2, CGMouseButton.right)] where buttons & mask != next & mask {
             let down = next & mask != 0
             let event=Self.mouseButtonEvent(button:button,down:down,at:point)

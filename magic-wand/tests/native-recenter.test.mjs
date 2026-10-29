@@ -20,6 +20,7 @@ func CGDisplayBounds(_ id:Int)->CGRect {CGRect(x:100,y:-200,width:1200,height:80
 func CGWarpMouseCursorPosition(_ point:CGPoint){warped=point}
 final class Rest {var activated=false;func pointerActivated(){activated=true}}
 final class Harness {
+ var actionPause=WandActionPause()
  let pointerRouter=WandPointerRouter(),recenterGesture=WandRecenterGesture(),dwell=WandDwellClick(),motionFilter=WandMotionFilter(),restDetection=Rest()
  let screenshot=WandScreenshotGesture();var pendingRecenter:Timer?
  var ready=true,restoring=false,recenterSuppressButtons=false,deliveryPoint:CGPoint?,commands:[String]=[]
@@ -59,5 +60,5 @@ precondition(warped == .zero,"screenshot mode is never recentred")
 print("PASS: global centre/follow (after the triple-click window) from off, mouse, HUD, scrolling, VS Code and drag; holds preserved")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-recenter-'));
- try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',['-O',new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
+ try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',['-O',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
 });

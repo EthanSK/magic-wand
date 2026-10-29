@@ -56,7 +56,7 @@ The wire channel names are the dashboard's legacy `wand-v1` keys and do not name
 {"profile": "sense"}
 ```
 
-Optional `"sense": {"id": "…", "axes": ["-y", "+x", "+z"], "pointerGain": 1.466}` pins one board and maps the Sense
+Optional `"sense": {"id": "…", "axes": ["-y", "+x", "+z"], "pointerGain": 1.1725}` pins one board and maps the Sense
 axes onto the Puck's x (right), y (towards the tip) and z (up). The default axes assume the
 board runs along the shaft with USB towards the tip and its parts facing up; this is not yet
 physically verified. Without an ID, the first single Sense on USB is selected and saved in
@@ -67,9 +67,39 @@ are stored per Sense board and axes, never shared with the Puck.
 Gyro readings are converted to the counts the Puck's identical LSM6DS3TR-C produces at its
 245 deg/s setting (8.75 mdps per count), so every canonical speed, stillness, dead-zone and
 calibration threshold matches the Puck physically. Earlier Sense builds used 134 counts per
-deg/s; their saved zero is converted once. `pointerGain` (0.25–4, default 1.466) is the only
-Sense pointer difference: 108 counts per degree at full speed, 25% above the 2026-10-29c Sense
-build and 1.47 times the Puck. HUD, review and scrolling are unchanged by it.
+deg/s; their saved zero is converted once. `pointerGain` (0.25–4, default 1.1725) is the only
+Sense pointer difference: 86.4 counts per degree at full speed, the same feel as the 2026-10-29c
+Sense build (1.17 times the Puck). Ethan asked for the earlier 25% boost (1.466) to be undone
+once the wand returned to the other rod. HUD, review and scrolling are unchanged by it.
+
+## Pointer path
+
+The Sense uses the **direct** pointer by default: calibrated, orientation-projected gyro rate ×
+time × the gain above, the 1.4 vertical gain and the one-third held gain, keeping the subpixel
+remainder. It has none of the Puck filter's 2–8 ms smoothing, 150 ms directional mean, 250 ms
+intent gate, 0.2° slack with recentring or slow-speed curve, and adds no buffering or delay.
+Stop-to-click and screenshot settling still use the tuned filter's stop detection, so they
+neither stop working nor click from tremor. Held scrolling, HUD and review keep their own
+lanes. Options › **Pointer filtering** (or `"sensePointer": "tuned"` in `feature-flags.json`)
+returns to the tuned filter; the Puck always uses it. `status.json` and the dashboard report
+the path actually in use.
+
+Expect the direct path to show what the filter used to hide: on the recorded Sense stream the
+tuned filter passed only 8% of motion slower than 2°/s and first moved 173 ms into a steady
+2°/s turn, against 10 ms direct. A residual zero error of 0.5°/s now drifts the pointer about
+43 counts per second, and hand tremor appears as small movement. Still active by design: the
+approved 90 ms buffer while Bottom is held, the bridge's 50–70 ms motion discard around
+button edges, the 96 ms gyro start-up discard and the HUD's 1.2°/s dead zone.
+
+## Debug pause
+
+The dashboard's **Pause wand actions** button (`--receiver` mode) asks Wand Receiver to stop every
+outward action: pointer, clicks, drags, scrolling, dwell clicks, recentring, HUD, review, screenshots
+and dictation commands. Readings, lights, calibration, desk sleep and standby continue, and the
+board keeps streaming full-rate motion for the dashboard. Held native buttons are released on
+entry; a recording already in progress keeps going. After **Resume wand actions**, each button
+needs a fresh press. The pause lives only in the receiver's memory and `status.json`; a receiver
+restart clears it.
 
 ## Measured stream (2026-10-29, Bluetooth, firmware c, 90 s passive)
 

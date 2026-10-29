@@ -53,7 +53,11 @@
     var accelOn = G.Puck.accelOn, accelOff = G.Puck.accelOff;
     G.Puck.accelOn = function (rate) { accelOn(rate); setIMU((rate || 12.5) >= 12.5 ? 2 : 1); };
     G.Puck.accelOff = function () { accelOff(); setIMU(0); };
-    function setIMU(mode) { if (mode !== imuMode) { imuMode = mode; if (!dead) native.imu(mode); } }
+    // sensorHold: the receiver's debug pause keeps full-rate readings flowing to
+    // the dashboard; deliver() still follows the program's own requested rate.
+    var sensorHold = false, sentIMU;
+    function setIMU(mode) { if (mode !== imuMode) { imuMode = mode; sendIMU(); } }
+    function sendIMU() { var m = sensorHold ? 2 : imuMode; if (!dead && m >= 0 && m !== sentIMU) { sentIMU = m; native.imu(m); } }
 
     // Real link and button-wake standby. NRF.sleep() on the Puck stops the radio;
     // on the Sense it asks the saved firmware for button-wake power-off.
@@ -170,6 +174,7 @@
 
     return {
       boot: boot, repl: repl, deliver: deliver, fire: fire, configurePointer: configurePointer,
+      holdSensor: function (on) { sensorHold = !!on; sendIMU(); },
       battery: function (volts, percent) { batteryVolts = volts; batteryPercent = percent; },
       teardown: function () { dead = true; timers = {}; },
       state: function () { return { awake: device.awake, rate: device.sampleRate, imu: imuMode, light: lastLight, link: linkUp, ready: G.wandMotionReady === true }; },

@@ -145,14 +145,14 @@ test("teardown stops every timer and output", () => {
 });
 
 test("Sense pointer gain changes only the pointer gain reported to the receiver", () => {
-  const plain = createSense({ zero: '{"x":0,"y":0,"z":0}' }), faster = createSense({ zero: '{"x":0,"y":0,"z":0}', options: { pointerGain: 1.466 } });
+  const plain = createSense({ zero: '{"x":0,"y":0,"z":0}' }), faster = createSense({ zero: '{"x":0,"y":0,"z":0}', options: { pointerGain: 1.1725 } });
   for (const s of [plain, faster]) {
     s.api.repl("global.WAND_UPDATING=false;setMouseFollow(true);");
     s.advance(0.2); s.frames(5, 0, [0, 0, -1340]);
   }
   const zero = (s) => JSON.parse(s.lines.find((l) => l.startsWith("@ZERO ")).slice(6));
   const a = zero(plain), b = zero(faster);
-  assert(Math.abs(b[2] / a[2] - 1.466) < 1e-9, `gain ${a[2]} -> ${b[2]}`);
+  assert(Math.abs(b[2] / a[2] - 1.1725) < 1e-9, `gain ${a[2]} -> ${b[2]}`);
   assert.deepEqual(b.slice(3), a.slice(3), "vertical gain, speed curve, held gain, slack and signs unchanged");
   assert.equal(b[12], 1, "Sense vertical direction kept");
   assert.equal(faster.ctx.CONFIG.deadZone, plain.ctx.CONFIG.deadZone, "HUD dead zone unchanged");
@@ -162,12 +162,28 @@ test("Sense pointer gain changes only the pointer gain reported to the receiver"
 
 // A live maintenance bridge update must keep the requested Sense sensitivity.
 test("Sense tuning survives repeated bridge replacement without multiplying twice", () => {
-  const s = createSense({zero: '{"x":0,"y":0,"z":0}', options: {pointerGain: 1.466}});
+  const s = createSense({zero: '{"x":0,"y":0,"z":0}', options: {pointerGain: 1.1725}});
   const gain = s.ctx.CONFIG.gain;
   for (let i=0;i<2;i++) {
     s.api.device.loadFragments(read("device/generated/wand-mode-bridge.compact.js"));
-    s.api.configurePointer(1.466);
+    s.api.configurePointer(1.1725);
     assert.equal(s.ctx.CONFIG.gain, gain);
     assert.equal(s.ctx.CONFIG.ySign, 1);
   }
+});
+
+test("debug pause holds full-rate sensing for the dashboard without changing the program's own rate", () => {
+  const s = createSense({ zero: '{"x":0,"y":0,"z":0}' });
+  s.api.repl("global.WAND_UPDATING=false;setMouseFollow(false);");
+  s.advance(1.2);
+  assert.equal(s.imu.at(-1), 1, "desk accelerometer only before the pause");
+  s.api.holdSensor(true);
+  assert.equal(s.imu.at(-1), 2, "board streams gyro and accelerometer while paused");
+  assert.equal(s.api.state().rate, 1.6, "program still asks for desk sensing");
+  s.lines.length = 0;
+  for (let i = 0; i < 52; i++) { s.advance(1 / 104); s.api.deliver(s.now, 0, [0, 0, 8192], [0, 0, 1340]); }
+  assert(!s.lines.some((l) => l.startsWith("@RAW ")), "held readings never become pointer input");
+  const count = s.imu.length; s.api.holdSensor(true); assert.equal(s.imu.length, count, "no duplicate sensor command");
+  s.api.holdSensor(false);
+  assert.equal(s.imu.at(-1), 1, "resume returns the board to the program's rate");
 });

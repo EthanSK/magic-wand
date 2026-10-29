@@ -44,7 +44,16 @@ final class WandControlTransport {
         return result == data.count
     }
 
+    /// Ethan's debug pause (WandActionPause): no new HUD, review, screenshot or
+    /// dictation command leaves the receiver. Closing the wand's own HUD session
+    /// is still allowed, and nothing is sent to Agent Flow, so a recording in
+    /// progress is never stopped. `refused` counts blocked commands for tests.
+    var suspended = false
+    private(set) var refused = 0
+    private func allowed() -> Bool { if suspended { refused += 1 }; return !suspended }
+
     func beginHUD() -> Bool {
+        guard allowed() else { return false }
         cancelHUD(reason: "user")
         let id = UUID().uuidString
         gestureID = id; lastGestureID = id; sequence = 0
@@ -55,7 +64,7 @@ final class WandControlTransport {
     }
 
     func updateHUD(x: Double, y: Double, ending: Bool = false) -> Bool {
-        guard let id = gestureID, x.isFinite, y.isFinite, abs(x) <= 7200, abs(y) <= 7200 else { return false }
+        guard allowed(), let id = gestureID, x.isFinite, y.isFinite, abs(x) <= 7200, abs(y) <= 7200 else { return false }
         sequence += 1
         let sent = send(["command":"agentic_mouse_wand_selection", "version":1,
                          "phase":ending ? "end" : "update", "gesture_id":id, "seq":sequence,
@@ -75,6 +84,7 @@ final class WandControlTransport {
     private var persistentID = UUID().uuidString
     private var persistentSequence=0
     func persistent(_ phase:String,x:Double=0,y:Double=0,mouseX:Double?=nil) {
+        guard phase == "dismiss" || phase == "park" || allowed() else {return}
         if ["open","hover","navigate","press","activate","choose","dismiss","toggleReview"].contains(phase) {persistentID=UUID().uuidString;persistentSequence=0}
         persistentSequence += 1
         var packet:[String:Any] = ["command":"agentic_mouse_wand_control","version":1,"phase":phase,"id":persistentID,
@@ -88,11 +98,13 @@ final class WandControlTransport {
     /// never cancels an active selection and sends no keyboard shortcut itself.
     @discardableResult
     func screenshotStart(id: String = UUID().uuidString) -> Bool {
-        send(["command":"agentic_mouse_wand_screenshot_start", "version":1, "id":id],
+        guard allowed() else { return false }
+        return send(["command":"agentic_mouse_wand_screenshot_start", "version":1, "id":id],
              path:agenticPath, limit:256)
     }
 
     func speech(down: Bool) -> Bool {
+        guard allowed() else { return false }
         guard down != speechPressed else { return true }
         let sent = send(["version":1, "action":"primaryRecordingMouse", "source":"wand",
                          "phase":down ? "down" : "up"], path:speechPath, limit:256)
@@ -103,6 +115,8 @@ final class WandControlTransport {
     func cancel() {
         cancelHUD()
         persistent("dismiss")
+        // Paused: leave Agent Flow's button state alone rather than risk ending a recording.
+        guard !suspended else { return }
         if speechPressed {
             _ = send(["version":1, "action":"primaryRecordingMouse", "source":"wand", "phase":"cancel"], path:speechPath, limit:256)
         }

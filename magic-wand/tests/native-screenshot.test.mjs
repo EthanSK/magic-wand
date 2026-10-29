@@ -39,6 +39,8 @@ final class Controls {var phases:[String]=[];var starts=0;var available=true
  func persistent(_ phase:String,x:Double=0,y:Double=0,mouseX:Double?=nil){phases.append(phase)}
  func screenshotStart()->Bool{starts+=1;return available}}
 final class Harness {
+ var pointerTravel=0.0
+ var actionPause=WandActionPause()
  let restDetection=Rest(),controls=Controls(),screenshot=WandScreenshotGesture()
  let heldScroll=WandHeldScroll(),motionFilter=WandMotionFilter(),dwell=WandDwellClick(),recenterGesture=WandRecenterGesture(),flickScroll=WandFlickScroll()
  var pointerRouter=WandPointerRouter(),tripleClick=WandTripleClick(),restFollow=WandRestFollowMemory()
@@ -71,6 +73,7 @@ final class Harness {
  func probeHoldTarget(at:CGPoint,token:UUID){}
  func enableMouseAfterScroll(){}
  func receive(_ line:String){for _ in [0] {
+ let paused=actionPause.paused
 ${bottom}
 ${follow}
  }}
@@ -202,7 +205,7 @@ precondition(g.settle.pause==0.2 && g.settle.travel==12,"the settle uses the ord
 print("PASS: screenshot ownership, latch, settle, cancellation and triple-click")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-screenshot-'));
- try {const out=swiftc(dir,code,[new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname]);assert.match(out,/PASS/);}finally{rmSync(dir,{recursive:true,force:true});}
+ try {const out=swiftc(dir,code,[new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname]);assert.match(out,/PASS/);}finally{rmSync(dir,{recursive:true,force:true});}
 });
 
 test('triple-click start packet is exactly the native screenshot start command',{skip:process.platform!=='darwin'},()=>{
@@ -210,6 +213,7 @@ test('triple-click start packet is exactly the native screenshot start command',
  assert(start>=0&&end>start);
  const code=`import Foundation
 final class Transport {
+ func allowed()->Bool {true}
  let agenticPath="test-only";var packets:[(object:[String:Any],limit:Int)]=[]
  func send(_ object:[String:Any],path:String,limit:Int)->Bool {packets.append((object,limit));return true}
  ${transport.slice(start,end)}

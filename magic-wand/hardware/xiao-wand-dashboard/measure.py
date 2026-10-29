@@ -15,6 +15,7 @@ Arrival times include host scheduling; they are not radio-only or end-to-end lat
 """
 import argparse, json, math, statistics, time, urllib.request
 from collections import Counter
+from pathlib import Path
 
 def capture(url, seconds):
     cursor, rows, end = -1, [], time.monotonic() + seconds
@@ -29,6 +30,39 @@ def capture(url, seconds):
                 cursor = packet["id"]; packet["poll"] = polled; rows.append(packet)
         time.sleep(0.1)
     return rows
+
+def read_rows(path):
+    path=Path(path)
+    if path.is_dir():
+        files=sorted(path.glob('readings.jsonl*'),key=lambda p:p.stat().st_mtime_ns)
+        return [row for file in files for row in read_rows(file)]
+    if path.suffix=='.json':return json.loads(path.read_text())
+    lines=path.read_text().splitlines();rows=[]
+    for i,line in enumerate(lines):
+        if not line.strip():continue
+        try:rows.append(json.loads(line))
+        except ValueError:
+            # A process/disk interruption may leave just the final line partial.
+            if i!=len(lines)-1:raise
+    return rows
+
+def pointer_use_rows(rows):
+    """Select observed pointer-use intervals, not gyro movement or follow alone.
+
+    Include the preceding sample as the interval boundary. Receiver counters are
+    cumulative; a new session, counter reset, pause or missing context establishes
+    a new baseline and never proves use. The source recordings remain untouched.
+    """
+    selected=set();previous=None
+    for i,row in enumerate(rows):
+        usage=row.get('usage')
+        valid=isinstance(usage,dict) and not usage.get('paused',True) and all(type(usage.get(k)) in (int,float) for k in ('pointerPosts','pointerTravel'))
+        if valid and previous is not None:
+            j,old=previous;u=old['usage']
+            if row.get('session')==old.get('session') and row.get('transport')==old.get('transport') and usage['pointerPosts']>u['pointerPosts'] and usage['pointerTravel']>u['pointerTravel'] and row.get('poll',0)>old.get('poll',0):
+                selected.update((j,i))
+        previous=(i,row) if valid else None
+    return [rows[i] for i in sorted(selected)]
 
 def q(values, fraction):
     return values[min(len(values) - 1, int(fraction * len(values)))] if values else None
@@ -126,8 +160,10 @@ def main():
     parser.add_argument("--url", default="http://127.0.0.1:8872")
     parser.add_argument("--seconds", type=float, default=60)
     parser.add_argument("--input"); parser.add_argument("--save")
+    parser.add_argument("--active-only",action="store_true",help="Analyse only intervals with receiver-confirmed posted pointer travel")
     args = parser.parse_args()
-    rows = json.load(open(args.input)) if args.input else capture(args.url, args.seconds)
+    rows = read_rows(args.input) if args.input else capture(args.url, args.seconds)
+    if args.active_only: rows = pointer_use_rows(rows)
     if args.save: json.dump(rows, open(args.save, "w"))
     print(json.dumps(report(rows), indent=1))
 

@@ -174,12 +174,15 @@ enum WandSenseUnits {
 
 /// Sense-only pointer tuning; every other canonical value is unchanged.
 enum WandSenseTuning {
-    /// Ethan asked for more sensitivity on 2026-10-29. Default: 25% above the
-    /// installed 2026-10-29c Sense build (86.4 counts per true degree at full
-    /// speed), i.e. 108 counts per degree, 1.466 × the Puck's physical gain.
+    /// Ethan, 2026-10-29: "make the sensitivity the same again. I know I asked to
+    /// increase it, but now it's ... back on the other rod. So go back to the old
+    /// sensitivity." Default: the installed firmware-c-era Sense feel, 86.4 counts
+    /// per true degree at full speed. With Puck-equivalent units that is
+    /// 134 × 0.00875 = 1.1725 × the canonical gain, not 1.0. The 25% boost
+    /// (previously 1.466) is retired; an explicit device.json pointerGain still wins.
     /// Applied to CONFIG.gain before @ZERO; HUD, review and scrolling use angles
     /// and are unaffected. No filtering, buffering or delay is added.
-    static let defaultPointerGain = 1.466
+    static let defaultPointerGain = 1.1725
     static let pointerGainRange = 0.25...4.0
 }
 
