@@ -1,3 +1,4 @@
+import {fileURLToPath as wandSourcePath} from 'node:url';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdtempSync,rmSync,readdirSync} from 'node:fs';
@@ -293,7 +294,7 @@ print("PASS: hold-to-show HUD, native close, kept-open next hold, tap and double
  const dir=mkdtempSync(join(tmpdir(),'wand-hud-'));
  try {
   writeFileSync(join(dir,'main.swift'),code);
-  const compile=spawnSync('swiftc',['-Onone',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});
+  const compile=spawnSync('swiftc',[wandSourcePath(new URL('../receiver/Sources/WandRunLoop.swift',import.meta.url)),'-Onone',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});
   assert.equal(compile.status,0,compile.stderr);
   const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);
  }finally{rmSync(dir,{recursive:true,force:true});}
@@ -316,7 +317,7 @@ test('table rest never stops dictation or closes an explicit HUD', {skip:process
  while(depth){if(source[end]==='{')depth++;if(source[end]==='}')depth--;end++;}
  const code=`import Foundation
 func log(_ values:Any...){}
-struct Filter {var configured=true;func observeGravity(x:Double,y:Double,z:Double){}}
+struct Filter {var configured=true;func observeGravity(x:Double,y:Double,z:Double,rotation:Double=0){}}
 final class Dwell {var following=true;func intent(_ value:Bool,now:Double){};func follow(_ value:Bool){following=value};func inhibit(until:Double){}}
 final class Rest {var parked=false;var deskQuietSince:Double?;var hasReference=true;var sawButtons=false;enum Event{case probe,pickedUp,settling,putDown};func update(x:Double,y:Double,z:Double,gyro:Double,now:Double,buttons:Bool,idle:Bool)->[Event]{sawButtons=buttons;if buttons{return []};parked=true;deskQuietSince=now-61;return [.putDown]}}
 final class Controls {var speechEvents=0;func speech(down:Bool)->Bool{speechEvents+=1;return true}}
@@ -348,7 +349,7 @@ precondition(hud.deskSleep.sleeping && hud.queued.contains{ $0.contains("setWand
 print("PASS: table rest cannot stop recording or dismiss open HUD")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-rest-'));
- try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',[new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
+ try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',[wandSourcePath(new URL('../receiver/Sources/WandRunLoop.swift',import.meta.url)),new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
 });
 
 test('receiver selection taps have independent identities after navigation and previous taps', {skip:process.platform!=='darwin'},()=>{
@@ -380,7 +381,7 @@ precondition(toggles.allSatisfy{$0["seq"] as? Int == 1},"toggle sequences start 
 print("PASS: real receiver generates independent selection identities")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-tap-id-'));
- try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',[join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
+ try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',[wandSourcePath(new URL('../receiver/Sources/WandRunLoop.swift',import.meta.url)),join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
 });
 
 test('actual UART marker handler ignores echoed source and never hides a failed upload', {skip:process.platform!=='darwin'},()=>{
@@ -426,7 +427,7 @@ print("UART regression passed")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-uart-'));
  try {const file=join(dir,'main.swift'),bin=join(dir,'test');writeFileSync(file,code);
- const build=spawnSync('swiftc',[file,'-o',bin],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);
+ const build=spawnSync('swiftc',[wandSourcePath(new URL('../receiver/Sources/WandRunLoop.swift',import.meta.url)),file,'-o',bin],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);
  const run=spawnSync(bin,[],{encoding:'utf8'});assert.equal(run.status,0,run.stderr);
  } finally {rmSync(dir,{recursive:true,force:true});}
 });

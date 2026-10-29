@@ -1,3 +1,4 @@
+import {fileURLToPath as wandSourcePath} from 'node:url';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdtempSync,rmSync} from 'node:fs';
@@ -60,5 +61,5 @@ precondition(warped == .zero,"screenshot mode is never recentred")
 print("PASS: global centre/follow (after the triple-click window) from off, mouse, HUD, scrolling, VS Code and drag; holds preserved")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-recenter-'));
- try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',['-O',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
+ try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',[wandSourcePath(new URL('../receiver/Sources/WandRunLoop.swift',import.meta.url)),'-O',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
 });

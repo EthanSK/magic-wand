@@ -55,6 +55,21 @@ for path in [WandPointerPath.tuned, .direct] {
     precondition(rolled.x == 0 && rolled.y != 0, "\(path) rolled 90°: \(rolled)")
 }
 print("PASS: gravity projection shared")
+// 5b. Sense strict gravity: a sample taken mid-jerk, mid-twist or near vertical
+// never sets the roll; a clean near-1 g sample still does, at once. The Puck
+// (strictGravity off) keeps its original bounds.
+func upright(_ f: WandMotionFilter) -> Bool { let m = run(f, x: 50, seconds: 0.2); return m.x != 0 && m.y == 0 }
+for strict in [false, true] {
+    func make() -> WandMotionFilter { let f = filter(.direct); f.orientationCompensation = true; f.orientation.strictGravity = strict; f.observeGravity(x: 0, y: 0, z: 1); return f }
+    let jerk = make(); jerk.observeGravity(x: 1.2, y: 0, z: 0, rotation: 5)
+    let twist = make(); twist.observeGravity(x: 1, y: 0, z: 0, rotation: 120)
+    let vertical = make(); vertical.observeGravity(x: 0.3, y: 0.954, z: 0, rotation: 5)
+    let clean = make(); clean.observeGravity(x: 1, y: 0, z: 0, rotation: 10)
+    precondition(upright(jerk) == strict && upright(vertical) == strict, "strict \(strict): 1.2 g and near-vertical samples")
+    precondition(upright(twist) == strict, "strict \(strict): a fast-rotation sample")
+    precondition(!upright(clean), "strict \(strict): a clean rolled sample is used immediately")
+}
+print("PASS: Sense gravity ignores jerks, twists and near-vertical samples")
 
 // 6. Nothing is replayed: only the ~8 ms smoothing's own tail after motion
 // stops, then nothing; a reset drops the remainder.

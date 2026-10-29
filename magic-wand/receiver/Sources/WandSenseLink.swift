@@ -45,7 +45,8 @@ final class WandSenseLink: NSObject, CBCentralManagerDelegate, CBPeripheralDeleg
         guard !started else { return }
         started = true
         if central == nil { central = CBCentralManager(delegate: self, queue: nil) }
-        tick = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in self?.poll() }
+        // Heartbeat and supervision keep running while a menu is open (WandRunLoop).
+        tick = WandRunLoop.commonTimer(interval: 0.1) { [weak self] _ in self?.poll() }
         poll()
     }
 

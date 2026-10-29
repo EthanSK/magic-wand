@@ -1,3 +1,4 @@
+import {fileURLToPath as wandSourcePath} from 'node:url';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdtempSync,rmSync} from 'node:fs';
@@ -16,7 +17,7 @@ test('pickup restores the pre-rest mouse state; manual choices and recording win
  function method(name){const a=source.indexOf('    func '+name+'(');assert(a>=0,name);let b=source.indexOf('{',a)+1,depth=1;while(depth){if(source[b]==='{')depth++;if(source[b]==='}')depth--;b++;}return source.slice(a,b);}
  const code=`import Foundation
 func log(_ values:Any...){}
-struct Filter {var configured=true;func observeGravity(x:Double,y:Double,z:Double){};func reset(){}}
+struct Filter {var configured=true;func observeGravity(x:Double,y:Double,z:Double,rotation:Double=0){};func reset(){}}
 final class Rest {
  var parked=false;var deskQuietSince:Double?;var hasReference=true
  enum Event{case probe,pickedUp,settling,putDown}
@@ -120,5 +121,5 @@ precondition(hud.mouseOnRequests==0 && hud.restFollow.remembered==nil)
 print("PASS: wake restores pre-rest state; manual and recording win")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-wake-'));
- try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',['-Onone',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
+ try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',[wandSourcePath(new URL('../receiver/Sources/WandRunLoop.swift',import.meta.url)),'-Onone',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
 });

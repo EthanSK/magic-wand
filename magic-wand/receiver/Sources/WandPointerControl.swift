@@ -537,13 +537,27 @@ final class WandReviewGesture {
 /// Transform increments before accumulating them: rotating an old total would jump.
 final class WandOrientation {
     var enabled=false
+    /// Sense only: the program samples gravity from one reading every 100 ms,
+    /// so one sample taken during a hand jerk or twist set a wrong roll until
+    /// the next. Recorded Sense pointing (firmware c, ~400 s following) had 15
+    /// transient basis flips over 30 degrees, from linear acceleration of
+    /// 0.83-1.24 g, a twist and a near-vertical roll. This accepts only near-1 g
+    /// samples, away from vertical, without fast rotation: 2 flips remained
+    /// and 74% of samples were still used. Each sample is judged at once;
+    /// nothing waits. The Puck keeps its original bounds.
+    var strictGravity=false
+    static let strictLength=0.9...1.1,strictAcross=0.4,strictRotation=45.0
     private var rollCos=1.0,rollSin=0.0,yawScale=1.0
-    func observeGravity(x:Double,y:Double,z:Double) {
-        guard x.isFinite,y.isFinite,z.isFinite else{return}
+    /// `rotation`: the same reading's rotation rate (program units, 134 per deg/s).
+    func observeGravity(x:Double,y:Double,z:Double,rotation:Double=0) {
+        guard x.isFinite,y.isFinite,z.isFinite,rotation.isFinite else{return}
         let length=sqrt(x*x+y*y+z*z),across=hypot(x,z)
         // Linear acceleration is not gravity. Ignore obvious shocks and retain
         // the last usable basis near vertical, where roll cannot be determined.
         guard (0.75...1.25).contains(length),across>=0.25 else{return}
+        if strictGravity {
+            guard Self.strictLength.contains(length),across>=Self.strictAcross,rotation<=Self.strictRotation else{return}
+        }
         rollCos=z/across;rollSin=x/across
         // Heading speed loses cos(elevation) when projected onto the two
         // axes perpendicular to the shaft. Undo that before the speed curve.
@@ -619,7 +633,7 @@ final class WandMotionFilter {
         get {orientation.enabled}
         set {orientation.enabled=newValue}
     }
-    func observeGravity(x:Double,y:Double,z:Double){orientation.observeGravity(x:x,y:y,z:z)}
+    func observeGravity(x:Double,y:Double,z:Double,rotation:Double=0){orientation.observeGravity(x:x,y:y,z:z,rotation:rotation)}
     func projectSigned(x:Double,y:Double)->(x:Double,y:Double) {
         let sx=configured ? values[11] : -1,sy=configured ? values[12] : -1
         let result=orientation.project(x:x/sx,y:y/sy)
