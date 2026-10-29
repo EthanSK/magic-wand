@@ -1,0 +1,83 @@
+{
+  "geometry": {
+    "overall_length_mm": 500.0,
+    "body_maximum_diameter_mm": 8.0,
+    "body_tip_maximum_diameter_mm": 5.8,
+    "solid_cross_sections": [
+      {
+        "z_mm": 12.0,
+        "max_diameter_mm": 7.932032642457218,
+        "core_diameter_mm": 7.040120323134815,
+        "holes": 0
+      },
+      {
+        "z_mm": 72.0,
+        "max_diameter_mm": 7.651276559754041,
+        "core_diameter_mm": 6.753320937793221,
+        "holes": 0
+      },
+      {
+        "z_mm": 125.0,
+        "max_diameter_mm": 7.388465065827444,
+        "core_diameter_mm": 6.499864970241592,
+        "holes": 0
+      },
+      {
+        "z_mm": 220.0,
+        "max_diameter_mm": 6.934093477454303,
+        "core_diameter_mm": 6.0456886873913405,
+        "holes": 0
+      },
+      {
+        "z_mm": 270.0,
+        "max_diameter_mm": 6.696004295545577,
+        "core_diameter_mm": 5.806651388202147,
+        "holes": 0
+      },
+      {
+        "z_mm": 370.0,
+        "max_diameter_mm": 6.227530288610817,
+        "core_diameter_mm": 5.328574209828888,
+        "holes": 0
+      },
+      {
+        "z_mm": 420.0,
+        "max_diameter_mm": 5.97882973594727,
+        "core_diameter_mm": 5.085441980085222,
+        "holes": 0
+      }
+    ],
+    "lap_overlap_mm": 28.0,
+    "lap_face_gap_mm": 0.2,
+    "assembly_overlap_mm3": {
+      "Lower_Rod/Middle_Rod": 3.925678618717843e-15,
+      "Lower_Rod/Upper_Rod_Integral_Gyro_Mount": 0.0,
+      "Middle_Rod/Upper_Rod_Integral_Gyro_Mount": 2.082662351428301e-13
+    },
+    "board_solder_usb_wire_clearance_mm3": {
+      "board": 0.0,
+      "solder": 0.0,
+      "usb": 0.0,
+      "wire_exit": 0.0
+    },
+    "board_removal_overlap_mm3": 0.0001773558683091497,
+    "integral_gyro_mount": true,
+    "external_wires": true,
+    "physical_fit_verified": false,
+    "physical_strength_verified": false
+  },
+  "clip_release_overlap_mm3": 0.00014680606481871867,
+  "seated_clip_numerical_margin_mm": 0.001,
+  "unsupported_sensor_starts": [],
+  "sliced_clearance_samples": {
+    "board": 0,
+    "solder": 0,
+    "usb": 0,
+    "wire_exit": 0
+  },
+  "nearby_material_samples": 10435,
+  "gcode_sampling_mm": 0.5,
+  "archive_sha256": "e65ca3aff6937424314d63ff6f4f6daf842036682f7ef5b7d3aec2fa2fa0fbad",
+  "physical_strength_verified": false,
+  "physical_fit_verified": false
+}
