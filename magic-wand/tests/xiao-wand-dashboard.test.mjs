@@ -84,6 +84,15 @@ test('debug pause control starts hidden and shows only the receiver-reported sta
 test('debug page names the receiver-reported pointer path only',()=>{
  const html=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/index.html',import.meta.url),'utf8');
  const app=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/app.mjs',import.meta.url),'utf8');
- assert.match(html,/<div id="pointer-row" hidden><dt>Pointer filtering<\/dt><dd id="pointer-path">Unknown<\/dd><\/div>/);
- assert.match(app,/actions\.pointerPath==='direct'\?'Off · direct':actions\.pointerPath==='tuned'\?'On · Puck tuning':'Unknown'/);
+ assert.match(html,/<div id="pointer-row" hidden><dt>Pointer mode<\/dt><dd id="pointer-path">Unknown<\/dd><\/div>/);
+ assert.match(app,/actions\.pointerPath==='direct'\?'Sense':actions\.pointerPath==='tuned'\?'Puck tuning':'Unknown'/);
+});
+
+test('battery at the top shows only the receiver estimate, its age or unknown',()=>{
+ const html=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/index.html',import.meta.url),'utf8');
+ const app=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/app.mjs',import.meta.url),'utf8');
+ assert.match(html,/<header>.*<p id="battery" class="battery" title="Estimated from battery voltage\. Runtime isn\u2019t measured\." hidden>Battery unknown<\/p>/s);
+ assert.match(app,/!battery\?'Battery unknown'/);
+ assert.match(app,/battery\.ageSeconds<=300/,'older or disconnected readings are shown as their age, not live');
+ assert(!/hours|remaining/i.test(app),'no runtime is invented');
 });

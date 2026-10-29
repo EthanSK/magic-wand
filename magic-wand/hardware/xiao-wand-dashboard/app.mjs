@@ -121,7 +121,12 @@ function renderActions(){
   if(banner.textContent!==text)banner.textContent=text;
   // The receiver's actual pointer conversion, so readings are compared knowingly.
   $('pointer-row').hidden=!localMode;
-  $('pointer-path').textContent=!available?'Unknown':actions.pointerPath==='direct'?'Off · direct':actions.pointerPath==='tuned'?'On · Puck tuning':'Unknown';
+  // Ethan's battery readout: the receiver's voltage estimate and its age only.
+  const battery=available?actions.battery:null,live=battery&&actions.connected&&battery.ageSeconds<=300;
+  const age=battery?(battery.ageSeconds<60?'just now':`${Math.round(battery.ageSeconds/60)} min ago`):'';
+  $('battery').hidden=!localMode;$('battery').classList.toggle('stale',!live);
+  $('battery').textContent=!battery?'Battery unknown':live?`Battery \u2248${battery.percent}% \u00b7 ${battery.volts.toFixed(2)} V`:`Battery \u2248${battery.percent}% \u00b7 ${age}`;
+  $('pointer-path').textContent=!available?'Unknown':actions.pointerPath==='direct'?'Sense':actions.pointerPath==='tuned'?'Puck tuning':'Unknown';
 }
 async function pollActions(){
   try{const response=await fetch('/api/actions',{cache:'no-store'});actions=response.ok?await response.json():null;}

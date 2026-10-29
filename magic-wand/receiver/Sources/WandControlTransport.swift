@@ -17,8 +17,14 @@ final class WandControlTransport {
         self.speechPath = speechPath
     }
 
+    /// Test seam: replaces the socket write. Same contract as `socketSend`.
+    var deliver: (([String: Any], String, Int) -> Bool)?
     @discardableResult
     private func send(_ object: [String: Any], path: String, limit: Int) -> Bool {
+        if let deliver { return deliver(object, path, limit) }
+        return socketSend(object, path: path, limit: limit)
+    }
+    private func socketSend(_ object: [String: Any], path: String, limit: Int) -> Bool {
         var metadata = stat()
         guard lstat(path, &metadata) == 0, metadata.st_uid == geteuid(),
               metadata.st_mode & S_IFMT == S_IFSOCK, metadata.st_mode & 0o022 == 0,
@@ -48,7 +54,7 @@ final class WandControlTransport {
     /// dictation command leaves the receiver. Closing the wand's own HUD session
     /// is still allowed, and nothing is sent to Agent Flow, so a recording in
     /// progress is never stopped. `refused` counts blocked commands for tests.
-    var suspended = false
+    var suspended = false { didSet { if suspended { discardPendingPersistent(keepingCleanup:true) } } }
     private(set) var refused = 0
     private func allowed() -> Bool { if suspended { refused += 1 }; return !suspended }
 
@@ -83,15 +89,58 @@ final class WandControlTransport {
 
     private var persistentID = UUID().uuidString
     private var persistentSequence=0
+    /// State-changing HUD packets retain order only within the current live
+    /// session. Motion is cumulative and never queued. Pause/dismiss/reset
+    /// invalidate earlier actions; a busy main queue never extends the deadline.
+    private struct Pending { let packet:[String:Any]; let queuedAt:TimeInterval }
+    private var outbox:[Pending]=[]
+    private var flushScheduled=false,flushGeneration:UInt64=0
+    private(set) var droppedPackets=0
+    var retryDelay:TimeInterval=0.015
+    var monotonicNow:()->TimeInterval = {ProcessInfo.processInfo.systemUptime}
+    private func cleanup(_ packet:[String:Any])->Bool { ["dismiss","park"].contains(packet["phase"] as? String ?? "") }
+    func discardPendingPersistent(keepingCleanup:Bool=false) {
+        let before=outbox.count
+        outbox=keepingCleanup ? outbox.filter{cleanup($0.packet)} : []
+        droppedPackets+=before-outbox.count
+        flushGeneration &+= 1;flushScheduled=false
+        if !outbox.isEmpty {flushOutbox()}
+    }
     func persistent(_ phase:String,x:Double=0,y:Double=0,mouseX:Double?=nil) {
         guard phase == "dismiss" || phase == "park" || allowed() else {return}
+        // A dismiss ends the journey; no older refused selection may precede it.
+        if phase == "dismiss" {discardPendingPersistent()}
         if ["open","hover","navigate","press","activate","choose","dismiss","toggleReview"].contains(phase) {persistentID=UUID().uuidString;persistentSequence=0}
         persistentSequence += 1
         var packet:[String:Any] = ["command":"agentic_mouse_wand_control","version":1,"phase":phase,"id":persistentID,
                 "seq":persistentSequence,"x":x,"y":y]
         if phase=="motion",let mouseX,mouseX.isFinite,abs(mouseX)<=7_200_000 {packet["mouseX"]=mouseX}
-        _=send(packet,path:agenticPath,limit:512)
+        if phase == "motion" {
+            if outbox.isEmpty, !send(packet,path:agenticPath,limit:512) {droppedPackets += 1}
+            return
+        }
+        guard outbox.count<64 else {discardPendingPersistent();droppedPackets+=1;return}
+        outbox.append(Pending(packet:packet,queuedAt:monotonicNow()))
+        flushOutbox()
     }
+    private func flushOutbox() {
+        while let pending=outbox.first {
+            guard monotonicNow()-pending.queuedAt<=1 else {discardPendingPersistent();return}
+            if suspended && !cleanup(pending.packet) {outbox.removeFirst();droppedPackets+=1;continue}
+            guard send(pending.packet,path:agenticPath,limit:512) else {
+                guard !flushScheduled else {return}
+                flushScheduled=true;let generation=flushGeneration
+                DispatchQueue.main.asyncAfter(deadline:.now()+retryDelay){[weak self] in
+                    guard let self,self.flushGeneration==generation else{return}
+                    self.flushScheduled=false;self.flushOutbox()
+                }
+                return
+            }
+            outbox.removeFirst()
+        }
+    }
+    /// Pending state-changing HUD packets (for tests and diagnostics).
+    var pendingPackets:Int {outbox.count}
 
     /// Ethan's Bottom triple-click. Agentic Mouse starts its native selected-area
     /// screenshot for a fresh identity and ignores a repeated one; this request
@@ -113,6 +162,7 @@ final class WandControlTransport {
     }
 
     func cancel() {
+        discardPendingPersistent()
         cancelHUD()
         persistent("dismiss")
         // Paused: leave Agent Flow's button state alone rather than risk ending a recording.

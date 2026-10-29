@@ -37,7 +37,7 @@ The wire channel names are the dashboard's legacy `wand-v1` keys and do not name
   Puck's 50 Hz anti-alias filter) plus button edges and press counters. 10 ms switch debounce.
   A free link sends each reading at once. While the radio is busy, newer readings merge into
   the next frame (`count`, first time, mean rate) instead of blocking sampling;
-  the receiver replays them at their own times on arrival.
+  normal pointing uses the latest reading without replaying historical motion; gesture lanes retain their own timing.
 - Asks macOS for the Puck's 15 ms connection interval after connecting and reports the
   negotiated interval, MTU, PHY and merged-frame counts as `Elink …` every 10 s.
 - Takes light (`L`), sensor (`M0` off, `M1` accelerometer about 1.6 Hz, `M2` both at 104 Hz),
@@ -76,19 +76,23 @@ once the wand returned to the other rod. HUD, review and scrolling are unchanged
 
 The Sense uses the **direct** pointer by default: calibrated, orientation-projected gyro rate ×
 time × the gain above, the 1.4 vertical gain and the one-third held gain, keeping the subpixel
-remainder. It has none of the Puck filter's 2–8 ms smoothing, 150 ms directional mean, 250 ms
-intent gate, 0.2° slack with recentring or slow-speed curve, and adds no buffering or delay.
-Stop-to-click and screenshot settling still use the tuned filter's stop detection, so they
-neither stop working nor click from tremor. Held scrolling, HUD and review keep their own
-lanes. Options › **Pointer filtering** (or `"sensePointer": "tuned"` in `feature-flags.json`)
-returns to the tuned filter; the Puck always uses it. `status.json` and the dashboard report
-the path actually in use.
+remainder. Since 2026-10-29 it adds only what was measured or approved: Ethan's approved ~8 ms
+causal smoothing of the rate, a continuous tiny-motion stop (still at or below the existing
+slow-speed boundary, about 2.3 deg/s here, full gain from twice it) and a bounded step, so a
+gap longer than 25 ms is skipped rather than caught up. In normal pointing, a reading that
+arrives more than 75 ms behind the best delivery updates buttons, gravity and desk sensing but
+never moves the pointer. Merged historical motion is also skipped during normal pointing. It still has none of the Puck filter's 150 ms directional mean, 250 ms
+intent gate, 0.2° slack or slow-speed curve, and nothing is buffered or predicted.
+Stop-to-click and screenshot settling still use the tuned filter's stop detection.
+Held scrolling, HUD and review keep their own lanes and every reading. Options › **Pointer
+filtering** (or `"sensePointer": "tuned"` in `feature-flags.json`) returns to the tuned filter;
+the Puck always uses it. `status.json` and the dashboard report the path actually in use.
 
 Expect the direct path to show what the filter used to hide: on the recorded Sense stream the
 tuned filter passed only 8% of motion slower than 2°/s and first moved 173 ms into a steady
 2°/s turn, against 10 ms direct. A residual zero error of 0.5°/s now drifts the pointer about
 43 counts per second, and hand tremor appears as small movement. Still active by design: the
-approved 90 ms buffer while Bottom is held, the bridge's 50–70 ms motion discard around
+zero-buffer held LOW pointer routing, the bridge's 50–70 ms motion discard around
 button edges, the 96 ms gyro start-up discard and the HUD's 1.2°/s dead zone.
 
 ## Debug pause

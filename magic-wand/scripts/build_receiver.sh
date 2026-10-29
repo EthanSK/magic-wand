@@ -15,6 +15,8 @@ swiftc -O "$ROOT/receiver/Sources/"*.swift \
 cp "$ROOT/device/generated/wand-mode-bridge.compact.js" "$APP/Contents/Resources/wand-mode-bridge.js"
 cp "$ROOT/device/generated/wand-power-policy.compact.js" "$APP/Contents/Resources/wand-power-policy.js"
 cp "$ROOT/device/generated/wand-commands.json" "$ROOT/device/generated/wand-runtime-version.txt" "$APP/Contents/Resources/"
+# The instruction panel's content, generated from wand.json (scripts/guide_build.py).
+cp "$ROOT/device/generated/wand-guide.json" "$APP/Contents/Resources/wand-guide.json"
 # Sense profile: the canonical Puck program run on the Mac. The readable base keeps its
 # function declarations for the shim's in-place replaceWith; it is the same source whose
 # body hash is wand-runtime-version.txt. The shim is the website/test Espruino host, unchanged.

@@ -1295,3 +1295,28 @@ gyro activity or a follow flag, and never label sensor logs as screen video. Wri
 queues and rotation stay outside native input delivery, with explicit loss/error
 metadata. Tests use private temporary files and exercise rotation, privacy and
 actual-use selection; physical movement acceptance remains separate.
+
+## Wand HUD packets need ordered delivery (2026-10-29)
+
+macOS gives same-user Unix datagram sockets a small receive queue (`net.local.dgram.recvspace`
+was 4096 bytes on Ethan's Mac, about 25 HUD packets). The receiver streams HUD motion every 30 ms and
+used to ignore refused sends, so a briefly busy Agentic Mouse could silently lose a release's `park`
+or `choose`; a lost `park` also left a held aim that later expired and closed the new page. This is a
+concrete mechanism for "hold-aim-release on Utility sometimes does nothing", not a proven cause. The
+receiver now resends refused state-changing packets unchanged and in order for at most one second
+(native handling ignores repeated ids and sequences) and never queues motion; Agentic Mouse ends a live
+held aim when its release arrives without the `park`.
+
+## Sense pointer jaggedness has three measured parts (2026-10-29)
+
+Recorded real pointing with firmware c over Bluetooth (about 16,000 follow readings):
+- About a third of readings sat at or below the 2 deg/s stop boundary, and the hard on/off
+  gate crossed about 5 times a second. A continuous knee keeps the stop without the jumps.
+- Readings arrive 2–4 at a time every 30 ms (about 15% estimated missing). Each burst moves the
+  pointer at once. Spreading bursts out would need roughly 20–30 ms of delay; only about 8 ms is
+  approved, so this needs firmware d's 15 ms connection request, USB, or Ethan's decision.
+- Per-reading change during slow pointing was about 5 counts rms, and 8 ms smoothing reduced it
+  only to about 5.2: mostly hand tremor, not sensor noise. Removing more needs longer filtering.
+Firmware c always sends one reading per frame, so merged-run replay never ran on it. Late
+backlog (over 75 ms behind the best delivery) is now dropped from normal pointing, and a
+pointer step never covers more than 25 ms. Simulation is not hand-to-screen latency.

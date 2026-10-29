@@ -7,7 +7,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 // Bare check executable in a temporary directory: pointer maths only, no native input.
-test("direct Sense pointer keeps small motion, units, axes, held gain and stop-to-click", { skip: process.platform !== "darwin" }, () => {
+test("direct Sense pointer keeps normal motion, quiet stopping, units, axes and held gain", { skip: process.platform !== "darwin" }, () => {
   const dir = mkdtempSync(join(tmpdir(), "wand-pointer-path-"));
   try {
     copyFileSync(fileURLToPath(new URL("native-pointer-path-main.swift", import.meta.url)), join(dir, "main.swift"));

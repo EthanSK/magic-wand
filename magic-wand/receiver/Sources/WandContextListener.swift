@@ -9,6 +9,10 @@ final class WandContextListener {
     var onModeChange:((String?)->Void)?
     var onSelectionChange:((String?)->Void)?
     var onScreenshotChange:((Bool)->Void)?
+    /// Agentic Mouse's dotted home Switch App with Command held and a live
+    /// wand stream (its `switchAppAdjusting`); older apps never send it.
+    var onSwitchAppAdjustingChange:((Bool)->Void)?
+    private(set) var switchAppAdjusting=false
     private var reviewSelection:String?
     private var screenshotActive=false
     var onReviewChange:((String?)->Void)?
@@ -59,6 +63,8 @@ final class WandContextListener {
             let selection=v["reviewSelection"] as? String ?? ""
             let selected=["changes","files"].contains(selection) ? selection : nil
             if selected != reviewSelection {reviewSelection=selected;onSelectionChange?(selected)}
+            let adjusting=a && (v["switchAppAdjusting"] as? Bool ?? false)
+            if adjusting != switchAppAdjusting {switchAppAdjusting=adjusting;onSwitchAppAdjustingChange?(adjusting)}
             let screenshot=v["screenshotActive"] as? Bool ?? false
             if screenshot != screenshotActive {screenshotActive=screenshot;onScreenshotChange?(screenshot)}
             expiry?.cancel()
@@ -69,6 +75,7 @@ final class WandContextListener {
                     if self.reviewMode != nil {self.reviewMode=nil;self.onReviewChange?(nil)}
                     if self.reviewSelection != nil {self.reviewSelection=nil;self.onSelectionChange?(nil)}
                     if self.screenshotActive {self.screenshotActive=false;self.onScreenshotChange?(false)}
+                    if self.switchAppAdjusting {self.switchAppAdjusting=false;self.onSwitchAppAdjustingChange?(false)}
                     if self.appMode != nil {self.appMode=nil;self.onModeChange?(nil)}
                 }
             }

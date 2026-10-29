@@ -79,7 +79,7 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  var traceInputs=0
  func recordReviewInput(rawX:Double,rawY:Double,dx:Double,dy:Double,now:Double,blocked:String?,step:Int32){traceInputs+=1}
  var cancelledScreenshotHold=false
- func finishBottomHold(now:Double,resumeMouse:Bool=true){cancelledScreenshotHold = !resumeMouse}
+ func finishBottomHold(now:Double,released:Bool=true){cancelledScreenshotHold = !released}
  var screenshotContexts:[Bool]=[]
  func screenshotContextChanged(_ active:Bool){screenshotContexts.append(active)}
  func releaseButtons(){}
@@ -133,8 +133,13 @@ precondition(menu.controls.phases.last=="choose")
 
 let tap=Harness();tap.handleMiddle("1");tap.context.set(true);tap.handleMiddle("0")
 precondition(tap.middleTap != nil && tap.controls.phases.last=="park","a tap waits out the double-click window")
+let selectedAtRelease=tap.controls.phases.count
+for point in ["9000,0","-8000,7000","0,-9000"] {tap.handleNavigation(point)}
+precondition(tap.controls.phases.count==selectedAtRelease && !tap.hudActive,"wand movement during click qualification cannot move the selected wedge")
 settle(0.35)
-precondition(tap.controls.phases.last=="activate" && tap.middleTap == nil,"a lone tap then uses the outlined card")
+precondition(tap.controls.phases.last=="activate" && tap.middleTap == nil,"a lone tap then uses the original outlined card")
+tap.handleNavigation("30000,15000")
+precondition(Array(tap.controls.phases.suffix(2))==["hover","motion"] && tap.controls.points.last==CGPoint.zero,"after activation aim restarts at a fresh origin without replaying click-window motion")
 let double=Harness();double.handleMiddle("1");double.context.set(true);double.handleMiddle("0");double.handleMiddle("1")
 precondition(!double.hudSession && double.controls.phases.last=="dismiss","double click still dismisses")
 double.handleMiddle("0");settle(0.35)
@@ -353,7 +358,8 @@ test('receiver selection taps have independent identities after navigation and p
  assert(start>=0&&end>start);
  const code=`import Foundation
 final class Transport {
- func allowed()->Bool {true}
+ var suspended=false
+ func allowed()->Bool {!suspended}
  let agenticPath="test-only"
  var packets:[[String:Any]]=[]
  func send(_ packet:[String:Any],path:String,limit:Int)->Bool {packets.append(packet);return true}

@@ -45,7 +45,7 @@ extension WandReceiver {
             log("SENSE_PROGRAM_UNAVAILABLE"); senseLink?.drop("program unavailable"); return
         }
         senseSessionNumber += 1
-        senseInfo = info; senseTransport = transport; senseSession.reset(); senseClock.reset(); senseLastReading = -.infinity
+        senseInfo = info; senseTransport = transport; senseSession.reset(); senseClock.reset(); senseLastReading = -.infinity; senseStaleReadings = 0
         restDetection = WandRestDetection(cache: support.appendingPathComponent("desk-reference-sense-\(info.id).json"))
         virtual.onText = { [weak self, weak virtual] text in
             guard let self, let virtual, self.senseVirtual === virtual else { return }
@@ -102,7 +102,7 @@ extension WandReceiver {
                                    "usage": ["pointerPosts":movementCount,"pointerTravel":pointerTravel,
                                              "follow":dwell.following,"paused":actionPause.paused,
                                              "recording":recording.isRecording,"hud":hudSession,
-                                             "pointerPath":motionFilter.path.rawValue]])
+                                             "pointerPath":motionFilter.path.rawValue,"lateDropped":senseStaleReadings]])
             guard let steps = senseSession.accept(frame, arrival: arrival) else { return }
             let time = senseClock.align(micros: frame.micros, arrival: arrival)
             let axes = deviceSettings.senseAxes
@@ -112,14 +112,24 @@ extension WandReceiver {
             // times, immediately, so its motion is integrated instead of lost.
             // Recovered short taps have no known historical edge time. Do not
             // run motion backwards through a synthetic press at the final time.
+            // Ethan prefers skipping missed normal pointer motion to catch-up.
+            // Preserve historical gesture data for HUD/scroll/review, but never
+            // reconstruct a merged run into multiple normal pointer movements.
+            let dropLate = dwell.following && !hudSession && !scrollActive && !heldScroll.active &&
+                !pointerRouter.bottomHeld && !screenshot.ownsPointer
             let times = gyro == nil ? [time] : WandSenseReplay.times(last: time, frame: frame, after: senseLastReading,
-                allowHistory: !steps.contains(where: { $0.synthetic }))
+                allowHistory: !dropLate && !steps.contains(where: { $0.synthetic }))
             senseLastReading = time
+            func motion(at reading: Double) -> [Int]? {
+                guard dropLate, gyro != nil, WandSenseStaleness.isStale(readingTime: reading, arrival: arrival) else { return gyro }
+                senseStaleReadings += 1
+                return nil
+            }
             for step in steps {
                 if step.synthetic { log("SENSE_SHORT_PRESS_RESTORED"); virtual.deliver(time: time, mask: step.mask, accel: nil, gyro: nil) }
                 else {
-                    for at in times.dropLast() { virtual.deliver(time: at, mask: step.mask, accel: accel, gyro: gyro) }
-                    virtual.deliver(time: time, mask: step.mask, accel: accel, gyro: gyro)
+                    for at in times.dropLast() { virtual.deliver(time: at, mask: step.mask, accel: accel, gyro: motion(at: at)) }
+                    virtual.deliver(time: time, mask: step.mask, accel: accel, gyro: motion(at: time))
                 }
             }
         case .battery(let millivolts, _):

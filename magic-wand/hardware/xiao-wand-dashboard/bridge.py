@@ -38,7 +38,10 @@ def accepted_usage(value):
     if type(travel) not in (int,float) or not math.isfinite(travel) or travel<0:return None
     if not all(type(value.get(k)) is bool for k in ('follow','paused','recording','hud')):return None
     if value.get('pointerPath') not in ('direct','tuned'):return None
-    return {k:value[k] for k in ('pointerPosts','pointerTravel','follow','paused','recording','hud','pointerPath')}
+    result={k:value[k] for k in ('pointerPosts','pointerTravel','follow','paused','recording','hud','pointerPath')}
+    # Late readings the receiver kept out of normal pointing (no catch-up replay).
+    if type(value.get('lateDropped')) is int and value['lateDropped']>=0:result['lateDropped']=value['lateDropped']
+    return result
 
 class PrivateReadingsHandler(logging.handlers.RotatingFileHandler):
     failed=False
@@ -257,8 +260,8 @@ class ActionControl:
     same-user file in the receiver's directory; the receiver applies it and echoes
     its id in status.json. No code, hardware connection or new port is involved.
     """
-    def __init__(self,support=RECEIVER_SUPPORT,alive=receiver_running,clock=time.monotonic,sleep=time.sleep):
-        self.support=support;self.alive=alive;self.clock=clock;self.sleep=sleep;self.lock=threading.Lock()
+    def __init__(self,support=RECEIVER_SUPPORT,alive=receiver_running,clock=time.monotonic,sleep=time.sleep,wall=time.time):
+        self.support=support;self.alive=alive;self.clock=clock;self.sleep=sleep;self.wall=wall;self.lock=threading.Lock()
     def state(self,status=None):
         status=read_receiver_status(self.support) if status is None else status
         pid=status.get('pid') if status else None
@@ -269,7 +272,14 @@ class ActionControl:
         since=status.get('actionsPausedAt')
         path=status.get('pointerPath')
         return {'available':True,'paused':paused,'since':since if paused and type(since) in (int,float) else None,'ready':status.get('ready') is True,
-                'pointerPath':path if path in ('direct','tuned') else None}
+                'pointerPath':path if path in ('direct','tuned') else None,'connected':status.get('connected') is True,'battery':self.battery(status)}
+    def battery(self,status):
+        # The receiver's voltage-derived estimate. Runtime is not measured, so none is offered.
+        value=status.get('battery')
+        if not isinstance(value,dict):return None
+        percent,volts,measured=value.get('percent'),value.get('volts'),value.get('measuredAt')
+        if type(percent) is not int or not 0<=percent<=100 or type(volts) not in (int,float) or not 1<=volts<=5 or type(measured) not in (int,float):return None
+        return {'percent':percent,'volts':round(volts,2),'ageSeconds':max(0,round(self.wall()-measured))}
     def request(self,paused,timeout=2.0):
         with self.lock:
             if not self.state()['available']:return 503,{'available':False,'paused':None,'confirmed':False}

@@ -4,7 +4,7 @@
     python3 scripts/build.py          # write generated files
     python3 scripts/build.py --check  # fail if any generated file is stale
 
-Generated files: device/generated/*, docs/device/*, docs/data/*, the marked sections of
+Generated files: device/generated/* (including the receiver's wand-guide.json), docs/device/*, docs/data/*, the marked sections of
 docs/index.html and README.md, and the ?v= cache keys in the website's HTML.
 """
 from __future__ import annotations
@@ -16,6 +16,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import device_build  # noqa: E402
+import guide_build  # noqa: E402
 import site_build  # noqa: E402
 import tutorials_build  # noqa: E402
 
@@ -24,6 +25,7 @@ from paths import ROOT, REPOSITORY, DOCS
 
 def outputs() -> dict[Path, str]:
     files = device_build.artifacts()
+    files.update(guide_build.artifacts())
     files.update(site_build.artifacts(device_build.identifiers()))
     files.update(tutorials_build.artifacts(files))
     return files

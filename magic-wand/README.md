@@ -41,14 +41,16 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | --- | --- |
 | Quick tap from closed | Switch app once |
 | Hold, turn, release | Open the HUD, point to a card and use it on release |
-| Choose a submenu | Keep the submenu open; hold Middle again to choose within it |
-| Choose a wheel control | Keep it selected; hold Middle again and turn the wand to adjust it |
+| In a submenu | Move the wand to outline a card without holding Middle, then click Middle, or hold, aim and release, to use it once |
+| Adjustable card | Click it, or release on it, for dotted mode: wand movement changes only that card; click Middle to finish |
+| Release on Switch App | Dotted app switching: move left or right, circle to keep going, click Middle to switch |
+| In VS Code review | Circle clockwise for next and anticlockwise for previous; click Middle to exit, double-click to swap Review changes and Stage files, hold to stage the selection |
 | Double tap | Close the entire HUD |
 
 - The installed wand uses a radial HUD with Switch App in the centre. The browser demo retains its earlier grid.
 - The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.
-- Ordinary actions close the HUD on release. Submenus and selected wheel controls stay open for the next hold; they have no inactivity timeout. Bottom and speech remain independent.
-- Keep Middle held on Switch App for 0.5 seconds after hold qualification to enter its chooser directly, then move left or right; release finishes. A quicker release still selects it for the next hold. Moving away resets the wait. A quick tap from closed switches once and closes.
+- Ordinary actions act once and close the HUD. After a submenu or Back opens, unheld wand movement moves the outline; click Middle to use the outlined wedge. There is no inactivity timeout. Bottom and speech remain independent.
+- Click an adjustable wheel card, or release on it or on Switch App, to enter dotted mode: wand movement adjusts it without holding Middle, and the next Middle click exits. Copy/Paste and Tracks keep their click actions; release on them to adjust. In Switch App, move left or right to choose a direction, then circle to keep going. A quick tap from closed switches app once.
 - Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.
 - In VS Code, tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit after at most 300 ms, double-click to switch between Review changes and Stage files, retaining the selection and including the current file without staging, or hold it for about half a second to stage the working selection and keep reviewing. Navigation stays frozen until release. The floating indicator says “(Hold to commit selection)” and names the mode a double-click will enter. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.
 - Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.
@@ -60,8 +62,9 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | --- | --- |
 | Tap from off | Enter high-sensitivity follow without clicking |
 | Stop after moving in HIGH | Click once after a 200 ms pause |
+| While choosing where to click | Keep moving the wand slightly while you are not certain about placement so it does not click. Stop when you are ready. The pointer must still be moving; tiny movements filtered out as hand noise do not prevent a click. |
 | Tap while following | Stop following without clicking |
-| Hold | Over a scroll area, drag in any direction to scroll; hold still to continue and drag the other way to reverse. A confirmed draggable target drags instead. Release stops the gesture. |
+| Hold | Over a scroll area, drag in any direction to scroll; hold still to continue and drag the other way to reverse. Release stops scrolling and leaves mouse follow off; tap Bottom to move the pointer again. A confirmed draggable target drags instead. |
 | Tap, then hold the second press | Drag with the mouse button down; release to drop |
 | Double tap | Centre the pointer on the main screen and enable mouse follow after the 300 ms triple-tap window; keep HUD and review selection unchanged |
 | Triple tap | Start screenshot selection; move to select the area, then stop to capture |
@@ -69,10 +72,9 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - Control V3 keeps short taps and tap-then-hold dragging unchanged. The existing 220 ms cutoff separates a tap from a hold.
 - A plain hold scrolls a scroll area or drags a confirmed draggable target. Unknown targets keep scrolling. Tap, then hold the second press to drag explicitly. The pointer stays fixed while scrolling until release.
 - Middle switches to the HUD. The pointer stays within real display edges.
-- Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.
+- Releasing a completed scroll leaves mouse follow off, even if it was on, so you can bring the wand back without moving the pointer. Tap Bottom to follow again.
 - Bottom never opens, closes or clears the Middle HUD or review selection.
 - V3 uses straight strokes in either axis, including diagonals. Holding still continues the captured speed; a new stroke can change speed or reverse without releasing. Circular page-scroll recognition is disabled; V2 remains selectable.
-- Keep moving the wand slightly while you are not certain about placement so it does not click. Stop when you are ready. The pointer must still be moving; tiny movements filtered out as hand noise do not prevent a click.
 - Screenshot temporarily moves the pointer even with mouse follow off. From the HUD Screenshot action, tap Bottom once to start selecting; stopping after movement ends the selection. Triple tap starts selection without another tap. Finishing or cancelling restores the previous mouse-follow choice.
 
 **Lights**, highest priority first
@@ -180,6 +182,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver1.2.104 build109 includes the always-visible Wand Guide, about8ms causal Sense pointer smoothing, tiny-motion stopping and no merged historical replay during normal pointing. Agentic Mouse1.0.296 build302 supplies unheld submenu aiming and locked dotted adjustment. Source checks and manual guide close/show/hide pass; pointer feel is awaiting physical acceptance. Firmware-e compiles but is not flashed because USB is absent.
+- Installed in Agentic Mouse302 and receiver107 or newer: unheld submenu aiming, click/release selection, locked dotted adjustment and click exit. Switch App continues with circular motion. Source checks pass; physical feel remains to be accepted.
 - Installed: holding the Agentic Mouse HUD button does not automatically enter Switch App after a timeout. Hold to aim and release to select; a selected continuous control uses the next deliberate hold. Agentic Mouse 1.0.295 build 301 is installed. Physical release-selection investigation is ongoing.
 - Installed: Review changes and Stage files switch within the same pending Better Git selection and include the current file. No files are staged by switching. Better Git 1.2.135 is released and active; receiver 1.2.96 is installed with settings preserved. Receiver and Mini checks pass. The device remained asleep during installation; physical gesture acceptance remains pending.
 - Installed: double-click Middle toggles Review changes and Stage files without staging. The floating indicator names the other mode. A single click cancels and exits after at most 300 ms; holding for half a second still stages the selection and stays in that mode. Pointer movement is unchanged. Receiver, native interaction and timer checks pass; physical button acceptance remains pending.
@@ -214,7 +218,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.100 (105) · device code `wand-441472ce965b` · bridge `f8639252` · updated 29 October 2026.
+Receiver 1.2.104 (109) · device code `wand-441472ce965b` · bridge `f8639252` · updated 29 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

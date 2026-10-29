@@ -92,6 +92,7 @@ enum WandSenseLine: Equatable {
 
 enum WandSenseCommand {
     static let identify = "?", heartbeat = "H", sleep = "Z", end = "X"
+    static func ending(restarting: Bool) -> String { restarting ? "XU" : end }
     static func sensor(_ mode: Int) -> String { "M" + String(max(0, min(2, mode))) }
     static func light(_ rgb: (UInt8, UInt8, UInt8)) -> String { String(format: "L%02x%02x%02x", rgb.0, rgb.1, rgb.2) }
 }
@@ -198,6 +199,18 @@ enum WandSenseReplay {
         let step = (last - start) / Double(frame.count - 1)
         return (0..<frame.count).map { start + step * Double($0) }
     }
+}
+
+/// Ethan: "If it skips ones ... I'd rather that [than] have it like try and
+/// replay missed movements." A reading that reaches the Mac this long after
+/// the best-case delivery is late radio backlog. In normal pointing it updates
+/// buttons, gravity and desk sensing but never moves the pointer; the pointer's
+/// bounded step then skips its time instead of catching up. Measured on real
+/// pointing (firmware c, Bluetooth): lag above best median 25 ms, p90 49 ms,
+/// p99 86 ms, so this drops only the late tail.
+enum WandSenseStaleness {
+    static let limit = 0.075
+    static func isStale(readingTime: Double, arrival: Double) -> Bool { arrival - readingTime > limit }
 }
 
 /// Device reading time on the host's uptime clock. Uses the least-delayed
