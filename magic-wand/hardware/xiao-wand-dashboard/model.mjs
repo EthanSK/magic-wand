@@ -1,8 +1,10 @@
 // Hardware-independent wire protocol and display state. No device access.
 export const BUTTONS = [
-  {key:'thumb', name:'Thumb', control:'Top', pin:'D8', printed:'8', colour:'#f27c88'},
-  {key:'index', name:'Index', control:'Middle', pin:'D9', printed:'9', colour:'#edc96d'},
-  {key:'middle', name:'Middle finger', control:'Bottom', pin:'D10', printed:'10', colour:'#78b9fa'},
+  // wand-v1 names are legacy wire-channel keys, not the fingers on Ethan's
+  // assembled grip. Keep those keys compatible with the already-saved sketch.
+  {key:'thumb', name:'Middle finger', control:'Bottom', pin:'D8', printed:'8', colour:'#78b9fa'},
+  {key:'index', name:'Thumb', control:'Top', pin:'D9', printed:'9', colour:'#f27c88'},
+  {key:'middle', name:'Index', control:'Middle', pin:'D10', printed:'10', colour:'#edc96d'},
 ];
 export const AXES = ['ax','ay','az','gx','gy','gz'];
 const uint32 = v => Number.isInteger(v) && v >= 0 && v <= 0xffffffff;

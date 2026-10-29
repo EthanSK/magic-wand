@@ -4,22 +4,28 @@
   "pressed_level": "LOW",
   "buttons": [
     {
-      "name": "thumb",
+      "name": "middle",
       "board_pin": "D8",
       "silkscreen": "8",
-      "mcu_pin": "P1.13"
+      "mcu_pin": "P1.13",
+      "wire_key": "thumb",
+      "control": "Bottom"
+    },
+    {
+      "name": "thumb",
+      "board_pin": "D9",
+      "silkscreen": "9",
+      "mcu_pin": "P1.14",
+      "wire_key": "index",
+      "control": "Top"
     },
     {
       "name": "index",
-      "board_pin": "D9",
-      "silkscreen": "9",
-      "mcu_pin": "P1.14"
-    },
-    {
-      "name": "middle",
       "board_pin": "D10",
       "silkscreen": "10",
-      "mcu_pin": "P1.15"
+      "mcu_pin": "P1.15",
+      "wire_key": "middle",
+      "control": "Middle"
     }
   ],
   "common": "GND",

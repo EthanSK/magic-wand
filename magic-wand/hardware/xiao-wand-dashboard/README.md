@@ -42,9 +42,9 @@ Manual browser mode closes its previous reader when switching sources. It has no
 
 | Switch | Sense label | MCU pin | Other contact |
 | --- | --- | --- | --- |
-| Thumb / Top | 8 / D8 | P1.13 | GND |
-| Index / Middle | 9 / D9 | P1.14 | GND |
-| Middle finger / Bottom | 10 / D10 | P1.15 | GND |
+| 1 · Left · Middle finger / Bottom | 8 / D8 | P1.13 | GND |
+| 2 · Centre · Thumb / Top | 9 / D9 | P1.14 | GND |
+| 3 · Right · Index / Middle | 10 / D10 | P1.15 | GND |
 
 Use the two metal switch/socket contacts; an ordinary mechanical switch has no polarity. All three share GND. Internal pull-ups make pressed LOW. **No 3V3 wire goes to these switches.** The checked mapping is included in `pin-plan.json`; this dashboard does not depend on another unpublished wiring page.
 
@@ -59,6 +59,8 @@ Each transport carries newline-delimited JSON, including a leading newline for f
 ```json
 {"schema":1,"sensor":"wand","seq":1,"ms":20,"buttons":{"thumb":false,"index":false,"middle":false},"presses":{"thumb":0,"index":0,"middle":0},"imu":{"ax":0,"ay":0,"az":1,"gx":0,"gy":0,"gz":0}}
 ```
+
+The original sketch’s `thumb`, `index`, `middle` keys identify D8, D9, D10 respectively. These legacy wire-channel names do **not** describe the fingers on the assembled grip: D8 is Middle finger, D9 Thumb and D10 Index. The dashboard labels and `pin-plan.json` preserve this distinction without requiring a firmware upload.
 
 `seq`, `ms` and optional `presses` fields are unsigned 32-bit values. Wrapping is accepted; duplicate/out-of-order sequences are rejected. A board reboot needs a new reader session. All three buttons must be explicit booleans. `imu` may be null; otherwise all six axes must be finite numeric values. No device identifier or calibration is exported. Control Hand's `sensor: hand` and Puck packets are rejected rather than reinterpreted.
 
