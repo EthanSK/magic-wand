@@ -14,3 +14,7 @@ The first dashboard ran in Demo and the diagnostic sketch was only compiled. USB
 A browser can retain the serial port while a separate installer/reader needs it. Release the browser reader and use one owner. The local reader removes device-picker friction and gives USB priority, with Bluetooth used after USB removal. Keep the HTTP dashboard available during work and distinguish waiting, incompatible/no packets, stale and live states.
 
 A single hardware-counter increment must create an activity entry even when both received button states are released; a short click can occur between host polls. An unexpected browser Bluetooth disconnect also needs its own regression: referencing a serial-only error variable there raised an exception despite intentional-close tests passing. Both paths now have targeted tests.
+
+## Keep physical fingers separate from legacy wire names
+
+Ethan corrected the assembled grip order to left Middle finger/D8, centre Thumb/D9, right Index/D10. The already-flashed wand-v1 keys still say thumb/index/middle for D8/D9/D10. Preserve wire compatibility and map by pin; changing only a heading or assuming a key names its finger can swap mouse, speech and HUD inputs. The dashboard mapping regression checks the physical order and retained channel keys; actual control acceptance remains a separate hardware check.
