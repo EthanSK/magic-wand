@@ -58,14 +58,21 @@ final class WandVirtualPuck {
 
     /// The Puck's saved boot, on the Mac. Returns false if any part failed:
     /// the receiver's handshake then reports the bridge as not ready.
-    func boot(_ s: Sources, zero: String?, runtime: String, revision: String) -> Bool {
+    func boot(_ s: Sources, zero: String?, runtime: String, revision: String, pointerGain: Double = 1) -> Bool {
         guard let api, !dead else { return false }
-        let result = api.invokeMethod("boot", withArguments: [s.base, s.bridge, s.power, zero ?? "", runtime, revision])
+        let options: [String: Any] = ["pointerGain": pointerGain]
+        let result = api.invokeMethod("boot", withArguments: [s.base, s.bridge, s.power, zero ?? "", runtime, revision, options])
         return result?.toBool() ?? false
     }
 
     /// One receiver queue() command, with Espruino console semantics.
     func send(_ command: String) { guard !dead else { return }; api?.invokeMethod("repl", withArguments: [command]) }
+
+    /// Reapply mounting and pointer-only gain after loading a fresh bridge.
+    func configurePointer(_ gain: Double) {
+        guard !dead else { return }
+        api?.invokeMethod("configurePointer", withArguments: [gain])
+    }
 
     /// Apply one Sense frame at its device-aligned time. Values are already
     /// in Puck units and the Puck body frame.

@@ -18,6 +18,16 @@ guard case .frame(let quiet)? = WandSenseLine.parse("S8,2000,0,1,0,2,0,0,0,0,0,0
 precondition(quiet.accel == nil && quiet.gyro == nil)
 precondition(WandSenseLine.parse("S8,2000,9,1,0,2,0,0,0,0,0,0,0") == nil && WandSenseLine.parse("S1,2,3") == nil)
 precondition(WandSenseLine.parse("V3912,1") == .battery(millivolts: 3912, charging: true))
+guard case .frame(let run)? = WandSenseLine.parse("S9,100000,0,1,0,2,3,0,0,8196,500,0,0,4,71155") else { fatalError("merged frame") }
+precondition(run.count == 4 && run.firstMicros == 71155 && run.gyro == [500, 0, 0])
+guard case .frame(let one)? = WandSenseLine.parse("S10,109615,0,1,0,2,3,0,0,8196,500,0,0,1,109615") else { fatalError("single frame") }
+precondition(one.count == 1 && one.firstMicros == nil)
+precondition(WandSenseLine.parse("S9,100000,0,1,0,2,3,0,0,8196,500,0,0,0,71155") == nil, "zero-reading count rejected")
+precondition(WandSenseReplay.times(last: 20, frame: run, after: 19.9, allowHistory: false) == [20], "a recovered button edge fences historical motion")
+let spread = WandSenseReplay.times(last: 20.0, frame: run, after: 19.9)
+precondition(spread.count == 4 && abs(spread[0] - 19.971155) < 1e-6 && spread[3] == 20.0, "merged run keeps its real spacing: \(spread)")
+precondition(WandSenseReplay.times(last: 20.0, frame: run, after: 19.99).first! > 19.99, "never before the previous reading")
+precondition(WandSenseReplay.times(last: 20.0, frame: one, after: 19.9) == [20.0])
 print("PASS: identity, frame and battery parsing; other devices rejected")
 
 // Ethan's assembled wiring: D8 Bottom, D9 Top, D10 Middle.
@@ -31,9 +41,15 @@ print("PASS: D8 Bottom, D9 Top, D10 Middle")
 precondition(WandSenseAxes(text: ["-y", "+x", "+z"]) == .standard)
 precondition(WandSenseAxes(text: ["+y", "+x", "+z"]) == nil, "mirror rejected")
 precondition(WandSenseAxes(text: ["+x", "+x", "+z"]) == nil, "duplicate axis rejected")
+// Same LSM6DS3TR-C as the Puck: one Puck count is 8.75 mdps (114.29 per deg/s).
 let g = WandSenseUnits.gyro([1000, 0, 0], info: info, axes: .standard)
-precondition(g == [0, 1173, 0], "8.75 deg/s on Sense x is Puck y at 134 per deg/s: \(g)")
-precondition(WandSenseUnits.gyro([0, 32767, 0], info: info, axes: .standard)[0] == -32767, "saturates like the Puck int16")
+precondition(g == [0, 1000, 0], "a 245 dps Sense count is exactly one Puck count: \(g)")
+guard case .info(var wide)? = identity else { fatalError() }
+wide = WandSenseInfo(firmware: wide.firmware, id: wide.id, gyroDpsPerLsb: 0.0175, accelGPerLsb: 0.000122, odr: 104, wake: false)
+precondition(WandSenseUnits.gyro([0, 32767, 0], info: wide, axes: .standard)[0] == -65534, "500 dps range keeps headroom above the Puck's 286.7 dps clip")
+let legacy = WandSenseUnits.migrateLegacyZero(WandCalibration(x: 339.16, y: 252.41, z: -56.09))
+precondition(abs(legacy.x - 289.26) < 0.05 && abs(legacy.z + 47.84) < 0.05, "134-per-dps zero converted to Puck counts: \(legacy)")
+precondition(WandSenseTuning.defaultPointerGain * 86.4 * WandSenseUnits.gyroCountsPerDps / 134 > 107.9, "25% above the installed Sense build's 86.4 counts per degree")
 precondition(WandSenseUnits.accel([0, 0, 8196], info: info, axes: .standard) == [0, 0, 8191])
 print("PASS: rotation-only axis map, Puck units and saturation")
 

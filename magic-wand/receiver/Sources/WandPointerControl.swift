@@ -558,7 +558,7 @@ final class WandMotionFilter {
     }
     func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0}
     func sample(rawX:Int,rawY:Int,microseconds:Int,held:Bool,resetState:Bool)->Result? {
-        guard configured,(-32768...32767).contains(rawX),(-32768...32767).contains(rawY),
+        guard configured,(-65535...65535).contains(rawX),(-65535...65535).contains(rawY),
               (1...50000).contains(microseconds) else{return nil}
         if resetState {reset()}
         let v=values,dt=Double(microseconds)/1_000_000

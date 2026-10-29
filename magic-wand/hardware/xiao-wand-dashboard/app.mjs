@@ -52,7 +52,7 @@ for(const button of document.querySelectorAll('[data-hold]')){
   button.addEventListener('keydown',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();hold(button.dataset.hold,true);}});
   button.addEventListener('keyup',e=>{if(['Space','Enter'].includes(e.code)){e.preventDefault();hold(button.dataset.hold,false);}});
 }
-const keys={'Digit1':'thumb','Digit2':'index','Digit3':'middle'};
+const keys=Object.fromEntries(BUTTONS.map((b,i)=>['Digit'+(i+1),b.key]));
 window.addEventListener('keydown',e=>{if(keys[e.code]&&!e.metaKey&&!e.ctrlKey&&!e.altKey){e.preventDefault();hold(keys[e.code],true);}});
 window.addEventListener('keyup',e=>{if(keys[e.code])hold(keys[e.code],false);});
 window.addEventListener('blur',()=>{for(const b of BUTTONS)hold(b.key,false);});

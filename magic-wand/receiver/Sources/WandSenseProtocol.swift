@@ -5,15 +5,17 @@ import Foundation
 //
 // Device lines (each preceded by a newline for framing recovery):
 //   I{json}  identity: protocol, firmware, id, gyroDpsPerLsb, accelGPerLsb, odr, wake
-//   S seq,us,buttons,pressD8,pressD9,pressD10,imuFlags,ax,ay,az,gx,gy,gz
+//   S seq,us,buttons,pressD8,pressD9,pressD10,imuFlags,ax,ay,az,gx,gy,gz[,count,firstUs]
+//     count > 1: the board merged readings the radio could not take at once;
+//     gx..gz are their mean, firstUs the first reading's time (firmware d+).
 //   V millivolts,charging
 //   E text   firmware event (logged only)
 // Host commands: ? identity, H heartbeat, Lrrggbb light, M0/M1/M2 sensor, Z sleep, X end.
 //
 // Wire channel names stay the dashboard's legacy wand-v1 keys: thumb=D8,
 // index=D9, middle=D10. They do NOT name fingers. Ethan's assembled wand:
-// D8 = middle finger = Bottom (mouse), D9 = thumb = Top (speech),
-// D10 = index finger = Middle (HUD/review). User-corrected — 2026-10-29.
+// D10 = left/middle finger = Middle (HUD/review), D8 = centre/thumb = Bottom
+// (mouse), D9 = right/index finger = Top (speech). Physical check — 2026-10-29.
 
 struct WandSenseInfo: Equatable {
     static let protocolName = "wand-sense-1"
@@ -50,14 +52,22 @@ struct WandSenseFrame: Equatable {
     let presses: [UInt32]
     let accel: [Int]?
     let gyro: [Int]?
+    /// Readings represented: 1, or several merged while the radio was busy.
+    var count = 1
+    var firstMicros: UInt32?
     static func parse(_ body: Substring) -> WandSenseFrame? {
         let f = body.split(separator: ",", omittingEmptySubsequences: false)
-        guard f.count == 13, let seq = UInt32(f[0]), let us = UInt32(f[1]), let wire = Int(f[2]), (0...7).contains(wire),
+        guard f.count == 13 || f.count == 15, let seq = UInt32(f[0]), let us = UInt32(f[1]), let wire = Int(f[2]), (0...7).contains(wire),
               let p0 = UInt32(f[3]), let p1 = UInt32(f[4]), let p2 = UInt32(f[5]), let flags = Int(f[6]), (0...3).contains(flags) else { return nil }
         let axes = f[7...12].compactMap { Int($0) }
         guard axes.count == 6, axes.allSatisfy({ (-32768...32767).contains($0) }) else { return nil }
-        return .init(seq: seq, micros: us, wire: wire, presses: [p0, p1, p2],
+        var frame = WandSenseFrame(seq: seq, micros: us, wire: wire, presses: [p0, p1, p2],
                      accel: flags & 1 != 0 ? Array(axes[0...2]) : nil, gyro: flags & 2 != 0 ? Array(axes[3...5]) : nil)
+        if f.count == 15 {
+            guard let count = Int(f[13]), (1...255).contains(count), let first = UInt32(f[14]), us &- first < 5_000_000 else { return nil }
+            frame.count = count; frame.firstMicros = count > 1 ? first : nil
+        }
+        return frame
     }
 }
 
@@ -128,18 +138,62 @@ struct WandSenseAxes: Equatable {
     func apply(_ v: [Double]) -> [Double] { map.map { Double($0.sign) * v[$0.axis] } }
 }
 
-/// Converts physical Sense readings to the Puck's documented units:
-/// 8192 per g and 134 per degree/second, saturating like its int16 sensor.
+/// Converts physical Sense readings to the counts the Puck itself produces.
+/// Both boards carry the same LSM6DS3TR-C (Espruino Puck.js page; Seeed XIAO
+/// wiki). Espruino runs it at 245 dps, ±4 g (jswrap_puck.c), where one gyro
+/// count is 8.75 mdps (ST sensitivity), i.e. 114.29 counts per deg/s. The
+/// documented "divide by 134" is full scale / 32768, not the chip's
+/// sensitivity. Until 2026-10-29 the Sense used 134 per true deg/s: 17% more
+/// pointer gain than the Puck and every speed/stillness threshold 15% tighter.
+/// Puck counts make all canonical thresholds physically identical; extra
+/// pointer sensitivity is the explicit Sense pointerGain instead.
 enum WandSenseUnits {
-    static func puck(_ value: Double, scale: Double) -> Int {
+    static let gyroCountsPerDps = 1 / 0.00875
+    static let accelCountsPerG = 8192.0
+    /// The 2026-10-29a–c builds' gyro units (saved zeros are migrated from them).
+    static let legacyGyroCountsPerDps = 134.0
+    /// Gyro headroom above the Puck's int16 clip (286.7 deg/s), for the Sense's
+    /// 500 deg/s range. The receiver's raw validation accepts this range.
+    static let gyroLimit = 65535.0
+    static func puck(_ value: Double, scale: Double, limit: Double = 32767) -> Int {
         guard value.isFinite else { return 0 }
-        return Int(max(-32767, min(32767, (value * scale).rounded())))
+        return Int(max(-limit, min(limit, (value * scale).rounded())))
     }
     static func accel(_ raw: [Int], info: WandSenseInfo, axes: WandSenseAxes) -> [Int] {
-        axes.apply(raw.map { Double($0) * info.accelGPerLsb }).map { puck($0, scale: 8192) }
+        axes.apply(raw.map { Double($0) * info.accelGPerLsb }).map { puck($0, scale: accelCountsPerG) }
     }
     static func gyro(_ raw: [Int], info: WandSenseInfo, axes: WandSenseAxes) -> [Int] {
-        axes.apply(raw.map { Double($0) * info.gyroDpsPerLsb }).map { puck($0, scale: 134) }
+        axes.apply(raw.map { Double($0) * info.gyroDpsPerLsb }).map { puck($0, scale: gyroCountsPerDps, limit: gyroLimit) }
+    }
+    /// A zero saved in the legacy 134-per-deg/s units, in current Puck counts.
+    static func migrateLegacyZero(_ zero: WandCalibration) -> WandCalibration {
+        let k = gyroCountsPerDps / legacyGyroCountsPerDps
+        return WandCalibration(x: zero.x * k, y: zero.y * k, z: zero.z * k)
+    }
+}
+
+/// Sense-only pointer tuning; every other canonical value is unchanged.
+enum WandSenseTuning {
+    /// Ethan asked for more sensitivity on 2026-10-29. Default: 25% above the
+    /// installed 2026-10-29c Sense build (86.4 counts per true degree at full
+    /// speed), i.e. 108 counts per degree, 1.466 × the Puck's physical gain.
+    /// Applied to CONFIG.gain before @ZERO; HUD, review and scrolling use angles
+    /// and are unaffected. No filtering, buffering or delay is added.
+    static let defaultPointerGain = 1.466
+    static let pointerGainRange = 0.25...4.0
+}
+
+/// Reading times for one frame: a single reading, or a run the board merged
+/// while the radio was busy, spread evenly from its first to its last
+/// reading. Every reading is applied as soon as the frame arrives; nothing
+/// waits for later data. Times never step backwards.
+enum WandSenseReplay {
+    static func times(last: Double, frame: WandSenseFrame, after previous: Double, allowHistory: Bool = true) -> [Double] {
+        guard allowHistory, frame.count > 1, let first = frame.firstMicros else { return [last] }
+        let span = Double(frame.micros &- first) / 1_000_000
+        let start = max(last - span, min(last, previous + 0.0005))
+        let step = (last - start) / Double(frame.count - 1)
+        return (0..<frame.count).map { start + step * Double($0) }
     }
 }
 
@@ -237,6 +291,8 @@ enum WandSenseDashboard {
                    "gx": Double(g[0]) * info.gyroDpsPerLsb, "gy": Double(g[1]) * info.gyroDpsPerLsb, "gz": Double(g[2]) * info.gyroDpsPerLsb]
         }
         return ["schema": 1, "sensor": "wand", "seq": Int(f.seq), "ms": Int(f.micros / 1000),
+                "sampleCount": f.count, "firstMicros": Int(f.firstMicros ?? f.micros),
+                "imuFlags": (f.accel == nil ? 0 : 1) | (f.gyro == nil ? 0 : 2),
                 "buttons": ["thumb": f.wire & 1 != 0, "index": f.wire & 2 != 0, "middle": f.wire & 4 != 0],
                 "presses": ["thumb": Int(f.presses[0]), "index": Int(f.presses[1]), "middle": Int(f.presses[2])],
                 "imu": imu, "firmware": info.firmware.filter { $0.isLetter || $0.isNumber }]

@@ -167,7 +167,7 @@ through their build/check commands; never claim an illustration is physical veri
 
 - Explicit timing exception: double-click-to-centre may wait up to 300 ms after the second release to distinguish the screenshot triple-click. Normal pointer movement remains immediate. This is only approval for centering, not for movement buffering or other new delays. User-confirmed — 2026-10-25.
 
-- Keeping Middle held on the wand-home centre Switch App item enters its existing chooser after a deliberate 0.5-second continuous dwell after qualification, without a release and re-hold. Moving away resets the dwell; fresh telemetry and the same page are required. Retain the first-hold navigation and quicker-release/second-hold paths. No pre-arm motion replay. User-requested — 2026-10-26.
+- Holding the Agentic Mouse HUD button must not automatically enter Switch App after a timeout. Keep the natural hold-to-aim behaviour: nothing activates until release or selecting an item and releasing. Keep the existing click behaviour and deliberate next-hold adjustment after selecting a continuous control. This replaces the earlier 0.5-second centre dwell. User-requested — 2026-10-29.
 
 ## Printed wand design identity
 
