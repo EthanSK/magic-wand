@@ -120,11 +120,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let recording = WandRecordingState(cache:support.appendingPathComponent("recording-state.json"))
     var recordingPointerPaused=false
     var recordingRestoreFollow:Bool?
-    /// After a released scroll turned mouse follow off: until the device reports
-    /// it (`@FOLLOW 0`, or a not-following raw frame), a new Bottom press or this
-    /// bound, its in-flight following frames must not move the pointer.
-    var scrollFollowOffUntil:Double?
-    static let scrollFollowOffConfirmSeconds=1.0
     var restFollow=WandRestFollowMemory()
     // One serial lane bounds the Bottom-hold Accessibility probe off the
     // main thread; motion and posting never wait for it.
@@ -345,14 +340,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         dwell.reset();scheduleDwell()
         log("RECORDING_STATE",active);syncRecordingLight();status()
     }
-    /// The device's own follow report (`@FOLLOW`). While a released scroll's
-    /// follow-off is unconfirmed, an older restore (the chord puts its prior
-    /// follow back before the receiver's command arrives) must not count.
+    /// The device's own follow report (`@FOLLOW`).
     func deviceFollowChanged(_ on:Bool) {
-        if scrollFollowOffUntil != nil {
-            if on {log("SCROLL_FOLLOW_RESTORE_IGNORED");return}
-            scrollFollowOffUntil=nil
-        }
         guard !recordingPointerPaused,!screenshot.ownsPointer else{return}
         if on {restDetection.pointerActivated()}else{restDetection.pointerStopped();flickScroll.reset();flickAnchor=nil;setCircleLight(false)}
         dwell.follow(on);scheduleDwell()
@@ -591,7 +580,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         wandShortcutMode=nil;wandShortcutCircle.reset()
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
         probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true);deskSleep.reset();restFollow.reset()
-        recenterGesture.cancel();recenterSuppressButtons=false;scrollFollowOffUntil=nil;performPointer(pointerRouter.cancelAll());setCircleLight(false)
+        recenterGesture.cancel();recenterSuppressButtons=false;performPointer(pointerRouter.cancelAll());setCircleLight(false)
         pendingRecenter?.invalidate();pendingRecenter=nil;tripleClick.cancel();clickFollowChoice=nil
         endScreenshot(reason:"receiver reset",contextActive:screenshotActive,forgetPress:true)
         lightMode="disconnected"
@@ -789,8 +778,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // so a consumed (scrolled) hold's endpoint click is dropped by order.
                 if value=="0" || value=="1" {
                     guard actionPause.admit(.bottom,down:value=="1") else {continue}
-                    // A new press is a newer deliberate choice than the scroll's follow-off.
-                    if value=="1" {scrollFollowOffUntil=nil}
                     if screenshotBottom(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
                     if value=="1" {manualPointerDuringRecording()}
                     if recognizeBottomRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
@@ -804,7 +791,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     if value=="1" && flickScroll.active {flickScroll.reset();flickAnchor=nil;setCircleLight(false);motionFilter.reset()}
                     let endedLegacyScroll=value=="0" && pointerRouter.circle.active
                     dwell.reset();scheduleDwell();performPointer(pointerRouter.bottom(down:value=="1"))
-                    if endedLegacyScroll {leaveMouseOffAfterScroll()}
+                    if endedLegacyScroll {enableMouseAfterScroll()}
                 }
             }
             if let marker=line.range(of:"@MIDDLE "){
@@ -1389,29 +1376,25 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         for event in Self.wheelEvents(x:x,y:y,at:scrollAnchor ?? circleAnchor) {event.post(tap:.cghidEventTap)}
         scrollPostedX+=Int(x);scrollPostedY+=Int(y)
     }
-    /// Ethan: after a scroll, "if the mouse mode was on before, it's no longer
-    /// on because I need to move my wand back because it's been offset. It's no
-    /// longer where the mouse is." A released page scroll (held scroll in any
-    /// control version, the two-button chord or the V1 circle) leaves mouse
-    /// follow off on the Mac and the device, whatever it was before. It is the
-    /// newest choice, so recording and rest memory cannot restore follow later;
-    /// a Bottom tap switches it back on. Taps, drags, screenshots, review and
-    /// lost-telemetry cancellation never come here. Nothing is delayed: frames
-    /// the device sent while still following are dropped, not replayed.
-    func leaveMouseOffAfterScroll(){
+    /// A released page scroll (held scroll in any control version, the
+    /// two-button chord or the V1 circle) returns to mouse follow at the current
+    /// pointer position, even if follow was off before. Ethan reversed the brief
+    /// follow-off rule: "undo the thing where after scrolling it disables the
+    /// mouse" (2026-10-29). Taps, drags, screenshots, review and lost-telemetry
+    /// cancellation never come here.
+    func enableMouseAfterScroll(){
         guard ready,!restoring else{return}
-        manualPointerDuringRecording()
-        motionFilter.reset();dwell.reset();dwell.follow(false);restDetection.pointerStopped();scheduleDwell()
-        scrollFollowOffUntil=ProcessInfo.processInfo.systemUptime+Self.scrollFollowOffConfirmSeconds
-        queue("setMouseFollow(false);")
-        log("SCROLL_FINISHED_MOUSE_OFF")
+        enterPointerMode();motionFilter.reset();dwell.reset();dwell.follow(true)
+        restDetection.pointerActivated();scheduleDwell()
+        queue("global.wandPointerPauseUntil=0;setMouseFollow(true);")
+        log("SCROLL_FINISHED_MOUSE_ON")
     }
     /// `released`: a physical release ended the chord scroll.
     func finishScroll(released:Bool=false){
         if scrollActive{log("SCROLL_END lines",scrollPostedX,scrollPostedY)}
         let wasActive=scrollActive
         scrollActive=false;scrollAnchor=nil;scrollWatchdog?.invalidate();scrollWatchdog=nil
-        if wasActive {if released {leaveMouseOffAfterScroll()}else{resumeHUDNavigation()}}
+        if wasActive {if released {enableMouseAfterScroll()}else{resumeHUDNavigation()}}
     }
     /// Bottom double tap is a global escape into pointing, not a mode action.
     /// Keep its recognition alive when the first tap closes a HUD or scroll.
@@ -1684,7 +1667,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)}
         if heldScroll.end(now:now) {queue("global.wandPointerPauseUntil=0;")}
         heldScrollAnchor=nil;setCircleLight(false)
-        if completedScroll && released {leaveMouseOffAfterScroll()}
+        if completedScroll && released {enableMouseAfterScroll()}
     }
     func reconcileBottomHold(down:Bool,now:Double,reason:String,released:Bool=true) {
         // A latched screenshot drag outlives its tap's physical release.
@@ -1735,8 +1718,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             rawWindowStart=now;rawReports=0;rawMaxGap=0
         }
         // HUD-only raw reports share HIGH math but never post pointer input.
-        // Not following also confirms a released scroll's follow-off.
-        if v[3]&4 != 0 {scrollFollowOffUntil=nil;return}
+        if v[3]&4 != 0 {return}
         if controlVersion.usesHeldScroll && heldScroll.active {
             dwell.reset();scheduleDwell()
             heldScroll.settleTarget(now:now)
@@ -1759,12 +1741,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             return
         }
         if controlVersion.usesHeldScroll && pointerRouter.bottomHeld {return}
-        // Still following on the device after a released scroll turned it off:
-        // drop the frame (no replay). The bound covers a lost confirmation.
-        if let until=scrollFollowOffUntil {
-            guard now>=until else {dwell.reset();return}
-            scrollFollowOffUntil=nil;log("SCROLL_FOLLOW_OFF_UNCONFIRMED")
-        }
         let wasFlick=flickScroll.active
         let flick=flickScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now,
             eligible:flickScrollEnabled && dwell.following && !pointerRouter.bottomHeld && buttons==0)

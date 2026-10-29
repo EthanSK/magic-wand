@@ -53,8 +53,6 @@ final class Harness {
  var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,flickScrollEnabled=false
  var screenshotActive=false,screenshotHUD=false,hudSession=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleHeld=false,hudEntryPress=false,acceptHUDContext=true,hudOpenedAt=0.0
  var recordingPointerPaused=false,recordingRestoreFollow:Bool?,recenterSuppressButtons=false
- var scrollFollowOffUntil:Double?
- static let scrollFollowOffConfirmSeconds=1.0
  var heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,flickAnchor:CGPoint?,deliveryPoint:CGPoint?
  var pointerDisplays=[CGRect(x:0,y:0,width:2000,height:1000)]
  var buttons=0,movementCount=0,reportCount=0,rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,middleMouseX=0.0,middleMouseSampleAt = -100.0
@@ -77,7 +75,7 @@ final class Harness {
  func beginBottomHold(now:Double){holds+=1}
  func finishBottomHold(now:Double,released:Bool=true){}
  func probeHoldTarget(at:CGPoint,token:UUID){}
- func leaveMouseOffAfterScroll(){}
+ func enableMouseAfterScroll(){}
  func receive(_ line:String){for _ in [0] {
  let paused=actionPause.paused
 ${bottom}

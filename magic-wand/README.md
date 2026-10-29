@@ -64,7 +64,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Stop after moving in HIGH | Click once after a 200 ms pause |
 | While choosing where to click | Keep moving the wand slightly while you are not certain about placement so it does not click. Stop when you are ready. The pointer must still be moving; tiny movements filtered out as hand noise do not prevent a click. |
 | Tap while following | Stop following without clicking |
-| Hold | Over a scroll area, drag in any direction to scroll; hold still to continue and drag the other way to reverse. Release stops scrolling and leaves mouse follow off; tap Bottom to move the pointer again. A confirmed draggable target drags instead. |
+| Hold | Over a scroll area, drag in any direction to scroll; hold still to continue and drag the other way to reverse. A confirmed draggable target drags instead. Release stops the gesture. |
 | Tap, then hold the second press | Drag with the mouse button down; release to drop |
 | Double tap | Centre the pointer on the main screen and enable mouse follow after the 300 ms triple-tap window; keep HUD and review selection unchanged |
 | Triple tap | Start screenshot selection; move to select the area, then stop to capture |
@@ -72,7 +72,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - Control V3 keeps short taps and tap-then-hold dragging unchanged. The existing 220 ms cutoff separates a tap from a hold.
 - A plain hold scrolls a scroll area or drags a confirmed draggable target. Unknown targets keep scrolling. Tap, then hold the second press to drag explicitly. The pointer stays fixed while scrolling until release.
 - Middle switches to the HUD. The pointer stays within real display edges.
-- Releasing a completed scroll leaves mouse follow off, even if it was on, so you can bring the wand back without moving the pointer. Tap Bottom to follow again.
+- Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.
 - Bottom never opens, closes or clears the Middle HUD or review selection.
 - V3 uses straight strokes in either axis, including diagonals. Holding still continues the captured speed; a new stroke can change speed or reverse without releasing. Circular page-scroll recognition is disabled; V2 remains selectable.
 - Screenshot temporarily moves the pointer even with mouse follow off. From the HUD Screenshot action, tap Bottom once to start selecting; stopping after movement ends the selection. Triple tap starts selection without another tap. Finishing or cancelling restores the previous mouse-follow choice.
@@ -182,6 +182,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Prepared receiver 1.2.106 build 111 restores mouse follow after a completed scroll is released, even if it was off before. Current pointing, scroll detection, button-release safety and menu fixes remain. Local release checks pass; installation and physical acceptance remain pending.
 - Installed receiver 1.2.105 build 110 keeps connection heartbeats, stop-to-click, button safety and gesture deadlines running while menus are open. Sense orientation correction rejects unreliable gravity readings during jerks, twists and near-vertical poses. The existing roughly 8 ms smoothing, quiet stopping and no historical replay remain. Local checks passed. Live menu and physical pointing checks remain pending; faster firmware e still needs USB.
 - Installed: hold to aim and release to select an action or enter a submenu. In a submenu, move the wand without holding to aim, then click or hold-aim-release to select. Choosing an adjustment enters dotted mode; unheld motion changes only that control and clicking exits. A freely aiming outline stays plain, even after holding. Switch App also supports circular continuation. Source checks passed; physical acceptance remains.
 - Installed: Review changes and Stage files switch within the same pending Better Git selection and include the current file. No files are staged by switching. Better Git 1.2.135 is released and active; receiver 1.2.96 is installed with settings preserved. Receiver and Mini checks pass. The device remained asleep during installation; physical gesture acceptance remains pending.
@@ -214,7 +215,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.105 (110) · device code `wand-441472ce965b` · bridge `f8639252` · updated 29 October 2026.
+Receiver 1.2.106 (111) · device code `wand-441472ce965b` · bridge `f8639252` · updated 29 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

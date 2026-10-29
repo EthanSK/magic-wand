@@ -237,7 +237,7 @@ export class WandReceiverModel {
       this.dwell.reset();
       this.scheduleDwell();
       this.performPointer(this.pointerRouter.bottom(this.bottomHeld));
-      if(endedScroll)this.leaveMouseOffAfterScroll();
+      if(endedScroll)this.enableMouseAfterScroll();
     }
     if ((payload = at("@IMU ")) !== null) {
       const fields = payload.split(",");
@@ -517,19 +517,17 @@ export class WandReceiverModel {
     if (phase === "E") this.finishScroll(true);
   }
 
-  // Ethan: after a scroll, "if the mouse mode was on before, it's no longer on
-  // because I need to move my wand back because it's been offset."
-  leaveMouseOffAfterScroll() {
-    this.dwell.reset();this.dwell.follow(false);this.scheduleDwell();
-    this.queue("setMouseFollow(false);");
+  enableMouseAfterScroll() {
+    this.enterPointerMode();this.dwell.reset();this.dwell.follow(true);this.scheduleDwell();
+    this.queue("global.wandPointerPauseUntil=0;setMouseFollow(true);");
   }
-  finishScroll(released = false) {
+  finishScroll(resumeMouse = false) {
     const wasActive = this.scrollActive;
     this.scrollActive = false;
     if (this.scrollWatchdog !== null)
       this.timers.clearInterval(this.scrollWatchdog);
     this.scrollWatchdog = null;
-    if (wasActive) {if(released)this.leaveMouseOffAfterScroll();else this.resumeHUDNavigation();}
+    if (wasActive) {if(resumeMouse)this.enableMouseAfterScroll();else this.resumeHUDNavigation();}
   }
 
   /** One mouse report: buttons first, then relative movement from the current location. */

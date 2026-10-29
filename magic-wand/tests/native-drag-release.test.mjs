@@ -22,7 +22,7 @@ final class Harness {
  func queue(_ s:String){}
  func scheduleDwell(){}
  func setCircleLight(_ on:Bool){}
- func leaveMouseOffAfterScroll(){}
+ func enableMouseAfterScroll(){}
  func performPointer(_ actions:[WandPointerRouter.Action]){}
  ${['finishBottomHold','reconcileBottomHold','handleFrame'].map(method).join('\n')}
 }

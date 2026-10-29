@@ -221,19 +221,14 @@ test('Bottom double tap centres mouse while preserving the independent HUD',()=>
 });
 
 
-test('Legacy releasing a page-scroll chord leaves mouse follow off so the wand can return',()=>{
+test('Legacy releasing a page-scroll chord enables mouse follow even when it started off',()=>{
  for(const prior of [false,true]) {
   const s=setup({legacy:true});
-  if(prior){s.press('D1',.06);s.w.advance(.4);assert(s.w.ctx.moveLatched);}
+  if(prior){s.press('D1',.06);s.w.advance(.4);}
   s.w.edge('D1',0);s.w.advance(.03);s.w.edge('D2',0);s.w.advance(.15);
-  s.turn(0,8,.4);s.w.edge('D1',1);s.w.edge('D2',1);
-  const released=s.mac.location();
-  s.turn(0,-8,.4);s.w.advance(.3); // move the wand back to where it started
-  assert(!s.w.ctx.moveLatched,'page scroll leaves mouse follow off, prior '+prior);
-  assert(!s.pipeline.receiver.dwell.following);
+  s.turn(0,8,.4);s.w.edge('D1',1);s.w.edge('D2',1);s.w.advance(.3);
+  assert(s.w.ctx.moveLatched,'page scroll returns to mouse follow');
+  assert(s.pipeline.receiver.dwell.following);
   assert(!s.pipeline.receiver.scrollActive);
-  assert.deepEqual(s.mac.location(),released,'returning the wand does not move the pointer');
-  s.press('D1',.06);s.w.advance(.4);
-  assert(s.w.ctx.moveLatched,'a Bottom tap turns mouse follow back on');
  }
 });

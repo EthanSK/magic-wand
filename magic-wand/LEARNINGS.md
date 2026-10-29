@@ -1351,3 +1351,10 @@ pointer step never covers more than 25 ms. Simulation is not hand-to-screen late
   none at button edges, with block data update already on. A filter that confirms these
   against both neighbours needs the next reading (lookahead). That extra delay is not
   implemented without approval; these traces alone do not prove data corruption.
+
+## Scrolling returns to mouse follow again (2026-10-29)
+
+The brief follow-off-after-scroll rule was an intentional user reversal, not a sensor or
+gesture change. Ethan found that scrolling needs only a small stroke and a hold, so the wand
+is not offset afterwards. A released completed scroll enables mouse follow again from either
+prior state, with no follow-off confirmation state or frame suppression left behind.
