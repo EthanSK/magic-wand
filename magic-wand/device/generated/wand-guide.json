@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "title": "Wand guide",
+  "sections": [
+    {
+      "button": "middle",
+      "role": "Agentic Mouse HUD",
+      "puckLabel": "Middle",
+      "senseLabel": "Button 1 · left",
+      "rows": [
+        [
+          "Quick tap from closed",
+          "Switch app once"
+        ],
+        [
+          "Hold, turn, release",
+          "Open the HUD, point to a card and use it on release"
+        ],
+        [
+          "In a submenu",
+          "Move the wand to outline a card without holding Middle, then click Middle, or hold, aim and release, to use it once"
+        ],
+        [
+          "Adjustable card",
+          "Click it, or release on it, for dotted mode: wand movement changes only that card; click Middle to finish"
+        ],
+        [
+          "Release on Switch App",
+          "Dotted app switching: move left or right, circle to keep going, click Middle to switch"
+        ],
+        [
+          "In VS Code review",
+          "Circle clockwise for next and anticlockwise for previous; click Middle to exit, double-click to swap Review changes and Stage files, hold to stage the selection"
+        ],
+        [
+          "Double tap",
+          "Close the entire HUD"
+        ]
+      ]
+    },
+    {
+      "button": "bottom",
+      "role": "Mouse",
+      "puckLabel": "Bottom",
+      "senseLabel": "Button 2 · centre",
+      "rows": [
+        [
+          "Tap from off",
+          "Enter high-sensitivity follow without clicking"
+        ],
+        [
+          "Stop after moving in HIGH",
+          "Click once after a 200 ms pause"
+        ],
+        [
+          "While choosing where to click",
+          "Keep moving the wand slightly while you are not certain about placement so it does not click. Stop when you are ready. The pointer must still be moving; tiny movements filtered out as hand noise do not prevent a click."
+        ],
+        [
+          "Tap while following",
+          "Stop following without clicking"
+        ],
+        [
+          "Hold",
+          "Over a scroll area, drag in any direction to scroll; hold still to continue and drag the other way to reverse. Release stops scrolling and leaves mouse follow off; tap Bottom to move the pointer again. A confirmed draggable target drags instead."
+        ],
+        [
+          "Tap, then hold the second press",
+          "Drag with the mouse button down; release to drop"
+        ],
+        [
+          "Double tap",
+          "Centre the pointer on the main screen and enable mouse follow after the 300 ms triple-tap window; keep HUD and review selection unchanged"
+        ],
+        [
+          "Triple tap",
+          "Start screenshot selection; move to select the area, then stop to capture"
+        ]
+      ]
+    },
+    {
+      "button": "top",
+      "role": "Speech to text",
+      "puckLabel": "Top",
+      "senseLabel": "Button 3 · right",
+      "rows": [
+        [
+          "Tap",
+          "Start Agent Flow dictation"
+        ],
+        [
+          "Tap again",
+          "Stop and paste"
+        ]
+      ]
+    }
+  ],
+  "power": [
+    [
+      "All three buttons",
+      "All three grip buttons turn off; any single button wakes. Release all before another action."
+    ],
+    [
+      "Resting on the desk",
+      "The light turns off after a minute; pick the wand up to wake it"
+    ],
+    [
+      "Left resting longer",
+      "After 5 minutes, every light flashes twice and the wand sleeps; press any button to wake it"
+    ]
+  ],
+  "lights": [
+    {
+      "mode": "mouse",
+      "name": "Pointer",
+      "detail": "Steady blue; recording takes priority and shows red",
+      "display": "#4469ff"
+    },
+    {
+      "mode": "scroll",
+      "name": "Scrolling",
+      "detail": "Cyan",
+      "display": "#19e3f0"
+    },
+    {
+      "mode": "hud",
+      "name": "HUD",
+      "detail": "Orange",
+      "display": "#ff5a1f"
+    },
+    {
+      "mode": "app",
+      "name": "App review",
+      "detail": "Green for app review; purple for VS Code file staging",
+      "display": "#22e871"
+    },
+    {
+      "mode": "recording",
+      "name": "Recording",
+      "detail": "Steady red while recording, including mouse mode. HUD, review, scrolling and loading keep their own colours.",
+      "display": "#ff2e3a"
+    },
+    {
+      "mode": "update",
+      "name": "Updating",
+      "detail": "Blinks orange while loading or updating the device code",
+      "display": "#ff8a20"
+    },
+    {
+      "mode": "disconnected",
+      "name": "Disconnected",
+      "detail": "Orange while unavailable",
+      "display": "#ff8a20"
+    },
+    {
+      "mode": "sleep",
+      "name": "Sleeping",
+      "detail": "Off after a minute on the desk; pickup restores the light",
+      "display": "#4a4268"
+    }
+  ]
+}

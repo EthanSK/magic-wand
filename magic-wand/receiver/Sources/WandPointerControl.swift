@@ -151,6 +151,43 @@ final class WandCircularScroll {
     }
 }
 
+/// Ethan's Switch App continuation uses the same direction lock and U-turn
+/// classifier as the old V2 held scroll (WandHeldScroll), rather than another
+/// circle implementation. HIGH counts retain the native app-switch sensitivity.
+/// The first sideways stroke chooses direction; its returning arc cannot undo
+/// it while a circle is being acquired. A long straight stroke starts afresh.
+final class WandSwitchAppWinding {
+    static let countsPerApp = 7 * 86.4
+    private let scroll=WandHeldScroll(linesPerDegree:1,holdSeconds:0)
+    private var seeded=false,seedX=0.0,straightTravel=0.0
+    var winding:Bool {scroll.circular}
+    func reset(){scroll.reset();seeded=false;seedX=0;straightTravel=0}
+    /// One HIGH pointer-space increment, not a delayed pointer frame.
+    func update(dx:Double,dy:Double,now:Double)->Double {
+        guard dx.isFinite,dy.isFinite,now.isFinite else{return 0}
+        let gain=86.4,dt=0.01
+        if !seeded {
+            let alreadyReported=seedX;seedX+=dx
+            // Ordinary sub-detent horizontal aiming is still reported at once.
+            guard abs(seedX)>=0.12*gain else{return dx}
+            scroll.begin(now:now)
+            _=scroll.sample(x:seedX/gain/dt,y:0,dt:dt,now:now)
+            seeded=true
+            return scroll.directionalTravel*gain-alreadyReported
+        }
+        scroll.confirmHeld(now:now)
+        // Convert increments to the V2 angular input; dt cancels in its sample.
+        // Undo the same 1.4 vertical ratio used by the HIGH pointer contract.
+        _=scroll.sample(x:dx/gain/dt,y:dy/gain/1.4/dt,dt:dt,now:now)
+        if scroll.circular {
+            if abs(scroll.latestTurn)>0.005 {straightTravel=0}
+            else {straightTravel+=hypot(dx,dy/1.4)}
+            if straightTravel>3*Self.countsPerApp {reset();return update(dx:dx,dy:dy,now:now)}
+        }
+        return scroll.directionalTravel*gain
+    }
+}
+
 /// Pure routing of the device's `@BOTTOM` edges and `@WAND x,y,buttons` frames.
 /// The receiver performs the returned actions in order and owns only CGEvent posting.
 ///
@@ -536,8 +573,11 @@ struct WandAngularStream {
 /// Ethan's Sense baseline (2026-10-29: "get rid of all the weird, hacky potential
 /// noise rejection ... start off like scratch ... just the expected route"):
 /// calibrated, orientation-projected gyro rate × time × the same gain, vertical
-/// gain and explicit held LOW gain, keeping the subpixel remainder. Nothing is
-/// smoothed, gated, curved, buffered or delayed. Both are measured in the same units.
+/// gain and explicit held LOW gain, keeping the subpixel remainder. Its only
+/// additions are the ones measured or approved since: Ethan's approved ~8 ms
+/// causal smoothing, a continuous tiny-motion stop and a bounded step (see
+/// `WandMotionFilter.directSmoothing`). Nothing is buffered, replayed or
+/// predicted. Both paths are measured in the same units.
 enum WandPointerPath: String {
     case tuned, direct
     static func read(_ value: Any?, default fallback: WandPointerPath) -> WandPointerPath {
@@ -551,9 +591,26 @@ final class WandMotionFilter {
     // stopX/stopY: the tuned filter's counts, used only to decide stop-to-click
     // (dwell) and screenshot settling, so a direct pointer cannot disable or
     // flood those clicks with tremor- or bias-level counts. Equal to x/y when tuned.
-    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0}
+    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0;var highY=0.0}
     var path:WandPointerPath = .tuned
-    private var directX=0.0,directY=0.0
+    private var directX=0.0,directY=0.0,smoothX=0.0,smoothY=0.0
+    /// Seconds. Ethan approved "about 8 ms of pointer smoothing delay to reduce
+    /// jagged movement" (2026-10-29, "Make it as good as possible"): a causal
+    /// exponential average of the calibrated rate in device time. It reduces
+    /// per-reading sensor noise only; it is not the Puck's 150 ms intent filter.
+    static let directSmoothing=0.008
+    /// Tiny-motion stop: the smoothed rate stops the pointer at or below the
+    /// existing slow-speed boundary (CONFIG fineSpeed: 2 in the program's
+    /// 134-count units, about 2.3 true deg/s on the Sense) and reaches full gain
+    /// at twice it. In recorded real pointing (2026-10-29, firmware c) about a
+    /// third of readings were at or below 2 deg/s and the hard on/off gate
+    /// crossed about 5 times a second; a continuous knee keeps the stop without
+    /// those jumps. Faster movement is unchanged.
+    static let directKneeFactor=2.0
+    /// One reading moves at most this much device time. A longer gap (lost
+    /// readings, a radio stall, a dropped stale reading) is skipped, never
+    /// caught up from the next reading's rate. One missing reading still fits.
+    static let directMaxStep=0.025
     private var values:[Double] = []
     private var fx=0.0,fy=0.0,ix=0.0,iy=0.0,meanSpeed=0.0,intentTime=0.0
     private var slackX=0.0,slackY=0.0,fractionX=0.0,fractionY=0.0
@@ -576,7 +633,7 @@ final class WandMotionFilter {
               abs(v[11])==1,abs(v[12])==1 else{return false}
         values=v;reset();return true
     }
-    func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0;directX=0;directY=0}
+    func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0;directX=0;directY=0;smoothX=0;smoothY=0}
     func sample(rawX:Int,rawY:Int,microseconds:Int,held:Bool,resetState:Bool)->Result? {
         guard configured,(-65535...65535).contains(rawX),(-65535...65535).contains(rawY),
               (1...50000).contains(microseconds) else{return nil}
@@ -611,16 +668,27 @@ final class WandMotionFilter {
         fractionX-=Double(countX);fractionY-=Double(countY)
         let tunedX=max(-4095,min(4095,countX)),tunedY=max(-4095,min(4095,countY))
         guard path == .direct else {
-            return .init(x:tunedX,y:tunedY,intent:active,angularX:x*v[11],angularY:y*v[12],highX:highX,stopX:tunedX,stopY:tunedY)
+            return .init(x:tunedX,y:tunedY,intent:active,angularX:x*v[11],angularY:y*v[12],highX:highX,stopX:tunedX,stopY:tunedY,
+                         highY:stepY*v[2]*v[3]*(v[4]+(1-v[4])*blend*blend*(3-2*blend))*v[12])
         }
         // Direct: the same calibrated, projected rate (x, y), gain, vertical gain
         // and held choice as above, applied to every reading as it arrives.
         let gain=v[2]*(held ? v[7] : 1)
-        directX+=x*dt*gain*v[11];directY+=y*dt*gain*v[3]*v[12]
+        let smoothing=1-exp(-dt/Self.directSmoothing)
+        smoothX+=smoothing*(x-smoothX);smoothY+=smoothing*(y-smoothY)
+        // Ethan: keep direct normal movement, restore tiny-motion stopping.
+        // Reuse the existing slow-speed boundary; click timing keeps tuned quiet counts.
+        let smoothSpeed=sqrt(smoothX*smoothX+smoothY*smoothY)
+        let knee=v[5]>0 ? min(1,max(0,(smoothSpeed-v[5])/(v[5]*(Self.directKneeFactor-1)))) : 1
+        if knee==0 {directX=0;directY=0}
+        else {
+            let step=min(dt,Self.directMaxStep)*gain*knee
+            directX+=smoothX*step*v[11];directY+=smoothY*step*v[3]*v[12]
+        }
         let directCountX=Int(directX.rounded(.towardZero)),directCountY=Int(directY.rounded(.towardZero))
         directX-=Double(directCountX);directY-=Double(directCountY)
         return .init(x:max(-4095,min(4095,directCountX)),y:max(-4095,min(4095,directCountY)),intent:active,
-                     angularX:x*v[11],angularY:y*v[12],highX:x*dt*v[2]*v[11],stopX:tunedX,stopY:tunedY)
+                     angularX:x*v[11],angularY:y*v[12],highX:x*dt*v[2]*v[11],stopX:tunedX,stopY:tunedY,highY:y*dt*v[2]*v[3]*v[12])
     }
 }
 
@@ -1050,6 +1118,9 @@ final class WandSustainedScroll {
 /// V2 changes only a Bottom hold. Short taps are still interpreted by the
 /// existing device callback; a used/long hold must never emit its old end click.
 final class WandHeldScroll {
+    /// Continuous signed travel from the shared V2 direction classifier.
+    private(set) var directionalTravel=0.0
+    var latestTurn:Double {circle.latestTurn}
     private(set) var active=false
     private(set) var dragging=false
     private(set) var scrollable=true
@@ -1063,10 +1134,10 @@ final class WandHeldScroll {
     private let circle:WandCircularScroll
     private var started=0.0,confirmed=0.0,fraction=0.0,moved=false,dropClick=false,droppingClick=false
     // Reuse the existing Bottom tap/hold cutoff; do not add a movement buffer.
-    let holdSeconds=0.22
+    let holdSeconds:Double
     private let linesPerDegree:Double
-    init(linesPerDegree:Double=1.6){
-        self.linesPerDegree=linesPerDegree
+    init(linesPerDegree:Double=1.6,holdSeconds:Double=0.22){
+        self.holdSeconds=holdSeconds;self.linesPerDegree=linesPerDegree
         self.sustained=WandSustainedScroll(linesPerDegree:linesPerDegree)
         var tuning=WandCircularScroll.Tuning()
         // Angular degrees, before sensitivity. Recognise the bend while the
@@ -1077,7 +1148,7 @@ final class WandHeldScroll {
         tuning.minDuration=0.06;tuning.window=1.0;tuning.idleEnd=0.35
         circle=WandCircularScroll(tuning:tuning)
     }
-    func reset(){sustained.reset();sustaining=false;active=false;dragging=false;resolving=false;circular=false;horizontal=false;scrollDirection=0;directionTravel=0;directionTravelX=0;sampleTime=0;winding=0;windingToScroll=0;reverseTurn=0;reverseAt=0;reverseSegments=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
+    func reset(){directionalTravel=0;sustained.reset();sustaining=false;active=false;dragging=false;resolving=false;circular=false;horizontal=false;scrollDirection=0;directionTravel=0;directionTravelX=0;sampleTime=0;winding=0;windingToScroll=0;reverseTurn=0;reverseAt=0;reverseSegments=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
     func begin(now:Double,scrollable:Bool=true,sustain:Bool=false,resolving:Bool=false){reset();active=true;started=now;confirmed=now;self.scrollable=scrollable;self.resolving=resolving && scrollable;sustaining=sustain;sustained.reset(now:now)}
     // A lease is renewed only by actual button samples, never by a timer.
     // Stop rather than keep a native drag or scroll alive after telemetry loss.
@@ -1113,6 +1184,7 @@ final class WandHeldScroll {
         fraction=0;circle.reset();circular=false;return dropClick
     }
     func sample(x:Double=0,y:Double,dt:Double,now:Double?=nil)->Int32 {
+        directionalTravel=0
         guard active,scrollable,x.isFinite,y.isFinite,dt>0,dt<=0.05 else{return 0}
         // V3 measures a stroke from its first held reading, including the readings
         // before the 220 ms tap/hold decision. Only continuation() emits wheel
@@ -1137,7 +1209,8 @@ final class WandHeldScroll {
                 let initialTravel=horizontal ? directionTravelX:directionTravel
                 scrollDirection=initialTravel>0 ? 1:-1
                 // Include the acquisition stroke once, on its chosen axis.
-                fraction=scrollDirection*hypot(directionTravelX,directionTravel)*linesPerDegree
+                directionalTravel=scrollDirection*hypot(directionTravelX,directionTravel)
+                fraction=directionalTravel*linesPerDegree
                 travel = 0
             }
         }
@@ -1166,6 +1239,7 @@ final class WandHeldScroll {
         // No output before axis acquisition; keep that small initial travel
         // so choosing an axis neither loses distance nor leaks onto the other.
         if scrollDirection != 0 {
+            directionalTravel += scrollDirection*travel
             fraction += scrollDirection*travel*linesPerDegree
         }
         let lines=Int32(max(-12,min(12,fraction.rounded(.towardZero))))

@@ -17,6 +17,7 @@
 //   board: I{identity}  S seq,us,buttons,pD8,pD9,pD10,imuFlags,ax,ay,az,gx,gy,gz,count,firstUs
 //          V millivolts,charging   E event
 //   host:  ? identity  H heartbeat  Lrrggbb light  M0/M1/M2 sensor  Z sleep  X end
+//          XU end because the receiver is restarting: blink orange until the next host
 // Readings are raw LSM6DS3TR-C counts (gyro 500 dps, accel 4 g). Each is sent
 // as soon as the link can take a frame; readings that arrive while the radio is
 // busy are merged into that next frame (count > 1), never held back or dropped.
@@ -31,8 +32,9 @@
 #include "nrf_gpio.h"
 #include "wand_time.h"
 #include "wand_merge.h"
+#include "wand_light.h"
 
-static const char FIRMWARE[] = "wand-sense-20261029d";
+static const char FIRMWARE[] = "wand-sense-20261029e";
 static const uint32_t DEBOUNCE_MS = 10;            // Same as the checked diagnostic sketch.
 static const uint32_t HOST_TIMEOUT_MS = 2000;      // Host heartbeat is every 500 ms.
 static const uint32_t HEARTBEAT_FRAME_MS = 250;    // Liveness while the sensor is quiet.
@@ -56,6 +58,8 @@ enum Transport : uint8_t { NONE = 0, USB_LINK = 1, BLE_LINK = 2 };
 static Transport session = NONE;
 static uint32_t hostAt = 0, offlineSince = 0, lastFrameAt = 0, lastBatteryAt = 0, sequence = 0;
 static bool stateDirty = false, sleepRequested = false, localDark = false; // sleepRequested: host Z only.
+static bool loadingBlink = false;                 // Offline after XU: the receiver is restarting.
+static uint32_t loadingSince = 0;
 static uint8_t chordPhase = 0;                     // Local all-three warning when no host owns the board.
 static uint32_t chordAt = 0;
 static bool wokeFromOff = false;
@@ -270,11 +274,13 @@ static void powerOff() {
   while (true) {}
 }
 
-static void endSession() {
+// restarting: the host sent XU (receiver update restart), so the orange blinks.
+static void endSession(bool restarting) {
   if (session == NONE) return;
   session = NONE; offlineSince = millis(); localDark = false; chordPhase = 0;
+  loadingBlink = restarting; loadingSince = offlineSince;
   setIMUMode(0); clearMerged(); frameWanted = false;
-  setLight(ORANGE[0], ORANGE[1], ORANGE[2]); // Disconnected orange, as on the Puck.
+  setLight(ORANGE[0], ORANGE[1], ORANGE[2]); // Disconnected orange, as on the Puck; lit first when blinking.
 }
 
 static int hexValue(char c) { return c >= '0' && c <= '9' ? c - '0' : c >= 'a' && c <= 'f' ? c - 'a' + 10 : c >= 'A' && c <= 'F' ? c - 'A' + 10 : -1; }
@@ -282,11 +288,11 @@ static void command(const char *line, uint8_t length, Transport from) {
   if (!length) return;
   const char c = line[0];
   if (c == '?') { sendIdentity(from); if (session == from) sendBattery(); return; }
-  if (c == 'X') { if (session == from) endSession(); return; }
+  if (c == 'X') { if (session == from) endSession(wandEndRestarting(line, length)); return; }
   if (c != 'H' && c != 'L' && c != 'M' && c != 'Z') return;
   if (session != from) {
     // A new host session: current state only, never queued edges or old motion.
-    session = from; clearMerged(); stateDirty = true; chordPhase = 0; localDark = false;
+    session = from; clearMerged(); stateDirty = true; chordPhase = 0; localDark = false; loadingBlink = false;
     lastBatteryAt = millis() - 10000; // Report the battery at once.
   }
   hostAt = millis();
@@ -405,7 +411,7 @@ void loop() {
 
   if (session != NONE) {
     const bool linkUp = session == USB_LINK ? bool(Serial) : (Bluefruit.connected() && uart.notifyEnabled());
-    if (!linkUp || wandElapsed(now, hostAt) > HOST_TIMEOUT_MS) endSession();
+    if (!linkUp || wandElapsed(now, hostAt) > HOST_TIMEOUT_MS) endSession(false);
   }
 
   // endSession() above can also advance offlineSince by a tick.
@@ -441,12 +447,17 @@ void loop() {
     // The Puck power policy's offline behaviour, kept on the board itself.
     // Any grip edge re-arms the offline timers and shows the disconnected light again.
     if (stateDirty) { stateDirty = false; offlineSince = now; if (localDark && !chordPhase) { localDark = false; setLight(ORANGE[0], ORANGE[1], ORANGE[2]); } }
-    if (!chordPhase && buttonMask() == 7) { chordPhase = 1; chordAt = now; }
+    if (!chordPhase && buttonMask() == 7) { chordPhase = 1; chordAt = now; loadingBlink = false; }
     if (chordPhase) {
       // All three: flash every colour twice (100 ms steps), then sleep once released.
       const uint8_t step = uint8_t((now - chordAt) / 100);
       if (step < 4) { const uint8_t v = step & 1 ? 0 : 255; setLight(v, v, v); }
-    } else if (!localDark && wandElapsed(now, offlineSince) >= OFFLINE_DARK_MS && !anyPhysical()) { localDark = true; setLight(0, 0, 0); }
+    } else if (!localDark && wandElapsed(now, offlineSince) >= OFFLINE_DARK_MS && !anyPhysical()) { localDark = true; loadingBlink = false; setLight(0, 0, 0); }
+    else if (loadingBlink) {
+      // Loop-paced (it wakes at least every 5 ms): no timer, no wait, no session.
+      const bool lit = wandLoadingLit(now, loadingSince);
+      setLight(lit ? ORANGE[0] : 0, lit ? ORANGE[1] : 0, lit ? ORANGE[2] : 0);
+    }
   }
   const bool localSleep = session == NONE && ((chordPhase && wandElapsed(now, chordAt) >= 400) || wandElapsed(now, offlineSince) >= OFFLINE_SLEEP_MS);
   // Sleep waits for every grip button to be released so a held chord cannot wake it at once.

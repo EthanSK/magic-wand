@@ -57,8 +57,15 @@ class BridgeTests(unittest.TestCase):
  def test_actions_unavailable_without_a_live_current_receiver(self):
   for status,alive in [(None,lambda pid:True),({'pid':4242,'actionsPaused':True},lambda pid:False),({'pid':4242},lambda pid:True),({'pid':'4242','actionsPaused':False},lambda pid:True)]:
    _,a=self.actions(status,alive);self.assertEqual(a.state(),{'available':False,'paused':None},status)
-  _,a=self.actions({'pid':4242,'actionsPaused':True,'actionsPausedAt':12.5,'ready':True,'pointerPath':'direct'});self.assertEqual(a.state(),{'available':True,'paused':True,'since':12.5,'ready':True,'pointerPath':'direct'})
+  _,a=self.actions({'pid':4242,'actionsPaused':True,'actionsPausedAt':12.5,'ready':True,'pointerPath':'direct'});self.assertEqual(a.state(),{'available':True,'paused':True,'since':12.5,'ready':True,'pointerPath':'direct','connected':False,'battery':None})
   _,a=self.actions({'pid':4242,'actionsPaused':False,'pointerPath':'smoothed'});self.assertIsNone(a.state()['pointerPath'],'unknown path is never shown as a real mode')
+ def test_battery_is_the_receivers_voltage_estimate_with_its_age_only(self):
+  root,a=self.actions({'pid':4242,'actionsPaused':False,'connected':True,'battery':{'percent':81,'volts':3.987,'measuredAt':1000}})
+  a.wall=lambda:1090
+  self.assertEqual(a.state()['battery'],{'percent':81,'volts':3.99,'ageSeconds':90});self.assertTrue(a.state()['connected'])
+  for bad in [{'percent':81.5,'volts':3.9,'measuredAt':1},{'percent':120,'volts':3.9,'measuredAt':1},{'percent':50,'volts':9,'measuredAt':1},'81%',None]:
+   _,b=self.actions({'pid':4242,'actionsPaused':False,'battery':bad});self.assertIsNone(b.state()['battery'],bad)
+  self.assertNotIn('hours',json.dumps(a.state()),'no runtime is invented')
  def test_actions_request_waits_for_the_receivers_acknowledgement(self):
   def receiver(root):
    request=root/ACTION_REQUEST

@@ -51,11 +51,16 @@ final class WandSenseLink: NSObject, CBCentralManagerDelegate, CBPeripheralDeleg
 
     /// End the host session cleanly: the firmware returns to its own light
     /// and power policy at once instead of after its timeout.
-    func end() {
-        send(WandSenseCommand.end)
+    func end(restarting: Bool = false) {
+        send(WandSenseCommand.ending(restarting: restarting))
         started = false; tick?.invalidate(); tick = nil
-        closeUSB(); closeBluetooth()
-        active = nil; info = nil
+        // Give the final BLE command a bounded chance to leave before teardown.
+        // This only runs while quitting; it never delays pointer movement.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+            guard let self else { return }
+            self.closeUSB(); self.closeBluetooth()
+            self.active = nil; self.info = nil
+        }
     }
 
     /// The receiver gave up on this session (for example its ready deadline):

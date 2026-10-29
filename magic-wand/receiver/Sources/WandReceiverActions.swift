@@ -13,7 +13,7 @@ extension WandReceiver {
         let fd = open(support.path, O_EVTONLY)
         guard fd >= 0 else { log("ACTIONS_REQUESTS_UNAVAILABLE"); return }
         let source = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fd, eventMask: [.write], queue: .main)
-        source.setEventHandler { [weak self] in self?.readActionRequest() }
+        source.setEventHandler { [weak self] in self?.readActionRequest(); self?.readGuideRequest() }
         source.setCancelHandler { close(fd) }
         source.resume(); actionRequestSource = source
     }

@@ -1,4 +1,5 @@
 import Foundation
+precondition(WandSenseCommand.ending(restarting: true) == "XU" && WandSenseCommand.ending(restarting: false) == "X", "update restarts request the loading blink; ordinary disconnect stays distinct")
 import CryptoKit
 setbuf(stdout, nil)
 // Arguments: component root and repository root. Pure checks and an in-process
@@ -63,6 +64,17 @@ var wrap = WandSenseClock()
 let w0 = wrap.align(micros: UInt32.max - 4_000, arrival: 10), w1 = wrap.align(micros: 5_615, arrival: 10.0097)
 precondition(abs((w1 - w0) - 0.009616) < 1e-5, "micros wrap")
 print("PASS: device-time alignment without waiting")
+// Late backlog: a normal 30 ms burst is fresh; a reading 80 ms behind the best
+// delivery is stale and never moves the normal pointer.
+var late = WandSenseClock()
+let fresh = late.align(micros: 2_000_000, arrival: 60.000)
+let burst = [late.align(micros: 2_009_615, arrival: 60.030), late.align(micros: 2_019_230, arrival: 60.030)]
+precondition(!WandSenseStaleness.isStale(readingTime: fresh, arrival: 60.000) &&
+             burst.allSatisfy { !WandSenseStaleness.isStale(readingTime: $0, arrival: 60.030) }, "an ordinary burst is not stale")
+let backlog = late.align(micros: 2_028_845, arrival: 60.110)
+precondition(WandSenseStaleness.isStale(readingTime: backlog, arrival: 60.110), "an 80 ms late reading is stale")
+precondition(WandSenseStaleness.limit == 0.075)
+print("PASS: late backlog is recognised without delaying fresh readings")
 
 // Session safety
 func frame(_ seq: UInt32, _ wire: Int, _ presses: [UInt32]) -> WandSenseFrame {

@@ -20,8 +20,11 @@ var logged:[String]=[]
 func log(_ v:Any...) {logged.append(v.map{"\\($0)"}.joined(separator:" "))}
 enum Tap {case cghidEventTap}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?){ };func post(tap:Tap){}}
-final class Rest {var activated=false;func pointerActivated(){activated=true}}
+final class Rest {var activated=false;func pointerActivated(){activated=true};func pointerStopped(){activated=false}}
+final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
+ let context=SwitchAppContext()
+ let switchAppWinding=WandSwitchAppWinding()
  var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  let restDetection=Rest()
@@ -30,6 +33,8 @@ final class Harness {
  var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,hudSession=false,flickScrollEnabled=false,heldScrollDiagnostics=false
  var screenshotActive=false,middleHeld=false,middleMouseX=0.0,middleMouseSampleAt = -100.0
  var commands:[String]=[],scrollPostedX=0,scrollPostedY=0
+ var scrollFollowOffUntil:Double?,recordingPointerPaused=false,recordingRestoreFollow:Bool?,restFollow=WandRestFollowMemory()
+ static let scrollFollowOffConfirmSeconds=1.0
  var scrollAnchor:CGPoint?,scrollWatchdog:Timer?
  var rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,frames=0,downs=0,light=false
  let holdTargetQueue=DispatchQueue(label:"test.hold-target")
@@ -53,7 +58,7 @@ final class Harness {
  func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil){frames+=1}
  static var wheelPairs:[(Int32,Int32)]=[]
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
- ${['beginBottomHold','probeHoldTarget','enableMouseAfterScroll','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
+ ${['beginBottomHold','probeHoldTarget','leaveMouseOffAfterScroll','manualPointerDuringRecording','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
 }
 func wait(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 func press(_ roles:[String],delay:Double=0)->Harness {
