@@ -147,6 +147,14 @@ npm --prefix .. run check          # repository-wide checks, including privacy
 clock. These tests don’t replace trying the wand: physical feel, light colours and Bluetooth timing
 only show up on the hardware.
 
+## XIAO nRF52840 Sense wand
+
+The Sense is a separate profile; the Puck steps above are unchanged. Install
+`device/sense/wand_sense/wand_sense.ino` on the original XIAO nRF52840 Sense through the
+private installation workflow, then set `{"profile": "sense"}` in `device.json`. The receiver
+runs the canonical Puck program on the Mac for it, so every control and option above applies.
+See [device/sense/README.md](device/sense/README.md) for wiring, protocol, axes and checks.
+
 ## Experimental wrist-roll compensation
 
 The native receiver defaults to the original fixed mouse axes. To try gravity-based

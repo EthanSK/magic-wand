@@ -77,7 +77,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
 
     var rawLastArrival=0.0,rawReports=0,rawWindowStart=0.0,rawMaxGap=0.0
     let dwell=WandDwellClick()
-    let restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
+    // Per physical wand: the Sense profile swaps in its own learned desk pose.
+    var restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
     var deskSleep=WandDeskSleep()
     var powerPolicyReady=false,loadingPowerPolicy=false
     var standbyResume:Bool?
@@ -134,6 +135,21 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // (see BUILDING.md); the identifier is optional and only skips scanning.
     let deviceSettings = WandDeviceConfiguration.load(from: support.appendingPathComponent("device.json"))
     var target: UUID? { deviceSettings.identifier }
+    // XIAO nRF52840 Sense profile ("Sense wand"): one USB/Bluetooth owner plus
+    // the canonical Puck program run on the Mac (WandVirtualPuck). See
+    // WandReceiverSense.swift. Never active for the Puck profile.
+    var isSense: Bool { deviceSettings.profile == .sense }
+    var senseLink: WandSenseLink?
+    var senseVirtual: WandVirtualPuck?
+    var senseInfo: WandSenseInfo?
+    var senseTransport: WandSenseLink.Transport?
+    var senseSession=WandSenseSession(),senseClock=WandSenseClock(),senseSessionNumber=0
+    let senseDashboard=WandSenseDashboardTap(path:support.appendingPathComponent("sense-dashboard.sock").path)
+    /// Calibration belongs to one physical wand; a Sense never reads a Puck zero.
+    var calibrationKey:String? {
+        isSense ? senseInfo.map{"sense-"+$0.id+"-"+deviceSettings.senseAxes.signature} : device?.identifier.uuidString
+    }
+    var deviceConnected:Bool { isSense ? senseTransport != nil : device?.state == .connected }
     let uart = CBUUID(string: "6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
     var restore: String {
         // Ethan's "blinking orange while restarting": an update keeps the device's
@@ -220,6 +236,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             _ = AXIsProcessTrustedWithOptions(options)
         }
         manager = CBCentralManager(delegate: self, queue: nil)
+        if isSense { connect() }
         heartbeat = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
             guard let self else { return }
             let trusted = AXIsProcessTrusted()
@@ -228,18 +245,18 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             self.refreshFeatureFlags()
             self.requestBattery()
             self.status()
-            if !self.ready && self.manager.state == .poweredOn && self.device == nil { self.connect() }
+            if !self.ready && (self.isSense || (self.manager.state == .poweredOn && self.device == nil)) { self.connect() }
         }
         status()
     }
     func restoreKnownCalibration() {
-        guard let id=device?.identifier.uuidString,
+        guard let id=calibrationKey,
               let value=WandCalibrationStore.read(calibrationURL(for:id),device:id),let json=value.json else{return}
         queue("if(global.wandState&&!global.wandState().calibrated&&typeof global.restoreWandCalibration==='function')global.restoreWandCalibration("+json+");")
         log("KNOWN_CALIBRATION_RESTORE_REQUESTED")
     }
     func rememberCalibration(_ line:String) {
-        guard let id=device?.identifier.uuidString,let marker=line.range(of:"WAND_CALIBRATED "),
+        guard let id=calibrationKey,let marker=line.range(of:"WAND_CALIBRATED "),
               let data=String(line[marker.upperBound...]).trimmingCharacters(in:.whitespacesAndNewlines).data(using:.utf8),
               let value=try? JSONDecoder().decode(WandCalibration.self,from:data),value.valid else{return}
         do {try WandCalibrationStore.write(value,to:calibrationURL(for:id),device:id);log("KNOWN_CALIBRATION_SAVED")}
@@ -377,7 +394,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // device updates do not disconnect the user's working pointer. Only consume
     // a same-user regular file with private permissions; never follow symlinks.
     func maintenance() {
-        guard !restoring,device?.state == .connected,tx != nil else {log("MAINTENANCE_NOT_READY");return}
+        guard !restoring,isSense ? senseVirtual != nil : device?.state == .connected && tx != nil else {log("MAINTENANCE_NOT_READY");return}
         let path=support.appendingPathComponent("maintenance.js").path
         let fd=open(path,O_RDONLY|O_NOFOLLOW)
         guard fd>=0 else{return}
@@ -409,11 +426,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func status() {
         connectionMenuItem?.title=ready ? "Connected" : "Connecting…"
         let traceState=reviewTrace.status
-        let key = "\(device?.state == .connected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(deskSleep.sleeping)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(reviewAxisEnabled)|\(motionFilter.orientationCompensation)|\(traceState["enabled"] ?? false)|\(traceState["diskError"] ?? false)"
+        let key = "\(isSense)|\(senseTransport?.rawValue ?? "")|\(deviceConnected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(deskSleep.sleeping)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(reviewAxisEnabled)|\(motionFilter.orientationCompensation)|\(traceState["enabled"] ?? false)|\(traceState["diskError"] ?? false)"
         let batteryKey=key+"|"+String(batterySampleAt?.timeIntervalSince1970 ?? 0)
         guard batteryKey != lastStatusKey else { return }
         lastStatusKey = batteryKey
-        var value: [String: Any] = ["pid": ProcessInfo.processInfo.processIdentifier, "connected": device?.state == .connected,
+        var value: [String: Any] = ["pid": ProcessInfo.processInfo.processIdentifier, "connected": deviceConnected,
+            "device": isSense ? "sense" : "puck", "transport": senseTransport?.rawValue ?? (device?.state == .connected ? "Bluetooth" : ""),
+            "motionSensor": isSense ? (senseInfo?.motion ?? false) : true,
             "ready": ready, "options":["controlVersion":controlVersion.rawValue,"flickScroll":flickScrollEnabled,"reviewAxisGestures":reviewAxisEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording,"deskSleeping":deskSleep.sleeping, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
             "reviewTrace":traceState,
             "updatedAt": ISO8601DateFormatter().string(from: Date())]
@@ -441,10 +460,15 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func centralManagerDidUpdateState(_ c: CBCentralManager) {
         log("RADIO_STATE", c.state.rawValue)
         status()
+        guard !isSense else { return } // The Sense link owns its own Bluetooth fallback.
         if c.state == .poweredOn { connect() }
         else { reset(); device = nil; status() }
     }
     func connect() {
+        if isSense {
+            guard !CommandLine.arguments.contains("--permissions-only"), AXIsProcessTrusted(), !restoring else { return }
+            startSense(); return
+        }
         guard !CommandLine.arguments.contains("--permissions-only"), deviceSettings.isConfigured, AXIsProcessTrusted(), !restoring, manager.state == .poweredOn, device == nil, !commands.isEmpty else { return }
         guard finishLegacyHandover() else { return }
         retry?.cancel(); manager.stopScan()
@@ -505,6 +529,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         generation += 1; middleHold?.invalidate();middleTap?.invalidate();middleHold=nil;middleTap=nil;middleOperating=false;pointerInHUD=false;middleHeld=false;controls.persistent("dismiss");releaseButtons(); ready = false; tx = nil; chunks = []; input = ""; writing = false; configuring = false; uartPaused = false
     }
     func reconnect() {
+        if isSense { senseLink?.drop("receiver deadline"); endSenseSession(); return }
         if let p = device { manager.cancelPeripheralConnection(p) }
         reset(); device = nil; status()
         retry?.cancel()
@@ -558,6 +583,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             }
             return
         }
+        startRuntimeHandshake()
+    }
+    /// Extraction of the existing Puck runtime handshake, unchanged, shared by
+    /// the Puck connection and the Sense profile's virtual Puck.
+    func startRuntimeHandshake() {
         log("CHECKING_RUNTIME", runtimeVersion)
         let handshake = "if(global.WAND_RUNTIME_VERSION===\"" + runtimeVersion + "\"){if(!global.wandBridgeOriginalSend)global.wandBridgeOriginalSend=mouse.send;mouse.send=function(x,y,b,cb){Bluetooth.println(\"@WAND \"+x+\",\"+y+\",\"+b);if(cb)cb();};if(!connected)onConnect();print(\"WAND_BRIDGE_READY\");}else print(\"WAND_NEEDS_CONFIG\");"
         // An interrupted prior UART write can leave a partial REPL expression.
@@ -567,6 +597,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         queue(handshake)
     }
     func queue(_ command: String) {
+        // Sense profile: the same JS commands go to the canonical program on the Mac.
+        if isSense { senseVirtual?.send(command); return }
         chunks += WandUART.packets(command,
             acknowledged:device?.maximumWriteValueLength(for:.withResponse) ?? 0,
             unacknowledged:device?.maximumWriteValueLength(for:.withoutResponse) ?? 0)
@@ -598,6 +630,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         sendNext()
         guard let text=String(data:Data(bytes.filter{$0 != 0x11 && $0 != 0x13}),encoding:.utf8) else{return}
+        receiveText(text)
+    }
+    /// Extraction of the existing Puck UART line handler, unchanged, so the
+    /// Sense profile's virtual Puck output reaches exactly the same code.
+    func receiveText(_ text:String) {
         deliveryPoint=WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays)
         defer {deliveryPoint=nil}
         input += text.replacingOccurrences(of: "\r", with: "")
@@ -1727,6 +1764,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         pendingRecenter?.invalidate();pendingRecenter=nil;endScreenshot(reason:"receiver stopped",contextActive:false,forgetPress:true)
         guard !restoring else { return }; performPointer(pointerRouter.cancelAll());setCircleLight(false);restoring = true; retry?.cancel(); controls.cancel(); hudWatchdog?.invalidate(); releaseButtons()
         finishScroll();log("STOPPING"); status()
+        if isSense {
+            // Restore the program's sender, end the firmware session, then exit.
+            if senseVirtual != nil { queue(restore) }
+            senseLink?.end(); DispatchQueue.main.asyncAfter(deadline: .now() + 1) { exit(0) }; return
+        }
         // Preserve the low-power runtime, restoring only its original output sender.
         if device?.state == .connected && tx != nil { chunks = []; queue(restore); DispatchQueue.main.asyncAfter(deadline: .now() + 3) { exit(0) } }
         else { exit(0) }

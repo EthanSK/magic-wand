@@ -14,7 +14,7 @@ function support() {
   $('demo').disabled=busy;$('stop').disabled=!state.connected&&!busy;
   $('pause').hidden=state.source!=='Demo'||!state.connected;
   for(const b of document.querySelectorAll('[data-hold]'))b.hidden=state.source!=='Demo'||!state.connected;
-  if(localMode){$('count-note').hidden=false;$('usb').disabled=true;$('ble').disabled=true;$('usb').classList.add('managed');$('ble').classList.add('managed');$('usb').textContent=localMeta?.usb_present?'USB primary':'USB waiting';$('ble').textContent=localMeta?.usb_present?'Bluetooth standby':'Bluetooth fallback';$('demo').hidden=true;$('stop').hidden=true;$('capabilities').textContent='One local reader owns the board. USB takes priority; Bluetooth is used when USB is absent. No device picker is needed.';}
+  if(localMode){$('count-note').hidden=false;$('usb').disabled=true;$('ble').disabled=true;$('usb').classList.add('managed');$('ble').classList.add('managed');$('usb').textContent=(localMeta?.usb_present||localMeta?.transport==='USB')?'USB primary':'USB waiting';$('ble').textContent=(localMeta?.usb_present||localMeta?.transport==='USB')?'Bluetooth standby':'Bluetooth fallback';$('demo').hidden=true;$('stop').hidden=true;$('capabilities').textContent='One local reader owns the board. USB takes priority; Bluetooth is used when USB is absent. No device picker is needed.';}
 }
 async function closeCurrent(){if(demoTimer!==null){clearInterval(demoTimer);demoTimer=null;}for(const b of BUTTONS)demoHeld[b.key]=false;const old=owner;owner=null;await old?.close();}
 async function stop(){++generation;state.disconnect();busy=false;support();notice('Disconnected. Button states are unknown until fresh readings arrive.');await closeCurrent();}

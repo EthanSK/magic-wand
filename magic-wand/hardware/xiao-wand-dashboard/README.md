@@ -21,6 +21,14 @@ The board must already run the matching diagnostic sketch below. Plugging in a b
 
 For the labelled demo or manual browser readers, serve the repository root with `python3 -m http.server 8870 --bind 127.0.0.1` and open `/magic-wand/hardware/xiao-wand-dashboard/` on that server. Browser USB/Bluetooth readers require the corresponding APIs, such as Chrome on macOS, and a device choice after clicking Connect. The automatic local reader also works with an embedded browser because Python owns the hardware connection.
 
+## With the control firmware
+
+Once the board runs the Sense control firmware (`device/sense/`), Wand Receiver is its only
+USB/Bluetooth owner. Start the reader with `--receiver` instead of `--hardware`: it observes the
+receiver's accepted packets through a same-user datagram socket, opens no hardware connection and
+sends nothing back, so it cannot compete for the board or move the pointer. `--hardware` remains
+for the diagnostic sketch only; the two modes cannot be combined.
+
 ## What V2 shows
 
 - Independent thumb, index and middle-finger states: Pressed, Released or Unknown.

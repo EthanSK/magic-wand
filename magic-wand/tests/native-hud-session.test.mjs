@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync,writeFileSync,mkdtempSync,rmSync} from 'node:fs';
+import {readFileSync,writeFileSync,mkdtempSync,rmSync,readdirSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {spawnSync} from 'node:child_process';
@@ -294,7 +294,9 @@ print("PASS: hold-to-show HUD, native close, kept-open next hold, tap and double
 
 test('complete published receiver typechecks together', {skip:process.platform!=='darwin'},()=>{
  const directory=new URL('../receiver/Sources/',import.meta.url);
- const files=['WandPointerControl.swift','WandCalibration.swift','WandUART.swift','WandRecordingState.swift','WandControlTransport.swift','WandContextListener.swift','WandReviewTrace.swift','WandDeviceConfiguration.swift','main.swift'].map(name=>new URL(name,directory).pathname);
+ // Compile the same complete Sources folder as build_receiver.sh; new device
+ // adapters must not be omitted by a separately maintained file list.
+ const files=readdirSync(directory).filter(name=>name.endsWith('.swift')).sort().map(name=>new URL(name,directory).pathname);
  const result=spawnSync('swiftc',['-typecheck',...files],{encoding:'utf8'});
  assert.equal(result.status,0,result.stderr);
 });
