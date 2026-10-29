@@ -357,6 +357,10 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   global.wandLiveMoveCallback.replaceWith(function(){
     global.wandBottomRelease=function(){
     clearHoldClick();
+    // Sense telemetry timestamps describe the physical press, while a Mac
+    // timer can fire before a delayed release frame arrives. A short physical
+    // tap still exits mouse mode; an early timer must not turn it into clutch.
+    if(moveGestureMode==='clutch'&&getTime()-global.wandPressStarted<CONFIG.tapSeconds)moveGestureMode='pointer';
     if(moveGestureMode==='operation'){pointerReport('E');stopPointerTrack();}
     else if(moveGestureMode==='clutch'){
       moveLatched=!!global.wandFollowBeforeHold;cancelTapGesture();lastMoveTap=-100;

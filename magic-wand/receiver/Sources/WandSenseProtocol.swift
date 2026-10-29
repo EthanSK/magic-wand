@@ -280,6 +280,30 @@ struct WandSenseSession {
     }
 }
 
+/// Bottom's physical press duration in device-aligned time. The Mac sees a
+/// Bluetooth release late whenever the radio stalls, so arrival time turns a
+/// ~200 ms tap into a qualified hold (2026-10-29: Ethan "couldn't exit mouse
+/// mode"; 207 ms taps were judged as held scrolls that turned follow back on).
+/// The frame times describe the physical edges; a restored short press (seen
+/// only in the board counter) has no known duration and counts as a tap.
+struct WandSenseBottomTimer {
+    private(set) var downAt: Double?, upAt: Double?
+    private var held = false
+    mutating func reset() { self = WandSenseBottomTimer() }
+    mutating func note(mask: Int, at time: Double, synthetic: Bool = false) {
+        let down = mask & WandSenseButtons.bottom != 0
+        if synthetic && down { downAt = time; upAt = time; held = false; return }
+        if down && !held { downAt = time; upAt = nil }
+        if !down && held { upAt = time }
+        held = down
+    }
+    /// The last completed press's physical duration, or nil while held or unknown.
+    var lastPressDuration: Double? {
+        guard !held, let downAt, let upAt, upAt >= downAt else { return nil }
+        return upAt - downAt
+    }
+}
+
 /// Puck light levels to the Sense RGB LED. Same meanings, Sense colours:
 /// equal partial levels are the established orange (update, calibration,
 /// disconnected); all full is the all-colours sleep warning.

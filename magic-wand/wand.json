@@ -12,19 +12,19 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.107",
-    "receiverBuild": "112",
+    "receiver": "1.2.108",
+    "receiverBuild": "113",
     "deviceRuntime": "wand-441472ce965b",
-    "bridgeRevision": "f8639252338ec51e176d36c4d467442d1acf0c06f4a14f10c11408d132f53416",
-    "agenticMouse": "1.0.297",
-    "agenticMouseBuild": "303",
+    "bridgeRevision": "fd58d99318cc4664e4157ad0fc6763a91f62ae79c692c95d7fd00a547fe68583",
+    "agenticMouse": "1.0.299",
+    "agenticMouseBuild": "305",
     "persistentImage": "full-20261025a"
   },
   "status": [
-    "Installed receiver 1.2.107 build 112: stop-to-click and screenshot settling now judge the same movement that the direct pointer posts. This fixes quiet-stop starvation and early clicks caused by the old tuned movement signal. The 200 ms dwell, approved roughly 8 ms smoothing and current gain remain. Full local checks pass; the signed receiver reconnected ready over Bluetooth with settings preserved. Physical button acceptance remains pending.",
+    "Installed receiver 1.2.108 build 113 and Agentic Mouse 1.0.299 build 305 restore the old click signal, the speed-based aiming curve and coherent tiny movement above about 1 deg/s. Only tiny slow movement uses the approved up-to-60 ms confirmation; normal pointing retains roughly 8 ms smoothing. Short Bottom taps use their physical duration. The wand HUD has related outer actions and the held Switch App exception. Local tests and installed signature, version, settings and process checks passed. The saved Sense firmware and current gain are preserved. The wand is asleep, and the native app's launch safety gate is waiting for real user input; the installed interactive review and physical acceptance remain pending.",
     "Installed receiver 1.2.106 build 111 restores mouse follow after a completed scroll is released, even if it was off before. Current pointing, scroll detection, button-release safety and menu fixes remain. Full local checks pass; the receiver reconnected ready over Bluetooth with settings preserved. Real user scroll-release events were observed enabling mouse follow again.",
     "Installed receiver 1.2.105 build 110 keeps connection heartbeats, stop-to-click, button safety and gesture deadlines running while menus are open. Sense orientation correction rejects unreliable gravity readings during jerks, twists and near-vertical poses. The existing roughly 8 ms smoothing, quiet stopping and no historical replay remain. Local checks passed. Live menu and physical pointing checks remain pending; faster firmware e still needs USB.",
-    "Installed Agentic Mouse 1.0.298 build 304: hold to aim and release to use a card; submenus stay open for unheld aiming. Holding Middle on an outlined adjustable card changes its value and release stops; a used adjustment never also clicks. Dotted mode still adjusts without holding and a click exits. Full native checks pass, the signed app is running and the wand is connected; physical held-adjustment acceptance remains.",
+    "Installed Agentic Mouse 1.0.298 build 304 passed the full native checks, but Ethan subsequently reported intermittent HUD opening and mouse-exit failures and changed Switch App behaviour. Current diagnostics have been captured; the cause and fixes are not yet verified. A ready process or socket alone does not establish working button input.",
     "Installed: Review changes and Stage files switch within the same pending Better Git selection and include the current file. No files are staged by switching. Better Git 1.2.135 is released and active; receiver 1.2.96 is installed with settings preserved. Receiver and Mini checks pass. The device remained asleep during installation; physical gesture acceptance remains pending.",
     "Installed: double-click Middle toggles Review changes and Stage files without staging. The floating indicator names the other mode. A single click cancels and exits after at most 300 ms; holding for half a second still stages the selection and stays in that mode. Pointer movement is unchanged. Receiver, native interaction and timer checks pass; physical button acceptance remains pending.",
     "Installed: triple Bottom starts screenshot selection; the HUD Screenshot action uses one Bottom tap, movement and the existing stop-to-click detector to finish. Double-tap centering waits up to 300 ms to distinguish a third tap. Pointer movement is not buffered. Recording red takes priority over mouse blue, and loading blinks orange. Complete saved bytes and clean startup with calibration passed; physical screenshot acceptance remains pending.",
@@ -134,8 +134,12 @@
           "In wedge selection, hold and move up or down to change it, like scrolling; release to stop"
         ],
         [
-          "Release on Switch App",
-          "Dotted app switching: move left or right, circle to keep going, click Middle to switch"
+          "Release a hold on Switch App",
+          "Armed for the next hold: unheld movement can still pick other cards; hold Middle on Switch App, move left or right (circle to keep going), release to switch"
+        ],
+        [
+          "Go out twice on a card",
+          "Outer quick actions: Undo beyond Keys, Space beyond Copy/Paste, and in VS Code Review changes and Stage files beyond the app card"
         ],
         [
           "In VS Code review",
@@ -150,9 +154,10 @@
         "The installed wand uses a radial HUD with Switch App in the centre. The browser demo retains its earlier grid.",
         "The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.",
         "Ordinary actions act once and close the HUD. After a submenu or Back opens, unheld wand movement moves the outline; click Middle to use the outlined wedge. There is no inactivity timeout. Bottom and speech remain independent.",
-        "Click an adjustable wheel card, or release on it or on Switch App, to enter dotted mode: wand movement adjusts it without holding Middle, and the next Middle click exits. Copy/Paste and Tracks keep their click actions; release on them to adjust. In Switch App, move left or right to choose a direction, then circle to keep going. A quick tap from closed switches app once.",
+        "Click an adjustable wheel card, or release on it, to enter dotted mode: wand movement adjusts it without holding Middle, and the next Middle click exits. Tracks keeps its click action; release on it to adjust. On the wand, Copy/Paste has no click action because Space is its own outer card. Switch App is the exception: a quick tap switches once, and releasing a hold on it arms it without pressing anything; the next hold on Switch App chooses apps (left or right, circle to keep going) and its release switches.",
+        "The wand HUD keeps its twelve inner cards at the same angles. A second outer layer holds quick actions one reach further out on the same wedge: a thin Undo beyond Keys, Space beyond Copy/Paste, and, only while VS Code is frontmost, larger Review changes and Stage files beyond the app card. The wand's cell 10 reads Close; it never holds Command. The physical mice are unchanged.",
         "Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.",
-        "In VS Code, tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit after at most 300 ms, double-click to switch between Review changes and Stage files, retaining the selection and including the current file without staging, or hold it for about half a second to stage the working selection and keep reviewing. Navigation stays frozen until release. The floating indicator says “(Hold to commit selection)” and names the mode a double-click will enter. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.",
+        "In VS Code, go out past the app card and tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit after at most 300 ms, double-click to switch between Review changes and Stage files, retaining the selection and including the current file without staging, or hold it for about half a second to stage the working selection and keep reviewing. Navigation stays frozen until release. The floating indicator says “(Hold to commit selection)” and names the mode a double-click will enter. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.",
         "Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.",
         "The native wand home HUD has Play/Pause after Utility around the ring. It uses the Mac’s standard media key, without changing either physical mouse."
       ]

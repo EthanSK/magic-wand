@@ -156,6 +156,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var senseInfo: WandSenseInfo?
     var senseTransport: WandSenseLink.Transport?
     var senseSession=WandSenseSession(),senseClock=WandSenseClock(),senseSessionNumber=0,senseLastReading = -Double.infinity
+    var senseBottomTimer=WandSenseBottomTimer()
     /// Late readings kept out of normal pointing this session (`WandSenseStaleness`).
     var senseStaleReadings=0
     let senseDashboard=WandSenseDashboardTap(path:support.appendingPathComponent("sense-dashboard.sock").path)
@@ -239,8 +240,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             self.setWandShortcut(mode)
         }
         context.onScreenshotChange = {[weak self] active in self?.setScreenshotActive(active)}
-        // Dotted Switch App starts or ends: a fresh cumulative stream; Agentic
-        // Mouse rebases on its first sample, so nothing jumps or replays.
+        // The held Switch App chooser starts or ends: a fresh cumulative
+        // stream; Agentic Mouse rebases on its first sample, so nothing jumps
+        // or replays. (The log key keeps its historical DOTTED name.)
         context.onSwitchAppAdjustingChange = {[weak self] adjusting in
             guard let self else{return}
             self.switchAppWinding.reset();self.middleMouseX=0;self.middleMouseSampleAt = -100
@@ -1660,7 +1662,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // native down too, even if another path already cleared the hold.
         if buttons & 1 != 0 {transition(to:buttons & ~1,at:deliveryPoint ?? CGEvent(source:nil)?.location ?? .zero)}
         guard heldScroll.active else{return}
-        let completedScroll=heldScroll.scrollable && !heldScroll.dragging && heldScroll.qualified(now:now)
+        // A Sense press judged by its physical edges: a short tap that only
+        // looked long because its release arrived late never counts as a
+        // completed scroll, so it cannot turn mouse follow back on.
+        let physicalDuration=released ? bottomPhysicalTapDuration() : nil
+        let physicalTap=physicalDuration.map{$0<heldScroll.holdSeconds} ?? false
+        if physicalTap {log("BOTTOM_PHYSICAL_TAP",Int((physicalDuration ?? 0)*1000))}
+        let completedScroll=heldScroll.scrollable && !heldScroll.dragging && heldScroll.qualified(now:now) && !physicalTap
         if heldScrollDiagnostics && heldScroll.sustaining && completedScroll {
             log("V3_SCROLL_HOLD",heldScroll.sustained.report(seconds:heldScroll.elapsed(now:now),ended:released ? "release":"lost"))
         }
@@ -1705,8 +1713,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let gap=rawLastArrival>0 ? now-rawLastArrival : 0
         guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:v[3]&1 != 0,resetState:v[3]&2 != 0 || gap>0.25) else{return}
         rawLastArrival=now
-        if context.switchAppAdjusting && hudSession && !middleHeld && !pointerRouter.bottomHeld {
-            // Unheld dotted Switch App: left/right travel, then winding continues it.
+        if context.switchAppAdjusting && hudSession && middleHeld && !pointerRouter.bottomHeld {
+            // Switch App is Ethan's held-only exception: the same HIGH mouse
+            // sensitivity, with winding continuing the initial direction.
             middleMouseX+=switchAppWinding.update(dx:sample.highX,dy:sample.highY,now:now);middleMouseSampleAt=now
         } else if middleHeld && !pointerRouter.bottomHeld {
             middleMouseX+=sample.highX;middleMouseSampleAt=now
