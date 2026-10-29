@@ -7,28 +7,32 @@
 // Wand Receiver on the Mac (receiver/Sources/WandVirtualPuck.swift). Nothing is
 // uploaded on connection; this sketch is the whole device program.
 //
-// Wiring (Ethan's assembled wand, user-corrected 2026-10-29): Button 1 left
-// D8 = middle finger = Bottom (mouse); Button 2 centre D9 = thumb = Top
-// (speech); Button 3 right D10 = index finger = Middle (HUD/review). Each
+// Wiring (physical presses checked 2026-10-29): Button 1 left D10 = middle
+// finger = Middle (HUD/review); Button 2 centre D8 = thumb = Bottom (mouse);
+// Button 3 right D9 = index finger = Top (speech). Each
 // switch goes to GND; internal pull-ups, pressed = LOW. Wire channel order is
 // D8, D9, D10 (the dashboard's legacy keys thumb, index, middle; not fingers).
 //
 // Protocol "wand-sense-1" over USB serial and Nordic UART, newline framed:
-//   board: I{identity}  S seq,us,buttons,pD8,pD9,pD10,imuFlags,ax,ay,az,gx,gy,gz
+//   board: I{identity}  S seq,us,buttons,pD8,pD9,pD10,imuFlags,ax,ay,az,gx,gy,gz,count,firstUs
 //          V millivolts,charging   E event
 //   host:  ? identity  H heartbeat  Lrrggbb light  M0/M1/M2 sensor  Z sleep  X end
-// Readings are raw LSM6DS3 counts (gyro 245 dps, accel 4 g), each sent as soon
-// as it is read: no batching, buffering or smoothing is added here.
+// Readings are raw LSM6DS3TR-C counts (gyro 500 dps, accel 4 g). Each is sent
+// as soon as the link can take a frame; readings that arrive while the radio is
+// busy are merged into that next frame (count > 1), never held back or dropped.
+// No smoothing is added here.
 #include <Adafruit_TinyUSB.h>
 #include <bluefruit.h>
 #include <LSM6DS3.h>
 #include <Wire.h>
 #include <FreeRTOS.h>
 #include <task.h>
+#include <queue.h>
 #include "nrf_gpio.h"
 #include "wand_time.h"
+#include "wand_merge.h"
 
-static const char FIRMWARE[] = "wand-sense-20261029c";
+static const char FIRMWARE[] = "wand-sense-20261029d";
 static const uint32_t DEBOUNCE_MS = 10;            // Same as the checked diagnostic sketch.
 static const uint32_t HOST_TIMEOUT_MS = 2000;      // Host heartbeat is every 500 ms.
 static const uint32_t HEARTBEAT_FRAME_MS = 250;    // Liveness while the sensor is quiet.
@@ -45,6 +49,8 @@ static uint8_t imuMode = 0xff;                     // 0 off, 1 accelerometer ~1.
 static uint8_t lowRateCount = 0;
 static TaskHandle_t loopTask = nullptr;
 static volatile uint32_t readyMicros = 0;
+static uint32_t linkConnectedAt = 0;
+static uint8_t intervalRequests = 0;
 
 enum Transport : uint8_t { NONE = 0, USB_LINK = 1, BLE_LINK = 2 };
 static Transport session = NONE;
@@ -101,10 +107,11 @@ static void setLight(uint8_t r, uint8_t g, uint8_t b) {
   ledChannel(LED_RED, r); ledChannel(LED_GREEN, g); ledChannel(LED_BLUE, b);
 }
 
+static void clearMerged();
 // ---------- Sensor ----------
 static void setIMUMode(uint8_t mode) {
   if (!imuReady || mode == imuMode) return;
-  imuMode = mode; lowRateCount = 0;
+  imuMode = mode; lowRateCount = 0; clearMerged(); // Never mix two sensor modes in one run.
   // Data-ready on INT1: gyro in mode 2, accelerometer in mode 1.
   imu.writeRegister(0x0D, mode == 2 ? 0x02 : mode == 1 ? 0x01 : 0x00);
   imu.writeRegister(0x11, mode == 2 ? activeG : 0x00);                               // CTRL2_G
@@ -112,6 +119,12 @@ static void setIMUMode(uint8_t mode) {
 }
 
 // ---------- Output ----------
+// Only wandtx calls BLEUart.write: notify() can split a line and block between
+// chunks. Status producers must never interleave bytes or block IMU sampling.
+static TaskHandle_t senderTask = nullptr;
+struct Outbound { uint16_t length, connection; uint32_t generation; char text[512]; };
+static QueueHandle_t outbound = nullptr;
+static volatile uint32_t bleGeneration = 0;
 static bool writeTo(Transport t, const char *text, int n) {
   if (n <= 0) return false;
   if (t == USB_LINK) {
@@ -120,26 +133,98 @@ static bool writeTo(Transport t, const char *text, int n) {
   }
   if (t == BLE_LINK) {
     if (!Bluefruit.connected() || !uart.notifyEnabled()) return false;
+    if (xTaskGetCurrentTaskHandle() != senderTask) {
+      if (!outbound || n > 512) return false;
+      Outbound message{}; message.length = uint16_t(n);
+      message.connection = Bluefruit.connHandle(); message.generation = bleGeneration;
+      memcpy(message.text, text, size_t(n));
+      if (xQueueSend(outbound, &message, 0) != pdTRUE) return false;
+      if (senderTask) xTaskNotifyGive(senderTask);
+      return true;
+    }
     return uart.write((const uint8_t *)text, n) == size_t(n);
   }
   return false;
 }
-static bool sendFrame(uint32_t us, bool hasAccel, bool hasGyro, const int16_t *v) {
-  if (session == NONE) return false;
-  char frame[128];
-  const int n = snprintf(frame, sizeof(frame), "\nS%lu,%lu,%u,%lu,%lu,%lu,%u,%d,%d,%d,%d,%d,%d\n",
-    (unsigned long)(sequence + 1), (unsigned long)us, buttonMask(),
-    (unsigned long)buttons[0].presses, (unsigned long)buttons[1].presses, (unsigned long)buttons[2].presses,
-    (hasAccel ? 1 : 0) | (hasGyro ? 2 : 0),
-    hasAccel ? v[3] : 0, hasAccel ? v[4] : 0, hasAccel ? v[5] : 0, hasGyro ? v[0] : 0, hasGyro ? v[1] : 0, hasGyro ? v[2] : 0);
-  if (!writeTo(session, frame, n)) return false;
-  ++sequence; lastFrameAt = millis();
+// ---------- Readings waiting for the link ----------
+// Measured 2026-10-29 over Bluetooth: macOS ran a 30 ms connection interval and
+// the core's three-notification queue (BANDWIDTH_MAX) filled; notify() then
+// blocked for up to 100 ms while the IMU overwrote its newest readings, so
+// active-stream device-time gaps reached 112 ms (loss is estimated, not measured). Now the Bluetooth
+// sender runs in its own task. Readings join one merged slot; a free link sends
+// a single reading at once, a busy one sends the whole run (mean rate, count,
+// first time) the moment it frees. The newest reading is always included, so
+// no intentional waiting is added. Button/session boundaries discard old motion.
+typedef WandMerged Merged;
+static Merged merged = {};
+static uint32_t inputEpoch = 0;
+static uint8_t frameButtons = 0;
+static uint32_t framePresses[3] = {};
+static volatile bool frameWanted = false;          // Button change or heartbeat due.
+static uint32_t mergedFrames = 0, mergedReadings = 0;
+static void clearMerged() {
+  taskENTER_CRITICAL();
+  merged = Merged{}; merged.epoch = ++inputEpoch;
+  frameButtons = buttonMask();
+  for (int i = 0; i < 3; ++i) framePresses[i] = buttons[i].presses;
+  taskEXIT_CRITICAL();
+}
+static void addReading(uint32_t us, const int16_t *v, bool hasGyro) {
+  taskENTER_CRITICAL(); wandMergeAdd(merged, us, v, v + 3, hasGyro); taskEXIT_CRITICAL();
+}
+// A frame that could not be sent goes back in front of anything newer.
+static void restoreMerged(const WandMerged &old) {
+  taskENTER_CRITICAL(); wandMergeRestore(merged, old); taskEXIT_CRITICAL();
+}
+static bool sendPending(Transport t) {
+  if (session != t || t == NONE) return false;
+  taskENTER_CRITICAL();
+  const Merged run = merged; merged = Merged{}; merged.epoch = inputEpoch;
+  const uint8_t mask = frameButtons;
+  const uint32_t presses[3] = {framePresses[0], framePresses[1], framePresses[2]};
+  const bool wanted = frameWanted; frameWanted = false;
+  taskEXIT_CRITICAL();
+  if (!run.count && !wanted) return true;
+  const int16_t mean[3] = {wandMergeMean(run, 0), wandMergeMean(run, 1), wandMergeMean(run, 2)};
+  const uint32_t us = run.count ? run.last : micros();
+  char frame[160];
+  const int n = snprintf(frame, sizeof(frame), "\nS%lu,%lu,%u,%lu,%lu,%lu,%u,%d,%d,%d,%d,%d,%d,%u,%lu\n",
+    (unsigned long)(sequence + 1), (unsigned long)us, mask,
+    (unsigned long)presses[0], (unsigned long)presses[1], (unsigned long)presses[2],
+    (run.count && run.hasAccel ? 1 : 0) | (run.count && run.hasGyro ? 2 : 0),
+    run.count ? run.accel[0] : 0, run.count ? run.accel[1] : 0, run.count ? run.accel[2] : 0, mean[0], mean[1], mean[2],
+    run.count ? run.count : 1, (unsigned long)(run.count ? run.first : us));
+  if (!writeTo(t, frame, n)) {
+    restoreMerged(run);
+    if (wanted) frameWanted = true;
+    return false;
+  }
+  taskENTER_CRITICAL(); ++sequence; taskEXIT_CRITICAL();
+  lastFrameAt = millis();
+  if (run.count > 1) { ++mergedFrames; mergedReadings += run.count; }
   return true;
 }
+// Bluetooth only: notify() may wait for the radio here, never in the sampling loop.
+static void senderLoop(void *) {
+  for (;;) {
+    ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(20));
+    for (;;) {
+      Outbound message;
+      while (outbound && xQueueReceive(outbound, &message, 0) == pdTRUE) {
+        if (message.generation == bleGeneration && Bluefruit.connected() &&
+            message.connection == Bluefruit.connHandle()) writeTo(BLE_LINK, message.text, message.length);
+      }
+      if (session != BLE_LINK || (!merged.count && !frameWanted)) break;
+      if (!sendPending(BLE_LINK)) { vTaskDelay(pdMS_TO_TICKS(2)); break; }
+    }
+  }
+}
+static void wakeSender() { if (senderTask) xTaskNotifyGive(senderTask); }
+
 static void sendIdentity(Transport t) {
   char text[512];
   const int n = snprintf(text, sizeof(text),
-    "\nI{\"protocol\":\"wand-sense-1\",\"firmware\":\"%s\",\"id\":\"%08lx%08lx\",\"imu\":%s,\"gyroDpsPerLsb\":0.00875,\"accelGPerLsb\":0.000122,\"odr\":104,\"wake\":%s}\n",
+    "\nI{\"protocol\":\"wand-sense-1\",\"firmware\":\"%s\",\"id\":\"%08lx%08lx\",\"imu\":%s,\"gyroDpsPerLsb\":0.0175,\"accelGPerLsb\":0.000122,\"odr\":104,\"merge\":true,\"wake\":%s}\n",
     FIRMWARE, (unsigned long)NRF_FICR->DEVICEID[1], (unsigned long)NRF_FICR->DEVICEID[0], imuReady ? "true" : "false", wokeFromOff ? "true" : "false");
   writeTo(t, text, n);
   char radio[120];
@@ -157,6 +242,14 @@ static void sendBattery() {
   char text[32];
   writeTo(session, text, snprintf(text, sizeof(text), "\nV%lu,%u\n", (unsigned long)batteryMv, charging ? 1 : 0));
 }
+// What macOS actually negotiated, for the receiver log (interval in 1.25 ms units).
+static void sendLink() {
+  BLEConnection *c = Bluefruit.connected() ? Bluefruit.Connection(Bluefruit.connHandle()) : nullptr;
+  if (!c) return;
+  char text[120];
+  writeTo(session, text, snprintf(text, sizeof(text), "\nElink interval=%u latency=%u mtu=%u phy=%u merged=%lu/%lu\n",
+    c->getConnectionInterval(), c->getSlaveLatency(), c->getMtu(), c->getPHY(), (unsigned long)mergedFrames, (unsigned long)mergedReadings));
+}
 
 // ---------- Power ----------
 static void powerOff() {
@@ -168,6 +261,7 @@ static void powerOff() {
   digitalWrite(PIN_LSM6DS3TR_C_POWER, LOW);
 #endif
   if (session != NONE) { const char bye[] = "\nE off\n"; writeTo(session, bye, sizeof(bye) - 1); delay(20); }
+  if (senderTask) vTaskSuspend(senderTask);
   Bluefruit.Advertising.stop();
   for (auto &b : buttons) nrf_gpio_cfg_sense_input(g_ADigitalPinMap[b.pin], NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_SENSE_LOW);
   delay(5);
@@ -179,7 +273,7 @@ static void powerOff() {
 static void endSession() {
   if (session == NONE) return;
   session = NONE; offlineSince = millis(); localDark = false; chordPhase = 0;
-  setIMUMode(0);
+  setIMUMode(0); clearMerged(); frameWanted = false;
   setLight(ORANGE[0], ORANGE[1], ORANGE[2]); // Disconnected orange, as on the Puck.
 }
 
@@ -192,7 +286,7 @@ static void command(const char *line, uint8_t length, Transport from) {
   if (c != 'H' && c != 'L' && c != 'M' && c != 'Z') return;
   if (session != from) {
     // A new host session: current state only, never queued edges or old motion.
-    session = from; stateDirty = true; chordPhase = 0; localDark = false;
+    session = from; clearMerged(); stateDirty = true; chordPhase = 0; localDark = false;
     lastBatteryAt = millis() - 10000; // Report the battery at once.
   }
   hostAt = millis();
@@ -218,11 +312,14 @@ static void readCommands() {
 }
 
 static void connectCallback(uint16_t handle) {
+  ++bleGeneration; // A previous link's queued status never enters the next link.
   BLEConnection *connection = Bluefruit.Connection(handle);
   if (!connection) return;
   connection->requestPHY();
   connection->requestDataLengthUpdate();
   connection->requestMtuExchange(247);
+  // The 15 ms interval itself is requested from the loop once these finish.
+  linkConnectedAt = millis(); intervalRequests = 0;
 }
 
 void setup() {
@@ -239,8 +336,11 @@ void setup() {
   analogReadResolution(12);
   setLight(ORANGE[0], ORANGE[1], ORANGE[2]);
 
-  imu.settings.gyroRange = 245;     // The Puck's own 245 deg/s scale.
+  // 500 deg/s: measured fast sweeps clipped at the Puck's 245 deg/s setting
+  // (286.7 deg/s full scale). The host still converts to Puck counts.
+  imu.settings.gyroRange = 500;
   imu.settings.accelRange = 4;      // The Puck's own 4 g scale.
+  imu.settings.accelBandWidth = 50; // The Puck's 50 Hz accelerometer anti-alias filter (Espruino jswrap_puck.c).
   imu.settings.gyroSampleRate = 104;
   imu.settings.accelSampleRate = 104;
   imuReady = imu.begin() == 0;
@@ -255,6 +355,7 @@ void setup() {
     setIMUMode(0);
   }
 
+  outbound = xQueueCreate(4, sizeof(Outbound));
   Bluefruit.autoConnLed(false);
   // One UART service, one peripheral: reserve only the vendor UUID and GATT
   // table it uses, leaving room for the 247-byte MTU in the core's fixed RAM.
@@ -278,6 +379,7 @@ void setup() {
   Bluefruit.Advertising.restartOnDisconnect(true);
   Bluefruit.Advertising.setInterval(32, 244);
   advReady = bleReady && uartStatus == 0 && advDataReady && Bluefruit.Advertising.start(0);
+  xTaskCreate(senderLoop, "wandtx", 1024, nullptr, TASK_PRIO_LOW, &senderTask);
   offlineSince = millis();
   readBattery(); lastBatteryAt = millis();
 }
@@ -286,7 +388,13 @@ void loop() {
   // Wake on sensor data-ready or within 5 ms for buttons and commands.
   ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(5));
   uint32_t now = millis();
-  for (auto &b : buttons) if (b.update(now)) stateDirty = true;
+  bool buttonChanged = false;
+  for (auto &b : buttons) if (b.update(now)) buttonChanged = true;
+  if (buttonChanged) {
+    // Ethan: dragging/scrolling only while held. Never replay a previous
+    // control's queued motion with the new button state, including failed sends.
+    clearMerged(); stateDirty = true;
+  }
   readCommands();
   if (bleReady && uartStatus == 0 && advDataReady && !Bluefruit.connected() && !Bluefruit.Advertising.isRunning() && wandElapsed(millis(), lastAdvRetry) >= 1000) {
     lastAdvRetry = millis(); advReady = Bluefruit.Advertising.start(0);
@@ -302,7 +410,7 @@ void loop() {
 
   // endSession() above can also advance offlineSince by a tick.
   now = millis();
-  bool sent = false;
+  bool sent = false; // A new reading joined the merged slot this pass.
   if (imuReady && imuMode && session != NONE) {
     uint8_t status = 0;
     if (imu.readRegister(&status, 0x1E) == IMU_SUCCESS && (status & (imuMode == 2 ? 0x02 : 0x01))) {
@@ -314,14 +422,20 @@ void loop() {
         for (int i = 0; i < 6; ++i) v[i] = int16_t(raw[2 * i] | (raw[2 * i + 1] << 8));
         // Desk sensing reports every eighth 12.5 Hz reading (~1.6 Hz), like Puck.accelOn(1.6).
         const bool publish = imuMode == 2 || (lowRateCount++ % 8) == 0;
-        if (publish && sendFrame(us, true, imuMode == 2, v)) { sent = true; stateDirty = false; }
+        if (publish) { addReading(us, v, imuMode == 2); sent = true; }
       }
     }
   }
-  if (session != NONE && !sent && (stateDirty || wandElapsed(now, lastFrameAt) >= HEARTBEAT_FRAME_MS)) {
-    if (sendFrame(micros(), false, false, nullptr)) stateDirty = false;
+  if (session != NONE && (stateDirty || (!sent && wandElapsed(now, lastFrameAt) >= HEARTBEAT_FRAME_MS))) { stateDirty = false; frameWanted = true; }
+  if (session == USB_LINK) sendPending(USB_LINK);      // USB writes never block (availableForWrite).
+  else if (session == BLE_LINK && (sent || frameWanted)) wakeSender();
+  // Ask macOS for the Puck's 15 ms interval after connection set-up settles.
+  if (Bluefruit.connected() && intervalRequests < 3 && wandElapsed(now, linkConnectedAt) >= 1500u + 5000u * intervalRequests) {
+    BLEConnection *c = Bluefruit.Connection(Bluefruit.connHandle());
+    if (c && c->getConnectionInterval() > 12) c->requestConnectionParameter(12);
+    ++intervalRequests;
   }
-  if (wandElapsed(now, lastBatteryAt) >= 10000) { lastBatteryAt = now; readBattery(); if (session != NONE) sendBattery(); }
+  if (wandElapsed(now, lastBatteryAt) >= 10000) { lastBatteryAt = now; readBattery(); if (session != NONE) { sendBattery(); sendLink(); } }
 
   if (session == NONE) {
     // The Puck power policy's offline behaviour, kept on the board itself.

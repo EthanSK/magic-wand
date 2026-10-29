@@ -102,7 +102,13 @@
       }
     }
 
-    function boot(base, bridge, power, zero, runtime, revision) {
+    // Also used after a bridge reload, which resets CONFIG.gain. The caller
+    // invokes this once per freshly loaded bridge, never per sensor reading.
+    function configurePointer(gain) {
+      device.evaluate("CONFIG.ySign=1;global.wandRawBias=undefined;CONFIG.gain*=" + gain + ";");
+    }
+    function boot(base, bridge, power, zero, runtime, revision, options) {
+      var gain = options && isFinite(options.pointerGain) && options.pointerGain >= 0.25 && options.pointerGain <= 4 ? +options.pointerGain : 1;
       device.load(base);
       device.evaluate("global.wandRawPointer=true;");
       // The saved Puck boot order: base, bridge, power policy, then the stored zero.
@@ -110,7 +116,10 @@
       // Ethan verified horizontal travel, but vertical travel was inverted on
       // this Sense mounting. Apply the shared vertical direction before the
       // receiver's @ZERO configuration: pointer, HUD and scroll stay aligned.
-      device.evaluate("CONFIG.ySign=1;global.wandRawBias=undefined;");
+      configurePointer(gain);
+      // Ethan's Sense pointer sensitivity (receiver WandSenseTuning): pointer
+      // gain only, also before @ZERO. HUD, review and scrolling use angles.
+
       linkUp = true; // The Sense link already exists; never arm the Puck's offline timers here.
       device.loadFragments(power);
       if (zero) device.evaluate("global.restoreWandCalibration(" + zero + ");");
@@ -160,7 +169,7 @@
     }
 
     return {
-      boot: boot, repl: repl, deliver: deliver, fire: fire,
+      boot: boot, repl: repl, deliver: deliver, fire: fire, configurePointer: configurePointer,
       battery: function (volts, percent) { batteryVolts = volts; batteryPercent = percent; },
       teardown: function () { dead = true; timers = {}; },
       state: function () { return { awake: device.awake, rate: device.sampleRate, imu: imuMode, light: lastLight, link: linkUp, ready: G.wandMotionReady === true }; },

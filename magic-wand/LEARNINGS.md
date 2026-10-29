@@ -1243,3 +1243,31 @@ The native framer is mutable Swift state. Dispatching a rejected identity from i
 The radio needs an explicit one-peripheral, one-vendor-UUID service configuration that fits the core’s reserved SoftDevice RAM. The checked configuration uses one vendor UUID, a 2 KiB attribute table and the existing maximum-bandwidth connection profile. Record the return from stack startup, UART service registration and advertising data/start calls; expose those states over the existing USB diagnostic path. After this configuration was installed, USB readback reported stack ready, UART success and advertising active, and the Mac then discovered and received 397 real Bluetooth sensor packets. USB-powered radio testing alone does not prove battery-powered operation or native automatic fallback.
 
 A receiver process restarts its numeric session counter. The dashboard observer must treat a new live boundary as a new local session even when that counter is again 1; otherwise the browser can reject the restarted sequence as old data. A searching boundary clears the mapping too. The regression covers a sequence of 900 followed by a restarted receiver’s sequence 1. The observer remains read-only and never takes hardware ownership.
+
+## Sense: measure the transport before retuning motion (2026-10-29)
+
+A 90-second passive Bluetooth capture of firmware c (dashboard observer, no second owner)
+showed host arrival groups roughly every 30 ms. Restricting cadence estimates to adjacent
+active frames in one session gave about 18% missing readings and a largest device-time gap
+of 112 ms. These are estimates from received timestamps, not a sensor-side loss counter;
+arrival groups alone do not establish the negotiated Bluetooth interval. The
+Adafruit core's `BANDWIDTH_MAX` allows three queued notifications and `notify()` waits up
+to 100 ms for a slot; meanwhile the IMU's data registers were overwritten. Firmware d sends
+from its own task and merges unsent readings into the next frame; the receiver replays them
+at their times. The same capture showed 286.7 deg/s clipping at the Puck's 245 deg/s
+setting. Before d, macOS had not applied the advertised 15 ms preferred interval; d requests
+it after connection, as Espruino does. Its effect is unmeasured until d is installed.
+
+The Sense and Puck.js v2 use the same LSM6DS3TR-C. Espruino documents "divide by 134"
+(full scale / 32768), but at 245 deg/s one count is 8.75 mdps (114.29 per deg/s). The first
+Sense builds converted to 134 per true deg/s, which made the pointer 17% faster than the
+Puck and every canonical threshold 15% tighter physically. Convert to Puck counts and put
+requested extra sensitivity in an explicit gain, not in the unit conversion.
+
+
+Keep queued readings within one button/sensor/session epoch. Snapshot button masks and
+press counters together with a run, clear obsolete motion at each boundary, and reject an
+older failed send after that boundary. One sender owns every BLE UART write, including
+identity/battery/link reports, because a split notification can otherwise interleave lines.
+Tests cover rejected cross-boundary retries and tuning after repeated maintenance reloads;
+these source checks do not establish physical radio performance.

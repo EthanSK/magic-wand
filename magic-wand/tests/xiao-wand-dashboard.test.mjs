@@ -8,7 +8,7 @@ const setup=()=>{const s=new WandState();s.connect('USB');return s;};
 test('Sense dashboard pin mapping matches the wiring plan and stays separate from Puck',()=>{
  const plan=JSON.parse(fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/pin-plan.json',import.meta.url)));
  assert.deepEqual(BUTTONS.map(b=>b.pin),plan.buttons.map(b=>b.board_pin));
- assert.deepEqual(BUTTONS.map(b=>[b.name,b.control,b.pin]),[['Middle finger','Bottom','D8'],['Thumb','Top','D9'],['Index','Middle','D10']]);
+ assert.deepEqual(BUTTONS.map(b=>[b.name,b.position,b.control,b.role,b.pin]),[['1','left','Middle','HUD','D10'],['2','centre','Bottom','Mouse','D8'],['3','right','Top','Recording','D9']]);
  assert.deepEqual(BUTTONS.map(b=>b.key),plan.buttons.map(b=>b.wire_key),'already-flashed v1 wire channels stay compatible');
  assert.equal(JSON.parse(fs.readFileSync(new URL('../wand.json',import.meta.url))).buttons[0].pin,'D30');
 });

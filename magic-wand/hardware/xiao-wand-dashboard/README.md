@@ -29,9 +29,13 @@ receiver's accepted packets through a same-user datagram socket, opens no hardwa
 sends nothing back, so it cannot compete for the board or move the pointer. `--hardware` remains
 for the diagnostic sketch only; the two modes cannot be combined.
 
+With the observer running, `python3 -I measure.py --seconds 60` reports cadence, missing readings,
+arrival grouping, clipping, the held gravity frame and a gyro scale check from that same read-only
+feed. Its arrival times include host scheduling; they are not end-to-end latency.
+
 ## What V2 shows
 
-- Independent thumb, index and middle-finger states: Pressed, Released or Unknown.
+- Independent states for buttons 1, 2 and 3 (left to right): Pressed, Released or Unknown.
 - Board press totals since the Sense last restarted in automatic local mode. The activity list starts with the current page/session. Manual browser and demo modes use session-relative counts.
 - Acceleration in g including gravity, rotation speed in degrees/s, ten-second histories, and a relative gyro illustration. It drifts; Zero view resets only the illustration, not board calibration.
 - Active transport, packet age, receive rate, rejected frames and button activity. A 1.5-second gap or disconnect makes current buttons Unknown and clears current axis values. History remains labelled as old data.
@@ -50,9 +54,9 @@ Manual browser mode closes its previous reader when switching sources. It has no
 
 | Switch | Sense label | MCU pin | Other contact |
 | --- | --- | --- | --- |
-| 1 · Left · Middle finger / Bottom | 8 / D8 | P1.13 | GND |
-| 2 · Centre · Thumb / Top | 9 / D9 | P1.14 | GND |
-| 3 · Right · Index / Middle | 10 / D10 | P1.15 | GND |
+| 1 · Left / Middle (HUD) | 10 / D10 | P1.15 | GND |
+| 2 · Centre / Bottom (mouse) | 8 / D8 | P1.13 | GND |
+| 3 · Right / Top (speech) | 9 / D9 | P1.14 | GND |
 
 Use the two metal switch/socket contacts; an ordinary mechanical switch has no polarity. All three share GND. Internal pull-ups make pressed LOW. **No 3V3 wire goes to these switches.** The checked mapping is included in `pin-plan.json`; this dashboard does not depend on another unpublished wiring page.
 
@@ -68,7 +72,7 @@ Each transport carries newline-delimited JSON, including a leading newline for f
 {"schema":1,"sensor":"wand","seq":1,"ms":20,"buttons":{"thumb":false,"index":false,"middle":false},"presses":{"thumb":0,"index":0,"middle":0},"imu":{"ax":0,"ay":0,"az":1,"gx":0,"gy":0,"gz":0}}
 ```
 
-The original sketch’s `thumb`, `index`, `middle` keys identify D8, D9, D10 respectively. These legacy wire-channel names do **not** describe the fingers on the assembled grip: D8 is Middle finger, D9 Thumb and D10 Index. The dashboard labels and `pin-plan.json` preserve this distinction without requiring a firmware upload.
+The original sketch’s `thumb`, `index`, `middle` keys identify D8, D9, D10 respectively. These legacy wire-channel names do **not** describe fingers: the grip buttons are numbered 1, 2, 3 left to right, so D10 is 1 (left), D8 is 2 (centre) and D9 is 3 (right). The dashboard labels and `pin-plan.json` preserve this distinction without requiring a firmware upload.
 
 `seq`, `ms` and optional `presses` fields are unsigned 32-bit values. Wrapping is accepted; duplicate/out-of-order sequences are rejected. A board reboot needs a new reader session. All three buttons must be explicit booleans. `imu` may be null; otherwise all six axes must be finite numeric values. No device identifier or calibration is exported. Control Hand's `sensor: hand` and Puck packets are rejected rather than reinterpreted.
 

@@ -4,28 +4,31 @@
   "pressed_level": "LOW",
   "buttons": [
     {
-      "name": "middle",
-      "board_pin": "D8",
-      "silkscreen": "8",
-      "mcu_pin": "P1.13",
-      "wire_key": "thumb",
-      "control": "Bottom"
-    },
-    {
-      "name": "thumb",
-      "board_pin": "D9",
-      "silkscreen": "9",
-      "mcu_pin": "P1.14",
-      "wire_key": "index",
-      "control": "Top"
-    },
-    {
-      "name": "index",
+      "name": "1",
       "board_pin": "D10",
       "silkscreen": "10",
       "mcu_pin": "P1.15",
       "wire_key": "middle",
-      "control": "Middle"
+      "control": "Middle",
+      "position": "left"
+    },
+    {
+      "name": "2",
+      "board_pin": "D8",
+      "silkscreen": "8",
+      "mcu_pin": "P1.13",
+      "wire_key": "thumb",
+      "control": "Bottom",
+      "position": "centre"
+    },
+    {
+      "name": "3",
+      "board_pin": "D9",
+      "silkscreen": "9",
+      "mcu_pin": "P1.14",
+      "wire_key": "index",
+      "control": "Top",
+      "position": "right"
     }
   ],
   "common": "GND",

@@ -11,7 +11,7 @@ import Foundation
 ///
 /// The XIAO nRF52840 Sense wand is a separate, explicit profile:
 ///
-///     {"profile": "sense", "sense": {"id": "optional 16-hex board ID", "axes": ["-y", "+x", "+z"]}}
+///     {"profile": "sense", "sense": {"id": "optional 16-hex board ID", "axes": ["-y", "+x", "+z"], "pointerGain": 1.466}}
 ///
 /// Without an ID, the first single Sense seen over USB is selected and remembered in
 /// `sense-device.json`; Bluetooth only reconnects to that selected board. `axes` names the
@@ -23,6 +23,7 @@ struct WandDeviceConfiguration {
     var profile: Profile = .puck
     var senseID: String?
     var senseAxes: WandSenseAxes = .standard
+    var sensePointerGain = WandSenseTuning.defaultPointerGain
 
     var isConfigured: Bool { profile == .sense || !name.isEmpty || identifier != nil }
 
@@ -43,6 +44,9 @@ struct WandDeviceConfiguration {
             settings.profile = .sense
             let sense = value["sense"] as? [String: Any] ?? [:]
             if let id = (sense["id"] as? String)?.lowercased(), id.count == 16, id.allSatisfy({ $0.isHexDigit }) { settings.senseID = id }
+            if let gain = (sense["pointerGain"] as? NSNumber)?.doubleValue {
+                if WandSenseTuning.pointerGainRange.contains(gain) { settings.sensePointerGain = gain } else { log("SENSE_POINTER_GAIN_INVALID_USING_DEFAULT") }
+            }
             if let axes = sense["axes"] as? [String] {
                 if let parsed = WandSenseAxes(text: axes) { settings.senseAxes = parsed } else { log("SENSE_AXES_INVALID_USING_DEFAULT") }
             }

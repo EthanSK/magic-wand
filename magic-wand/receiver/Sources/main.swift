@@ -143,11 +143,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var senseVirtual: WandVirtualPuck?
     var senseInfo: WandSenseInfo?
     var senseTransport: WandSenseLink.Transport?
-    var senseSession=WandSenseSession(),senseClock=WandSenseClock(),senseSessionNumber=0
+    var senseSession=WandSenseSession(),senseClock=WandSenseClock(),senseSessionNumber=0,senseLastReading = -Double.infinity
     let senseDashboard=WandSenseDashboardTap(path:support.appendingPathComponent("sense-dashboard.sock").path)
     /// Calibration belongs to one physical wand; a Sense never reads a Puck zero.
     var calibrationKey:String? {
-        isSense ? senseInfo.map{"sense-"+$0.id+"-"+deviceSettings.senseAxes.signature} : device?.identifier.uuidString
+        // "-c875": Puck-equivalent gyro counts (8.75 mdps). The older key held 134-per-deg/s zeros.
+        isSense ? senseInfo.map{"sense-"+$0.id+"-"+deviceSettings.senseAxes.signature+"-c875"} : device?.identifier.uuidString
     }
     var deviceConnected:Bool { isSense ? senseTransport != nil : device?.state == .connected }
     let uart = CBUUID(string: "6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
@@ -179,6 +180,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // Each complete statement is small; the old single giant REPL function
         // exceeded the device's available memory during repeated live updates.
         for command in source.split(separator:"\n") where !command.contains("WAND_MODE_ROUTING_READY") {queue(String(command))}
+        if isSense { senseVirtual?.configurePointer(deviceSettings.sensePointerGain) }
         queue("if(global.wandMotionReady){global.WAND_BRIDGE_REVISION='"+bridgeRevision(source)+"';print('WAND_MODE_ROUTING_READY');}else print('WAND_UPDATE_FAILED');")
     }
     let commands: [String]
@@ -1602,7 +1604,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let fields=payload.split(separator:",",omittingEmptySubsequences:false)
         guard fields.count==4 else{return}
         let v=fields.compactMap{Int($0)}
-        guard v.count==4,(1...50000).contains(v[0]),(-32768...32767).contains(v[1]),(-32768...32767).contains(v[2]),(0...7).contains(v[3]) else{return}
+        // ±65535: the Sense's 500 deg/s range in Puck counts; a Puck never exceeds int16.
+        guard v.count==4,(1...50000).contains(v[0]),(-65535...65535).contains(v[1]),(-65535...65535).contains(v[2]),(0...7).contains(v[3]) else{return}
         let now=ProcessInfo.processInfo.systemUptime
         // Screenshot mode precedes every ordinary Bottom guard: its latched
         // drag must survive the latching tap's physical release.

@@ -4,7 +4,7 @@ const test = require("node:test"), assert = require("node:assert/strict");
 const vm = require("node:vm"), crypto = require("node:crypto");
 const { read } = require("./harness.cjs");
 
-function createSense({ zero } = {}) {
+function createSense({ zero, options } = {}) {
   let now = 100, next = 0;
   const timers = new Map(), lines = [], lights = [], imu = [], logs = [];
   let sleeps = 0, api;
@@ -22,7 +22,7 @@ function createSense({ zero } = {}) {
   const bridge = read("device/generated/wand-mode-bridge.compact.js");
   const runtime = read("device/generated/wand-runtime-version.txt").trim();
   const revision = crypto.createHash("sha256").update(bridge).digest("hex");
-  const ok = api.boot(read("device/wand-mouse-prototype.js"), bridge, read("device/generated/wand-power-policy.compact.js"), zero || "", runtime, revision);
+  const ok = api.boot(read("device/wand-mouse-prototype.js"), bridge, read("device/generated/wand-power-policy.compact.js"), zero || "", runtime, revision, options);
   function advance(seconds) {
     const end = now + seconds;
     for (;;) {
@@ -142,4 +142,32 @@ test("teardown stops every timer and output", () => {
   s.api.repl("print('late')");
   assert.equal(s.lights.length, count);
   assert(!s.lines.includes("late"));
+});
+
+test("Sense pointer gain changes only the pointer gain reported to the receiver", () => {
+  const plain = createSense({ zero: '{"x":0,"y":0,"z":0}' }), faster = createSense({ zero: '{"x":0,"y":0,"z":0}', options: { pointerGain: 1.466 } });
+  for (const s of [plain, faster]) {
+    s.api.repl("global.WAND_UPDATING=false;setMouseFollow(true);");
+    s.advance(0.2); s.frames(5, 0, [0, 0, -1340]);
+  }
+  const zero = (s) => JSON.parse(s.lines.find((l) => l.startsWith("@ZERO ")).slice(6));
+  const a = zero(plain), b = zero(faster);
+  assert(Math.abs(b[2] / a[2] - 1.466) < 1e-9, `gain ${a[2]} -> ${b[2]}`);
+  assert.deepEqual(b.slice(3), a.slice(3), "vertical gain, speed curve, held gain, slack and signs unchanged");
+  assert.equal(b[12], 1, "Sense vertical direction kept");
+  assert.equal(faster.ctx.CONFIG.deadZone, plain.ctx.CONFIG.deadZone, "HUD dead zone unchanged");
+  const ignored = createSense({ options: { pointerGain: 40 } });
+  assert.equal(ignored.ctx.CONFIG.gain, plain.ctx.CONFIG.gain, "out-of-range gain ignored");
+});
+
+// A live maintenance bridge update must keep the requested Sense sensitivity.
+test("Sense tuning survives repeated bridge replacement without multiplying twice", () => {
+  const s = createSense({zero: '{"x":0,"y":0,"z":0}', options: {pointerGain: 1.466}});
+  const gain = s.ctx.CONFIG.gain;
+  for (let i=0;i<2;i++) {
+    s.api.device.loadFragments(read("device/generated/wand-mode-bridge.compact.js"));
+    s.api.configurePointer(1.466);
+    assert.equal(s.ctx.CONFIG.gain, gain);
+    assert.equal(s.ctx.CONFIG.ySign, 1);
+  }
 });
