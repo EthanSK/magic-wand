@@ -60,8 +60,11 @@ def html_vision(manifest: dict) -> str:
 
 
 def html_intro(manifest: dict) -> str:
-    """What the wand is, beside the headline. The vision's longer detail stays in the README."""
-    return f'<p class="tagline">{escape(manifest["tagline"])}</p>'
+    """The shared introduction and Ethan's intended workflow, beside the headline."""
+    return (
+        f'<p class="tagline">{escape(manifest["tagline"])}</p>\n'
+        f'<p class="lounge">{escape(manifest["vision"]["detail"])}</p>'
+    )
 
 
 def html_summary(manifest: dict) -> str:

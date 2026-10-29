@@ -1358,3 +1358,12 @@ The brief follow-off-after-scroll rule was an intentional user reversal, not a s
 gesture change. Ethan found that scrolling needs only a small stroke and a hold, so the wand
 is not offset afterwards. A released completed scroll enables mouse follow again from either
 prior state, with no follow-off confirmation state or frame suppression left behind.
+
+## Held Middle on a wheel card adjusts it (2026-10-29)
+
+Wedge selection used to treat every Middle hold as aiming, so a hold that began on Zoom
+slid the outline to neighbouring wedges instead of changing Zoom. The native controller
+now asks the coordinator, without pressing, whether the outlined card is a wand-adjustable
+wheel (`wandAdjustableControl`), presses it on Middle down and consumes the gesture's later
+click or release once it has adjusted. A press with no adjustment still resolves through the
+same click/held-release rules, from the press already down, so dual cards never act twice.
