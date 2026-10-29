@@ -180,7 +180,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
-- Installed: staying on the centre Switch App item for 0.5 seconds after hold qualification enters its chooser without releasing Middle. Moving away restarts that dwell; stale telemetry prevents entry. Motion before arming is discarded, and releasing finishes the same gesture. Native checks pass; physical gesture acceptance remains pending.
+- Installed: holding the Agentic Mouse HUD button does not automatically enter Switch App after a timeout. Hold to aim and release to select; a selected continuous control uses the next deliberate hold. Agentic Mouse 1.0.295 build 301 is installed. Physical release-selection investigation is ongoing.
 - Installed: Review changes and Stage files switch within the same pending Better Git selection and include the current file. No files are staged by switching. Better Git 1.2.135 is released and active; receiver 1.2.96 is installed with settings preserved. Receiver and Mini checks pass. The device remained asleep during installation; physical gesture acceptance remains pending.
 - Installed: double-click Middle toggles Review changes and Stage files without staging. The floating indicator names the other mode. A single click cancels and exits after at most 300 ms; holding for half a second still stages the selection and stays in that mode. Pointer movement is unchanged. Receiver, native interaction and timer checks pass; physical button acceptance remains pending.
 - Installed: triple Bottom starts screenshot selection; the HUD Screenshot action uses one Bottom tap, movement and the existing stop-to-click detector to finish. Double-tap centering waits up to 300 ms to distinguish a third tap. Pointer movement is not buffered. Recording red takes priority over mouse blue, and loading blinks orange. Complete saved bytes and clean startup with calibration passed; physical screenshot acceptance remains pending.
@@ -214,7 +214,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.99 (104) · device code `wand-441472ce965b` · bridge `f8639252` · updated 29 October 2026.
+Receiver 1.2.100 (105) · device code `wand-441472ce965b` · bridge `f8639252` · updated 29 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

@@ -69,6 +69,12 @@ final class WandVirtualPuck {
     func send(_ command: String) { guard !dead else { return }; api?.invokeMethod("repl", withArguments: [command]) }
 
     /// Reapply mounting and pointer-only gain after loading a fresh bridge.
+    /// Debug pause: keep the board streaming 104 Hz gyro and accelerometer for
+    /// the dashboard. The canonical program still sees only its own requested rate.
+    func holdSensor(_ on: Bool) {
+        guard !dead else { return }
+        api?.invokeMethod("holdSensor", withArguments: [on])
+    }
     func configurePointer(_ gain: Double) {
         guard !dead else { return }
         api?.invokeMethod("configurePointer", withArguments: [gain])

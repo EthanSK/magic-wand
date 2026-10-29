@@ -59,6 +59,7 @@ extension WandReceiver {
         let zero = knownSenseZero()?.json
         let booted = virtual.boot(sources, zero: zero, runtime: runtimeVersion, revision: bridgeRevision(sources.bridge),
                                   pointerGain: deviceSettings.sensePointerGain)
+        if actionPause.paused { virtual.holdSensor(true) } // Debug pause keeps full-rate telemetry.
         log("SENSE_CONNECTED", transport.rawValue, info.firmware, "program", booted ? "complete" : "FAILED", "knownZero", zero != nil,
             "pointerGain", deviceSettings.sensePointerGain)
         if !info.motion { log("SENSE_MOTION_SENSOR_UNAVAILABLE") }
@@ -97,7 +98,11 @@ extension WandReceiver {
         switch line {
         case .frame(let frame):
             senseDashboard.packet(["type": "packet", "transport": senseTransport?.rawValue ?? "", "session": senseSessionNumber,
-                                   "packet": WandSenseDashboard.packet(frame, info: info)])
+                                   "packet": WandSenseDashboard.packet(frame, info: info),
+                                   "usage": ["pointerPosts":movementCount,"pointerTravel":pointerTravel,
+                                             "follow":dwell.following,"paused":actionPause.paused,
+                                             "recording":recording.isRecording,"hud":hudSession,
+                                             "pointerPath":motionFilter.path.rawValue]])
             guard let steps = senseSession.accept(frame, arrival: arrival) else { return }
             let time = senseClock.align(micros: frame.micros, arrival: arrival)
             let axes = deviceSettings.senseAxes

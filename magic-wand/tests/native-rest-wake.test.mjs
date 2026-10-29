@@ -30,6 +30,7 @@ final class Rest {
 final class Controls {var speechEvents=0}
 final class Recording {var isRecording=false}
 final class Harness {
+ var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  var ready=true,restoring=false,scrollActive=false,buttons=0,restDiagnosticsRemaining=0,hudSession=false
  var recordingPointerPaused=false,recordingRestoreFollow:Bool?
@@ -119,5 +120,5 @@ precondition(hud.mouseOnRequests==0 && hud.restFollow.remembered==nil)
 print("PASS: wake restores pre-rest state; manual and recording win")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-wake-'));
- try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',['-Onone',new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
+ try {writeFileSync(join(dir,'main.swift'),code);const build=spawnSync('swiftc',['-Onone',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(build.status,0,build.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
 });

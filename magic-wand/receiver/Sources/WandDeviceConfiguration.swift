@@ -11,7 +11,7 @@ import Foundation
 ///
 /// The XIAO nRF52840 Sense wand is a separate, explicit profile:
 ///
-///     {"profile": "sense", "sense": {"id": "optional 16-hex board ID", "axes": ["-y", "+x", "+z"], "pointerGain": 1.466}}
+///     {"profile": "sense", "sense": {"id": "optional 16-hex board ID", "axes": ["-y", "+x", "+z"], "pointerGain": 1.1725}}
 ///
 /// Without an ID, the first single Sense seen over USB is selected and remembered in
 /// `sense-device.json`; Bluetooth only reconnects to that selected board. `axes` names the

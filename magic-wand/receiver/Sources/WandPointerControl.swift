@@ -530,10 +530,30 @@ struct WandAngularStream {
     }
 }
 
+/// Ordinary pointer conversion. `tuned` is the unchanged Puck filter: adaptive
+/// 2–8 ms smoothing, 150 ms directional mean with a 250 ms intent gate, 0.2°
+/// slack with recentring, and the slow-motion sensitivity curve. `direct` is
+/// Ethan's Sense baseline (2026-10-29: "get rid of all the weird, hacky potential
+/// noise rejection ... start off like scratch ... just the expected route"):
+/// calibrated, orientation-projected gyro rate × time × the same gain, vertical
+/// gain and explicit held LOW gain, keeping the subpixel remainder. Nothing is
+/// smoothed, gated, curved, buffered or delayed. Both are measured in the same units.
+enum WandPointerPath: String {
+    case tuned, direct
+    static func read(_ value: Any?, default fallback: WandPointerPath) -> WandPointerPath {
+        (value as? String).flatMap(WandPointerPath.init(rawValue:)) ?? fallback
+    }
+}
+
 final class WandMotionFilter {
     // Ethan's Switch App sensitivity means normal mouse HIGH, even while
     // Middle is held. Share the unrounded calculation; Bottom alone owns LOW.
-    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double}
+    // stopX/stopY: the tuned filter's counts, used only to decide stop-to-click
+    // (dwell) and screenshot settling, so a direct pointer cannot disable or
+    // flood those clicks with tremor- or bias-level counts. Equal to x/y when tuned.
+    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0}
+    var path:WandPointerPath = .tuned
+    private var directX=0.0,directY=0.0
     private var values:[Double] = []
     private var fx=0.0,fy=0.0,ix=0.0,iy=0.0,meanSpeed=0.0,intentTime=0.0
     private var slackX=0.0,slackY=0.0,fractionX=0.0,fractionY=0.0
@@ -556,7 +576,7 @@ final class WandMotionFilter {
               abs(v[11])==1,abs(v[12])==1 else{return false}
         values=v;reset();return true
     }
-    func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0}
+    func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0;directX=0;directY=0}
     func sample(rawX:Int,rawY:Int,microseconds:Int,held:Bool,resetState:Bool)->Result? {
         guard configured,(-65535...65535).contains(rawX),(-65535...65535).contains(rawY),
               (1...50000).contains(microseconds) else{return nil}
@@ -589,7 +609,18 @@ final class WandMotionFilter {
         fractionX+=stepX*v[2]*scale*v[11];fractionY+=stepY*v[2]*v[3]*scale*v[12]
         let countX=Int(fractionX.rounded(.towardZero)),countY=Int(fractionY.rounded(.towardZero))
         fractionX-=Double(countX);fractionY-=Double(countY)
-        return .init(x:max(-4095,min(4095,countX)),y:max(-4095,min(4095,countY)),intent:active,angularX:x*v[11],angularY:y*v[12],highX:highX)
+        let tunedX=max(-4095,min(4095,countX)),tunedY=max(-4095,min(4095,countY))
+        guard path == .direct else {
+            return .init(x:tunedX,y:tunedY,intent:active,angularX:x*v[11],angularY:y*v[12],highX:highX,stopX:tunedX,stopY:tunedY)
+        }
+        // Direct: the same calibrated, projected rate (x, y), gain, vertical gain
+        // and held choice as above, applied to every reading as it arrives.
+        let gain=v[2]*(held ? v[7] : 1)
+        directX+=x*dt*gain*v[11];directY+=y*dt*gain*v[3]*v[12]
+        let directCountX=Int(directX.rounded(.towardZero)),directCountY=Int(directY.rounded(.towardZero))
+        directX-=Double(directCountX);directY-=Double(directCountY)
+        return .init(x:max(-4095,min(4095,directCountX)),y:max(-4095,min(4095,directCountY)),intent:active,
+                     angularX:x*v[11],angularY:y*v[12],highX:x*dt*v[2]*v[11],stopX:tunedX,stopY:tunedY)
     }
 }
 

@@ -16,6 +16,7 @@ enum Tap {case cghidEventTap}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?){ };func post(tap:Tap){}}
 final class Rest {var activated=false;func pointerActivated(){activated=true}}
 final class Harness {
+ var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  let restDetection=Rest()
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),motionFilter=WandMotionFilter(),dwell=WandDwellClick(),recenterGesture=WandRecenterGesture(),flickScroll=WandFlickScroll()
@@ -34,7 +35,7 @@ final class Harness {
  func scheduleDwell(){}
  func releaseButtons(){buttons=0}
  func postPointerMove(dx:Int,dy:Int,from p:CGPoint)->CGPoint{p}
- func handleFrame(x:Int,y:Int,b:Int){frames+=1}
+ func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil){frames+=1}
  static var wheelPairs:[(Int32,Int32)]=[]
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
  ${['beginBottomHold','enableMouseAfterScroll','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
@@ -134,5 +135,5 @@ precondition(!quietLog.heldScroll.active && !logged.contains{$0.hasPrefix("V3_SC
 print("PASS: missing release, native drag release, stale telemetry and scroll-to-mouse from both prior states")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-release-'));
- try {writeFileSync(join(dir,'main.swift'),code);const built=spawnSync('swiftc',['-O',new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(built.status,0,built.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
+ try {writeFileSync(join(dir,'main.swift'),code);const built=spawnSync('swiftc',['-O',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(built.status,0,built.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
 });
