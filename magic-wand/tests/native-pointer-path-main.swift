@@ -126,6 +126,59 @@ precondition(stop.settledCounts == 0,"settled tiny motion must not move the poin
 precondition(raw.clicks == 1,"quiet-motion stopping permits one click on direct counts too (\(raw.clicks))")
 print("PASS: stop-to-click fires once; tiny motion cannot keep moving the pointer")
 
+// 7b. Ethan: "make sure ... it actually sends a click if it ... stopped".
+// Stop-to-click judges the pointer he sees. Receiver order per reading: the
+// dwell timer fires at nextDue if it is earlier, then intent, then the move.
+struct StopRun { var clicks: [Double] = []; var visible: [Double] = [] }
+func stopToClick(_ phases: [(rate: Double, seconds: Double)], tremor: Bool = true, gapAt: Int? = nil) -> StopRun {
+    stopToClick(phases.map { ($0.rate, $0.seconds, tremor ? 0.6 : 0) }, gapAt: gapAt)
+}
+/// `wobble`: alternating hand wobble (deg/s amplitude) on top of the phase's rate.
+func stopToClick(_ phases: [(rate: Double, seconds: Double, wobble: Double)], gapAt: Int? = nil) -> StopRun {
+    let f = filter(.direct), dwell = WandDwellClick(); dwell.follow(true)
+    var run = StopRun(), now = 100.0, i = 0
+    for phase in phases {
+        for _ in 0..<Int((phase.seconds * 104).rounded()) {
+            var dt = 9615
+            if let gap = gapAt, i == gap { dt = 50000; now += 0.04 } // one late reading after a radio gap
+            if let due = dwell.nextDue, due <= now, dwell.tick(now: due) { run.clicks.append(due) }
+            let wobble = phase.wobble * sin(Double(i) * 0.9)
+            let s = f.sample(rawX: Int((bias[0] + (phase.rate + wobble) * counts).rounded()), rawY: Int(bias[1]),
+                             microseconds: dt, held: false, resetState: false)!
+            if s.x != 0 || s.y != 0 { run.visible.append(now) }
+            dwell.intent(s.intent, now: now)
+            dwell.move(dx: s.stopX, dy: s.stopY, now: now, eligible: true)
+            now += 0.009615; i += 1
+        }
+    }
+    return run
+}
+func clickedAfterStopping(_ run: StopRun, _ label: String) {
+    precondition(run.clicks.count == 1, "\(label): one click per stop, got \(run.clicks)")
+    let click = run.clicks[0], last = run.visible.filter { $0 < click }.max() ?? -1
+    precondition(!run.visible.contains { $0 > click - 0.19 && $0 < click }, "\(label): never clicks while the pointer is still moving")
+    precondition(click - last >= 0.19 && click - last <= 0.25, "\(label): clicks about 200 ms after the pointer stops: \(click - last)")
+}
+// Gentle approach: a sweep that slows to a visible creep, then rests with tremor.
+clickedAfterStopping(stopToClick([(40, 0.3), (8, 0.4), (4.5, 0.3), (3, 0.3), (0.2, 1)]), "gentle approach")
+// Small residual drift under the quiet stop: the pointer is frozen, so it clicks (no starving).
+clickedAfterStopping(stopToClick([(40, 0.3), (1.8, 1.5)]), "residual drift")
+// Deliberately continuing slowly: no click until the pointer stops.
+let continuing = stopToClick([(40, 0.3), (6, 1.5), (0, 0.6)], tremor: false)
+clickedAfterStopping(continuing, "continued movement")
+precondition(continuing.clicks[0] > 100 + 0.3 + 1.5, "no click during the deliberate slow movement")
+// Visible wobble before settling: click about 200 ms after the visible stop.
+// (The old tuned stop counts clicked ~440 ms late here; in replayed real use
+// they also clicked mid-wobble, 63 of 133 clicks, which the 7b checks forbid.)
+clickedAfterStopping(stopToClick([(40, 0.3, 0.6), (0, 0.6, 3.6), (0, 1, 0.6)]), "wobble before settling")
+// One click per stop: staying, or a tiny nudge, never clicks again; a fresh move does.
+let twice = stopToClick([(40, 0.3), (0, 1.5), (1.5, 0.3), (0, 1), (-40, 0.3), (0, 1)], tremor: false)
+precondition(twice.clicks.count == 2, "one click per stop, and a fresh move clicks again: \(twice.clicks)")
+// A late reading after a radio gap neither bursts nor adds a click.
+let stale = stopToClick([(40, 0.3), (0, 1)], tremor: false, gapAt: 40)
+precondition(stale.clicks.count == 1, "a late reading never adds a click: \(stale.clicks)")
+print("PASS: stop-to-click follows the visible pointer: gentle approach, residual drift, continued movement, one click per stop, late reading")
+
 // 8. The tuned path is unchanged and reports its own counts as stop counts.
 let tuned = filter(.tuned)
 for _ in 0..<52 {

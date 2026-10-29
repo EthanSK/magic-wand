@@ -1279,8 +1279,9 @@ captures (restored gain) showed the tuned path passing 85–91% of total travel 
 motion below 2°/s; in 41% of the mixed capture's readings a direct pointer moved and the tuned one did not.
 Its 0.2° slack delayed the first count of a steady 2°/s turn to 173 ms and swallowed 0.5–1°/s
 entirely. The same filter is what made stop-to-click possible: hand tremor and a 0.2–0.5°/s
-zero error keep direct counts flowing, so a direct pointer must keep the tuned stop detection
-for dwell and screenshot settling. Both captures also implied about 18% missing sample intervals in firmware c
+zero error kept direct counts flowing in that initial unfiltered path. At that stage tuned stop
+detection kept dwell and screenshot settling usable; the later quiet-stop path supersedes that
+coupling (see “Stop-to-click must judge the visible pointer” below). Both captures also implied about 18% missing sample intervals in firmware c
 (not a sensor-side loss counter) and arrived in observed bursts every 30 ms; those transport limits are separate from the filter.
 
 ## Sensor motion is not evidence of actual pointer use (2026-10-29)
@@ -1367,3 +1368,13 @@ now asks the coordinator, without pressing, whether the outlined card is a wand-
 wheel (`wandAdjustableControl`), presses it on Middle down and consumes the gesture's later
 click or release once it has adjusted. A press with no adjustment still resolves through the
 same click/held-release rules, from the press already down, so dual cards never act twice.
+
+## Stop-to-click must judge the visible pointer (2026-10-29)
+
+The direct Sense pointer kept stop-to-click on the tuned filter's counts and intent, so the
+two disagreed. A replay of recorded use through the real receiver classes, matching 128 of 134
+logged clicks, showed both failures Ethan reported: visible stops without a click (the tuned
+counts never armed, or kept trickling while the pointer was frozen by the quiet stop) and early
+clicks while the pointer still crept or wobbled, which then disarmed the real stop on a small
+target. In that replay, using the posted counts clicked every qualifying stop about 200 ms
+after it, never during visible motion. Clicks were already plain left down/up events at the current position.

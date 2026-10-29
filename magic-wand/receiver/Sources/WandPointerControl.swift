@@ -602,9 +602,9 @@ enum WandPointerPath: String {
 final class WandMotionFilter {
     // Ethan's Switch App sensitivity means normal mouse HIGH, even while
     // Middle is held. Share the unrounded calculation; Bottom alone owns LOW.
-    // stopX/stopY: the tuned filter's counts, used only to decide stop-to-click
-    // (dwell) and screenshot settling, so a direct pointer cannot disable or
-    // flood those clicks with tremor- or bias-level counts. Equal to x/y when tuned.
+    // stopX/stopY: the counts stop-to-click (dwell) and screenshot settling
+    // judge. Both paths now report their own posted counts: the direct path's
+    // quiet knee keeps tremor and small zero error out of them (2026-10-29).
     struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0;var highY=0.0}
     var path:WandPointerPath = .tuned
     private var directX=0.0,directY=0.0,smoothX=0.0,smoothY=0.0
@@ -701,8 +701,17 @@ final class WandMotionFilter {
         }
         let directCountX=Int(directX.rounded(.towardZero)),directCountY=Int(directY.rounded(.towardZero))
         directX-=Double(directCountX);directY-=Double(directCountY)
-        return .init(x:max(-4095,min(4095,directCountX)),y:max(-4095,min(4095,directCountY)),intent:active,
-                     angularX:x*v[11],angularY:y*v[12],highX:x*dt*v[2]*v[11],stopX:tunedX,stopY:tunedY,highY:y*dt*v[2]*v[3]*v[12])
+        // Stop-to-click and screenshot settling judge the pointer Ethan sees:
+        // "if it stopped, click". The quiet knee already stops it below the
+        // slow-speed boundary, so the posted counts are the stop counts and
+        // the tuned filter's intent lease does not apply. Recorded Sense use
+        // (receiver 111, ~15 min, replay matched 128 of 134 logged clicks): the
+        // tuned counts clicked during only 57% of visible stops and half their
+        // clicks came while the pointer was still visibly moving; the posted
+        // counts clicked during 89%, ~200 ms after the stop, never mid-motion.
+        let postedX=max(-4095,min(4095,directCountX)),postedY=max(-4095,min(4095,directCountY))
+        return .init(x:postedX,y:postedY,intent:false,
+                     angularX:x*v[11],angularY:y*v[12],highX:x*dt*v[2]*v[11],stopX:postedX,stopY:postedY,highY:y*dt*v[2]*v[3]*v[12])
     }
 }
 
