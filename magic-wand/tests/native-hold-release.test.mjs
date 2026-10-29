@@ -19,7 +19,6 @@ final class Rest {var activated=false,stopped=0;func pointerActivated(){activate
 final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
  let context=SwitchAppContext()
- let switchAppWinding=WandSwitchAppWinding()
  var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  let restDetection=Rest()
@@ -52,6 +51,18 @@ let hudOnly=Harness();hudOnly.middleHeld=true
 precondition(hudOnly.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 for _ in 0..<40 {hudOnly.handleRaw("10000,2680,0,4")}
 precondition(hudOnly.middleMouseX < 0 && hudOnly.frames == 0 && hudOnly.buttons == 0,"HUD-only samples provide HIGH sensitivity without pointer events")
+// Held Switch App: plain forward and back, no circular direction latch.
+let chooser=Harness();chooser.middleHeld=true;chooser.hudSession=true;chooser.context.switchAppAdjusting=true
+precondition(chooser.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
+for _ in 0..<30 {chooser.handleRaw("10000,2680,0,4")}
+let forward=chooser.middleMouseX
+for _ in 0..<30 {chooser.handleRaw("10000,-2680,0,4")}
+precondition(forward < 0 && abs(chooser.middleMouseX) < abs(forward) * 0.2,"reversing moves straight back: \\(forward) then \\(chooser.middleMouseX)")
+let circle=Harness();circle.middleHeld=true;circle.hudSession=true;circle.context.switchAppAdjusting=true
+precondition(circle.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
+var path=0.0,last=0.0
+for i in 0..<200 {let a=Double(i)/200*2 * .pi;circle.handleRaw("10000,\\(Int(2680*cos(a))),\\(Int(2680*sin(a))),4");path+=abs(circle.middleMouseX-last);last=circle.middleMouseX}
+precondition(abs(circle.middleMouseX) < path * 0.15,"a full circle returns near its start instead of latching one direction")
 
 let explicit=Harness();precondition(explicit.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 _=explicit.recenterGesture.edge(down:true,now:now-1)

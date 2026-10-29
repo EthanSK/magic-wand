@@ -25,7 +25,6 @@ final class Rest {var activated=false;func pointerActivated(){activated=true}}
 final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
  let context=SwitchAppContext()
- let switchAppWinding=WandSwitchAppWinding()
  var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  let restDetection=Rest()
