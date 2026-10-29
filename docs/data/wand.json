@@ -5,7 +5,7 @@
   "summary": "Turning the wand moves my Mac’s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.",
   "vision": {
     "headline": "The age of AI doesn’t need a keyboard.",
-    "detail": "The wand is my step toward that, with pointing, HUD cards and Agent Flow dictation."
+    "detail": "The wand is my step toward that. It’s not a mouse replacement: lounge back with the wand and ask Computer Use for most things, ideally by talking through Hello Chat, then reach for your mouse and Agentic Mouse when you need precision. Keep the keyboard for text that has to be typed exactly, which I find is rare."
   },
   "updated": "2026-10-29",
   "site": "https://ethansk.github.io/magic-wand/",
@@ -20,9 +20,9 @@
     "persistentImage": "full-20261025a"
   },
   "status": [
-    "Prepared receiver 1.2.106 build 111 restores mouse follow after a completed scroll is released, even if it was off before. Current pointing, scroll detection, button-release safety and menu fixes remain. Local release checks pass; installation and physical acceptance remain pending.",
+    "Installed receiver 1.2.106 build 111 restores mouse follow after a completed scroll is released, even if it was off before. Current pointing, scroll detection, button-release safety and menu fixes remain. Full local checks pass; the receiver reconnected ready over Bluetooth with settings preserved. Real user scroll-release events were observed enabling mouse follow again.",
     "Installed receiver 1.2.105 build 110 keeps connection heartbeats, stop-to-click, button safety and gesture deadlines running while menus are open. Sense orientation correction rejects unreliable gravity readings during jerks, twists and near-vertical poses. The existing roughly 8 ms smoothing, quiet stopping and no historical replay remain. Local checks passed. Live menu and physical pointing checks remain pending; faster firmware e still needs USB.",
-    "Installed: hold to aim and release to select an action or enter a submenu. In a submenu, move the wand without holding to aim, then click or hold-aim-release to select. Choosing an adjustment enters dotted mode; unheld motion changes only that control and clicking exits. A freely aiming outline stays plain, even after holding. Switch App also supports circular continuation. Source checks passed; physical acceptance remains.",
+    "Installed Agentic Mouse 1.0.298 build 304: hold to aim and release to use a card; submenus stay open for unheld aiming. Holding Middle on an outlined adjustable card changes its value and release stops; a used adjustment never also clicks. Dotted mode still adjusts without holding and a click exits. Full native checks pass, the signed app is running and the wand is connected; physical held-adjustment acceptance remains.",
     "Installed: Review changes and Stage files switch within the same pending Better Git selection and include the current file. No files are staged by switching. Better Git 1.2.135 is released and active; receiver 1.2.96 is installed with settings preserved. Receiver and Mini checks pass. The device remained asleep during installation; physical gesture acceptance remains pending.",
     "Installed: double-click Middle toggles Review changes and Stage files without staging. The floating indicator names the other mode. A single click cancels and exits after at most 300 ms; holding for half a second still stages the selection and stays in that mode. Pointer movement is unchanged. Receiver, native interaction and timer checks pass; physical button acceptance remains pending.",
     "Installed: triple Bottom starts screenshot selection; the HUD Screenshot action uses one Bottom tap, movement and the existing stop-to-click detector to finish. Double-tap centering waits up to 300 ms to distinguish a third tap. Pointer movement is not buffered. Recording red takes priority over mouse blue, and loading blinks orange. Complete saved bytes and clean startup with calibration passed; physical screenshot acceptance remains pending.",
@@ -126,6 +126,10 @@
         [
           "Adjustable card",
           "Click it, or release on it, for dotted mode: wand movement changes only that card; click Middle to finish"
+        ],
+        [
+          "Hold Middle on an adjustable card",
+          "In wedge selection, hold and move up or down to change it, like scrolling; release to stop"
         ],
         [
           "Release on Switch App",
