@@ -83,7 +83,9 @@ gap longer than 25 ms is skipped rather than caught up. In normal pointing, a re
 arrives more than 75 ms behind the best delivery updates buttons, gravity and desk sensing but
 never moves the pointer. Merged historical motion is also skipped during normal pointing. It still has none of the Puck filter's 150 ms directional mean, 250 ms
 intent gate, 0.2° slack or slow-speed curve, and nothing is buffered or predicted.
-Stop-to-click and screenshot settling still use the tuned filter's stop detection.
+Stop-to-click and screenshot settling judge the posted pointer counts, the pointer you see: the
+quiet stop keeps tremor out. After a fresh movement arms clicking, 200 ms without posted movement
+triggers one click; movement postpones it. A radio stall can still resemble a pause.
 Held scrolling, HUD and review keep their own lanes and every reading. Options › **Pointer
 filtering** (or `"sensePointer": "tuned"` in `feature-flags.json`) returns to the tuned filter;
 the Puck always uses it. `status.json` and the dashboard report the path actually in use.

@@ -11,8 +11,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.106",
-    "receiverBuild": "111",
+    "receiver": "1.2.107",
+    "receiverBuild": "112",
     "deviceRuntime": "wand-441472ce965b",
     "bridgeRevision": "f8639252338ec51e176d36c4d467442d1acf0c06f4a14f10c11408d132f53416",
     "agenticMouse": "1.0.297",
@@ -20,6 +20,7 @@
     "persistentImage": "full-20261025a"
   },
   "status": [
+    "Installed receiver 1.2.107 build 112: stop-to-click and screenshot settling now judge the same movement that the direct pointer posts. This fixes quiet-stop starvation and early clicks caused by the old tuned movement signal. The 200 ms dwell, approved roughly 8 ms smoothing and current gain remain. Full local checks pass; the signed receiver reconnected ready over Bluetooth with settings preserved. Physical button acceptance remains pending.",
     "Installed receiver 1.2.106 build 111 restores mouse follow after a completed scroll is released, even if it was off before. Current pointing, scroll detection, button-release safety and menu fixes remain. Full local checks pass; the receiver reconnected ready over Bluetooth with settings preserved. Real user scroll-release events were observed enabling mouse follow again.",
     "Installed receiver 1.2.105 build 110 keeps connection heartbeats, stop-to-click, button safety and gesture deadlines running while menus are open. Sense orientation correction rejects unreliable gravity readings during jerks, twists and near-vertical poses. The existing roughly 8 ms smoothing, quiet stopping and no historical replay remain. Local checks passed. Live menu and physical pointing checks remain pending; faster firmware e still needs USB.",
     "Installed Agentic Mouse 1.0.298 build 304: hold to aim and release to use a card; submenus stay open for unheld aiming. Holding Middle on an outlined adjustable card changes its value and release stops; a used adjustment never also clicks. Dotted mode still adjusts without holding and a click exits. Full native checks pass, the signed app is running and the wand is connected; physical held-adjustment acceptance remains.",
