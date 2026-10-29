@@ -1,0 +1,72 @@
+{
+  "file": "Long-Solid-Wand-500mm-8mm.3mf",
+  "sha256": "e65ca3aff6937424314d63ff6f4f6daf842036682f7ef5b7d3aec2fa2fa0fbad",
+  "mass": {
+    "archive_sha256": "e65ca3aff6937424314d63ff6f4f6daf842036682f7ef5b7d3aec2fa2fa0fbad",
+    "build_instances": 3,
+    "printed_parts_g": 17.821,
+    "supports_and_brim_g": 0.11,
+    "total_slicer_g": 18.03,
+    "accounted_g": 17.931,
+    "startup_and_rounding_g": 0.099,
+    "features_g": {
+      "Brim": 0.10986654368451701,
+      "Outer wall": 4.787063364207741,
+      "Inner wall": 9.71954631571759,
+      "Gap infill": 0.14935625057169052,
+      "Bottom surface": 0.0020077679151739914,
+      "Internal solid infill": 3.0883620967110814,
+      "Overhang wall": 0.028191930510779322,
+      "Bridge": 0.0038061050511182465,
+      "Top surface": 0.042480754754597616
+    },
+    "object_features_g": {
+      "Upper_Rod_Integral_Gyro_Mount": {
+        "Brim": 0.03289297335931498,
+        "Outer wall": 1.783856445492175,
+        "Inner wall": 3.1901964690398983,
+        "Gap infill": 0.055219742356788226,
+        "Overhang wall": 0.025339932950685217,
+        "Bridge": 0.0019428859176413252,
+        "Internal solid infill": 0.5107191628787392,
+        "Top surface": 0.0308293653822343
+      },
+      "Middle_Rod": {
+        "Brim": 0.03524919181396875,
+        "Outer wall": 1.3847984977842467,
+        "Inner wall": 2.8233723192561095,
+        "Gap infill": 0.05389219681499342,
+        "Overhang wall": 0.0028519975600940946,
+        "Bridge": 0.0018632191334769217,
+        "Internal solid infill": 0.8333181058209225,
+        "Top surface": 0.004930665247524828
+      },
+      "Lower_Rod": {
+        "Brim": 0.04172437851123304,
+        "Outer wall": 1.6184084209315972,
+        "Inner wall": 3.7059775274212146,
+        "Bottom surface": 0.0020077679151739914,
+        "Internal solid infill": 1.7443248280114152,
+        "Gap infill": 0.04024431139990877,
+        "Top surface": 0.006720724124838503
+      }
+    },
+    "object_mass_mapping_available": true,
+    "object_printed_parts_g": {
+      "Upper_Rod_Integral_Gyro_Mount": 5.598,
+      "Middle_Rod": 5.105,
+      "Lower_Rod": 7.118
+    },
+    "settings": {
+      "printer_model": "Bambu Lab P1S",
+      "filament_type": [
+        "PETG"
+      ],
+      "layer_height": "0.2",
+      "wall_loops": "4",
+      "sparse_infill_density": "20%",
+      "support_type": "tree(auto)"
+    }
+  },
+  "physical_print_verified": false
+}
