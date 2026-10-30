@@ -14,7 +14,7 @@ test('independent review circles use existing ordered Better Git ratchets', {ski
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
 
-for(const name of ['review-gesture-main','desk-sleep-main','review-mode-main']) {
+for(const name of ['review-gesture-main','desk-sleep-main','review-mode-main','review-slow-pause-main','review-circle-resize-main']) {
  test(`native ${name}`, {skip:process.platform!=='darwin'},()=>{
   const dir=mkdtempSync(join(tmpdir(),'wand-native-policy-'));
   try {

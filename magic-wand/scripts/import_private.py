@@ -57,6 +57,18 @@ PRIVATE_PATTERNS = [
 
 
 def sanitize_receiver(text: str) -> str:
+    # A previously imported entry point can be the canonical source for a
+    # receiver-only update. Accept the complete public configuration block;
+    # incomplete migrations still hit the strict one-match guards below.
+    public_anchors = (
+        '    let deviceSettings = WandDeviceConfiguration.load(from: support.appendingPathComponent("device.json"))',
+        "    var target: UUID? { deviceSettings.identifier }",
+        "if let target, let p = manager.retrievePeripherals(withIdentifiers: [target]).first { begin(p) }",
+        "guard p.identifier == target || deviceSettings.matches(name: name) else { return }",
+        'guard !CommandLine.arguments.contains("--permissions-only"), deviceSettings.isConfigured, AXIsProcessTrusted(),',
+    )
+    if all(text.count(anchor) == 1 for anchor in public_anchors):
+        return text
     replacements = [
         (
             re.compile(r'    let target = UUID\(uuidString: "[0-9A-Fa-f-]{36}"\)!\n'),
