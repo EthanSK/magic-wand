@@ -22,6 +22,17 @@ boundaries discard obsolete motion.
 
 ## Firmware
 
+Release labels use numeric versions from now on, rather than letters. Keep a
+legacy board's exact reported identifier in diagnostics until it is actually
+flashed; never relabel an installed board as a newer release.
+
+The board firmware and the Mac receiver are separate programs. The board reads
+sensors and buttons and handles its radio, lights and power. The receiver owns
+most mouse, HUD, click and gesture behaviour. Installing a receiver update does
+not flash the board, and an older board identifier does not mean those Mac
+improvements are missing. A built firmware file is only a candidate until the
+board is flashed and its reported version is read back.
+
 `wand_sense/wand_sense.ino` is the complete saved program (Seeeduino:nrf52:xiaonRF52840Sense,
 core 1.1.13, Seeed Arduino LSM6DS3 2.0.7). Nothing is uploaded on connection.
 

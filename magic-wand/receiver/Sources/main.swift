@@ -19,6 +19,37 @@ func log(_ values: Any...) {
     if !FileManager.default.fileExists(atPath: logURL.path) { FileManager.default.createFile(atPath: logURL.path, contents: nil) }
     if let file = try? FileHandle(forWritingTo: logURL) { defer { try? file.close() }; _ = try? file.seekToEnd(); try? file.write(contentsOf: Data(line.utf8)) }
 }
+/// Ethan's "two-finger drag": a native precise scroll gesture, not a guessed
+/// Back/Forward shortcut. The receiving app owns scrolling and edge navigation.
+/// Keep the existing wheel distance (one line is ten CoreGraphics points).
+/// This is transport only: no pointer buffering, inertia or replay.
+struct WandNativeScrollGesture {
+    private(set) var active=false
+    private var anchor=CGPoint.zero
+    mutating func update(x:Int32,y:Int32,at point:CGPoint)->CGEvent? {
+        guard x != 0 || y != 0 else{return nil}
+        let phase:CGScrollPhase=active ? .changed:.began
+        let position=active ? anchor:point
+        guard let event=Self.event(x:x,y:y,phase:phase,at:position) else{return nil}
+        anchor=position;active=true
+        return event
+    }
+    mutating func finish(cancelled:Bool)->CGEvent? {
+        guard active else{return nil}
+        active=false
+        return Self.event(x:0,y:0,phase:cancelled ? .cancelled:.ended,at:anchor)
+    }
+    private static func event(x:Int32,y:Int32,phase:CGScrollPhase,at point:CGPoint)->CGEvent? {
+        guard let source=CGEventSource(stateID:.hidSystemState),
+              let event=CGEvent(scrollWheelEvent2Source:source,units:.pixel,wheelCount:2,
+                               wheel1:Int32(clamping:Int64(y)*10),wheel2:Int32(clamping:Int64(x)*10),wheel3:0) else{return nil}
+        event.location=point
+        event.setIntegerValueField(.scrollWheelEventScrollPhase,value:Int64(phase.rawValue))
+        event.setIntegerValueField(.scrollWheelEventMomentumPhase,value:0)
+        return event
+    }
+}
+
 final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     var manager: CBCentralManager!
     var device: CBPeripheral?
@@ -65,6 +96,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let options=WandUserOptions(url:support.appendingPathComponent("feature-flags.json"))
     let flickScroll=WandFlickScroll()
     let heldScroll=WandHeldScroll()
+    var nativeScroll=WandNativeScrollGesture()
     var heldScrollAnchor:CGPoint?
     var heldTargetToken=UUID()
     var heldSafetyTimer:Timer?
@@ -368,7 +400,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func refreshFeatureFlags() {
         let enabled=options.enabled("orientationCompensation")
         let selected=WandControlVersion.read(options.read()["controlVersion"])
-        if controlVersion != selected {controlVersion=selected;heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;performPointer(pointerRouter.cancelAll());setCircleLight(false);releaseButtons();motionFilter.reset();if ready {queue("global.wandHostHeldScroll="+(selected.usesHeldScroll ? "true":"false")+";")}}
+        if controlVersion != selected {controlVersion=selected;heldSafetyTimer?.invalidate();heldSafetyTimer=nil;finishNativeScroll(cancelled:true);heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;performPointer(pointerRouter.cancelAll());setCircleLight(false);releaseButtons();motionFilter.reset();if ready {queue("global.wandHostHeldScroll="+(selected.usesHeldScroll ? "true":"false")+";")}}
         controlV1Menu?.state=selected == .pointerV1 ? .on : .off
         controlV2Menu?.state=selected == .scrollV2 ? .on : .off
         controlV3Menu?.state=selected == .sustainedV3 ? .on : .off
@@ -588,7 +620,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         powerPolicyReady=false;loadingPowerPolicy=false;batteryRequested=Date.distantPast
         reviewTrace.boundary("receiver reset",mode:wandShortcutMode)
         reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset();middleReviewExit=false
-        heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil
+        heldSafetyTimer?.invalidate();heldSafetyTimer=nil;finishNativeScroll(cancelled:true);heldScroll.reset();heldScrollAnchor=nil
         flickScroll.reset();flickAnchor=nil
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
         wandShortcutMode=nil;wandShortcutCircle.reset()
@@ -1341,6 +1373,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// target probe answers it behaves as a scroll and can never drag, and an
     /// unknown answer keeps scrolling. Tap-then-hold is always a native drag.
     func beginBottomHold(now:Double) {
+        finishNativeScroll(cancelled:true)
         heldScrollAnchor=deliveryPoint ?? currentPointerOrigin()
         heldTargetToken=UUID()
         let explicitDrag=recenterGesture.isSecondPress
@@ -1349,11 +1382,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         heldSafetyTimer=WandRunLoop.commonTimer(interval:0.02,repeats:true){[weak self] _ in
             guard let self else{return};let now=ProcessInfo.processInfo.systemUptime
             if self.heldScroll.stale(now:now){self.reconcileBottomHold(down:false,now:now,reason:"button telemetry timeout",released:false);return}
+            // A pause mid-gesture cancels it at once rather than leaving it open.
+            if self.actionPause.paused {self.finishNativeScroll(cancelled:true)}
             guard self.ready,!self.restoring,!self.actionPause.paused,AXIsProcessTrusted() else{return}
             let lines=self.heldScroll.continuation(now:now)
             if lines.x != 0 || lines.y != 0 {
                 self.setCircleLight(true)
-                for event in Self.wheelEvents(x:lines.x,y:lines.y,at:self.heldScrollAnchor){event.post(tap:.cghidEventTap)}
+                self.postNativeScroll(x:lines.x,y:lines.y,at:self.heldScrollAnchor)
             }
         }
         releaseButtons()
@@ -1419,8 +1454,30 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if let point {for event in events {event.location=point}}
         return events
     }
+    func postNativeScroll(x:Int32,y:Int32,at point:CGPoint?) {
+        guard !actionPause.paused else{finishNativeScroll(cancelled:true);return}
+        let beginning = !nativeScroll.active
+        if let event=nativeScroll.update(x:x,y:y,at:point ?? currentPointerOrigin()) {
+            event.post(tap:.cghidEventTap)
+            if beginning {log("NATIVE_SCROLL_BEGIN")}
+        }
+    }
+    /// Ends or cancels the open native gesture (a no-op when none is open).
+    /// Every path that ends a held or chord scroll, starts a native drag, or
+    /// tears the receiver down must come through here.
+    func finishNativeScroll(cancelled:Bool) {
+        if let event=nativeScroll.finish(cancelled:cancelled) {
+            event.post(tap:.cghidEventTap)
+            log(cancelled ? "NATIVE_SCROLL_CANCEL" : "NATIVE_SCROLL_END")
+        }
+    }
     func postScroll(x:Int32,y:Int32){
-        guard !actionPause.paused else{return}
+        guard !actionPause.paused else{finishNativeScroll(cancelled:true);return}
+        if scrollActive {
+            postNativeScroll(x:x,y:y,at:scrollAnchor)
+            scrollPostedX+=Int(x);scrollPostedY+=Int(y)
+            return
+        }
         for event in Self.wheelEvents(x:x,y:y,at:scrollAnchor ?? circleAnchor) {event.post(tap:.cghidEventTap)}
         scrollPostedX+=Int(x);scrollPostedY+=Int(y)
     }
@@ -1442,7 +1499,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if scrollActive{log("SCROLL_END lines",scrollPostedX,scrollPostedY)}
         let wasActive=scrollActive
         scrollActive=false;scrollAnchor=nil;scrollWatchdog?.invalidate();scrollWatchdog=nil
-        if wasActive {if released {enableMouseAfterScroll()}else{resumeHUDNavigation()}}
+        if wasActive {finishNativeScroll(cancelled:!released);if released {enableMouseAfterScroll()}else{resumeHUDNavigation()}}
     }
     /// Bottom double tap is a global escape into pointing, not a mode action.
     /// Keep its recognition alive when the first tap closes a HUD or scroll.
@@ -1497,7 +1554,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         } else if !active {circleTimer?.invalidate();circleTimer=nil}
     }
     /// Scroll chord, HUD and speech take over: drop unshown LOW motion and any circle.
-    func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? currentPointerOrigin())};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
+    func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? currentPointerOrigin())};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;finishNativeScroll(cancelled:true);heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
     // Ethan: Review changes = eyes mode; Stage files = whole-file "bang" selection.
     // Keep the existing Better Git URI lifecycle; only the gesture source changes.
     func setWandShortcut(_ mode:String?) {
@@ -1732,7 +1789,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // Ethan: dragging is only while holding Bottom. Release an orphaned
         // native down too, even if another path already cleared the hold.
         if buttons & 1 != 0 {transition(to:buttons & ~1,at:deliveryPoint ?? currentPointerOrigin())}
-        guard heldScroll.active else{return}
+        guard heldScroll.active else{
+            // @BOTTOM 0 precedes @SCROLL E on the device. The chord owns
+            // its open gesture until that end marker, not this Bottom edge.
+            if !scrollActive {finishNativeScroll(cancelled:true)}
+            return
+        }
         // A Sense press judged by its physical edges: a short tap that only
         // looked long because its release arrived late never counts as a
         // completed scroll, so it cannot turn mouse follow back on.
@@ -1740,6 +1802,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let physicalTap=physicalDuration.map{$0<heldScroll.holdSeconds} ?? false
         if physicalTap {log("BOTTOM_PHYSICAL_TAP",Int((physicalDuration ?? 0)*1000))}
         let completedScroll=heldScroll.scrollable && !heldScroll.dragging && heldScroll.qualified(now:now) && !physicalTap
+        // A delayed short tap is not an accepted scroll. Cancel its native
+        // phase so an app cannot commit history navigation on that release.
+        finishNativeScroll(cancelled:!released || !completedScroll)
         if heldScrollDiagnostics && heldScroll.sustaining && completedScroll {
             log("V3_SCROLL_HOLD",heldScroll.sustained.report(seconds:heldScroll.elapsed(now:now),ended:released ? "release":"lost"))
         }
@@ -1808,10 +1873,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     setCircleLight(true)
                     let x: Int32=heldScroll.horizontal ? lines:0
                     let y: Int32=heldScroll.horizontal ? 0:lines
-                    for event in Self.wheelEvents(x:x,y:y,at:heldScrollAnchor){event.post(tap:.cghidEventTap)}
+                    postNativeScroll(x:x,y:y,at:heldScrollAnchor)
                 }
             } else {
-                if heldScroll.startDrag(now:now) {transition(to:1,at:heldScrollAnchor ?? deliveryPoint ?? .zero)}
+                // A native drag never starts inside an open scroll gesture.
+                if heldScroll.startDrag(now:now) {finishNativeScroll(cancelled:true);transition(to:1,at:heldScrollAnchor ?? deliveryPoint ?? .zero)}
                 if heldScroll.dragging {
                     let point=deliveryPoint ?? currentPointerOrigin()
                     let moved=postPointerMove(dx:sample.x,dy:sample.y,from:point)
@@ -1958,7 +2024,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil;probeTimer?.invalidate();probeTimer=nil
         pendingRecenter?.invalidate();pendingRecenter=nil;endScreenshot(reason:"receiver stopped",contextActive:false,forgetPress:true)
         guard !restoring else { return }; performPointer(pointerRouter.cancelAll());setCircleLight(false);restoring = true; retry?.cancel(); controls.cancel(); hudWatchdog?.invalidate(); releaseButtons()
-        finishScroll();log("STOPPING"); status()
+        finishScroll();finishNativeScroll(cancelled:true);log("STOPPING"); status()
         if isSense {
             // Restore the program's sender, end the firmware session, then exit.
             if senseVirtual != nil { queue(restore) }
