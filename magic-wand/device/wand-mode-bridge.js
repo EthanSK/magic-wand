@@ -484,7 +484,11 @@ if(global.wandRawPointer)global.wandLiveMotionCallback.replaceWith(function(a) {
     hudX+=hx*keep*dt*C.xSign;hudY+=hy*keep*dt*C.ySign;
   }
   // wandShot: the receiver's temporary screenshot motion, independent of follow.
-  if (!connected || (!moveLatched && !hudOpen && !G.wandShot) || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging)) {
+  // Native V2/V3 scrolls need the initial stroke before the hold timeout.
+  // Sending these readings does not click or scroll yet: the receiver owns
+  // the existing tap/hold decision. V1 keeps its original pointer behavior.
+  var hostHold=!!G.wandHostHeldScroll&&!digitalRead(MOVE_PIN);
+  if (!connected || (!moveLatched && !hudOpen && !G.wandShot && !hostHold) || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging && !hostHold)) {
     G.wandSlackX=G.wandSlackY=0;
     fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;return;
   }

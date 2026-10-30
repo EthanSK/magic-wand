@@ -785,11 +785,13 @@ struct WandPointerOrigin {
 /// The single eligibility rule for stop-to-click, named so a no-click report
 /// says which state blocks it. Nil means clicks may arm.
 enum WandClickGate {
-    static func blocker(recordingPaused:Bool,bottomHeld:Bool,buttons:Int,hudSession:Bool,hudShown:Bool,scrollActive:Bool)->String? {
+    static func blocker(recordingPaused:Bool,bottomHeld:Bool,buttons:Int,hudSession:Bool,hudShown:Bool,scrollActive:Bool,hudOperating:Bool=false)->String? {
         if recordingPaused {return "recording"}
         if bottomHeld {return "bottom held"}
         if buttons != 0 {return "button down"}
-        if hudSession {return hudShown ? "hud open" : "hud not shown"}
+        // Ethan: follow-on clicking is independent of an open HUD. Suppress
+        // clicks only while Middle is actually operating its selected card.
+        if hudSession && hudOperating {return "hud operating"}
         if scrollActive {return "scroll"}
         return nil
     }

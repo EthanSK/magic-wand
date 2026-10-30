@@ -1456,3 +1456,12 @@ Regression tests must isolate the quiet tail after smoothing settles. Counting t
 of an earlier fast stroke as successful fine aiming gives a false positive. Keep math
 replay, captured-use replay and fresh physical acceptance separate; a synthetic quiet
 trace is not proof that the user's hand was physically still.
+
+
+## 2026-10-30 — Held scroll must receive the stroke before the hold deadline
+
+The V3 controller accumulated input from the first held reading, but the raw-mode device callback suppressed the first 220 ms when follow was already on. A quick stroke followed by a still hold could therefore leave the controller with no starting stroke. The captured longer holds did not establish this as their cause; keep the reproduced edge case separate from the original field report. A virtual Sense reproduction produced zero raw reports during 192 ms of movement; controller-only simulations had missed this upstream loss. Enable early raw reporting only for native V2/V3 held scrolling; keep the existing no-output-before-hold rule. Separately, process an active Bottom scroll or drag before rejecting a HUD-only raw flag, so follow-off input is still usable by its owning gesture. Regression tests cover the virtual device boundary, unchanged V1 suppression and the actual native raw routing.
+
+Ethan also changed the intended visible-HUD policy: showing the HUD must not suppress ordinary follow-on clicks. Gate on active HUD operation, not visibility, at both click arming and timer firing; follow-off, held Bottom, recording pause and screenshot ownership remain separate gates. The earlier ghost-HUD fix remains useful recovery, but its visible-HUD click suppression is superseded.
+
+Physical follow-up: Ethan confirmed that normal held scrolling and follow-on clicking with the HUD open both worked on receiver 122. This does not establish every other gesture or the cause of each earlier failed scroll.

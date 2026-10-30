@@ -187,6 +187,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed receiver 1.2.117 build 122 restores raw input during the initial Bottom-held stroke, before the existing tap/hold decision. Active Bottom scrolling is routed before the HUD-only input filter. An open unheld HUD permits follow-on stop-to-click, while an actively held HUD control owns that gesture. All 228 Wand checks passed; the installed source and executable were verified, and Ethan confirmed both normal held scrolling and HUD-open clicking work. Other gesture acceptance is separate.
 - Installed receiver 1.2.116 build 121 restores quiet stopping by disabling the newer sub-threshold fine-motion bypass. The existing roughly 8 ms smoothing, speed-based sensitivity, orientation correction, held precision and single-shot click signal are unchanged. Pure-motion regression checks pass; fresh physical stillness acceptance is pending.
 - Installed: receiver 1.2.115 build 120 and Agentic Mouse 1.0.303 build 309. Ordinary HUD actions keep the HUD open, so you can select as many times as you want; a double click closes it, and every open page’s centre says “Double click to close”. The wand home ring is grouped: Keys, the app card and Utility at the top, with Back beside Forward. Space moves beyond Enter, New Codex chat sits beyond Utility, and Zoom is a third layer beyond it. Adjustment arrows follow each card’s real direction, including left and right for Spaces. The centre-and-left click added in build 119 is removed. Native and receiver checks pass; physical acceptance is pending.
 - Installed receiver 1.2.109 build 114 removes circular continuation from Switch App: held app choosing now follows normal horizontal movement and reverses directly. Double-click centring resets the pointer lane and synchronises the centre with queued native input; its focused regression checks pass, while physical centring acceptance remains pending. The receiver reconnected ready over Bluetooth, with settings, calibration, saved Sense firmware and Agent Flow preserved. The larger outer labels are prepared separately in the native HUD update.
@@ -224,7 +225,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.116 (121) · device code `wand-edceb5bfbea1` · bridge `2d89cef8` · updated 30 October 2026.
+Receiver 1.2.117 (122) · device code `wand-edceb5bfbea1` · bridge `40e3d976` · updated 30 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

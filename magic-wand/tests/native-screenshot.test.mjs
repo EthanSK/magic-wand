@@ -232,12 +232,26 @@ for _ in 0..<5 {ghostHUD.handleRaw(followMove)};for _ in 0..<3 {ghostHUD.handleR
 precondition(ghostHUD.closedHUD==["context missing"] && !ghostHUD.hudSession,"a session the HUD no longer shows is closed as the mouse moves")
 precondition(ghostHUD.downs==1 && ghostHUD.ups==1,"and stop-to-click works again")
 precondition(logged.contains("HIGH_DWELL_CLICK"))
-// A HUD Agentic Mouse still shows keeps its session and names the blocker.
+// Follow-on clicking stays independent of a visible, unheld HUD.
 let shown=make(follow:true);shown.hudSession=true;shown.context.isActive=true;shown.hudOpenedAt=ProcessInfo.processInfo.systemUptime-5
-for _ in 0..<5 {shown.handleRaw(followMove)};wait(0.35)
-precondition(shown.hudSession && shown.downs==0 && shown.clickGate=="hud open" && logged.contains("CLICK_GATE hud open"),"a shown HUD still suppresses automatic clicks, and says so")
-precondition(WandClickGate.blocker(recordingPaused:false,bottomHeld:false,buttons:0,hudSession:true,hudShown:false,scrollActive:false)=="hud not shown")
+for _ in 0..<5 {shown.handleRaw(followMove)};for _ in 0..<3 {shown.handleRaw(followStill)};wait(0.35)
+precondition(shown.hudSession && shown.downs==1 && shown.ups==1 && shown.clickGate==nil,"an open unheld HUD permits normal follow-on clicks")
+let operating=make(follow:true);operating.hudSession=true;operating.context.isActive=true;operating.middleHeld=true
+for _ in 0..<5 {operating.handleRaw(followMove)};wait(0.35)
+precondition(operating.downs==0 && operating.clickGate=="hud operating","held HUD operation cannot click behind the wheel")
+let off=make(follow:false);off.hudSession=true;off.context.isActive=true
+for _ in 0..<5 {off.handleRaw(move)};wait(0.35)
+precondition(off.downs==0,"HUD-only motion with follow off never clicks")
+precondition(WandClickGate.blocker(recordingPaused:false,bottomHeld:false,buttons:0,hudSession:true,hudShown:false,scrollActive:false)==nil)
 precondition(WandClickGate.blocker(recordingPaused:false,bottomHeld:false,buttons:0,hudSession:false,hudShown:false,scrollActive:false)==nil)
+// A Bottom hold still reaches native scrolling when the packet is HUD-only.
+for follow in [false,true] {
+ let scroll=make(follow:follow);scroll.controlVersion = .sustainedV3;scroll.hudSession=true;scroll.context.isActive=true
+ scroll.heldScroll.begin(now:ProcessInfo.processInfo.systemUptime-0.3,scrollable:true,sustain:true)
+ for _ in 0..<25 {scroll.handleRaw("10000,2680,0,5")}
+ precondition(scroll.heldScroll.sustained.started,"HUD-only flag must not swallow Bottom's scrolling stroke")
+ precondition(scroll.downs==0,"scrolling emits no pointer click")
+}
 print("PASS: screenshot ownership, natural drag, cancellation and triple-click")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-screenshot-'));

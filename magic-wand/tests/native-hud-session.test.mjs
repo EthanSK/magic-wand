@@ -421,10 +421,12 @@ struct Filter {func reset(){}}
 struct Context {var isActive=false}
 final class Dwell {func follow(_ on:Bool){}}
 struct Recording {var isRecording=false}
+struct Version {var usesHeldScroll=true}
 final class Harness {
  var loadingBridge=false,loadingRuntime=false,bridgeLoadFailed=false,ready=false,lightMode="",generation=0,rawLastArrival=0.0,hudSession=false,hudOpenedAt=0.0
  let commands=["PROGRAM"],modeBridge="bridge",context=Context(),motionFilter=Filter()
  var selectedReviewMode:String?
+ var controlVersion=Version()
  var standbyResume:Bool?
  let dwell=Dwell(),recording=Recording()
  func restoreKnownCalibration(){};func checkPowerPolicy(){};func requestBattery(){}
@@ -447,6 +449,7 @@ h.receive("WAND_MODE_ROUTING_READY")
 precondition(!h.ready && h.bridgeLoadFailed)
 let valid=Harness();valid.receive(">WAND_BRIDGE_READY");precondition(valid.sent.count==1)
 valid.receive("WAND_MODE_ROUTING_READY");precondition(valid.ready)
+precondition(valid.sent.contains("global.wandHostHeldScroll=true;"))
 print("UART regression passed")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-uart-'));

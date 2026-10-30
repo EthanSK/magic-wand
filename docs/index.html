@@ -43,8 +43,8 @@
     "worker": "./sim/worker.js?v=418f86ed95",
     "shim": "./sim/espruino.js?v=0fba4637ae",
     "device": "./device/wand-mouse-prototype.js?v=9f9074cd0f",
-    "bridge": "./device/wand-mode-bridge.compact.js?v=2d89cef8e6",
-    "wand": "./data/wand.json?v=f721726e28",
+    "bridge": "./device/wand-mode-bridge.compact.js?v=40e3d97673",
+    "wand": "./data/wand.json?v=ccf9b16fca",
     "hud": "./data/hud.json?v=cdd0fb60fb"
   }
   </script>
@@ -350,11 +350,12 @@
         <div class="status">
           <h3>Status</h3>
           <!-- wand:status -->
-          <p class="versions"><span>Receiver 1.2.116 (121)</span> <span>Device code wand-edceb5bfbea1</span> <span>Bridge 2d89cef8</span></p>
+          <p class="versions"><span>Receiver 1.2.117 (122)</span> <span>Device code wand-edceb5bfbea1</span> <span>Bridge 40e3d976</span></p>
           <p class="fine">Updated 30 October 2026</p>
           <details class="more">
             <summary>Status notes</summary>
             <ul class="status-list">
+              <li>Installed receiver 1.2.117 build 122 restores raw input during the initial Bottom-held stroke, before the existing tap/hold decision. Active Bottom scrolling is routed before the HUD-only input filter. An open unheld HUD permits follow-on stop-to-click, while an actively held HUD control owns that gesture. All 228 Wand checks passed; the installed source and executable were verified, and Ethan confirmed both normal held scrolling and HUD-open clicking work. Other gesture acceptance is separate.</li>
               <li>Installed receiver 1.2.116 build 121 restores quiet stopping by disabling the newer sub-threshold fine-motion bypass. The existing roughly 8 ms smoothing, speed-based sensitivity, orientation correction, held precision and single-shot click signal are unchanged. Pure-motion regression checks pass; fresh physical stillness acceptance is pending.</li>
               <li>Installed: receiver 1.2.115 build 120 and Agentic Mouse 1.0.303 build 309. Ordinary HUD actions keep the HUD open, so you can select as many times as you want; a double click closes it, and every open page’s centre says “Double click to close”. The wand home ring is grouped: Keys, the app card and Utility at the top, with Back beside Forward. Space moves beyond Enter, New Codex chat sits beyond Utility, and Zoom is a third layer beyond it. Adjustment arrows follow each card’s real direction, including left and right for Spaces. The centre-and-left click added in build 119 is removed. Native and receiver checks pass; physical acceptance is pending.</li>
               <li>Installed receiver 1.2.109 build 114 removes circular continuation from Switch App: held app choosing now follows normal horizontal movement and reverses directly. Double-click centring resets the pointer lane and synchronises the centre with queued native input; its focused regression checks pass, while physical centring acceptance remains pending. The receiver reconnected ready over Bluetooth, with settings, calibration, saved Sense firmware and Agent Flow preserved. The larger outer labels are prepared separately in the native HUD update.</li>
