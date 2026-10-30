@@ -247,8 +247,8 @@ def tuning_rows(manifest: dict) -> list[tuple[str, str, str]]:
     return [
         ("Pointer gain", f"{t['pointerGain']} counts per degree", f"{reduction}% below the earlier {t['previousPointerGain']}"),
         ("Vertical", f"× {t['verticalRatio']}", "Up and down move further than sideways"),
-        ("Fine aim", f"{round(t['fineGain'] * 100)}% gain below {t['fineSpeedDegreesPerSecond']}°/s",
-         f"Full gain from {t['fullSpeedDegreesPerSecond']}°/s"),
+        ("Puck fine aim", f"{round(t['fineGain'] * 100)}% gain below {t['fineSpeedDegreesPerSecond']}°/s",
+         f"Full gain from {t['fullSpeedDegreesPerSecond']}°/s; Sense direct also stops tiny motion"),
         ("Noise zone", f"Up to {t['maximumNoiseZoneDegreesPerSecond']}°/s", "Measured during calibration"),
         ("Sensor", f"{t['sensorRequestHz']} Hz requested", f"About {t['processedHzMeasured']} Hz fully processed in a recent measurement"),
         ("Bluetooth interval", f"{t['bluetoothIntervalMs']} ms requested", ""),
