@@ -165,7 +165,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 | --- | --- | --- |
 | Pointer gain | 86.4 counts per degree | 20% below the earlier 108 |
 | Vertical | × 1.4 | Up and down move further than sideways |
-| Fine aim | 35% gain below 2°/s | Full gain from 18°/s |
+| Puck fine aim | 35% gain below 2°/s | Full gain from 18°/s; Sense direct also stops tiny motion |
 | Noise zone | Up to 1.2°/s | Measured during calibration |
 | Sensor | 104 Hz requested | About 50 Hz fully processed in a recent measurement |
 | Bluetooth interval | 15 ms requested |  |
@@ -187,9 +187,10 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed receiver 1.2.116 build 121 restores quiet stopping by disabling the newer sub-threshold fine-motion bypass. The existing roughly 8 ms smoothing, speed-based sensitivity, orientation correction, held precision and single-shot click signal are unchanged. Pure-motion regression checks pass; fresh physical stillness acceptance is pending.
 - Installed: receiver 1.2.115 build 120 and Agentic Mouse 1.0.303 build 309. Ordinary HUD actions keep the HUD open, so you can select as many times as you want; a double click closes it, and every open page’s centre says “Double click to close”. The wand home ring is grouped: Keys, the app card and Utility at the top, with Back beside Forward. Space moves beyond Enter, New Codex chat sits beyond Utility, and Zoom is a third layer beyond it. Adjustment arrows follow each card’s real direction, including left and right for Spaces. The centre-and-left click added in build 119 is removed. Native and receiver checks pass; physical acceptance is pending.
 - Installed receiver 1.2.109 build 114 removes circular continuation from Switch App: held app choosing now follows normal horizontal movement and reverses directly. Double-click centring resets the pointer lane and synchronises the centre with queued native input; its focused regression checks pass, while physical centring acceptance remains pending. The receiver reconnected ready over Bluetooth, with settings, calibration, saved Sense firmware and Agent Flow preserved. The larger outer labels are prepared separately in the native HUD update.
-- Installed receiver 1.2.108 build 113 and Agentic Mouse 1.0.299 build 305 restore the old click signal, the speed-based aiming curve and coherent tiny movement above about 1 deg/s. Only tiny slow movement uses the approved up-to-60 ms confirmation; normal pointing retains roughly 8 ms smoothing. Short Bottom taps use their physical duration. The wand HUD has related outer actions and the held Switch App exception. Local tests and installed signature, version, settings and process checks passed. The saved Sense firmware and current gain are preserved. The native app's launch safety check has cleared. The receiver is ready over Bluetooth, live HUD and held Switch App lifecycle reports were observed, and Ethan reports the installed wand is working well. This is general physical acceptance, not a claim that every gesture has been tested.
+- Fine-motion bypass superseded by receiver 121: Installed receiver 1.2.108 build 113 and Agentic Mouse 1.0.299 build 305 restore the old click signal, the speed-based aiming curve and coherent tiny movement above about 1 deg/s. Only tiny slow movement uses the approved up-to-60 ms confirmation; normal pointing retains roughly 8 ms smoothing. Short Bottom taps use their physical duration. The wand HUD has related outer actions and the held Switch App exception. Local tests and installed signature, version, settings and process checks passed. The saved Sense firmware and current gain are preserved. The native app's launch safety check has cleared. The receiver is ready over Bluetooth, live HUD and held Switch App lifecycle reports were observed, and Ethan reports the installed wand is working well. This is general physical acceptance, not a claim that every gesture has been tested.
 - Installed receiver 1.2.106 build 111 restores mouse follow after a completed scroll is released, even if it was off before. Current pointing, scroll detection, button-release safety and menu fixes remain. Full local checks pass; the receiver reconnected ready over Bluetooth with settings preserved. Real user scroll-release events were observed enabling mouse follow again.
 - Installed receiver 1.2.105 build 110 keeps connection heartbeats, stop-to-click, button safety and gesture deadlines running while menus are open. Sense orientation correction rejects unreliable gravity readings during jerks, twists and near-vertical poses. The existing roughly 8 ms smoothing, quiet stopping and no historical replay remain. Local checks passed. Live menu and physical pointing checks remain pending; faster firmware e still needs USB.
 - Installed Agentic Mouse 1.0.298 build 304 passed the full native checks, but Ethan subsequently reported intermittent HUD opening and mouse-exit failures and changed Switch App behaviour. Current diagnostics have been captured; the cause and fixes are not yet verified. A ready process or socket alone does not establish working button input.
@@ -223,7 +224,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.115 (120) · device code `wand-edceb5bfbea1` · bridge `2d89cef8` · updated 30 October 2026.
+Receiver 1.2.116 (121) · device code `wand-edceb5bfbea1` · bridge `2d89cef8` · updated 30 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

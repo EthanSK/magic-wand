@@ -1438,3 +1438,21 @@ The carbon-rod accessory preview's painter-sorted triangles showed the rod throu
 - Restore only a HUD whose native context remains active. Reuse the existing freshness check to close an expired, unheld HUD session during ordinary pointer frames as well as at the next Middle press; a missing callback must not require a special gesture to recover.
 - Keep a real visible HUD's click suppression. The inert native screenshot regression covers both callback orders, actual pointer frames recovering the stale session, and a visible HUD still blocking clicks. Reverting each fix independently makes the corresponding regression fail.
 - Log the click blocker when it changes, rather than printing every sample or attributing a missing generated click to application focus. Keep this diagnostic state distinct from physical-device acceptance.
+
+
+## 2026-10-30 — Coherent tiny motion can still be unwanted drift
+
+The fine-motion bypass let a directionally consistent, sub-threshold rate bypass the
+quiet-stop floor after about 60 ms. A bounded synthetic replay of a broad sweep followed
+by a 1.25 +/- 0.15 program-unit rate produced 231 counts during the quiet tail; removing
+only the bypass produced zero, with the same first response to normal-speed movement.
+Receiver 121 restored that floor while retaining the existing roughly 8 ms causal
+smoothing, speed curve, gain, orientation correction, late-reading bound and original
+tuned single-shot stop-to-click signal. Rates below the floor are intentionally suppressed,
+including deliberate extremely slow aiming. Do not silently restore the bypass from an
+older positive slow-motion trace: confirm both stationary behavior and physical aiming.
+
+Regression tests must isolate the quiet tail after smoothing settles. Counting the tail
+of an earlier fast stroke as successful fine aiming gives a false positive. Keep math
+replay, captured-use replay and fresh physical acceptance separate; a synthetic quiet
+trace is not proof that the user's hand was physically still.

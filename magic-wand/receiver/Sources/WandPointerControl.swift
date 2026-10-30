@@ -699,11 +699,12 @@ final class WandMotionFilter {
         // Reuse the existing slow-speed boundary; click timing keeps tuned quiet counts.
         let smoothSpeed=sqrt(smoothX*smoothX+smoothY*smoothY)
         let knee=v[5]>0 ? min(1,max(0,(smoothSpeed-v[5])/(v[5]*(Self.directKneeFactor-1)))) : 1
-        let coherent=fineMovement(speed:smoothSpeed,knee:knee,dt:min(dt,Self.directMaxStep))
+        // The 60 ms fine-motion escape mistook low-level hand drift for aiming.
+        // Restore the original quiet-stop floor; normal smoothing and gain stay unchanged.
         // Restore the original speed-based sensitivity curve, not its radial
         // slack or drift decay: fine aiming is precise, broad travel is fast.
         let response=v[4]+(1-v[4])*blend*blend*(3-2*blend)
-        let amount=max(knee,coherent ? 1 : 0)
+        let amount=knee
         let step=min(dt,Self.directMaxStep)*response*amount
         if amount==0 {directX=0;directY=0}
         else {

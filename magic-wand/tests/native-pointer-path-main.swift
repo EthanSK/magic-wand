@@ -93,16 +93,16 @@ precondition(response[2] > 0.93 * full && response.allSatisfy { $0 <= full + 1 }
 // 134-count units, about 2.34 true deg/s on the Sense: still at or below it,
 // part gain up to twice it, then full gain.
 func steady(_ rate: Double) -> Double { Double(-run(filter(.direct), x: rate, seconds: 1).x) / (rate * perDegree) }
-precondition(steady(0.1) == 0 && steady(1.5) > 0, "still noise stops; coherent slow aiming moves")
+precondition(steady(0.1) == 0 && steady(1.5) == 0, "restored quiet stop rejects sub-threshold drift")
 precondition(steady(1.5) < steady(5.5) && steady(5.5) < steady(10) && steady(10) < steady(25), "restored speed curve: fine aim, medium and broad travel")
-// Approved tiny-only intent confirmation never replays its confirming travel.
+// Coherence alone must never promote sub-threshold drift into pointer movement.
 let fine = filter(.direct)
 var firstFine:Int?
 for i in 0..<104 {
     let o=fine.sample(rawX:Int(bias[0]+1.5*counts),rawY:Int(bias[1]),microseconds:9615,held:false,resetState:false)!
     if o.x != 0 && firstFine == nil {firstFine=i}
 }
-precondition(firstFine != nil && firstFine! < 12, "slow aiming starts after bounded confirmation and subpixel travel")
+precondition(firstFine == nil, "quiet-stop rollback does not reopen for coherent sub-threshold motion")
 let tinyNoise=filter(.direct)
 var noiseTotal=0
 for i in 0..<208 {
@@ -110,7 +110,29 @@ for i in 0..<208 {
  noiseTotal += tinyNoise.sample(rawX:Int(bias[0]+sign*0.8*counts),rawY:Int(bias[1]),microseconds:9615,held:false,resetState:false)!.x
 }
 precondition(abs(noiseTotal)<=2, "back-and-forth wobble cancels without drift")
-print("PASS: coherent slow movement, wobble cancellation, original speed response and bounded start")
+print("PASS: restored quiet stop, wobble cancellation and unchanged speed response")
+
+// 2026-10-30: quiet hand drift was promoted to aiming by the 60 ms bypass.
+let driftStop=filter(.direct)
+var quietTail=0
+for i in 0..<520 {
+    let rate=i<32 ? 30.0 : 1.25+0.15*sin(Double(i)*0.12)
+    let sample=driftStop.sample(rawX:Int(bias[0]+rate*134),rawY:Int(bias[1]),microseconds:9615,held:false,resetState:false)!
+    if i>100 {quietTail+=abs(sample.x)+abs(sample.y)}
+}
+precondition(quietTail==0,"quiet drift must stay stopped after a sweep: \(quietTail)")
+
+// Near-threshold oscillation is not a stationary-hand recording. It must not
+// turn its alternating motion into sustained one-way creep.
+let oscillation=filter(.direct)
+var oscillationNet=0,oscillationTravel=0
+for i in 0..<624 {
+    let rate=5.0*sin(2*Double.pi*10*Double(i)/104)
+    let sample=oscillation.sample(rawX:Int((bias[0]+rate*counts).rounded()),rawY:Int(bias[1]),microseconds:9615,held:false,resetState:false)!
+    if i>=104 {oscillationNet+=sample.x;oscillationTravel+=abs(sample.x)}
+}
+precondition(oscillationTravel>0,"near-threshold oscillation exercises the partial-gain band")
+precondition(abs(oscillationNet)<=3,"alternating motion must not accumulate one-way creep: \(oscillationNet)")
 
 // 6d. A long gap is skipped, never caught up: one late reading moves at most 25 ms.
 let gapFilter = filter(.direct); _ = run(gapFilter, x: 40, seconds: 0.2)
@@ -120,8 +142,7 @@ precondition(abs(WandMotionFilter.directSmoothing - 0.008) < 1e-9, "the approved
 print("PASS: approved 8 ms smoothing, continuous stop and bounded late step")
 
 // 7. Stop-to-click keeps the tuned stop counts: one click after real travel,
-// none from tremor alone, no flood while still, even though the direct
-// pointer shows tremor and a small zero error as continuous counts.
+// none from tremor alone and no flood while still.
 func dwellClicks(useStopCounts: Bool) -> (clicks: Int, stillCounts: Int, settledCounts:Int) {
     let f = filter(.direct), dwell = WandDwellClick(); dwell.follow(true)
     var now = 100.0, clicks = 0, stillCounts = 0, settledCounts=0
@@ -204,27 +225,30 @@ do {
     print("PASS: settled stop-to-click repeats every 300 ms and stops on movement, HUD, stale input and intent")
 }
 
-// 7a. Coherent fine aiming, then settling: the pointer visibly creeps toward
-// the target, and the old (111) tuned stop signal still clicks once after the
-// hand settles, never during the deliberate slow approach.
+// 7a. Aiming above the quiet threshold, then settling: the pointer visibly
+// approaches the target, and the old (111) tuned stop signal still clicks once
+// after the hand settles, never during the deliberate approach.
 do {
     let f = filter(.direct), dwell = WandDwellClick(); dwell.follow(true)
     var now = 100.0, clickTimes: [Double] = [], aimCounts = 0, settledCounts = 0, lastAim = 0.0
     for i in 0..<Int(4 * 104) {
-        let phase = i < 31 ? 40.0 : (i < 31 + 156 ? 1.5 : 0.2 + 0.7 * sin(Double(i) * 0.9))
+        let phase = i < 31 ? 40.0 : (i < 31 + 156 ? 3.0 : 0.2 + 0.7 * sin(Double(i) * 0.9))
         let s = f.sample(rawX: Int((bias[0] + phase * counts).rounded()), rawY: Int(bias[1]), microseconds: 9615, held: false, resetState: false)!
-        if i >= 31 && i < 31 + 156 { aimCounts += abs(s.x); if s.x != 0 { lastAim = now } }
+        if i >= 31 && i < 31 + 156 {
+            if i >= 31 + 20 { aimCounts += abs(s.x) } // exclude the previous fast stroke's settling tail
+            if s.x != 0 { lastAim = now }
+        }
         if i > 31 + 156 + 20 { settledCounts += abs(s.x) + abs(s.y) }
         if let due = dwell.nextDue, due <= now, dwell.tick(now: due) { clickTimes.append(due) }
         dwell.intent(s.intent, now: now)
         dwell.move(dx: s.stopX, dy: s.stopY, now: now, eligible: true)
         now += 0.009615
     }
-    precondition(aimCounts >= 3, "coherent 1.5-unit fine aiming visibly moves the pointer: \(aimCounts)")
+    precondition(aimCounts >= 3, "3-unit aiming above the quiet threshold visibly moves the pointer: \(aimCounts)")
     precondition(settledCounts == 0, "settled tremor and zero error never move it")
     precondition(clickTimes.count == 1, "one stop-to-click for the whole approach: \(clickTimes)")
     precondition(clickTimes[0] > lastAim + 0.15, "the click follows the settle, never the slow approach")
-    print("PASS: coherent fine aiming then settling clicks once with the 111 stop signal (last aim \(lastAim - 100), click \(clickTimes[0] - 100))")
+    print("PASS: above-threshold aiming then settling clicks once with the 111 stop signal (last aim \(lastAim - 100), click \(clickTimes[0] - 100))")
 }
 
 // 8. The tuned path is unchanged and reports its own counts as stop counts.
