@@ -1,0 +1,19 @@
+{
+  "scope": "Two carbon-rod accessory prototypes; no physical acceptance",
+  "geometry": "passed; exported closed single bodies and nominal hardware/access checks",
+  "slice_clearances": "passed; final prepared meshes and sampled extrusion, including brim",
+  "slice_warning": "Bambu flags unsupported regions on the key carrier; independent 0.25 mm overlap / 0.15 mm2 threshold layer-island audit detects no floating islands; bridge quality remains unverified",
+  "repository_check": {
+    "exit_code": 1,
+    "unrelated_current_failures": [
+      "versions match the sources and the receiver bundle",
+      "wand guide content, placement, agent requests and close choice",
+      "native HUD close cancels actions, rejects stale context and closes any child",
+      "saved payload manifest matches the bytes and fits storage with calibration headroom"
+    ]
+  },
+  "pending": [
+    "Confirm fitted battery, insulation, solder and lead envelope",
+    "Test print retention, bridges and strength"
+  ]
+}
