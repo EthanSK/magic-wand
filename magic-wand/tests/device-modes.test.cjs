@@ -104,7 +104,10 @@ for (const bridge of ["readable", "fragments"]) {
     assert.deepEqual(w.colors(), [0, 0, 1], "pointer is blue again once recording stops");
     ctx.setWandRecording(true);
     ctx.moveLatched=false;ctx.setHUDOpen(true); ctx.updateLights();
-    assert.deepEqual(w.colors(), [1, 0.2, 0], "HUD orange overrides recording red");
+    assert.deepEqual(w.colors(), [0, 1, 0], "HUD green overrides recording red");
+    ctx.moveLatched=true;ctx.updateLights();
+    assert.deepEqual(w.colors(), [0, 1, 0], "the open HUD stays green with mouse follow on");
+    ctx.moveLatched=false;ctx.updateLights();
     ctx.scrollHeld = true; ctx.updateLights();
     assert.deepEqual(w.colors(), [0, 1, 1], "scroll cyan overrides recording red");
     ctx.scrollHeld = false; ctx.setHUDOpen(false); ctx.setWandRecording(false);

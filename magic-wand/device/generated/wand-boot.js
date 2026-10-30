@@ -7,7 +7,7 @@ var lightLevels=[0,0,0],loadTimer,loadLit;
 function writeLight(pin, level) { if(loadTimer)loadTimer=loadLit=clearTimeout(loadTimer); if(level>0 && level<1)analogWrite(pin,level,{freq:200}); else {pinMode(pin,"output");pin.write(level);} }
 function allLights(v){writeLight(LED1,v);writeLight(LED2,v);writeLight(LED3,v);}
 function loadingLight(){if(!loadTimer){allLights((loadLit=!loadLit)?0.45:0);loadTimer=setTimeout(function(){loadTimer=0;updateLights();},250);}}
-function updateLights() { if(global.WAND_UPDATING)return loadingLight(); var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN),speech=!digitalRead(STT_PIN); lightLevels=calibrationLit?[1,0,0]:!connected?[0.08,0.016,0]:scrollHeld?[0,1,1]:speech?[1,0,0]:hud?[1,0.2,0]:move?[0.45,0.45,0.45]:[0,0,0]; writeLight(LED1,lightLevels[0]); writeLight(LED2,lightLevels[1]); writeLight(LED3,lightLevels[2]); }
+function updateLights() { if(global.WAND_UPDATING)return loadingLight(); var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN),speech=!digitalRead(STT_PIN); lightLevels=calibrationLit?[1,0,0]:!connected?[0.08,0.016,0]:scrollHeld?[0,1,1]:hud?[0,1,0]:speech?[1,0,0]:move?[0.45,0.45,0.45]:[0,0,0]; writeLight(LED1,lightLevels[0]); writeLight(LED2,lightLevels[1]); writeLight(LED3,lightLevels[2]); }
 var CONFIG = {xAxis:"z", yAxis:"x", xSign:-1, ySign:-1, gain:108, yGain:1.4, sampleRate:104, fineGain:0.35, fineSpeed:2, fullSpeed:18, deadZone:1.2, tapSeconds:0.22, doubleTapSeconds:0.25};
 var bias, sum, samples, warmup, lastTime, fractionX, fractionY;
 var restMin, restMax, sumSquares, noise={x:1.2,y:1.2,z:1.2};
