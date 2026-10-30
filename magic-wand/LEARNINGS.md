@@ -1408,3 +1408,7 @@ floor reduced frozen slow motion while posting nothing in the still-hand portion
 retaining all 228 baseline clicks in that recording. Do not generalise those capture metrics
 to guaranteed accuracy or end-to-end latency. Keep approved tiny-motion confirmation separate
 from normal-movement smoothing, and never replay historical pointer displacement.
+
+## Mechanical previews need correct depth ordering (2026-10-30)
+
+The carbon-rod accessory preview's painter-sorted triangles showed the rod through the board and hid purchased caps behind the frame, despite correct non-intersecting meshes. A per-pixel depth buffer over the actual exported triangles corrected those occlusion artefacts. Keep the preview's visibility evidence separate from the solid collision and sliced-path checks; attractive or opaque-looking reference parts do not prove fit.

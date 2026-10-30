@@ -1,0 +1,55 @@
+{
+  "archive_sha256": "2b8e2cb1f885c409bdef7bf86f5b72e7f7f375d42154a41376e9396cdcd29da8",
+  "build_instances": 2,
+  "printed_parts_g": 3.491,
+  "supports_and_brim_g": 0.105,
+  "total_slicer_g": 3.69,
+  "accounted_g": 3.596,
+  "startup_and_rounding_g": 0.094,
+  "features_g": {
+    "Brim": 0.10481595060162796,
+    "Outer wall": 1.9373393010763496,
+    "Gap infill": 0.5584415521534115,
+    "Overhang wall": 0.11375353740299236,
+    "Inner wall": 0.7953640006362129,
+    "Top surface": 0.0625716913389784,
+    "Internal solid infill": 0.02193454449261478,
+    "Bridge": 0.0015207252745615472
+  },
+  "object_features_g": {
+    "XIAO_Rod_Holder": {
+      "Brim": 0.10481595060162796,
+      "Outer wall": 0.3699252893270203,
+      "Gap infill": 0.0931521591148584,
+      "Overhang wall": 0.018987484420128202,
+      "Inner wall": 0.10538516488694936,
+      "Top surface": 0.009287534147755112,
+      "Internal solid infill": 0.0006112776142307843
+    },
+    "Key_Battery_Carrier": {
+      "Outer wall": 1.567414011749329,
+      "Gap infill": 0.46528939303855577,
+      "Inner wall": 0.6899788357492453,
+      "Overhang wall": 0.09476605298286421,
+      "Top surface": 0.053284157191223265,
+      "Internal solid infill": 0.021323266878383994,
+      "Bridge": 0.0015207252745615472
+    }
+  },
+  "object_mass_mapping_available": true,
+  "object_printed_parts_g": {
+    "XIAO_Rod_Holder": 0.597,
+    "Key_Battery_Carrier": 2.894
+  },
+  "settings": {
+    "printer_model": "Bambu Lab P1S",
+    "filament_type": [
+      "PETG"
+    ],
+    "layer_height": "0.2",
+    "wall_loops": "3",
+    "sparse_infill_density": "20%",
+    "support_type": "tree(auto)"
+  },
+  "scope": "One carrier plus one tip holder. Model plastic and brim separate. Bought parts, rod, tape, glue and wires excluded. Slicer estimate, not weighed."
+}
