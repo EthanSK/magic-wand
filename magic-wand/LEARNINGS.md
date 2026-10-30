@@ -1505,3 +1505,14 @@ The device reports `@BOTTOM 0` before its two-button chord's `@SCROLL E`.
 When no held-scroll session is active, Bottom release must leave the chord's
 native gesture alone until that end marker. The ordered regression cancels
 prematurely before the ownership guard and ends normally after it.
+
+
+## 2026-10-30 — Restore the scroll choice captured before a temporary hold
+
+A mouse-button press can temporarily turn follow on before a two-button chord begins.
+Capturing the state at chord start alone therefore loses an off choice. Capture it
+on the first mouse-button down, before the temporary enable; retain that value if
+the gesture becomes a chord. Only a completed physical scroll release restores it.
+An ordinary tap, drag, cancelled gesture or late short release keeps its own rules.
+The release regression exercises both prior choices and both raw/edge arrival orders.
+This supersedes the older always-enable release policy, not its historical record.

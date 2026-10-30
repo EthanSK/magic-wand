@@ -12,6 +12,7 @@ const code=`import Foundation
 func log(_ v:Any...) {}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?) {}}
 final class Harness {
+ var scrollFollowBefore=false
  func finishNativeScroll(cancelled:Bool){}
 
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
@@ -29,7 +30,7 @@ final class Harness {
  func queue(_ s:String){}
  func scheduleDwell(){}
  func setCircleLight(_ on:Bool){}
- func enableMouseAfterScroll(){}
+ func restoreMouseAfterScroll(){}
  func performPointer(_ actions:[WandPointerRouter.Action]){}
  ${['finishBottomHold','reconcileBottomHold','handleFrame'].map(method).join('\n')}
 }

@@ -41,6 +41,7 @@ final class Controls {var phases:[String]=[];var starts=0;var available=true
  func screenshotStart()->Bool{starts+=1;return available}}
 final class SwitchAppContext {var switchAppAdjusting=false,isActive=false}
 final class Harness {
+ var scrollFollowBefore=false
  let context=SwitchAppContext()
  var pointerTravel=0.0
  var actionPause=WandActionPause()
@@ -77,10 +78,10 @@ final class Harness {
  func cancelCircleScroll(){}
  func finishScroll(){}
  func stopHUDWatchdog(){}
- func beginBottomHold(now:Double){holds+=1}
+ func beginBottomHold(now:Double,following:Bool?=nil){holds+=1}
  func finishBottomHold(now:Double,released:Bool=true){}
  func probeHoldTarget(at:CGPoint,token:UUID){}
- func enableMouseAfterScroll(){}
+ func restoreMouseAfterScroll(){}
  func receive(_ line:String){for _ in [0] {
  let paused=actionPause.paused
 ${bottom}
