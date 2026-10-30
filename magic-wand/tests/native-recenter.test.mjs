@@ -25,7 +25,7 @@ final class Harness {
  let pointerRouter=WandPointerRouter(),recenterGesture=WandRecenterGesture(),dwell=WandDwellClick(),motionFilter=WandMotionFilter(),restDetection=Rest()
  let screenshot=WandScreenshotGesture();var pendingRecenter:Timer?
  var ready=true,restoring=false,recenterSuppressButtons=false,deliveryPoint:CGPoint?,commands:[String]=[]
- var recenterOrigin=WandRecenterOrigin(),settled:CGPoint?
+ var pointerOrigin=WandPointerOrigin(),settled:CGPoint?
  func settleRecenteredCursor(at point:CGPoint){settled=point}
  var hud=false,scroll=false,buttons=0,appMode:String?
  func queue(_ text:String){commands.append(text)}
@@ -75,13 +75,14 @@ do {
  let first=h.motionFilter.sample(rawX:0,rawY:0,microseconds:9615,held:false,resetState:false)!
  precondition(first.x==0 && first.y==0,"no smoothed or subpixel residual from before the centre")
  let old=CGPoint(x:1250,y:540)
- var now=10.0;h.recenterOrigin.begin(at:centre,now:now)
- precondition(h.recenterOrigin.origin(system:old,now:now+0.02)==centre,"a lagging or stale old location never becomes the origin")
- h.recenterOrigin.moved(to:CGPoint(x:705,y:198))
- precondition(h.recenterOrigin.origin(system:old,now:now+0.05)==CGPoint(x:705,y:198),"the next movement chains from the centre")
- precondition(h.recenterOrigin.origin(system:CGPoint(x:705,y:198),now:now+0.08)==CGPoint(x:705,y:198) && h.recenterOrigin.point==nil,"once the system agrees, ordinary tracking resumes")
- now=20;h.recenterOrigin.begin(at:centre,now:now)
- precondition(h.recenterOrigin.origin(system:old,now:now+WandRecenterOrigin.settle+0.01)==old && h.recenterOrigin.point==nil,"bounded: never overrides the real cursor indefinitely")
+ var now=10.0;h.pointerOrigin.begin(at:centre,now:now)
+ precondition(h.pointerOrigin.origin(system:old,now:now+0.02)==centre,"a lagging or stale old location never becomes the origin")
+ h.pointerOrigin.moved(from:centre,to:CGPoint(x:705,y:198),now:now+0.03)
+ precondition(h.pointerOrigin.origin(system:old,now:now+0.05)==CGPoint(x:705,y:198),"the next movement chains from the centre")
+ precondition(h.pointerOrigin.origin(system:CGPoint(x:705,y:198),now:now+0.08)==CGPoint(x:705,y:198),"once the system agrees, ordinary tracking resumes")
+ precondition(h.pointerOrigin.origin(system:CGPoint(x:900,y:400),now:now+0.09)==CGPoint(x:900,y:400),"after it, a physical mouse is adopted at once")
+ now=20;h.pointerOrigin.begin(at:centre,now:now)
+ precondition(h.pointerOrigin.origin(system:old,now:now+WandPointerOrigin.settle+0.01)==old && h.pointerOrigin.latest==nil,"bounded: never overrides the real cursor indefinitely")
 }
 print("PASS: global centre/follow (after the triple-click window) from off, mouse, HUD, scrolling, VS Code and drag; holds preserved")
 `;

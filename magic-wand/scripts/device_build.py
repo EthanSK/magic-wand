@@ -145,7 +145,7 @@ def artifacts() -> dict[Path, str]:
         return subprocess.run(["node", str(ROOT / "scripts" / "minify_device.mjs")],
                               input=text, capture_output=True, text=True, check=True).stdout
     # Persist only syntax-compacted code: comments/whitespace are not worth flash.
-    # Names and behavior stay intact (compress=false, mangle=false).
+    # Join declarations/statements only; other compression and name mangling stay off.
     payloads = {
         "base.js": ("wand.boot.v4", minify(out[GENERATED / "wand-boot.js"])),
         "bridge.js": ("wand.bridge.p1", minify((DEVICE / "wand-mode-bridge.js").read_text())),

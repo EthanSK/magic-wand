@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync, copyFileSync } from "node:fs";
+import { mkdtempSync, rmSync, copyFileSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawnSync } from "node:child_process";
@@ -18,4 +18,12 @@ test("direct Sense pointer keeps normal motion, quiet stopping, units, axes and 
     assert.equal(run.status, 0, run.stderr + run.stdout);
     assert.match(run.stdout, /tuned path unchanged/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+// Ethan's jump-back reports (2026-10-30): the live receiver keeps ordinary
+// stop-to-click single-shot; the repeat option stays off.
+test("the receiver's ordinary stop-to-click is single-shot", () => {
+  const main = readFileSync(fileURLToPath(new URL("../receiver/Sources/main.swift", import.meta.url)), "utf8");
+  assert.match(main, /\n    let dwell=WandDwellClick\(\)\n/);
+  assert.doesNotMatch(main, /WandDwellClick\(repeatInterval/);
 });

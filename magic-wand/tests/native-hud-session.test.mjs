@@ -64,6 +64,7 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  var reviewExitGesture=WandReviewExitGesture();var reviewExitTimer:Timer?
  var pointerRouter=WandPointerRouter()
  var deliveryPoint:CGPoint?
+ var pointerOrigin=WandPointerOrigin(),systemCursor=CGPoint.zero;func currentPointerOrigin()->CGPoint{pointerOrigin.origin(system:systemCursor,now:ProcessInfo.processInfo.systemUptime)}
  func performPointer(_ actions:[WandPointerRouter.Action]){}
  func scheduleDwell(){}
  func syncRecordingLight(){}
@@ -132,7 +133,14 @@ precondition(Array(menu.controls.phases.suffix(2))==["park","navigate"] && menu.
 menu.handleNavigation("0,7000");menu.middlePressedAt-=0.3;menu.handleMiddle("0")
 precondition(menu.controls.phases.last=="choose")
 
-let tap=Harness();tap.handleMiddle("1");tap.context.set(true);tap.handleMiddle("0")
+// Ethan: a quick tap from closed "should just instantly switch app". With no
+// open HUD to dismiss, it acts at once.
+let instant=Harness();instant.handleMiddle("1");instant.context.set(true);instant.handleMiddle("0")
+precondition(instant.middleTap == nil && instant.controls.phases.last=="activate","a tap that opened the HUD acts at once")
+// Inside an already open HUD a tap still waits out the double-click window.
+let tap=Harness();tap.handleMiddle("1");tap.context.set(true);tap.middlePressedAt-=0.3;tap.handleMiddle("0")
+precondition(tap.controls.phases.last=="choose","the opening hold's release")
+tap.handleMiddle("1");tap.handleMiddle("0")
 precondition(tap.middleTap != nil && tap.controls.phases.last=="park","a tap waits out the double-click window")
 let selectedAtRelease=tap.controls.phases.count
 for point in ["9000,0","-8000,7000","0,-9000"] {tap.handleNavigation(point)}
@@ -141,14 +149,21 @@ settle(0.35)
 precondition(tap.controls.phases.last=="activate" && tap.middleTap == nil,"a lone tap then uses the original outlined card")
 tap.handleNavigation("30000,15000")
 precondition(Array(tap.controls.phases.suffix(2))==["hover","motion"] && tap.controls.points.last==CGPoint.zero,"after activation aim restarts at a fresh origin without replaying click-window motion")
-let double=Harness();double.handleMiddle("1");double.context.set(true);double.handleMiddle("0");double.handleMiddle("1")
+// A double click inside an open HUD dismisses without acting. (From closed,
+// the first tap acts at once; Agentic Mouse ignores it when that press only
+// reopened a remembered submenu, so a double click still resets to home.)
+let double=Harness();double.handleMiddle("1");double.context.set(true);double.middlePressedAt-=0.3;double.handleMiddle("0")
+let beforeDouble=double.controls.phases.count
+double.handleMiddle("1");double.handleMiddle("0");double.handleMiddle("1")
 precondition(!double.hudSession && double.controls.phases.last=="dismiss","double click still dismisses")
 double.handleMiddle("0");settle(0.35)
-precondition(!double.controls.phases.contains("activate") && !double.controls.phases.contains("choose") && !double.hudSession,"and never acts")
-let lateTap=Harness();lateTap.handleMiddle("1");lateTap.context.set(true);lateTap.handleMiddle("0")
+precondition(!double.controls.phases.dropFirst(beforeDouble).contains("activate") && !double.controls.phases.dropFirst(beforeDouble).contains("choose") && !double.hudSession,"and never acts")
+let lateTap=Harness();lateTap.handleMiddle("1");lateTap.context.set(true);lateTap.middlePressedAt-=0.3;lateTap.handleMiddle("0")
+lateTap.handleMiddle("1");lateTap.handleMiddle("0")
 lateTap.middleLastRelease = -100;lateTap.handleMiddle("1")
 precondition(lateTap.middleTap == nil && Array(lateTap.controls.phases.suffix(2))==["activate","navigate"],"a tap whose window ended is used before the next hold, never lost")
-let hidden=Harness();hidden.handleMiddle("1");hidden.context.set(true);hidden.handleMiddle("0");hidden.context.set(false);settle(0.4)
+let hidden=Harness();hidden.handleMiddle("1");hidden.context.set(true);hidden.middlePressedAt-=0.3;hidden.handleMiddle("0")
+hidden.handleMiddle("1");hidden.handleMiddle("0");hidden.context.set(false);settle(0.4)
 precondition(!hidden.controls.phases.contains("activate"),"a closed HUD cancels the pending tap")
 let racing=Harness();racing.handleMiddle("1");racing.context.set(true);racing.context.set(false)
 precondition(racing.hudSession && racing.middleHeld,"a close during a live hold waits for its release")
@@ -164,7 +179,8 @@ shortcut.handleMiddle("0")
 precondition(shortcut.wandShortcutMode==nil && shortcut.review.committed,"physical Middle release immediately finishes review")
 shortcut.wandShortcutMode="files";shortcut.closeHUD(reason:"disconnect")
 precondition(shortcut.wandShortcutMode==nil && !shortcut.review.committed,"lost HUD cancels review")
-let screenshot=Harness();screenshot.hudSession=true;screenshot.hudActive=true
+// A capture that ends while Agentic Mouse still shows the HUD returns to it.
+let screenshot=Harness();screenshot.hudSession=true;screenshot.hudActive=true;screenshot.context.set(true)
 screenshot.setScreenshotActive(true);screenshot.enterPointerMode()
 precondition(!screenshot.hudSession && screenshot.screenshotHUD)
 precondition(!screenshot.controls.phases.contains("dismiss"))
@@ -173,6 +189,14 @@ precondition(screenshot.cancelledScreenshotHold,"screenshot exit cancels any hel
 precondition(screenshot.hudSession && !screenshot.hudActive && !screenshot.screenshotHUD,"the HUD returns waiting, never steering unheld")
 precondition(screenshot.screenshotContexts==[true,false],"the context reaches screenshot ownership")
 precondition(screenshot.commands.last=="setHUDOpen(true);" && !screenshot.commands.contains{$0.contains("setMouseFollow")},"returning to the HUD leaves the mouse-follow choice alone")
+// Ethan, 2026-10-30 00:54: the HUD's own Screenshot card hides the HUD (its
+// context ends) before the capture ends. No ghost session may come back: it
+// blocked every stop-to-click ("it's straight up not clicking").
+let ghost=Harness();ghost.hudSession=true;ghost.hudActive=true;ghost.context.set(true)
+ghost.setScreenshotActive(true);ghost.enterPointerMode();ghost.context.set(false)
+ghost.setScreenshotActive(false)
+precondition(!ghost.hudSession && !ghost.screenshotHUD,"a hidden HUD never returns as a session")
+precondition(!ghost.commands.contains("setHUDOpen(true);"),"the wand is never told a HUD is open")
 let pinned=Harness();pinned.selectedReviewMode="changes";pinned.wandShortcutMode="changes";pinned.handleMiddle("1")
 precondition(pinned.reviewExitGesture.pending && !pinned.review.committed,"Middle-down freezes the existing working set")
 for i in 1...80 {pinned.handleNavigation("\\(i*1000),\\(i*2000)")}

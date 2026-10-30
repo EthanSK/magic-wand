@@ -16,7 +16,7 @@ function method(name){const a=source.indexOf('    func '+name+'(');assert(a>=0,n
 function block(from,to){const a=source.indexOf(from),b=source.indexOf(to,a);assert(a>=0&&b>a,from);return source.slice(a,b);}
 const swiftc=(dir,code,extra=[])=>{writeFileSync(join(dir,'main.swift'),code);const built=spawnSync('swiftc',[wandSourcePath(new URL('../receiver/Sources/WandRunLoop.swift',import.meta.url)),'-Onone',...extra,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(built.status,0,built.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);return run.stdout;};
 
-test('screenshot mode: follow-independent aim, one-tap latch, shared settle release, triple-click start',{skip:process.platform!=='darwin'},()=>{
+test('screenshot mode: follow-independent aim, natural press-drag-release, triple-click start',{skip:process.platform!=='darwin'},()=>{
  const bottom=block('            if let marker=line.range(of:"@BOTTOM ")','            if let marker=line.range(of:"@MIDDLE ")');
  const follow=block('            if let marker=line.range(of:"@FOLLOW ")','            if let marker=line.range(of:"@ZERO ")');
  assert(bottom.indexOf('screenshotBottom(')<bottom.indexOf('manualPointerDuringRecording()'),'screenshot ownership and the triple-click precede every ordinary Bottom lane');
@@ -39,7 +39,7 @@ final class Rest {var parked=false;func pointerActivated(){};func pointerStopped
 final class Controls {var phases:[String]=[];var starts=0;var available=true
  func persistent(_ phase:String,x:Double=0,y:Double=0,mouseX:Double?=nil){phases.append(phase)}
  func screenshotStart()->Bool{starts+=1;return available}}
-final class SwitchAppContext {var switchAppAdjusting=false}
+final class SwitchAppContext {var switchAppAdjusting=false,isActive=false}
 final class Harness {
  let context=SwitchAppContext()
  var pointerTravel=0.0
@@ -52,7 +52,8 @@ final class Harness {
  var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,flickScrollEnabled=false
  var screenshotActive=false,screenshotHUD=false,hudSession=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleHeld=false,hudEntryPress=false,acceptHUDContext=true,hudOpenedAt=0.0
  var recordingPointerPaused=false,recordingRestoreFollow:Bool?,recenterSuppressButtons=false
- var recenterOrigin=WandRecenterOrigin();func settleRecenteredCursor(at point:CGPoint){}
+ func settleRecenteredCursor(at point:CGPoint){}
+ var pointerOrigin=WandPointerOrigin();func currentPointerOrigin()->CGPoint{pointerOrigin.origin(system:CGEvent(source:nil)?.location ?? .zero,now:ProcessInfo.processInfo.systemUptime)}
  var heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,flickAnchor:CGPoint?,deliveryPoint:CGPoint?
  var pointerDisplays=[CGRect(x:0,y:0,width:2000,height:1000)]
  var buttons=0,movementCount=0,reportCount=0,rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,middleMouseX=0.0,middleMouseSampleAt = -100.0
@@ -67,6 +68,8 @@ final class Harness {
  func queue(_ s:String){commands.append(s)}
  func syncRecordingLight(){}
  func status(){}
+ var clickGate:String?,closedHUD:[String]=[]
+ func closeHUD(reason:String,notifyNative:Bool=true){hudSession=false;closedHUD.append(reason)}
  func performPointer(_ a:[WandPointerRouter.Action]){}
  func setCircleLight(_ on:Bool){if on {wheels+=1}}
  func cancelCircleScroll(){}
@@ -81,13 +84,15 @@ final class Harness {
 ${bottom}
 ${follow}
  }}
- ${['setScreenshotActive','screenshotContextChanged','takeScreenshotPointer','screenshotBottom','startScreenshotShortcut','superviseScreenshot','checkScreenshot','latchScreenshotIfReady','handleScreenshotRaw','scheduleScreenshotSettle','finishScreenshotDrag','endScreenshot','recognizeBottomRecenter','recenterPointer','recordingChanged','manualPointerDuringRecording','deviceFollowChanged','enterPointerMode','postPointerMove','handleRaw','handleFrame','reconcileBottomHold','scheduleDwell'].map(method).join('\n')}
+ ${['setScreenshotActive','screenshotContextChanged','takeScreenshotPointer','screenshotBottom','startScreenshotShortcut','superviseScreenshot','checkScreenshot','latchScreenshotIfReady','handleScreenshotRaw','finishScreenshotDrag','endScreenshot','recognizeBottomRecenter','recenterPointer','recordingChanged','manualPointerDuringRecording','deviceFollowChanged','enterPointerMode','postPointerMove','handleRaw','handleFrame','reconcileBottomHold','scheduleDwell','noteClickGate'].map(method).join('\n')}
 }
 func wait(_ s:Double){RunLoop.main.run(until:Date().addingTimeInterval(s))}
 let move="10000,2680,0,4",heldMove="10000,2680,0,5",still="10000,0,0,4"
 func make(follow:Bool)->Harness {let h=Harness();precondition(h.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]));h.dwell.follow(follow);Harness.selector=true;Harness.moves=[];return h}
 func tap(_ h:Harness,_ seconds:Double=0.06){h.receive("@BOTTOM 1");wait(seconds);h.receive("@BOTTOM 0")}
 func dragThenStop(_ h:Harness){for _ in 0..<5 {h.handleRaw(move)};for _ in 0..<3 {h.handleRaw(still)};wait(0.3)}
+// Ethan (2026-10-30): native macOS screenshot mode, then "click and hold the
+// mouse button to drag and drop the area naturally". No auto-finish.
 
 // HUD-started capture with ordinary mouse follow off, then on.
 for following in [false,true] {
@@ -102,21 +107,23 @@ for following in [false,true] {
  h.receive("@FOLLOW "+(following ? "0":"1"))
  precondition(h.dwell.following==following,"stale wand follow edges never change the choice during screenshot mode")
  h.receive("@BOTTOM 1")
- precondition(h.downs==1 && h.screenshot.dragging && h.buttons==1,"one Bottom tap latches the left drag")
- h.receive("@BOTTOM 0");h.handleRaw(still);h.handleFrame(x:0,y:0,b:0)
+ precondition(h.downs==1 && h.screenshot.dragging && h.buttons==1,"Bottom down presses like the mouse button")
+ h.handleFrame(x:0,y:0,b:0)
  h.reconcileBottomHold(down:false,now:ProcessInfo.processInfo.systemUptime,reason:"sensor button state")
- h.controlVersion = .pointerV1;h.reconcileBottomHold(down:false,now:ProcessInfo.processInfo.systemUptime,reason:"sensor button state");h.controlVersion = .scrollV2
- precondition(h.screenshot.dragging && h.buttons==1 && h.ups==0,"physical release, up telemetry and legacy frames leave it latched")
+ precondition(h.screenshot.dragging && h.buttons==1 && h.ups==0,"legacy frames and up reconciliation never lift a held drag")
  let before=Harness.moves.count
  dragThenStop(h)
- precondition(Harness.moves.count>before && Harness.moves.dropFirst(before).allSatisfy{$0.buttons==1},"aiming after the latch drags the selection")
- precondition(h.ups==1 && h.buttons==0 && h.screenshot.phase == .done,"stopping ends the drag through the shared dwell timing")
+ precondition(Harness.moves.count>before && Harness.moves.dropFirst(before).allSatisfy{$0.buttons==1},"held motion drags the selection")
+ precondition(h.screenshot.dragging && h.ups==0,"stopping never finishes the selection: no auto-finish")
+ h.receive("@BOTTOM 0")
+ precondition(h.ups==1 && h.buttons==0 && h.screenshot.phase == .done,"releasing Bottom lets go and macOS captures")
  precondition(h.commands.last=="global.wandShot=0;sleepGyro();","screenshot motion stops with the selection")
  for _ in 0..<5 {h.handleRaw(move)};wait(0.3)
  precondition(h.ups==1 && h.downs==1,"the release happens exactly once")
  precondition(!logged.contains("HIGH_DWELL_CLICK") && warps==0 && h.wheels==0 && h.holds==0,"no ordinary click, recentre, scroll or hold leaks")
  h.setScreenshotActive(false)
- precondition(h.screenshot.phase == .idle && h.hudSession && h.commands.last=="setHUDOpen(true);","capture end returns the waiting HUD")
+ // The HUD's Screenshot card hid the HUD (no live context): no ghost session returns.
+ precondition(h.screenshot.phase == .idle && !h.hudSession && !h.screenshotHUD && !h.commands.contains("setHUDOpen(true);"),"capture end after the HUD card leaves no HUD session")
  precondition(h.dwell.following==following && !h.commands.contains{$0.contains("setMouseFollow(true)") || $0.contains("setMouseFollow(false)")},"the normal follow choice is untouched")
 }
 
@@ -136,9 +143,11 @@ precondition(lost.ups==1 && lost.screenshot.phase == .done && lost.dwell.followi
 let reset=make(follow:false);reset.setScreenshotActive(true);reset.receive("@BOTTOM 1")
 reset.endScreenshot(reason:"receiver reset",contextActive:true,forgetPress:true)
 precondition(reset.ups==1 && reset.screenshot.phase == .done && !reset.screenshot.consumeRelease,"disconnect lifts the drag and forgets the stale press")
-let again=make(follow:false);again.setScreenshotActive(true);again.receive("@BOTTOM 1");again.receive("@BOTTOM 0");again.receive("@BOTTOM 1")
-precondition(again.ups==1 && again.screenshot.phase == .done,"a fresh Bottom press finishes the selection now")
-again.receive("@BOTTOM 0");precondition(again.holds==0,"and its release is consumed")
+let prompt=make(follow:false);Harness.selector=false;prompt.setScreenshotActive(true);prompt.receive("@BOTTOM 1");prompt.receive("@BOTTOM 0")
+Harness.selector=true;prompt.handleRaw(still);wait(0.08)
+precondition(prompt.downs==0 && prompt.screenshot.phase == .aiming,"a press released before the selector appeared never clicks")
+prompt.receive("@BOTTOM 1");precondition(prompt.downs==1 && prompt.screenshot.dragging,"the next press drags")
+prompt.receive("@BOTTOM 0");precondition(prompt.ups==1 && prompt.holds==0,"its release captures and is never an ordinary hold")
 
 // Triple-click: follow off and paused by recording; firmware follow edges replayed.
 let t=make(follow:false);t.recordingPointerPaused=true;t.recordingRestoreFollow=true
@@ -155,12 +164,16 @@ for _ in 0..<5 {t.handleRaw(move)}
 precondition(!Harness.moves.isEmpty && t.downs==0,"recording-paused follow still lets screenshot aim; nothing presses before the selector")
 Harness.selector=false;t.setScreenshotActive(true)
 for _ in 0..<4 {t.handleRaw(still);wait(0.05)}
-precondition(t.screenshot.phase == .aiming && t.screenshot.anchorRequested && t.downs==0,"no press until macOS shows the selector")
+precondition(t.screenshot.phase == .aiming && t.downs==0,"the triple-click itself never presses")
+t.receive("@BOTTOM 1")
+precondition(t.screenshot.pressHeld && t.downs==0,"a press waits for macOS's selector")
 Harness.selector=true;t.handleRaw(still);wait(0.08)
-precondition(t.downs==1 && t.screenshot.dragging,"the drag anchors at the shown pointer with no fourth click")
-precondition(warps==0,"no recentre before the screenshot anchor")
+precondition(t.downs==1 && t.screenshot.dragging,"still held when the selector shows: the drag starts there")
+precondition(warps==0,"no recentre in screenshot mode")
 dragThenStop(t)
-precondition(t.ups==1 && t.screenshot.phase == .done,"stop-to-click ends the shortcut's selection")
+precondition(t.screenshot.dragging && t.ups==0,"no stop-to-click finish")
+t.receive("@BOTTOM 0")
+precondition(t.ups==1 && t.screenshot.phase == .done,"releasing Bottom captures")
 t.setScreenshotActive(false)
 precondition(t.recordingPointerPaused && !t.dwell.following && t.screenshot.phase == .idle,"recording pause and follow choice survive the screenshot")
 
@@ -205,8 +218,27 @@ _=r.edge(down:false,now:0.85);_=r.edge(down:true,now:0.95);_=r.edge(down:false,n
 precondition(r.edge(down:true,now:1.1) == .third && r.edge(down:false,now:1.2) == .none)
 let g=WandScreenshotGesture();precondition(g.requestShortcut(now:10) && g.expired(now:10.7)==nil && g.expired(now:10.9)=="telemetry lost","missing wand telemetry ends a pending start")
 g.telemetry(now:12);precondition(g.expired(now:12.1)=="native start timed out","Agentic Mouse must report the selection within two seconds")
-precondition(g.settle.pause==0.2 && g.settle.travel==12,"the settle uses the ordinary stop-to-click timing")
-print("PASS: screenshot ownership, latch, settle, cancellation and triple-click")
+let n=WandScreenshotGesture();_=n.contextActive(now:1,pressed:false)
+precondition(n.bottom(down:true) == .press && n.latch(now:1) && n.dragging,"down then the selector: drag")
+precondition(n.bottom(down:true) == .consumed,"a second press while dragging is consumed")
+precondition(n.bottom(down:false) == .release,"up lets go")
+let m=WandScreenshotGesture();_=m.contextActive(now:1,pressed:false);_=m.bottom(down:true);_=m.end(contextActive:false)
+precondition(m.bottom(down:false) == .consumed,"a press held when the mode ended keeps its release consumed")
+// Ethan, 2026-10-30 00:54: a ghost HUD session Agentic Mouse no longer
+// shows blocked every stop-to-click. Real frames now close it, then click.
+let ghostHUD=make(follow:true);ghostHUD.hudSession=true;ghostHUD.hudOpenedAt=ProcessInfo.processInfo.systemUptime-5
+let followMove="10000,2680,0,0",followStill="10000,0,0,0" // ordinary follow samples, not HUD-only
+for _ in 0..<5 {ghostHUD.handleRaw(followMove)};for _ in 0..<3 {ghostHUD.handleRaw(followStill)};wait(0.35)
+precondition(ghostHUD.closedHUD==["context missing"] && !ghostHUD.hudSession,"a session the HUD no longer shows is closed as the mouse moves")
+precondition(ghostHUD.downs==1 && ghostHUD.ups==1,"and stop-to-click works again")
+precondition(logged.contains("HIGH_DWELL_CLICK"))
+// A HUD Agentic Mouse still shows keeps its session and names the blocker.
+let shown=make(follow:true);shown.hudSession=true;shown.context.isActive=true;shown.hudOpenedAt=ProcessInfo.processInfo.systemUptime-5
+for _ in 0..<5 {shown.handleRaw(followMove)};wait(0.35)
+precondition(shown.hudSession && shown.downs==0 && shown.clickGate=="hud open" && logged.contains("CLICK_GATE hud open"),"a shown HUD still suppresses automatic clicks, and says so")
+precondition(WandClickGate.blocker(recordingPaused:false,bottomHeld:false,buttons:0,hudSession:true,hudShown:false,scrollActive:false)=="hud not shown")
+precondition(WandClickGate.blocker(recordingPaused:false,bottomHeld:false,buttons:0,hudSession:false,hudShown:false,scrollActive:false)==nil)
+print("PASS: screenshot ownership, natural drag, cancellation and triple-click")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-screenshot-'));
  try {const out=swiftc(dir,code,[new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname]);assert.match(out,/PASS/);}finally{rmSync(dir,{recursive:true,force:true});}

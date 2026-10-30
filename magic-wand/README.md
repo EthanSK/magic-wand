@@ -42,9 +42,9 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Quick tap from closed | Switch app once |
 | Hold, turn, release | Open the HUD, point to a card and use it on release |
 | In a submenu | Move the wand to outline a card without holding Middle, then click Middle, or hold, aim and release, to use it once |
-| Adjustable card | Click it, or release on it, for dotted mode: wand movement changes only that card; click Middle to finish |
+| Adjustable card | Click it, or release on it, to select it (dots); hold Middle and move to adjust, release to stop and reset the wand; tap to deselect |
 | Hold Middle on an adjustable card | In wedge selection, hold and move up or down to change it, like scrolling; release to stop |
-| Release a hold on Switch App | Armed for the next hold: unheld movement can still pick other cards; hold Middle on Switch App, move left or right, release to switch |
+| Release a hold on Switch App | Armed for the next hold: unheld movement can still pick other cards; hold Middle on Switch App, move left or right, release to switch; in an open HUD a fresh hold on Switch App chooses at once |
 | Go out twice on a card | Outer quick actions: Undo beyond Keys, Space beyond Copy/Paste, and in VS Code Review changes and Stage files beyond the app card |
 | In VS Code review | Circle clockwise for next and anticlockwise for previous; click Middle to exit, double-click to swap Review changes and Stage files, hold to stage the selection |
 | Double tap | Close the entire HUD |
@@ -52,7 +52,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - The installed wand uses a radial HUD with Switch App in the centre. The browser demo retains its earlier grid.
 - The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.
 - Ordinary actions act once and close the HUD. After a submenu or Back opens, unheld wand movement moves the outline; click Middle to use the outlined wedge. There is no inactivity timeout. Bottom and speech remain independent.
-- Click an adjustable wheel card, or release on it, to enter dotted mode: wand movement adjusts it without holding Middle, and the next Middle click exits. Tracks keeps its click action; release on it to adjust. On the wand, Copy/Paste has no click action because Space is its own outer card. Switch App is the exception: a quick tap switches once, and releasing a hold on it arms it without pressing anything; the next hold on Switch App chooses apps by moving left or right, and its release switches.
+- Adjustable cards are held only: click or release on one to select it (dots), then hold Middle and move to adjust it; releasing stops so the wand can reset, and nothing listens while Middle is up. Values move up and down; Spaces, scrolling, tabs and history move left and right; Mission Control and similar actions act once per quick held swipe. Tracks keeps its click. Copy/Paste has no click on the wand because Space is its own outer card. Switch App: a tap switches once; in an open HUD a fresh hold on it chooses apps by moving left or right, and release switches.
 - The wand HUD keeps its twelve inner cards at the same angles. A second outer layer holds quick actions one reach further out on the same wedge: a thin Undo beyond Keys, Space beyond Copy/Paste, and, only while VS Code is frontmost, larger Review changes and Stage files beyond the app card. The wand's cell 10 reads Close and never holds Command; cell 5 reads Forward without the mice's volume chord. The physical mice are unchanged.
 - Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.
 - In VS Code, go out past the app card and tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit after at most 300 ms, double-click to switch between Review changes and Stage files, retaining the selection and including the current file without staging, or hold it for about half a second to stage the working selection and keep reviewing. Navigation stays frozen until release. The floating indicator says “(Hold to commit selection)” and names the mode a double-click will enter. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.
@@ -70,7 +70,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Hold | Over a scroll area, drag in any direction to scroll; hold still to continue and drag the other way to reverse. A confirmed draggable target drags instead. Release stops the gesture. |
 | Tap, then hold the second press | Drag with the mouse button down; release to drop |
 | Double tap | Centre the pointer on the main screen and enable mouse follow after the 300 ms triple-tap window; keep HUD and review selection unchanged |
-| Triple tap | Start screenshot selection; move to select the area, then stop to capture |
+| Triple tap | Start screenshot selection; hold Bottom and move to select the area, then release to capture |
 
 - Control V3 keeps short taps and tap-then-hold dragging unchanged. The existing 220 ms cutoff separates a tap from a hold.
 - A plain hold scrolls a scroll area or drags a confirmed draggable target. Unknown targets keep scrolling. Tap, then hold the second press to drag explicitly. The pointer stays fixed while scrolling until release.
@@ -78,7 +78,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - Release a completed scroll to enable mouse follow at the current pointer position, even if follow was off before scrolling.
 - Bottom never opens, closes or clears the Middle HUD or review selection.
 - V3 uses straight strokes in either axis, including diagonals. Holding still continues the captured speed; a new stroke can change speed or reverse without releasing. Circular page-scroll recognition is disabled; V2 remains selectable.
-- Screenshot temporarily moves the pointer even with mouse follow off. From the HUD Screenshot action, tap Bottom once to start selecting; stopping after movement ends the selection. Triple tap starts selection without another tap. Finishing or cancelling restores the previous mouse-follow choice.
+- Screenshot opens the native macOS selection and moves the pointer even with mouse follow off. From the HUD Screenshot action or a triple tap, hold Bottom and move to select the area, then release to capture. Finishing or cancelling restores the previous mouse-follow choice.
 
 **Lights**, highest priority first
 
@@ -220,7 +220,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.109 (114) · device code `wand-441472ce965b` · bridge `fd58d993` · updated 29 October 2026.
+Receiver 1.2.114 (119) · device code `wand-edceb5bfbea1` · bridge `33291b90` · updated 29 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
