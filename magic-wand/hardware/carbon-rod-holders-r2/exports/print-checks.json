@@ -1,0 +1,106 @@
+{
+  "project": "Holder-pair-layout.3mf",
+  "sha256": "4b7692f53c0a838a985d6db430ac545a0ae478379dd5e3bc862cf94cfcdb6885",
+  "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
+  "generator_sha256": "98aca3d14f052ba6abfb12a3ed72ca0830c263edf31043efc1713255448fe137",
+  "physical_print_verified": false,
+  "parts": [
+    "Key_Battery_Carrier",
+    "XIAO_Rod_Holder"
+  ],
+  "slice": {
+    "error_string": "Success.",
+    "export_time": 1604,
+    "layer_height": 0.20000000298023224,
+    "plate_index": 0,
+    "prepare_time": 66,
+    "return_code": 0,
+    "sliced_plates": [
+      {
+        "feature_type_times": {
+          "Bridge": 0.319540798664093,
+          "Brim": 21.527286529541016,
+          "Custom": 362.6464538574219,
+          "Flush": 29.0,
+          "Gap infill": 153.00836181640625,
+          "Inner wall": 205.43807983398438,
+          "Internal solid infill": 8.926484107971191,
+          "Outer wall": 491.4559326171875,
+          "Overhang wall": 78.03201293945312,
+          "Top surface": 26.499711990356445,
+          "Travel": 336.8490295410156,
+          "Undefined": 321.3179626464844
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 3.6895086765289307,
+            "total_used_g": 3.6895086765289307
+          }
+        ],
+        "generate_support_material_time": 40,
+        "id": 1,
+        "infill_time": 47,
+        "layer_filament_change": 0,
+        "main_predication": 1293.0618896484375,
+        "make_perimeters_time": 160,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 60.400001525878906,
+              "height": 14.100000381469727,
+              "width": 59.10000228881836,
+              "x": 85.0,
+              "y": 100.0,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Key_Battery_Carrier",
+            "triangle_count": 18586
+          },
+          {
+            "bbox": {
+              "depth": 28.399999618530273,
+              "height": 15.40000057220459,
+              "width": 21.200000762939453,
+              "x": 150.0,
+              "y": 100.0,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "XIAO_Rod_Holder",
+            "triangle_count": 3070
+          }
+        ],
+        "sliced_time": 1400,
+        "sliced_time_with_cache": 1094,
+        "total_predication": 1698.146728515625,
+        "triangle_count": 21656,
+        "warning_message": "It seems object Key_Battery_Carrier has floating regions. Please re-orient the object or enable support generation."
+      }
+    ],
+    "sparse_infill_density": 20.0,
+    "upward_compatible_machine": [
+      "Bambu Lab P1P 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab A1 0.4 nozzle",
+      "Bambu Lab H2D 0.4 nozzle",
+      "Bambu Lab H2D Pro 0.4 nozzle",
+      "Bambu Lab H2S 0.4 nozzle",
+      "Bambu Lab P2S 0.4 nozzle",
+      "Bambu Lab H2C 0.4 nozzle",
+      "Bambu Lab X2D 0.4 nozzle",
+      "Bambu Lab A2L 0.4 nozzle"
+    ],
+    "wall_loops": 3
+  },
+  "warnings": [
+    "It seems object Key_Battery_Carrier has floating regions. Please re-orient the object or enable support generation."
+  ],
+  "sliced_project_sha256": "3b25800c9e6e23b7c9c82f532fcd6719a5e2bbe3d3c3e323b63ee253e09e7766"
+}

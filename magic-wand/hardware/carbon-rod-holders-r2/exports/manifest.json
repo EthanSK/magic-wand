@@ -1,0 +1,104 @@
+{
+  "source_sha256": {
+    "cad.py": "88faf80920e129cdceca2c4456c4f313ac3d7b5525f777420061943c5f6f5ba9",
+    "parameters.json": "a78216383c2b8dd872f7444dcbb1d1a07ec9a663438244ebe0e086a34d9d1bad",
+    "../printed-loop-wand/shard-tube-r2/direct_switches.py": "08083422ab348a7992b68f964a3f09338bda31803be9b4c3e44f16a5fa39b4df",
+    "../carbon-rod-holders/cad.py": "f82a695bb4dec8f009afaa78b65c15309b4d55ff8b699581d99e600aabe79991"
+  },
+  "physical_fit_verified": false,
+  "scope": "CAD export; print evidence is in print-checks.json and slice-clearances.json",
+  "parts": {
+    "Key_Battery_Carrier": {
+      "bounds_mm": [
+        [
+          -29.700000762939453,
+          -12.5,
+          0.0
+        ],
+        [
+          29.399999618530273,
+          47.900001525878906,
+          14.100000381469727
+        ]
+      ],
+      "volume_mm3": 2495.286022154743,
+      "solid_PETG_g": 3.169013248136524,
+      "watertight": true,
+      "body_count": 1,
+      "stl_sha256": "cf5dda89d12c9fe9891206863955acf509a2d75e13870df9ee38e76a268d9e4a",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -29.700000762939453
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          47.900001525878906
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          14.100000381469734
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "XIAO_Rod_Holder": {
+      "bounds_mm": [
+        [
+          -10.600000381469727,
+          -5.0,
+          -5.400000095367432
+        ],
+        [
+          10.600000381469727,
+          23.399999618530273,
+          10.0
+        ]
+      ],
+      "volume_mm3": 522.0185354462278,
+      "solid_PETG_g": 0.6629635400167093,
+      "watertight": true,
+      "body_count": 1,
+      "stl_sha256": "652aa3415e4e84bef0a134e4c520bbe87843b1749d00ec8a9367a479e7b25ad3",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.600000381469727
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          23.399999618530273
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          10.000000000000004
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "revision": "carbon-rod-holders-r2",
+  "wire_envelope_measured": false
+}

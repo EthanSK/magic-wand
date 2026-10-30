@@ -1,0 +1,21 @@
+{
+  "hardware_geometry_passed": true,
+  "prepared_mesh_and_sliced_clearance_passed": true,
+  "reference_wire_bundle_measured": false,
+  "physical_fit_and_strength_verified": false,
+  "root_npm_check": {
+    "exit_code": 1,
+    "wand_tests": 227,
+    "wand_passed": 224,
+    "wand_failed": 3,
+    "failing_test_names": [
+      "physical release clears an orphan drag and stale device frames cannot relatch it",
+      "native HUD close cancels actions, rejects stale context and closes any child",
+      "screenshot mode: follow-independent aim, natural press-drag-release, triple-click start"
+    ],
+    "scope": "Failures belong to concurrently modified receiver/software files; this CAD revision does not modify them."
+  },
+  "privacy_scan": "passed",
+  "control_stones_tests": 17,
+  "control_stones_result": "passed"
+}

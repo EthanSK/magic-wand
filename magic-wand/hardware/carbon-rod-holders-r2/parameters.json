@@ -1,0 +1,87 @@
+{
+  "revision": "carbon-rod-holders-r2",
+  "units": "mm",
+  "status": "dimensional prototype; purchased parts and physical fit unconfirmed",
+  "rod": {
+    "diameter": 8.0,
+    "diametral_clearance": 0.4,
+    "wall": 1.2,
+    "inside_diameter": 7
+  },
+  "keys": {
+    "pitch": 20.0,
+    "plate_z": 12.8,
+    "reference": "Choc V1 red switches, compatible sockets and milky-white slim caps identified; opening/plate dimensions owned by Shard R2 direct_switches.py; physical fit unconfirmed"
+  },
+  "battery": {
+    "width": 22.0,
+    "length": 30.0,
+    "thickness": 6.0,
+    "clearance_per_side": 0.8,
+    "start_y": 15.0,
+    "floor_z": 11.5,
+    "reference": "PROVISIONAL packaging envelope for a small 150mAh cell; fitted cell identity, insulation and lead exit still need measurement"
+  },
+  "sensor": {
+    "board_width": 17.8,
+    "board_length": 21.0,
+    "board_thickness": 1.0,
+    "clearance_per_side": 0.3,
+    "board_z": 8.8,
+    "reference": "Seeed XIAO nRF52840 Sense nominal footprint; revision, solder and wire envelope unconfirmed",
+    "usb_direction": "negative_y_near_sleeve_opening",
+    "wire_bundle_diameter": 3.0,
+    "wire_clearance": 0.2,
+    "wire_centerline_mm": [
+      [
+        0,
+        14,
+        7.1
+      ],
+      [
+        0,
+        23.5,
+        7.1
+      ],
+      [
+        0,
+        26,
+        5.5
+      ],
+      [
+        0,
+        27.4,
+        3
+      ],
+      [
+        0,
+        26,
+        0
+      ],
+      [
+        0,
+        23.4,
+        0
+      ],
+      [
+        0,
+        -7,
+        0
+      ]
+    ]
+  },
+  "print": {
+    "material": "PETG",
+    "density_g_cm3": 1.27,
+    "layer_height": 0.2,
+    "walls": 3,
+    "infill_percent": 20,
+    "nozzle": 0.4
+  },
+  "sources": [
+    "https://wiki.seeedstudio.com/XIAO_BLE/",
+    "https://www.kailhswitch.com/Content/upload/pdf/201915927/CPG135001D01_-_Red_Linear_Choc.pdf",
+    "https://www.kailhswitch.com/Content/upload/pdf/202115927/CPG135001S30-data-sheet.pdf",
+    "https://www.align-trex.co.uk/carbon-fibre-tube-8mm-x-0-5metre-7mm-id.html"
+  ]
+}
