@@ -56,6 +56,10 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
    Commit completed changes regularly. For an authorized publication, verify the remote
    commit, CI and deployed assets rather than stopping at a local commit.
 
+## Additive workflow profiles
+
+Ethan: “we need different profiles for what kind of a computer user you are”; Sunny's additions must be “additive” and “slot in” without breaking existing functionality. Keep new user/workflow presets isolated to the selected profile and compose through existing controls. Preserve the coder profile, other profiles and physical mouse behaviour; verify those alongside the new profile before committing. Do not introduce a speculative profile architecture merely to satisfy this rule. User-requested — 2026-10-30.
+
 ## Completion
 
 Ethan: “It doesn't count as working if you're doing hacks like temporary code

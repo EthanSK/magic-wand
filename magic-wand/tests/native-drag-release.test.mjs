@@ -15,10 +15,14 @@ final class Harness {
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),dwell=WandDwellClick()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?
+ var pointerOrigin=WandPointerOrigin();func currentPointerOrigin()->CGPoint{pointerOrigin.origin(system:CGEvent(source:nil)?.location ?? .zero,now:ProcessInfo.processInfo.systemUptime)}
  var controlVersion=WandControlVersion.sustainedV3,heldScrollDiagnostics=false,buttons=0,recenterSuppressButtons=false
  var physicalTapDuration:Double?=nil;func bottomPhysicalTapDuration()->Double?{physicalTapDuration}
  var reportCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1920,height:1080)],recordingPointerPaused=false,hudSession=false,scrollActive=false
  var transitions:[Int]=[]
+ final class Ctx {var isActive=false};let context=Ctx();var middleHeld=false,hudOpenedAt=0.0,clickGate:String?
+ func closeHUD(reason:String,notifyNative:Bool=true){hudSession=false}
+ func noteClickGate(_ gate:String?){clickGate=gate}
  func transition(to next:Int,at:CGPoint){buttons=next;transitions.append(next)}
  func queue(_ s:String){}
  func scheduleDwell(){}

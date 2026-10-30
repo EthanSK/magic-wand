@@ -31,7 +31,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   var connects=NRF['#onconnect'];
   if(!connects)connects=[onConnect];else if(typeof connects==='function')connects=[connects];
   connects.forEach(function(callback){if(callback.toString().indexOf('stopScroll')>=0)callback.replaceWith(function(){
-    global.wandCircleScrolling=false;global.wandReviewTracking=false;global.wandDeskSleeping=false;global.wandAppMode=undefined;global.wandReviewFiles=false;stopScroll();scrollSuppress=false;chordFollowBefore=false;
+    global.wandCircleScrolling=false;global.wandReviewTracking=false;global.wandDeskSleeping=false;global.wandAppMode=undefined;global.wandReviewFiles=false;global.wandLeftClickHeld=false;stopScroll();scrollSuppress=false;chordFollowBefore=false;
     clearHoldClick();moveLatched=false;hudOpen=false;moveGestureMode=undefined;lastMoveTap=-100;
     stopHUD();cancelTapGesture();epoch++;connected=true;busy=false;sentButtons=0;
     if(sendTimer!==undefined){clearTimeout(sendTimer);sendTimer=undefined;}
@@ -43,36 +43,53 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   global.wandDoubleClickSeconds=0.3;
   // Ethan's independent lanes: Bottom = mouse, Middle = HUD/review, Top = speech.
   global.wandReviewTracking=false;global.wandDeskSleeping=false;
-  // Keep legacy simultaneous-button scrolling out of the independent controls.
-  checkScrollChord.replaceWith(function(){return false;});
+  checkScrollChord.replaceWith(function(bottomEdge){
+    // Only a fresh left/HUD press after centre/Bottom clicks; reverse order keeps its controls.
+    if(bottomEdge)return false;
+    // Consume the matching left release, even after centre is released first, without opening the HUD.
+    if(global.wandLeftClickHeld){global.wandLeftClickHeld=!digitalRead(HUD_PIN);return true;}
+    if(!connected||!bias||global.wandShot||hudHeld||digitalRead(MOVE_PIN)||digitalRead(HUD_PIN))return false;
+    // Reuse follow restoration to cancel the hold/drag and its release click, without changing the prior mode.
+    setMouseFollow(global.wandFollowBeforeHold);
+    global.wandLeftClickHeld=true;
+    // Ethan's physical middle+left click uses the receiver's ordinary native pair without a HUD delay.
+    // All-three sleep cannot undo this immediate click if centre+left arrive before the third press.
+    Bluetooth.println('@LEFTCLICK');return true;
+  });
   middlePress.replaceWith(function(){
     if(!connected)return;hudReportStarted=true;Bluetooth.println('@MIDDLE 1');
   });
   hudReport.replaceWith(function(){
     if(connected&&(hudOpen||global.wandReviewTracking))Bluetooth.println('@NAV '+Math.round(hudX*1000)+','+Math.round(hudY*1000));
   });
+  // The gyro runs while anything uses motion (follow, HUD or review).
+  global.wandGyro=function(){if(connected&&!global.wandDeskSleeping&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();};
+  // Closing the HUD must not forget a Middle press that is still down: its
+  // release edge must still reach the Mac (a lost release swallowed the next
+  // hold and left Middle held, 2026-10-29).
+  global.wandStopHUD=function(){var h=hudHeld,s=hudReportStarted;stopHUD();hudHeld=h;hudReportStarted=s;};
   setMouseFollow.replaceWith(function(on){
     // Release the device's native drag before forgetting its gesture state.
     // Otherwise a recording/mode change leaves sentButtons latched at one.
     if(dragging){dragging=false;states.push(0);pump();}
     cancelTapGesture();clearHoldClick();moveGestureMode=undefined;moveLatched=!!on;
     if(on&&global.wandDeskSleeping)global.setWandDeskSleeping(false);
-    if(connected&&!global.wandDeskSleeping&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();
+    wandGyro();
     updateLights();
   });
   setHUDOpen.replaceWith(function(open){
     if(hudOpen===open){updateLights();return;}hudOpen=open;
     if(open||global.wandReviewTracking){
-      if(hudTimer===undefined){hudX=0;hudY=0;hudTimer=setInterval(function(){hudReport();},30);}
-    }else stopHUD();
-    if(connected&&!global.wandDeskSleeping&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();
+      if(hudTimer===undefined){hudX=0;hudY=0;hudTimer=setInterval(hudReport,30);}
+    }else wandStopHUD();
+    wandGyro();
     updateLights();
   });
   global.setWandReviewTracking=function(active){
     if(global.wandReviewTracking===!!active)return;
     global.wandReviewTracking=!!active;
-    if(active){hudX=0;hudY=0;if(hudTimer===undefined)hudTimer=setInterval(function(){hudReport();},30);if(!global.wandDeskSleeping)wakeGyro();}
-    else if(!hudOpen){stopHUD();if(!moveLatched)sleepGyro();}
+    if(active){hudX=0;hudY=0;if(hudTimer===undefined)hudTimer=setInterval(hudReport,30);if(!global.wandDeskSleeping)wakeGyro();}
+    else if(!hudOpen){wandStopHUD();if(!moveLatched)sleepGyro();}
   };
   // Keep the actual registered sensor callback, including its saved scope.
   var mh=Puck['#onaccel'];if(typeof mh==='function')mh=[mh];
@@ -188,7 +205,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       if(hudTimer!==undefined){clearInterval(hudTimer);hudTimer=undefined;}
       global.wandPowerDownGyro();
     }else{
-      if((hudOpen||global.wandReviewTracking)&&hudTimer===undefined)hudTimer=setInterval(function(){hudReport();},30);
+      if((hudOpen||global.wandReviewTracking)&&hudTimer===undefined)hudTimer=setInterval(hudReport,30);
       if(connected&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();
     }
     updateLights();
@@ -387,7 +404,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(global.wandPowerInputGuard&&global.wandPowerInputGuard())return;
     if(connected)Bluetooth.println('@BOTTOM '+(digitalRead(MOVE_PIN)?0:1));
     if(!digitalRead(MOVE_PIN)&&digitalRead(HUD_PIN)&&!scrollSuppress)chordFollowBefore=moveLatched;
-    if(checkScrollChord()){global.wandMomentaryStarted=undefined;return;}
+    if(checkScrollChord(true)){global.wandMomentaryStarted=undefined;return;}
     moveX=moveY=fractionX=fractionY=filteredX=filteredY=0;
     global.wandSlackX=global.wandSlackY=0;
     // Discovery marker for the registered watch.

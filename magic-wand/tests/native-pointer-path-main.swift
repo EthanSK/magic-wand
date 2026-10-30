@@ -143,6 +143,67 @@ precondition(stop.settledCounts == 0,"settled tiny motion must not move the poin
 precondition(raw.clicks == 1,"quiet-motion stopping permits one click on direct counts too (\(raw.clicks))")
 print("PASS: stop-to-click fires once; tiny motion cannot keep moving the pointer")
 
+// 7b. Ethan: "another tab will slide in and my mouse will still be over the
+// close button but it won't send a click again ... 300 milliseconds". The
+// first stop-to-click is the unchanged 111 signal; while the pointer stays
+// settled and samples stay fresh it repeats every 300 ms, timed from each
+// click, with no catch-up burst. Pure state only: nothing is clicked here.
+do {
+    func settled(_ d: WandDwellClick, from start: Double) -> Double {
+        d.follow(true); var t = start
+        for _ in 0..<5 { d.move(dx: 4, dy: 0, now: t, eligible: true); t += 0.01 } // 20 counts of travel
+        return t
+    }
+    func run(_ d: WandDwellClick, until end: Double, from t0: Double, sample: (Double) -> (dx: Int, eligible: Bool)? = { _ in (0, true) }) -> [Double] {
+        var t = t0, clicks: [Double] = []
+        while t < end {
+            if let due = d.nextDue, due <= t, d.tick(now: due) { clicks.append(due) }
+            if let s = sample(t) { d.move(dx: s.dx, dy: 0, now: t, eligible: s.eligible) }
+            t += 0.0096
+        }
+        return clicks
+    }
+    let d = WandDwellClick(repeatInterval: 0.3)
+    let start = settled(d, from: 10)
+    let clicks = run(d, until: start + 1.2, from: start)
+    precondition(clicks.count == 4, "first click then repeats while settled: \(clicks.map { $0 - start })")
+    precondition(abs(clicks[0] - (start - 0.01 + 0.2)) < 0.02, "the first click keeps the 111 timing")
+    for i in 1..<clicks.count { precondition(abs(clicks[i] - clicks[i - 1] - 0.3) < 0.011, "repeats every 300 ms from the actual click") }
+
+    let moved = WandDwellClick(repeatInterval: 0.3)
+    let s2 = settled(moved, from: 20)
+    let afterMove = run(moved, until: s2 + 1.2, from: s2) { t in (t > s2 + 0.3 && t < s2 + 0.32) ? (1, true) : (0, true) }
+    precondition(afterMove.count == 1, "movement ends the repeats: \(afterMove.count)")
+
+    let hud = WandDwellClick(repeatInterval: 0.3)
+    let s3 = settled(hud, from: 30)
+    let hidden = run(hud, until: s3 + 1.2, from: s3) { t in (0, t < s3 + 0.3) }
+    precondition(hidden.count == 1, "an ineligible sample (HUD, button, scroll) ends the repeats")
+
+    let stale = WandDwellClick(repeatInterval: 0.3)
+    let s4 = settled(stale, from: 40)
+    let lost = run(stale, until: s4 + 1.2, from: s4) { t in t < s4 + 0.25 ? (0, true) : nil }
+    precondition(lost.count == 1 && !stale.repeating, "stale telemetry stops the repeats: \(lost.count)")
+
+    let late = WandDwellClick(repeatInterval: 0.3)
+    let s5 = settled(late, from: 50)
+    _ = run(late, until: s5 + 0.25, from: s5)
+    for t in stride(from: s5 + 0.25, to: s5 + 1.5, by: 0.01) { late.move(dx: 0, dy: 0, now: t, eligible: true) } // timer starved
+    precondition(late.tick(now: s5 + 1.5) && !late.tick(now: s5 + 1.5), "a late timer clicks once, never a burst")
+    precondition(abs((late.nextDue ?? 0) - (s5 + 1.8)) < 1e-9, "the next repeat is timed from the actual click")
+
+    let intent = WandDwellClick(repeatInterval: 0.3)
+    let s6 = settled(intent, from: 60)
+    _ = run(intent, until: s6 + 0.25, from: s6)
+    intent.intent(true, now: s6 + 0.26)
+    precondition(!intent.repeating, "deliberate motion intent ends the repeats")
+
+    let shot = WandDwellClick()
+    let s7 = settled(shot, from: 70)
+    precondition(run(shot, until: s7 + 1.2, from: s7).count == 1, "screenshot settling never repeats")
+    print("PASS: settled stop-to-click repeats every 300 ms and stops on movement, HUD, stale input and intent")
+}
+
 // 7a. Coherent fine aiming, then settling: the pointer visibly creeps toward
 // the target, and the old (111) tuned stop signal still clicks once after the
 // hand settles, never during the deliberate slow approach.

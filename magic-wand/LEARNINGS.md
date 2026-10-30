@@ -53,6 +53,8 @@ commands, runtime, boot image and bridge byte for byte (16 October 2026). Keep t
 `scripts/device_build.py` unchanged unless the receiver changes with them: the receiver compares
 both identifiers on every connection. `tests/manifest.test.mjs` recomputes them.
 
+The bridge statement compactor drops comment-only lines, so keep its `//` comments on separate lines: an inline comment survives joining and hides the rest of that generated statement. Exercise both readable and compacted input. The explicit centre-held/left-press click also exhausted the saved Puck image's existing size margin; joining adjacent declarations and statements with all other Terser compression and name mangling disabled kept the image inside the unchanged calibration/storage budget. Preserve callback-discovery markers and verify the complete saved startup after changing that syntax packing.
+
 ## Running Espruino code outside the Puck
 
 The bridge patches the live device with `Function.replaceWith` and finds its targets through
@@ -983,6 +985,13 @@ triggering its ordinary mouse, HUD or recording action. Consume
 that first automatic-wake press until release too, otherwise a three-button wake
 can immediately turn the wand off again. Regression checks cover both sequences.
 
+The later immediate centre-held/left-press click has an ordering limit: it can
+already have clicked before a third press completes the all-three standby chord.
+Standby still enters. Do not recommend pressing Top first as a general workaround:
+Top immediately controls dictation. Resolving that interaction needs a deliberate
+control decision; adding a chord delay requires fresh latency approval. Readable
+and compacted bridge regressions cover the ordered presses.
+
 All three LEDs blink on/off twice at 100 ms per phase before deep standby. A grip
 press cancels an automatic warning; an intentional manual power-off chord is not
 cancelled by its own held buttons. The complete saved image was verified by length
@@ -1409,6 +1418,25 @@ retaining all 228 baseline clicks in that recording. Do not generalise those cap
 to guaranteed accuracy or end-to-end latency. Keep approved tiny-motion confirmation separate
 from normal-movement smoothing, and never replay historical pointer displacement.
 
+
+## Preserve button edges independently of HUD visibility (2026-10-30)
+
+A HUD close could clear the bridge's held flag before the physical release. The release was then omitted, and the receiver could consume the next gesture's release as belonging to the prior double click, leaving a held state that also blocked pointer motion. HUD visibility must not overwrite physical-held state. Retain the pending edge on the bridge, clear stale double-click ownership at a fresh down, and cover close-while-held followed by release and a new hold in the host regression. The regression passed and the matching receiver was installed. This proves a software failure path; it does not diagnose an electrically unobserved physical press.
 ## Mechanical previews need correct depth ordering (2026-10-30)
 
 The carbon-rod accessory preview's painter-sorted triangles showed the rod through the board and hid purchased caps behind the frame, despite correct non-intersecting meshes. A per-pixel depth buffer over the actual exported triangles corrected those occlusion artefacts. Keep the preview's visibility evidence separate from the solid collision and sliced-path checks; attractive or opaque-looking reference parts do not prove fit.
+
+
+## 2026-10-30 — Stale cursor reads between receive batches moved the pointer back
+
+- Evidence: a passive posted-cursor capture showed own mouseMoved events 0.1 ms apart going 2103,746 → 2113,737 → 2134,719, then a +9,−8 move landing at 2112,738: the stale 2103,746 plus that delta. No click was involved. 51 of 222 captured own moves started from such a stale origin, all of them points the receiver had itself just posted.
+- Cause: posted CGEvents reach the cursor asynchronously, and each separate `receiveText` batch read `CGEvent(source:nil).location` afresh. The per-batch `deliveryPoint` carry did not cover consecutive batches.
+- Guard: `WandPointerOrigin` remembers the receiver's own posted points for 0.25 s. A system cursor equal to one of them is our lag, so motion continues from the latest posted point; any other location (physical mouse, warp, another app) is adopted at once. Recenter keeps its own settle. Only `currentPointerOrigin()` reads the system cursor. No delay, buffer, smoothing or replay. `tests/native-pointer-origin.test.mjs` replays the captured sequence through the real methods and fails with the old origin.
+- Separately, the 300 ms stop-to-click repeat was disabled after Ethan requested less extra pointer behaviour. The captured movement-only jump did not establish repeat clicks as its cause.
+
+## 2026-10-30 — Screenshot completion must not restore a hidden HUD
+
+- The receiver parked its HUD for native screenshot capture, but unconditionally restored `hudSession` at capture end even when Agentic Mouse had already hidden it. That invisible session suppressed stop-to-click on every subsequent frame.
+- Restore only a HUD whose native context remains active. Reuse the existing freshness check to close an expired, unheld HUD session during ordinary pointer frames as well as at the next Middle press; a missing callback must not require a special gesture to recover.
+- Keep a real visible HUD's click suppression. The inert native screenshot regression covers both callback orders, actual pointer frames recovering the stale session, and a visible HUD still blocking clicks. Reverting each fix independently makes the corresponding regression fail.
+- Log the click blocker when it changes, rather than printing every sample or attributing a missing generated click to application focus. Keep this diagnostic state distinct from physical-device acceptance.

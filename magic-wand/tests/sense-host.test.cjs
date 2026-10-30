@@ -199,3 +199,15 @@ test("a short physical release wins over an early host hold timer", () => {
   s.api.deliver(down+0.20,0,null,null);
   assert.equal(s.ctx.moveLatched,false,"the 200 ms physical tap exits mouse follow");
 });
+
+// A HUD that closes while Middle is still held (a double click's second press)
+// must still report the release edge, or the Mac swallows the next hold and
+// keeps Middle "held" (2026-10-29).
+test("closing the HUD during a held Middle still reports its release", () => {
+  const s=createSense({zero:'{"x":0,"y":0,"z":0}'});
+  s.frames(1,2); s.advance(0.15);
+  s.api.repl("setHUDOpen(true);"); s.api.repl("setHUDOpen(false);");
+  const before=s.lines.length;
+  s.frames(1,0); s.advance(0.05);
+  assert.ok(s.lines.slice(before).some(l=>l.includes("@MIDDLE 0")),"release reaches the Mac: "+s.lines.slice(before).join("|"));
+});

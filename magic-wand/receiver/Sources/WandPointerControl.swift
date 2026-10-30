@@ -263,30 +263,57 @@ final class WandPointerRouter {
 final class WandDwellClick {
     let pause:Double
     let travel:Double
+    /// Ethan (2026-10-29): after a stop-to-click, "another tab will slide in
+    /// and my mouse will still be over the close button but it won't send a
+    /// click again ... do it maybe every interval ... 300 milliseconds".
+    /// While the pointer stays settled after the original (unchanged) click,
+    /// click again every `repeatInterval`. Any movement, intent, ineligible
+    /// sample, button or mode change, or stale telemetry ends the repeats.
+    /// Nil (screenshot settling) never repeats.
+    let repeatInterval:Double?
+    /// Repeats need live samples: a gap longer than this stops them.
+    static let freshness=0.1
     private(set) var following=false
     private var x=0.0,y=0.0,lastMotion=0.0,inhibitedUntil=0.0,intentUntil=0.0
     private(set) var armed=false
-    init(pause:Double=0.2,travel:Double=12){self.pause=pause;self.travel=travel}
-    var nextDue:Double? {following && armed ? max(lastMotion+pause,inhibitedUntil,intentUntil) : nil}
-    func reset(){x=0;y=0;armed=false;lastMotion=0;intentUntil=0}
+    private(set) var repeatDue:Double?
+    private var lastSeen = -Double.infinity
+    init(pause:Double=0.2,travel:Double=12,repeatInterval:Double?=nil){self.pause=pause;self.travel=travel;self.repeatInterval=repeatInterval}
+    var nextDue:Double? {
+        guard following else{return nil}
+        if armed {return max(lastMotion+pause,inhibitedUntil,intentUntil)}
+        return repeatDue
+    }
+    var repeating:Bool {repeatDue != nil}
+    func reset(){x=0;y=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil}
     func follow(_ on:Bool){if following != on {reset()};following=on}
     func inhibit(until:Double){reset();inhibitedUntil=max(inhibitedUntil,until)}
     /// The device sees sub-pixel motion before integer cursor counts exist.
     /// A bounded heartbeat lease prevents both premature clicks and stuck state.
     func intent(_ moving:Bool,now:Double){
         guard following else{return}
-        if moving {intentUntil=now+0.6;lastMotion=now}
+        if moving {intentUntil=now+0.6;lastMotion=now;repeatDue=nil}
         else if intentUntil>0 {intentUntil=0;lastMotion=now}
     }
     func move(dx:Int,dy:Int,now:Double,eligible:Bool){
         guard following,eligible,now>=inhibitedUntil else{reset();return}
+        lastSeen=now
         guard dx != 0 || dy != 0 else{return}
+        repeatDue=nil
         x+=Double(dx);y+=Double(dy);lastMotion=now
         if hypot(x,y)>=travel {armed=true}
     }
     func tick(now:Double)->Bool {
         guard let due=nextDue,now>=due else{return false}
-        reset();return true
+        if !armed {
+            // A repeat: only on a fresh, still settled pointer, never a burst.
+            guard now-lastSeen<=Self.freshness, let interval=repeatInterval else{reset();return false}
+            repeatDue=now+interval
+            return true
+        }
+        reset()
+        if let interval=repeatInterval {repeatDue=now+interval}
+        return true
     }
 }
 
@@ -705,27 +732,66 @@ final class WandMotionFilter {
 }
 
 
-/// Ethan: "I just double clicked. It came to the center and then it jumped
-/// back" (2026-10-29). A warp bypasses macOS's input queue: events posted
-/// before it can still land after it, and the system cursor location can lag
-/// it, so the next movement started from the old position. After a centre,
-/// pointer movement chains from the centre until the system cursor reports
-/// where we last put it (or a short settle passes). Nothing is replayed.
-struct WandRecenterOrigin {
+/// Where the wand's next pointer event starts.
+///
+/// Posted CGEvents reach the cursor asynchronously, so `CGEvent(source:nil)`
+/// can still report a point the wand already moved away from. Separate rapid
+/// `receiveText` batches each read it afresh: on 2026-10-30 a batch 0.1 ms
+/// after two moves read the pre-move origin (2103,746) again and its +9,-8
+/// move landed at 2112,738, 22 px back ("it's jumping back to its original
+/// position"). The receiver remembers the points it just posted (and the
+/// origin they started from). When the system reports one of those, that is
+/// only our own lag: continue from the latest posted point. Anything else (a
+/// physical mouse, a warp, another app) is adopted at once. After a recenter
+/// warp, the centre wins until macOS reports it or `settle` passes
+/// (2026-10-29: "It came to the center and then it jumped back").
+/// Nothing is delayed, buffered or replayed; it only chooses the origin.
+struct WandPointerOrigin {
+    /// Own posted points older than this are forgotten; the system is then trusted.
+    static let horizon=0.25
     static let settle=0.5
-    static let tolerance:CGFloat=2
-    private(set) var point:CGPoint?
-    private var until=0.0
-    mutating func begin(at center:CGPoint,now:Double){point=center;until=now+Self.settle}
-    /// The point the next movement starts from.
+    static let tolerance:CGFloat=1
+    static let maximumTrail=128
+    private var trail:[(point:CGPoint,time:Double)]=[]
+    private var forcedUntil = -Double.infinity
+    /// The last point the wand posted, while it is still remembered.
+    var latest:CGPoint? {trail.last?.point}
+    private static func near(_ a:CGPoint,_ b:CGPoint)->Bool {abs(a.x-b.x)<=tolerance && abs(a.y-b.y)<=tolerance}
+    /// A recenter warp: the centre is the origin until macOS reports it.
+    mutating func begin(at center:CGPoint,now:Double){trail=[(center,now)];forcedUntil=now+Self.settle}
+    /// The point the next pointer event starts from.
     mutating func origin(system:CGPoint,now:Double)->CGPoint {
-        guard let expected=point else{return system}
-        if now>until || hypot(system.x-expected.x,system.y-expected.y)<=Self.tolerance {point=nil;return system}
-        return expected
+        if now<=forcedUntil, let centre=trail.last {
+            if Self.near(system,centre.point) {forcedUntil = -.infinity}
+            return centre.point
+        }
+        trail.removeAll {now-$0.time>Self.horizon}
+        guard let latest=trail.last, trail.contains(where:{Self.near($0.point,system)}) else {
+            trail.removeAll()
+            return system
+        }
+        return latest.point
     }
-    /// Where our own posted movement left the pointer.
-    mutating func moved(to next:CGPoint){if point != nil {point=next}}
-    mutating func cancel(){point=nil}
+    /// One posted move, from where it started to where it put the pointer.
+    mutating func moved(from start:CGPoint,to end:CGPoint,now:Double) {
+        if !(trail.last.map {Self.near($0.point,start)} ?? false) {trail.append((start,now))}
+        trail.append((end,now))
+        if trail.count>Self.maximumTrail {trail.removeFirst(trail.count-Self.maximumTrail)}
+    }
+    mutating func cancel(){trail.removeAll();forcedUntil = -.infinity}
+}
+
+/// The single eligibility rule for stop-to-click, named so a no-click report
+/// says which state blocks it. Nil means clicks may arm.
+enum WandClickGate {
+    static func blocker(recordingPaused:Bool,bottomHeld:Bool,buttons:Int,hudSession:Bool,hudShown:Bool,scrollActive:Bool)->String? {
+        if recordingPaused {return "recording"}
+        if bottomHeld {return "bottom held"}
+        if buttons != 0 {return "button down"}
+        if hudSession {return hudShown ? "hud open" : "hud not shown"}
+        if scrollActive {return "scroll"}
+        return nil
+    }
 }
 
 /// Short second release recenters; a held second press remains a real drag.
@@ -797,27 +863,35 @@ struct WandTripleClick {
 /// armed, can never end it. A latched drag ends exactly once: by `settle`, by a
 /// fresh Bottom press, or by any cancellation (`end`). Physical release of the
 /// latching tap never ends it.
+/// Ethan (2026-10-30): "triple click enters like normal screenshot mode and
+/// it just like enters native macOS screenshot mode and then I just click and
+/// hold the mouse button to drag and drop the area naturally". While macOS's
+/// own selector is up, the wand aims the pointer (even with mouse follow off)
+/// and Bottom is the mouse button: down presses, held motion drags, up lets go
+/// and macOS captures. Nothing is pressed, finished or repeated automatically.
 final class WandScreenshotGesture {
     enum Phase {case idle,pending,aiming,dragging,done}
-    enum Bottom {case pass,consumed,anchor,finish}
+    enum Bottom {case pass,consumed,press,release}
     /// Agentic Mouse must report its native selection this soon after a
     /// triple-click request; the wand's motion telemetry must keep arriving.
     static let startSeconds=2.0,telemetrySeconds=0.8
     private(set) var phase:Phase = .idle
     private(set) var shortcut=false
-    private(set) var anchorRequested=false
-    /// The physical press that entered, latched or ended screenshot mode. Its
-    /// release, even after the mode has ended, is never an ordinary Bottom edge.
+    /// Bottom is physically down inside screenshot mode, waiting for the
+    /// selector before it presses.
+    private(set) var pressHeld=false
+    /// The press that entered screenshot mode (the triple-click's third, or
+    /// one held as the selection started). Its release is never an ordinary
+    /// Bottom edge, even after the mode has ended.
     private(set) var consumeRelease=false
     private(set) var since=0.0,lastTelemetry=0.0
-    let settle=WandDwellClick()
     var ownsPointer:Bool {phase == .pending || phase == .aiming || phase == .dragging}
     var dragging:Bool {phase == .dragging}
-    /// Triple-click: the native selection was requested and its drag will
-    /// anchor at the pointer as soon as macOS shows the selector.
+    /// Triple-click: the native selection was requested. The third press is
+    /// consumed; a fresh press drags.
     func requestShortcut(now:Double)->Bool {
         guard phase == .idle else{return false}
-        phase = .pending;shortcut=true;anchorRequested=true;consumeRelease=true;since=now;lastTelemetry=now
+        phase = .pending;shortcut=true;pressHeld=false;consumeRelease=true;since=now;lastTelemetry=now
         return true
     }
     /// Agentic Mouse reports an active native selection. Its repeated heartbeat
@@ -826,7 +900,7 @@ final class WandScreenshotGesture {
     func contextActive(now:Double,pressed:Bool)->Bool {
         switch phase {
         case .idle:
-            phase = .aiming;shortcut=false;anchorRequested=false;consumeRelease=consumeRelease || pressed
+            phase = .aiming;shortcut=false;pressHeld=false;consumeRelease=consumeRelease || pressed
         case .pending:
             phase = .aiming
         default: return false
@@ -842,25 +916,27 @@ final class WandScreenshotGesture {
     }
     /// The release of a consumed triple-click press that could not start.
     func holdRelease(){consumeRelease=true}
-    /// One Bottom edge. While aiming, a press asks for the anchor; while
-    /// dragging, a fresh press finishes now. Releases are always consumed.
+    /// One Bottom edge. Down asks to press (once the selector shows); up
+    /// lets go of a drag. Everything else in screenshot mode is consumed.
     func bottom(down:Bool)->Bottom {
         guard ownsPointer else {
             if !down && consumeRelease {consumeRelease=false;return .consumed}
             if down {consumeRelease=false}
             return .pass
         }
-        guard down else{consumeRelease=false;return .consumed}
-        defer{consumeRelease=true}
-        if phase == .dragging {return consumeRelease ? .consumed : .finish}
-        if anchorRequested {return .consumed}
-        anchorRequested=true;return .anchor
+        if down {
+            consumeRelease=false
+            guard phase != .dragging else{return .consumed}
+            pressHeld=true;return .press
+        }
+        if consumeRelease {consumeRelease=false;pressHeld=false;return .consumed}
+        pressHeld=false
+        return phase == .dragging ? .release : .consumed
     }
-    /// macOS shows the selector: the receiver presses at the shown pointer.
+    /// macOS shows the selector and Bottom is down: the receiver presses at the shown pointer.
     func latch(now:Double)->Bool {
-        guard phase == .aiming,anchorRequested else{return false}
-        phase = .dragging;anchorRequested=false;since=now
-        settle.follow(false);settle.follow(true)
+        guard phase == .aiming,pressHeld else{return false}
+        phase = .dragging;since=now
         return true
     }
     /// Return the pointer. True when a native button-down must be lifted.
@@ -868,8 +944,10 @@ final class WandScreenshotGesture {
     @discardableResult
     func end(contextActive:Bool,forgetPress:Bool=false)->Bool {
         let wasDragging=phase == .dragging
+        // A press still down when the mode ends: its release stays consumed.
+        if wasDragging || pressHeld {consumeRelease=true}
         phase = contextActive && phase != .idle ? .done : .idle
-        anchorRequested=false;shortcut=false;settle.follow(false)
+        shortcut=false;pressHeld=false
         if forgetPress {consumeRelease=false}
         return wasDragging
     }

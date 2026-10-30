@@ -89,7 +89,7 @@ function clearHoldClick(){if(holdClickTimer!==undefined)clearTimeout(holdClickTi
 function setHUDOpen(open){
   if(hudOpen===open)return;
   hudOpen=open;
-  if(open){hudX=0;hudY=0;if(hudTimer!==undefined)clearInterval(hudTimer);hudTimer=setInterval(function(){hudReport();},30);}
+  if(open){hudX=0;hudY=0;if(hudTimer!==undefined)clearInterval(hudTimer);hudTimer=setInterval(hudReport,30);}
   else stopHUD();
   if(connected&&(scrollHeld||moveLatched||hudOpen))wakeGyro();else if(bias)sleepGyro();
   updateLights();
