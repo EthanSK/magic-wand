@@ -7,19 +7,20 @@
     "headline": "The age of AI doesn’t need a keyboard.",
     "detail": "The wand is my step toward that. It’s not a mouse replacement: lounge back with the wand and ask Computer Use for most things, ideally by talking through Hello Chat, then reach for your mouse and Agentic Mouse when you need precision. Keep the keyboard for text that has to be typed exactly, which I find is rare."
   },
-  "updated": "2026-10-29",
+  "updated": "2026-10-30",
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.114",
-    "receiverBuild": "119",
+    "receiver": "1.2.115",
+    "receiverBuild": "120",
     "deviceRuntime": "wand-edceb5bfbea1",
-    "bridgeRevision": "33291b9057d5e42cb7e8b4f958c2b760750a6265b2e58e924e828b54e49dd5b2",
-    "agenticMouse": "1.0.301",
-    "agenticMouseBuild": "307",
+    "bridgeRevision": "2d89cef8e6a8e9a19b7139186167be675aaed7a3410267c04dc7196c4c9bb2d9",
+    "agenticMouse": "1.0.303",
+    "agenticMouseBuild": "309",
     "persistentImage": "full-20261025a"
   },
   "status": [
+    "Installed: receiver 1.2.115 build 120 and Agentic Mouse 1.0.303 build 309. Ordinary HUD actions keep the HUD open, so you can select as many times as you want; a double click closes it, and every open page’s centre says “Double click to close”. The wand home ring is grouped: Keys, the app card and Utility at the top, with Back beside Forward. Space moves beyond Enter, New Codex chat sits beyond Utility, and Zoom is a third layer beyond it. Adjustment arrows follow each card’s real direction, including left and right for Spaces. The centre-and-left click added in build 119 is removed. Native and receiver checks pass; physical acceptance is pending.",
     "Installed receiver 1.2.109 build 114 removes circular continuation from Switch App: held app choosing now follows normal horizontal movement and reverses directly. Double-click centring resets the pointer lane and synchronises the centre with queued native input; its focused regression checks pass, while physical centring acceptance remains pending. The receiver reconnected ready over Bluetooth, with settings, calibration, saved Sense firmware and Agent Flow preserved. The larger outer labels are prepared separately in the native HUD update.",
     "Installed receiver 1.2.108 build 113 and Agentic Mouse 1.0.299 build 305 restore the old click signal, the speed-based aiming curve and coherent tiny movement above about 1 deg/s. Only tiny slow movement uses the approved up-to-60 ms confirmation; normal pointing retains roughly 8 ms smoothing. Short Bottom taps use their physical duration. The wand HUD has related outer actions and the held Switch App exception. Local tests and installed signature, version, settings and process checks passed. The saved Sense firmware and current gain are preserved. The native app's launch safety check has cleared. The receiver is ready over Bluetooth, live HUD and held Switch App lifecycle reports were observed, and Ethan reports the installed wand is working well. This is general physical acceptance, not a claim that every gesture has been tested.",
     "Installed receiver 1.2.106 build 111 restores mouse follow after a completed scroll is released, even if it was off before. Current pointing, scroll detection, button-release safety and menu fixes remain. Full local checks pass; the receiver reconnected ready over Bluetooth with settings preserved. Real user scroll-release events were observed enabling mouse follow again.",
@@ -27,11 +28,11 @@
     "Installed Agentic Mouse 1.0.298 build 304 passed the full native checks, but Ethan subsequently reported intermittent HUD opening and mouse-exit failures and changed Switch App behaviour. Current diagnostics have been captured; the cause and fixes are not yet verified. A ready process or socket alone does not establish working button input.",
     "Installed: Review changes and Stage files switch within the same pending Better Git selection and include the current file. No files are staged by switching. Better Git 1.2.135 is released and active; receiver 1.2.96 is installed with settings preserved. Receiver and Mini checks pass. The device remained asleep during installation; physical gesture acceptance remains pending.",
     "Installed: double-click Middle toggles Review changes and Stage files without staging. The floating indicator names the other mode. A single click cancels and exits after at most 300 ms; holding for half a second still stages the selection and stays in that mode. Pointer movement is unchanged. Receiver, native interaction and timer checks pass; physical button acceptance remains pending.",
-    "Installed: triple Bottom starts screenshot selection; the HUD Screenshot action uses one Bottom tap, movement and the existing stop-to-click detector to finish. Double-tap centering waits up to 300 ms to distinguish a third tap. Pointer movement is not buffered. Recording red takes priority over mouse blue, and loading blinks orange. Complete saved bytes and clean startup with calibration passed; physical screenshot acceptance remains pending.",
+    "Installed: triple Bottom starts screenshot selection; the HUD Screenshot action uses one Bottom tap, movement and the existing stop-to-click detector to finish. Double-tap centering waits up to 300 ms to distinguish a third tap. Pointer movement is not buffered. Recording red takes priority over mouse blue, and loading blinks orange. Complete saved bytes and clean startup with calibration passed; physical screenshot acceptance remains pending. Superseded: hold Bottom to select the area and release to capture.",
     "Installed: each circular Wand HUD wedge has its own masked glass backing, clearer text and a gentle selection lift. Gaps and space around the wheel stay transparent. The armed dotted outline moves; Reduce Motion keeps it static. Native rendering and interaction checks passed; physical Copy/Paste acceptance remains pending.",
     "Installed: the Review changes and Stage files indicators say “Hold to commit selection”. Selection is the current term for the pending group; holding stages it without making a Git commit. Native tests and both rendered indicators passed.",
     "Installed: all three grip buttons turn the wand off; any single grip button wakes manual or automatic sleep. The wake press is consumed until every button is released. Five-minute automatic deep sleep and the two-blink cue are unchanged. Saved bytes and clean startup verified; physical any-button wake acceptance pending.",
-    "Installed: shared click and hold cues distinguish a card action from held wheel or wand adjustments. Copy/Paste names Space explicitly. Native checks and rendered layout inspection passed; physical gesture acceptance is pending.",
+    "Installed: shared click and hold cues distinguish a card action from held wheel or wand adjustments. Copy/Paste names Space explicitly. Native checks and rendered layout inspection passed; physical gesture acceptance is pending. Superseded on the wand: Space is its own outer card beyond Enter.",
     "Installed: held Switch App adjustment shares the normal HIGH mouse sensitivity calculation, including fine movement and orientation correction. Other HUD controls keep their existing angular input. Native and receiver checks pass; physical feel is awaiting acceptance.",
     "Installed: the complete saved program includes the corrected Bottom press, calibration restore and button-wake sleep. Clean startup was verified before reconnecting the receiver, with no code re-upload. A full five-minute sleep/button-wake cycle was observed on 24 October; physical battery-removal remains unverified.",
     "Installed: radial text is larger, with gentle card-aligned tilt only when it earns more readable space. The visible wand HUD stays anchored while Agent Flow changes its panel; reopening refreshes recorder clearance. Native tests and rendered layout checks passed; physical acceptance is pending.",
@@ -44,7 +45,7 @@
     "Review navigation uses a redesigned spatial corner detector with learned noise tolerance. Reversible quarters, rough squares, slow motion and simulated device traces pass automated checks; physical acceptance is pending.",
     "A minute of confirmed desk rest turns the lights off and keeps low-rate pickup sensing. Pickup or a button restores the light. Rest never stops dictation or dismisses the open HUD.",
     "Receiver reconnection now rejects echoed upload requests and failed-runtime ready markers. Updating, disconnected and calibration bridge states use orange; recording alone uses red.",
-    "Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending.",
+    "Wand-only VS Code shortcuts expose change review and file staging beside Switch App. Automated checks cover their input; physical acceptance is pending. Superseded: they sit beyond the app card in the outer layer.",
     "HIGH stop-to-click uses a 200 ms rest interval. Automated timing checks passed; physical acceptance is pending.",
     "Wand Receiver has a menu-bar Options menu. Optional first-flick scrolling in V1 passes automated checks; physical gesture acceptance is pending.",
     "Shared orientation correction and full Middle double-tap dismissal pass automated checks; physical acceptance is pending.",
@@ -94,6 +95,10 @@
         [
           "Tap again",
           "Stop and paste"
+        ],
+        [
+          "Double tap while recording or transcribing",
+          "Won’t paste: copy the text without pasting it"
         ]
       ],
       "notes": [
@@ -119,11 +124,11 @@
         ],
         [
           "Hold, turn, release",
-          "Open the HUD, point to a card and use it on release"
+          "Open the HUD, point to a card and use it on release; the HUD stays open"
         ],
         [
-          "In a submenu",
-          "Move the wand to outline a card without holding Middle, then click Middle, or hold, aim and release, to use it once"
+          "In an open HUD or submenu",
+          "Move the wand to outline a card without holding Middle, then click Middle, or hold, aim and release, to use it. Select as many times as you want"
         ],
         [
           "Adjustable card",
@@ -131,7 +136,7 @@
         ],
         [
           "Hold Middle on an adjustable card",
-          "In wedge selection, hold and move up or down to change it, like scrolling; release to stop"
+          "In wedge selection, hold and move the way its arrows point, like scrolling: values up or down; Spaces, scrolling, tabs and history left or right. Release to stop"
         ],
         [
           "Release a hold on Switch App",
@@ -139,23 +144,27 @@
         ],
         [
           "Go out twice on a card",
-          "Outer quick actions: Undo beyond Keys, Space beyond Copy/Paste, and in VS Code Review changes and Stage files beyond the app card"
+          "Outer quick actions: Undo beyond Keys, Space beyond Enter, New Codex chat beyond Utility, and in VS Code Review changes and Stage files beyond the app card"
+        ],
+        [
+          "Go out a third time on Utility",
+          "Zoom, beyond New Codex chat"
         ],
         [
           "In VS Code review",
           "Circle clockwise for next and anticlockwise for previous; click Middle to exit, double-click to swap Review changes and Stage files, hold to stage the selection"
         ],
         [
-          "Double tap",
+          "Double click",
           "Close the entire HUD"
         ]
       ],
       "notes": [
         "The installed wand uses a radial HUD with Switch App in the centre. The browser demo retains its earlier grid.",
         "The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.",
-        "Ordinary actions act once and close the HUD. After a submenu or Back opens, unheld wand movement moves the outline; click Middle to use the outlined wedge. There is no inactivity timeout. Bottom and speech remain independent.",
-        "Adjustable cards are held only: click or release on one to select it (dots), then hold Middle and move to adjust it; releasing stops so the wand can reset, and nothing listens while Middle is up. Values move up and down; Spaces, scrolling, tabs and history move left and right; Mission Control and similar actions act once per quick held swipe. Tracks keeps its click. Copy/Paste has no click on the wand because Space is its own outer card. Switch App: a tap switches once; in an open HUD a fresh hold on it chooses apps by moving left or right, and release switches.",
-        "The wand HUD keeps its twelve inner cards at the same angles. A second outer layer holds quick actions one reach further out on the same wedge: a thin Undo beyond Keys, Space beyond Copy/Paste, and, only while VS Code is frontmost, larger Review changes and Stage files beyond the app card. The wand's cell 10 reads Close and never holds Command; cell 5 reads Forward without the mice's volume chord. The physical mice are unchanged.",
+        "Ordinary actions act once and keep the HUD open on the same card, so you can select as many times as you want. Only a double click, Close or locking the Mac closes it; every open page’s centre says “Double click to close”. Exceptions: Screenshot parks the HUD for its crosshair; a quick tap from closed on Switch App and the held Switch App chooser switch and close; Review changes and Stage files hide the HUD for review. Unheld wand movement moves the outline; click Middle to use the outlined wedge. There is no inactivity timeout. Bottom and speech remain independent.",
+        "Adjustable cards are held only: click or release on one to select it (dots), then hold Middle and move to adjust it; releasing stops so the wand can reset, and nothing listens while Middle is up. Each card’s arrows show its direction: values move up and down; Spaces, Horizontal Scroll, Magnet, tabs, chat and cursor history and Tracks move left and right; Mission Control and similar actions act once per quick held swipe. Tracks keeps its click. Copy/Paste has no click on the wand; Space is its own outer card beyond Enter. Switch App: a tap switches once; in an open HUD a fresh hold on it chooses apps by moving left or right, and release switches.",
+        "The wand home ring is grouped, clockwise from 12: the app card, Utility, Play/Pause, YouTube, Horizontal Scroll, Forward, Back, Enter, Copy/Paste, Screenshot, Close and Keys. These positions stay the same in every app. Keys puts ← ↑ ↓ → across the top; Utility mirrors home, with Zoom beside Brightness. A second outer layer holds quick actions one reach further out on the same wedge: a thin Undo beyond Keys, Space beyond Enter, New Codex chat beyond Utility, and, only while VS Code is frontmost, larger Review changes and Stage files beyond the app card. Zoom is a third layer beyond New Codex chat. On the wand, cell 10 reads Close and never holds Command, cell 5 reads Forward without the mice’s volume chord, and Codex Pin/Unpin has no Hold 2 cue. The physical mice are unchanged.",
         "Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.",
         "In VS Code, go out past the app card and tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit after at most 300 ms, double-click to switch between Review changes and Stage files, retaining the selection and including the current file without staging, or hold it for about half a second to stage the working selection and keep reviewing. Navigation stays frozen until release. The floating indicator says “(Hold to commit selection)” and names the mode a double-click will enter. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.",
         "Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.",

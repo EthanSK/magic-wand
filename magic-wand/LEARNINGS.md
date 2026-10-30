@@ -53,7 +53,7 @@ commands, runtime, boot image and bridge byte for byte (16 October 2026). Keep t
 `scripts/device_build.py` unchanged unless the receiver changes with them: the receiver compares
 both identifiers on every connection. `tests/manifest.test.mjs` recomputes them.
 
-The bridge statement compactor drops comment-only lines, so keep its `//` comments on separate lines: an inline comment survives joining and hides the rest of that generated statement. Exercise both readable and compacted input. The explicit centre-held/left-press click also exhausted the saved Puck image's existing size margin; joining adjacent declarations and statements with all other Terser compression and name mangling disabled kept the image inside the unchanged calibration/storage budget. Preserve callback-discovery markers and verify the complete saved startup after changing that syntax packing.
+The bridge statement compactor drops comment-only lines, so keep its `//` comments on separate lines: an inline comment survives joining and hides the rest of that generated statement. Exercise both readable and compacted input. The short-lived centre-held/left-press click (removed 2026-10-30) exhausted the saved Puck image's existing size margin; joining adjacent declarations and statements with all other Terser compression and name mangling disabled kept the image inside the unchanged calibration/storage budget. Preserve callback-discovery markers and verify the complete saved startup after changing that syntax packing.
 
 ## Running Espruino code outside the Puck
 
@@ -985,12 +985,10 @@ triggering its ordinary mouse, HUD or recording action. Consume
 that first automatic-wake press until release too, otherwise a three-button wake
 can immediately turn the wand off again. Regression checks cover both sequences.
 
-The later immediate centre-held/left-press click has an ordering limit: it can
-already have clicked before a third press completes the all-three standby chord.
-Standby still enters. Do not recommend pressing Top first as a general workaround:
-Top immediately controls dictation. Resolving that interaction needs a deliberate
-control decision; adding a chord delay requires fresh latency approval. Readable
-and compacted bridge regressions cover the ordered presses.
+A centre-held/left-press click chord (2026-10-30) was removed the same day.
+Ethan: “I don't want to do that because it's too hard.” It also clicked before a
+third press could complete this all-three standby chord. Do not reintroduce a
+two-button click chord; the wanted manual click is a double HUD (left/Middle) click.
 
 All three LEDs blink on/off twice at 100 ms per phase before deep standby. A grip
 press cancels an automatic warning; an intentional manual power-off chord is not

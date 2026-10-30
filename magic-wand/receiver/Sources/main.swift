@@ -809,9 +809,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 let value=String(line[marker.upperBound...])
                 if actionPause.admit(.middle,down:value.trimmingCharacters(in:.whitespaces)=="1") {handleMiddle(value)}
             }
-            if line=="@LEFTCLICK" || line==">@LEFTCLICK" {
-                if actionPause.admit(.middle,down:true) {handleLeftClickChord()}
-            }
             if let marker=line.range(of:"@NAV "), !paused {handleNavigation(String(line[marker.upperBound...]))}
             if let marker = line.range(of: "@SCROLL "), !paused { handleScroll(String(line[marker.upperBound...])) }
             if let marker = line.range(of: "@MOVE "), !paused { handleMove(String(line[marker.upperBound...])) }
@@ -1039,18 +1036,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             pointerInHUD=false;middleOperating=false;stopHUDWatchdog();queue("setHUDOpen(false);")
         } // Bottom changes pointing only; it never closes the Middle-owned HUD/review.
         log("POINTER_MODE_ENTERED")
-    }
-    /// Click once when centre/Bottom is held and the physical left/HUD button is pressed.
-    func handleLeftClickChord() {
-        guard ready,!restoring,!actionPause.paused,!scrollActive,!screenshot.ownsPointer,pointerRouter.bottomHeld,AXIsProcessTrusted() else{return}
-        finishBottomHold(now:ProcessInfo.processInfo.systemUptime,released:false) // This explicit click ends an in-progress scroll or drag; it is not a completed scroll that enables follow.
-        performPointer(pointerRouter.interrupt())
-        recenterGesture.cancel();tripleClick.cancel();clickFollowChoice=nil
-        pendingRecenter?.invalidate();pendingRecenter=nil // A click chord cannot also finish a pending centre double/triple tap.
-        dwell.reset();scheduleDwell()
-        let point=deliveryPoint ?? currentPointerOrigin()
-        transition(to:1,at:point);transition(to:0,at:point)
-        log("MANUAL_LEFT_CLICK")
     }
     func handleMiddle(_ payload:String){
         guard !restoring,!scrollActive,AXIsProcessTrusted() else{return}

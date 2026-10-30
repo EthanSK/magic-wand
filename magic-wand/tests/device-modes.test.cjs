@@ -200,8 +200,8 @@ for (const bridge of ["readable", "fragments"]) {
 
     prepareIdle();w.edge("D1",0);w.advance(.02);w.edge("D2",0);w.advance(.1);
     assert(!ctx.scrollHeld,"Bottom and Middle remain independent");
-    assert(lines.includes("@LEFTCLICK"),"centre held then left is the explicit click");
-    assert(!lines.some(l=>l.startsWith("@MIDDLE ")),"the click chord never opens the HUD");
+    assert(lines.some(l=>l==="@MIDDLE 1"),"Middle still reaches its owner");
+    assert(!lines.includes("@LEFTCLICK"),"Ethan rejected the Bottom+Middle click chord");
     w.edge("D1",1);w.edge("D2",1);
 
   });

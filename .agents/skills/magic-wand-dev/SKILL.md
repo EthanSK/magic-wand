@@ -26,6 +26,8 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
 2. Use [BUILDING.md](../../../magic-wand/BUILDING.md) for the real build and connection architecture.
    This public checkout publishes sources; do not connect to, flash or restart hardware here.
    Authorized hardware changes run from the established private installation workflow.
+For wand HUD controls, navigation, presentation, wording or lifecycle, read [the HUD interaction contract](references/hud-interaction.md) before editing. It preserves the detailed project rules previously in AGENTS.md.
+
 3. Keep one Bluetooth owner: the installed receiver. Prefer diagnostics through its existing
    connection; opening a second connection can make a working device appear disconnected.
    Prepare and check updates before the short swap, preserving calibration and rollback.
