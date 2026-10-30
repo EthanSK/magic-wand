@@ -90,6 +90,10 @@ test("V3 held-scroll speed range matches the native controller", () => {
   assert.equal(number(/var highSpeedFrom=([\d.]+)/, sustained, "high-speed start"), t.highSpeedFromDegreesPerSecond);
   assert.equal(number(/highSpeedFull=([\d.]+)/, sustained, "high-speed full"), t.highSpeedFullDegreesPerSecond);
   assert.equal(number(/var maxRate=([\d.]+)/, sustained, "maximum"), t.maxLinesPerSecond);
+  assert.equal(number(/var horizontalGain=([\d.]+)/, sustained, "horizontal gain"), t.horizontalGain);
+  assert.equal(number(/var horizontalGainFrom=([\d.]+)/, sustained, "horizontal gain start"), t.horizontalGainFromDegreesPerSecond);
+  assert.equal(number(/horizontalGainFull=([\d.]+)/, sustained, "horizontal gain full"), t.horizontalGainFullDegreesPerSecond);
+  assert.equal(number(/var horizontalGainLevelSlope=([\d.]+)/, sustained, "horizontal full-gain slope"), t.horizontalGainLevelSlope);
   assert.equal(number(/init\(linesPerDegree:Double=([\d.]+)/, sustained, "gain"), t.linesPerDegree);
   assert.equal(number(/wheel1:Int32\(clamping:Int64\(y\)\*(\d+)\)/, swift, "points per line"), t.pointsPerLine);
 });

@@ -4,6 +4,11 @@ import Foundation
 // actual WandHeldScroll controller. The hand motion is synthetic: these checks are
 // deterministic regression evidence, not physical acceptance of the wand's feel.
 
+// These profiles check the shared stroke classifier and curve identically on both
+// axes. The horizontal-only gain scales only a horizontal output's magnitude; its
+// own profiles, against this same simulator, are in native-trackpad-scroll.test.mjs.
+simulationTuning.horizontalGain=1
+
 var failures:[String]=[]
 func check(_ ok:Bool,_ name:String,_ detail:@autoclosure()->String=""){if !ok {failures.append(name+(detail().isEmpty ? "" : ": "+detail()))}}
 

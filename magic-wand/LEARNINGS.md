@@ -1531,3 +1531,20 @@ ordinary scrolling. Ethan reported that the normal feel had changed and the
 original curve was restored. Compare the full previous speed mapping, including
 the old cap plateau, when adding a stronger-stroke extension. Retain physical
 feel acceptance separately from the mathematical and motion-profile checks.
+
+## 2026-10-30 — Horizontal native swipes need their own measured gain
+
+Ethan saw the native Back/Forward edge indicator start without completing the
+gesture. The held-scroll path used the vertical speed for horizontal output;
+the independent chord already had a horizontal multiplier. A horizontal-only
+gain now increases deliberate held strokes while fine strokes retain the old
+mapping. Fade the gain out before the diagonal boundary so crossing that
+boundary does not create a speed discontinuity. Vertical and diagonal output
+must match the old path sample for sample, including the high-speed extension.
+
+Test the held controller and native transport together: first output timing,
+both directions, reversal, release, lost telemetry, precise event phases and
+no added buffering or replay. A larger synthetic event distance does not prove
+that a receiving app accepts a history swipe. The app still owns that choice;
+real horizontally scrolling content also receives the larger horizontal gain.
+Keep physical Back/Forward acceptance separate from these checks.

@@ -1091,6 +1091,21 @@ final class WandSustainedScroll {
         var highSpeedFrom=120.0,highSpeedFull=240.0
         /// Wheel lines per second (ten points each): 6,000 points per second.
         var maxRate=600.0
+        /// Ethan, 2026-10-30, on the native Back/Forward edge peek: "it's just
+        /// not sensitive enough when doing those trackpad swipes". A stroke that
+        /// scrolls only horizontally gets up to this multiple of the vertical
+        /// rate above, never beyond maxRate. Vertical and diagonal strokes keep
+        /// that curve exactly. It scales velocity only: same timing, no buffer,
+        /// no catch-up. The receiving app still decides scroll or history.
+        var horizontalGain=2.5
+        /// Degrees per second: the extra horizontal rate eases in (smoothstep)
+        /// from none at horizontalGainFrom to all of it at horizontalGainFull, so
+        /// fine horizontal strokes keep the ordinary mapping.
+        var horizontalGainFrom=8.0,horizontalGainFull=30.0
+        /// tan(20 degrees): a stroke this close to level gets all of it. It fades
+        /// to none at the axisSnap boundary, where diagonal scrolling begins, so
+        /// the rate is continuous across that boundary.
+        var horizontalGainLevelSlope=0.364
     }
     /// Counts for the opt-in per-hold diagnostic line. No positions or coordinates.
     struct Summary:Equatable {
@@ -1180,8 +1195,25 @@ final class WandSustainedScroll {
         let excess=min(1,(peak-tuning.highSpeedFrom)/(tuning.highSpeedFull-tuning.highSpeedFrom))
         return ordinary+(tuning.maxRate-ordinary)*excess*excess
     }
+    /// Wheel lines per second for a stroke whose output is horizontal only.
+    /// `slope` is |vertical/horizontal| of the stroke itself. Never below the
+    /// vertical rate for the same speed and never above maxRate; continuous and
+    /// non-decreasing in speed, so it changes no timing and adds no catch-up.
+    func horizontalLinesPerSecond(peak:Double,slope:Double=0)->Double {
+        let ordinary=linesPerSecond(peak:peak)
+        guard peak.isFinite,!slope.isNaN,tuning.horizontalGain>1 else{return ordinary}
+        let span=tuning.horizontalGainFull-tuning.horizontalGainFrom
+        let rise=span>0 ? min(1,max(0,(peak-tuning.horizontalGainFrom)/span)) : (peak>=tuning.horizontalGainFull ? 1:0)
+        let edge=tuning.axisSnap-tuning.horizontalGainLevelSlope
+        let level=edge>0 ? min(1,max(0,(tuning.axisSnap-abs(slope))/edge)) : (abs(slope)<tuning.axisSnap ? 1:0)
+        let gain=1+(tuning.horizontalGain-1)*rise*rise*(3-2*rise)*level
+        return max(ordinary,min(max(ordinary,tuning.maxRate),ordinary*gain))
+    }
     private func apply(){
-        let rate=linesPerSecond(peak:peak)
+        // Only an output that is purely horizontal is boosted; a diagonal or
+        // vertical output keeps the shared curve.
+        let horizontal=outputY==0 && outputX != 0
+        let rate=horizontal ? horizontalLinesPerSecond(peak:peak,slope:directionX != 0 ? abs(directionY/directionX) : .infinity) : linesPerSecond(peak:peak)
         let magnitude=settling ? max(base,rate) : rate
         velocityX=outputX*magnitude;velocityY=outputY*magnitude
         summary.peakRate=max(summary.peakRate,magnitude)
@@ -1278,9 +1310,9 @@ final class WandHeldScroll {
     // Reuse the existing mouse button tap/hold cutoff; do not add a movement buffer.
     let holdSeconds:Double
     private let linesPerDegree:Double
-    init(linesPerDegree:Double=1.6,holdSeconds:Double=0.22){
+    init(linesPerDegree:Double=1.6,holdSeconds:Double=0.22,sustainedTuning:WandSustainedScroll.Tuning=WandSustainedScroll.Tuning()){
         self.holdSeconds=holdSeconds;self.linesPerDegree=linesPerDegree
-        self.sustained=WandSustainedScroll(linesPerDegree:linesPerDegree)
+        self.sustained=WandSustainedScroll(linesPerDegree:linesPerDegree,tuning:sustainedTuning)
         var tuning=WandCircularScroll.Tuning()
         // Angular degrees, before sensitivity. Recognise the bend while the
         // wand still travels in its original vertical direction.
