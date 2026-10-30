@@ -188,6 +188,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed receiver 1.2.126 build 131 adds a high-speed-only V3 scroll extension. The entire original speed curve is retained through 120 angular units/s, including its 120-line/s plateau; only stronger strokes rise smoothly toward 600 lines/s. Every tested ordinary sample and tick matches the original, and strong-stroke, direction, release and lost-telemetry checks pass. Installed binary, resources and connection were verified; fresh physical feel remains for confirmation.
 - Installed receiver 1.2.125 build 130 restores the original V3 scroll-speed curve after physical feedback that 129 altered the normal feel. The boost began before the old cap and could affect ordinary strokes. Follow-state restoration, native scrolling and all pointer settings remain. A revised high-speed-only extension is still being prepared; it is not installed.
 - Installed receiver 1.2.124 build 129: ordinary V3 scrolling retains its fine and normal speed and increases the strong-stroke maximum from 120 to 600 lines per second. Motion-profile checks cover ordinary speed, stronger strokes, reversals, released buttons and lost telemetry. Installed binary, signature, resources and Bluetooth readiness were verified. Pointer tuning and click behavior are unchanged; physical scrolling acceptance remains pending.
 - Installed receiver 1.2.123 build 128: a completed page scroll restores the mouse-follow choice from before scrolling. Off stays off; on stays on. Held-scroll and chord release checks passed. Installed source and signature, Bluetooth readiness, calibration, settings and Agent Flow were checked; physical follow-state acceptance remains pending.
@@ -234,7 +235,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.125 (130) · device code `wand-edceb5bfbea1` · bridge `8d1f5b77` · updated 30 October 2026.
+Receiver 1.2.126 (131) · device code `wand-edceb5bfbea1` · bridge `8d1f5b77` · updated 30 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

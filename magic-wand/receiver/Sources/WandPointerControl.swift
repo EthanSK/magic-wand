@@ -1072,7 +1072,20 @@ final class WandSustainedScroll {
         var forwardCosine=0.7
         /// Receiver seconds without readings that end the current measurement.
         var gapSeconds=0.25
-        var maxRate=120.0
+        /// The original speed mapping, kept exactly: lines per second are
+        /// min(ordinaryMaxRate, stroke speed x lines per degree), so 1.6 lines per
+        /// degree up to 75 degrees per second, then a flat 120 lines per second.
+        var ordinaryMaxRate=120.0
+        /// Ethan, 2026-10-30: "the highest isn't fast enough ... it should be
+        /// like much faster if you want to do like a huge scroll", then "I just
+        /// wanted to add like extra sensitivity at the faster speeds. Did you
+        /// have to change like the normal behavior?" Only strokes faster than
+        /// highSpeedFrom (degrees per second) exceed the original mapping. The
+        /// extra rate starts flat and grows with the square of the excess,
+        /// reaching maxRate at highSpeedFull.
+        var highSpeedFrom=120.0,highSpeedFull=240.0
+        /// Wheel lines per second (ten points each): 6,000 points per second.
+        var maxRate=600.0
     }
     /// Counts for the opt-in per-hold diagnostic line. No positions or coordinates.
     struct Summary:Equatable {
@@ -1154,8 +1167,16 @@ final class WandSustainedScroll {
         stroking=false;endedAt=clock;endedTravel=max(0,strokeX*directionX+strokeY*directionY)
         if settling {settling=false;apply()}
     }
+    /// Wheel lines per second for a stroke's representative speed. Continuous
+    /// and rising; it sets velocity only, so it adds no delay or catch-up.
+    func linesPerSecond(peak:Double)->Double {
+        let ordinary=min(tuning.ordinaryMaxRate,max(0,peak)*linesPerDegree)
+        guard peak>tuning.highSpeedFrom,tuning.highSpeedFull>tuning.highSpeedFrom,tuning.maxRate>ordinary else{return ordinary}
+        let excess=min(1,(peak-tuning.highSpeedFrom)/(tuning.highSpeedFull-tuning.highSpeedFrom))
+        return ordinary+(tuning.maxRate-ordinary)*excess*excess
+    }
     private func apply(){
-        let rate=min(tuning.maxRate,peak*linesPerDegree)
+        let rate=linesPerSecond(peak:peak)
         let magnitude=settling ? max(base,rate) : rate
         velocityX=outputX*magnitude;velocityY=outputY*magnitude
         summary.peakRate=max(summary.peakRate,magnitude)
