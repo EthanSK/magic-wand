@@ -188,6 +188,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed receiver 1.2.122 build 127: held and chord scrolling send native precise two-axis scroll gestures. Applications own scroll-container and edge-navigation decisions. Release, pause, disconnect, drag takeover and shutdown end or cancel the gesture; a delayed short tap cancels it, and a two-button chord retains ownership until its own release marker. Native event and lifecycle checks pass. Existing sustained-hold behavior and pointer tuning are unchanged. Chrome and Codex history acceptance still needs a physical test.
+- Installed Agentic Mouse 1.0.305 build 311: New Codex chat replaces Screenshot at the same home-ring position, with no duplicate outer card. Native screenshot triple-click and the physical mouse layouts remain unchanged. Zoom keeps its existing outer position. Signed installed source, settings and rendered layout checks passed; physical activation remains to be tried.
 - Installed receiver 1.2.120 build 125: review circles retain their learned size across pauses and about-faces, so a tiny wobble cannot become a new reverse gesture. A near-complete smaller circle can establish a smaller size; the first loop after a dramatic size reduction may only relearn it. Private slow recordings and synthetic pause, noise, reversal and size-change checks pass. Installed executable, source, resources and settings were verified. The receiver reconnected ready over Bluetooth after waking; fresh physical acceptance remains pending. Pointer smoothing, quiet stopping, gain, clicks and saved firmware are unchanged.
 - Installed Agentic Mouse 1.0.304 build 310 uses wider two-line review pills, a centred dot between hints, and the labels Hold to stage selection and Double-click for Stage files mode. Rendered review, stage, creating-chat and repeat-hint variants pass; fresh physical acceptance remains separate. Installed native signature, source and settings checks passed; 1,190 native tests passed with four optional tests skipped.
 - Installed receiver 1.2.119 build 124: review circles retain slow motion above the calibrated sensor-noise floor rather than the larger HUD speed floor. Direction and startup-noise checks prevent false turns. Closed-HUD double-click right-click remains installed from build 123. Pointer quiet stopping, smoothing, sensitivity and physical mouse behavior are unchanged. Fresh physical acceptance is pending. All 229 Wand tests and 17 Control Stones checks passed; the installed receiver is ready over Bluetooth with settings and calibration preserved.
@@ -229,7 +231,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.120 (125) · device code `wand-edceb5bfbea1` · bridge `8d1f5b77` · updated 30 October 2026.
+Receiver 1.2.122 (127) · device code `wand-edceb5bfbea1` · bridge `8d1f5b77` · updated 30 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

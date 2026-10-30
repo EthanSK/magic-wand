@@ -96,7 +96,11 @@ test("native wheel axes retain the same fixed scroll target", {skip:process.plat
  const dir=mkdtempSync(join(tmpdir(),"wand-wheel.noindex-"));
  try {
   const source=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.url),'utf8');
-  const start=source.indexOf('    static func wheelEvents('),end=source.indexOf('    func postScroll(',start);
+  const start=source.indexOf('    static func wheelEvents(');
+  assert(start>=0);
+  let end=source.indexOf('{',start)+1,depth=1;
+  while(depth && end<source.length) {if(source[end]==='{') depth++;if(source[end]==='}') depth--;end++;}
+  assert.equal(depth,0,'complete wheel method');
   writeFileSync(join(dir,'main.swift'),`import Foundation
 import ApplicationServices
 enum Wheel {

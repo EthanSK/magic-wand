@@ -479,3 +479,39 @@ Better Git 1.2.136 background-hold protocol. Ordinary input activation and
 physical mouse gesture acceptance remain unverified; these automated checks
 do not establish either. This is an
 incremental archive, not a complete distribution.
+
+
+## New Codex chat in the wand home ring
+
+Agentic Mouse 1.0.305 (311) replaces the wand home Screenshot card with
+New Codex chat at the same ring position and removes the duplicate outer card.
+Zoom retains its third-layer geometry and reach. Physical mouse layouts and
+the receiver's native screenshot triple-click are unchanged. The full source
+is published in [the Agentic Mouse repository](https://github.com/EthanSK/agentic-mouse/commit/d3ad5e5).
+
+The installed Developer ID signature, source digest and settings matched the
+reviewed candidate. The current native suite passed 1,190 cases with four
+optional cases skipped, and the home and Zoom renders were inspected. These
+checks do not establish physical chat creation or screenshot acceptance.
+
+
+## Native page-scroll gestures
+
+Wand Receiver 1.2.122 (127) sends precise pixel scroll events for the held-centre
+and two-button page-scroll paths, with native begin/change/end/cancel phases.
+It preserves the existing scroll controller and leaves semantic HUD wheel
+commands and physical mice unchanged. The receiving application decides how
+to consume scrolling and edge navigation; the receiver does not guess a
+horizontal container or send a Back shortcut.
+
+[CoreGraphics exposes the scroll phase field](https://developer.apple.com/documentation/coregraphics/cgeventfield/scrollwheeleventscrollphase).
+[Chromium's native history handler](https://chromium.googlesource.com/chromium/src/+/main/chrome/browser/renderer_host/chrome_render_widget_host_view_mac_history_swiper.mm)
+uses phases and the renderer's scroll-consumption result. Local event tests
+and process-targeted WindowServer delivery preserve the phases and precise
+deltas. These checks do not establish Chrome or Codex history acceptance.
+
+Release, lost telemetry, pause, native drag takeover and shutdown close each
+open gesture. A delayed physical tap cancels rather than accepting a swipe,
+and Bottom release leaves a two-button chord open for its own ordered end
+marker. The installed binary, settings and resources match the reviewed build;
+the board firmware was not flashed.

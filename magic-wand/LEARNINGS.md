@@ -1480,3 +1480,28 @@ Private slow-use replay reproduced the installed classifier's emitted step signs
 Keeping the maximum size forever also blocks a genuinely smaller next circle. A bounded spatial sample can reduce that retained size only when it describes a near-complete, coherent smaller circle above the learned noise floor. In the drastic large-to-small regression, the first loop can establish the smaller size; subsequent loops must count in the correct direction. Clear that sample on accepted steps and mode resets. Do not add pointer buffering, replay, gain changes or a global linear-motion filter for this review-only problem.
 
 Use private labelled raw recordings for observed regressions and publish only synthetic analogues. The pause-wobble fixture covers false reversals, a deliberate opposite circle and small noise loops; the resize fixture covers both directions and multiple radii. Replay agreement is not physical acceptance, and geometry-derived labels are inference rather than a human label for every packet.
+
+
+## 2026-10-30 — Native scrolling needs a complete gesture lifecycle
+
+Discrete line-wheel events do not carry the scroll phases Chromium uses for
+trackpad-style edge navigation. Ordinary held and chord page scrolling now use
+precise pixel events with CoreGraphics began/changed/ended/cancelled phases;
+semantic HUD wheel commands and physical mice keep their existing paths.
+Local AppKit conversion verifies both axes, a fixed gesture anchor and no
+synthetic momentum. A process-targeted WindowServer delivery probe also preserved
+the precise flag and all four phases at its own windowless AppKit receiver. This does not prove a particular app accepts synthetic
+history swipes; that still needs a physical application check.
+
+Cancel before a native drag, action pause, lost telemetry, reset or shutdown.
+A physically short tap whose release arrives late must cancel any open native
+scroll instead of ending it as an accepted history gesture. The new lifecycle
+regression failed before that correction and passed afterward. Keep pointer
+filters, sensitivity, click timing and the existing hold controller separate
+from the native event transport. Log one begin and one end or cancellation,
+never every movement.
+
+The device reports `@BOTTOM 0` before its two-button chord's `@SCROLL E`.
+When no held-scroll session is active, Bottom release must leave the chord's
+native gesture alone until that end marker. The ordered regression cancels
+prematurely before the ownership guard and ends normally after it.
