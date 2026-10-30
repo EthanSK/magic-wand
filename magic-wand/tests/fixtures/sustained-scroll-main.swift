@@ -202,15 +202,75 @@ do {
 let quiet=WandHeldScroll();quiet.begin(now:0,sustain:true)
 for i in 1...100 {let t=Double(i)*0.01;quiet.confirmHeld(now:t);_=quiet.sample(x:0.5,y:-0.5,dt:0.01,now:t);check(quiet.continuation(now:t)==(0,0),"quiet noise")}
 let drag=WandHeldScroll();drag.begin(now:0,scrollable:false,sustain:true);precondition(drag.startDrag(now:0.3));check(drag.continuation(now:0.3)==(0,0),"explicit drag never scrolls")
+// 22. Ethan's faster-speed extension (2026-10-30), corrected after "Did you have to change
+//     like the normal behavior?": every speed up to 120 degrees per second keeps the
+//     original min(120, 1.6 x speed) mapping, including its 120 lines/s plateau from 75.
+func original(_ peak:Double)->Double {min(120,max(0,peak)*gain)}
+let curve=WandSustainedScroll()
+for peak in stride(from:0.0,through:120.0,by:0.25) {
+    check(curve.linesPerSecond(peak:peak)==original(peak),"ordinary stroke \(f(peak)) deg/s keeps the original speed","\(curve.linesPerSecond(peak:peak)) vs \(original(peak))")
+}
+check(curve.linesPerSecond(peak:120.5)-120<0.01 && curve.linesPerSecond(peak:125)-120<1,"the faster range starts flat from the original plateau","\(curve.linesPerSecond(peak:120.5)), \(curve.linesPerSecond(peak:125))")
+var previous=0.0
+for peak in stride(from:0.0,through:1000.0,by:0.25) {
+    let rate=curve.linesPerSecond(peak:peak)
+    check(rate>=previous && rate-previous<=2+1e-9 && rate<=600,"speed curve rises continuously (at most 8 lines/s per deg/s) to its bound","\(f(rate)) at \(f(peak))");previous=rate
+}
+for (peak,expected) in [(150.0,150.0),(180.0,240.0),(210.0,390.0),(240.0,600.0),(1e6,600.0)] {
+    check(abs(curve.linesPerSecond(peak:peak)-expected)<1e-9,"strong stroke \(f(peak)) deg/s","\(f(curve.linesPerSecond(peak:peak))) not \(f(expected))")
+}
+// 23. The whole controller is identical to the original tuning for ordinary hands:
+//     same velocity after every reading and the same wheel lines at every tick,
+//     across slow, normal and plateau-speed strokes, restrokes and reversals.
+var originalTuning=WandSustainedScroll.Tuning();originalTuning.highSpeedFrom = .infinity;originalTuning.maxRate=120
+var compared=0
+for (index,parts) in [[stroke(1.5,0.4)],[stroke(5,0.3)],[stroke(9,0.25)],[stroke(14,0.3)],[stroke(17,0.3)],
+                      [stroke(6,0.25),.rest(0.8),stroke(-8,0.3)],[stroke(3,0.4),.rest(0.6),stroke(16,0.3)],
+                      [stroke(16,0.3),.rest(0.6),stroke(4,0.4)],[.stroke(p:10,s:10,seconds:0.3)]].enumerated() {
+    let hand=Hand(parts:[.rest(0.2)]+parts+[.rest(1.0)])
+    let now=WandSustainedScroll(),before=WandSustainedScroll(tuning:originalTuning)
+    var rng=Rng(state:UInt64(index+11)),time=0.0
+    while time<hand.duration {
+        let dt=0.0088+0.0017*rng.unit(),intent=hand.intent(at:time)
+        let x=intent.s+2*sin(2*Double.pi*9*time)+0.5*rng.gauss(),y=intent.p+2*sin(2*Double.pi*10.5*time+1)+0.5*rng.gauss()
+        now.sample(x:x,y:y,dt:dt,now:time);before.sample(x:x,y:y,dt:dt,now:time)
+        check(now.velocityX==before.velocityX && now.velocityY==before.velocityY,"ordinary hand \(index) matches the original speed","\(f(now.velocityY)) vs \(f(before.velocityY)) at \(f(time))")
+        let a=now.tick(now:time),b=before.tick(now:time)
+        check(a==b,"ordinary hand \(index) posts the original lines");compared+=1
+        time+=dt
+    }
+}
+check(compared>1000,"enough ordinary readings compared","\(compared)")
+// 24. Through the held controller: a stroke near the old plateau stays at 120 lines/s;
+//     only a much stronger flick goes faster, bounded, and still reverses and stops.
+each {axis,sign,seed,label in
+    let trace=simulate(Hand(parts:[.rest(0.35),stroke(16,0.3),.rest(2.0)]),axis:axis,sign:sign,seed:seed)
+    let plateau=sign*trace.rate(0.9,2.6).p
+    check(plateau>=105 && plateau<=121,"plateau stroke ("+label+") keeps the original 120 lines/s","\(f(plateau))")
+}
 let fast=WandSustainedScroll()
 for _ in 0..<6 {fast.sample(x:2000,y:0,dt:0.01)}
-check(fast.velocityX==120 && fast.velocityY==0,"fast strokes cap at 120 lines per second","\(fast.velocityX)")
+check(fast.velocityX==600 && fast.velocityY==0,"fast strokes cap at 600 lines per second","\(fast.velocityX)")
 // A late timer pays at most 50 ms at the cap, plus the new direction's first line.
-check(fast.tick(now:100).x<=7,"late timer cannot replay a backlog")
+check(fast.tick(now:100).x<=31,"late timer cannot replay a backlog")
+var strongRates:[Double]=[]
+each {axis,sign,seed,label in
+    let hand=Hand(parts:[.rest(0.35),stroke(30,0.2),.rest(1.2),stroke(-5,0.3),.rest(1.2)])
+    let trace=simulate(hand,axis:axis,sign:sign,seed:seed,release:3.2)
+    let name="strong flick ("+label+")"
+    let big=sign*trace.rate(0.75,1.5).p;strongRates.append(big)
+    check(big>=2*120 && big<=600,name+" scrolls well beyond the original 120, within the bound","\(f(big)) lines/s")
+    check(trace.lines(0.75,1.5).s==0,name+" single axis")
+    let reverse=trace.first({p,_ in Double(p)*sign<0},after:1.75) ?? 99
+    check(reverse<=1.75+0.25,name+" still reverses promptly","\(f((reverse-1.75)*1000)) ms")
+    expectSustained(trace,name+" ordinary reverse speed",from:2.3,to:3.15,representative(5,0.3),sign:-sign)
+    check(trace.dropClick && trace.afterRelease==(0,0),name+" release stops at once")
+}
+print("strong flick lines/s: \(f(strongRates.min() ?? 0))...\(f(strongRates.max() ?? 0))")
 precondition(WandControlVersion.read(3) == .sustainedV3)
 
 if failures.isEmpty {
-    print("PASS: V3 motion profiles - stroke then still, slow onset, press and drag, recoil, reversal after a pause and while moving, faster and slower restrokes, axis change, sloppy and diagonal strokes, still and shaky holds, taps, stalls, lost samples, batching, follow-through, knocks, uneven intervals, release, fresh holds, telemetry loss")
+    print("PASS: V3 motion profiles - stroke then still, slow onset, press and drag, recoil, reversal after a pause and while moving, faster and slower restrokes, axis change, sloppy and diagonal strokes, still and shaky holds, taps, stalls, lost samples, batching, follow-through, knocks, uneven intervals, release, fresh holds, telemetry loss, original ordinary speeds, faster strong strokes")
 } else {
     var groups:[String:Int]=[:]
     for failure in failures {
