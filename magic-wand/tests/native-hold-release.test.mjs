@@ -18,6 +18,7 @@ final class CGEvent {var location=CGPoint.zero;init?(source:Int?){ };func post(t
 final class Rest {var activated=false,stopped=0;func pointerActivated(){activated=true};func pointerStopped(){activated=false;stopped+=1}}
 final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
+ var scrollFollowBefore=false
  let context=SwitchAppContext()
  var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
@@ -46,7 +47,7 @@ final class Harness {
  func finishNativeScroll(cancelled:Bool){}
  func postNativeScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
- ${['beginBottomHold','enableMouseAfterScroll','deviceFollowChanged','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
+ ${['beginBottomHold','restoreMouseAfterScroll','deviceFollowChanged','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
 }
 let h=Harness();precondition(h.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 let now=ProcessInfo.processInfo.systemUptime
@@ -103,34 +104,32 @@ precondition(!h.heldScroll.active,"late telemetry must not restart a cancelled h
 h.heldScroll.begin(now:30);h.scrollActive=true
 h.finishBottomHold(now:31)
 precondition(!h.heldScroll.active,"release teardown is independent of other mode state")
-// A released page scroll returns to mouse follow even if it started off.
-// Ethan reversed the brief follow-off rule ("undo the thing where after
-// scrolling it disables the mouse"). Real release orders: the raw button-up
-// sample or the @BOTTOM 0 edge may arrive first, and both always arrive.
+// A released scroll restores its pre-scroll mouse-follow choice, for both
+// raw-up-first and edge-first delivery. Neither duplicate release can flip it.
 let config=[0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]
 for prior in [false,true] {
  for rawFirst in [false,true] {
   let exit=Harness();precondition(exit.motionFilter.configure(config));exit.controlVersion = .sustainedV3
   exit.dwell.follow(prior);exit.restDetection.activated=prior;logged=[]
-  exit.heldScroll.begin(now:now-1);_=exit.pointerRouter.bottom(down:true)
+  exit.beginBottomHold(now:now-1);_=exit.pointerRouter.bottom(down:true)
   if rawFirst {exit.handleRaw("10000,0,2680,0")}                      // raw up, then the edge
   else {exit.finishBottomHold(now:now);_=exit.pointerRouter.bottom(down:false)} // edge, then raw up
   precondition(exit.frames==0,"the release sample itself never moves or clicks")
   exit.finishBottomHold(now:now+0.01);exit.handleRaw("10000,0,2680,0") // the other report of the same release
   exit.reconcileBottomHold(down:false,now:now+0.02,reason:"sensor button state")
-  let on=exit.commands.filter{$0=="global.wandPointerPauseUntil=0;setMouseFollow(true);"}
-  precondition(on.count==1 && !exit.commands.contains{$0.contains("setMouseFollow(false)")},"one follow-on per release (prior \(prior), raw first \(rawFirst)): \(exit.commands)")
-  precondition(exit.dwell.following && exit.restDetection.activated,"a completed scroll enables mouse regardless of prior follow")
-  precondition(logged.filter{$0=="SCROLL_FINISHED_MOUSE_ON"}.count==1,"duplicate release reports enable once")
+  let expected="global.wandPointerPauseUntil=0;setMouseFollow("+(prior ? "true":"false")+");"
+  precondition(exit.commands.filter{$0==expected}.count==1,"restore the original follow choice once")
+  precondition(exit.dwell.following==prior && exit.restDetection.activated==prior,"scroll preserves the prior follow choice")
+  precondition(logged.filter{$0==(prior ? "SCROLL_FINISHED_MOUSE_ON":"SCROLL_FINISHED_MOUSE_OFF")}.count==1,"duplicate release restores once")
   // Normal pointing resumes on the next following frame, with no suppression wait.
   let frames=exit.frames
   exit.handleRaw("10000,2680,0,0")
   precondition(exit.frames==frames+1,"the next following frame moves the pointer at once")
   exit.handleRaw("10000,2680,0,4");precondition(exit.frames==frames+1,"HUD-only frames never move the pointer")
  }
- let chord=Harness();chord.dwell.follow(prior);chord.scrollActive=true
+ let chord=Harness();chord.dwell.follow(prior);chord.scrollFollowBefore=prior;chord.scrollActive=true
  chord.finishScroll(released:true)
- precondition(chord.dwell.following && !chord.scrollActive && chord.commands==["global.wandPointerPauseUntil=0;setMouseFollow(true);"],"chord release enables mouse")
+ precondition(chord.dwell.following==prior && !chord.scrollActive && chord.commands==["global.wandPointerPauseUntil=0;setMouseFollow("+(prior ? "true":"false")+");"],"chord release restores prior follow")
  let watchdog=Harness();watchdog.dwell.follow(prior);watchdog.scrollActive=true
  watchdog.finishScroll()
  precondition(watchdog.dwell.following==prior && watchdog.commands.isEmpty,"a chord watchdog stop is not a release")
@@ -141,8 +140,8 @@ for prior in [false,true] {
  // it never turns mouse follow back on, so Bottom can exit mouse mode.
  let late=Harness();late.dwell.follow(prior);late.physicalTapDuration=0.207;late.heldScroll.begin(now:100);late.finishBottomHold(now:100.4)
  precondition(late.dwell.following==prior && !late.commands.contains{$0.contains("setMouseFollow")},"a physically short tap is never a completed scroll")
- let longHold=Harness();longHold.dwell.follow(prior);longHold.physicalTapDuration=0.4;longHold.heldScroll.begin(now:100);longHold.finishBottomHold(now:100.4)
- precondition(longHold.dwell.following && longHold.commands.contains{$0.contains("setMouseFollow(true)")},"a physically long hold still completes its scroll")
+ let longHold=Harness();longHold.dwell.follow(prior);longHold.physicalTapDuration=0.4;longHold.beginBottomHold(now:100);longHold.finishBottomHold(now:100.4)
+ precondition(longHold.dwell.following==prior && longHold.commands.contains{$0.contains("setMouseFollow("+(prior ? "true":"false")+")")},"a physically long hold restores prior follow")
  let drag=Harness();drag.dwell.follow(prior);drag.heldScroll.begin(now:100,scrollable:false);_=drag.heldScroll.startDrag(now:100.3);drag.finishBottomHold(now:101)
  precondition(drag.dwell.following==prior && !drag.commands.contains{$0.contains("setMouseFollow")},"native dragging is not a scroll gesture")
  let lost=Harness();lost.dwell.follow(prior);lost.heldScroll.begin(now:100);lost.reconcileBottomHold(down:false,now:101,reason:"timeout",released:false)

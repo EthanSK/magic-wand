@@ -21,9 +21,10 @@ var logged:[String]=[]
 func log(_ v:Any...) {logged.append(v.map{"\\($0)"}.joined(separator:" "))}
 enum Tap {case cghidEventTap}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?){ };func post(tap:Tap){}}
-final class Rest {var activated=false;func pointerActivated(){activated=true}}
+final class Rest {var activated=false;func pointerActivated(){activated=true};func pointerStopped(){activated=false}}
 final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
+ var scrollFollowBefore=false
  let context=SwitchAppContext()
  var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
@@ -60,7 +61,7 @@ final class Harness {
  func finishNativeScroll(cancelled:Bool){}
  func postNativeScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
- ${['beginBottomHold','probeHoldTarget','enableMouseAfterScroll','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
+ ${['beginBottomHold','probeHoldTarget','restoreMouseAfterScroll','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
 }
 func wait(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 func press(_ roles:[String],delay:Double=0)->Harness {

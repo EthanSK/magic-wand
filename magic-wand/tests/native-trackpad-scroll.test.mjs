@@ -55,12 +55,14 @@ test('every held and chord scroll ends, cancels or yields its native gesture exa
  // stop (update or SIGTERM) closes any open gesture.
  assert.ok(/startDrag\(now:now\) \{finishNativeScroll\(cancelled:true\);transition\(to:1,/.test(source),'drag start cancels the open scroll gesture first');
  assert.ok(/finishNativeScroll\(cancelled:true\)/.test(method('stop')),'receiver stop closes an open gesture');
- assert.ok(/^[^\n]*\n\s*finishNativeScroll\(cancelled:true\)/.test(method('beginBottomHold')),'a new hold first cancels any stale gesture');
+ const beginHold=method('beginBottomHold');
+ assert(beginHold.indexOf('finishNativeScroll(cancelled:true)')>=0 && beginHold.indexOf('finishNativeScroll(cancelled:true)')<beginHold.indexOf('heldScroll.begin('),'a new hold cancels a stale native gesture before beginning');
  const code=`import Cocoa
 func log(_ v:Any...) {}
 ${source.slice(start,end)}
 struct PauseStub {var paused=false}
 final class Harness {
+ var scrollFollowBefore=false
  var posted:[CGEvent]=[]
  var nativeScroll=WandNativeScrollGesture(),actionPause=PauseStub()
  var scrollActive=false,scrollAnchor:CGPoint?,circleAnchor:CGPoint?,scrollWatchdog:Timer?,scrollPostedX=0,scrollPostedY=0
@@ -74,7 +76,7 @@ final class Harness {
  func transition(to next:Int,at:CGPoint){buttons=next}
  func queue(_ s:String){}
  func setCircleLight(_ on:Bool){}
- func enableMouseAfterScroll(){mouseOn+=1}
+ func restoreMouseAfterScroll(){mouseOn+=1}
  func resumeHUDNavigation(){hudResumed+=1}
  ${methods}
  func phases()->[NSEvent.Phase]{posted.map{NSEvent(cgEvent:$0)!.phase}}
