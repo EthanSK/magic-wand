@@ -410,7 +410,8 @@ async function main() {
     requestStep();
   }
 
-  // Stage: the mouse is the wand (left = Bottom, right = Middle, wheel button = Top); touch drags turn it.
+  // Stage: the mouse is the wand (left = mouse button, right = HUD button, wheel button = speech button); touch drags turn it.
+  // Legacy button ids: mouse, HUD and speech buttons.
   const mouseButtons = [["bottom", 1], ["middle", 2], ["top", 4]];
   const touches = new Map();
   function syncMouseButtons(mask) {

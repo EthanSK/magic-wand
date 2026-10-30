@@ -17,12 +17,13 @@
       "question": "How do I move the pointer and click?",
       "questions": [
         "How do I use the wand as a mouse?",
+        "What does the mouse button do?",
         "How do I click?",
         "How do I turn on mouse follow?",
         "How do I stop the pointer following the wand?"
       ],
-      "keywords": ["pointer", "cursor", "mouse", "click", "follow", "high", "dwell", "stop"],
-      "summary": "Tap Bottom to point and settle to click, without pressing at the exact moment. Need time to decide? Tap Bottom again to pause without a click, then resume when ready. Keep moving naturally between actions: aim, settle, click, move again.",
+      "keywords": ["pointer", "cursor", "mouse", "mouse button", "click", "follow", "high", "dwell", "stop"],
+      "summary": "Tap the mouse button to point and settle to click, without pressing at the exact moment. Need time to decide? Tap it again to pause without a click, then resume when ready. Keep moving naturally between actions: aim, settle, click, move again.",
       "buttons": ["bottom"],
       "base": "dialog",
       "initial": {"pointer": [0.42, 0.42]},
@@ -134,7 +135,7 @@
         "How do I hold the mouse button down?"
       ],
       "keywords": ["drag", "drop", "select", "text", "window", "move", "file", "tap then hold"],
-      "summary": "Tap Bottom, then hold the second press to drag; release to drop.",
+      "summary": "Tap the mouse button, then hold the second press to drag; release to drop.",
       "buttons": ["bottom"],
       "base": "files",
       "initial": {"pointer": [0.27, 0.47]},
@@ -259,7 +260,7 @@
         "Where did my pointer go?"
       ],
       "keywords": ["recenter", "recentre", "centre", "center", "lost", "find", "pointer", "cursor", "double tap"],
-      "summary": "Double tap Bottom to centre the pointer with mouse follow on.",
+      "summary": "Double tap the mouse button to centre the pointer with mouse follow on.",
       "buttons": ["bottom"],
       "base": "desktop",
       "initial": {"pointer": [0.965, 0.09], "badge": "Review changes"},
@@ -351,7 +352,7 @@
         "How do I scroll with circles?"
       ],
       "keywords": ["scroll", "vertical", "up", "down", "page", "circle", "circles", "hold", "keep scrolling", "reverse"],
-      "summary": "Hold Bottom, move up or down, then keep circling; release to stop.",
+      "summary": "Hold the mouse button, move up or down, then keep circling; release to stop.",
       "buttons": ["bottom"],
       "base": "document",
       "initial": {"pointer": [0.5, 0.48]},
@@ -470,7 +471,7 @@
       "question": "How do I scroll sideways?",
       "questions": ["How do I scroll horizontally?", "How do I scroll left and right?", "How do I scroll a timeline?"],
       "keywords": ["scroll", "sideways", "horizontal", "left", "right", "timeline", "circle", "circles", "hold"],
-      "summary": "Hold Bottom, start left or right, then keep circling; release to stop.",
+      "summary": "Hold the mouse button, start left or right, then keep circling; release to stop.",
       "buttons": ["bottom"],
       "base": "timeline",
       "initial": {"pointer": [0.5, 0.5], "scrollX": 1600},
@@ -571,10 +572,11 @@
         "How do I use the HUD?",
         "How do I pick a HUD card?",
         "How do I close the HUD?",
+        "What does the HUD button do?",
         "What does the Middle button do?"
       ],
-      "keywords": ["hud", "card", "middle", "open", "close", "choose", "outline", "menu", "double tap"],
-      "summary": "Tap Middle, turn to a card, tap to use it; double tap to close.",
+      "keywords": ["hud", "card", "hud button", "middle", "open", "close", "choose", "outline", "menu", "double tap"],
+      "summary": "Tap the HUD button, turn to a card, tap to use it; double tap to close.",
       "buttons": ["middle"],
       "base": "desktop",
       "initial": {"pointer": [0.62, 0.3]},
@@ -721,7 +723,7 @@
         "How do I go back in the HUD?"
       ],
       "keywords": ["hud", "page", "submenu", "keys", "utility", "app specific", "current app", "exit", "back"],
-      "summary": "Tap Middle on a page card; its exit card goes back one page.",
+      "summary": "Tap the HUD button on a page card; its exit card goes back one page.",
       "buttons": ["middle"],
       "base": "desktop",
       "initial": {"pointer": [0.62, 0.3]},
@@ -956,7 +958,8 @@
         "How do I use speech to text?",
         "How do I start Agent Flow?",
         "How do I stop dictation?",
-        "How do I talk to my agent?"
+        "How do I talk to my agent?",
+        "What does the speech button do?"
       ],
       "keywords": [
         "dictate",
@@ -968,9 +971,10 @@
         "agent flow",
         "record",
         "transcribe",
+        "speech button",
         "top"
       ],
-      "summary": "Tap Top to start Agent Flow and tap again to stop and paste.",
+      "summary": "Tap the speech button to start Agent Flow and tap again to stop and paste.",
       "buttons": ["top"],
       "base": "chat",
       "initial": {"pointer": [0.7, 0.3]},
@@ -1091,7 +1095,7 @@
         "quarter-turn",
         "diamond"
       ],
-      "summary": "Choose Review changes, quarter-turn through changes, hold Middle to stage the set.",
+      "summary": "Choose Review changes, quarter-turn through changes, hold the HUD button to stage the set.",
       "buttons": ["middle"],
       "base": "vscode",
       "initial": {"pointer": [0.8, 0.2], "app": "VS Code", "hud.vscode": true},
@@ -1283,7 +1287,7 @@
         "quarter-turn",
         "diamond"
       ],
-      "summary": "Choose Stage files, circle to build a set, hold Middle to stage it.",
+      "summary": "Choose Stage files, circle to build a set, hold the HUD button to stage it.",
       "buttons": ["middle"],
       "base": "vscode",
       "initial": {"pointer": [0.8, 0.2], "app": "VS Code", "hud.vscode": true, "review.unit": "file"},

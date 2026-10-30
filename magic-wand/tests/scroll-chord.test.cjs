@@ -1,4 +1,4 @@
-// Bottom + Middle two-axis scrolling with the current bridge applied.
+// mouse button + HUD button two-axis scrolling with the current bridge applied.
 // Ported from the wand's original chord regression; the bridge adds a one-second sensor grace,
 // so "sensor off" checks wait for it.
 const test = require("node:test");
@@ -30,7 +30,7 @@ for (const bridge of [false]) {
       w.edge(first, 1);
       assert(!ctx.scrollHeld && ctx.scrollSuppress);
       assert(lines.some((l) => l.startsWith("@SCROLL E,")));
-      // Physical Bottom edge reports cancel circle recognition; they are not HUD actions.
+      // Physical mouse-button edge reports cancel circle recognition; they are not HUD actions.
       const actionLines = () => lines.filter((l) => l.startsWith("@") && !["@BOTTOM ","@IMU ","@FOLLOW "].some(prefix=>l.startsWith(prefix)));
       const count = actionLines().length;
       w.advance(0.4); w.edge(second, 1); w.advance(0.3);
@@ -65,7 +65,7 @@ for (const bridge of [false]) {
     w.edge("D1", 1); w.edge("D2", 1); grace();
     assert(!ctx.gyroAwake && w.device.sampleRate===1.6);
 
-    // Re-pressing while Middle stays held resumes scrolling; disconnect stops everything.
+    // Re-pressing while the HUD button stays held resumes scrolling; disconnect stops everything.
     w.edge("D1", 0); w.advance(0.02); w.edge("D2", 0); w.edge("D1", 1);
     assert(!ctx.scrollHeld);
     w.edge("D1", 0);

@@ -96,6 +96,8 @@ export class WandReceiverModel {
    * @param {object} options.mac {location(), mouse(type, point, clickCount), scroll(dx, dy)}
    * @param {(command: string) => void} options.queue send one REPL command to the Puck
    */
+  // Button names match the native receiver: hudButton* and mouseButtonHeld were
+  // previously middle* and bottomHeld, and handleHUDButton was handleMiddle.
   constructor({ tuning, timers, controls, mac, queue }) {
     this.tuning = tuning;
     this.timers = timers;
@@ -104,13 +106,13 @@ export class WandReceiverModel {
     this.queue = queue;
     this.contextActive = false;
     this.acceptHUDContext = true;
-    this.middleLastRelease = -100; this.middlePressedAt = 0; this.middleDoubleConsumed = false;
+    this.hudButtonLastRelease = -100; this.hudButtonPressedAt = 0; this.hudButtonDoubleConsumed = false;
     this.buttons = 0;
     this.lastClickTime = -Infinity;
     this.lastClickPoint = { x: -1e9, y: -1e9 };
     this.clickCount = 0;
     this.pointerInHUD = false;
-    this.middleOperating = false;
+    this.hudButtonOperating = false;
     this.hudSession = false;
     this.hudEntryPress = false;
     this.hudEntryPressStarted = 0;
@@ -119,7 +121,7 @@ export class WandReceiverModel {
     this.lowDelayTimer = null;
     this.dwellTimer = null;
     this.circleLight = false;
-    this.bottomHeld = false;
+    this.mouseButtonHeld = false;
     this.circleTimer = null;
     this.navX = 0;
     this.navY = 0;
@@ -127,10 +129,10 @@ export class WandReceiverModel {
     this.navOriginY = 0;
     this.operationOriginX = 0;
     this.operationOriginY = 0;
-    this.middleX = 0;
-    this.middleY = 0;
-    this.middleHold = null;
-    this.middleTap = null;
+    this.hudButtonX = 0;
+    this.hudButtonY = 0;
+    this.hudButtonHold = null;
+    this.hudButtonTap = null;
     this.hudActive = false;
     this.hudLastUpdate = -Infinity;
     this.hudWatchdog = null;
@@ -229,14 +231,14 @@ export class WandReceiverModel {
       (payload = at("@BOTTOM ")) !== null &&
       ["0", "1"].includes(payload.trim())
     ) {
-      this.bottomHeld = payload.trim() === "1";
-      if(this.bottomHeld)this.recenterSuppressButtons=false;
-      const recenter=this.recenterGesture.edge(this.bottomHeld,this.timers.now());
-      if(recenter){this.cancelCircleScroll();this.finishScroll();this.releaseButtons();this.recenterSuppressButtons=true;this.bottomHeld=false;this.pointerRouter.bottom(false);this.dwell.follow(true);this.scheduleDwell();this.mac.mouse("move",{x:this.mac.width/2,y:this.mac.height/2});this.queue("stopScroll();stopPointerTrack();scrollSuppress=false;global.wandCircleScrolling=false;setMouseFollow(true);");return;}
-      const endedScroll=!this.bottomHeld && this.pointerRouter.circle.active;
+      this.mouseButtonHeld = payload.trim() === "1";
+      if(this.mouseButtonHeld)this.recenterSuppressButtons=false;
+      const recenter=this.recenterGesture.edge(this.mouseButtonHeld,this.timers.now());
+      if(recenter){this.cancelCircleScroll();this.finishScroll();this.releaseButtons();this.recenterSuppressButtons=true;this.mouseButtonHeld=false;this.pointerRouter.mouseButton(false);this.dwell.follow(true);this.scheduleDwell();this.mac.mouse("move",{x:this.mac.width/2,y:this.mac.height/2});this.queue("stopScroll();stopPointerTrack();scrollSuppress=false;global.wandCircleScrolling=false;setMouseFollow(true);");return;}
+      const endedScroll=!this.mouseButtonHeld && this.pointerRouter.circle.active;
       this.dwell.reset();
       this.scheduleDwell();
-      this.performPointer(this.pointerRouter.bottom(this.bottomHeld));
+      this.performPointer(this.pointerRouter.mouseButton(this.mouseButtonHeld));
       if(endedScroll)this.enableMouseAfterScroll();
     }
     if ((payload = at("@IMU ")) !== null) {
@@ -247,7 +249,7 @@ export class WandReceiverModel {
       }
     }
     if ((payload = at("@MIDDLE ")) !== null) {
-      this.handleMiddle(payload);
+      this.handleHUDButton(payload);
     }
     if ((payload = at("@NAV ")) !== null) this.handleNavigation(payload);
     if ((payload = at("@SCROLL ")) !== null) this.handleScroll(payload);
@@ -267,59 +269,59 @@ export class WandReceiverModel {
     this[name] = null;
   }
 
-  // MIDDLE latches the HUD, then operates the selected card.
+  // The HUD button (`@MIDDLE`) latches the HUD, then operates the selected card.
   handleMove(payload) {
     if (this.scrollActive || !this.hudSession) return;
     const parsed = parseTriple(payload);
     if (!parsed) return;
-    this.middleX = parsed.x / 1000;
-    this.middleY = parsed.y / 1000;
+    this.hudButtonX = parsed.x / 1000;
+    this.hudButtonY = parsed.y / 1000;
     switch (parsed.phase) {
       case "B":
-        if (this.middleTap !== null) {
-          this.clearTimer("middleTap");
-          this.clearTimer("middleHold");
+        if (this.hudButtonTap !== null) {
+          this.clearTimer("hudButtonTap");
+          this.clearTimer("hudButtonHold");
           this.closeHUD();
           return;
         }
         if (!(this.contextActive || this.hudSession)) return;
         this.pointerInHUD = true;
-        this.middleOperating = false;
-        this.middleHold = this.timers.setTimeout(() => {
-          this.middleHold = null;
+        this.hudButtonOperating = false;
+        this.hudButtonHold = this.timers.setTimeout(() => {
+          this.hudButtonHold = null;
           if (!this.pointerInHUD || !(this.contextActive || this.hudSession))
             return;
-          this.middleOperating = true;
+          this.hudButtonOperating = true;
           this.controls.persistent("press");
-          this.controls.persistent("motion", this.middleX, this.middleY);
+          this.controls.persistent("motion", this.hudButtonX, this.hudButtonY);
         }, this.tuning.receiverHoldMs);
         this.startHUDWatchdog();
         break;
       case "U":
         if (!this.pointerInHUD) return;
         this.hudLastUpdate = this.timers.now();
-        if (this.middleOperating)
-          this.controls.persistent("motion", this.middleX, this.middleY);
+        if (this.hudButtonOperating)
+          this.controls.persistent("motion", this.hudButtonX, this.hudButtonY);
         break;
       case "E":
         if (!this.pointerInHUD) return;
         this.pointerInHUD = false;
-        this.clearTimer("middleHold");
+        this.clearTimer("hudButtonHold");
         this.stopHUDWatchdog();
-        if (this.middleOperating) {
-          this.controls.persistent("motion", this.middleX, this.middleY);
+        if (this.hudButtonOperating) {
+          this.controls.persistent("motion", this.hudButtonX, this.hudButtonY);
           this.controls.persistent("release");
           this.resumeHUDNavigation();
         } else {
-          this.middleTap = this.timers.setTimeout(() => {
-            this.middleTap = null;
+          this.hudButtonTap = this.timers.setTimeout(() => {
+            this.hudButtonTap = null;
             if (!this.hudSession || !this.acceptHUDContext || !this.contextActive) return;
             this.controls.persistent("press");
             this.controls.persistent("release");
             this.resumeHUDNavigation();
           }, this.doubleClickInterval * 1000);
         }
-        this.middleOperating = false;
+        this.hudButtonOperating = false;
         break;
       default:
         break;
@@ -332,23 +334,23 @@ export class WandReceiverModel {
     this.hudEntryPress = false;
     this.hudActive = false;
     this.pointerInHUD = false;
-    this.middleOperating = false;
-    this.clearTimer("middleTap");
-    this.clearTimer("middleHold");
+    this.hudButtonOperating = false;
+    this.clearTimer("hudButtonTap");
+    this.clearTimer("hudButtonHold");
     this.stopHUDWatchdog();
     this.controls.persistent("dismiss");
     this.queue("global.wandAppMode=undefined;setHUDOpen(false);updateLights();");
   }
 
-  enterPointerMode() { /* Bottom does not own the Middle HUD. */ }
+  enterPointerMode() { /* The mouse button does not own the HUD. */ }
 
-  handleMiddle(payload) {
+  handleHUDButton(payload) {
     if (this.scrollActive) return;
     switch (payload.trim()) {
       case "1":
-        this.middlePressedAt = this.timers.now();
-        if (this.timers.now() - this.middleLastRelease <= this.doubleClickInterval) {
-          this.middleLastRelease = -100; this.middleDoubleConsumed = true; this.closeHUD(); return;
+        this.hudButtonPressedAt = this.timers.now();
+        if (this.timers.now() - this.hudButtonLastRelease <= this.doubleClickInterval) {
+          this.hudButtonLastRelease = -100; this.hudButtonDoubleConsumed = true; this.closeHUD(); return;
         }
         if (!this.hudSession) {
           this.acceptHUDContext = true;
@@ -375,8 +377,8 @@ export class WandReceiverModel {
         this.handleMove("B,0,0");
         break;
       case "0":
-        if (this.middleDoubleConsumed) { this.middleDoubleConsumed = false; return; }
-        this.middleLastRelease = this.timers.now()-this.middlePressedAt < 0.14 ? this.timers.now() : -100;
+        if (this.hudButtonDoubleConsumed) { this.hudButtonDoubleConsumed = false; return; }
+        this.hudButtonLastRelease = this.timers.now()-this.hudButtonPressedAt < 0.14 ? this.timers.now() : -100;
         if (this.hudEntryPress) {
           this.hudEntryPress = false;
           this.navigationOpenedHUD = false;
@@ -464,8 +466,8 @@ export class WandReceiverModel {
       this.cancelCircleScroll();
       this.finishScroll();
       this.hudEntryPress = false;
-      this.clearTimer("middleTap");
-      this.clearTimer("middleHold");
+      this.clearTimer("hudButtonTap");
+      this.clearTimer("hudButtonHold");
       if (this.hudActive) {
         this.controls.persistent("park");
         if (this.navigationOpenedHUD) {
@@ -473,12 +475,12 @@ export class WandReceiverModel {
           this.hudSession = false;
           this.queue("setHUDOpen(false);");
         }
-      } else if (this.middleOperating) {
+      } else if (this.hudButtonOperating) {
         this.controls.persistent("release");
       }
       this.hudActive = false;
       this.pointerInHUD = false;
-      this.middleOperating = false;
+      this.hudButtonOperating = false;
       this.navigationOpenedHUD = false;
       this.stopHUDWatchdog();
       this.releaseButtons();
@@ -553,7 +555,7 @@ export class WandReceiverModel {
       x,
       y,
       this.timers.now(),
-      !this.bottomHeld && b === 0 && !this.hudSession && !this.scrollActive,
+      !this.mouseButtonHeld && b === 0 && !this.hudSession && !this.scrollActive,
     );
     this.scheduleDwell();
     this.transition(routed.buttons, this.mac.location());
@@ -590,7 +592,7 @@ export class WandReceiverModel {
       () => {
         this.dwellTimer = null;
         if (
-          !this.bottomHeld &&
+          !this.mouseButtonHeld &&
           !this.hudSession &&
           !this.scrollActive &&
           this.buttons === 0 &&

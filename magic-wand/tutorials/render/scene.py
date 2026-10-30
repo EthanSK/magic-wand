@@ -467,7 +467,7 @@ class Painter:
         ix0, iy0, ix1, _ = INSET
         pen.text(ix0 + 20, iy0 + 22, "BUTTONS", "atkinson-hyperlegible-mono", 12, 600, HAZE, "lm")
         pen.text(ix1 - 20, iy0 + 22, "LAST 3 S", "atkinson-hyperlegible-mono", 12, 500, (120, 112, 160), "rm")
-        # Side view of the grip, matching the website schematic: Bottom, Middle, then Top nearest the shaft.
+        # Side view of the grip, matching the website schematic: mouse button, HUD button, then the speech button nearest the shaft.
         pen.rect((ix0 + 22, iy0 + 46, ix0 + 318, iy0 + 72), fill=GRIP, outline=(255, 255, 255, 30), radius=13)
         pen.rect((ix0 + 314, iy0 + 53, ix1 - 22, iy0 + 65), fill=CARBON, radius=3)
         pen.text(ix1 - 22, iy0 + 84, "to the tip", "atkinson-hyperlegible-mono", 11, 500, (120, 112, 160), "rm")
@@ -1003,7 +1003,7 @@ class Painter:
                 pen.rect((x0, y0, x1, y1), fill=(255, 255, 255, round(150 * (1 - age / 0.5))), radius=9)
 
     def _middle_operating(self, t):
-        """A Middle hold that began with the HUD already open operates the card (dashed outline).
+        """A HUD-button hold that began with the HUD already open operates the card (dashed outline).
         A hold that opened the HUD is still navigating, so its outline stays solid."""
         opened = self.tl.changed_at("hud.open", t)
         for a, b in self.tl.presses["middle"]:

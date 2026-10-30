@@ -18,15 +18,15 @@ second wand.
 - Three momentary push buttons, wire, and a tube or handle. Ethan’s wand is a roughly 50 cm carbon-fibre tube with the Puck at the tip and the buttons on the grip.
 - A Mac with macOS 13 or later and the Xcode command line tools (`swiftc`, `codesign`).
 - Python 3.10+ and Node.js 22+ for the build and tests.
-- Optional, for Middle and Top: [Agentic Mouse](https://ethansk.github.io/agentic-mouse/) and [Agent Flow](https://ethansk.github.io/AgentFlow/) builds with wand support. Neither is published yet, so with public builds only pointing, clicking, dragging and scrolling work.
+- Optional, for the HUD button and the speech button: [Agentic Mouse](https://ethansk.github.io/agentic-mouse/) and [Agent Flow](https://ethansk.github.io/AgentFlow/) builds with wand support. Neither is published yet, so with public builds only pointing, clicking, dragging and scrolling work.
 
 ## 1. Wire the buttons
 
 | Button | Puck pin | Role |
 | --- | --- | --- |
-| Top | `D30` | Speech to text |
-| Middle | `D2` | Agentic Mouse HUD |
-| Bottom | `D1` | Mouse |
+| The speech button | `D30` | Speech to text |
+| The HUD button | `D2` | Agentic Mouse HUD |
+| The mouse button | `D1` | Mouse |
 
 Connect the other side of each button to `GND`. The device code turns on the Puck’s internal
 pull-ups, so a press reads low and no resistors are needed. If you mount the Puck differently,
@@ -109,7 +109,7 @@ Logs and status are in `~/Library/Application Support/WandReceiver/` (`receiver.
 `status.json`). Quitting with `SIGTERM` or `SIGINT` restores the Puck’s original Bluetooth mouse
 sender before the receiver exits.
 
-Middle talks to Agentic Mouse and Top to Agent Flow over same-user local sockets. The receiver only
+The HUD button talks to Agentic Mouse and the speech button to Agent Flow over same-user local sockets. The receiver only
 accepts HUD context from `/Applications/AgenticMouse.app` and follows recording state for
 `/Applications/AgentFlow.app`.
 

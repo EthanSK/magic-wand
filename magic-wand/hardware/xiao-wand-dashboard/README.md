@@ -72,9 +72,9 @@ Manual browser mode closes its previous reader when switching sources. It has no
 
 | Switch | Sense label | MCU pin | Other contact |
 | --- | --- | --- | --- |
-| 1 · Left / Middle (HUD) | 10 / D10 | P1.15 | GND |
-| 2 · Centre / Bottom (mouse) | 8 / D8 | P1.13 | GND |
-| 3 · Right / Top (speech) | 9 / D9 | P1.14 | GND |
+| 1 · Left / HUD button | 10 / D10 | P1.15 | GND |
+| 2 · Centre / Mouse button | 8 / D8 | P1.13 | GND |
+| 3 · Right / Speech button | 9 / D9 | P1.14 | GND |
 
 Use the two metal switch/socket contacts; an ordinary mechanical switch has no polarity. All three share GND. Internal pull-ups make pressed LOW. **No 3V3 wire goes to these switches.** The checked mapping is included in `pin-plan.json`; this dashboard does not depend on another unpublished wiring page.
 

@@ -38,11 +38,11 @@ core 1.1.13, Seeed Arduino LSM6DS3 2.0.7). Nothing is uploaded on connection.
 
 | Physical button | Sense pin | Control | Wire channel |
 | --- | --- | --- | --- |
-| Button 1, left | D10 | Middle (HUD/review) | `middle` |
-| Button 2, centre | D8 | Bottom (mouse) | `thumb` |
-| Button 3, right | D9 | Top (speech) | `index` |
+| Button 1, left | D10 | HUD button (HUD/review) | `middle` |
+| Button 2, centre | D8 | Mouse button | `thumb` |
+| Button 3, right | D9 | Speech button | `index` |
 
-The wire channel names are the dashboard's legacy `wand-v1` keys and do not name fingers.
+The wire channel names are the dashboard's legacy `wand-v1` keys, kept as compatibility aliases; they do not name fingers or buttons. The buttons were formerly called Middle, Bottom and Top.
 
 - Streams each 104 Hz LSM6DS3TR-C reading (gyro 500 deg/s range, accelerometer 4 g with the
   Puck's 50 Hz anti-alias filter) plus button edges and press counters. 10 ms switch debounce.

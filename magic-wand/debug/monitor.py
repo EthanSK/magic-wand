@@ -360,7 +360,7 @@ class LogModel:
             down = parts[0] == "1" if parts else None
             sent = len(parts) > 1 and parts[1] == "SENT"
             self._set("speechButton", {"down": down, "sent": sent}, t)
-            add(t, event, "buttons", ("Top pressed" if down else "Top released") + (": sent to Agent Flow" if sent else ": Agent Flow unavailable"),
+            add(t, event, "buttons", ("Speech button pressed" if down else "Speech button released") + (": sent to Agent Flow" if sent else ": Agent Flow unavailable"),
                 level="info" if sent else "warn")
         elif event == "HUD_CLOSED":
             self._set("hud", {"open": False, "reason": sanitize(a, 60)}, t)
@@ -373,7 +373,7 @@ class LogModel:
             add(t, event, "buttons", "Pointer mode")
         elif event == "POINTER_RECENTER":
             self._set("pointer", "recentered", t)
-            add(t, event, "buttons", "Pointer recentered", "Bottom double tap")
+            add(t, event, "buttons", "Pointer recentered", "Mouse button double tap")
         elif event == "HIGH_DWELL_CLICK":
             add(t, event, "buttons", "Stop-to-click")
         elif event == "BUTTON":
@@ -385,12 +385,13 @@ class LogModel:
             add(t, event, "buttons", "Held click dropped", "The hold was used for scrolling.")
         elif event == "FIRST_DEVICE_REPORT_VALIDATED":
             add(t, event, "motion", "First pointer report accepted")
+        # BOTTOM_* and MIDDLE_* are the receiver log's legacy tags for the mouse and HUD buttons.
         elif event == "BOTTOM_HOLD_TARGET":
             target = HOLD_TARGETS.get(a, sanitize(a, 40))
             self._set("holdTarget", target, t)
-            add(t, event, "buttons", "Bottom hold: " + target)
+            add(t, event, "buttons", "Mouse button hold: " + target)
         elif event == "BOTTOM_HOLD_RECOVERED":
-            add(t, event, "buttons", "Bottom hold ended", sanitize(a, 80) or None)
+            add(t, event, "buttons", "Mouse button hold ended", sanitize(a, 80) or None)
         elif event in ("SCROLL_BEGIN", "SCROLL_END", "SCROLL_FINISHED_MOUSE_ON"):
             self._set("scroll", event == "SCROLL_BEGIN", t)
             label = {"SCROLL_BEGIN": "Chord scroll started", "SCROLL_END": "Chord scroll ended",
@@ -716,6 +717,7 @@ def read_status(path: Path) -> dict:
     return {"present": True, "valid": True, "error": None, "mtime": mtime, "fields": fields}
 
 
+# middleHeld and bottomHeld are the snapshot's legacy keys for the HUD and mouse buttons.
 DEBUG_LANES = {"mouseFollow": bool, "hudOpen": bool, "middleHeld": bool, "bottomHeld": bool,
                "scrollActive": bool, "heldScroll": str, "reviewMode": str}
 DEBUG_POWER = {"restParked": bool, "deskSleeping": bool, "deepStandbyPending": bool, "powerPolicyReady": bool}
@@ -1013,13 +1015,13 @@ def build_snapshot(now: float, status: dict, process: dict, model: LogModel, fol
     recording = fields.get("recording") if live else None
     speech = model.fact("speechButton")
     lanes.append({
-        "id": "speech", "button": "Top", "lane": "Speech",
+        "id": "speech", "button": "Speech button", "lane": "Speech",
         "value": "Recording" if recording else "Off" if recording is False else "Unknown",
         "tone": "on" if recording else "off" if recording is False else "unknown",
         "basis": "status" if recording is not None else "none",
         "since": rec_fact["t"] if rec_fact and rec_fact["value"] == recording else None,
         "note": None,
-        "last": ago(speech, "Last Top press" if speech["value"].get("sent") else "Last Top press: Agent Flow unavailable") if speech else None,
+        "last": ago(speech, "Last speech button press" if speech["value"].get("sent") else "Last speech button press: Agent Flow unavailable") if speech else None,
     })
     hud_fact = model.fact("hud")
     value, tone, note = from_light("hud", "Open", "Closed")
@@ -1030,7 +1032,7 @@ def build_snapshot(now: float, status: dict, process: dict, model: LogModel, fol
     if hud_fact:
         hud_last = ago(hud_fact, "HUD closed" + (" (" + hud_fact["value"]["reason"] + ")" if hud_fact["value"].get("reason") else "")
                        if hud_fact["value"].get("open") is False else "HUD card used")
-    lanes.append({"id": "hud", "button": "Middle", "lane": "HUD", "value": value, "tone": tone,
+    lanes.append({"id": "hud", "button": "HUD button", "lane": "HUD", "value": value, "tone": tone,
                   "basis": basis if tone != "unknown" else "none", "since": light["since"] if tone == "on" and basis == "light" else None,
                   "note": note, "last": hud_last})
     review_fact = model.fact("review")
@@ -1045,7 +1047,7 @@ def build_snapshot(now: float, status: dict, process: dict, model: LogModel, fol
         rv = ("None selected", "off", "log", review_fact["t"])
     else:
         rv = ("Unknown", "unknown", "none", None)
-    lanes.append({"id": "review", "button": "Middle", "lane": "Review", "value": rv[0], "tone": rv[1], "basis": rv[2],
+    lanes.append({"id": "review", "button": "HUD button", "lane": "Review", "value": rv[0], "tone": rv[1], "basis": rv[2],
                   "since": rv[3], "note": "Best effort from the log." if rv[2] == "log" else ("No review events logged this session." if ready and rv[2] == "none" else None),
                   "last": None})
     value, tone, note = from_light("mouse", "On", "Off")
@@ -1059,7 +1061,7 @@ def build_snapshot(now: float, status: dict, process: dict, model: LogModel, fol
             if name == "pointer" and candidate["value"] == "recentered":
                 label = "Recentered"
             pointer_last = {"label": label, "t": candidate["t"]}
-    lanes.append({"id": "mouse", "button": "Bottom", "lane": "Mouse", "value": value, "tone": tone,
+    lanes.append({"id": "mouse", "button": "Mouse button", "lane": "Mouse", "value": value, "tone": tone,
                   "basis": basis if tone != "unknown" else "none", "since": light["since"] if tone == "on" and basis == "light" else None,
                   "note": note, "last": pointer_last})
     value, tone, note = from_light("scroll", "Scrolling", "Idle")
@@ -1067,7 +1069,7 @@ def build_snapshot(now: float, status: dict, process: dict, model: LogModel, fol
     if dbg_lanes and dbg_lanes.get("scrollActive") is not None:
         value, tone, note, basis = ("Scrolling", "on", None, "receiver") if dbg_lanes["scrollActive"] else ("Idle", "off", None, "receiver")
     hold = model.fact("holdTarget")
-    lanes.append({"id": "scroll", "button": "Bottom", "lane": "Scroll", "value": value, "tone": tone,
+    lanes.append({"id": "scroll", "button": "Mouse button", "lane": "Scroll", "value": value, "tone": tone,
                   "basis": basis if tone != "unknown" else "none", "since": light["since"] if tone == "on" and basis == "light" else None,
                   "note": note, "last": ago(hold, "Last hold: " + hold["value"]) if hold else None})
 

@@ -1,4 +1,4 @@
-// Printed loop wand preview input: scrolling turns by default (the wand's Bottom hold arrives as
+// Printed loop wand preview input: scrolling turns by default (the wand's mouse-button hold arrives as
 // scroll events), Move and Zoom are deliberate, pinch always zooms, and large inputs are limited.
 import { test } from "node:test";
 import assert from "node:assert/strict";

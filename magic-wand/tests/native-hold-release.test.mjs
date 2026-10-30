@@ -27,8 +27,8 @@ final class Harness {
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?
  var pointerOrigin=WandPointerOrigin();func currentPointerOrigin()->CGPoint{pointerOrigin.origin(system:CGEvent(source:nil)?.location ?? .zero,now:ProcessInfo.processInfo.systemUptime)}
  var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,hudSession=false,flickScrollEnabled=false,heldScrollDiagnostics=false
- var physicalTapDuration:Double?=nil;func bottomPhysicalTapDuration()->Double?{physicalTapDuration}
- var screenshotActive=false,middleHeld=false,middleMouseX=0.0,middleMouseSampleAt = -100.0
+ var physicalTapDuration:Double?=nil;func mouseButtonPhysicalTapDuration()->Double?{physicalTapDuration}
+ var screenshotActive=false,hudButtonHeld=false,hudButtonMouseX=0.0,hudButtonMouseSampleAt = -100.0
  var commands:[String]=[],scrollPostedX=0,scrollPostedY=0
  var recordingPointerPaused=false
  var scrollAnchor:CGPoint?,scrollWatchdog:Timer?
@@ -47,35 +47,35 @@ final class Harness {
  func finishNativeScroll(cancelled:Bool){}
  func postNativeScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
- ${['beginBottomHold','restoreMouseAfterScroll','deviceFollowChanged','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
+ ${['beginMouseButtonHold','restoreMouseAfterScroll','deviceFollowChanged','finishScroll','finishMouseButtonHold','reconcileMouseButtonHold','handleRaw'].map(method).join('\n')}
 }
 let h=Harness();precondition(h.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 let now=ProcessInfo.processInfo.systemUptime
-let hudOnly=Harness();hudOnly.middleHeld=true
+let hudOnly=Harness();hudOnly.hudButtonHeld=true
 precondition(hudOnly.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 for _ in 0..<40 {hudOnly.handleRaw("10000,2680,0,4")}
-precondition(hudOnly.middleMouseX < 0 && hudOnly.frames == 0 && hudOnly.buttons == 0,"HUD-only samples provide HIGH sensitivity without pointer events")
+precondition(hudOnly.hudButtonMouseX < 0 && hudOnly.frames == 0 && hudOnly.buttons == 0,"HUD-only samples provide HIGH sensitivity without pointer events")
 // Held Switch App: plain forward and back, no circular direction latch.
-let chooser=Harness();chooser.middleHeld=true;chooser.hudSession=true;chooser.context.switchAppAdjusting=true
+let chooser=Harness();chooser.hudButtonHeld=true;chooser.hudSession=true;chooser.context.switchAppAdjusting=true
 precondition(chooser.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 for _ in 0..<30 {chooser.handleRaw("10000,2680,0,4")}
-let forward=chooser.middleMouseX
+let forward=chooser.hudButtonMouseX
 for _ in 0..<30 {chooser.handleRaw("10000,-2680,0,4")}
-precondition(forward < 0 && abs(chooser.middleMouseX) < abs(forward) * 0.2,"reversing moves straight back: \\(forward) then \\(chooser.middleMouseX)")
-let circle=Harness();circle.middleHeld=true;circle.hudSession=true;circle.context.switchAppAdjusting=true
+precondition(forward < 0 && abs(chooser.hudButtonMouseX) < abs(forward) * 0.2,"reversing moves straight back: \\(forward) then \\(chooser.hudButtonMouseX)")
+let circle=Harness();circle.hudButtonHeld=true;circle.hudSession=true;circle.context.switchAppAdjusting=true
 precondition(circle.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 var path=0.0,last=0.0
-for i in 0..<200 {let a=Double(i)/200*2 * .pi;circle.handleRaw("10000,\\(Int(2680*cos(a))),\\(Int(2680*sin(a))),4");path+=abs(circle.middleMouseX-last);last=circle.middleMouseX}
-precondition(abs(circle.middleMouseX) < path * 0.15,"a full circle returns near its start instead of latching one direction")
+for i in 0..<200 {let a=Double(i)/200*2 * .pi;circle.handleRaw("10000,\\(Int(2680*cos(a))),\\(Int(2680*sin(a))),4");path+=abs(circle.hudButtonMouseX-last);last=circle.hudButtonMouseX}
+precondition(abs(circle.hudButtonMouseX) < path * 0.15,"a full circle returns near its start instead of latching one direction")
 
 let explicit=Harness();precondition(explicit.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 _=explicit.recenterGesture.edge(down:true,now:now-1)
-explicit.beginBottomHold(now:now-1)
+explicit.beginMouseButtonHold(now:now-1)
 precondition(explicit.heldScroll.scrollable,"a plain hold scrolls until its target is proven draggable")
 _=explicit.recenterGesture.edge(down:false,now:now-0.95)
-explicit.finishBottomHold(now:now-0.95)
+explicit.finishMouseButtonHold(now:now-0.95)
 _=explicit.recenterGesture.edge(down:true,now:now-0.85)
-explicit.beginBottomHold(now:now-0.85)
+explicit.beginMouseButtonHold(now:now-0.85)
 precondition(!explicit.heldScroll.scrollable,"only the second held click requests a real drag")
 explicit.handleRaw("10000,2680,0,1")
 precondition(explicit.heldScroll.dragging && explicit.buttons==1,"explicit drag posts mouse-down")
@@ -83,26 +83,26 @@ precondition(!explicit.recenterGesture.edge(down:false,now:now),"held second cli
 explicit.handleRaw("10000,2680,0,0")
 precondition(!explicit.heldScroll.active && explicit.buttons==0,"release drops the explicit drag")
 _=explicit.recenterGesture.edge(down:true,now:now+1)
-explicit.beginBottomHold(now:now+1)
+explicit.beginMouseButtonHold(now:now+1)
 precondition(explicit.heldScroll.scrollable,"the next ordinary hold returns to scrolling")
-explicit.finishBottomHold(now:now+2)
-h.heldScroll.begin(now:now-1);_=h.pointerRouter.bottom(down:true);h.light=true
+explicit.finishMouseButtonHold(now:now+2)
+h.heldScroll.begin(now:now-1);_=h.pointerRouter.mouseButton(down:true);h.light=true
 h.handleRaw("10000,0,2680,0") // no @BOTTOM 0: raw physical-up must still stop first
-precondition(!h.heldScroll.active && !h.pointerRouter.bottomHeld && !h.light)
+precondition(!h.heldScroll.active && !h.pointerRouter.mouseButtonHeld && !h.light)
 precondition(h.frames==0,"release sample cannot move or click")
 precondition(h.heldScroll.sample(y:20,dt:0.01)==0)
-h.heldScroll.begin(now:now-1,scrollable:false);_=h.pointerRouter.bottom(down:true)
+h.heldScroll.begin(now:now-1,scrollable:false);_=h.pointerRouter.mouseButton(down:true)
 precondition(h.heldScroll.startDrag(now:now));h.buttons=1
 h.handleRaw("10000,0,2680,0")
 precondition(h.buttons==0 && !h.heldScroll.active,"missed release must drop native drag")
-h.heldScroll.begin(now:20);h.reconcileBottomHold(down:true,now:20.7,reason:"sensor")
+h.heldScroll.begin(now:20);h.reconcileMouseButtonHold(down:true,now:20.7,reason:"sensor")
 precondition(!h.heldScroll.stale(now:21.4) && h.heldScroll.stale(now:21.6))
-h.reconcileBottomHold(down:false,now:21.6,reason:"timeout")
+h.reconcileMouseButtonHold(down:false,now:21.6,reason:"timeout")
 precondition(!h.heldScroll.active)
-h.reconcileBottomHold(down:true,now:22,reason:"late telemetry")
+h.reconcileMouseButtonHold(down:true,now:22,reason:"late telemetry")
 precondition(!h.heldScroll.active,"late telemetry must not restart a cancelled hold")
 h.heldScroll.begin(now:30);h.scrollActive=true
-h.finishBottomHold(now:31)
+h.finishMouseButtonHold(now:31)
 precondition(!h.heldScroll.active,"release teardown is independent of other mode state")
 // A released scroll restores its pre-scroll mouse-follow choice, for both
 // raw-up-first and edge-first delivery. Neither duplicate release can flip it.
@@ -111,12 +111,12 @@ for prior in [false,true] {
  for rawFirst in [false,true] {
   let exit=Harness();precondition(exit.motionFilter.configure(config));exit.controlVersion = .sustainedV3
   exit.dwell.follow(prior);exit.restDetection.activated=prior;logged=[]
-  exit.beginBottomHold(now:now-1);_=exit.pointerRouter.bottom(down:true)
+  exit.beginMouseButtonHold(now:now-1);_=exit.pointerRouter.mouseButton(down:true)
   if rawFirst {exit.handleRaw("10000,0,2680,0")}                      // raw up, then the edge
-  else {exit.finishBottomHold(now:now);_=exit.pointerRouter.bottom(down:false)} // edge, then raw up
+  else {exit.finishMouseButtonHold(now:now);_=exit.pointerRouter.mouseButton(down:false)} // edge, then raw up
   precondition(exit.frames==0,"the release sample itself never moves or clicks")
-  exit.finishBottomHold(now:now+0.01);exit.handleRaw("10000,0,2680,0") // the other report of the same release
-  exit.reconcileBottomHold(down:false,now:now+0.02,reason:"sensor button state")
+  exit.finishMouseButtonHold(now:now+0.01);exit.handleRaw("10000,0,2680,0") // the other report of the same release
+  exit.reconcileMouseButtonHold(down:false,now:now+0.02,reason:"sensor button state")
   let expected="global.wandPointerPauseUntil=0;setMouseFollow("+(prior ? "true":"false")+");"
   precondition(exit.commands.filter{$0==expected}.count==1,"restore the original follow choice once")
   precondition(exit.dwell.following==prior && exit.restDetection.activated==prior,"scroll preserves the prior follow choice")
@@ -134,22 +134,22 @@ for prior in [false,true] {
  watchdog.finishScroll()
  precondition(watchdog.dwell.following==prior && watchdog.commands.isEmpty,"a chord watchdog stop is not a release")
  // Short taps, native drags and lost telemetry keep the device's own follow choice.
- let tap=Harness();tap.dwell.follow(prior);tap.heldScroll.begin(now:100);tap.finishBottomHold(now:100.05)
+ let tap=Harness();tap.dwell.follow(prior);tap.heldScroll.begin(now:100);tap.finishMouseButtonHold(now:100.05)
  precondition(tap.dwell.following==prior && tap.commands.isEmpty,"short taps retain their existing meaning")
  // A 207 ms physical tap whose release arrived late (Mac sees 0.4 s) is still a tap:
- // it never turns mouse follow back on, so Bottom can exit mouse mode.
- let late=Harness();late.dwell.follow(prior);late.physicalTapDuration=0.207;late.heldScroll.begin(now:100);late.finishBottomHold(now:100.4)
+ // it never turns mouse follow back on, so the mouse button can exit mouse mode.
+ let late=Harness();late.dwell.follow(prior);late.physicalTapDuration=0.207;late.heldScroll.begin(now:100);late.finishMouseButtonHold(now:100.4)
  precondition(late.dwell.following==prior && !late.commands.contains{$0.contains("setMouseFollow")},"a physically short tap is never a completed scroll")
- let longHold=Harness();longHold.dwell.follow(prior);longHold.physicalTapDuration=0.4;longHold.beginBottomHold(now:100);longHold.finishBottomHold(now:100.4)
+ let longHold=Harness();longHold.dwell.follow(prior);longHold.physicalTapDuration=0.4;longHold.beginMouseButtonHold(now:100);longHold.finishMouseButtonHold(now:100.4)
  precondition(longHold.dwell.following==prior && longHold.commands.contains{$0.contains("setMouseFollow("+(prior ? "true":"false")+")")},"a physically long hold restores prior follow")
- let drag=Harness();drag.dwell.follow(prior);drag.heldScroll.begin(now:100,scrollable:false);_=drag.heldScroll.startDrag(now:100.3);drag.finishBottomHold(now:101)
+ let drag=Harness();drag.dwell.follow(prior);drag.heldScroll.begin(now:100,scrollable:false);_=drag.heldScroll.startDrag(now:100.3);drag.finishMouseButtonHold(now:101)
  precondition(drag.dwell.following==prior && !drag.commands.contains{$0.contains("setMouseFollow")},"native dragging is not a scroll gesture")
- let lost=Harness();lost.dwell.follow(prior);lost.heldScroll.begin(now:100);lost.reconcileBottomHold(down:false,now:101,reason:"timeout",released:false)
+ let lost=Harness();lost.dwell.follow(prior);lost.heldScroll.begin(now:100);lost.reconcileMouseButtonHold(down:false,now:101,reason:"timeout",released:false)
  precondition(lost.dwell.following==prior && !lost.commands.contains{$0.contains("setMouseFollow")},"lost telemetry must not activate mouse")
 }
 for horizontal in [false,true] {
  let axis=Harness();precondition(axis.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
- axis.heldScroll.begin(now:now-1);_=axis.pointerRouter.bottom(down:true);Harness.wheelPairs=[]
+ axis.heldScroll.begin(now:now-1);_=axis.pointerRouter.mouseButton(down:true);Harness.wheelPairs=[]
  for _ in 0..<50 {axis.handleRaw(horizontal ? "10000,2680,0,1":"10000,0,2680,1")}
  precondition(!Harness.wheelPairs.isEmpty,"raw motion must reach the wheel output")
  precondition(Harness.wheelPairs.allSatisfy{horizontal ? ($0.0 != 0 && $0.1 == 0):($0.0 == 0 && $0.1 != 0)},"the receiver must post only the acquired scroll axis")
@@ -160,7 +160,7 @@ for horizontal in [false,true] {
 let continuing=Harness();continuing.controlVersion = .sustainedV3
 precondition(continuing.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 _=continuing.recenterGesture.edge(down:true,now:now-1)
-continuing.beginBottomHold(now:now-1)
+continuing.beginMouseButtonHold(now:now-1)
 continuing.heldScrollDiagnostics=true
 // A short straight stroke (20 degrees per second for 80 ms) through the real raw handler.
 for _ in 0..<8 {continuing.handleRaw("10000,0,2680,1")}
@@ -177,7 +177,7 @@ precondition(summary.count==1 && summary[0].contains(" strokes=1 ") && summary[0
 precondition(!summary[0].contains("."),"the diagnostic line has whole counts and rates, never coordinates")
 let quietLog=Harness();quietLog.controlVersion = .sustainedV3
 precondition(quietLog.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
-logged=[];quietLog.beginBottomHold(now:now-1)
+logged=[];quietLog.beginMouseButtonHold(now:now-1)
 for _ in 0..<8 {quietLog.handleRaw("10000,0,2680,1")}
 quietLog.handleRaw("10000,0,2680,0")
 precondition(!quietLog.heldScroll.active && !logged.contains{$0.hasPrefix("V3_SCROLL_HOLD")},"diagnostics stay off unless enabled")

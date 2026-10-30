@@ -4,9 +4,10 @@ export const BUTTONS = [
   // two, and three going left to right." Visible names are numbers only.
   // wand-v1 keys are legacy wire channels (thumb=D8, index=D9, middle=D10),
   // not fingers; keep them for compatibility. Previously named by finger.
-  {key:'middle', name:'1', position:'left', control:'Middle', role:'HUD', pin:'D10', printed:'10', colour:'#edc96d'},
-  {key:'thumb', name:'2', position:'centre', control:'Bottom', role:'Mouse', pin:'D8', printed:'8', colour:'#78b9fa'},
-  {key:'index', name:'3', position:'right', control:'Top', role:'Recording', pin:'D9', printed:'9', colour:'#f27c88'},
+  // control was Middle, Bottom and Top before Ethan's 2026-10-30 rename.
+  {key:'middle', name:'1', position:'left', control:'HUD button', role:'HUD', pin:'D10', printed:'10', colour:'#edc96d'},
+  {key:'thumb', name:'2', position:'centre', control:'Mouse button', role:'Mouse', pin:'D8', printed:'8', colour:'#78b9fa'},
+  {key:'index', name:'3', position:'right', control:'Speech button', role:'Recording', pin:'D9', printed:'9', colour:'#f27c88'},
 ];
 export const AXES = ['ax','ay','az','gx','gy','gz'];
 const uint32 = v => Number.isInteger(v) && v >= 0 && v <= 0xffffffff;

@@ -95,7 +95,7 @@ test("Sense buttons drive the canonical lanes and motion uses the real reading t
   s.api.repl("global.WAND_UPDATING=false;updateLights();");
   s.frames(3, 0);
   s.lines.length = 0;
-  s.frames(1, 1); // Bottom down
+  s.frames(1, 1); // The mouse button down
   assert(s.lines.includes("@BOTTOM 1"));
   assert.equal(s.ctx.moveLatched, true);
   assert.equal(s.imu.at(-1), 2, "gyro requested at the accepted 104 Hz");
@@ -112,7 +112,7 @@ test("Sense buttons drive the canonical lanes and motion uses the real reading t
   const dt = raw.slice(2).map((l) => Number(l.slice(5).split(",")[0]));
   assert(dt.every((v) => Math.abs(v - 9615) < 50), "dt comes from reading times: " + dt.join(","));
   assert(s.lines.some((l) => l.startsWith("@ZERO ")));
-  // Middle and Top reach their own lanes.
+  // The HUD button and the speech button reach their own lanes.
   s.lines.length = 0;
   s.frames(12, 2); s.frames(1, 0);
   assert(s.lines.includes("@MIDDLE 1") && s.lines.includes("@MIDDLE 0"));
@@ -214,10 +214,10 @@ test("a short physical release wins over an early host hold timer", () => {
   assert.equal(s.ctx.moveLatched,false,"the 200 ms physical tap exits mouse follow");
 });
 
-// A HUD that closes while Middle is still held (a double click's second press)
+// A HUD that closes while the HUD button is still held (a double click's second press)
 // must still report the release edge, or the Mac swallows the next hold and
-// keeps Middle "held" (2026-10-29).
-test("closing the HUD during a held Middle still reports its release", () => {
+// keeps the HUD button "held" (2026-10-29).
+test("closing the HUD during a held HUD button still reports its release", () => {
   const s=createSense({zero:'{"x":0,"y":0,"z":0}'});
   s.frames(1,2); s.advance(0.15);
   s.api.repl("setHUDOpen(true);"); s.api.repl("setHUDOpen(false);");

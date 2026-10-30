@@ -17,7 +17,8 @@
 (function (root) {
   "use strict";
 
-  // Logical control mask, matching the Puck @IMU mask: Bottom 1, Middle 2, Top 4.
+  // Logical control mask, matching the Puck @IMU mask: mouse button 1, HUD button 2,
+  // speech button 4.
   var PINS = [["D1", 1], ["D2", 2], ["D30", 4]];
 
   function create(G, native) {

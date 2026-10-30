@@ -75,23 +75,24 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let pointerRouter=WandPointerRouter()
     let recenterGesture=WandRecenterGesture()
     var recenterSuppressButtons=false
-    // Ethan's Bottom triple-click screenshot shortcut shares the double click's
+    // Ethan's mouse-button triple-click screenshot shortcut shares the double click's
     // first two clicks; that recentre now waits out the third press's window.
     var tripleClick=WandTripleClick()
     var pendingRecenter:Timer?
     var clickFollowChoice:(following:Bool,paused:Bool,restore:Bool?,rest:WandRestFollowMemory)?
-    // Screenshot mode: temporary pointer and Bottom ownership while the native
+    // Screenshot mode: temporary pointer and mouse-button ownership while the native
     // selection is active. It never changes the ordinary follow choice.
     let screenshot=WandScreenshotGesture()
     var screenshotTimer:Timer?
     let motionFilter=WandMotionFilter()
-    // Cumulative unrounded HIGH mouse counts, scoped to the current Middle
+    // Cumulative unrounded HIGH mouse counts, scoped to the current HUD button
     // hold. Native Switch App alone consumes this; other HUD cards stay angular.
-    var middleMouseX=0.0,middleMouseSampleAt = -100.0
+    // Previously middleMouseX and middleMouseSampleAt.
+    var hudButtonMouseX=0.0,hudButtonMouseSampleAt = -100.0
     // Ethan's Switch App winding while Agentic Mouse reports dotted app switching.
-    var middleMouseOffset:Double? {
-        let age=ProcessInfo.processInfo.systemUptime-middleMouseSampleAt
-        return age>=0 && age<=0.25 && middleMouseX.isFinite && abs(middleMouseX)<=7_200_000 ? middleMouseX : nil
+    var hudButtonMouseOffset:Double? { // Previously middleMouseOffset.
+        let age=ProcessInfo.processInfo.systemUptime-hudButtonMouseSampleAt
+        return age>=0 && age<=0.25 && hudButtonMouseX.isFinite && abs(hudButtonMouseX)<=7_200_000 ? hudButtonMouseX : nil
     }
     let options=WandUserOptions(url:support.appendingPathComponent("feature-flags.json"))
     let flickScroll=WandFlickScroll()
@@ -136,17 +137,18 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         configuration:support.appendingPathComponent("review-trace.json"),
         build:Bundle.main.object(forInfoDictionaryKey:"CFBundleVersion") as? String ?? "unknown")
     var wandShortcutCircle=WandReviewNavigation()
-    var middleReviewExit=false
+    var hudButtonReviewExit=false // Previously middleReviewExit.
     var reviewExitGesture=WandReviewExitGesture()
     var reviewExitTimer:Timer?
     var selectedReviewMode:String?
     var hiddenReviewOperating=false
     var hiddenReviewPending=false
     var screenshotActive=false,screenshotHUD=false
-    var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false
-    /// The pending `middleTap` is a tap that opened the HUD from closed: a
+    // Previously middleLastRelease, middlePressedAt and middleDoubleConsumed.
+    var hudButtonLastRelease = -100.0,hudButtonPressedAt=0.0,hudButtonDoubleConsumed=false
+    /// The pending `hudButtonTap` is a tap that opened the HUD from closed: a
     /// second press inside its double-click window right-clicks instead.
-    var middleClosedTap=false
+    var hudButtonClosedTap=false // Previously middleClosedTap.
     var circleLight=false
     var circleTimer:Timer?,lowDelayTimer:Timer?
     var heartbeat: Timer?
@@ -160,21 +162,21 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var recordingPointerPaused=false
     var recordingRestoreFollow:Bool?
     var restFollow=WandRestFollowMemory()
-    // One serial lane bounds the Bottom-hold Accessibility probe off the
+    // One serial lane bounds the mouse-button-hold Accessibility probe off the
     // main thread; motion and posting never wait for it.
     let holdTargetQueue=DispatchQueue(label:"wand.hold-target",qos:.userInitiated)
-    var pointerInHUD=false, middleOperating=false, middleSecondTap=false
+    var pointerInHUD=false, hudButtonOperating=false, hudButtonSecondTap=false // Previously middleOperating and middleSecondTap.
     var acceptHUDContext=true
     var navStream=WandAngularStream(),moveStream=WandAngularStream(),legacyHUDStream=WandAngularStream(),scrollStream=WandAngularStream()
     var hudSession=false,hudEntryPress=false
     var hudEntryPressStarted=0.0
-    // Ethan's hold-to-show HUD: true from Middle down to Middle up while the
+    // Ethan's hold-to-show HUD: true from HUD button down to HUD button up while the
     // HUD is steering. Agentic Mouse decides on release whether it stays open.
-    var middleHeld=false,middleQualified=false,hudOpenedAt=0.0
-    let hudHoldSeconds=0.14 // Existing received-Middle hold cutoff; firmware already waits 80 ms.
+    var hudButtonHeld=false,hudButtonQualified=false,hudOpenedAt=0.0 // Previously middleHeld and middleQualified.
+    let hudHoldSeconds=0.14 // Existing received HUD-button hold cutoff; firmware already waits 80 ms.
     var navX=0.0,navY=0.0,navOriginX=0.0,navOriginY=0.0,operationOriginX=0.0,operationOriginY=0.0
-    var middleX=0.0,middleY=0.0
-    var middleHold:Timer?, middleTap:Timer?
+    var hudButtonX=0.0,hudButtonY=0.0 // Previously middleX and middleY.
+    var hudButtonHold:Timer?, hudButtonTap:Timer? // Previously middleHold and middleTap.
     var hudActive = false, hudLastUpdate = Date.distantPast
     var hudWatchdog: Timer?
     var navigationOpenedHUD=false,scrollActive=false
@@ -195,7 +197,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var senseInfo: WandSenseInfo?
     var senseTransport: WandSenseLink.Transport?
     var senseSession=WandSenseSession(),senseClock=WandSenseClock(),senseSessionNumber=0,senseLastReading = -Double.infinity
-    var senseBottomTimer=WandSenseBottomTimer()
+    var senseMouseButtonTimer=WandSenseMouseButtonTimer() // Previously senseBottomTimer.
     var pointerOrigin=WandPointerOrigin()
     /// Why stop-to-click cannot act right now (nil: it can).
     var clickGate:String?
@@ -251,8 +253,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             guard let self,self.ready,!self.restoring else{return}
             // Agentic Mouse closes the HUD after a completed action. It already
             // knows, so this close sends no dismiss that would cut short the
-            // action's follow-up. A live Middle hold settles it on release.
-            if !active {if self.hudSession && !self.middleHeld {self.closeHUD(reason:"context ended",notifyNative:false)};return}
+            // action's follow-up. A live HUD button hold settles it on release.
+            if !active {if self.hudSession && !self.hudButtonHeld {self.closeHUD(reason:"context ended",notifyNative:false)};return}
             guard self.acceptHUDContext else{return}
             // Waiting for the next hold: show the HUD, but never steer it unheld.
             if !self.hudSession {self.cancelCircleScroll();self.hudSession=true;self.hudOpenedAt=ProcessInfo.processInfo.systemUptime;self.navStream.reset();self.navX=0;self.navY=0}
@@ -287,7 +289,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // or replays. (The log key keeps its historical DOTTED name.)
         context.onSwitchAppAdjustingChange = {[weak self] adjusting in
             guard let self else{return}
-            self.middleMouseX=0;self.middleMouseSampleAt = -100
+            self.hudButtonMouseX=0;self.hudButtonMouseSampleAt = -100
             log("SWITCH_APP_DOTTED",adjusting)
         }
         recording.onChange = {[weak self] active in
@@ -365,7 +367,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             clickFollowChoice=choice
         }
         // Ethan: recording switches mouse follow off once. It is not a lock:
-        // Bottom can explicitly re-enter mouse mode while speech keeps running.
+        // The mouse button can explicitly re-enter mouse mode while speech keeps running.
         performPointer(pointerRouter.interrupt());motionFilter.reset();deliveryPoint=nil
         if active {
             // A resting wand keeps the user's choice in rest memory; recording
@@ -391,7 +393,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         dwell.follow(on);scheduleDwell()
     }
     func manualPointerDuringRecording() {
-        // Manual Bottom input wins over automatic speech-time restoration,
+        // Manual mouse-button input wins over automatic speech-time restoration,
         // including a later explicit switch off. Never stop Agent Flow here.
         recordingPointerPaused=false;recordingRestoreFollow=nil
         restFollow.manualChoice()
@@ -620,10 +622,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func reset() {
         powerPolicyReady=false;loadingPowerPolicy=false;batteryRequested=Date.distantPast
         reviewTrace.boundary("receiver reset",mode:wandShortcutMode)
-        reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset();middleReviewExit=false
+        reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset();hudButtonReviewExit=false
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;finishNativeScroll(cancelled:true);heldScroll.reset();heldScrollAnchor=nil
         flickScroll.reset();flickAnchor=nil
-        sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;middleLastRelease = -100;middleDoubleConsumed=false
+        sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil;hudButtonLastRelease = -100;hudButtonDoubleConsumed=false
         wandShortcutMode=nil;wandShortcutCircle.reset()
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil
         probeTimer?.invalidate();probeTimer=nil;restDetection.reset(keepingReference:true);deskSleep.reset();restFollow.reset()
@@ -634,7 +636,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         hudSession=false;hudEntryPress=false
         finishScroll()
         controls.cancel(); hudActive = false; hudWatchdog?.invalidate(); hudWatchdog = nil
-        generation += 1; middleHold?.invalidate();middleTap?.invalidate();middleHold=nil;middleTap=nil;middleClosedTap=false;middleOperating=false;pointerInHUD=false;middleHeld=false;controls.persistent("dismiss");releaseButtons(); ready = false; tx = nil; chunks = []; input = ""; writing = false; configuring = false; uartPaused = false
+        generation += 1; hudButtonHold?.invalidate();hudButtonTap?.invalidate();hudButtonHold=nil;hudButtonTap=nil;hudButtonClosedTap=false;hudButtonOperating=false;pointerInHUD=false;hudButtonHeld=false;controls.persistent("dismiss");releaseButtons(); ready = false; tx = nil; chunks = []; input = ""; writing = false; configuring = false; uartPaused = false
     }
     func reconnect() {
         if isSense { senseLink?.drop("receiver deadline"); endSenseSession(); return }
@@ -820,34 +822,36 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line=="WAND_POWER_STANDBY_DENIED" || line==">WAND_POWER_STANDBY_DENIED" {standbyResume=nil}
             if line=="WAND_POWER_STANDBY_CANCELLED" || line==">WAND_POWER_STANDBY_CANCELLED" {standbyResume=nil;log("DEEP_STANDBY_CANCELLED")}
             if line=="WAND_POWER_STANDBY_ENTERED" || line==">WAND_POWER_STANDBY_ENTERED" {log("DEEP_STANDBY_ENTERED")}
+            // Wire names are unchanged for compatibility with the saved firmware:
+            // @BOTTOM is the mouse button, @MIDDLE the HUD button, @STT the speech button.
             if let marker=line.range(of:"@BOTTOM ") {
                 let value=String(line[marker.upperBound...]).trimmingCharacters(in:.whitespaces)
                 // The device prints each edge before the click it emits on release,
                 // so a consumed (scrolled) hold's endpoint click is dropped by order.
                 if value=="0" || value=="1" {
-                    guard actionPause.admit(.bottom,down:value=="1") else {continue}
-                    if screenshotBottom(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
+                    guard actionPause.admit(.mouseButton,down:value=="1") else {continue}
+                    if screenshotMouseButton(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
                     if value=="1" {
                         if !scrollActive && !heldScroll.active {scrollFollowBefore=dwell.following}
                         manualPointerDuringRecording()
                     }
-                    if recognizeBottomRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
-                    if controlVersion.usesHeldScroll && value=="0" {finishBottomHold(now:ProcessInfo.processInfo.systemUptime)}
+                    if recognizeMouseButtonRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
+                    if controlVersion.usesHeldScroll && value=="0" {finishMouseButtonHold(now:ProcessInfo.processInfo.systemUptime)}
                     if controlVersion.usesHeldScroll && !scrollActive {
                         if value=="1" {
-                            beginBottomHold(now:ProcessInfo.processInfo.systemUptime,following:scrollFollowBefore)
+                            beginMouseButtonHold(now:ProcessInfo.processInfo.systemUptime,following:scrollFollowBefore)
                             if heldScroll.resolving {probeHoldTarget(at:heldScrollAnchor ?? .zero,token:heldTargetToken)}
                         }
                     }
                     if value=="1" && flickScroll.active {flickScroll.reset();flickAnchor=nil;setCircleLight(false);motionFilter.reset()}
                     let endedLegacyScroll=value=="0" && pointerRouter.circle.active
-                    dwell.reset();scheduleDwell();performPointer(pointerRouter.bottom(down:value=="1"))
+                    dwell.reset();scheduleDwell();performPointer(pointerRouter.mouseButton(down:value=="1"))
                     if endedLegacyScroll {restoreMouseAfterScroll()}
                 }
             }
             if let marker=line.range(of:"@MIDDLE "){
                 let value=String(line[marker.upperBound...])
-                if actionPause.admit(.middle,down:value.trimmingCharacters(in:.whitespaces)=="1") {handleMiddle(value)}
+                if actionPause.admit(.hudButton,down:value.trimmingCharacters(in:.whitespaces)=="1") {handleHUDButton(value)}
             }
             if let marker=line.range(of:"@NAV "), !paused {handleNavigation(String(line[marker.upperBound...]))}
             if let marker = line.range(of: "@SCROLL "), !paused { handleScroll(String(line[marker.upperBound...])) }
@@ -857,7 +861,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 let value=String(line[marker.upperBound...]).trimmingCharacters(in: .whitespaces)
                 // Paused: nothing reaches Agent Flow, so a running recording keeps going.
                 if value == "0" || value == "1" {
-                    guard actionPause.admit(.top,down:value=="1") else {log("SPEECH_BUTTON",value,"PAUSED");continue}
+                    guard actionPause.admit(.speechButton,down:value=="1") else {log("SPEECH_BUTTON",value,"PAUSED");continue}
                     log("SPEECH_BUTTON", value, controls.speech(down:value == "1") ? "SENT" : "UNAVAILABLE")
                 }
             }
@@ -865,8 +869,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if restoring && line.contains("WAND_BRIDGE_RESTORED") { log("STOPPED"); exit(0) }
         }
     }
-    // Legacy @MOVE card operation. Middle itself now uses the hold-to-show
-    // lifecycle in handleMiddle: hold steers, release uses the card.
+    // Legacy @MOVE card operation. The HUD button itself now uses the hold-to-show
+    // lifecycle in handleHUDButton: hold steers, release uses the card.
     var hudDoubleClickInterval:Double {max(0.25,min(0.3,NSEvent.doubleClickInterval))}
     func handleMove(_ payload:String,project:Bool=true) {
         guard !restoring,!scrollActive,AXIsProcessTrusted() else{return}
@@ -875,44 +879,44 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard hudSession else{return}
         if f[0]=="B" {moveStream.reset()}
         let point=project ? moveStream.update(x:x/1000,y:y/1000,using:motionFilter) : (x:x/1000,y:y/1000)
-        middleX=point.x;middleY=point.y
+        hudButtonX=point.x;hudButtonY=point.y
         switch f[0] {
         case "B":
-            if middleTap != nil {
-                middleTap?.invalidate();middleTap=nil
-                middleHold?.invalidate();middleHold=nil
+            if hudButtonTap != nil {
+                hudButtonTap?.invalidate();hudButtonTap=nil
+                hudButtonHold?.invalidate();hudButtonHold=nil
                 closeHUD(reason:"middle double click")
                 return
             }
             guard context.isActive || hudSession else{return}
-            pointerInHUD=true;middleOperating=false
-            middleSecondTap=false
-            middleHold=WandRunLoop.commonTimer(interval:0.22,repeats:false){[weak self] _ in
+            pointerInHUD=true;hudButtonOperating=false
+            hudButtonSecondTap=false
+            hudButtonHold=WandRunLoop.commonTimer(interval:0.22,repeats:false){[weak self] _ in
                 guard let self,self.pointerInHUD,(self.context.isActive || self.hudSession) else{return}
-                self.middleOperating=true;self.controls.persistent("press")
-                self.controls.persistent("motion",x:self.middleX,y:self.middleY)
+                self.hudButtonOperating=true;self.controls.persistent("press")
+                self.controls.persistent("motion",x:self.hudButtonX,y:self.hudButtonY)
             }
             startHUDWatchdog()
         case "U":
             guard pointerInHUD else{return};hudLastUpdate=Date()
-            if middleOperating {controls.persistent("motion",x:middleX,y:middleY)}
+            if hudButtonOperating {controls.persistent("motion",x:hudButtonX,y:hudButtonY)}
         case "E":
             guard pointerInHUD else{return};pointerInHUD=false
-            middleHold?.invalidate();middleHold=nil;stopHUDWatchdog()
-            if middleOperating {controls.persistent("motion",x:middleX,y:middleY);controls.persistent("release");resumeHUDNavigation()}
+            hudButtonHold?.invalidate();hudButtonHold=nil;stopHUDWatchdog()
+            if hudButtonOperating {controls.persistent("motion",x:hudButtonX,y:hudButtonY);controls.persistent("release");resumeHUDNavigation()}
             else {
-                middleTap=WandRunLoop.commonTimer(interval:hudDoubleClickInterval,repeats:false){[weak self] _ in
-                    guard let self else{return};self.middleTap=nil
+                hudButtonTap=WandRunLoop.commonTimer(interval:hudDoubleClickInterval,repeats:false){[weak self] _ in
+                    guard let self else{return};self.hudButtonTap=nil
                     guard self.hudSession,self.acceptHUDContext,self.context.isActive,!self.restoring else{return}
                     self.controls.persistent("activate");self.resumeHUDNavigation()
                 }
             }
-            middleOperating=false
+            hudButtonOperating=false
         default:break
         }
     }
     /// Close the entire wand session, including delayed clicks and app-specific state.
-    /// Ignore stale positive heartbeats until a fresh physical Middle press opens it.
+    /// Ignore stale positive heartbeats until a fresh physical HUD button press opens it.
     /// `notifyNative` is false when Agentic Mouse itself closed the HUD.
     func closeHUD(reason:String,notifyNative:Bool=true) {
         finishWandShortcut(commit:false)
@@ -922,8 +926,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         screenshotHUD=false
         acceptHUDContext=false
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil
-        hudSession=false;hudEntryPress=false;hudActive=false;pointerInHUD=false;middleOperating=false;navigationOpenedHUD=false;middleHeld=false
-        middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil;middleClosedTap=false
+        hudSession=false;hudEntryPress=false;hudActive=false;pointerInHUD=false;hudButtonOperating=false;navigationOpenedHUD=false;hudButtonHeld=false
+        hudButtonTap?.invalidate();hudButtonTap=nil;hudButtonHold?.invalidate();hudButtonHold=nil;hudButtonClosedTap=false
         stopHUDWatchdog();if notifyNative {controls.persistent("dismiss")}
         queue("global.wandAppMode=undefined;setHUDOpen(false);updateLights();")
         log("HUD_CLOSED",reason)
@@ -932,10 +936,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// should do the right mouse menu, like right click basically", starting
     /// from a closed HUD (an open HUD's double click still only closes it).
     /// One native right press and release at the pointer he sees, with mouse
-    /// follow on or off and without moving or warping it. Never while Bottom,
+    /// follow on or off and without moving or warping it. Never while the mouse button,
     /// a scroll, a native button or screenshot mode owns the pointer.
     func hudDoubleRightClick() {
-        let blocker = screenshot.ownsPointer ? "screenshot" : pointerRouter.bottomHeld || heldScroll.active ? "bottom held" :
+        let blocker = screenshot.ownsPointer ? "screenshot" : pointerRouter.mouseButtonHeld || heldScroll.active ? "bottom held" :
             buttons != 0 ? "button down" : nil
         if let blocker {log("HUD_RIGHT_CLICK_SKIPPED",blocker);return}
         let point=deliveryPoint ?? currentPointerOrigin()
@@ -944,8 +948,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func setScreenshotActive(_ active:Bool) {
         // Cancelling the screenshot tool must not carry its mouse-down into
-        // the underlying app, even if Bottom has not been released yet.
-        if screenshotActive && !active {finishBottomHold(now:ProcessInfo.processInfo.systemUptime,released:false)}
+        // the underlying app, even if the mouse button has not been released yet.
+        if screenshotActive && !active {finishMouseButtonHold(now:ProcessInfo.processInfo.systemUptime,released:false)}
         screenshotActive=active
         screenshotContextChanged(active)
         if !active,screenshotHUD {
@@ -966,26 +970,27 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// never permission for an ordinary click in the app underneath.
     func screenshotContextChanged(_ active:Bool) {
         guard active else{endScreenshot(reason:"capture ended",contextActive:false);return}
-        guard ready,!restoring,!actionPause.paused,screenshot.contextActive(now:ProcessInfo.processInfo.systemUptime,pressed:pointerRouter.bottomHeld) else{return}
+        guard ready,!restoring,!actionPause.paused,screenshot.contextActive(now:ProcessInfo.processInfo.systemUptime,pressed:pointerRouter.mouseButtonHeld) else{return}
         takeScreenshotPointer(follow:"moveLatched")
         enterPointerMode()
         log("SCREENSHOT_MODE",screenshot.shortcut ? "shortcut":"selection")
     }
-    /// Take the pointer from every ordinary Bottom lane and ask the wand for
+    /// Take the pointer from every ordinary mouse-button lane and ask the wand for
     /// HIGH motion even with mouse follow off. `setMouseFollow` here only
-    /// clears the wand's Bottom gesture; `follow` is the unchanged choice.
+    /// clears the wand's mouse-button gesture; `follow` is the unchanged choice.
     func takeScreenshotPointer(follow:String) {
         pendingRecenter?.invalidate();pendingRecenter=nil;tripleClick.cancel();recenterGesture.cancel()
-        cancelCircleScroll();finishBottomHold(now:ProcessInfo.processInfo.systemUptime,released:false)
+        cancelCircleScroll();finishMouseButtonHold(now:ProcessInfo.processInfo.systemUptime,released:false)
         performPointer(pointerRouter.cancelAll());if buttons != 0 {releaseButtons()}
         motionFilter.reset();dwell.reset();scheduleDwell()
         queue("global.wandShot=1;setMouseFollow("+follow+");wakeGyro();")
         superviseScreenshot()
     }
-    /// Bottom edges before every ordinary lane. Screenshot mode owns Bottom
+    /// Mouse-button edges before every ordinary lane. Screenshot mode owns the mouse button
     /// outright; otherwise watch for Ethan's triple-click shortcut.
-    func screenshotBottom(down:Bool,now:Double)->Bool {
-        switch screenshot.bottom(down:down) {
+    /// Previously screenshotBottom.
+    func screenshotMouseButton(down:Bool,now:Double)->Bool {
+        switch screenshot.mouseButton(down:down) {
         case .consumed: tripleClick.cancel();return true
         case .press: tripleClick.cancel();latchScreenshotIfReady();return true
         case .release: tripleClick.cancel();finishScreenshotDrag(reason:"Bottom release");return true
@@ -1001,9 +1006,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if down,let waiting=pendingRecenter {waiting.invalidate();pendingRecenter=nil;recenterPointer()}
         return false
     }
-    /// Ethan's Bottom triple-click: start the ordinary native macOS selection.
+    /// Ethan's mouse-button triple-click: start the ordinary native macOS selection.
     /// All three clicks are consumed: no recentre, scroll, drag, click or
-    /// mouse-follow change survives them. A fresh Bottom press then drags the
+    /// mouse-follow change survives them. A fresh mouse-button press then drags the
     /// area like a mouse button and its release captures.
     func startScreenshotShortcut(now:Double) {
         pendingRecenter?.invalidate();pendingRecenter=nil
@@ -1024,7 +1029,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         log("SCREENSHOT_SHORTCUT")
     }
     /// One bounded supervisor while screenshot mode owns the pointer: native
-    /// start, lost telemetry, and a Bottom press made before the selector
+    /// start, lost telemetry, and a mouse-button press made before the selector
     /// appeared. It never moves the pointer.
     func superviseScreenshot() {
         if screenshotTimer==nil {
@@ -1038,7 +1043,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if let reason=screenshot.expired(now:ProcessInfo.processInfo.systemUptime) {endScreenshot(reason:reason,contextActive:screenshotActive);return}
         latchScreenshotIfReady()
     }
-    /// Bottom is down: press the native button, but only once macOS's own
+    /// The mouse button is down: press the native button, but only once macOS's own
     /// selector is up; a press before it exists would click the app underneath.
     func latchScreenshotIfReady() {
         guard !actionPause.paused,screenshot.phase == .aiming,screenshot.pressHeld,AXIsProcessTrusted(),Self.screenshotSelectorVisible() else{return}
@@ -1053,7 +1058,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         return windows.contains{$0[kCGWindowOwnerName as String] as? String == "screencapture"}
     }
     /// Screenshot motion: the same HIGH sensor-space calculation and gain as
-    /// normal mouse follow. Bottom down is only a click here, never LOW, and the
+    /// normal mouse follow. Mouse button down is only a click here, never LOW, and the
     /// wand's HUD-only flag is expected because follow may be off.
     func handleScreenshotRaw(_ v:[Int],now:Double) {
         screenshot.telemetry(now:now)
@@ -1087,56 +1092,57 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func enterPointerMode(){
         if screenshotActive && (hudSession || screenshotHUD) {
             screenshotHUD=true;controls.persistent("park");hudActive=false;hudSession=false
-            pointerInHUD=false;middleOperating=false;stopHUDWatchdog();queue("setHUDOpen(false);")
-        } // Bottom changes pointing only; it never closes the Middle-owned HUD/review.
+            pointerInHUD=false;hudButtonOperating=false;stopHUDWatchdog();queue("setHUDOpen(false);")
+        } // The mouse button changes pointing only; it never closes the HUD or review owned by the HUD button.
         log("POINTER_MODE_ENTERED")
     }
-    func handleMiddle(_ payload:String){
+    /// The HUD button's `@MIDDLE` edges (legacy wire name). Previously handleMiddle.
+    func handleHUDButton(_ payload:String){
         guard !restoring,!scrollActive,AXIsProcessTrusted() else{return}
         switch payload.trimmingCharacters(in:.whitespaces){
         case "1":
-            let now=ProcessInfo.processInfo.systemUptime;middlePressedAt=now
+            let now=ProcessInfo.processInfo.systemUptime;hudButtonPressedAt=now
             // A new press proves any earlier release happened, even if its
             // edge never arrived (2026-10-29: a double click's lost release
-            // swallowed the next hold's release and left Middle "held",
+            // swallowed the next hold's release and left the HUD button "held",
             // blocking the pointer). Start every press from a clean state.
-            if middleDoubleConsumed || middleHeld {log("MIDDLE_RELEASE_RECOVERED")}
-            middleDoubleConsumed=false
+            if hudButtonDoubleConsumed || hudButtonHeld {log("MIDDLE_RELEASE_RECOVERED")}
+            hudButtonDoubleConsumed=false
             // A first tap whose double-click window already ended (its timer ran
             // late) exits now, exactly as on time, before this press is judged.
             if selectedReviewMode != nil,reviewExitGesture.expiredTap(now:now) {expireReviewTap()}
             if selectedReviewMode != nil {
                 guard !reviewExitGesture.pending else{return}
-                middleReviewExit=true;middleLastRelease = -100
+                hudButtonReviewExit=true;hudButtonLastRelease = -100
                 reviewExitTimer?.invalidate();reviewExitTimer=nil
                 beginReviewCommitHold(now:now)
                 return
             }
-            if now-middleLastRelease<=hudDoubleClickInterval {
+            if now-hudButtonLastRelease<=hudDoubleClickInterval {
                 // Double click still dismisses, cancelling the first tap's pending use.
                 // Started from a closed HUD it is Ethan's right click instead
                 // (2026-10-30); its first press only showed the HUD, so close that.
-                let rightClick=middleClosedTap && middleTap != nil
-                middleLastRelease = -100;middleDoubleConsumed=true;middleClosedTap=false
-                middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
+                let rightClick=hudButtonClosedTap && hudButtonTap != nil
+                hudButtonLastRelease = -100;hudButtonDoubleConsumed=true;hudButtonClosedTap=false
+                hudButtonTap?.invalidate();hudButtonTap=nil;hudButtonHold?.invalidate();hudButtonHold=nil
                 closeHUD(reason:rightClick ? "middle double click from closed" : "middle double click")
                 if rightClick {hudDoubleRightClick()}
                 return
             }
-            let closedTapPending=middleClosedTap;middleClosedTap=false
+            let closedTapPending=hudButtonClosedTap;hudButtonClosedTap=false
             // A session Agentic Mouse no longer shows (it quit or lost the
             // lease) is stale: start a fresh HUD instead of steering nothing.
             if hudSession && !context.isActive && now-hudOpenedAt>1 {closeHUD(reason:"context missing",notifyNative:false);acceptHUDContext=true}
-            if let pending=middleTap {
+            if let pending=hudButtonTap {
                 // A tap whose double-click window just ended: use it now, before
                 // this new hold, rather than lose it to a late timer.
-                pending.invalidate();middleTap=nil
+                pending.invalidate();hudButtonTap=nil
                 if hudSession,acceptHUDContext,context.isActive || closedTapPending {controls.persistent("activate");log("HUD_TAP_USED")}
             }
-            middleHeld=true;middleQualified=false;hudEntryPress=false
-            middleMouseX=0;middleMouseSampleAt = -100
+            hudButtonHeld=true;hudButtonQualified=false;hudEntryPress=false
+            hudButtonMouseX=0;hudButtonMouseSampleAt = -100
             if !hudSession {
-                // Holding Middle shows the HUD and steers it from Switch App.
+                // Holding the HUD button shows the HUD and steers it from Switch App.
                 acceptHUDContext=true;navStream.reset()
                 hudSession=true;hudOpenedAt=now;navigationOpenedHUD=true;navX=0;navY=0
                 controls.persistent("open");resumeHUDNavigation()
@@ -1147,8 +1153,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             // the last release armed. Agentic Mouse knows which.
             resumeHUDNavigation()
         case "0":
-            if middleReviewExit {
-                middleReviewExit=false
+            if hudButtonReviewExit {
+                hudButtonReviewExit=false
                 reviewExitTimer?.invalidate();reviewExitTimer=nil
                 let now=ProcessInfo.processInfo.systemUptime
                 // One short click exits unstaged once its double-click window
@@ -1165,32 +1171,32 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             }
             if hiddenReviewOperating {
                 finishWandShortcut(commit:true);hiddenReviewOperating=false
-                middleHold?.invalidate();middleHold=nil
+                hudButtonHold?.invalidate();hudButtonHold=nil
                 queue("setHUDOpen(false);");return
             }
             if hiddenReviewPending {
-                hiddenReviewPending=false;middleHold?.invalidate();middleHold=nil
+                hiddenReviewPending=false;hudButtonHold?.invalidate();hudButtonHold=nil
                 // A tap reopens the main HUD without changing the selected review mode.
                 acceptHUDContext=true;hudSession=true;hudEntryPress=false;navStream.reset();navX=0;navY=0
                 controls.persistent("open");queue("setHUDOpen(true);");resumeHUDNavigation()
-                middleLastRelease=ProcessInfo.processInfo.systemUptime;return
+                hudButtonLastRelease=ProcessInfo.processInfo.systemUptime;return
             }
             // A bounced or duplicate release in a selected review set is not a
             // gesture: it must neither stage the set nor end a waiting tap.
-            if selectedReviewMode != nil && !middleHeld {middleDoubleConsumed=false;return}
+            if selectedReviewMode != nil && !hudButtonHeld {hudButtonDoubleConsumed=false;return}
             finishWandShortcut(commit:true)
             // The double click's own release: it is still a release.
-            if middleDoubleConsumed {middleDoubleConsumed=false;middleHeld=false;middleQualified=false;return}
-            guard middleHeld else{return}
+            if hudButtonDoubleConsumed {hudButtonDoubleConsumed=false;hudButtonHeld=false;hudButtonQualified=false;return}
+            guard hudButtonHeld else{return}
             let openedByThisPress=navigationOpenedHUD
-            middleHeld=false;middleQualified=false;navigationOpenedHUD=false
-            // Firmware delays a held Middle down by 80 ms to arbitrate the scroll
+            hudButtonHeld=false;hudButtonQualified=false;navigationOpenedHUD=false
+            // Firmware delays a held HUD-button down edge by 80 ms to arbitrate the scroll
             // chord, so under 140 ms here is a physical tap under 220 ms.
             let now=ProcessInfo.processInfo.systemUptime
-            let tap=now-middlePressedAt<hudHoldSeconds
-            middleLastRelease=tap ? now : -100
+            let tap=now-hudButtonPressedAt<hudHoldSeconds
+            hudButtonLastRelease=tap ? now : -100
             if hudActive {
-                hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY,mouseX:middleMouseOffset)
+                hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY,mouseX:hudButtonMouseOffset)
                 controls.persistent("park")
             }
             hudActive=false;stopHUDWatchdog()
@@ -1203,17 +1209,17 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // of that double click never switches apps. Holds, pointer
                 // movement and an already open HUD are not delayed. Unlike the
                 // open-HUD tap it never needed the HUD's first heartbeat.
-                middleClosedTap=true
-                middleTap=WandRunLoop.commonTimer(interval:hudDoubleClickInterval,repeats:false){[weak self] _ in
-                    guard let self else{return};self.middleTap=nil;self.middleClosedTap=false
+                hudButtonClosedTap=true
+                hudButtonTap=WandRunLoop.commonTimer(interval:hudDoubleClickInterval,repeats:false){[weak self] _ in
+                    guard let self else{return};self.hudButtonTap=nil;self.hudButtonClosedTap=false
                     guard self.hudSession,self.acceptHUDContext,!self.restoring else{return}
                     self.controls.persistent("activate");log("HUD_TAP_USED")
                 }
             } else if tap {
                 // A tap uses the outlined card once the double-click window
                 // passes, so a double click can still dismiss without acting.
-                middleTap=WandRunLoop.commonTimer(interval:hudDoubleClickInterval,repeats:false){[weak self] _ in
-                    guard let self else{return};self.middleTap=nil
+                hudButtonTap=WandRunLoop.commonTimer(interval:hudDoubleClickInterval,repeats:false){[weak self] _ in
+                    guard let self else{return};self.hudButtonTap=nil
                     guard self.hudSession,self.acceptHUDContext,self.context.isActive,!self.restoring else{return}
                     self.controls.persistent("activate");log("HUD_TAP_USED")
                 }
@@ -1235,10 +1241,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             let now=ProcessInfo.processInfo.systemUptime
             let dx=navX-wandShortcutX,dy=navY-wandShortcutY
             wandShortcutX=navX;wandShortcutY=navY;wandShortcutTime=now
-            // Bottom retains its mouse gesture. Never interpret that held movement as review.
-            // Review also holds still while one Middle tap may become a double
+            // The mouse button retains its mouse gesture. Never interpret that held movement as review.
+            // Review also holds still while one HUD button tap may become a double
             // click, and until Agentic Mouse acknowledges the resulting toggle.
-            let blocked = pointerRouter.bottomHeld ? "bottom held" : reviewExitGesture.pending ? "middle held" :
+            let blocked = pointerRouter.mouseButtonHeld ? "bottom held" : reviewExitGesture.pending ? "middle held" :
                 reviewExitGesture.awaitingSecond ? "double click pending" : reviewExitGesture.toggling(now:now) ? "toggle pending" :
                 (!ready || restoring) ? "receiver unavailable" : !context.isFresh ? "context expired" :
                 NSWorkspace.shared.frontmostApplication?.bundleIdentifier != "com.microsoft.VSCode" ? "app not frontmost" : nil
@@ -1256,13 +1262,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard !restoring,!scrollActive,hudSession else{return}
         // Ethan wants the dotted Switch App outline while the first hold is
         // still down. Qualify the current gesture; release still owns choose.
-        if middleHeld && !middleQualified && ProcessInfo.processInfo.systemUptime-middlePressedAt>=hudHoldSeconds {
-            middleQualified=true;controls.persistent("qualify")
+        if hudButtonHeld && !hudButtonQualified && ProcessInfo.processInfo.systemUptime-hudButtonPressedAt>=hudHoldSeconds {
+            hudButtonQualified=true;controls.persistent("qualify")
         }
-        // Ethan's Bottom mouse lane stays independent from the dotted Switch
+        // Ethan's mouse-button lane stays independent from the dotted Switch
         // App hover. Park before a drag/scroll, then start a fresh origin so
-        // that movement cannot jump the outline when Bottom is released.
-        if !middleHeld && pointerRouter.bottomHeld {
+        // that movement cannot jump the outline when the mouse button is released.
+        if !hudButtonHeld && pointerRouter.mouseButtonHeld {
             if hudActive {controls.persistent("park");hudActive=false;stopHUDWatchdog()}
             navOriginX=navX;navOriginY=navY
             return
@@ -1271,17 +1277,17 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // double-click window is pending, ignore aim movement; activate must use
         // the clicked wedge, never a later Back/Utilities outline. The next
         // stream takes a fresh origin, so this movement is dropped, not replayed.
-        guard middleTap == nil else{return}
+        guard hudButtonTap == nil else{return}
         // Unheld movement aims within a submenu. A selected dotted control
         // adjusts only while held; native state owns that choice. Passive aim never times out.
-        if !middleHeld,!pointerInHUD,!hudActive,acceptHUDContext,context.isActive {
+        if !hudButtonHeld,!pointerInHUD,!hudActive,acceptHUDContext,context.isActive {
             navOriginX=navX;navOriginY=navY;hudActive=true
             stopHUDWatchdog();controls.persistent("hover")
         }
         if pointerInHUD {
             handleMove("U,"+String((navX-operationOriginX)*1000)+","+String((navY-operationOriginY)*1000),project:false)
         }else if hudActive {
-            hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY,mouseX:middleMouseOffset)
+            hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY,mouseX:hudButtonMouseOffset)
         }
     }
     func recordReviewInput(rawX:Double,rawY:Double,dx:Double,dy:Double,now:Double,blocked:String?,step:Int32) {
@@ -1310,8 +1316,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let x=point.x,y=point.y
         switch f[0] {
         case "B":
-            middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
-            if middleOperating {controls.persistent("release");middleOperating=false}
+            hudButtonTap?.invalidate();hudButtonTap=nil;hudButtonHold?.invalidate();hudButtonHold=nil
+            if hudButtonOperating {controls.persistent("release");hudButtonOperating=false}
             pointerInHUD=false;releaseButtons();hudActive=true
             navigationOpenedHUD = !context.isActive
             if navigationOpenedHUD {controls.persistent("open")}
@@ -1347,12 +1353,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let x=point.x,y=point.y
         switch f[0]{
         case "B":
-            let followingBefore=heldScroll.active || pointerRouter.bottomHeld ? scrollFollowBefore:dwell.following
+            let followingBefore=heldScroll.active || pointerRouter.mouseButtonHeld ? scrollFollowBefore:dwell.following
             if screenshot.ownsPointer {endScreenshot(reason:"scroll chord",contextActive:screenshotActive)}
-            sendReview(review.cancel());cancelCircleScroll();finishScroll();hudEntryPress=false;middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
+            sendReview(review.cancel());cancelCircleScroll();finishScroll();hudEntryPress=false;hudButtonTap?.invalidate();hudButtonTap=nil;hudButtonHold?.invalidate();hudButtonHold=nil
             if hudActive {controls.persistent("park");if navigationOpenedHUD{controls.persistent("dismiss");hudSession=false;queue("setHUDOpen(false);")}}
-            else if middleOperating {controls.persistent("release")}
-            hudActive=false;pointerInHUD=false;middleOperating=false;navigationOpenedHUD=false
+            else if hudButtonOperating {controls.persistent("release")}
+            hudActive=false;pointerInHUD=false;hudButtonOperating=false;navigationOpenedHUD=false
             stopHUDWatchdog();releaseButtons()
             scrollAnchor=deliveryPoint ?? currentPointerOrigin()
             scrollFollowBefore=followingBefore
@@ -1378,7 +1384,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// over a draggable target it becomes a native drag. Until the bounded
     /// target probe answers it behaves as a scroll and can never drag, and an
     /// unknown answer keeps scrolling. Tap-then-hold is always a native drag.
-    func beginBottomHold(now:Double,following:Bool?=nil) {
+    /// Previously beginBottomHold.
+    func beginMouseButtonHold(now:Double,following:Bool?=nil) {
         scrollFollowBefore=following ?? dwell.following
         finishNativeScroll(cancelled:true)
         heldScrollAnchor=deliveryPoint ?? currentPointerOrigin()
@@ -1388,7 +1395,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         heldSafetyTimer?.invalidate()
         heldSafetyTimer=WandRunLoop.commonTimer(interval:0.02,repeats:true){[weak self] _ in
             guard let self else{return};let now=ProcessInfo.processInfo.systemUptime
-            if self.heldScroll.stale(now:now){self.reconcileBottomHold(down:false,now:now,reason:"button telemetry timeout",released:false);return}
+            if self.heldScroll.stale(now:now){self.reconcileMouseButtonHold(down:false,now:now,reason:"button telemetry timeout",released:false);return}
             // A pause mid-gesture cancels it at once rather than leaving it open.
             if self.actionPause.paused {self.finishNativeScroll(cancelled:true)}
             guard self.ready,!self.restoring,!self.actionPause.paused,AXIsProcessTrusted() else{return}
@@ -1509,12 +1516,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         scrollActive=false;scrollAnchor=nil;scrollWatchdog?.invalidate();scrollWatchdog=nil
         if wasActive {finishNativeScroll(cancelled:!released);if released {restoreMouseAfterScroll()}else{resumeHUDNavigation()}}
     }
-    /// Bottom double tap is a global escape into pointing, not a mode action.
+    /// A mouse-button double tap is a global escape into pointing, not a mode action.
     /// Keep its recognition alive when the first tap closes a HUD or scroll.
     /// Ethan's triple-click screenshot shares its two clicks, so the centre
     /// waits out the third press's 0.3 s window rather than jumping before a
     /// screenshot anchor. No pointer motion is buffered or replayed meanwhile.
-    func recognizeBottomRecenter(down:Bool,now:Double)->Bool {
+    /// Previously recognizeBottomRecenter.
+    func recognizeMouseButtonRecenter(down:Bool,now:Double)->Bool {
         if down {recenterSuppressButtons=false}
         guard recenterGesture.edge(down:down,now:now) else{return false}
         pendingRecenter?.invalidate()
@@ -1523,7 +1531,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         return true
     }
-    /// Recenter only the Bottom pointer lane; preserve Middle HUD/review and speech.
+    /// Recenter only the mouse-button pointer lane; preserve the HUD button's HUD/review and speech.
     func recenterPointer() {
         guard ready,!restoring,!actionPause.paused,!screenshot.ownsPointer,AXIsProcessTrusted() else{return}
         cancelCircleScroll();finishScroll();performPointer(pointerRouter.cancelAll());releaseButtons();motionFilter.reset()
@@ -1632,7 +1640,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard selectedReviewMode != nil,reviewExitGesture.commitIfHeld(now:now) else{return}
         commitSelectedReview()
     }
-    /// Ethan's single Middle click in review waits out the double-click window
+    /// Ethan's single HUD-button click in review waits out the double-click window
     /// (at most 0.3 s, approved) before exiting. Only review navigation pauses
     /// meanwhile; pointer motion is never buffered or delayed.
     func scheduleReviewTapTimeout() {
@@ -1668,7 +1676,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func commitSelectedReview() {
         reviewExitTimer?.invalidate();reviewExitTimer=nil
-        // Keep the held latch until Middle-up: circling must not change the set,
+        // Keep the held latch until HUD-button release: circling must not change the set,
         // including after this one staging action has already completed.
         guard let mode=selectedReviewMode else{return}
         sendReview(review.endDetents(commit:true))
@@ -1731,12 +1739,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func postPointerMove(dx:Int,dy:Int,from point:CGPoint)->CGPoint {
         guard !actionPause.paused else{return point}
         guard !recordingPointerPaused || screenshot.ownsPointer else{return point}
-        // Ethan's "switch app button": Middle operates the selected HUD card.
+        // Ethan's "switch app button": the HUD button operates the selected HUD card.
         // Keep horizontal card input, but drop concurrent mouse-mode movement
         // for the whole press, including entry and the card's hold threshold.
         // Returning the unchanged point discards motion instead of replaying it
         // on release; an open, unheld HUD and independent review stay separate.
-        guard !(hudSession && (middleHeld || hudEntryPress || pointerInHUD)) else{return point}
+        guard !(hudSession && (hudButtonHeld || hudEntryPress || pointerInHUD)) else{return point}
         // Ethan (2026-10-29): "it should not block me from using the mouse
         // ever in any HUD." An open HUD no longer freezes the pointer: when
         // mouse follow is on, unheld motion moves it while the HUD's outline
@@ -1759,13 +1767,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         handleFrame(x:x,y:y,b:b)
     }
     func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil){
-        // Screenshot mode owns Bottom and the native button; the wand's legacy
+        // Screenshot mode owns the mouse button and the native button; the wand's legacy
         // button frames carry no motion in raw mode and must never act here.
         if screenshot.ownsPointer {return}
         // The device can finish an old release click after the global escape.
         if recenterSuppressButtons && b != 0 {return}
-        if controlVersion.usesHeldScroll && (heldScroll.consumes(buttons:b) || pointerRouter.bottomHeld) {dwell.reset();scheduleDwell();return}
-        // V2/V3 owns native drags in the physical Bottom hold. Firmware's
+        if controlVersion.usesHeldScroll && (heldScroll.consumes(buttons:b) || pointerRouter.mouseButtonHeld) {dwell.reset();scheduleDwell();return}
+        // V2/V3 owns native drags in the physical mouse-button hold. Firmware's
         // legacy drag/click queue must never relatch the Mac after release.
         if controlVersion.usesHeldScroll && b != 0 {return}
         reportCount += 1
@@ -1775,14 +1783,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // applied before motion, at the position already shown.
         let routed=pointerRouter.frame(dx:x,dy:y,buttons:b,hud:false,now:ProcessInfo.processInfo.systemUptime)
         // A HUD session Agentic Mouse no longer shows never blocks clicks: the
-        // same stale rule a Middle press applies, checked as the mouse moves.
-        if hudSession && !middleHeld && !context.isActive && ProcessInfo.processInfo.systemUptime-hudOpenedAt>1 {
+        // same stale rule a HUD-button press applies, checked as the mouse moves.
+        if hudSession && !hudButtonHeld && !context.isActive && ProcessInfo.processInfo.systemUptime-hudOpenedAt>1 {
             closeHUD(reason:"context missing",notifyNative:false)
         }
         // Stop-to-click follows the tuned stop counts on either pointer path.
-        let gate=WandClickGate.blocker(recordingPaused:recordingPointerPaused,bottomHeld:pointerRouter.bottomHeld,buttons:b,
+        let gate=WandClickGate.blocker(recordingPaused:recordingPointerPaused,mouseButtonHeld:pointerRouter.mouseButtonHeld,buttons:b,
                                        hudSession:hudSession,hudShown:context.isActive,scrollActive:scrollActive,
-                                       hudOperating:middleHeld || hudEntryPress || pointerInHUD)
+                                       hudOperating:hudButtonHeld || hudEntryPress || pointerInHUD)
         noteClickGate(gate)
         dwell.move(dx:stopX ?? x,dy:stopY ?? y,now:ProcessInfo.processInfo.systemUptime,eligible:gate == nil)
         scheduleDwell()
@@ -1792,21 +1800,22 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     /// `released`: the physical release, as opposed to lost telemetry or a
     /// screenshot taking over. Only a released, qualified scroll changes follow.
-    func finishBottomHold(now:Double,released:Bool=true) {
+    /// Previously finishBottomHold.
+    func finishMouseButtonHold(now:Double,released:Bool=true) {
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldTargetToken=UUID()
-        // Ethan: dragging is only while holding Bottom. Release an orphaned
+        // Ethan: dragging is only while holding the mouse button. Release an orphaned
         // native down too, even if another path already cleared the hold.
         if buttons & 1 != 0 {transition(to:buttons & ~1,at:deliveryPoint ?? currentPointerOrigin())}
         guard heldScroll.active else{
             // @BOTTOM 0 precedes @SCROLL E on the device. The chord owns
-            // its open gesture until that end marker, not this Bottom edge.
+            // its open gesture until that end marker, not this mouse-button edge.
             if !scrollActive {finishNativeScroll(cancelled:true)}
             return
         }
         // A Sense press judged by its physical edges: a short tap that only
         // looked long because its release arrived late never counts as a
         // completed scroll, so it cannot turn mouse follow back on.
-        let physicalDuration=released ? bottomPhysicalTapDuration() : nil
+        let physicalDuration=released ? mouseButtonPhysicalTapDuration() : nil
         let physicalTap=physicalDuration.map{$0<heldScroll.holdSeconds} ?? false
         if physicalTap {log("BOTTOM_PHYSICAL_TAP",Int((physicalDuration ?? 0)*1000))}
         let completedScroll=heldScroll.scrollable && !heldScroll.dragging && heldScroll.qualified(now:now) && !physicalTap
@@ -1821,13 +1830,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         heldScrollAnchor=nil;setCircleLight(false)
         if completedScroll && released {restoreMouseAfterScroll()}
     }
-    func reconcileBottomHold(down:Bool,now:Double,reason:String,released:Bool=true) {
+    /// Previously reconcileBottomHold.
+    func reconcileMouseButtonHold(down:Bool,now:Double,reason:String,released:Bool=true) {
         // A latched screenshot drag outlives its tap's physical release.
         guard !screenshot.ownsPointer else{return}
         // V1's normal click pair is synchronous. After its physical release
         // edge, a later up sample can safely clear an orphaned device drag.
         if !controlVersion.usesHeldScroll {
-            if !down && !pointerRouter.bottomHeld && buttons & 1 != 0 {
+            if !down && !pointerRouter.mouseButtonHeld && buttons & 1 != 0 {
                 transition(to:buttons & ~1,at:deliveryPoint ?? currentPointerOrigin())
                 log("BOTTOM_HOLD_RECOVERED",reason)
             }
@@ -1835,9 +1845,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         guard controlVersion.usesHeldScroll else{return}
         if down {heldScroll.confirmHeld(now:now);return}
-        guard heldScroll.active || pointerRouter.bottomHeld || buttons & 1 != 0 else{return}
-        finishBottomHold(now:now,released:released)
-        performPointer(pointerRouter.bottom(down:false))
+        guard heldScroll.active || pointerRouter.mouseButtonHeld || buttons & 1 != 0 else{return}
+        finishMouseButtonHold(now:now,released:released)
+        performPointer(pointerRouter.mouseButton(down:false))
         dwell.reset();scheduleDwell();log("BOTTOM_HOLD_RECOVERED",reason)
     }
     func handleRaw(_ payload:String){
@@ -1848,11 +1858,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // ±65535: the Sense's 500 deg/s range in Puck counts; a Puck never exceeds int16.
         guard v.count==4,(1...50000).contains(v[0]),(-65535...65535).contains(v[1]),(-65535...65535).contains(v[2]),(0...7).contains(v[3]) else{return}
         let now=ProcessInfo.processInfo.systemUptime
-        // Screenshot mode precedes every ordinary Bottom guard: its latched
+        // Screenshot mode precedes every ordinary mouse-button guard: its latched
         // drag must survive the latching tap's physical release.
         if screenshot.ownsPointer {handleScreenshotRaw(v,now:now);return}
         let released=heldScroll.active && v[3]&1 == 0
-        reconcileBottomHold(down:v[3]&1 != 0,now:now,reason:"motion button state")
+        reconcileMouseButtonHold(down:v[3]&1 != 0,now:now,reason:"motion button state")
         guard !released,!scrollActive,AXIsProcessTrusted() else{return}
         let gap=rawLastArrival>0 ? now-rawLastArrival : 0
         guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:v[3]&1 != 0,resetState:v[3]&2 != 0 || gap>0.25) else{return}
@@ -1861,8 +1871,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // HIGH motion, reversals included. Ethan removed its circular latch:
         // "Just do normal scroll forward and backwards for the switch app
         // thing" (2026-10-29).
-        if middleHeld && !pointerRouter.bottomHeld {
-            middleMouseX+=sample.highX;middleMouseSampleAt=now
+        if hudButtonHeld && !pointerRouter.mouseButtonHeld {
+            hudButtonMouseX+=sample.highX;hudButtonMouseSampleAt=now
         }
         if rawWindowStart==0 || gap>0.25 {rawWindowStart=now;rawReports=0;rawMaxGap=0}
         rawReports+=1;rawMaxGap=max(rawMaxGap,gap)
@@ -1870,7 +1880,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             log("RAW_DELIVERY",rawReports,"seconds",String(format:"%.2f",now-rawWindowStart),"maxGapMs",Int(rawMaxGap*1000))
             rawWindowStart=now;rawReports=0;rawMaxGap=0
         }
-        // Bottom owns its scroll/drag independently of follow. A HUD-only
+        // The mouse button owns its scroll/drag independently of follow. A HUD-only
         // flag must not discard those held samples when follow is off.
         if controlVersion.usesHeldScroll && heldScroll.active {
             dwell.reset();scheduleDwell()
@@ -1896,10 +1906,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         // Unheld HUD-only samples still never move or click the pointer.
         if v[3]&4 != 0 {return}
-        if controlVersion.usesHeldScroll && pointerRouter.bottomHeld {return}
+        if controlVersion.usesHeldScroll && pointerRouter.mouseButtonHeld {return}
         let wasFlick=flickScroll.active
         let flick=flickScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now,
-            eligible:flickScrollEnabled && dwell.following && !pointerRouter.bottomHeld && buttons==0)
+            eligible:flickScrollEnabled && dwell.following && !pointerRouter.mouseButtonHeld && buttons==0)
         if flick.consumesPointer {
             if flickAnchor==nil {flickAnchor=deliveryPoint ?? currentPointerOrigin();setCircleLight(true)}
             dwell.reset();scheduleDwell()
@@ -1925,9 +1935,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         dwellTimer=WandRunLoop.commonTimer(interval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             guard let self else{return};self.dwellTimer=nil
             guard self.ready,!self.restoring,!self.actionPause.paused,!self.screenshot.ownsPointer,!self.heldScroll.active,
-                  WandClickGate.blocker(recordingPaused:self.recordingPointerPaused,bottomHeld:self.pointerRouter.bottomHeld,buttons:self.buttons,
+                  WandClickGate.blocker(recordingPaused:self.recordingPointerPaused,mouseButtonHeld:self.pointerRouter.mouseButtonHeld,buttons:self.buttons,
                       hudSession:self.hudSession,hudShown:self.context.isActive,scrollActive:self.scrollActive,
-                      hudOperating:self.middleHeld || self.hudEntryPress || self.pointerInHUD)==nil,
+                      hudOperating:self.hudButtonHeld || self.hudEntryPress || self.pointerInHUD)==nil,
                   AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
             let point=self.currentPointerOrigin()
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
@@ -1941,8 +1951,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard (5...7).contains(parts.count),let x=Double(parts[0]),let y=Double(parts[1]),let z=Double(parts[2]),let gyro=Double(parts[3]),let held=Int(parts[4]),(0...1).contains(held),abs(x)<=32768,abs(y)<=32768,abs(z)<=32768,(0...100_000).contains(gyro) else{return}
         let now=ProcessInfo.processInfo.systemUptime
         if parts.count==7,let mask=Int(parts[6]),(0...7).contains(mask) {
-            reconcileBottomHold(down:mask&1 != 0,now:now,reason:"sensor button state")
-        } else if held==0 {reconcileBottomHold(down:false,now:now,reason:"all buttons released")}
+            reconcileMouseButtonHold(down:mask&1 != 0,now:now,reason:"sensor button state")
+        } else if held==0 {reconcileMouseButtonHold(down:false,now:now,reason:"all buttons released")}
         if !motionFilter.configured,parts.count>=6,parts[5]=="0" || parts[5]=="1" {dwell.intent(parts[5]=="1",now:now);scheduleDwell()}
         motionFilter.observeGravity(x:x/8192,y:y/8192,z:z/8192,rotation:gyro/100)
         if restDiagnosticsRemaining>0 {
@@ -1997,7 +2007,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     /// Ethan's "normal click": a plain single click, never inherited Command-click
     /// or an OS double-click made from two independent stop-to-click gestures.
-    /// Bottom double-tap is classified by the wand router (recenter), not here.
+    /// A mouse-button double-tap is classified by the wand router (recenter), not here.
     /// Ordinary native pointer motion includes relative distance as well as
     /// position. Some draggable controls consume deltaX/deltaY, not location.
     static func mouseMovementEvent(buttons:Int,from start:CGPoint,to end:CGPoint)->CGEvent? {

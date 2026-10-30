@@ -154,7 +154,7 @@ final class WandCircularScroll {
 /// Pure routing of the device's `@BOTTOM` edges and `@WAND x,y,buttons` frames.
 /// The receiver performs the returned actions in order and owns only CGEvent posting.
 ///
-/// LOW is a plain Bottom hold with no mouse button down (precision aiming, not a
+/// LOW is a plain mouse-button hold with no native button down (precision aiming, not a
 /// drag). LOW motion is delayed by the explicitly approved `lowDelay`: the device reports
 /// the release edge in the same ordered UART stream as motion, so stiff-switch
 /// movement in the last instant before release is discarded unseen and the release
@@ -162,7 +162,7 @@ final class WandCircularScroll {
 /// stay immediate. Loop scrolling is recognised only during LOW. A hold in which a
 /// loop was recognised is consumed by scrolling: the endpoint click that the device
 /// emits right after that `@BOTTOM 0` (same callback, so before any later frame) is
-/// dropped. The drop is disarmed by the next Bottom press, so it can never swallow
+/// dropped. The drop is disarmed by the next mouse button press, so it can never swallow
 /// a later real click. It is decided by stream order, never by a timeout.
 final class WandPointerRouter {
     enum Action:Equatable { case move(dx:Int,dy:Int), scroll(lines:Int32), circleLight(Bool) }
@@ -173,7 +173,7 @@ final class WandPointerRouter {
     /// Bounds memory if the drain timer is starved; the oldest motion is then shown, not lost.
     let maxPending:Int
     let circle:WandCircularScroll
-    private(set) var bottomHeld=false
+    private(set) var mouseButtonHeld=false // Previously bottomHeld.
     private(set) var holdConsumed=false
     private(set) var dropNextClick=false
     private var droppingClick=false
@@ -186,12 +186,13 @@ final class WandPointerRouter {
     var nextDue:Double? {pending.first?.due}
     var pendingCount:Int {pending.count}
 
-    /// The device prints a Bottom edge before the release click it emits for that edge.
-    func bottom(down:Bool)->[Action] {
+    /// The device prints a mouse-button edge before the release click it emits for
+    /// that edge. Previously bottom(down:); the wire edge is still `@BOTTOM`.
+    func mouseButton(down:Bool)->[Action] {
         pending.removeAll(keepingCapacity:true)
         if down {dropNextClick=false;droppingClick=false}
-        else {dropNextClick=bottomHeld && holdConsumed}
-        holdConsumed=false;bottomHeld=down
+        else {dropNextClick=mouseButtonHeld && holdConsumed}
+        holdConsumed=false;mouseButtonHeld=down
         return endCircle()
     }
     /// One device pointer frame. `hud` excludes HUD navigation from LOW handling.
@@ -202,7 +203,7 @@ final class WandPointerRouter {
             else if droppingClick {droppingClick=false}
         }
         var actions:[Action]=[]
-        let low=bottomHeld && bits==0 && !hud
+        let low=mouseButtonHeld && bits==0 && !hud
         if !low {actions+=endCircle()}
         // A button change lands where the pointer is already shown.
         if bits != 0 {pending.removeAll(keepingCapacity:true)}
@@ -248,7 +249,7 @@ final class WandPointerRouter {
     /// Disconnect or shutdown: forget everything.
     func cancelAll()->[Action] {
         pending.removeAll(keepingCapacity:true)
-        bottomHeld=false;holdConsumed=false;dropNextClick=false;droppingClick=false
+        mouseButtonHeld=false;holdConsumed=false;dropNextClick=false;droppingClick=false
         return endCircle()
     }
     private func endCircle()->[Action] {
@@ -591,7 +592,7 @@ enum WandPointerPath: String {
 
 final class WandMotionFilter {
     // Ethan's Switch App sensitivity means normal mouse HIGH, even while
-    // Middle is held. Share the unrounded calculation; Bottom alone owns LOW.
+    // The HUD button is held. Share the unrounded calculation; the mouse button alone owns LOW.
     // stopX/stopY: the tuned filter's counts, used only to decide stop-to-click
     // (dwell) and screenshot settling, so a direct pointer cannot disable or
     // flood those clicks with tremor- or bias-level counts. Equal to x/y when tuned.
@@ -785,12 +786,14 @@ struct WandPointerOrigin {
 /// The single eligibility rule for stop-to-click, named so a no-click report
 /// says which state blocks it. Nil means clicks may arm.
 enum WandClickGate {
-    static func blocker(recordingPaused:Bool,bottomHeld:Bool,buttons:Int,hudSession:Bool,hudShown:Bool,scrollActive:Bool,hudOperating:Bool=false)->String? {
+    static func blocker(recordingPaused:Bool,mouseButtonHeld:Bool,buttons:Int,hudSession:Bool,hudShown:Bool,scrollActive:Bool,hudOperating:Bool=false)->String? {
         if recordingPaused {return "recording"}
-        if bottomHeld {return "bottom held"}
+        // Legacy status.json/log value for the mouse button (formerly Bottom);
+        // kept so existing readers and recorded logs still match.
+        if mouseButtonHeld {return "bottom held"}
         if buttons != 0 {return "button down"}
         // Ethan: follow-on clicking is independent of an open HUD. Suppress
-        // clicks only while Middle is actually operating its selected card.
+        // clicks only while the HUD button is actually operating its selected card.
         if hudSession && hudOperating {return "hud operating"}
         if scrollActive {return "scroll"}
         return nil
@@ -819,7 +822,7 @@ final class WandRecenterGesture {
     }
 }
 
-/// Ethan's Bottom triple-click screenshot shortcut. A click is the existing
+/// Ethan's mouse-button triple-click screenshot shortcut. A click is the existing
 /// short press (under 220 ms) and each further press follows the previous
 /// release within the double click's 300 ms window. A held press is never a
 /// click, so tap-then-hold remains the explicit drag. A gap under 30 ms is
@@ -856,7 +859,7 @@ struct WandTripleClick {
 /// Ethan's screenshot mode: "the mouse should move around, even if I wasn't in
 /// mouse mode ... you click the bottom button once ... that starts the hold ...
 /// when you stop moving it ... that's when we end the drag of the screenshot".
-/// Pure ownership state for the receiver. It owns the pointer and Bottom only
+/// Pure ownership state for the receiver. It owns the pointer and the mouse button only
 /// while Agentic Mouse's native selection is active, or while a triple-click
 /// start waits for it, and never changes the ordinary mouse-follow choice.
 ///
@@ -864,28 +867,29 @@ struct WandTripleClick {
 /// algorithm and timing (0.2 s pause after 12 counts of travel), so ending the
 /// selection adds no new delay, and the ordinary dwell, which may already be
 /// armed, can never end it. A latched drag ends exactly once: by `settle`, by a
-/// fresh Bottom press, or by any cancellation (`end`). Physical release of the
+/// fresh mouse button press, or by any cancellation (`end`). Physical release of the
 /// latching tap never ends it.
 /// Ethan (2026-10-30): "triple click enters like normal screenshot mode and
 /// it just like enters native macOS screenshot mode and then I just click and
 /// hold the mouse button to drag and drop the area naturally". While macOS's
 /// own selector is up, the wand aims the pointer (even with mouse follow off)
-/// and Bottom is the mouse button: down presses, held motion drags, up lets go
+/// and the wand's mouse button is the native mouse button: down presses, held motion drags, up lets go
 /// and macOS captures. Nothing is pressed, finished or repeated automatically.
 final class WandScreenshotGesture {
     enum Phase {case idle,pending,aiming,dragging,done}
-    enum Bottom {case pass,consumed,press,release}
+    /// Previously Bottom.
+    enum MouseButton {case pass,consumed,press,release}
     /// Agentic Mouse must report its native selection this soon after a
     /// triple-click request; the wand's motion telemetry must keep arriving.
     static let startSeconds=2.0,telemetrySeconds=0.8
     private(set) var phase:Phase = .idle
     private(set) var shortcut=false
-    /// Bottom is physically down inside screenshot mode, waiting for the
+    /// The mouse button is physically down inside screenshot mode, waiting for the
     /// selector before it presses.
     private(set) var pressHeld=false
     /// The press that entered screenshot mode (the triple-click's third, or
     /// one held as the selection started). Its release is never an ordinary
-    /// Bottom edge, even after the mode has ended.
+    /// mouse-button edge, even after the mode has ended.
     private(set) var consumeRelease=false
     private(set) var since=0.0,lastTelemetry=0.0
     var ownsPointer:Bool {phase == .pending || phase == .aiming || phase == .dragging}
@@ -919,9 +923,10 @@ final class WandScreenshotGesture {
     }
     /// The release of a consumed triple-click press that could not start.
     func holdRelease(){consumeRelease=true}
-    /// One Bottom edge. Down asks to press (once the selector shows); up
+    /// One mouse-button edge. Down asks to press (once the selector shows); up
     /// lets go of a drag. Everything else in screenshot mode is consumed.
-    func bottom(down:Bool)->Bottom {
+    /// Previously bottom(down:).
+    func mouseButton(down:Bool)->MouseButton {
         guard ownsPointer else {
             if !down && consumeRelease {consumeRelease=false;return .consumed}
             if down {consumeRelease=false}
@@ -936,7 +941,7 @@ final class WandScreenshotGesture {
         pressHeld=false
         return phase == .dragging ? .release : .consumed
     }
-    /// macOS shows the selector and Bottom is down: the receiver presses at the shown pointer.
+    /// macOS shows the selector and the mouse button is down: the receiver presses at the shown pointer.
     func latch(now:Double)->Bool {
         guard phase == .aiming,pressHeld else{return false}
         phase = .dragging;since=now
@@ -1252,7 +1257,7 @@ final class WandSustainedScroll {
     }
 }
 
-/// V2 changes only a Bottom hold. Short taps are still interpreted by the
+/// V2 changes only a mouse button hold. Short taps are still interpreted by the
 /// existing device callback; a used/long hold must never emit its old end click.
 final class WandHeldScroll {
     /// Continuous signed travel from the shared V2 direction classifier.
@@ -1270,7 +1275,7 @@ final class WandHeldScroll {
     private var reverseSegments=0
     private let circle:WandCircularScroll
     private var started=0.0,confirmed=0.0,fraction=0.0,moved=false,dropClick=false,droppingClick=false
-    // Reuse the existing Bottom tap/hold cutoff; do not add a movement buffer.
+    // Reuse the existing mouse button tap/hold cutoff; do not add a movement buffer.
     let holdSeconds:Double
     private let linesPerDegree:Double
     init(linesPerDegree:Double=1.6,holdSeconds:Double=0.22){
@@ -1393,7 +1398,7 @@ final class WandHeldScroll {
     func consumes(buttons:Int)->Bool {
         if active {return true}
         // Device reports an endpoint click as ordered down/up frames after
-        // Bottom-up. Keep dropping it until its up, never the next physical tap.
+        // mouse-button release. Keep dropping it until its up, never the next physical tap.
         if dropClick && buttons & 1 != 0 {dropClick=false;droppingClick=true;return true}
         if droppingClick {
             if buttons & 1 == 0 {droppingClick=false}
@@ -1404,7 +1409,7 @@ final class WandHeldScroll {
 }
 
 
-/// What a plain Bottom hold should do with the target under the pointer,
+/// What a plain mouse button hold should do with the target under the pointer,
 /// judged from the Accessibility roles of the hit element and its ancestors
 /// (nearest first). Restored from the earlier contextual hold, with safer
 /// failure handling: only a positive answer can produce a native drag.
@@ -1435,13 +1440,13 @@ enum WandHoldTarget:String,Equatable {
 /// Ethan: waking from rest must "return to the state it was on before
 /// sleeping". Remember the mouse-follow choice when the wand comes to rest
 /// and restore exactly that on pickup, instead of always entering mouse mode.
-/// A manual Bottom choice made meanwhile wins, and the recording pause keeps
+/// A manual mouse button choice made meanwhile wins, and the recording pause keeps
 /// pointing off until recording or a manual choice ends it.
 struct WandRestFollowMemory {
     private(set) var remembered:Bool?
     /// The wand has just come to rest; `following` is the choice it had.
     mutating func cameToRest(following:Bool) {remembered=following}
-    /// A deliberate Bottom choice replaces whatever rest remembered.
+    /// A deliberate mouse button choice replaces whatever rest remembered.
     mutating func manualChoice() {remembered=nil}
     /// Recording starts while resting: report the choice rest is hiding so
     /// recording can resume it later, and stop rest from also restoring it.
@@ -1457,12 +1462,12 @@ struct WandRestFollowMemory {
     mutating func reset() {remembered=nil}
 }
 
-/// Middle in an active review: tap cancels; a long press stages the working selection.
+/// The HUD button in an active review: tap cancels; a long press stages the working selection.
 /// Ethan now calls this the "selection"; former "bucket" / "commit set"
 /// mean Better Git's pending staging selection,
 /// not a Git commit. Formerly a double-click action. Pointer motion is unbuffered.
 struct WandReviewExitGesture {
-    // Middle in Ethan's selected Review changes / Stage files set. A 0.5 s
+    // The HUD button in Ethan's selected Review changes / Stage files set. A 0.5 s
     // hold stages and stays. One short click waits out the double-click
     // window (at most 0.3 s) and then exits; a second short press inside it
     // asks Agentic Mouse to toggle the set instead. That second press can
@@ -1478,7 +1483,7 @@ struct WandReviewExitGesture {
     private var toggledAt: Double?
     /// When one short click exits unless a second press arrives first.
     private(set) var tapDeadline: Double?
-    /// Middle is down.
+    /// The HUD button is down.
     var pending: Bool { pressedAt != nil }
     /// One short click is waiting for a possible second press.
     var awaitingSecond: Bool { tapDeadline != nil }

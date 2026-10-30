@@ -42,11 +42,11 @@ final class Harness {
  var powerPolicyReady=false,standbyResume:Bool?,selectedReviewMode:String?
  var pointerRouter=WandPointerRouter(),deliveryPoint:CGPoint?
  var probeTimer:Timer?,queued:[String]=[],entered=0
- func reconcileBottomHold(down:Bool,now:Double,reason:String){};func scheduleDwell(){};func cancelCircleScroll(){};func releaseButtons(){}
+ func reconcileMouseButtonHold(down:Bool,now:Double,reason:String){};func scheduleDwell(){};func cancelCircleScroll(){};func releaseButtons(){}
  func performPointer(_ actions:[WandPointerRouter.Action]){};func syncRecordingLight(){};func status(){}
  func enterPointerMode(){entered+=1};func queue(_ text:String){queued.append(text)}
  var mouseOnRequests:Int {queued.filter{ $0.contains("setMouseFollow(true)") }.count}
- /// What the device does for a deliberate Bottom choice: the receiver
+ /// What the device does for a deliberate mouse-button choice: the receiver
  /// marks it manual, then the device's own follow report arrives.
  func bottomChoice(follow:Bool){manualPointerDuringRecording();dwell.follow(follow)}
  func rest(putDown:Bool){restDetection.script=[(true,putDown ? [.putDown]:[])];handleIMU("0,0,8192,0,0,0,0")}

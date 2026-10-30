@@ -39,16 +39,16 @@ source, and their tests. Read README.md, SOURCES.md and LEARNINGS.md before chan
 Use Codex’s built-in browser; don’t open or focus Ethan’s personal Chrome. After the last edit, run
 a local server (`npm run serve`) or use the live site and check:
 
-- Hovering turns the wand; left button is Bottom, right button is Middle.
-- Bottom: tap to follow, hold-turn-release clicks once, tap-then-hold drags a light stroke,
+- Hovering turns the wand; left button is the mouse button, right button is the HUD button.
+- The mouse button: tap to follow, hold-turn-release clicks once, tap-then-hold drags a light stroke,
   double tap recenters on the main display. The pointer holds still while a click is decided.
-- Middle: tap opens the HUD on Switch App, turning moves the outline and stops at the edges,
-  a tap uses a card after about 0.8 s, double tap closes, Bottom returns to the pointer.
-- Starting with the HUD closed: hold Middle, turn to a card, then release to use it once.
-- Control V3 on the installed receiver: a Bottom-held straight stroke sets scrolling direction and speed; holding still continues it. Another stroke can reverse in the same hold. Release stops; the pointer remains anchored. Circular page scrolling stays disabled. The browser simulation and illustrated videos retain their labelled earlier control scope until ported.
-- Hold Middle on Horizontal Scroll + Wheel and tilt: wheel steps appear.
-- Bottom + Middle (both mouse buttons, B+M keys, or the chord key while dragging) scrolls both axes.
-- Top toggles the Agent Flow indicator; the light is red only when nothing else is active.
+- The HUD button: tap opens the HUD on Switch App, turning moves the outline and stops at the edges,
+  a tap uses a card after about 0.8 s, double tap closes, the mouse button returns to the pointer.
+- Starting with the HUD closed: hold the HUD button, turn to a card, then release to use it once.
+- Control V3 on the installed receiver: a mouse-button-held straight stroke sets scrolling direction and speed; holding still continues it. Another stroke can reverse in the same hold. Release stops; the pointer remains anchored. Circular page scrolling stays disabled. The browser simulation and illustrated videos retain their labelled earlier control scope until ported.
+- Hold the HUD button on Horizontal Scroll + Wheel and tilt: wheel steps appear.
+- The mouse button + HUD button chord (both simulator mouse buttons, B+M keys, or the chord key while dragging) scrolls both axes.
+- The speech button toggles the Agent Flow indicator; the light is red only when nothing else is active.
 - Keys T, M, B and the arrows, Space/Enter on a focused grip key, touch dragging with a held key,
   Reset, a narrow phone width, reduced motion, and browser console errors.
 - The fallback wand when WebGL is unavailable.
@@ -100,12 +100,16 @@ Report any check the browser tool can’t do, such as real multitouch, rather th
   `prototypes/README.md` before changing prototype profiles; later hardware gets a separate
   profile so returning to V1 does not lose its tuned behaviour.
 
+## Button names
+
+- Ethan: “make sure it's fully renamed in the whole project lol, so call it, let's refer to it as the HUD button, the mouse button and the speech button. These are the three buttons. Rename it everywhere and from now on refer to it as such.” The HUD button was Middle (Sense button 1, left), the mouse button was Bottom (button 2, centre) and the speech button was Top (button 3, right). Say “double-click the speech button”, not “Double Top”. Keep the earlier names only where compatibility needs them (wire edges `@BOTTOM`/`@MIDDLE`, log tags, button ids, `wand.json` keys, saved Puck entry points), in dated history and in quotes, with a searchable note. Geometric top, middle and bottom and a physical mouse's middle click are unrelated. User-requested — 2026-10-30.
+
 ## Control versions
 
 - Before moving on to the next control version, keep the current state and snapshot it.
   Preserve the matching device code, receiver, settings and controls together so we can
   go back without losing the behavior. Control versions are separate from hardware prototypes.
-- When a new control version changes only Bottom, keep every other control unchanged.
+- When a new control version changes only the mouse button, keep every other control unchanged.
   Use one runtime version selector; never silently redefine an older version or move its tag.
 
 - Before restarting Wand Receiver or Agentic Mouse, check Agent Flow automatically using its current authoritative idle probe, then recheck immediately after the restart warning and before replacement. Do not ask me whether I am finished when the app can report that itself. Busy or unknown capture state blocks the swap; do not stop recording to manufacture idle. Leave Agent Flow itself running. Table-rest detection must never stop dictation or dismiss an explicitly open wand HUD. User-requested — 2026-10-18.
@@ -115,7 +119,7 @@ Report any check the browser tool can’t do, such as real multitouch, rather th
 - Ethan: “remember to do that review after installing every time.” Review the installed version after every installation, check the changed behaviour and nearby controls, fix any in-scope bugs found, and recheck after the fix. Keep automated checks, installed-runtime checks and Ethan's physical review distinct. User-requested — 2026-10-29.
 - After the installed review is complete, send a native notification: “New Magic Wand installed. Try it now.” Ethan will review it. Do not send that ready notification for prepared or unfinished work. User-requested — 2026-10-29.
 
-- Bottom (mouse), Middle (HUD/review), and Top (Agent Flow speech) are independent. Bottom must not clear review selection or the Middle HUD. In Review changes (Ethan's “eyes mode”) or Stage files (his “bang” / “!” whole-file mode), hide the large HUD on entry; use unheld clockwise circles for next and anticlockwise for previous only while VS Code is frontmost; one Middle click cancels and exits after the approved double-click window of at most 300 ms; double-click Middle toggles Review changes and Stage files, preserves the pending selection and includes the current file without staging, and the floating indicator names the other mode; hold Middle for about half a second to stage the accumulated selection and stay in the same review mode, ready for the next selection. Freeze review navigation for the entire press, including after staging. The floating indicator says `Hold to stage selection`; double-click hints name the destination `mode` (for example `Double-click for Stage files mode`). Every rough clockwise quarter-turn is one next step; every anticlockwise quarter-turn is one previous step. A full loop is four steps, regardless of radius. North-to-east is next; east-to-north and north-to-west are previous. Accept rough diamond corners too. Straight down/up flick navigation is disabled; keep the nod/shake experiment behind its disabled option unless Ethan asks to enable it. Updated at Ethan’s request — 2026-10-19. Reuse Better Git's existing selection and staging lifecycle. User-requested — 2026-10-18.
+- The mouse button (mouse), the HUD button (HUD/review) and the speech button (Agent Flow speech) are independent. The mouse button must not clear review selection or the HUD. In Review changes (Ethan's “eyes mode”) or Stage files (his “bang” / “!” whole-file mode), hide the large HUD on entry; use unheld clockwise circles for next and anticlockwise for previous only while VS Code is frontmost; one HUD-button click cancels and exits after the approved double-click window of at most 300 ms; double-click the HUD button toggles Review changes and Stage files, preserves the pending selection and includes the current file without staging, and the floating indicator names the other mode; hold the HUD button for about half a second to stage the accumulated selection and stay in the same review mode, ready for the next selection. Freeze review navigation for the entire press, including after staging. The floating indicator says `Hold to stage selection`; double-click hints name the destination `mode` (for example `Double-click for Stage files mode`). Every rough clockwise quarter-turn is one next step; every anticlockwise quarter-turn is one previous step. A full loop is four steps, regardless of radius. North-to-east is next; east-to-north and north-to-west are previous. Accept rough diamond corners too. Straight down/up flick navigation is disabled; keep the nod/shake experiment behind its disabled option unless Ethan asks to enable it. Updated at Ethan’s request — 2026-10-19. Reuse Better Git's existing selection and staging lifecycle. User-requested — 2026-10-18.
 
 ## Action-by-action tutorials
 
@@ -126,7 +130,8 @@ Check the selected control version and options first: default review-circle vide
 describe the optional nod/shake mode. Keep the manifest, rendered videos and gallery in sync
 through their build/check commands; never claim an illustration is physical verification.
 
-- Control V3 page scrolling follows Ethan’s “drag up or down or left or right”: a straight stroke chooses velocity, holding still continues at that speed, another deliberate stroke changes direction or speed without release, and release stops. Do not re-enable circular page scrolling in V3. Preserve V2 and the independent Middle review gestures. User-requested — 2026-10-19.
+- Control V3 page scrolling follows Ethan’s “drag up or down or left or right”: a straight stroke chooses velocity, holding still continues at that speed, another deliberate stroke changes direction or speed without release, and release stops. Do not re-enable circular page scrolling in V3. Preserve V2 and the independent HUD-button review gestures. User-requested — 2026-10-19.
+- Ethan: “I just wanted to add like extra sensitivity at the faster speeds. Did you have to change like the normal behavior? It just doesn't feel as good” Extra V3 scroll speed applies only above the original mapping's whole ordinary range, including its 120 lines/s plateau; ordinary strokes keep the exact original speed. User-requested — 2026-10-30.
 
 ## Opus for UX
 
@@ -137,7 +142,7 @@ through their build/check commands; never claim an illustration is physical veri
 
 - After five minutes of confirmed rest, use deeper button-wake sleep: switch off Bluetooth, motion sensing and lights, then wake on any of the three custom grip buttons. Pickup alone does not wake this deeper state. Preserve the prior mouse-follow choice; newer recording or manual choices win. Keep the known calibration in the Mac app per physical wand and restore it automatically after reconnect or power loss, without requiring another manual setup. User-requested — 2026-10-24.
 - Just before that deep sleep, flash all three LED colours together twice as an “I'm going to sleep” cue. Keep the one-minute light-off state unchanged; a grip-button press cancels the warning and pending sleep. User-requested — 2026-10-24.
-- Bottom hold scrolls over a scroll area and drags a confirmed draggable target.
+- mouse-button hold scrolls over a scroll area and drags a confirmed draggable target.
   Unknown or late target detection must never turn scrolling into a surprise
   drag; release and lost telemetry cancel pending target results. Preserve the
   explicit tap-then-hold drag. User-requested — 2026-10-19.
@@ -157,14 +162,14 @@ through their build/check commands; never claim an illustration is physical veri
 
 ## Screenshot selection
 
-- Screenshot (HUD card or Bottom triple-click) enters ordinary native macOS selected-area screenshot mode. Ethan: “then I just click and hold the mouse button to drag and drop the area naturally. So you don't have any weird custom nonsense”. While macOS's selector is up the wand aims the pointer even with mouse follow off; Bottom down presses (once the selector shows), held motion drags, release captures. No automatic press, stop-to-finish or repeat click. Cancellation, lost telemetry and disconnect lift the button; leaving restores the ordinary mouse-mode choice. This replaces the 2026-10-25 one-click latch and stop-to-click finish. User-requested — 2026-10-30.
+- Screenshot (HUD card or mouse-button triple-click) enters ordinary native macOS selected-area screenshot mode. Ethan: “then I just click and hold the mouse button to drag and drop the area naturally. So you don't have any weird custom nonsense”. While macOS's selector is up the wand aims the pointer even with mouse follow off; mouse button down presses (once the selector shows), held motion drags, release captures. No automatic press, stop-to-finish or repeat click. Cancellation, lost telemetry and disconnect lift the button; leaving restores the ordinary mouse-mode choice. This replaces the 2026-10-25 one-click latch and stop-to-click finish. User-requested — 2026-10-30.
 
 - While recording and in mouse mode, recording red takes priority over mouse blue. Ethan can tell mouse mode is on because the pointer moves; the light must confirm recording. Do not reintroduce red/blue flashing. Loading remains the separate orange indication. This replaces the earlier steady-blue-while-recording preference. User-requested — 2026-10-25.
 
-- Double Top starts dictation into a new chat in the configured harness (Codex in Ethan’s setup; also support Claude Code). Bring that harness frontmost, focus the new empty composer and show a small “Creating chat…” indicator while opening. Reuse normal stop/paste behavior and preserve normal single-Top recording. User-requested — 2026-10-25.
+- Double-clicking the speech button starts dictation into a new chat in the configured harness (Codex in Ethan’s setup; also support Claude Code). Bring that harness frontmost, focus the new empty composer and show a small “Creating chat…” indicator while opening. Reuse normal stop/paste behavior and preserve normal single-click speech button recording. User-requested — 2026-10-25.
 
 - Explicit timing exception: double-click-to-centre may wait up to 300 ms after the second release to distinguish the screenshot triple-click. Normal pointer movement remains immediate. This is only approval for centering, not for movement buffering or other new delays. User-confirmed — 2026-10-25.
-- Explicit timing exception: a quick Middle tap that opens the HUD from closed may wait up to 300 ms so a closed-HUD double click can right-click instead of switching apps. Question: “Allow a closed-HUD single tap to wait up to 300 ms ...?” Ethan: “Allow up to 300 ms.” It does not delay holds, hold-to-show, pointer movement or an open HUD. User-confirmed — 2026-10-30.
+- Explicit timing exception: a quick HUD-button tap that opens the HUD from closed may wait up to 300 ms so a closed-HUD double click can right-click instead of switching apps. Question: “Allow a closed-HUD single tap to wait up to 300 ms ...?” Ethan: “Allow up to 300 ms.” It does not delay holds, hold-to-show, pointer movement or an open HUD. User-confirmed — 2026-10-30.
 
 - Ethan: "if I wasn't in mouse follow mode when I started scrolling, on end it shouldn't enter mouse follow mode after." Releasing a completed page scroll (held scroll in any control version, the two-button chord or the V1 circle) restores the mouse-follow choice from before scrolling: off stays off and on stays on. This supersedes the 2026-10-29 always-on release rule. Taps, drags, screenshots, review and lost telemetry keep their own behaviour. User-requested — 2026-10-30.
 - Explicit timing exception: Ethan approved about 8 ms of causal pointer smoothing for the Sense direct pointer ("Make it as good as possible") to reduce jagged movement. Ethan also approved up to 60 ms of directional confirmation only for tiny slow movement (normal movement unaffected; 2026-10-29); that experimental tiny-motion bypass is disabled following his stillness regression report on 2026-10-30. It is not approval for the Puck's 150/250 ms intent filters, frame buffering, lookahead or replay. Ethan: "If it skips ones, I'd rather that [than] have it like try and replay missed movements." Drop late radio backlog from normal pointing rather than catching up. User-confirmed — 2026-10-29; current disabled state clarified — 2026-10-30.

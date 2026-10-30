@@ -15,7 +15,7 @@ for (const bridge of ["readable", "fragments"]) {
     w.loadBridge();
     assert(lines.includes("WAND_CALLBACK_MATCH false"), "bridge patched the watched callback, not the stale global");
     assert(lines.includes("WAND_MODE_ROUTING_READY"));
-    const middleTap = () => { w.edge("D2", 0); w.advance(0.05); w.edge("D2", 1); };
+    const hudButtonTap = () => { w.edge("D2", 0); w.advance(0.05); w.edge("D2", 1); };
 
     // Hold from idle: temporary movement, one endpoint click on release, sensor kept warm briefly.
     frames.length = 0;
@@ -81,11 +81,11 @@ for (const bridge of ["readable", "fragments"]) {
     assert(!ctx.moveLatched, "single click exits latched follow");
     w.advance(0.3);
 
-    // The host controls HUD visibility; firmware Middle cannot change pointer follow.
-    w.tap(); assert(ctx.moveLatched);middleTap();assert(ctx.moveLatched);
+    // The host controls HUD visibility; the firmware HUD button cannot change pointer follow.
+    w.tap(); assert(ctx.moveLatched);hudButtonTap();assert(ctx.moveLatched);
     ctx.setHUDOpen(true);assert(ctx.moveLatched && ctx.hudOpen);
     w.edge("D1",0);w.advance(.3);w.edge("D1",1);
-    assert(ctx.hudOpen,"Bottom never dismisses the HUD");
+    assert(ctx.hudOpen,"The mouse button never dismisses the HUD");
     ctx.setMouseFollow(false);assert(ctx.hudOpen);
     ctx.setHUDOpen(false);
     const watchers=w.device.watchCount();w.loadBridge();
@@ -202,9 +202,9 @@ for (const bridge of ["readable", "fragments"]) {
     assert(moved());
 
     prepareIdle();w.edge("D1",0);w.advance(.02);w.edge("D2",0);w.advance(.1);
-    assert(!ctx.scrollHeld,"Bottom and Middle remain independent");
+    assert(!ctx.scrollHeld,"The mouse button and the HUD button remain independent");
     assert(lines.some(l=>l==="@MIDDLE 1"),"Middle still reaches its owner");
-    assert(!lines.includes("@LEFTCLICK"),"Ethan rejected the Bottom+Middle click chord");
+    assert(!lines.includes("@LEFTCLICK"),"Ethan rejected the mouse button + HUD button click chord");
     w.edge("D1",1);w.edge("D2",1);
 
   });

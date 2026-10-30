@@ -4,19 +4,19 @@ setbuf(stdout, nil)
 // Pure checks for the debug pause: no native input, sockets or hardware.
 
 var p = WandActionPause()
-precondition(p.admit(.bottom, down: true) && p.admit(.bottom, down: false), "ordinary edges act before any pause")
+precondition(p.admit(.mouseButton, down: true) && p.admit(.mouseButton, down: false), "ordinary edges act before any pause")
 precondition(p.pause() && !p.pause(), "pause is idempotent")
 for lane in WandActionPause.Lane.allCases {
     precondition(!p.admit(lane, down: true) && !p.admit(lane, down: false), "nothing acts while paused")
 }
 precondition(p.resume() && !p.resume())
-// Bottom was pressed during the pause and is released after resume: swallowed.
-precondition(!p.admit(.bottom, down: false), "release of a paused-interval press is never replayed")
-precondition(p.admit(.bottom, down: true) && p.admit(.bottom, down: false), "the next press is fresh")
-// Middle was up at resume: its first press is fresh input.
-precondition(p.admit(.middle, down: true) && p.admit(.middle, down: false))
-// Top pressed and released entirely during the pause: no edge reaches it; next press fresh.
-precondition(p.admit(.top, down: true))
+// The mouse button was pressed during the pause and is released after resume: swallowed.
+precondition(!p.admit(.mouseButton, down: false), "release of a paused-interval press is never replayed")
+precondition(p.admit(.mouseButton, down: true) && p.admit(.mouseButton, down: false), "the next press is fresh")
+// The HUD button was up at resume: its first press is fresh input.
+precondition(p.admit(.hudButton, down: true) && p.admit(.hudButton, down: false))
+// The speech button pressed and released entirely during the pause: no edge reaches it; next press fresh.
+precondition(p.admit(.speechButton, down: true))
 precondition(p.since == nil && !p.paused)
 p.pause(at: Date(timeIntervalSince1970: 100)); precondition(p.since == Date(timeIntervalSince1970: 100))
 p.acknowledge("0123456789abcdef0123456789abcdef"); precondition(p.lastRequest == "0123456789abcdef0123456789abcdef")

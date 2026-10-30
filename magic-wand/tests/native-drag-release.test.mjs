@@ -20,10 +20,10 @@ final class Harness {
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?
  var pointerOrigin=WandPointerOrigin();func currentPointerOrigin()->CGPoint{pointerOrigin.origin(system:CGEvent(source:nil)?.location ?? .zero,now:ProcessInfo.processInfo.systemUptime)}
  var controlVersion=WandControlVersion.sustainedV3,heldScrollDiagnostics=false,buttons=0,recenterSuppressButtons=false
- var physicalTapDuration:Double?=nil;func bottomPhysicalTapDuration()->Double?{physicalTapDuration}
+ var physicalTapDuration:Double?=nil;func mouseButtonPhysicalTapDuration()->Double?{physicalTapDuration}
  var reportCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1920,height:1080)],recordingPointerPaused=false,hudSession=false,scrollActive=false
  var transitions:[Int]=[]
- final class Ctx {var isActive=false};let context=Ctx();var middleHeld=false,hudEntryPress=false,pointerInHUD=false,hudOpenedAt=0.0,clickGate:String?
+ final class Ctx {var isActive=false};let context=Ctx();var hudButtonHeld=false,hudEntryPress=false,pointerInHUD=false,hudOpenedAt=0.0,clickGate:String?
  func closeHUD(reason:String,notifyNative:Bool=true){hudSession=false}
  func noteClickGate(_ gate:String?){clickGate=gate}
  func transition(to next:Int,at:CGPoint){buttons=next;transitions.append(next)}
@@ -32,32 +32,32 @@ final class Harness {
  func setCircleLight(_ on:Bool){}
  func restoreMouseAfterScroll(){}
  func performPointer(_ actions:[WandPointerRouter.Action]){}
- ${['finishBottomHold','reconcileBottomHold','handleFrame'].map(method).join('\n')}
+ ${['finishMouseButtonHold','reconcileMouseButtonHold','handleFrame'].map(method).join('\n')}
 }
 let legacy=Harness();legacy.controlVersion = .pointerV1
-_=legacy.pointerRouter.bottom(down:true);legacy.buttons=1
-legacy.reconcileBottomHold(down:false,now:1,reason:"early raw sample")
+_=legacy.pointerRouter.mouseButton(down:true);legacy.buttons=1
+legacy.reconcileMouseButtonHold(down:false,now:1,reason:"early raw sample")
 precondition(legacy.buttons==1,"V1 does not cut a still-held drag on a pre-debounce sample")
-_=legacy.pointerRouter.bottom(down:false)
-legacy.reconcileBottomHold(down:false,now:2,reason:"released raw sample")
+_=legacy.pointerRouter.mouseButton(down:false)
+legacy.reconcileMouseButtonHold(down:false,now:2,reason:"released raw sample")
 precondition(legacy.buttons==0,"V1 releases an orphan after its physical up edge")
 legacy.handleFrame(x:0,y:0,b:1);legacy.handleFrame(x:0,y:0,b:0)
 precondition(legacy.transitions.suffix(2)==[1,0],"ordinary V1 click pairs remain intact")
 for version in [WandControlVersion.scrollV2,.sustainedV3] {
  let h=Harness();h.controlVersion=version
  h.buttons=1 // A native down survived an earlier state cancellation.
- h.reconcileBottomHold(down:false,now:10,reason:"physical release")
+ h.reconcileMouseButtonHold(down:false,now:10,reason:"physical release")
  precondition(h.buttons==0,"physical up must release even with no active hold")
  // Once a consumed hold's normal down/up was discarded, a delayed/repeated
  // firmware drag frame must not create a second, unleased OS button-down.
  h.heldScroll.begin(now:20,scrollable:false)
  _=h.heldScroll.startDrag(now:21)
- h.finishBottomHold(now:21)
+ h.finishMouseButtonHold(now:21)
  precondition(!h.heldScroll.dragging,"ended hold clears the native dragging flag")
  h.handleFrame(x:0,y:0,b:1);h.handleFrame(x:0,y:0,b:0)
  h.handleFrame(x:0,y:0,b:1)
  precondition(h.buttons==0,"legacy device report cannot relatch a V2/V3 drag")
- h.reconcileBottomHold(down:false,now:22,reason:"repeat up")
+ h.reconcileMouseButtonHold(down:false,now:22,reason:"repeat up")
  precondition(h.buttons==0)
 }
 print("PASS orphan physical release and stale firmware down")

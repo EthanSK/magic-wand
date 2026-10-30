@@ -143,7 +143,7 @@ for speed in [0.0,0.2,1,3,10,20,80] {
   counts+=a.x;precise+=a.highX;lowHigh+=b.highX;lowCounts+=b.x
  }
  precondition(abs(Double(counts)-precise)<1.00001)
- precondition(abs(precise-lowHigh)<0.000001,"Middle HIGH must not inherit Bottom LOW")
+ precondition(abs(precise-lowHigh)<0.000001,"HUD-button HIGH must not inherit mouse-button LOW")
  precondition(abs(Double(lowCounts)*3-precise)<3.00001)
 }
 print("PASS: shared unrounded HIGH output and unchanged LOW pointer gain")

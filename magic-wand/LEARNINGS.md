@@ -1,5 +1,9 @@
 # Verified lessons
 
+Ethan renamed the three grip buttons on 30 October 2026: Bottom is now the mouse button,
+Middle the HUD button and Top the speech button. Lessons below keep the names used when they
+were recorded.
+
 ## Temporary gestures must preserve newer recording choices
 
 A triple-click starts by remembering mouse follow before its first tap. If recording

@@ -358,7 +358,7 @@ class FakeText extends FakeNode { constructor(text) { super("#text"); this._text
 
 function loadPage() {
   const ids = new Map();
-  const lanes = ["Top", "Middle", "Bottom"].map((button) => Object.assign(new FakeNode("ul"), { dataset: { button } }));
+  const lanes = ["Speech button", "HUD button", "Mouse button"].map((button) => Object.assign(new FakeNode("ul"), { dataset: { button } }));
   const steps = ["awake", "desk-idle", "deep-sleep"].map((step) => Object.assign(new FakeNode("li"), { dataset: { step } }));
   const document = {
     body: new FakeNode("body"), title: "", hidden: false,
@@ -416,19 +416,19 @@ test("page leads with plain current state, files old errors as earlier and quiet
   assert.equal(page.text("errors-earlier-label"), "1 earlier error, before then");
 
   const lane = (button, index) => page.lanes.find((list) => list.dataset.button === button).children[index].textContent;
-  assert.match(lane("Top", 0), /^SpeechRecording/);
-  assert.match(lane("Middle", 0), /HUDCan’t tell.*Hidden while the light shows Pointer \(blue\)\..*HUD closed by Agentic Mouse/);
-  assert.match(lane("Bottom", 0), /^PointerOnTap Bottom to turn the pointer on or off/);
+  assert.match(lane("Speech button", 0), /^SpeechRecording/);
+  assert.match(lane("HUD button", 0), /HUDCan’t tell.*Hidden while the light shows Pointer \(blue\)\..*HUD closed by Agentic Mouse/);
+  assert.match(lane("Mouse button", 0), /^PointerOnTap the mouse button to turn the pointer on or off/);
 
   const timeline = page.text("timeline");
   assert.match(timeline, /Agent Flow started recording/);
-  assert.match(timeline, /Bottom held: scrolling×3/);
-  for (const noise of ["Light:", "Pointer moves", "Motion data", "Recording light", "Top pressed"]) {
+  assert.match(timeline, /Mouse button held: scrolling×3/);
+  for (const noise of ["Light:", "Pointer moves", "Motion data", "Recording light", "Speech button pressed"]) {
     assert.ok(!timeline.includes(noise), "key events hide " + noise);
   }
   const buttons = page.context.prepareTimeline(live.timeline, "buttons").map((row) => row.title);
   assert.ok(buttons.includes("Clicked by holding still"), "down, up and stop-to-click become one row");
-  assert.ok(buttons.includes("Top tapped"), "a quick Top press and release become one row");
+  assert.ok(buttons.includes("Speech button tapped"), "a quick speech button press and release become one row");
   assert.ok(!buttons.includes("Left button down") && !buttons.includes("Recording light on"));
   const everything = page.context.prepareTimeline(live.timeline, "all").map((row) => row.title);
   assert.ok(everything.some((title) => title.startsWith("Motion data: 50.0 updates a second")));
@@ -446,7 +446,7 @@ test("page leads with plain current state, files old errors as earlier and quiet
   assert.equal(page.text("headline"), "Deep Sleep");
   assert.match(page.text("headline-detail"), /Press any grip button to wake it\. Picking it up alone won’t\./);
   assert.equal(page.steps.find((step) => step.dataset.step === "deep-sleep").getAttribute("aria-current"), "step");
-  assert.match(page.lanes.find((list) => list.dataset.button === "Bottom").textContent, /Can’t tell.*Needs a connected wand\./);
+  assert.match(page.lanes.find((list) => list.dataset.button === "Mouse button").textContent, /Can’t tell.*Needs a connected wand\./);
   assert.ok(!page.text("status-row").includes("Battery"), "an old battery reading isn't shown as current");
   assert.match(page.text("receiver-facts"), /About 72% · 2\.91 V last reading, not current/);
 });

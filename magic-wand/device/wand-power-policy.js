@@ -1,5 +1,5 @@
 // Button-wake standby: sensors and Bluetooth off, GPIO watches retained.
-// Ethan's custom grip buttons are D1 (Bottom), D2 (Middle), D30 (Top).
+// Ethan's custom grip buttons are D1 (mouse button), D2 (HUD button), D30 (speech button).
 // The host requests this only after five minutes of confirmed desk rest.
 // Ethan: "Just before the wand goes to sleep ... flash all the colours twice."
 // All three LEDs pulse together twice (100 ms on, 100 ms off), then standby.

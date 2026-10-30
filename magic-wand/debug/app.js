@@ -13,11 +13,11 @@ const LIGHT_COLOURS = {
 };
 const LANE_NAMES = { speech: "Speech", hud: "HUD", review: "Review", mouse: "Pointer", scroll: "Scroll" };
 const LANE_HELP = {
-  speech: "Top starts and stops Agent Flow speech to text.",
-  hud: "Hold Middle to show the HUD; release to use the outlined card.",
+  speech: "The speech button starts and stops Agent Flow speech to text.",
+  hud: "Hold the HUD button to show the HUD; release to use the outlined card.",
   review: "Review changes or Stage files in VS Code.",
-  mouse: "Tap Bottom to turn the pointer on or off. Double tap recenters.",
-  scroll: "Hold Bottom over a page to scroll, or over something draggable to drag.",
+  mouse: "Tap the mouse button to turn the pointer on or off. Double tap recenters.",
+  scroll: "Hold the mouse button over a page to scroll, or over something draggable to drag.",
 };
 const BASIS = {
   light: ["from light", "Read from the wand’s light. A higher-priority light can hide this."],
@@ -26,8 +26,8 @@ const BASIS = {
 };
 const HUD_REASONS = {
   "context ended": "By Agentic Mouse",
-  "middle double click": "By Middle double-click",
-  "navigation timed out": "Middle hold signal stopped",
+  "middle double click": "By HUD button double-click",
+  "navigation timed out": "HUD button hold signal stopped",
   "context missing": "Agentic Mouse wasn’t showing it",
 };
 const HOLD_ENDS = {
@@ -136,7 +136,7 @@ function activity(s) {
   } else if (key === "mouse") {
     title = "Pointer On"; sentence = "The wand is moving the pointer.";
   } else if (key === "scroll") {
-    title = "Scrolling"; sentence = "Bottom is scrolling the page.";
+    title = "Scrolling"; sentence = "The mouse button is scrolling the page.";
   } else if (key === "hud") {
     title = "HUD Open"; sentence = "The HUD is open.";
   } else if (key === "app") {
@@ -183,7 +183,7 @@ function laneView(lane, s) {
       const reason = HUD_REASONS[label.slice(12, -1)] || label.slice(12, -1);
       label = reason.startsWith("By ") ? "HUD closed by " + reason.slice(3) : "HUD closed: " + reason;
     } else if (label === "Mouse button") label = "Last click";
-    else if (label.startsWith("Last hold: ")) label = label.includes("drag") ? "Last Bottom hold dragged" : "Last Bottom hold scrolled";
+    else if (label.startsWith("Last hold: ")) label = label.includes("drag") ? "Last mouse button hold dragged" : "Last mouse button hold scrolled";
     last = { label, t: last.t };
   }
   return { id: lane.id, name: LANE_NAMES[lane.id] || lane.lane, help: LANE_HELP[lane.id] || "", value,
@@ -237,25 +237,26 @@ function describeEvent(item) {
     case "RECORDING_STATE":
       title = summary === "Recording started" ? "Agent Flow started recording" : "Agent Flow stopped recording"; key = true; break;
     case "SPEECH_BUTTON":
-      title = summary.startsWith("Top pressed") ? "Top pressed" : "Top released";
+      title = summary.startsWith("Speech button pressed") ? "Speech button pressed" : "Speech button released";
       text = item.level === "warn" ? "Agent Flow wasn’t available" : null;
       key = item.level === "warn"; break;
     case "HUD_CLOSED": title = "HUD closed"; text = HUD_REASONS[detail] || detail; key = true; break;
-    case "HUD_HOLD_RELEASED": title = "HUD card used"; text = "Released Middle"; key = true; break;
-    case "HUD_TAP_USED": title = "HUD card used"; text = "Tapped Middle"; key = true; break;
+    case "HUD_HOLD_RELEASED": title = "HUD card used"; text = "Released HUD button"; key = true; break;
+    case "HUD_TAP_USED": title = "HUD card used"; text = "Tapped HUD button"; key = true; break;
     case "POINTER_MODE_ENTERED": title = "Pointer mode"; break;
-    case "POINTER_RECENTER": title = "Pointer recentered"; text = "Bottom double tap"; key = true; break;
+    case "POINTER_RECENTER": title = "Pointer recentered"; text = "Mouse button double tap"; key = true; break;
     case "HIGH_DWELL_CLICK": title = "Clicked by holding still"; break;
+    // BOTTOM_HOLD_* are the receiver log's legacy tags for the mouse button.
     case "BOTTOM_HOLD_TARGET": {
-      const target = summary.replace(/^Bottom hold: /, "");
-      if (target === "drag") title = "Bottom held: dragging";
-      else if (target === "tap-then-hold drag") title = "Bottom tap-then-hold: dragging";
-      else title = "Bottom held: scrolling";
+      const target = summary.replace(/^Mouse button hold: /, "");
+      if (target === "drag") title = "Mouse button held: dragging";
+      else if (target === "tap-then-hold drag") title = "Mouse button tap-then-hold: dragging";
+      else title = "Mouse button held: scrolling";
       if (target.startsWith("late")) text = "The target check finished late, so it kept scrolling.";
       if (target.startsWith("unknown")) text = "Target unknown, so it kept scrolling.";
       key = true; break;
     }
-    case "BOTTOM_HOLD_RECOVERED": title = "Bottom hold ended"; text = HOLD_ENDS[detail] || detail; break;
+    case "BOTTOM_HOLD_RECOVERED": title = "Mouse button hold ended"; text = HOLD_ENDS[detail] || detail; break;
     case "SCROLL_BEGIN": title = "Scroll chord started"; break;
     case "SCROLL_END": title = "Scroll chord ended"; break;
     case "SCROLL_FINISHED_MOUSE_ON": title = "Scrolling stopped: pointer back on"; break;
@@ -286,7 +287,7 @@ function describeEvent(item) {
 
 function isButton(item, edge) { return item && item.event === "BUTTON" && item.title.endsWith(" " + edge); }
 
-/** Newest first. Merge a click (down, up, optional stop-to-click marker) or a quick Top tap into one row. */
+/** Newest first. Merge a click (down, up, optional stop-to-click marker) or a quick speech button tap into one row. */
 function mergeClicks(items) {
   const out = [];
   for (let i = 0; i < items.length; i += 1) {
@@ -299,8 +300,8 @@ function mergeClicks(items) {
     } else if (isButton(a, "up") && isButton(b, "down") && a.t - b.t <= 1 && a.title.split(" ")[0] === b.title.split(" ")[0]) {
       out.push({ ...a, title: a.title.split(" ")[0] + " click" });
       i += 1;
-    } else if (a.title === "Top released" && b && b.title === "Top pressed" && !a.detail && !b.detail && a.t - b.t <= 1.5) {
-      out.push({ ...a, title: "Top tapped" });
+    } else if (a.title === "Speech button released" && b && b.title === "Speech button pressed" && !a.detail && !b.detail && a.t - b.t <= 1.5) {
+      out.push({ ...a, title: "Speech button tapped" });
       i += 1;
     } else {
       out.push(a);

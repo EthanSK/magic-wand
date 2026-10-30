@@ -29,7 +29,7 @@ final class CGEvent {static var system=CGPoint.zero;var location:CGPoint {CGEven
 final class Harness {
  static var landed:[CGPoint]=[]
  var actionPause=WandActionPause();let screenshot=WandScreenshotGesture()
- var recordingPointerPaused=false,hudSession=false,middleHeld=false,hudEntryPress=false,pointerInHUD=false
+ var recordingPointerPaused=false,hudSession=false,hudButtonHeld=false,hudEntryPress=false,pointerInHUD=false
  var buttons=0,pointerTravel=0.0,movementCount=0,pointerDisplays=[CGRect(x:0,y:0,width:3000,height:2000)]
  var pointerOrigin=WandPointerOrigin(),deliveryPoint:CGPoint?
  static func mouseMovementEvent(buttons:Int,from:CGPoint,to:CGPoint)->Posted? {Posted(to:to)}

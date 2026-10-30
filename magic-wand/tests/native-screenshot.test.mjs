@@ -6,7 +6,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {spawnSync} from 'node:child_process';
 
-// Ethan's screenshot mode and Bottom triple-click shortcut, through the actual
+// Ethan's screenshot mode and mouse-button triple-click shortcut, through the actual
 // receiver methods and its actual @BOTTOM/@FOLLOW line handling. Native capture,
 // Agentic Mouse and CGEvent posting are inert stubs: this cannot prove a
 // physical screenshot, only the receiver's ownership, button and follow rules.
@@ -19,8 +19,8 @@ const swiftc=(dir,code,extra=[])=>{writeFileSync(join(dir,'main.swift'),code);co
 test('screenshot mode: follow-independent aim, natural press-drag-release, triple-click start',{skip:process.platform!=='darwin'},()=>{
  const bottom=block('            if let marker=line.range(of:"@BOTTOM ")','            if let marker=line.range(of:"@MIDDLE ")');
  const follow=block('            if let marker=line.range(of:"@FOLLOW ")','            if let marker=line.range(of:"@ZERO ")');
- assert(bottom.indexOf('screenshotBottom(')<bottom.indexOf('manualPointerDuringRecording()'),'screenshot ownership and the triple-click precede every ordinary Bottom lane');
- assert(method('handleRaw').indexOf('handleScreenshotRaw')<method('handleRaw').indexOf('reconcileBottomHold'),'screenshot raw handling precedes the button-up reconciliation');
+ assert(bottom.indexOf('screenshotMouseButton(')<bottom.indexOf('manualPointerDuringRecording()'),'screenshot ownership and the triple-click precede every ordinary mouse-button lane');
+ assert(method('handleRaw').indexOf('handleScreenshotRaw')<method('handleRaw').indexOf('reconcileMouseButtonHold'),'screenshot raw handling precedes the button-up reconciliation');
  for(const name of ['reset','stop']) assert(method(name).includes('endScreenshot('),name+' releases any screenshot drag');
  assert(source.includes('queue("global.wandShot=0;global.wandRawPointer=true;'),'a fresh bridge session never inherits screenshot motion');
  assert(source.includes('return loading + "global.wandShot=0;'),'shutdown stops screenshot motion');
@@ -51,13 +51,13 @@ final class Harness {
  var pendingRecenter:Timer?,clickFollowChoice:(following:Bool,paused:Bool,restore:Bool?,rest:WandRestFollowMemory)?
  var screenshotTimer:Timer?,screenshotSettleTimer:Timer?,dwellTimer:Timer?,heldSafetyTimer:Timer?
  var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,flickScrollEnabled=false
- var screenshotActive=false,screenshotHUD=false,hudSession=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleHeld=false,hudEntryPress=false,acceptHUDContext=true,hudOpenedAt=0.0
+ var screenshotActive=false,screenshotHUD=false,hudSession=false,hudActive=false,pointerInHUD=false,hudButtonOperating=false,hudButtonHeld=false,hudEntryPress=false,acceptHUDContext=true,hudOpenedAt=0.0
  var recordingPointerPaused=false,recordingRestoreFollow:Bool?,recenterSuppressButtons=false
  func settleRecenteredCursor(at point:CGPoint){}
  var pointerOrigin=WandPointerOrigin();func currentPointerOrigin()->CGPoint{pointerOrigin.origin(system:CGEvent(source:nil)?.location ?? .zero,now:ProcessInfo.processInfo.systemUptime)}
  var heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,flickAnchor:CGPoint?,deliveryPoint:CGPoint?
  var pointerDisplays=[CGRect(x:0,y:0,width:2000,height:1000)]
- var buttons=0,movementCount=0,reportCount=0,rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,middleMouseX=0.0,middleMouseSampleAt = -100.0
+ var buttons=0,movementCount=0,reportCount=0,rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,hudButtonMouseX=0.0,hudButtonMouseSampleAt = -100.0
  var commands:[String]=[],downs=0,ups=0,holds=0,wheels=0
  static var selector=true
  static var moves:[(buttons:Int,to:CGPoint)]=[]
@@ -78,8 +78,8 @@ final class Harness {
  func cancelCircleScroll(){}
  func finishScroll(){}
  func stopHUDWatchdog(){}
- func beginBottomHold(now:Double,following:Bool?=nil){holds+=1}
- func finishBottomHold(now:Double,released:Bool=true){}
+ func beginMouseButtonHold(now:Double,following:Bool?=nil){holds+=1}
+ func finishMouseButtonHold(now:Double,released:Bool=true){}
  func probeHoldTarget(at:CGPoint,token:UUID){}
  func restoreMouseAfterScroll(){}
  func receive(_ line:String){for _ in [0] {
@@ -87,7 +87,7 @@ final class Harness {
 ${bottom}
 ${follow}
  }}
- ${['setScreenshotActive','screenshotContextChanged','takeScreenshotPointer','screenshotBottom','startScreenshotShortcut','superviseScreenshot','checkScreenshot','latchScreenshotIfReady','handleScreenshotRaw','finishScreenshotDrag','endScreenshot','recognizeBottomRecenter','recenterPointer','recordingChanged','manualPointerDuringRecording','deviceFollowChanged','enterPointerMode','postPointerMove','handleRaw','handleFrame','reconcileBottomHold','scheduleDwell','noteClickGate'].map(method).join('\n')}
+ ${['setScreenshotActive','screenshotContextChanged','takeScreenshotPointer','screenshotMouseButton','startScreenshotShortcut','superviseScreenshot','checkScreenshot','latchScreenshotIfReady','handleScreenshotRaw','finishScreenshotDrag','endScreenshot','recognizeMouseButtonRecenter','recenterPointer','recordingChanged','manualPointerDuringRecording','deviceFollowChanged','enterPointerMode','postPointerMove','handleRaw','handleFrame','reconcileMouseButtonHold','scheduleDwell','noteClickGate'].map(method).join('\n')}
 }
 func wait(_ s:Double){RunLoop.main.run(until:Date().addingTimeInterval(s))}
 let move="10000,2680,0,4",heldMove="10000,2680,0,5",still="10000,0,0,4"
@@ -110,16 +110,16 @@ for following in [false,true] {
  h.receive("@FOLLOW "+(following ? "0":"1"))
  precondition(h.dwell.following==following,"stale wand follow edges never change the choice during screenshot mode")
  h.receive("@BOTTOM 1")
- precondition(h.downs==1 && h.screenshot.dragging && h.buttons==1,"Bottom down presses like the mouse button")
+ precondition(h.downs==1 && h.screenshot.dragging && h.buttons==1,"The mouse button down presses like the mouse button")
  h.handleFrame(x:0,y:0,b:0)
- h.reconcileBottomHold(down:false,now:ProcessInfo.processInfo.systemUptime,reason:"sensor button state")
+ h.reconcileMouseButtonHold(down:false,now:ProcessInfo.processInfo.systemUptime,reason:"sensor button state")
  precondition(h.screenshot.dragging && h.buttons==1 && h.ups==0,"legacy frames and up reconciliation never lift a held drag")
  let before=Harness.moves.count
  dragThenStop(h)
  precondition(Harness.moves.count>before && Harness.moves.dropFirst(before).allSatisfy{$0.buttons==1},"held motion drags the selection")
  precondition(h.screenshot.dragging && h.ups==0,"stopping never finishes the selection: no auto-finish")
  h.receive("@BOTTOM 0")
- precondition(h.ups==1 && h.buttons==0 && h.screenshot.phase == .done,"releasing Bottom lets go and macOS captures")
+ precondition(h.ups==1 && h.buttons==0 && h.screenshot.phase == .done,"releasing the mouse button lets go and macOS captures")
  precondition(h.commands.last=="global.wandShot=0;sleepGyro();","screenshot motion stops with the selection")
  for _ in 0..<5 {h.handleRaw(move)};wait(0.3)
  precondition(h.ups==1 && h.downs==1,"the release happens exactly once")
@@ -130,11 +130,11 @@ for following in [false,true] {
  precondition(h.dwell.following==following && !h.commands.contains{$0.contains("setMouseFollow(true)") || $0.contains("setMouseFollow(false)")},"the normal follow choice is untouched")
 }
 
-// HIGH sensitivity: Bottom down for the click never selects LOW.
+// HIGH sensitivity: mouse button down for the click never selects LOW.
 let high=make(follow:false),low=make(follow:false);high.setScreenshotActive(true);low.setScreenshotActive(true)
 Harness.moves=[];for _ in 0..<6 {high.handleRaw(move)};let highX=Harness.moves.reduce(0.0){$0+$1.to.x}
 Harness.moves=[];for _ in 0..<6 {low.handleRaw(heldMove)};let lowX=Harness.moves.reduce(0.0){$0+$1.to.x}
-precondition(highX==lowX,"physical Bottom state does not change screenshot sensitivity")
+precondition(highX==lowX,"physical mouse button state does not change screenshot sensitivity")
 
 // Cancellations always lift the native press.
 let cancelled=make(follow:false);cancelled.setScreenshotActive(true);cancelled.receive("@BOTTOM 1")
@@ -162,7 +162,7 @@ precondition(t.controls.starts==1 && t.pendingRecenter==nil && t.screenshot.phas
 precondition(!t.dwell.following && t.recordingPointerPaused && t.recordingRestoreFollow==true,"the clicks' follow and recording-override effects are undone")
 precondition(t.commands.last=="global.wandShot=1;setMouseFollow(false);wakeGyro();","the wand restores follow off and supplies screenshot motion")
 precondition(t.holds==2,"the third press never becomes an ordinary hold")
-t.receive("@BOTTOM 0");precondition(t.holds==2 && !t.pointerRouter.bottomHeld,"its release is consumed")
+t.receive("@BOTTOM 0");precondition(t.holds==2 && !t.pointerRouter.mouseButtonHeld,"its release is consumed")
 for _ in 0..<5 {t.handleRaw(move)}
 precondition(!Harness.moves.isEmpty && t.downs==0,"recording-paused follow still lets screenshot aim; nothing presses before the selector")
 Harness.selector=false;t.setScreenshotActive(true)
@@ -176,7 +176,7 @@ precondition(warps==0,"no recentre in screenshot mode")
 dragThenStop(t)
 precondition(t.screenshot.dragging && t.ups==0,"no stop-to-click finish")
 t.receive("@BOTTOM 0")
-precondition(t.ups==1 && t.screenshot.phase == .done,"releasing Bottom captures")
+precondition(t.ups==1 && t.screenshot.phase == .done,"releasing the mouse button captures")
 t.setScreenshotActive(false)
 precondition(t.recordingPointerPaused && !t.dwell.following && t.screenshot.phase == .idle,"recording pause and follow choice survive the screenshot")
 
@@ -222,11 +222,11 @@ precondition(r.edge(down:true,now:1.1) == .third && r.edge(down:false,now:1.2) =
 let g=WandScreenshotGesture();precondition(g.requestShortcut(now:10) && g.expired(now:10.7)==nil && g.expired(now:10.9)=="telemetry lost","missing wand telemetry ends a pending start")
 g.telemetry(now:12);precondition(g.expired(now:12.1)=="native start timed out","Agentic Mouse must report the selection within two seconds")
 let n=WandScreenshotGesture();_=n.contextActive(now:1,pressed:false)
-precondition(n.bottom(down:true) == .press && n.latch(now:1) && n.dragging,"down then the selector: drag")
-precondition(n.bottom(down:true) == .consumed,"a second press while dragging is consumed")
-precondition(n.bottom(down:false) == .release,"up lets go")
-let m=WandScreenshotGesture();_=m.contextActive(now:1,pressed:false);_=m.bottom(down:true);_=m.end(contextActive:false)
-precondition(m.bottom(down:false) == .consumed,"a press held when the mode ended keeps its release consumed")
+precondition(n.mouseButton(down:true) == .press && n.latch(now:1) && n.dragging,"down then the selector: drag")
+precondition(n.mouseButton(down:true) == .consumed,"a second press while dragging is consumed")
+precondition(n.mouseButton(down:false) == .release,"up lets go")
+let m=WandScreenshotGesture();_=m.contextActive(now:1,pressed:false);_=m.mouseButton(down:true);_=m.end(contextActive:false)
+precondition(m.mouseButton(down:false) == .consumed,"a press held when the mode ended keeps its release consumed")
 // Ethan, 2026-10-30 00:54: a ghost HUD session Agentic Mouse no longer
 // shows blocked every stop-to-click. Real frames now close it, then click.
 let ghostHUD=make(follow:true);ghostHUD.hudSession=true;ghostHUD.hudOpenedAt=ProcessInfo.processInfo.systemUptime-5
@@ -239,20 +239,20 @@ precondition(logged.contains("HIGH_DWELL_CLICK"))
 let shown=make(follow:true);shown.hudSession=true;shown.context.isActive=true;shown.hudOpenedAt=ProcessInfo.processInfo.systemUptime-5
 for _ in 0..<5 {shown.handleRaw(followMove)};for _ in 0..<3 {shown.handleRaw(followStill)};wait(0.35)
 precondition(shown.hudSession && shown.downs==1 && shown.ups==1 && shown.clickGate==nil,"an open unheld HUD permits normal follow-on clicks")
-let operating=make(follow:true);operating.hudSession=true;operating.context.isActive=true;operating.middleHeld=true
+let operating=make(follow:true);operating.hudSession=true;operating.context.isActive=true;operating.hudButtonHeld=true
 for _ in 0..<5 {operating.handleRaw(followMove)};wait(0.35)
 precondition(operating.downs==0 && operating.clickGate=="hud operating","held HUD operation cannot click behind the wheel")
 let off=make(follow:false);off.hudSession=true;off.context.isActive=true
 for _ in 0..<5 {off.handleRaw(move)};wait(0.35)
 precondition(off.downs==0,"HUD-only motion with follow off never clicks")
-precondition(WandClickGate.blocker(recordingPaused:false,bottomHeld:false,buttons:0,hudSession:true,hudShown:false,scrollActive:false)==nil)
-precondition(WandClickGate.blocker(recordingPaused:false,bottomHeld:false,buttons:0,hudSession:false,hudShown:false,scrollActive:false)==nil)
-// A Bottom hold still reaches native scrolling when the packet is HUD-only.
+precondition(WandClickGate.blocker(recordingPaused:false,mouseButtonHeld:false,buttons:0,hudSession:true,hudShown:false,scrollActive:false)==nil)
+precondition(WandClickGate.blocker(recordingPaused:false,mouseButtonHeld:false,buttons:0,hudSession:false,hudShown:false,scrollActive:false)==nil)
+// A mouse-button hold still reaches native scrolling when the packet is HUD-only.
 for follow in [false,true] {
  let scroll=make(follow:follow);scroll.controlVersion = .sustainedV3;scroll.hudSession=true;scroll.context.isActive=true
  scroll.heldScroll.begin(now:ProcessInfo.processInfo.systemUptime-0.3,scrollable:true,sustain:true)
  for _ in 0..<25 {scroll.handleRaw("10000,2680,0,5")}
- precondition(scroll.heldScroll.sustained.started,"HUD-only flag must not swallow Bottom's scrolling stroke")
+ precondition(scroll.heldScroll.sustained.started,"HUD-only flag must not swallow the mouse button's scrolling stroke")
  precondition(scroll.downs==0,"scrolling emits no pointer click")
 }
 print("PASS: screenshot ownership, natural drag, cancellation and triple-click")

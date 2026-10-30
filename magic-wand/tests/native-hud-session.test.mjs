@@ -59,11 +59,11 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
  var buttons=0,movementCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1000,height:1000)]
  var selectedReviewMode:String?,hiddenReviewOperating=false,hiddenReviewPending=false,screenshotActive=false,screenshotHUD=false
- var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,middleOperating=false,middleSecondTap=false,navigationOpenedHUD=false
- var middleHeld=false,middleQualified=false,hudOpenedAt=0.0;let hudHoldSeconds=0.14
- var middleMouseX=0.0,middleMouseSampleAt = -100.0; var middleMouseOffset:Double? {let age=ProcessInfo.processInfo.systemUptime-middleMouseSampleAt;return age>=0 && age<=0.25 ? middleMouseX:nil}
+ var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,hudButtonOperating=false,hudButtonSecondTap=false,navigationOpenedHUD=false
+ var hudButtonHeld=false,hudButtonQualified=false,hudOpenedAt=0.0;let hudHoldSeconds=0.14
+ var hudButtonMouseX=0.0,hudButtonMouseSampleAt = -100.0; var hudButtonMouseOffset:Double? {let age=ProcessInfo.processInfo.systemUptime-hudButtonMouseSampleAt;return age>=0 && age<=0.25 ? hudButtonMouseX:nil}
  var wandShortcutMode:String?,wandShortcutX=0.0,wandShortcutY=0.0,wandShortcutTime=0.0
- var wandShortcutCircle=WandReviewNavigation();var middleReviewExit=false
+ var wandShortcutCircle=WandReviewNavigation();var hudButtonReviewExit=false
  var reviewExitGesture=WandReviewExitGesture();var reviewExitTimer:Timer?
  var pointerRouter=WandPointerRouter()
  var deliveryPoint:CGPoint?
@@ -72,13 +72,13 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  func scheduleDwell(){}
  func syncRecordingLight(){}
  func status(){}
- var appMode:String?,reviewTimer:Timer?,middleTap:Timer?,middleHold:Timer?,hudWatchdog:Timer?
- var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false,hudEntryPressStarted=0.0
- var middleClosedTap=false
+ var appMode:String?,reviewTimer:Timer?,hudButtonTap:Timer?,hudButtonHold:Timer?,hudWatchdog:Timer?
+ var hudButtonLastRelease = -100.0,hudButtonPressedAt=0.0,hudButtonDoubleConsumed=false,hudEntryPressStarted=0.0
+ var hudButtonClosedTap=false
  let heldScroll=WandHeldScroll()
  var transitions:[(buttons:Int,at:CGPoint)]=[]
  func transition(to next:Int,at point:CGPoint){let allowed=actionPause.paused ? next & buttons : next;transitions.append((allowed,point));buttons=allowed}
- var reviewOriginY=0.0,navX=0.0,navY=0.0,navOriginX=0.0,navOriginY=0.0,operationOriginX=0.0,operationOriginY=0.0,middleX=0.0,middleY=0.0
+ var reviewOriginY=0.0,navX=0.0,navY=0.0,navOriginX=0.0,navOriginY=0.0,operationOriginX=0.0,operationOriginY=0.0,hudButtonX=0.0,hudButtonY=0.0
  var navStream=WandAngularStream(),moveStream=WandAngularStream(),legacyHUDStream=WandAngularStream()
  var hudLastUpdate=Date.distantPast,commands:[String]=[]
  var hudDoubleClickInterval:Double {0.3}
@@ -88,138 +88,138 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  var traceInputs=0
  func recordReviewInput(rawX:Double,rawY:Double,dx:Double,dy:Double,now:Double,blocked:String?,step:Int32){traceInputs+=1}
  var cancelledScreenshotHold=false
- func finishBottomHold(now:Double,released:Bool=true){cancelledScreenshotHold = !released}
+ func finishMouseButtonHold(now:Double,released:Bool=true){cancelledScreenshotHold = !released}
  var screenshotContexts:[Bool]=[]
  func screenshotContextChanged(_ active:Bool){screenshotContexts.append(active)}
  func releaseButtons(){}
  init(){${callback}
 ${modeCallback}
 ${selectionCallback}}
- ${['setScreenshotActive','setWandShortcut','switchWandShortcut','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','scheduleReviewTapTimeout','expireReviewTap','cancelReviewTap','requestReviewToggle','closeHUD','enterPointerMode','handleMiddle','hudDoubleRightClick','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','mouseMovementEvent','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
+ ${['setScreenshotActive','setWandShortcut','switchWandShortcut','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','scheduleReviewTapTimeout','expireReviewTap','cancelReviewTap','requestReviewToggle','closeHUD','enterPointerMode','handleHUDButton','hudDoubleRightClick','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','mouseMovementEvent','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
-// Ethan's hold-to-show HUD. Holding Middle shows and steers it; releasing
+// Ethan's hold-to-show HUD. Holding the HUD button shows and steers it; releasing
 // uses the outlined card; Agentic Mouse closes it after an ordinary action
 // and keeps it open only for a submenu or a card that needs more motion.
 let h=Harness()
-h.handleMiddle("1")
-precondition(h.hudSession && h.middleHeld && Array(h.controls.phases.suffix(2))==["open","navigate"] && h.commands.contains("setHUDOpen(true);"),"holding Middle shows and steers the HUD")
+h.handleHUDButton("1")
+precondition(h.hudSession && h.hudButtonHeld && Array(h.controls.phases.suffix(2))==["open","navigate"] && h.commands.contains("setHUDOpen(true);"),"holding the HUD button shows and steers the HUD")
 h.context.set(true);h.handleNavigation("8000,0")
 precondition(!h.controls.phases.contains("qualify"),"a short hold does not qualify")
-h.middlePressedAt-=0.2;h.handleNavigation("9000,0")
+h.hudButtonPressedAt-=0.2;h.handleNavigation("9000,0")
 precondition(h.controls.phases.filter{$0=="qualify"}.count==1,"qualify while still held")
 h.handleNavigation("10000,0")
 precondition(h.controls.phases.filter{$0=="qualify"}.count==1,"qualify once per hold")
 precondition(h.controls.phases.last=="motion","held motion steers the outline")
-h.middlePressedAt-=0.3;h.handleMiddle("0")
-precondition(Array(h.controls.phases.suffix(3))==["motion","park","choose"] && !h.middleHeld && !h.hudActive,"releasing a hold uses the outlined card at once")
+h.hudButtonPressedAt-=0.3;h.handleHUDButton("0")
+precondition(Array(h.controls.phases.suffix(3))==["motion","park","choose"] && !h.hudButtonHeld && !h.hudActive,"releasing a hold uses the outlined card at once")
 let beforeClose=h.controls.phases.count
 h.context.set(false)
 precondition(!h.hudSession && !h.controls.phases.dropFirst(beforeClose).contains("dismiss"),"Agentic Mouse closed it, so no dismiss cuts short the action's follow-up")
 h.context.set(true);h.handleNavigation("20000,0");h.handleHUD("B,0,0");h.handleMove("B,0,0");settle(0.35)
 precondition(!h.hudSession && h.controls.phases.count==beforeClose,"a stale positive heartbeat never reopens or steers a closed HUD")
 
-let menu=Harness();menu.handleMiddle("1");menu.context.set(true);menu.middlePressedAt-=0.3;menu.handleMiddle("0")
+let menu=Harness();menu.handleHUDButton("1");menu.context.set(true);menu.hudButtonPressedAt-=0.3;menu.handleHUDButton("0")
 precondition(menu.hudSession && !menu.hudActive,"a kept-open HUD waits for the next hold")
 let waiting=menu.controls.phases.count
 menu.handleNavigation("9000,0")
 precondition(Array(menu.controls.phases.suffix(2))==["hover","motion"] && menu.hudWatchdog==nil,"unheld input is passive hover; native app accepts it only for an armed Switch App")
 menu.hudLastUpdate=Date.distantPast;settle(1.1)
 precondition(menu.hudSession && !menu.controls.phases.contains("dismiss"),"passive hover must not expire after a pause")
-_=menu.pointerRouter.bottom(down:true)
+_=menu.pointerRouter.mouseButton(down:true)
 menu.handleNavigation("19000,0")
-precondition(!menu.hudActive && menu.controls.phases.last=="park","Bottom parks passive hover before scrolling or dragging")
+precondition(!menu.hudActive && menu.controls.phases.last=="park","the mouse button parks passive hover before scrolling or dragging")
 let parkedCount=menu.controls.phases.count
 menu.handleNavigation("29000,0")
-precondition(menu.controls.phases.count==parkedCount,"Bottom movement cannot leak into the HUD")
-_=menu.pointerRouter.bottom(down:false)
+precondition(menu.controls.phases.count==parkedCount,"The mouse button movement cannot leak into the HUD")
+_=menu.pointerRouter.mouseButton(down:false)
 menu.handleNavigation("39000,0")
-precondition(Array(menu.controls.phases.suffix(2))==["hover","motion"] && menu.controls.points.last==CGPoint.zero,"release starts from a new origin without replaying Bottom movement")
-menu.handleMiddle("1")
-precondition(Array(menu.controls.phases.suffix(2))==["park","navigate"] && menu.middleHeld && menu.hudWatchdog != nil && !menu.controls.phases.dropFirst(waiting).contains("open"),"the next hold steers the page or adjusts the armed card")
-menu.handleNavigation("0,7000");menu.middlePressedAt-=0.3;menu.handleMiddle("0")
+precondition(Array(menu.controls.phases.suffix(2))==["hover","motion"] && menu.controls.points.last==CGPoint.zero,"release starts from a new origin without replaying mouse-button movement")
+menu.handleHUDButton("1")
+precondition(Array(menu.controls.phases.suffix(2))==["park","navigate"] && menu.hudButtonHeld && menu.hudWatchdog != nil && !menu.controls.phases.dropFirst(waiting).contains("open"),"the next hold steers the page or adjusts the armed card")
+menu.handleNavigation("0,7000");menu.hudButtonPressedAt-=0.3;menu.handleHUDButton("0")
 precondition(menu.controls.phases.last=="choose")
 
 // Ethan (2026-10-30): double-clicking the HUD button from closed "should do
 // the right mouse menu, like right click". He approved the closed-HUD single
 // tap waiting up to 300 ms, so Switch App waits out the double-click window.
-let instant=Harness();instant.handleMiddle("1");instant.context.set(true);instant.handleMiddle("0")
-precondition(instant.middleTap != nil && !instant.controls.phases.contains("activate"),"a tap from closed waits out the double-click window")
+let instant=Harness();instant.handleHUDButton("1");instant.context.set(true);instant.handleHUDButton("0")
+precondition(instant.hudButtonTap != nil && !instant.controls.phases.contains("activate"),"a tap from closed waits out the double-click window")
 let outlined=instant.controls.phases.count
 for point in ["9000,0","-8000,7000"] {instant.handleNavigation(point)}
 precondition(instant.controls.phases.count==outlined,"motion while it waits cannot change the card it will use")
 settle(0.35)
-precondition(instant.middleTap == nil && instant.controls.phases.last=="activate" && instant.transitions.isEmpty && instant.hudSession,"a lone tap from closed then switches app, never right-clicks")
-let unconfirmed=Harness();unconfirmed.handleMiddle("1");unconfirmed.handleMiddle("0");settle(0.35)
+precondition(instant.hudButtonTap == nil && instant.controls.phases.last=="activate" && instant.transitions.isEmpty && instant.hudSession,"a lone tap from closed then switches app, never right-clicks")
+let unconfirmed=Harness();unconfirmed.handleHUDButton("1");unconfirmed.handleHUDButton("0");settle(0.35)
 precondition(unconfirmed.controls.phases.last=="activate","as before, a closed tap does not need the HUD's first heartbeat")
 for following in [false,true] {
  let right=Harness();right.dwell.follow(following);right.systemCursor=CGPoint(x:321,y:654)
- right.handleMiddle("1");right.context.set(true);right.handleMiddle("0");right.handleMiddle("1")
+ right.handleHUDButton("1");right.context.set(true);right.handleHUDButton("0");right.handleHUDButton("1")
  precondition(right.transitions.map{$0.buttons}==[2,0] && right.transitions.allSatisfy{$0.at==CGPoint(x:321,y:654)},"a double click from closed right-clicks once at the visible pointer")
- precondition(!right.hudSession && right.middleTap == nil && right.controls.phases.last=="dismiss" && right.buttons==0,"and dismisses the HUD the first press showed")
- right.handleMiddle("0");settle(0.35)
+ precondition(!right.hudSession && right.hudButtonTap == nil && right.controls.phases.last=="dismiss" && right.buttons==0,"and dismisses the HUD the first press showed")
+ right.handleHUDButton("0");settle(0.35)
  precondition(!right.controls.phases.contains("activate") && !right.controls.phases.contains("choose") && right.transitions.count==2,"Switch App never fires and the second release is consumed")
  precondition(right.dwell.following==following,"mouse follow stays as it was")
- right.handleMiddle("1")
- precondition(right.hudSession && right.middleHeld && right.transitions.count==2,"the next press is an ordinary hold-to-show")
+ right.handleHUDButton("1")
+ precondition(right.hudSession && right.hudButtonHeld && right.transitions.count==2,"the next press is an ordinary hold-to-show")
 }
-let heldFirst=Harness();heldFirst.handleMiddle("1");heldFirst.context.set(true);heldFirst.middlePressedAt-=0.3;heldFirst.handleMiddle("0")
-heldFirst.handleMiddle("1")
-precondition(heldFirst.transitions.isEmpty && heldFirst.hudSession && heldFirst.middleHeld,"a hold that opened the HUD is never the first click of a right-click")
-let lateClosed=Harness();lateClosed.handleMiddle("1");lateClosed.context.set(true);lateClosed.handleMiddle("0")
-lateClosed.middleLastRelease = -100;lateClosed.handleMiddle("1")
-precondition(lateClosed.transitions.isEmpty && lateClosed.middleTap == nil && Array(lateClosed.controls.phases.suffix(2))==["activate","navigate"],"a closed tap whose window ended (late timer) switches app before the next hold")
-let closedEarly=Harness();closedEarly.handleMiddle("1");closedEarly.context.set(true);closedEarly.handleMiddle("0")
-closedEarly.closeHUD(reason:"disconnect");closedEarly.handleMiddle("1")
-precondition(closedEarly.transitions.isEmpty && !closedEarly.middleClosedTap,"a HUD closed meanwhile (disconnect, native close) cancels the right-click")
+let heldFirst=Harness();heldFirst.handleHUDButton("1");heldFirst.context.set(true);heldFirst.hudButtonPressedAt-=0.3;heldFirst.handleHUDButton("0")
+heldFirst.handleHUDButton("1")
+precondition(heldFirst.transitions.isEmpty && heldFirst.hudSession && heldFirst.hudButtonHeld,"a hold that opened the HUD is never the first click of a right-click")
+let lateClosed=Harness();lateClosed.handleHUDButton("1");lateClosed.context.set(true);lateClosed.handleHUDButton("0")
+lateClosed.hudButtonLastRelease = -100;lateClosed.handleHUDButton("1")
+precondition(lateClosed.transitions.isEmpty && lateClosed.hudButtonTap == nil && Array(lateClosed.controls.phases.suffix(2))==["activate","navigate"],"a closed tap whose window ended (late timer) switches app before the next hold")
+let closedEarly=Harness();closedEarly.handleHUDButton("1");closedEarly.context.set(true);closedEarly.handleHUDButton("0")
+closedEarly.closeHUD(reason:"disconnect");closedEarly.handleHUDButton("1")
+precondition(closedEarly.transitions.isEmpty && !closedEarly.hudButtonClosedTap,"a HUD closed meanwhile (disconnect, native close) cancels the right-click")
 settle(0.35);precondition(!closedEarly.controls.phases.contains("activate"))
-let dragging=Harness();dragging.handleMiddle("1");dragging.context.set(true);dragging.handleMiddle("0")
-_=dragging.pointerRouter.bottom(down:true);dragging.handleMiddle("1")
-precondition(dragging.transitions.isEmpty && !dragging.hudSession && dragging.controls.phases.last=="dismiss","while Bottom is held the double click only dismisses")
-let paused=Harness();paused.handleMiddle("1");paused.context.set(true);paused.handleMiddle("0")
-paused.actionPause.pause();paused.handleMiddle("1")
+let dragging=Harness();dragging.handleHUDButton("1");dragging.context.set(true);dragging.handleHUDButton("0")
+_=dragging.pointerRouter.mouseButton(down:true);dragging.handleHUDButton("1")
+precondition(dragging.transitions.isEmpty && !dragging.hudSession && dragging.controls.phases.last=="dismiss","while the mouse button is held the double click only dismisses")
+let paused=Harness();paused.handleHUDButton("1");paused.context.set(true);paused.handleHUDButton("0")
+paused.actionPause.pause();paused.handleHUDButton("1")
 precondition(paused.buttons==0 && paused.transitions.allSatisfy{$0.buttons==0},"the debug pause never presses a native button")
 // Inside an already open HUD a tap still waits out the double-click window.
-let tap=Harness();tap.handleMiddle("1");tap.context.set(true);tap.middlePressedAt-=0.3;tap.handleMiddle("0")
+let tap=Harness();tap.handleHUDButton("1");tap.context.set(true);tap.hudButtonPressedAt-=0.3;tap.handleHUDButton("0")
 precondition(tap.controls.phases.last=="choose","the opening hold's release")
-tap.handleMiddle("1");tap.handleMiddle("0")
-precondition(tap.middleTap != nil && tap.controls.phases.last=="park","a tap waits out the double-click window")
+tap.handleHUDButton("1");tap.handleHUDButton("0")
+precondition(tap.hudButtonTap != nil && tap.controls.phases.last=="park","a tap waits out the double-click window")
 let selectedAtRelease=tap.controls.phases.count
 for point in ["9000,0","-8000,7000","0,-9000"] {tap.handleNavigation(point)}
 precondition(tap.controls.phases.count==selectedAtRelease && !tap.hudActive,"wand movement during click qualification cannot move the selected wedge")
 settle(0.35)
-precondition(tap.controls.phases.last=="activate" && tap.middleTap == nil,"a lone tap then uses the original outlined card")
+precondition(tap.controls.phases.last=="activate" && tap.hudButtonTap == nil,"a lone tap then uses the original outlined card")
 tap.handleNavigation("30000,15000")
 precondition(Array(tap.controls.phases.suffix(2))==["hover","motion"] && tap.controls.points.last==CGPoint.zero,"after activation aim restarts at a fresh origin without replaying click-window motion")
 // A double click inside an open HUD dismisses without acting. (From closed,
 // the first tap acts at once; Agentic Mouse ignores it when that press only
 // reopened a remembered submenu, so a double click still resets to home.)
-let double=Harness();double.handleMiddle("1");double.context.set(true);double.middlePressedAt-=0.3;double.handleMiddle("0")
+let double=Harness();double.handleHUDButton("1");double.context.set(true);double.hudButtonPressedAt-=0.3;double.handleHUDButton("0")
 let beforeDouble=double.controls.phases.count
-double.handleMiddle("1");double.handleMiddle("0");double.handleMiddle("1")
+double.handleHUDButton("1");double.handleHUDButton("0");double.handleHUDButton("1")
 precondition(!double.hudSession && double.controls.phases.last=="dismiss","double click still dismisses")
-double.handleMiddle("0");settle(0.35)
+double.handleHUDButton("0");settle(0.35)
 precondition(!double.controls.phases.dropFirst(beforeDouble).contains("activate") && !double.controls.phases.dropFirst(beforeDouble).contains("choose") && !double.hudSession,"and never acts")
 precondition(double.transitions.isEmpty,"a double click inside an open HUD only closes it, never right-clicks")
-let lateTap=Harness();lateTap.handleMiddle("1");lateTap.context.set(true);lateTap.middlePressedAt-=0.3;lateTap.handleMiddle("0")
-lateTap.handleMiddle("1");lateTap.handleMiddle("0")
-lateTap.middleLastRelease = -100;lateTap.handleMiddle("1")
-precondition(lateTap.middleTap == nil && Array(lateTap.controls.phases.suffix(2))==["activate","navigate"],"a tap whose window ended is used before the next hold, never lost")
-let hidden=Harness();hidden.handleMiddle("1");hidden.context.set(true);hidden.middlePressedAt-=0.3;hidden.handleMiddle("0")
-hidden.handleMiddle("1");hidden.handleMiddle("0");hidden.context.set(false);settle(0.4)
+let lateTap=Harness();lateTap.handleHUDButton("1");lateTap.context.set(true);lateTap.hudButtonPressedAt-=0.3;lateTap.handleHUDButton("0")
+lateTap.handleHUDButton("1");lateTap.handleHUDButton("0")
+lateTap.hudButtonLastRelease = -100;lateTap.handleHUDButton("1")
+precondition(lateTap.hudButtonTap == nil && Array(lateTap.controls.phases.suffix(2))==["activate","navigate"],"a tap whose window ended is used before the next hold, never lost")
+let hidden=Harness();hidden.handleHUDButton("1");hidden.context.set(true);hidden.hudButtonPressedAt-=0.3;hidden.handleHUDButton("0")
+hidden.handleHUDButton("1");hidden.handleHUDButton("0");hidden.context.set(false);settle(0.4)
 precondition(!hidden.controls.phases.contains("activate"),"a closed HUD cancels the pending tap")
-let racing=Harness();racing.handleMiddle("1");racing.context.set(true);racing.context.set(false)
-precondition(racing.hudSession && racing.middleHeld,"a close during a live hold waits for its release")
-racing.middlePressedAt-=0.3;racing.handleMiddle("0")
+let racing=Harness();racing.handleHUDButton("1");racing.context.set(true);racing.context.set(false)
+precondition(racing.hudSession && racing.hudButtonHeld,"a close during a live hold waits for its release")
+racing.hudButtonPressedAt-=0.3;racing.handleHUDButton("0")
 precondition(racing.controls.phases.last=="choose")
-let lost=Harness();lost.handleMiddle("1");lost.hudLastUpdate=Date.distantPast;settle(0.3)
+let lost=Harness();lost.handleHUDButton("1");lost.hudLastUpdate=Date.distantPast;settle(0.3)
 precondition(!lost.hudSession && !lost.acceptHUDContext && lost.controls.phases.last=="dismiss","lost telemetry during a hold clears the whole session")
 lost.context.set(true);precondition(!lost.hudSession)
-let stale=Harness();stale.hudSession=true;stale.hudOpenedAt=ProcessInfo.processInfo.systemUptime-5;stale.handleMiddle("1")
-precondition(stale.hudSession && stale.middleHeld && stale.controls.phases.contains("open"),"a session Agentic Mouse no longer shows restarts as a fresh HUD")
-let shortcut=Harness();shortcut.hudSession=true;shortcut.pointerInHUD=true;shortcut.middleOperating=true;shortcut.wandShortcutMode="changes"
-shortcut.handleMiddle("0")
-precondition(shortcut.wandShortcutMode==nil && shortcut.review.committed,"physical Middle release immediately finishes review")
+let stale=Harness();stale.hudSession=true;stale.hudOpenedAt=ProcessInfo.processInfo.systemUptime-5;stale.handleHUDButton("1")
+precondition(stale.hudSession && stale.hudButtonHeld && stale.controls.phases.contains("open"),"a session Agentic Mouse no longer shows restarts as a fresh HUD")
+let shortcut=Harness();shortcut.hudSession=true;shortcut.pointerInHUD=true;shortcut.hudButtonOperating=true;shortcut.wandShortcutMode="changes"
+shortcut.handleHUDButton("0")
+precondition(shortcut.wandShortcutMode==nil && shortcut.review.committed,"physical HUD-button release immediately finishes review")
 shortcut.wandShortcutMode="files";shortcut.closeHUD(reason:"disconnect")
 precondition(shortcut.wandShortcutMode==nil && !shortcut.review.committed,"lost HUD cancels review")
 // A capture that ends while Agentic Mouse still shows the HUD returns to it.
@@ -240,8 +240,8 @@ ghost.setScreenshotActive(true);ghost.enterPointerMode();ghost.context.set(false
 ghost.setScreenshotActive(false)
 precondition(!ghost.hudSession && !ghost.screenshotHUD,"a hidden HUD never returns as a session")
 precondition(!ghost.commands.contains("setHUDOpen(true);"),"the wand is never told a HUD is open")
-let pinned=Harness();pinned.selectedReviewMode="changes";pinned.wandShortcutMode="changes";pinned.handleMiddle("1")
-precondition(pinned.reviewExitGesture.pending && !pinned.review.committed,"Middle-down freezes the existing working set")
+let pinned=Harness();pinned.selectedReviewMode="changes";pinned.wandShortcutMode="changes";pinned.handleHUDButton("1")
+precondition(pinned.reviewExitGesture.pending && !pinned.review.committed,"HUD button down freezes the existing working set")
 for i in 1...80 {pinned.handleNavigation("\\(i*1000),\\(i*2000)")}
 precondition(pinned.review.inputs==0,"held motion never reaches Better Git")
 pinned.commitReviewHold(now:ProcessInfo.processInfo.systemUptime+0.6)
@@ -250,7 +250,7 @@ precondition(pinned.review.starts==["changes"] && pinned.reviewExitGesture.pendi
 for i in 81...160 {pinned.handleNavigation("\\(i*1000),\\(i*2000)")}
 pinned.commitReviewHold(now:ProcessInfo.processInfo.systemUptime+2)
 precondition(pinned.review.inputs==0 && pinned.review.starts.count==1,"continued holding neither edits nor commits the next set")
-pinned.handleMiddle("0");settle(0.36)
+pinned.handleHUDButton("0");settle(0.36)
 precondition(!pinned.hudSession && pinned.selectedReviewMode=="changes" && !pinned.reviewExitGesture.pending,"release stays in review and unfreezes")
 pinned.handleNavigation("161000,322000")
 precondition(pinned.review.inputs==1,"new motion after release resumes review")
@@ -262,22 +262,22 @@ NSWorkspace.shared.frontmostApplication?.bundleIdentifier="com.microsoft.VSCode"
 pinned.context.isFresh=false;pinned.handleNavigation("163000,326000")
 precondition(pinned.review.inputs==1,"expired context cannot deliver a review step")
 pinned.context.isFresh=true
-pinned.handleMiddle("1");pinned.handleMiddle("0")
+pinned.handleHUDButton("1");pinned.handleHUDButton("0")
 precondition(pinned.selectedReviewMode=="changes" && pinned.reviewExitGesture.awaitingSecond,"single review tap waits for double-click")
 settle(0.35)
 precondition(pinned.selectedReviewMode==nil && !pinned.review.committed,"a later short tap cancels and exits")
-let cancel=Harness();cancel.selectedReviewMode="files";cancel.wandShortcutMode="files";cancel.handleMiddle("1");cancel.handleMiddle("0");settle(0.6)
+let cancel=Harness();cancel.selectedReviewMode="files";cancel.wandShortcutMode="files";cancel.handleHUDButton("1");cancel.handleHUDButton("0");settle(0.6)
 precondition(cancel.selectedReviewMode==nil && cancel.wandShortcutMode==nil && !cancel.review.committed,"short tap cancels the timer without staging later")
-let late=Harness();late.selectedReviewMode="files";late.wandShortcutMode="files";late.middleReviewExit=true
-late.beginReviewCommitHold(now:ProcessInfo.processInfo.systemUptime-0.6);late.handleMiddle("0")
+let late=Harness();late.selectedReviewMode="files";late.wandShortcutMode="files";late.hudButtonReviewExit=true
+late.beginReviewCommitHold(now:ProcessInfo.processInfo.systemUptime-0.6);late.handleHUDButton("0")
 precondition(late.review.committed && late.review.starts==["files"] && late.selectedReviewMode=="files","long release works even when the timer was delayed")
 let toggled=Harness();toggled.selectedReviewMode="changes";toggled.wandShortcutMode="changes"
 for expected in ["files","changes","files"] {
- toggled.handleMiddle("1");toggled.handleMiddle("0")
+ toggled.handleHUDButton("1");toggled.handleHUDButton("0")
  precondition(toggled.reviewExitGesture.awaitingSecond && toggled.selectedReviewMode != nil)
  let before=toggled.review.inputs;toggled.handleNavigation("1000,1000")
  precondition(toggled.review.inputs==before,"waiting double-click freezes review, not pointer")
- toggled.handleMiddle("1");toggled.handleMiddle("0")
+ toggled.handleHUDButton("1");toggled.handleHUDButton("0")
  precondition(toggled.controls.phases.last=="toggleReview" && !toggled.review.committed,"double click requests mode toggle without staging")
  precondition(toggled.selectedReviewMode != expected,"only native acknowledgement changes local mode")
  toggled.context.onSelectionChange?(expected)
@@ -289,11 +289,11 @@ precondition(toggled.controls.phases.filter{$0=="toggleReview"}.count==3)
 precondition(toggled.transitions.isEmpty,"review double clicks toggle the mode, never right-click")
 precondition(toggled.review.modeChanges==["files","changes","files"] && toggled.review.endings.isEmpty && toggled.review.starts.isEmpty,"mode switches preserve the live review transaction: no cancel, finish or begin")
 let secondHold=Harness();secondHold.selectedReviewMode="files";secondHold.wandShortcutMode="files"
-secondHold.handleMiddle("1");secondHold.handleMiddle("0");secondHold.handleMiddle("1")
-secondHold.commitReviewHold(now:ProcessInfo.processInfo.systemUptime+0.6);secondHold.handleMiddle("0");settle(0.35)
+secondHold.handleHUDButton("1");secondHold.handleHUDButton("0");secondHold.handleHUDButton("1")
+secondHold.commitReviewHold(now:ProcessInfo.processInfo.systemUptime+0.6);secondHold.handleHUDButton("0");settle(0.35)
 precondition(secondHold.review.committed && secondHold.selectedReviewMode=="files" && !secondHold.controls.phases.contains("toggleReview"),"long second press stages and stays")
 let changed=Harness();changed.selectedReviewMode="changes";changed.wandShortcutMode="changes"
-changed.handleMiddle("1");changed.handleMiddle("0");changed.context.onSelectionChange?(nil);settle(0.35)
+changed.handleHUDButton("1");changed.handleHUDButton("0");changed.context.onSelectionChange?(nil);settle(0.35)
 precondition(changed.selectedReviewMode==nil && !changed.controls.phases.contains("exitReview"),"native cancellation clears pending exit")
 let submenu=Harness();submenu.hudSession=true;submenu.context.set(true);submenu.resumeHUDNavigation()
 let navigationStarts=submenu.controls.phases.filter{$0=="navigate"}.count
@@ -305,38 +305,38 @@ for i in 0...60 {_=asleep.deskSleep.sample(parked:true,buttons:false,now:100+Dou
 asleep.hudLastUpdate=Date.distantPast;settle(1)
 precondition(asleep.hudSession && asleep.hudActive,"sleep stops NAV heartbeat without closing the HUD")
 asleep.deskSleep.reset();asleep.closeHUD(reason:"test done")
-let independent=Harness();independent.hudSession=true;independent.enterPointerMode();precondition(independent.hudSession,"Bottom leaves Middle HUD alone")
+let independent=Harness();independent.hudSession=true;independent.enterPointerMode();precondition(independent.hudSession,"the mouse button leaves the HUD alone")
 
-// Every Middle hold, including the second hold that adjusts an armed card
-// such as Switch App, freezes the Bottom pointer lane for its length only.
-// Use the real pointer posting and Middle/navigation handlers with inert events.
+// Every HUD-button hold, including the second hold that adjusts an armed card
+// such as Switch App, freezes the mouse-button pointer lane for its length only.
+// Use the real pointer posting and the HUD button/navigation handlers with inert events.
 let switching=Harness(),anchor=CGPoint(x:400,y:400)
 precondition(switching.postPointerMove(dx:20,dy:10,from:anchor)==CGPoint(x:420,y:410))
-switching.handleMiddle("1")
+switching.handleHUDButton("1")
 let entryPosts=CGEvent.posted
-for _ in 0..<100 {precondition(switching.postPointerMove(dx:30,dy:-15,from:anchor)==anchor,"a Middle hold freezes an already-following pointer")}
+for _ in 0..<100 {precondition(switching.postPointerMove(dx:30,dy:-15,from:anchor)==anchor,"a HUD-button hold freezes an already-following pointer")}
 switching.handleNavigation("10000,0")
 precondition(CGEvent.posted==entryPosts && switching.controls.phases.last=="motion","the hold still steers the HUD without moving the pointer")
-switching.context.set(true);switching.middlePressedAt-=0.3;switching.handleMiddle("0")
+switching.context.set(true);switching.hudButtonPressedAt-=0.3;switching.handleHUDButton("0")
 precondition(switching.postPointerMove(dx:-20,dy:10,from:anchor)==CGPoint(x:380,y:410),"release resumes new pointer movement without replaying the held sweep")
-switching.handleMiddle("1")
+switching.handleHUDButton("1")
 let pressPosts=CGEvent.posted
 precondition(switching.postPointerMove(dx:60,dy:40,from:anchor)==anchor,"the second hold freezes the pointer too")
 switching.handleNavigation("-20000,0");switching.handleNavigation("20000,0")
 precondition(switching.controls.phases.last=="motion" && CGEvent.posted==pressPosts,"left and right reach the armed card without moving the pointer")
-switching.middlePressedAt-=0.3;switching.handleMiddle("0")
-precondition(switching.postPointerMove(dx:5,dy:0,from:anchor)==CGPoint(x:405,y:400),"Middle release restores pointing even while the HUD stays open")
-switching.handleMiddle("1");switching.closeHUD(reason:"context ended")
+switching.hudButtonPressedAt-=0.3;switching.handleHUDButton("0")
+precondition(switching.postPointerMove(dx:5,dy:0,from:anchor)==CGPoint(x:405,y:400),"HUD-button release restores pointing even while the HUD stays open")
+switching.handleHUDButton("1");switching.closeHUD(reason:"context ended")
 precondition(switching.postPointerMove(dx:7,dy:0,from:anchor)==CGPoint(x:407,y:400),"a cancelled hold cannot leave the pointer frozen")
-let independentReview=Harness();independentReview.selectedReviewMode="changes";independentReview.handleMiddle("1")
-precondition(independentReview.postPointerMove(dx:8,dy:0,from:anchor)==CGPoint(x:408,y:400),"independent review commit holds retain the Bottom pointer lane")
+let independentReview=Harness();independentReview.selectedReviewMode="changes";independentReview.handleHUDButton("1")
+precondition(independentReview.postPointerMove(dx:8,dy:0,from:anchor)==CGPoint(x:408,y:400),"independent review commit holds retain the mouse button pointer lane")
 
 // Recording freezes delivery and forgets speech-time travel without changing
 // the latched follow choice. Exercise the actual receiver callback and emitter.
 for following in [false,true] {
  let speech=Harness();speech.dwell.follow(following)
  speech.pointerRouter=WandPointerRouter(lowDelay:0.09)
- _=speech.pointerRouter.bottom(down:true)
+ _=speech.pointerRouter.mouseButton(down:true)
  _=speech.pointerRouter.frame(dx:25,dy:0,buttons:0,hud:false,now:1)
  precondition(speech.pointerRouter.pendingCount==1)
  speech.dwell.move(dx:40,dy:0,now:1,eligible:true)
@@ -354,7 +354,7 @@ let manual=Harness();manual.dwell.follow(true)
 manual.recording.isRecording=true;manual.recordingChanged(true)
 manual.manualPointerDuringRecording();manual.dwell.follow(true)
 precondition(!manual.recordingPointerPaused && manual.recording.isRecording)
-precondition(manual.postPointerMove(dx:6,dy:2,from:anchor)==CGPoint(x:406,y:402),"manual Bottom re-entry allows pointer movement while recording")
+precondition(manual.postPointerMove(dx:6,dy:2,from:anchor)==CGPoint(x:406,y:402),"manual mouse-button re-entry allows pointer movement while recording")
 manual.dwell.follow(false);manual.recording.isRecording=false;manual.recordingChanged(false)
 precondition(!manual.dwell.following,"recording end preserves a manual switch off")
 print("PASS: hold-to-show HUD, native close, kept-open next hold, tap and double click, stale input rejection, watchdog teardown, review hold")
@@ -401,7 +401,7 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  struct Sleep {var sleeping=false,deepSleeping=true;mutating func sample(parked:Bool,buttons:Bool,now:Double)->Bool?{sleeping=parked && !buttons;return sleeping}}
  var deskSleep=Sleep()
  var probeTimer:Timer?,queued:[String]=[],entered=0
- func reconcileBottomHold(down:Bool,now:Double,reason:String){};func scheduleDwell(){};func cancelCircleScroll(){};func releaseButtons(){}
+ func reconcileMouseButtonHold(down:Bool,now:Double,reason:String){};func scheduleDwell(){};func cancelCircleScroll(){};func releaseButtons(){}
  func enterPointerMode(){entered+=1;hudSession=false};func queue(_ text:String){queued.append(text)}
  ${source.slice(start,end)}
 }

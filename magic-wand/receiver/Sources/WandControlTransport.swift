@@ -142,7 +142,7 @@ final class WandControlTransport {
     /// Pending state-changing HUD packets (for tests and diagnostics).
     var pendingPackets:Int {outbox.count}
 
-    /// Ethan's Bottom triple-click. Agentic Mouse starts its native selected-area
+    /// Ethan's mouse-button triple-click. Agentic Mouse starts its native selected-area
     /// screenshot for a fresh identity and ignores a repeated one; this request
     /// never cancels an active selection and sends no keyboard shortcut itself.
     @discardableResult

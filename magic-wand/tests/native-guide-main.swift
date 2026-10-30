@@ -6,19 +6,19 @@ let generated = URL(fileURLWithPath: CommandLine.arguments[1])
 let data = try! Data(contentsOf: generated)
 let sense = WandGuideContent.parse(data, sense: true)!, puck = WandGuideContent.parse(data, sense: false)!
 let headings = sense.sections.map(\.heading)
-precondition(headings[0] == "Button 1 · left · Agentic Mouse HUD (Middle)" && headings[1] == "Button 2 · centre · Mouse (Bottom)"
-             && headings[2] == "Button 3 · right · Speech to text (Top)", "physical Sense buttons, not finger names: \(headings)")
-precondition(puck.sections[0].heading == "Middle · Agentic Mouse HUD", "Puck keeps its own names")
+precondition(headings[0] == "Button 1 · left · HUD button · Agentic Mouse HUD" && headings[1] == "Button 2 · centre · Mouse button · Mouse"
+             && headings[2] == "Button 3 · right · Speech button · Speech to text", "physical Sense buttons, not finger names: \(headings)")
+precondition(puck.sections[0].heading == "HUD button · Agentic Mouse HUD", "the Puck uses the same button names")
 let all = sense.sections.flatMap(\.rows).map { $0.joined(separator: " ") }.joined(separator: "\n")
-for needle in ["submenu", "select it (dots)", "hold Middle and move to adjust", "release to capture", "Triple tap", "screenshot", "Stage files", "dictation", "mouse follow", "flashes twice", "All three buttons", "Recording"] {
+for needle in ["submenu", "select it (dots)", "hold the HUD button and move to adjust", "release to capture", "Triple tap", "screenshot", "Stage files", "dictation", "mouse follow", "flashes twice", "All three buttons", "Recording"] {
     precondition(all.lowercased().contains(needle.lowercased()), "the guide covers \(needle)")
 }
-precondition(!all.contains("hold Middle again"), "the superseded next-hold flow is gone")
+precondition(!all.contains("hold Middle again") && !all.contains("hold the HUD button again"), "the superseded next-hold flow is gone")
 // Superseded 2026-10-29/30: unheld dotted adjustment and stop-to-capture screenshots.
 for retired in ["click Middle to finish", "then stop to capture", "stopping after movement ends the selection"] {
     precondition(!all.contains(retired), "retired guide wording is gone: \(retired)")
 }
-precondition(all.contains("hold Bottom and move to select the area"), "screenshots are held and released like a mouse button")
+precondition(all.contains("hold the mouse button and move to select the area"), "screenshots are held and released like a mouse button")
 print("PASS: generated content with Sense button positions")
 
 // Top-right of the visible display, clear of the centred HUD and bottom-centre Agent Flow.
