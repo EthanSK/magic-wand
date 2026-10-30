@@ -1,0 +1,84 @@
+{
+  "reloaded_closed_single_bodies": true,
+  "physical_fit_verified": false,
+  "parts": {
+    "Key_Battery_Carrier": {
+      "solid_PETG_g": 3.169013248136524,
+      "bounds_mm": [
+        [
+          -29.700000762939453,
+          -12.5,
+          0.0
+        ],
+        [
+          29.399999618530273,
+          47.900001525878906,
+          14.100000381469727
+        ]
+      ],
+      "faces": 18586
+    },
+    "XIAO_Rod_Holder": {
+      "solid_PETG_g": 0.6629635400167093,
+      "bounds_mm": [
+        [
+          -10.600000381469727,
+          -5.0,
+          -5.400000095367432
+        ],
+        [
+          10.600000381469727,
+          23.399999618530273,
+          10.0
+        ]
+      ],
+      "faces": 3070
+    }
+  },
+  "checker_sha256": "8ee56a6f2d6d37cae737e1a0d0bfa50b66acf516da58ea511736913abbc22049",
+  "manifest_sha256": "7de76008c51bf767b99e19c2fb18090a6815639e8731197c70876291668f31e9",
+  "carrier_clearance_mm3": {
+    "rod": 0.0,
+    "battery": 1.2477760311110928e-07,
+    "key_0_switch": 2.708946756992142e-06,
+    "key_0_socket": 0.0,
+    "key_0_cap": 0.0,
+    "key_1_switch": 2.7089467269561853e-06,
+    "key_1_socket": 0.0,
+    "key_1_cap": 0.0,
+    "key_2_switch": 2.7089472551082076e-06,
+    "key_2_socket": 0.0,
+    "key_2_cap": 0.0
+  },
+  "tip_clearance_mm3": {
+    "rod": 0.0,
+    "pcb": 3.4713733657197773e-07,
+    "usb": 0.0
+  },
+  "continuous_access_mm3": {
+    "battery_outward": 2.313337252590396e-07,
+    "board_outward": 0.0,
+    "usb_plug_approach": 0.0,
+    "rod_axial_entry": 0.0
+  },
+  "switch_housing_entries_mm3": {
+    "-20.0": 0.0,
+    "0": 0.0,
+    "20.0": 0.0
+  },
+  "purchased_clip_capture_mm3": {
+    "-20.0": 0.7050012588501013,
+    "0": 0.7050012588501015,
+    "20.0": 0.7050012588501017
+  },
+  "r2_clearances_mm3": {
+    "usb_negative_y_plug_approach": 0.0,
+    "nominal_wire_vs_holder": 0.0,
+    "nominal_wire_vs_tube_wall": 0.0,
+    "nominal_wire_vs_board": 0.0
+  },
+  "carrier_identical_to_r1": true,
+  "r2_checker_sha256": "8f24621d17b607fc950c210edd83df19cbcf2e65617f05af99523572c5a3fee4",
+  "wire_bundle_diameter_mm": 3.0,
+  "wire_envelope_measured": false
+}
