@@ -39,7 +39,7 @@ function setup({legacy=false}={}) {
   return { w, mac, macEvents, pipeline, turn, press, get hud() { return hud; } };
 }
 
-test("opening with held Middle navigates then selects exactly once on release", () => {
+test("opening with held HUD button navigates then selects exactly once on release", () => {
   const s = setup();
   s.w.edge("D2", 0); s.w.advance(0.35);
   s.turn(-10, 0, 0.5); s.turn(0, -9, 0.5);
@@ -75,7 +75,7 @@ test("held LOW circles use wheel events and cyan; release cancels without a clic
   assert.equal(s.macEvents.filter(e => e.type === "scroll").length, count);
 });
 
-test("Middle opens the HUD on Switch App, turning moves the outline without wrapping, a tap uses the card", () => {
+test("The HUD button opens the HUD on Switch App, turning moves the outline without wrapping, a tap uses the card", () => {
   const s = setup();
   s.press("D2", 0.12);
   s.w.advance(0.1);
@@ -107,7 +107,7 @@ test("Middle opens the HUD on Switch App, turning moves the outline without wrap
   assert.deepEqual(s.w.colors(), [0, 0, 0]);
 });
 
-test("holding Middle on a wheel card turns its wheel with tilt", () => {
+test("holding the HUD button on a wheel card turns its wheel with tilt", () => {
   const s = setup();
   s.press("D2", 0.12); s.w.advance(0.1);
   s.turn(-8.5, 0, 0.4); s.turn(-8.5, 0, 0.4); s.turn(-8.5, 0, 0.4);
@@ -115,7 +115,7 @@ test("holding Middle on a wheel card turns its wheel with tilt", () => {
   s.w.advance(0.1);
   assert.equal(s.hud.cell, 1, "Horizontal Scroll + Wheel is outlined");
   s.w.edge("D2", 0); s.w.advance(0.35);
-  assert(s.hud.pressed, "holding Middle holds the card");
+  assert(s.hud.pressed, "holding the HUD button holds the card");
   s.turn(0, -9, 0.5);
   s.w.advance(0.1);
   assert.equal(s.hud.action.kind, "wheel");
@@ -145,10 +145,10 @@ test("HIGH clicks once after settling, a tap exits; tap then hold drags and rest
   assert(s.w.ctx.moveLatched,"a drop restores prior HIGH");
   s.press("D2",.12);s.w.advance(.1);assert(s.hud.open);
   s.press("D1",.06);s.w.advance(.1);
-  assert(s.hud.open&&s.w.ctx.hudOpen,"Bottom leaves the Middle HUD open");
+  assert(s.hud.open&&s.w.ctx.hudOpen,"The mouse button leaves the HUD button HUD open");
 });
 
-test("Legacy Bottom + Middle scrolls both axes as separate wheel events and never clicks", () => {
+test("Legacy mouse button + HUD button chord scrolls both axes as separate wheel events and never clicks", () => {
   const s = setup({legacy:true});
   s.macEvents.length = 0;
   s.w.edge("D1", 0); s.w.advance(0.03); s.w.edge("D2", 0); s.w.advance(0.1);
@@ -166,7 +166,7 @@ test("Legacy Bottom + Middle scrolls both axes as separate wheel events and neve
   assert(!s.hud || !s.hud.open, "no HUD");
 });
 
-test("Top starts and stops Agent Flow, and the recording light yields to other modes", () => {
+test("The speech button starts and stops Agent Flow, and the recording light yields to other modes", () => {
   const s = setup();
   s.press("D30", 0.08); s.w.advance(0.05);
   assert(s.pipeline.agentFlow.recording, "first press starts recording");
@@ -194,7 +194,7 @@ test('receiver accepts wide UART motion and still clamps to the screen', () => {
 });
 
 
-test("Bottom double tap recenters but a held second press remains a drag", () => {
+test("mouse-button double tap recenters but a held second press remains a drag", () => {
  const s=setup();
  s.mac.mouse('move',{x:100,y:120});
  s.press('D1',0.08);s.w.advance(0.08);s.press('D1',0.08);s.w.advance(0.05);
@@ -206,7 +206,7 @@ test("Bottom double tap recenters but a held second press remains a drag", () =>
  s.w.edge('D1',1);s.w.advance(0.05);assert(!s.mac.buttonDown);
 });
 
-test('Bottom double tap centres mouse while preserving the independent HUD',()=>{
+test('mouse-button double tap centres mouse while preserving the independent HUD',()=>{
  for(const mode of ['off','mouse','hud','scroll']) {
   const s=setup();
   if(mode==='mouse'){s.press('D1',.06);s.w.advance(.5);}
@@ -214,7 +214,7 @@ test('Bottom double tap centres mouse while preserving the independent HUD',()=>
   if(mode==='scroll'){s.pipeline.receiver.scrollActive=true;}
   s.press('D1',.06);s.w.advance(.07);s.press('D1',.06);s.w.advance(.1);
   assert(s.w.ctx.moveLatched,mode+' enables follow');
-  assert.equal(s.pipeline.receiver.hudSession,mode==='hud',mode+' preserves the Middle HUD');assert(!s.pipeline.receiver.scrollActive);
+  assert.equal(s.pipeline.receiver.hudSession,mode==='hud',mode+' preserves the HUD');assert(!s.pipeline.receiver.scrollActive);
   const p=s.mac.location();assert.equal(p.x,s.mac.width/2);assert.equal(p.y,s.mac.height/2);
   assert.equal(s.pipeline.receiver.buttons,0);
  }

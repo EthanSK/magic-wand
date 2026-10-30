@@ -6,14 +6,14 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {spawnSync} from 'node:child_process';
 
-// Ethan's smart Bottom hold: scroll over a real scroll area, native drag over
+// Ethan's smart mouse-button hold: scroll over a real scroll area, native drag over
 // a draggable target, and never a drag while the target is unknown. The real
 // receiver methods run with an inert, scripted Accessibility answer.
 const source=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.url),'utf8');
 const pointer=readFileSync(new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url),'utf8');
 const ready=pointer.includes('enum WandHoldTarget')&&source.includes('    func probeHoldTarget(');
 
-test('Bottom hold scrolls scroll areas, drags draggable targets and never drags on doubt',{skip:process.platform!=='darwin'||!ready},()=>{
+test('mouse-button hold scrolls scroll areas, drags draggable targets and never drags on doubt',{skip:process.platform!=='darwin'||!ready},()=>{
  function method(name){const a=source.indexOf('    func '+name+'(');assert(a>=0,name);let b=source.indexOf('{',a)+1,depth=1;while(depth){if(source[b]==='{')depth++;if(source[b]==='}')depth--;b++;}return source.slice(a,b);}
  const code=`import Foundation
 func AXIsProcessTrusted()->Bool {true}
@@ -33,8 +33,8 @@ final class Harness {
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?
  var pointerOrigin=WandPointerOrigin();func currentPointerOrigin()->CGPoint{pointerOrigin.origin(system:CGEvent(source:nil)?.location ?? .zero,now:ProcessInfo.processInfo.systemUptime)}
  var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,hudSession=false,flickScrollEnabled=false,heldScrollDiagnostics=false
- var physicalTapDuration:Double?=nil;func bottomPhysicalTapDuration()->Double?{physicalTapDuration}
- var screenshotActive=false,middleHeld=false,middleMouseX=0.0,middleMouseSampleAt = -100.0
+ var physicalTapDuration:Double?=nil;func mouseButtonPhysicalTapDuration()->Double?{physicalTapDuration}
+ var screenshotActive=false,hudButtonHeld=false,hudButtonMouseX=0.0,hudButtonMouseSampleAt = -100.0
  var commands:[String]=[],scrollPostedX=0,scrollPostedY=0
  var scrollAnchor:CGPoint?,scrollWatchdog:Timer?
  var rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,frames=0,downs=0,light=false
@@ -61,16 +61,16 @@ final class Harness {
  func finishNativeScroll(cancelled:Bool){}
  func postNativeScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
- ${['beginBottomHold','probeHoldTarget','restoreMouseAfterScroll','finishScroll','finishBottomHold','reconcileBottomHold','handleRaw'].map(method).join('\n')}
+ ${['beginMouseButtonHold','probeHoldTarget','restoreMouseAfterScroll','finishScroll','finishMouseButtonHold','reconcileMouseButtonHold','handleRaw'].map(method).join('\n')}
 }
 func wait(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 func press(_ roles:[String],delay:Double=0)->Harness {
  let h=Harness();precondition(h.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
  Harness.scriptedRoles=roles;Harness.probeDelay=delay
  _=h.recenterGesture.edge(down:true,now:ProcessInfo.processInfo.systemUptime)
- h.beginBottomHold(now:ProcessInfo.processInfo.systemUptime)
+ h.beginMouseButtonHold(now:ProcessInfo.processInfo.systemUptime)
  if h.heldScroll.resolving {h.probeHoldTarget(at:.zero,token:h.heldTargetToken)}
- _=h.pointerRouter.bottom(down:true)
+ _=h.pointerRouter.mouseButton(down:true)
  return h
 }
 
@@ -86,13 +86,13 @@ precondition(WandHoldTarget.classify(roles:["AXTextField","AXGroup"]) == .unknow
 
 precondition(WandHoldTarget.classify(roles:["AXStaticText","AXGroup","AXNotificationCenterAlert","AXScrollArea"]) == .drag,"a notification is a native drag target")
 
-// Screenshot mode owns Bottom before any ordinary hold (native-screenshot
+// Screenshot mode owns the mouse button before any ordinary hold (native-screenshot
 // test). A screenshot context alone never turns an ordinary hold into a press.
 let shot=Harness();shot.screenshotActive=true
 precondition(shot.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
-shot.beginBottomHold(now:ProcessInfo.processInfo.systemUptime)
+shot.beginMouseButtonHold(now:ProcessInfo.processInfo.systemUptime)
 precondition(shot.buttons==0 && !shot.heldScroll.dragging && shot.heldScroll.resolving,"an ordinary hold keeps its target probe")
-shot.finishBottomHold(now:ProcessInfo.processInfo.systemUptime)
+shot.finishMouseButtonHold(now:ProcessInfo.processInfo.systemUptime)
 let owned=Harness();precondition(owned.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 owned.heldScroll.begin(now:ProcessInfo.processInfo.systemUptime);_=owned.screenshot.requestShortcut(now:ProcessInfo.processInfo.systemUptime)
 owned.handleRaw("10000,0,0,0")
@@ -134,7 +134,7 @@ slow.handleRaw("10000,0,2680,0")
 
 // Answer after release: the gesture token drops it.
 let gone=press(["AXWindow"],delay:0.1)
-gone.finishBottomHold(now:ProcessInfo.processInfo.systemUptime);_=gone.pointerRouter.bottom(down:false)
+gone.finishMouseButtonHold(now:ProcessInfo.processInfo.systemUptime);_=gone.pointerRouter.mouseButton(down:false)
 wait(0.2)
 precondition(!gone.heldScroll.active && gone.downs==0 && gone.buttons==0,"a reply for a finished hold never acts")
 
@@ -144,11 +144,11 @@ let t=ProcessInfo.processInfo.systemUptime
 _=explicit.recenterGesture.edge(down:true,now:t-1);_=explicit.recenterGesture.edge(down:false,now:t-0.95)
 _=explicit.recenterGesture.edge(down:true,now:t-0.85)
 let before=Harness.probes
-explicit.beginBottomHold(now:t-0.85)
+explicit.beginMouseButtonHold(now:t-0.85)
 precondition(!explicit.heldScroll.resolving && !explicit.heldScroll.scrollable && Harness.probes==before,"no probe for the explicit drag")
 explicit.handleRaw("10000,0,2680,1");precondition(explicit.downs==1,"explicit drag still presses")
 explicit.handleRaw("10000,0,2680,0");precondition(explicit.buttons==0)
-print("PASS: contextual Bottom hold")
+print("PASS: contextual mouse-button hold")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-context-hold-'));
  try {writeFileSync(join(dir,'main.swift'),code);const built=spawnSync('swiftc',[wandSourcePath(new URL('../receiver/Sources/WandRunLoop.swift',import.meta.url)),'-Onone',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(built.status,0,built.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}

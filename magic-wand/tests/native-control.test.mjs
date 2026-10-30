@@ -8,10 +8,10 @@ import { fileURLToPath } from "node:url";
 import { PointerRouter, DwellClick } from "../../docs/sim/pointer.mjs";
 test("optional zero-buffer LOW motion has no delay or release replay", () => {
   const router = new PointerRouter({lowDelay:0});
-  router.bottom(true);
+  router.mouseButton(true);
   assert.deepEqual(router.frame(4, 3, 0, false, 10).actions, [{type: "move", dx: 4, dy: 3}]);
   assert.equal(router.nextDue, undefined);
-  router.bottom(false);
+  router.mouseButton(false);
   assert.deepEqual(router.drain(11), []);
   assert.equal(router.frame(0, 0, 1, false, 11).buttons, 1);
 });
@@ -55,27 +55,27 @@ test(
 
 
 test("held-only 90 ms buffer discards release flick but bypasses HIGH and dragging", () => {
- const r=new PointerRouter({lowDelay:0.09});r.bottom(true);
+ const r=new PointerRouter({lowDelay:0.09});r.mouseButton(true);
  assert.deepEqual(r.frame(4,3,0,false,10).actions,[]);
  assert.deepEqual(r.drain(10.08),[]);
  assert.deepEqual(r.drain(10.1),[{type:"move",dx:4,dy:3}]);
- r.frame(0,-50,0,false,11);r.bottom(false);
+ r.frame(0,-50,0,false,11);r.mouseButton(false);
  assert.deepEqual(r.drain(12),[]);
  assert.deepEqual(r.frame(8,0,0,false,12).actions,[{type:"move",dx:8,dy:0}]);
- r.bottom(true);
+ r.mouseButton(true);
  assert.deepEqual(r.frame(8,0,1,false,13).actions,[{type:"move",dx:8,dy:0}]);
  assert.deepEqual(r.frame(0,8,0,true,14).actions,[{type:"move",dx:0,dy:8}]);
 });
 
 
 test("recognized scrolling keeps the pointer locked through pauses and straight motion until release", () => {
- const r=new PointerRouter();r.bottom(true);let x=80,y=0;
+ const r=new PointerRouter();r.mouseButton(true);let x=80,y=0;
  for(let i=1;i<=105;i++){const a=i/35*Math.PI*2,nx=80*Math.cos(a),ny=80*Math.sin(a);r.frame(Math.round(nx-x),Math.round((ny-y)*1.4),0,false,10+i/35);x=nx;y=ny;}
  assert(r.circle.active);
  assert.deepEqual(r.tick(16),[]);
  for(let i=0;i<100;i++)assert(!r.frame(8,0,0,false,17+i/35).actions.some(a=>a.type==='move'));
  assert(r.circle.active);
- assert.deepEqual(r.bottom(false),[{type:'light',on:false}]);
+ assert.deepEqual(r.mouseButton(false),[{type:'light',on:false}]);
  assert.equal(r.frame(0,0,1,false,21).buttons,0,'no click after scrolling');
  assert(r.frame(4,0,0,false,22).actions.some(a=>a.type==='move'));
 });

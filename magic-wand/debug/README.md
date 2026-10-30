@@ -26,7 +26,7 @@ reuses the published site's fonts from `../docs/fonts/`.
 - **Errors**: only errors from the current connection count. Older ones stay under
   "earlier errors" so a past failure doesn't look current.
 - **Activity**: Key events by default. Buttons adds clicks and presses; Everything also
-  shows light changes, motion samples and wand diagnostics. Clicks and quick Top taps are
+  shows light changes, motion samples and wand diagnostics. Clicks and quick speech button taps are
   merged into one row, and back-to-back repeats show a count.
 
 ## One Bluetooth owner
@@ -117,7 +117,8 @@ test fixtures are synthetic.
 The current receiver doesn't write this file; the monitor works without it. A future
 receiver can write `debug.json` next to `status.json` to make lane values authoritative.
 It is used only when `schema` is 1, `pid` matches `status.json` and `generatedAt` is
-within 10 seconds. Unknown keys and wrongly typed values are ignored.
+within 10 seconds. Unknown keys and wrongly typed values are ignored. `middleHeld` and
+`bottomHeld` keep the earlier button names: they report the HUD and mouse buttons.
 
 ```json
 {

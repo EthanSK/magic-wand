@@ -1,5 +1,11 @@
 # Sources and provenance
 
+Ethan renamed the three grip buttons on 30 October 2026: Bottom is now the mouse button,
+Middle the HUD button and Top the speech button, and double-clicking the speech button replaces
+“Double Top”. Dated entries below keep the names used at the time. The wire edges (`@BOTTOM`,
+`@MIDDLE`, `@STT`), receiver log tags (`BOTTOM_HOLD_*`), button ids and saved Puck entry points
+(`middlePress`, `wandBottomPress`, `wandBottomRelease`) keep the earlier names for compatibility.
+
 ## Where the code came from
 
 The wand was built in one of Ethan’s private working directories, alongside logs, receipts and

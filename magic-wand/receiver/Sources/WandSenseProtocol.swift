@@ -13,9 +13,11 @@ import Foundation
 // Host commands: ? identity, H heartbeat, Lrrggbb light, M0/M1/M2 sensor, Z sleep, X end.
 //
 // Wire channel names stay the dashboard's legacy wand-v1 keys: thumb=D8,
-// index=D9, middle=D10. They do NOT name fingers. Ethan's assembled wand:
-// D10 = left/middle finger = Middle (HUD/review), D8 = centre/thumb = Bottom
-// (mouse), D9 = right/index finger = Top (speech). Physical check — 2026-10-29.
+// index=D9, middle=D10. They are compatibility aliases for the wire channels
+// and do NOT name fingers or buttons. Ethan's assembled wand: D10 = button 1,
+// left = HUD button (HUD/review), D8 = button 2, centre = mouse button, D9 =
+// button 3, right = speech button. Physical check — 2026-10-29. The buttons
+// were formerly called Middle, Bottom and Top (renamed 2026-10-30).
 
 struct WandSenseInfo: Equatable {
     static let protocolName = "wand-sense-1"
@@ -97,12 +99,13 @@ enum WandSenseCommand {
     static func light(_ rgb: (UInt8, UInt8, UInt8)) -> String { String(format: "L%02x%02x%02x", rgb.0, rgb.1, rgb.2) }
 }
 
-/// Wire channel to canonical control. Logical mask: Bottom 1, Middle 2, Top 4,
-/// the Puck's own @IMU mask (D1 MOVE, D2 HUD, D30 STT).
+/// Wire channel to canonical control. Logical mask: mouse button 1, HUD button 2,
+/// speech button 4, the Puck's own @IMU mask (D1 MOVE, D2 HUD, D30 STT).
 enum WandSenseButtons {
-    static let bottom = 1, middle = 2, top = 4
-    /// D8 Bottom, D9 Top, D10 Middle (Ethan's assembled wiring).
-    static let wireToLogical = [bottom, top, middle]
+    // Previously bottom, middle and top (Ethan renamed the buttons, 2026-10-30).
+    static let mouseButton = 1, hudButton = 2, speechButton = 4
+    /// D8 mouse button, D9 speech button, D10 HUD button (Ethan's assembled wiring).
+    static let wireToLogical = [mouseButton, speechButton, hudButton]
     static func logical(_ wire: Int) -> Int {
         (0..<3).reduce(0) { wire & (1 << $1) != 0 ? $0 | wireToLogical[$1] : $0 }
     }
@@ -280,18 +283,19 @@ struct WandSenseSession {
     }
 }
 
-/// Bottom's physical press duration in device-aligned time. The Mac sees a
+/// The mouse button's physical press duration in device-aligned time. The Mac sees a
 /// Bluetooth release late whenever the radio stalls, so arrival time turns a
 /// ~200 ms tap into a qualified hold (2026-10-29: Ethan "couldn't exit mouse
 /// mode"; 207 ms taps were judged as held scrolls that turned follow back on).
 /// The frame times describe the physical edges; a restored short press (seen
 /// only in the board counter) has no known duration and counts as a tap.
-struct WandSenseBottomTimer {
+/// Previously WandSenseBottomTimer.
+struct WandSenseMouseButtonTimer {
     private(set) var downAt: Double?, upAt: Double?
     private var held = false
-    mutating func reset() { self = WandSenseBottomTimer() }
+    mutating func reset() { self = WandSenseMouseButtonTimer() }
     mutating func note(mask: Int, at time: Double, synthetic: Bool = false) {
-        let down = mask & WandSenseButtons.bottom != 0
+        let down = mask & WandSenseButtons.mouseButton != 0
         if synthetic && down { downAt = time; upAt = time; held = false; return }
         if down && !held { downAt = time; upAt = nil }
         if !down && held { upAt = time }

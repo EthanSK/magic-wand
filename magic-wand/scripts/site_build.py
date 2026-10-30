@@ -23,7 +23,7 @@ STAMP = re.compile(
     r"(?P<path>[A-Za-z0-9_\-][A-Za-z0-9_\-./]*\.(?:" + ASSET_EXTENSIONS + r"))\?v=[0-9a-f]*"
 )
 # The buttons in the order they sit on the grip, from the butt toward the shaft.
-GRIP_ORDER = ("bottom", "middle", "top")
+GRIP_ORDER = ("bottom", "middle", "top")  # Legacy ids: mouse, HUD and speech buttons.
 
 
 def load_manifest(identifiers: dict[str, str]) -> dict:
@@ -189,21 +189,22 @@ def html_dependencies(manifest: dict) -> str:
 def schematic(manifest: dict) -> str:
     """Side view of the wand. Proportions, spacing and the wire route are illustrative."""
     buttons = {button["id"]: button for button in manifest["buttons"]}
-    order = list(zip(GRIP_ORDER, (82, 142, 202)))  # Top sits nearest the shaft.
+    order = list(zip(GRIP_ORDER, (82, 142, 202)))  # The speech button sits nearest the shaft.
     caps = []
     wires = []
     for index, (button_id, x) in enumerate(order):
         button = buttons[button_id]
         caps.append(
             f'<g class="cap" data-light="{button["light"]}"><rect x="{x - 13}" y="78" width="26" height="12" rx="5"/>'
-            f'<text class="label" x="{x}" y="58" text-anchor="middle">{escape(button["name"])}</text>'
+            # Short cap labels (Mouse, HUD, Speech) fit the 60-unit spacing.
+            f'<text class="label" x="{x}" y="58" text-anchor="middle">{escape(button["name"].removesuffix(" button"))}</text>'
             f'<text class="pin-label" x="{x}" y="38" text-anchor="middle">{button["pin"]}</text></g>'
         )
         y = 104 + index * 5
         wires.append(f'<path class="wire" d="M{x} 96 V{y} H858"/>')
     return f"""<svg class="schematic" viewBox="0 0 1000 200" role="img" aria-labelledby="schematic-title schematic-desc">
   <title id="schematic-title">Wand schematic</title>
-  <desc id="schematic-desc">A grip with three buttons, Bottom, Middle and Top, then a long carbon-fibre shaft ending in a Puck.js at the tip.</desc>
+  <desc id="schematic-desc">A grip with three buttons, the mouse, HUD and speech buttons, then a long carbon-fibre shaft ending in a Puck.js at the tip.</desc>
   <defs>
     <pattern id="twill" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
       <rect width="12" height="12" class="twill-a"/><rect width="6" height="12" class="twill-b"/>
@@ -260,7 +261,9 @@ def tuning_rows(manifest: dict) -> list[tuple[str, str, str]]:
         ("HIGH stop-to-click", f"{t['highDwellMs']} ms still", "One click after deliberate movement; no repeat while still"),
         ("Double-click window", f"{t['macDoubleClickSeconds']:g} s", "Read from the Mac’s setting"),
         ("Scrolling", f"Horizontal × {t['horizontalScrollBoost']}", f"Mac wheel gain {t['hostScrollGain']}"),
-        ("Middle report", f"After {t['middleReportDelayMs']} ms", "So Bottom + Middle can become a scroll"),
+        ("V3 held scrolling", f"{t['sustainedScroll']['linesPerDegree']} lines per degree, up to {t['sustainedScroll']['ordinaryMaxLinesPerSecond']} lines/s",
+         f"Strokes faster than {t['sustainedScroll']['highSpeedFromDegreesPerSecond']}°/s rise to {t['sustainedScroll']['maxLinesPerSecond']} lines/s"),
+        ("HUD button report", f"After {t['middleReportDelayMs']} ms", "So the mouse and HUD buttons together can become a scroll"),
         ("Reports", f"Every {t['reportIntervalMs']} ms", "While the HUD or scrolling is active"),
         ("Calibration", f"{t['calibrationSeconds']} s still, no buttons pressed", "Kept across reconnects"),
     ]

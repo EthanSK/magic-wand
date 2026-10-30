@@ -9,21 +9,21 @@ for (name,points) in fixtures.sorted(by:{$0.key<$1.key}) {
  if name.contains("cw") {precondition(name.contains("ccw") ? lines>0 : lines<0,name)}
  else {precondition(lines==0,name)}
 }
-let immediate=WandPointerRouter(lowDelay:0);_=immediate.bottom(down:true)
+let immediate=WandPointerRouter(lowDelay:0);_=immediate.mouseButton(down:true)
 precondition(immediate.lowDelay==0)
 precondition(immediate.frame(dx:4,dy:3,buttons:0,hud:false,now:10).actions==[.move(dx:4,dy:3)],"LOW immediate")
 precondition(immediate.pendingCount==0 && immediate.nextDue==nil,"no LOW timer")
-_=immediate.bottom(down:false)
+_=immediate.mouseButton(down:false)
 precondition(immediate.drain(now:12).isEmpty,"release never replays motion")
 precondition(immediate.frame(dx:0,dy:0,buttons:1,hud:false,now:12).buttons==1,"release click preserved")
-let r=WandPointerRouter(lowDelay:0.09);precondition(r.lowDelay==0.09);_=r.bottom(down:true)
+let r=WandPointerRouter(lowDelay:0.09);precondition(r.lowDelay==0.09);_=r.mouseButton(down:true)
 precondition(r.frame(dx:4,dy:3,buttons:0,hud:false,now:10).actions.isEmpty)
 precondition(r.drain(now:10.08).isEmpty)
 precondition(r.drain(now:10.10)==[.move(dx:4,dy:3)])
-_=r.frame(dx:0,dy:-50,buttons:0,hud:false,now:11);_=r.bottom(down:false)
+_=r.frame(dx:0,dy:-50,buttons:0,hud:false,now:11);_=r.mouseButton(down:false)
 precondition(r.drain(now:12).isEmpty,"release jolt discarded")
 precondition(r.frame(dx:8,dy:0,buttons:0,hud:false,now:12).actions==[.move(dx:8,dy:0)],"HIGH immediate")
-_=r.bottom(down:true)
+_=r.mouseButton(down:true)
 precondition(r.frame(dx:8,dy:0,buttons:1,hud:false,now:13).actions==[.move(dx:8,dy:0)],"actual drag immediate")
 let d=WandDwellClick();d.follow(true);precondition(!d.tick(now:20),"entry never clicks")
 d.move(dx:20,dy:0,now:20,eligible:true);precondition(!d.tick(now:20.199));precondition(d.tick(now:20.201));precondition(!d.tick(now:30),"one click while still")
@@ -119,7 +119,7 @@ for i in 0...55 {let p=activeSamples[i%activeSamples.count];activeStops += activ
 precondition(activeStops==1,"actual active-rate desk noise must stop exactly once")
 print("PASS: actual active sensor noise parks once")
 
-let heldScroll=WandPointerRouter();_=heldScroll.bottom(down:true)
+let heldScroll=WandPointerRouter();_=heldScroll.mouseButton(down:true)
 var loopX=80.0,loopY=0.0
 for i in 1...105 {
  let a=Double(i)/35*2*Double.pi,nx=80*cos(a),ny=80*sin(a)
@@ -130,7 +130,7 @@ precondition(heldScroll.circle.active)
 precondition(heldScroll.tick(now:16).isEmpty,"pause keeps held scrolling")
 for i in 0..<100 {precondition(!heldScroll.frame(dx:8,dy:0,buttons:0,hud:false,now:17+Double(i)/35).actions.contains{if case .move = $0{return true};return false},"straight motion cannot move pointer after scroll recognition")}
 precondition(heldScroll.circle.active)
-precondition(heldScroll.bottom(down:false)==[.circleLight(false)])
+precondition(heldScroll.mouseButton(down:false)==[.circleLight(false)])
 precondition(heldScroll.frame(dx:0,dy:0,buttons:1,hud:false,now:21).buttons==0,"scroll release never clicks")
 precondition(heldScroll.frame(dx:4,dy:0,buttons:0,hud:false,now:22).actions==[.move(dx:4,dy:0)])
 print("PASS: held scrolling survives pause and straight motion until release")
@@ -161,7 +161,7 @@ for _ in 0..<30 {_=sampleFlick(0,0)}
 precondition(!flick.active,"stationary return ends capture")
 flick.reset();_=sampleFlick(0,-70);precondition(!sampleFlick(0,0).consumesPointer,"one-sample click jolt must not scroll")
 for _ in 0..<10 {_=sampleFlick(0,-100)}
-precondition(!sampleFlick(0,10,false).consumesPointer && !flick.active,"Bottom hold, HUD and disabled option cancel immediately")
+precondition(!sampleFlick(0,10,false).consumesPointer && !flick.active,"mouse-button hold, HUD and disabled option cancel immediately")
 flick.reset();for _ in 0..<80 {precondition(!sampleFlick(0,15).consumesPointer,"slow pointing alone never starts scrolling")}
 for _ in 0..<8 {_=sampleFlick(0,-100)}
 precondition(!sampleFlick(80,0).consumesPointer,"sideways pointing cancels")

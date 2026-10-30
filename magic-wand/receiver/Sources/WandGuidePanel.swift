@@ -16,7 +16,7 @@ struct WandGuideContent: Equatable {
     let sections: [Section]
 
     /// `sense`: label the buttons by their position on the Sense grip
-    /// (Button 1 left, 2 centre, 3 right) rather than the Puck's names.
+    /// (Button 1 left, 2 centre, 3 right) as well as the button names.
     static func parse(_ data: Data, sense: Bool) -> WandGuideContent? {
         guard let value = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
               value["schemaVersion"] as? Int == 1, let title = value["title"] as? String,
@@ -27,8 +27,10 @@ struct WandGuideContent: Equatable {
             guard let role = button["role"] as? String, let puck = button["puckLabel"] as? String,
                   let senseLabel = button["senseLabel"] as? String, let rows = button["rows"] as? [[String]],
                   rows.allSatisfy({ $0.count == 2 }) else { return nil }
-            // The gesture text names the Puck buttons; keep that name beside the Sense position.
-            sections.append(.init(heading: sense ? "\(senseLabel) · \(role) (\(puck))" : "\(puck) · \(role)", rows: rows))
+            // The gesture text names the buttons (HUD, mouse, speech); keep that name
+            // beside the Sense position. `puckLabel` is the generated file's legacy
+            // field name for the button name, kept for compatibility.
+            sections.append(.init(heading: sense ? "\(senseLabel) · \(puck) · \(role)" : "\(puck) · \(role)", rows: rows))
         }
         guard power.allSatisfy({ $0.count == 2 }) else { return nil }
         sections.append(.init(heading: "Power", rows: power))

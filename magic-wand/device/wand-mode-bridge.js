@@ -41,7 +41,10 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   });});
   global.wandCircleScrolling=false;
   global.wandDoubleClickSeconds=0.3;
-  // Ethan's independent lanes: Bottom = mouse, Middle = HUD/review, Top = speech.
+  // Ethan's independent lanes: mouse button = mouse, HUD button = HUD/review,
+  // speech button = speech (formerly Bottom, Middle and Top). The saved entry
+  // points middlePress, wandBottomPress and wandBottomRelease and the @BOTTOM
+  // and @MIDDLE edges keep the earlier names for compatibility.
   global.wandReviewTracking=false;global.wandDeskSleeping=false;
   // Keep legacy simultaneous-button scrolling out of the independent controls.
   checkScrollChord.replaceWith(function(){return false;});
@@ -53,9 +56,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   });
   // The gyro runs while anything uses motion (follow, HUD or review).
   global.wandGyro=function(){if(connected&&!global.wandDeskSleeping&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();};
-  // Closing the HUD must not forget a Middle press that is still down: its
+  // Closing the HUD must not forget a HUD-button press that is still down: its
   // release edge must still reach the Mac (a lost release swallowed the next
-  // hold and left Middle held, 2026-10-29).
+  // hold and left the HUD button held, 2026-10-29).
   global.wandStopHUD=function(){var h=hudHeld,s=hudReportStarted;stopHUD();hudHeld=h;hudReportStarted=s;};
   setMouseFollow.replaceWith(function(on){
     // Release the device's native drag before forgetting its gesture state.
@@ -124,7 +127,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   CONFIG.gain=86.4;
   // The 208 Hz trial stuttered on this workload; keep the smoother 104 Hz rate.
   CONFIG.sampleRate=104;
-  // Holding Bottom is the precision gesture: use one-third of normal pointer
+  // Holding the mouse button is the precision gesture: use one-third of normal pointer
   // gain for temporary movement and real dragging. Released-button follow
   // keeps normal gain; HUD selection and the two-button scroll return earlier.
   CONFIG.heldPointerGain=1/3;
@@ -402,7 +405,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     global.wandSlackX=global.wandSlackY=0;
     // Discovery marker for the registered watch.
     if(false)clearHoldClick();
-    // Screenshot mode (receiver-set wandShot) owns Bottom: report the edge only.
+    // Screenshot mode (receiver-set wandShot) owns the mouse button: report the edge only.
     if(!global.wandShot){if(!digitalRead(MOVE_PIN))global.wandBottomPress();else global.wandBottomRelease();}
   });
   // Expose the same scoped functions to receiver commands; never a second copy

@@ -181,7 +181,7 @@ export class PointerRouter {
     this.lowDelay=Math.max(0,lowDelay);
     this.maxPending=Math.max(1,maxPending);
     this.circle = new CircularScroll();
-    this.bottomHeld = false;
+    this.mouseButtonHeld = false;
     this.holdConsumed = false;
     this.dropNextClick = false;
     this.droppingClick = false;
@@ -197,14 +197,15 @@ export class PointerRouter {
     this.lit = false;
     return [{ type: "light", on: false }];
   }
-  bottom(down) {
+  /** One mouse-button edge (`@BOTTOM`). Previously bottom(down). */
+  mouseButton(down) {
     this.pending = [];
     if (down) {
       this.dropNextClick = false;
       this.droppingClick = false;
-    } else this.dropNextClick = this.bottomHeld && this.holdConsumed;
+    } else this.dropNextClick = this.mouseButtonHeld && this.holdConsumed;
     this.holdConsumed = false;
-    this.bottomHeld = down;
+    this.mouseButtonHeld = down;
     return this.endCircle();
   }
   frame(dx, dy, buttons, hud, now) {
@@ -217,7 +218,7 @@ export class PointerRouter {
       } else if (this.droppingClick) this.droppingClick = false;
     }
     let actions = [];
-    const low = this.bottomHeld && bits === 0 && !hud;
+    const low = this.mouseButtonHeld && bits === 0 && !hud;
     if (!low) actions.push(...this.endCircle());
     if (bits !== 0) this.pending = [];
     if (!dx && !dy) return { buttons: bits, actions };

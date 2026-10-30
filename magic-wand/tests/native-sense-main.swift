@@ -31,12 +31,12 @@ precondition(WandSenseReplay.times(last: 20.0, frame: run, after: 19.99).first! 
 precondition(WandSenseReplay.times(last: 20.0, frame: one, after: 19.9) == [20.0])
 print("PASS: identity, frame and battery parsing; other devices rejected")
 
-// Ethan's assembled wiring: D8 Bottom, D9 Top, D10 Middle.
-precondition(WandSenseButtons.logical(1) == WandSenseButtons.bottom)
-precondition(WandSenseButtons.logical(2) == WandSenseButtons.top)
-precondition(WandSenseButtons.logical(4) == WandSenseButtons.middle)
+// Ethan's assembled wiring: D8 mouse button, D9 speech button, D10 HUD button.
+precondition(WandSenseButtons.logical(1) == WandSenseButtons.mouseButton)
+precondition(WandSenseButtons.logical(2) == WandSenseButtons.speechButton)
+precondition(WandSenseButtons.logical(4) == WandSenseButtons.hudButton)
 precondition(WandSenseButtons.logical(7) == 7)
-print("PASS: D8 Bottom, D9 Top, D10 Middle")
+print("PASS: D8 mouse button, D9 speech button, D10 HUD button")
 
 // Axes and units
 precondition(WandSenseAxes(text: ["-y", "+x", "+z"]) == .standard)
@@ -80,22 +80,22 @@ print("PASS: late backlog is recognised without delaying fresh readings")
 func frame(_ seq: UInt32, _ wire: Int, _ presses: [UInt32]) -> WandSenseFrame {
     .init(seq: seq, micros: seq * 9615, wire: wire, presses: presses, accel: nil, gyro: nil)
 }
-// Bottom's physical duration comes from device-aligned frame times, so a
+// The mouse button's physical duration comes from device-aligned frame times, so a
 // late Bluetooth release never turns a ~200 ms tap into a held scroll.
-var bottom = WandSenseBottomTimer()
-bottom.note(mask: WandSenseButtons.bottom, at: 10.000)
+var bottom = WandSenseMouseButtonTimer()
+bottom.note(mask: WandSenseButtons.mouseButton, at: 10.000)
 precondition(bottom.lastPressDuration == nil, "unknown while held")
-bottom.note(mask: WandSenseButtons.bottom, at: 10.100)
+bottom.note(mask: WandSenseButtons.mouseButton, at: 10.100)
 bottom.note(mask: 0, at: 10.207)
 precondition(abs(bottom.lastPressDuration! - 0.207) < 1e-9, "the physical tap, whatever its arrival")
-bottom.note(mask: WandSenseButtons.middle, at: 10.3)
-precondition(abs(bottom.lastPressDuration! - 0.207) < 1e-9, "other buttons never change Bottom's press")
-bottom.note(mask: WandSenseButtons.bottom, at: 11, synthetic: true)
+bottom.note(mask: WandSenseButtons.hudButton, at: 10.3)
+precondition(abs(bottom.lastPressDuration! - 0.207) < 1e-9, "other buttons never change the mouse button's press")
+bottom.note(mask: WandSenseButtons.mouseButton, at: 11, synthetic: true)
 precondition(bottom.lastPressDuration == 0, "a press seen only in the counter is a tap")
 bottom.reset()
 bottom.note(mask: 0, at: 12)
 precondition(bottom.lastPressDuration == nil, "a release without its press is unknown")
-print("PASS: Bottom press duration follows the physical edges")
+print("PASS: mouse-button press duration follows the physical edges")
 
 var s = WandSenseSession()
 precondition(s.accept(frame(1, 1, [4, 0, 0]), arrival: 1) == [.init(mask: 0, synthetic: false)], "held at start is masked")

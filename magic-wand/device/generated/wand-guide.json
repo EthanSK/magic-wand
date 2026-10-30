@@ -5,7 +5,7 @@
     {
       "button": "middle",
       "role": "Agentic Mouse HUD",
-      "puckLabel": "Middle",
+      "puckLabel": "HUD button",
       "senseLabel": "Button 1 · left",
       "rows": [
         [
@@ -22,31 +22,31 @@
         ],
         [
           "In an open HUD or submenu",
-          "Move the wand to outline a card without holding Middle, then click Middle, or hold, aim and release, to use it. Select as many times as you want"
+          "Move the wand to outline a card without holding the HUD button, then click it, or hold, aim and release, to use it. Select as many times as you want"
         ],
         [
           "Adjustable card",
-          "Click it, or release on it, to select it (dots); hold Middle and move to adjust, release to stop and reset the wand; tap to deselect"
+          "Click it, or release on it, to select it (dots); hold the HUD button and move to adjust, release to stop and reset the wand; tap to deselect"
         ],
         [
-          "Hold Middle on an adjustable card",
+          "Hold the HUD button on an adjustable card",
           "In wedge selection, hold and move the way its arrows point, like scrolling: values up or down; Spaces, scrolling, tabs and history left or right. Release to stop"
         ],
         [
           "Release a hold on Switch App",
-          "Armed for the next hold: unheld movement can still pick other cards; hold Middle on Switch App, move left or right, release to switch; in an open HUD a fresh hold on Switch App chooses at once"
+          "Armed for the next hold: unheld movement can still pick other cards; hold the HUD button on Switch App, move left or right, release to switch; in an open HUD a fresh hold on Switch App chooses at once"
         ],
         [
           "Go out twice on a card",
-          "Outer quick actions: Undo beyond Keys, Space beyond Enter, New Codex chat beyond Utility, and in VS Code Review changes and Stage files beyond the app card"
+          "Outer quick actions: Undo beyond Keys, Space beyond Enter, and in VS Code Review changes and Stage files beyond the app card. New Codex chat is on the main ring"
         ],
         [
           "Go out a third time on Utility",
-          "Zoom, beyond New Codex chat"
+          "Zoom, beyond Utility"
         ],
         [
           "In VS Code review",
-          "Circle clockwise for next and anticlockwise for previous; click Middle to exit, double-click to swap Review changes and Stage files, hold to stage the selection"
+          "Circle clockwise for next and anticlockwise for previous; click the HUD button to exit, double-click to swap Review changes and Stage files, hold to stage the selection"
         ],
         [
           "Double click in an open HUD",
@@ -57,7 +57,7 @@
     {
       "button": "bottom",
       "role": "Mouse",
-      "puckLabel": "Bottom",
+      "puckLabel": "Mouse button",
       "senseLabel": "Button 2 · centre",
       "rows": [
         [
@@ -90,14 +90,14 @@
         ],
         [
           "Triple tap",
-          "Start screenshot selection; hold Bottom and move to select the area, then release to capture"
+          "Start screenshot selection; hold the mouse button and move to select the area, then release to capture"
         ]
       ]
     },
     {
       "button": "top",
       "role": "Speech to text",
-      "puckLabel": "Top",
+      "puckLabel": "Speech button",
       "senseLabel": "Button 3 · right",
       "rows": [
         [

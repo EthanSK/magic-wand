@@ -1,5 +1,5 @@
 // Ethan's screenshot mode on the wand: the receiver's exact REPL commands give
-// HIGH raw motion with mouse follow off and take Bottom away from the legacy
+// HIGH raw motion with mouse follow off and take the mouse button away from the legacy
 // follow/click callback, while every edge is still reported. Readable and
 // fragment-loaded bridges both run the same checks.
 const test=require('node:test'),assert=require('node:assert/strict');
@@ -8,7 +8,7 @@ const ENTER='global.wandShot=1;setMouseFollow(moveLatched);wakeGyro();';
 const EXIT='global.wandShot=0;sleepGyro();';
 const turn={x:0,y:0,z:-1340};
 for(const bridge of ['readable','fragments']) {
- test(`screenshot motion and Bottom ownership leave follow untouched (${bridge})`,()=>{
+ test(`screenshot motion and the mouse button ownership leave follow untouched (${bridge})`,()=>{
   const w=createWand({bridge});w.calibrate();w.ctx.wandRawPointer=true;w.loadBridge();const c=w.ctx;
   c.setMouseFollow(false);w.advance(1.2);assert(!c.gyroAwake);
   w.device.evaluate(ENTER);w.advance(0.2);w.lines.length=0;w.frames.length=0;
@@ -29,7 +29,7 @@ for(const bridge of ['readable','fragments']) {
   assert(!c.gyroAwake,'exit with follow off returns to low-power sensing');
   w.lines.length=0;for(let i=0;i<5;i++)w.paced(0.01,turn);
   assert(!w.lines.some(l=>l.startsWith('@RAW ')),'no motion after exit');
-  w.tap();assert(c.moveLatched,'ordinary Bottom behaviour returns after exit');
+  w.tap();assert(c.moveLatched,'ordinary mouse button behaviour returns after exit');
  });
  test(`triple-click start restores the pre-click follow choice (${bridge})`,()=>{
   for(const before of [false,true]) {

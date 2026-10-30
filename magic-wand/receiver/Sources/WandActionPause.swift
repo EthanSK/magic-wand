@@ -8,7 +8,8 @@ import Darwin
 /// screenshot, recentre or dictation action. An ongoing recording is never stopped.
 /// Memory only: a receiver restart clears it; status.json reports the actual state.
 struct WandActionPause {
-    enum Lane: CaseIterable { case bottom, middle, top }
+    /// One lane per custom button. Previously the cases were bottom, middle and top.
+    enum Lane: CaseIterable { case mouseButton, hudButton, speechButton }
     private(set) var paused = false
     private(set) var since: Date?
     /// The last dashboard request this receiver applied, echoed in status.json

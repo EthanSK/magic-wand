@@ -49,13 +49,13 @@ test('every held and chord scroll ends, cancels or yields its native gesture exa
  const method=name=>{const a=source.indexOf('    func '+name+'(');assert(a>=0,name);let b=source.indexOf('{',a)+1,depth=1;while(depth){if(source[b]==='{')depth++;if(source[b]==='}')depth--;b++;}return source.slice(a,b);};
  const start=source.indexOf('struct WandNativeScrollGesture {'),end=source.indexOf('\nfinal class WandReceiver',start);
  // Record instead of posting: this harness never sends real input.
- const methods=['postNativeScroll','finishNativeScroll','postScroll','finishScroll','finishBottomHold'].map(method).join('\n')
+ const methods=['postNativeScroll','finishNativeScroll','postScroll','finishScroll','finishMouseButtonHold'].map(method).join('\n')
   .replaceAll('event.post(tap:.cghidEventTap)','posted.append(event)');
  // A native drag can never begin inside an open scroll gesture, and a receiver
  // stop (update or SIGTERM) closes any open gesture.
  assert.ok(/startDrag\(now:now\) \{finishNativeScroll\(cancelled:true\);transition\(to:1,/.test(source),'drag start cancels the open scroll gesture first');
  assert.ok(/finishNativeScroll\(cancelled:true\)/.test(method('stop')),'receiver stop closes an open gesture');
- const beginHold=method('beginBottomHold');
+ const beginHold=method('beginMouseButtonHold');
  assert(beginHold.indexOf('finishNativeScroll(cancelled:true)')>=0 && beginHold.indexOf('finishNativeScroll(cancelled:true)')<beginHold.indexOf('heldScroll.begin('),'a new hold cancels a stale native gesture before beginning');
  const code=`import Cocoa
 func log(_ v:Any...) {}
@@ -72,7 +72,7 @@ final class Harness {
  static func wheelEvents(x:Int32,y:Int32,at point:CGPoint?=nil)->[CGEvent]{[]}
  func currentPointerOrigin()->CGPoint{.zero}
  var physicalDuration:Double?
- func bottomPhysicalTapDuration()->Double?{physicalDuration}
+ func mouseButtonPhysicalTapDuration()->Double?{physicalDuration}
  func transition(to next:Int,at:CGPoint){buttons=next}
  func queue(_ s:String){}
  func setCircleLight(_ on:Bool){}
@@ -86,8 +86,8 @@ let chord=Harness();chord.scrollActive=true;chord.scrollAnchor=CGPoint(x:5,y:6)
 chord.postScroll(x:3,y:0);chord.postScroll(x:2,y:1)
 // Firmware sends @BOTTOM 0 before the chord's @SCROLL E. The held-scroll
 // release must not cancel the chord which owns this open native gesture.
-chord.finishBottomHold(now:0.1,released:true)
-precondition(chord.phases()==[.began,.changed],"Bottom release waits for the chord end marker")
+chord.finishMouseButtonHold(now:0.1,released:true)
+precondition(chord.phases()==[.began,.changed],"mouse-button release waits for the chord end marker")
 chord.finishScroll(released:true)
 precondition(chord.phases()==[.began,.changed,.ended],"chord release ends the gesture")
 precondition(chord.posted.allSatisfy{$0.location==CGPoint(x:5,y:6)},"anchored for the whole gesture")
@@ -101,20 +101,20 @@ precondition(lost.phases()==[.began,.cancelled] && lost.hudResumed==1)
 let paused=Harness();paused.scrollActive=true;paused.scrollAnchor = .zero
 paused.postScroll(x:1,y:0);paused.actionPause.paused=true;paused.postScroll(x:4,y:0)
 precondition(paused.phases()==[.began,.cancelled] && !paused.nativeScroll.active)
-// Held Bottom scroll: a physical release ends it; lost telemetry cancels it.
+// Held mouse button scroll: a physical release ends it; lost telemetry cancels it.
 for (released,phase) in [(true,NSEvent.Phase.ended),(false,.cancelled)] {
  let held=Harness();held.heldScroll.begin(now:0,scrollable:true);held.heldScrollAnchor=CGPoint(x:9,y:9)
  held.postNativeScroll(x:0,y:3,at:held.heldScrollAnchor);held.postNativeScroll(x:0,y:2,at:.zero)
- held.finishBottomHold(now:1,released:released)
+ held.finishMouseButtonHold(now:1,released:released)
  precondition(held.phases()==[.began,.changed,phase],"held finish \\(released)")
  precondition(held.posted.last!.location==CGPoint(x:9,y:9))
- held.finishBottomHold(now:2,released:true);precondition(held.posted.count==3)
+ held.finishMouseButtonHold(now:2,released:true);precondition(held.posted.count==3)
 }
 // A physically short tap whose release arrived late must not commit history.
 let delayed=Harness();delayed.heldScroll.begin(now:0,scrollable:true)
 delayed.physicalDuration=0.1
 delayed.postNativeScroll(x:3,y:0,at:.zero)
-delayed.finishBottomHold(now:1,released:true)
+delayed.finishMouseButtonHold(now:1,released:true)
 precondition(delayed.phases()==[.began,.cancelled] && delayed.mouseOn==0,"a late tap release cancels instead of committing a swipe")
 // No open gesture: finishing is silent.
 let idle=Harness();idle.finishNativeScroll(cancelled:true);idle.finishScroll(released:true)

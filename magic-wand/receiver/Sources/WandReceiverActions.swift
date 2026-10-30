@@ -45,10 +45,10 @@ extension WandReceiver {
         clickFollowChoice = nil; recenterSuppressButtons = false
         endScreenshot(reason: "actions paused", contextActive: screenshotActive, forgetPress: true)
         if hudSession || screenshotHUD { closeHUD(reason: "actions paused") }
-        middleTap?.invalidate(); middleTap = nil; middleHold?.invalidate(); middleHold = nil
-        middleHeld = false; middleQualified = false; hudEntryPress = false; pointerInHUD = false
-        middleOperating = false; middleDoubleConsumed = false
-        reviewExitTimer?.invalidate(); reviewExitTimer = nil; reviewExitGesture.reset(); middleReviewExit = false
+        hudButtonTap?.invalidate(); hudButtonTap = nil; hudButtonHold?.invalidate(); hudButtonHold = nil
+        hudButtonHeld = false; hudButtonQualified = false; hudEntryPress = false; pointerInHUD = false
+        hudButtonOperating = false; hudButtonDoubleConsumed = false
+        reviewExitTimer?.invalidate(); reviewExitTimer = nil; reviewExitGesture.reset(); hudButtonReviewExit = false
         hiddenReviewPending = false; hiddenReviewOperating = false
         finishWandShortcut(commit: false); sendReview(review.cancel()); reviewTimer?.invalidate(); reviewTimer = nil
         cancelCircleScroll(); finishScroll()

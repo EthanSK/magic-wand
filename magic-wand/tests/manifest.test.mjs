@@ -39,7 +39,7 @@ test("button pins and pull-ups match the device code", () => {
   assert.deepEqual(manifest.buttons.map((button) => button.key), ["T", "M", "B"]);
   assert.deepEqual(manifest.chords, [], "current independent controls have no combined-button chord");
   assert.match(bridge,/checkScrollChord\.replaceWith\(function\(\)\{return false;\}\)/);
-  assert.doesNotMatch(bridge,/@LEFTCLICK/,"Ethan rejected the Bottom+Middle click chord");
+  assert.doesNotMatch(bridge,/@LEFTCLICK/,"Ethan rejected the mouse button + HUD button click chord");
 });
 
 test("tuning matches the running device code and the receiver", () => {
@@ -80,7 +80,18 @@ test("tuning matches the running device code and the receiver", () => {
   assert.equal(number(/scrollTimer=setInterval\(function\(\)\{scrollReport\('U'\);\},(\d+)\)/, device, "scroll report"), t.reportIntervalMs);
   assert.match(device, new RegExp(`samples>=CONFIG\\.sampleRate\\*${t.calibrationSeconds}\\)`));
   assert.equal(number(/scrollFractionX\+=\(x\/1000-scrollX\)\*([\d.]+)/, swift, "host scroll gain"), t.hostScrollGain);
-  assert.equal(Math.round(number(/middleHold=WandRunLoop\.commonTimer\(interval:([\d.]+)/, swift, "receiver hold") * 1000), t.receiverHoldMs);
+  assert.equal(Math.round(number(/hudButtonHold=WandRunLoop\.commonTimer\(interval:([\d.]+)/, swift, "receiver hold") * 1000), t.receiverHoldMs);
+});
+
+test("V3 held-scroll speed range matches the native controller", () => {
+  const t = manifest.tuning.sustainedScroll;
+  const sustained = pointer.slice(pointer.indexOf("final class WandSustainedScroll"), pointer.indexOf("final class WandHeldScroll"));
+  assert.equal(number(/var ordinaryMaxRate=([\d.]+)/, sustained, "ordinary maximum"), t.ordinaryMaxLinesPerSecond);
+  assert.equal(number(/var highSpeedFrom=([\d.]+)/, sustained, "high-speed start"), t.highSpeedFromDegreesPerSecond);
+  assert.equal(number(/highSpeedFull=([\d.]+)/, sustained, "high-speed full"), t.highSpeedFullDegreesPerSecond);
+  assert.equal(number(/var maxRate=([\d.]+)/, sustained, "maximum"), t.maxLinesPerSecond);
+  assert.equal(number(/init\(linesPerDegree:Double=([\d.]+)/, sustained, "gain"), t.linesPerDegree);
+  assert.equal(number(/wheel1:Int32\(clamping:Int64\(y\)\*(\d+)\)/, swift, "points per line"), t.pointsPerLine);
 });
 
 test("micro-circle tuning matches native geometry and preserves pointer noise guards", () => {

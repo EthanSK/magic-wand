@@ -10,7 +10,7 @@ export const RIG = {
   // The drawn wand turns a quarter as far as the simulated sensor, so the tip stays below the HUD
   // instead of sweeping across the screen. The device code still receives the full rotation.
   visualScale: 0.25,
-  buttons: { bottom: 0.035, middle: 0.07, top: 0.105 }, // Top sits nearest the shaft.
+  buttons: { bottom: 0.035, middle: 0.07, top: 0.105 }, // The speech button sits nearest the shaft.
 };
 
 /** Build the wand meshes. Returns handles for aiming, buttons and the light. */
