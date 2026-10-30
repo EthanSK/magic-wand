@@ -129,3 +129,23 @@ print("Native scroll lifecycle: chord end/cancel, pause cancel, held end/cancel,
   const t=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(t.status,0,t.stdout+t.stderr);
  } finally {rmSync(dir,{recursive:true,force:true});}
 });
+
+// Ethan, 2026-10-30: native Back/Forward swipes are "not sensitive enough". Synthetic
+// hands on the real V3 held controller plus the real native transport, recorded and
+// never posted. Distance alone does not prove Chrome or Codex navigates.
+test('horizontal held swipes travel further with unchanged timing, vertical, diagonal and lifecycle', {skip:process.platform!=='darwin'},()=>{
+ const root=new URL('../receiver/Sources/',import.meta.url).pathname;
+ const source=readFileSync(root+'main.swift','utf8');
+ const start=source.indexOf('struct WandNativeScrollGesture {'),end=source.indexOf('\nfinal class WandReceiver',start);
+ assert(start>=0 && end>start);
+ const dir=mkdtempSync(join(tmpdir(),'wand-trackpad-swipe-'));
+ try {
+  writeFileSync(join(dir,'gesture.swift'),'import Cocoa\n'+source.slice(start,end));
+  writeFileSync(join(dir,'main.swift'),readFileSync(new URL('./fixtures/trackpad-swipe-main.swift',import.meta.url),'utf8'));
+  const sim=new URL('./fixtures/sustained-scroll-sim.swift',import.meta.url).pathname;
+  const r=spawnSync('swiftc',['-O',root+'WandPointerControl.swift',sim,join(dir,'gesture.swift'),join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});
+  assert.equal(r.status,0,r.stderr);
+  const t=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(t.status,0,t.stdout+t.stderr);
+  console.log(t.stdout.trim());
+ } finally {rmSync(dir,{recursive:true,force:true});}
+});

@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Receiver 1.2.129 build 134 increases horizontal-only native swipe distance, easing in up to 2.5 times the shared rate. Ordinary vertical and diagonal scrolling, pointer tuning, click timing and follow restoration are unchanged. Native phases still let the receiving app decide scrolling or history navigation. Physical Back/Forward acceptance remains unverified.
 - Installed receiver 1.2.128 build 133 and Agentic Mouse 1.0.306 build 312: current controls now use HUD button, mouse button and speech button, retaining wire aliases and marked older tutorial recordings. The wand HUD selection outline now moves continuously between the centre, ring and outer cards, with input timing unchanged. Green HUD light, the original normal scroll feel and stronger high-speed scroll range are preserved. Signed installation, source/resources and Bluetooth readiness were verified; physical animation feel remains for confirmation.
 - Installed receiver 1.2.127 build 132: the active HUD light is green, including when mouse follow is also on. Existing loading, scrolling and review colors remain. Device simulation verifies the light priorities, and the installed resources and connection were checked. The corrected high-speed-only scrolling is preserved; physical light-color acceptance remains pending.
 - Installed receiver 1.2.126 build 131 adds a high-speed-only V3 scroll extension. The entire original speed curve is retained through 120 angular units/s, including its 120-line/s plateau; only stronger strokes rise smoothly toward 600 lines/s. Every tested ordinary sample and tick matches the original, and strong-stroke, direction, release and lost-telemetry checks pass. Installed binary, resources and connection were verified; fresh physical feel remains for confirmation.
@@ -238,7 +239,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.128 (133) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 30 October 2026.
+Receiver 1.2.129 (134) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 30 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

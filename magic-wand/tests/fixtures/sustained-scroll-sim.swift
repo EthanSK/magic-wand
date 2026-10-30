@@ -87,6 +87,10 @@ struct Trace {
 }
 
 enum Axis {case vertical,horizontal}
+/// Sustained-scroll tuning for every simulated hold. The production default includes
+/// the horizontal-only gain; axis-symmetric profiles set horizontalGain=1 to check the
+/// shared stroke classifier on both axes against the one shared curve.
+var simulationTuning=WandSustainedScroll.Tuning()
 /// Runs one hold on the real WandHeldScroll and a 20 ms continuation timer, as the
 /// receiver does. Every delivered sample renews the held lease, like its button bit.
 func simulate(_ hand:Hand,_ delivery:Delivery=Delivery(),axis:Axis,sign:Double,seed:UInt64,release:Double?=nil)->Trace {
@@ -112,7 +116,7 @@ func simulate(_ hand:Hand,_ delivery:Delivery=Delivery(),axis:Axis,sign:Double,s
         }
         t+=dt
     }
-    let hold=WandHeldScroll();hold.begin(now:0,sustain:true)
+    let hold=WandHeldScroll(sustainedTuning:simulationTuning);hold.begin(now:0,sustain:true)
     var trace=Trace(),tick=0.02,index=0
     while true {
         if index<samples.count && samples[index].arrive<=tick {
