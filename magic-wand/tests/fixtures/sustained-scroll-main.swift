@@ -202,44 +202,15 @@ do {
 let quiet=WandHeldScroll();quiet.begin(now:0,sustain:true)
 for i in 1...100 {let t=Double(i)*0.01;quiet.confirmHeld(now:t);_=quiet.sample(x:0.5,y:-0.5,dt:0.01,now:t);check(quiet.continuation(now:t)==(0,0),"quiet noise")}
 let drag=WandHeldScroll();drag.begin(now:0,scrollable:false,sustain:true);precondition(drag.startDrag(now:0.3));check(drag.continuation(now:0.3)==(0,0),"explicit drag never scrolls")
-// 22. Ethan's "much faster ... huge scroll" range (2026-10-30). Ordinary strokes keep
-//     the original 1.6 lines per degree; faster strokes rise well above the old flat
-//     120 lines per second, to a bounded 600.
-let curve=WandSustainedScroll()
-for peak in stride(from:0.0,through:60.0,by:2.5) {
-    check(abs(curve.linesPerSecond(peak:peak)-peak*gain)<1e-9,"ordinary stroke \(f(peak)) deg/s keeps its speed","\(f(curve.linesPerSecond(peak:peak)))")
-}
-var previous=0.0
-for peak in stride(from:0.0,through:400.0,by:0.5) {
-    let rate=curve.linesPerSecond(peak:peak)
-    check(rate>=previous && rate<=600,"speed curve rises continuously to its bound","\(f(rate)) at \(f(peak))");previous=rate
-}
-check(curve.linesPerSecond(peak:75)>=150,"a stroke at the old cap speed is faster","\(f(curve.linesPerSecond(peak:75)))")
-check(curve.linesPerSecond(peak:100)>=2*120,"a fast stroke is at least twice the old maximum","\(f(curve.linesPerSecond(peak:100)))")
-check(curve.linesPerSecond(peak:150)==600 && curve.linesPerSecond(peak:1e6)==600,"the fastest strokes are bounded at 600 lines per second")
 let fast=WandSustainedScroll()
 for _ in 0..<6 {fast.sample(x:2000,y:0,dt:0.01)}
-check(fast.velocityX==600 && fast.velocityY==0,"fast strokes cap at 600 lines per second","\(fast.velocityX)")
+check(fast.velocityX==120 && fast.velocityY==0,"fast strokes cap at 120 lines per second","\(fast.velocityX)")
 // A late timer pays at most 50 ms at the cap, plus the new direction's first line.
-check(fast.tick(now:100).x<=31,"late timer cannot replay a backlog")
-// 23. A big flick through the whole held controller: far faster than the old cap,
-//     then still reversible in the same hold and stopped at once by release.
-each {axis,sign,seed,label in
-    let hand=Hand(parts:[.rest(0.35),stroke(14,0.2),.rest(1.2),stroke(-5,0.3),.rest(1.2)])
-    let trace=simulate(hand,axis:axis,sign:sign,seed:seed,release:3.2)
-    let name="big flick ("+label+")"
-    let big=sign*trace.rate(0.75,1.5).p
-    check(big>=2*120 && big<=600,name+" scrolls at least twice the old maximum, within the bound","\(f(big)) lines/s")
-    check(trace.lines(0.75,1.5).s==0,name+" single axis")
-    let reverse=trace.first({p,_ in Double(p)*sign<0},after:1.75) ?? 99
-    check(reverse<=1.75+0.25,name+" still reverses promptly","\(f((reverse-1.75)*1000)) ms")
-    expectSustained(trace,name+" ordinary reverse speed",from:2.3,to:3.15,representative(5,0.3),sign:-sign)
-    check(trace.dropClick && trace.afterRelease==(0,0),name+" release stops at once")
-}
+check(fast.tick(now:100).x<=7,"late timer cannot replay a backlog")
 precondition(WandControlVersion.read(3) == .sustainedV3)
 
 if failures.isEmpty {
-    print("PASS: V3 motion profiles - stroke then still, slow onset, press and drag, recoil, reversal after a pause and while moving, faster and slower restrokes, axis change, sloppy and diagonal strokes, still and shaky holds, taps, stalls, lost samples, batching, follow-through, knocks, uneven intervals, release, fresh holds, telemetry loss, faster huge-scroll range")
+    print("PASS: V3 motion profiles - stroke then still, slow onset, press and drag, recoil, reversal after a pause and while moving, faster and slower restrokes, axis change, sloppy and diagonal strokes, still and shaky holds, taps, stalls, lost samples, batching, follow-through, knocks, uneven intervals, release, fresh holds, telemetry loss")
 } else {
     var groups:[String:Int]=[:]
     for failure in failures {

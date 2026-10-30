@@ -1516,3 +1516,14 @@ the gesture becomes a chord. Only a completed physical scroll release restores i
 An ordinary tap, drag, cancelled gesture or late short release keeps its own rules.
 The release regression exercises both prior choices and both raw/edge arrival orders.
 This supersedes the older always-enable release policy, not its historical record.
+
+
+## 2026-10-30 — A high-speed extension must preserve the whole old curve
+
+The first larger scroll range passed all existing motion profiles but started its
+boost at 60 angular units/s, below the old 75-unit cap boundary. Those profiles
+peaked below the changed range, so passing them did not establish unchanged
+ordinary scrolling. Ethan reported that the normal feel had changed and the
+original curve was restored. Compare the full previous speed mapping, including
+the old cap plateau, when adding a stronger-stroke extension. Retain physical
+feel acceptance separately from the mathematical and motion-profile checks.
