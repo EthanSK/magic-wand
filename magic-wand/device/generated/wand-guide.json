@@ -10,7 +10,11 @@
       "rows": [
         [
           "Quick tap from closed",
-          "Switch app once"
+          "Switch app once, after waiting at most 0.3 s for a second click"
+        ],
+        [
+          "Double click from closed",
+          "Right-click at the pointer, with mouse follow on or off"
         ],
         [
           "Hold, turn, release",
@@ -45,7 +49,7 @@
           "Circle clockwise for next and anticlockwise for previous; click Middle to exit, double-click to swap Review changes and Stage files, hold to stage the selection"
         ],
         [
-          "Double click",
+          "Double click in an open HUD",
           "Close the entire HUD"
         ]
       ]

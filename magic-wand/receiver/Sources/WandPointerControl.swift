@@ -1637,7 +1637,8 @@ struct WandReviewCircle {
     /// The short path within which a large turn is an about-face rather than winding.
     private var cuspReach:Double {max(Self.cuspFraction*scale,segmentLength)}
     /// An opening chord a few noise widths long (or locked) can anchor a turn.
-    private var referenceReliable:Bool {referenceLocked || referenceChord>=max(Self.partialSegment*segmentLength,Self.reliableNoise*noise)}
+    // An unfiltered opening needs a full segment, not a half-segment of tremor.
+    private var referenceReliable:Bool {referenceLocked || referenceChord>=max(segmentLength,Self.reliableNoise*noise)}
     /// Turn measured from the run's opening stroke.
     private func effective(_ raw:Double)->Double {raw-Self.wrap(reference-firstHeading)}
     private var sideways:Double {
@@ -1674,7 +1675,10 @@ struct WandReviewCircle {
         if lastProgress==nil {progressX=x;progressY=y;lastProgress=now}
         // Sideways scatter of each moving packet from the chord joining its
         // neighbours: tremor counts, acceleration along the path does not.
-        if active,!settled,dx != 0 || dy != 0 {
+        // Review now receives slow motion before the HUD speed floor. Learn
+        // sideways noise from the opening packets too, before an apparent
+        // first turn can be mistaken for an intentional loop.
+        if !settled,dx != 0 || dy != 0 {
             if moving>=2 && now-olderTime<=Self.tremorSpan {
                 let cx=x-olderX,cy=y-olderY,chord=hypot(cx,cy)
                 if chord>1e-6 {wobbleCount=min(wobbleCount+1,20);wobble+=(Self.robust(abs(cx*(priorY-olderY)-cy*(priorX-olderX))/chord,wobble)-wobble)/wobbleCount}

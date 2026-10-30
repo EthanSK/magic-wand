@@ -266,7 +266,11 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   }
   if(scrollSuppress){G.wandSlackX=G.wandSlackY=0;return;}
   if((hudOpen||G.wandReviewTracking)&&connected){
-    var hx=(g[C.xAxis]-bias[C.xAxis])/134,hy=(g[C.yAxis]-bias[C.yAxis])/134,keep=radialKeep(hx,hy);
+    // Review circles use the measured sensor-noise floor, then spatial
+    // direction/noise rejection on the Mac. The ordinary HUD's
+    // speed dead zone otherwise deletes a slow circle before it reaches that
+    // detector. Ordinary HUD selection and pointer filtering stay unchanged.
+    var hx=(g[C.xAxis]-bias[C.xAxis])/134,hy=(g[C.yAxis]-bias[C.yAxis])/134,hm=M.sqrt(hx*hx+hy*hy),rf=M.max(noise[C.xAxis],noise[C.yAxis]),keep=G.wandReviewTracking?(hm<=rf?0:(hm-rf)/hm):radialKeep(hx,hy);
     hudX+=hx*keep*dt*C.xSign;hudY+=hy*keep*dt*C.ySign;
   }
   if (!connected || !moveLatched || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging)) {
@@ -480,7 +484,8 @@ if(global.wandRawPointer)global.wandLiveMotionCallback.replaceWith(function(a) {
   }
   if(scrollSuppress){G.wandSlackX=G.wandSlackY=0;return;}
   if((hudOpen||G.wandReviewTracking)&&connected){
-    var hx=(g[C.xAxis]-bias[C.xAxis])/134,hy=(g[C.yAxis]-bias[C.yAxis])/134,keep=radialKeep(hx,hy);
+    // Use measured sensor noise plus spatial review evidence, not the HUD speed floor.
+    var hx=(g[C.xAxis]-bias[C.xAxis])/134,hy=(g[C.yAxis]-bias[C.yAxis])/134,hm=M.sqrt(hx*hx+hy*hy),rf=M.max(noise[C.xAxis],noise[C.yAxis]),keep=G.wandReviewTracking?(hm<=rf?0:(hm-rf)/hm):radialKeep(hx,hy);
     hudX+=hx*keep*dt*C.xSign;hudY+=hy*keep*dt*C.ySign;
   }
   // wandShot: the receiver's temporary screenshot motion, independent of follow.

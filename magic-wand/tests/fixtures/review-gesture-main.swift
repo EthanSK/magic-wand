@@ -40,6 +40,12 @@ let north = -Double.pi/2, east = 0.0, west = Double.pi
 let poses=[0.0,0.5,2.4,4.4] // radians: the same gestures from arbitrary hand poses
 func name(_ s:[Int32])->String{s.map{$0>0 ? "+":"-"}.joined()}
 
+// Slow coherent motion must survive the pause classifier at the normal 30 ms cadence.
+for sign in [-1.0,1.0] {
+    var slow=Feed(start:(0.5,0));slow.arc((0,0),0.5,0,sign*2*Double.pi,packets:2000,seconds:60);slow.hold(0.6)
+    check(slow.steps==Array(repeating:Int32(sign),count:4),"a sixty-second coherent loop is four steps sign \(sign) got \(name(slow.steps))")
+}
+
 // 1. Quarter arcs and their reversals, at three sizes and any pose.
 for r in [0.15,1.0,8.0] {
     for pose in poses {
@@ -178,9 +184,9 @@ do {
     check(loop==4 && after.steps.count==4,"wobble after a loop adds nothing got \(name(after.steps))")
 }
 
-// 9. Device-model traces: 104 Hz rates through the firmware's 1.2 deg/s radial dead
-// zone, 30 ms NAV reports rounded to 0.001 degree, 9 Hz tremor and roll jitter.
-func device(_ path:(Double)->(Double,Double),seconds:Double,seed:UInt64,tremor:Double)->[(Double,Double,Double)] {
+// 9. Device-model traces: review uses calibrated 104 Hz rates through its measured-noise floor instead of the HUD's
+// larger speed dead zone, 30 ms NAV reports rounded to 0.001 degree, tremor and roll jitter.
+func device(_ path:(Double)->(Double,Double),seconds:Double,seed:UInt64,tremor:Double,deadZone:Double=0.25)->[(Double,Double,Double)] {
     var rng=LCG(s:seed),hx=0.0,hy=0.0,last=path(0),time=0.0,next=0.03,reported=(0.0,0.0),out:[(Double,Double,Double)]=[]
     let phase=Double(seed%7)
     while time<seconds+0.6 {
@@ -188,7 +194,7 @@ func device(_ path:(Double)->(Double,Double),seconds:Double,seed:UInt64,tremor:D
         let p=path(min(time,seconds))
         let q=(p.0+tremor*sin(2*Double.pi*9.3*time+phase),p.1+tremor*0.8*sin(2*Double.pi*10.5*time))
         var vx=(q.0-last.0)*104+0.35*rng.next(),vy=(q.1-last.1)*104+0.35*rng.next();last=q
-        let m=hypot(vx,vy),keep=m<=1.2 ? 0:(m-1.2)/m;vx*=keep;vy*=keep;hx+=vx/104;hy+=vy/104
+        let m=hypot(vx,vy),keep=m<=deadZone ? 0:(m-deadZone)/m;vx*=keep;vy*=keep;hx+=vx/104;hy+=vy/104
         if time>=next {
             next+=0.03
             let rx=(hx*1000).rounded()/1000,ry=(hy*1000).rounded()/1000,roll=0.05*rng.next()
@@ -217,6 +223,16 @@ for (tremor,seed) in [(0.0,1 as UInt64),(0.02,3),(0.04,5)] {
     check(loops==Array(repeating:1,count:8),"device two loops \(tag) got \(name(loops))")
     let corner=play(device({t in let u=smooth((t-hold)/0.2),v=smooth((t-hold-0.2)/0.2),w=smooth((t-hold-0.4)/0.25);return (1.2*v-1.2*w,-1.2*u+1.2*w)},seconds:hold+0.65,seed:seed,tremor:tremor))
     check(corner==[1],"device corner then straight diagonal reset \(tag) got \(name(corner))")
+}
+
+for sign in [-1.0,1.0] {
+    let slowPath:(Double)->(Double,Double)={t in let a=sign*2*Double.pi*min(t,60)/60;return (5*cos(a),5*sin(a))}
+    let before=play(device(slowPath,seconds:60,seed:17,tremor:0,deadZone:1.2))
+    check(before.isEmpty,"old HUD speed floor erased the slow circle")
+    let after=play(device(slowPath,seconds:60,seed:17,tremor:0))
+    check(after==Array(repeating:Int32(sign),count:4),"full device-model slow circle reaches review at either direction: \(name(after))")
+    let quiet=play(device({_ in (0,0)},seconds:60,seed:17,tremor:0.02))
+    check(quiet.isEmpty,"unfiltered review input still rejects stationary tremor")
 }
 
 // 10. Diagnostics and options.

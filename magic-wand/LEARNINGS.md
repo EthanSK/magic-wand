@@ -1465,3 +1465,9 @@ The V3 controller accumulated input from the first held reading, but the raw-mod
 Ethan also changed the intended visible-HUD policy: showing the HUD must not suppress ordinary follow-on clicks. Gate on active HUD operation, not visibility, at both click arming and timer firing; follow-off, held Bottom, recording pause and screenshot ownership remain separate gates. The earlier ghost-HUD fix remains useful recovery, but its visible-HUD click suppression is superseded.
 
 Physical follow-up: Ethan confirmed that normal held scrolling and follow-on clicking with the HUD open both worked on receiver 122. This does not establish every other gesture or the cause of each earlier failed scroll.
+
+## 2026-10-30 — Slow review circles and input floors
+
+Review uses `@NAV`, not the direct mouse lane. The ordinary HUD radial speed floor erased steady rotations below 1.2 degrees/second before the spatial circle classifier received them. Review now keeps its measured calibration noise floor but bypasses that larger HUD floor. This applies only while review tracking is selected; normal HUD navigation, direct-pointer quiet stopping, smoothing and gain retain their own behavior.
+
+When removing a preprocessing floor, retest the complete input path, not only the downstream classifier. Full device-model replay exposed startup tremor being interpreted as an initial turn. Learning lateral noise from opening packets and requiring a complete initial segment fixed those cases. Tests cover slow clockwise/anticlockwise loops, reversals, stationary tremor and ordinary HUD rejection. Below the calibrated noise floor, intent remains indistinguishable from sensor noise; do not promise arbitrary-speed detection.

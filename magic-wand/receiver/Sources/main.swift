@@ -111,6 +111,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var hiddenReviewPending=false
     var screenshotActive=false,screenshotHUD=false
     var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false
+    /// The pending `middleTap` is a tap that opened the HUD from closed: a
+    /// second press inside its double-click window right-clicks instead.
+    var middleClosedTap=false
     var circleLight=false
     var circleTimer:Timer?,lowDelayTimer:Timer?
     var heartbeat: Timer?
@@ -598,7 +601,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         hudSession=false;hudEntryPress=false
         finishScroll()
         controls.cancel(); hudActive = false; hudWatchdog?.invalidate(); hudWatchdog = nil
-        generation += 1; middleHold?.invalidate();middleTap?.invalidate();middleHold=nil;middleTap=nil;middleOperating=false;pointerInHUD=false;middleHeld=false;controls.persistent("dismiss");releaseButtons(); ready = false; tx = nil; chunks = []; input = ""; writing = false; configuring = false; uartPaused = false
+        generation += 1; middleHold?.invalidate();middleTap?.invalidate();middleHold=nil;middleTap=nil;middleClosedTap=false;middleOperating=false;pointerInHUD=false;middleHeld=false;controls.persistent("dismiss");releaseButtons(); ready = false; tx = nil; chunks = []; input = ""; writing = false; configuring = false; uartPaused = false
     }
     func reconnect() {
         if isSense { senseLink?.drop("receiver deadline"); endSenseSession(); return }
@@ -884,10 +887,24 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         acceptHUDContext=false
         sendReview(review.cancel());appMode=nil;reviewTimer?.invalidate();reviewTimer=nil
         hudSession=false;hudEntryPress=false;hudActive=false;pointerInHUD=false;middleOperating=false;navigationOpenedHUD=false;middleHeld=false
-        middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
+        middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil;middleClosedTap=false
         stopHUDWatchdog();if notifyNative {controls.persistent("dismiss")}
         queue("global.wandAppMode=undefined;setHUDOpen(false);updateLights();")
         log("HUD_CLOSED",reason)
+    }
+    /// Ethan (2026-10-30): "the HUD button, if I double click it, I think it
+    /// should do the right mouse menu, like right click basically", starting
+    /// from a closed HUD (an open HUD's double click still only closes it).
+    /// One native right press and release at the pointer he sees, with mouse
+    /// follow on or off and without moving or warping it. Never while Bottom,
+    /// a scroll, a native button or screenshot mode owns the pointer.
+    func hudDoubleRightClick() {
+        let blocker = screenshot.ownsPointer ? "screenshot" : pointerRouter.bottomHeld || heldScroll.active ? "bottom held" :
+            buttons != 0 ? "button down" : nil
+        if let blocker {log("HUD_RIGHT_CLICK_SKIPPED",blocker);return}
+        let point=deliveryPoint ?? currentPointerOrigin()
+        transition(to:buttons|2,at:point);transition(to:buttons & ~2,at:point)
+        log("HUD_RIGHT_CLICK")
     }
     func setScreenshotActive(_ active:Bool) {
         // Cancelling the screenshot tool must not carry its mouse-down into
@@ -1061,11 +1078,16 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             }
             if now-middleLastRelease<=hudDoubleClickInterval {
                 // Double click still dismisses, cancelling the first tap's pending use.
-                middleLastRelease = -100;middleDoubleConsumed=true
+                // Started from a closed HUD it is Ethan's right click instead
+                // (2026-10-30); its first press only showed the HUD, so close that.
+                let rightClick=middleClosedTap && middleTap != nil
+                middleLastRelease = -100;middleDoubleConsumed=true;middleClosedTap=false
                 middleTap?.invalidate();middleTap=nil;middleHold?.invalidate();middleHold=nil
-                closeHUD(reason:"middle double click")
+                closeHUD(reason:rightClick ? "middle double click from closed" : "middle double click")
+                if rightClick {hudDoubleRightClick()}
                 return
             }
+            let closedTapPending=middleClosedTap;middleClosedTap=false
             // A session Agentic Mouse no longer shows (it quit or lost the
             // lease) is stale: start a fresh HUD instead of steering nothing.
             if hudSession && !context.isActive && now-hudOpenedAt>1 {closeHUD(reason:"context missing",notifyNative:false);acceptHUDContext=true}
@@ -1073,7 +1095,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // A tap whose double-click window just ended: use it now, before
                 // this new hold, rather than lose it to a late timer.
                 pending.invalidate();middleTap=nil
-                if hudSession,acceptHUDContext,context.isActive {controls.persistent("activate");log("HUD_TAP_USED")}
+                if hudSession,acceptHUDContext,context.isActive || closedTapPending {controls.persistent("activate");log("HUD_TAP_USED")}
             }
             middleHeld=true;middleQualified=false;hudEntryPress=false
             middleMouseX=0;middleMouseSampleAt = -100
@@ -1138,10 +1160,19 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             hudActive=false;stopHUDWatchdog()
             if tap && openedByThisPress {
                 // Ethan: "when I just quickly tap the HUD button, it should just
-                // instantly switch app". A tap that opened the HUD from closed
-                // has no open HUD to dismiss, so it acts at once instead of
-                // waiting out the double-click window.
-                controls.persistent("activate");log("HUD_TAP_USED")
+                // instantly switch app". Then (2026-10-30): "the HUD button, if I
+                // double click it, I think it should do the right mouse menu".
+                // He approved this closed-HUD tap waiting up to 300 ms
+                // (`hudDoubleClickInterval` is at most 0.3 s) so the first click
+                // of that double click never switches apps. Holds, pointer
+                // movement and an already open HUD are not delayed. Unlike the
+                // open-HUD tap it never needed the HUD's first heartbeat.
+                middleClosedTap=true
+                middleTap=WandRunLoop.commonTimer(interval:hudDoubleClickInterval,repeats:false){[weak self] _ in
+                    guard let self else{return};self.middleTap=nil;self.middleClosedTap=false
+                    guard self.hudSession,self.acceptHUDContext,!self.restoring else{return}
+                    self.controls.persistent("activate");log("HUD_TAP_USED")
+                }
             } else if tap {
                 // A tap uses the outlined card once the double-click window
                 // passes, so a double click can still dismiss without acting.

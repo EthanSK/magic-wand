@@ -71,6 +71,10 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  func status(){}
  var appMode:String?,reviewTimer:Timer?,middleTap:Timer?,middleHold:Timer?,hudWatchdog:Timer?
  var middleLastRelease = -100.0,middlePressedAt=0.0,middleDoubleConsumed=false,hudEntryPressStarted=0.0
+ var middleClosedTap=false
+ let heldScroll=WandHeldScroll()
+ var transitions:[(buttons:Int,at:CGPoint)]=[]
+ func transition(to next:Int,at point:CGPoint){let allowed=actionPause.paused ? next & buttons : next;transitions.append((allowed,point));buttons=allowed}
  var reviewOriginY=0.0,navX=0.0,navY=0.0,navOriginX=0.0,navOriginY=0.0,operationOriginX=0.0,operationOriginY=0.0,middleX=0.0,middleY=0.0
  var navStream=WandAngularStream(),moveStream=WandAngularStream(),legacyHUDStream=WandAngularStream()
  var hudLastUpdate=Date.distantPast,commands:[String]=[]
@@ -88,7 +92,7 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  init(){${callback}
 ${modeCallback}
 ${selectionCallback}}
- ${['setScreenshotActive','setWandShortcut','switchWandShortcut','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','scheduleReviewTapTimeout','expireReviewTap','cancelReviewTap','requestReviewToggle','closeHUD','enterPointerMode','handleMiddle','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','mouseMovementEvent','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
+ ${['setScreenshotActive','setWandShortcut','switchWandShortcut','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','scheduleReviewTapTimeout','expireReviewTap','cancelReviewTap','requestReviewToggle','closeHUD','enterPointerMode','handleMiddle','hudDoubleRightClick','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','mouseMovementEvent','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 // Ethan's hold-to-show HUD. Holding Middle shows and steers it; releasing
@@ -133,10 +137,45 @@ precondition(Array(menu.controls.phases.suffix(2))==["park","navigate"] && menu.
 menu.handleNavigation("0,7000");menu.middlePressedAt-=0.3;menu.handleMiddle("0")
 precondition(menu.controls.phases.last=="choose")
 
-// Ethan: a quick tap from closed "should just instantly switch app". With no
-// open HUD to dismiss, it acts at once.
+// Ethan (2026-10-30): double-clicking the HUD button from closed "should do
+// the right mouse menu, like right click". He approved the closed-HUD single
+// tap waiting up to 300 ms, so Switch App waits out the double-click window.
 let instant=Harness();instant.handleMiddle("1");instant.context.set(true);instant.handleMiddle("0")
-precondition(instant.middleTap == nil && instant.controls.phases.last=="activate","a tap that opened the HUD acts at once")
+precondition(instant.middleTap != nil && !instant.controls.phases.contains("activate"),"a tap from closed waits out the double-click window")
+let outlined=instant.controls.phases.count
+for point in ["9000,0","-8000,7000"] {instant.handleNavigation(point)}
+precondition(instant.controls.phases.count==outlined,"motion while it waits cannot change the card it will use")
+settle(0.35)
+precondition(instant.middleTap == nil && instant.controls.phases.last=="activate" && instant.transitions.isEmpty && instant.hudSession,"a lone tap from closed then switches app, never right-clicks")
+let unconfirmed=Harness();unconfirmed.handleMiddle("1");unconfirmed.handleMiddle("0");settle(0.35)
+precondition(unconfirmed.controls.phases.last=="activate","as before, a closed tap does not need the HUD's first heartbeat")
+for following in [false,true] {
+ let right=Harness();right.dwell.follow(following);right.systemCursor=CGPoint(x:321,y:654)
+ right.handleMiddle("1");right.context.set(true);right.handleMiddle("0");right.handleMiddle("1")
+ precondition(right.transitions.map{$0.buttons}==[2,0] && right.transitions.allSatisfy{$0.at==CGPoint(x:321,y:654)},"a double click from closed right-clicks once at the visible pointer")
+ precondition(!right.hudSession && right.middleTap == nil && right.controls.phases.last=="dismiss" && right.buttons==0,"and dismisses the HUD the first press showed")
+ right.handleMiddle("0");settle(0.35)
+ precondition(!right.controls.phases.contains("activate") && !right.controls.phases.contains("choose") && right.transitions.count==2,"Switch App never fires and the second release is consumed")
+ precondition(right.dwell.following==following,"mouse follow stays as it was")
+ right.handleMiddle("1")
+ precondition(right.hudSession && right.middleHeld && right.transitions.count==2,"the next press is an ordinary hold-to-show")
+}
+let heldFirst=Harness();heldFirst.handleMiddle("1");heldFirst.context.set(true);heldFirst.middlePressedAt-=0.3;heldFirst.handleMiddle("0")
+heldFirst.handleMiddle("1")
+precondition(heldFirst.transitions.isEmpty && heldFirst.hudSession && heldFirst.middleHeld,"a hold that opened the HUD is never the first click of a right-click")
+let lateClosed=Harness();lateClosed.handleMiddle("1");lateClosed.context.set(true);lateClosed.handleMiddle("0")
+lateClosed.middleLastRelease = -100;lateClosed.handleMiddle("1")
+precondition(lateClosed.transitions.isEmpty && lateClosed.middleTap == nil && Array(lateClosed.controls.phases.suffix(2))==["activate","navigate"],"a closed tap whose window ended (late timer) switches app before the next hold")
+let closedEarly=Harness();closedEarly.handleMiddle("1");closedEarly.context.set(true);closedEarly.handleMiddle("0")
+closedEarly.closeHUD(reason:"disconnect");closedEarly.handleMiddle("1")
+precondition(closedEarly.transitions.isEmpty && !closedEarly.middleClosedTap,"a HUD closed meanwhile (disconnect, native close) cancels the right-click")
+settle(0.35);precondition(!closedEarly.controls.phases.contains("activate"))
+let dragging=Harness();dragging.handleMiddle("1");dragging.context.set(true);dragging.handleMiddle("0")
+_=dragging.pointerRouter.bottom(down:true);dragging.handleMiddle("1")
+precondition(dragging.transitions.isEmpty && !dragging.hudSession && dragging.controls.phases.last=="dismiss","while Bottom is held the double click only dismisses")
+let paused=Harness();paused.handleMiddle("1");paused.context.set(true);paused.handleMiddle("0")
+paused.actionPause.pause();paused.handleMiddle("1")
+precondition(paused.buttons==0 && paused.transitions.allSatisfy{$0.buttons==0},"the debug pause never presses a native button")
 // Inside an already open HUD a tap still waits out the double-click window.
 let tap=Harness();tap.handleMiddle("1");tap.context.set(true);tap.middlePressedAt-=0.3;tap.handleMiddle("0")
 precondition(tap.controls.phases.last=="choose","the opening hold's release")
@@ -158,6 +197,7 @@ double.handleMiddle("1");double.handleMiddle("0");double.handleMiddle("1")
 precondition(!double.hudSession && double.controls.phases.last=="dismiss","double click still dismisses")
 double.handleMiddle("0");settle(0.35)
 precondition(!double.controls.phases.dropFirst(beforeDouble).contains("activate") && !double.controls.phases.dropFirst(beforeDouble).contains("choose") && !double.hudSession,"and never acts")
+precondition(double.transitions.isEmpty,"a double click inside an open HUD only closes it, never right-clicks")
 let lateTap=Harness();lateTap.handleMiddle("1");lateTap.context.set(true);lateTap.middlePressedAt-=0.3;lateTap.handleMiddle("0")
 lateTap.handleMiddle("1");lateTap.handleMiddle("0")
 lateTap.middleLastRelease = -100;lateTap.handleMiddle("1")
@@ -243,6 +283,7 @@ for expected in ["files","changes","files"] {
  precondition(toggled.selectedReviewMode==expected && !toggled.controls.phases.contains("exitReview"),"old tap timer cannot exit new mode")
 }
 precondition(toggled.controls.phases.filter{$0=="toggleReview"}.count==3)
+precondition(toggled.transitions.isEmpty,"review double clicks toggle the mode, never right-click")
 precondition(toggled.review.modeChanges==["files","changes","files"] && toggled.review.endings.isEmpty && toggled.review.starts.isEmpty,"mode switches preserve the live review transaction: no cancel, finish or begin")
 let secondHold=Harness();secondHold.selectedReviewMode="files";secondHold.wandShortcutMode="files"
 secondHold.handleMiddle("1");secondHold.handleMiddle("0");secondHold.handleMiddle("1")
