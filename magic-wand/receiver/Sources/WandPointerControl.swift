@@ -1072,7 +1072,17 @@ final class WandSustainedScroll {
         var forwardCosine=0.7
         /// Receiver seconds without readings that end the current measurement.
         var gapSeconds=0.25
-        var maxRate=120.0
+        /// Ethan, 2026-10-30: "the highest isn't fast enough ... it should be
+        /// like much faster if you want to do like a huge scroll". Up to this
+        /// stroke speed (degrees per second) the wheel keeps its original
+        /// lines-per-degree gain, so precise and ordinary strokes are unchanged.
+        /// Faster strokes gain in proportion to their speed (twice this speed
+        /// scrolls four times as fast), up to maxRate.
+        var boostFrom=60.0
+        /// Wheel lines per second (ten points each): 6,000 points per second,
+        /// reached at about 150 degrees per second. Previously a flat 120 lines
+        /// per second, reached at 75 degrees per second.
+        var maxRate=600.0
     }
     /// Counts for the opt-in per-hold diagnostic line. No positions or coordinates.
     struct Summary:Equatable {
@@ -1154,8 +1164,15 @@ final class WandSustainedScroll {
         stroking=false;endedAt=clock;endedTravel=max(0,strokeX*directionX+strokeY*directionY)
         if settling {settling=false;apply()}
     }
+    /// Wheel lines per second for a stroke's representative speed. Continuous
+    /// and rising; it sets velocity only, so it adds no delay or catch-up.
+    func linesPerSecond(peak:Double)->Double {
+        let linear=max(0,peak)*linesPerDegree
+        let boost=tuning.boostFrom>0 && peak>tuning.boostFrom ? peak/tuning.boostFrom : 1
+        return min(tuning.maxRate,linear*boost)
+    }
     private func apply(){
-        let rate=min(tuning.maxRate,peak*linesPerDegree)
+        let rate=linesPerSecond(peak:peak)
         let magnitude=settling ? max(base,rate) : rate
         velocityX=outputX*magnitude;velocityY=outputY*magnitude
         summary.peakRate=max(summary.peakRate,magnitude)

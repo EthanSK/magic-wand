@@ -11,8 +11,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.123",
-    "receiverBuild": "128",
+    "receiver": "1.2.124",
+    "receiverBuild": "129",
     "deviceRuntime": "wand-edceb5bfbea1",
     "bridgeRevision": "8d1f5b7771df3d9efb59e3e6916810a9bd33d79d3a0e67042bd4d8be19e5e458",
     "agenticMouse": "1.0.305",
@@ -20,6 +20,7 @@
     "persistentImage": "full-20261025a"
   },
   "status": [
+    "Installed receiver 1.2.124 build 129: ordinary V3 scrolling retains its fine and normal speed and increases the strong-stroke maximum from 120 to 600 lines per second. Motion-profile checks cover ordinary speed, stronger strokes, reversals, released buttons and lost telemetry. Installed binary, signature, resources and Bluetooth readiness were verified. Pointer tuning and click behavior are unchanged; physical scrolling acceptance remains pending.",
     "Installed receiver 1.2.123 build 128: a completed page scroll restores the mouse-follow choice from before scrolling. Off stays off; on stays on. Held-scroll and chord release checks passed. Installed source and signature, Bluetooth readiness, calibration, settings and Agent Flow were checked; physical follow-state acceptance remains pending.",
     "Installed receiver 1.2.122 build 127: held and chord scrolling send native precise two-axis scroll gestures. Applications own scroll-container and edge-navigation decisions. Release, pause, disconnect, drag takeover and shutdown end or cancel the gesture; a delayed short tap cancels it, and a two-button chord retains ownership until its own release marker. Native event and lifecycle checks pass. Existing sustained-hold behavior and pointer tuning are unchanged. Chrome and Codex history acceptance still needs a physical test.",
     "Installed Agentic Mouse 1.0.305 build 311: New Codex chat replaces Screenshot at the same home-ring position, with no duplicate outer card. Native screenshot triple-click and the physical mouse layouts remain unchanged. Zoom keeps its existing outer position. Signed installed source, settings and rendered layout checks passed; physical activation remains to be tried.",
