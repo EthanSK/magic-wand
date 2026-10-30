@@ -64,6 +64,20 @@ test("boots the complete canonical program and passes the receiver's own handsha
   assert.deepEqual(s.lights.at(-1), [0, 0, 0], "idle is dark");
 });
 
+test("native held scrolling receives the initial stroke before the hold deadline", () => {
+  for (const hostScroll of [false, true]) {
+    const s = createSense({ zero: '{"x":0,"y":0,"z":0}' });
+    s.api.repl(`setMouseFollow(true);global.wandHostHeldScroll=${hostScroll};`);
+    s.frames(35, 0);
+    s.lines.length = 0;
+    s.frames(20, 1, [0, 0, 4000]); // initial 192 ms stroke, before the 220 ms hold timer
+    const raw = s.lines.filter(l => l.startsWith("@RAW "));
+    assert.equal(raw.length > 0, hostScroll, "only native V2/V3 needs early held samples");
+    assert.equal(s.ctx.moveGestureMode, "pointer", "no early gesture classification");
+    assert(!s.lines.some(l => /^@WAND .*,1$/.test(l)), "early motion never emits a click");
+  }
+});
+
 test("multi-line console input runs only when complete", () => {
   const s = createSense();
   s.api.repl("global.wandTestValue=(function(){");

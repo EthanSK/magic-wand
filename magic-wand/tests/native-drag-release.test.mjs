@@ -20,7 +20,7 @@ final class Harness {
  var physicalTapDuration:Double?=nil;func bottomPhysicalTapDuration()->Double?{physicalTapDuration}
  var reportCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1920,height:1080)],recordingPointerPaused=false,hudSession=false,scrollActive=false
  var transitions:[Int]=[]
- final class Ctx {var isActive=false};let context=Ctx();var middleHeld=false,hudOpenedAt=0.0,clickGate:String?
+ final class Ctx {var isActive=false};let context=Ctx();var middleHeld=false,hudEntryPress=false,pointerInHUD=false,hudOpenedAt=0.0,clickGate:String?
  func closeHUD(reason:String,notifyNative:Bool=true){hudSession=false}
  func noteClickGate(_ gate:String?){clickGate=gate}
  func transition(to next:Int,at:CGPoint){buttons=next;transitions.append(next)}

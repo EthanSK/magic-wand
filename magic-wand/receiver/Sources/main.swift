@@ -365,7 +365,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func refreshFeatureFlags() {
         let enabled=options.enabled("orientationCompensation")
         let selected=WandControlVersion.read(options.read()["controlVersion"])
-        if controlVersion != selected {controlVersion=selected;heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;performPointer(pointerRouter.cancelAll());setCircleLight(false);releaseButtons();motionFilter.reset()}
+        if controlVersion != selected {controlVersion=selected;heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;performPointer(pointerRouter.cancelAll());setCircleLight(false);releaseButtons();motionFilter.reset();if ready {queue("global.wandHostHeldScroll="+(selected.usesHeldScroll ? "true":"false")+";")}}
         controlV1Menu?.state=selected == .pointerV1 ? .on : .off
         controlV2Menu?.state=selected == .scrollV2 ? .on : .off
         controlV3Menu?.state=selected == .sustainedV3 ? .on : .off
@@ -740,6 +740,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 if context.isActive {hudSession=true;hudOpenedAt=ProcessInfo.processInfo.systemUptime}
                 if let mode=selectedReviewMode {setWandShortcut(mode)}
                 queue("global.wandShot=0;global.wandRawPointer=true;global.wandRawBias=undefined;global.wandRawActive=false;global.WAND_UPDATING=false;setHUDOpen("+(context.isActive ? "true":"false")+");updateLights();")
+                queue("global.wandHostHeldScroll="+(controlVersion.usesHeldScroll ? "true":"false")+";")
             }
             if line.hasPrefix("WAND_DIAG ") || line.hasPrefix(">WAND_DIAG ") || line.hasPrefix("WAND_CALLBACK_MATCH ") || line.hasPrefix(">WAND_CALLBACK_MATCH ") {log("DEVICE",line)}
             if line.hasPrefix("WAND_BATTERY ") || line.hasPrefix(">WAND_BATTERY "),let range=line.range(of:"WAND_BATTERY ") {handleBattery(String(line[range.upperBound...]))}
@@ -1204,8 +1205,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // the clicked wedge, never a later Back/Utilities outline. The next
         // stream takes a fresh origin, so this movement is dropped, not replayed.
         guard middleTap == nil else{return}
-        // Unheld movement aims within a submenu, or adjusts the selected dotted
-        // control. Native state owns that choice. Passive aim never times out.
+        // Unheld movement aims within a submenu. A selected dotted control
+        // adjusts only while held; native state owns that choice. Passive aim never times out.
         if !middleHeld,!pointerInHUD,!hudActive,acceptHUDContext,context.isActive {
             navOriginX=navX;navOriginY=navY;hudActive=true
             stopHUDWatchdog();controls.persistent("hover")
@@ -1643,8 +1644,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // Ethan (2026-10-29): "it should not block me from using the mouse
         // ever in any HUD." An open HUD no longer freezes the pointer: when
         // mouse follow is on, unheld motion moves it while the HUD's outline
-        // follows too. Stop-to-click stays off while the HUD is open, so the
-        // HUD never causes an automatic click.
+        // follows too. Follow-on stop-to-click also stays available with an
+        // open, unheld HUD; operating a HUD card still owns that press.
         let newPoint=WandPointerBounds.clamp(CGPoint(x:point.x+CGFloat(dx),y:point.y+CGFloat(dy)),to:pointerDisplays)
         if let event=Self.mouseMovementEvent(buttons:buttons,from:point,to:newPoint) {
             event.post(tap:.cghidEventTap)
@@ -1684,7 +1685,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         // Stop-to-click follows the tuned stop counts on either pointer path.
         let gate=WandClickGate.blocker(recordingPaused:recordingPointerPaused,bottomHeld:pointerRouter.bottomHeld,buttons:b,
-                                       hudSession:hudSession,hudShown:context.isActive,scrollActive:scrollActive)
+                                       hudSession:hudSession,hudShown:context.isActive,scrollActive:scrollActive,
+                                       hudOperating:middleHeld || hudEntryPress || pointerInHUD)
         noteClickGate(gate)
         dwell.move(dx:stopX ?? x,dy:stopY ?? y,now:ProcessInfo.processInfo.systemUptime,eligible:gate == nil)
         scheduleDwell()
@@ -1764,8 +1766,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             log("RAW_DELIVERY",rawReports,"seconds",String(format:"%.2f",now-rawWindowStart),"maxGapMs",Int(rawMaxGap*1000))
             rawWindowStart=now;rawReports=0;rawMaxGap=0
         }
-        // HUD-only raw reports share HIGH math but never post pointer input.
-        if v[3]&4 != 0 {return}
+        // Bottom owns its scroll/drag independently of follow. A HUD-only
+        // flag must not discard those held samples when follow is off.
         if controlVersion.usesHeldScroll && heldScroll.active {
             dwell.reset();scheduleDwell()
             heldScroll.settleTarget(now:now)
@@ -1787,6 +1789,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             }
             return
         }
+        // Unheld HUD-only samples still never move or click the pointer.
+        if v[3]&4 != 0 {return}
         if controlVersion.usesHeldScroll && pointerRouter.bottomHeld {return}
         let wasFlick=flickScroll.active
         let flick=flickScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now,
@@ -1815,7 +1819,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard ready,!restoring,!actionPause.paused,!recordingPointerPaused,!screenshot.ownsPointer,let due=dwell.nextDue else{return}
         dwellTimer=WandRunLoop.commonTimer(interval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             guard let self else{return};self.dwellTimer=nil
-            guard self.ready,!self.restoring,!self.actionPause.paused,!self.recordingPointerPaused,!self.screenshot.ownsPointer,!self.heldScroll.active,!self.pointerRouter.bottomHeld,!self.hudSession,!self.scrollActive,self.buttons==0,AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
+            guard self.ready,!self.restoring,!self.actionPause.paused,!self.screenshot.ownsPointer,!self.heldScroll.active,
+                  WandClickGate.blocker(recordingPaused:self.recordingPointerPaused,bottomHeld:self.pointerRouter.bottomHeld,buttons:self.buttons,
+                      hudSession:self.hudSession,hudShown:self.context.isActive,scrollActive:self.scrollActive,
+                      hudOperating:self.middleHeld || self.hudEntryPress || self.pointerInHUD)==nil,
+                  AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
             let point=self.currentPointerOrigin()
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
             // Re-arms only when repeats are enabled; single-shot schedules nothing.
