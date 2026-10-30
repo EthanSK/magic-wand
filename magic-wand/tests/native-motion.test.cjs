@@ -48,3 +48,16 @@ test('HUD-only raw motion is available without enabling the mouse',()=>{
  assert(raw.every(l=>(Number(l.split(',').at(-1))&4)!==0));assert.equal(w.ctx.wandState().move,false);
  assert(!w.lines.some(l=>l.startsWith('@WAND ')&&!l.includes('@WAND 0,0,0')));
 });
+
+test('slow review circles reach the spatial classifier without the HUD speed floor',()=>{
+ for(const native of [false,true]) {
+  const w=createWand();w.calibrate();w.ctx.wandRawPointer=native;w.loadBridge('readable');
+  w.ctx.setMouseFollow(false);w.ctx.setHUDOpen(true);w.advance(.3);
+  const run=()=>{for(let i=0;i<200;i++)w.paced(.01,{z:80,x:0,y:0});};
+  run();assert.equal(w.ctx.hudX,0,'ordinary HUD navigation still rejects sub-floor drift');
+  w.ctx.wandReviewTracking=true;run();
+  assert(Math.abs(w.ctx.hudX)>0.2,'coherent slow review movement is not deleted before the spatial detector');
+  assert.equal(w.ctx.wandState().move,false,'review does not enable mouse follow');
+  assert(!w.frames.some(f=>f[0]||f[1]),'review-only motion never moves the pointer');
+ }
+});

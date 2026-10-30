@@ -40,7 +40,8 @@ The website runs the wand’s own device code in your browser, with the Mac side
 
 | Gesture | Result |
 | --- | --- |
-| Quick tap from closed | Switch app once |
+| Quick tap from closed | Switch app once, after waiting at most 0.3 s for a second click |
+| Double click from closed | Right-click at the pointer, with mouse follow on or off |
 | Hold, turn, release | Open the HUD, point to a card and use it on release; the HUD stays open |
 | In an open HUD or submenu | Move the wand to outline a card without holding Middle, then click Middle, or hold, aim and release, to use it. Select as many times as you want |
 | Adjustable card | Click it, or release on it, to select it (dots); hold Middle and move to adjust, release to stop and reset the wand; tap to deselect |
@@ -49,7 +50,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Go out twice on a card | Outer quick actions: Undo beyond Keys, Space beyond Enter, New Codex chat beyond Utility, and in VS Code Review changes and Stage files beyond the app card |
 | Go out a third time on Utility | Zoom, beyond New Codex chat |
 | In VS Code review | Circle clockwise for next and anticlockwise for previous; click Middle to exit, double-click to swap Review changes and Stage files, hold to stage the selection |
-| Double click | Close the entire HUD |
+| Double click in an open HUD | Close the entire HUD |
 
 - The installed wand uses a radial HUD with Switch App in the centre. The browser demo retains its earlier grid.
 - The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.
@@ -57,7 +58,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - Adjustable cards are held only: click or release on one to select it (dots), then hold Middle and move to adjust it; releasing stops so the wand can reset, and nothing listens while Middle is up. Each card’s arrows show its direction: values move up and down; Spaces, Horizontal Scroll, Magnet, tabs, chat and cursor history and Tracks move left and right; Mission Control and similar actions act once per quick held swipe. Tracks keeps its click. Copy/Paste has no click on the wand; Space is its own outer card beyond Enter. Switch App: a tap switches once; in an open HUD a fresh hold on it chooses apps by moving left or right, and release switches.
 - The wand home ring is grouped, clockwise from 12: the app card, Utility, Play/Pause, YouTube, Horizontal Scroll, Forward, Back, Enter, Copy/Paste, Screenshot, Close and Keys. These positions stay the same in every app. Keys puts ← ↑ ↓ → across the top; Utility mirrors home, with Zoom beside Brightness. A second outer layer holds quick actions one reach further out on the same wedge: a thin Undo beyond Keys, Space beyond Enter, New Codex chat beyond Utility, and, only while VS Code is frontmost, larger Review changes and Stage files beyond the app card. Zoom is a third layer beyond New Codex chat. On the wand, cell 10 reads Close and never holds Command, cell 5 reads Forward without the mice’s volume chord, and Codex Pin/Unpin has no Hold 2 cue. The physical mice are unchanged.
 - Bottom, Middle and speech are independent. Mouse follow can keep running while review is selected.
-- In VS Code, go out past the app card and tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit after at most 300 ms, double-click to switch between Review changes and Stage files, retaining the selection and including the current file without staging, or hold it for about half a second to stage the working selection and keep reviewing. Navigation stays frozen until release. The floating indicator says “(Hold to commit selection)” and names the mode a double-click will enter. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.
+- In VS Code, go out past the app card and tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap Middle once to cancel and exit after at most 300 ms, double-click to switch between Review changes and Stage files, retaining the selection and including the current file without staging, or hold it for about half a second to stage the working selection and keep reviewing. Navigation stays frozen until release. The floating indicator says “Hold to stage selection” and names the mode a double-click will enter. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.
 - Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.
 - The native wand home HUD has Play/Pause after Utility around the ring. It uses the Mac’s standard media key, without changing either physical mouse.
 
@@ -187,6 +188,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed Agentic Mouse 1.0.304 build 310 uses wider two-line review pills, a centred dot between hints, and the labels Hold to stage selection and Double-click for Stage files mode. Rendered review, stage, creating-chat and repeat-hint variants pass; fresh physical acceptance remains separate. Installed native signature, source and settings checks passed; 1,190 native tests passed with four optional tests skipped.
+- Installed receiver 1.2.119 build 124: review circles retain slow motion above the calibrated sensor-noise floor rather than the larger HUD speed floor. Direction and startup-noise checks prevent false turns. Closed-HUD double-click right-click remains installed from build 123. Pointer quiet stopping, smoothing, sensitivity and physical mouse behavior are unchanged. Fresh physical acceptance is pending. All 229 Wand tests and 17 Control Stones checks passed; the installed receiver is ready over Bluetooth with settings and calibration preserved.
 - Installed receiver 1.2.117 build 122 restores raw input during the initial Bottom-held stroke, before the existing tap/hold decision. Active Bottom scrolling is routed before the HUD-only input filter. An open unheld HUD permits follow-on stop-to-click, while an actively held HUD control owns that gesture. All 228 Wand checks passed; the installed source and executable were verified, and Ethan confirmed both normal held scrolling and HUD-open clicking work. Other gesture acceptance is separate.
 - Installed receiver 1.2.116 build 121 restores quiet stopping by disabling the newer sub-threshold fine-motion bypass. The existing roughly 8 ms smoothing, speed-based sensitivity, orientation correction, held precision and single-shot click signal are unchanged. Pure-motion regression checks pass; fresh physical stillness acceptance is pending.
 - Installed: receiver 1.2.115 build 120 and Agentic Mouse 1.0.303 build 309. Ordinary HUD actions keep the HUD open, so you can select as many times as you want; a double click closes it, and every open page’s centre says “Double click to close”. The wand home ring is grouped: Keys, the app card and Utility at the top, with Back beside Forward. Space moves beyond Enter, New Codex chat sits beyond Utility, and Zoom is a third layer beyond it. Adjustment arrows follow each card’s real direction, including left and right for Spaces. The centre-and-left click added in build 119 is removed. Native and receiver checks pass; physical acceptance is pending.
@@ -225,7 +228,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.117 (122) · device code `wand-edceb5bfbea1` · bridge `40e3d976` · updated 30 October 2026.
+Receiver 1.2.119 (124) · device code `wand-edceb5bfbea1` · bridge `8d1f5b77` · updated 30 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
