@@ -14,11 +14,11 @@
         ],
         [
           "Hold, turn, release",
-          "Open the HUD, point to a card and use it on release"
+          "Open the HUD, point to a card and use it on release; the HUD stays open"
         ],
         [
-          "In a submenu",
-          "Move the wand to outline a card without holding Middle, then click Middle, or hold, aim and release, to use it once"
+          "In an open HUD or submenu",
+          "Move the wand to outline a card without holding Middle, then click Middle, or hold, aim and release, to use it. Select as many times as you want"
         ],
         [
           "Adjustable card",
@@ -26,7 +26,7 @@
         ],
         [
           "Hold Middle on an adjustable card",
-          "In wedge selection, hold and move up or down to change it, like scrolling; release to stop"
+          "In wedge selection, hold and move the way its arrows point, like scrolling: values up or down; Spaces, scrolling, tabs and history left or right. Release to stop"
         ],
         [
           "Release a hold on Switch App",
@@ -34,14 +34,18 @@
         ],
         [
           "Go out twice on a card",
-          "Outer quick actions: Undo beyond Keys, Space beyond Copy/Paste, and in VS Code Review changes and Stage files beyond the app card"
+          "Outer quick actions: Undo beyond Keys, Space beyond Enter, New Codex chat beyond Utility, and in VS Code Review changes and Stage files beyond the app card"
+        ],
+        [
+          "Go out a third time on Utility",
+          "Zoom, beyond New Codex chat"
         ],
         [
           "In VS Code review",
           "Circle clockwise for next and anticlockwise for previous; click Middle to exit, double-click to swap Review changes and Stage files, hold to stage the selection"
         ],
         [
-          "Double tap",
+          "Double click",
           "Close the entire HUD"
         ]
       ]
@@ -99,6 +103,10 @@
         [
           "Tap again",
           "Stop and paste"
+        ],
+        [
+          "Double tap while recording or transcribing",
+          "Won’t paste: copy the text without pasting it"
         ]
       ]
     }

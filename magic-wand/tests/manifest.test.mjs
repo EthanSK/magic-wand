@@ -37,9 +37,9 @@ test("button pins and pull-ups match the device code", () => {
   assert.match(device, new RegExp(`var MOVE_PIN=${pins.bottom};`));
   for (const pin of Object.values(pins)) assert.match(device, new RegExp(`pinMode\\(${pin},"input_pullup"\\)`));
   assert.deepEqual(manifest.buttons.map((button) => button.key), ["T", "M", "B"]);
-  assert.deepEqual(manifest.chords, [], "the ordered click gesture is part of Bottom; no legacy simultaneous scroll chord is published");
-  assert.match(bridge,/checkScrollChord\.replaceWith\(function\(bottomEdge\)/);
-  assert.match(bridge,/Bluetooth\.println\('@LEFTCLICK'\)/);
+  assert.deepEqual(manifest.chords, [], "current independent controls have no combined-button chord");
+  assert.match(bridge,/checkScrollChord\.replaceWith\(function\(\)\{return false;\}\)/);
+  assert.doesNotMatch(bridge,/@LEFTCLICK/,"Ethan rejected the Bottom+Middle click chord");
 });
 
 test("tuning matches the running device code and the receiver", () => {

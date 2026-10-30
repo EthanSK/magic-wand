@@ -31,7 +31,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   var connects=NRF['#onconnect'];
   if(!connects)connects=[onConnect];else if(typeof connects==='function')connects=[connects];
   connects.forEach(function(callback){if(callback.toString().indexOf('stopScroll')>=0)callback.replaceWith(function(){
-    global.wandCircleScrolling=false;global.wandReviewTracking=false;global.wandDeskSleeping=false;global.wandAppMode=undefined;global.wandReviewFiles=false;global.wandLeftClickHeld=false;stopScroll();scrollSuppress=false;chordFollowBefore=false;
+    global.wandCircleScrolling=false;global.wandReviewTracking=false;global.wandDeskSleeping=false;global.wandAppMode=undefined;global.wandReviewFiles=false;stopScroll();scrollSuppress=false;chordFollowBefore=false;
     clearHoldClick();moveLatched=false;hudOpen=false;moveGestureMode=undefined;lastMoveTap=-100;
     stopHUD();cancelTapGesture();epoch++;connected=true;busy=false;sentButtons=0;
     if(sendTimer!==undefined){clearTimeout(sendTimer);sendTimer=undefined;}
@@ -43,19 +43,8 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   global.wandDoubleClickSeconds=0.3;
   // Ethan's independent lanes: Bottom = mouse, Middle = HUD/review, Top = speech.
   global.wandReviewTracking=false;global.wandDeskSleeping=false;
-  checkScrollChord.replaceWith(function(bottomEdge){
-    // Only a fresh left/HUD press after centre/Bottom clicks; reverse order keeps its controls.
-    if(bottomEdge)return false;
-    // Consume the matching left release, even after centre is released first, without opening the HUD.
-    if(global.wandLeftClickHeld){global.wandLeftClickHeld=!digitalRead(HUD_PIN);return true;}
-    if(!connected||!bias||global.wandShot||hudHeld||digitalRead(MOVE_PIN)||digitalRead(HUD_PIN))return false;
-    // Reuse follow restoration to cancel the hold/drag and its release click, without changing the prior mode.
-    setMouseFollow(global.wandFollowBeforeHold);
-    global.wandLeftClickHeld=true;
-    // Ethan's physical middle+left click uses the receiver's ordinary native pair without a HUD delay.
-    // All-three sleep cannot undo this immediate click if centre+left arrive before the third press.
-    Bluetooth.println('@LEFTCLICK');return true;
-  });
+  // Keep legacy simultaneous-button scrolling out of the independent controls.
+  checkScrollChord.replaceWith(function(){return false;});
   middlePress.replaceWith(function(){
     if(!connected)return;hudReportStarted=true;Bluetooth.println('@MIDDLE 1');
   });
@@ -404,7 +393,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(global.wandPowerInputGuard&&global.wandPowerInputGuard())return;
     if(connected)Bluetooth.println('@BOTTOM '+(digitalRead(MOVE_PIN)?0:1));
     if(!digitalRead(MOVE_PIN)&&digitalRead(HUD_PIN)&&!scrollSuppress)chordFollowBefore=moveLatched;
-    if(checkScrollChord(true)){global.wandMomentaryStarted=undefined;return;}
+    if(checkScrollChord()){global.wandMomentaryStarted=undefined;return;}
     moveX=moveY=fractionX=fractionY=filteredX=filteredY=0;
     global.wandSlackX=global.wandSlackY=0;
     // Discovery marker for the registered watch.

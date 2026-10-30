@@ -14,11 +14,9 @@ test('native pointer transport opts in, retains fallback and survives bridge rel
  w.ctx.wandRawPointer=true;w.loadBridge();w.frames.length=0;w.lines.length=0;
  for(let i=0;i<10;i++)w.paced(.01,{z:1200,x:-800,y:0});
  assert.equal(w.lines.filter(l=>l.startsWith('@RAW ')).length,10,'reload must leave one sensor listener');
- w.edge('D1',0);w.edge('D2',0);
- assert(w.lines.includes('@LEFTCLICK'),'centre held then left emits the explicit click');
- w.lines.length=0;
+ w.edge('D1',0);w.edge('D2',0);w.lines.length=0;
  for(let i=0;i<20;i++)w.paced(.01,{z:1200,x:-800,y:0});
- assert(w.lines.some(l=>l.startsWith('@RAW ')),'the click chord retains physical button telemetry for native release safety');
+ assert(!w.lines.some(l=>l.startsWith('@RAW ')),'scroll chord must keep its own route');
 });
 test('native filter matches actual device math without future samples',{skip:process.platform!=='darwin'},()=>{
  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'wand-filter-'));
