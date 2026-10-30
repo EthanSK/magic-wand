@@ -1610,6 +1610,8 @@ struct WandReviewCircle {
     private var pendingSign=0.0,pendingThreshold=0.0,pendingX=0.0,pendingY=0.0,pendingHeading=0.0,pendingPartial=false
     private var pendingSharp=false,armX=0.0,armY=0.0,armSideways=0.0,recentTurn=0.0
 
+    // Bounded spatial evidence, cleared on an accepted step or mode reset.
+    private var smallerCurve:[(x:Double,y:Double)]=[]
     var isCircling: Bool { direction != 0 }
     /// Keeps the learned noise floors; everything about the gesture starts afresh.
     mutating func reset(){let learned=(jitter,wobble,jitterCount,wobbleCount);self=Self();(jitter,wobble,jitterCount,wobbleCount)=learned}
@@ -1712,8 +1714,17 @@ struct WandReviewCircle {
     private mutating func resume(direction resumed:Double) {
         paused=false
         guard let current=heading,abs(Self.wrap(resumed-current))>Self.radians(Self.continueDegrees) else{return}
-        startRun(x:pauseX,y:pauseY,previous:0);note(.resumed)
+        startRun(x:pauseX,y:pauseY,previous:knownSize);note(.resumed)
     }
+    /// The gesture size a restarted run keeps. Ethan wants the known circle to be
+    /// the frame of reference that blocks noise. Slow circles pause at their slow
+    /// points and wobble at a near-stop; restarting from zero (after a pause) or
+    /// from a tremor-sized about-face let the size the step rules scale by shrink
+    /// to hundredths of a degree, so ~0.2° of wobble stepped "previous" in the
+    /// middle of slow clockwise circles (2026-10-30 slow reference). A restart now
+    /// keeps the size, exactly as an ordinary step already does (half of it, via
+    /// `scale`); each later step re-learns it from the new gesture.
+    private var knownSize:Double {max(extent,previousExtent)}
     /// A run starts at a point with no heading yet; its first segment sets it.
     private mutating func startRun(x startX:Double,y startY:Double,previous:Double) {
         anchorX=startX;anchorY=startY;heading=nil;extremeX=startX;extremeY=startY;extremeReach=0
@@ -1721,6 +1732,37 @@ struct WandReviewCircle {
         runX=startX;runY=startY;runSteps=0
         direction=0;next=0;peak=0;pendingSign=0;pendingPartial=false;stepPath=0
         previousExtent=previous;windowX=startX;windowY=startY;spread=hypot(x-startX,y-startY)
+    }
+
+    /// Keep pause wobble from redefining the circle, while allowing a genuine
+    /// smaller circle to replace it. Near-full winding, radial fit and noise
+    /// clearance must agree; no minimum speed or timed wait is introduced.
+    /// A dramatic size reduction may use its first loop to establish the new size.
+    private mutating func relearnSmallerCurve()->Bool {
+        guard previousExtent>0 else{return false}
+        let spacing=floor(Self.minimumSegment,Self.noiseSegment,noise)
+        if let p=smallerCurve.last, hypot(x-p.x,y-p.y)<spacing {return false}
+        smallerCurve.append((x,y));if smallerCurve.count>96 {smallerCurve.removeFirst()}
+        guard smallerCurve.count>=8 else{return false}
+        let a=smallerCurve[0],b=smallerCurve[smallerCurve.count/3],c=smallerCurve[2*smallerCurve.count/3]
+        let bx=b.x-a.x,by=b.y-a.y,cx=c.x-a.x,cy=c.y-a.y
+        let determinant=2*(bx*cy-by*cx)
+        guard abs(determinant)>1e-6 else{return false}
+        let bb=bx*bx+by*by,cc=cx*cx+cy*cy
+        let ux=(bb*cy-cc*by)/determinant,uy=(bx*cc-cx*bb)/determinant
+        let radius=hypot(ux,uy)
+        guard radius.isFinite,radius>=max(Self.minimumPath*2,10*noise),2*radius<previousExtent*0.8 else{return false}
+        let ox=a.x+ux,oy=a.y+uy
+        var turn=0.0,absolute=0.0,last:Double?
+        for p in smallerCurve {
+            guard abs(hypot(p.x-ox,p.y-oy)-radius)<=0.15*radius else{return false}
+            let angle=atan2(p.y-oy,p.x-ox)
+            if let prior=last {let d=Self.wrap(angle-prior);turn+=d;absolute+=abs(d)}
+            last=angle
+        }
+        guard abs(turn)>=Self.radians(300),abs(turn)>=0.98*absolute else{return false}
+        previousExtent=min(previousExtent,2*radius);smallerCurve.removeAll(keepingCapacity:true)
+        return true
     }
 
     // MARK: Segments and turning
@@ -1732,8 +1774,9 @@ struct WandReviewCircle {
             guard hypot(rx,ry)>=max(Self.partialSegment*segmentLength,Self.noiseTravel*noise) else{return 0}
             resume(direction:atan2(ry,rx))
         }
-        let length=segmentLength
+        var length=segmentLength
         spread=max(spread,hypot(x-windowX,y-windowY))
+        if relearnSmallerCurve() {length=segmentLength}
         let ddx=x-anchorX,ddy=y-anchorY,distance=hypot(ddx,ddy),h=atan2(ddy,ddx)
         if let current=heading {
             let reach=ddx*cos(current)+ddy*sin(current)
@@ -1761,7 +1804,7 @@ struct WandReviewCircle {
         // clearly longer than tremor at a momentary stop.
         if sharp>=Self.radians(Self.cuspTurnDegrees) && (distance>=length || distance>=max(Self.partialSegment*length,Self.cuspNoise*noise)) {
             if pendingSign != 0 {note(.cancelled)}
-            let stroke=extent
+            let stroke=knownSize
             startRun(x:extremeReach>0 ? extremeX:anchorX,y:extremeReach>0 ? extremeY:anchorY,previous:stroke)
             note(.cusp)
             return advance()
@@ -1836,6 +1879,7 @@ struct WandReviewCircle {
         direction=sign;next=pendingThreshold+Self.radians(Self.quarterTurnDegrees)*sign
         peak=value ?? effective(turn);peakX=x;peakY=y;peakHeading=now
         refX=x;refY=y;refHeading=now
+        smallerCurve.removeAll(keepingCapacity:true)
         runSteps+=1;stepPath=0;previousExtent=extent;windowX=x;windowY=y;spread=0
         pendingSign=0;note(onSettle ? .settled:.step)
         return Int32(sign)
