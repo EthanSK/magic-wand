@@ -82,7 +82,7 @@ test("Middle opens the HUD on Switch App, turning moves the outline without wrap
   assert(s.hud.open, "HUD opens");
   assert.equal(s.hud.cell, 11, "starts on Switch App");
   assert(s.w.ctx.hudOpen, "device is in HUD mode");
-  assert.deepEqual(s.w.colors(), [1, 0.2, 0], "HUD is orange");
+  assert.deepEqual(s.w.colors(), [0, 1, 0], "HUD is green");
 
   s.turn(12, 0, 0.5);
   s.w.advance(0.1);

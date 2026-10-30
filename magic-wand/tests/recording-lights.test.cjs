@@ -6,8 +6,8 @@ test('recording red replaces mouse blue steadily, cancels legacy timers and pres
  assert.deepEqual(w.colors(),[1,0,0]);w.advance(.36);assert.deepEqual(w.colors(),[1,0,0]);w.advance(.35);assert.deepEqual(w.colors(),[1,0,0]);
  c.wandRecording=false;c.updateLights();w.advance(.4);assert.deepEqual(w.colors(),[0,0,1]);assert.equal(c.wandRecordingBlinkTimer,undefined);
  c.moveLatched=false;c.wandRecording=true;c.updateLights();w.advance(.4);assert.deepEqual(w.colors(),[1,0,0]);assert.equal(c.wandRecordingBlinkTimer,undefined);
- c.hudOpen=true;c.updateLights();assert.deepEqual(w.colors(),[1,.2,0]);
- c.moveLatched=true;c.updateLights();assert.deepEqual(w.colors(),[1,0,0],'recording with mouse and HUD is red');c.moveLatched=false;
+ c.hudOpen=true;c.updateLights();assert.deepEqual(w.colors(),[0,1,0]);
+ c.moveLatched=true;c.updateLights();assert.deepEqual(w.colors(),[0,1,0],'an open HUD stays green with recording and mouse follow');c.moveLatched=false;
  c.scrollHeld=true;c.updateLights();assert.deepEqual(w.colors(),[0,1,1],'scroll keeps priority');c.scrollHeld=false;
  c.hudOpen=false;c.moveLatched=true;c.updateLights();c.connected=false;c.updateLights();assert.equal(c.wandRecordingBlinkTimer,undefined);
 });

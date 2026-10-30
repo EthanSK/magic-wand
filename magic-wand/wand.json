@@ -12,15 +12,16 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.126",
-    "receiverBuild": "131",
-    "deviceRuntime": "wand-edceb5bfbea1",
-    "bridgeRevision": "8d1f5b7771df3d9efb59e3e6916810a9bd33d79d3a0e67042bd4d8be19e5e458",
+    "receiver": "1.2.127",
+    "receiverBuild": "132",
+    "deviceRuntime": "wand-7e734a872bfe",
+    "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.305",
     "agenticMouseBuild": "311",
     "persistentImage": "full-20261025a"
   },
   "status": [
+    "Installed receiver 1.2.127 build 132: the active HUD light is green, including when mouse follow is also on. Existing loading, scrolling and review colors remain. Device simulation verifies the light priorities, and the installed resources and connection were checked. The corrected high-speed-only scrolling is preserved; physical light-color acceptance remains pending.",
     "Installed receiver 1.2.126 build 131 adds a high-speed-only V3 scroll extension. The entire original speed curve is retained through 120 angular units/s, including its 120-line/s plateau; only stronger strokes rise smoothly toward 600 lines/s. Every tested ordinary sample and tick matches the original, and strong-stroke, direction, release and lost-telemetry checks pass. Installed binary, resources and connection were verified; fresh physical feel remains for confirmation.",
     "Installed receiver 1.2.125 build 130 restores the original V3 scroll-speed curve after physical feedback that 129 altered the normal feel. The boost began before the old cap and could affect ordinary strokes. Follow-state restoration, native scrolling and all pointer settings remain. A revised high-speed-only extension is still being prepared; it is not installed.",
     "Installed receiver 1.2.124 build 129: ordinary V3 scrolling retains its fine and normal speed and increases the strong-stroke maximum from 120 to 600 lines per second. Motion-profile checks cover ordinary speed, stronger strokes, reversals, released buttons and lost telemetry. Installed binary, signature, resources and Bluetooth readiness were verified. Pointer tuning and click behavior are unchanged; physical scrolling acceptance remains pending.",
@@ -323,26 +324,15 @@
       ]
     },
     {
-      "mode": "mouse",
-      "name": "Pointer",
-      "levels": [
-        0,
-        0,
-        1
-      ],
-      "display": "#4469ff",
-      "detail": "Steady blue; recording takes priority and shows red"
-    },
-    {
       "mode": "hud",
       "name": "HUD",
       "levels": [
+        0,
         1,
-        0.2,
         0
       ],
-      "display": "#ff5a1f",
-      "detail": "Orange"
+      "display": "#22c55e",
+      "detail": "Green"
     },
     {
       "mode": "recording",
@@ -354,6 +344,17 @@
       ],
       "display": "#ff2e3a",
       "detail": "Steady red while recording, including mouse mode. HUD, review, scrolling and loading keep their own colours."
+    },
+    {
+      "mode": "mouse",
+      "name": "Pointer",
+      "levels": [
+        0,
+        0,
+        1
+      ],
+      "display": "#4469ff",
+      "detail": "Steady blue; recording takes priority and shows red"
     },
     {
       "mode": "idle",

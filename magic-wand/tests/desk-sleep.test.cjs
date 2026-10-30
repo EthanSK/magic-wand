@@ -10,7 +10,7 @@ for(const bridge of ['readable','fragments']) {
   assert(c.moveLatched);assert(c.hudOpen);assert(c.wandReviewTracking);assert(c.wandRecording);
   // Background HUD updates must not wake a parked wand or light it up.
   c.setHUDOpen(true);c.updateLights();w.advance(3);assert.deepEqual(w.colors(),[0,0,0]);assert(!c.gyroAwake);
-  c.setWandDeskSleeping(false);assert.notEqual(c.hudTimer,undefined);assert(c.gyroAwake);assert.deepEqual(w.colors(),[1,0,0],'waking while recording shows red, not mouse blue');
+  c.setWandDeskSleeping(false);assert.notEqual(c.hudTimer,undefined);assert(c.gyroAwake);assert.deepEqual(w.colors(),[0,1,0],'waking with an open HUD restores green');
   c.setMouseFollow(false);c.setHUDOpen(false);c.setWandReviewTracking(false);
   c.setWandDeskSleeping(true);assert.deepEqual(w.colors(),[0,0,0]);
   c.setWandDeskSleeping(false);assert(c.wandRecording);assert.deepEqual(w.colors(),[1,0,0]);

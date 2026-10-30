@@ -30,8 +30,8 @@ function updateLights() {
   if(global.WAND_UPDATING)return loadingLight();
   // Button-edge feedback only: no animation or idle polling timer.
   var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN),speech=!digitalRead(STT_PIN);
-  // White pointer, orange HUD/disconnected, red speech. Hardware PWM mixes the LEDs.
-  lightLevels=calibrationLit?[1,0,0]:!connected?[0.08,0.016,0]:scrollHeld?[0,1,1]:speech?[1,0,0]:hud?[1,0.2,0]:move?[0.45,0.45,0.45]:[0,0,0];
+  // White pointer, green HUD, orange disconnected and red speech. Hardware PWM mixes the LEDs.
+  lightLevels=calibrationLit?[1,0,0]:!connected?[0.08,0.016,0]:scrollHeld?[0,1,1]:hud?[0,1,0]:speech?[1,0,0]:move?[0.45,0.45,0.45]:[0,0,0];
   writeLight(LED1,lightLevels[0]);
   writeLight(LED2,lightLevels[1]);
   writeLight(LED3,lightLevels[2]);
