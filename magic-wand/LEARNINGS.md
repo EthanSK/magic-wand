@@ -1461,6 +1461,13 @@ of an earlier fast stroke as successful fine aiming gives a false positive. Keep
 replay, captured-use replay and fresh physical acceptance separate; a synthetic quiet
 trace is not proof that the user's hand was physically still.
 
+A later offline comparison kept fractional pointer counts across quiet-floor
+crossings without lowering the floor. It recovered a small amount of narrated
+slow movement but also increased output in the still-like part of the same
+recording. That was not a clean improvement, so it was not installed. Keeping
+the floor unchanged alone does not prove a fractional-motion change is safe;
+compare deliberate motion and independently labelled rest before shipping it.
+
 
 ## 2026-10-30 — Held scroll must receive the stroke before the hold deadline
 
