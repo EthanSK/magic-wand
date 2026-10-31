@@ -11,8 +11,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.131",
-    "receiverBuild": "136",
+    "receiver": "1.2.132",
+    "receiverBuild": "137",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.306",
@@ -20,6 +20,7 @@
     "persistentImage": "full-20261025a"
   },
   "status": [
+    "Receiver 1.2.132 build137 installed and reconnected over Bluetooth: gentler low-speed page input, retained boost from repeated page flicks, scrolling fallback for custom app surfaces, bounded app/role diagnostics, and immediate exit-follow click. Physical WhatsApp acceptance remains unverified; native horizontal stop-ending is a separate follow-up.",
     "Installed receiver 1.2.131 build 136 restores ordinary wheel events for vertical and diagonal page scrolling and doubles the fast-end maximum to 1,200 lines per second. Pure horizontal held swipes retain native history gestures and the stronger 135 curve. Installed source, resources, settings and Bluetooth readiness were verified. Initial physical feedback reports stronger page scrolling but too much speed at the low end and a drop after repeated flicks; further tuning is in progress.",
     "Receiver 1.2.130 build 135 increases deliberate horizontal swipes to five times the previous 134 strength after physical feedback. Vertical and diagonal scrolling, fine pointing, clicks and follow restoration are unchanged. Native receiving apps still decide scroll or history navigation. The stronger setting needs physical confirmation.",
     "Receiver 1.2.129 build 134 increases horizontal-only native swipe distance, easing in up to 2.5 times the shared rate. Ordinary vertical and diagonal scrolling, pointer tuning, click timing and follow restoration are unchanged. Native phases still let the receiving app decide scrolling or history navigation. Physical Back/Forward acceptance remains unverified.",
@@ -418,13 +419,15 @@
       "highSpeedFullDegreesPerSecond": 240,
       "maxLinesPerSecond": 1200,
       "pointsPerLine": 10,
-      "scope": "Control V3 held scrolling. Vertical and diagonal page scrolling use ordinary wheel events and retain the original normal curve through 120 degrees per second; stronger strokes rise to 1,200 lines per second at 240 degrees per second. Pure horizontal held scrolling uses native precise swipe events and retains the 12.5-times gain and independent 3,000-line-per-second maximum. No new delay, buffering, momentum or catch-up.",
+      "scope": "Control V3 page scrolling: gentle low-speed input, original plateau and upper curve, repeated flick speed retained. Horizontal native swipe curve unchanged. Generic custom app content defaults to scrolling; explicit draggable roles and tap-then-hold still drag.",
       "horizontalGain": 12.5,
       "horizontalGainFromDegreesPerSecond": 8,
       "horizontalGainFullDegreesPerSecond": 30,
       "horizontalGainLevelSlope": 0.364,
       "horizontalMaxLinesPerSecond": 3000,
-      "horizontalCurveMaxLinesPerSecond": 600
+      "horizontalCurveMaxLinesPerSecond": 600,
+      "pageLowSpeedGain": 0.5,
+      "sameDirectionPageFlicks": "Each distinct qualified same-direction page flick adds to the held speed, capped at1200 lines/second; deceleration does not lower it."
     },
     "flickScroll": {
       "default": false,

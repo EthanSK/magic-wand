@@ -10,7 +10,12 @@ test('mouse-button double tap always centres and enables follow across prior mod
  const source=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.url),'utf8');
  function method(name){const start=source.indexOf('    func '+name+'(');assert(start>=0,name);let end=source.indexOf('{',start)+1,depth=1;while(depth){if(source[end]==='{')depth++;if(source[end]==='}')depth--;end++;}return source.slice(start,end);}
  const body=source.slice(source.indexOf('if let marker=line.range(of:"@BOTTOM ")'),source.indexOf('if let marker=line.range(of:"@MIDDLE ")'));
- assert(body.indexOf('recognizeMouseButtonRecenter')<body.indexOf('if controlVersion'));
+ // The release may click immediately (Ethan accepts it before double/triple),
+ // but recenter still consumes that release before a new hold is routed.
+ const finish=body.indexOf('if controlVersion.usesHeldScroll && value=="0"');
+ const recognize=body.indexOf('recognizeMouseButtonRecenter');
+ const route=body.indexOf('if controlVersion.usesHeldScroll && !scrollActive');
+ assert(finish>=0 && finish<recognize && recognize<route);
  assert(!body.includes('eligible:'));
  const code=`import Foundation
 func AXIsProcessTrusted()->Bool {true}

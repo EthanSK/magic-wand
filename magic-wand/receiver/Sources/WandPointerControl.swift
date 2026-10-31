@@ -1077,10 +1077,14 @@ final class WandSustainedScroll {
         var forwardCosine=0.7
         /// Receiver seconds without readings that end the current measurement.
         var gapSeconds=0.25
-        /// The original speed mapping, kept exactly: lines per second are
-        /// min(ordinaryMaxRate, stroke speed x lines per degree), so 1.6 lines per
-        /// degree up to 75 degrees per second, then a flat 120 lines per second.
+        /// Base speed mapping: min(ordinaryMaxRate, stroke speed x lines per
+        /// degree). Page fine control scales its low end below the plateau.
         var ordinaryMaxRate=120.0
+        /// Ethan found page scrolling too fast at low speed after the wheel
+        /// transport change. Ease small page strokes in at half gain, reaching
+        /// the original mapping by its plateau. Horizontal history gestures
+        /// retain their independently tested curve; this adds no input delay.
+        var pageLowSpeedGain=0.5
         /// Ethan, 2026-10-30: "the highest isn't fast enough ... it should be
         /// like much faster if you want to do like a huge scroll", then "I just
         /// wanted to add like extra sensitivity at the faster speeds. Did you
@@ -1201,8 +1205,14 @@ final class WandSustainedScroll {
     }
     /// Wheel lines per second for a stroke's representative speed. Continuous
     /// and rising; it sets velocity only, so it adds no delay or catch-up.
-    func linesPerSecond(peak:Double)->Double {curve(peak:peak,top:tuning.maxRate)}
-    /// The original mapping up to highSpeedFrom, then rising to `top`.
+    func linesPerSecond(peak:Double)->Double {
+        let rate=curve(peak:peak,top:tuning.maxRate)
+        let full=linesPerDegree>0 ? tuning.ordinaryMaxRate/linesPerDegree : 0
+        let u=full>0 ? min(1,max(0,peak/full)):1
+        let gentle=min(1,max(0,tuning.pageLowSpeedGain))
+        return rate*(gentle+(1-gentle)*u*u*(3-2*u))
+    }
+    /// Base mapping before the page-only fine-control adjustment.
     private func curve(peak:Double,top:Double)->Double {
         let ordinary=min(tuning.ordinaryMaxRate,max(0,peak)*linesPerDegree)
         guard peak>tuning.highSpeedFrom,tuning.highSpeedFull>tuning.highSpeedFrom,top>ordinary else{return ordinary}
@@ -1215,7 +1225,8 @@ final class WandSustainedScroll {
     /// the snap boundary) and never above horizontalMaxRate (unless the page
     /// rate is); non-decreasing in speed, so it changes no timing and adds no catch-up.
     func horizontalLinesPerSecond(peak:Double,slope:Double=0)->Double {
-        let page=linesPerSecond(peak:peak)
+        // Horizontal tuning retains the pre-page-adjustment floor.
+        let page=curve(peak:peak,top:tuning.maxRate)
         guard peak.isFinite,!slope.isNaN,tuning.horizontalGain>1 else{return page}
         let ordinary=curve(peak:peak,top:tuning.horizontalCurveMaxRate)
         let span=tuning.horizontalGainFull-tuning.horizontalGainFrom
@@ -1226,11 +1237,20 @@ final class WandSustainedScroll {
         return max(page,ordinary,min(max(ordinary,tuning.horizontalMaxRate),ordinary*gain))
     }
     private func apply(){
-        // Only an output that is purely horizontal is boosted; a diagonal or
-        // vertical output keeps the shared curve.
+        // Pure horizontal output keeps its separate history-swipe curve;
+        // vertical and diagonal page output use gentle low-speed control.
         let horizontal=outputY==0 && outputX != 0
         let rate=horizontal ? horizontalLinesPerSecond(peak:peak,slope:directionX != 0 ? abs(directionY/directionX) : .infinity) : linesPerSecond(peak:peak)
-        let magnitude=settling ? max(base,rate) : rate
+        // Ethan's same-direction flick adds to the held page speed and keeps
+        // that increment after its decelerating tail. `base` is captured once
+        // per qualified stroke, never once per sample, so noise cannot pump it.
+        // Sideways history gestures keep their existing replace-speed semantics.
+        let magnitude:Double
+        if !horizontal && keepOutput {
+            magnitude=min(tuning.maxRate,base+rate)
+        } else {
+            magnitude=settling ? max(base,rate):rate
+        }
         velocityX=outputX*magnitude;velocityY=outputY*magnitude
         summary.peakRate=max(summary.peakRate,magnitude)
     }
@@ -1273,7 +1293,7 @@ final class WandSustainedScroll {
         moving=false;stroking=true;directionX=unitX;directionY=unitY;strokeX=moveX;strokeY=moveY;peak=movePeak
         summary.strokes+=1
         if same {
-            // Same direction: keep it and change only the speed, without a dip.
+            // Same direction: snapshot speed once; page flicks add to it without a dip.
             outputX=velocityX/velocity;outputY=velocityY/velocity;base=velocity;settling=true;keepOutput=true
             summary.speedChanges+=1
         } else {
@@ -1467,8 +1487,9 @@ enum WandHoldTarget:String,Equatable {
     static let draggableRoles:Set<String>=["AXScrollBar","AXValueIndicator","AXSlider","AXSplitter","AXNotificationCenterAlert"]
     /// A real scrolling surface: native scroll views and web documents.
     static let scrollRoles:Set<String>=["AXScrollArea","AXWebArea"]
-    /// Reaching the window or app with no scroll surface means a window
-    /// background, title bar, toolbar, Dock or menu bar: a real native drag.
+    /// A window/app boundary ends the search but does not prove a drag target.
+    /// Custom message lists can expose AXList -> AXWindow with no AXScrollArea.
+    /// Keep their ordinary hold scrolling; tap-then-hold still drags deliberately.
     static let surfaceRoles:Set<String>=["AXWindow","AXSheet","AXDrawer","AXApplication","AXMenuBar"]
     static func ends(at role:String)->Bool {
         draggableRoles.contains(role) || scrollRoles.contains(role) || surfaceRoles.contains(role)
@@ -1477,11 +1498,26 @@ enum WandHoldTarget:String,Equatable {
         for role in roles {
             if draggableRoles.contains(role) {return .drag}
             if scrollRoles.contains(role) {return .scroll}
-            if surfaceRoles.contains(role) {return .drag}
+            if surfaceRoles.contains(role) {return .unknown}
         }
         // Empty, broken or timed-out chains prove nothing. Keep scrolling:
         // an unknown answer must never select text or move a window.
         return .unknown
+    }
+}
+
+/// One bounded Accessibility probe, deliberately excluding titles, values and text.
+/// The role chain and owner let a failed hold be attributed without recording chats.
+struct WandHoldTargetProbe {
+    var roles:[String]=[]
+    var bundleIdentifier:String="unknown"
+    var stop:String="unavailable"
+    var error:Int=0
+    var milliseconds:Int=0
+    var target:WandHoldTarget {WandHoldTarget.classify(roles:roles)}
+    var diagnostic:String {
+        let chain=roles.prefix(24).map{String($0.prefix(64))}.joined(separator:">")
+        return "app=\(bundleIdentifier.prefix(128)) roles=\(chain) stop=\(stop) error=\(error) ms=\(milliseconds)"
     }
 }
 

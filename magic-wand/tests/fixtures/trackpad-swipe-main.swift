@@ -19,18 +19,19 @@ var previousBuild=shipped;previousBuild.horizontalGain=2.5;previousBuild.horizon
 var receiver135=shipped;receiver135.maxRate=600
 check(WandHeldScroll().sustained.tuning.horizontalGain==shipped.horizontalGain,"the receiver's held scroll uses the shipped gain")
 
-// 1. The page (vertical/diagonal) curve keeps Ethan's ordinary mapping min(120, 1.6 x speed)
-//    exactly through 120 deg/s, plateau included, then rises to the larger 1200 maximum.
+// 1. Pages now ease in gently below the 75 deg/s plateau; upper speeds
+//    and the independently tuned horizontal curve retain their existing mapping.
 //    The horizontal curve sits on or above it, is continuous, non-decreasing and bounded by 3000.
 func original(_ p:Double)->Double {
     let o=min(120,max(0,p)*1.6)
-    guard p>120 else{return o}
+    let u=min(1,max(0,p/75)),gentle=0.5+0.5*u*u*(3-2*u)
+    guard p>120 else{return o*gentle}
     let e=min(1,(p-120)/120);return o+(1200-o)*e*e
 }
 let page135=WandSustainedScroll(tuning:receiver135)
 for peak in stride(from:0.0,through:1000.0,by:0.25) {
     let now=WandSustainedScroll().linesPerSecond(peak:peak),old=page135.linesPerSecond(peak:peak)
-    if peak<=120 {check(now==old && now==min(120,peak*1.6),"ordinary page speed unchanged at \(f(peak))","\(now) vs \(old)")}
+    if peak<=120 {check(now==old && abs(now-original(peak))<1e-9,"ordinary page speed unchanged at \(f(peak))","\(now) vs \(old)")}
     else {check(now>=old && now<=2*old+1e-9,"stronger page maximum above 120 deg/s at \(f(peak))","\(now) vs \(old)")}
 }
 check(WandSustainedScroll().linesPerSecond(peak:240)==2*page135.linesPerSecond(peak:240),"page maximum doubled")
@@ -59,7 +60,7 @@ let before=WandSustainedScroll(tuning:previousBuild)
 for peak in stride(from:0.0,through:1000.0,by:0.25) {for slope in [0.0,0.2,0.364] {
     let now=curve.horizontalLinesPerSecond(peak:peak,slope:slope),old=before.horizontalLinesPerSecond(peak:peak,slope:slope)
     if peak>=30 {check(abs(now-5*old)<1e-9,"five times the previous curve at \(f(peak)) deg/s","\(now) vs \(old)")}
-    else if peak<=8 {check(now==old && now==curve.linesPerSecond(peak:peak),"fine stroke \(f(peak)) unchanged")}
+    else if peak<=8 {check(now==old && now==min(120,peak*1.6),"fine stroke \(f(peak)) unchanged")}
     else {check(now>=old && now<=5*old+1e-9,"ramp \(f(peak)) between the previous and fivefold","\(now) vs \(old)")}
 }}
 // Off-level strokes fade to the shared rate exactly at the 30 degree snap boundary.

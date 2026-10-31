@@ -42,10 +42,10 @@ final class Harness {
  static var scriptedRoles:[String]=[]
  static var probeDelay=0.0
  static var probes=0
- static func holdTargetRoles(at point:CGPoint,budget:TimeInterval=0.06)->[String]{
+ static func holdTargetProbe(at point:CGPoint,budget:TimeInterval=0.06)->WandHoldTargetProbe{
   probes+=1
   if probeDelay>0 {Thread.sleep(forTimeInterval:probeDelay)}
-  return scriptedRoles
+  return WandHoldTargetProbe(roles:scriptedRoles,bundleIdentifier:"test.custom-list",stop:"boundary",milliseconds:2)
  }
  func transition(to:Int,at:CGPoint){if to==1 && buttons==0 {downs+=1};buttons=to}
  func queue(_ s:String){commands.append(s)}
@@ -80,8 +80,9 @@ precondition(WandHoldTarget.classify(roles:["AXStaticText","AXGroup","AXScrollAr
 precondition(WandHoldTarget.classify(roles:["AXGroup","AXWebArea"]) == .scroll,"web documents scroll")
 precondition(WandHoldTarget.classify(roles:["AXValueIndicator","AXScrollBar","AXScrollArea"]) == .drag,"a scroll bar thumb drags")
 precondition(WandHoldTarget.classify(roles:["AXSlider"]) == .drag && WandHoldTarget.classify(roles:["AXSplitter"]) == .drag)
-precondition(WandHoldTarget.classify(roles:["AXToolbar","AXWindow"]) == .drag,"a title bar or toolbar drags the window")
-precondition(WandHoldTarget.classify(roles:["AXDockItem","AXList","AXApplication"]) == .drag)
+for roles in [["AXList","AXWindow"],["AXStaticText","AXGroup","AXWindow"],["AXToolbar","AXWindow"],["AXDockItem","AXList","AXApplication"]] {
+ precondition(WandHoldTarget.classify(roles:roles) == .unknown,"an ancestor window or application does not prove dragging")
+}
 precondition(WandHoldTarget.classify(roles:[]) == .unknown,"a failed hit test proves nothing")
 precondition(WandHoldTarget.classify(roles:["AXTextField","AXGroup"]) == .unknown,"a broken chain proves nothing")
 
@@ -108,14 +109,22 @@ precondition(!Harness.wheelPairs.isEmpty && scroll.downs==0,"a scroll area scrol
 scroll.handleRaw("10000,0,2680,0");precondition(!scroll.heldScroll.active && scroll.buttons==0)
 
 // Over a draggable target: a native drag after the existing 220 ms decision.
-let drag=press(["AXGroup","AXWindow"]);wait(0.05)
-precondition(!drag.heldScroll.scrollable,"a window surface is a drag target")
+let drag=press(["AXSlider","AXGroup","AXWindow"]);wait(0.05)
+precondition(!drag.heldScroll.scrollable,"a positively identified slider is a drag target")
 drag.handleRaw("10000,0,2680,1")
 precondition(drag.downs==0,"a short tap can never become a drag")
 wait(0.2);drag.handleRaw("10000,0,2680,1")
 precondition(drag.downs==1 && drag.buttons==1 && drag.heldScroll.dragging,"one native button-down once the hold qualifies")
 Harness.wheelPairs=[];drag.handleRaw("10000,0,2680,1");precondition(Harness.wheelPairs.isEmpty,"a drag never scrolls")
 drag.handleRaw("10000,0,2680,0");precondition(drag.buttons==0 && !drag.heldScroll.active,"release always lifts the button")
+
+// Custom app content under a window: scroll, never silently select/drag text.
+let custom=press(["AXList","AXWindow"]);wait(0.27)
+Harness.wheelPairs=[]
+for _ in 0..<30 {custom.handleRaw("10000,0,2680,1")}
+precondition(custom.heldScroll.scrollable && custom.downs==0 && !Harness.wheelPairs.isEmpty,"a custom list scrolls without AXScrollArea")
+precondition(logged.contains{$0.contains("app=test.custom-list") && $0.contains("roles=AXList>AXWindow") && $0.contains("stop=boundary") && $0.contains("applied")},"one bounded role/app result explains the decision")
+custom.handleRaw("10000,0,2680,0")
 
 // Unknown answer: keeps scrolling, never selects text.
 let unknown=press([]);wait(0.27)
@@ -125,7 +134,7 @@ unknown.handleRaw("10000,0,2680,0")
 
 // Slow answer: the hold settles on scrolling at the decision and the late
 // drag answer can never flip it mid-gesture.
-let slow=press(["AXWindow"],delay:0.35);wait(0.25)
+let slow=press(["AXSlider","AXWindow"],delay:0.35);wait(0.25)
 for _ in 0..<10 {slow.handleRaw("10000,0,2680,1")}
 precondition(slow.heldScroll.scrollable && !slow.heldScroll.resolving && slow.downs==0,"unresolved at the decision: scroll")
 wait(0.2);slow.handleRaw("10000,0,2680,1")
@@ -134,10 +143,13 @@ precondition(logged.contains{ $0.contains("late") },"the late answer is recorded
 slow.handleRaw("10000,0,2680,0")
 
 // Answer after release: the gesture token drops it.
-let gone=press(["AXWindow"],delay:0.1)
+let gone=press(["AXSlider","AXWindow"],delay:0.1)
 gone.finishMouseButtonHold(now:ProcessInfo.processInfo.systemUptime);_=gone.pointerRouter.mouseButton(down:false)
 wait(0.2)
 precondition(!gone.heldScroll.active && gone.downs==0 && gone.buttons==0,"a reply for a finished hold never acts")
+precondition(logged.contains{$0.contains("discarded") && $0.contains("roles=AXSlider>AXWindow")},"a cancelled reply remains attributable without changing the gesture")
+let bounded=WandHoldTargetProbe(roles:Array(repeating:String(repeating:"A",count:100),count:100),bundleIdentifier:String(repeating:"B",count:500))
+precondition(bounded.diagnostic.count<1800,"probe logs are bounded even for unexpected AX input")
 
 // Explicit tap-then-hold: always a native drag, with no probe at all.
 let explicit=Harness();precondition(explicit.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))

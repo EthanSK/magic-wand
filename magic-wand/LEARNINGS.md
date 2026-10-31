@@ -1548,3 +1548,24 @@ no added buffering or replay. A larger synthetic event distance does not prove
 that a receiving app accepts a history swipe. The app still owns that choice;
 real horizontally scrolling content also receives the larger horizontal gain.
 Keep physical Back/Forward acceptance separate from these checks.
+
+
+## 2026-10-31 — A generic app boundary is not a draggable surface
+
+A custom scrolling list may expose `AXList → AXWindow` without an `AXScrollArea`.
+The old classifier returned drag at the window boundary, which could consume a
+scroll gesture as a mouse drag. Treat generic window/app boundaries as unknown
+and keep the scrolling fallback. Only positive draggable roles or the explicit
+tap-then-hold gesture select a native drag. Keep bounded app-bundle/role/error
+telemetry for diagnosis, without window titles, messages or field values.
+The regression harness verifies this fallback; it does not prove which native
+or browser WhatsApp surface caused an earlier user report.
+
+## 2026-10-31 — Retain each deliberate same-direction page flick
+
+The old restroke temporarily kept the prior speed but replaced it with the new
+stroke's smaller peak as deceleration began. Each qualified same-direction page
+stroke now captures its prior speed once and adds its own increment, capped at
+the page limit. Do not add an increment per sample or bank resting noise. Tests
+cover repeated equal flicks, holding still, tremor, reversal, fresh holds and
+release. Horizontal history swipes keep their separate curve and lifecycle.

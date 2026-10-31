@@ -68,7 +68,8 @@ func log(_ v:Any...) {}
 ${source.slice(start,end)}
 struct PauseStub {var paused=false}
 final class Harness {
- var scrollFollowBefore=false
+ var scrollFollowBefore=false,ready=true,restoring=false
+ let screenshot=WandScreenshotGesture()
  var posted:[CGEvent]=[]
  var nativeScroll=WandNativeScrollGesture(),actionPause=PauseStub()
  var scrollActive=false,scrollAnchor:CGPoint?,circleAnchor:CGPoint?,scrollWatchdog:Timer?,scrollPostedX=0,scrollPostedY=0
