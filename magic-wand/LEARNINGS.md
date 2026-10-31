@@ -1740,3 +1740,21 @@ accelerations within slow aiming could otherwise earn the shortcut. The final
 After installing receiver156, all253 Wand,17 Control Stones and4 shared checks
 passed. Live fast-stop clicks and their blue-light commands were observed;
 neither a passing replay nor those commands confirm the user's physical feel.
+
+## 2026-10-31 — Separate sensor gaps from delivery gaps for brisk stops
+
+The ordinary-use trace contains a44 ms host arrival gap during an otherwise
+continuous brisk move. The40 ms fast-stop reset discarded that move and forced
+the later stop down the ordinary path. Preserve evidence for at most80 ms of
+host delivery spacing only when sensor intervals stay finite, positive and at
+most20 ms. Still require new quiet arrivals; the pending-click freshness guard
+remains40 ms. A real sensor gap, longer host gap, or slow final approach retains
+the existing protections. This changes no pointer output or movement timing.
+
+The private Brisk-stop click reference preserves the mixed-result user report,
+raw sensor records and replay limits. Its inferred ordinary-use replay gains
+three quick decisions without adding clicks; the separately labelled slow-aim
+segment earns no fast clicks with either version. This is not a physical success
+rate. Receiver157 passed the focused gap regression and full253 Wand,17 Control
+Stones and4 shared checks. Installed source/resources and Bluetooth were read
+back with saved Sense8; physical reliability remains a user check.

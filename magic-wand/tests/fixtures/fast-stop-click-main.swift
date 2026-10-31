@@ -23,6 +23,18 @@ one.move(dx:6,dy:0,now:0.10,eligible:true);expect(!one.tick(now:0.111),"continui
 let batched=brisk();for i in 0..<8{batched.move(dx:0,dy:0,now:0.09+Double(i)*0.0001,eligible:true)}
 expect(!batched.tick(now:0.091),"many burst-delivered zero frames do not fake elapsed quiet time")
 let gap=brisk();quiet(gap,from:0.18);expect(!gap.tick(now:0.201),"a missing-data gap is not immediate-stop evidence")
+let delivery=brisk()
+delivery.move(dx:6,dy:0,now:0.125,eligible:true,sampleSeconds:0.01)
+for i in 0...2 {delivery.move(dx:0,dy:0,now:0.135+Double(i)*0.01,eligible:true,sampleSeconds:0.01,pointerQuiet:true)}
+expect(delivery.tick(now:0.156) && delivery.lastClickWasFast,"continuous sensor samples survive a45ms host-delivery gap, then confirm a fresh stop")
+let sensorGap=brisk()
+sensorGap.move(dx:6,dy:0,now:0.125,eligible:true,sampleSeconds:0.045)
+quiet(sensorGap,from:0.135)
+expect(!sensorGap.tick(now:0.156),"a real45ms sensor gap still clears brisk evidence")
+let longDelivery=brisk()
+longDelivery.move(dx:6,dy:0,now:0.165,eligible:true,sampleSeconds:0.01)
+quiet(longDelivery,from:0.175)
+expect(!longDelivery.tick(now:0.196),"an over80ms host gap cannot preserve stale brisk evidence")
 let lost=brisk();quiet(lost,from:0.09);expect(!lost.tick(now:0.2),"a stale accelerated timer cannot replay its click")
 let gated=brisk();gated.move(dx:0,dy:0,now:0.09,eligible:false);quiet(gated,from:0.10);expect(!gated.tick(now:0.131),"a held/HUD/paused lane clears quick-click eligibility")
 let noCursor=WandDwellClick(fastStops:true);noCursor.follow(true);noCursor.move(dx:0,dy:0,now:0,eligible:true)

@@ -265,6 +265,7 @@ final class WandPointerRouter {
 struct WandFastStopClick {
     static let window=0.12, distance=40.0, speed=500.0, finalSpeed=500.0
     static let quietDuration=0.008, maximumGap=0.04, maximumTail=0.08, slowTail=0.06
+    static let maximumDeliveryGap=0.08, maximumContinuousSample=0.02
     private var samples:[(time:Double,dt:Double,x:Double,y:Double)]=[]
     private var lastAt:Double?,lastMotion=0.0,lastBrisk=0.0,quietAt:Double?,quietCount=0,eligible=false
     private(set) var due:Double?
@@ -274,7 +275,12 @@ struct WandFastStopClick {
     mutating func sample(stopped:Bool,x:Int,y:Int,now:Double,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil){
         guard now.isFinite else{reset();return}
         let dt=lastAt.map{now-$0};lastAt=now
-        guard let dt,dt>0,dt<=Self.maximumGap else{
+        // A short host-delivery gap need not be a sensor gap: Bluetooth may
+        // deliver continuous 104 Hz readings together. Preserve the brisk
+        // evidence only when sensor time confirms continuity. Still require
+        // fresh quiet arrivals afterwards; this never waits or replays motion.
+        let continuous=sampleSeconds.map{$0.isFinite && $0>0 && $0<=Self.maximumContinuousSample} ?? false
+        guard let dt,dt>0,dt<=Self.maximumGap || (continuous && dt<=Self.maximumDeliveryGap) else{
             samples=[];quietAt=nil;quietCount=0;eligible=false;due=nil;return
         }
         // Radio notifications can deliver adjacent readings in one burst.

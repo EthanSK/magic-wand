@@ -12,8 +12,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.151",
-    "receiverBuild": "156",
+    "receiver": "1.2.152",
+    "receiverBuild": "157",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.315",
@@ -21,6 +21,7 @@
     "persistentImage": "full-20261025a"
   },
   "status": [
+    "Installed: receiver1.2.152 build157 preserves brisk-stop evidence across brief Bluetooth delivery gaps only when the sensor intervals remain continuous. Fresh stop confirmation, genuine sensor-gap rejection, the slow precision path, pointer filtering and the blue click cue are unchanged. All253 Wand,17 Control Stones and4 shared checks passed; installed source, resources, Bluetooth and firmware8 readback verified. The saved slow-aim exercise keeps its precision protection; physical reliability remains for user review.",
     "Installed: receiver1.2.151 build156 uses the visible pointer stop after a recent brisk move, tolerates a brief settling tail and measures speed from sensor time. Sent clicks briefly dim the blue light or show blue from another mode, then restore current status. Slow precision timing, pointer filtering and firmware8 stay unchanged. Signed source, bundled resources, Bluetooth and firmware8 readback verified; all253 Wand,17 Control Stones and4 shared checks passed after installation. Live fast-stop clicks and their blue-light commands were observed; physical click feel and blink visibility remain for user review.",
     "Installed: receiver1.2.150 build155 fixes the fast-stop click integration: motion-intent heartbeats no longer erase brisk-move evidence, and a residual stop count without visible pointer travel no longer cancels it. Slow approach keeps the normal200 ms pause. The actual filter and click call order now reproduce the old wait and pass with the correction. Signed installed source and resources match; Bluetooth and firmware8 readback verified. All252 Wand,17 Control Stones and4 shared checks passed after installation. Physical click feel remains for user review.",
     "Installed: receiver 1.2.149 build154 uses the physical release frame to stop replaying obsolete stroke motion after a stalled Bluetooth batch. Existing timing, pointer filtering, fast-stop clicking and held-scroll behavior are preserved. This fixes a reproduced delayed-frame path; the observed fresh post-scroll motion still needs a separate recoil decision. Signed build and source readback match;252 Wand,17 Control Stones and4 shared checks passed. Button-wake Bluetooth reconnection is verified with saved firmware8. Ethan chose immediate pointer movement; no post-scroll recoil suppression was added.",
@@ -541,7 +542,9 @@
       "maximumSampleGapSeconds": 0.04,
       "scope": "Only after a recent brisk move, use the visible pointer stop; invisible residual counts cannot postpone that click. Sustained slow aiming keeps200 ms and its intent protection. No pointer movement is delayed or replayed.",
       "slowTailSeconds": 0.06,
-      "speedClock": "sensor sample duration"
+      "speedClock": "sensor sample duration",
+      "maximumDeliveryGapSeconds": 0.08,
+      "maximumContinuousSampleSeconds": 0.02
     },
     "clickLight": {
       "durationMs": 90,
