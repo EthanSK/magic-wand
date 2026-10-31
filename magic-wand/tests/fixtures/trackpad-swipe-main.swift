@@ -12,7 +12,9 @@ func check(_ ok:Bool,_ name:String,_ detail:@autoclosure()->String=""){if !ok {f
 
 var flat=WandSustainedScroll.Tuning();flat.horizontalGain=1
 let shipped=WandSustainedScroll.Tuning()
-check(shipped.horizontalGain==2.5 && shipped.horizontalGainFrom==8 && shipped.horizontalGainFull==30 && shipped.horizontalGainLevelSlope==0.364,"shipped horizontal gain")
+check(shipped.horizontalGain==12.5 && shipped.horizontalMaxRate==3000 && shipped.maxRate==600 && shipped.horizontalGainFrom==8 && shipped.horizontalGainFull==30 && shipped.horizontalGainLevelSlope==0.364,"shipped horizontal gain")
+// The first installed build (2.5x, within the shared 600 ceiling). Ethan: "maybe five times".
+var previousBuild=shipped;previousBuild.horizontalGain=2.5;previousBuild.horizontalMaxRate=600
 check(WandHeldScroll().sustained.tuning.horizontalGain==shipped.horizontalGain,"the receiver's held scroll uses the shipped gain")
 
 // 1. The shared (vertical/diagonal) curve is exactly Ethan's corrected one; the horizontal
@@ -27,20 +29,31 @@ var previous=0.0
 for peak in stride(from:0.0,through:1000.0,by:0.25) {
     let v=curve.linesPerSecond(peak:peak),h=curve.horizontalLinesPerSecond(peak:peak)
     check(abs(v-original(peak))<1e-9,"shared curve unchanged at \(f(peak)) deg/s","\(v) vs \(original(peak))")
-    check(h>=v && h<=600,"horizontal rate bounded at \(f(peak))","\(h)")
-    check(h>=previous && h-previous<=5+1e-9,"horizontal rate continuous and rising at \(f(peak))","\(previous) -> \(h)");previous=h
+    check(h>=v && h<=3000,"horizontal rate bounded at \(f(peak))","\(h)")
+    check(h>=previous && h-previous<=12.5+1e-9,"horizontal rate continuous and rising at \(f(peak))","\(previous) -> \(h)");previous=h
 }
-for (peak,expected) in [(0.0,0.0),(5.0,8.0),(8.0,12.8),(19.0,53.2),(30.0,120.0),(50.0,200.0),(75.0,300.0),(120.0,300.0),(150.0,375.0),(180.0,600.0),(240.0,600.0)] {
+for (peak,expected) in [(0.0,0.0),(5.0,8.0),(8.0,12.8),(19.0,205.2),(30.0,600.0),(50.0,1000.0),(75.0,1500.0),(120.0,1500.0),(150.0,1875.0),(180.0,3000.0),(240.0,3000.0)] {
     check(abs(curve.horizontalLinesPerSecond(peak:peak)-expected)<1e-9,"horizontal rate at \(f(peak)) deg/s","\(curve.horizontalLinesPerSecond(peak:peak)) not \(expected)")
 }
+// Fivefold the previous installed curve wherever that curve had its whole gain (30 deg/s
+// and up, within 20 degrees of level), including five times its 600 ceiling; fine strokes
+// up to 8 deg/s are unchanged in both; the ramp between rises continuously and never falls
+// below the previous build.
+let before=WandSustainedScroll(tuning:previousBuild)
+for peak in stride(from:0.0,through:1000.0,by:0.25) {for slope in [0.0,0.2,0.364] {
+    let now=curve.horizontalLinesPerSecond(peak:peak,slope:slope),old=before.horizontalLinesPerSecond(peak:peak,slope:slope)
+    if peak>=30 {check(abs(now-5*old)<1e-9,"five times the previous curve at \(f(peak)) deg/s","\(now) vs \(old)")}
+    else if peak<=8 {check(now==old && now==curve.linesPerSecond(peak:peak),"fine stroke \(f(peak)) unchanged")}
+    else {check(now>=old && now<=5*old+1e-9,"ramp \(f(peak)) between the previous and fivefold","\(now) vs \(old)")}
+}}
 // Off-level strokes fade to the shared rate exactly at the 30 degree snap boundary.
-check(curve.horizontalLinesPerSecond(peak:50,slope:0.364)==200,"20 degrees off level keeps all of the gain")
-check(abs(curve.horizontalLinesPerSecond(peak:50,slope:0.4705)-140)<1e-6,"25 degrees off level keeps half of it")
+check(curve.horizontalLinesPerSecond(peak:50,slope:0.364)==1000,"20 degrees off level keeps all of the gain")
+check(abs(curve.horizontalLinesPerSecond(peak:50,slope:0.4705)-540)<1e-6,"25 degrees off level keeps half of it")
 check(curve.horizontalLinesPerSecond(peak:50,slope:0.577)==80 && curve.horizontalLinesPerSecond(peak:50,slope:.infinity)==80,"the snap boundary has none")
-var lastSlope=200.0
+var lastSlope=1000.0
 for slope in stride(from:0.0,through:1.0,by:0.001) {
     let h=curve.horizontalLinesPerSecond(peak:50,slope:slope)
-    check(h<=lastSlope && lastSlope-h<=0.6,"gain fades continuously with slope \(slope)");lastSlope=h
+    check(h<=lastSlope && lastSlope-h<=4.5,"gain fades continuously with slope \(slope)");lastSlope=h
 }
 var off=flat;check(WandSustainedScroll(tuning:off).horizontalLinesPerSecond(peak:60)==96,"gain 1 is the shared curve")
 off.horizontalGain=0.5;check(WandSustainedScroll(tuning:off).horizontalLinesPerSecond(peak:60)==96,"a gain below 1 never weakens horizontal")
@@ -93,10 +106,16 @@ for (name,hand,delivery,release) in swipes {
         check(firstBoosted<=firstBase && firstBoosted>=0.22,label+" first line no later, never before the hold decision","\(f(firstBoosted*1000)) vs \(f(firstBase*1000)) ms")
         check(boosted.total.s==0 && base.total.s==0,label+" horizontal only","\(boosted.total.s)")
         check(boosted.ticks.allSatisfy{Double($0.p)*sign>=0},label+" never the wrong way")
-        check(boosted.ticks.allSatisfy{abs($0.p)<=31},label+" no backlog burst")
+        // At most 50 ms at the horizontal ceiling, as the shared timer already allows.
+        check(boosted.ticks.allSatisfy{abs($0.p)<=151},label+" no backlog burst")
+        let old=run(previousBuild,hand,delivery,sign:sign,seed:seed,release:release)
+        let fold=boosted.total.p/old.total.p
+        check(fold>=4.6 && fold<=5.2,label+" five times the previous build","\(f(sign*old.total.p)) -> \(f(sign*boosted.total.p)) lines")
+        let firstOld=old.first({p,s in p != 0 || s != 0}) ?? 99
+        check(firstBoosted<=firstOld,label+" first line no later than the previous build")
         check(boosted.dropClick && boosted.afterRelease==(0,0),label+" release stops at once")
         let ratio=sign*boosted.total.p/(sign*base.total.p)
-        check(ratio>=1.9 && ratio<=2.7,label+" distance gain","\(f(sign*base.total.p)) -> \(f(sign*boosted.total.p)) lines")
+        check(ratio>=10 && ratio<=13,label+" distance gain","\(f(sign*base.total.p)) -> \(f(sign*boosted.total.p)) lines")
         before.append(sign*base.total.p);after.append(sign*boosted.total.p)
     }}
     let mean={(a:[Double]) in a.reduce(0,+)/Double(a.count)}
@@ -114,7 +133,7 @@ for seed:UInt64 in 1...5 {
     let hand=Hand(parts:[.rest(0.3),.stroke(p:8*cos(a),s:8*sin(a),seconds:0.25),.rest(0.8)])
     let base=run(flat,hand,Delivery(),sign:-1,seed:seed),boosted=run(shipped,hand,Delivery(),sign:-1,seed:seed)
     check(boosted.total.s==0,"sloppy swipe seed \(seed) horizontal only")
-    check(boosted.total.p/base.total.p>=1.7,"sloppy swipe seed \(seed) keeps most of the gain","\(base.total.p) -> \(boosted.total.p)")
+    check(boosted.total.p/base.total.p>=7,"sloppy swipe seed \(seed) keeps most of the gain","\(base.total.p) -> \(boosted.total.p)")
 }
 // Diagonal held scrolling is untouched, tick for tick.
 for seed:UInt64 in 1...5 {
@@ -136,7 +155,7 @@ for (name,parts,turn) in [("reverse while moving",[Part.rest(0.3),stroke(5,0.25)
         check(boosted.ticks.allSatisfy{$0.t<rs+0.1 || Double($0.p)*sign<=0},label+" no old-direction lines after reversing")
         check(boosted.total.s==0,label+" horizontal only")
         let a=hand.duration-0.8,b=hand.duration
-        check(-sign*boosted.lines(a,b).p>=1.9*(-sign*base.lines(a,b).p),label+" return leg boosted","\(base.lines(a,b).p) -> \(boosted.lines(a,b).p)")
+        check(-sign*boosted.lines(a,b).p>=9*(-sign*base.lines(a,b).p),label+" return leg boosted","\(base.lines(a,b).p) -> \(boosted.lines(a,b).p)")
     }}
 }
 

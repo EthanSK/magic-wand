@@ -253,7 +253,8 @@ each {axis,sign,seed,label in
     let plateau=sign*trace.rate(0.9,2.6).p
     check(plateau>=105 && plateau<=121,"plateau stroke ("+label+") keeps the original 120 lines/s","\(f(plateau))")
 }
-let fast=WandSustainedScroll()
+// A horizontal stroke: the shared ceiling applies with the horizontal gain off.
+let fast=WandSustainedScroll(tuning:simulationTuning)
 for _ in 0..<6 {fast.sample(x:2000,y:0,dt:0.01)}
 check(fast.velocityX==600 && fast.velocityY==0,"fast strokes cap at 600 lines per second","\(fast.velocityX)")
 // A late timer pays at most 50 ms at the cap, plus the new direction's first line.
