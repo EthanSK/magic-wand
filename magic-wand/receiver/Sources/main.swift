@@ -1893,7 +1893,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         performPointer(routed.actions)
     }
     /// `released`: the physical release, as opposed to lost telemetry or a
-    /// screenshot taking over. Only a released, qualified scroll changes follow.
+    /// screenshot taking over. A scroll restores prior follow; a quiet long hold exits it.
     /// Previously finishBottomHold.
     func finishMouseButtonHold(now:Double,released:Bool=true) {
         if !released {cancelMouseExitClick()}
@@ -1920,6 +1920,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // Physical duration wins when Bluetooth delivery is late; held scrolling,
         // dragging, entering follow and duplicate/cancelled releases never click.
         let shortRelease=physicalDuration.map{$0>=0 && $0<heldScroll.holdSeconds} ?? (heldScroll.elapsed(now:now)>=0 && !heldScroll.qualified(now:now))
+        // Ethan: "long press ... don't do a scroll gesture ... turns off follow
+        // mode without sending the click". Reuse the existing hold threshold and
+        // physical timestamps: no new delay, and late delivery cannot turn a tap
+        // into a quiet hold. Native dragging and lost telemetry keep their rules.
+        let stopWithoutClick=released && !shortRelease && scrollFollowBefore && !heldScroll.hasScrollGesture && !heldScroll.dragging && !scrollActive
         let exitClick=released && shortRelease && !earlyHorizontal && scrollFollowBefore && !heldScroll.dragging && !scrollActive
         if exitClick && ready && !restoring && !actionPause.paused && !screenshot.ownsPointer && AXIsProcessTrusted() {
             scheduleMouseExitClick(at:currentPointerOrigin())
@@ -1936,7 +1941,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? currentPointerOrigin())}
         if heldScroll.end(now:now) {queue("global.wandPointerPauseUntil=0;")}
         heldScrollAnchor=nil;setCircleLight(false)
-        if completedScroll && released {restoreMouseAfterScroll()}
+        if stopWithoutClick && ready && !restoring && !actionPause.paused && !screenshot.ownsPointer {
+            cancelMouseExitClick()
+            dwell.follow(false);restDetection.pointerStopped();scheduleDwell()
+            queue("global.wandPointerPauseUntil=0;setMouseFollow(false);")
+            log("MOUSE_HOLD_STOP_WITHOUT_CLICK")
+        } else if completedScroll && released {restoreMouseAfterScroll()}
     }
     /// The only delayed ordinary click. Keep its release point and reject it
     /// after a new action, pointer movement, app switch or overdue run-loop wake.

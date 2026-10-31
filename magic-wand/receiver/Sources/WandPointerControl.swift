@@ -1401,6 +1401,9 @@ final class WandHeldScroll {
     private var started=0.0,confirmed=0.0,fraction=0.0,moved=false,dropClick=false,droppingClick=false
     private var earlyIntent=WandEarlyHorizontalIntent()
     var earlyHorizontal:Bool {earlyIntent.accepted}
+    /// A qualified movement, not merely elapsed hold time. Even a tiny V3 stroke
+    /// counts before its fractional wheel output reaches a whole pixel.
+    var hasScrollGesture:Bool {moved || earlyHorizontal || (sustaining ? sustained.summary.strokes > 0 : scrollDirection != 0)}
     // Reuse the existing mouse button tap/hold cutoff; do not add a movement buffer.
     let holdSeconds:Double
     private let linesPerDegree:Double

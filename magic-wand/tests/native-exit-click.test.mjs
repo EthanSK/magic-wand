@@ -68,7 +68,7 @@ expect(double.clicks.isEmpty && double.centres==1,"double click cancels the pend
 let triple=make();tap(triple);wait(0.08);tap(triple);wait(0.08);triple.edge(true);triple.edge(false);wait(0.33)
 expect(triple.clicks.isEmpty && triple.centres==0 && triple.screenshots==1,"triple click opens screenshot without any preliminary click")
 let entering=make(false);tap(entering);wait(0.33);expect(entering.clicks.isEmpty,"entering follow never clicks")
-let held=make();held.edge(true);wait(0.26);held.edge(false);wait(0.33);expect(held.clicks.isEmpty && held.pendingMouseExitClick==nil,"held scrolling never queues an exit click")
+let held=make();held.edge(true);wait(0.26);held.edge(false);wait(0.33);expect(!held.dwell.following && held.clicks.isEmpty && held.pendingMouseExitClick==nil,"a quiet hold stops follow without queuing a click")
 let drag=make();tap(drag);wait(0.08);drag.edge(true);wait(0.23);expect(drag.heldScroll.startDrag(now:ProcessInfo.processInfo.systemUptime),"tap-then-hold is an explicit drag");drag.edge(false);wait(0.33)
 expect(drag.clicks.isEmpty && drag.pendingMouseExitClick==nil,"drag release never queues a click")
 for reason in ["next press","pause","disconnect","pointer moved","app changed","screenshot","HUD opens","following again"] {

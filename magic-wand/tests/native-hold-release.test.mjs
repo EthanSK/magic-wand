@@ -119,6 +119,8 @@ for prior in [false,true] {
   let exit=Harness();precondition(exit.motionFilter.configure(config));exit.controlVersion = .sustainedV3
   exit.dwell.follow(prior);exit.restDetection.activated=prior;logged=[]
   exit.beginMouseButtonHold(now:now-1);_=exit.pointerRouter.mouseButton(down:true)
+  for i in 1...20 {_=exit.heldScroll.sample(y:20,dt:0.01,now:now-0.8+Double(i)*0.01)}
+  precondition(exit.heldScroll.hasScrollGesture,"the restoration case includes an actual scroll stroke")
   if rawFirst {exit.handleRaw("10000,0,2680,0")}                      // raw up, then the edge
   else {exit.finishMouseButtonHold(now:now);_=exit.pointerRouter.mouseButton(down:false)} // edge, then raw up
   precondition(exit.frames==0,"the release sample itself never moves or clicks")
@@ -148,12 +150,34 @@ for prior in [false,true] {
  let late=Harness();late.dwell.follow(prior);late.physicalTapDuration=0.207;late.heldScroll.begin(now:100);late.finishMouseButtonHold(now:100.4)
  precondition(late.dwell.following==prior && !late.commands.contains{$0.contains("setMouseFollow")},"a physically short tap is never a completed scroll")
  let longHold=Harness();longHold.dwell.follow(prior);longHold.physicalTapDuration=0.4;longHold.beginMouseButtonHold(now:100);longHold.finishMouseButtonHold(now:100.4)
- precondition(longHold.dwell.following==prior && longHold.commands.contains{$0.contains("setMouseFollow("+(prior ? "true":"false")+")")},"a physically long hold restores prior follow")
+ precondition(!longHold.dwell.following && longHold.queuedExitClicks.isEmpty,"a physically long quiet hold stops follow without clicking")
+ precondition(longHold.commands.contains{$0.contains("setMouseFollow(false)")},"quiet holds leave follow off from either prior state")
  let drag=Harness();drag.dwell.follow(prior);drag.heldScroll.begin(now:100,scrollable:false);_=drag.heldScroll.startDrag(now:100.3);drag.finishMouseButtonHold(now:101)
  precondition(drag.dwell.following==prior && !drag.commands.contains{$0.contains("setMouseFollow")},"native dragging is not a scroll gesture")
  let lost=Harness();lost.dwell.follow(prior);lost.heldScroll.begin(now:100);lost.reconcileMouseButtonHold(down:false,now:101,reason:"timeout",released:false)
  precondition(lost.dwell.following==prior && !lost.commands.contains{$0.contains("setMouseFollow")},"lost telemetry must not activate mouse")
 }
+// Quiet release is independent of edge order. Small unqualified hand noise is
+// not a scroll gesture; a real V3 stroke counts even before one pixel is emitted.
+for version in [WandControlVersion.scrollV2,.sustainedV3] {
+ for rawFirst in [false,true] {
+  let quiet=Harness();quiet.controlVersion=version;quiet.dwell.follow(true)
+  quiet.beginMouseButtonHold(now:now-1,following:true);_=quiet.pointerRouter.mouseButton(down:true)
+  for i in 1...20 {_=quiet.heldScroll.sample(x:0.05,y:-0.05,dt:0.01,now:now-0.8+Double(i)*0.01)}
+  precondition(!quiet.heldScroll.hasScrollGesture,"subthreshold noise must not count as scrolling")
+  if rawFirst {quiet.handleRaw("10000,0,0,0")} else {quiet.finishMouseButtonHold(now:now)}
+  quiet.finishMouseButtonHold(now:now+0.01)
+  precondition(!quiet.dwell.following && quiet.queuedExitClicks.isEmpty && quiet.downs==0,"quiet hold turns follow off without an OS click")
+  precondition(quiet.commands.filter{$0=="global.wandPointerPauseUntil=0;setMouseFollow(false);"}.count==1,"duplicate release changes follow once")
+  precondition(quiet.heldScroll.consumes(buttons:1) && quiet.heldScroll.consumes(buttons:0),"quiet hold consumes the firmware endpoint click")
+ }
+}
+let smallStroke=Harness();smallStroke.controlVersion = .sustainedV3;smallStroke.dwell.follow(true)
+smallStroke.beginMouseButtonHold(now:100,following:true)
+for i in 1...10 {_=smallStroke.heldScroll.sample(y:8,dt:0.01,now:100+Double(i)*0.01)}
+precondition(smallStroke.heldScroll.hasScrollGesture,"a qualified stroke is counted before output rounding")
+smallStroke.finishMouseButtonHold(now:100.4)
+precondition(smallStroke.dwell.following && smallStroke.commands.contains{$0.contains("setMouseFollow(true)")},"actual scrolling restores follow even with no emitted whole pixel")
 // Exit follow queues the short-release click for double/triple recognition. The
 // actual finish method owns both raw-up and edge-up, so duplicate reports are inert.
 for physicalDuration:Double? in [nil,0.12] {
