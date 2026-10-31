@@ -36,7 +36,8 @@ expect(precisePage(pixel) && native.scrollingDeltaX==1 && native.scrollingDeltaY
 expect(pixel.location==CGPoint(x:20,y:30),"pixel builder preserves the anchor")
 
 // A slow qualified page stroke should reach the existing 20 ms output cadence
-// in one/two-pixel increments, instead of waiting ~150 ms for one large line.
+// in small pixel increments, instead of waiting ~150 ms for one large line.
+// Receiver146's requested 1.7 page gain raises this sample to at most three pixels.
 let lines=WandHeldScroll(),pixels=WandHeldScroll();lines.begin(now:0,sustain:true);pixels.begin(now:0,sustain:true)
 var lineValues:[Int32]=[],pixelValues:[Int32]=[]
 for i in 1...100 {
@@ -48,7 +49,7 @@ for i in 1...100 {
  }
 }
 expect(pixelValues.filter{$0 != 0}.count>lineValues.filter{$0 != 0}.count*4,"small page output no longer stalls on whole lines")
-expect(pixelValues.allSatisfy{$0>=1 && $0<=2},"slow page output stays at one/two pixels per existing tick")
+expect(pixelValues.allSatisfy{$0>=1 && $0<=3},"slow page output stays at one to three pixels per existing tick")
 expect(lines.sustained.velocityY==pixels.sustained.velocityY,"pixel precision never changes held speed")
 expect(abs(Double(pixelValues.reduce(0,+))-10*Double(lineValues.reduce(0,+)))<10,"fractional physical travel is preserved within one former line")
 let before=pixels.sustained.velocityY

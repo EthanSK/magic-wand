@@ -3,17 +3,17 @@
   "schemaVersion": 1,
   "name": "Magic Wand",
   "tagline": "Mouse, HUD, scrolling and speech to text from three buttons on a wand.",
-  "summary": "Turning the wand moves my Mac’s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.",
+  "summary": "Turning the wand moves my Mac\u2019s pointer or the Agentic Mouse HUD outline. A Puck.js at the tip reads the rotation and sends it over Bluetooth.",
   "vision": {
-    "headline": "The age of AI doesn’t need a keyboard.",
-    "detail": "The wand is my step toward that. It’s not a mouse replacement: lounge back with the wand and ask Computer Use for most things, ideally by talking through Hello Chat, then reach for your mouse and Agentic Mouse when you need precision. Keep the keyboard for text that has to be typed exactly, which I find is rare."
+    "headline": "The age of AI doesn\u2019t need a keyboard.",
+    "detail": "The wand is my step toward that. It\u2019s not a mouse replacement: lounge back with the wand and ask Computer Use for most things, ideally by talking through Hello Chat, then reach for your mouse and Agentic Mouse when you need precision. Keep the keyboard for text that has to be typed exactly, which I find is rare."
   },
   "updated": "2026-10-31",
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.138",
-    "receiverBuild": "143",
+    "receiver": "1.2.141",
+    "receiverBuild": "146",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.311",
@@ -21,15 +21,16 @@
     "persistentImage": "full-20261025a"
   },
   "status": [
+    "Installed: receiver 1.2.141 build146 increases page-scroll output from1.3x to1.7x, including low speeds. The flick-and-hold curve, timing, horizontal swipe strength, pointer filter and both click behaviors are unchanged. Bluetooth reconnected and focused checks passed; physical sensitivity acceptance is pending.",
     "Receiver1.2.138 build143: page scrolling is30% more sensitive, with the existing gentle low-speed curve, cumulative flicks and1560 output lines/second ceiling. Sideways swipes, pointer motion and stroke timing are unchanged. Physical sensitivity acceptance pending.",
-    "Installed: Agentic Mouse 1.0.310 build 316 adds Brightness to the home HUD’s second layer, between Utility and the unchanged third-layer Zoom. Build 315’s restored dragging is retained. The installed app and rendered layout were checked; physical Brightness use remains unverified.",
+    "Installed: Agentic Mouse 1.0.310 build 316 adds Brightness to the home HUD\u2019s second layer, between Utility and the unchanged third-layer Zoom. Build 315\u2019s restored dragging is retained. The installed app and rendered layout were checked; physical Brightness use remains unverified.",
     "Installed: receiver 1.2.137 build 142 and Agentic Mouse 1.0.309 build 315. Clear sideways flicks can start before the 220 ms hold threshold; ordinary taps, page scrolling and dragging keep their timing, and accepted short swipes stay separate from click shortcuts. No pointer delay was added. Faster Back/Forward and abrupt-stop feel still need physical confirmation.",
     "Installed: Agentic Mouse 1.0.308 build 314 adds built-in left/right window snapping to the Magnet card. Repeating at an occupied screen half moves the window to the neighbouring display. Existing HUD layout and wand controls are retained; standalone snapping apps stay installed. Focused geometry, cancellation and readback checks passed; physical cross-monitor acceptance remains unverified.",
     "Installed: receiver 1.2.136 build 141 and Sense firmware 8. The first wireless update completed, the wand restarted over Bluetooth, and the receiver confirmed firmware 8 with calibration and the update key preserved. Startup and ordinary disconnection pulse white every 275 ms until connection or the existing one-minute dark timeout. Receiver-restart colour cycling and the short sleep warning are unchanged. The first update attempt stopped before authorization; package and key checks now run outside the input thread, with the live connection rechecked before authorization. Interrupted wireless updates can still require USB recovery.",
     "Installed: receiver 1.2.135 build 140 and complete Sense firmware 7. Bluetooth works with USB removed, confirmed by live input and user feedback. Calibration and the update key are preserved. Page scrolling uses fine pixel output, sideways native gestures end at wrist stop, and the approved 300 ms exit-click window preserves double and triple shortcuts. All 247 receiver tests pass. The first wireless firmware transfer and physical acceptance of the latest scrolling remain unverified. The reviewed single-bank bootloader can require USB recovery after an interrupted update.",
     "Receiver140 prepared: verified single-bank updater policy for the actual0.6.1 bootloader, explicit USB-recovery acceptance required. Receiver139 pixel scrolling is installed. Firmware6 is installed but its long Bluetooth identity is truncated; packetized firmware7 repair is being prepared.",
     "Receiver1.2.134 build139 prepared: V3 pages use precise pixel output at the existing20ms cadence for smooth slow scrolling. Native sideways stroke endings and300ms exit-click cancellation are retained. Wireless host prepared; complete Sense6 still needs its first USB installation and hardware verification.",
-    "Receiver1.2.133 build138 prepared: native sideways swipes end on the existing wrist-stop detection; only the exit-follow click waits300ms and double/triple cancel it. Agentic Mouse313 is installed with Utility Select all→Backspace→Copy, higher HUD sensitivity and dragging-direction Spaces. Complete Sense6 firmware and wireless host updater prepared; physical USB/BLE acceptance pending.",
+    "Receiver1.2.133 build138 prepared: native sideways swipes end on the existing wrist-stop detection; only the exit-follow click waits300ms and double/triple cancel it. Agentic Mouse313 is installed with Utility Select all\u2192Backspace\u2192Copy, higher HUD sensitivity and dragging-direction Spaces. Complete Sense6 firmware and wireless host updater prepared; physical USB/BLE acceptance pending.",
     "Prepared, not installed: the Sense wireless application updater has checked USB provisioning, exact-board update requests, bounded handoff, post-update confirmation and explicit result acknowledgement. Host tests use fake Bluetooth; real wireless transfer, interruption recovery and power-cycle acceptance still need hardware checks. Current pointer and scroll controls are unchanged.",
     "Receiver 1.2.132 build137 installed and reconnected over Bluetooth: gentler low-speed page input, retained boost from repeated page flicks, scrolling fallback for custom app surfaces, bounded app/role diagnostics, and immediate exit-follow click. Physical WhatsApp acceptance remains unverified; native horizontal stop-ending is a separate follow-up.",
     "Installed receiver 1.2.131 build 136 restores ordinary wheel events for vertical and diagonal page scrolling and doubles the fast-end maximum to 1,200 lines per second. Pure horizontal held swipes retain native history gestures and the stronger 135 curve. Installed source, resources, settings and Bluetooth readiness were verified. Initial physical feedback reports stronger page scrolling but too much speed at the low end and a drop after repeated flicks; further tuning is in progress.",
@@ -48,7 +49,7 @@
     "Installed receiver 1.2.119 build 124: review circles retain slow motion above the calibrated sensor-noise floor rather than the larger HUD speed floor. Direction and startup-noise checks prevent false turns. Closed-HUD double-click right-click remains installed from build 123. Pointer quiet stopping, smoothing, sensitivity and physical mouse behavior are unchanged. Fresh physical acceptance is pending. All 229 Wand tests and 17 Control Stones checks passed; the installed receiver is ready over Bluetooth with settings and calibration preserved.",
     "Installed receiver 1.2.117 build 122 restores raw input during the initial Bottom-held stroke, before the existing tap/hold decision. Active Bottom scrolling is routed before the HUD-only input filter. An open unheld HUD permits follow-on stop-to-click, while an actively held HUD control owns that gesture. All 228 Wand checks passed; the installed source and executable were verified, and Ethan confirmed both normal held scrolling and HUD-open clicking work. Other gesture acceptance is separate.",
     "Installed receiver 1.2.116 build 121 restores quiet stopping by disabling the newer sub-threshold fine-motion bypass. The existing roughly 8 ms smoothing, speed-based sensitivity, orientation correction, held precision and single-shot click signal are unchanged. Pure-motion regression checks pass; fresh physical stillness acceptance is pending.",
-    "Installed: receiver 1.2.115 build 120 and Agentic Mouse 1.0.303 build 309. Ordinary HUD actions keep the HUD open, so you can select as many times as you want; a double click closes it, and every open page’s centre says “Double click to close”. The wand home ring is grouped: Keys, the app card and Utility at the top, with Back beside Forward. Space moves beyond Enter, New Codex chat sits beyond Utility, and Zoom is a third layer beyond it. Adjustment arrows follow each card’s real direction, including left and right for Spaces. The centre-and-left click added in build 119 is removed. Native and receiver checks pass; physical acceptance is pending.",
+    "Installed: receiver 1.2.115 build 120 and Agentic Mouse 1.0.303 build 309. Ordinary HUD actions keep the HUD open, so you can select as many times as you want; a double click closes it, and every open page\u2019s centre says \u201cDouble click to close\u201d. The wand home ring is grouped: Keys, the app card and Utility at the top, with Back beside Forward. Space moves beyond Enter, New Codex chat sits beyond Utility, and Zoom is a third layer beyond it. Adjustment arrows follow each card\u2019s real direction, including left and right for Spaces. The centre-and-left click added in build 119 is removed. Native and receiver checks pass; physical acceptance is pending.",
     "Installed receiver 1.2.109 build 114 removes circular continuation from Switch App: held app choosing now follows normal horizontal movement and reverses directly. Double-click centring resets the pointer lane and synchronises the centre with queued native input; its focused regression checks pass, while physical centring acceptance remains pending. The receiver reconnected ready over Bluetooth, with settings, calibration, saved Sense firmware and Agent Flow preserved. The larger outer labels are prepared separately in the native HUD update.",
     "Fine-motion bypass superseded by receiver 121: Installed receiver 1.2.108 build 113 and Agentic Mouse 1.0.299 build 305 restore the old click signal, the speed-based aiming curve and coherent tiny movement above about 1 deg/s. Only tiny slow movement uses the approved up-to-60 ms confirmation; normal pointing retains roughly 8 ms smoothing. Short Bottom taps use their physical duration. The wand HUD has related outer actions and the held Switch App exception. Local tests and installed signature, version, settings and process checks passed. The saved Sense firmware and current gain are preserved. The native app's launch safety check has cleared. The receiver is ready over Bluetooth, live HUD and held Switch App lifecycle reports were observed, and Ethan reports the installed wand is working well. This is general physical acceptance, not a claim that every gesture has been tested.",
     "Installed receiver 1.2.106 build 111 restores mouse follow after a completed scroll is released, even if it was off before. Current pointing, scroll detection, button-release safety and menu fixes remain. Full local checks pass; the receiver reconnected ready over Bluetooth with settings preserved. Real user scroll-release events were observed enabling mouse follow again.",
@@ -58,7 +59,7 @@
     "Installed: double-click Middle toggles Review changes and Stage files without staging. The floating indicator names the other mode. A single click cancels and exits after at most 300 ms; holding for half a second still stages the selection and stays in that mode. Pointer movement is unchanged. Receiver, native interaction and timer checks pass; physical button acceptance remains pending.",
     "Installed: triple Bottom starts screenshot selection; the HUD Screenshot action uses one Bottom tap, movement and the existing stop-to-click detector to finish. Double-tap centering waits up to 300 ms to distinguish a third tap. Pointer movement is not buffered. Recording red takes priority over mouse blue, and loading blinks orange. Complete saved bytes and clean startup with calibration passed; physical screenshot acceptance remains pending. Superseded: hold Bottom to select the area and release to capture.",
     "Installed: each circular Wand HUD wedge has its own masked glass backing, clearer text and a gentle selection lift. Gaps and space around the wheel stay transparent. The armed dotted outline moves; Reduce Motion keeps it static. Native rendering and interaction checks passed; physical Copy/Paste acceptance remains pending.",
-    "Installed: the Review changes and Stage files indicators say “Hold to commit selection”. Selection is the current term for the pending group; holding stages it without making a Git commit. Native tests and both rendered indicators passed.",
+    "Installed: the Review changes and Stage files indicators say \u201cHold to commit selection\u201d. Selection is the current term for the pending group; holding stages it without making a Git commit. Native tests and both rendered indicators passed.",
     "Installed: all three grip buttons turn the wand off; any single grip button wakes manual or automatic sleep. The wake press is consumed until every button is released. Five-minute automatic deep sleep and the two-blink cue are unchanged. Saved bytes and clean startup verified; physical any-button wake acceptance pending.",
     "Installed: shared click and hold cues distinguish a card action from held wheel or wand adjustments. Copy/Paste names Space explicitly. Native checks and rendered layout inspection passed; physical gesture acceptance is pending. Superseded on the wand: Space is its own outer card beyond Enter.",
     "Installed: held Switch App adjustment shares the normal HIGH mouse sensitivity calculation, including fine movement and orientation correction. Other HUD controls keep their existing angular input. Native and receiver checks pass; physical feel is awaiting acceptance.",
@@ -82,7 +83,7 @@
     "Held positioning clicks on release and resumes prior high sensitivity after 300 ms. Ethan confirmed the still-hand tolerance feels good.",
     "Ethan confirmed automatic pickup and put-down both work on receiver 1.2.35.",
     "HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.",
-    "End-to-end latency, accuracy and battery life haven’t been measured."
+    "End-to-end latency, accuracy and battery life haven\u2019t been measured."
   ],
   "hardware": {
     "board": "Puck.js v2.1",
@@ -101,7 +102,7 @@
         "Three separate wired momentary buttons"
       ]
     ],
-    "wiring": "Each button connects its pin to GND. The Puck’s internal pull-ups make a press read low."
+    "wiring": "Each button connects its pin to GND. The Puck\u2019s internal pull-ups make a press read low."
   },
   "buttons": [
     {
@@ -126,7 +127,7 @@
         ],
         [
           "Double tap while recording or transcribing",
-          "Won’t paste: copy the text without pasting it"
+          "Won\u2019t paste: copy the text without pasting it"
         ]
       ],
       "notes": [
@@ -194,13 +195,13 @@
       "notes": [
         "The installed wand uses a radial HUD with Switch App in the centre. The browser demo retains its earlier grid.",
         "The browser demo shows the main HUD; native app-specific controls and desk detection need the installed integrations.",
-        "Ordinary actions act once and keep the HUD open on the same card, so you can select as many times as you want. Only a double click, Close or locking the Mac closes it; every open page’s centre says “Double click to close”. Exceptions: Screenshot parks the HUD for its crosshair; a quick tap from closed on Switch App and the held Switch App chooser switch and close; Review changes and Stage files hide the HUD for review. Unheld wand movement moves the outline; click the HUD button to use the outlined wedge. There is no inactivity timeout. The mouse and speech buttons remain independent.",
-        "Adjustable cards are held only: click or release on one to select it (dots), then hold the HUD button and move to adjust it; releasing stops so the wand can reset, and nothing listens while the HUD button is up. Each card’s arrows show its direction: values move up and down; Spaces, Horizontal Scroll, Magnet, tabs, chat and cursor history and Tracks move left and right; Mission Control and similar actions act once per quick held swipe. Tracks keeps its click. Copy/Paste has no click on the wand; Space is its own outer card beyond Enter. Switch App: a tap switches once; in an open HUD a fresh hold on it chooses apps by moving left or right, and release switches.",
-        "The wand home ring is grouped, clockwise from 12: the app card, Utility, Play/Pause, YouTube, Horizontal Scroll, Forward, Back, Enter, Copy/Paste, New Codex chat, Close and Keys. These positions stay the same in every app. Keys puts ← ↑ ↓ → across the top; Utility mirrors home, with Zoom beside Brightness. A second outer layer holds quick actions one reach further out on the same wedge: a thin Undo beyond Keys, Space beyond Enter, and, only while VS Code is frontmost, larger Review changes and Stage files beyond the app card. Zoom is a third layer beyond Utility. On the wand, cell 10 reads Close and never holds Command, cell 5 reads Forward without the mice’s volume chord, and Codex Pin/Unpin has no Hold 2 cue. The physical mice are unchanged.",
+        "Ordinary actions act once and keep the HUD open on the same card, so you can select as many times as you want. Only a double click, Close or locking the Mac closes it; every open page\u2019s centre says \u201cDouble click to close\u201d. Exceptions: Screenshot parks the HUD for its crosshair; a quick tap from closed on Switch App and the held Switch App chooser switch and close; Review changes and Stage files hide the HUD for review. Unheld wand movement moves the outline; click the HUD button to use the outlined wedge. There is no inactivity timeout. The mouse and speech buttons remain independent.",
+        "Adjustable cards are held only: click or release on one to select it (dots), then hold the HUD button and move to adjust it; releasing stops so the wand can reset, and nothing listens while the HUD button is up. Each card\u2019s arrows show its direction: values move up and down; Spaces, Horizontal Scroll, Magnet, tabs, chat and cursor history and Tracks move left and right; Mission Control and similar actions act once per quick held swipe. Tracks keeps its click. Copy/Paste has no click on the wand; Space is its own outer card beyond Enter. Switch App: a tap switches once; in an open HUD a fresh hold on it chooses apps by moving left or right, and release switches.",
+        "The wand home ring is grouped, clockwise from 12: the app card, Utility, Play/Pause, YouTube, Horizontal Scroll, Forward, Back, Enter, Copy/Paste, New Codex chat, Close and Keys. These positions stay the same in every app. Keys puts \u2190 \u2191 \u2193 \u2192 across the top; Utility mirrors home, with Zoom beside Brightness. A second outer layer holds quick actions one reach further out on the same wedge: a thin Undo beyond Keys, Space beyond Enter, and, only while VS Code is frontmost, larger Review changes and Stage files beyond the app card. Zoom is a third layer beyond Utility. On the wand, cell 10 reads Close and never holds Command, cell 5 reads Forward without the mice\u2019s volume chord, and Codex Pin/Unpin has no Hold 2 cue. The physical mice are unchanged.",
         "The mouse, HUD and speech buttons are independent. Mouse follow can keep running while review is selected.",
-        "In VS Code, go out past the app card and tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap the HUD button once to cancel and exit after at most 300 ms, double-click to switch between Review changes and Stage files, retaining the selection and including the current file without staging, or hold it for about half a second to stage the working selection and keep reviewing. Navigation stays frozen until release. The floating indicator says “Hold to stage selection” and names the mode a double-click will enter. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.",
+        "In VS Code, go out past the app card and tap Review changes or Stage files to enter and hide the HUD. Move through a rough quarter-circle or diamond corner: clockwise for one next step, anticlockwise for one previous step, with no button held. A full loop gives four steps; straight up/down flicks are disabled. Tap the HUD button once to cancel and exit after at most 300 ms, double-click to switch between Review changes and Stage files, retaining the selection and including the current file without staging, or hold it for about half a second to stage the working selection and keep reviewing. Navigation stays frozen until release. The floating indicator says \u201cHold to stage selection\u201d and names the mode a double-click will enter. Review changes uses Better Git eyes mode; Stage files uses its whole-file selection.",
         "Review input only runs while VS Code is frontmost. The small review indicator stays above Agent Flow.",
-        "The native wand home HUD has Play/Pause after Utility around the ring. It uses the Mac’s standard media key, without changing either physical mouse."
+        "The native wand home HUD has Play/Pause after Utility around the ring. It uses the Mac\u2019s standard media key, without changing either physical mouse."
       ]
     },
     {
@@ -438,7 +439,7 @@
       "horizontalMaxLinesPerSecond": 3000,
       "horizontalCurveMaxLinesPerSecond": 600,
       "pageLowSpeedGain": 0.5,
-      "sameDirectionPageFlicks": "Each distinct qualified same-direction page flick adds to the held speed, capped at1560 output lines/second; deceleration does not lower it.",
+      "sameDirectionPageFlicks": "Each distinct qualified same-direction page flick adds to the held speed, capped at2040 output lines/second; deceleration does not lower it.",
       "earlyHorizontalIntent": {
         "minimumHorizontalTravelDegrees": 4,
         "strongSampleDegreesPerSecond": 40,
@@ -450,8 +451,8 @@
         "requiresResolvedScrollTarget": true,
         "scope": "V3 clear sideways flicks only. The existing stroke classifier must already be active and purely horizontal, with the target resolved to scrolling. Ordinary taps, vertical and diagonal page scrolling, and dragging keep the 220 ms hold cutoff. Accepted short swipes cannot become clicks on release. No pointer delay is added; physical acceptance is pending."
       },
-      "pageSensitivity": 1.3,
-      "pageOutputMaxLinesPerSecond": 1560
+      "pageSensitivity": 1.7,
+      "pageOutputMaxLinesPerSecond": 2040
     },
     "flickScroll": {
       "default": false,
@@ -519,7 +520,7 @@
     "manualPowerChord": "All three grip buttons turn off; any single button wakes. Release all before another action."
   },
   "hud": {
-    "source": "Agentic Mouse’s published Default mode",
+    "source": "Agentic Mouse\u2019s published Default mode",
     "startCell": 11,
     "cardOverrides": {},
     "navigation": {
@@ -553,7 +554,7 @@
       "name": "Agent Flow",
       "url": "https://ethansk.github.io/AgentFlow/",
       "role": "Records and pastes dictation",
-      "availability": "The public build accepts its mouse controls; wand input isn’t published yet."
+      "availability": "The public build accepts its mouse controls; wand input isn\u2019t published yet."
     },
     {
       "name": "Espruino",
@@ -567,18 +568,18 @@
     "available": [
       {
         "id": 1,
-        "name": "V1 · Pointer",
+        "name": "V1 \u00b7 Pointer",
         "snapshotTag": "controls-v1.0.0"
       },
       {
         "id": 2,
-        "name": "V2 · Hold to scroll",
+        "name": "V2 \u00b7 Hold to scroll",
         "profile": "control-versions/v2.json",
         "snapshotManifest": "control-versions/v2-manifest.json"
       },
       {
         "id": 3,
-        "name": "V3 · Hold to continue scrolling",
+        "name": "V3 \u00b7 Hold to continue scrolling",
         "profile": "control-versions/v3.json"
       }
     ]
