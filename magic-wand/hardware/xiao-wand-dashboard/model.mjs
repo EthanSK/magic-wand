@@ -10,15 +10,19 @@ export const BUTTONS = [
   {key:'index', name:'3', position:'right', control:'Speech button', role:'Recording', pin:'D9', printed:'9', colour:'#f27c88'},
 ];
 export const AXES = ['ax','ay','az','gx','gy','gz'];
+export const MOTION_WINDOW_MS = 2000;
+export const hasSensorAxis = (packet,key) => !!packet.imu && (((packet.imuFlags ?? 3) & (key[0]==='g'?2:1)) !== 0);
 const uint32 = v => Number.isInteger(v) && v >= 0 && v <= 0xffffffff;
 export function validatePacket(value) {
   if (!value || value.schema !== 1 || value.sensor !== 'wand' || !uint32(value.ms) || !uint32(value.seq)) throw Error('Expected a wand-v1 telemetry packet.');
   if (!value.buttons || BUTTONS.some(b => typeof value.buttons[b.key] !== 'boolean')) throw Error('Three explicit button states are required.');
   if (value.imu !== null && (!value.imu || AXES.some(k => typeof value.imu[k] !== 'number' || !Number.isFinite(value.imu[k]) || Math.abs(value.imu[k]) > 10000))) throw Error('Invalid motion reading.');
+  if (value.imuFlags !== undefined && (!Number.isInteger(value.imuFlags) || value.imuFlags<0 || value.imuFlags>3)) throw Error('Invalid motion flags.');
   if (value.presses !== undefined && (!value.presses || BUTTONS.some(b => !uint32(value.presses[b.key])))) throw Error('Invalid press counter.');
   return {schema:1, sensor:'wand', seq:value.seq, ms:value.ms,
     buttons:Object.fromEntries(BUTTONS.map(b => [b.key,value.buttons[b.key]])),
     imu:value.imu === null ? null : Object.fromEntries(AXES.map(k => [k,value.imu[k]])),
+    ...(value.imuFlags !== undefined ? {imuFlags:value.imuFlags} : {}),
     ...(value.presses ? {presses:Object.fromEntries(BUTTONS.map(b => [b.key,value.presses[b.key]]))} : {})};
 }
 // Keep small raw readings visible: the old 30 deg/s minimum flattened normal
@@ -48,7 +52,7 @@ export class LineFramer {
 export class WandState {
   constructor() { this.reset('None'); }
   reset(source) {
-    this.source=source; this.connected=false; this.latest=null; this.received=null; this.latestMotion=null; this.motionReceived=null; this.frames=[]; this.history=[]; this.events=[];
+    this.source=source; this.connected=false; this.latest=null; this.received=null; this.latestMotion=null; this.motionReceived=null; this.latestGyro=null; this.gyroReceived=null; this.latestAccel=null; this.frames=[]; this.history=[]; this.events=[];
     this.total=0; this.invalid=0; this.duplicates=0; this.previous=null; this.counterLast=null;
     this.counts={thumb:0,index:0,middle:0}; this.orientation=[0,0,0]; this.arrivals=[];
   }
@@ -79,14 +83,16 @@ export class WandState {
     } else this.counterLast=null;
     // Button-only heartbeats do not erase the last motion reading. Keep motion
     // freshness separate so the idle sensor cannot flash numbers on and off.
-    if (this.latestMotion && this.motionFresh(now) && p.imu) {
-      const dt=((p.ms-this.latestMotion.ms)>>>0)/1000;
+    if (this.latestGyro && this.gyroReceived!==null && now-this.gyroReceived<1500 && hasSensorAxis(p,'gx')) {
+      const dt=((p.ms-this.latestGyro.ms)>>>0)/1000;
       if (dt>0 && dt<=0.2) ['gx','gy','gz'].forEach((k,i)=>{this.orientation[i]=(this.orientation[i]+p.imu[k]*dt)%360;});
     }
     if (p.imu) { this.latestMotion=p; this.motionReceived=now; }
+    if (hasSensorAxis(p,'gx')) { this.latestGyro=p; this.gyroReceived=now; }
+    if (hasSensorAxis(p,'ax')) this.latestAccel=p;
     this.previous=p; this.latest=p; this.received=now; ++this.total;
     this.frames.push(p); if(this.frames.length>3000)this.frames.shift();
-    this.history.push({now,imu:p.imu}); if(this.history.length>500)this.history.shift();
+    this.history.push({now,imu:p.imu,imuFlags:p.imuFlags}); if(this.history.length>500)this.history.shift();
     this.arrivals.push(now); this.arrivals=this.arrivals.filter(t=>now-t<=2000);
     return true;
   }

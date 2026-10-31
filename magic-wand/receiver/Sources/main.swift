@@ -224,7 +224,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var senseInfo: WandSenseInfo?
     var senseTransport: WandSenseLink.Transport?
     var senseSession=WandSenseSession(),senseClock=WandSenseClock(),senseSessionNumber=0,senseLastReading = -Double.infinity
-    var senseMouseButtonTimer=WandSenseMouseButtonTimer() // Previously senseBottomTimer.
+    var senseMouseButtonTimer=WandSenseMouseButtonTimer()
+    var senseHUDButtonTimer=WandSenseMouseButtonTimer(logicalButton:WandSenseButtons.hudButton) // Previously senseBottomTimer.
     // Wireless Sense updates (WandReceiverSenseUpdate.swift).
     let senseUpdate=WandSenseUpdateSession()
     var stopAfterSenseUpdate = false
@@ -1265,7 +1266,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             // Firmware delays a held HUD-button down edge by 80 ms to arbitrate the scroll
             // chord, so under 140 ms here is a physical tap under 220 ms.
             let now=ProcessInfo.processInfo.systemUptime
-            let tap=now-hudButtonPressedAt<hudHoldSeconds
+            // The virtual program waits 80 ms before its HUD-down marker. Sense
+            // frame time includes that interval; late Mac delivery must not turn
+            // a physical quick tap into a hold. Puck keeps its original clock.
+            let tap=hudButtonPhysicalDuration().map{$0<hudHoldSeconds+0.08} ?? (now-hudButtonPressedAt<hudHoldSeconds)
             hudButtonLastRelease=tap ? now : -100
             if hudActive {
                 hudLastUpdate=Date();controls.persistent("motion",x:navX-navOriginX,y:navY-navOriginY,mouseX:hudButtonMouseOffset)
@@ -1334,7 +1338,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard !restoring,!scrollActive,hudSession else{return}
         // Ethan wants the dotted Switch App outline while the first hold is
         // still down. Qualify the current gesture; release still owns choose.
-        if hudButtonHeld && !hudButtonQualified && ProcessInfo.processInfo.systemUptime-hudButtonPressedAt>=hudHoldSeconds {
+        let physicalHUDDuration=hudButtonPhysicalDuration()
+        let qualifies=physicalHUDDuration.map{$0>=hudHoldSeconds+0.08} ?? (ProcessInfo.processInfo.systemUptime-hudButtonPressedAt>=hudHoldSeconds)
+        if hudButtonHeld && !hudButtonQualified && qualifies {
             hudButtonQualified=true;controls.persistent("qualify")
         }
         // Ethan's mouse-button lane stays independent from the dotted Switch
@@ -1688,7 +1694,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         CGWarpMouseCursorPosition(point)
         settleRecenteredCursor(at:point)
         pointerOrigin.begin(at:point,now:ProcessInfo.processInfo.systemUptime)
-        deliveryPoint=point
+        // Only a receive turn owns deliveryPoint. A timer-driven recenter
+        // must not leave a stale centre for later timer-driven movement.
+        if deliveryPoint != nil {deliveryPoint=point}
         log("POINTER_RECENTER")
     }
     /// One ordinary move to the centre through the same input queue as the

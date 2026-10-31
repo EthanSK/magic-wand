@@ -2024,3 +2024,15 @@ A passing comparison does not establish the cause of a live jump.
 - A synthetic vertical reversal emitted 59 pixels in the previous direction while the existing stroke classifier qualified the new direction. Page scrolling has no native history-swipe phase, so this occurred before macOS gesture handling.
 - Suppress only old-direction page output during a strong opposite input, using the existing stroke speed, end-share and turn-angle bounds. Keep the latched velocity for the established recoil classifier, and advance the tick clock so suppressed output is never replayed.
 - The first guard used only the absolute stroke-speed floor; it disturbed the shaky-hand speed regression. Requiring strength relative to the previous stroke passed the complete V3 suite. Sideways native gesture phases and pointer motion are unaffected. Physical reversal feel still requires user verification.
+
+## Physical tap timing and opening HUD actions (2026-10-31)
+
+- A short physical Sense HUD tap can arrive late on the Mac. Measuring only the host's interval can classify it as a hold. Reuse the Sense button-frame clock for HUD timing as for the mouse button, including the existing 80 ms marker delay; retain the Puck fallback and existing thresholds.
+- A hard opening tap can move the live outline before release. Agentic Mouse owns the eventual quick Switch App action; choose that action explicitly for an opening tap instead of delaying live aiming to protect the initial card. Genuine hold-to-choose still uses the selected card. The no-delay native fixture and physical-clock cases pass; physical feel remains a separate check.
+- A timer-driven recenter must not create a receive-turn cursor origin that outlives its turn. Only update that turn's origin when the turn already owns one; retain the normal cursor-history recenter settling. Test both timer and active receive-turn paths.
+
+## Idle telemetry is not missing gyro data (2026-10-31)
+
+- The Sense can report only acceleration while at rest. Preserve its validity flags instead of plotting zero-filled gyro fields as measurements. Keep the last actual gyro value separately from the current connection state.
+- A fresh connection heartbeat must not flash the motion chart's stale overlay on and off. Advance the chart clock normally; only a stale connection shows the overlay. Two seconds of adaptive-range history makes small current movement visible after an earlier large movement, without altering sensor or pointer input.
+- Native and dashboard fixtures cover timing, validity flags and held readings. A source-only check does not establish physical sensor quality.

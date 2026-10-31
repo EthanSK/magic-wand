@@ -53,6 +53,7 @@ final class Receiver {
     var pointerMotionCutoff = -Double.infinity
     var senseLastReading = -Double.infinity
     var senseMouseButtonTimer = WandSenseMouseButtonTimer()
+    var senseHUDButtonTimer = WandSenseMouseButtonTimer(logicalButton:WandSenseButtons.hudButton)
     func senseUpdateReply(_ reply: WandSenseUpdateReply) {}
     func senseUpdateBattery(millivolts: Int, charging: Bool) {}
 /*SENSE_LINE*/

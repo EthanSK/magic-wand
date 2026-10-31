@@ -12,8 +12,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.172",
-    "receiverBuild": "177",
+    "receiver": "1.2.173",
+    "receiverBuild": "178",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.315",
@@ -22,6 +22,7 @@
     "senseFirmware": 11
   },
   "status": [
+    "Installed receiver1.2.173 build178 uses physical Sense timing for HUD tap classification and keeps timer-based recentering from leaving a stale cursor origin. Live HUD motion remains immediate; pointer filtering, gain, ordinary clicks and firmware11 are unchanged. The debug view preserves idle readings, distinguishes accelerometer-only packets and shows finer motion over a two-second chart. Focused checks and Bluetooth reconnection passed; physical acceptance remains pending.",
     "Installed: receiver 1.2.172 build177 removes native pointer-event combining. Accepted movement is posted separately; cursor-history tracking, recenter cancellation, filtering, gain and click logic are preserved. The debug dashboard shows finer raw values and holds idle readings steady. Physical jump acceptance and the independent review remain pending.",
     "Installed: receiver176 stops old-direction page output during a clear opposite stroke while retaining the existing reversal and recoil classifier. Native sideways gestures, pointer sensitivity, smoothing, click timing and firmware11 are unchanged. The synthetic reversal changed from 59 pixels of wrong-direction output to zero; the full V3 motion suite passed. Installed binary, live Bluetooth and preserved settings were verified. Physical feel remains for review. All 266 Wand, 17 Control Stones and 4 shared checks passed after installation.",
     "Installed: receiver175 discards unsent movement and pending dwell clicks when recentering, changing follow mode, recording, pausing actions or taking and returning screenshot control. Recentring no longer posts an older pending move after the centre warp. Physical button and speech messages remain ordered; current fresh readings still pass. Firmware11, gain, smoothing and ordinary click timing are unchanged. Installed binary, preserved settings and live Bluetooth were verified; 265 Wand, 17 Control Stones and 4 shared checks passed, including the corrected isolated fixture. Physical acceptance remains pending.",

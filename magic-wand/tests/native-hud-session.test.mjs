@@ -45,6 +45,8 @@ final class Trace {var boundaries:[String]=[];func boundary(_ reason:String,mode
 final class Controls {var phases:[String]=[];var points:[CGPoint]=[];func persistent(_ phase:String,x:Double=0,y:Double=0,mouseX:Double?=nil){phases.append(phase);points.append(CGPoint(x:x,y:y))}}
 final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];var modeChanges:[String]=[];var endings:[Bool]=[];var inputs=0;func beginDetents(mode:String,now:Double){starts.append(mode)};func changeMode(_ mode:String,now:Double)->[Int]{modeChanges.append(mode);return[]};func tick(now:Double)->[Int]{[]};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{inputs+=1;return[]};func endDetents(commit:Bool)->[Int]{endings.append(commit);committed=commit;return[]}}
 final class Harness {
+ var physicalHUDDuration:Double?
+ func hudButtonPhysicalDuration()->Double?{physicalHUDDuration}
  func invalidatePointerMotion(){}
  func cancelMouseExitClick(){}
  var scrollFollowBefore=false
@@ -145,6 +147,19 @@ menu.handleHUDButton("1")
 precondition(Array(menu.controls.phases.suffix(2))==["park","navigate"] && menu.hudButtonHeld && menu.hudWatchdog != nil && !menu.controls.phases.dropFirst(waiting).contains("open"),"the next hold steers the page or adjusts the armed card")
 menu.handleNavigation("0,7000");menu.hudButtonPressedAt-=0.3;menu.handleHUDButton("0")
 precondition(menu.controls.phases.last=="choose")
+
+// A hard quick tap may jolt while the HUD opens. It must remain a tap even
+// when the Mac delivers its release late. Native Agentic Mouse selects
+// Switch App for this opening tap; the receiver never delays live aiming.
+let hard=Harness();hard.physicalHUDDuration=0.1
+hard.handleHUDButton("1");hard.context.set(true);hard.hudButtonPressedAt-=1
+hard.handleNavigation("90000,0");hard.handleHUDButton("0")
+precondition(hard.hudButtonTap != nil && !hard.controls.phases.contains("choose"),"physical short tap stays a tap under host lag")
+precondition(hard.controls.points.contains{abs($0.x)>0},"live HUD aiming is not delayed while classifying a tap")
+settle(0.35);precondition(hard.controls.phases.last=="activate")
+let physicalHold=Harness();physicalHold.physicalHUDDuration=0.4
+physicalHold.handleHUDButton("1");physicalHold.context.set(true);physicalHold.handleNavigation("90000,0");physicalHold.handleHUDButton("0")
+precondition(physicalHold.controls.phases.contains("qualify") && physicalHold.controls.phases.last=="choose","real holds still steer and select")
 
 // Ethan (2026-10-30): double-clicking the HUD button from closed "should do
 // the right mouse menu, like right click". He approved the closed-HUD single

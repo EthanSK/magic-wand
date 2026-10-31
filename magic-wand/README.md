@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed receiver1.2.173 build178 uses physical Sense timing for HUD tap classification and keeps timer-based recentering from leaving a stale cursor origin. Live HUD motion remains immediate; pointer filtering, gain, ordinary clicks and firmware11 are unchanged. The debug view preserves idle readings, distinguishes accelerometer-only packets and shows finer motion over a two-second chart. Focused checks and Bluetooth reconnection passed; physical acceptance remains pending.
 - Installed: receiver 1.2.172 build177 removes native pointer-event combining. Accepted movement is posted separately; cursor-history tracking, recenter cancellation, filtering, gain and click logic are preserved. The debug dashboard shows finer raw values and holds idle readings steady. Physical jump acceptance and the independent review remain pending.
 - Installed: receiver176 stops old-direction page output during a clear opposite stroke while retaining the existing reversal and recoil classifier. Native sideways gestures, pointer sensitivity, smoothing, click timing and firmware11 are unchanged. The synthetic reversal changed from 59 pixels of wrong-direction output to zero; the full V3 motion suite passed. Installed binary, live Bluetooth and preserved settings were verified. Physical feel remains for review. All 266 Wand, 17 Control Stones and 4 shared checks passed after installation.
 - Installed: receiver175 discards unsent movement and pending dwell clicks when recentering, changing follow mode, recording, pausing actions or taking and returning screenshot control. Recentring no longer posts an older pending move after the centre warp. Physical button and speech messages remain ordered; current fresh readings still pass. Firmware11, gain, smoothing and ordinary click timing are unchanged. Installed binary, preserved settings and live Bluetooth were verified; 265 Wand, 17 Control Stones and 4 shared checks passed, including the corrected isolated fixture. Physical acceptance remains pending.
@@ -278,7 +279,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.172 (177) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.173 (178) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

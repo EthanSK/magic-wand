@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {WandState,validatePacket,LineFramer,BUTTONS,motionPlotLimit} from '../hardware/xiao-wand-dashboard/model.mjs';
+import {WandState,validatePacket,LineFramer,BUTTONS,motionPlotLimit,MOTION_WINDOW_MS,hasSensorAxis} from '../hardware/xiao-wand-dashboard/model.mjs';
 import {openSerial,openBluetooth,UART_SERVICE,UART_TX} from '../hardware/xiao-wand-dashboard/transports.mjs';
 const packet=(seq=1,ms=20)=>({schema:1,sensor:'wand',seq,ms,buttons:{thumb:false,index:false,middle:false},imu:{ax:0,ay:0,az:1,gx:2,gy:3,gz:4}});
 const setup=()=>{const s=new WandState();s.connect('USB');return s;};
@@ -118,4 +118,14 @@ test('button-only heartbeats keep the last motion display steady without faking 
  assert(s.fresh(1600));assert(!s.motionFresh(1600));assert.equal(s.latestMotion.imu.gx,2);
  s.accept({...packet(5,1640),imu:null},1620);assert(!s.motionFresh(1620));
  s.connect('Bluetooth');assert.equal(s.latestMotion,null);assert.equal(s.motionReceived,null);
+});
+
+test('idle accelerometer packets never invent a gyro measurement or rotation',()=>{
+ const s=setup();s.accept({...packet(1,20),imuFlags:3},0);const before=[...s.orientation];
+ const idle=packet(2,40);idle.imuFlags=1;idle.imu.gx=idle.imu.gy=idle.imu.gz=0;s.accept(idle,20);
+ assert.equal(s.latestGyro.seq,1);assert.equal(s.latestAccel.seq,2);assert.deepEqual(s.orientation,before);
+ assert.equal(s.history.filter(p=>hasSensorAxis(p,'gx')).length,1);
+ assert.equal(s.history.filter(p=>hasSensorAxis(p,'ax')).length,2);
+ assert.equal(MOTION_WINDOW_MS,2000,'a large stroke no longer flattens ten seconds of fine motion');
+ assert.throws(()=>validatePacket({...packet(),imuFlags:4}));
 });

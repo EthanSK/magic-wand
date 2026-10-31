@@ -1,5 +1,5 @@
 // Render raw wand telemetry and controls; display precision never filters pointer input.
-import {BUTTONS, WandState, LineFramer, motionPlotLimit} from './model.mjs';
+import {BUTTONS, WandState, LineFramer, motionPlotLimit, MOTION_WINDOW_MS, hasSensorAxis} from './model.mjs';
 import {openSerial, openBluetooth, UART_SERVICE} from './transports.mjs';
 const $=id=>document.getElementById(id), state=new WandState();
 let owner=null, generation=0, busy=false, demoTimer=null, demoPaused=false, demoSeq=0;
@@ -63,23 +63,24 @@ $('zero').addEventListener('click',()=>{state.zero();state.event('View zeroed ·
 $('export').addEventListener('click',()=>{if(!state.frames.length)return;const text=state.frames.map(p=>JSON.stringify(p)).join('\n')+'\n',url=URL.createObjectURL(new Blob([text],{type:'application/x-ndjson'}));const a=document.createElement('a');a.href=url;a.download=`Magic_Wand_Sense_${state.source}_${new Date().toISOString().replace(/[:.]/g,'-')}.jsonl`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 function plot(id,keys,now,fresh){
   const canvas=$(id),c=canvas.getContext('2d'),w=canvas.width,h=canvas.height;c.clearRect(0,0,w,h);
-  const rows=state.history.filter(p=>p.imu&&now-p.now<=10000),max=motionPlotLimit(rows,keys);
+  const rows=state.history.filter(p=>hasSensorAxis(p,keys[0])&&now-p.now<=MOTION_WINDOW_MS),max=motionPlotLimit(rows,keys);
   const left=52,right=w-12,top=22,bottom=h-24;
   c.font='17px system-ui';c.fillStyle='#9baeb9';c.strokeStyle='#34434e';c.lineWidth=1;
   for(const n of [-1,0,1]){const y=top+(bottom-top)*(1-n)/2;c.beginPath();c.moveTo(left,y);c.lineTo(right,y);c.stroke();c.fillText((max*n).toFixed(max<10?1:0),3,y+5);}
-  ['#ef9296','#9bd7b8','#8bbdf1'].forEach((colour,i)=>{c.strokeStyle=colour;c.lineWidth=3;c.beginPath();let previous=null;for(const row of rows){const x=right-(now-row.now)/10000*(right-left),y=(top+bottom)/2-row.imu[keys[i]]/max*(bottom-top)/2;if(previous===null||row.now-previous>300)c.moveTo(x,y);else c.lineTo(x,y);previous=row.now;}c.stroke();});
+  ['#ef9296','#9bd7b8','#8bbdf1'].forEach((colour,i)=>{c.strokeStyle=colour;c.lineWidth=3;c.beginPath();let previous=null;for(const row of rows){const x=right-(now-row.now)/MOTION_WINDOW_MS*(right-left),y=(top+bottom)/2-row.imu[keys[i]]/max*(bottom-top)/2;if(previous===null||row.now-previous>300)c.moveTo(x,y);else c.lineTo(x,y);previous=row.now;}c.stroke();});
   if(!fresh){c.fillStyle='#cad6dc';c.font='19px system-ui';c.textAlign='center';c.fillText(state.latest?'Last readings · no fresh data':'Waiting for motion readings',(left+right)/2,h/2-14);c.textAlign='left';}
 }
 function render(){
-  const now=performance.now(),fresh=state.fresh(now),motion=state.latestMotion?.imu;
-  const motionFresh=state.motionFresh(now),plotNow=state.motionReceived===null?now:Math.min(now,state.motionReceived+1500);
+  const now=performance.now(),fresh=state.fresh(now);
+
   document.body.classList.toggle('stale',!fresh);
   $('source').textContent=state.connected?`${state.source}${state.source==='Demo'?' · simulated':fresh?' · live':' · waiting'}`:'Not connected';$('source').className=`pill ${state.connected?(state.source==='Demo'?'demo':fresh?'live':''):''}`;
   $('freshness').textContent=fresh?`${Math.round(now-state.received)} ms since last packet`:state.connected?(state.latest?'No recent readings':'Waiting for a wand packet'):'Waiting for a data source';
   for(const b of BUTTONS){const card=document.querySelector(`[data-key="${b.key}"]`),pressed=fresh?state.latest.buttons[b.key]:null;card.classList.toggle('pressed',pressed===true);card.querySelector('[data-state]').textContent=pressed===null?'Unknown':pressed?'Pressed':'Released';card.querySelector('[data-level]').textContent=pressed===null?'No current reading':pressed?'LOW · joined to GND':'HIGH · pull-up';const count=localMode&&state.latest?.presses?state.latest.presses[b.key]:state.counts[b.key];card.querySelector('[data-count]').textContent=count;card.querySelector('[data-count]').parentElement.lastChild.textContent=count===1?' press':' presses';}
-  for(const [id,keys] of [['gyro-values',['gx','gy','gz']],['accel-values',['ax','ay','az']]])document.querySelectorAll(`#${id} b`).forEach((el,i)=>el.textContent=motion?motion[keys[i]].toFixed(3):'—');
+  for(const [id,keys] of [['gyro-values',['gx','gy','gz']],['accel-values',['ax','ay','az']]])document.querySelectorAll(`#${id} b`).forEach((el,i)=>el.textContent=(id==='gyro-values'?state.latestGyro:state.latestAccel)?.imu[keys[i]]?.toFixed(3)??'—');
   if(fresh){const [x,y,z]=state.orientation;$('wand').style.transform=`rotateX(${x}deg) rotateY(${y}deg) rotateZ(${-z}deg)`;$('angles').textContent=`X ${x.toFixed(2)}° · Y ${y.toFixed(2)}° · Z ${z.toFixed(2)}°`;}else{$('angles').textContent='X —° · Y —° · Z —°';}
-  plot('gyro-chart',['gx','gy','gz'],plotNow,motionFresh);plot('accel-chart',['ax','ay','az'],plotNow,motionFresh);
+  plot('gyro-chart',['gx','gy','gz'],now,fresh);plot('accel-chart',['ax','ay','az'],now,fresh);
+  $('gyro-note').textContent=hasSensorAxis(state.latest??{},'gx')?`Raw gyro readings · last ${MOTION_WINDOW_MS/1000} seconds`:'Last readings · no fresh data';
   $('packets').textContent=`${state.total} packets`;$('rate').textContent=fresh?`${state.rate(now).toFixed(1)} packets/s`:'—';$('rejected').textContent=`${state.invalid} / ${state.duplicates}`;$('export').disabled=!state.frames.length;
   const key=JSON.stringify(state.events);if(key!==eventKey){eventKey=key;const list=$('events');list.replaceChildren();if(!state.events.length){const li=document.createElement('li');li.textContent='No button changes received.';list.append(li);}for(const e of state.events){const li=document.createElement('li'),text=document.createElement('span'),time=document.createElement('time');text.textContent=e.text;time.textContent=`${(e.now/1000).toFixed(1)} s`;li.append(text,time);list.append(li);}}
 }

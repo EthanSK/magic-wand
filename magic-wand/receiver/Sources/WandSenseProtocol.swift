@@ -335,13 +335,24 @@ struct WandSenseSession {
 struct WandSenseMouseButtonTimer {
     private(set) var downAt: Double?, upAt: Double?
     private var held = false
-    mutating func reset() { self = WandSenseMouseButtonTimer() }
+    private var lastAt: Double?
+    private let logicalButton: Int
+    // The same physical clock serves the HUD button too; the old type name is
+    // retained for the mouse callers. No threshold or delivery delay is added.
+    init(logicalButton: Int = WandSenseButtons.mouseButton) { self.logicalButton = logicalButton }
+    mutating func reset() { self = Self(logicalButton: logicalButton) }
     mutating func note(mask: Int, at time: Double, synthetic: Bool = false) {
-        let down = mask & WandSenseButtons.mouseButton != 0
+        lastAt = time
+        let down = mask & logicalButton != 0
         if synthetic && down { downAt = time; upAt = time; held = false; return }
         if down && !held { downAt = time; upAt = nil }
         if !down && held { upAt = time }
         held = down
+    }
+    /// Device time through the latest frame, including a completed release.
+    var currentPressDuration: Double? {
+        guard let downAt, let end = held ? lastAt : upAt, end >= downAt else { return nil }
+        return end - downAt
     }
     /// The last completed press's physical duration, or nil while held or unknown.
     var lastPressDuration: Double? {

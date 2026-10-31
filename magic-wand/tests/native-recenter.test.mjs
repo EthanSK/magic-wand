@@ -55,11 +55,13 @@ for mode in ["off","mouse","hud","scroll","vsCode","drag"] {
  // Ethan's triple-click shares these clicks: centre once its window passes.
  precondition(warped == .zero && h.pendingRecenter != nil && h.dwell.following == (mode=="mouse"),"no centre before the third-press window "+mode)
  RunLoop.main.run(until:Date().addingTimeInterval(WandTripleClick.window+0.03))
- precondition(h.pendingRecenter==nil && warped==CGPoint(x:700,y:200) && h.deliveryPoint==warped,mode)
+ precondition(h.pendingRecenter==nil && warped==CGPoint(x:700,y:200) && h.deliveryPoint==nil,mode)
  precondition(h.dwell.following && !h.pointerRouter.mouseButtonHeld && h.buttons==0,mode)
  precondition(h.hud==(mode=="hud") && !h.scroll && h.appMode==(mode=="vsCode" ? "vsCode":nil) && h.restDetection.activated,mode)
  precondition(h.recenterSuppressButtons && h.commands.last!.contains("setMouseFollow(true)"))
 }
+let inTurn=Harness();inTurn.deliveryPoint = .zero;inTurn.recenterPointer()
+precondition(inTurn.deliveryPoint==warped,"a live receive turn continues from the new centre")
 let hold=Harness();_=hold.recognizeMouseButtonRecenter(down:true,now:2);_=hold.recognizeMouseButtonRecenter(down:false,now:2.08);_=hold.recognizeMouseButtonRecenter(down:true,now:2.18)
 precondition(!hold.recognizeMouseButtonRecenter(down:false,now:2.6),"long second press remains a hold")
 precondition(hold.pendingRecenter==nil)

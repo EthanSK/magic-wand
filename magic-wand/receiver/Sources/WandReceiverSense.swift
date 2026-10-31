@@ -45,7 +45,7 @@ extension WandReceiver {
             log("SENSE_PROGRAM_UNAVAILABLE"); senseLink?.drop("program unavailable"); return
         }
         senseSessionNumber += 1
-        senseInfo = info; senseTransport = transport; senseSession.reset(); senseClock.reset(); senseLastReading = -.infinity; senseStaleReadings = 0; senseMouseButtonTimer.reset()
+        senseInfo = info; senseTransport = transport; senseSession.reset(); senseClock.reset(); senseLastReading = -.infinity; senseStaleReadings = 0; senseMouseButtonTimer.reset(); senseHUDButtonTimer.reset()
         senseUpdateIdentity(info, transport)
         restDetection = WandRestDetection(cache: support.appendingPathComponent("desk-reference-sense-\(info.id).json"))
         virtual.onText = { [weak self, weak virtual] text in
@@ -89,7 +89,7 @@ extension WandReceiver {
         guard senseVirtual != nil || senseTransport != nil else { return }
         reset()
         senseVirtual?.teardown(); senseVirtual = nil
-        senseInfo = nil; senseTransport = nil; senseSession.reset(); senseClock.reset(); senseMouseButtonTimer.reset()
+        senseInfo = nil; senseTransport = nil; senseSession.reset(); senseClock.reset(); senseMouseButtonTimer.reset(); senseHUDButtonTimer.reset()
         senseDashboard.status(["type": "status", "state": "searching", "session": senseSessionNumber])
         status()
     }
@@ -99,6 +99,10 @@ extension WandReceiver {
     /// Previously bottomPhysicalTapDuration.
     func mouseButtonPhysicalTapDuration() -> Double? {
         senseTransport == nil ? nil : senseMouseButtonTimer.lastPressDuration
+    }
+
+    func hudButtonPhysicalDuration() -> Double? {
+        senseTransport == nil ? nil : senseHUDButtonTimer.currentPressDuration
     }
 
     func senseLine(_ line: WandSenseLine, _ arrival: Double) {
@@ -149,6 +153,7 @@ extension WandReceiver {
             }
             for step in steps {
                 senseMouseButtonTimer.note(mask: step.mask, at: time, synthetic: step.synthetic)
+                senseHUDButtonTimer.note(mask: step.mask, at: time, synthetic: step.synthetic)
                 if step.synthetic { log("SENSE_SHORT_PRESS_RESTORED"); virtual.deliver(time: time, mask: step.mask, accel: nil, gyro: nil) }
                 else {
                     for at in times.dropLast() { virtual.deliver(time: at, mask: step.mask, accel: accel, gyro: motion(at: at)) }
