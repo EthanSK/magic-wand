@@ -36,8 +36,12 @@ a private request file for the receiver and shows only the state the receiver re
 resume actions; **Resume wand actions** or a receiver restart does. The Data check panel's
 **Pointer filtering** row shows the receiver's actual pointer path, so readings are compared knowingly.
 
-Receiver mode automatically saves recent readings in private `WandReceiver/DebugReadings`
-storage (eight rotating files, up to 8 MiB each). File writing runs off the receive path;
+Receiver mode saves a ten-minute temporary capture in private `WandReceiver/DebugReadings`
+storage (eight rotating files, up to 8 MiB each), then deletes it two hours after capture ends.
+The absolute deadlines survive reconnects and restarts; reading the dashboard does not renew them.
+An explicit `scripts/review_trace.py capture on` starts a new window for both temporary
+recorders. Keep deliberately saved, labelled references outside these temporary directories.
+File writing and deadline maintenance run off the receive path;
 queue drops and write errors are reported by `/api/wand` under `capture`. `--no-record`
 disables this temporary diagnostic history; `--record-dir` chooses its private destination.
 It records sensor readings, button states and receiver mode/posted-pointer counters, never

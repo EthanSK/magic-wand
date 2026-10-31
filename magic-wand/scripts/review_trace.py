@@ -11,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from paths import ROOT, REPOSITORY, DOCS
@@ -56,28 +57,46 @@ def main() -> None:
     if args.command == "capture":
         path = args.support.expanduser() / "review-trace.json"
         if args.state == "status":
+            value = {}
             try:
                 info = path.lstat()
                 if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o022 or info.st_size > 1024:
                     raise ValueError("Untrusted diagnostic configuration")
                 value = json.loads(path.read_text())
-                enabled = value.get("enabled") is True
-            except (OSError, ValueError):
+                if not isinstance(value, dict): raise ValueError("Invalid capture configuration")
+                enabled = value.get("enabled") is True and time.time() < value.get("captureUntil", 0)
+            except (OSError, ValueError, TypeError):
                 enabled = False
-            print(json.dumps({"enabled": enabled, "configuration": str(path)}))
+            print(json.dumps({"enabled": enabled, "configuration": str(path), "captureUntil": value.get("captureUntil") if enabled else None}))
             return
         path.parent.mkdir(parents=True, exist_ok=True)
-        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=path.parent, prefix=".review-trace-", delete=False) as f:
-            temporary = Path(f.name)
-            try:
-                os.chmod(temporary, 0o600)
-                json.dump({"enabled": args.state == "on"}, f)
-                f.write("\n"); f.flush()
-                os.fsync(f.fileno())
-            except BaseException:
-                temporary.unlink(missing_ok=True)
-                raise
-        os.replace(temporary, path)
+        end = time.time() + 600
+        # The same explicit window controls both existing recorders. Merely
+        # reading a dashboard or restarting a receiver does not renew it.
+        for target in (path, path.parent / "DebugReadings/capture-window.json"):
+            target.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+            info = target.parent.lstat()
+            if not stat.S_ISDIR(info.st_mode) or info.st_uid != os.getuid() or info.st_mode & 0o022:
+                raise ValueError("Untrusted capture directory")
+            with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=target.parent, prefix=".capture-", delete=False) as f:
+                temporary = Path(f.name)
+                try:
+                    os.chmod(temporary, 0o600)
+                    value = {"enabled": args.state == "on"}
+                    if args.state == "on":
+                        value.update(captureUntil=end, deleteAfter=end + 7200)
+                    else:
+                        try:
+                            old = json.loads(target.read_text())
+                            value.update({k: old[k] for k in ("captureUntil", "deleteAfter") if k in old})
+                        except (OSError, ValueError): pass
+                    json.dump(value, f)
+                    f.write("\n"); f.flush()
+                    os.fsync(f.fileno())
+                except BaseException:
+                    temporary.unlink(missing_ok=True)
+                    raise
+            os.replace(temporary, target)
         print(f"Review capture {args.state}. The running receiver reads the switch without a restart.")
         return
     if sys.platform != "darwin":

@@ -61,22 +61,70 @@ class RollingReadings:
     history and explicit pointer-post counters, so still/unused time is never
     mislabeled as a mouse test. No screen, audio, text or app titles are captured.
     """
-    def __init__(self,path,max_bytes=8*1024*1024,backups=7):
+    def __init__(self,path,max_bytes=8*1024*1024,backups=7,clock=time.time,capture_seconds=600,retention_seconds=7200):
+        backups=max(0,min(31,backups))
         path=Path(path);path.mkdir(parents=True,exist_ok=True,mode=0o700)
+        if path.is_symlink() or path.stat().st_uid!=os.geteuid() or path.stat().st_mode&0o077:
+            raise ValueError('Private recording directory required')
+        self.path=path;self.clock=clock;self.purged=False
         self.queue=queue.Queue(maxsize=1024);self.dropped=0;self.error=False
-        self.handler=PrivateReadingsHandler(path/'readings.jsonl',maxBytes=max_bytes,backupCount=backups,encoding='utf-8')
+        self.capture_until=0;self.delete_after=0;self.capture_enabled=False;self.next_check=0
+        # Persist wall-clock deadlines. Reopening the dashboard or reconnecting
+        # the wand must never grant an expired capture another ten minutes.
+        state=path/'capture-window.json';self.state=state
+        try:
+            if not state.exists():
+                now=clock();data=json.dumps({'captureUntil':now+capture_seconds,'deleteAfter':now+capture_seconds+retention_seconds})
+                fd=os.open(state,os.O_CREAT|os.O_EXCL|os.O_WRONLY|os.O_NOFOLLOW,0o600)
+                with os.fdopen(fd,'w') as f:f.write(data)
+            self.reload_window()
+        except (OSError,ValueError,KeyError,TypeError):self.error=True
+        self.handler=PrivateReadingsHandler(path/'readings.jsonl',maxBytes=max_bytes,backupCount=backups,encoding='utf-8',delay=True)
+        self.maximum_bytes=max_bytes*(backups+1)
         self.thread=threading.Thread(target=self.run,daemon=True);self.thread.start()
+    @property
+    def enabled(self):return self.capture_enabled and not self.error and self.clock()<self.capture_until
+    @property
+    def status(self):return dict(enabled=self.enabled,dropped=self.dropped,error=self.error or self.handler.failed,captureUntil=self.capture_until,deleteAfter=self.delete_after,maximumBytes=self.maximum_bytes)
     def record(self,row):
+        if not self.enabled:return
         value={k:v for k,v in row.items() if k!='received'}
-        value.update(poll=row['received'],age_ms=0,wallTime=time.time(),captureDrops=self.dropped)
+        value.update(poll=row['received'],age_ms=0,wallTime=self.clock(),captureDrops=self.dropped)
         try:self.queue.put_nowait(value)
         except queue.Full:self.dropped+=1
+    def reload_window(self):
+        info=self.state.lstat()
+        if not stat.S_ISREG(info.st_mode) or info.st_uid!=os.geteuid() or info.st_mode&0o077 or info.st_size>1024:raise ValueError('Untrusted recording deadline')
+        value=json.loads(self.state.read_text());end=value['captureUntil'];delete=value['deleteAfter']
+        if not all(type(x) in (int,float) and math.isfinite(x) for x in (end,delete)) or delete<end:raise ValueError('Invalid recording deadline')
+        if (end,delete)!=(self.capture_until,self.delete_after):self.purged=False
+        self.capture_until=end;self.delete_after=delete;self.capture_enabled=value.get('enabled',True) is True
+    def maintain(self):
+        if self.clock()>=self.next_check:
+            self.next_check=self.clock()+1
+            try:self.reload_window()
+            except (OSError,ValueError,KeyError,TypeError):self.capture_enabled=False
+        if self.purged or self.error or self.clock()<self.delete_after:return
+        self.handler.close()
+        # Only this recorder's fixed filenames are eligible. Never traverse or
+        # remove saved reference folders, symlinks, or unrelated diagnostics.
+        for index in range(32):
+            p=self.path/('readings.jsonl' if index==0 else f'readings.jsonl.{index}')
+            try:
+                info=p.lstat()
+                if stat.S_ISREG(info.st_mode) and info.st_uid==os.geteuid():p.unlink()
+            except FileNotFoundError:pass
+        self.purged=True
     def run(self):
         while True:
-            value=self.queue.get()
+            try:self.maintain()
+            except OSError:self.error=True
+            try:value=self.queue.get(timeout=1)
+            except queue.Empty:continue
             try:
                 if value is None:return
-                self.handler.emit(logging.LogRecord('wand-readings',logging.INFO,'',0,json.dumps(value,allow_nan=False,separators=(',',':')),(),None))
+                if not self.purged and value['wallTime']<self.capture_until and self.clock()<self.delete_after:
+                    self.handler.emit(logging.LogRecord('wand-readings',logging.INFO,'',0,json.dumps(value,allow_nan=False,separators=(',',':')),(),None))
             except Exception:self.error=True
             finally:self.queue.task_done()
     def close(self):
@@ -110,7 +158,7 @@ class Store:
             selected=rows[-1:] if after<0 else [r for r in rows if r['id']>after]
             age=(now-rows[-1]['received'])*1000 if rows and rows[-1]['session']==self.session else None
             live=self.status=='live' and age is not None and age<1500
-            return {'bridge':'wand-local-v1','status':'live' if live else 'stale' if self.status=='live' else self.status,'message':self.message if live or self.status!='live' else 'No recent wand readings','transport':self.transport,'usb_present':self.usb_present,'bluetooth':self.bluetooth,'session':self.session,'cursor':self.cursor,'age_ms':age,'capture':{'enabled':self.recorder is not None,'dropped':self.recorder.dropped if self.recorder else 0,'error':bool(self.recorder and (self.recorder.error or self.recorder.handler.failed))},'packets':[{k:v for k,v in r.items() if k!='received'}|{'age_ms':max(0,(now-r['received'])*1000)} for r in selected]}
+            return {'bridge':'wand-local-v1','status':'live' if live else 'stale' if self.status=='live' else self.status,'message':self.message if live or self.status!='live' else 'No recent wand readings','transport':self.transport,'usb_present':self.usb_present,'bluetooth':self.bluetooth,'session':self.session,'cursor':self.cursor,'age_ms':age,'capture':self.recorder.status if self.recorder else {'enabled':False,'dropped':0,'error':False},'packets':[{k:v for k,v in r.items() if k!='received'}|{'age_ms':max(0,(now-r['received'])*1000)} for r in selected]}
 
 class Framer:
     def __init__(self,receive):self.buffer=bytearray();self.receive=receive;self.dropping=False

@@ -5,7 +5,7 @@ import Darwin
 /// The input callback only copies numbers into a bounded buffer. Configuration,
 /// JSON encoding, rotation and disk access run on the utility queue, never there.
 final class WandReviewTrace {
-    private struct Configuration: Decodable { let enabled: Bool }
+    private struct Configuration: Decodable { let enabled: Bool; let captureUntil: Double?; let deleteAfter: Double? }
     struct Metrics: Codable {
         var event: String
         var active: Bool
@@ -48,6 +48,8 @@ final class WandReviewTrace {
     private var timer: DispatchSourceTimer?
     private var pending: [Frame] = []
     private var captureEnabled = false
+    private var captureUntil = 0.0, deleteAfter = 0.0
+    private let wallClock: () -> Double
     private var dropped: UInt64 = 0
     private var totalDropped: UInt64 = 0
     private var sequence: UInt64 = 0
@@ -61,8 +63,9 @@ final class WandReviewTrace {
     private var lastConfigurationCheck = -Double.infinity
     private let encoder = JSONEncoder()
 
-    init(directory: URL, configuration: URL, build: String, maximumBytes: Int = 2 * 1024 * 1024, fileCount: Int = 4) {
+    init(directory: URL, configuration: URL, build: String, maximumBytes: Int = 2 * 1024 * 1024, fileCount: Int = 4, wallClock: @escaping () -> Double = { Date().timeIntervalSince1970 }) {
         self.directory = directory; self.configuration = configuration; self.build = build
+        self.wallClock = wallClock
         self.maximumBytes = max(1024, maximumBytes); self.fileCount = max(1, min(8, fileCount))
         pending.reserveCapacity(bufferLimit)
         let timer = DispatchSource.makeTimerSource(queue: queue)
@@ -74,11 +77,12 @@ final class WandReviewTrace {
     var status: [String: Any] {
         lock.lock(); defer { lock.unlock() }
         return ["enabled": captureEnabled, "buffered": pending.count, "dropped": totalDropped,
-                "diskError": diskError, "maximumFiles": fileCount, "maximumFileBytes": maximumBytes]
+                "diskError": diskError, "maximumFiles": fileCount, "maximumFileBytes": maximumBytes,
+                "captureUntil": captureUntil, "deleteAfter": deleteAfter]
     }
     func record(_ frame: Frame) {
         lock.lock(); defer { lock.unlock() }
-        guard captureEnabled else { return }
+        guard captureEnabled, wallClock() < captureUntil else { return }
         guard pending.count < bufferLimit else { dropped += 1; totalDropped += 1; return }
         var frame = frame; sequence += 1; frame.sequence = sequence
         pending.append(frame)
@@ -95,13 +99,23 @@ final class WandReviewTrace {
         guard now - lastConfigurationCheck >= 0.5 else { return nil }
         lastConfigurationCheck = now
         var wanted = false
+        let wall = wallClock()
+        var end = 0.0, deletion = 0.0
         if trusted(configuration, directory: false),
            ((try? configuration.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? Int.max) <= 1024,
            let data = try? Data(contentsOf: configuration),
            let json = try? JSONDecoder().decode(Configuration.self, from: data) {
-            wanted = json.enabled
+            // A persistent deadline is required: the old {enabled:true} switch
+            // must not silently renew indefinite capture after a restart.
+            if let until = json.captureUntil, let after = json.deleteAfter,
+               until.isFinite, after.isFinite, after >= until {
+                end = until; deletion = after
+                wanted = json.enabled && wall < until
+            }
         }
-        lock.lock(); let changed = wanted != captureEnabled; captureEnabled = wanted; lock.unlock()
+        lock.lock(); let changed = wanted != captureEnabled; captureEnabled = wanted
+        captureUntil = end; deleteAfter = deletion; lock.unlock()
+        if deletion > 0 && wall >= deletion { purgeTemporaryFiles() }
         if changed {
             timer?.schedule(deadline: .now() + (wanted ? 0.25 : 1),
                             repeating: wanted ? .milliseconds(250) : .seconds(1), leeway: .milliseconds(50))
@@ -112,6 +126,17 @@ final class WandReviewTrace {
     }
     private func traceURL(_ index: Int) -> URL {
         directory.appendingPathComponent(index == 0 ? "trace.jsonl" : "trace.\(index).jsonl")
+    }
+    private func purgeTemporaryFiles() {
+        try? file?.close(); file = nil; size = 0
+        guard trusted(directory, directory: true) else { return }
+        // Never enumerate or remove reference libraries or neighbouring files.
+        for index in 0..<8 {
+            let path = traceURL(index)
+            guard trusted(path, directory: false) else { continue }
+            do { try FileManager.default.removeItem(at: path) }
+            catch { lock.lock(); diskError = true; lock.unlock() }
+        }
     }
     private func ensureFile() throws {
         if file != nil { return }
@@ -161,10 +186,15 @@ final class WandReviewTrace {
         let batch = pending; pending.removeAll(keepingCapacity: true)
         let lost = dropped; dropped = 0
         lock.unlock()
-        if let change, change.reason == "enabled" { append(change) }
-        for frame in batch { append(frame) }
-        if lost > 0 { append(Frame(kind: "gap", t: now, reason: "capture buffer full", dropped: lost)) }
-        if let change, change.reason == "disabled" { append(change) }
+        // A Mac waking after deletion must not recreate expired files from
+        // its queued pre-sleep frames or from the disabled boundary marker.
+        if deleteAfter > 0 && wallClock() < deleteAfter {
+            if let change, change.reason == "enabled" { append(change) }
+            for frame in batch { append(frame) }
+            if lost > 0 { append(Frame(kind: "gap", t: now, reason: "capture buffer full", dropped: lost)) }
+            if let change, change.reason == "disabled" { append(change) }
+        }
+        if !enabled { try? file?.close(); file = nil }
     }
     /// Used by the isolated diagnostic tests, never by the motion callback.
     func synchronize() { queue.sync { drain(force: true) } }
