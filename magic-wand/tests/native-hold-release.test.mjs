@@ -10,6 +10,7 @@ test('native held scrolling and dragging stop on physical up even without the ed
  const source=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.url),'utf8');
  function method(name){const a=source.indexOf('    func '+name+'(');assert(a>=0,name);let b=source.indexOf('{',a)+1,depth=1;while(depth){if(source[b]==='{')depth++;if(source[b]==='}')depth--;b++;}return source.slice(a,b);}
  const code=`import Foundation
+func precondition(_ condition:@autoclosure ()->Bool,_ message:@autoclosure ()->String = "",line:Int=#line){if !condition(){FileHandle.standardError.write(Data("CHECK \\(line): \\(message())\\n".utf8));exit(1)}}
 func AXIsProcessTrusted()->Bool {true}
 var logged:[String]=[]
 func log(_ v:Any...) {logged.append(v.map{"\\($0)"}.joined(separator:" "))}
@@ -20,9 +21,6 @@ final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
  var tripleClick=WandTripleClick(),pendingRecenter:Timer?
  var scrollFollowBefore=false
- var queuedExitClicks:[CGPoint]=[]
- func cancelMouseExitClick(){}
- func scheduleMouseExitClick(at point:CGPoint){queuedExitClicks.append(point);dwell.follow(false)}
  let context=SwitchAppContext()
  var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
@@ -120,7 +118,8 @@ for prior in [false,true] {
   exit.dwell.follow(prior);exit.restDetection.activated=prior;logged=[]
   exit.beginMouseButtonHold(now:now-1);_=exit.pointerRouter.mouseButton(down:true)
   for i in 1...20 {_=exit.heldScroll.sample(y:20,dt:0.01,now:now-0.8+Double(i)*0.01)}
-  precondition(exit.heldScroll.hasScrollGesture,"the restoration case includes an actual scroll stroke")
+  _=exit.heldScroll.continuation(now:now-0.5,pageUnitsPerLine:WandSustainedScroll.pagePixelsPerLine)
+  precondition(exit.heldScroll.hasScrollGesture,"the restoration case includes actual scroll output")
   if rawFirst {exit.handleRaw("10000,0,2680,0")}                      // raw up, then the edge
   else {exit.finishMouseButtonHold(now:now);_=exit.pointerRouter.mouseButton(down:false)} // edge, then raw up
   precondition(exit.frames==0,"the release sample itself never moves or clicks")
@@ -149,8 +148,8 @@ for prior in [false,true] {
  // it never turns mouse follow back on, so the mouse button can exit mouse mode.
  let late=Harness();late.dwell.follow(prior);late.physicalTapDuration=0.207;late.heldScroll.begin(now:100);late.finishMouseButtonHold(now:100.4)
  precondition(late.dwell.following==prior && !late.commands.contains{$0.contains("setMouseFollow")},"a physically short tap is never a completed scroll")
- let longHold=Harness();longHold.dwell.follow(prior);longHold.physicalTapDuration=0.4;longHold.beginMouseButtonHold(now:100);longHold.finishMouseButtonHold(now:100.4)
- precondition(!longHold.dwell.following && longHold.queuedExitClicks.isEmpty,"a physically long quiet hold stops follow without clicking")
+ let longHold=Harness();longHold.heldScroll.quietStopEnabled=true;longHold.dwell.follow(prior);longHold.physicalTapDuration=0.4;longHold.beginMouseButtonHold(now:100);longHold.finishMouseButtonHold(now:100.4)
+ precondition(!longHold.dwell.following,"a physically long quiet hold stops follow without clicking")
  precondition(longHold.commands.contains{$0.contains("setMouseFollow(false)")},"quiet holds leave follow off from either prior state")
  let drag=Harness();drag.dwell.follow(prior);drag.heldScroll.begin(now:100,scrollable:false);_=drag.heldScroll.startDrag(now:100.3);drag.finishMouseButtonHold(now:101)
  precondition(drag.dwell.following==prior && !drag.commands.contains{$0.contains("setMouseFollow")},"native dragging is not a scroll gesture")
@@ -161,45 +160,45 @@ for prior in [false,true] {
 // not a scroll gesture; a real V3 stroke counts even before one pixel is emitted.
 for version in [WandControlVersion.scrollV2,.sustainedV3] {
  for rawFirst in [false,true] {
-  let quiet=Harness();quiet.controlVersion=version;quiet.dwell.follow(true)
+  let quiet=Harness();quiet.heldScroll.quietStopEnabled=true;quiet.controlVersion=version;quiet.dwell.follow(true)
   quiet.beginMouseButtonHold(now:now-1,following:true);_=quiet.pointerRouter.mouseButton(down:true)
   for i in 1...20 {_=quiet.heldScroll.sample(x:0.05,y:-0.05,dt:0.01,now:now-0.8+Double(i)*0.01)}
   precondition(!quiet.heldScroll.hasScrollGesture,"subthreshold noise must not count as scrolling")
   if rawFirst {quiet.handleRaw("10000,0,0,0")} else {quiet.finishMouseButtonHold(now:now)}
   quiet.finishMouseButtonHold(now:now+0.01)
-  precondition(!quiet.dwell.following && quiet.queuedExitClicks.isEmpty && quiet.downs==0,"quiet hold turns follow off without an OS click")
+  precondition(!quiet.dwell.following && quiet.downs==0,"quiet hold turns follow off without an OS click")
   precondition(quiet.commands.filter{$0=="global.wandPointerPauseUntil=0;setMouseFollow(false);"}.count==1,"duplicate release changes follow once")
   precondition(quiet.heldScroll.consumes(buttons:1) && quiet.heldScroll.consumes(buttons:0),"quiet hold consumes the firmware endpoint click")
  }
 }
-let smallStroke=Harness();smallStroke.controlVersion = .sustainedV3;smallStroke.dwell.follow(true)
+let smallStroke=Harness();smallStroke.heldScroll.quietStopEnabled=true;smallStroke.controlVersion = .sustainedV3;smallStroke.dwell.follow(true)
 smallStroke.beginMouseButtonHold(now:100,following:true)
 for i in 1...10 {_=smallStroke.heldScroll.sample(y:8,dt:0.01,now:100+Double(i)*0.01)}
 precondition(smallStroke.heldScroll.hasScrollGesture,"a qualified stroke is counted before output rounding")
 smallStroke.finishMouseButtonHold(now:100.4)
 precondition(smallStroke.dwell.following && smallStroke.commands.contains{$0.contains("setMouseFollow(true)")},"actual scrolling restores follow even with no emitted whole pixel")
-// Exit follow queues the short-release click for double/triple recognition. The
+// Exiting follow sends no click; double/triple recognition stays independent. The
 // actual finish method owns both raw-up and edge-up, so duplicate reports are inert.
 for physicalDuration:Double? in [nil,0.12] {
  let click=Harness();click.dwell.follow(true);click.beginMouseButtonHold(now:100,following:true)
  click.heldScrollAnchor=CGPoint(x:800,y:600)
  click.physicalTapDuration=physicalDuration
  click.finishMouseButtonHold(now:physicalDuration == nil ? 100.12:100.4)
- precondition(click.queuedExitClicks.count==1 && click.downs==0 && click.buttons==0 && !click.dwell.following,"short exit release queues a click and immediately stops follow")
- precondition(click.queuedExitClicks==[.zero],"exit click captures the release pointer, not the old press anchor")
+ precondition(click.downs==0 && click.buttons==0 && !click.dwell.following,"short exit release stops follow without clicking")
+ precondition(click.downs==0,"no exit click is scheduled at the press or release point")
  click.finishMouseButtonHold(now:100.5);click.reconcileMouseButtonHold(down:false,now:100.6,reason:"duplicate")
- precondition(click.queuedExitClicks.count==1,"raw/edge duplicate release cannot queue twice")
+ precondition(click.downs==0,"raw/edge duplicate release cannot queue twice")
 }
 let enter=Harness();enter.beginMouseButtonHold(now:100,following:false);enter.finishMouseButtonHold(now:100.12)
-precondition(enter.downs==0 && enter.queuedExitClicks.isEmpty,"entering follow does not click")
+precondition(enter.downs==0 && enter.downs==0,"entering follow does not click")
 let cancelledClick=Harness();cancelledClick.beginMouseButtonHold(now:100,following:true);cancelledClick.finishMouseButtonHold(now:100.12,released:false)
-precondition(cancelledClick.downs==0 && cancelledClick.queuedExitClicks.isEmpty,"cancellation does not click")
+precondition(cancelledClick.downs==0 && cancelledClick.downs==0,"cancellation does not click")
 let heldClick=Harness();heldClick.beginMouseButtonHold(now:100,following:true);heldClick.finishMouseButtonHold(now:101)
-precondition(heldClick.downs==0 && heldClick.queuedExitClicks.isEmpty,"a scroll hold does not click")
+precondition(heldClick.downs==0 && heldClick.downs==0,"a scroll hold does not click")
 let draggingClick=Harness();draggingClick.beginMouseButtonHold(now:100,following:true)
 _=draggingClick.heldScroll.setTarget(scrollable:false,now:100.01);_=draggingClick.heldScroll.startDrag(now:100.3)
 draggingClick.physicalTapDuration=0.1;draggingClick.finishMouseButtonHold(now:100.4)
-precondition(draggingClick.downs==0 && draggingClick.queuedExitClicks.isEmpty,"even a delayed short-duration report cannot click after native dragging")
+precondition(draggingClick.downs==0 && draggingClick.downs==0,"even a delayed short-duration report cannot click after native dragging")
 
 for horizontal in [false,true] {
  let axis=Harness();precondition(axis.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
@@ -238,5 +237,5 @@ precondition(!quietLog.heldScroll.active && !logged.contains{$0.hasPrefix("V3_SC
 print("PASS: missing release, native drag release, stale telemetry and scroll-to-mouse from both prior states")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-release-'));
- try {writeFileSync(join(dir,'main.swift'),code);const built=spawnSync('swiftc',[wandSourcePath(new URL('../receiver/Sources/WandRunLoop.swift',import.meta.url)),'-O',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(built.status,0,built.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,run.stdout+run.stderr);}finally{rmSync(dir,{recursive:true,force:true});}
+ try {writeFileSync(join(dir,'main.swift'),code);const built=spawnSync('swiftc',[wandSourcePath(new URL('../receiver/Sources/WandRunLoop.swift',import.meta.url)),'-O',new URL('../receiver/Sources/WandActionPause.swift',import.meta.url).pathname,new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url).pathname,join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});assert.equal(built.status,0,built.stderr);const run=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(run.status,0,JSON.stringify({signal:run.signal,error:run.error,stdout:run.stdout,stderr:run.stderr}));}finally{rmSync(dir,{recursive:true,force:true});}
 });

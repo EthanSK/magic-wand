@@ -69,8 +69,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Tap from off | Enter high-sensitivity follow without clicking |
 | Stop after moving in HIGH | Click once after a 200 ms pause |
 | While choosing where to click | Keep moving the wand slightly while you are not certain about placement so it does not click. Stop when you are ready. The pointer must still be moving; tiny movements filtered out as hand noise do not prevent a click. |
-| Tap while following | Stop following and click after the double/triple-click window |
-| Hold without scrolling while following | Turn off follow without clicking on release |
+| Tap while following | Stop following without clicking |
 | Hold | Over a scroll area, drag to scroll. Holding still continues page scrolling; sideways swipes end when the stroke stops. A confirmed draggable target drags instead. Release stops the gesture. |
 | Tap, then hold the second press | Drag with the mouse button down; release to drop |
 | Double tap | Centre the pointer on the main screen and enable mouse follow after the 300 ms triple-tap window; keep HUD and review selection unchanged |
@@ -190,9 +189,10 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver1.2.147 build152 restores plain tap-to-exit without a click. Automatic stillness clicking remains enabled. The earlier quiet long-hold stop is retained only behind the disabled quietMouseHold flag; the withdrawn early-stop and dark-light additions have been removed. Scroll sensitivity, double/triple shortcuts and ordinary pointer timing are unchanged. Bluetooth, saved firmware8 and the disabled flag were verified. All250 Wand,17 Control Stones and4 shared checks passed, including legacy Puck storage. Physical feel remains for user review.
 - Installed: receiver1.2.145 build150 adds dim/bright Sense mode-light feedback and the bounded eight-second RGB demo. The demo ran once and restored normal status in the same Bluetooth session. Receiver147 scroll/click behavior, calibration and saved firmware8 are preserved. Physical light preference remains unverified.
 - Installed: Agentic Mouse1.0.314 build320 fixes the wand-home YouTube rewind and Forward guards, and keeps incoming movement from shortening the selection spring. Build318 Zoom placement and screenshot-window recovery remain. The1,248 native tests pass; Ethan confirmed wand YouTube rewind now works. Physical animation preference remains open.
-- Installed: receiver1.2.142 build147 adds a long mouse-button hold begun in follow mode, without a scroll gesture, to stop follow on release without clicking. Existing taps, scrolling, dragging and screenshot shortcuts remain unchanged. Bluetooth reconnected; local checks pass. Physical quiet-hold acceptance is pending.
+- Superseded by receiver152: Installed: receiver1.2.142 build147 adds a long mouse-button hold begun in follow mode, without a scroll gesture, to stop follow on release without clicking. Existing taps, scrolling, dragging and screenshot shortcuts remain unchanged. Bluetooth reconnected; local checks pass. Physical quiet-hold acceptance is pending.
 - Installed: receiver 1.2.141 build146 increases page-scroll output from1.3x to1.7x, including low speeds. The flick-and-hold curve, timing, horizontal swipe strength, pointer filter and both click behaviors are unchanged. Bluetooth reconnected and focused checks passed; physical sensitivity acceptance is pending.
 - Receiver1.2.138 build143: page scrolling is30% more sensitive, with the existing gentle low-speed curve, cumulative flicks and1560 output lines/second ceiling. Sideways swipes, pointer motion and stroke timing are unchanged. Physical sensitivity acceptance pending.
 - Installed: Agentic Mouse 1.0.310 build 316 adds Brightness to the home HUD’s second layer, between Utility and the unchanged third-layer Zoom. Build 315’s restored dragging is retained. The installed app and rendered layout were checked; physical Brightness use remains unverified.
@@ -257,7 +257,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.145 (150) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.147 (152) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

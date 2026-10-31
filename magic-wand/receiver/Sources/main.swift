@@ -81,8 +81,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // first two clicks; that recentre now waits out the third press's window.
     var tripleClick=WandTripleClick()
     var pendingRecenter:Timer?
-    // Only the short exit-follow click waits for the existing double/triple window.
-    var pendingMouseExitClick:Timer?,mouseExitClickToken=UUID()
+    // Preserve the pre-gesture follow choice across screenshot triple-clicks.
     var clickFollowChoice:(following:Bool,paused:Bool,restore:Bool?,rest:WandRestFollowMemory)?
     // Screenshot mode: temporary pointer and mouse-button ownership while the native
     // selection is active. It never changes the ordinary follow choice.
@@ -359,7 +358,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         queue("setWandRecording("+(recording.isRecording ? "true":"false")+");")
     }
     func recordingChanged(_ active:Bool) {
-        cancelMouseExitClick()
         // A recording transition is newer than a possible screenshot triple's
         // first-click snapshot. Apply it to that snapshot too, so undoing the
         // first two taps cannot undo a recording pause or its later restoration.
@@ -422,6 +420,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if flickScrollEnabled != flick {if flickScroll.active {setCircleLight(false);motionFilter.reset()};flickScrollEnabled=flick;flickScroll.reset();flickAnchor=nil}
         flickMenuItem?.state=flick ? .on : .off
         heldScrollDiagnostics=options.enabled("heldScrollDiagnostics")
+        heldScroll.quietStopEnabled=options.enabled("quietMouseHold")
         rotationMenuItem?.state=enabled ? .on : .off
         // Sense only: the direct pointer is the default; "sensePointer":"tuned"
         // returns to the Puck filter. A Puck always keeps the tuned filter.
@@ -533,7 +532,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func status() {
         connectionMenuItem?.title=ready ? (actionPause.paused ? "Connected · Wand actions paused" : "Connected") : "Connecting…"
         let traceState=reviewTrace.status
-        let key = "\(isSense)|\(senseTransport?.rawValue ?? "")|\(deviceConnected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(deskSleep.sleeping)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(reviewAxisEnabled)|\(motionFilter.orientationCompensation)|\(traceState["enabled"] ?? false)|\(traceState["diskError"] ?? false)|\(actionPause.paused)|\(actionPause.lastRequest ?? "")|\(motionFilter.path.rawValue)"
+        let key = "\(isSense)|\(senseTransport?.rawValue ?? "")|\(deviceConnected)|\(ready)|\(AXIsProcessTrusted())|\(CBCentralManager.authorization.rawValue)|\(recording.isRecording)|\(lightMode)|\(deskSleep.sleeping)|\(controlVersion.rawValue)|\(flickScrollEnabled)|\(heldScroll.quietStopEnabled)|\(reviewAxisEnabled)|\(motionFilter.orientationCompensation)|\(traceState["enabled"] ?? false)|\(traceState["diskError"] ?? false)|\(actionPause.paused)|\(actionPause.lastRequest ?? "")|\(motionFilter.path.rawValue)"
         // The update result can change while every ordinary connection field
         // stays the same. Derive the write key from the exact published value.
         let firmwareStatus: [String: Any] = isSense ? senseUpdateStatus : [:]
@@ -544,7 +543,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         var value: [String: Any] = ["pid": ProcessInfo.processInfo.processIdentifier, "connected": deviceConnected,
             "device": isSense ? "sense" : "puck", "transport": senseTransport?.rawValue ?? (device?.state == .connected ? "Bluetooth" : ""),
             "motionSensor": isSense ? (senseInfo?.motion ?? false) : true,
-            "ready": ready, "options":["controlVersion":controlVersion.rawValue,"flickScroll":flickScrollEnabled,"reviewAxisGestures":reviewAxisEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording,"deskSleeping":deskSleep.sleeping, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
+            "ready": ready, "options":["controlVersion":controlVersion.rawValue,"flickScroll":flickScrollEnabled,"quietMouseHold":heldScroll.quietStopEnabled,"reviewAxisGestures":reviewAxisEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording,"deskSleeping":deskSleep.sleeping, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
             "reviewTrace":traceState,
             // The debug pause's actual state; the dashboard only displays this.
             "actionsPaused":actionPause.paused,
@@ -634,7 +633,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func reset() {
-        cancelMouseExitClick()
         powerPolicyReady=false;loadingPowerPolicy=false;batteryRequested=Date.distantPast
         reviewTrace.boundary("receiver reset",mode:wandShortcutMode)
         reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset();hudButtonReviewExit=false
@@ -851,7 +849,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                         manualPointerDuringRecording()
                     }
                     // Finish the physical release before double-click recognition consumes it.
-                    // The exit click waits for that recognition; follow stops immediately.
+                    // Exiting follow never clicks; stillness clicking is independent.
                     if controlVersion.usesHeldScroll && value=="0" {finishMouseButtonHold(now:ProcessInfo.processInfo.systemUptime)}
                     if recognizeMouseButtonRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
                     if controlVersion.usesHeldScroll && !scrollActive {
@@ -996,7 +994,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// HIGH motion even with mouse follow off. `setMouseFollow` here only
     /// clears the wand's mouse-button gesture; `follow` is the unchanged choice.
     func takeScreenshotPointer(follow:String) {
-        cancelMouseExitClick()
         pendingRecenter?.invalidate();pendingRecenter=nil;tripleClick.cancel();recenterGesture.cancel()
         cancelCircleScroll();finishMouseButtonHold(now:ProcessInfo.processInfo.systemUptime,released:false)
         performPointer(pointerRouter.cancelAll());if buttons != 0 {releaseButtons()}
@@ -1008,7 +1005,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// outright; otherwise watch for Ethan's triple-click shortcut.
     /// Previously screenshotBottom.
     func screenshotMouseButton(down:Bool,now:Double)->Bool {
-        if down {cancelMouseExitClick()}
         switch screenshot.mouseButton(down:down) {
         case .consumed: tripleClick.cancel();return true
         case .press: tripleClick.cancel();latchScreenshotIfReady();return true
@@ -1026,11 +1022,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         return false
     }
     /// Ethan's mouse-button triple-click: start the ordinary native macOS selection.
-    /// All three presses are consumed, cancelling any pending exit click and centre.
+    /// All three presses are consumed, cancelling the pending centre.
     /// The follow choice is restored. A fresh mouse-button press then drags the
     /// area like a mouse button and its release captures.
     func startScreenshotShortcut(now:Double) {
-        cancelMouseExitClick()
         pendingRecenter?.invalidate();pendingRecenter=nil
         // Undo the first two clicks' follow and recording-override effects.
         if let choice=clickFollowChoice {
@@ -1121,7 +1116,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard !restoring,!scrollActive,AXIsProcessTrusted() else{return}
         switch payload.trimmingCharacters(in:.whitespaces){
         case "1":
-            cancelMouseExitClick()
             let now=ProcessInfo.processInfo.systemUptime;hudButtonPressedAt=now
             // A new press proves any earlier release happened, even if its
             // edge never arrived (2026-10-29: a double click's lost release
@@ -1332,7 +1326,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard !restoring,!scrollActive,hudSession,AXIsProcessTrusted() else{return}
         let f=payload.split(separator:",",omittingEmptySubsequences:false)
         guard f.count==3,let rawX=Double(f[1]),let rawY=Double(f[2]),rawX.isFinite,rawY.isFinite,abs(rawX)<=7_200_000,abs(rawY)<=7_200_000 else{return}
-        if f[0]=="B" {cancelMouseExitClick();legacyHUDStream.reset()}
+        if f[0]=="B" {legacyHUDStream.reset()}
         let point=legacyHUDStream.update(x:rawX,y:rawY,using:motionFilter)
         let x=point.x,y=point.y
         switch f[0] {
@@ -1407,7 +1401,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// unknown answer keeps scrolling. Tap-then-hold is always a native drag.
     /// Previously beginBottomHold.
     func beginMouseButtonHold(now:Double,following:Bool?=nil) {
-        cancelMouseExitClick()
         scrollFollowBefore=following ?? dwell.following
         finishNativeScroll(cancelled:true)
         heldScrollAnchor=deliveryPoint ?? currentPointerOrigin()
@@ -1548,7 +1541,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// A clear short sideways stroke owns this press, including its later up.
     /// Clear all tap recognizers now, before any physical-release ordering.
     func consumeEarlyHorizontalIntent(now:Double) {
-        cancelMouseExitClick();recenterGesture.cancel();tripleClick.cancel()
+        recenterGesture.cancel();tripleClick.cancel()
         pendingRecenter?.invalidate();pendingRecenter=nil
         log("HORIZONTAL_INTENT", "ms", Int(heldScroll.elapsed(now:now)*1000), "reason", "clear stroke")
     }
@@ -1615,9 +1608,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// screenshot anchor. No pointer motion is buffered or replayed meanwhile.
     /// Previously recognizeBottomRecenter.
     func recognizeMouseButtonRecenter(down:Bool,now:Double)->Bool {
-        if down {cancelMouseExitClick();recenterSuppressButtons=false}
+        if down {recenterSuppressButtons=false}
         guard recenterGesture.edge(down:down,now:now) else{return false}
-        cancelMouseExitClick()
         pendingRecenter?.invalidate()
         pendingRecenter=WandRunLoop.commonTimer(interval:WandTripleClick.window,repeats:false){[weak self] _ in
             guard let self else{return};self.pendingRecenter=nil;self.recenterPointer()
@@ -1626,7 +1618,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     /// Recenter only the mouse-button pointer lane; preserve the HUD button's HUD/review and speech.
     func recenterPointer() {
-        cancelMouseExitClick()
         guard ready,!restoring,!actionPause.paused,!screenshot.ownsPointer,AXIsProcessTrusted() else{return}
         cancelCircleScroll();finishScroll();performPointer(pointerRouter.cancelAll());releaseButtons();motionFilter.reset()
         recenterSuppressButtons=true
@@ -1664,7 +1655,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         } else if !active {circleTimer?.invalidate();circleTimer=nil}
     }
     /// Scroll chord, HUD and speech take over: drop unshown LOW motion and any circle.
-    func cancelCircleScroll(){cancelMouseExitClick();if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? currentPointerOrigin())};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;finishNativeScroll(cancelled:true);heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
+    func cancelCircleScroll(){if heldScroll.dragging {transition(to:0,at:deliveryPoint ?? currentPointerOrigin())};heldSafetyTimer?.invalidate();heldSafetyTimer=nil;finishNativeScroll(cancelled:true);heldScroll.reset();heldScrollAnchor=nil;flickScroll.reset();flickAnchor=nil;dwell.reset();scheduleDwell();performPointer(pointerRouter.interrupt());setCircleLight(false)}
     // Ethan: Review changes = eyes mode; Stage files = whole-file "bang" selection.
     // Keep the existing Better Git URI lifecycle; only the gesture source changes.
     func setWandShortcut(_ mode:String?) {
@@ -1893,10 +1884,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         performPointer(routed.actions)
     }
     /// `released`: the physical release, as opposed to lost telemetry or a
-    /// screenshot taking over. A scroll restores prior follow; a quiet long hold exits it.
+    /// screenshot taking over. A scroll restores prior follow; the optional quiet hold exits it.
     /// Previously finishBottomHold.
     func finishMouseButtonHold(now:Double,released:Bool=true) {
-        if !released {cancelMouseExitClick()}
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldTargetToken=UUID()
         // Ethan: dragging is only while holding the mouse button. Release an orphaned
         // native down too, even if another path already cleared the hold.
@@ -1915,19 +1905,20 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let physicalTap=(physicalDuration.map{$0<heldScroll.holdSeconds} ?? false) && !earlyHorizontal
         if physicalTap {log("BOTTOM_PHYSICAL_TAP",Int((physicalDuration ?? 0)*1000))}
         let completedScroll=heldScroll.scrollable && !heldScroll.dragging && (heldScroll.qualified(now:now) || earlyHorizontal) && !physicalTap
-        // Ethan (2026-10-31): stop follow now, but wait up to the existing
-        // 300 ms double/triple window before clicking. Either gesture cancels it.
-        // Physical duration wins when Bluetooth delivery is late; held scrolling,
-        // dragging, entering follow and duplicate/cancelled releases never click.
+        // Ethan reversed the click-to-exit experiment: a short exit tap stops
+        // follow without clicking. Stillness clicking stays in the dwell lane.
+        // Physical duration wins when Bluetooth delivery is late; double/triple
+        // taps retain their existing centring/screenshot behaviour.
         let shortRelease=physicalDuration.map{$0>=0 && $0<heldScroll.holdSeconds} ?? (heldScroll.elapsed(now:now)>=0 && !heldScroll.qualified(now:now))
         // Ethan: "long press ... don't do a scroll gesture ... turns off follow
         // mode without sending the click". Reuse the existing hold threshold and
         // physical timestamps: no new delay, and late delivery cannot turn a tap
         // into a quiet hold. Native dragging and lost telemetry keep their rules.
-        let stopWithoutClick=released && !shortRelease && scrollFollowBefore && !heldScroll.hasScrollGesture && !heldScroll.dragging && !scrollActive
-        let exitClick=released && shortRelease && !earlyHorizontal && scrollFollowBefore && !heldScroll.dragging && !scrollActive
-        if exitClick && ready && !restoring && !actionPause.paused && !screenshot.ownsPointer && AXIsProcessTrusted() {
-            scheduleMouseExitClick(at:currentPointerOrigin())
+        let stopWithoutClick=heldScroll.quietStopEnabled && released && !shortRelease && scrollFollowBefore && !heldScroll.hasScrollGesture && !heldScroll.dragging && !scrollActive
+        let exitFollow=released && shortRelease && !earlyHorizontal && scrollFollowBefore && !heldScroll.dragging && !scrollActive
+        if exitFollow && ready && !restoring && !actionPause.paused && !screenshot.ownsPointer && AXIsProcessTrusted() {
+            dwell.follow(false);restDetection.pointerStopped();scheduleDwell()
+            log("MOUSE_EXIT_WITHOUT_CLICK")
         }
         // A delayed short tap is not an accepted scroll. Cancel its native
         // phase so an app cannot commit history navigation on that release.
@@ -1942,38 +1933,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if heldScroll.end(now:now) {queue("global.wandPointerPauseUntil=0;")}
         heldScrollAnchor=nil;setCircleLight(false)
         if stopWithoutClick && ready && !restoring && !actionPause.paused && !screenshot.ownsPointer {
-            cancelMouseExitClick()
             dwell.follow(false);restDetection.pointerStopped();scheduleDwell()
             queue("global.wandPointerPauseUntil=0;setMouseFollow(false);")
             log("MOUSE_HOLD_STOP_WITHOUT_CLICK")
         } else if completedScroll && released {restoreMouseAfterScroll()}
-    }
-    /// The only delayed ordinary click. Keep its release point and reject it
-    /// after a new action, pointer movement, app switch or overdue run-loop wake.
-    /// This never delays follow-off, pointing, dragging or scrolling.
-    func scheduleMouseExitClick(at point:CGPoint) {
-        cancelMouseExitClick()
-        dwell.follow(false);restDetection.pointerStopped();scheduleDwell()
-        guard let app=mouseExitClickContext() else{return}
-        let token=mouseExitClickToken,started=ProcessInfo.processInfo.systemUptime,hudWasOpen=hudSession
-        pendingMouseExitClick=WandRunLoop.commonTimer(interval:WandTripleClick.window,repeats:false){[weak self] _ in
-            guard let self,self.mouseExitClickToken==token else{return}
-            self.pendingMouseExitClick=nil
-            // A late timer is dropped, never replayed after the Mac was busy.
-            guard ProcessInfo.processInfo.systemUptime-started<=WandTripleClick.window+0.1,
-                  self.ready,!self.restoring,!self.actionPause.paused,!self.screenshot.ownsPointer,
-                  !self.heldScroll.active,!self.scrollActive,!self.pointerRouter.mouseButtonHeld,
-                  self.hudSession==hudWasOpen,!self.hudButtonHeld,!self.hudEntryPress,!self.pointerInHUD,
-                  !self.dwell.following,self.mouseExitClickContext()==app,AXIsProcessTrusted() else{return}
-            let current=self.currentPointerOrigin(),tolerance=WandPointerOrigin.tolerance
-            guard abs(current.x-point.x)<=tolerance,abs(current.y-point.y)<=tolerance else{return}
-            self.transition(to:1,at:point);self.transition(to:0,at:point)
-            log("MOUSE_EXIT_CLICK")
-        }
-    }
-    func mouseExitClickContext()->String? {NSWorkspace.shared.frontmostApplication?.bundleIdentifier}
-    func cancelMouseExitClick() {
-        pendingMouseExitClick?.invalidate();pendingMouseExitClick=nil;mouseExitClickToken=UUID()
     }
     /// Previously reconcileBottomHold.
     func reconcileMouseButtonHold(down:Bool,now:Double,reason:String,released:Bool=true) {
@@ -2186,7 +2149,6 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func releaseButtons() { transition(to: 0, at: currentPointerOrigin()) }
     func stop() {
-        cancelMouseExitClick()
         sendReview(review.cancel());reviewTimer?.invalidate();reviewTimer=nil
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil;probeTimer?.invalidate();probeTimer=nil
         pendingRecenter?.invalidate();pendingRecenter=nil;endScreenshot(reason:"receiver stopped",contextActive:false,forgetPress:true)
