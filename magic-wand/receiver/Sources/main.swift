@@ -1545,10 +1545,21 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         event.setIntegerValueField(.scrollWheelEventMomentumPhase,value:0)
         return event
     }
+    /// A clear short sideways stroke owns this press, including its later up.
+    /// Clear all tap recognizers now, before any physical-release ordering.
+    func consumeEarlyHorizontalIntent(now:Double) {
+        cancelMouseExitClick();recenterGesture.cancel();tripleClick.cancel()
+        pendingRecenter?.invalidate();pendingRecenter=nil
+        log("HORIZONTAL_INTENT", "ms", Int(heldScroll.elapsed(now:now)*1000), "reason", "clear stroke")
+    }
     /// A completed sideways stroke hands its native gesture back to the app
     /// immediately. The held button may then start a fresh deliberate stroke.
     func finishHorizontalStrokeIfNeeded() {
         guard let boundary=heldScroll.sustained.takeHorizontalBoundary() else{return}
+        if heldScroll.earlyHorizontal {
+            log("HORIZONTAL_INTENT_END", "ms", Int(heldScroll.elapsed(now:ProcessInfo.processInfo.systemUptime)*1000),
+                "reason", boundary == .cancelled ? "turn or interruption":"stroke ended")
+        }
         finishNativeScroll(cancelled:boundary == .cancelled)
     }
     func postNativeScroll(x:Int32,y:Int32,at point:CGPoint?) {
@@ -1900,20 +1911,24 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // looked long because its release arrived late never counts as a
         // completed scroll, so it cannot turn mouse follow back on.
         let physicalDuration=released ? mouseButtonPhysicalTapDuration() : nil
-        let physicalTap=physicalDuration.map{$0<heldScroll.holdSeconds} ?? false
+        let earlyHorizontal=heldScroll.earlyHorizontal
+        let physicalTap=(physicalDuration.map{$0<heldScroll.holdSeconds} ?? false) && !earlyHorizontal
         if physicalTap {log("BOTTOM_PHYSICAL_TAP",Int((physicalDuration ?? 0)*1000))}
-        let completedScroll=heldScroll.scrollable && !heldScroll.dragging && heldScroll.qualified(now:now) && !physicalTap
+        let completedScroll=heldScroll.scrollable && !heldScroll.dragging && (heldScroll.qualified(now:now) || earlyHorizontal) && !physicalTap
         // Ethan (2026-10-31): stop follow now, but wait up to the existing
         // 300 ms double/triple window before clicking. Either gesture cancels it.
         // Physical duration wins when Bluetooth delivery is late; held scrolling,
         // dragging, entering follow and duplicate/cancelled releases never click.
         let shortRelease=physicalDuration.map{$0>=0 && $0<heldScroll.holdSeconds} ?? (heldScroll.elapsed(now:now)>=0 && !heldScroll.qualified(now:now))
-        let exitClick=released && shortRelease && scrollFollowBefore && !heldScroll.dragging && !scrollActive
+        let exitClick=released && shortRelease && !earlyHorizontal && scrollFollowBefore && !heldScroll.dragging && !scrollActive
         if exitClick && ready && !restoring && !actionPause.paused && !screenshot.ownsPointer && AXIsProcessTrusted() {
             scheduleMouseExitClick(at:currentPointerOrigin())
         }
         // A delayed short tap is not an accepted scroll. Cancel its native
         // phase so an app cannot commit history navigation on that release.
+        if earlyHorizontal {
+            log("HORIZONTAL_INTENT_RELEASE", "ms", Int(heldScroll.elapsed(now:now)*1000), "reason", released ? "release":"cancelled")
+        }
         finishNativeScroll(cancelled:!released || !completedScroll)
         if heldScrollDiagnostics && heldScroll.sustaining && completedScroll {
             log("V3_SCROLL_HOLD",heldScroll.sustained.report(seconds:heldScroll.elapsed(now:now),ended:released ? "release":"lost"))
@@ -2006,7 +2021,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             dwell.reset();scheduleDwell()
             heldScroll.settleTarget(now:now)
             if heldScroll.scrollable {
+                let hadEarlyIntent=heldScroll.earlyHorizontal
                 let lines=heldScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now)
+                if !hadEarlyIntent && heldScroll.earlyHorizontal {consumeEarlyHorizontalIntent(now:now)}
                 finishHorizontalStrokeIfNeeded()
                 if lines != 0 {
                     setCircleLight(true)

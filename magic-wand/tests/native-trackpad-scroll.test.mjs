@@ -51,7 +51,7 @@ test('page scrolls use line wheel events; only sideways held output owns a nativ
  const start=source.indexOf('struct WandNativeScrollGesture {'),end=source.indexOf('\nfinal class WandReceiver',start);
  // Record instead of posting: this harness never sends real input. wheelEvents is the
  // receiver's own ordinary line-event builder, unchanged since before native gestures.
- const methods=['postHeldScroll','postNativeScroll','finishNativeScroll','postScroll','finishScroll','finishMouseButtonHold','finishHorizontalStrokeIfNeeded'].map(method).join('\n')
+ const methods=['postHeldScroll','postNativeScroll','finishNativeScroll','postScroll','finishScroll','finishMouseButtonHold','finishHorizontalStrokeIfNeeded','consumeEarlyHorizontalIntent'].map(method).join('\n')
   .replaceAll('event.post(tap:.cghidEventTap)','posted.append(event)');
  const wheel=block(source.indexOf('    static func wheelEvents('));
  assert.ok(/startDrag\(now:now\) \{finishNativeScroll\(cancelled:true\);transition\(to:1,/.test(source),'drag start cancels the open scroll gesture first');
@@ -69,6 +69,8 @@ func log(_ v:Any...) {}
 ${source.slice(start,end)}
 struct PauseStub {var paused=false}
 final class Harness {
+ var tripleClick=WandTripleClick(),pendingRecenter:Timer?
+ let recenterGesture=WandRecenterGesture()
  var scrollFollowBefore=false,ready=true,restoring=false
  let dwell=WandDwellClick()
  var queuedExitClicks:[CGPoint]=[]
@@ -93,7 +95,9 @@ ${wheel}
  ${methods}
  func sample(x:Double,y:Double=0,now:Double) {
   heldScroll.confirmHeld(now:now)
+  let before=heldScroll.earlyHorizontal
   _=heldScroll.sample(x:x,y:y,dt:0.01,now:now)
+  if !before && heldScroll.earlyHorizontal {consumeEarlyHorizontalIntent(now:now)}
   finishHorizontalStrokeIfNeeded()
  }
  func tick(now:Double) {
@@ -210,6 +214,58 @@ for y in [80.0,60.0] {
  let count=page.posted.count
  for i in 71...90 {let t=Double(i)*0.01;page.sample(x:0,y:0,now:t);page.tick(now:t)}
  expect(page.posted.count>count && !page.nativeScroll.active,"page output continues while still, with line events")
+}
+
+// 12. A clear short sideways flick earns output before 220 ms and consumes
+// its press, including the receiver's exit click and double/triple recognizers.
+for sign in [-1.0,1.0] {
+ let h=Harness();h.scrollFollowBefore=true;h.physicalDuration=0.18;h.heldScroll.begin(now:0,sustain:true)
+ _=h.recenterGesture.edge(down:true,now:0);_=h.tripleClick.edge(down:true,now:0)
+ for i in 6...15 {let t=Double(i)/100;h.sample(x:120*sign,now:t);h.tick(now:t)}
+ expect(h.heldScroll.earlyHorizontal && h.nativeScroll.active,"clear horizontal earns early output")
+ expect(h.tripleClick.edge(down:false,now:0.18) == .none,"consumed release cannot join triple click")
+ h.finishMouseButtonHold(now:0.18)
+ expect(!h.recenterGesture.edge(down:false,now:0.18),"consumed release cannot join double click")
+ expect(h.queuedExitClicks.isEmpty && h.mouseOn==1,"short swipe preserves scroll follow restoration without exit click")
+ expect(h.kinds().last == .native(.ended,x:0),"accepted short swipe ends instead of cancels")
+ expect(h.heldScroll.consumes(buttons:1) && h.heldScroll.consumes(buttons:0),"firmware endpoint click consumed")
+ expect(!h.heldScroll.consumes(buttons:1),"next ordinary click remains independent")
+ h.heldScroll.begin(now:0.3,sustain:true)
+ expect(!h.heldScroll.earlyHorizontal,"fresh hold resets early intent")
+ _=h.recenterGesture.edge(down:true,now:0.3);_=h.tripleClick.edge(down:true,now:0.3)
+ h.physicalDuration=0.1;h.finishMouseButtonHold(now:0.4)
+ expect(h.queuedExitClicks.count==1,"ordinary tap retains exit click")
+ expect(!h.recenterGesture.edge(down:false,now:0.4),"fresh first tap is not a double")
+ _=h.recenterGesture.edge(down:true,now:0.5)
+ expect(h.recenterGesture.isSecondPress && h.recenterGesture.edge(down:false,now:0.6),"fresh ordinary double tap works")
+}
+let earlyLost=Harness();earlyLost.heldScroll.begin(now:0,sustain:true)
+for i in 6...15 {let t=Double(i)/100;earlyLost.sample(x:120,now:t);earlyLost.tick(now:t)}
+earlyLost.finishMouseButtonHold(now:0.18,released:false)
+expect(earlyLost.kinds().last == .native(.cancelled,x:0) && earlyLost.mouseOn==0 && earlyLost.queuedExitClicks.isEmpty,"lost early gesture cancels without restoring follow")
+for (scrollable,resolving) in [(false,false),(true,true)] {
+ let h=WandHeldScroll();h.begin(now:0,scrollable:scrollable,sustain:true,resolving:resolving)
+ for i in 5..<20 {let t=Double(i)/100;h.confirmHeld(now:t);_=h.sample(x:150,y:0,dt:0.01,now:t)
+  expect(!h.earlyHorizontal && h.continuation(now:t).x==0,"pending target and explicit drag never fast qualify")}
+}
+let pending=WandHeldScroll();pending.begin(now:0,sustain:true,resolving:true)
+for i in 5..<12 {_=pending.sample(x:150,y:0,dt:0.01,now:Double(i)/100)}
+expect(pending.setTarget(scrollable:false,now:0.12) && !pending.earlyHorizontal,"early samples cannot steal pending drag target")
+expect(!pending.startDrag(now:0.15) && pending.startDrag(now:0.23),"ordinary drag keeps hold timing")
+
+let negatives:[(String,(Double)->(Double,Double))]=[
+ ("quiet tap",{t in (0.5*sin(t*100),0.3*cos(t*100))}),
+ ("tremor",{t in (8*sin(t*100),6*cos(t*100))}),
+ ("slow drift",{_ in (10,0)}),
+ ("one-frame knock",{t in (t>=0.1 && t<0.11 ? 500:0,0)}),
+ ("two-frame knock",{t in (t>=0.1 && t<0.12 ? 500:0,0)}),
+ ("vertical flick",{t in (0,t>=0.06 && t<0.18 ? 120:0)}),
+ ("diagonal flick",{t in t>=0.06 && t<0.18 ? (120,100):(0,0)})
+]
+for (name,rate) in negatives {
+ let h=WandHeldScroll();h.begin(now:0,sustain:true)
+ for i in 5..<22 {let t=Double(i)/100,(x,y)=rate(t);h.confirmHeld(now:t);_=h.sample(x:x,y:y,dt:0.01,now:t)
+  let v=h.continuation(now:t);expect(!h.earlyHorizontal && v.x==0 && v.y==0,name+" retains hold gate")}
 }
 print("Scroll transports: chord and page lines, sideways native began/changed/ended/cancelled, axis-change cancel, pause, late tap passed")
 `;

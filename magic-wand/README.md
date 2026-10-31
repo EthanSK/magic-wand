@@ -70,12 +70,12 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Stop after moving in HIGH | Click once after a 200 ms pause |
 | While choosing where to click | Keep moving the wand slightly while you are not certain about placement so it does not click. Stop when you are ready. The pointer must still be moving; tiny movements filtered out as hand noise do not prevent a click. |
 | Tap while following | Stop following without clicking |
-| Hold | Over a scroll area, drag in any direction to scroll; hold still to continue and drag the other way to reverse. A confirmed draggable target drags instead. Release stops the gesture. |
+| Hold | Over a scroll area, drag to scroll. Holding still continues page scrolling; sideways swipes end when the stroke stops. A confirmed draggable target drags instead. Release stops the gesture. |
 | Tap, then hold the second press | Drag with the mouse button down; release to drop |
 | Double tap | Centre the pointer on the main screen and enable mouse follow after the 300 ms triple-tap window; keep HUD and review selection unchanged |
 | Triple tap | Start screenshot selection; hold the mouse button and move to select the area, then release to capture |
 
-- Control V3 keeps short taps and tap-then-hold dragging unchanged. The existing 220 ms cutoff separates a tap from a hold.
+- Control V3 keeps ordinary short taps and tap-then-hold dragging unchanged. Clear sideways flicks can qualify before the usual 220 ms hold cutoff; other gestures keep that cutoff.
 - A plain hold scrolls a scroll area or drags a confirmed draggable target. Unknown targets keep scrolling. Tap, then hold the second press to drag explicitly. The pointer stays fixed while scrolling until release.
 - The HUD button switches to the HUD. The pointer stays within real display edges.
 - Releasing a completed scroll restores the mouse-follow choice from before scrolling: off stays off and on stays on.
@@ -189,6 +189,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: Agentic Mouse 1.0.310 build 316 adds Brightness to the home HUD’s second layer, between Utility and the unchanged third-layer Zoom. Build 315’s restored dragging is retained. The installed app and rendered layout were checked; physical Brightness use remains unverified.
+- Installed: receiver 1.2.137 build 142 and Agentic Mouse 1.0.309 build 315. Clear sideways flicks can start before the 220 ms hold threshold; ordinary taps, page scrolling and dragging keep their timing, and accepted short swipes stay separate from click shortcuts. No pointer delay was added. Faster Back/Forward and abrupt-stop feel still need physical confirmation.
 - Installed: Agentic Mouse 1.0.308 build 314 adds built-in left/right window snapping to the Magnet card. Repeating at an occupied screen half moves the window to the neighbouring display. Existing HUD layout and wand controls are retained; standalone snapping apps stay installed. Focused geometry, cancellation and readback checks passed; physical cross-monitor acceptance remains unverified.
 - Installed: receiver 1.2.136 build 141 and Sense firmware 8. The first wireless update completed, the wand restarted over Bluetooth, and the receiver confirmed firmware 8 with calibration and the update key preserved. Startup and ordinary disconnection pulse white every 275 ms until connection or the existing one-minute dark timeout. Receiver-restart colour cycling and the short sleep warning are unchanged. The first update attempt stopped before authorization; package and key checks now run outside the input thread, with the live connection rechecked before authorization. Interrupted wireless updates can still require USB recovery.
 - Installed: receiver 1.2.135 build 140 and complete Sense firmware 7. Bluetooth works with USB removed, confirmed by live input and user feedback. Calibration and the update key are preserved. Page scrolling uses fine pixel output, sideways native gestures end at wrist stop, and the approved 300 ms exit-click window preserves double and triple shortcuts. All 247 receiver tests pass. The first wireless firmware transfer and physical acceptance of the latest scrolling remain unverified. The reviewed single-bank bootloader can require USB recovery after an interrupted update.
@@ -249,7 +251,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.136 (141) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.137 (142) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
