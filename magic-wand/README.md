@@ -189,6 +189,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver161 uses one packet per acknowledgement for wireless firmware transfers, stays below the bootloader receive-buffer limit, and ignores late callbacks after cancellation. Package, protocol, bounded-buffer and transport checks pass. A complete wireless transfer with this repair is still pending; firmware9 is running after USB recovery.
+- Installed: Sense firmware9 acknowledges a physical button press locally for160 ms when the normal light is dark, including the consumed wake press. Idle darkness, existing mode colours, sleep and pointer timing are unchanged. USB recovery installed and confirmed firmware9 with the key, calibration and settings preserved after a failed wireless transfer. Physical light acceptance is pending; wireless reliability repair remains in progress.
 - Installed: receiver160 adds a brief fading Back gesture / Forward gesture acknowledgement after a completed native sideways gesture. Cancelled, vertical and zero-net gestures do not acknowledge. Native preview verified the fade, replacement and retained app focus; all255 Wand,17 Control Stones and4 shared checks passed. Recognition feedback is independent of application navigation; scrolling, pointer timing and firmware8 are unchanged. Physical gesture confirmation remains pending while the wand is disconnected.
 - Installed: receiver159 keeps the quick-click opportunity through120 ms of settling only after fast sweeps averaging at least1500 pointer counts/second. Slower aiming keeps the existing pause. Invisible residual readings cannot rearm another click after a fast click; bounded per-click diagnostics distinguish quick decisions from fallbacks. All254 Wand,17 Control Stones and4 shared checks passed. Installed source, resources and signature match; no firmware was flashed. The wand disconnected as Ethan left, so physical acceptance and reconnect confirmation remain pending. Pointer movement, filtering, sensitivity and saved firmware8 are unchanged.
 - Installed: receiver158 and the Sense dashboard enforce a persisted ten-minute temporary sensor capture, followed by deletion two hours later. Reconnecting or restarting does not extend the window. Byte caps remain and deliberately saved references are excluded. Both live recorders report matching deadlines; source, resources, Bluetooth and firmware8 were verified. All253 Wand,17 Control Stones and4 shared checks passed, including expiry, restart and cleanup tests. Click and pointer behavior are unchanged.
@@ -266,7 +268,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.155 (160) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.156 (161) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

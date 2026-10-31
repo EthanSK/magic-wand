@@ -326,9 +326,15 @@ struct WandSenseLegacyDFU {
     let image: Data, initPacket: Data, receiptInterval: Int, chunk: Int
     private var phase = Phase.idle, sent = 0
     private(set) var acknowledged = 0
-    init(image: Data, initPacket: Data, receiptInterval: Int = 10, chunk: Int = 20) {
+    // The reviewed 0.6.1 bootloader has only eight receive buffers. Its receipt
+    // acknowledges receipt, not completion of the asynchronous flash write.
+    // Ten-packet bursts can exhaust that pool before the first receipt. Keep
+    // the production sender to one packet per receipt; never catch up in a
+    // burst after a busy Mac. Explicit test/tuning values retain headroom too.
+    static let defaultReceiptInterval = 1
+    init(image: Data, initPacket: Data, receiptInterval: Int = Self.defaultReceiptInterval, chunk: Int = 20) {
         self.image = image; self.initPacket = initPacket
-        self.receiptInterval = max(1, min(100, receiptInterval)); self.chunk = max(1, min(244, chunk))
+        self.receiptInterval = max(1, min(4, receiptInterval)); self.chunk = max(1, min(244, chunk))
     }
     var progress: Double { image.isEmpty ? 0 : Double(acknowledged) / Double(image.count) }
 
@@ -633,6 +639,12 @@ final class WandSenseDFUTransfer: NSObject, CBPeripheralDelegate {
     var onFinish: ((String?) -> Void)?
     var onLog: ((String) -> Void)?
     static let connectSeconds = 30.0, transferSeconds = 240.0
+    // One receipt per packet can take a full connection round trip, including
+    // the bootloader's four-event slave latency. Do not abort a healthy larger
+    // image using the former ten-packet sender's fixed four-minute budget.
+    var transferBudgetSeconds: Double {
+        max(Self.transferSeconds, Double((protocolClient.image.count + 19) / 20) * 0.15 + 30)
+    }
 
     init(central: CBCentralManager, peripheralID: UUID, package: WandSenseDFUPackage) {
         self.central = central; self.peripheralID = peripheralID
@@ -656,25 +668,35 @@ final class WandSenseDFUTransfer: NSObject, CBPeripheralDelegate {
     }
 
     func peripheral(_ p: CBPeripheral, didDiscoverServices error: Error?) {
+        guard !finished, p === peripheral else { return }
         guard error == nil, let s = p.services?.first(where: { $0.uuid == WandSenseLegacyDFU.service }) else { finish("no updater service on this board"); return }
         p.discoverCharacteristics([WandSenseLegacyDFU.control, WandSenseLegacyDFU.packet], for: s)
     }
     func peripheral(_ p: CBPeripheral, didDiscoverCharacteristicsFor s: CBService, error: Error?) {
+        guard !finished, p === peripheral else { return }
         control = s.characteristics?.first { $0.uuid == WandSenseLegacyDFU.control }
         packet = s.characteristics?.first { $0.uuid == WandSenseLegacyDFU.packet }
         guard error == nil, let control, packet != nil else { finish("the updater service is incomplete"); return }
         p.setNotifyValue(true, for: control)
     }
     func peripheral(_ p: CBPeripheral, didUpdateNotificationStateFor c: CBCharacteristic, error: Error?) {
+        guard !finished, p === peripheral else { return }
         guard error == nil, c.isNotifying else { finish("the updater refused notifications"); return }
         timer?.invalidate()
-        timer = WandRunLoop.commonTimer(interval: Self.transferSeconds, repeats: false) { [weak self] _ in self?.finish("the transfer took too long") }
+        timer = WandRunLoop.commonTimer(interval: transferBudgetSeconds, repeats: false) { [weak self] _ in self?.finish("the transfer took too long") }
         onStarted?(); onLog?("SENSE_UPDATE_TRANSFER_STARTED")
         perform(protocolClient.start())
     }
     func peripheral(_ p: CBPeripheral, didUpdateValueFor c: CBCharacteristic, error: Error?) {
-        guard c.uuid == WandSenseLegacyDFU.control, error == nil, let value = c.value else { return }
-        perform(protocolClient.receive(value))
+        guard !finished, p === peripheral, c.uuid == WandSenseLegacyDFU.control, error == nil, let value = c.value else { return }
+        let before = protocolClient.acknowledged
+        let outcome = protocolClient.receive(value)
+        // Bounded diagnostics: show real acknowledged progress, not packets
+        // merely queued on the Mac. Do not log every 20-byte acknowledgement.
+        if protocolClient.acknowledged / 4096 != before / 4096 {
+            onLog?("SENSE_UPDATE_PROGRESS acknowledgedBytes \(protocolClient.acknowledged) imageBytes \(protocolClient.image.count)")
+        }
+        perform(outcome)
     }
     func peripheral(_ p: CBPeripheral, didWriteValueFor c: CBCharacteristic, error: Error?) {
         guard p === peripheral, !finished, c.uuid == WandSenseLegacyDFU.control else { return }
@@ -715,7 +737,7 @@ final class WandSenseDFUTransfer: NSObject, CBPeripheralDelegate {
         guard !finished else { return }
         finished = true; timer?.invalidate(); timer = nil
         if error != nil, let p = peripheral { central.cancelPeripheralConnection(p) }
-        onLog?(error.map { "SENSE_UPDATE_TRANSFER_FAILED \($0)" } ?? "SENSE_UPDATE_TRANSFER_DONE")
+        onLog?(error.map { "SENSE_UPDATE_TRANSFER_FAILED \($0) acknowledgedBytes \(protocolClient.acknowledged) imageBytes \(protocolClient.image.count)" } ?? "SENSE_UPDATE_TRANSFER_DONE")
         onFinish?(error)
     }
 }

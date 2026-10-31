@@ -107,10 +107,47 @@ transfer.peripheral(peripheral, didDiscoverCharacteristicsFor: dfuService, error
 transfer.peripheral(peripheral, didUpdateNotificationStateFor: control, error: nil)
 func ack() { transfer.peripheral(peripheral, didWriteValueFor: control, error: nil) }
 func response(_ procedure: UInt8) { control.value = Data([16, procedure, 1]); transfer.peripheral(peripheral, didUpdateValueFor: control, error: nil) }
-ack(); response(1); ack(); ack(); response(2); ack(); ack(); response(3); ack(); response(4)
+ack(); response(1); ack(); ack(); response(2); ack(); ack()
+// One 20-byte packet per receipt, even if CoreBluetooth can queue more.
+// Each receipt earns exactly one next packet; host availability alone does not.
+func packetCount() -> Int { peripheral.writes.filter { $0.1 == .withoutResponse && $0.0.count == 20 }.count }
+precondition(packetCount() == 1)
+transfer.peripheralIsReady(toSendWriteWithoutResponse: peripheral)
+precondition(packetCount() == 1, "availability must not bypass a device receipt")
+for count in stride(from: 20, through: 80, by: 20) {
+    control.value = Data([17, UInt8(count), 0, 0, 0])
+    transfer.peripheral(peripheral, didUpdateValueFor: control, error: nil)
+    precondition(packetCount() == count / 20 + 1)
+}
+response(3); ack(); response(4)
 precondition(peripheral.writes.last?.0 == WandSenseLegacyDFU.activate, "actual transfer runner sends Activate only after validation")
 transfer.peripheral(peripheral, didWriteValueFor: control, error: NSError(domain: "test", code: 1))
 precondition(completed && transferError?.contains("activation") == true, "activation write failure cannot report transfer success")
 link.centralManager(central, didDisconnectPeripheral: peripheral, error: nil)
 precondition(transferError?.contains("activation") == true && link.updater == nil)
 print("PASS: real updater/link orchestration against fake Bluetooth bounds handoff, excludes USB, routes exact peripheral and handles activation failure")
+
+// Late callbacks belong to a finished transfer and must never activate a board.
+let latePeripheral = CBPeripheral(), lateCentral = CBCentralManager(delegate:nil,queue:nil)
+lateCentral.known = [latePeripheral]
+let late = WandSenseDFUTransfer(central:lateCentral,peripheralID:latePeripheral.identifier,package:package())
+precondition(late.transferBudgetSeconds >= 240, "small images retain the existing timeout")
+late.start()
+let lateControl = CBCharacteristic(WandSenseLegacyDFU.control), latePacket = CBCharacteristic(WandSenseLegacyDFU.packet)
+let lateService = CBService(WandSenseLegacyDFU.service,[lateControl,latePacket]); latePeripheral.services=[lateService]
+late.peripheral(latePeripheral,didDiscoverServices:nil)
+late.peripheral(latePeripheral,didDiscoverCharacteristicsFor:lateService,error:nil)
+late.peripheral(latePeripheral,didUpdateNotificationStateFor:lateControl,error:nil)
+func lateAck(){late.peripheral(latePeripheral,didWriteValueFor:lateControl,error:nil)}
+func lateResponse(_ bytes:[UInt8]){lateControl.value=Data(bytes);late.peripheral(latePeripheral,didUpdateValueFor:lateControl,error:nil)}
+lateAck();lateResponse([16,1,1]);lateAck();lateAck();lateResponse([16,2,1]);lateAck();lateAck()
+for n in stride(from:20,through:80,by:20){lateResponse([17,UInt8(n),0,0,0])}
+lateResponse([16,3,1]);lateAck()
+late.finish("cancelled before validation response")
+let beforeLateResponse=latePeripheral.writes.count
+let beforeLateTimers=WandRunLoop.timers.count
+lateResponse([16,4,1])
+late.peripheral(latePeripheral,didUpdateNotificationStateFor:lateControl,error:nil)
+precondition(latePeripheral.writes.count==beforeLateResponse,"cancelled transfer sent Activate from a late validation response")
+precondition(WandRunLoop.timers.count==beforeLateTimers,"late notification callback restarted a finished update timer")
+print("PASS: cancelled transfers ignore late validation callbacks")

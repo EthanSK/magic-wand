@@ -9,6 +9,11 @@ setbuf(stdout, nil)
 final class FakeBootloader {
     var installedSoftDevice: UInt16 = 0x0123
     var dropPacket: Int? = nil, corruptByte: Int? = nil
+    // Real bootloader 0.6.1 has eight pending receive buffers, freed only
+    // after asynchronous flash completion, not by a receipt notification.
+    var pendingFlashCapacity: Int? = nil
+    private var pendingFlash = 0
+    func completeFlashWrites() { pendingFlash = 0 }
     private(set) var receivedImage = Data(), activated = false, appValid = true, initPacket = Data(), expected = 0
     private var phase = "idle", receiveInit = false, prn = 0, sinceReceipt = 0, sizeNext = false, packetIndex = 0
     private var notes: [Data] = []
@@ -48,8 +53,13 @@ final class FakeBootloader {
             phase = "init"; return [Data([16, 1, 1])]
         }
         if receiveInit { initPacket.append(d); return [] }
+        if phase == "failed" { return [] }
         precondition(phase == "receiving", "data before Receive in \(phase)")
         packetIndex += 1
+        if let limit = pendingFlashCapacity {
+            if pendingFlash >= limit { phase = "failed"; return [Data([16, 3, 6])] }
+            pendingFlash += 1
+        }
         if packetIndex == dropPacket { return [] } // Lost on air.
         var data = d
         if let i = corruptByte, i >= receivedImage.count, i < receivedImage.count + data.count { data[data.startIndex + i - receivedImage.count] ^= 0xFF }
@@ -66,7 +76,7 @@ final class FakeBootloader {
 }
 
 /// Runs the pure client against the fake, as WandSenseDFUTransfer does over Bluetooth.
-func transfer(_ package: WandSenseDFUPackage, _ boot: FakeBootloader, interval: Int = 10) -> (activated: Bool, failure: String?) {
+func transfer(_ package: WandSenseDFUPackage, _ boot: FakeBootloader, interval: Int = WandSenseLegacyDFU.defaultReceiptInterval) -> (activated: Bool, failure: String?) {
     var client = WandSenseLegacyDFU(image: package.image, initPacket: package.initPacket, receiptInterval: interval)
     var pending: [WandSenseLegacyDFU.Outcome] = [client.start()]
     while let outcome = pending.first {
@@ -82,6 +92,10 @@ func transfer(_ package: WandSenseDFUPackage, _ boot: FakeBootloader, interval: 
                 case .packets(let ds): for d in ds { notes += boot.packet(d) }
                 }
             }
+            // Model a slow writer: it cannot free any of the eight buffers until
+            // this complete radio burst has arrived. The old ten-packet burst
+            // overran it before its first receipt, exactly the missing case.
+            boot.completeFlashWrites()
             for n in notes { pending.append(client.receive(n)) }
             if notes.isEmpty && pending.isEmpty { return (false, "stalled: no response from the bootloader") }
         }
@@ -150,6 +164,10 @@ print("PASS: packages are application-only, CRC-matched, single-target and link-
 let boot = FakeBootloader()
 let ok = transfer(package, boot)
 precondition(ok.activated && ok.failure == nil && boot.receivedImage == seven, "complete image, then activation: \(String(describing: ok.failure))")
+let slowWriter = FakeBootloader(); slowWriter.pendingFlashCapacity = 8
+let bounded = transfer(package, slowWriter)
+print("BOUNDED FLASH WRITER:", bounded)
+precondition(bounded.activated && bounded.failure == nil, "default sender overran the bootloader: \(String(describing: bounded.failure))")
 for interval in [1, 7, 100] { precondition(transfer(package, FakeBootloader(), interval: interval).activated, "receipt interval \(interval)") }
 let corrupted = FakeBootloader(); corrupted.corruptByte = 70_000
 let bad = transfer(package, corrupted)

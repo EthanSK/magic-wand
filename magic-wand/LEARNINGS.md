@@ -1820,3 +1820,26 @@ Source tests cover expiry, held input, wake masking, cancellation and clock wrap
 firmware compilation and physical light acceptance remain distinct checks.
 If a press still produces no light, inspect power and the physical button path;
 an acknowledgement alone does not prove the host completed the action.
+
+## 2026-10-31 — Wireless receipts do not mean flash completion
+
+The reviewed Sense bootloader has eight HCI receive buffers. A successful packet
+receipt notification counts received bytes; buffers are freed later by the flash
+completion callback. The old sender's ten-packet burst could exhaust the pool
+before its first receipt. A bounded-buffer regression reproduced procedure3,
+status6, matching a failed physical transfer. This establishes a source defect,
+not proof of the exact internal error on that board; a prior successful wireless
+transfer did not cover the slower-flash case.
+
+Use one packet per receipt in production and cap explicit burst sizes below the
+pool capacity. Derive a finite whole-transfer timeout from packet count so this
+conservative path is not killed by the old burst sender's shorter budget. Log
+acknowledged bytes at bounded intervals, not every packet. Receipts, complete
+CRC validation, activation, reconnect and durable result confirmation remain
+separate stages; a queued write is not progress on the board.
+
+A cancelled transfer also accepted a late validation response and could send
+Activate after reporting failure. The real transport fixture reproduced it.
+All discovery/notification callbacks now reject a finished transfer or another
+peripheral, like the existing write-completion guard. Keep this check at the
+transport boundary, not only inside protocol state transitions.
