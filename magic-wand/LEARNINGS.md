@@ -1683,7 +1683,7 @@ readback confirms the flag is off; physical preference remains a separate check.
 
 Keep the normal 200 ms pause for small or slow aiming. The optional fast stop
 classifier uses actual cursor travel to recognise a coherent brisk move, then
-requires multiple fresh quiet samples spanning16 ms; a lone zero frame, a
+requires at least two fresh quiet samples (minimum8 ms apart); a lone zero frame, a
 radio gap or an overdue timer cannot fast-click. A slow final approach drops
 back to the ordinary pause. After scrolling, demand rest and a new pointer
 move before using the shortcut, so release motion cannot earn it. Pointer
@@ -1718,3 +1718,25 @@ Treat a zero-travel stop-guard tail as waiting for confirmed stillness, not a
 new slow approach. The live-order regression runs the real filter, its intent
 heartbeat and click controller together: it reproduced a221 ms wait before
 the fix. Slow final approach and genuinely slow pointing keep the old pause.
+
+## 2026-10-31 — Keep brief stopping tails and feedback separate from movement
+
+A final tiny correction could clear otherwise valid brisk-move evidence.
+Keep that evidence through at most60 ms of deceleration; sustained slow
+approach still uses the normal200 ms pause. Calculate speed from the sensor
+sample duration, not bursty host callback spacing. Two fresh readings with no visible pointer travel confirm the brisk stop,
+even if the tuned stop counter or low-speed intent still reports motion.
+That exception requires recent brisk travel; precision keeps its intent veto.
+An integer zero alone is not quiet: accepted sub-pixel movement must still
+protect fine aiming, so use the filter’s unrounded accepted output.
+No pointer sample is held or replayed. A sent-click LED
+pulse belongs to the Sense output adapter, outside the input decision: it
+briefly dips existing blue or substitutes dim blue, then restores live mode.
+Update, sleep and teardown cancel that pulse. Firmware8 needs no reflash.
+
+The saved slow-aim reference rejected a permissive briskness threshold: short
+accelerations within slow aiming could otherwise earn the shortcut. The final
+500-points/second threshold preserves that reference's precision behavior.
+After installing receiver156, all253 Wand,17 Control Stones and4 shared checks
+passed. Live fast-stop clicks and their blue-light commands were observed;
+neither a passing replay nor those commands confirm the user's physical feel.

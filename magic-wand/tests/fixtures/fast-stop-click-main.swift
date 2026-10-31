@@ -52,7 +52,7 @@ func liveStop(briskFrames:Int,approachFrames:Int=0,rate:Double=40)->(delay:Doubl
   let sample=f.sample(rawX:Int((rateNow/0.00875).rounded()),rawY:0,microseconds:9615,held:false,resetState:false)!
   let now=Double(i)*dt;intentSeen = intentSeen || sample.intent
   d.intent(sample.intent,now:now)
-  d.move(dx:sample.stopX,dy:sample.stopY,now:now,eligible:true,pointerX:sample.x,pointerY:sample.y)
+  d.move(dx:sample.stopX,dy:sample.stopY,now:now,eligible:true,pointerX:sample.x,pointerY:sample.y,sampleSeconds:dt,pointerQuiet:sample.highX==0 && sample.highY==0)
   if d.tick(now:now) {count+=1;delay=now-stop;fast=d.lastClickWasFast}
  }
  expect(intentSeen,"the sequence exercised the real motion intent signal")
@@ -64,4 +64,26 @@ let livePrecise=liveStop(briskFrames:42,rate:3)
 expect(!livePrecise.fast && livePrecise.delay>=0.18 && livePrecise.count==1,"slow live-pipeline motion keeps the precision wait; got \(livePrecise)")
 let liveApproach=liveStop(briskFrames:42,approachFrames:30)
 expect(!liveApproach.fast && liveApproach.delay>=0.18 && liveApproach.count==1,"slowing into a target cancels acceleration in the live pipeline; got \(liveApproach)")
+let settling=brisk()
+for i in 9...11 {settling.move(dx:1,dy:0,now:Double(i)*0.01,eligible:true,sampleSeconds:0.01)}
+quiet(settling,from:0.12)
+expect(settling.tick(now:0.141) && settling.lastClickWasFast,"a brief final settling tail retains the brisk stop")
+let burstSlow=WandDwellClick(fastStops:true);burstSlow.follow(true);burstSlow.move(dx:0,dy:0,now:0,eligible:true)
+for i in 1...50 {burstSlow.move(dx:1,dy:0,now:Double(i)*0.0001,eligible:true,sampleSeconds:0.01)}
+quiet(burstSlow,from:0.01)
+expect(!burstSlow.tick(now:0.04),"burst arrivals cannot make genuinely slow sensor samples look fast")
+let invisibleTail=brisk()
+for i in 9...12 {
+ let t=Double(i)*0.01
+ invisibleTail.intent(true,now:t)
+ invisibleTail.move(dx:1,dy:0,now:t,eligible:true,pointerX:0,pointerY:0,sampleSeconds:0.01,pointerQuiet:true)
+}
+expect(invisibleTail.tick(now:0.121) && invisibleTail.lastClickWasFast,"only a recent brisk move may click through invisible residual movement and intent")
+let precisionTail=WandDwellClick(fastStops:true);precisionTail.follow(true)
+for i in 1...25 {
+ let t=Double(i)*0.01
+ precisionTail.intent(true,now:t)
+ precisionTail.move(dx:1,dy:0,now:t,eligible:true,pointerX:0,pointerY:0,sampleSeconds:0.01,pointerQuiet:false)
+}
+expect(!precisionTail.tick(now:0.26),"invisible slow aiming without a brisk move retains the ordinary intent protection")
 print("PASS: live motion intent preserves brisk-stop evidence and slow precision timing")

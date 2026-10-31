@@ -94,8 +94,8 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Scrolling | Cyan |
 | App review | Green for app review; purple for VS Code file staging |
 | HUD | Green |
-| Recording | Steady red while recording, including mouse mode. HUD, review, scrolling and loading keep their own colours. |
-| Pointer | Steady blue; recording takes priority and shows red |
+| Recording | Red while recording; briefly shows blue when a click is sent |
+| Pointer | Blue while the pointer follows; briefly dims when a click is sent |
 | Idle | Off |
 <!-- /wand:controls -->
 
@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver1.2.151 build156 uses the visible pointer stop after a recent brisk move, tolerates a brief settling tail and measures speed from sensor time. Sent clicks briefly dim the blue light or show blue from another mode, then restore current status. Slow precision timing, pointer filtering and firmware8 stay unchanged. Signed source, bundled resources, Bluetooth and firmware8 readback verified; all253 Wand,17 Control Stones and4 shared checks passed after installation. Live fast-stop clicks and their blue-light commands were observed; physical click feel and blink visibility remain for user review.
 - Installed: receiver1.2.150 build155 fixes the fast-stop click integration: motion-intent heartbeats no longer erase brisk-move evidence, and a residual stop count without visible pointer travel no longer cancels it. Slow approach keeps the normal200 ms pause. The actual filter and click call order now reproduce the old wait and pass with the correction. Signed installed source and resources match; Bluetooth and firmware8 readback verified. All252 Wand,17 Control Stones and4 shared checks passed after installation. Physical click feel remains for user review.
 - Installed: receiver 1.2.149 build154 uses the physical release frame to stop replaying obsolete stroke motion after a stalled Bluetooth batch. Existing timing, pointer filtering, fast-stop clicking and held-scroll behavior are preserved. This fixes a reproduced delayed-frame path; the observed fresh post-scroll motion still needs a separate recoil decision. Signed build and source readback match;252 Wand,17 Control Stones and4 shared checks passed. Button-wake Bluetooth reconnection is verified with saved firmware8. Ethan chose immediate pointer movement; no post-scroll recoil suppression was added.
 - Installed: receiver 1.2.148 build153: a larger, brisk pointer move can click as soon as fresh stillness samples confirm its stop; slow precision aiming retains the existing 200 ms pause. Brief pauses, missing data and scroll-release motion cannot trigger the quicker path. Pointer motion, smoothing, gain and plain tap-to-exit are unchanged. Focused and saved slow-reference checks pass; Bluetooth, the signed installed program and saved firmware8 were verified; physical feel is pending.
@@ -261,7 +262,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.150 (155) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.151 (156) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

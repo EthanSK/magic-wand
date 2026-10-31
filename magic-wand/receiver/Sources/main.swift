@@ -959,6 +959,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if let blocker {log("HUD_RIGHT_CLICK_SKIPPED",blocker);return}
         let point=deliveryPoint ?? currentPointerOrigin()
         transition(to:buttons|2,at:point);transition(to:buttons & ~2,at:point)
+        senseVirtual?.clickLight()
         log("HUD_RIGHT_CLICK")
     }
     func setScreenshotActive(_ active:Bool) {
@@ -1852,7 +1853,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
               (-4095...4095).contains(x), (-4095...4095).contains(y), (0...3).contains(b), !restoring, !scrollActive, AXIsProcessTrusted() else { return }
         handleFrame(x:x,y:y,b:b)
     }
-    func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil){
+    func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil){
         // Screenshot mode owns the mouse button and the native button; the wand's legacy
         // button frames carry no motion in raw mode and must never act here.
         if screenshot.ownsPointer {return}
@@ -1878,7 +1879,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                                        hudSession:hudSession,hudShown:context.isActive,scrollActive:scrollActive,
                                        hudOperating:hudButtonHeld || hudEntryPress || pointerInHUD)
         noteClickGate(gate)
-        dwell.move(dx:stopX ?? x,dy:stopY ?? y,now:ProcessInfo.processInfo.systemUptime,eligible:gate == nil,pointerX:x,pointerY:y)
+        dwell.move(dx:stopX ?? x,dy:stopY ?? y,now:ProcessInfo.processInfo.systemUptime,eligible:gate == nil,pointerX:x,pointerY:y,sampleSeconds:sampleSeconds,pointerQuiet:pointerQuiet)
         scheduleDwell()
         if routed.buttons != b {log("CONSUMED_HOLD_CLICK_DROPPED")}
         transition(to: routed.buttons, at: point)
@@ -2031,7 +2032,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         flickAnchor=nil
         if wasFlick {setCircleLight(false);motionFilter.reset();dwell.reset();scheduleDwell();return}
         dwell.intent(sample.intent,now:now)
-        handleFrame(x:sample.x,y:sample.y,b:buttons,stopX:sample.stopX,stopY:sample.stopY)
+        handleFrame(x:sample.x,y:sample.y,b:buttons,stopX:sample.stopX,stopY:sample.stopY,sampleSeconds:Double(v[0])/1_000_000,pointerQuiet:sample.highX==0 && sample.highY==0)
     }
     /// Bounded click telemetry: one line when the reason stop-to-click cannot
     /// act changes (never per frame), and the current reason in status.json.
@@ -2053,6 +2054,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                   AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
             let point=self.currentPointerOrigin()
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
+            self.senseVirtual?.clickLight()
             if self.dwell.lastClickWasFast {log("FAST_STOP_CLICK")}
             // Re-arms only when repeats are enabled; single-shot schedules nothing.
             self.scheduleDwell()

@@ -263,20 +263,24 @@ final class WandPointerRouter {
 /// that it stopped. Ethan: a larger move should click as soon as it stops;
 /// slow precision work keeps its existing pause. This never delays motion.
 struct WandFastStopClick {
-    static let window=0.12, distance=40.0, speed=350.0, finalSpeed=200.0
-    static let quietDuration=0.016, maximumGap=0.04, maximumTail=0.08
+    static let window=0.12, distance=40.0, speed=500.0, finalSpeed=500.0
+    static let quietDuration=0.008, maximumGap=0.04, maximumTail=0.08, slowTail=0.06
     private var samples:[(time:Double,dt:Double,x:Double,y:Double)]=[]
-    private var lastAt:Double?,lastMotion=0.0,quietAt:Double?,quietCount=0,eligible=false
+    private var lastAt:Double?,lastMotion=0.0,lastBrisk=0.0,quietAt:Double?,quietCount=0,eligible=false
     private(set) var due:Double?
     private var needsRest=false
     mutating func reset(){self=Self()}
     mutating func requireRest(){reset();needsRest=true}
-    mutating func sample(stopped:Bool,x:Int,y:Int,now:Double){
+    mutating func sample(stopped:Bool,x:Int,y:Int,now:Double,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil){
         guard now.isFinite else{reset();return}
         let dt=lastAt.map{now-$0};lastAt=now
         guard let dt,dt>0,dt<=Self.maximumGap else{
             samples=[];quietAt=nil;quietCount=0;eligible=false;due=nil;return
         }
+        // Radio notifications can deliver adjacent readings in one burst.
+        // Judge speed from sensor time, while freshness and a confirmed stop
+        // still use real arrival time. Neither path buffers pointer movement.
+        let motionDt=sampleSeconds.flatMap { $0.isFinite && $0>0 && $0<=0.05 ? $0:nil } ?? dt
         if needsRest {
             if stopped && x==0 && y==0 {
                 if quietAt==nil {quietAt=now;quietCount=1}else{quietCount+=1}
@@ -285,23 +289,33 @@ struct WandFastStopClick {
             return
         }
         if x==0 && y==0 {
-            // The tuned stop guard may emit a final count after the visible
-            // pointer is quiet. Wait for that guard; do not treat its residual
-            // count as a new slow approach or erase the brisk cursor history.
-            guard stopped else{quietAt=nil;quietCount=0;due=nil;return}
+            // Ethan's brisk-stop exception uses the pointer he can see. The
+            // ordinary precision path still follows the tuned stop guard;
+            // hidden residual counts cannot postpone this recent brisk stop.
+            // But sub-pixel *accepted* movement is still precision aiming,
+            // even between integer cursor steps; it must not count as quiet.
+            guard pointerQuiet ?? stopped else {
+                quietAt=nil;quietCount=0;due=nil
+                if now-lastBrisk>Self.slowTail {eligible=false}
+                return
+            }
             guard eligible,now-lastMotion<=Self.maximumTail else{quietAt=nil;quietCount=0;due=nil;return}
             if quietAt==nil {quietAt=now;quietCount=1}else{quietCount+=1}
             if due==nil,quietCount>=2,now-(quietAt ?? now)>=Self.quietDuration {due=now}
             return
         }
         due=nil;quietAt=nil;quietCount=0;lastMotion=now
-        samples.append((now,dt,Double(x),Double(y)))
+        samples.append((now,motionDt,Double(x),Double(y)))
         samples.removeAll{now-$0.time>Self.window}
         let path=samples.reduce(0){$0+hypot($1.x,$1.y)}
         let elapsed=samples.reduce(0){$0+$1.dt}
         let net=hypot(samples.reduce(0){$0+$1.x},samples.reduce(0){$0+$1.y})
-        eligible=path>=Self.distance && elapsed>0 && path/elapsed>=Self.speed &&
-            net>=path*0.8 && hypot(Double(x),Double(y))/dt>=Self.finalSpeed
+        let brisk=path>=Self.distance && elapsed>0 && path/elapsed>=Self.speed &&
+            net>=path*0.8 && hypot(Double(x),Double(y))/motionDt>=Self.finalSpeed
+        if brisk {eligible=true;lastBrisk=now}
+        // A brief deceleration/settling tail is part of the same brisk stop.
+        // Sustained slow aiming still clears the shortcut and uses200 ms.
+        else if !eligible || now-lastBrisk>Self.slowTail {eligible=false}
     }
 }
 
@@ -330,7 +344,7 @@ final class WandDwellClick {
     init(pause:Double=0.2,travel:Double=12,repeatInterval:Double?=nil,fastStops:Bool=false){self.pause=pause;self.travel=travel;self.repeatInterval=repeatInterval;fastStop=fastStops ? WandFastStopClick():nil}
     var nextDue:Double? {
         guard following else{return nil}
-        if armed {return max(min(lastMotion+pause,fastStop?.due ?? .infinity),inhibitedUntil,intentUntil)}
+        if armed {return max(min(max(lastMotion+pause,intentUntil),fastStop?.due ?? .infinity),inhibitedUntil)}
         return repeatDue
     }
     var repeating:Bool {repeatDue != nil}
@@ -351,9 +365,9 @@ final class WandDwellClick {
         if moving {intentUntil=now+0.6;lastMotion=now;repeatDue=nil}
         else if intentUntil>0 {intentUntil=0;lastMotion=now}
     }
-    func move(dx:Int,dy:Int,now:Double,eligible:Bool,pointerX:Int?=nil,pointerY:Int?=nil){
+    func move(dx:Int,dy:Int,now:Double,eligible:Bool,pointerX:Int?=nil,pointerY:Int?=nil,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil){
         guard following,eligible,now>=inhibitedUntil else{reset();return}
-        fastStop?.sample(stopped:dx==0 && dy==0,x:pointerX ?? dx,y:pointerY ?? dy,now:now)
+        fastStop?.sample(stopped:dx==0 && dy==0,x:pointerX ?? dx,y:pointerY ?? dy,now:now,sampleSeconds:sampleSeconds,pointerQuiet:pointerQuiet)
         lastSeen=now
         guard dx != 0 || dy != 0 else{return}
         repeatDue=nil
