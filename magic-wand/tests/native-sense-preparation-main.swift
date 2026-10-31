@@ -16,8 +16,10 @@ final class WandReceiver {
     var isSense = true, senseTransport: WandSenseLink.Transport? = .bluetooth
     var senseLink: WandSenseLink? = WandSenseLink(), senseSessionNumber = 1
     var senseUpdateRefusal: String?
+    var stopAfterSenseUpdate = false, stops = 0
     init(_ support: URL) { self.support = support }
     func status() {}
+    func stop() { stops += 1 }
 }
 func image(number: Int, board: String = WandSenseImageTarget.board, size: Int = 132_472, markers: Int = 1) -> Data {
     var d = Data((0..<size).map { UInt8(truncatingIfNeeded: $0 &* 31 &+ 7) })
@@ -93,6 +95,15 @@ precondition(disconnected.work.count == 1)
 disconnected.complete(); disconnected.noChallenge()
 precondition(disconnected.receiver.senseUpdate.flow.state == .failed && !disconnected.receiver.senseUpdate.preparation.busy)
 print("PASS: disconnect cancels completion and prevents overlapping stale loads")
+
+let deferredStop = Harness(); request(deferredStop.receiver)
+deferredStop.receiver.stopAfterSenseUpdate = true
+precondition(deferredStop.receiver.stops == 0, "a busy update retains its deferred stop")
+deferredStop.receiver.senseUpdateConnectionLost()
+precondition(deferredStop.receiver.stops == 1 && !deferredStop.receiver.stopAfterSenseUpdate,
+             "the terminal update state honors the deferred stop exactly once")
+deferredStop.receiver.senseUpdateConnectionLost()
+precondition(deferredStop.receiver.stops == 1)
 
 for mutation in 0..<7 {
     let h = Harness(); request(h.receiver)

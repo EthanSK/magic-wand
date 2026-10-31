@@ -216,6 +216,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var senseMouseButtonTimer=WandSenseMouseButtonTimer() // Previously senseBottomTimer.
     // Wireless Sense updates (WandReceiverSenseUpdate.swift).
     let senseUpdate=WandSenseUpdateSession()
+    var stopAfterSenseUpdate = false
     var senseUpdateRefusal:String?
     var pointerOrigin=WandPointerOrigin()
     /// Why stop-to-click cannot act right now (nil: it can).
@@ -2180,6 +2181,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func releaseButtons() { transition(to: 0, at: currentPointerOrigin()) }
     func stop() {
+        // Ordinary quit and installer signals must not strand a partial image.
+        // Complete (or fail) the bounded update before honoring this request.
+        if senseUpdate.flow.busy {
+            stopAfterSenseUpdate = true; log("STOP_DEFERRED_FOR_FIRMWARE_UPDATE"); return
+        }
         navigationFeedback.dismiss()
         sendReview(review.cancel());reviewTimer?.invalidate();reviewTimer=nil
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil;probeTimer?.invalidate();probeTimer=nil

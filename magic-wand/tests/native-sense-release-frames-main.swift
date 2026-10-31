@@ -45,6 +45,7 @@ final class Receiver {
     var senseSessionNumber = 1, movementCount = 0, pointerTravel = 0.0
     let dwell = Dwell(), actionPause = Pause(), recording = Recording(), motionFilter = PathHolder()
     var hudSession = false, scrollActive = false
+    var hudButtonHeld = false, hudEntryPress = false, pointerInHUD = false
     var senseStaleReadings = 0
     var senseSession = WandSenseSession(), senseClock = WandSenseClock()
     let deviceSettings = Settings()
@@ -74,6 +75,8 @@ final class Rig {
         p.onText = { [unowned self] chunk in
             for line in chunk.split(separator: "\n").map(String.init) {
                 self.lines.append(line)
+                if line == "@MIDDLE 1" { self.r.hudButtonHeld = true; self.r.hudSession = true; self.puck.send("setHUDOpen(true);") }
+                if line == "@MIDDLE 0" { self.r.hudButtonHeld = false }
                 if line == "@BOTTOM 1" { self.r.heldScroll.active = true }
                 if line == "@BOTTOM 0" && self.r.heldScroll.active {
                     self.r.heldScroll.active = false
@@ -198,5 +201,46 @@ do {
     print("RESULT batch " + json(["batchRaw": batch.count, "batchCounts": batch.map { $0.counts }.reduce(0, +),
         "expectedAllPastPause": pastPause.count, "expectedFreshPastPause": fresh.count,
         "staleDropped": g.r.senseStaleReadings - staleBefore, "expectedStale": stale]))
+}
+// 4. Merely leaving the HUD visible must not opt ordinary pointing into
+// historical replay. The HUD button is up in both runs; only visibility differs.
+for open in [false, true] {
+    let g = Rig()
+    var t = g.paced(wire: 0, gz: 0, seconds: 0.1, from: clock)
+    g.puck.send("setMouseFollow(true);")
+    g.r.dwell.following = true
+    if open { g.puck.send("setHUDOpen(true);"); g.r.hudSession = true }
+    t = g.paced(wire: 0, gz: -80, seconds: 0.15, from: t)
+    until(t + 0.6)
+    let mark = g.lines.count
+    g.send(wire: 0, gz: -80, at: t + 0.6, count: 60, span: 0.58)
+    spin(0.01)
+    let output = g.rawsAfter(mark)
+    print("RESULT \(open ? "hudOpen" : "hudClosed") " + json([
+        "reports": output.count, "counts": output.reduce(0) { $0 + $1.counts }]))
+    g.puck.teardown()
+}
+// 5. The HUD release is carried by this frame before the host handles @MIDDLE0.
+// Preserve held history, but never replay that history as released pointer input.
+do {
+    let g = Rig()
+    var t = g.paced(wire: 0, gz: 0, seconds: 0.1, from: clock)
+    g.puck.send("setMouseFollow(true);"); g.r.dwell.following = true
+    t = g.paced(wire: 0, gz: -80, seconds: 0.15, from: t)
+    t = g.paced(wire: 4, gz: -80, seconds: 0.3, from: t)
+    precondition(g.r.hudButtonHeld)
+    until(t + 0.04)
+    let heldMark = g.lines.count
+    g.send(wire: 4, gz: -80, at: t + 0.04, count: 4, span: 0.03); spin(0.01)
+    let heldReports = g.rawsAfter(heldMark).count
+    t += 0.04
+    until(t + 0.6)
+    let mark = g.lines.count
+    g.send(wire: 0, gz: -80, at: t + 0.6, count: 60, span: 0.58); spin(0.02)
+    let released = g.rawsAfter(mark).count
+    let freshMark = g.lines.count
+    _ = g.paced(wire: 0, gz: -20, seconds: 0.2, from: t + 0.6); spin(0.01)
+    print("RESULT hudRelease " + json(["held": heldReports, "released": released, "fresh": g.rawsAfter(freshMark).count]))
+    g.puck.teardown()
 }
 print("DONE")

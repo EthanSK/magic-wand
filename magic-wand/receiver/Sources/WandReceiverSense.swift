@@ -125,8 +125,16 @@ extension WandReceiver {
             // Preserve historical gesture data for HUD/scroll/review, but never
             // reconstruct a merged run into multiple normal pointer movements.
             // This frame's own mask is the physical boundary (`WandSensePointerFrames`).
-            let frameMouseButtonDown = (steps.last?.mask ?? 0) & WandSenseButtons.mouseButton != 0
-            let dropLate = WandSensePointerFrames.pointerOwns(following: dwell.following, hudSession: hudSession,
+            let frameMask = steps.last?.mask ?? 0
+            let frameMouseButtonDown = frameMask & WandSenseButtons.mouseButton != 0
+            let frameHUDButtonDown = frameMask & WandSenseButtons.hudButton != 0
+            // An unheld HUD permits normal follow/clicks. Match postPointerMove's
+            // actual HUD ownership, or an open passive menu replays radio backlog
+            // into the pointer even though closed-menu follow drops those frames.
+            // As for mouse release, the physical HUD bit wins over the host flag:
+            // @MIDDLE0 is handled only after this batch has already been routed.
+            let dropLate = WandSensePointerFrames.pointerOwns(following: dwell.following,
+                hudSession: frameHUDButtonDown && hudSession && (hudButtonHeld || hudEntryPress || pointerInHUD),
                 scrollActive: scrollActive, hostHolding: heldScroll.active || pointerRouter.mouseButtonHeld,
                 frameMouseButtonDown: frameMouseButtonDown, screenshot: screenshot.ownsPointer)
             let times = gyro == nil ? [time] : WandSenseReplay.times(last: time, frame: frame, after: senseLastReading,

@@ -27,6 +27,87 @@ function run(body){
 }
 const hex=(b)=>Buffer.from(b).toString('hex');
 
+// Compile the actual firmware boundary under small inert I/O stubs, so a
+// parser regression is not hidden by reproducing its logic in a fake parser.
+const blockAt=(start)=>{
+ const first=firmware.indexOf(start);assert(first>=0,start);
+ let end=firmware.indexOf('{',first)+1,depth=1;
+ while(depth){if(firmware[end]==='{')depth++;if(firmware[end]==='}')depth--;end++;}
+ return firmware.slice(first,end);
+};
+
+test('malformed and disconnected command input cannot turn its suffix into sleep',()=>{
+ const commands=firmware.slice(firmware.indexOf('static int hexValue('),firmware.indexOf('static void connectCallback('));
+ run(`
+ enum Transport:uint8_t{NONE,USB_LINK,BLE_LINK};Transport session=NONE;
+ uint32_t hostAt=0,bleGeneration=0,commandBleGeneration=0,lastBatteryAt=0;
+ bool stateDirty=false,sleepRequested=false,localDark=false,loadingBlink=false,verifyBlink=false;
+ uint8_t chordPhase=0,usbLength=0,bleLength=0;char usbLine[112],bleLine[112];
+ bool usbDiscardLine=false,bleDiscardLine=false;int identities=0;
+ struct Port{bool online=true;std::string input;size_t offset=0;explicit operator bool()const{return online;}
+ int available(){return int(input.size()-offset);}int read(){return input[offset++];}
+ void flush(){input.clear();offset=0;}void feed(std::string s){input+=s;}} Serial,uart;
+ struct Radio{bool online=true;bool connected(){return online;}} Bluefruit;
+ uint32_t millis(){return 100;}void sendIdentity(Transport){identities++;}void sendBattery(){}
+ void endSession(bool){session=NONE;}void updateCommand(const char*,uint8_t,Transport){}
+ void clearMerged(){}void setLight(int,int,int){}void setIMUMode(int){}
+ ${commands}
+ int main(){
+ Serial.feed(std::string(112,'x')+"Z\\nH\\n");readCommands();assert(!sleepRequested&&session==USB_LINK);
+ Serial.feed("Z?\\nHX\\nLffffffx\\nM20\\n");readCommands();assert(!sleepRequested);
+ Serial.feed("Z\\n");readCommands();assert(sleepRequested);sleepRequested=false;
+ uart.feed("Z");readCommands();assert(bleLength==1);
+ Bluefruit.online=false;readCommands();assert(bleLength==0);
+ Bluefruit.online=true;bleGeneration++;readCommands();uart.feed("?\\n");readCommands();assert(!sleepRequested&&identities==1);
+ Serial.feed("Z");readCommands();Serial.online=false;readCommands();Serial.online=true;
+ Serial.feed("?\\n");readCommands();assert(!sleepRequested&&identities==2);
+ uart.feed(std::string(112,'x')+"Z\\r\\nH\\n");readCommands();assert(!sleepRequested&&session==BLE_LINK);
+ }`);
+});
+
+test('key deletion is acknowledged only when persistent storage confirms absence',()=>{
+ const keyBranch=blockAt("if (line[0] == 'K')");
+ run(`
+ enum Transport:uint8_t{NONE,USB_LINK,BLE_LINK};bool updateFsReady=true,updateKeyPresent=true,nonceValid=true;
+ uint8_t updateKey[WAND_UPDATE_KEY_BYTES]={1};const char* UPDATE_KEY_FILE="key";std::string reply;
+ struct FS{bool present=true,fail=false;bool exists(const char*){return present;}
+ bool remove(const char*){if(fail)return false;present=false;return true;}}InternalFS;
+ void sendUpdate(Transport,const char*s){reply=s;}
+ bool writeFile(const char*,const uint8_t*,size_t){return false;}
+ bool readFile(const char*,uint8_t*,size_t){return false;}
+ void removeKey(const char*line,uint8_t length,Transport from){${keyBranch}}
+ int main(){
+ InternalFS.fail=true;removeKey("KX",2,USB_LINK);assert(reply=="NO storage"&&updateKeyPresent&&updateKey[0]==1);
+ InternalFS.fail=false;removeKey("KX",2,USB_LINK);assert(reply=="KEY removed"&&!updateKeyPresent&&!InternalFS.present);
+ reply="";removeKey("KX",2,USB_LINK);assert(reply=="KEY removed");
+ updateFsReady=false;removeKey("KX",2,USB_LINK);assert(reply=="NO storage");
+ }`);
+});
+
+test('offline standby flashes twice, and a button cancels its pending sleep',()=>{
+ const start=firmware.lastIndexOf('  if (session == NONE) {');assert(start>=0);
+ const end=firmware.indexOf('powerOff();',start)+'powerOff();'.length;
+ const policy=firmware.slice(start,end);
+ run(`
+ enum Transport:uint8_t{NONE,USB_LINK};Transport session=NONE;
+ uint32_t offlineSince=0,chordAt=0,loadingSince=0,verifySince=0,notReadySince=0;
+ constexpr uint32_t OFFLINE_DARK_MS=60000,OFFLINE_SLEEP_MS=300000;
+ bool stateDirty=false,localDark=false,loadingBlink=false,verifyBlink=false,sleepRequested=false;
+ uint8_t chordPhase=0,mask=0;int sleeps=0;WandRgb shown={0,0,0};
+ uint8_t buttonMask(){return mask;}bool anyPhysical(){return mask!=0;}
+ void setLight(uint8_t r,uint8_t g,uint8_t b){shown={r,g,b};}void powerOff(){sleeps++;}
+ void tick(uint32_t now){${policy}}
+ int main(){
+ tick(60000);assert(localDark&&sleeps==0);
+ tick(300000);assert(chordPhase==2&&shown.r==255&&sleeps==0);
+ tick(300100);assert(shown.r==0);tick(300200);assert(shown.r==255);
+ tick(300300);assert(shown.r==0);tick(300400);assert(sleeps==1);
+ sleeps=0;chordPhase=0;offlineSince=0;tick(300000);mask=1;stateDirty=true;
+ tick(300100);assert(chordPhase==0&&sleeps==0&&offlineSince==300100);
+ mask=0;tick(300500);assert(sleeps==0);
+ }`);
+});
+
 test('SHA-256 and HMAC-SHA256 match the published vectors and Node crypto',()=>{
  const long='a'.repeat(1000),key131=Buffer.alloc(131,0xaa);
  const cases=[
@@ -128,7 +209,7 @@ test('firmware lights stay in their own colour families and stop like every boar
 
 test('the firmware exposes no open updater and keeps the key off Bluetooth',()=>{
  assert.doesNotMatch(firmware,/^\s*BLEDfu\s+\w+\s*;|\.begin\(\);?\s*\/\/\s*dfu|bledfu\.begin|addService\(bledfu\)/m,'no open DFU control point is declared or started');
- assert.match(firmware,/static const char FIRMWARE\[\] = "wand-sense-9";\nstatic const uint32_t FIRMWARE_NUMBER = 9;/);
+ assert.match(firmware,/static const char FIRMWARE\[\] = "wand-sense-11";\nstatic const uint32_t FIRMWARE_NUMBER = 11;/);
  const number=firmware.match(/static const uint32_t FIRMWARE_NUMBER = (\d+);/)[1];
  assert.equal(firmware.match(/static const char FIRMWARE\[\] = "wand-sense-(\d+)";/)[1],number,'the name and number agree');
  assert.match(firmware,new RegExp(`static const char WAND_IMAGE_MARKER\\[\\] = "WANDIMG1;xiao-nrf52840-sense;${number}";`),'the image marker carries the same number');

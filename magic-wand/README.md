@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver166 adds bounded reconnect, progress resynchronisation and update lifetime guards, and drops obsolete merged pointer data around passive or released HUD sessions. The complete wireless transfer to firmware11 is in progress; firmware9 was verified before it began. Firmware11 hardens command framing, key deletion and offline sleep warnings. Normal pointer gain, smoothing and timing are unchanged.
 - Installed: receiver161 uses one packet per acknowledgement for wireless firmware transfers, stays below the bootloader receive-buffer limit, and ignores late callbacks after cancellation. Package, protocol, bounded-buffer and transport checks pass. A complete wireless transfer with this repair is still pending; firmware9 is running after USB recovery.
 - Installed: Sense firmware9 acknowledges a physical button press locally for160 ms when the normal light is dark, including the consumed wake press. Idle darkness, existing mode colours, sleep and pointer timing are unchanged. USB recovery installed and confirmed firmware9 with the key, calibration and settings preserved after a failed wireless transfer. Physical light acceptance is pending; wireless reliability repair remains in progress.
 - Installed: receiver160 adds a brief fading Back gesture / Forward gesture acknowledgement after a completed native sideways gesture. Cancelled, vertical and zero-net gestures do not acknowledge. Native preview verified the fade, replacement and retained app focus; all255 Wand,17 Control Stones and4 shared checks passed. Recognition feedback is independent of application navigation; scrolling, pointer timing and firmware8 are unchanged. Physical gesture confirmation remains pending while the wand is disconnected.
@@ -268,7 +269,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.156 (161) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.161 (166) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

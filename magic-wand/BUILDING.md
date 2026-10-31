@@ -119,7 +119,7 @@ Edit `device/wand-mode-bridge.js`, update `wand.json`, then run:
 
 ```sh
 python3 scripts/build.py
-node --test tests/*.test.*
+node --test --test-concurrency=2 tests/*.test.*
 ```
 
 A rebuilt receiver sends a changed bridge on its next connection, because the bridge’s SHA-256 no
@@ -139,13 +139,17 @@ receiver re-uploads the whole runtime on the next connection.
 python3 scripts/build.py --check
 python3 scripts/vendor.py --check
 python3 scripts/check.py           # website checks only
-node --test tests/*.test.*
+node --test --test-concurrency=2 tests/*.test.*
 npm --prefix .. run check          # repository-wide checks, including privacy
 ```
 
 `tests/` runs the real device code and bridge through the website’s Espruino shim with a simulated
 clock. These tests don’t replace trying the wand: physical feel, light colours and Bluetooth timing
 only show up on the hardware.
+
+Keep the explicit two-file concurrency limit: several native fixtures compile Swift. Running every
+file at once can make the same Mac that receives the wand unresponsive. The package scripts carry
+the limit themselves so npm's executable-path changes cannot bypass a shell wrapper.
 
 ## XIAO nRF52840 Sense wand
 

@@ -61,4 +61,14 @@ test("Sense release frames never replay obsolete stroke motion into the pointer"
   assert.equal(f.batch.batchRaw, f.batch.expectedFreshPastPause, `only readings within the stale limit reach the pointer (${JSON.stringify(f.batch)})`);
   assert.equal(f.batch.staleDropped, f.batch.expectedStale, "late readings are counted as dropped, as in ordinary follow");
   assert.ok(f.batch.batchCounts < o.batch.batchCounts);
+  assert.equal(o.hudOpen.reports, 60, "reference: a visible unheld HUD replays the entire old run");
+  assert.equal(f.hudClosed.reports, 1);
+  assert.equal(f.hudOpen.reports, 1, "a passive visible HUD keeps normal pointer freshness");
+  // Each independent rig samples real host time, so rounding can differ by a
+  // count. The safety invariant is exactly one report, not byte-identical dt.
+  assert.ok(Math.abs(f.hudOpen.counts - f.hudClosed.counts) <= 2);
+  assert.equal(f.hudRelease.held, 4, "held HUD history is preserved");
+  assert.equal(f.hudRelease.released, 0, "release history cannot escape into the pointer");
+  assert.ok(f.hudRelease.fresh > 0, "fresh unheld movement resumes without a new delay");
+  assert.ok(o.hudRelease.released > 1, "reference proves the release replay");
 });

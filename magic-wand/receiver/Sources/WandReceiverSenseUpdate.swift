@@ -163,6 +163,7 @@ extension WandReceiver {
                 log("SENSE_UPDATE", flow.state.rawValue, "firmware", flow.target, flow.detail)
                 if !flow.busy { update.preparation.cancel(); update.timer?.invalidate(); update.timer = nil; update.key = nil; update.package = nil }
                 status()
+                if !flow.busy, stopAfterSenseUpdate { stopAfterSenseUpdate = false; stop() }
             }
         }
     }

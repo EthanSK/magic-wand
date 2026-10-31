@@ -11,16 +11,17 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.156",
-    "receiverBuild": "161",
+    "receiver": "1.2.161",
+    "receiverBuild": "166",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.315",
     "agenticMouseBuild": "321",
     "persistentImage": "full-20261025a",
-    "senseFirmware": 9
+    "senseFirmware": 11
   },
   "status": [
+    "Installed: receiver166 adds bounded reconnect, progress resynchronisation and update lifetime guards, and drops obsolete merged pointer data around passive or released HUD sessions. The complete wireless transfer to firmware11 is in progress; firmware9 was verified before it began. Firmware11 hardens command framing, key deletion and offline sleep warnings. Normal pointer gain, smoothing and timing are unchanged.",
     "Installed: receiver161 uses one packet per acknowledgement for wireless firmware transfers, stays below the bootloader receive-buffer limit, and ignores late callbacks after cancellation. Package, protocol, bounded-buffer and transport checks pass. A complete wireless transfer with this repair is still pending; firmware9 is running after USB recovery.",
     "Installed: Sense firmware9 acknowledges a physical button press locally for160 ms when the normal light is dark, including the consumed wake press. Idle darkness, existing mode colours, sleep and pointer timing are unchanged. USB recovery installed and confirmed firmware9 with the key, calibration and settings preserved after a failed wireless transfer. Physical light acceptance is pending; wireless reliability repair remains in progress.",
     "Installed: receiver160 adds a brief fading Back gesture / Forward gesture acknowledgement after a completed native sideways gesture. Cancelled, vertical and zero-net gestures do not acknowledge. Native preview verified the fade, replacement and retained app focus; all255 Wand,17 Control Stones and4 shared checks passed. Recognition feedback is independent of application navigation; scrolling, pointer timing and firmware8 are unchanged. Physical gesture confirmation remains pending while the wand is disconnected.",

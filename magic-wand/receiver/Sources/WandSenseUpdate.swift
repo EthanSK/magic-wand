@@ -334,9 +334,39 @@ struct WandSenseLegacyDFU {
     static let defaultReceiptInterval = 1
     init(image: Data, initPacket: Data, receiptInterval: Int = Self.defaultReceiptInterval, chunk: Int = 20) {
         self.image = image; self.initPacket = initPacket
-        self.receiptInterval = max(1, min(4, receiptInterval)); self.chunk = max(1, min(244, chunk))
+        self.receiptInterval = max(1, min(4, receiptInterval))
+        // SDK11 accepts at most20 bytes, and firmware writes count 32-bit words.
+        self.chunk = max(4, min(20, chunk)) / 4 * 4
     }
     var progress: Double { image.isEmpty ? 0 : Double(acknowledged) / Double(image.count) }
+    var canResume: Bool { phase == .streaming }
+
+    /// Opcode 7 reports the same bootloader session's accepted byte count. It
+    /// may include the last packet whose receipt was lost, but never bytes we
+    /// did not send or less than the count already acknowledged. Do not send
+    /// Start again: the existing session rejects it, while a new session can
+    /// erase the application rather than resume it.
+    mutating func resume(_ value: Data) -> Outcome {
+        let b = [UInt8](value)
+        // SDK11's explicit byte-count query is a seven-byte response to opcode
+        // 7. The five-byte opcode17 packet receipt is a different notification.
+        guard canResume, b.count == 7, b[0] == Op.response, b[1] == 7, b[2] == Self.success else {
+            return fail("invalid resume byte count")
+        }
+        let bytes = Int(UInt32(b[3]) | UInt32(b[4]) << 8 | UInt32(b[5]) << 16 | UInt32(b[6]) << 24)
+        guard bytes >= acknowledged, bytes <= sent, bytes <= image.count,
+              bytes % chunk == 0 || bytes == image.count else {
+            return fail("resume byte count is outside this transfer")
+        }
+        sent = bytes; acknowledged = bytes
+        if bytes == image.count {
+            phase = .validating
+            return .writes([.control(Data([Op.validate]))])
+        }
+        let n = UInt16(receiptInterval)
+        return .writes([.control(Data([Op.receipts, UInt8(n & 255), UInt8(n >> 8)])),
+                        .control(Data([Op.receive])), .packets(nextBurst())])
+    }
 
     mutating func start() -> Outcome {
         guard phase == .idle else { return .failed("already started") }
@@ -633,14 +663,19 @@ final class WandSenseDFUTransfer: NSObject, CBPeripheralDelegate {
     private let central: CBCentralManager
     private var protocolClient: WandSenseLegacyDFU
     private var peripheral: CBPeripheral?, control: CBCharacteristic?, packet: CBCharacteristic?
+    private var discoveredService: CBService?
     private var queue: [Data] = [], afterQueue: [WandSenseLegacyDFU.Write] = []
-    private var timer: Timer?, finished = false, activating = false, awaitingControl = false
+    private var timer: Timer?, progressTimer: Timer?, finished = false, activating = false, awaitingControl = false
+    private var reconnects = 0, resuming = false, awaitingResumeCount = false
+    private var linkConnected = false, notificationReady = false, waitingForRadio = false
+    private var errorResyncs = 0
+    private var activity: NSObjectProtocol?
+    private var transferDeadline: TimeInterval?
     var onStarted: (() -> Void)?
     var onFinish: ((String?) -> Void)?
     var onLog: ((String) -> Void)?
     static let connectSeconds = 30.0, transferSeconds = 240.0
-    // One receipt per packet can take a full connection round trip, including
-    // the bootloader's four-event slave latency. Do not abort a healthy larger
+    // One receipt per packet can take a full connection round trip. Do not abort a healthy larger
     // image using the former ten-packet sender's fixed four-minute budget.
     var transferBudgetSeconds: Double {
         max(Self.transferSeconds, Double((protocolClient.image.count + 19) / 20) * 0.15 + 30)
@@ -653,58 +688,183 @@ final class WandSenseDFUTransfer: NSObject, CBPeripheralDelegate {
     func owns(_ p: CBPeripheral) -> Bool { p.identifier == peripheralID }
 
     func start() {
+        guard !finished, peripheral == nil else { return }
         guard let p = central.retrievePeripherals(withIdentifiers: [peripheralID]).first else { finish("the updater was not found by its Bluetooth identity"); return }
+        activity = ProcessInfo.processInfo.beginActivity(options: [.userInitiated, .idleSystemSleepDisabled], reason: "Complete the wand firmware transfer")
         peripheral = p; p.delegate = self
         timer = WandRunLoop.commonTimer(interval: Self.connectSeconds, repeats: false) { [weak self] _ in self?.finish("the updater did not accept a connection") }
         central.connect(p); onLog?("SENSE_UPDATE_CONNECTING")
     }
     // Forwarded by WandSenseLink while the transfer owns the central.
-    func didConnect(_ p: CBPeripheral) { guard owns(p) else { return }; p.discoverServices([WandSenseLegacyDFU.service]) }
-    func didFailToConnect(_ p: CBPeripheral) { guard owns(p) else { return }; finish("the updater connection failed") }
-    func didDisconnect(_ p: CBPeripheral) {
-        guard owns(p) else { return }
-        // After Activate the bootloader validates, swaps banks and restarts.
-        finish(activating ? nil : "the updater disconnected during the transfer")
+    func didConnect(_ p: CBPeripheral) {
+        guard !finished, !waitingForRadio, owns(p) else { return }
+        linkConnected = true; notificationReady = false; discoveredService = nil
+        p.discoverServices([WandSenseLegacyDFU.service])
+    }
+    func didFailToConnect(_ p: CBPeripheral) {
+        guard !finished, !waitingForRadio, owns(p) else { return }
+        if resuming { reconnect(p, detail: "connection attempt failed") }
+        else { finish("the updater connection failed") }
+    }
+    func didDisconnect(_ p: CBPeripheral, error: Error? = nil) {
+        guard !finished, owns(p) else { return }
+        // After validated Activate the single-bank bootloader restarts the app.
+        if activating { finish(nil); return }
+        let detail = error.map { " (\(($0 as NSError).domain) \(($0 as NSError).code))" } ?? ""
+        if waitingForRadio || (resuming && !linkConnected) { return } // Only an old disconnect is redundant.
+        reconnect(p, detail: detail)
+    }
+
+    private func reconnect(_ p: CBPeripheral, detail: String) {
+        guard protocolClient.canResume, reconnects < 2 else {
+            finish("the updater disconnected during the transfer" + detail); return
+        }
+        reconnects += 1; resuming = true; awaitingResumeCount = false
+        linkConnected = false; notificationReady = false
+        progressTimer?.invalidate(); progressTimer = nil
+        control = nil; packet = nil; discoveredService = nil; awaitingControl = false
+        queue.removeAll(); afterQueue.removeAll(); timer?.invalidate()
+        let remaining = (transferDeadline ?? ProcessInfo.processInfo.systemUptime) - ProcessInfo.processInfo.systemUptime
+        guard remaining > 0 else { finish("the transfer took too long"); return }
+        timer = WandRunLoop.commonTimer(interval: min(Self.connectSeconds, remaining), repeats: false) { [weak self] _ in
+            self?.finish("the updater did not reconnect")
+        }
+        // Preserve the authenticated package and exact peripheral identity.
+        // The bootloader restarts advertising on an external disconnect.
+        peripheral = p; p.delegate = self
+        central.connect(p)
+        onLog?("SENSE_UPDATE_RECONNECT attempt \(reconnects) acknowledgedBytes \(protocolClient.acknowledged)" + detail)
+    }
+
+    /// A radio power change need not be accompanied by a per-device disconnect.
+    /// Keep the same bounded transfer alive while the user brings the radio back.
+    func radioChanged(available: Bool) {
+        guard !finished else { return }
+        if available {
+            guard waitingForRadio, let p = peripheral else { return }
+            waitingForRadio = false; reconnect(p, detail: " after radio returned")
+        } else {
+            guard protocolClient.canResume else { finish("Bluetooth became unavailable before image transfer"); return }
+            waitingForRadio = true; resuming = true; linkConnected = false; notificationReady = false
+            progressTimer?.invalidate(); progressTimer = nil
+            control = nil; packet = nil; discoveredService = nil; awaitingControl = false; queue.removeAll(); afterQueue.removeAll()
+            timer?.invalidate()
+            let remaining = (transferDeadline ?? 0) - ProcessInfo.processInfo.systemUptime
+            guard remaining > 0 else { finish("the transfer took too long"); return }
+            timer = WandRunLoop.commonTimer(interval: min(Self.connectSeconds, remaining), repeats: false) { [weak self] _ in
+                self?.finish("Bluetooth did not return before the reconnect deadline")
+            }
+            onLog?("SENSE_UPDATE_WAITING_FOR_RADIO")
+        }
+    }
+
+    /// Query progress rather than replaying data if a notification was lost.
+    /// With one outstanding packet, a rejected packet can also be resynchronised
+    /// without shifting subsequent bytes. Final image CRC still gates activation.
+    private func queryProgress() {
+        guard !finished, protocolClient.canResume, linkConnected else { return }
+        resuming = true; awaitingResumeCount = true
+        queue.removeAll(); afterQueue.removeAll(); awaitingControl = false
+        perform(.writes([.control(Data([7]))]))
+        watchProgress()
+    }
+    private func watchProgress() {
+        progressTimer?.invalidate(); progressTimer = nil
+        guard !finished, protocolClient.canResume, linkConnected, !waitingForRadio else { return }
+        progressTimer = WandRunLoop.commonTimer(interval: 10, repeats: false) { [weak self] _ in
+            guard let self, !self.finished else { return }
+            if self.awaitingResumeCount {
+                // Ask CoreBluetooth to end the dead link; its disconnect callback
+                // enters the same finite reconnect path as a real link loss.
+                self.onLog?("SENSE_UPDATE_PROGRESS_QUERY_TIMEOUT")
+                self.progressTimer = WandRunLoop.commonTimer(interval: Self.connectSeconds, repeats: false) { [weak self] _ in self?.finish("the updater did not close its stalled connection") }
+                if let p = self.peripheral { self.central.cancelPeripheralConnection(p) }
+            } else {
+                self.onLog?("SENSE_UPDATE_PROGRESS_QUERY")
+                self.queryProgress()
+            }
+        }
     }
 
     func peripheral(_ p: CBPeripheral, didDiscoverServices error: Error?) {
-        guard !finished, p === peripheral else { return }
+        guard !finished, linkConnected, !waitingForRadio, p === peripheral else { return }
         guard error == nil, let s = p.services?.first(where: { $0.uuid == WandSenseLegacyDFU.service }) else { finish("no updater service on this board"); return }
+        discoveredService = s
         p.discoverCharacteristics([WandSenseLegacyDFU.control, WandSenseLegacyDFU.packet], for: s)
     }
     func peripheral(_ p: CBPeripheral, didDiscoverCharacteristicsFor s: CBService, error: Error?) {
-        guard !finished, p === peripheral else { return }
+        guard !finished, linkConnected, !waitingForRadio, p === peripheral,
+              s === discoveredService, s.uuid == WandSenseLegacyDFU.service else { return }
         control = s.characteristics?.first { $0.uuid == WandSenseLegacyDFU.control }
         packet = s.characteristics?.first { $0.uuid == WandSenseLegacyDFU.packet }
         guard error == nil, let control, packet != nil else { finish("the updater service is incomplete"); return }
         p.setNotifyValue(true, for: control)
     }
     func peripheral(_ p: CBPeripheral, didUpdateNotificationStateFor c: CBCharacteristic, error: Error?) {
-        guard !finished, p === peripheral else { return }
+        guard !finished, linkConnected, !waitingForRadio, p === peripheral,
+              c === control, c.uuid == WandSenseLegacyDFU.control else { return }
         guard error == nil, c.isNotifying else { finish("the updater refused notifications"); return }
+        guard !notificationReady else { return }
+        notificationReady = true
         timer?.invalidate()
-        timer = WandRunLoop.commonTimer(interval: transferBudgetSeconds, repeats: false) { [weak self] _ in self?.finish("the transfer took too long") }
-        onStarted?(); onLog?("SENSE_UPDATE_TRANSFER_STARTED")
-        perform(protocolClient.start())
+        let now = ProcessInfo.processInfo.systemUptime
+        if transferDeadline == nil { transferDeadline = now + transferBudgetSeconds }
+        let remaining = transferDeadline! - now
+        guard remaining > 0 else { finish("the transfer took too long"); return }
+        timer = WandRunLoop.commonTimer(interval: remaining, repeats: false) { [weak self] _ in self?.finish("the transfer took too long") }
+        if resuming {
+            awaitingResumeCount = true
+            perform(.writes([.control(Data([7]))]))
+            watchProgress()
+        } else {
+            onStarted?(); onLog?("SENSE_UPDATE_TRANSFER_STARTED")
+            perform(protocolClient.start())
+        }
     }
     func peripheral(_ p: CBPeripheral, didUpdateValueFor c: CBCharacteristic, error: Error?) {
-        guard !finished, p === peripheral, c.uuid == WandSenseLegacyDFU.control, error == nil, let value = c.value else { return }
+        guard !finished, linkConnected, !waitingForRadio, p === peripheral, c === control, c.uuid == WandSenseLegacyDFU.control,
+              !resuming || awaitingResumeCount, error == nil, let value = c.value else { return }
         let before = protocolClient.acknowledged
-        let outcome = protocolClient.receive(value)
+        let outcome: WandSenseLegacyDFU.Outcome
+        if awaitingResumeCount {
+            // Ignore a delayed ordinary receipt while the explicit query is
+            // pending; only its opcode7 response may establish the resume offset.
+            guard value.count >= 2, value[value.startIndex] == 16, value[value.startIndex + 1] == 7 else { return }
+            awaitingResumeCount = false
+            outcome = protocolClient.resume(value)
+            resuming = false
+            if case .failed = outcome {} else {
+                onLog?("SENSE_UPDATE_RESUMED acknowledgedBytes \(protocolClient.acknowledged)")
+            }
+        } else if value == Data([16, 3, 6]), protocolClient.canResume, protocolClient.receiptInterval == 1, errorResyncs < 2 {
+            errorResyncs += 1; onLog?("SENSE_UPDATE_PACKET_REJECTED_RESYNC")
+            queryProgress(); return
+        } else { outcome = protocolClient.receive(value) }
+        if protocolClient.acknowledged > before { errorResyncs = 0 }
         // Bounded diagnostics: show real acknowledged progress, not packets
         // merely queued on the Mac. Do not log every 20-byte acknowledgement.
         if protocolClient.acknowledged / 4096 != before / 4096 {
             onLog?("SENSE_UPDATE_PROGRESS acknowledgedBytes \(protocolClient.acknowledged) imageBytes \(protocolClient.image.count)")
         }
         perform(outcome)
+        watchProgress()
     }
     func peripheral(_ p: CBPeripheral, didWriteValueFor c: CBCharacteristic, error: Error?) {
-        guard p === peripheral, !finished, c.uuid == WandSenseLegacyDFU.control else { return }
-        if error != nil { finish(activating ? "the activation write failed" : "a control write failed"); return }
+        guard p === peripheral, !finished, linkConnected, !waitingForRadio, c === control, c.uuid == WandSenseLegacyDFU.control,
+              !resuming || awaitingResumeCount else { return }
+        if let error {
+            let native = error as NSError
+            // These connection errors can race the bootloader's expected reboot.
+            // Treat activation as unconfirmed; the existing exact-version readback
+            // decides success. Attribute/other errors remain definite failures.
+            if activating && native.domain == "CBErrorDomain" && [3, 6, 7].contains(native.code) { finish(nil) }
+            else { finish(activating ? "the activation write failed" : "a control write failed") }
+            return
+        }
         if activating { return } // Activate normally reboots before another notification.
         awaitingControl = false; drain()
     }
-    func peripheralIsReady(toSendWriteWithoutResponse p: CBPeripheral) { drain() }
+    func peripheralIsReady(toSendWriteWithoutResponse p: CBPeripheral) { if p === peripheral { drain() } }
 
     private func perform(_ outcome: WandSenseLegacyDFU.Outcome) {
         switch outcome {
@@ -720,7 +880,7 @@ final class WandSenseDFUTransfer: NSObject, CBPeripheralDelegate {
     /// Strict order: each control write is acknowledged before anything after
     /// it is sent, and packets go only when the link can take them.
     private func drain() {
-        guard let p = peripheral, let control, let packet, !finished, !awaitingControl else { return }
+        guard let p = peripheral, let control, let packet, !finished, linkConnected, !waitingForRadio, !awaitingControl else { return }
         while true {
             while let next = queue.first {
                 guard p.canSendWriteWithoutResponse else { return }
@@ -735,9 +895,14 @@ final class WandSenseDFUTransfer: NSObject, CBPeripheralDelegate {
     }
     func finish(_ error: String?) {
         guard !finished else { return }
-        finished = true; timer?.invalidate(); timer = nil
+        finished = true; timer?.invalidate(); timer = nil; progressTimer?.invalidate(); progressTimer = nil
+        if let activity { ProcessInfo.processInfo.endActivity(activity); self.activity = nil }
         if error != nil, let p = peripheral { central.cancelPeripheralConnection(p) }
         onLog?(error.map { "SENSE_UPDATE_TRANSFER_FAILED \($0) acknowledgedBytes \(protocolClient.acknowledged) imageBytes \(protocolClient.image.count)" } ?? "SENSE_UPDATE_TRANSFER_DONE")
         onFinish?(error)
+    }
+    deinit {
+        timer?.invalidate(); progressTimer?.invalidate()
+        if let activity { ProcessInfo.processInfo.endActivity(activity) }
     }
 }

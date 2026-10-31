@@ -244,6 +244,10 @@ final class WandSenseLink: NSObject, CBCentralManagerDelegate, CBPeripheralDeleg
 
     func centralManagerDidUpdateState(_ c: CBCentralManager) {
         scanning = false
+        if updaterStarted, let updater {
+            updater.radioChanged(available: c.state == .poweredOn)
+            return
+        }
         if c.state != .poweredOn { if active == .bluetooth { fail(.bluetooth, reason: "Bluetooth off") }; peripheral = nil; rx = nil }
         updateScan()
     }
@@ -272,7 +276,7 @@ final class WandSenseLink: NSObject, CBCentralManagerDelegate, CBPeripheralDeleg
         peripheral = nil; rx = nil
     }
     func centralManager(_ c: CBCentralManager, didDisconnectPeripheral p: CBPeripheral, error: Error?) {
-        if updaterStarted, let updater, updater.owns(p), p !== peripheral { updater.didDisconnect(p); return }
+        if updaterStarted, let updater, updater.owns(p), p !== peripheral { updater.didDisconnect(p, error: error); return }
         guard p === peripheral else { return }
         peripheral = nil; rx = nil; bleFramer.reset()
         if active == .bluetooth { active = nil; info = nil; onLost?(.bluetooth, "Bluetooth disconnected") }

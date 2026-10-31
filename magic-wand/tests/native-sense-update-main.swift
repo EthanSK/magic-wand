@@ -14,13 +14,13 @@ final class FakeBootloader {
     var pendingFlashCapacity: Int? = nil
     private var pendingFlash = 0
     func completeFlashWrites() { pendingFlash = 0 }
-    private(set) var receivedImage = Data(), activated = false, appValid = true, initPacket = Data(), expected = 0
+    private(set) var receivedImage = Data(), activated = false, appValid = true, initPacket = Data(), expected = 0, starts = 0
     private var phase = "idle", receiveInit = false, prn = 0, sinceReceipt = 0, sizeNext = false, packetIndex = 0
     private var notes: [Data] = []
     func control(_ d: Data) -> [Data] {
         let b = [UInt8](d)
         switch (b[0], phase) {
-        case (1, "idle"): precondition(b == [1, 4], "application image type"); phase = "sizes"; sizeNext = true
+        case (1, "idle"): precondition(b == [1, 4], "application image type"); phase = "sizes"; sizeNext = true; starts += 1
         case (2, "init") where b.count == 2 && b[1] == 0: receiveInit = true
         case (2, "init") where b.count == 2 && b[1] == 1:
             receiveInit = false
@@ -33,6 +33,13 @@ final class FakeBootloader {
             return [Data([16, 2, ok ? 1 : 6])]
         case (8, "ready"): prn = Int(b[1]) | Int(b[2]) << 8
         case (3, "ready"): phase = "receiving"
+        case (8, "receiving"): prn = Int(b[1]) | Int(b[2]) << 8; sinceReceipt = 0
+        case (3, "receiving"): break
+        case (7, "receiving"):
+            let n=UInt32(receivedImage.count)
+            // SDK11 ble_dfu_bytes_rcvd_report: response, requested opcode,
+            // success, then the little-endian count (not a packet receipt).
+            return [Data([16,7,1,UInt8(n & 255),UInt8(n >> 8 & 255),UInt8(n >> 16 & 255),UInt8(n >> 24)])]
         case (4, "received"):
             let crc = UInt16(initPacket[initPacket.count - 2]) | UInt16(initPacket[initPacket.count - 1]) << 8
             let good = WandSenseDFUPackage.crc16(receivedImage) == crc
@@ -76,9 +83,10 @@ final class FakeBootloader {
 }
 
 /// Runs the pure client against the fake, as WandSenseDFUTransfer does over Bluetooth.
-func transfer(_ package: WandSenseDFUPackage, _ boot: FakeBootloader, interval: Int = WandSenseLegacyDFU.defaultReceiptInterval) -> (activated: Bool, failure: String?) {
+func transfer(_ package: WandSenseDFUPackage, _ boot: FakeBootloader, interval: Int = WandSenseLegacyDFU.defaultReceiptInterval, resumeOnceAt: Int? = nil) -> (activated: Bool, failure: String?) {
     var client = WandSenseLegacyDFU(image: package.image, initPacket: package.initPacket, receiptInterval: interval)
     var pending: [WandSenseLegacyDFU.Outcome] = [client.start()]
+    var resumed = false
     while let outcome = pending.first {
         pending.removeFirst()
         switch outcome {
@@ -96,7 +104,12 @@ func transfer(_ package: WandSenseDFUPackage, _ boot: FakeBootloader, interval: 
             // this complete radio burst has arrived. The old ten-packet burst
             // overran it before its first receipt, exactly the missing case.
             boot.completeFlashWrites()
-            for n in notes { pending.append(client.receive(n)) }
+            if let offset=resumeOnceAt, !resumed, boot.receivedImage.count>=offset, client.canResume {
+                // Drop the last receipt as a real link loss can do. Ask the
+                // retained bootloader for its count; do not erase/restart it.
+                resumed=true
+                for n in boot.control(Data([7])) { pending.append(client.resume(n)) }
+            } else { for n in notes { pending.append(client.receive(n)) } }
             if notes.isEmpty && pending.isEmpty { return (false, "stalled: no response from the bootloader") }
         }
     }
@@ -169,6 +182,8 @@ let bounded = transfer(package, slowWriter)
 print("BOUNDED FLASH WRITER:", bounded)
 precondition(bounded.activated && bounded.failure == nil, "default sender overran the bootloader: \(String(describing: bounded.failure))")
 for interval in [1, 7, 100] { precondition(transfer(package, FakeBootloader(), interval: interval).activated, "receipt interval \(interval)") }
+for chunk in [21, 244] { precondition(WandSenseLegacyDFU(image: seven, initPacket: dat(seven), chunk: chunk).chunk == 20) }
+for (requested, expected) in [(1,4),(5,4),(19,16)] { precondition(WandSenseLegacyDFU(image: seven, initPacket: dat(seven), chunk: requested).chunk == expected) }
 let corrupted = FakeBootloader(); corrupted.corruptByte = 70_000
 let bad = transfer(package, corrupted)
 precondition(!bad.activated && !corrupted.activated && bad.failure?.contains("status 5") == true, "a CRC failure never activates")
@@ -181,6 +196,35 @@ precondition(!transfer(package, otherSD).activated, "the bootloader's own SoftDe
 var early = WandSenseLegacyDFU(image: seven, initPacket: dat(seven))
 precondition(early.receive(Data([16, 1, 1])) == .failed("out-of-order response 1"), "no response before start")
 print("PASS: legacy DFU completes, and CRC, packet-loss and SoftDevice failures never activate")
+let reconnectBoot=FakeBootloader();reconnectBoot.pendingFlashCapacity=8
+let reconnectResult=transfer(package,reconnectBoot,resumeOnceAt:65_000)
+precondition(reconnectResult.activated && reconnectBoot.receivedImage==seven && reconnectBoot.starts==1,
+             "resumption must preserve full image bytes, CRC and a single erase/start")
+print("PASS: complete image and CRC survive a lost receipt and reconnect midway")
+
+func resumableClient() -> WandSenseLegacyDFU {
+    var c=WandSenseLegacyDFU(image:seven,initPacket:dat(seven))
+    _=c.start();_=c.receive(Data([16,1,1]));_=c.receive(Data([16,2,1]));_=c.receive(Data([17,20,0,0,0]))
+    return c // 20 acknowledged; at most40 sent.
+}
+for bytes in [0,24,44] {
+    var c=resumableClient()
+    let result=c.resume(Data([16,7,1,UInt8(bytes),0,0,0]))
+    if case .failed = result {} else {preconditionFailure("unsafe resume offset accepted")}
+}
+var malformed=resumableClient()
+if case .failed = malformed.resume(Data([16,7,1,21,0,0,0])) {} else {preconditionFailure("unaligned resume offset accepted")}
+for reply: [UInt8] in [[17,40,0,0,0], [16,7,2,40,0,0,0], [16,3,1,40,0,0,0], [16,7,1,40,0,0]] {
+    var invalid = resumableClient()
+    if case .failed = invalid.resume(Data(reply)) {} else { preconditionFailure("wrong resume reply accepted") }
+}
+var prefix=resumableClient()
+let resumed=prefix.resume(Data([16,7,1,40,0,0,0]))
+if case .writes(let writes)=resumed {
+    precondition(!writes.contains(.control(Data([1,4]))),"resume must not erase")
+    precondition(writes.contains(.packets([seven.subdata(in:40..<60)])),"resume sends only bytes beyond confirmed offset")
+} else {preconditionFailure("valid resume refused")}
+print("PASS: resumption bounds received bytes to this exact retained transfer")
 
 // ---------- Preflight ----------
 func info(_ extra: [String: Any] = [:], firmware: String = "wand-sense-6") -> WandSenseInfo {

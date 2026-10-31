@@ -1843,3 +1843,72 @@ Activate after reporting failure. The real transport fixture reproduced it.
 All discovery/notification callbacks now reject a finished transfer or another
 peripheral, like the existing write-completion guard. Keep this check at the
 transport boundary, not only inside protocol state transitions.
+
+A subsequent physical trial progressed to73,600 bytes, then lost its Bluetooth
+connection. Fixing buffer flow control did not establish end-to-end reliability.
+The bootloader restarts advertising after an external disconnect and supports
+opcode7 to report accepted bytes. Retain the exact peripheral and package during
+a bounded reconnect, check that count against acknowledged/sent packet boundaries,
+and continue without another Start/erase. Keep the original whole-transfer deadline
+and final CRC validation. Reject old-connection callbacks until the new byte-count
+query is active; cancellation still wins. Simulated full-image/CRC, lost-receipt,
+identity and retry-limit cases cover this path, not physical reconnection success.
+
+## 2026-10-31 — Match the bootloader's explicit byte-count reply
+
+SDK11's opcode7 query returns seven bytes: response opcode16, requested opcode7,
+success status1 and a little-endian 32-bit count. Its ordinary packet receipt is
+five bytes beginning with opcode17. A resume test that reused the packet-receipt
+shape concealed an invalid decoder. Use the actual bootloader wire shape in the
+fake peer and reject wrong status, procedure, length and out-of-range counts.
+The corrected fixture failed before the decoder change and passed afterward.
+
+## 2026-10-31 — A visible passive HUD still needs fresh pointer input
+
+An unheld open HUD permits normal pointer movement. Treating visibility as HUD
+ownership replayed a merged 60-reading run into 60 pointer reports, while the
+closed HUD produced one. Use the same held/entry/legacy ownership condition as
+pointer posting and the click gate. The inert end-to-end program/filter replay
+now produces one report in both cases while held scrolling retains its history.
+This demonstrates a jump mechanism, not the cause of an unrecorded live jump.
+The same check must use this frame's physical HUD-button bit: the queued host
+release has not been handled when a merged release frame chooses its policy.
+Held history remains intact, but a released frame cannot replay it as pointing.
+
+## 2026-10-31 — Firmware boundaries must discard partial commands
+
+An overflowing line previously reset its length and allowed its suffix to become
+a new command. Partial lines also crossed connection boundaries. Discard through
+the delimiter after overflow, clear partial input at session/transport boundaries,
+and validate the full length before acting. Inert tests compile the actual command
+functions, covering oversized lines, invalid suffixes and reconnects. Key removal
+must confirm persistent absence before clearing the live key or reporting success.
+Automatic offline standby must use the same cancellable two-flash warning as the
+manual sleep gesture; a new button press resets the offline deadline.
+
+## 2026-10-31 — Bound the whole updater lifetime, including reconnect setup
+
+A real second disconnect after reconnect must consume a bounded retry; only a
+queued old disconnect before a new link is redundant. Gate discovery, subscription,
+readiness and writes on current connection/radio ownership, and bind characteristic
+discovery to its current service. Repeated subscription success must be idempotent.
+A missing receipt now triggers an explicit byte-count query; a single outstanding
+rejected packet can use the same resynchronisation path. Keep count bounds, finite
+retry limits, whole-transfer deadline and final CRC verification independent.
+
+CoreBluetooth disconnected-write errors can race a validated Activate. Treat those
+specific errors as an unknown outcome and use the existing exact-board/version
+verification; do not claim installation from the write alone. Keep genuine write
+errors distinct. Prevent ordinary idle sleep during a transfer with a scoped process
+activity; end it on success, failure or destruction. Defer ordinary receiver shutdown
+while an update is busy and honour it once after terminal reporting.
+
+## 2026-10-31 — Put the native-test worker limit in the command
+
+The full check launched many Swift compilers despite a task-local `node` wrapper:
+npm's lifecycle executable path bypassed that wrapper. Several compilations then
+competed with the live receiver and the user's other apps. Keep
+`--test-concurrency=2` in the actual test and check commands and the documented
+direct invocation. Verify the running test child count, not merely the shell's
+PATH. This avoids test-induced load; it does not identify the cause of an earlier
+unrecorded pointer jump.

@@ -48,12 +48,12 @@ using namespace Adafruit_LittleFS_Namespace;
 
 // Numeric firmware versions from 6 on; earlier images used dated letters
 // (the previous one was wand-sense-20261029e). Wireless updates only move up.
-static const char FIRMWARE[] = "wand-sense-9";
-static const uint32_t FIRMWARE_NUMBER = 9;
+static const char FIRMWARE[] = "wand-sense-11";
+static const uint32_t FIRMWARE_NUMBER = 11;
 // The image's own statement of its board and number. The receiver refuses a
 // package without exactly one, or for another board or number. Change the
 // number with FIRMWARE_NUMBER.
-static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;9";
+static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;11";
 static const uint32_t DEBOUNCE_MS = 10;            // Same as the checked diagnostic sketch.
 static const uint32_t HOST_TIMEOUT_MS = 2000;      // Host heartbeat is every 500 ms.
 static const uint32_t HEARTBEAT_FRAME_MS = 250;    // Liveness while the sensor is quiet.
@@ -80,11 +80,13 @@ static bool stateDirty = false, sleepRequested = false, localDark = false; // sl
 static bool loadingBlink = false;                 // Offline after XU: the receiver is restarting; cycle the loading colours.
 static uint32_t loadingSince = 0;
 static uint32_t notReadySince = 0; // LED phase only: never used for input, link or power deadlines.
-static uint8_t chordPhase = 0;                     // Local all-three warning when no host owns the board.
+static uint8_t chordPhase = 0;                     // 1: manual chord warning; 2: cancellable offline warning.
 static uint32_t chordAt = 0;
 static bool wokeFromOff = false;
 static char usbLine[112], bleLine[112]; // Update authorizations are about 80 characters.
 static uint8_t usbLength = 0, bleLength = 0;
+static bool usbDiscardLine = false, bleDiscardLine = false;
+static uint32_t commandBleGeneration = 0;
 static uint8_t light[3] = {0, 0, 0};
 static uint8_t shownLight[3] = {0, 0, 0};
 static bool shownLightKnown = false;
@@ -389,6 +391,7 @@ static void powerOff() {
 static void endSession(bool restarting) {
   if (session == NONE) return;
   nonceValid = false; // A challenge belongs to the session that asked for it.
+  usbLength = bleLength = 0; usbDiscardLine = bleDiscardLine = false;
   session = NONE; offlineSince = millis(); localDark = false; chordPhase = 0;
   loadingBlink = restarting; loadingSince = offlineSince; notReadySince = offlineSince;
   setIMUMode(0); clearMerged(); frameWanted = false;
@@ -461,7 +464,10 @@ static void updateCommand(const char *line, uint8_t length, Transport from) {
   if (line[0] == 'K') {
     if (from != USB_LINK) { sendUpdate(from, "NO transport"); return; }
     if (length == 2 && line[1] == 'X') {
-      if (updateFsReady) InternalFS.remove(UPDATE_KEY_FILE);
+      // As with clearing an update result, acknowledge only a durable removal.
+      // Otherwise the old key would silently return after the next power cycle.
+      if (!updateFsReady || (InternalFS.exists(UPDATE_KEY_FILE) && !InternalFS.remove(UPDATE_KEY_FILE)) ||
+          InternalFS.exists(UPDATE_KEY_FILE)) { sendUpdate(from, "NO storage"); return; }
       updateKeyPresent = false; memset(updateKey, 0, sizeof(updateKey)); nonceValid = false;
       sendUpdate(from, "KEY removed"); return;
     }
@@ -519,10 +525,14 @@ static int hexValue(char c) { return c >= '0' && c <= '9' ? c - '0' : c >= 'a' &
 static void command(const char *line, uint8_t length, Transport from) {
   if (!length) return;
   const char c = line[0];
-  if (c == '?') { sendIdentity(from); if (session == from) sendBattery(); return; }
-  if (c == 'X') { if (session == from) endSession(wandEndRestarting(line, length)); return; }
+  if (c == '?') { if (length == 1) { sendIdentity(from); if (session == from) sendBattery(); } return; }
+  if (c == 'X') { if ((length == 1 || wandEndRestarting(line, length)) && session == from) endSession(wandEndRestarting(line, length)); return; }
   if (c == 'U' || c == 'K') { if (session == from) updateCommand(line, length, from); return; }
   if (c != 'H' && c != 'L' && c != 'M' && c != 'Z') return;
+  // Reject a malformed whole command before it can establish or refresh a session.
+  if ((c == 'H' || c == 'Z') && length != 1) return;
+  if (c == 'L') { if (length != 7) return; for (uint8_t i = 1; i < 7; ++i) if (hexValue(line[i]) < 0) return; }
+  if (c == 'M' && (length != 2 || line[1] < '0' || line[1] > '2')) return;
   if (session != from) {
     // A new host session: current state only, never queued edges or old motion.
     session = from; clearMerged(); stateDirty = true; chordPhase = 0; localDark = false; loadingBlink = false; verifyBlink = false;
@@ -535,18 +545,28 @@ static void command(const char *line, uint8_t length, Transport from) {
   } else if (c == 'M' && length == 2 && line[1] >= '0' && line[1] <= '2') setIMUMode(line[1] - '0');
   else if (c == 'Z') sleepRequested = true;
 }
+static void receiveCommandByte(int c, char *line, uint8_t &length, bool &discard, Transport from) {
+  if (c == '\n' || c == '\r') {
+    if (!discard) command(line, length, from);
+    length = 0; discard = false;
+  } else if (!discard) {
+    if (length < sizeof(usbLine) - 1) line[length++] = char(c);
+    else { length = 0; discard = true; } // Never execute the tail of an oversized command.
+  }
+}
 static void readCommands() {
+  if (!Serial) { usbLength = 0; usbDiscardLine = false; }
+  if (commandBleGeneration != bleGeneration || !Bluefruit.connected()) {
+    bleLength = 0; bleDiscardLine = false; uart.flush();
+    commandBleGeneration = bleGeneration; // No partial input crosses a BLE connection.
+  }
   while (Serial.available()) {
     const int c = Serial.read();
-    if (c == '\n' || c == '\r') { command(usbLine, usbLength, USB_LINK); usbLength = 0; }
-    else if (usbLength < sizeof(usbLine) - 1) usbLine[usbLength++] = char(c);
-    else usbLength = 0;
+    if (Serial) receiveCommandByte(c, usbLine, usbLength, usbDiscardLine, USB_LINK);
   }
   while (uart.available()) {
     const int c = uart.read();
-    if (c == '\n' || c == '\r') { command(bleLine, bleLength, BLE_LINK); bleLength = 0; }
-    else if (bleLength < sizeof(bleLine) - 1) bleLine[bleLength++] = char(c);
-    else bleLength = 0;
+    receiveCommandByte(c, bleLine, bleLength, bleDiscardLine, BLE_LINK);
   }
 }
 
@@ -686,8 +706,11 @@ void loop() {
   if (session == NONE) {
     // The Puck power policy's offline behaviour, kept on the board itself.
     // Any grip edge re-arms the offline timers and shows the disconnected light again.
-    if (stateDirty) { stateDirty = false; offlineSince = now; if (localDark && !chordPhase) { localDark = false; notReadySince = now; setLight(WAND_NOT_READY_WHITE.r, WAND_NOT_READY_WHITE.g, WAND_NOT_READY_WHITE.b); } }
+    if (stateDirty) { stateDirty = false; offlineSince = now; if (chordPhase == 2) chordPhase = 0; if (localDark && !chordPhase) { localDark = false; notReadySince = now; setLight(WAND_NOT_READY_WHITE.r, WAND_NOT_READY_WHITE.g, WAND_NOT_READY_WHITE.b); } }
     if (!chordPhase && buttonMask() == 7) { chordPhase = 1; chordAt = now; loadingBlink = false; verifyBlink = false; }
+    if (!chordPhase && wandElapsed(now, offlineSince) >= OFFLINE_SLEEP_MS && !anyPhysical()) {
+      chordPhase = 2; chordAt = now; loadingBlink = false; verifyBlink = false;
+    }
     if (chordPhase) {
       // All three: flash every colour twice (100 ms steps), then sleep once released.
       const uint8_t step = uint8_t((now - chordAt) / 100);
@@ -709,7 +732,7 @@ void loop() {
       setLight(colour.r, colour.g, colour.b);
     }
   }
-  const bool localSleep = session == NONE && ((chordPhase && wandElapsed(now, chordAt) >= 400) || wandElapsed(now, offlineSince) >= OFFLINE_SLEEP_MS);
+  const bool localSleep = session == NONE && chordPhase && wandElapsed(now, chordAt) >= 400;
   // Sleep waits for every grip button to be released so a held chord cannot wake it at once.
   if ((sleepRequested || localSleep) && !anyPhysical()) powerOff();
 }
