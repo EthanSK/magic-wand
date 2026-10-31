@@ -124,7 +124,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // Ethan's 2026-10-30 "as little weirdness as possible" amendment pauses
     // the 300 ms repeat experiment; the captured no-click jumps were a
     // separate stale-origin defect, fixed by WandPointerOrigin below.
-    let dwell=WandDwellClick()
+    let dwell=WandDwellClick(fastStops:true)
     // Per physical wand: the Sense profile swaps in its own learned desk pose.
     var restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
     var deskSleep=WandDeskSleep()
@@ -1589,6 +1589,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         guard ready,!restoring else{return}
         if scrollFollowBefore {enterPointerMode()}
         motionFilter.reset();dwell.reset();dwell.follow(scrollFollowBefore)
+        dwell.requireFreshFastGesture()
         if scrollFollowBefore {restDetection.pointerActivated()}else{restDetection.pointerStopped()}
         scheduleDwell()
         queue("global.wandPointerPauseUntil=0;setMouseFollow("+(scrollFollowBefore ? "true":"false")+");")
@@ -1877,7 +1878,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                                        hudSession:hudSession,hudShown:context.isActive,scrollActive:scrollActive,
                                        hudOperating:hudButtonHeld || hudEntryPress || pointerInHUD)
         noteClickGate(gate)
-        dwell.move(dx:stopX ?? x,dy:stopY ?? y,now:ProcessInfo.processInfo.systemUptime,eligible:gate == nil)
+        dwell.move(dx:stopX ?? x,dy:stopY ?? y,now:ProcessInfo.processInfo.systemUptime,eligible:gate == nil,pointerX:x,pointerY:y)
         scheduleDwell()
         if routed.buttons != b {log("CONSUMED_HOLD_CLICK_DROPPED")}
         transition(to: routed.buttons, at: point)
@@ -2052,6 +2053,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                   AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
             let point=self.currentPointerOrigin()
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
+            if self.dwell.lastClickWasFast {log("FAST_STOP_CLICK")}
             // Re-arms only when repeats are enabled; single-shot schedules nothing.
             self.scheduleDwell()
         }

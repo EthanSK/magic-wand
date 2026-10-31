@@ -259,19 +259,63 @@ final class WandPointerRouter {
     }
 }
 
-/// HIGH clicks once after travel then a pause. Entry and remaining still never
-/// click; every button/mode transition requires a fresh deliberate movement.
+/// Click sooner only after a coherent, brisk pointer move and fresh evidence
+/// that it stopped. Ethan: a larger move should click as soon as it stops;
+/// slow precision work keeps its existing pause. This never delays motion.
+struct WandFastStopClick {
+    static let window=0.12, distance=40.0, speed=350.0, finalSpeed=200.0
+    static let quietDuration=0.016, maximumGap=0.04, maximumTail=0.08
+    private var samples:[(time:Double,dt:Double,x:Double,y:Double)]=[]
+    private var lastAt:Double?,lastMotion=0.0,quietAt:Double?,quietCount=0,eligible=false
+    private(set) var due:Double?
+    private var needsRest=false
+    mutating func reset(){self=Self()}
+    mutating func requireRest(){reset();needsRest=true}
+    mutating func sample(stopped:Bool,x:Int,y:Int,now:Double){
+        guard now.isFinite else{reset();return}
+        let dt=lastAt.map{now-$0};lastAt=now
+        guard let dt,dt>0,dt<=Self.maximumGap else{
+            samples=[];quietAt=nil;quietCount=0;eligible=false;due=nil;return
+        }
+        if needsRest {
+            if stopped && x==0 && y==0 {
+                if quietAt==nil {quietAt=now;quietCount=1}else{quietCount+=1}
+                if quietCount>=2,now-(quietAt ?? now)>=Self.quietDuration {needsRest=false;quietAt=nil;quietCount=0}
+            }else{quietAt=nil;quietCount=0}
+            return
+        }
+        if stopped && x==0 && y==0 {
+            guard eligible,now-lastMotion<=Self.maximumTail else{quietAt=nil;quietCount=0;due=nil;return}
+            if quietAt==nil {quietAt=now;quietCount=1}else{quietCount+=1}
+            if due==nil,quietCount>=2,now-(quietAt ?? now)>=Self.quietDuration {due=now}
+            return
+        }
+        due=nil;quietAt=nil;quietCount=0;lastMotion=now
+        samples.append((now,dt,Double(x),Double(y)))
+        samples.removeAll{now-$0.time>Self.window}
+        let path=samples.reduce(0){$0+hypot($1.x,$1.y)}
+        let elapsed=samples.reduce(0){$0+$1.dt}
+        let net=hypot(samples.reduce(0){$0+$1.x},samples.reduce(0){$0+$1.y})
+        eligible=path>=Self.distance && elapsed>0 && path/elapsed>=Self.speed &&
+            net>=path*0.8 && hypot(Double(x),Double(y))/dt>=Self.finalSpeed
+    }
+}
+
+/// HIGH clicks once after travel then a pause, or an eligible clear fast stop.
+/// Entry and remaining still never click; mode changes require fresh movement.
 final class WandDwellClick {
     let pause:Double
     let travel:Double
     /// Ethan (2026-10-29): after a stop-to-click, "another tab will slide in
     /// and my mouse will still be over the close button but it won't send a
     /// click again ... do it maybe every interval ... 300 milliseconds".
-    /// While the pointer stays settled after the original (unchanged) click,
+    /// While the pointer stays settled after the first click,
     /// click again every `repeatInterval`. Any movement, intent, ineligible
     /// sample, button or mode change, or stale telemetry ends the repeats.
     /// Nil (screenshot settling) never repeats.
     let repeatInterval:Double?
+    private var fastStop:WandFastStopClick?
+    private(set) var lastClickWasFast=false
     /// Repeats need live samples: a gap longer than this stops them.
     static let freshness=0.1
     private(set) var following=false
@@ -279,25 +323,29 @@ final class WandDwellClick {
     private(set) var armed=false
     private(set) var repeatDue:Double?
     private var lastSeen = -Double.infinity
-    init(pause:Double=0.2,travel:Double=12,repeatInterval:Double?=nil){self.pause=pause;self.travel=travel;self.repeatInterval=repeatInterval}
+    init(pause:Double=0.2,travel:Double=12,repeatInterval:Double?=nil,fastStops:Bool=false){self.pause=pause;self.travel=travel;self.repeatInterval=repeatInterval;fastStop=fastStops ? WandFastStopClick():nil}
     var nextDue:Double? {
         guard following else{return nil}
-        if armed {return max(lastMotion+pause,inhibitedUntil,intentUntil)}
+        if armed {return max(min(lastMotion+pause,fastStop?.due ?? .infinity),inhibitedUntil,intentUntil)}
         return repeatDue
     }
     var repeating:Bool {repeatDue != nil}
-    func reset(){x=0;y=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil}
+    func reset(){x=0;y=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil;fastStop?.reset();lastClickWasFast=false}
     func follow(_ on:Bool){if following != on {reset()};following=on}
+    /// A scroll release may contain wrist recoil. Keep the old click pause
+    /// until a quiet hand and a new pointer move establish a fresh gesture.
+    func requireFreshFastGesture(){fastStop?.requireRest()}
     func inhibit(until:Double){reset();inhibitedUntil=max(inhibitedUntil,until)}
     /// The device sees sub-pixel motion before integer cursor counts exist.
     /// A bounded heartbeat lease prevents both premature clicks and stuck state.
     func intent(_ moving:Bool,now:Double){
         guard following else{return}
-        if moving {intentUntil=now+0.6;lastMotion=now;repeatDue=nil}
+        if moving {intentUntil=now+0.6;lastMotion=now;repeatDue=nil;fastStop?.reset()}
         else if intentUntil>0 {intentUntil=0;lastMotion=now}
     }
-    func move(dx:Int,dy:Int,now:Double,eligible:Bool){
+    func move(dx:Int,dy:Int,now:Double,eligible:Bool,pointerX:Int?=nil,pointerY:Int?=nil){
         guard following,eligible,now>=inhibitedUntil else{reset();return}
+        fastStop?.sample(stopped:dx==0 && dy==0,x:pointerX ?? dx,y:pointerY ?? dy,now:now)
         lastSeen=now
         guard dx != 0 || dy != 0 else{return}
         repeatDue=nil
@@ -312,7 +360,10 @@ final class WandDwellClick {
             repeatDue=now+interval
             return true
         }
-        reset()
+        let fast=(fastStop?.due).map{$0<lastMotion+pause} ?? false
+        // An overdue quick decision cannot click later at a stale position.
+        if fast,now-lastSeen>WandFastStopClick.maximumGap {fastStop?.reset();return false}
+        reset();lastClickWasFast=fast
         if let interval=repeatInterval {repeatDue=now+interval}
         return true
     }

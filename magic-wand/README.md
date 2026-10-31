@@ -67,7 +67,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 | Gesture | Result |
 | --- | --- |
 | Tap from off | Enter high-sensitivity follow without clicking |
-| Stop after moving in HIGH | Click once after a 200 ms pause |
+| Stop after moving in HIGH | Click as soon as a larger, brisk move clearly stops; slow precision aiming keeps the 200 ms pause |
 | While choosing where to click | Keep moving the wand slightly while you are not certain about placement so it does not click. Stop when you are ready. The pointer must still be moving; tiny movements filtered out as hand noise do not prevent a click. |
 | Tap while following | Stop following without clicking |
 | Hold | Over a scroll area, drag to scroll. Holding still continues page scrolling; sideways swipes end when the stroke stops. A confirmed draggable target drags instead. Release stops the gesture. |
@@ -189,6 +189,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver 1.2.148 build153: a larger, brisk pointer move can click as soon as fresh stillness samples confirm its stop; slow precision aiming retains the existing 200 ms pause. Brief pauses, missing data and scroll-release motion cannot trigger the quicker path. Pointer motion, smoothing, gain and plain tap-to-exit are unchanged. Focused and saved slow-reference checks pass; Bluetooth, the signed installed program and saved firmware8 were verified; physical feel is pending.
+- Installed: Agentic Mouse 1.0.315 build 321 fixes one-click unlocking after a value adjustment or missing navigation message. Copy/Paste can proceed to Enter without closing the HUD. All 1,250 native tests pass, with 4 skipped; physical button reliability remains unconfirmed.
 - Installed: receiver1.2.147 build152 restores plain tap-to-exit without a click. Automatic stillness clicking remains enabled. The earlier quiet long-hold stop is retained only behind the disabled quietMouseHold flag; the withdrawn early-stop and dark-light additions have been removed. Scroll sensitivity, double/triple shortcuts and ordinary pointer timing are unchanged. Bluetooth, saved firmware8 and the disabled flag were verified. All250 Wand,17 Control Stones and4 shared checks passed, including legacy Puck storage. Physical feel remains for user review.
 - Installed: receiver1.2.145 build150 adds dim/bright Sense mode-light feedback and the bounded eight-second RGB demo. The demo ran once and restored normal status in the same Bluetooth session. Receiver147 scroll/click behavior, calibration and saved firmware8 are preserved. Physical light preference remains unverified.
 - Installed: Agentic Mouse1.0.314 build320 fixes the wand-home YouTube rewind and Forward guards, and keeps incoming movement from shortening the selection spring. Build318 Zoom placement and screenshot-window recovery remain. The1,248 native tests pass; Ethan confirmed wand YouTube rewind now works. Physical animation preference remains open.
@@ -257,7 +259,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.147 (152) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.148 (153) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
