@@ -26,6 +26,8 @@
     var override; // Device-aligned reading time while one telemetry frame is applied.
     var linkUp = false, imuMode = -1, lastLight = "", lastDelivered = -Infinity;
     var batteryVolts, batteryPercent;
+    var lightOwnerPins = { mouse: "D1", scroll: "D1", hud: "D2", app: "D2", recording: "D30" };
+    var lightDemoTimer, lightDemoStarted = 0, lightDemoContext;
 
     var host = {
       now: function () { return override !== undefined ? override : native.now(); },
@@ -68,9 +70,51 @@
     G.NRF.getBattery = function () { return batteryVolts; };
     G.E.getBattery = function () { return batteryPercent; };
 
+    function lightContext() {
+      return [G.wandLastLightState, !!G.wandRecording, G.digitalRead(G.D1), G.digitalRead(G.D2), G.digitalRead(G.D30)].join(":");
+    }
+    function stopLightDemo(reason) {
+      if (lightDemoTimer === undefined) return;
+      host.clearInterval(lightDemoTimer); lightDemoTimer = undefined;
+      native.log("LIGHT_DEMO_" + reason);
+    }
+    function lightDemoAllowed() {
+      return !dead && !booting && linkUp && !G.WAND_UPDATING && G.wandMotionReady !== false &&
+        !G.calibrationLit && !G.wandDeskSleeping && !G.wandPowerStandby && G.wandPowerWarnPhase === undefined &&
+        ["idle", "mouse", "hud", "app", "recording", "scroll"].indexOf(G.wandLastLightState) >= 0;
+    }
+    // An explicitly requested, bounded hardware demonstration. Only the emitted
+    // RGB value changes: canonical mode state, controls and stored firmware do not.
+    function lightDemo(on) {
+      if (!on) { stopLightDemo("CANCELLED"); sync(); return true; }
+      if (!lightDemoAllowed() || lightDemoTimer !== undefined) return false;
+      lightDemoStarted = native.now(); lightDemoContext = lightContext();
+      lightDemoTimer = host.setInterval(sync, 50);
+      native.log("LIGHT_DEMO_STARTED"); sync(); return true;
+    }
     function sync() {
       if (dead) return;
       var levels = [G.LED1.level, G.LED2.level, G.LED3.level].map(function (v) { return Math.max(0, Math.min(1, Number(v) || 0)); });
+      // Ethan: keep a dim version of the current mode, then brighten it while
+      // that mode's own button is held. The canonical bridge still chooses the
+      // mode and hue; this Sense output adapter only changes brightness.
+      // Power warnings write the LEDs directly and must retain their full flash.
+      var owner = lightOwnerPins[G.wandLastLightState];
+      if (owner && linkUp && !booting && G.wandPowerWarnPhase === undefined && !G.wandPowerStandby && G.digitalRead(G[owner])) {
+        levels = levels.map(function (v) { return v * 0.35; });
+      }
+      if (lightDemoTimer !== undefined) {
+        var elapsed = native.now() - lightDemoStarted;
+        if (!lightDemoAllowed() || lightContext() !== lightDemoContext) stopLightDemo("CANCELLED");
+        else if (elapsed >= 8) stopLightDemo("FINISHED");
+        else if (elapsed < 1) levels = [1, 0, 0];
+        else if (elapsed < 2) levels = [0, 1, 0];
+        else if (elapsed < 3) levels = [0, 0, 1];
+        else {
+          var brightness = elapsed < 5 ? .15 + .85 * (elapsed - 3) / 2 : elapsed < 7 ? 1 - .85 * (elapsed - 5) / 2 : .15;
+          levels = [brightness, brightness, brightness];
+        }
+      }
       var key = levels.join(",");
       if (key !== lastLight) { lastLight = key; native.light(levels[0], levels[1], levels[2]); }
     }
@@ -174,10 +218,10 @@
     }
 
     return {
-      boot: boot, repl: repl, deliver: deliver, fire: fire, configurePointer: configurePointer,
+      boot: boot, repl: repl, deliver: deliver, fire: fire, configurePointer: configurePointer, lightDemo: lightDemo,
       holdSensor: function (on) { sensorHold = !!on; sendIMU(); },
       battery: function (volts, percent) { batteryVolts = volts; batteryPercent = percent; },
-      teardown: function () { dead = true; timers = {}; },
+      teardown: function () { stopLightDemo("CANCELLED"); dead = true; timers = {}; },
       state: function () { return { awake: device.awake, rate: device.sampleRate, imu: imuMode, light: lastLight, link: linkUp, ready: G.wandMotionReady === true }; },
       device: device
     };

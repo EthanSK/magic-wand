@@ -5,18 +5,20 @@ import Darwin
 /// asks through a private request file and displays status.json, never its own guess.
 extension WandReceiver {
     var actionRequestPath: String { support.appendingPathComponent(WandActionPauseRequest.fileName).path }
+    var lightDemoRequestPath: String { support.appendingPathComponent("light-demo.request").path }
 
     /// Watch the private support directory for the dashboard's request file.
     /// A request left by an earlier run is discarded: a restart clears the pause.
     func startActionRequests() {
         unlink(actionRequestPath)
+        unlink(lightDemoRequestPath) // Never replay an old physical demo at launch.
         // Update permissions are scoped to this receiver run, including failure acknowledgement.
         unlink(firmwareUpdateRequestPath)
         unlink(support.appendingPathComponent(WandSenseUpdateReconcileRequest.fileName).path)
         let fd = open(support.path, O_EVTONLY)
         guard fd >= 0 else { log("ACTIONS_REQUESTS_UNAVAILABLE"); return }
         let source = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fd, eventMask: [.write], queue: .main)
-        source.setEventHandler { [weak self] in self?.readActionRequest(); self?.readGuideRequest(); self?.readFirmwareUpdateRequest() }
+        source.setEventHandler { [weak self] in self?.readActionRequest(); self?.readGuideRequest(); self?.readFirmwareUpdateRequest(); self?.readLightDemoRequest() }
         source.setCancelHandler { close(fd) }
         source.resume(); actionRequestSource = source
     }
@@ -24,6 +26,14 @@ extension WandReceiver {
     func readActionRequest() {
         guard let request = WandActionPauseRequest.take(at: actionRequestPath) else { return }
         setActionsPaused(request.paused, request: request.id)
+    }
+
+    /// Reuse the guide's strict private show/hide envelope and safe file reader.
+    /// Here `visible` starts/stops only the bounded RGB demonstration.
+    func readLightDemoRequest() {
+        guard let request = WandGuideRequest.take(at: lightDemoRequestPath) else { return }
+        guard isSense, ready, !restoring, let virtual = senseVirtual else { log("LIGHT_DEMO_NOT_READY"); return }
+        log("LIGHT_DEMO_REQUEST", virtual.lightDemo(request.visible) ? "accepted" : "rejected")
     }
 
     func setActionsPaused(_ paused: Bool, request: String? = nil) {

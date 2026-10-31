@@ -1656,3 +1656,14 @@ output and a 1560 lines/second output ceiling. Replay checks compare identical
 input histories: every stroke, reversal and added flick occurs at the same time;
 horizontal events remain identical. This is synthetic regression evidence;
 physical preference for the stronger speed still needs user confirmation.
+
+## 2026-10-31 — Sense light feedback must retain mode ownership
+
+The canonical program still chooses the mode and RGB hue. Scale only the
+Sense adapter's outgoing values for that mode's own physical button; do not
+brighten the HUD light when only the mouse button is down. Raw sleep-warning
+writes bypass that scaling. The bounded RGB demo changes outgoing light only,
+never mode state, and cancels on input or a priority-state change. Its private
+request reuses the guide's validated same-user envelope; it accepts no code.
+The host regression checks cover dim/bright ownership, warning priority, demo
+expiry and teardown. Actual perceived brightness still needs human feedback.

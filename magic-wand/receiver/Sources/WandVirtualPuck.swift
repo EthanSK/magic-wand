@@ -80,6 +80,12 @@ final class WandVirtualPuck {
         api?.invokeMethod("configurePointer", withArguments: [gain])
     }
 
+    /// LED-only, eight-second demonstration; it never evaluates supplied code.
+    func lightDemo(_ on: Bool) -> Bool {
+        guard !dead else { return false }
+        return api?.invokeMethod("lightDemo", withArguments: [on])?.toBool() ?? false
+    }
+
     /// Apply one Sense frame at its device-aligned time. Values are already
     /// in Puck units and the Puck body frame.
     func deliver(time: Double, mask: Int, accel: [Int]?, gyro: [Int]?) {

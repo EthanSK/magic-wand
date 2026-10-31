@@ -146,6 +146,90 @@ test("all three buttons start the canonical warning, then ask the firmware for b
   assert(!s.lines.slice(before).some((l) => /^@(STT|MIDDLE|BOTTOM|WAND)/.test(l)), "the chord release fires no action");
 });
 
+test("Sense mode lights brighten only for their own held button, preserving priority and warnings", () => {
+  const s = createSense({ zero: '{"x":0,"y":0,"z":0}' });
+  s.api.repl("global.WAND_UPDATING=false;setMouseFollow(true);");
+  assert.deepEqual(s.lights.at(-1), [0, 0, .35], "mouse follow stays visible while released");
+  s.frames(35, 1);
+  assert.deepEqual(s.lights.at(-1), [0, 0, 1], "mouse button brightens blue");
+  s.frames(1, 0);
+  assert.deepEqual(s.lights.at(-1), [0, 0, .35], "quiet release restores dim blue");
+
+  s.api.repl("setHUDOpen(true);");
+  assert.deepEqual(s.lights.at(-1), [0, .35, 0], "open HUD stays dim green");
+  s.frames(1, 1);
+  assert.deepEqual(s.lights.at(-1), [0, .35, 0], "mouse button does not brighten a HUD-owned light");
+  s.frames(1, 0); s.frames(1, 2);
+  assert.deepEqual(s.lights.at(-1), [0, 1, 0], "HUD button brightens green");
+  s.frames(1, 0);
+  assert.deepEqual(s.lights.at(-1), [0, .35, 0]);
+
+  s.api.repl("setHUDOpen(false);setMouseFollow(false);setWandRecording(true);");
+  assert.deepEqual(s.lights.at(-1), [.35, 0, 0], "recording remains red when released");
+  s.frames(1, 1);
+  assert.deepEqual(s.lights.at(-1), [.35, 0, 0], "mouse button does not brighten recording red");
+  s.frames(1, 0); s.frames(1, 4);
+  assert.deepEqual(s.lights.at(-1), [1, 0, 0]);
+  s.frames(1, 0);
+  assert.deepEqual(s.lights.at(-1), [.35, 0, 0]);
+
+  s.api.repl("setWandRecording(false);global.wandAppMode=true;global.wandReviewFiles=true;updateLights();");
+  assert.deepEqual(s.lights.at(-1), [.35, 0, .35], "review keeps its magenta hue while released");
+  s.frames(1, 1); assert.deepEqual(s.lights.at(-1), [.35, 0, .35]);
+  s.frames(1, 0); s.frames(1, 2); assert.deepEqual(s.lights.at(-1), [1, 0, 1]);
+  s.frames(1, 0);
+  s.api.repl("global.wandAppMode=false;global.wandCircleScrolling=true;updateLights();");
+  assert.deepEqual(s.lights.at(-1), [0, .35, .35], "scroll keeps its cyan hue while released");
+  s.frames(1, 1); assert.deepEqual(s.lights.at(-1), [0, 1, 1]);
+  s.frames(1, 0);
+  s.api.repl("global.wandCircleScrolling=false;");
+
+  s.api.repl("setWandRecording(false);setHUDOpen(true);global.WAND_UPDATING=true;updateLights();");
+  assert.deepEqual(s.lights.at(-1), [.45, .45, .45], "loading owns its original pulse levels");
+  s.api.repl("global.WAND_UPDATING=false;updateLights();global.wandEnterDeepStandby();");
+  assert.deepEqual(s.lights.at(-1), [1, 1, 1], "sleep warning remains full white even over a dim HUD mode");
+  s.advance(.5);
+  assert.deepEqual(s.lights.at(-1), [0, 0, 0], "sleep remains dark");
+});
+
+test("the explicit LED-only demo is bounded, cancels for input or priority states, and restores status", () => {
+  const make = () => {
+    const s = createSense({ zero: '{"x":0,"y":0,"z":0}' });
+    s.api.repl("global.WAND_UPDATING=false;setHUDOpen(true);");
+    return s;
+  };
+  const s = make(), before = s.lines.length;
+  assert.equal(s.api.lightDemo(true), true);
+  assert.equal(s.api.lightDemo(true), false, "a second request cannot extend the demonstration");
+  assert.deepEqual(s.lights.at(-1), [1, 0, 0]);
+  s.advance(1.1); assert.deepEqual(s.lights.at(-1), [0, 1, 0]);
+  s.advance(1); assert.deepEqual(s.lights.at(-1), [0, 0, 1]);
+  s.advance(1.5);
+  assert(s.lights.at(-1).every(v => v > .15 && v < 1), "white ramp demonstrates real fractional output");
+  s.advance(4.5);
+  assert.deepEqual(s.lights.at(-1), [0, .35, 0], "the current canonical HUD light is restored");
+  assert(s.logs.includes("LIGHT_DEMO_FINISHED"));
+  assert(s.ctx.hudOpen && !s.ctx.moveLatched);
+  assert(!s.lines.slice(before).some(l => /^@(STT|MIDDLE|BOTTOM|WAND)/.test(l)), "light proof never emits controls");
+
+  for (const change of ["setWandRecording(true);", "global.WAND_UPDATING=true;loadingLight();", "global.wandEnterDeepStandby();"]) {
+    const t = make(); assert(t.api.lightDemo(true));
+    t.api.repl(change); t.advance(.06);
+    assert(t.logs.includes("LIGHT_DEMO_CANCELLED"), change);
+    if (change.includes("UPDATING")) assert(!t.api.lightDemo(true), "updates cannot start a new demo");
+    t.api.lightDemo(false);
+  }
+  const pressed = make(); assert(pressed.api.lightDemo(true)); pressed.frames(1, 2);
+  assert(pressed.logs.includes("LIGHT_DEMO_CANCELLED"));
+  assert.deepEqual(pressed.lights.at(-1), [0, 1, 0]);
+  const idle = createSense({ zero: '{"x":0,"y":0,"z":0}' });
+  idle.api.repl("global.WAND_UPDATING=false;updateLights();");
+  assert(idle.api.lightDemo(true), "the demo also works from ordinary idle");
+  idle.api.lightDemo(false); assert.deepEqual(idle.lights.at(-1), [0, 0, 0]);
+  assert(idle.api.lightDemo(true)); idle.api.teardown();
+  const count=idle.lights.length; idle.advance(9); assert.equal(idle.lights.length,count, "teardown kills the demo timer");
+});
+
 test("teardown stops every timer and output", () => {
   const s = createSense({ zero: '{"x":0,"y":0,"z":0}' });
   s.api.repl("global.WAND_UPDATING=true;updateLights();");
