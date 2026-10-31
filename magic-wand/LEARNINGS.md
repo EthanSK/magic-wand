@@ -2002,5 +2002,12 @@ A passing comparison does not establish the cause of a live jump.
 - The Sense program can produce several fresh motion lines in one existing main-queue turn. Keep their filter and display-clamp steps in order, but one native endpoint event per uninterrupted segment avoids posting a historical path for the window server to drain. Do not add a timer or wait for future readings.
 - Native press/release, scrolling, recentering and cursor-origin reads must flush earlier movement first. A no-op button-state check must not flush every frame and defeat combining. Remember each emitted endpoint in WandPointerOrigin; its stale-feedback protection remains necessary.
 - Preserve the existing deferred virtual-Puck output hand-off: it collects readings already waiting. Flushing after every sensor callback would undo this benefit. Current-only sensor rejection stays separate and must not be replaced with replay.
-- A brief backward settling arc after a fast sweep can outlive the original quick-click window. Bound the extra eligibility by speed, backward travel and time; require fresh fully quiet readings. A slow forward approach, genuine sensor gap or scroll-release recoil must retain its separate protection.
+- The backward-settling extension from receiver173 was withdrawn after missed-click feedback. Do not restore it as part of the ordinary click repair below.
 - Verified with inert native-event tests, the real pointer filter/click fixtures and labelled slow-aim references. Recorded-data comparisons support the selected bounds, but they are not physical acceptance or end-to-end latency measurements.
+
+
+## A quick click must not consume the ordinary click state (2026-10-31)
+
+- The early path shared the ordinary click reset, clearing pending travel and timing. After a fast sweep and early click, a two-count correction then failed to re-arm the ordinary click: the original algorithm clicked at350 ms, while the quick path produced only its120 ms click.
+- Keep the ordinary state and deadline intact when delivering the early opportunity. Suppress its later duplicate only if no real pointer movement followed that early click. Hidden sensor residue does not count as another target.
+- Keep the original counters and slow-aim decision unchanged. The corrected disabled-fast path matched the pre-fast algorithm over10000 deterministic state transitions; fixtures cover a real correction retaining its normal click and a stationary target receiving only one click.

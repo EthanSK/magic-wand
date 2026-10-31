@@ -270,29 +270,8 @@ struct WandFastStopClick {
     /// also accelerated a labelled slow-aim example; only this faster class
     /// gets the longer allowance. No pointer output or delay changes here.
     static let fastSweepSpeed=1500.0, fastSweepTail=0.12
-    /// Ethan (2026-10-31): "the abrupt stop for a fast click ... I want the
-    /// fastest behavior back." An abrupt stop after a fast sweep makes the wand
-    /// spring back a little before it is still. Receiver 172 log and capture,
-    /// 20:21:26: a 4500 px/s sweep, then about 30 px back over about 150 ms,
-    /// then still; the 120 ms allowance sent it to the 200 ms stillness click.
-    /// Settling that stays behind the furthest point reached (springing or
-    /// swinging back, up to `reboundDistance`) is part of that stop for up to
-    /// `reboundTail`. Any new progress past the turnaround is aiming again and
-    /// keeps the 120 ms allowance; slower moves keep 60 ms. A click still needs
-    /// the same fresh, fully quiet readings; nothing waits or is replayed.
-    /// Replayed on all saved recordings: every stop this helps followed a sweep
-    /// of 2900-5900 px/s and swung back at most 31 px within 210 ms. A 1539 px/s
-    /// hook and a 270 ms backward drift that then kept moving stay excluded.
-    static let reboundSpeed=2500.0, reboundTail=0.20, reboundDistance=50.0
     private var sweepSpeed=0.0, missReason="not qualified"
-    /// Unit direction of the last brisk window and visible travel along it since.
-    private var sweepX=0.0, sweepY=0.0, along=0.0, furthest=0.0
-    private var rebounding:Bool {
-        sweepSpeed>=Self.reboundSpeed && furthest-along>=2 && furthest-along<=Self.reboundDistance
-    }
-    private var tail:Double {
-        sweepSpeed>=Self.fastSweepSpeed ? (rebounding ? Self.reboundTail:Self.fastSweepTail):Self.slowTail
-    }
+    private var tail:Double {sweepSpeed>=Self.fastSweepSpeed ? Self.fastSweepTail:Self.slowTail}
     private var samples:[(time:Double,dt:Double,x:Double,y:Double)]=[]
     private var lastAt:Double?,lastMotion=0.0,lastBrisk=0.0,quietAt:Double?,quietCount=0,eligible=false
     private(set) var due:Double?
@@ -349,21 +328,16 @@ struct WandFastStopClick {
         if brisk {
             if !eligible {sweepSpeed=0}
             eligible=true;lastBrisk=now;sweepSpeed=max(sweepSpeed,path/elapsed);missReason="still moving"
-            let sx=samples.reduce(0){$0+$1.x},sy=samples.reduce(0){$0+$1.y},length=hypot(sx,sy)
-            if length>0 {sweepX=sx/length;sweepY=sy/length}
-            along=0;furthest=0
-        } else {
-            along+=Double(x)*sweepX+Double(y)*sweepY;furthest=max(furthest,along)
         }
         // A brief deceleration/settling tail is part of the same brisk stop.
         // Sustained slow aiming still clears the shortcut and uses200 ms.
-        if !brisk && eligible && now-lastBrisk>tail {eligible=false;missReason="settling window elapsed"}
+        else if eligible && now-lastBrisk>tail {eligible=false;missReason="settling window elapsed"}
     }
     /// One diagnostic per sent click, never per sensor frame. This makes a
     /// fallback distinguishable from a lost click without continuous logging.
     func report(now:Double)->String? {
         guard sweepSpeed>=Self.speed,lastBrisk>0,now-lastBrisk<2 else{return nil}
-        return String(format:"sweep=%.0f settleMs=%.0f motionAgeMs=%.0f backPx=%.0f reason=%@",sweepSpeed,(now-lastBrisk)*1000,(now-lastMotion)*1000,furthest-along,due == nil ? missReason:"confirmed")
+        return String(format:"sweep=%.0f settleMs=%.0f motionAgeMs=%.0f reason=%@",sweepSpeed,(now-lastBrisk)*1000,(now-lastMotion)*1000,due == nil ? missReason:"confirmed")
     }
 }
 
@@ -383,7 +357,10 @@ final class WandDwellClick {
     private var fastStop:WandFastStopClick?
     private(set) var lastClickWasFast=false
     private(set) var lastClickDiagnostic:String?
-    private var needsVisibleRearm=false
+    /// A quick click may replace the ordinary click only while the pointer stays
+    /// at that same target. It must not erase the ordinary movement/timing state:
+    /// Ethan's small correction after a rapid stop still needs its normal click.
+    private var fastClickAwaitingMovement=false
     /// Repeats need live samples: a gap longer than this stops them.
     static let freshness=0.1
     private(set) var following=false
@@ -398,7 +375,7 @@ final class WandDwellClick {
         return repeatDue
     }
     var repeating:Bool {repeatDue != nil}
-    func reset(){x=0;y=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil;fastStop?.reset();lastClickWasFast=false;lastClickDiagnostic=nil;needsVisibleRearm=false}
+    func reset(){x=0;y=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil;fastStop?.reset();lastClickWasFast=false;lastClickDiagnostic=nil;fastClickAwaitingMovement=false}
     func follow(_ on:Bool){if following != on {reset()};following=on}
     /// A scroll release may contain wrist recoil. Keep the old click pause
     /// until a quiet hand and a new pointer move establish a fresh gesture.
@@ -419,14 +396,13 @@ final class WandDwellClick {
         guard following,eligible,now>=inhibitedUntil else{reset();return}
         fastStop?.sample(stopped:dx==0 && dy==0,x:pointerX ?? dx,y:pointerY ?? dy,now:now,sampleSeconds:sampleSeconds,pointerQuiet:pointerQuiet)
         lastSeen=now
+        if (pointerX ?? dx) != 0 || (pointerY ?? dy) != 0 {fastClickAwaitingMovement=false}
         guard dx != 0 || dy != 0 else{return}
         repeatDue=nil
-        // A quick click can precede the old stop counter settling to zero.
-        // Those invisible leftovers must not arm a second click. Subsequent
-        // visible travel restores the ordinary precision behavior.
-        x+=Double(needsVisibleRearm ? (pointerX ?? dx):dx)
-        y+=Double(needsVisibleRearm ? (pointerY ?? dy):dy);lastMotion=now
-        if hypot(x,y)>=travel {armed=true;needsVisibleRearm=false}
+        // The established ordinary click path keeps its original counters.
+        // Quick-stop recognition observes it; it never consumes this state.
+        x+=Double(dx);y+=Double(dy);lastMotion=now
+        if hypot(x,y)>=travel {armed=true}
     }
     func tick(now:Double)->Bool {
         guard let due=nextDue,now>=due else{return false}
@@ -440,9 +416,22 @@ final class WandDwellClick {
         // An overdue quick decision cannot click later at a stale position.
         if fast,now-lastSeen>WandFastStopClick.maximumGap {fastStop?.reset();return false}
         let diagnostic=fastStop?.report(now:now)
-        reset();lastClickWasFast=fast;lastClickDiagnostic=diagnostic;needsVisibleRearm=fast
+        if fast {
+            // An additional early opportunity, not a replacement state machine.
+            // Keep the original normal-click deadline and travel. A small real
+            // correction can still receive exactly the ordinary click it would
+            // have received with quick clicking disabled.
+            fastStop?.reset();fastClickAwaitingMovement=true
+            lastClickWasFast=true;lastClickDiagnostic=diagnostic
+            return true
+        }
+        // If nothing visibly moved after the quick click, that target already
+        // received its click. Consume only this duplicate at the original
+        // deadline; hidden sensor residue must not click the target twice.
+        let alreadyClicked=fastClickAwaitingMovement
+        reset();lastClickWasFast=false;lastClickDiagnostic=diagnostic
         if let interval=repeatInterval {repeatDue=now+interval}
-        return true
+        return !alreadyClicked
     }
 }
 
