@@ -37,3 +37,31 @@ quiet(release,from:0.19);expect(!release.tick(now:0.211),"release recoil must no
 for i in 22...30 {release.move(dx:6,dy:0,now:Double(i)*0.01,eligible:true)}
 quiet(release,from:0.31);expect(release.tick(now:0.331),"a fresh intentional move after settling can click quickly")
 print("PASS: clear fast stops, preserved precision, short moves, single-frame/burst/gap/stale safety, lane cancellation and actual cursor travel")
+
+// Exercise the live call order, including the filter's motion-intent heartbeat.
+// A longer brisk move activates intent after250 ms; it must not erase the
+// actual cursor travel that qualifies a quick stop.
+func liveStop(briskFrames:Int,approachFrames:Int=0,rate:Double=40)->(delay:Double,fast:Bool,count:Int) {
+ let f=WandMotionFilter();f.path = .direct
+ expect(f.configure([0,0,86.4*1.3,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,1]),"live filter configuration")
+ let d=WandDwellClick(fastStops:true);d.follow(true)
+ let dt=0.009615,stop=Double(briskFrames+approachFrames)*dt
+ var count=0,delay=Double.infinity,fast=false,intentSeen=false
+ for i in 0..<(briskFrames+approachFrames+45) {
+  let rateNow=i<briskFrames ? rate : (i<briskFrames+approachFrames ? 3.0:0.0)
+  let sample=f.sample(rawX:Int((rateNow/0.00875).rounded()),rawY:0,microseconds:9615,held:false,resetState:false)!
+  let now=Double(i)*dt;intentSeen = intentSeen || sample.intent
+  d.intent(sample.intent,now:now)
+  d.move(dx:sample.stopX,dy:sample.stopY,now:now,eligible:true,pointerX:sample.x,pointerY:sample.y)
+  if d.tick(now:now) {count+=1;delay=now-stop;fast=d.lastClickWasFast}
+ }
+ expect(intentSeen,"the sequence exercised the real motion intent signal")
+ return (delay,fast,count)
+}
+let liveFast=liveStop(briskFrames:42)
+expect(liveFast.fast && liveFast.delay<0.12 && liveFast.count==1,"long brisk live-pipeline move must click quickly once, including intent heartbeat; got \(liveFast)")
+let livePrecise=liveStop(briskFrames:42,rate:3)
+expect(!livePrecise.fast && livePrecise.delay>=0.18 && livePrecise.count==1,"slow live-pipeline motion keeps the precision wait; got \(livePrecise)")
+let liveApproach=liveStop(briskFrames:42,approachFrames:30)
+expect(!liveApproach.fast && liveApproach.delay>=0.18 && liveApproach.count==1,"slowing into a target cancels acceleration in the live pipeline; got \(liveApproach)")
+print("PASS: live motion intent preserves brisk-stop evidence and slow precision timing")
