@@ -16,7 +16,7 @@ class RecordingsTests(unittest.TestCase):
     p.update(imuFlags=3,sampleCount=1,firstMicros=seq*20000)
     store.record(p,'Bluetooth',session,{**usage(seq,seq*2),'windowTitle':'never-keep'})
    recorder.queue.join()
-   self.assertEqual(store.snapshot()['capture'],dict(enabled=True,dropped=0,error=False))
+   self.assertEqual({k:store.snapshot()['capture'][k] for k in ('enabled','dropped','error')},dict(enabled=True,dropped=0,error=False))
    recorder.close();files=list(Path(directory).glob('readings.jsonl*'))
    self.assertLessEqual(len(files),3)
    for file in files:self.assertEqual(file.stat().st_mode&0o777,0o600)
@@ -25,6 +25,20 @@ class RecordingsTests(unittest.TestCase):
    self.assertEqual(rows[-1]['packet']['sampleCount'],1)
    self.assertEqual(rows[-1]['age_ms'],0)
    self.assertNotIn('private-do-not-keep',json.dumps(rows));self.assertNotIn('windowTitle',json.dumps(rows))
+ def test_deadlines_survive_restart_and_only_owned_files_expire(self):
+  with tempfile.TemporaryDirectory() as directory:
+   now=[1000.0];clock=lambda:now[0]
+   recorder=RollingReadings(directory,clock=clock)
+   store=Store(recorder=recorder);session=store.begin('Bluetooth');store.record(packet(1),'Bluetooth',session,usage());recorder.queue.join()
+   self.assertEqual(recorder.capture_until,1600);self.assertEqual(recorder.delete_after,8800)
+   now[0]=1601;store.record(packet(2),'Bluetooth',session,usage());recorder.close()
+   self.assertEqual(len(read_rows(directory)),1)
+   recorder=RollingReadings(directory,clock=clock);self.assertFalse(recorder.enabled);recorder.close()
+   keep=Path(directory)/'reference.txt';keep.write_text('keep')
+   victim=Path(directory)/'victim';victim.write_text('safe');(Path(directory)/'readings.jsonl.31').symlink_to(victim)
+   now[0]=8801;recorder=RollingReadings(directory,clock=clock);recorder.close()
+   self.assertFalse((Path(directory)/'readings.jsonl').exists());self.assertEqual(keep.read_text(),'keep');self.assertEqual(victim.read_text(),'safe')
+   self.assertFalse(recorder.enabled)
  def test_active_windows_need_posted_travel_not_sensor_motion_or_follow(self):
   def row(i,u,session=1):return dict(id=i,session=session,transport='Bluetooth',packet=packet(i),poll=float(i),usage=u)
   rows=[row(1,usage()),row(2,usage()),row(3,usage(1,3)),row(4,usage(1,3)),row(5,usage(2,8,True)),row(6,usage(3,10)),row(7,usage(4,12))]

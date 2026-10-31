@@ -1758,3 +1758,14 @@ segment earns no fast clicks with either version. This is not a physical success
 rate. Receiver157 passed the focused gap regression and full253 Wand,17 Control
 Stones and4 shared checks. Installed source/resources and Bluetooth were read
 back with saved Sense8; physical reliability remains a user check.
+
+## 2026-10-31 — Temporary sensor capture has persistent deadlines
+
+Rotation limited storage but left both DebugReadings and review-traces recording
+indefinitely. Each now uses a saved capture deadline and deletion deadline: ten
+minutes to collect feedback, then two hours until raw temporary files expire.
+Restarting or reading the dashboard must not renew them. The explicit capture
+command starts the same window for both recorders after an installed change.
+The existing worker/utility queues enforce expiry, including after sleep; only
+their own fixed raw filenames are deleted. Preserve labelled shared references
+and independently authorized longer studies outside that cleanup scope.

@@ -14,8 +14,13 @@ test('trace switch is local, opt-in and can be disabled without restarting',()=>
   assert.equal(run('on').status,0);
   assert.equal(JSON.parse(run('status').stdout).enabled,true);
   const config=join(dir,'review-trace.json');assert.equal(statSync(config).mode & 0o777,0o600);
+  const window=JSON.parse(readFileSync(config,'utf8'));
+  assert(window.captureUntil>Date.now()/1000+590 && window.captureUntil<=Date.now()/1000+600);
+  assert.equal(window.deleteAfter-window.captureUntil,7200);
+  assert.deepEqual(JSON.parse(readFileSync(join(dir,'DebugReadings/capture-window.json'),'utf8')),window);
   chmodSync(config,0o666);assert.equal(JSON.parse(run('status').stdout).enabled,false);
   assert.equal(run('off').status,0);assert.equal(JSON.parse(run('status').stdout).enabled,false);
+  assert.equal(JSON.parse(readFileSync(config,'utf8')).deleteAfter,window.deleteAfter);
  }finally{rmSync(dir,{recursive:true,force:true});}
 });
 test('review traces are private, bounded, optional and independent of input delivery',{skip:process.platform!=='darwin'},()=>{
