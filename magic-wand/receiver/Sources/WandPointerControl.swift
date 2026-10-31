@@ -1085,11 +1085,11 @@ final class WandSustainedScroll {
         /// the original mapping by its plateau. Horizontal history gestures
         /// retain their independently tested curve; this adds no input delay.
         var pageLowSpeedGain=0.5
-        /// Ethan, 2026-10-31: "make this scroll more sensitive ... the behavior
-        /// is good now". Scale page speed by 30%, including each added flick
+        /// Ethan, 2026-10-31: "sensitivity at low scroll speed or maybe overall
+        /// can still be faster". Increase the earlier 1.3 gain to 1.7, including each added flick
         /// and the ceiling, without changing stroke recognition or sideways
         /// history gestures. The gentle low-speed curve keeps the same shape.
-        var pageSensitivity=1.3
+        var pageSensitivity=1.7
         /// Ethan, 2026-10-30: "the highest isn't fast enough ... it should be
         /// like much faster if you want to do like a huge scroll", then "I just
         /// wanted to add like extra sensitivity at the faster speeds. Did you

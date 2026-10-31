@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver 1.2.141 build146 increases page-scroll output from1.3x to1.7x, including low speeds. The flick-and-hold curve, timing, horizontal swipe strength, pointer filter and both click behaviors are unchanged. Bluetooth reconnected and focused checks passed; physical sensitivity acceptance is pending.
 - Receiver1.2.138 build143: page scrolling is30% more sensitive, with the existing gentle low-speed curve, cumulative flicks and1560 output lines/second ceiling. Sideways swipes, pointer motion and stroke timing are unchanged. Physical sensitivity acceptance pending.
 - Installed: Agentic Mouse 1.0.310 build 316 adds Brightness to the home HUD’s second layer, between Utility and the unchanged third-layer Zoom. Build 315’s restored dragging is retained. The installed app and rendered layout were checked; physical Brightness use remains unverified.
 - Installed: receiver 1.2.137 build 142 and Agentic Mouse 1.0.309 build 315. Clear sideways flicks can start before the 220 ms hold threshold; ordinary taps, page scrolling and dragging keep their timing, and accepted short swipes stay separate from click shortcuts. No pointer delay was added. Faster Back/Forward and abrupt-stop feel still need physical confirmation.
@@ -252,7 +253,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.138 (143) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.141 (146) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
