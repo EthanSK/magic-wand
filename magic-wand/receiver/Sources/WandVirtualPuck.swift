@@ -86,6 +86,12 @@ final class WandVirtualPuck {
         return api?.invokeMethod("lightDemo", withArguments: [on])?.toBool() ?? false
     }
 
+    /// A sent click briefly acknowledges in blue without changing mode state.
+    func clickLight() {
+        guard !dead else { return }
+        _ = api?.invokeMethod("clickLight", withArguments: [])
+    }
+
     /// Apply one Sense frame at its device-aligned time. Values are already
     /// in Puck units and the Puck body frame.
     func deliver(time: Double, mask: Int, accel: [Int]?, gyro: [Int]?) {

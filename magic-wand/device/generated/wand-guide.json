@@ -133,7 +133,7 @@
     {
       "mode": "mouse",
       "name": "Pointer",
-      "detail": "Steady blue; recording takes priority and shows red",
+      "detail": "Blue while the pointer follows; briefly dims when a click is sent",
       "display": "#4469ff"
     },
     {
@@ -157,7 +157,7 @@
     {
       "mode": "recording",
       "name": "Recording",
-      "detail": "Steady red while recording, including mouse mode. HUD, review, scrolling and loading keep their own colours.",
+      "detail": "Red while recording; briefly shows blue when a click is sent",
       "display": "#ff2e3a"
     },
     {

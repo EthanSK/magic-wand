@@ -67,6 +67,8 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  var wandShortcutCircle=WandReviewNavigation();var hudButtonReviewExit=false
  var reviewExitGesture=WandReviewExitGesture();var reviewExitTimer:Timer?
  var pointerRouter=WandPointerRouter()
+ class ClickLight { var sent=0;func clickLight(){sent+=1} }
+ let senseVirtual:ClickLight?=ClickLight()
  var deliveryPoint:CGPoint?
  var pointerOrigin=WandPointerOrigin(),systemCursor=CGPoint.zero;func currentPointerOrigin()->CGPoint{pointerOrigin.origin(system:systemCursor,now:ProcessInfo.processInfo.systemUptime)}
  func performPointer(_ actions:[WandPointerRouter.Action]){}
@@ -157,6 +159,7 @@ for following in [false,true] {
  let right=Harness();right.dwell.follow(following);right.systemCursor=CGPoint(x:321,y:654)
  right.handleHUDButton("1");right.context.set(true);right.handleHUDButton("0");right.handleHUDButton("1")
  precondition(right.transitions.map{$0.buttons}==[2,0] && right.transitions.allSatisfy{$0.at==CGPoint(x:321,y:654)},"a double click from closed right-clicks once at the visible pointer")
+ precondition(right.senseVirtual?.sent==1,"the sent right click triggers one LED acknowledgement")
  precondition(!right.hudSession && right.hudButtonTap == nil && right.controls.phases.last=="dismiss" && right.buttons==0,"and dismisses the HUD the first press showed")
  right.handleHUDButton("0");settle(0.35)
  precondition(!right.controls.phases.contains("activate") && !right.controls.phases.contains("choose") && right.transitions.count==2,"Switch App never fires and the second release is consumed")

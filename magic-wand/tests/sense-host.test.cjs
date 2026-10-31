@@ -230,6 +230,33 @@ test("the explicit LED-only demo is bounded, cancels for input or priority state
   const count=idle.lights.length; idle.advance(9); assert.equal(idle.lights.length,count, "teardown kills the demo timer");
 });
 
+test("a sent-click pulse dips blue, briefly replaces recording red and restores live mode", () => {
+  const s = createSense({ zero: '{"x":0,"y":0,"z":0}' });
+  s.api.repl("global.WAND_UPDATING=false;setMouseFollow(true);");
+  assert.deepEqual(s.lights.at(-1), [0, 0, .35]);
+  const before = s.lines.length;
+  assert(s.api.clickLight());
+  assert.deepEqual(s.lights.at(-1), [0, 0, .025]);
+  s.advance(.1);
+  assert.deepEqual(s.lights.at(-1), [0, 0, .35]);
+  s.api.repl("setWandRecording(true);");
+  assert.deepEqual(s.lights.at(-1), [.35, 0, 0]);
+  assert(s.api.clickLight());
+  assert.deepEqual(s.lights.at(-1), [0, 0, .25]);
+  s.advance(.05);assert(s.api.clickLight());s.advance(.05);
+  assert.deepEqual(s.lights.at(-1), [0, 0, .25], "a repeated click cannot restore the earlier pulse prematurely");
+  s.advance(.05);assert.deepEqual(s.lights.at(-1), [.35, 0, 0]);
+  assert(s.ctx.wandRecording && s.ctx.moveLatched, "the pulse never changes modes");
+  assert(!s.lines.slice(before).some(l=>/^@(WAND|BOTTOM|MIDDLE|STT) /.test(l)), "feedback never generates input");
+  assert(s.api.clickLight());
+  s.api.repl("global.WAND_UPDATING=true;updateLights();");
+  assert(!s.api.clickLight(), "updating takes priority over a click pulse");
+  s.advance(.1);assert.notDeepEqual(s.lights.at(-1), [0, 0, .25]);
+  s.api.repl("global.WAND_UPDATING=false;updateLights();");
+  assert(s.api.clickLight());s.api.teardown();
+  const count=s.lights.length;s.advance(.2);assert.equal(s.lights.length,count);
+});
+
 test("teardown stops every timer and output", () => {
   const s = createSense({ zero: '{"x":0,"y":0,"z":0}' });
   s.api.repl("global.WAND_UPDATING=true;updateLights();");

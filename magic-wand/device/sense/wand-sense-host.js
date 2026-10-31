@@ -28,6 +28,7 @@
     var batteryVolts, batteryPercent;
     var lightOwnerPins = { mouse: "D1", scroll: "D1", hud: "D2", app: "D2", recording: "D30" };
     var lightDemoTimer, lightDemoStarted = 0, lightDemoContext;
+    var clickLightTimer, clickBlue = 0;
 
     var host = {
       now: function () { return override !== undefined ? override : native.now(); },
@@ -83,6 +84,20 @@
         !G.calibrationLit && !G.wandDeskSleeping && !G.wandPowerStandby && G.wandPowerWarnPhase === undefined &&
         ["idle", "mouse", "hud", "app", "recording", "scroll"].indexOf(G.wandLastLightState) >= 0;
     }
+    function stopClickLight() {
+      if (clickLightTimer !== undefined) host.clearTimeout(clickLightTimer);
+      clickLightTimer = undefined;
+    }
+    // Ethan's sent-click acknowledgement: dip an already-blue mouse light,
+    // otherwise briefly show dim blue (including from recording red). Only
+    // outgoing RGB changes; the current mode is restored from live state.
+    function clickLight() {
+      if (!lightDemoAllowed() || lightDemoTimer !== undefined) return false;
+      stopClickLight();
+      clickBlue = G.wandLastLightState === "mouse" ? 0.025 : 0.25;
+      clickLightTimer = host.setTimeout(function () { clickLightTimer = undefined; sync(); }, 90);
+      sync(); native.log("CLICK_LIGHT"); return true;
+    }
     // An explicitly requested, bounded hardware demonstration. Only the emitted
     // RGB value changes: canonical mode state, controls and stored firmware do not.
     function lightDemo(on) {
@@ -114,6 +129,10 @@
           var brightness = elapsed < 5 ? .15 + .85 * (elapsed - 3) / 2 : elapsed < 7 ? 1 - .85 * (elapsed - 5) / 2 : .15;
           levels = [brightness, brightness, brightness];
         }
+      }
+      if (clickLightTimer !== undefined) {
+        if (!lightDemoAllowed()) stopClickLight();
+        else levels = [0, 0, clickBlue];
       }
       var key = levels.join(",");
       if (key !== lastLight) { lastLight = key; native.light(levels[0], levels[1], levels[2]); }
@@ -218,10 +237,10 @@
     }
 
     return {
-      boot: boot, repl: repl, deliver: deliver, fire: fire, configurePointer: configurePointer, lightDemo: lightDemo,
+      boot: boot, repl: repl, deliver: deliver, fire: fire, configurePointer: configurePointer, lightDemo: lightDemo, clickLight: clickLight,
       holdSensor: function (on) { sensorHold = !!on; sendIMU(); },
       battery: function (volts, percent) { batteryVolts = volts; batteryPercent = percent; },
-      teardown: function () { stopLightDemo("CANCELLED"); dead = true; timers = {}; },
+      teardown: function () { stopClickLight(); stopLightDemo("CANCELLED"); dead = true; timers = {}; },
       state: function () { return { awake: device.awake, rate: device.sampleRate, imu: imuMode, light: lastLight, link: linkUp, ready: G.wandMotionReady === true }; },
       device: device
     };

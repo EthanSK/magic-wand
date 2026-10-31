@@ -57,7 +57,7 @@ final class Harness {
  func scheduleDwell(){}
  func releaseButtons(){buttons=0}
  func postPointerMove(dx:Int,dy:Int,from p:CGPoint)->CGPoint{p}
- func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil){frames+=1}
+ func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil){frames+=1}
  static var wheelPairs:[(Int32,Int32)]=[]
  func finishNativeScroll(cancelled:Bool){}
  func postNativeScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}

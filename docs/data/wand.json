@@ -11,8 +11,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.150",
-    "receiverBuild": "155",
+    "receiver": "1.2.151",
+    "receiverBuild": "156",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.315",
@@ -20,6 +20,7 @@
     "persistentImage": "full-20261025a"
   },
   "status": [
+    "Installed: receiver1.2.151 build156 uses the visible pointer stop after a recent brisk move, tolerates a brief settling tail and measures speed from sensor time. Sent clicks briefly dim the blue light or show blue from another mode, then restore current status. Slow precision timing, pointer filtering and firmware8 stay unchanged. Signed source, bundled resources, Bluetooth and firmware8 readback verified; all253 Wand,17 Control Stones and4 shared checks passed after installation. Live fast-stop clicks and their blue-light commands were observed; physical click feel and blink visibility remain for user review.",
     "Installed: receiver1.2.150 build155 fixes the fast-stop click integration: motion-intent heartbeats no longer erase brisk-move evidence, and a residual stop count without visible pointer travel no longer cancels it. Slow approach keeps the normal200 ms pause. The actual filter and click call order now reproduce the old wait and pass with the correction. Signed installed source and resources match; Bluetooth and firmware8 readback verified. All252 Wand,17 Control Stones and4 shared checks passed after installation. Physical click feel remains for user review.",
     "Installed: receiver 1.2.149 build154 uses the physical release frame to stop replaying obsolete stroke motion after a stalled Bluetooth batch. Existing timing, pointer filtering, fast-stop clicking and held-scroll behavior are preserved. This fixes a reproduced delayed-frame path; the observed fresh post-scroll motion still needs a separate recoil decision. Signed build and source readback match;252 Wand,17 Control Stones and4 shared checks passed. Button-wake Bluetooth reconnection is verified with saved firmware8. Ethan chose immediate pointer movement; no post-scroll recoil suppression was added.",
     "Installed: receiver 1.2.148 build153: a larger, brisk pointer move can click as soon as fresh stillness samples confirm its stop; slow precision aiming retains the existing 200 ms pause. Brief pauses, missing data and scroll-release motion cannot trigger the quicker path. Pointer motion, smoothing, gain and plain tap-to-exit are unchanged. Focused and saved slow-reference checks pass; Bluetooth, the signed installed program and saved firmware8 were verified; physical feel is pending.",
@@ -366,7 +367,7 @@
         0
       ],
       "display": "#ff2e3a",
-      "detail": "Steady red while recording, including mouse mode. HUD, review, scrolling and loading keep their own colours."
+      "detail": "Red while recording; briefly shows blue when a click is sent"
     },
     {
       "mode": "mouse",
@@ -377,7 +378,7 @@
         1
       ],
       "display": "#4469ff",
-      "detail": "Steady blue; recording takes priority and shows red"
+      "detail": "Blue while the pointer follows; briefly dims when a click is sent"
     },
     {
       "mode": "idle",
@@ -533,11 +534,19 @@
       "enabled": true,
       "minimumPointerCounts": 40,
       "sampleWindowSeconds": 0.12,
-      "minimumAverageCountsPerSecond": 350,
-      "minimumFinalCountsPerSecond": 200,
-      "quietConfirmationSeconds": 0.016,
+      "minimumAverageCountsPerSecond": 500,
+      "minimumFinalCountsPerSecond": 500,
+      "quietConfirmationSeconds": 0.008,
       "maximumSampleGapSeconds": 0.04,
-      "scope": "Click timing only: a coherent brisk pointer move followed by fresh quiet readings. Slow aiming retains 200 ms. After scrolling, require rest and a new move. No pointer samples are delayed or replayed."
+      "scope": "Only after a recent brisk move, use the visible pointer stop; invisible residual counts cannot postpone that click. Sustained slow aiming keeps200 ms and its intent protection. No pointer movement is delayed or replayed.",
+      "slowTailSeconds": 0.06,
+      "speedClock": "sensor sample duration"
+    },
+    "clickLight": {
+      "durationMs": 90,
+      "mouseBlue": 0.025,
+      "otherModeBlue": 0.25,
+      "scope": "Sense only; acknowledge a sent click in blue, then restore the current mode. Updates and sleep take priority."
     }
   },
   "hud": {
