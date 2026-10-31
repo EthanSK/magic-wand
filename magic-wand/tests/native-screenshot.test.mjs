@@ -20,6 +20,7 @@ test('screenshot mode: follow-independent aim, natural press-drag-release, tripl
  const bottom=block('            if let marker=line.range(of:"@BOTTOM ")','            if let marker=line.range(of:"@MIDDLE ")');
  const follow=block('            if let marker=line.range(of:"@FOLLOW ")','            if let marker=line.range(of:"@ZERO ")');
  assert(bottom.indexOf('screenshotMouseButton(')<bottom.indexOf('manualPointerDuringRecording()'),'screenshot ownership and the triple-click precede every ordinary mouse-button lane');
+ assert(bottom.indexOf('finishMouseButtonHold(')<bottom.indexOf('recognizeMouseButtonRecenter('),'the exit release completes immediately before double-click recognition consumes it');
  assert(method('handleRaw').indexOf('handleScreenshotRaw')<method('handleRaw').indexOf('reconcileMouseButtonHold'),'screenshot raw handling precedes the button-up reconciliation');
  for(const name of ['reset','stop']) assert(method(name).includes('endScreenshot('),name+' releases any screenshot drag');
  assert(source.includes('queue("global.wandShot=0;global.wandRawPointer=true;'),'a fresh bridge session never inherits screenshot motion');

@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Receiver 1.2.132 build137 installed and reconnected over Bluetooth: gentler low-speed page input, retained boost from repeated page flicks, scrolling fallback for custom app surfaces, bounded app/role diagnostics, and immediate exit-follow click. Physical WhatsApp acceptance remains unverified; native horizontal stop-ending is a separate follow-up.
 - Installed receiver 1.2.131 build 136 restores ordinary wheel events for vertical and diagonal page scrolling and doubles the fast-end maximum to 1,200 lines per second. Pure horizontal held swipes retain native history gestures and the stronger 135 curve. Installed source, resources, settings and Bluetooth readiness were verified. Initial physical feedback reports stronger page scrolling but too much speed at the low end and a drop after repeated flicks; further tuning is in progress.
 - Receiver 1.2.130 build 135 increases deliberate horizontal swipes to five times the previous 134 strength after physical feedback. Vertical and diagonal scrolling, fine pointing, clicks and follow restoration are unchanged. Native receiving apps still decide scroll or history navigation. The stronger setting needs physical confirmation.
 - Receiver 1.2.129 build 134 increases horizontal-only native swipe distance, easing in up to 2.5 times the shared rate. Ordinary vertical and diagonal scrolling, pointer tuning, click timing and follow restoration are unchanged. Native phases still let the receiving app decide scrolling or history navigation. Physical Back/Forward acceptance remains unverified.
@@ -241,7 +242,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.131 (136) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 30 October 2026.
+Receiver 1.2.132 (137) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 30 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

@@ -8,6 +8,7 @@ import Foundation
 // axes. The horizontal-only gain scales only a horizontal output's magnitude; its
 // own profiles, against this same simulator, are in native-trackpad-scroll.test.mjs.
 simulationTuning.horizontalGain=1
+simulationTuning.pageLowSpeedGain=1
 
 var failures:[String]=[]
 func check(_ ok:Bool,_ name:String,_ detail:@autoclosure()->String=""){if !ok {failures.append(name+(detail().isEmpty ? "" : ": "+detail()))}}
@@ -92,15 +93,17 @@ each {axis,sign,seed,label in
     for a in stride(from:1.7,to:2.1,by:0.1) {
         check(sign*trace.rate(a,a+0.1).p>=0.8*before,name+" no dip","\(f(sign*trace.rate(a,a+0.1).p)) at \(f(a)) after \(f(before))")
     }
-    expectSustained(trace,name+" after",from:2.2,to:3.45,representative(6,0.25),sign:sign)
+    let expected = axis == .vertical ? (representative(3,0.4).lowerBound+representative(6,0.25).lowerBound)...(representative(3,0.4).upperBound+representative(6,0.25).upperBound) : representative(6,0.25)
+    expectSustained(trace,name+" after",from:2.2,to:3.45,expected,sign:sign)
 }
-// 8. A slower stroke in the same direction slows the scroll.
+// 8. A slower page flick still increases speed; sideways keeps replace-speed semantics.
 each {axis,sign,seed,label in
     let hand=Hand(parts:[.rest(0.3),stroke(6,0.25),.rest(1.0),stroke(2.5,0.35),.rest(1.5)])
     let trace=simulate(hand,axis:axis,sign:sign,seed:seed)
     let name="slower restroke ("+label+")"
     expectSustained(trace,name+" before",from:0.8,to:1.5,representative(6,0.25),sign:sign)
-    expectSustained(trace,name+" after",from:2.2,to:3.4,representative(2.5,0.35),sign:sign)
+    let expected = axis == .vertical ? (representative(6,0.25).lowerBound+representative(2.5,0.35).lowerBound)...(representative(6,0.25).upperBound+representative(2.5,0.35).upperBound) : representative(2.5,0.35)
+    expectSustained(trace,name+" after",from:2.2,to:3.4,expected,sign:sign)
 }
 // 9. A stroke on the other axis switches axis in the same hold.
 each {axis,sign,seed,label in
@@ -211,7 +214,7 @@ let drag=WandHeldScroll();drag.begin(now:0,scrollable:false,sustain:true);precon
 //     like the normal behavior?": every speed up to 120 degrees per second keeps the
 //     original min(120, 1.6 x speed) mapping, including its 120 lines/s plateau from 75.
 func original(_ peak:Double)->Double {min(120,max(0,peak)*gain)}
-let curve=WandSustainedScroll()
+let curve=WandSustainedScroll(tuning:simulationTuning)
 for peak in stride(from:0.0,through:120.0,by:0.25) {
     check(curve.linesPerSecond(peak:peak)==original(peak),"ordinary stroke \(f(peak)) deg/s keeps the original speed","\(curve.linesPerSecond(peak:peak)) vs \(original(peak))")
 }
@@ -224,16 +227,16 @@ for peak in stride(from:0.0,through:1000.0,by:0.25) {
 for (peak,expected) in [(150.0,187.5),(180.0,390.0),(210.0,727.5),(240.0,1200.0),(1e6,1200.0)] {
     check(abs(curve.linesPerSecond(peak:peak)-expected)<1e-9,"strong stroke \(f(peak)) deg/s","\(f(curve.linesPerSecond(peak:peak))) not \(f(expected))")
 }
-// 23. The whole controller is identical to the original tuning for ordinary hands:
-//     same velocity after every reading and the same wheel lines at every tick,
-//     across slow, normal and plateau-speed strokes, restrokes and reversals.
+// 23. With fine-gain reduction disabled, first strokes and reversals keep the
+//     old ordinary curve. Same-direction restrokes intentionally accumulate now
+//     and are covered independently above and below.
 var originalTuning=WandSustainedScroll.Tuning();originalTuning.highSpeedFrom = .infinity;originalTuning.maxRate=120
 var compared=0
 for (index,parts) in [[stroke(1.5,0.4)],[stroke(5,0.3)],[stroke(9,0.25)],[stroke(14,0.3)],[stroke(17,0.3)],
-                      [stroke(6,0.25),.rest(0.8),stroke(-8,0.3)],[stroke(3,0.4),.rest(0.6),stroke(16,0.3)],
-                      [stroke(16,0.3),.rest(0.6),stroke(4,0.4)],[.stroke(p:10,s:10,seconds:0.3)]].enumerated() {
+                      [stroke(6,0.25),.rest(0.8),stroke(-8,0.3)],[.stroke(p:10,s:10,seconds:0.3)]].enumerated() {
     let hand=Hand(parts:[.rest(0.2)]+parts+[.rest(1.0)])
-    let now=WandSustainedScroll(),before=WandSustainedScroll(tuning:originalTuning)
+    originalTuning.pageLowSpeedGain=1
+    let now=WandSustainedScroll(tuning:simulationTuning),before=WandSustainedScroll(tuning:originalTuning)
     var rng=Rng(state:UInt64(index+11)),time=0.0
     while time<hand.duration {
         let dt=0.0088+0.0017*rng.unit(),intent=hand.intent(at:time)
@@ -273,6 +276,41 @@ each {axis,sign,seed,label in
     check(trace.dropClick && trace.afterRelease==(0,0),name+" release stops at once")
 }
 print("strong flick lines/s: \(f(strongRates.min() ?? 0))...\(f(strongRates.max() ?? 0))")
+// 25. Production page tuning has gentle fine control, matching the existing
+// plateau and high range exactly. Horizontal swipe strength is unchanged.
+let production=WandSustainedScroll()
+var priorHorizontalTuning=WandSustainedScroll.Tuning();priorHorizontalTuning.pageLowSpeedGain=1
+let priorHorizontal=WandSustainedScroll(tuning:priorHorizontalTuning)
+var prior=0.0
+for speed in stride(from:0.0,through:1000.0,by:0.25) {
+    let value=production.linesPerSecond(peak:speed)
+    check(value>=prior && value<=1200,"production page curve is continuous and bounded")
+    if speed>=75 {check(abs(value-curve.linesPerSecond(peak:speed))<1e-9,"normal plateau and high speed are unchanged")}
+    check(abs(production.horizontalLinesPerSecond(peak:speed)-priorHorizontal.horizontalLinesPerSecond(peak:speed))<1e-9,"horizontal swipe tuning remains deterministic")
+    prior=value
+}
+check(production.linesPerSecond(peak:10)<0.6*original(10),"small page stroke has gentler control")
+check(production.linesPerSecond(peak:30)<0.75*original(30),"moderate page stroke still eases in")
+// Same-direction flicks accumulate once per real stroke, hold their increment
+// through the tail/rest, reach the cap, and clear on a real reversal/release.
+simulationTuning=WandSustainedScroll.Tuning()
+for seed in seeds {
+    let parts:[Part]=[.rest(0.35),stroke(5,0.3),.rest(0.8),stroke(5,0.3),.rest(0.8),stroke(5,0.3),.rest(1.4)]
+    for sign in [1.0,-1.0] {
+        let t=simulate(Hand(parts:parts),axis:.vertical,sign:sign,seed:seed)
+        let first=sign*t.rate(0.85,1.35).p,second=sign*t.rate(1.95,2.45).p,third=sign*t.rate(3.05,4.0).p
+        check(first>0 && second>first*1.6 && third>second*1.25,"repeated equal page flicks progressively increase", "\(first), \(second), \(third)")
+        check(abs(t.rate(3.05,3.45).p-t.rate(3.55,4.0).p)<4,"flick speed remains after deceleration")
+    }
+}
+var many:[Part]=[.rest(0.35)]
+for _ in 0..<12 {many += [stroke(20,0.2),.rest(0.6)]}
+many += [.rest(1)]
+let capped=simulate(Hand(parts:many),axis:.vertical,sign:1,seed:1)
+check(capped.rate(10,10.7).p>=1190 && capped.rate(10,10.7).p<=1201,"successive page flicks reach but cannot exceed cap")
+let noPump=simulate(Hand(parts:[.rest(0.35),stroke(5,0.3),.rest(6)],tremor:3.5,drift:2),axis:.vertical,sign:1,seed:3)
+check(abs(noPump.rate(1,2).p-noPump.rate(5,6).p)<=2,"stillness and tremor cannot pump held page speed")
+
 precondition(WandControlVersion.read(3) == .sustainedV3)
 
 if failures.isEmpty {

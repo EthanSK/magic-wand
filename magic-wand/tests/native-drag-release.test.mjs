@@ -10,9 +10,12 @@ function method(name){const a=source.indexOf('    func '+name+'(');assert(a>=0,n
 test('physical release clears an orphan drag and stale device frames cannot relatch it',{skip:process.platform!=='darwin'},()=>{
 const code=`import Foundation
 func log(_ v:Any...) {}
+func AXIsProcessTrusted()->Bool {true}
+struct PauseStub {var paused=false}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?) {}}
 final class Harness {
- var scrollFollowBefore=false
+ var scrollFollowBefore=false,ready=true,restoring=false
+ var actionPause=PauseStub()
  func finishNativeScroll(cancelled:Bool){}
 
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}

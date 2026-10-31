@@ -837,8 +837,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                         if !scrollActive && !heldScroll.active {scrollFollowBefore=dwell.following}
                         manualPointerDuringRecording()
                     }
-                    if recognizeMouseButtonRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
+                    // Finish the physical release before double-click recognition consumes it.
+                    // Ethan permits the first exit click immediately, including in a double/triple.
                     if controlVersion.usesHeldScroll && value=="0" {finishMouseButtonHold(now:ProcessInfo.processInfo.systemUptime)}
+                    if recognizeMouseButtonRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
                     if controlVersion.usesHeldScroll && !scrollActive {
                         if value=="1" {
                             beginMouseButtonHold(now:ProcessInfo.processInfo.systemUptime,following:scrollFollowBefore)
@@ -1009,8 +1011,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         return false
     }
     /// Ethan's mouse-button triple-click: start the ordinary native macOS selection.
-    /// All three clicks are consumed: no recentre, scroll, drag, click or
-    /// mouse-follow change survives them. A fresh mouse-button press then drags the
+    /// The third press is consumed and any pending centre is cancelled. An immediate
+    /// exit click from an earlier tap is intentionally retained (Ethan, 2026-10-31).
+    /// The follow choice is restored. A fresh mouse-button press then drags the
     /// area like a mouse button and its release captures.
     func startScreenshotShortcut(now:Double) {
         pendingRecenter?.invalidate();pendingRecenter=nil
@@ -1415,49 +1418,69 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// the hold itself rejects one that arrives after the tap/hold decision.
     func probeHoldTarget(at point:CGPoint,token:UUID) {
         holdTargetQueue.async { [weak self] in
-            let target=WandHoldTarget.classify(roles:Self.holdTargetRoles(at:point))
+            let probe=Self.holdTargetProbe(at:point)
             DispatchQueue.main.async {
-                guard let self,self.heldTargetToken==token,self.heldScroll.active else{return}
-                let applied=self.heldScroll.setTarget(scrollable:target != .drag,now:ProcessInfo.processInfo.systemUptime)
-                log("BOTTOM_HOLD_TARGET",applied ? target.rawValue : "late (scroll)")
+                guard let self else{return}
+                let current=self.heldTargetToken==token && self.heldScroll.active
+                let applied=current && self.heldScroll.setTarget(scrollable:probe.target != .drag,now:ProcessInfo.processInfo.systemUptime)
+                // One result per request, even when released or too late. No chat content.
+                let disposition = applied ? "applied" : current ? "late (scroll)" : "discarded"
+                log("BOTTOM_HOLD_TARGET",probe.target.rawValue,"id="+token.uuidString,disposition,probe.diagnostic)
             }
         }
     }
-    /// Roles of the element under the pointer and its ancestors, nearest
-    /// first, within a hard 60 ms budget. Stops at the first role that
-    /// decides the hold. A failure returns what was read, which classifies
-    /// as unknown unless a deciding role was already found.
-    static func holdTargetRoles(at point:CGPoint,budget:TimeInterval=0.06)->[String] {
-        guard AXIsProcessTrusted() else{return []}
-        let system=AXUIElementCreateSystemWide(),deadline=Date().addingTimeInterval(budget)
-        AXUIElementSetMessagingTimeout(system,0.02)
+    /// Roles and app identity only, nearest first, within the existing 60 ms budget.
+    /// Stop at a decision or boundary, and report exactly why traversal ended.
+    static func holdTargetProbe(at point:CGPoint,budget:TimeInterval=0.06)->WandHoldTargetProbe {
+        var probe=WandHoldTargetProbe()
+        let start=ProcessInfo.processInfo.systemUptime
+        func finished(_ stop:String,_ error:AXError = .success)->WandHoldTargetProbe {
+            probe.stop=stop;probe.error=Int(error.rawValue)
+            probe.milliseconds=Int((ProcessInfo.processInfo.systemUptime-start)*1000)
+            return probe
+        }
+        guard AXIsProcessTrusted() else{return finished("not-trusted")}
+        let deadline=start+budget,system=AXUIElementCreateSystemWide()
+        AXUIElementSetMessagingTimeout(system,Float(max(0.001,min(0.02,budget))))
         var hit:AXUIElement?
-        guard AXUIElementCopyElementAtPosition(system,Float(point.x),Float(point.y),&hit) == .success else{return []}
+        let hitResult=AXUIElementCopyElementAtPosition(system,Float(point.x),Float(point.y),&hit)
+        guard hitResult == .success,let hit else{return finished("hit-error",hitResult)}
         var owner:pid_t=0
-        let notificationCenter=hit.map{AXUIElementGetPid($0,&owner) == .success && NSRunningApplication(processIdentifier:owner)?.bundleIdentifier=="com.apple.notificationcenterui"} ?? false
-        var roles:[String]=[]
-        var current=hit
+        if AXUIElementGetPid(hit,&owner) == .success {
+            probe.bundleIdentifier=NSRunningApplication(processIdentifier:owner)?.bundleIdentifier ?? "unknown"
+        }
+        let notificationCenter=probe.bundleIdentifier=="com.apple.notificationcenterui"
+        var current:AXUIElement?=hit
         for _ in 0..<24 {
-            guard let item=current,Date()<deadline else{break}
-            AXUIElementSetMessagingTimeout(item,Float(max(0.001,min(0.01,deadline.timeIntervalSinceNow))))
+            guard let item=current else{return finished("no-parent")}
+            let remaining=deadline-ProcessInfo.processInfo.systemUptime
+            guard remaining>0 else{return finished("budget")}
+            AXUIElementSetMessagingTimeout(item,Float(max(0.001,min(0.01,remaining))))
             var role:CFTypeRef?
-            guard AXUIElementCopyAttributeValue(item,kAXRoleAttribute as CFString,&role) == .success,
-                  let name=role as? String else{break}
-            roles.append(name)
-            // Ethan's notification drag is an ordinary mouse drag. A banner
-            // sits inside a scroll area, but is itself a draggable target.
+            let roleResult=AXUIElementCopyAttributeValue(item,kAXRoleAttribute as CFString,&role)
+            guard roleResult == .success,let name=role as? String else{return finished("role-error",roleResult)}
+            probe.roles.append(name)
+            // Notification banners are positively draggable, even in a scroll area.
             if notificationCenter,name=="AXGroup" {
+                let remaining=deadline-ProcessInfo.processInfo.systemUptime
+                guard remaining>0 else{return finished("budget")}
+                AXUIElementSetMessagingTimeout(item,Float(max(0.001,min(0.01,remaining))))
                 var subrole:CFTypeRef?
                 if AXUIElementCopyAttributeValue(item,kAXSubroleAttribute as CFString,&subrole) == .success,
-                   let value=subrole as? String,value=="AXNotificationCenterAlert" {roles.append(value);break}
+                   let value=subrole as? String,value=="AXNotificationCenterAlert" {
+                    probe.roles.append(value);return finished("decisive-role")
+                }
             }
-            if WandHoldTarget.ends(at:name) {break}
+            if WandHoldTarget.ends(at:name) {return finished("boundary")}
+            let parentRemaining=deadline-ProcessInfo.processInfo.systemUptime
+            guard parentRemaining>0 else{return finished("budget")}
+            AXUIElementSetMessagingTimeout(item,Float(max(0.001,min(0.01,parentRemaining))))
             var parent:CFTypeRef?
-            guard AXUIElementCopyAttributeValue(item,kAXParentAttribute as CFString,&parent) == .success,
-                  let value=parent,CFGetTypeID(value)==AXUIElementGetTypeID() else{break}
+            let parentResult=AXUIElementCopyAttributeValue(item,kAXParentAttribute as CFString,&parent)
+            guard parentResult == .success,let value=parent,CFGetTypeID(value)==AXUIElementGetTypeID() else{return finished("parent-error",parentResult)}
             current=(value as! AXUIElement)
         }
-        return roles
+        return finished("depth")
     }
     // Ordinary mice deliver one wheel axis at a time. Mixed-axis line events
     // can be reduced to the dominant direction by native scrolling views.
@@ -1835,6 +1858,18 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let physicalTap=physicalDuration.map{$0<heldScroll.holdSeconds} ?? false
         if physicalTap {log("BOTTOM_PHYSICAL_TAP",Int((physicalDuration ?? 0)*1000))}
         let completedScroll=heldScroll.scrollable && !heldScroll.dragging && heldScroll.qualified(now:now) && !physicalTap
+        // Ethan: leaving mouse follow with a short click should click immediately.
+        // Physical duration wins when Bluetooth delivery is late. Never click for
+        // entering follow, held scrolling/dragging, cancellation or duplicate release.
+        let shortRelease=physicalDuration.map{$0>=0 && $0<heldScroll.holdSeconds} ?? (heldScroll.elapsed(now:now)>=0 && !heldScroll.qualified(now:now))
+        let exitClick=released && shortRelease && scrollFollowBefore && !heldScroll.dragging && !scrollActive
+        if exitClick && ready && !restoring && !actionPause.paused && !screenshot.ownsPointer && AXIsProcessTrusted() {
+            // A physical mouse may have moved during this short press: click the
+            // current pointer, never the earlier scroll anchor.
+            let point=currentPointerOrigin()
+            transition(to:1,at:point);transition(to:0,at:point)
+            log("MOUSE_EXIT_CLICK")
+        }
         // A delayed short tap is not an accepted scroll. Cancel its native
         // phase so an app cannot commit history navigation on that release.
         finishNativeScroll(cancelled:!released || !completedScroll)

@@ -30,10 +30,11 @@ final class Harness {
  var physicalTapDuration:Double?=nil;func mouseButtonPhysicalTapDuration()->Double?{physicalTapDuration}
  var screenshotActive=false,hudButtonHeld=false,hudButtonMouseX=0.0,hudButtonMouseSampleAt = -100.0
  var commands:[String]=[],scrollPostedX=0,scrollPostedY=0
+ var clickPoints:[CGPoint]=[]
  var recordingPointerPaused=false
  var scrollAnchor:CGPoint?,scrollWatchdog:Timer?
- var rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,wheels=0,frames=0,ups=0,light=false
- func transition(to:Int,at:CGPoint){buttons=to;if to==0 {ups+=1}}
+ var rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,wheels=0,frames=0,ups=0,downs=0,light=false
+ func transition(to:Int,at:CGPoint){if to==1 && buttons==0 {downs+=1;clickPoints.append(at)};buttons=to;if to==0 {ups+=1}}
  func queue(_ s:String){commands.append(s)}
  func enterPointerMode(){hudSession=false}
  func resumeHUDNavigation(){}
@@ -148,6 +149,29 @@ for prior in [false,true] {
  let lost=Harness();lost.dwell.follow(prior);lost.heldScroll.begin(now:100);lost.reconcileMouseButtonHold(down:false,now:101,reason:"timeout",released:false)
  precondition(lost.dwell.following==prior && !lost.commands.contains{$0.contains("setMouseFollow")},"lost telemetry must not activate mouse")
 }
+// Exit follow clicks on release itself, with no double/triple-click wait. The
+// actual finish method owns both raw-up and edge-up, so duplicate reports are inert.
+for physicalDuration:Double? in [nil,0.12] {
+ let click=Harness();click.dwell.follow(true);click.beginMouseButtonHold(now:100,following:true)
+ click.heldScrollAnchor=CGPoint(x:800,y:600)
+ click.physicalTapDuration=physicalDuration
+ click.finishMouseButtonHold(now:physicalDuration == nil ? 100.12:100.4)
+ precondition(click.downs==1 && click.ups==1 && click.buttons==0,"short exit release emits one immediate down/up")
+ precondition(click.clickPoints==[.zero],"exit click uses the current pointer, not the old press anchor")
+ click.finishMouseButtonHold(now:100.5);click.reconcileMouseButtonHold(down:false,now:100.6,reason:"duplicate")
+ precondition(click.downs==1,"raw/edge duplicate release cannot click twice")
+}
+let enter=Harness();enter.beginMouseButtonHold(now:100,following:false);enter.finishMouseButtonHold(now:100.12)
+precondition(enter.downs==0,"entering follow does not click")
+let cancelledClick=Harness();cancelledClick.beginMouseButtonHold(now:100,following:true);cancelledClick.finishMouseButtonHold(now:100.12,released:false)
+precondition(cancelledClick.downs==0,"cancellation does not click")
+let heldClick=Harness();heldClick.beginMouseButtonHold(now:100,following:true);heldClick.finishMouseButtonHold(now:101)
+precondition(heldClick.downs==0,"a scroll hold does not click")
+let draggingClick=Harness();draggingClick.beginMouseButtonHold(now:100,following:true)
+_=draggingClick.heldScroll.setTarget(scrollable:false,now:100.01);_=draggingClick.heldScroll.startDrag(now:100.3)
+draggingClick.physicalTapDuration=0.1;draggingClick.finishMouseButtonHold(now:100.4)
+precondition(draggingClick.downs==0,"even a delayed short-duration report cannot click after native dragging")
+
 for horizontal in [false,true] {
  let axis=Harness();precondition(axis.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
  axis.heldScroll.begin(now:now-1);_=axis.pointerRouter.mouseButton(down:true);Harness.wheelPairs=[]
