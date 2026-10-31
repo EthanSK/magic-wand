@@ -1638,3 +1638,14 @@ next hold. Native phase, release, drag, page, tremor and knock regressions passe
 26 short context presses rejected the early path in approximate recorded-input
 replay. Missing historical calibration and gravity timing limit that replay;
 faster physical Back/Forward and abrupt-stop acceptance remain unverified.
+
+## 2026-10-31 — Page sensitivity must not retune gesture recognition
+
+When the current flick-and-hold behavior feels right and only page sensitivity
+needs increasing, scale the page output curve and its cumulative ceiling together.
+Keep stroke thresholds, average, reversal/recoil handling and the separately
+tuned horizontal history gesture unchanged. Receiver 143 uses 1.3 times page
+output and a 1560 lines/second output ceiling. Replay checks compare identical
+input histories: every stroke, reversal and added flick occurs at the same time;
+horizontal events remain identical. This is synthetic regression evidence;
+physical preference for the stronger speed still needs user confirmation.

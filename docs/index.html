@@ -44,7 +44,7 @@
     "shim": "./sim/espruino.js?v=0fba4637ae",
     "device": "./device/wand-mouse-prototype.js?v=d83a4fb022",
     "bridge": "./device/wand-mode-bridge.compact.js?v=ec5338c622",
-    "wand": "./data/wand.json?v=a2327f65da",
+    "wand": "./data/wand.json?v=f852a6fb23",
     "hud": "./data/hud.json?v=cdd0fb60fb"
   }
   </script>
@@ -352,11 +352,12 @@
         <div class="status">
           <h3>Status</h3>
           <!-- wand:status -->
-          <p class="versions"><span>Receiver 1.2.137 (142)</span> <span>Device code wand-7e734a872bfe</span> <span>Bridge ec5338c6</span></p>
+          <p class="versions"><span>Receiver 1.2.138 (143)</span> <span>Device code wand-7e734a872bfe</span> <span>Bridge ec5338c6</span></p>
           <p class="fine">Updated 31 October 2026</p>
           <details class="more">
             <summary>Status notes</summary>
             <ul class="status-list">
+              <li>Receiver1.2.138 build143: page scrolling is30% more sensitive, with the existing gentle low-speed curve, cumulative flicks and1560 output lines/second ceiling. Sideways swipes, pointer motion and stroke timing are unchanged. Physical sensitivity acceptance pending.</li>
               <li>Installed: Agentic Mouse 1.0.310 build 316 adds Brightness to the home HUD’s second layer, between Utility and the unchanged third-layer Zoom. Build 315’s restored dragging is retained. The installed app and rendered layout were checked; physical Brightness use remains unverified.</li>
               <li>Installed: receiver 1.2.137 build 142 and Agentic Mouse 1.0.309 build 315. Clear sideways flicks can start before the 220 ms hold threshold; ordinary taps, page scrolling and dragging keep their timing, and accepted short swipes stay separate from click shortcuts. No pointer delay was added. Faster Back/Forward and abrupt-stop feel still need physical confirmation.</li>
               <li>Installed: Agentic Mouse 1.0.308 build 314 adds built-in left/right window snapping to the Magnet card. Repeating at an occupied screen half moves the window to the neighbouring display. Existing HUD layout and wand controls are retained; standalone snapping apps stay installed. Focused geometry, cancellation and readback checks passed; physical cross-monitor acceptance remains unverified.</li>

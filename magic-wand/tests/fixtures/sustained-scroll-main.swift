@@ -9,6 +9,7 @@ import Foundation
 // own profiles, against this same simulator, are in native-trackpad-scroll.test.mjs.
 simulationTuning.horizontalGain=1
 simulationTuning.pageLowSpeedGain=1
+simulationTuning.pageSensitivity=1
 
 var failures:[String]=[]
 func check(_ ok:Bool,_ name:String,_ detail:@autoclosure()->String=""){if !ok {failures.append(name+(detail().isEmpty ? "" : ": "+detail()))}}
@@ -241,6 +242,7 @@ for (index,parts) in [[stroke(1.5,0.4)],[stroke(5,0.3)],[stroke(9,0.25)],[stroke
                       [stroke(6,0.25),.rest(0.8),stroke(-8,0.3)],[.stroke(p:10,s:10,seconds:0.3)]].enumerated() {
     let hand=Hand(parts:[.rest(0.2)]+parts+[.rest(1.0)])
     originalTuning.pageLowSpeedGain=1
+    originalTuning.pageSensitivity=1
     let now=WandSustainedScroll(tuning:simulationTuning),before=WandSustainedScroll(tuning:originalTuning)
     var rng=Rng(state:UInt64(index+11)),time=0.0
     while time<hand.duration {
@@ -285,18 +287,18 @@ print("strong flick lines/s: \(f(strongRates.min() ?? 0))...\(f(strongRates.max(
 // 25. Production page tuning has gentle fine control, matching the existing
 // plateau and high range exactly. Horizontal swipe strength is unchanged.
 let production=WandSustainedScroll()
-var priorHorizontalTuning=WandSustainedScroll.Tuning();priorHorizontalTuning.pageLowSpeedGain=1
+var priorHorizontalTuning=WandSustainedScroll.Tuning();priorHorizontalTuning.pageLowSpeedGain=1;priorHorizontalTuning.pageSensitivity=1
 let priorHorizontal=WandSustainedScroll(tuning:priorHorizontalTuning)
 var prior=0.0
 for speed in stride(from:0.0,through:1000.0,by:0.25) {
     let value=production.linesPerSecond(peak:speed)
-    check(value>=prior && value<=1200,"production page curve is continuous and bounded")
-    if speed>=75 {check(abs(value-curve.linesPerSecond(peak:speed))<1e-9,"normal plateau and high speed are unchanged")}
+    check(value>=prior && value<=1560,"production page curve is continuous and bounded")
+    if speed>=75 {check(abs(value-1.3*curve.linesPerSecond(peak:speed))<1e-9,"normal plateau and high speed gain 30%")}
     check(abs(production.horizontalLinesPerSecond(peak:speed)-priorHorizontal.horizontalLinesPerSecond(peak:speed))<1e-9,"horizontal swipe tuning remains deterministic")
     prior=value
 }
-check(production.linesPerSecond(peak:10)<0.6*original(10),"small page stroke has gentler control")
-check(production.linesPerSecond(peak:30)<0.75*original(30),"moderate page stroke still eases in")
+check(production.linesPerSecond(peak:10)<0.78*original(10),"small page stroke has gentler control")
+check(production.linesPerSecond(peak:30)<0.975*original(30),"moderate page stroke still eases in")
 // Same-direction flicks accumulate once per real stroke, hold their increment
 // through the tail/rest, reach the cap, and clear on a real reversal/release.
 simulationTuning=WandSustainedScroll.Tuning()
@@ -313,10 +315,27 @@ var many:[Part]=[.rest(0.35)]
 for _ in 0..<12 {many += [stroke(20,0.2),.rest(0.6)]}
 many += [.rest(1)]
 let capped=simulate(Hand(parts:many),axis:.vertical,sign:1,seed:1)
-check(capped.rate(10,10.7).p>=1190 && capped.rate(10,10.7).p<=1201,"successive page flicks reach but cannot exceed cap")
+check(capped.rate(10,10.7).p>=1550 && capped.rate(10,10.7).p<=1561,"successive page flicks reach but cannot exceed cap")
 let noPump=simulate(Hand(parts:[.rest(0.35),stroke(5,0.3),.rest(6)],tremor:3.5,drift:2),axis:.vertical,sign:1,seed:3)
 check(abs(noPump.rate(1,2).p-noPump.rate(5,6).p)<=2,"stillness and tremor cannot pump held page speed")
 
+// The sensitivity request changes output strength only: identical samples must
+// start/end the same strokes, reject the same recoil and retain every flick.
+for horizontal in [false,true] {
+    var previous=WandSustainedScroll.Tuning();previous.pageSensitivity=1
+    let old=WandSustainedScroll(tuning:previous),new=WandSustainedScroll()
+    let hand=Hand(parts:[.rest(0.3),stroke(5,0.3),.rest(0.8),stroke(9,0.2),.rest(0.8),stroke(-5,0.3),.rest(1)])
+    var t=0.0
+    while t<hand.duration {
+        let rate=hand.intent(at:t).p
+        for scroll in [old,new] {scroll.sample(x:horizontal ? rate:0,y:horizontal ? 0:rate,dt:0.01,now:t)}
+        let factor=horizontal ? 1.0:1.3
+        check(abs(new.velocityX-factor*old.velocityX)<1e-8 && abs(new.velocityY-factor*old.velocityY)<1e-8,"sensitivity preserves the stroke timeline")
+        check(new.summary.strokes==old.summary.strokes && new.summary.directionChanges==old.summary.directionChanges && new.summary.speedChanges==old.summary.speedChanges,"same strokes, reversals and added flicks")
+        if horizontal {check(new.tick(now:t)==old.tick(now:t),"horizontal events remain identical")}
+        t+=0.01
+    }
+}
 precondition(WandControlVersion.read(3) == .sustainedV3)
 
 if failures.isEmpty {

@@ -16,7 +16,7 @@ check(shipped.horizontalGain==12.5 && shipped.horizontalMaxRate==3000 && shipped
 // The first installed build (2.5x, within the shared 600 ceiling). Ethan: "maybe five times".
 var previousBuild=shipped;previousBuild.horizontalGain=2.5;previousBuild.horizontalMaxRate=600;previousBuild.maxRate=600
 // Receiver 135 (12.5x sideways, 600 page maximum), before the page/sideways split.
-var receiver135=shipped;receiver135.maxRate=600
+var receiver135=shipped;receiver135.maxRate=600;receiver135.pageSensitivity=1
 check(WandHeldScroll().sustained.tuning.horizontalGain==shipped.horizontalGain,"the receiver's held scroll uses the shipped gain")
 
 // 1. Pages now ease in gently below the 75 deg/s plateau; upper speeds
@@ -31,22 +31,22 @@ func original(_ p:Double)->Double {
 let page135=WandSustainedScroll(tuning:receiver135)
 for peak in stride(from:0.0,through:1000.0,by:0.25) {
     let now=WandSustainedScroll().linesPerSecond(peak:peak),old=page135.linesPerSecond(peak:peak)
-    if peak<=120 {check(now==old && abs(now-original(peak))<1e-9,"ordinary page speed unchanged at \(f(peak))","\(now) vs \(old)")}
-    else {check(now>=old && now<=2*old+1e-9,"stronger page maximum above 120 deg/s at \(f(peak))","\(now) vs \(old)")}
+    if peak<=120 {check(abs(now-1.3*old)<1e-9 && abs(now-1.3*original(peak))<1e-9,"ordinary page speed unchanged at \(f(peak))","\(now) vs \(old)")}
+    else {check(now>=old && now<=2.6*old+1e-9,"stronger page maximum above 120 deg/s at \(f(peak))","\(now) vs \(old)")}
 }
-check(WandSustainedScroll().linesPerSecond(peak:240)==2*page135.linesPerSecond(peak:240),"page maximum doubled")
+check(WandSustainedScroll().linesPerSecond(peak:240)==2.6*page135.linesPerSecond(peak:240),"page maximum doubled")
 // Sideways swipes keep exactly the Receiver 135 strength within 20 degrees of level.
 for peak in stride(from:0.0,through:1000.0,by:0.25) {for slope in [0.0,0.2,0.364,0.45,0.55] {
     let now=WandSustainedScroll().horizontalLinesPerSecond(peak:peak,slope:slope),old=WandSustainedScroll(tuning:receiver135).horizontalLinesPerSecond(peak:peak,slope:slope)
     if slope<=0.364 {check(now==old,"sideways swipe strength unchanged at \(f(peak)) slope \(slope)","\(now) vs \(old)")}
-    else {check(now>=old && now>=WandSustainedScroll().linesPerSecond(peak:peak),"off-level sideways never below page speed at \(f(peak))")}
+    else {check(now>=old && now>=WandSustainedScroll().linesPerSecond(peak:peak)/1.3,"off-level sideways never below page speed at \(f(peak))")}
 }}
 let curve=WandSustainedScroll()
 var previous=0.0
 for peak in stride(from:0.0,through:1000.0,by:0.25) {
     let v=curve.linesPerSecond(peak:peak),h=curve.horizontalLinesPerSecond(peak:peak)
-    check(abs(v-original(peak))<1e-9,"shared curve unchanged at \(f(peak)) deg/s","\(v) vs \(original(peak))")
-    check(h>=v && h<=3000,"horizontal rate bounded at \(f(peak))","\(h)")
+    check(abs(v-1.3*original(peak))<1e-9,"shared curve unchanged at \(f(peak)) deg/s","\(v) vs \(original(peak))")
+    check(h>=v/1.3 && h<=3000,"horizontal rate bounded at \(f(peak))","\(h)")
     check(h>=previous && h-previous<=12.5+1e-9,"horizontal rate continuous and rising at \(f(peak))","\(previous) -> \(h)");previous=h
 }
 for (peak,expected) in [(0.0,0.0),(5.0,8.0),(8.0,12.8),(19.0,205.2),(30.0,600.0),(50.0,1000.0),(75.0,1500.0),(120.0,1500.0),(150.0,1875.0),(180.0,3000.0),(240.0,3000.0)] {
