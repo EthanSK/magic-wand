@@ -1769,3 +1769,24 @@ command starts the same window for both recorders after an installed change.
 The existing worker/utility queues enforce expiry, including after sleep; only
 their own fixed raw filenames are deleted. Preserve labelled shared references
 and independently authorized longer studies outside that cleanup scope.
+
+## 2026-10-31 — Fast sweeps need more settling time than precision moves
+
+Opus's microsecond-time replay of the varied-stop reference showed that the
+fast movement was already recognised, but its60 ms settling allowance expired
+before many natural75–120 ms stopping tails. Weakening directional coherence
+barely helped. Extending every move also accelerated a labelled slow-aim case.
+Keep60 ms for ordinary brisk motion; only sweeps averaging at least1500 pointer
+counts/second get120 ms. This retains the same8 ms quiet confirmation and
+unchanged pointer filtering. The recorded comparison is not physical acceptance.
+
+After an early click, the old stop counter can still emit invisible residual
+counts. They previously rearmed a second click without new visible movement.
+Require visible travel to rearm after a fast click, while retaining the existing
+ordinary precision behavior. A synthetic check reproduces the two-click failure;
+the new settling fixture checks one click, visible rearming, slow approaches,
+sensor gaps, recoil and the real filter-to-click call order. Per-click STOP_CLICK
+telemetry records sweep speed, settling age and fallback reason without a new
+per-frame log. Receiver159 passed254 Wand,17 Control Stones and4 shared checks;
+the exact installed source/resources/signature were verified while the wand was
+away. Reconnection and physical feel remain for the user's return.
