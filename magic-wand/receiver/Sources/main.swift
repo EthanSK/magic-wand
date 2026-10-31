@@ -2056,6 +2056,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
             self.senseVirtual?.clickLight()
             if self.dwell.lastClickWasFast {log("FAST_STOP_CLICK")}
+            if let diagnostic=self.dwell.lastClickDiagnostic {
+                log("STOP_CLICK",self.dwell.lastClickWasFast ? "fast":"precision",diagnostic)
+            }
             // Re-arms only when repeats are enabled; single-shot schedules nothing.
             self.scheduleDwell()
         }

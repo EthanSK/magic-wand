@@ -266,6 +266,12 @@ struct WandFastStopClick {
     static let window=0.12, distance=40.0, speed=500.0, finalSpeed=500.0
     static let quietDuration=0.008, maximumGap=0.04, maximumTail=0.08, slowTail=0.06
     static let maximumDeliveryGap=0.08, maximumContinuousSample=0.02
+    /// Recorded fast sweeps need75–120 ms to settle. Extending every move
+    /// also accelerated a labelled slow-aim example; only this faster class
+    /// gets the longer allowance. No pointer output or delay changes here.
+    static let fastSweepSpeed=1500.0, fastSweepTail=0.12
+    private var sweepSpeed=0.0, missReason="not qualified"
+    private var tail:Double {sweepSpeed>=Self.fastSweepSpeed ? Self.fastSweepTail:Self.slowTail}
     private var samples:[(time:Double,dt:Double,x:Double,y:Double)]=[]
     private var lastAt:Double?,lastMotion=0.0,lastBrisk=0.0,quietAt:Double?,quietCount=0,eligible=false
     private(set) var due:Double?
@@ -281,7 +287,7 @@ struct WandFastStopClick {
         // fresh quiet arrivals afterwards; this never waits or replays motion.
         let continuous=sampleSeconds.map{$0.isFinite && $0>0 && $0<=Self.maximumContinuousSample} ?? false
         guard let dt,dt>0,dt<=Self.maximumGap || (continuous && dt<=Self.maximumDeliveryGap) else{
-            samples=[];quietAt=nil;quietCount=0;eligible=false;due=nil;return
+            samples=[];quietAt=nil;quietCount=0;eligible=false;due=nil;missReason="sample gap";return
         }
         // Radio notifications can deliver adjacent readings in one burst.
         // Judge speed from sensor time, while freshness and a confirmed stop
@@ -302,10 +308,11 @@ struct WandFastStopClick {
             // even between integer cursor steps; it must not count as quiet.
             guard pointerQuiet ?? stopped else {
                 quietAt=nil;quietCount=0;due=nil
-                if now-lastBrisk>Self.slowTail {eligible=false}
+                if eligible {missReason="not fully quiet"}
+                if eligible && now-lastBrisk>tail {eligible=false;missReason="settling window elapsed"}
                 return
             }
-            guard eligible,now-lastMotion<=Self.maximumTail else{quietAt=nil;quietCount=0;due=nil;return}
+            guard eligible,now-lastMotion<=tail+Self.maximumTail-Self.slowTail else{quietAt=nil;quietCount=0;due=nil;return}
             if quietAt==nil {quietAt=now;quietCount=1}else{quietCount+=1}
             if due==nil,quietCount>=2,now-(quietAt ?? now)>=Self.quietDuration {due=now}
             return
@@ -318,10 +325,19 @@ struct WandFastStopClick {
         let net=hypot(samples.reduce(0){$0+$1.x},samples.reduce(0){$0+$1.y})
         let brisk=path>=Self.distance && elapsed>0 && path/elapsed>=Self.speed &&
             net>=path*0.8 && hypot(Double(x),Double(y))/motionDt>=Self.finalSpeed
-        if brisk {eligible=true;lastBrisk=now}
+        if brisk {
+            if !eligible {sweepSpeed=0}
+            eligible=true;lastBrisk=now;sweepSpeed=max(sweepSpeed,path/elapsed);missReason="still moving"
+        }
         // A brief deceleration/settling tail is part of the same brisk stop.
         // Sustained slow aiming still clears the shortcut and uses200 ms.
-        else if !eligible || now-lastBrisk>Self.slowTail {eligible=false}
+        else if eligible && now-lastBrisk>tail {eligible=false;missReason="settling window elapsed"}
+    }
+    /// One diagnostic per sent click, never per sensor frame. This makes a
+    /// fallback distinguishable from a lost click without continuous logging.
+    func report(now:Double)->String? {
+        guard sweepSpeed>=Self.speed,lastBrisk>0,now-lastBrisk<2 else{return nil}
+        return String(format:"sweep=%.0f settleMs=%.0f motionAgeMs=%.0f reason=%@",sweepSpeed,(now-lastBrisk)*1000,(now-lastMotion)*1000,due == nil ? missReason:"confirmed")
     }
 }
 
@@ -340,6 +356,8 @@ final class WandDwellClick {
     let repeatInterval:Double?
     private var fastStop:WandFastStopClick?
     private(set) var lastClickWasFast=false
+    private(set) var lastClickDiagnostic:String?
+    private var needsVisibleRearm=false
     /// Repeats need live samples: a gap longer than this stops them.
     static let freshness=0.1
     private(set) var following=false
@@ -354,7 +372,7 @@ final class WandDwellClick {
         return repeatDue
     }
     var repeating:Bool {repeatDue != nil}
-    func reset(){x=0;y=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil;fastStop?.reset();lastClickWasFast=false}
+    func reset(){x=0;y=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil;fastStop?.reset();lastClickWasFast=false;lastClickDiagnostic=nil;needsVisibleRearm=false}
     func follow(_ on:Bool){if following != on {reset()};following=on}
     /// A scroll release may contain wrist recoil. Keep the old click pause
     /// until a quiet hand and a new pointer move establish a fresh gesture.
@@ -377,8 +395,12 @@ final class WandDwellClick {
         lastSeen=now
         guard dx != 0 || dy != 0 else{return}
         repeatDue=nil
-        x+=Double(dx);y+=Double(dy);lastMotion=now
-        if hypot(x,y)>=travel {armed=true}
+        // A quick click can precede the old stop counter settling to zero.
+        // Those invisible leftovers must not arm a second click. Subsequent
+        // visible travel restores the ordinary precision behavior.
+        x+=Double(needsVisibleRearm ? (pointerX ?? dx):dx)
+        y+=Double(needsVisibleRearm ? (pointerY ?? dy):dy);lastMotion=now
+        if hypot(x,y)>=travel {armed=true;needsVisibleRearm=false}
     }
     func tick(now:Double)->Bool {
         guard let due=nextDue,now>=due else{return false}
@@ -391,7 +413,8 @@ final class WandDwellClick {
         let fast=(fastStop?.due).map{$0<lastMotion+pause} ?? false
         // An overdue quick decision cannot click later at a stale position.
         if fast,now-lastSeen>WandFastStopClick.maximumGap {fastStop?.reset();return false}
-        reset();lastClickWasFast=fast
+        let diagnostic=fastStop?.report(now:now)
+        reset();lastClickWasFast=fast;lastClickDiagnostic=diagnostic;needsVisibleRearm=fast
         if let interval=repeatInterval {repeatDue=now+interval}
         return true
     }
