@@ -29,6 +29,19 @@ test('separate rapid batches continue from the wand\'s own last move, never a st
  assert(click.startsWith('let point=self.currentPointerOrigin()\n            self.transition(to:1,at:point);self.transition(to:0,at:point)'),'the click presses and releases at the tracked shown point');
  for (const forbidden of ['postPointerMove','CGWarpMouseCursorPosition','pointerOrigin.begin','deliveryPoint','heldScrollAnchor','mouseMovementEvent','performPointer'])
   assert(!click.includes(forbidden),'a stop-to-click never moves, warps or re-anchors the cursor: '+forbidden);
+ // 2026-10-31 capture: macOS reported the wand's own positions up to 0.37 s
+ // late. Physical mouse input, not age, ends the wand's ownership. The monitors
+ // only observe: they never consume, delay or rewrite an event.
+ const init=source.slice(source.indexOf('    override init() {'),source.indexOf('    override init() {')+600);
+ assert(init.includes('startPointerObservation()'),'other mouse input is observed from launch');
+ const observe=method('startPointerObservation');
+ assert(observe.includes('NSEvent.addGlobalMonitorForEvents')&&observe.includes('NSEvent.addLocalMonitorForEvents'),'global and local passive monitors');
+ assert(/addLocalMonitorForEvents\(matching:mask\)\{\[weak self\] event in self\?\.observeExternalPointer\(event\);return event\}/.test(observe),'the local monitor returns every event unchanged');
+ const external=method('observeExternalPointer');
+ assert(external.includes('.eventSourceUnixProcessID')&&external.includes('getpid()'),'the wand\'s own posted events never end its ownership');
+ assert(external.includes('let now=ProcessInfo.processInfo.systemUptime')&&external.includes('externalMovement(at:event.timestamp,now:now)'),'NSEvent.timestamp shares the systemUptime clock');
+ assert(!external.includes('cg.timestamp')&&!external.includes('.timestamp)/'),'never a raw CGEvent timestamp, which can use another clock');
+ assert(method('stop').includes('stopPointerObservation()'),'monitors are removed on stop');
  const code=`import Foundation
 func log(_ v:Any...) {}
 enum Tap {case cghidEventTap}
@@ -87,6 +100,16 @@ for lagging in [p(320,300),p(340,300),p(334,300)] {
 // Another input moved the cursor: the click goes where it now is.
 CGEvent.system=p(900,900)
 precondition(stop.currentPointerOrigin()==p(900,900),"an external cursor position is adopted, not a remembered one")
+// 2026-10-31 (receiver 171): macOS reported the wand's own position 0.31 s
+// late; the old 0.25 s memory treated it as another mouse and the next move
+// started there, hundreds of pixels back. Real time passes here, as live.
+let late=Harness();CGEvent.system=p(2095,551);Harness.landed=[]
+late.batch([(-20,0)]);late.batch([(-20,0)]);late.batch([(-20,0)])
+RunLoop.main.run(until:Date().addingTimeInterval(0.35))
+CGEvent.system=p(2075,551)                                // 0.35 s old own position
+late.batch([(-19,0)])
+precondition(Harness.landed.last==p(2016,551),"a 0.35 s late own report continues from the shown point: \\(Harness.landed)")
+precondition(late.currentPointerOrigin()==p(2016,551),"a stop-to-click after the lag presses at the shown point, not the old one")
 print("PASS: stale cursor reads never move the pointer back; stop-to-click presses at the shown point")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-pointer-origin-'));

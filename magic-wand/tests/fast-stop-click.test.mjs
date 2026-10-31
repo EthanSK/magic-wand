@@ -9,7 +9,9 @@ import {spawnSync} from 'node:child_process';
 for (const fixture of ['fast-stop-click','fast-stop-settling']) test(`${fixture}: brisk stops preserve precision, stale-data and scroll-release safety`, {skip:process.platform!=='darwin'},()=>{
  const sources=new URL('../receiver/Sources/',import.meta.url);
  const main=readFileSync(new URL('main.swift',sources),'utf8');
- assert(main.includes('let dwell=WandDwellClick(fastStops:false)'), 'the live comparison keeps rapid-stop clicks disabled');
+ // Ethan undid the temporary fastStops:false comparison (2026-10-31): the jumps
+ // were a cursor-origin defect, not quick clicks (native-pointer-origin tests).
+ assert(main.includes('let dwell=WandDwellClick(fastStops:true)'), 'quick brisk-stop clicks are enabled alongside the 200 ms stillness click');
  assert(main.includes('eligible:gate == nil,pointerX:x,pointerY:y'));
  const dir=mkdtempSync(join(tmpdir(),'wand-fast-stop-'));
  try {

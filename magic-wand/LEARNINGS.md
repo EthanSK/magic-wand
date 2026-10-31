@@ -1986,3 +1986,12 @@ matched the original pre-shortcut click deadlines and actions over10000
 deterministic transitions. Keep pointer gain, filtering, position tracking and
 other controls unchanged so the physical comparison can answer the question.
 A passing comparison does not establish the cause of a live jump.
+
+
+## 2026-10-31 — Cursor-query lag can look like a click or screen-edge regression
+
+- A passive capture at the HID and annotated session event taps found receiver-posted moves already carrying an old absolute origin. In one case a requested -19 px move started from an own position about 0.31 s old, producing a jump of hundreds of pixels. The event had not been changed by the target app. Sensor recordings alone cannot establish this; compare posted positions and deltas too.
+- The old `WandPointerOrigin` discarded each own position after 0.25 s. A later report of that position then looked like another input and cleared the remaining history, causing repeated jumps between histories. Turning off fast-stop clicks did not remove the recorded bug. A second path dropped the pre-warp history at recentering while those moves could still be reported.
+- Receiver172 keeps a count-bounded history during continuous own posting (1024 points), expires it after two seconds without an own post, and retains pre-recenter points. Passive local/global NSEvent monitors yield to real external movement, including a physical mouse moving onto the same path. Use `NSEvent.timestamp` with system uptime; raw HID timestamps can be on a different clock. Ignore genuinely older external notifications. Remove monitors during stop.
+- This history recognises stale feedback; it never replays sensor samples or emits past pointer positions. Clicks still press/release at the latest current origin, never a saved click target. Do not reintroduce pointer pauses, a click anchor or movement suppression to mask stale-coordinate jumps.
+- The real-Swift scenario fixture failed eight old cases and passed 22 candidate cases. A model using captured deltas and several simulated cursor-report delays is additional regression evidence, not a physical acceptance test. Keep the observed query-lag problem separate from unproven explanations for why macOS reported those old positions.

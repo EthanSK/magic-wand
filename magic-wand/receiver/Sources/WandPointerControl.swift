@@ -862,30 +862,72 @@ final class WandMotionFilter {
 /// warp, the centre wins until macOS reports it or `settle` passes
 /// (2026-10-29: "It came to the center and then it jumped back").
 /// Nothing is delayed, buffered or replayed; it only chooses the origin.
+///
+/// 2026-10-31, receiver 171 ("it's jumping around", "if I stop moving it to
+/// click, then that's when it happens"): a passive capture at both the HID and
+/// session taps showed the jump already inside the receiver's own posted
+/// events. macOS kept reporting the wand's own earlier positions for up to
+/// 0.37 s, although the events themselves were delivered within about 0.1 s.
+/// The old rule forgot own points after 0.25 s, so that late report looked like
+/// another mouse: e.g. a requested -19 px move started from 2095,551 (posted
+/// 0.31 s earlier) while the cursor was at 1438,534, a 657 px jump. Forgetting
+/// the trail then made the next late reports "foreign" too, so the cursor
+/// flicked between the two histories. After a stop-to-click the late report was
+/// the click spot itself, so the pointer went "back to the known position".
+/// A recenter also wiped the trail while pre-warp moves were still queued.
+///
+/// Rules. Keep them; do not shorten this into an age limit again:
+/// - Own posted points are remembered while the wand keeps posting, bounded
+///   by count, not by age. They are forgotten after `idle` seconds without
+///   any own post, or as soon as another input moves the mouse.
+/// - A system position equal to any remembered own point is only macOS lag:
+///   continue from the newest own point. Never from that late position, an
+///   older own point or a remembered click target.
+/// - Any other position (physical mouse, another app's warp) is adopted at once.
+/// - A recenter keeps the pre-warp own points: moves queued before the warp
+///   may still be reported after it, and they are lag, not a new position.
+/// - Real mouse or trackpad movement seen by the receiver's passive monitor
+///   (`externalMovement`) ends ownership immediately, so moving the physical
+///   mouse back across the wand's recent path is never mistaken for lag.
 struct WandPointerOrigin {
-    /// Own posted points older than this are forgotten; the system is then trusted.
-    static let horizon=0.25
+    /// Without any own post for this long, macOS has caught up: trust it again.
+    /// The worst measured report lag was 0.37 s. Bookkeeping only; nothing waits.
+    static let idle=2.0
+    /// Former name of the forgetting time, kept for existing callers and tests.
+    static var horizon:Double {idle}
     static let settle=0.5
     static let tolerance:CGFloat=1
-    static let maximumTrail=128
+    /// About 10 s of continuous 104 Hz posting; bounds memory and each search.
+    static let maximumTrail=1024
     private var trail:[(point:CGPoint,time:Double)]=[]
     private var forcedUntil = -Double.infinity
     /// The last point the wand posted, while it is still remembered.
     var latest:CGPoint? {trail.last?.point}
+    /// Remembered own points (bounded by `maximumTrail`).
+    var count:Int {trail.count}
     private static func near(_ a:CGPoint,_ b:CGPoint)->Bool {abs(a.x-b.x)<=tolerance && abs(a.y-b.y)<=tolerance}
-    /// A recenter warp: the centre is the origin until macOS reports it.
-    mutating func begin(at center:CGPoint,now:Double){trail=[(center,now)];forcedUntil=now+Self.settle}
+    private mutating func forgetIfIdle(now:Double) {
+        if let last=trail.last, now-last.time>Self.idle {trail.removeAll()}
+    }
+    /// A recenter warp: the centre is the origin until macOS reports it. Earlier
+    /// own points stay remembered, because moves posted before the warp can be
+    /// reported after it.
+    mutating func begin(at center:CGPoint,now:Double){
+        forgetIfIdle(now:now)
+        trail.append((center,now));forcedUntil=now+Self.settle
+        if trail.count>Self.maximumTrail {trail.removeFirst(trail.count-Self.maximumTrail)}
+    }
     /// The point the next pointer event starts from, and where stop-to-click
-    /// presses. It returns only the system cursor or the newest point the wand
-    /// itself posted, never an older trail point, so a click cannot send the
-    /// cursor back to an earlier "known" position. Keep that invariant.
+    /// presses: the system cursor if something else put it there, otherwise
+    /// the newest point the wand itself posted. Never an older own point.
     mutating func origin(system:CGPoint,now:Double)->CGPoint {
         if now<=forcedUntil, let centre=trail.last {
             if Self.near(system,centre.point) {forcedUntil = -.infinity}
             return centre.point
         }
-        trail.removeAll {now-$0.time>Self.horizon}
-        guard let latest=trail.last, trail.contains(where:{Self.near($0.point,system)}) else {
+        forgetIfIdle(now:now)
+        // Newest first: a lagging report is usually recent.
+        guard let latest=trail.last, trail.reversed().contains(where:{Self.near($0.point,system)}) else {
             trail.removeAll()
             return system
         }
@@ -896,6 +938,20 @@ struct WandPointerOrigin {
         if !(trail.last.map {Self.near($0.point,start)} ?? false) {trail.append((start,now))}
         trail.append((end,now))
         if trail.count>Self.maximumTrail {trail.removeFirst(trail.count-Self.maximumTrail)}
+    }
+    /// Another source (physical mouse or trackpad, another app) moved the
+    /// cursor at `time`, in seconds since startup like `now`. The wand no
+    /// longer owns the cursor, even if that input lands exactly on one of its
+    /// earlier points. A late notification of input older than the wand's
+    /// newest move is ignored: that move was already posted after it. A
+    /// timestamp that is not plausibly on this clock counts as new input.
+    /// Returns true when it ended a remembered wand trail (for a bounded log).
+    @discardableResult
+    mutating func externalMovement(at time:Double,now:Double)->Bool {
+        if let last=trail.last, time.isFinite, abs(now-time)<=Self.idle, time<last.time {return false}
+        let owned = !trail.isEmpty
+        cancel()
+        return owned
     }
     mutating func cancel(){trail.removeAll();forcedUntil = -.infinity}
 }

@@ -137,10 +137,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // Ethan's 2026-10-30 "as little weirdness as possible" amendment pauses
     // the 300 ms repeat experiment; the captured no-click jumps were a
     // separate stale-origin defect, fixed by WandPointerOrigin below.
-    // Ethan's temporary comparison with the pre-rapid-click behaviour (2026-10-31).
-    // Keep the original 200 ms stillness path; do not change pointer filtering,
-    // gain, coordinates or other controls while isolating this regression.
-    let dwell=WandDwellClick(fastStops:false)
+    // Ethan undid the temporary fastStops:false comparison (2026-10-31): the
+    // jumps continued without quick clicks. They were a cursor-origin defect
+    // (see WandPointerOrigin). Quick brisk-stop clicks and the ordinary 200 ms
+    // stillness click are both back; filtering and gain are unchanged.
+    let dwell=WandDwellClick(fastStops:true)
     // Per physical wand: the Sense profile swaps in its own learned desk pose.
     var restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
     var deskSleep=WandDeskSleep()
@@ -223,6 +224,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var stopAfterSenseUpdate = false
     var senseUpdateRefusal:String?
     var pointerOrigin=WandPointerOrigin()
+    /// Passive observers of other mouse input (`startPointerObservation`).
+    var pointerGlobalMonitor:Any?,pointerLocalMonitor:Any?,pointerExternalLoggedAt = -Double.infinity
     /// Why stop-to-click cannot act right now (nil: it can).
     var clickGate:String?
     /// Late readings kept out of normal pointing this session (`WandSenseStaleness`).
@@ -271,6 +274,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     override init() {
         commands = (try? JSONDecoder().decode([String].self, from: Data(contentsOf: Bundle.main.url(forResource: "wand-commands", withExtension: "json")!))) ?? []
         super.init()
+        startPointerObservation()
         nativeScroll.onCompletedHorizontal = { [weak self] delta, point in
             // Post the native end event first. The acknowledgement is independent
             // of the target app, so even a lagging app cannot postpone its fade.
@@ -1851,10 +1855,39 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     @discardableResult
     /// Where the next pointer event starts: the system cursor, unless it only
-    /// lags the wand's own just-posted movement (`WandPointerOrigin`).
+    /// lags the wand's own posted movement (`WandPointerOrigin`). macOS can
+    /// report the wand's own position from several hundred ms earlier.
     func currentPointerOrigin()->CGPoint {
         pointerOrigin.origin(system:WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays),
                              now:ProcessInfo.processInfo.systemUptime)
+    }
+    /// Ethan's physical mouse and trackpad keep working alongside the wand.
+    /// Observe only: these monitors never consume, delay or rewrite an event.
+    /// Any mouse movement not posted by this receiver (physical devices report
+    /// process 0; another app reports its own) ends the wand's ownership of the
+    /// cursor at once, so a real mouse crossing the wand's recent path is never
+    /// mistaken for macOS lagging behind the wand.
+    func startPointerObservation() {
+        let mask:NSEvent.EventTypeMask=[.mouseMoved,.leftMouseDragged,.rightMouseDragged,.otherMouseDragged]
+        pointerGlobalMonitor=NSEvent.addGlobalMonitorForEvents(matching:mask){[weak self] event in self?.observeExternalPointer(event)}
+        pointerLocalMonitor=NSEvent.addLocalMonitorForEvents(matching:mask){[weak self] event in self?.observeExternalPointer(event);return event}
+        log("POINTER_OWNERSHIP_MONITORS",pointerGlobalMonitor != nil,pointerLocalMonitor != nil)
+    }
+    func observeExternalPointer(_ event:NSEvent) {
+        guard let source=event.cgEvent?.getIntegerValueField(.eventSourceUnixProcessID),source != Int64(getpid()) else{return}
+        // NSEvent.timestamp is seconds since startup, the clock of systemUptime.
+        // (A raw HID-level CGEvent timestamp can use another clock; not used.)
+        let now=ProcessInfo.processInfo.systemUptime
+        guard pointerOrigin.externalMovement(at:event.timestamp,now:now) else{return}
+        // Bounded check for installed review: real mouse input, never the wand.
+        if now-pointerExternalLoggedAt>=2 {
+            pointerExternalLoggedAt=now
+            log("POINTER_EXTERNAL_HANDOVER","pid",source,"ageMs",Int((now-event.timestamp)*1000))
+        }
+    }
+    func stopPointerObservation() {
+        if let monitor=pointerGlobalMonitor {NSEvent.removeMonitor(monitor);pointerGlobalMonitor=nil}
+        if let monitor=pointerLocalMonitor {NSEvent.removeMonitor(monitor);pointerLocalMonitor=nil}
     }
     func postPointerMove(dx:Int,dy:Int,from point:CGPoint)->CGPoint {
         guard !actionPause.paused else{return point}
@@ -2093,11 +2126,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             // now. It never posts movement, warps, restores an earlier point or
             // replays readings. A mouse press carries an absolute position, so
             // the position must be the shown one: currentPointerOrigin() is the
-            // system cursor, or, only while macOS still lags the wand's own
-            // just-posted moves, the newest of those moves (never an older one).
-            // Do not use the raw system location here: during that lag the
-            // press is queued after the moves and would itself jump the cursor
-            // back. Do not use deliveryPoint, a hold anchor or a remembered
+            // system cursor, or, while macOS still reports any of the wand's own
+            // earlier positions (measured up to 0.37 s late, 2026-10-31), the
+            // newest of those moves. Do not use the raw system location here:
+            // during that lag the press is queued after the moves and would
+            // itself jump the cursor back to the click spot. Do not use
+            // deliveryPoint, a hold anchor or a remembered
             // stop point. Any later pointer move belongs to the separate motion
             // path; this click must never reconstruct or restore a position.
             // tests/native-pointer-origin.test.mjs pins this.
@@ -2210,6 +2244,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if senseUpdate.flow.busy {
             stopAfterSenseUpdate = true; log("STOP_DEFERRED_FOR_FIRMWARE_UPDATE"); return
         }
+        stopPointerObservation()
         navigationFeedback.dismiss()
         sendReview(review.cancel());reviewTimer?.invalidate();reviewTimer=nil
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil;probeTimer?.invalidate();probeTimer=nil
