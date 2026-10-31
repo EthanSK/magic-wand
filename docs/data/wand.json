@@ -11,8 +11,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.171",
-    "receiverBuild": "176",
+    "receiver": "1.2.172",
+    "receiverBuild": "177",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.315",
@@ -21,6 +21,7 @@
     "senseFirmware": 11
   },
   "status": [
+    "Installed: receiver 1.2.172 build177 removes native pointer-event combining. Accepted movement is posted separately; cursor-history tracking, recenter cancellation, filtering, gain and click logic are preserved. The debug dashboard shows finer raw values and holds idle readings steady. Physical jump acceptance and the independent review remain pending.",
     "Installed: receiver176 stops old-direction page output during a clear opposite stroke while retaining the existing reversal and recoil classifier. Native sideways gestures, pointer sensitivity, smoothing, click timing and firmware11 are unchanged. The synthetic reversal changed from 59 pixels of wrong-direction output to zero; the full V3 motion suite passed. Installed binary, live Bluetooth and preserved settings were verified. Physical feel remains for review. All 266 Wand, 17 Control Stones and 4 shared checks passed after installation.",
     "Installed: receiver175 discards unsent movement and pending dwell clicks when recentering, changing follow mode, recording, pausing actions or taking and returning screenshot control. Recentring no longer posts an older pending move after the centre warp. Physical button and speech messages remain ordered; current fresh readings still pass. Firmware11, gain, smoothing and ordinary click timing are unchanged. Installed binary, preserved settings and live Bluetooth were verified; 265 Wand, 17 Control Stones and 4 shared checks passed, including the corrected isolated fixture. Physical acceptance remains pending.",
     "Installed: receiver 174 preserves the original ordinary click after a quick click and small correction; it suppresses only a duplicate when the pointer never moved again. The added backward-settling exception is removed. With quick clicking disabled and with it enabled during ordinary slow motion, the original click state and deadlines each match 10,000 deterministic transitions. All 262 Wand, 17 Control Stones and 4 shared checks passed. Installed Bluetooth, signed binary, settings, resources and unchanged firmware 11 were verified; physical feel remains for user review.",
@@ -577,9 +578,9 @@
       "scope": "Temporary raw sensor files only; labelled shared references and expressly requested longer studies are excluded."
     },
     "pointerDelivery": {
-      "coalescing": "current receive turn only",
+      "coalescing": false,
       "additionalWaitMilliseconds": 0,
-      "scope": "Combine already available filtered moves into one clamped endpoint per continuous segment. Native button edges, scroll actions, recentering and pointer-origin queries first flush preceding movement. Late sensor readings remain excluded."
+      "scope": "Each accepted filtered move is posted separately and in order. Combining a backlog into one endpoint was withdrawn after jump feedback under load. Cursor-history tracking and cancellation of old movement on recenter or mode changes remain active."
     }
   },
   "hud": {

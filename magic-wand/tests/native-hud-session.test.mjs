@@ -1,3 +1,4 @@
+// Exercise receiver HUD ownership, tap and release behavior using inert native stubs.
 import {fileURLToPath as wandSourcePath} from 'node:url';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -60,7 +61,7 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  let restDetection=Rest()
  var ready=true,restoring=false,scrollActive=false,acceptHUDContext=true
  var buttons=0,movementCount=0,pointerDisplays=[CGRect(x:0,y:0,width:1000,height:1000)]
- var pendingMove:(start:CGPoint,end:CGPoint,buttons:Int)?,moveCoalescing=0,pointerEventsPosted=0
+ var pointerEventsPosted=0
  var selectedReviewMode:String?,hiddenReviewOperating=false,hiddenReviewPending=false,screenshotActive=false,screenshotHUD=false
  var hudSession=false,hudEntryPress=false,hudActive=false,pointerInHUD=false,hudButtonOperating=false,hudButtonSecondTap=false,navigationOpenedHUD=false
  var hudButtonHeld=false,hudButtonQualified=false,hudOpenedAt=0.0;let hudHoldSeconds=0.14
@@ -100,7 +101,7 @@ ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=Wand
  init(){${callback}
 ${modeCallback}
 ${selectionCallback}}
- ${['setScreenshotActive','setWandShortcut','switchWandShortcut','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','scheduleReviewTapTimeout','expireReviewTap','cancelReviewTap','requestReviewToggle','closeHUD','enterPointerMode','handleHUDButton','hudDoubleRightClick','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','flushPendingMove','mouseMovementEvent','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
+ ${['setScreenshotActive','setWandShortcut','switchWandShortcut','finishWandShortcut','exitSelectedReview','commitSelectedReview','beginReviewCommitHold','commitReviewHold','scheduleReviewTapTimeout','expireReviewTap','cancelReviewTap','requestReviewToggle','closeHUD','enterPointerMode','handleHUDButton','hudDoubleRightClick','handleMove','handleNavigation','resumeHUDNavigation','handleHUD','startHUDWatchdog','stopHUDWatchdog','postPointerMove','mouseMovementEvent','recordingChanged','manualPointerDuringRecording'].map(method).join('\n')}
 }
 func settle(_ seconds:Double){RunLoop.main.run(until:Date().addingTimeInterval(seconds))}
 // Ethan's hold-to-show HUD. Holding the HUD button shows and steers it; releasing

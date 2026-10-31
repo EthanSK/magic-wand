@@ -1,7 +1,8 @@
+// Check raw telemetry, display precision and connection state without opening hardware.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {WandState,validatePacket,LineFramer,BUTTONS} from '../hardware/xiao-wand-dashboard/model.mjs';
+import {WandState,validatePacket,LineFramer,BUTTONS,motionPlotLimit} from '../hardware/xiao-wand-dashboard/model.mjs';
 import {openSerial,openBluetooth,UART_SERVICE,UART_TX} from '../hardware/xiao-wand-dashboard/transports.mjs';
 const packet=(seq=1,ms=20)=>({schema:1,sensor:'wand',seq,ms,buttons:{thumb:false,index:false,middle:false},imu:{ax:0,ay:0,az:1,gx:2,gy:3,gz:4}});
 const setup=()=>{const s=new WandState();s.connect('USB');return s;};
@@ -95,4 +96,26 @@ test('battery at the top shows only the receiver estimate, its age or unknown',(
  assert.match(app,/!battery\?'Battery unknown'/);
  assert.match(app,/battery\.ageSeconds<=300/,'older or disconnected readings are shown as their age, not live');
  assert(!/hours|remaining/i.test(app),'no runtime is invented');
+});
+
+// Raw sub-degree motion must survive the display path even below pointer thresholds.
+test('slow raw movement remains measurable and gets a readable chart scale',()=>{
+ const s=setup();const a=packet(1,20),b=packet(2,40);a.imu.gx=.0525;b.imu.gx=.0875;
+ s.accept(a,0);s.accept(b,20);
+ assert.equal(s.latest.imu.gx,.0875);assert(Math.abs(s.orientation[0]-.00175)<1e-12);
+ const keys=['gx','gy','gz'];
+ assert(motionPlotLimit([{imu:{gx:.0525,gy:.0175,gz:-.035}}],keys)<1);
+ assert(motionPlotLimit([{imu:{gx:83,gy:0,gz:0}}],keys)>83,'large readings stay in view');
+ assert(motionPlotLimit([],keys)>0,'empty chart has a finite scale');
+});
+
+test('button-only heartbeats keep the last motion display steady without faking freshness',()=>{
+ const s=setup();s.accept(packet(1,20),0);
+ s.accept({...packet(2,40),imu:null},20);
+ assert.equal(s.latest.imu,null);assert.equal(s.latestMotion.imu.gx,2);assert(s.motionFresh(20));
+ s.accept(packet(3,60),40);assert(Math.abs(s.orientation[0]-.08)<1e-12,'integrate between motion frames');
+ s.accept({...packet(4,1620),imu:null},1600);
+ assert(s.fresh(1600));assert(!s.motionFresh(1600));assert.equal(s.latestMotion.imu.gx,2);
+ s.accept({...packet(5,1640),imu:null},1620);assert(!s.motionFresh(1620));
+ s.connect('Bluetooth');assert.equal(s.latestMotion,null);assert.equal(s.motionReceived,null);
 });

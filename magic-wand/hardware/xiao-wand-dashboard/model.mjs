@@ -21,6 +21,14 @@ export function validatePacket(value) {
     imu:value.imu === null ? null : Object.fromEntries(AXES.map(k => [k,value.imu[k]])),
     ...(value.presses ? {presses:Object.fromEntries(BUTTONS.map(b => [b.key,value.presses[b.key]]))} : {})};
 }
+// Keep small raw readings visible: the old 30 deg/s minimum flattened normal
+// slow aiming. The scale still expands to include every sample, without clipping
+// or changing the data sent to the receiver. This is display scaling only.
+export function motionPlotLimit(rows, keys) {
+  let limit=keys[0][0]==='a'?1.25:0.5;
+  for (const row of rows) for (const key of keys) limit=Math.max(limit,Math.abs(row.imu[key]));
+  return limit*1.15;
+}
 export class LineFramer {
   constructor(receive, invalid = () => {}) { this.receive=receive; this.invalid=invalid; this.buffer=''; this.dropping=false; }
   push(text) {
@@ -40,13 +48,14 @@ export class LineFramer {
 export class WandState {
   constructor() { this.reset('None'); }
   reset(source) {
-    this.source=source; this.connected=false; this.latest=null; this.received=null; this.frames=[]; this.history=[]; this.events=[];
+    this.source=source; this.connected=false; this.latest=null; this.received=null; this.latestMotion=null; this.motionReceived=null; this.frames=[]; this.history=[]; this.events=[];
     this.total=0; this.invalid=0; this.duplicates=0; this.previous=null; this.counterLast=null;
     this.counts={thumb:0,index:0,middle:0}; this.orientation=[0,0,0]; this.arrivals=[];
   }
   connect(source) { this.reset(source); this.connected=true; }
   disconnect() { this.connected=false; this.previous=null; }
   fresh(now) { return this.connected && this.received!==null && now-this.received<1500; }
+  motionFresh(now) { return this.fresh(now) && this.motionReceived!==null && now-this.motionReceived<1500; }
   zero() { this.orientation=[0,0,0]; }
   event(text,now) { this.events.unshift({text,now}); this.events.length=Math.min(this.events.length,40); }
   accept(value,now) {
@@ -68,10 +77,13 @@ export class WandState {
       }
       this.counterLast=p.presses;
     } else this.counterLast=null;
-    if (this.latest && wasFresh && p.imu && this.latest.imu) {
-      const dt=((p.ms-this.latest.ms)>>>0)/1000;
+    // Button-only heartbeats do not erase the last motion reading. Keep motion
+    // freshness separate so the idle sensor cannot flash numbers on and off.
+    if (this.latestMotion && this.motionFresh(now) && p.imu) {
+      const dt=((p.ms-this.latestMotion.ms)>>>0)/1000;
       if (dt>0 && dt<=0.2) ['gx','gy','gz'].forEach((k,i)=>{this.orientation[i]=(this.orientation[i]+p.imu[k]*dt)%360;});
     }
+    if (p.imu) { this.latestMotion=p; this.motionReceived=now; }
     this.previous=p; this.latest=p; this.received=now; ++this.total;
     this.frames.push(p); if(this.frames.length>3000)this.frames.shift();
     this.history.push({now,imu:p.imu}); if(this.history.length>500)this.history.shift();

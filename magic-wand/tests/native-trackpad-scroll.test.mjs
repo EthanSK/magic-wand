@@ -1,3 +1,4 @@
+// Check native scroll phases and cleanup using inert event stubs.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdtempSync,rmSync} from 'node:fs';
@@ -83,7 +84,6 @@ final class Harness {
  let heldScroll=WandHeldScroll();var controlVersion=WandControlVersion.sustainedV3,heldScrollDiagnostics=false,buttons=0
  var mouseOn=0,hudResumed=0
 ${wheel}
- func flushPendingMove(){}
  func currentPointerOrigin()->CGPoint{.zero}
  var physicalDuration:Double?
  func mouseButtonPhysicalTapDuration()->Double?{physicalDuration}

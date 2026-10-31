@@ -1997,14 +1997,11 @@ A passing comparison does not establish the cause of a live jump.
 - The real-Swift scenario fixture failed eight old cases and passed 22 candidate cases. A model using captured deltas and several simulated cursor-report delays is additional regression evidence, not a physical acceptance test. Keep the observed query-lag problem separate from unproven explanations for why macOS reported those old positions.
 
 
-## Preserve action boundaries when combining ready pointer moves (2026-10-31)
+## Withdrawn pointer combining experiment (2026-10-31)
 
-- The Sense program can produce several fresh motion lines in one existing main-queue turn. Keep their filter and display-clamp steps in order, but one native endpoint event per uninterrupted segment avoids posting a historical path for the window server to drain. Do not add a timer or wait for future readings.
-- Native press/release, scrolling and cursor-origin reads must flush earlier movement first. Recentring is a cancellation boundary: discard unsent earlier movement before the warp, never flush it afterward. A no-op button-state check must not flush every frame and defeat combining. Remember each emitted endpoint in WandPointerOrigin; its stale-feedback protection remains necessary.
-- Preserve the existing deferred virtual-Puck output hand-off: it collects readings already waiting. Flushing after every sensor callback would undo this benefit. Current-only sensor rejection stays separate and must not be replaced with replay.
-- The backward-settling extension from receiver173 was withdrawn after missed-click feedback. Do not restore it as part of the ordinary click repair below.
-- Verified with inert native-event tests, the real pointer filter/click fixtures and labelled slow-aim references. Recorded-data comparisons support the selected bounds, but they are not physical acceptance or end-to-end latency measurements.
-
+- Ethan withdrew the request to combine available movement deltas after reporting jumps under lag. Receiver177 restores a separate native event for each accepted movement, with sequential clamping and button order. Do not reintroduce delta combining as a lag improvement without revisiting this reported trade-off with him.
+- Keep the cursor-origin history: it recognizes late macOS reports and prevents an old coordinate becoming the next starting point. It does not replay positions. Recenter and explicit cancellation still invalidate unsent old motion; click code must never warp or replay a saved target.
+- The separate-move fixture covers bursts, direction reversals, display edges, native drag ordering, held HUD suppression and click placement. Passing it verifies software ordering, not the physical feel under arbitrary Mac load.
 
 ## A quick click must not consume the ordinary click state (2026-10-31)
 

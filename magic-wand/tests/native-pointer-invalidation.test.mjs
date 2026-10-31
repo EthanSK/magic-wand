@@ -1,3 +1,4 @@
+// Check that recentering and mode changes discard only obsolete pointer work.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdtempSync,rmSync} from 'node:fs';
@@ -18,7 +19,6 @@ final class Harness {
  static var events:[CGPoint]=[]
  static func mouseMovementEvent(buttons:Int,from:CGPoint,to:CGPoint)->E? {E(p:to)}
  var pointerMotionEpoch:UInt64=0,pointerMotionCutoff = -Double.infinity
- var pendingMove:(start:CGPoint,end:CGPoint,buttons:Int)?=(.zero,CGPoint(x:200,y:100),0)
  let dwell=WandDwellClick();var dwellTimer:Timer?;let senseVirtual:Virtual?=Virtual()
  ${method('invalidatePointerMotion')}
  ${method('settleRecenteredCursor')}
@@ -28,7 +28,7 @@ _=h.dwell.move(dx:20,dy:0,now:1,eligible:true)
 h.dwellTimer=Timer(timeInterval:1,repeats:false){_ in fatalError("cancelled click fired")}
 let timer=h.dwellTimer!,before=ProcessInfo.processInfo.systemUptime
 h.invalidatePointerMotion()
-precondition(h.pendingMove==nil && h.pointerMotionEpoch==1 && h.pointerMotionCutoff>=before)
+precondition(h.pointerMotionEpoch==1 && h.pointerMotionCutoff>=before)
 precondition(!timer.isValid && h.dwellTimer==nil && h.dwell.following)
 precondition(!h.dwell.tick(now:100) && h.senseVirtual?.cancelled==1)
 let centre=CGPoint(x:500,y:400);Harness.events.append(centre);h.settleRecenteredCursor(at:centre)
