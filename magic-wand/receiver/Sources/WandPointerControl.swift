@@ -284,7 +284,11 @@ struct WandFastStopClick {
             }else{quietAt=nil;quietCount=0}
             return
         }
-        if stopped && x==0 && y==0 {
+        if x==0 && y==0 {
+            // The tuned stop guard may emit a final count after the visible
+            // pointer is quiet. Wait for that guard; do not treat its residual
+            // count as a new slow approach or erase the brisk cursor history.
+            guard stopped else{quietAt=nil;quietCount=0;due=nil;return}
             guard eligible,now-lastMotion<=Self.maximumTail else{quietAt=nil;quietCount=0;due=nil;return}
             if quietAt==nil {quietAt=now;quietCount=1}else{quietCount+=1}
             if due==nil,quietCount>=2,now-(quietAt ?? now)>=Self.quietDuration {due=now}
@@ -340,7 +344,11 @@ final class WandDwellClick {
     /// A bounded heartbeat lease prevents both premature clicks and stuck state.
     func intent(_ moving:Bool,now:Double){
         guard following else{return}
-        if moving {intentUntil=now+0.6;lastMotion=now;repeatDue=nil;fastStop?.reset()}
+        // This signal vetoes a click while motion continues; it must not erase
+        // the cursor travel that qualifies Ethan's faster click when it stops.
+        // Slow final approach, pauses and stale samples remain classified by
+        // fastStop.sample, using actual motion in the same live call order.
+        if moving {intentUntil=now+0.6;lastMotion=now;repeatDue=nil}
         else if intentUntil>0 {intentUntil=0;lastMotion=now}
     }
     func move(dx:Int,dy:Int,now:Double,eligible:Bool,pointerX:Int?=nil,pointerY:Int?=nil){

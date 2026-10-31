@@ -1703,3 +1703,18 @@ The synthetic regression reproduces that failure with the real program.
 The separate captured post-scroll jump was fresh sensor motion, consistent
 with recoil: do not claim this replay correction removes that motion or
 add a broad post-scroll movement suppression without its own latency approval.
+
+Ethan subsequently chose to keep pointer movement immediate. The post-scroll
+recoil suppression stays off; the real release-frame replay fix remains.
+Button-wake reconnected receiver154 over Bluetooth with saved firmware8.
+
+## 2026-10-31 — Fast stop clicks must use the complete motion pipeline
+
+The first fast-stop checks passed only raw movement into the click controller.
+In use, the filter's motion-intent heartbeat erased that movement history,
+and a final tuned stop count with no visible cursor travel cancelled it too.
+Keep the intent veto while the wand moves, but preserve brisk-travel evidence.
+Treat a zero-travel stop-guard tail as waiting for confirmed stillness, not a
+new slow approach. The live-order regression runs the real filter, its intent
+heartbeat and click controller together: it reproduced a221 ms wait before
+the fix. Slow final approach and genuinely slow pointing keep the old pause.
