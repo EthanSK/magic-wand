@@ -1606,20 +1606,21 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         for event in Self.wheelEvents(x:x,y:y,at:scrollAnchor ?? circleAnchor) {event.post(tap:.cghidEventTap)}
         scrollPostedX+=Int(x);scrollPostedY+=Int(y)
     }
-    /// Formerly enableMouseAfterScroll. A completed page scroll restores the
-    /// mouse-follow choice captured before the mouse-button/chord gesture.
-    /// Ethan: "if I wasn't in mouse follow mode when I started scrolling,
-    /// on end it shouldn't enter mouse follow mode after" (2026-10-30).
+    /// Formerly enableMouseAfterScroll; restoreMouseAfterScroll is retained as
+    /// the existing release boundary. Ethan now wants a completed scroll to
+    /// leave follow off until the next mouse-button tap (2026-10-31).
+    /// An otherwise quiet hold is not a scroll: preserve its prior follow choice.
     /// Taps, native drags, lost telemetry and screenshots keep their own paths.
-    func restoreMouseAfterScroll(){
+    func restoreMouseAfterScroll(hadScrollGesture:Bool=true){
         guard ready,!restoring else{return}
-        if scrollFollowBefore {enterPointerMode()}
-        motionFilter.reset();dwell.reset();dwell.follow(scrollFollowBefore)
+        let followAfter = !hadScrollGesture && scrollFollowBefore
+        if followAfter {enterPointerMode()}
+        motionFilter.reset();dwell.reset();dwell.follow(followAfter)
         dwell.requireFreshFastGesture()
-        if scrollFollowBefore {restDetection.pointerActivated()}else{restDetection.pointerStopped()}
+        if followAfter {restDetection.pointerActivated()}else{restDetection.pointerStopped()}
         scheduleDwell()
-        queue("global.wandPointerPauseUntil=0;setMouseFollow("+(scrollFollowBefore ? "true":"false")+");")
-        log(scrollFollowBefore ? "SCROLL_FINISHED_MOUSE_ON":"SCROLL_FINISHED_MOUSE_OFF")
+        queue("global.wandPointerPauseUntil=0;setMouseFollow("+(followAfter ? "true":"false")+");")
+        log(followAfter ? "SCROLL_FINISHED_MOUSE_ON":"SCROLL_FINISHED_MOUSE_OFF")
     }
     /// `released`: a physical release ended the chord scroll.
     func finishScroll(released:Bool=false){
@@ -1911,7 +1912,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         performPointer(routed.actions)
     }
     /// `released`: the physical release, as opposed to lost telemetry or a
-    /// screenshot taking over. A scroll restores prior follow; the optional quiet hold exits it.
+    /// screenshot taking over. A scroll leaves follow off; a quiet hold keeps its prior choice.
     /// Previously finishBottomHold.
     func finishMouseButtonHold(now:Double,released:Bool=true) {
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldTargetToken=UUID()
@@ -1932,6 +1933,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let physicalTap=(physicalDuration.map{$0<heldScroll.holdSeconds} ?? false) && !earlyHorizontal
         if physicalTap {log("BOTTOM_PHYSICAL_TAP",Int((physicalDuration ?? 0)*1000))}
         let completedScroll=heldScroll.scrollable && !heldScroll.dragging && (heldScroll.qualified(now:now) || earlyHorizontal) && !physicalTap
+        let hadScrollGesture=heldScroll.hasScrollGesture
         // Ethan reversed the click-to-exit experiment: a short exit tap stops
         // follow without clicking. Stillness clicking stays in the dwell lane.
         // Physical duration wins when Bluetooth delivery is late; double/triple
@@ -1963,7 +1965,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             dwell.follow(false);restDetection.pointerStopped();scheduleDwell()
             queue("global.wandPointerPauseUntil=0;setMouseFollow(false);")
             log("MOUSE_HOLD_STOP_WITHOUT_CLICK")
-        } else if completedScroll && released {restoreMouseAfterScroll()}
+        } else if completedScroll && released {restoreMouseAfterScroll(hadScrollGesture:hadScrollGesture)}
     }
     /// Previously reconcileBottomHold.
     func reconcileMouseButtonHold(down:Bool,now:Double,reason:String,released:Bool=true) {
@@ -2077,6 +2079,21 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                       hudSession:self.hudSession,hudShown:self.context.isActive,scrollActive:self.scrollActive,
                       hudOperating:self.hudButtonHeld || self.hudEntryPress || self.pointerInHUD)==nil,
                   AXIsProcessTrusted(),self.dwell.tick(now:ProcessInfo.processInfo.systemUptime) else{return}
+            // Ethan (2026-10-31): "when I do a fast stop, it shouldn't move the
+            // mouse back to the known position. It should just send the click.
+            // Don't try and do anything clever." A stop-to-click, quick or
+            // ordinary, is only a press and release where the cursor is shown
+            // now. It never posts movement, warps, restores an earlier point or
+            // replays readings. A mouse press carries an absolute position, so
+            // the position must be the shown one: currentPointerOrigin() is the
+            // system cursor, or, only while macOS still lags the wand's own
+            // just-posted moves, the newest of those moves (never an older one).
+            // Do not use the raw system location here: during that lag the
+            // press is queued after the moves and would itself jump the cursor
+            // back. Do not use deliveryPoint, a hold anchor or a remembered
+            // stop point. Any later pointer move belongs to the separate motion
+            // path; this click must never reconstruct or restore a position.
+            // tests/native-pointer-origin.test.mjs pins this.
             let point=self.currentPointerOrigin()
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
             self.senseVirtual?.clickLight()

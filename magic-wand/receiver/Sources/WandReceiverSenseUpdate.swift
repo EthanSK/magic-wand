@@ -161,6 +161,9 @@ extension WandReceiver {
             case .report:
                 let flow = update.flow
                 log("SENSE_UPDATE", flow.state.rawValue, "firmware", flow.target, flow.detail)
+                // A verified wireless installation also starts Ethan's bounded
+                // diagnostic window. The recorder deduplicates this version.
+                if flow.state == .done { reviewTrace.installedFirmware(flow.target) }
                 if !flow.busy { update.preparation.cancel(); update.timer?.invalidate(); update.timer = nil; update.key = nil; update.package = nil }
                 status()
                 if !flow.busy, stopAfterSenseUpdate { stopAfterSenseUpdate = false; stop() }

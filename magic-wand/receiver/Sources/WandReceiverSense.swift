@@ -117,13 +117,11 @@ extension WandReceiver {
             let axes = deviceSettings.senseAxes
             let accel = frame.accel.map { WandSenseUnits.accel($0, info: info, axes: axes) }
             let gyro = frame.gyro.map { WandSenseUnits.gyro($0, info: info, axes: axes) }
-            // A merged run (radio busy) is replayed reading by reading at its own
-            // times, immediately, so its motion is integrated instead of lost.
-            // Recovered short taps have no known historical edge time. Do not
-            // run motion backwards through a synthetic press at the final time.
-            // Ethan prefers skipping missed normal pointer motion to catch-up.
-            // Preserve historical gesture data for HUD/scroll/review, but never
-            // reconstruct a merged run into multiple normal pointer movements.
+            // Ethan: never buffer readings and replay them to catch up. This
+            // applies to HUD/scroll/review as well as every cursor lane. Accept
+            // each radio report once at its latest time; do not manufacture a
+            // sequence of historical samples from the board's merged average.
+            // Button edges still arrive independently so a release cannot stick.
             // This frame's own mask is the physical boundary (`WandSensePointerFrames`).
             let frameMask = steps.last?.mask ?? 0
             let frameMouseButtonDown = frameMask & WandSenseButtons.mouseButton != 0
@@ -136,9 +134,9 @@ extension WandReceiver {
             let dropLate = WandSensePointerFrames.pointerOwns(following: dwell.following,
                 hudSession: frameHUDButtonDown && hudSession && (hudButtonHeld || hudEntryPress || pointerInHUD),
                 scrollActive: scrollActive, hostHolding: heldScroll.active || pointerRouter.mouseButtonHeld,
-                frameMouseButtonDown: frameMouseButtonDown, screenshot: screenshot.ownsPointer)
+                frameMouseButtonDown: frameMouseButtonDown, hostDragging: heldScroll.dragging, screenshot: screenshot.ownsPointer)
             let times = gyro == nil ? [time] : WandSenseReplay.times(last: time, frame: frame, after: senseLastReading,
-                allowHistory: !dropLate && !steps.contains(where: { $0.synthetic }))
+                allowHistory: false)
             senseLastReading = time
             func motion(at reading: Double) -> [Int]? {
                 guard dropLate, gyro != nil, WandSenseStaleness.isStale(readingTime: reading, arrival: arrival) else { return gyro }

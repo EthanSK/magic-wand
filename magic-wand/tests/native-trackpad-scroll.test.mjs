@@ -89,7 +89,7 @@ ${wheel}
  func transition(to next:Int,at:CGPoint){buttons=next}
  func queue(_ s:String){}
  func setCircleLight(_ on:Bool){}
- func restoreMouseAfterScroll(){mouseOn+=1}
+ func restoreMouseAfterScroll(hadScrollGesture:Bool=true){mouseOn+=1}
  func resumeHUDNavigation(){hudResumed+=1}
  ${methods}
  func sample(x:Double,y:Double=0,now:Double) {

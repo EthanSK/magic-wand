@@ -78,7 +78,7 @@ The website runs the wand’s own device code in your browser, with the Mac side
 - Control V3 keeps ordinary short taps and tap-then-hold dragging unchanged. Clear sideways flicks can qualify before the usual 220 ms hold cutoff; other gestures keep that cutoff.
 - A plain hold scrolls a scroll area or drags a confirmed draggable target. Unknown targets keep scrolling. Tap, then hold the second press to drag explicitly. The pointer stays fixed while scrolling until release.
 - The HUD button switches to the HUD. The pointer stays within real display edges.
-- Releasing a completed scroll restores the mouse-follow choice from before scrolling: off stays off and on stays on.
+- Releasing a completed scroll leaves mouse follow off. Tap the mouse button to follow again. A hold without a scroll keeps the previous follow choice.
 - The mouse button never opens, closes or clears the HUD or review selection.
 - V3 uses straight strokes in either axis, including diagonals. Holding still continues the captured speed; a new stroke can change speed or reverse without releasing. Much faster strokes go beyond the normal maximum, up to 600 lines per second. Circular page-scroll recognition is disabled; V2 remains selectable.
 - Screenshot opens the native macOS selection and moves the pointer even with mouse follow off. After a triple tap, hold the mouse button and move to select the area, then release to capture. Finishing or cancelling restores the previous mouse-follow choice.
@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver168 leaves follow off after completed scrolling, disables synthetic historical sensor replay in every mode, and applies current-only cursor processing to native and screenshot drags. Stop-to-click still presses at the current pointer without a position restore; its timing and normal sensitivity are unchanged. Each new receiver or verified wireless firmware version starts one bounded ten-minute diagnostic window, with temporary raw data deleted two hours later. The signed app, bundled resources, preserved settings and automatic capture were verified. All259 Wand,17 Control Stones and4 shared checks passed. Firmware11 was not changed; the wand was asleep, so live Bluetooth and physical acceptance remain pending. The latest reported jump is not yet reproduced.
 - Installed: receiver166 and complete firmware11. A full wireless transfer of149,688 bytes passed validation and reconnected over Bluetooth with firmware11 confirmed; calibration, settings and the update key were preserved. All259 Wand,17 Control Stones and4 shared checks pass. Uninterrupted wireless installation is verified; recovery from a forced interruption and physical pointer feel remain unverified. Normal pointer gain, smoothing and timing are unchanged.
 - Installed: receiver161 uses one packet per acknowledgement for wireless firmware transfers, stays below the bootloader receive-buffer limit, and ignores late callbacks after cancellation. Package, protocol, bounded-buffer and transport checks pass. A complete wireless transfer with this repair is still pending; firmware9 is running after USB recovery.
 - Installed: Sense firmware9 acknowledges a physical button press locally for160 ms when the normal light is dark, including the consumed wake press. Idle darkness, existing mode colours, sleep and pointer timing are unchanged. USB recovery installed and confirmed firmware9 with the key, calibration and settings preserved after a failed wireless transfer. Physical light acceptance is pending; wireless reliability repair remains in progress.
@@ -269,7 +270,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.161 (166) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.163 (168) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

@@ -62,3 +62,28 @@ let remaining=try fm.contentsOfDirectory(atPath:directory.path)
 precondition(remaining==["keep-reference.txt"],"only owned temporary traces expire")
 late.synchronize();precondition(!late.enabled,"restart never renews an expired lease")
 print("PASS private bounded trace rotation, live switch, symlinks and failed writer")
+
+// Installing a new build starts exactly one window; restart, reconnect and a
+// manual capture-off choice cannot silently renew that same build's window.
+let installed=root.appendingPathComponent("installed",isDirectory:true)
+let installConfig=installed.appendingPathComponent("review-trace.json")
+let firstInstall=try WandReviewTrace.startInstalledCapture(configuration:installConfig,build:"168",now:1000);precondition(firstInstall)
+let first=try Data(contentsOf:installConfig)
+let firstValue=try JSONSerialization.jsonObject(with:first) as! [String:Any]
+precondition(firstValue["captureUntil"] as? Double == 1600 && firstValue["deleteAfter"] as? Double == 8800)
+let rawConfig=installed.appendingPathComponent("DebugReadings/capture-window.json")
+let rawData=try Data(contentsOf:rawConfig);precondition(rawData == first)
+let restart=try WandReviewTrace.startInstalledCapture(configuration:installConfig,build:"168",now:1601);precondition(!restart)
+try Data("{\"enabled\":false,\"captureUntil\":1600,\"deleteAfter\":8800}".utf8).write(to:installConfig,options:.atomic)
+let manualOff=try WandReviewTrace.startInstalledCapture(configuration:installConfig,build:"168",now:1700);precondition(!manualOff)
+let disabled=try JSONSerialization.jsonObject(with:Data(contentsOf:installConfig)) as! [String:Any]
+precondition(disabled["enabled"] as? Bool == false)
+let nextInstall=try WandReviewTrace.startInstalledCapture(configuration:installConfig,build:"169",now:2000);precondition(nextInstall)
+let renewed=try JSONSerialization.jsonObject(with:Data(contentsOf:installConfig)) as! [String:Any]
+precondition(renewed["captureUntil"] as? Double == 2600)
+let firmwareInstall=try WandReviewTrace.startInstalledCapture(configuration:installConfig,build:"12",now:2200,component:.firmware)
+precondition(firmwareInstall)
+let receiverRestart=try WandReviewTrace.startInstalledCapture(configuration:installConfig,build:"169",now:2300)
+let firmwareReconnect=try WandReviewTrace.startInstalledCapture(configuration:installConfig,build:"12",now:2300,component:.firmware)
+precondition(!receiverRestart && !firmwareReconnect,"both component receipts survive; reconnects do not renew")
+print("PASS one ten-minute capture per installed version; restart and manual off preserved")

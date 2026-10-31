@@ -34,7 +34,7 @@ final class Harness {
  func queue(_ s:String){}
  func scheduleDwell(){}
  func setCircleLight(_ on:Bool){}
- func restoreMouseAfterScroll(){}
+ func restoreMouseAfterScroll(hadScrollGesture:Bool=true){}
  func performPointer(_ actions:[WandPointerRouter.Action]){}
  ${['finishMouseButtonHold','reconcileMouseButtonHold','handleFrame'].map(method).join('\n')}
 }

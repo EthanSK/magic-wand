@@ -21,6 +21,14 @@ test('separate rapid batches continue from the wand\'s own last move, never a st
  assert(!/CGEvent\(source: nil\)\?\.location/.test(source),'no other spelling bypasses the helper');
  assert(method('postPointerMove').includes('pointerOrigin.moved(from:point,to:newPoint'),'every posted move is remembered');
  assert(method('recenterPointer').includes('pointerOrigin.begin(at:point'),'a recenter still wins until macOS reports it');
+ // Ethan, 2026-10-31: "when I do a fast stop, it shouldn't move the mouse back
+ // to the known position. It should just send the click." The stop-to-click
+ // (quick or ordinary) presses at the shown point and does nothing else.
+ const dwell=method('scheduleDwell');
+ const click=dwell.slice(dwell.indexOf('let point=self.currentPointerOrigin()'));
+ assert(click.startsWith('let point=self.currentPointerOrigin()\n            self.transition(to:1,at:point);self.transition(to:0,at:point)'),'the click presses and releases at the tracked shown point');
+ for (const forbidden of ['postPointerMove','CGWarpMouseCursorPosition','pointerOrigin.begin','deliveryPoint','heldScrollAnchor','mouseMovementEvent','performPointer'])
+  assert(!click.includes(forbidden),'a stop-to-click never moves, warps or re-anchors the cursor: '+forbidden);
  const code=`import Foundation
 func log(_ v:Any...) {}
 enum Tap {case cghidEventTap}
@@ -66,7 +74,20 @@ precondition(Harness.landed==[p(101,100)],"after the horizon the real cursor win
 // Nothing is buffered or replayed: one event per move, never more.
 let count=Harness();CGEvent.system=p(10,10);Harness.landed=[];count.batch([(1,0),(1,0)]);count.batch([(1,0)])
 precondition(Harness.landed==[p(11,10),p(12,10),p(13,10)])
-print("PASS: stale cursor reads never move the pointer back")
+// Stop-to-click presses at currentPointerOrigin(). After a fast sweep and a
+// small fresh rebound, a lagging macOS cursor still gives the newest shown
+// point: never the sweep's start, an older own point or the furthest point.
+let stop=Harness();CGEvent.system=p(300,300);Harness.landed=[]
+stop.batch([(20,0)]);stop.batch([(20,0)]);stop.batch([(-6,0)])
+precondition(Harness.landed==[p(320,300),p(340,300),p(334,300)],"\\(Harness.landed)")
+for lagging in [p(320,300),p(340,300),p(334,300)] {
+ CGEvent.system=lagging
+ precondition(stop.currentPointerOrigin()==p(334,300),"a click lands on the newest shown point, not \\(lagging)")
+}
+// Another input moved the cursor: the click goes where it now is.
+CGEvent.system=p(900,900)
+precondition(stop.currentPointerOrigin()==p(900,900),"an external cursor position is adopted, not a remembered one")
+print("PASS: stale cursor reads never move the pointer back; stop-to-click presses at the shown point")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-pointer-origin-'));
  try {

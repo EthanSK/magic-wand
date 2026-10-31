@@ -863,7 +863,10 @@ struct WandPointerOrigin {
     private static func near(_ a:CGPoint,_ b:CGPoint)->Bool {abs(a.x-b.x)<=tolerance && abs(a.y-b.y)<=tolerance}
     /// A recenter warp: the centre is the origin until macOS reports it.
     mutating func begin(at center:CGPoint,now:Double){trail=[(center,now)];forcedUntil=now+Self.settle}
-    /// The point the next pointer event starts from.
+    /// The point the next pointer event starts from, and where stop-to-click
+    /// presses. It returns only the system cursor or the newest point the wand
+    /// itself posted, never an older trail point, so a click cannot send the
+    /// cursor back to an earlier "known" position. Keep that invariant.
     mutating func origin(system:CGPoint,now:Double)->CGPoint {
         if now<=forcedUntil, let centre=trail.last {
             if Self.near(system,centre.point) {forcedUntil = -.infinity}

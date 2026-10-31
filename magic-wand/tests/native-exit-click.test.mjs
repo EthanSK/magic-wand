@@ -43,7 +43,7 @@ final class Harness {
  func queue(_ text:String){}
  func scheduleDwell(){}
  func performPointer(_ actions:[WandPointerRouter.Action]){}
- func restoreMouseAfterScroll(){}
+ func restoreMouseAfterScroll(hadScrollGesture:Bool=true){}
  func probeHoldTarget(at:CGPoint,token:UUID){_=heldScroll.setTarget(scrollable:true,now:ProcessInfo.processInfo.systemUptime)}
  func manualPointerDuringRecording(){}
  func recenterPointer(){centres+=1;dwell.follow(true);_=pointerRouter.cancelAll()}

@@ -1922,3 +1922,42 @@ and the private update key were preserved. This proves that complete transfer,
 not physical recovery after forced power loss or a dropped link. Reconnect and
 lost-receipt recovery remain covered by the fake-transport tests, not deliberate
 hardware fault injection.
+
+## 2026-10-31 — Leave follow off after an actual scroll
+
+Ethan reversed the earlier restoration preference: a completed mouse-button
+scroll now leaves follow off until the next mouse-button tap. Keep the decision
+at the existing release boundary and capture the actual-scroll flag before the
+held controller ends. A quiet hold with no scroll is not this gesture and retains
+its prior follow choice. Preserve native dragging, short taps, screenshot selection,
+lost-telemetry cleanup and duplicate-release protection.
+
+## 2026-10-31 — No synthetic catch-up and no click-position restore
+
+Normal follow had current-only handling, but native and screenshot drags could
+still expand one merged radio report into many historical cursor moves. The
+real-program test reproduced 60 moves from one report, and 50 moves from a
+stalled drag batch. Apply a merged report once and discard late cursor samples;
+never select this policy using only the ordinary-follow flag. Ethan also rejected
+historical reconstruction for HUD, scrolling and review, so live input disables
+synthetic time expansion in every mode. The old expansion helper is retained
+only for the offline regression reference; its default is now current-only.
+
+A stop-to-click sends only down/up at the current pointer origin. That helper
+uses the newest posted point when macOS still reports our earlier position;
+using the raw older position could itself move a click back. It must never use
+a stored stop point, hold anchor or earlier trail point. Tests cover that
+invariant. Older recordings suggest physical rebound can occur after a fast
+sweep, but that does not prove the cause of a newly reported jump. Do not add
+unapproved movement suppression or change precision timing to hide it.
+
+## 2026-10-31 — Capture once after a new installation
+
+An explicit ten-minute diagnostic window was not automatically renewed after
+a receiver-only installation. The receiver now records the installed receiver
+and successfully verified firmware versions in a private receipt and starts one
+window per version change. Keep that receipt independent from capture on/off,
+so an ordinary restart or reconnect cannot undo a manual off choice or renew an
+expired window. Configuration writes run on the existing diagnostic queue,
+outside input processing. Tests cover first install, changed receiver, changed
+firmware, repeated reconnects, manual off, time expiry and bounded retention.

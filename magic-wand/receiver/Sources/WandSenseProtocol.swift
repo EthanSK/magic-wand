@@ -195,12 +195,11 @@ enum WandSenseTuning {
     static let pointerGainRange = 0.25...4.0
 }
 
-/// Reading times for one frame: a single reading, or a run the board merged
-/// while the radio was busy, spread evenly from its first to its last
-/// reading. Every reading is applied as soon as the frame arrives; nothing
-/// waits for later data. Times never step backwards.
+/// Historical expansion retained for offline reference tests only. Live
+/// senseLine always passes allowHistory:false: one report at its latest time,
+/// for every mode. Never enable old-sample catch-up in the live input path.
 enum WandSenseReplay {
-    static func times(last: Double, frame: WandSenseFrame, after previous: Double, allowHistory: Bool = true) -> [Double] {
+    static func times(last: Double, frame: WandSenseFrame, after previous: Double, allowHistory: Bool = false) -> [Double] {
         guard allowHistory, frame.count > 1, let first = frame.firstMicros else { return [last] }
         let span = Double(frame.micros &- first) / 1_000_000
         let start = max(last - span, min(last, previous + 0.0005))
@@ -223,8 +222,8 @@ enum WandSenseStaleness {
 
 /// Which frames are ordinary pointer data: late readings are skipped and a merged
 /// run is applied once, never replayed (`WandSenseStaleness`, `WandSenseReplay`).
-/// A held mouse-button gesture keeps its readings' history for scrolling and
-/// dragging. Ethan (2026-10-31): the physical button release is the boundary.
+/// Historically, held gestures kept reading history for scrolling and dragging.
+/// Ethan (2026-10-31): the physical button release is the boundary.
 /// The virtual Puck reports that release on the next main-queue turn, so frames
 /// from the same Bluetooth batch used to be judged as still held. A merged run
 /// containing the release was replayed reading by reading under the released
@@ -235,10 +234,27 @@ enum WandSenseStaleness {
 /// is applied once, at its last reading, and late readings are skipped as in
 /// ordinary follow. Obsolete motion is dropped, never waited for or replayed.
 /// `tests/native-sense-release-frames.test.mjs` replays both cases.
+///
+/// Ethan (2026-10-31): "no old sensor readings should be buffered then
+/// replayed; continuous current motion only." Every lane that moves the
+/// visible cursor uses these same current-only rules: ordinary follow, a native
+/// drag (mouse button held on a drag target, once dragging) and a screenshot
+/// drag. Before this, a native drag or screenshot drag expanded a merged radio
+/// run into one cursor move per old reading and kept late readings, so a stall
+/// arrived as a sudden catch-up jump. Synthetic history is now disabled in all
+/// modes. This predicate additionally drops late cursor samples; held scrolling
+/// and HUD/review retain their ordinary per-report integration, never a replay.
 enum WandSensePointerFrames {
     static func pointerOwns(following: Bool, hudSession: Bool, scrollActive: Bool, hostHolding: Bool,
-                            frameMouseButtonDown: Bool, screenshot: Bool) -> Bool {
-        following && !hudSession && !scrollActive && !(hostHolding && frameMouseButtonDown) && !screenshot
+                            frameMouseButtonDown: Bool, hostDragging: Bool = false, screenshot: Bool) -> Bool {
+        // The program integrates chord scrolling from every reading; no cursor moves.
+        if scrollActive { return false }
+        // A screenshot drag posts each reading as cursor motion.
+        if screenshot { return true }
+        // A held mouse button: a native drag moves the cursor (current only); a
+        // page scroll or still-unresolved hold uses ordinary per-report input.
+        if hostHolding && frameMouseButtonDown { return hostDragging && !hudSession }
+        return following && !hudSession
     }
 }
 

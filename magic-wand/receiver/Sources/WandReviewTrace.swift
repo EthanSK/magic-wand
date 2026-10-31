@@ -68,10 +68,77 @@ final class WandReviewTrace {
         self.wallClock = wallClock
         self.maximumBytes = max(1024, maximumBytes); self.fileCount = max(1, min(8, fileCount))
         pending.reserveCapacity(bufferLimit)
+        // Ethan: record ten minutes of real use after installing a new version.
+        // A persisted build receipt makes this an installation boundary, not a
+        // restart/reconnect boundary. Ordinary restarts must never renew it.
+        // Do all of its disk work on the existing diagnostic queue, not input.
+        if Bundle.main.bundleIdentifier == "com.ethansk.wand-receiver",
+           Bundle.main.bundleURL.pathExtension == "app", build != "unknown" {
+            queue.async { [weak self] in
+                guard let self else { return }
+                do { _ = try Self.startInstalledCapture(configuration: configuration, build: build, now: wallClock()) }
+                catch { self.lock.lock(); self.diskError = true; self.lock.unlock() }
+            }
+        }
         let timer = DispatchSource.makeTimerSource(queue: queue)
         timer.schedule(deadline: .now(), repeating: .seconds(1), leeway: .milliseconds(100))
         timer.setEventHandler { [weak self] in self?.drain() }
         self.timer = timer; timer.resume()
+    }
+
+    /// One bounded capture for a newly installed build. Diagnostic buffers are
+    /// write-only evidence: they are never fed back into mouse/gesture delivery.
+    enum InstalledComponent: String { case receiver = "build", firmware }
+    @discardableResult
+    static func startInstalledCapture(configuration: URL, build: String, now: Double,
+                                      component: InstalledComponent = .receiver) throws -> Bool {
+        let fm = FileManager.default, support = configuration.deletingLastPathComponent()
+        let receipt = support.appendingPathComponent("capture-installation.json")
+        func check(_ url: URL, directory: Bool, missingAllowed: Bool = false) throws {
+            var info = stat()
+            if lstat(url.path, &info) != 0 {
+                if missingAllowed && errno == ENOENT { return }
+                throw CocoaError(.fileReadUnknown)
+            }
+            guard info.st_uid == geteuid(), info.st_mode & 0o022 == 0,
+                  info.st_mode & S_IFMT == (directory ? S_IFDIR : S_IFREG),
+                  directory || info.st_size <= 1024 else { throw CocoaError(.fileReadNoPermission) }
+        }
+        try fm.createDirectory(at: support, withIntermediateDirectories: true, attributes: [.posixPermissions: 0o700])
+        try check(support, directory: true)
+        try check(receipt, directory: false, missingAllowed: true)
+        var versions = [String: String]()
+        if let bytes = try? Data(contentsOf: receipt),
+           let old = try? JSONSerialization.jsonObject(with: bytes) as? [String: String] { versions = old }
+        if versions[component.rawValue] == build { return false }
+        let debug = support.appendingPathComponent("DebugReadings", isDirectory: true)
+        if !fm.fileExists(atPath: debug.path) {
+            try fm.createDirectory(at: debug, withIntermediateDirectories: false, attributes: [.posixPermissions: 0o700])
+        }
+        try check(debug, directory: true)
+        let targets = [configuration, debug.appendingPathComponent("capture-window.json")]
+        for target in targets { try check(target, directory: false, missingAllowed: true) }
+        let end = now + 600
+        let data = try JSONSerialization.data(withJSONObject: ["enabled": true, "captureUntil": end, "deleteAfter": end + 7200])
+        for target in targets {
+            try data.write(to: target, options: .atomic)
+            try fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: target.path)
+        }
+        // Write last: a partial write does not claim a completed installation.
+        versions[component.rawValue] = build
+        try JSONSerialization.data(withJSONObject: versions).write(to: receipt, options: .atomic)
+        try fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: receipt.path)
+        return true
+    }
+    /// Called only after the wireless updater verifies the new running image;
+    /// ordinary Bluetooth reconnects are not installations and never call this.
+    func installedFirmware(_ version: Int) {
+        queue.async { [weak self] in
+            guard let self else { return }
+            do { _ = try Self.startInstalledCapture(configuration: self.configuration,
+                build: String(version), now: self.wallClock(), component: .firmware) }
+            catch { self.lock.lock(); self.diskError = true; self.lock.unlock() }
+        }
     }
     var enabled: Bool { lock.lock(); defer { lock.unlock() }; return captureEnabled }
     var status: [String: Any] {

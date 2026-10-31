@@ -10,6 +10,10 @@ final class WandSenseLink {
     func prepareUpdate(_ package: WandSenseDFUPackage) -> WandSenseDFUTransfer? { nil }
     func finishUpdate() {}
 }
+final class CaptureRecorder {
+    var installedVersions: [Int] = []
+    func installedFirmware(_ version: Int) { installedVersions.append(version) }
+}
 final class WandReceiver {
     let support: URL
     var senseUpdate = WandSenseUpdateSession(), senseInfo: WandSenseInfo? = info()
@@ -17,6 +21,7 @@ final class WandReceiver {
     var senseLink: WandSenseLink? = WandSenseLink(), senseSessionNumber = 1
     var senseUpdateRefusal: String?
     var stopAfterSenseUpdate = false, stops = 0
+    let reviewTrace = CaptureRecorder()
     init(_ support: URL) { self.support = support }
     func status() {}
     func stop() { stops += 1 }

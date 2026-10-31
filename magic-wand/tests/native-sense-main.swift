@@ -25,9 +25,10 @@ guard case .frame(let one)? = WandSenseLine.parse("S10,109615,0,1,0,2,3,0,0,8196
 precondition(one.count == 1 && one.firstMicros == nil)
 precondition(WandSenseLine.parse("S9,100000,0,1,0,2,3,0,0,8196,500,0,0,0,71155") == nil, "zero-reading count rejected")
 precondition(WandSenseReplay.times(last: 20, frame: run, after: 19.9, allowHistory: false) == [20], "a recovered button edge fences historical motion")
-let spread = WandSenseReplay.times(last: 20.0, frame: run, after: 19.9)
+let spread = WandSenseReplay.times(last: 20.0, frame: run, after: 19.9, allowHistory: true)
 precondition(spread.count == 4 && abs(spread[0] - 19.971155) < 1e-6 && spread[3] == 20.0, "merged run keeps its real spacing: \(spread)")
-precondition(WandSenseReplay.times(last: 20.0, frame: run, after: 19.99).first! > 19.99, "never before the previous reading")
+precondition(WandSenseReplay.times(last: 20.0, frame: run, after: 19.99, allowHistory: true).first! > 19.99, "offline reference never before the previous reading")
+precondition(WandSenseReplay.times(last: 20.0, frame: run, after: 19.9) == [20.0], "live-safe default never expands merged readings")
 precondition(WandSenseReplay.times(last: 20.0, frame: one, after: 19.9) == [20.0])
 print("PASS: identity, frame and battery parsing; other devices rejected")
 

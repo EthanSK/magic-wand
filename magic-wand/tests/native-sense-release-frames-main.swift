@@ -26,7 +26,7 @@ let revision = SHA256.hash(data: Data(bridge.utf8)).map { String(format: "%02x",
 
 // Receiver state the extracted senseLine reads. Gesture state changes only when
 // the program's output is handled on a later turn, as in the receiver.
-final class Flag { var active = false }
+final class Flag { var active = false, dragging = false }
 final class Router { var mouseButtonHeld = false }
 final class Shot { var ownsPointer = false }
 final class Dwell { var following = false }
@@ -80,7 +80,11 @@ final class Rig {
                 if line == "@BOTTOM 1" { self.r.heldScroll.active = true }
                 if line == "@BOTTOM 0" && self.r.heldScroll.active {
                     self.r.heldScroll.active = false
-                    self.puck.send("global.wandPointerPauseUntil=0;setMouseFollow(true);") // restoreMouseAfterScroll
+                    // Deliberately force the former auto-follow release here:
+                    // this stress fixture isolates stale replay even when follow
+                    // becomes enabled immediately. The actual release policy is
+                    // covered separately by native-hold-release.test.mjs.
+                    self.puck.send("global.wandPointerPauseUntil=0;setMouseFollow(true);")
                 }
                 if let m = line.range(of: "@ZERO "), let d = String(line[m.upperBound...]).data(using: .utf8),
                    let v = try? JSONDecoder().decode([Double].self, from: d) { precondition(self.filter.configure(v), line) }
@@ -135,17 +139,23 @@ final class Rig {
 
 func json(_ v: [String: Any]) -> String { String(data: try! JSONSerialization.data(withJSONObject: v, options: [.sortedKeys]), encoding: .utf8)! }
 
-// 1. Pure policy: the change is confined to frames that show the physical release
-//    while the host still holds a gesture.
+// 1. Pure policy. Every lane that moves the cursor is current-only (Ethan,
+//    2026-10-31: "no old sensor readings should be buffered then replayed;
+//    continuous current motion only"): follow, a released frame, a native drag
+//    and a screenshot drag. HUD, chord scroll and a held page scroll keep history.
 var differs: [String] = []
-for bits in 0..<64 {
-    let b = (0..<6).map { bits & (1 << $0) != 0 }
-    let fixed = WandSensePointerFrames.pointerOwns(following: b[0], hudSession: b[1], scrollActive: b[2], hostHolding: b[3], frameMouseButtonDown: b[4], screenshot: b[5])
-    let original = b[0] && !b[1] && !b[2] && !b[3] && !b[5]
+for bits in 0..<128 {
+    let b = (0..<7).map { bits & (1 << $0) != 0 }
+    let (following, hud, scroll, holding, down, shot, dragging) = (b[0], b[1], b[2], b[3], b[4], b[5], b[6])
+    let fixed = WandSensePointerFrames.pointerOwns(following: following, hudSession: hud, scrollActive: scroll, hostHolding: holding,
+        frameMouseButtonDown: down, hostDragging: dragging, screenshot: shot)
+    let original = following && !hud && !scroll && !holding && !shot
+    if shot { precondition(fixed == !scroll, "a screenshot drag is current-only unless the chord scroll owns the readings: \(b)"); continue }
+    if dragging && holding && down && !scroll { precondition(fixed == !hud, "a native drag is current-only: \(b)"); continue }
     if fixed != original { differs.append("\(b.map { $0 ? 1 : 0 })") }
 }
-precondition(differs == ["[1, 0, 0, 1, 0, 0]"], "only following + host holding + frame released changes: \(differs)")
-print("PASS: frame policy differs only for a released frame during a host-held gesture; HUD, chord scroll and screenshot keep history")
+precondition(differs == ["[1, 0, 0, 1, 0, 0, 0]", "[1, 0, 0, 1, 0, 0, 1]"], "otherwise only following + host holding + frame released changes: \(differs)")
+print("PASS: cursor lanes (follow, release, native drag, screenshot) are current-only; HUD, chord scroll and held page scroll keep history")
 
 // 2. A merged run that contains the release (radio stall during the stroke's end).
 do {
@@ -241,6 +251,43 @@ do {
     let freshMark = g.lines.count
     _ = g.paced(wire: 0, gz: -20, seconds: 0.2, from: t + 0.6); spin(0.01)
     print("RESULT hudRelease " + json(["held": heldReports, "released": released, "fresh": g.rawsAfter(freshMark).count]))
+    g.puck.teardown()
+}
+// 6. A native drag moves the cursor, so radio backlog must not catch up into it:
+//    a merged run is applied once and late readings are skipped, as in follow.
+do {
+    let g = Rig()
+    let t = g.heldStroke()
+    g.r.heldScroll.dragging = true // the host started a native drag on this hold
+    until(t + 0.6 + 0.001)
+    let mark = g.lines.count
+    g.send(wire: 1, gz: -120, at: t + 0.6, count: 60, span: 0.58); spin(0.01)
+    let merged = g.rawsAfter(mark).count
+    // A 0.5 s stall delivered as one batch of 50 held readings.
+    let t2 = t + 0.6 + 1.0 / 104
+    until(t2 + 0.5)
+    let arrival = clock, batchMark = g.lines.count, staleBefore = g.r.senseStaleReadings
+    var aligned: [Double] = []
+    for k in 0..<50 { g.send(wire: 1, gz: -120, at: t2 + Double(k) / 104, arrival: arrival); aligned.append(g.r.senseLastReading) }
+    spin(0.01)
+    let fresh = aligned.filter { arrival - $0 <= WandSenseStaleness.limit }.count
+    print("RESULT drag " + json(["merged": merged, "batchRaw": g.rawsAfter(batchMark).count, "expectedFresh": fresh,
+        "staleDropped": g.r.senseStaleReadings - staleBefore, "expectedStale": aligned.count - fresh]))
+    g.puck.teardown()
+}
+// 7. A screenshot drag moves the cursor too: the same current-only rule.
+do {
+    let g = Rig()
+    var t = g.paced(wire: 0, gz: 0, seconds: 0.1, from: clock)
+    g.puck.send("global.wandShot=1;setMouseFollow(false);wakeGyro();") // the receiver's screenshot entry
+    g.r.screenshot.ownsPointer = true
+    let streamMark = g.lines.count
+    t = g.paced(wire: 0, gz: -80, seconds: 0.15, from: t)
+    let streamed = g.rawsAfter(streamMark).count
+    until(t + 0.6)
+    let mark = g.lines.count
+    g.send(wire: 0, gz: -80, at: t + 0.6, count: 60, span: 0.58); spin(0.01)
+    print("RESULT shot " + json(["streamed": streamed, "reports": g.rawsAfter(mark).count]))
     g.puck.teardown()
 }
 print("DONE")

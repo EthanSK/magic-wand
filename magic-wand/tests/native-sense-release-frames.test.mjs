@@ -22,7 +22,9 @@ test("Sense release frames never replay obsolete stroke motion into the pointer"
   const fixed = sense.slice(start, end);
   const policy = /\/\/ This frame's own mask is the physical boundary[\s\S]*?screenshot: screenshot\.ownsPointer\)/;
   assert.match(fixed, policy, "the frame-mask policy is the routing under test");
-  const original = fixed.replace(policy, "let dropLate = dwell.following && !hudSession && !scrollActive && !heldScroll.active &&\n                !pointerRouter.mouseButtonHeld && !screenshot.ownsPointer");
+  assert.match(fixed, /allowHistory: false/, "all live modes disable synthetic history, including scroll/HUD/review");
+  const original = fixed.replace(policy, "let dropLate = dwell.following && !hudSession && !scrollActive && !heldScroll.active &&\n                !pointerRouter.mouseButtonHeld && !screenshot.ownsPointer")
+    .replace("allowHistory: false", "allowHistory: !dropLate && !steps.contains(where: { $0.synthetic })");
   const main = readFileSync(new URL("native-sense-release-frames-main.swift", import.meta.url), "utf8");
   const component = fileURLToPath(new URL("..", import.meta.url));
   const results = {};
@@ -47,7 +49,7 @@ test("Sense release frames never replay obsolete stroke motion into the pointer"
     `reference: the replayed release run reaches the pointer after the release (${JSON.stringify(o.merged)})`);
   assert.equal(f.merged.obsoleteRaw, 0, `no @RAW from a release-containing merged run (${JSON.stringify(f.merged)})`);
   assert.equal(f.merged.obsoleteCounts, 0);
-  assert.equal(f.merged.heldReplayed, 4, "a held merged run keeps every reading for the scroll");
+  assert.equal(f.merged.heldReplayed, 1, "a held merged run is applied once; scroll does not replay historical samples");
   assert.equal(o.merged.heldReplayed, 4);
   // Fresh post-release motion resumes at the first reading after the existing
   // 70 ms switch settle, with a filter reset; nothing extra waits.
@@ -67,8 +69,19 @@ test("Sense release frames never replay obsolete stroke motion into the pointer"
   // Each independent rig samples real host time, so rounding can differ by a
   // count. The safety invariant is exactly one report, not byte-identical dt.
   assert.ok(Math.abs(f.hudOpen.counts - f.hudClosed.counts) <= 2);
-  assert.equal(f.hudRelease.held, 4, "held HUD history is preserved");
+  assert.equal(f.hudRelease.held, 1, "held HUD input also consumes a merged report once without historical replay");
   assert.equal(f.hudRelease.released, 0, "release history cannot escape into the pointer");
   assert.ok(f.hudRelease.fresh > 0, "fresh unheld movement resumes without a new delay");
   assert.ok(o.hudRelease.released > 1, "reference proves the release replay");
+  // Ethan (2026-10-31): "no old sensor readings should be buffered then replayed;
+  // continuous current motion only." Native and screenshot drags move the cursor.
+  assert.equal(o.drag.merged, 60, `reference: a native drag replays a merged run as 60 cursor moves (${JSON.stringify(o.drag)})`);
+  assert.equal(f.drag.merged, 1, `a native drag applies a merged run once (${JSON.stringify(f.drag)})`);
+  assert.equal(o.drag.batchRaw, 50, "reference: a native drag replays a stalled backlog");
+  assert.ok(f.drag.expectedStale > 0 && f.drag.expectedFresh > 0, `the stall has late and current readings (${JSON.stringify(f.drag)})`);
+  assert.equal(f.drag.batchRaw, f.drag.expectedFresh, "only readings within the stale limit move a native drag");
+  assert.equal(f.drag.staleDropped, f.drag.expectedStale, "late drag readings are counted as dropped");
+  assert.ok(f.shot.streamed > 0, `screenshot motion streams normally (${JSON.stringify(f.shot)})`);
+  assert.equal(o.shot.reports, 60, `reference: a screenshot drag replays a merged run (${JSON.stringify(o.shot)})`);
+  assert.equal(f.shot.reports, 1, "a screenshot drag applies a merged run once");
 });

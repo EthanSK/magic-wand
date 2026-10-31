@@ -109,8 +109,8 @@ precondition(!h.heldScroll.active,"late telemetry must not restart a cancelled h
 h.heldScroll.begin(now:30);h.scrollActive=true
 h.finishMouseButtonHold(now:31)
 precondition(!h.heldScroll.active,"release teardown is independent of other mode state")
-// A released scroll restores its pre-scroll mouse-follow choice, for both
-// raw-up-first and edge-first delivery. Neither duplicate release can flip it.
+// A completed scroll leaves follow off, for both raw-up-first and edge-first
+// delivery. Only the next deliberate mouse-button tap may enable it again.
 let config=[0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]
 for prior in [false,true] {
  for rawFirst in [false,true] {
@@ -125,11 +125,13 @@ for prior in [false,true] {
   precondition(exit.frames==0,"the release sample itself never moves or clicks")
   exit.finishMouseButtonHold(now:now+0.01);exit.handleRaw("10000,0,2680,0") // the other report of the same release
   exit.reconcileMouseButtonHold(down:false,now:now+0.02,reason:"sensor button state")
-  let expected="global.wandPointerPauseUntil=0;setMouseFollow("+(prior ? "true":"false")+");"
-  precondition(exit.commands.filter{$0==expected}.count==1,"restore the original follow choice once")
-  precondition(exit.dwell.following==prior && exit.restDetection.activated==prior,"scroll preserves the prior follow choice")
-  precondition(logged.filter{$0==(prior ? "SCROLL_FINISHED_MOUSE_ON":"SCROLL_FINISHED_MOUSE_OFF")}.count==1,"duplicate release restores once")
-  // Normal pointing resumes on the next following frame, with no suppression wait.
+  let expected="global.wandPointerPauseUntil=0;setMouseFollow(false);"
+  precondition(exit.commands.filter{$0==expected}.count==1,"stop follow exactly once")
+  precondition(!exit.dwell.following && !exit.restDetection.activated,"scroll leaves follow off from either prior choice")
+  precondition(logged.filter{$0=="SCROLL_FINISHED_MOUSE_OFF"}.count==1,"duplicate release cannot reactivate follow")
+  // The ordinary mouse-button callback can enable follow again, with no new wait.
+  exit.deviceFollowChanged(true)
+  precondition(exit.dwell.following && exit.restDetection.activated,"the next mouse-button tap enables follow")
   let frames=exit.frames
   exit.handleRaw("10000,2680,0,0")
   precondition(exit.frames==frames+1,"the next following frame moves the pointer at once")
@@ -137,13 +139,18 @@ for prior in [false,true] {
  }
  let chord=Harness();chord.dwell.follow(prior);chord.scrollFollowBefore=prior;chord.scrollActive=true
  chord.finishScroll(released:true)
- precondition(chord.dwell.following==prior && !chord.scrollActive && chord.commands==["global.wandPointerPauseUntil=0;setMouseFollow("+(prior ? "true":"false")+");"],"chord release restores prior follow")
+ precondition(!chord.dwell.following && !chord.scrollActive && chord.commands==["global.wandPointerPauseUntil=0;setMouseFollow(false);"],"chord release leaves follow off")
  let watchdog=Harness();watchdog.dwell.follow(prior);watchdog.scrollActive=true
  watchdog.finishScroll()
  precondition(watchdog.dwell.following==prior && watchdog.commands.isEmpty,"a chord watchdog stop is not a release")
  // Short taps, native drags and lost telemetry keep the device's own follow choice.
  let tap=Harness();tap.dwell.follow(prior);tap.heldScroll.begin(now:100);tap.finishMouseButtonHold(now:100.05)
  precondition(tap.dwell.following==prior && tap.commands.isEmpty,"short taps retain their existing meaning")
+ for version in [WandControlVersion.scrollV2,.sustainedV3] {
+  let still=Harness();still.controlVersion=version;still.dwell.follow(prior);still.beginMouseButtonHold(now:100)
+  still.finishMouseButtonHold(now:100.4)
+  precondition(still.dwell.following==prior,"a hold without a scroll keeps the prior follow choice")
+ }
  // A 207 ms physical tap whose release arrived late (Mac sees 0.4 s) is still a tap:
  // it never turns mouse follow back on, so the mouse button can exit mouse mode.
  let late=Harness();late.dwell.follow(prior);late.physicalTapDuration=0.207;late.heldScroll.begin(now:100);late.finishMouseButtonHold(now:100.4)
@@ -176,7 +183,7 @@ smallStroke.beginMouseButtonHold(now:100,following:true)
 for i in 1...10 {_=smallStroke.heldScroll.sample(y:8,dt:0.01,now:100+Double(i)*0.01)}
 precondition(smallStroke.heldScroll.hasScrollGesture,"a qualified stroke is counted before output rounding")
 smallStroke.finishMouseButtonHold(now:100.4)
-precondition(smallStroke.dwell.following && smallStroke.commands.contains{$0.contains("setMouseFollow(true)")},"actual scrolling restores follow even with no emitted whole pixel")
+precondition(!smallStroke.dwell.following && smallStroke.commands.contains{$0.contains("setMouseFollow(false)")},"a real scroll stroke stops follow even before whole-pixel output")
 // Exiting follow sends no click; double/triple recognition stays independent. The
 // actual finish method owns both raw-up and edge-up, so duplicate reports are inert.
 for physicalDuration:Double? in [nil,0.12] {
