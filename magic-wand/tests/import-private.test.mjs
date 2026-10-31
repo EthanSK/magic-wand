@@ -23,6 +23,8 @@ for public in ["WandSenseUpdate.swift", "WandReceiverSenseUpdate.swift", "WandSe
     path="receiver/Sources/"+public
     assert any(target==path for target,transform in m.FILES.values()), path
     assert m.leaks(Path(path).read_text())==[], path
+for name in ["wand_sense.ino", "wand_time.h", "wand_merge.h", "wand_light.h", "wand_update.h", "wand_usb_output.h", "wand_ble_output.h"]:
+    assert m.FILES["sense/"+name] == ("device/sense/wand_sense/"+name, "verbatim")
 assert m.leaks(source+'\nlet privateID="'+"-".join("0"*n for n in (8,4,4,4,12))+'"')
 print("PASS: public source stays byte-identical; partial source and private identity fail")
 `],{cwd:new URL('..',import.meta.url),encoding:'utf8'});

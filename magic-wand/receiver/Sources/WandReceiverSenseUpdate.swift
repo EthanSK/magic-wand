@@ -6,6 +6,7 @@ import CryptoKit
 /// effects through the one existing Sense link (no second Bluetooth owner).
 final class WandSenseUpdateSession {
     var flow = WandSenseUpdateFlow()
+    var preparation = WandSenseUpdatePreparation()
     var setup = WandSenseUpdateSetup()
     var package: WandSenseDFUPackage?
     var key: SymmetricKey?
@@ -23,7 +24,7 @@ extension WandReceiver {
     func readFirmwareUpdateRequest() {
         let reconcilePath = support.appendingPathComponent(WandSenseUpdateReconcileRequest.fileName).path
         if let request = WandSenseUpdateReconcileRequest.take(at: reconcilePath) {
-            guard !senseUpdate.flow.busy, let info = senseInfo, request.matches(info) else {
+            guard !senseUpdate.flow.busy, !senseUpdate.preparation.busy, let info = senseInfo, request.matches(info) else {
                 log("SENSE_UPDATE_RECONCILE_REFUSED", "board or update result changed"); return
             }
             senseUpdate.requestID = request.id
@@ -34,23 +35,60 @@ extension WandReceiver {
         guard let request = WandSenseUpdateRequest.take(at: firmwareUpdateRequestPath) else { return }
         let update = senseUpdate
         log("SENSE_UPDATE_REQUEST", request.id, "firmware", request.firmware, request.firstTrial ? "first-trial" : "")
-        guard !update.flow.busy else { log("SENSE_UPDATE_REFUSED", "an update is already running"); return }
+        guard !update.flow.busy, !update.preparation.busy else { log("SENSE_UPDATE_REFUSED", "an update is already running"); return }
         guard update.setup.keyBoardID == nil else { log("SENSE_UPDATE_REFUSED", "key provisioning is unconfirmed"); return }
         update.requestID = request.id
-        guard isSense, let info = senseInfo else { failSenseUpdate("No Sense wand is connected."); return }
-        let package: WandSenseDFUPackage
-        do { package = try WandSenseDFUPackage.load(directory: request.package) }
-        catch { failSenseUpdate("The package is invalid: \(error)."); return }
-        let check = WandSenseUpdateCheck(batteryMillivolts: update.batteryMillivolts, charging: update.charging,
-                                         overBluetooth: senseTransport == .bluetooth, expectedSHA256: request.sha256,
-                                         expectedFirmware: request.firmware, allowFirstTrial: request.firstTrial, acceptUSBRecovery: request.acceptUSBRecovery)
-        let blockers = WandSenseUpdatePreflight.blockers(info, package, check)
-        guard blockers.isEmpty else { failSenseUpdate(blockers.joined(separator: " ")); return }
-        guard let key = senseUpdateKeys.load(info.id) else { failSenseUpdate("This Mac has no update key for the wand. Connect it over USB once."); return }
+        guard isSense, let info = senseInfo, senseTransport == .bluetooth,
+              let link = senseLink, link.active == .bluetooth else {
+            failSenseUpdate("No Sense wand is connected over Bluetooth."); return
+        }
+        let boardID = info.id, session = senseSessionNumber, keys = senseUpdateKeys
         senseUpdateRefusal = nil
-        update.package = package; update.key = key
-        performSenseUpdate(update.flow.begin(boardID: info.id, target: package.target.firmwareNumber))
-        armSenseUpdateTimer(15)
+        performSenseUpdate(update.flow.prepare(boardID: boardID, target: request.firmware))
+        log("SENSE_UPDATE_PREPARE_START", request.id, "monotonicMS", ProcessInfo.processInfo.systemUptime * 1000)
+        update.preparation.start(load: {
+            let package = try WandSenseDFUPackage.load(directory: request.package)
+            guard let key = keys.load(boardID) else {
+                throw NSError(domain: "WandSenseUpdatePreparation", code: 1,
+                              userInfo: [NSLocalizedDescriptionKey: "This Mac has no update key for the wand. Connect it over USB once."])
+            }
+            return .init(package: package, key: key)
+        }, complete: { [weak self, weak link] result, timing, valid in
+            guard let self else { return }
+            log("SENSE_UPDATE_PREPARE_END", request.id, "startedMS", timing.startedMS,
+                "endedMS", timing.endedMS, "workMS", timing.endedMS - timing.startedMS,
+                "returnedMS", ProcessInfo.processInfo.systemUptime * 1000)
+            guard valid, self.senseUpdate.requestID == request.id, self.senseUpdate.flow.state == .preparing else {
+                log("SENSE_UPDATE_PREPARE_DISCARDED", request.id); return
+            }
+            // Revalidate the live session after disk and key work. A reconnect to
+            // the same board is a different session and cannot inherit approval.
+            guard self.isSense, self.senseSessionNumber == session, let current = self.senseInfo,
+                  current.id == boardID, let link, self.senseLink === link,
+                  self.senseTransport == .bluetooth, link.active == .bluetooth,
+                  self.senseUpdate.setup.keyBoardID == nil, current.update.keyProvisioned else {
+                self.refusePreparedSenseUpdate("The wand connection changed while preparing the update. Submit a new request."); return
+            }
+            switch result {
+            case .failure(let error):
+                self.refusePreparedSenseUpdate("The update could not be prepared: \(error.localizedDescription)")
+            case .success(let prepared):
+                let check = WandSenseUpdateCheck(batteryMillivolts: update.batteryMillivolts, charging: update.charging,
+                    overBluetooth: true, expectedSHA256: request.sha256, expectedFirmware: request.firmware,
+                    allowFirstTrial: request.firstTrial, acceptUSBRecovery: request.acceptUSBRecovery)
+                let blockers = WandSenseUpdatePreflight.blockers(current, prepared.package, check)
+                guard blockers.isEmpty else { self.refusePreparedSenseUpdate(blockers.joined(separator: " ")); return }
+                update.package = prepared.package; update.key = prepared.key
+                self.performSenseUpdate(update.flow.prepared(boardID: boardID, target: request.firmware))
+                self.armSenseUpdateTimer(15)
+            }
+        })
+        armSenseUpdateTimer(30)
+    }
+
+    private func refusePreparedSenseUpdate(_ text: String) {
+        senseUpdateRefusal = text
+        performSenseUpdate(senseUpdate.flow.preparationFailed(text))
     }
 
     func senseUpdateReply(_ reply: WandSenseUpdateReply) {
@@ -98,7 +136,7 @@ extension WandReceiver {
         performSenseUpdate(senseUpdate.flow.identity(info))
     }
 
-    func senseUpdateConnectionLost() { senseUpdate.setup.reset(); performSenseUpdate(senseUpdate.flow.connectionLost()) }
+    func senseUpdateConnectionLost() { senseUpdate.preparation.cancel(); senseUpdate.setup.reset(); performSenseUpdate(senseUpdate.flow.connectionLost()) }
     func senseUpdateBattery(millivolts: Int, charging: Bool) { senseUpdate.batteryMillivolts = millivolts; senseUpdate.charging = charging }
 
     private func performSenseUpdate(_ effects: [WandSenseUpdateFlow.Effect]) {
@@ -123,7 +161,7 @@ extension WandReceiver {
             case .report:
                 let flow = update.flow
                 log("SENSE_UPDATE", flow.state.rawValue, "firmware", flow.target, flow.detail)
-                if !flow.busy { update.timer?.invalidate(); update.timer = nil; update.key = nil; update.package = nil }
+                if !flow.busy { update.preparation.cancel(); update.timer?.invalidate(); update.timer = nil; update.key = nil; update.package = nil }
                 status()
             }
         }

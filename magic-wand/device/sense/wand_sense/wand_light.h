@@ -13,11 +13,13 @@
 //     green = HUD, red = recording, blue = mouse follow, cyan = scrolling.
 //     The board never shows these on its own, so a steady one always means
 //     the Mac is connected and in that mode.
-//   Link (board-owned, orange family):
-//     steady orange          = no receiver (disconnected), dark after a minute.
+//   Not ready (board-owned, neutral white):
+//     white/dark, 275 ms      = starting or waiting for a receiver, including
+//                              an ordinary disconnect; dark after the existing
+//                              one-minute offline timeout. Host modes replace it.
 //     changing colours,      = the receiver is restarting or loading
-//       one every 250 ms       (XU); it starts orange, like disconnected.
-//                              The only pattern that shows every colour;
+//       one every 250 ms       (XU); orange first, ordinary offline white.
+//                              The only pattern that cycles distinct hues;
 //                              it reads by its change, not by one colour.
 //   Firmware (board-owned, magenta family; nothing else uses magenta alone):
 //     fast magenta strobe    = authorized update: handing over to the updater.
@@ -27,7 +29,7 @@
 //                              this board.
 //     slow magenta blink     = new firmware's first start after an update,
 //                              until the receiver confirms its version.
-//   Power (white = every channel):
+//   Power (short white cue = every channel, distinct 100 ms phases):
 //     white flashes x2       = the all-button chord: going to standby.
 //     dark                   = standby, sleep or a minute offline.
 // Rules for new patterns: steady means a state, animation means a process in
@@ -46,8 +48,8 @@
 // in progress; the board then steps through the loading colours, one every
 // 250 ms (the cadence of the Puck's loadingLight()), until the next host
 // session, the all-button chord or the existing one-minute offline dark. A
-// plain "X", a lost link or a host timeout keeps the steady disconnected
-// orange. Older firmware reads "XU" as "X". This application cannot light the
+// plain "X", a lost link or a host timeout uses neutral white pulses until
+// the existing offline-dark deadline. Older firmware reads "XU" as "X". This application cannot light the
 // LED while the bootloader is being flashed.
 
 static const uint32_t WAND_LOADING_BLINK_MS = 250;
@@ -55,9 +57,9 @@ static const uint32_t WAND_LOADING_BLINK_MS = 250;
 struct WandRgb { uint8_t r, g, b; };
 
 // Distinct full-strength colours, ordered so neighbours contrast. It starts
-// with the established update orange (ORANGE in wand_sense.ino), so the first
-// frame matches the disconnected light endSession() shows. Previously the
-// loading light alternated that orange with dark.
+// with the established update orange. For XU, endSession() shows this same
+// first frame; ordinary offline uses white instead. Previously the loading
+// light alternated update orange with dark.
 static const WandRgb WAND_LOADING_COLOURS[] = {
   {255, 80, 0},   // orange
   {0, 255, 0},    // green
@@ -90,4 +92,13 @@ static inline WandRgb wandHandoffColour(uint8_t step) { return step % 2 == 0 ? W
 static const uint32_t WAND_VERIFY_BLINK_MS = 500;
 static inline WandRgb wandVerifyColour(uint32_t now, uint32_t since) {
   return (wandElapsed(now, since) / WAND_VERIFY_BLINK_MS) % 2 == 0 ? WAND_FIRMWARE_MAGENTA : WAND_LIGHT_DARK;
+}
+
+// Ethan's final preference: white means neutral "not ready", both during boot
+// and while waiting to reconnect. Keep the existing offline-dark timeout; do
+// not add a separate startup cutoff or relabel disconnection with orange.
+static const uint32_t WAND_NOT_READY_PHASE_MS = 275;
+static const WandRgb WAND_NOT_READY_WHITE = {255, 255, 255};
+static inline WandRgb wandNotReadyColour(uint32_t now, uint32_t since) {
+  return (wandElapsed(now, since) / WAND_NOT_READY_PHASE_MS) % 2 == 0 ? WAND_NOT_READY_WHITE : WAND_LIGHT_DARK;
 }

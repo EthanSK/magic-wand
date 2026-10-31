@@ -44,6 +44,14 @@ FILES = {
     "wand-sense-protocol.swift": ("receiver/Sources/WandSenseProtocol.swift", "verbatim"),
     "wand-receiver-sense.swift": ("receiver/Sources/WandReceiverSense.swift", "verbatim"),
     "wand-receiver-actions.swift": ("receiver/Sources/WandReceiverActions.swift", "verbatim"),
+    # Publish the complete compiled Sense program from the same checked snapshot.
+    "sense/wand_sense.ino": ("device/sense/wand_sense/wand_sense.ino", "verbatim"),
+    "sense/wand_time.h": ("device/sense/wand_sense/wand_time.h", "verbatim"),
+    "sense/wand_merge.h": ("device/sense/wand_sense/wand_merge.h", "verbatim"),
+    "sense/wand_light.h": ("device/sense/wand_sense/wand_light.h", "verbatim"),
+    "sense/wand_update.h": ("device/sense/wand_sense/wand_update.h", "verbatim"),
+    "sense/wand_usb_output.h": ("device/sense/wand_sense/wand_usb_output.h", "verbatim"),
+    "sense/wand_ble_output.h": ("device/sense/wand_sense/wand_ble_output.h", "verbatim"),
     "Wand Receiver.app/Contents/Info.plist": ("receiver/Info.plist", "verbatim"),
 }
 

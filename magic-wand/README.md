@@ -134,7 +134,7 @@ The Puck also advertises as a Bluetooth mouse, but macOS pairing stalled, so the
 ### Needs
 
 <!-- wand:dependencies -->
-- [Agentic Mouse](https://ethansk.github.io/agentic-mouse/): Draws the HUD and runs its cards. Wand support is in Ethan’s local build and isn’t published yet.
+- [Agentic Mouse](https://ethansk.github.io/agentic-mouse/): Draws the HUD and runs its cards. Public source includes wand support.
 - [Agent Flow](https://ethansk.github.io/AgentFlow/): Records and pastes dictation. The public build accepts its mouse controls; wand input isn’t published yet.
 - [Espruino](https://www.espruino.com/): JavaScript firmware on the Puck.js. Public. The first upload uses the Espruino Web IDE.
 <!-- /wand:dependencies -->
@@ -189,6 +189,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: Agentic Mouse 1.0.308 build 314 adds built-in left/right window snapping to the Magnet card. Repeating at an occupied screen half moves the window to the neighbouring display. Existing HUD layout and wand controls are retained; standalone snapping apps stay installed. Focused geometry, cancellation and readback checks passed; physical cross-monitor acceptance remains unverified.
+- Installed: receiver 1.2.136 build 141 and Sense firmware 8. The first wireless update completed, the wand restarted over Bluetooth, and the receiver confirmed firmware 8 with calibration and the update key preserved. Startup and ordinary disconnection pulse white every 275 ms until connection or the existing one-minute dark timeout. Receiver-restart colour cycling and the short sleep warning are unchanged. The first update attempt stopped before authorization; package and key checks now run outside the input thread, with the live connection rechecked before authorization. Interrupted wireless updates can still require USB recovery.
 - Installed: receiver 1.2.135 build 140 and complete Sense firmware 7. Bluetooth works with USB removed, confirmed by live input and user feedback. Calibration and the update key are preserved. Page scrolling uses fine pixel output, sideways native gestures end at wrist stop, and the approved 300 ms exit-click window preserves double and triple shortcuts. All 247 receiver tests pass. The first wireless firmware transfer and physical acceptance of the latest scrolling remain unverified. The reviewed single-bank bootloader can require USB recovery after an interrupted update.
 - Receiver140 prepared: verified single-bank updater policy for the actual0.6.1 bootloader, explicit USB-recovery acceptance required. Receiver139 pixel scrolling is installed. Firmware6 is installed but its long Bluetooth identity is truncated; packetized firmware7 repair is being prepared.
 - Receiver1.2.134 build139 prepared: V3 pages use precise pixel output at the existing20ms cadence for smooth slow scrolling. Native sideways stroke endings and300ms exit-click cancellation are retained. Wireless host prepared; complete Sense6 still needs its first USB installation and hardware verification.
@@ -247,7 +249,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.135 (140) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.136 (141) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

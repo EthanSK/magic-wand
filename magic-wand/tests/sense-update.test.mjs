@@ -112,17 +112,23 @@ test('firmware lights stay in their own colour families and stop like every boar
   assert(WAND_VERIFY_BLINK_MS>WAND_LOADING_BLINK_MS&&WAND_VERIFY_BLINK_MS>WAND_HANDOFF_STEP_MS);
   const uint32_t since=0xfffffe00U;
   for(uint32_t ms=0;ms<3000;ms+=50) assert(same(wandVerifyColour(since+ms,since),(ms/500)%2?WAND_LIGHT_DARK:WAND_FIRMWARE_MAGENTA));
+  // White means not ready, distinct from the shorter two-flash sleep cue.
+  assert(WAND_NOT_READY_PHASE_MS==275);
+  for(uint32_t ms=0;ms<=60000;++ms) assert(same(wandNotReadyColour(since+ms,since),(ms/275)%2?WAND_LIGHT_DARK:WAND_NOT_READY_WHITE));
+  assert(same(wandNotReadyColour(1000,1001),WAND_NOT_READY_WHITE));
  }`);
  const loop=firmware.slice(firmware.indexOf('void loop()'));
  assert.match(firmware,/session = from;[^\n]*loadingBlink = false; verifyBlink = false;/,'a host session ends the verification light');
  assert.match(loop,/chordPhase = 1; chordAt = now; loadingBlink = false; verifyBlink = false;/);
  assert.match(loop,/localDark = true; loadingBlink = false; verifyBlink = false; setLight\(0, 0, 0\);/);
  assert(loop.indexOf('OFFLINE_DARK_MS')<loop.indexOf('else if (verifyBlink)'),'the offline dark still wins');
+ assert(loop.indexOf('else if (loadingBlink)')<loop.indexOf('else if (!localDark)'),'installation colours take priority over ordinary not-ready pulses');
+ assert.match(loop,/wandNotReadyColour\(now, notReadySince\)/);
 });
 
 test('the firmware exposes no open updater and keeps the key off Bluetooth',()=>{
  assert.doesNotMatch(firmware,/^\s*BLEDfu\s+\w+\s*;|\.begin\(\);?\s*\/\/\s*dfu|bledfu\.begin|addService\(bledfu\)/m,'no open DFU control point is declared or started');
- assert.match(firmware,/static const char FIRMWARE\[\] = "wand-sense-7";\nstatic const uint32_t FIRMWARE_NUMBER = 7;/);
+ assert.match(firmware,/static const char FIRMWARE\[\] = "wand-sense-8";\nstatic const uint32_t FIRMWARE_NUMBER = 8;/);
  const number=firmware.match(/static const uint32_t FIRMWARE_NUMBER = (\d+);/)[1];
  assert.equal(firmware.match(/static const char FIRMWARE\[\] = "wand-sense-(\d+)";/)[1],number,'the name and number agree');
  assert.match(firmware,new RegExp(`static const char WAND_IMAGE_MARKER\\[\\] = "WANDIMG1;xiao-nrf52840-sense;${number}";`),'the image marker carries the same number');

@@ -1604,3 +1604,19 @@ reviewed versions compile single-bank DFU and erase the running app before recei
 its replacement. A conservative half-size image cap is not a backup bank. State
 USB recovery requirements explicitly; keep source review, actual board identity,
 successful wireless transfer and interruption recovery as separate evidence.
+
+## 2026-10-31 — Prepare firmware packages away from live input
+
+The first wireless request reached its challenge state after a three-second
+preparation gap, then the unchanged telemetry watchdog disconnected it before
+authorization. The same firmware reconnected; no image transfer had started.
+Package decoding and key reads now run outside the main input queue. Completion
+rechecks the exact connection generation, board, transport, key confirmation and
+fresh battery before authorizing anything. Cancellation keeps the worker slot
+occupied until it returns, so reconnects cannot accumulate readers or reuse an
+old result. Logs distinguish worker time from return-to-main time.
+
+The next physical attempt prepared in about 12 ms and completed the firmware-7-to-8
+wireless update, including Bluetooth reconnection and durable result confirmation.
+That proves this tested path; it does not establish which individual operation
+caused the earlier gap or prove recovery after an interrupted transfer.
