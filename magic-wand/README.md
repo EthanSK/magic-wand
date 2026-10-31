@@ -178,7 +178,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 | HIGH stop-to-click | 200 ms still | One click after deliberate movement; no repeat while still |
 | Double-click window | 0.3 s | Read from the Mac’s setting |
 | Scrolling | Horizontal × 1.4 | Mac wheel gain 0.8 |
-| V3 held scrolling | 1.6 lines per degree, up to 120 lines/s | Strokes faster than 120°/s rise to 600 lines/s |
+| V3 held scrolling | 1.6 lines per degree, up to 120 lines/s | Strokes faster than 120°/s rise to 1200 lines/s |
 | HUD button report | After 80 ms | So the mouse and HUD buttons together can become a scroll |
 | Reports | Every 30 ms | While the HUD or scrolling is active |
 | Calibration | 2 s still, no buttons pressed | Kept across reconnects |
@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed receiver 1.2.131 build 136 restores ordinary wheel events for vertical and diagonal page scrolling and doubles the fast-end maximum to 1,200 lines per second. Pure horizontal held swipes retain native history gestures and the stronger 135 curve. Installed source, resources, settings and Bluetooth readiness were verified. Initial physical feedback reports stronger page scrolling but too much speed at the low end and a drop after repeated flicks; further tuning is in progress.
 - Receiver 1.2.130 build 135 increases deliberate horizontal swipes to five times the previous 134 strength after physical feedback. Vertical and diagonal scrolling, fine pointing, clicks and follow restoration are unchanged. Native receiving apps still decide scroll or history navigation. The stronger setting needs physical confirmation.
 - Receiver 1.2.129 build 134 increases horizontal-only native swipe distance, easing in up to 2.5 times the shared rate. Ordinary vertical and diagonal scrolling, pointer tuning, click timing and follow restoration are unchanged. Native phases still let the receiving app decide scrolling or history navigation. Physical Back/Forward acceptance remains unverified.
 - Installed receiver 1.2.128 build 133 and Agentic Mouse 1.0.306 build 312: current controls now use HUD button, mouse button and speech button, retaining wire aliases and marked older tutorial recordings. The wand HUD selection outline now moves continuously between the centre, ring and outer cards, with input timing unchanged. Green HUD light, the original normal scroll feel and stronger high-speed scroll range are preserved. Signed installation, source/resources and Bluetooth readiness were verified; physical animation feel remains for confirmation.
@@ -240,7 +241,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.130 (135) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 30 October 2026.
+Receiver 1.2.131 (136) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 30 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

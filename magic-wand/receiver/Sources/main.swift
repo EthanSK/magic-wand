@@ -23,6 +23,8 @@ func log(_ values: Any...) {
 /// Back/Forward shortcut. The receiving app owns scrolling and edge navigation.
 /// Keep the existing wheel distance (one line is ten CoreGraphics points).
 /// This is transport only: no pointer buffering, inertia or replay.
+/// Used only for a held scroll's purely sideways output; page scrolling with
+/// any vertical part keeps ordinary line wheel events (see postHeldScroll).
 struct WandNativeScrollGesture {
     private(set) var active=false
     private var anchor=CGPoint.zero
@@ -1402,7 +1404,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             let lines=self.heldScroll.continuation(now:now)
             if lines.x != 0 || lines.y != 0 {
                 self.setCircleLight(true)
-                self.postNativeScroll(x:lines.x,y:lines.y,at:self.heldScrollAnchor)
+                self.postHeldScroll(x:lines.x,y:lines.y,at:self.heldScrollAnchor)
             }
         }
         releaseButtons()
@@ -1468,6 +1470,22 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if let point {for event in events {event.location=point}}
         return events
     }
+    /// Ethan, 2026-10-31: "make the up-down mechanism be different from the side
+    /// scrolling" and "the same feeling as before". Output with any vertical part
+    /// (vertical or diagonal page scrolling) uses the ordinary line wheel events his
+    /// normal scroll feel was tuned on, exactly as before native gestures. Only a
+    /// purely sideways output is a native precise phased gesture, so the app itself
+    /// still decides horizontal scrolling or Back/Forward. Turning from sideways to
+    /// page scrolling abandons that swipe: cancel it, so no history commits, before
+    /// any line event. A later sideways stroke begins a fresh gesture. Same tick,
+    /// same values: routing adds no delay, buffering or replay.
+    func postHeldScroll(x:Int32,y:Int32,at point:CGPoint?) {
+        guard !actionPause.paused else{finishNativeScroll(cancelled:true);return}
+        guard x != 0 || y != 0 else{return}
+        if y == 0 {postNativeScroll(x:x,y:0,at:point);return}
+        finishNativeScroll(cancelled:true)
+        for event in Self.wheelEvents(x:x,y:y,at:point) {event.post(tap:.cghidEventTap)}
+    }
     func postNativeScroll(x:Int32,y:Int32,at point:CGPoint?) {
         guard !actionPause.paused else{finishNativeScroll(cancelled:true);return}
         let beginning = !nativeScroll.active
@@ -1486,12 +1504,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func postScroll(x:Int32,y:Int32){
+        // The two-button chord keeps its original line wheel events. Its raw
+        // two-axis stream has no snapped axis, so it could not own a clean
+        // sideways-only native gesture without flipping transports mid-chord.
         guard !actionPause.paused else{finishNativeScroll(cancelled:true);return}
-        if scrollActive {
-            postNativeScroll(x:x,y:y,at:scrollAnchor)
-            scrollPostedX+=Int(x);scrollPostedY+=Int(y)
-            return
-        }
         for event in Self.wheelEvents(x:x,y:y,at:scrollAnchor ?? circleAnchor) {event.post(tap:.cghidEventTap)}
         scrollPostedX+=Int(x);scrollPostedY+=Int(y)
     }
@@ -1891,7 +1907,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     setCircleLight(true)
                     let x: Int32=heldScroll.horizontal ? lines:0
                     let y: Int32=heldScroll.horizontal ? 0:lines
-                    postNativeScroll(x:x,y:y,at:heldScrollAnchor)
+                    postHeldScroll(x:x,y:y,at:heldScrollAnchor)
                 }
             } else {
                 // A native drag never starts inside an open scroll gesture.

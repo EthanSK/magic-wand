@@ -215,13 +215,13 @@ let curve=WandSustainedScroll()
 for peak in stride(from:0.0,through:120.0,by:0.25) {
     check(curve.linesPerSecond(peak:peak)==original(peak),"ordinary stroke \(f(peak)) deg/s keeps the original speed","\(curve.linesPerSecond(peak:peak)) vs \(original(peak))")
 }
-check(curve.linesPerSecond(peak:120.5)-120<0.01 && curve.linesPerSecond(peak:125)-120<1,"the faster range starts flat from the original plateau","\(curve.linesPerSecond(peak:120.5)), \(curve.linesPerSecond(peak:125))")
+check(curve.linesPerSecond(peak:120.5)-120<0.02 && curve.linesPerSecond(peak:125)-120<2,"the faster range starts flat from the original plateau","\(curve.linesPerSecond(peak:120.5)), \(curve.linesPerSecond(peak:125))")
 var previous=0.0
 for peak in stride(from:0.0,through:1000.0,by:0.25) {
     let rate=curve.linesPerSecond(peak:peak)
-    check(rate>=previous && rate-previous<=2+1e-9 && rate<=600,"speed curve rises continuously (at most 8 lines/s per deg/s) to its bound","\(f(rate)) at \(f(peak))");previous=rate
+    check(rate>=previous && rate-previous<=4.5+1e-9 && rate<=1200,"speed curve rises continuously (at most 18 lines/s per deg/s) to its bound","\(f(rate)) at \(f(peak))");previous=rate
 }
-for (peak,expected) in [(150.0,150.0),(180.0,240.0),(210.0,390.0),(240.0,600.0),(1e6,600.0)] {
+for (peak,expected) in [(150.0,187.5),(180.0,390.0),(210.0,727.5),(240.0,1200.0),(1e6,1200.0)] {
     check(abs(curve.linesPerSecond(peak:peak)-expected)<1e-9,"strong stroke \(f(peak)) deg/s","\(f(curve.linesPerSecond(peak:peak))) not \(f(expected))")
 }
 // 23. The whole controller is identical to the original tuning for ordinary hands:
@@ -256,16 +256,16 @@ each {axis,sign,seed,label in
 // A horizontal stroke: the shared ceiling applies with the horizontal gain off.
 let fast=WandSustainedScroll(tuning:simulationTuning)
 for _ in 0..<6 {fast.sample(x:2000,y:0,dt:0.01)}
-check(fast.velocityX==600 && fast.velocityY==0,"fast strokes cap at 600 lines per second","\(fast.velocityX)")
+check(fast.velocityX==1200 && fast.velocityY==0,"fast strokes cap at the 1200 lines per second page maximum","\(fast.velocityX)")
 // A late timer pays at most 50 ms at the cap, plus the new direction's first line.
-check(fast.tick(now:100).x<=31,"late timer cannot replay a backlog")
+check(fast.tick(now:100).x<=61,"late timer cannot replay a backlog")
 var strongRates:[Double]=[]
 each {axis,sign,seed,label in
     let hand=Hand(parts:[.rest(0.35),stroke(30,0.2),.rest(1.2),stroke(-5,0.3),.rest(1.2)])
     let trace=simulate(hand,axis:axis,sign:sign,seed:seed,release:3.2)
     let name="strong flick ("+label+")"
     let big=sign*trace.rate(0.75,1.5).p;strongRates.append(big)
-    check(big>=2*120 && big<=600,name+" scrolls well beyond the original 120, within the bound","\(f(big)) lines/s")
+    check(big>=2*120 && big<=1200,name+" scrolls well beyond the original 120, within the bound","\(f(big)) lines/s")
     check(trace.lines(0.75,1.5).s==0,name+" single axis")
     let reverse=trace.first({p,_ in Double(p)*sign<0},after:1.75) ?? 99
     check(reverse<=1.75+0.25,name+" still reverses promptly","\(f((reverse-1.75)*1000)) ms")

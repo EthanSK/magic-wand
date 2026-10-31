@@ -65,6 +65,7 @@ final class Harness {
  static func mouseMovementEvent(buttons:Int,from:CGPoint,to:CGPoint)->Posted? {moves.append((buttons,to));return Posted()}
  func finishNativeScroll(cancelled:Bool){}
  func postNativeScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
+ func postHeldScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{[]}
  func transition(to next:Int,at:CGPoint){if buttons & 1 == 0 && next & 1 != 0 {downs+=1};if buttons & 1 != 0 && next & 1 == 0 {ups+=1};buttons=next}
  func releaseButtons(){transition(to:0,at:.zero)}

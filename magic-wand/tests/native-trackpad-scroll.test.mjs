@@ -43,20 +43,26 @@ print("Native scroll: precise both axes, phase lifecycle, fixed anchor, no momen
  } finally {rmSync(dir,{recursive:true,force:true});}
 });
 
-test('every held and chord scroll ends, cancels or yields its native gesture exactly once', {skip:process.platform!=='darwin'},()=>{
+test('page scrolls use line wheel events; only sideways held output owns a native gesture, ended or cancelled exactly once', {skip:process.platform!=='darwin'},()=>{
  const root=new URL('../receiver/Sources/',import.meta.url).pathname;
  const source=readFileSync(root+'main.swift','utf8');
- const method=name=>{const a=source.indexOf('    func '+name+'(');assert(a>=0,name);let b=source.indexOf('{',a)+1,depth=1;while(depth){if(source[b]==='{')depth++;if(source[b]==='}')depth--;b++;}return source.slice(a,b);};
+ const block=(a)=>{assert(a>=0);let b=source.indexOf('{',a)+1,depth=1;while(depth){if(source[b]==='{')depth++;if(source[b]==='}')depth--;b++;}return source.slice(a,b);};
+ const method=name=>block(source.indexOf('    func '+name+'('));
  const start=source.indexOf('struct WandNativeScrollGesture {'),end=source.indexOf('\nfinal class WandReceiver',start);
- // Record instead of posting: this harness never sends real input.
- const methods=['postNativeScroll','finishNativeScroll','postScroll','finishScroll','finishMouseButtonHold'].map(method).join('\n')
+ // Record instead of posting: this harness never sends real input. wheelEvents is the
+ // receiver's own ordinary line-event builder, unchanged since before native gestures.
+ const methods=['postHeldScroll','postNativeScroll','finishNativeScroll','postScroll','finishScroll','finishMouseButtonHold'].map(method).join('\n')
   .replaceAll('event.post(tap:.cghidEventTap)','posted.append(event)');
- // A native drag can never begin inside an open scroll gesture, and a receiver
- // stop (update or SIGTERM) closes any open gesture.
+ const wheel=block(source.indexOf('    static func wheelEvents('));
  assert.ok(/startDrag\(now:now\) \{finishNativeScroll\(cancelled:true\);transition\(to:1,/.test(source),'drag start cancels the open scroll gesture first');
  assert.ok(/finishNativeScroll\(cancelled:true\)/.test(method('stop')),'receiver stop closes an open gesture');
  const beginHold=method('beginMouseButtonHold');
  assert(beginHold.indexOf('finishNativeScroll(cancelled:true)')>=0 && beginHold.indexOf('finishNativeScroll(cancelled:true)')<beginHold.indexOf('heldScroll.begin('),'a new hold cancels a stale native gesture before beginning');
+ // Every held output goes through the router; nothing else starts a native gesture.
+ assert.equal((source.match(/postNativeScroll\(/g)||[]).length,2,'only postHeldScroll calls postNativeScroll');
+ assert.ok(beginHold.includes('self.postHeldScroll(x:lines.x,y:lines.y,at:self.heldScrollAnchor)'),'V3 continuation is routed');
+ assert.ok(method('handleRaw').includes('postHeldScroll(x:x,y:y,at:heldScrollAnchor)'),'V2 held lines are routed');
+ assert.ok(!method('postScroll').includes('postNativeScroll'),'the chord never opens a native gesture');
  const code=`import Cocoa
 func log(_ v:Any...) {}
 ${source.slice(start,end)}
@@ -69,7 +75,7 @@ final class Harness {
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?
  let heldScroll=WandHeldScroll();var controlVersion=WandControlVersion.sustainedV3,heldScrollDiagnostics=false,buttons=0
  var mouseOn=0,hudResumed=0
- static func wheelEvents(x:Int32,y:Int32,at point:CGPoint?=nil)->[CGEvent]{[]}
+${wheel}
  func currentPointerOrigin()->CGPoint{.zero}
  var physicalDuration:Double?
  func mouseButtonPhysicalTapDuration()->Double?{physicalDuration}
@@ -79,47 +85,72 @@ final class Harness {
  func restoreMouseAfterScroll(){mouseOn+=1}
  func resumeHUDNavigation(){hudResumed+=1}
  ${methods}
- func phases()->[NSEvent.Phase]{posted.map{NSEvent(cgEvent:$0)!.phase}}
+ // "L" an ordinary line event, else the native phase; deltas in lines for both.
+ enum Kind:Equatable {case line(x:Int64,y:Int64),native(NSEvent.Phase,x:Int64)}
+ func kinds()->[Kind]{posted.map{e in
+  let n=NSEvent(cgEvent:e)!
+  if !n.hasPreciseScrollingDeltas {
+   precondition(n.phase.isEmpty && n.momentumPhase.isEmpty && e.getIntegerValueField(.scrollWheelEventIsContinuous)==0,"line events carry no phase")
+   return .line(x:e.getIntegerValueField(.scrollWheelEventDeltaAxis2),y:e.getIntegerValueField(.scrollWheelEventDeltaAxis1))
+  }
+  precondition(n.scrollingDeltaY==0 && n.momentumPhase.isEmpty,"native events are sideways only, without momentum")
+  return .native(n.phase,x:Int64(n.scrollingDeltaX)/10)
+ }}
+ var nativeCount:Int {kinds().filter{if case .native = $0 {return true};return false}.count}
 }
-// Two-button chord: began, changed, then a physical release ends it.
+let anchor=CGPoint(x:9,y:9)
+// 1. Two-button chord: ordinary line events only, exactly its original transport.
 let chord=Harness();chord.scrollActive=true;chord.scrollAnchor=CGPoint(x:5,y:6)
 chord.postScroll(x:3,y:0);chord.postScroll(x:2,y:1)
-// Firmware sends @BOTTOM 0 before the chord's @SCROLL E. The held-scroll
-// release must not cancel the chord which owns this open native gesture.
-chord.finishMouseButtonHold(now:0.1,released:true)
-precondition(chord.phases()==[.began,.changed],"mouse-button release waits for the chord end marker")
-chord.finishScroll(released:true)
-precondition(chord.phases()==[.began,.changed,.ended],"chord release ends the gesture")
-precondition(chord.posted.allSatisfy{$0.location==CGPoint(x:5,y:6)},"anchored for the whole gesture")
-precondition(chord.scrollPostedX==5 && chord.mouseOn==1)
-chord.finishScroll(released:true);precondition(chord.posted.count==3,"a second finish posts nothing")
-// Chord watchdog or takeover (not a physical release) cancels it.
+precondition(chord.kinds()==[.line(x:3,y:0),.line(x:2,y:0),.line(x:0,y:1)],"chord posts line events, one axis each")
+precondition(chord.posted.allSatisfy{$0.location==CGPoint(x:5,y:6)},"chord keeps its anchor")
+chord.finishMouseButtonHold(now:0.1,released:true);chord.finishScroll(released:true);chord.finishScroll(released:true)
+precondition(chord.posted.count==3 && chord.scrollPostedX==5 && chord.scrollPostedY==1 && chord.mouseOn==1,"chord end posts no phase and restores follow once")
 let lost=Harness();lost.scrollActive=true;lost.scrollAnchor = .zero
 lost.postScroll(x:0,y:-2);lost.finishScroll(released:false)
-precondition(lost.phases()==[.began,.cancelled] && lost.hudResumed==1)
-// A pause mid-gesture cancels it and sends no further scroll.
+precondition(lost.kinds()==[.line(x:0,y:-2)] && lost.hudResumed==1,"a lost chord posts no phase")
 let paused=Harness();paused.scrollActive=true;paused.scrollAnchor = .zero
 paused.postScroll(x:1,y:0);paused.actionPause.paused=true;paused.postScroll(x:4,y:0)
-precondition(paused.phases()==[.began,.cancelled] && !paused.nativeScroll.active)
-// Held mouse button scroll: a physical release ends it; lost telemetry cancels it.
-for (released,phase) in [(true,NSEvent.Phase.ended),(false,.cancelled)] {
- let held=Harness();held.heldScroll.begin(now:0,scrollable:true);held.heldScrollAnchor=CGPoint(x:9,y:9)
- held.postNativeScroll(x:0,y:3,at:held.heldScrollAnchor);held.postNativeScroll(x:0,y:2,at:.zero)
+precondition(paused.kinds()==[.line(x:1,y:0)],"a pause stops chord scrolling")
+// 2. Held vertical page scrolling: line events at the anchor, no gesture to end.
+for released in [true,false] {
+ let held=Harness();held.heldScroll.begin(now:0,scrollable:true);held.heldScrollAnchor=anchor
+ held.postHeldScroll(x:0,y:3,at:held.heldScrollAnchor);held.postHeldScroll(x:0,y:-2,at:held.heldScrollAnchor)
  held.finishMouseButtonHold(now:1,released:released)
- precondition(held.phases()==[.began,.changed,phase],"held finish \\(released)")
- precondition(held.posted.last!.location==CGPoint(x:9,y:9))
- held.finishMouseButtonHold(now:2,released:true);precondition(held.posted.count==3)
+ precondition(held.kinds()==[.line(x:0,y:3),.line(x:0,y:-2)] && held.posted.allSatisfy{$0.location==anchor},"vertical held scroll is line events only")
+ precondition(held.mouseOn==(released ? 1:0),"a released vertical scroll restores follow; lost telemetry does not")
 }
-// A physically short tap whose release arrived late must not commit history.
-let delayed=Harness();delayed.heldScroll.begin(now:0,scrollable:true)
-delayed.physicalDuration=0.1
-delayed.postNativeScroll(x:3,y:0,at:.zero)
-delayed.finishMouseButtonHold(now:1,released:true)
-precondition(delayed.phases()==[.began,.cancelled] && delayed.mouseOn==0,"a late tap release cancels instead of committing a swipe")
-// No open gesture: finishing is silent.
-let idle=Harness();idle.finishNativeScroll(cancelled:true);idle.finishScroll(released:true)
+// 3. Diagonal page scrolling keeps both axes as line events.
+let diagonal=Harness();diagonal.heldScroll.begin(now:0);diagonal.postHeldScroll(x:3,y:2,at:anchor)
+precondition(diagonal.kinds()==[.line(x:3,y:0),.line(x:0,y:2)],"diagonal is line events on both axes")
+// 4. Held sideways: one native gesture, began/changed then ended (release) or cancelled (lost).
+for (released,phase) in [(true,NSEvent.Phase.ended),(false,.cancelled)] {
+ let held=Harness();held.heldScroll.begin(now:0,scrollable:true);held.heldScrollAnchor=anchor
+ held.postHeldScroll(x:3,y:0,at:held.heldScrollAnchor);held.postHeldScroll(x:-2,y:0,at:.zero)
+ held.finishMouseButtonHold(now:1,released:released)
+ precondition(held.kinds()==[.native(.began,x:3),.native(.changed,x:-2),.native(phase,x:0)],"sideways held finish")
+ precondition(held.posted.allSatisfy{$0.location==anchor},"sideways gesture anchored")
+ held.finishMouseButtonHold(now:2,released:true);precondition(held.posted.count==3,"a second finish posts nothing")
+}
+// 5. Sideways then page scrolling in one hold: the swipe is cancelled before the first
+//    line event, so no history commits; a later sideways stroke begins a fresh gesture.
+let turn=Harness();turn.heldScroll.begin(now:0);turn.heldScrollAnchor=anchor
+turn.postHeldScroll(x:3,y:0,at:anchor);turn.postHeldScroll(x:2,y:0,at:anchor);turn.postHeldScroll(x:0,y:4,at:anchor)
+turn.postHeldScroll(x:0,y:4,at:anchor);turn.postHeldScroll(x:1,y:0,at:anchor);turn.finishMouseButtonHold(now:1,released:true)
+precondition(turn.kinds()==[.native(.began,x:3),.native(.changed,x:2),.native(.cancelled,x:0),.line(x:0,y:4),.line(x:0,y:4),
+                            .native(.began,x:1),.native(.ended,x:0)],"axis change cancels, then a fresh gesture")
+// 6. A physically short tap whose release arrived late must not commit history.
+let delayed=Harness();delayed.heldScroll.begin(now:0,scrollable:true);delayed.physicalDuration=0.1
+delayed.postHeldScroll(x:3,y:0,at:.zero);delayed.finishMouseButtonHold(now:1,released:true)
+precondition(delayed.kinds()==[.native(.began,x:3),.native(.cancelled,x:0)] && delayed.mouseOn==0,"a late tap release cancels")
+// 7. A pause mid-swipe cancels at once and sends nothing more.
+let hold=Harness();hold.heldScroll.begin(now:0);hold.postHeldScroll(x:2,y:0,at:anchor);hold.actionPause.paused=true
+hold.postHeldScroll(x:2,y:0,at:anchor);hold.postHeldScroll(x:0,y:2,at:anchor)
+precondition(hold.kinds()==[.native(.began,x:2),.native(.cancelled,x:0)],"pause cancels the swipe and posts nothing more")
+// 8. Zero output and idle finishes are silent.
+let idle=Harness();idle.postHeldScroll(x:0,y:0,at:anchor);idle.finishNativeScroll(cancelled:true);idle.finishScroll(released:true)
 precondition(idle.posted.isEmpty)
-print("Native scroll lifecycle: chord end/cancel, pause cancel, held end/cancel, single finish passed")
+print("Scroll transports: chord and page lines, sideways native began/changed/ended/cancelled, axis-change cancel, pause, late tap passed")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-native-scroll-life-'));
  try {
