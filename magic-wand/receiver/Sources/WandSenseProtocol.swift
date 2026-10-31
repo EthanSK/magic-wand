@@ -221,6 +221,27 @@ enum WandSenseStaleness {
     static func isStale(readingTime: Double, arrival: Double) -> Bool { arrival - readingTime > limit }
 }
 
+/// Which frames are ordinary pointer data: late readings are skipped and a merged
+/// run is applied once, never replayed (`WandSenseStaleness`, `WandSenseReplay`).
+/// A held mouse-button gesture keeps its readings' history for scrolling and
+/// dragging. Ethan (2026-10-31): the physical button release is the boundary.
+/// The virtual Puck reports that release on the next main-queue turn, so frames
+/// from the same Bluetooth batch used to be judged as still held. A merged run
+/// containing the release was replayed reading by reading under the released
+/// mask: the program saw the release at the run's first reading, and readings
+/// past its 0.3 s clutch-release pause became pointer reports carrying the run's
+/// average, pre-release stroke included. Late post-release readings in that batch
+/// were kept too. Judge the hold by this frame's own mask instead: a release run
+/// is applied once, at its last reading, and late readings are skipped as in
+/// ordinary follow. Obsolete motion is dropped, never waited for or replayed.
+/// `tests/native-sense-release-frames.test.mjs` replays both cases.
+enum WandSensePointerFrames {
+    static func pointerOwns(following: Bool, hudSession: Bool, scrollActive: Bool, hostHolding: Bool,
+                            frameMouseButtonDown: Bool, screenshot: Bool) -> Bool {
+        following && !hudSession && !scrollActive && !(hostHolding && frameMouseButtonDown) && !screenshot
+    }
+}
+
 /// Device reading time on the host's uptime clock. Uses the least-delayed
 /// arrival as the offset, so a burst of readings keeps its real spacing.
 /// It never waits for later data and never returns a future time.

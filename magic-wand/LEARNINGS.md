@@ -1690,3 +1690,16 @@ move before using the shortcut, so release motion cannot earn it. Pointer
 filtering and delivery are separate and unchanged. Replaying the saved slow
 reference produced identical clicks with no accelerated click in the labelled
 slow interval; synthetic cases cover the positive fast path and nearby guards.
+
+## 2026-10-31 — A physical release ends historical pointer replay
+
+When classifying a Sense frame, use its own physical button mask. Host-held
+state can remain true until the virtual program flushes its release on the
+next main-queue turn. Treating a released frame as held replayed a merged
+pre-release stroke and bypassed stale-pointer rejection. A released merged
+frame now runs once at its last reading; the existing 75 ms stale limit
+applies to post-release readings. Held gestures still retain their history.
+The synthetic regression reproduces that failure with the real program.
+The separate captured post-scroll jump was fresh sensor motion, consistent
+with recoil: do not claim this replay correction removes that motion or
+add a broad post-scroll movement suppression without its own latency approval.
