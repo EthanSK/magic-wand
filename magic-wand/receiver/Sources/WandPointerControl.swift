@@ -1094,10 +1094,16 @@ final class WandSustainedScroll {
         /// Ethan, 2026-10-30, on the native Back/Forward edge peek: "it's just
         /// not sensitive enough when doing those trackpad swipes". A stroke that
         /// scrolls only horizontally gets up to this multiple of the vertical
-        /// rate above, never beyond maxRate. Vertical and diagonal strokes keep
-        /// that curve exactly. It scales velocity only: same timing, no buffer,
-        /// no catch-up. The receiving app still decides scroll or history.
-        var horizontalGain=2.5
+        /// rate above, never beyond horizontalMaxRate. Vertical and diagonal
+        /// strokes keep that curve exactly. It scales velocity only: same timing,
+        /// no buffer, no catch-up. The receiving app still decides scroll or history.
+        /// After the 2.5x build worked in Chrome but needed "extreme swipe radii",
+        /// Ethan asked for "maybe five times" more: 12.5, and a ceiling five times
+        /// the shared maxRate, so stronger strokes are not clamped back to 600.
+        var horizontalGain=12.5
+        /// Horizontal-only wheel lines per second (30,000 points per second).
+        /// The shared maxRate for vertical and diagonal is unchanged.
+        var horizontalMaxRate=3000.0
         /// Degrees per second: the extra horizontal rate eases in (smoothstep)
         /// from none at horizontalGainFrom to all of it at horizontalGainFull, so
         /// fine horizontal strokes keep the ordinary mapping.
@@ -1197,7 +1203,7 @@ final class WandSustainedScroll {
     }
     /// Wheel lines per second for a stroke whose output is horizontal only.
     /// `slope` is |vertical/horizontal| of the stroke itself. Never below the
-    /// vertical rate for the same speed and never above maxRate; continuous and
+    /// vertical rate for the same speed and never above horizontalMaxRate; continuous and
     /// non-decreasing in speed, so it changes no timing and adds no catch-up.
     func horizontalLinesPerSecond(peak:Double,slope:Double=0)->Double {
         let ordinary=linesPerSecond(peak:peak)
@@ -1207,7 +1213,7 @@ final class WandSustainedScroll {
         let edge=tuning.axisSnap-tuning.horizontalGainLevelSlope
         let level=edge>0 ? min(1,max(0,(tuning.axisSnap-abs(slope))/edge)) : (abs(slope)<tuning.axisSnap ? 1:0)
         let gain=1+(tuning.horizontalGain-1)*rise*rise*(3-2*rise)*level
-        return max(ordinary,min(max(ordinary,tuning.maxRate),ordinary*gain))
+        return max(ordinary,min(max(ordinary,tuning.horizontalMaxRate),ordinary*gain))
     }
     private func apply(){
         // Only an output that is purely horizontal is boosted; a diagonal or
