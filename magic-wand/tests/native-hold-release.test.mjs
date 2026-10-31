@@ -19,6 +19,7 @@ final class CGEvent {var location=CGPoint.zero;init?(source:Int?){ };func post(t
 final class Rest {var activated=false,stopped=0;func pointerActivated(){activated=true};func pointerStopped(){activated=false;stopped+=1}}
 final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
+ func invalidatePointerMotion(){}
  var tripleClick=WandTripleClick(),pendingRecenter:Timer?
  var scrollFollowBefore=false
  let context=SwitchAppContext()

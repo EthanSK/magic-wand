@@ -72,6 +72,7 @@ extension WandReceiver {
         controls.suspended = true
         if isSense { senseVirtual?.holdSensor(true) }
         guard !actionPause.paused else { return }
+        invalidatePointerMotion()
         controls.suspended = false // Cleanup below may still close the wand's own HUD session.
         pendingRecenter?.invalidate(); pendingRecenter = nil; tripleClick.cancel(); recenterGesture.cancel()
         clickFollowChoice = nil; recenterSuppressButtons = false
@@ -101,6 +102,7 @@ extension WandReceiver {
             status(); return
         }
         if ready && !restoring { queue("global.wandShot=0;setMouseFollow(" + (dwell.following ? "true" : "false") + ");") }
+        invalidatePointerMotion()
         if isSense { senseVirtual?.holdSensor(false) }
         motionFilter.reset(); rawLastArrival = 0
         let generation = actionPauseGeneration

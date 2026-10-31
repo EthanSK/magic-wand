@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver175 discards unsent movement and pending dwell clicks when recentering, changing follow mode, recording, pausing actions or taking and returning screenshot control. Recentring no longer posts an older pending move after the centre warp. Physical button and speech messages remain ordered; current fresh readings still pass. Firmware11, gain, smoothing and ordinary click timing are unchanged. Installed binary, preserved settings and live Bluetooth were verified; 265 Wand, 17 Control Stones and 4 shared checks passed, including the corrected isolated fixture. Physical acceptance remains pending.
 - Installed: receiver 174 preserves the original ordinary click after a quick click and small correction; it suppresses only a duplicate when the pointer never moved again. The added backward-settling exception is removed. With quick clicking disabled and with it enabled during ordinary slow motion, the original click state and deadlines each match 10,000 deterministic transitions. All 262 Wand, 17 Control Stones and 4 shared checks passed. Installed Bluetooth, signed binary, settings, resources and unchanged firmware 11 were verified; physical feel remains for user review.
 - Installed: receiver173 combines already available filtered pointer movement within each receive turn, preserving native action order and display-edge clamping. A bounded backward settling motion after a fast sweep keeps the quick-click opportunity; slow precision aiming, fresh-stop safeguards, pointer gain, smoothing and firmware11 are unchanged. Signed installed binary, resources, settings, live Bluetooth and automatic diagnostics are verified. All262 Wand,17 Control Stones and4 shared checks passed after installation. Physical feel remains for user review.
 - Installed: receiver172 fixes recorded jumps caused by late cursor-position reports. Own posted positions remain recognised during continuous movement and after recentering; observed physical mouse input hands control back immediately. Rapid-stop clicks are restored after the comparison still reproduced the jump. Filtering, gain, smoothing and firmware11 are unchanged. The signed installed app, resources, preserved settings, automatic diagnostic capture and live Bluetooth were verified. All261 Wand,17 Control Stones and4 shared checks passed after installation. Physical movement acceptance remains pending.
@@ -275,7 +276,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.169 (174) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.170 (175) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

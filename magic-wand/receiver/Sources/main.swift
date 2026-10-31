@@ -87,6 +87,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var pendingMove:(start:CGPoint,end:CGPoint,buttons:Int)?
     /// Receive turns in progress; movement is combined only inside one.
     var moveCoalescing=0
+    // A recenter/cancel invalidates movement prepared before that action,
+    // not the later button releases and non-pointer control messages.
+    var pointerMotionEpoch:UInt64=0
+    var pointerMotionCutoff = -Double.infinity
     /// Actual pointer events posted (one per combined turn segment).
     var pointerEventsPosted=0
     var circleAnchor:CGPoint?,scrollAnchor:CGPoint?
@@ -399,6 +403,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         queue("setWandRecording("+(recording.isRecording ? "true":"false")+");")
     }
     func recordingChanged(_ active:Bool) {
+        invalidatePointerMotion()
         // A recording transition is newer than a possible screenshot triple's
         // first-click snapshot. Apply it to that snapshot too, so undoing the
         // first two taps cannot undo a recording pause or its later restoration.
@@ -437,6 +442,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// The device's own follow report (`@FOLLOW`).
     func deviceFollowChanged(_ on:Bool) {
         guard !recordingPointerPaused,!screenshot.ownsPointer else{return}
+        if dwell.following != on {invalidatePointerMotion()}
         if on {restDetection.pointerActivated()}else{restDetection.pointerStopped();flickScroll.reset();flickAnchor=nil;setCircleLight(false)}
         dwell.follow(on);scheduleDwell()
     }
@@ -675,6 +681,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func reset() {
+        invalidatePointerMotion()
         navigationFeedback.dismiss()
         powerPolicyReady=false;loadingPowerPolicy=false;batteryRequested=Date.distantPast
         reviewTrace.boundary("receiver reset",mode:wandShortcutMode)
@@ -804,6 +811,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // One receive turn: every line the program has already produced. Its
         // pointer moves are combined and shown once at the end (`postPointerMove`).
         moveCoalescing+=1
+        let pointerEpochAtEntry=pointerMotionEpoch
         deliveryPoint=currentPointerOrigin()
         defer {flushPendingMove();moveCoalescing-=1;deliveryPoint=nil}
         input += text.replacingOccurrences(of: "\r", with: "")
@@ -864,7 +872,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 if value=="0" || value=="1" {deviceFollowChanged(value=="1")}
             }
             if let marker=line.range(of:"@ZERO "),let data=String(line[marker.upperBound...]).data(using:.utf8),let config=try? JSONDecoder().decode([Double].self,from:data) {log("NATIVE_MOTION_CONFIG",motionFilter.configure(config))}
-            if let marker=line.range(of:"@RAW "), !paused {handleRaw(String(line[marker.upperBound...]))}
+            if let marker=line.range(of:"@RAW "), !paused, pointerEpochAtEntry==pointerMotionEpoch {handleRaw(String(line[marker.upperBound...]))}
             if let marker=line.range(of:"@IMU ") {handleIMU(String(line[marker.upperBound...]))}
             // Legacy held app-page packets never own a selected persistent review set.
             if let marker=line.range(of:"@REVIEW "),!paused,appMode=="vsCode",selectedReviewMode==nil {
@@ -930,7 +938,11 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     log("SPEECH_BUTTON", value, controls.speech(down:value == "1") ? "SENT" : "UNAVAILABLE")
                 }
             }
-            if let marker = line.range(of: "@WAND "), !paused { handle(String(line[marker.upperBound...])) }
+            if let marker = line.range(of: "@WAND "), !paused {
+                let payload=String(line[marker.upperBound...])
+                if pointerEpochAtEntry==pointerMotionEpoch {handle(payload)}
+                else if let button=payload.split(separator:",").last {handle("0,0,"+button)}
+            }
             if restoring && line.contains("WAND_BRIDGE_RESTORED") { log("STOPPED"); exit(0) }
         }
     }
@@ -1045,6 +1057,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// HIGH motion even with mouse follow off. `setMouseFollow` here only
     /// clears the wand's mouse-button gesture; `follow` is the unchanged choice.
     func takeScreenshotPointer(follow:String) {
+        invalidatePointerMotion()
         pendingRecenter?.invalidate();pendingRecenter=nil;tripleClick.cancel();recenterGesture.cancel()
         cancelCircleScroll();finishMouseButtonHold(now:ProcessInfo.processInfo.systemUptime,released:false)
         performPointer(pointerRouter.cancelAll());if buttons != 0 {releaseButtons()}
@@ -1151,6 +1164,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             log("SCREENSHOT_DRAG_END",reason)
         }
         guard owned else{return}
+        // The final drag move and release above keep their order. Subsequent
+        // queued movement belongs to the finished screenshot and is obsolete.
+        invalidatePointerMotion()
         motionFilter.reset();dwell.reset();scheduleDwell()
         if ready && !restoring {queue("global.wandShot=0;sleepGyro();")}
         log("SCREENSHOT_MODE_END",reason)
@@ -1677,6 +1693,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// Recenter only the mouse-button pointer lane; preserve the HUD button's HUD/review and speech.
     func recenterPointer() {
         guard ready,!restoring,!actionPause.paused,!screenshot.ownsPointer,AXIsProcessTrusted() else{return}
+        invalidatePointerMotion()
         cancelCircleScroll();finishScroll();performPointer(pointerRouter.cancelAll());releaseButtons();motionFilter.reset()
         recenterSuppressButtons=true
         dwell.follow(true);restDetection.pointerActivated();scheduleDwell()
@@ -1693,8 +1710,19 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// wand's earlier events, so anything posted before the warp lands first
     /// and the cursor finishes at the centre.
     func settleRecenteredCursor(at point:CGPoint) {
-        flushPendingMove() // preserve motion before this native action
+        // Earlier movement was discarded before the warp. Sending it now
+        // would briefly undo the centre, even if a centre event follows it.
         Self.mouseMovementEvent(buttons:0,from:point,to:point)?.post(tap:.cghidEventTap)
+    }
+    /// Ethan: double-click must never finish movements from before the reset.
+    /// Keep the own-position history (late macOS feedback), but discard input
+    /// work which has not been posted. Fresh physical movement stays immediate.
+    func invalidatePointerMotion() {
+        pointerMotionEpoch &+= 1
+        pointerMotionCutoff=ProcessInfo.processInfo.systemUptime
+        pendingMove=nil
+        dwell.reset();dwellTimer?.invalidate();dwellTimer=nil
+        senseVirtual?.discardPendingPointerMotion()
     }
     func refreshPointerDisplays() {
         var ids=[CGDirectDisplayID](repeating:0,count:32),count:UInt32=0

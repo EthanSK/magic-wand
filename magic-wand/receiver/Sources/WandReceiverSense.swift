@@ -139,6 +139,10 @@ extension WandReceiver {
                 allowHistory: false)
             senseLastReading = time
             func motion(at reading: Double) -> [Int]? {
+                // Even a normally fresh radio reading is obsolete if it was
+                // sampled before a recenter or cancellation. Preserve its
+                // physical button edges; do not move the new pointer origin.
+                if reading <= pointerMotionCutoff {return nil}
                 guard dropLate, gyro != nil, WandSenseStaleness.isStale(readingTime: reading, arrival: arrival) else { return gyro }
                 senseStaleReadings += 1
                 return nil

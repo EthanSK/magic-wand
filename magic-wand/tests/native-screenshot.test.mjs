@@ -42,6 +42,7 @@ final class Controls {var phases:[String]=[];var starts=0;var available=true
  func screenshotStart()->Bool{starts+=1;return available}}
 final class SwitchAppContext {var switchAppAdjusting=false,isActive=false}
 final class Harness {
+ func invalidatePointerMotion(){}
  final class ClickLight {var count=0;func clickLight(){count+=1}}
  let senseVirtual:ClickLight?=ClickLight()
  func cancelMouseExitClick(){}

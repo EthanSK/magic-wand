@@ -50,6 +50,7 @@ final class Receiver {
     var senseSession = WandSenseSession(), senseClock = WandSenseClock()
     let deviceSettings = Settings()
     let heldScroll = Flag(), pointerRouter = Router(), screenshot = Shot()
+    var pointerMotionCutoff = -Double.infinity
     var senseLastReading = -Double.infinity
     var senseMouseButtonTimer = WandSenseMouseButtonTimer()
     func senseUpdateReply(_ reply: WandSenseUpdateReply) {}

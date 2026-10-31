@@ -25,7 +25,7 @@ func CGDisplayBounds(_ id:Int)->CGRect {CGRect(x:100,y:-200,width:1200,height:80
 func CGWarpMouseCursorPosition(_ point:CGPoint){warped=point}
 final class Rest {var activated=false;func pointerActivated(){activated=true}}
 final class Harness {
- func cancelMouseExitClick(){}
+ func cancelMouseExitClick(){}\n func invalidatePointerMotion(){dwell.reset()}
  var actionPause=WandActionPause()
  let pointerRouter=WandPointerRouter(),recenterGesture=WandRecenterGesture(),dwell=WandDwellClick(),motionFilter=WandMotionFilter(),restDetection=Rest()
  let screenshot=WandScreenshotGesture();var pendingRecenter:Timer?

@@ -105,6 +105,22 @@ final class WandVirtualPuck {
 
     func evaluate(_ expression: String) -> JSValue? { dead ? nil : context.evaluateScript(expression) }
 
+    /// A host recenter/cancel invalidates only queued pointer displacement.
+    /// Keep button releases, dictation, HUD and power messages in their order.
+    func discardPendingPointerMotion() {
+        pending=pending.split(separator:"\n",omittingEmptySubsequences:false).compactMap { part -> String? in
+            let line=String(part)
+            if line.range(of:"@RAW ") != nil {return nil}
+            if let marker=line.range(of:"@WAND ") {
+                let values=line[marker.upperBound...].split(separator:",")
+                if values.count==3,let button=Int(values[2]),(0...3).contains(button) {
+                    return String(line[..<marker.lowerBound])+"@WAND 0,0,"+String(button)
+                }
+            }
+            return line
+        }.joined(separator:"\n")
+    }
+
     func teardown() {
         guard !dead else { return }
         dead = true; pending = ""

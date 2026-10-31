@@ -15,9 +15,9 @@ test('one receive turn shows its motion once, in order with buttons and clicks',
  const source=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.url),'utf8');
  function method(name){const a=source.indexOf('    func '+name+'(');assert(a>=0,name);let b=source.indexOf('{',a)+1,depth=1;while(depth){if(source[b]==='{')depth++;if(source[b]==='}')depth--;b++;}return source.slice(a,b);}
  const receive=method('receiveText');
- assert(receive.includes('moveCoalescing+=1\n        deliveryPoint=currentPointerOrigin()\n        defer {flushPendingMove();moveCoalescing-=1;deliveryPoint=nil}'),'a receive turn combines its motion and shows it when it ends');
+ assert(receive.includes('moveCoalescing+=1\n        let pointerEpochAtEntry=pointerMotionEpoch\n        deliveryPoint=currentPointerOrigin()\n        defer {flushPendingMove();moveCoalescing-=1;deliveryPoint=nil}'),'a receive turn combines its motion and shows it when it ends');
  assert(receive.includes('if pendingMove != nil, line.range(of:"@RAW ")==nil, line.range(of:"@IMU ")==nil {flushPendingMove()}'),'any non-motion line first shows earlier motion');
- for (const name of ['postHeldScroll','postSustainedScroll','postNativeScroll','finishNativeScroll','postScroll','settleRecenteredCursor'])
+ for (const name of ['postHeldScroll','postSustainedScroll','postNativeScroll','finishNativeScroll','postScroll'])
   assert(/^\s*func [^\n]*\{\n\s*flushPendingMove\(\)/.test(method(name)),name+' shows pending motion before scrolling or warping');
  assert(source.includes('if flickAnchor==nil {flickAnchor=currentPointerOrigin();setCircleLight(true)}'),'a flick first flushes motion through the origin query');
  assert(method('currentPointerOrigin').includes('flushPendingMove()'),'an origin query first shows pending motion');

@@ -2000,7 +2000,7 @@ A passing comparison does not establish the cause of a live jump.
 ## Preserve action boundaries when combining ready pointer moves (2026-10-31)
 
 - The Sense program can produce several fresh motion lines in one existing main-queue turn. Keep their filter and display-clamp steps in order, but one native endpoint event per uninterrupted segment avoids posting a historical path for the window server to drain. Do not add a timer or wait for future readings.
-- Native press/release, scrolling, recentering and cursor-origin reads must flush earlier movement first. A no-op button-state check must not flush every frame and defeat combining. Remember each emitted endpoint in WandPointerOrigin; its stale-feedback protection remains necessary.
+- Native press/release, scrolling and cursor-origin reads must flush earlier movement first. Recentring is a cancellation boundary: discard unsent earlier movement before the warp, never flush it afterward. A no-op button-state check must not flush every frame and defeat combining. Remember each emitted endpoint in WandPointerOrigin; its stale-feedback protection remains necessary.
 - Preserve the existing deferred virtual-Puck output hand-off: it collects readings already waiting. Flushing after every sensor callback would undo this benefit. Current-only sensor rejection stays separate and must not be replaced with replay.
 - The backward-settling extension from receiver173 was withdrawn after missed-click feedback. Do not restore it as part of the ordinary click repair below.
 - Verified with inert native-event tests, the real pointer filter/click fixtures and labelled slow-aim references. Recorded-data comparisons support the selected bounds, but they are not physical acceptance or end-to-end latency measurements.
@@ -2011,3 +2011,12 @@ A passing comparison does not establish the cause of a live jump.
 - The early path shared the ordinary click reset, clearing pending travel and timing. After a fast sweep and early click, a two-count correction then failed to re-arm the ordinary click: the original algorithm clicked at350 ms, while the quick path produced only its120 ms click.
 - Keep the ordinary state and deadline intact when delivering the early opportunity. Suppress its later duplicate only if no real pointer movement followed that early click. Hidden sensor residue does not count as another target.
 - Keep the original counters and slow-aim decision unchanged. The corrected disabled-fast path matched the pre-fast algorithm over10000 deterministic state transitions; fixtures cover a real correction retaining its normal click and a stationary target receiving only one click.
+
+
+## Pointer cancellation invalidates pending work (2026-10-31)
+
+- Recentring formerly warped to the centre and then flushed an older pending move. An inert reproduction emitted centre, old point, centre. Discard unsent motion before the warp and post only the centre afterward.
+- Use one cancellation boundary for recenter, changed follow state, recording transitions, debug pause/resume and screenshot ownership changes. Clear pending movement and dwell decisions; preserve native button releases, speech and HUD messages. A screenshot's final drag movement still precedes its release.
+- Reject device samples older than that boundary and queued raw lines from the prior receive epoch. This cancels work before it becomes native input; it does not retract events already posted to macOS.
+- Keep own-position history: it recognises delayed operating-system feedback and is not movement replay. Do not clear it to implement cancellation. No new movement delay or change to gain, smoothing or ordinary click timing was introduced.
+- Source-based inert regression checks cover queued movement, dwell cancellation, retained button/speech messages, fresh movement, screenshot order and recentering. Physical feel remains a separate acceptance check.
