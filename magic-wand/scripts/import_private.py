@@ -35,6 +35,7 @@ FILES = {
     "wand-context-listener.swift": ("receiver/Sources/WandContextListener.swift", "verbatim"),
     "wand-recording-state.swift": ("receiver/Sources/WandRecordingState.swift", "verbatim"),
     "wand-review-trace.swift": ("receiver/Sources/WandReviewTrace.swift", "verbatim"),
+    "wand-update-work.swift": ("receiver/Sources/WandUpdateWork.swift", "verbatim"),
     "wand-pointer-control.swift": ("receiver/Sources/WandPointerControl.swift", "verbatim"),
     "wand-navigation-feedback.swift": ("receiver/Sources/WandNavigationFeedback.swift", "verbatim"),
     "wand-calibration.swift": ("receiver/Sources/WandCalibration.swift", "verbatim"),

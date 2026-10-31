@@ -246,3 +246,19 @@ swiftc -typecheck magic-wand/receiver/Sources/*.swift
 Run those commands at the repository root. The test wildcard includes the updater
 protocol, persistence and fake-Bluetooth transport tests; no additional package
 script or installed application is needed.
+
+## Temporary update work
+
+The private installation workflow can keep an already awake wand reachable while
+preparing changes. Atomically write a same-user mode-0600 `update-work.json` in
+Wand Receiver’s Application Support directory. Its only fields are `version: 1`
+and `expiresAt`: a Unix timestamp no more than 30 minutes ahead. Refresh the
+expiry while actually working; write zero when finished. The receiver reports
+the applied `updateWork.active` and `updateWork.expiresAt` in `status.json`.
+
+The lease survives receiver replacement, keeps normal dark idle and all input
+unchanged, and prevents automatic deep standby. Expiry or explicit end starts a
+fresh five-minute deep-standby grace period. The three-button manual shutdown
+still wins. This cannot remotely wake a radio that was already powered off.
+The physical Sense board retains its independent five-minute offline shutdown
+if the Mac disappears; the lease is not a promise to stay awake out of range.

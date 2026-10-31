@@ -531,18 +531,30 @@ struct WandDeskSleep {
     private(set) var sleeping = false
     private(set) var deepSleeping = false
     private var restSince:Double?,lastSeen:Double?
+    private var updateWorkUntil:Double?
+    private var deepNotBefore = -Double.infinity
+    /// Ethan: keep the wand reachable while an agent is preparing an update.
+    /// Only automatic deep sleep is inhibited; dark idle and manual off remain.
+    /// This is a monotonic deadline, converted from the private wall-clock lease.
+    mutating func keepAwakeForUpdate(until:Double?,now:Double) {
+        updateWorkUntil=until;deepSleeping=false
+        // Ending work starts a fresh deep-sleep grace period without turning
+        // the idle LED back on or disturbing the learned rest position.
+        deepNotBefore=(until ?? now)+Self.deepSeconds
+    }
     mutating func reset(){sleeping=false;deepSleeping=false;restSince=nil;lastSeen=nil}
     /// Reuse the existing confirmed parked/pickup state. Isolated sensor noise
     /// must not postpone sleep forever. A telemetry gap cannot prove rest.
     mutating func sample(parked:Bool,buttons:Bool,now:Double)->Bool? {
         guard now.isFinite else{return nil}
+        if let until=updateWorkUntil,now>=until {updateWorkUntil=nil}
         let was=sleeping
         if let last=lastSeen,now<=last || now-last>2 {restSince=nil}
         lastSeen=now
         if buttons || !parked {sleeping=false;deepSleeping=false;restSince=nil}
         else {
             if restSince==nil {restSince=now}
-            if let since=restSince {sleeping=now-since>=Self.seconds;deepSleeping=now-since>=Self.deepSeconds}
+            if let since=restSince {sleeping=now-since>=Self.seconds;deepSleeping=updateWorkUntil==nil && now>=deepNotBefore && now-since>=Self.deepSeconds}
         }
         return was==sleeping ? nil:sleeping
     }

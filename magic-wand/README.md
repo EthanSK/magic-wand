@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver169 adds a private, automatically expiring update-work mode. It keeps an awake wand reachable during active development by preventing automatic deep standby; ordinary dark idle, pointer timing and manual three-button shutdown are unchanged. The lease survives a receiver restart and expires without further agent work. It cannot wake an already sleeping radio. Firmware11 is unchanged. The signed receiver and source snapshot match. Installed activation, automatic expiry and ending work were verified; all260 Wand,17 Control Stones and4 shared checks passed. Prevention of physical standby remains unverified while the wand is asleep.
 - Installed: receiver168 leaves follow off after completed scrolling, disables synthetic historical sensor replay in every mode, and applies current-only cursor processing to native and screenshot drags. Stop-to-click still presses at the current pointer without a position restore; its timing and normal sensitivity are unchanged. Each new receiver or verified wireless firmware version starts one bounded ten-minute diagnostic window, with temporary raw data deleted two hours later. The signed app, bundled resources, preserved settings and automatic capture were verified. All259 Wand,17 Control Stones and4 shared checks passed. Firmware11 was not changed; the wand was asleep, so live Bluetooth and physical acceptance remain pending. The latest reported jump is not yet reproduced.
 - Installed: receiver166 and complete firmware11. A full wireless transfer of149,688 bytes passed validation and reconnected over Bluetooth with firmware11 confirmed; calibration, settings and the update key were preserved. All259 Wand,17 Control Stones and4 shared checks pass. Uninterrupted wireless installation is verified; recovery from a forced interruption and physical pointer feel remain unverified. Normal pointer gain, smoothing and timing are unchanged.
 - Installed: receiver161 uses one packet per acknowledgement for wireless firmware transfers, stays below the bootloader receive-buffer limit, and ignores late callbacks after cancellation. Package, protocol, bounded-buffer and transport checks pass. A complete wireless transfer with this repair is still pending; firmware9 is running after USB recovery.
@@ -270,7 +271,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.163 (168) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.164 (169) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

@@ -1961,3 +1961,19 @@ so an ordinary restart or reconnect cannot undo a manual off choice or renew an
 expired window. Configuration writes run on the existing diagnostic queue,
 outside input processing. Tests cover first install, changed receiver, changed
 firmware, repeated reconnects, manual off, time expiry and bounded retention.
+
+## 2026-10-31 — Update work prevents sleep; it cannot wake a powered-off radio
+
+A receiver-only installation can complete while the Sense wand is asleep: it
+replaces the Mac app, not the board program. Do not describe that as a remote
+wake or firmware recovery. Firmware System OFF has no Bluetooth listener.
+
+Ethan requested a temporary special mode while an agent prepares an update.
+The private update-work lease inhibits automatic deep standby, persists across
+receiver replacement and expires without a continuing worker. Keep its clock
+conversion and file reads off sensor delivery. Clearing or expiring the lease
+starts a fresh five-minute standby grace period while preserving dark idle; it
+must not reset the light-sleep timer or override the three-button manual shutdown.
+Unit checks cover expiry, reset, file safety and darkness. Installed status
+confirmed activation and expiry while disconnected; prevention of actual
+physical standby still needs an awake device.

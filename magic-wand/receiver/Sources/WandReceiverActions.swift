@@ -18,7 +18,7 @@ extension WandReceiver {
         let fd = open(support.path, O_EVTONLY)
         guard fd >= 0 else { log("ACTIONS_REQUESTS_UNAVAILABLE"); return }
         let source = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fd, eventMask: [.write], queue: .main)
-        source.setEventHandler { [weak self] in self?.readActionRequest(); self?.readGuideRequest(); self?.readFirmwareUpdateRequest(); self?.readLightDemoRequest() }
+        source.setEventHandler { [weak self] in self?.readActionRequest(); self?.readGuideRequest(); self?.readFirmwareUpdateRequest(); self?.readLightDemoRequest(); self?.refreshUpdateWork() }
         source.setCancelHandler { close(fd) }
         source.resume(); actionRequestSource = source
     }
@@ -26,6 +26,25 @@ extension WandReceiver {
     func readActionRequest() {
         guard let request = WandActionPauseRequest.take(at: actionRequestPath) else { return }
         setActionsPaused(request.paused, request: request.id)
+    }
+
+    /// The agent enables this lease before work and clears it after installation.
+    /// Refreshes only run on directory changes or the existing heartbeat, never
+    /// on sensor delivery. An expired lease gives a fresh ordinary rest period.
+    func refreshUpdateWork() {
+        let wall=Date().timeIntervalSince1970
+        guard updateWork.refresh(from:support.appendingPathComponent(WandUpdateWork.fileName),now:wall) else{return}
+        let active=updateWork.active(at:wall)
+        let now=ProcessInfo.processInfo.systemUptime
+        deskSleep.keepAwakeForUpdate(until:active ? now+updateWork.expiresAt-wall : nil,now:now)
+        if active && ready {
+            // Cancel an automatic warning already in progress, never a user's
+            // three-button shutdown. A radio already off still needs a button.
+            standbyResume=nil
+            queue("if(!global.wandPowerManual&&typeof global.wandPowerWarnCancel==='function')global.wandPowerWarnCancel();")
+        }
+        log("UPDATE_WORK",active ? "active":"ended")
+        status()
     }
 
     /// Reuse the guide's strict private show/hide envelope and safe file reader.

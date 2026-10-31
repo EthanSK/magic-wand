@@ -141,6 +141,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // Per physical wand: the Sense profile swaps in its own learned desk pose.
     var restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
     var deskSleep=WandDeskSleep()
+    var updateWork=WandUpdateWork()
     var powerPolicyReady=false,loadingPowerPolicy=false
     var standbyResume:Bool?
     func calibrationURL(for device:String)->URL {support.appendingPathComponent("calibrations").appendingPathComponent(device+".json")}
@@ -338,6 +339,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if isSense { connect() }
         heartbeat = WandRunLoop.commonTimer(interval: 5, repeats: true) { [weak self] _ in
             guard let self else { return }
+            self.refreshUpdateWork()
             let trusted = AXIsProcessTrusted()
             if self.lastTrusted != trusted { self.lastTrusted = trusted; log("ACCESSIBILITY", trusted); self.status() }
             self.recording.refresh()
@@ -349,6 +351,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             self.readFirmwareUpdateRequest()
         }
         startActionRequests()
+        refreshUpdateWork()
         startGuide()
         status()
     }
@@ -561,7 +564,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // stays the same. Derive the write key from the exact published value.
         let firmwareStatus: [String: Any] = isSense ? senseUpdateStatus : [:]
         let firmwareStatusData = (try? JSONSerialization.data(withJSONObject: firmwareStatus, options: [.sortedKeys])) ?? Data()
-        let batteryKey=key+"|"+String(batterySampleAt?.timeIntervalSince1970 ?? 0)+"|"+String(guide?.visible ?? false)+(guide?.lastRequest ?? "")+"|"+(clickGate ?? "")+String(decoding:firmwareStatusData,as:UTF8.self)
+        let batteryKey=key+"|"+String(batterySampleAt?.timeIntervalSince1970 ?? 0)+"|"+String(guide?.visible ?? false)+(guide?.lastRequest ?? "")+"|"+(clickGate ?? "")+String(decoding:firmwareStatusData,as:UTF8.self)+"|"+String(updateWork.expiresAt)
         guard batteryKey != lastStatusKey else { return }
         lastStatusKey = batteryKey
         var value: [String: Any] = ["pid": ProcessInfo.processInfo.processIdentifier, "connected": deviceConnected,
@@ -569,6 +572,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             "motionSensor": isSense ? (senseInfo?.motion ?? false) : true,
             "ready": ready, "options":["controlVersion":controlVersion.rawValue,"flickScroll":flickScrollEnabled,"quietMouseHold":heldScroll.quietStopEnabled,"reviewAxisGestures":reviewAxisEnabled,"orientationCompensation":motionFilter.orientationCompensation], "recording":recording.isRecording,"deskSleeping":deskSleep.sleeping, "lightMode":lightMode, "accessibility": AXIsProcessTrusted(), "bluetoothAuthorization": CBCentralManager.authorization.rawValue,
             "reviewTrace":traceState,
+            "updateWork":["active":updateWork.active(at:Date().timeIntervalSince1970),"expiresAt":updateWork.expiresAt],
             // The debug pause's actual state; the dashboard only displays this.
             "actionsPaused":actionPause.paused,
             // The ordinary pointer conversion actually in use (WandPointerPath).
