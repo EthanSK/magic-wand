@@ -1336,6 +1336,7 @@ final class WandSustainedScroll {
     private var initialX=0.0,initialY=0.0
     // Averaged angular rate, device-sample clock and last receiver arrival.
     private var rateX=0.0,rateY=0.0,averaging=false,clock=0.0,lastArrival:Double?
+    private var latestInputX=0.0,latestInputY=0.0
     // Candidate movement since it last started, restarted or turned.
     private var moving=false,moveX=0.0,moveY=0.0,movePath=0.0,moveTime=0.0
     private var movePeak=0.0,moveFloor=0.0,moveStart=0.0,moveLargestStep=0.0,moveCountedRecoil=false
@@ -1351,7 +1352,7 @@ final class WandSustainedScroll {
     var horizontalStrokeActive:Bool {stroking && velocityX != 0 && velocityY == 0}
     func reset(now:Double=0){
         velocityX=0;velocityY=0;summary=Summary();fractionX=0;fractionY=0;initialX=0;initialY=0;lastTick=now;horizontalBoundary=nil
-        rateX=0;rateY=0;averaging=false;clock=0;lastArrival=nil
+        rateX=0;rateY=0;latestInputX=0;latestInputY=0;averaging=false;clock=0;lastArrival=nil
         moving=false;stroking=false;settling=false;keepOutput=false;strokeX=0;strokeY=0;peak=0;base=0
         endedAt = -Double.infinity;endedTravel=0
     }
@@ -1364,6 +1365,7 @@ final class WandSustainedScroll {
             if let last=lastArrival,now-last>tuning.gapSeconds {interrupt()}
             lastArrival=now
         }
+        latestInputX=x;latestInputY=y
         clock+=dt
         if averaging {let a=1-exp(-dt/tuning.smoothing);rateX+=a*(x-rateX);rateY+=a*(y-rateY)}
         else {rateX=x;rateY=y;averaging=true}
@@ -1541,6 +1543,14 @@ final class WandSustainedScroll {
         // Fractions stay in physical line units between ticks. Only the final
         // quantization changes: page pixels arrive at the same cadence, without
         // waiting for a whole wheel line or replaying missed timer intervals.
+        // Ethan: reversing page scroll should not "jump a tiny bit" in the old
+        // direction first. Keep the existing stroke/recoil classifier, but do
+        // not output the old velocity against a clear opposite hand movement.
+        // lastTick was advanced above: this skipped output is never caught up.
+        // Sideways native history gestures retain their own phase lifecycle.
+        let inputSpeed=hypot(latestInputX,latestInputY),speed=hypot(velocityX,velocityY)
+        if velocityY != 0 && inputSpeed>=max(tuning.strokeSpeed,peak*tuning.endShare) &&
+            latestInputX*velocityX+latestInputY*velocityY < -tuning.turnCosine*inputSpeed*speed {return (0,0)}
         let scale=velocityY == 0 ? 1:pageUnitsPerLine
         fractionX+=velocityX*dt;fractionY+=velocityY*dt
         let unitsX=fractionX*scale+initialX,unitsY=fractionY*scale+initialY

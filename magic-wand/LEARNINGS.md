@@ -2020,3 +2020,10 @@ A passing comparison does not establish the cause of a live jump.
 - Reject device samples older than that boundary and queued raw lines from the prior receive epoch. This cancels work before it becomes native input; it does not retract events already posted to macOS.
 - Keep own-position history: it recognises delayed operating-system feedback and is not movement replay. Do not clear it to implement cancellation. No new movement delay or change to gain, smoothing or ordinary click timing was introduced.
 - Source-based inert regression checks cover queued movement, dwell cancellation, retained button/speech messages, fresh movement, screenshot order and recentering. Physical feel remains a separate acceptance check.
+
+
+## Do not keep scrolling against a clear reverse stroke (2026-10-31)
+
+- A synthetic vertical reversal emitted 59 pixels in the previous direction while the existing stroke classifier qualified the new direction. Page scrolling has no native history-swipe phase, so this occurred before macOS gesture handling.
+- Suppress only old-direction page output during a strong opposite input, using the existing stroke speed, end-share and turn-angle bounds. Keep the latched velocity for the established recoil classifier, and advance the tick clock so suppressed output is never replayed.
+- The first guard used only the absolute stroke-speed floor; it disturbed the shaky-hand speed regression. Requiring strength relative to the previous stroke passed the complete V3 suite. Sideways native gesture phases and pointer motion are unaffected. Physical reversal feel still requires user verification.
