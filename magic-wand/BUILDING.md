@@ -171,3 +171,60 @@ The chosen vertical multiplier and one-third held gain still apply afterward. HU
 not absolute 3D position tracking; near a vertical shaft or during obvious
 acceleration shocks it retains the last usable rotation estimate. Physical feel
 still needs testing with the actual grip.
+
+
+### Prepared Sense wireless application updater
+
+The host updater needs the complete firmware-6 USB installation first. It updates
+only the application, using an application-only Nordic/Adafruit legacy DFU package
+for the original XIAO nRF52840 Sense. It does not replace the bootloader or SoftDevice.
+Hardware transfer and interruption recovery remain unverified; USB recovery is still
+required when the bootloader cannot return to the application.
+
+The existing receiver watches its private support directory for
+`firmware-update.request`. The installation workflow first checks Agent Flow is idle,
+warns about the interruption, and validates the selected board/package. It then
+writes an owner-only (0600) request atomically:
+
+```json
+{"version":1,"id":"<32 lowercase hex>","package":"<absolute unpacked package directory>","sha256":"<64 lowercase hex image hash>","firmware":7,"firstTrial":true,"acceptUSBRecovery":true}
+```
+
+The package must contain `manifest.json` and its named `.bin` and `.dat` files.
+Preflight checks the exact image hash and embedded board/version marker, reviewed
+bootloader 0.6.1 or 0.6.2, the exact original Sense SoftDevice/memory layout,
+conservative application-size cap, key, battery and Bluetooth connection.
+`firstTrial` allows an explicitly requested trial of a source-reviewed bootloader;
+it does not mean that hardware was already proven. Independently,
+`acceptUSBRecovery` must be explicitly true: these bootloaders use single-bank
+updates and erase the running application before receiving its replacement.
+An interrupted or invalid transfer can leave no runnable application. Resetting
+cannot restore those overwritten bytes; recovery then requires the checked
+application ZIP over the existing USB bootloader. The default is false, including
+older requests that omit this field. No bootloader upgrade is required or performed.
+
+Read `senseFirmwareUpdate` in `status.json` for the result. A request is consumed
+once and never replayed across receiver restarts. Reconnecting cannot start an update.
+If a previous attempt left a pending result, a separate owner-only
+`firmware-update-reconcile.request` acknowledges only that exact observed result:
+
+```json
+{"version":1,"id":"<32 lowercase hex>","boardID":"<16 lowercase hex>","running":6,"target":7}
+```
+
+`running` and `target` must match the connected identity and pending target. Different
+numbers acknowledge `not-installed` while preserving the failure; equal numbers
+acknowledge `installed`, including after a receiver restart. The host waits for the
+board's acknowledgement before clearing its pending status. Another normal update
+request is required for a retry. Both request types are removed at receiver startup.
+
+Source checks (no device connection or native input):
+
+```sh
+npm run check
+swiftc -typecheck magic-wand/receiver/Sources/*.swift
+```
+
+Run those commands at the repository root. The test wildcard includes the updater
+protocol, persistence and fake-Bluetooth transport tests; no additional package
+script or installed application is needed.

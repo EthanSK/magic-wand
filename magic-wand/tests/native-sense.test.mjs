@@ -13,7 +13,7 @@ test("Sense protocol safety and the canonical program in JavaScriptCore", { skip
   try {
     const source = (name) => fileURLToPath(new URL(`../receiver/Sources/${name}`, import.meta.url));
     copyFileSync(fileURLToPath(new URL("native-sense-main.swift", import.meta.url)), join(dir, "main.swift"));
-    const built = spawnSync("swiftc", ["-O", source("WandSenseProtocol.swift"), source("WandCalibration.swift"), source("WandVirtualPuck.swift"), join(dir, "main.swift"), "-o", join(dir, "check")], { encoding: "utf8" });
+    const built = spawnSync("swiftc", ["-O", source("WandSenseProtocol.swift"), source("WandSenseUpdate.swift"), source("WandRunLoop.swift"), source("WandCalibration.swift"), source("WandVirtualPuck.swift"), join(dir, "main.swift"), "-o", join(dir, "check")], { encoding: "utf8" });
     assert.equal(built.status, 0, built.stderr);
     const component = fileURLToPath(new URL("..", import.meta.url));
     const run = spawnSync(join(dir, "check"), [component, join(component, "..")], { encoding: "utf8", timeout: 60000 });

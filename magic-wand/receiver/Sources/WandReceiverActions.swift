@@ -10,10 +10,13 @@ extension WandReceiver {
     /// A request left by an earlier run is discarded: a restart clears the pause.
     func startActionRequests() {
         unlink(actionRequestPath)
+        // Update permissions are scoped to this receiver run, including failure acknowledgement.
+        unlink(firmwareUpdateRequestPath)
+        unlink(support.appendingPathComponent(WandSenseUpdateReconcileRequest.fileName).path)
         let fd = open(support.path, O_EVTONLY)
         guard fd >= 0 else { log("ACTIONS_REQUESTS_UNAVAILABLE"); return }
         let source = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fd, eventMask: [.write], queue: .main)
-        source.setEventHandler { [weak self] in self?.readActionRequest(); self?.readGuideRequest() }
+        source.setEventHandler { [weak self] in self?.readActionRequest(); self?.readGuideRequest(); self?.readFirmwareUpdateRequest() }
         source.setCancelHandler { close(fd) }
         source.resume(); actionRequestSource = source
     }

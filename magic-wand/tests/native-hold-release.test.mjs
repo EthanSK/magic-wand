@@ -19,6 +19,9 @@ final class Rest {var activated=false,stopped=0;func pointerActivated(){activate
 final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
  var scrollFollowBefore=false
+ var queuedExitClicks:[CGPoint]=[]
+ func cancelMouseExitClick(){}
+ func scheduleMouseExitClick(at point:CGPoint){queuedExitClicks.append(point);dwell.follow(false)}
  let context=SwitchAppContext()
  var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
@@ -48,8 +51,9 @@ final class Harness {
  func finishNativeScroll(cancelled:Bool){}
  func postNativeScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  func postHeldScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
+ func postSustainedScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
- ${['beginMouseButtonHold','restoreMouseAfterScroll','deviceFollowChanged','finishScroll','finishMouseButtonHold','reconcileMouseButtonHold','handleRaw'].map(method).join('\n')}
+ ${['beginMouseButtonHold','restoreMouseAfterScroll','deviceFollowChanged','finishScroll','finishMouseButtonHold','reconcileMouseButtonHold','handleRaw','finishHorizontalStrokeIfNeeded'].map(method).join('\n')}
 }
 let h=Harness();precondition(h.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 let now=ProcessInfo.processInfo.systemUptime
@@ -149,28 +153,28 @@ for prior in [false,true] {
  let lost=Harness();lost.dwell.follow(prior);lost.heldScroll.begin(now:100);lost.reconcileMouseButtonHold(down:false,now:101,reason:"timeout",released:false)
  precondition(lost.dwell.following==prior && !lost.commands.contains{$0.contains("setMouseFollow")},"lost telemetry must not activate mouse")
 }
-// Exit follow clicks on release itself, with no double/triple-click wait. The
+// Exit follow queues the short-release click for double/triple recognition. The
 // actual finish method owns both raw-up and edge-up, so duplicate reports are inert.
 for physicalDuration:Double? in [nil,0.12] {
  let click=Harness();click.dwell.follow(true);click.beginMouseButtonHold(now:100,following:true)
  click.heldScrollAnchor=CGPoint(x:800,y:600)
  click.physicalTapDuration=physicalDuration
  click.finishMouseButtonHold(now:physicalDuration == nil ? 100.12:100.4)
- precondition(click.downs==1 && click.ups==1 && click.buttons==0,"short exit release emits one immediate down/up")
- precondition(click.clickPoints==[.zero],"exit click uses the current pointer, not the old press anchor")
+ precondition(click.queuedExitClicks.count==1 && click.downs==0 && click.buttons==0 && !click.dwell.following,"short exit release queues a click and immediately stops follow")
+ precondition(click.queuedExitClicks==[.zero],"exit click captures the release pointer, not the old press anchor")
  click.finishMouseButtonHold(now:100.5);click.reconcileMouseButtonHold(down:false,now:100.6,reason:"duplicate")
- precondition(click.downs==1,"raw/edge duplicate release cannot click twice")
+ precondition(click.queuedExitClicks.count==1,"raw/edge duplicate release cannot queue twice")
 }
 let enter=Harness();enter.beginMouseButtonHold(now:100,following:false);enter.finishMouseButtonHold(now:100.12)
-precondition(enter.downs==0,"entering follow does not click")
+precondition(enter.downs==0 && enter.queuedExitClicks.isEmpty,"entering follow does not click")
 let cancelledClick=Harness();cancelledClick.beginMouseButtonHold(now:100,following:true);cancelledClick.finishMouseButtonHold(now:100.12,released:false)
-precondition(cancelledClick.downs==0,"cancellation does not click")
+precondition(cancelledClick.downs==0 && cancelledClick.queuedExitClicks.isEmpty,"cancellation does not click")
 let heldClick=Harness();heldClick.beginMouseButtonHold(now:100,following:true);heldClick.finishMouseButtonHold(now:101)
-precondition(heldClick.downs==0,"a scroll hold does not click")
+precondition(heldClick.downs==0 && heldClick.queuedExitClicks.isEmpty,"a scroll hold does not click")
 let draggingClick=Harness();draggingClick.beginMouseButtonHold(now:100,following:true)
 _=draggingClick.heldScroll.setTarget(scrollable:false,now:100.01);_=draggingClick.heldScroll.startDrag(now:100.3)
 draggingClick.physicalTapDuration=0.1;draggingClick.finishMouseButtonHold(now:100.4)
-precondition(draggingClick.downs==0,"even a delayed short-duration report cannot click after native dragging")
+precondition(draggingClick.downs==0 && draggingClick.queuedExitClicks.isEmpty,"even a delayed short-duration report cannot click after native dragging")
 
 for horizontal in [false,true] {
  let axis=Harness();precondition(axis.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))

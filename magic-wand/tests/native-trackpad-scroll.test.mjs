@@ -51,7 +51,7 @@ test('page scrolls use line wheel events; only sideways held output owns a nativ
  const start=source.indexOf('struct WandNativeScrollGesture {'),end=source.indexOf('\nfinal class WandReceiver',start);
  // Record instead of posting: this harness never sends real input. wheelEvents is the
  // receiver's own ordinary line-event builder, unchanged since before native gestures.
- const methods=['postHeldScroll','postNativeScroll','finishNativeScroll','postScroll','finishScroll','finishMouseButtonHold'].map(method).join('\n')
+ const methods=['postHeldScroll','postNativeScroll','finishNativeScroll','postScroll','finishScroll','finishMouseButtonHold','finishHorizontalStrokeIfNeeded'].map(method).join('\n')
   .replaceAll('event.post(tap:.cghidEventTap)','posted.append(event)');
  const wheel=block(source.indexOf('    static func wheelEvents('));
  assert.ok(/startDrag\(now:now\) \{finishNativeScroll\(cancelled:true\);transition\(to:1,/.test(source),'drag start cancels the open scroll gesture first');
@@ -60,8 +60,9 @@ test('page scrolls use line wheel events; only sideways held output owns a nativ
  assert(beginHold.indexOf('finishNativeScroll(cancelled:true)')>=0 && beginHold.indexOf('finishNativeScroll(cancelled:true)')<beginHold.indexOf('heldScroll.begin('),'a new hold cancels a stale native gesture before beginning');
  // Every held output goes through the router; nothing else starts a native gesture.
  assert.equal((source.match(/postNativeScroll\(/g)||[]).length,2,'only postHeldScroll calls postNativeScroll');
- assert.ok(beginHold.includes('self.postHeldScroll(x:lines.x,y:lines.y,at:self.heldScrollAnchor)'),'V3 continuation is routed');
+ assert.ok(beginHold.includes('self.postSustainedScroll(x:units.x,y:units.y,at:self.heldScrollAnchor)'),'V3 continuation uses the pixel-aware page router');
  assert.ok(method('handleRaw').includes('postHeldScroll(x:x,y:y,at:heldScrollAnchor)'),'V2 held lines are routed');
+ assert.ok(method('handleRaw').includes('finishHorizontalStrokeIfNeeded()'),'every raw held sample promptly consumes the stroke boundary');
  assert.ok(!method('postScroll').includes('postNativeScroll'),'the chord never opens a native gesture');
  const code=`import Cocoa
 func log(_ v:Any...) {}
@@ -69,6 +70,10 @@ ${source.slice(start,end)}
 struct PauseStub {var paused=false}
 final class Harness {
  var scrollFollowBefore=false,ready=true,restoring=false
+ let dwell=WandDwellClick()
+ var queuedExitClicks:[CGPoint]=[]
+ func cancelMouseExitClick(){}
+ func scheduleMouseExitClick(at point:CGPoint){queuedExitClicks.append(point);dwell.follow(false)}
  let screenshot=WandScreenshotGesture()
  var posted:[CGEvent]=[]
  var nativeScroll=WandNativeScrollGesture(),actionPause=PauseStub()
@@ -86,6 +91,15 @@ ${wheel}
  func restoreMouseAfterScroll(){mouseOn+=1}
  func resumeHUDNavigation(){hudResumed+=1}
  ${methods}
+ func sample(x:Double,y:Double=0,now:Double) {
+  heldScroll.confirmHeld(now:now)
+  _=heldScroll.sample(x:x,y:y,dt:0.01,now:now)
+  finishHorizontalStrokeIfNeeded()
+ }
+ func tick(now:Double) {
+  let v=heldScroll.continuation(now:now)
+  if v.x != 0 || v.y != 0 {postHeldScroll(x:v.x,y:v.y,at:heldScrollAnchor)}
+ }
  // "L" an ordinary line event, else the native phase; deltas in lines for both.
  enum Kind:Equatable {case line(x:Int64,y:Int64),native(NSEvent.Phase,x:Int64)}
  func kinds()->[Kind]{posted.map{e in
@@ -151,6 +165,52 @@ precondition(hold.kinds()==[.native(.began,x:2),.native(.cancelled,x:0)],"pause 
 // 8. Zero output and idle finishes are silent.
 let idle=Harness();idle.postHeldScroll(x:0,y:0,at:anchor);idle.finishNativeScroll(cancelled:true);idle.finishScroll(released:true)
 precondition(idle.posted.isEmpty)
+func expect(_ ok:Bool,_ message:String) {if !ok {print("FAIL: "+message);fflush(stdout);exit(1)}}
+// 9. An abrupt stop ends the native swipe while the physical button stays held.
+let stop=Harness();stop.heldScroll.begin(now:0,sustain:true);stop.heldScrollAnchor=anchor
+for i in 30...45 {let t=Double(i)*0.01;stop.sample(x:80,now:t);stop.tick(now:t)}
+expect(stop.nativeScroll.active,"moving horizontal stroke opens its native gesture")
+var endedAt:Double?
+for i in 46...70 {
+ let t=Double(i)*0.01;stop.sample(x:0,now:t)
+ if !stop.nativeScroll.active && endedAt == nil {endedAt=t}
+ stop.tick(now:t)
+}
+expect(endedAt != nil && endedAt!<=0.51,"the existing stroke-end detection ends promptly, with no release wait")
+expect(stop.heldScroll.active && stop.kinds().filter{if case .native(.ended,_)=$0{return true};return false}.count==1,"exactly one ended while button remains held")
+let countAfterStop=stop.posted.count
+for i in 71...120 {let t=Double(i)*0.01;stop.sample(x:0,now:t);stop.tick(now:t)}
+expect(stop.posted.count==countAfterStop,"stillness never reopens or synthesizes horizontal continuation")
+for i in 121...142 {let t=Double(i)*0.01;stop.sample(x:100,now:t);stop.tick(now:t)}
+expect(stop.nativeScroll.active && stop.kinds().filter{if case .native(.began,_)=$0{return true};return false}.count==2,"a fresh deliberate stroke opens a fresh native swipe")
+for i in 143...168 {let t=Double(i)*0.01;stop.sample(x:0,now:t);stop.tick(now:t)}
+let beforeRelease=stop.posted.count
+stop.finishMouseButtonHold(now:1.7,released:true)
+expect(stop.posted.count==beforeRelease,"release after stopped swipe sends no duplicate end")
+expect(stop.posted.allSatisfy{$0.location==anchor},"every restarted swipe retains the held anchor")
+// 10. Reversal cancels the old in-flight swipe before a new one starts.
+let reverse=Harness();reverse.heldScroll.begin(now:0,sustain:true);reverse.heldScrollAnchor=anchor
+for i in 30...45 {let t=Double(i)*0.01;reverse.sample(x:80,now:t);reverse.tick(now:t)}
+for i in 46...75 {let t=Double(i)*0.01;reverse.sample(x:-100,now:t);reverse.tick(now:t)}
+expect(reverse.kinds().contains{if case .native(.cancelled,_)=$0{return true};return false},"a turn cancels rather than accepts the old swipe")
+expect(reverse.kinds().filter{if case .native(.began,_)=$0{return true};return false}.count==2,"qualified reverse stroke gets its own gesture")
+reverse.finishMouseButtonHold(now:0.8,released:false)
+expect(reverse.kinds().last == .native(.cancelled,x:0),"lost telemetry cancels the current swipe")
+// A missing sample interval cancels an open stroke; it cannot accept history.
+let gap=Harness();gap.heldScroll.begin(now:0,sustain:true);gap.heldScrollAnchor=anchor
+for i in 30...45 {let t=Double(i)*0.01;gap.sample(x:80,now:t);gap.tick(now:t)}
+gap.sample(x:0,now:0.8);gap.tick(now:0.8)
+expect(gap.kinds().last == .native(.cancelled,x:0) && !gap.nativeScroll.active,"an input gap cancels the swipe")
+// 11. Vertical and diagonal output still continue at the latched speed while still.
+for y in [80.0,60.0] {
+ let page=Harness();page.heldScroll.begin(now:0,sustain:true)
+ let x=y==80 ? 0.0:60.0
+ for i in 30...45 {let t=Double(i)*0.01;page.sample(x:x,y:y,now:t);page.tick(now:t)}
+ for i in 46...70 {let t=Double(i)*0.01;page.sample(x:0,y:0,now:t);page.tick(now:t)}
+ let count=page.posted.count
+ for i in 71...90 {let t=Double(i)*0.01;page.sample(x:0,y:0,now:t);page.tick(now:t)}
+ expect(page.posted.count>count && !page.nativeScroll.active,"page output continues while still, with line events")
+}
 print("Scroll transports: chord and page lines, sideways native began/changed/ended/cancelled, axis-change cancel, pause, late tap passed")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-native-scroll-life-'));

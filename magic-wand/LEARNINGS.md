@@ -1569,3 +1569,38 @@ stroke now captures its prior speed once and adds its own increment, capped at
 the page limit. Do not add an increment per sample or bank resting noise. Tests
 cover repeated equal flicks, holding still, tremor, reversal, fresh holds and
 release. Horizontal history swipes keep their separate curve and lifecycle.
+
+
+## Sense wireless updater: keep the handoff and result observable
+
+A successful authorization does not establish that the board entered its bootloader.
+Keep a deadline from GO to disconnect, then a separate connection/transfer deadline.
+While the updater owns the Bluetooth central, stop ordinary USB discovery and normal
+reconnection so a newly booted application cannot claim a second session before the
+transfer result is processed. Treat an activation-write error as a failure, even if
+a later disconnect arrives. The executable fake-Bluetooth test runs the actual link
+and transfer classes through these boundaries; it is not physical radio evidence.
+
+The receiver's status file previously cached only ordinary connection state, so
+updater progress and refusals could disappear despite calls to `status()`. Include
+the exact serialized update status in that cache key. A restarted receiver also has
+no in-memory record of an earlier transfer: permit an explicit board/running/target
+matched acknowledgement for either installed or not-installed pending results.
+Never initiate a transfer or clear an earlier result merely because a board
+reconnects, and retain the failure when acknowledging an unsuccessful attempt.
+
+
+## 2026-10-31 — Verify transport length and bootloader behavior from real limits
+
+BLEUart.write can report the caller's full length even though the characteristic
+notifier clips it to its configured maximum length. Extending identity JSON beyond
+that length broke Bluetooth identification while USB still worked. Split control
+messages in the existing sender task by the negotiated payload limit, keep each
+line contiguous, and test with a fake transport that reproduces the truncation.
+USB success does not qualify the Bluetooth identity path.
+
+The bundled Sense bootloader file labelled 0.6.2 contains version 0.6.1. Both
+reviewed versions compile single-bank DFU and erase the running app before receiving
+its replacement. A conservative half-size image cap is not a backup bank. State
+USB recovery requirements explicitly; keep source review, actual board identity,
+successful wireless transfer and interruption recovery as separate evidence.

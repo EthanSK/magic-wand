@@ -34,8 +34,8 @@
     "receiver/Sources/main.swift": {
       "importedFrom": "wand-mac-receiver.swift",
       "transform": "receiver",
-      "originalSha256": "8d308fa4ecbca79b1e7a20e7660878b6a3aec5e1f93dcdcec900f12f0e5012e3",
-      "publicSha256": "8d308fa4ecbca79b1e7a20e7660878b6a3aec5e1f93dcdcec900f12f0e5012e3"
+      "originalSha256": "5b6ff7bea8feae2f007fa71f82ba3d7a279616ae77a1de562fb8124098af55b2",
+      "publicSha256": "5b6ff7bea8feae2f007fa71f82ba3d7a279616ae77a1de562fb8124098af55b2"
     },
     "receiver/Sources/WandControlTransport.swift": {
       "importedFrom": "wand-control-transport.swift",
@@ -64,8 +64,8 @@
     "receiver/Sources/WandPointerControl.swift": {
       "importedFrom": "wand-pointer-control.swift",
       "transform": "verbatim",
-      "originalSha256": "b7c27ade222a2c78753bb9ab833e5f556f5608c74d607acaf9e64e4d88d06843",
-      "publicSha256": "b7c27ade222a2c78753bb9ab833e5f556f5608c74d607acaf9e64e4d88d06843"
+      "originalSha256": "c392ca1a3022b43dac2082fc5dc8f8f1ec56efcef594f7997fcad659aa7a0854",
+      "publicSha256": "c392ca1a3022b43dac2082fc5dc8f8f1ec56efcef594f7997fcad659aa7a0854"
     },
     "receiver/Sources/WandCalibration.swift": {
       "importedFrom": "wand-calibration.swift",
@@ -79,11 +79,47 @@
       "originalSha256": "088b29bfd624be94a85e012e7e0f3a5ea50fd09f8da9fbc4438de1a7e513e4a4",
       "publicSha256": "088b29bfd624be94a85e012e7e0f3a5ea50fd09f8da9fbc4438de1a7e513e4a4"
     },
+    "receiver/Sources/WandSenseUpdate.swift": {
+      "importedFrom": "wand-sense-update.swift",
+      "transform": "verbatim",
+      "originalSha256": "b0f2900bb5527fed1817d7ee95920265b3912063afd2f6c8747f673417139d58",
+      "publicSha256": "b0f2900bb5527fed1817d7ee95920265b3912063afd2f6c8747f673417139d58"
+    },
+    "receiver/Sources/WandReceiverSenseUpdate.swift": {
+      "importedFrom": "wand-receiver-sense-update.swift",
+      "transform": "verbatim",
+      "originalSha256": "f534352f82c0a0b8157da9da0f262e1d5207d78d645f37b9681866a09fa6da95",
+      "publicSha256": "f534352f82c0a0b8157da9da0f262e1d5207d78d645f37b9681866a09fa6da95"
+    },
+    "receiver/Sources/WandSenseLink.swift": {
+      "importedFrom": "wand-sense-link.swift",
+      "transform": "verbatim",
+      "originalSha256": "668e0f14db0f949e81493e11f76801214bde9c310ffd2a920c99933082b48de7",
+      "publicSha256": "668e0f14db0f949e81493e11f76801214bde9c310ffd2a920c99933082b48de7"
+    },
+    "receiver/Sources/WandSenseProtocol.swift": {
+      "importedFrom": "wand-sense-protocol.swift",
+      "transform": "verbatim",
+      "originalSha256": "d24bcb654b550b8f4f684e5f36a1a6d60ae393437f63417cce42ff39c09815a3",
+      "publicSha256": "d24bcb654b550b8f4f684e5f36a1a6d60ae393437f63417cce42ff39c09815a3"
+    },
+    "receiver/Sources/WandReceiverSense.swift": {
+      "importedFrom": "wand-receiver-sense.swift",
+      "transform": "verbatim",
+      "originalSha256": "ab101f5402dc6bcea9170b1ab1d3ac946fc3bcb4c75e93b57639a24f2a965280",
+      "publicSha256": "ab101f5402dc6bcea9170b1ab1d3ac946fc3bcb4c75e93b57639a24f2a965280"
+    },
+    "receiver/Sources/WandReceiverActions.swift": {
+      "importedFrom": "wand-receiver-actions.swift",
+      "transform": "verbatim",
+      "originalSha256": "4306fd56dad52de8cb92afb098e381d74bfe6ee8e159e682effe804ffd13f154",
+      "publicSha256": "4306fd56dad52de8cb92afb098e381d74bfe6ee8e159e682effe804ffd13f154"
+    },
     "receiver/Info.plist": {
       "importedFrom": "Wand Receiver.app/Contents/Info.plist",
       "transform": "verbatim",
-      "originalSha256": "a18b9617b6bf7993311864067a326f3c94f015766a00848304fca26b3d6a4e93",
-      "publicSha256": "a18b9617b6bf7993311864067a326f3c94f015766a00848304fca26b3d6a4e93"
+      "originalSha256": "ff92e6bbbdd4f3c8c7e08b35147ceeede574b0db7e7f67b98b975d3505b1c7be",
+      "publicSha256": "ff92e6bbbdd4f3c8c7e08b35147ceeede574b0db7e7f67b98b975d3505b1c7be"
     }
   }
 }

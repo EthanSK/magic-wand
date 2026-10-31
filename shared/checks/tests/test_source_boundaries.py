@@ -47,6 +47,17 @@ class SourceBoundaryTests(unittest.TestCase):
                 (root / 'component' / 'source.py').write_text(private_value)
                 self.assertEqual(scanner.main(), 1)
 
+    def test_privacy_accepts_protocol_uuids_but_rejects_device_identity(self):
+        scanner = load('shared/checks/privacy.py')
+        with tempfile.TemporaryDirectory() as temporary:
+            scanner.ROOT = Path(temporary)
+            source = scanner.ROOT / 'update.swift'
+            source.write_text('\n'.join('0000153' + suffix + '-1212-EFDE-1523-785FEABCD123' for suffix in ('0', '1', '2')))
+            with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+                self.assertEqual(scanner.main(), 0)
+                source.write_text('-'.join('0' * n for n in (8, 4, 4, 4, 12)))
+                self.assertEqual(scanner.main(), 1)
+
     def test_stones_checks_only_owned_python_source(self):
         checker = load('control-stones/scripts/check.py')
         with tempfile.TemporaryDirectory() as temporary:
