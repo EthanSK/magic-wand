@@ -189,6 +189,11 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver 1.2.135 build 140 and complete Sense firmware 7. Bluetooth works with USB removed, confirmed by live input and user feedback. Calibration and the update key are preserved. Page scrolling uses fine pixel output, sideways native gestures end at wrist stop, and the approved 300 ms exit-click window preserves double and triple shortcuts. All 247 receiver tests pass. The first wireless firmware transfer and physical acceptance of the latest scrolling remain unverified. The reviewed single-bank bootloader can require USB recovery after an interrupted update.
+- Receiver140 prepared: verified single-bank updater policy for the actual0.6.1 bootloader, explicit USB-recovery acceptance required. Receiver139 pixel scrolling is installed. Firmware6 is installed but its long Bluetooth identity is truncated; packetized firmware7 repair is being prepared.
+- Receiver1.2.134 build139 prepared: V3 pages use precise pixel output at the existing20ms cadence for smooth slow scrolling. Native sideways stroke endings and300ms exit-click cancellation are retained. Wireless host prepared; complete Sense6 still needs its first USB installation and hardware verification.
+- Receiver1.2.133 build138 prepared: native sideways swipes end on the existing wrist-stop detection; only the exit-follow click waits300ms and double/triple cancel it. Agentic Mouse313 is installed with Utility Select all→Backspace→Copy, higher HUD sensitivity and dragging-direction Spaces. Complete Sense6 firmware and wireless host updater prepared; physical USB/BLE acceptance pending.
+- Prepared, not installed: the Sense wireless application updater has checked USB provisioning, exact-board update requests, bounded handoff, post-update confirmation and explicit result acknowledgement. Host tests use fake Bluetooth; real wireless transfer, interruption recovery and power-cycle acceptance still need hardware checks. Current pointer and scroll controls are unchanged.
 - Receiver 1.2.132 build137 installed and reconnected over Bluetooth: gentler low-speed page input, retained boost from repeated page flicks, scrolling fallback for custom app surfaces, bounded app/role diagnostics, and immediate exit-follow click. Physical WhatsApp acceptance remains unverified; native horizontal stop-ending is a separate follow-up.
 - Installed receiver 1.2.131 build 136 restores ordinary wheel events for vertical and diagonal page scrolling and doubles the fast-end maximum to 1,200 lines per second. Pure horizontal held swipes retain native history gestures and the stronger 135 curve. Installed source, resources, settings and Bluetooth readiness were verified. Initial physical feedback reports stronger page scrolling but too much speed at the low end and a drop after repeated flicks; further tuning is in progress.
 - Receiver 1.2.130 build 135 increases deliberate horizontal swipes to five times the previous 134 strength after physical feedback. Vertical and diagonal scrolling, fine pointing, clicks and follow restoration are unchanged. Native receiving apps still decide scroll or history navigation. The stronger setting needs physical confirmation.
@@ -242,7 +247,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.132 (137) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 30 October 2026.
+Receiver 1.2.135 (140) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

@@ -15,6 +15,9 @@ struct PauseStub {var paused=false}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?) {}}
 final class Harness {
  var scrollFollowBefore=false,ready=true,restoring=false
+ var queuedExitClicks:[CGPoint]=[]
+ func cancelMouseExitClick(){}
+ func scheduleMouseExitClick(at point:CGPoint){queuedExitClicks.append(point);dwell.follow(false)}
  var actionPause=PauseStub()
  func finishNativeScroll(cancelled:Bool){}
 

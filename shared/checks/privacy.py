@@ -12,6 +12,8 @@ SKIP_DIRS = {".git", "build", ".cache", "work", "node_modules", "__pycache__", "
 BINARY = {".png", ".jpg", ".webp", ".woff2", ".icns"}
 PUBLIC_UUIDS = {
     "6E400001-B5A3-F393-E0A9-E50E24DCCA9E", "6E400002-B5A3-F393-E0A9-E50E24DCCA9E", "6E400003-B5A3-F393-E0A9-E50E24DCCA9E",
+    # Public Nordic legacy DFU service and its control/data characteristics.
+    "00001530-1212-EFDE-1523-785FEABCD123", "00001531-1212-EFDE-1523-785FEABCD123", "00001532-1212-EFDE-1523-785FEABCD123",
     # Synthetic request fixture in the Agentic Mouse screenshot decoder tests;
     # this is not a Bluetooth device identifier or a real capture request.
     "AC1718F8-B050-47BB-B763-5BA765D69F93",

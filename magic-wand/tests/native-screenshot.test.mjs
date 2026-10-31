@@ -21,7 +21,7 @@ test('screenshot mode: follow-independent aim, natural press-drag-release, tripl
  const follow=block('            if let marker=line.range(of:"@FOLLOW ")','            if let marker=line.range(of:"@ZERO ")');
  assert(bottom.indexOf('screenshotMouseButton(')<bottom.indexOf('manualPointerDuringRecording()'),'screenshot ownership and the triple-click precede every ordinary mouse-button lane');
  assert(bottom.indexOf('finishMouseButtonHold(')<bottom.indexOf('recognizeMouseButtonRecenter('),'the exit release completes immediately before double-click recognition consumes it');
- assert(method('handleRaw').indexOf('handleScreenshotRaw')<method('handleRaw').indexOf('reconcileMouseButtonHold'),'screenshot raw handling precedes the button-up reconciliation');
+ assert(method('handleRaw','finishHorizontalStrokeIfNeeded').indexOf('handleScreenshotRaw')<method('handleRaw','finishHorizontalStrokeIfNeeded').indexOf('reconcileMouseButtonHold'),'screenshot raw handling precedes the button-up reconciliation');
  for(const name of ['reset','stop']) assert(method(name).includes('endScreenshot('),name+' releases any screenshot drag');
  assert(source.includes('queue("global.wandShot=0;global.wandRawPointer=true;'),'a fresh bridge session never inherits screenshot motion');
  assert(source.includes('return loading + "global.wandShot=0;'),'shutdown stops screenshot motion');
@@ -42,6 +42,7 @@ final class Controls {var phases:[String]=[];var starts=0;var available=true
  func screenshotStart()->Bool{starts+=1;return available}}
 final class SwitchAppContext {var switchAppAdjusting=false,isActive=false}
 final class Harness {
+ func cancelMouseExitClick(){}
  var scrollFollowBefore=false
  let context=SwitchAppContext()
  var pointerTravel=0.0
@@ -89,7 +90,7 @@ final class Harness {
 ${bottom}
 ${follow}
  }}
- ${['setScreenshotActive','screenshotContextChanged','takeScreenshotPointer','screenshotMouseButton','startScreenshotShortcut','superviseScreenshot','checkScreenshot','latchScreenshotIfReady','handleScreenshotRaw','finishScreenshotDrag','endScreenshot','recognizeMouseButtonRecenter','recenterPointer','recordingChanged','manualPointerDuringRecording','deviceFollowChanged','enterPointerMode','postPointerMove','handleRaw','handleFrame','reconcileMouseButtonHold','scheduleDwell','noteClickGate'].map(method).join('\n')}
+ ${['setScreenshotActive','screenshotContextChanged','takeScreenshotPointer','screenshotMouseButton','startScreenshotShortcut','superviseScreenshot','checkScreenshot','latchScreenshotIfReady','handleScreenshotRaw','finishScreenshotDrag','endScreenshot','recognizeMouseButtonRecenter','recenterPointer','recordingChanged','manualPointerDuringRecording','deviceFollowChanged','enterPointerMode','postPointerMove','handleRaw','finishHorizontalStrokeIfNeeded','handleFrame','reconcileMouseButtonHold','scheduleDwell','noteClickGate'].map(method).join('\n')}
 }
 func wait(_ s:Double){RunLoop.main.run(until:Date().addingTimeInterval(s))}
 let move="10000,2680,0,4",heldMove="10000,2680,0,5",still="10000,0,0,4"

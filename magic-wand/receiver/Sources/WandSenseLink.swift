@@ -37,6 +37,11 @@ final class WandSenseLink: NSObject, CBCentralManagerDelegate, CBPeripheralDeleg
     private var central: CBCentralManager?, peripheral: CBPeripheral?, rx: CBCharacteristic?
     private var bleFramer = WandSenseFramer(), bleStartedAt = 0.0, bleIdentifyAt = 0.0, scanning = false
     private var ignoredPeripherals: Set<UUID> = []
+    /// An authorized wireless update owns the central from the board's handoff
+    /// until the transfer ends; ordinary scanning and reconnecting wait.
+    private(set) var updater: WandSenseDFUTransfer?
+    private var updaterStarted = false
+    private var updaterHandoffTimer: Timer?
 
     private var now: Double { ProcessInfo.processInfo.systemUptime }
     var usbPresent: Bool { fd >= 0 }
@@ -83,6 +88,10 @@ final class WandSenseLink: NSObject, CBCentralManagerDelegate, CBPeripheralDeleg
 
     private func poll() {
         guard started else { return }
+        // The transfer owns this central until its callback finishes. In
+        // particular, USB discovery must not create a second application
+        // session before Activate and post-update verification have completed.
+        guard updater == nil else { return }
         let t = now
         if let active, t - lastLineAt > Self.staleSeconds { fail(active, reason: "telemetry stopped") }
         if active != nil, t - heartbeatAt >= Self.heartbeatSeconds { heartbeatAt = t; send(WandSenseCommand.heartbeat) }
@@ -228,7 +237,7 @@ final class WandSenseLink: NSObject, CBCentralManagerDelegate, CBPeripheralDeleg
 
     private func updateScan() {
         guard let central, central.state == .poweredOn else { return }
-        let want = started && fd < 0 && active == nil && peripheral == nil && pinnedID != nil
+        let want = started && fd < 0 && active == nil && peripheral == nil && pinnedID != nil && updater == nil
         if want && !scanning { scanning = true; central.scanForPeripherals(withServices: [Self.uart]); onLog?("SENSE_SCANNING") }
         else if !want && scanning { scanning = false; central.stopScan() }
     }
@@ -241,7 +250,7 @@ final class WandSenseLink: NSObject, CBCentralManagerDelegate, CBPeripheralDeleg
 
     func centralManager(_ c: CBCentralManager, didDiscover p: CBPeripheral, advertisementData: [String: Any], rssi: NSNumber) {
         let name = (advertisementData[CBAdvertisementDataLocalNameKey] as? String) ?? p.name ?? ""
-        guard name == Self.name, !ignoredPeripherals.contains(p.identifier), peripheral == nil, fd < 0 else { return }
+        guard updater == nil, name == Self.name, !ignoredPeripherals.contains(p.identifier), peripheral == nil, fd < 0 else { return }
         // Scan-response identity (test company 0xFFFF + 8-byte board ID) lets
         // another Sense be skipped before connecting; the identity reply decides.
         if let data = advertisementData[CBAdvertisementDataManufacturerDataKey] as? Data, data.count == 10,
@@ -253,17 +262,45 @@ final class WandSenseLink: NSObject, CBCentralManagerDelegate, CBPeripheralDeleg
     }
 
     func centralManager(_ c: CBCentralManager, didConnect p: CBPeripheral) {
+        if updaterStarted, let updater, updater.owns(p), p !== peripheral { updater.didConnect(p); return }
         guard p === peripheral else { c.cancelPeripheralConnection(p); return }
         p.discoverServices([Self.uart])
     }
     func centralManager(_ c: CBCentralManager, didFailToConnect p: CBPeripheral, error: Error?) {
+        if updaterStarted, let updater, updater.owns(p), p !== peripheral { updater.didFailToConnect(p); return }
         guard p === peripheral else { return }
         peripheral = nil; rx = nil
     }
     func centralManager(_ c: CBCentralManager, didDisconnectPeripheral p: CBPeripheral, error: Error?) {
+        if updaterStarted, let updater, updater.owns(p), p !== peripheral { updater.didDisconnect(p); return }
         guard p === peripheral else { return }
         peripheral = nil; rx = nil; bleFramer.reset()
         if active == .bluetooth { active = nil; info = nil; onLost?(.bluetooth, "Bluetooth disconnected") }
+        // The board has handed over: reach its updater at the same identity.
+        if let updater, !updaterStarted {
+            updaterHandoffTimer?.invalidate(); updaterHandoffTimer = nil
+            updaterStarted = true; updater.start()
+        }
+    }
+
+    /// After the board's "U GO": prepare the transfer to the same Bluetooth
+    /// identity. Nil unless this exact board is connected over Bluetooth.
+    func prepareUpdate(_ package: WandSenseDFUPackage) -> WandSenseDFUTransfer? {
+        guard updater == nil, active == .bluetooth, let central, let peripheral, peripheral.state == .connected else { return nil }
+        let transfer = WandSenseDFUTransfer(central: central, peripheralID: peripheral.identifier, package: package)
+        updater = transfer; updaterStarted = false
+        // GO is only permission to hand over. A board that never disconnects
+        // must not leave the receiver permanently busy without a timer.
+        updaterHandoffTimer = WandRunLoop.commonTimer(interval: 10, repeats: false) { [weak self, weak transfer] _ in
+            guard let self, let transfer, self.updater === transfer, !self.updaterStarted else { return }
+            transfer.finish("the wand did not hand over after authorizing the update")
+        }
+        return transfer
+    }
+    /// The transfer ended, either way: resume ordinary scanning for the wand.
+    func finishUpdate() {
+        updaterHandoffTimer?.invalidate(); updaterHandoffTimer = nil
+        updater = nil; updaterStarted = false; updateScan()
     }
     func peripheral(_ p: CBPeripheral, didDiscoverServices error: Error?) {
         guard p === peripheral else { return }

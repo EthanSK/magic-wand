@@ -48,6 +48,7 @@ final class Harness {
  var mouseOnRequests:Int {queued.filter{ $0.contains("setMouseFollow(true)") }.count}
  /// What the device does for a deliberate mouse-button choice: the receiver
  /// marks it manual, then the device's own follow report arrives.
+ func cancelMouseExitClick(){}
  func bottomChoice(follow:Bool){manualPointerDuringRecording();dwell.follow(follow)}
  func rest(putDown:Bool){restDetection.script=[(true,putDown ? [.putDown]:[])];handleIMU("0,0,8192,0,0,0,0")}
  func pickup(){restDetection.script=[(false,[.pickedUp])];handleIMU("0,0,8192,0,0,0,0")}

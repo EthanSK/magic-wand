@@ -38,14 +38,23 @@ FILES = {
     "wand-pointer-control.swift": ("receiver/Sources/WandPointerControl.swift", "verbatim"),
     "wand-calibration.swift": ("receiver/Sources/WandCalibration.swift", "verbatim"),
     "wand-uart.swift": ("receiver/Sources/WandUART.swift", "verbatim"),
+    "wand-sense-update.swift": ("receiver/Sources/WandSenseUpdate.swift", "verbatim"),
+    "wand-receiver-sense-update.swift": ("receiver/Sources/WandReceiverSenseUpdate.swift", "verbatim"),
+    "wand-sense-link.swift": ("receiver/Sources/WandSenseLink.swift", "verbatim"),
+    "wand-sense-protocol.swift": ("receiver/Sources/WandSenseProtocol.swift", "verbatim"),
+    "wand-receiver-sense.swift": ("receiver/Sources/WandReceiverSense.swift", "verbatim"),
+    "wand-receiver-actions.swift": ("receiver/Sources/WandReceiverActions.swift", "verbatim"),
     "Wand Receiver.app/Contents/Info.plist": ("receiver/Info.plist", "verbatim"),
 }
 
-# The Nordic UART Service and its two characteristics are a public standard, not device identity.
+# The Nordic UART and legacy DFU service/characteristic UUIDs are public protocols, not device identity.
 PUBLIC_UUIDS = {
     "6E400001-B5A3-F393-E0A9-E50E24DCCA9E",
     "6E400002-B5A3-F393-E0A9-E50E24DCCA9E",
     "6E400003-B5A3-F393-E0A9-E50E24DCCA9E",
+    "00001530-1212-EFDE-1523-785FEABCD123",
+    "00001531-1212-EFDE-1523-785FEABCD123",
+    "00001532-1212-EFDE-1523-785FEABCD123",
 }
 UUID_PATTERN = re.compile(r"[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}")
 PRIVATE_PATTERNS = [

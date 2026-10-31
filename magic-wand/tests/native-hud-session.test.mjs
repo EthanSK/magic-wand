@@ -44,6 +44,7 @@ final class Trace {var boundaries:[String]=[];func boundary(_ reason:String,mode
 final class Controls {var phases:[String]=[];var points:[CGPoint]=[];func persistent(_ phase:String,x:Double=0,y:Double=0,mouseX:Double?=nil){phases.append(phase);points.append(CGPoint(x:x,y:y))}}
 final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];var modeChanges:[String]=[];var endings:[Bool]=[];var inputs=0;func beginDetents(mode:String,now:Double){starts.append(mode)};func changeMode(_ mode:String,now:Double)->[Int]{modeChanges.append(mode);return[]};func tick(now:Double)->[Int]{[]};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{inputs+=1;return[]};func endDetents(commit:Bool)->[Int]{endings.append(commit);committed=commit;return[]}}
 final class Harness {
+ func cancelMouseExitClick(){}
  var scrollFollowBefore=false
  func finishNativeScroll(cancelled:Bool){}
 
@@ -391,6 +392,7 @@ final class Rest {var parked=false;var deskQuietSince:Double?;var hasReference=t
 final class Controls {var speechEvents=0;func speech(down:Bool)->Bool{speechEvents+=1;return true}}
 final class Recording {var isRecording=true}
 final class Harness {
+ func cancelMouseExitClick(){}
  var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
  var ready=true,restoring=false,scrollActive=false,buttons=0,restDiagnosticsRemaining=0,hudSession=false
@@ -467,6 +469,7 @@ final class Dwell {func follow(_ on:Bool){}}
 struct Recording {var isRecording=false}
 struct Version {var usesHeldScroll=true}
 final class Harness {
+ func cancelMouseExitClick(){}
  var loadingBridge=false,loadingRuntime=false,bridgeLoadFailed=false,ready=false,lightMode="",generation=0,rawLastArrival=0.0,hudSession=false,hudOpenedAt=0.0
  let commands=["PROGRAM"],modeBridge="bridge",context=Context(),motionFilter=Filter()
  var selectedReviewMode:String?

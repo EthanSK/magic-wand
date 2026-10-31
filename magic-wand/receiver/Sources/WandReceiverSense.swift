@@ -31,7 +31,7 @@ extension WandReceiver {
             link.onPin = { [weak self] id in self?.rememberSenseID(id) }
             link.onLog = { log($0) }
             link.onReady = { [weak self] info, transport in self?.senseReady(info, transport) }
-            link.onLost = { [weak self] transport, reason in log("SENSE_DISCONNECTED", transport.rawValue, reason); self?.endSenseSession() }
+            link.onLost = { [weak self] transport, reason in log("SENSE_DISCONNECTED", transport.rawValue, reason); self?.senseUpdateConnectionLost(); self?.endSenseSession() }
             link.onLine = { [weak self] line, arrival in self?.senseLine(line, arrival) }
             senseLink = link
         }
@@ -46,6 +46,7 @@ extension WandReceiver {
         }
         senseSessionNumber += 1
         senseInfo = info; senseTransport = transport; senseSession.reset(); senseClock.reset(); senseLastReading = -.infinity; senseStaleReadings = 0; senseMouseButtonTimer.reset()
+        senseUpdateIdentity(info, transport)
         restDetection = WandRestDetection(cache: support.appendingPathComponent("desk-reference-sense-\(info.id).json"))
         virtual.onText = { [weak self, weak virtual] text in
             guard let self, let virtual, self.senseVirtual === virtual else { return }
@@ -101,6 +102,7 @@ extension WandReceiver {
     }
 
     func senseLine(_ line: WandSenseLine, _ arrival: Double) {
+        if case .update(let reply) = line { senseUpdateReply(reply); return }
         guard let virtual = senseVirtual, let info = senseInfo else { return }
         switch line {
         case .frame(let frame):
@@ -140,14 +142,15 @@ extension WandReceiver {
                     virtual.deliver(time: time, mask: step.mask, accel: accel, gyro: motion(at: time))
                 }
             }
-        case .battery(let millivolts, _):
+        case .battery(let millivolts, let charging):
+            senseUpdateBattery(millivolts: millivolts, charging: charging)
             // Single-cell LiPo estimate only; capacity and runtime are not measured.
             let volts = Double(millivolts) / 1000
             let usable = volts >= 2.5 && volts <= 4.5
             virtual.battery(volts: usable ? volts : nil,
                             percent: usable ? Int(max(0, min(100, ((volts - 3.3) / 0.85 * 100).rounded()))) : nil)
         case .event(let text): log("SENSE_EVENT", text)
-        case .info: break
+        case .info, .update: break
         }
     }
 }

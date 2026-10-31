@@ -30,6 +30,8 @@ struct WandSenseInfo: Equatable {
     /// False when the board's built-in IMU did not start: buttons still work,
     /// pointing does not. The receiver reports it instead of implying motion.
     var motion = true
+    /// Wireless update support from firmware 6 on (WandSenseUpdate.swift).
+    var update = WandSenseUpdateSupport.none
     static func parse(_ json: String) -> WandSenseInfo? {
         guard json.utf8.count <= 512, let data = json.data(using: .utf8),
               let v = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
@@ -42,6 +44,7 @@ struct WandSenseInfo: Equatable {
         var info = WandSenseInfo(firmware: firmware, id: id.lowercased(), gyroDpsPerLsb: gyro, accelGPerLsb: accel,
                                  odr: odr, wake: v["wake"] as? Bool ?? false)
         info.motion = v["imu"] as? Bool ?? false
+        info.update = .parse(v)
         return info
     }
 }
@@ -75,6 +78,7 @@ struct WandSenseFrame: Equatable {
 
 enum WandSenseLine: Equatable {
     case info(WandSenseInfo), frame(WandSenseFrame), battery(millivolts: Int, charging: Bool), event(String)
+    case update(WandSenseUpdateReply)
     static func parse(_ raw: String) -> WandSenseLine? {
         let line = raw.trimmingCharacters(in: CharacterSet(charactersIn: "\r\n "))
         guard let head = line.first, line.utf8.count <= 600 else { return nil }
@@ -87,6 +91,7 @@ enum WandSenseLine: Equatable {
             guard f.count == 2, let mv = Int(f[0]), (0...6000).contains(mv), f[1] == "0" || f[1] == "1" else { return nil }
             return .battery(millivolts: mv, charging: f[1] == "1")
         case "E": return .event(String(body.prefix(80)))
+        case "U": return WandSenseUpdateReply.parse(body).map { .update($0) }
         default: return nil
         }
     }

@@ -1033,12 +1033,12 @@ enum WandControlVersion:Int {
 
 /// Ethan's "drag up or down or left or right ... if I keep it held down ... it
 /// keeps scrolling ... ideally at the same speed as the initial drag ... until I
-/// let go". A deliberate stroke sets the wheel velocity: it rises with the hand,
-/// then keeps that stroke's representative (peak averaged) speed while the hand
-/// slows and rests. Another deliberate stroke in the same hold replaces it,
-/// including a reversal or a change of axis. Tremor, slow drift, end-of-stroke
-/// recoil, follow-through and one-reading knocks are not strokes. No circle
-/// classifier runs.
+/// let go". Vertical/diagonal page strokes latch their representative speed while
+/// the hand rests; another deliberate stroke changes it. Same-direction page
+/// flicks add speed. Sideways native gestures instead end with the measured
+/// stroke, so the app can accept Back/Forward without waiting for button release.
+/// Tremor, slow drift, end-of-stroke recoil, follow-through and one-reading knocks
+/// are not new strokes. No circle classifier runs.
 ///
 /// This sets wheel velocity only. The pointer stays at its anchor; nothing here
 /// delays, buffers or replays pointer motion. The 40 ms average shapes only how
@@ -1128,10 +1128,19 @@ final class WandSustainedScroll {
         var strokes=0,directionChanges=0,speedChanges=0,ignoredRecoils=0
         var peakRate=0.0
     }
+    /// Native sideways swipes end at the measured stroke's end, while the
+    /// physical button can stay held for another distinct swipe.
+    enum HorizontalBoundary {case ended,cancelled}
+    private var horizontalBoundary:HorizontalBoundary?
+    func takeHorizontalBoundary()->HorizontalBoundary? {defer{horizontalBoundary=nil};return horizontalBoundary}
     private(set) var velocityX=0.0,velocityY=0.0
     private(set) var summary=Summary()
     let tuning:Tuning
+    static let pagePixelsPerLine=10.0
     private var fractionX=0.0,fractionY=0.0,lastTick=0.0
+    // The initial credit is one output unit: a pixel for page output, one line
+    // for the existing default/horizontal path. It must not become a page jump.
+    private var initialX=0.0,initialY=0.0
     // Averaged angular rate, device-sample clock and last receiver arrival.
     private var rateX=0.0,rateY=0.0,averaging=false,clock=0.0,lastArrival:Double?
     // Candidate movement since it last started, restarted or turned.
@@ -1147,7 +1156,7 @@ final class WandSustainedScroll {
     init(linesPerDegree:Double=1.6,tuning:Tuning=Tuning()){self.linesPerDegree=linesPerDegree;self.tuning=tuning}
     var started:Bool {velocityX != 0 || velocityY != 0}
     func reset(now:Double=0){
-        velocityX=0;velocityY=0;summary=Summary();fractionX=0;fractionY=0;lastTick=now
+        velocityX=0;velocityY=0;summary=Summary();fractionX=0;fractionY=0;initialX=0;initialY=0;lastTick=now;horizontalBoundary=nil
         rateX=0;rateY=0;averaging=false;clock=0;lastArrival=nil
         moving=false;stroking=false;settling=false;keepOutput=false;strokeX=0;strokeY=0;peak=0;base=0
         endedAt = -Double.infinity;endedTravel=0
@@ -1172,7 +1181,7 @@ final class WandSustainedScroll {
         track(x:x,y:y,dt:dt,speed:speed)
     }
     private func interrupt(){
-        if stroking {finishStroke()}
+        if stroking {finishStroke(cancelled:true)}
         moving=false;averaging=false
     }
     private func continueStroke(x:Double,y:Double,dt:Double,speed:Double){
@@ -1187,21 +1196,32 @@ final class WandSustainedScroll {
                 along=rateX*directionX+rateY*directionY
                 if !keepOutput {
                     let output=snapped(directionX,directionY)
-                    if output.x==0 {fractionX=0}
-                    if output.y==0 {fractionY=0}
+                    if output.x==0 {fractionX=0;initialX=0}
+                    if output.y==0 {fractionY=0;initialY=0}
                     outputX=output.x;outputY=output.y
                 }
             }
             peak=max(peak,along);apply()
         }
-        if along<max(tuning.restSpeed,tuning.endShare*peak) || (speed>tuning.restSpeed && along<tuning.turnCosine*speed) {
-            finishStroke();return
+        let turned=speed>tuning.restSpeed && along<tuning.turnCosine*speed
+        if along<max(tuning.restSpeed,tuning.endShare*peak) || turned {
+            // Use the existing stroke-end test, with no additional timer or delay.
+            // The average decelerates before it crosses zero on a reversal.
+            // Classify that boundary from the real incoming direction, using
+            // the existing stroke-speed/turn thresholds, so reversal cancels.
+            let incomingSpeed=hypot(x,y)
+            let incomingTurn=incomingSpeed>=tuning.strokeSpeed && x*directionX+y*directionY<tuning.turnCosine*incomingSpeed
+            finishStroke(cancelled:turned || incomingTurn);return
         }
         if settling && along<tuning.settleShare*peak {settling=false;apply()}
     }
-    private func finishStroke(){
+    private func finishStroke(cancelled:Bool=false){
         stroking=false;endedAt=clock;endedTravel=max(0,strokeX*directionX+strokeY*directionY)
         if settling {settling=false;apply()}
+        if velocityX != 0 && velocityY == 0 {
+            horizontalBoundary=cancelled ? .cancelled:.ended
+            fractionX=0;fractionY=0;initialX=0;initialY=0
+        }
     }
     /// Wheel lines per second for a stroke's representative speed. Continuous
     /// and rising; it sets velocity only, so it adds no delay or catch-up.
@@ -1251,6 +1271,7 @@ final class WandSustainedScroll {
         } else {
             magnitude=settling ? max(base,rate):rate
         }
+        if velocityX != 0 && velocityY == 0 && !horizontal {horizontalBoundary = .cancelled}
         velocityX=outputX*magnitude;velocityY=outputY*magnitude
         summary.peakRate=max(summary.peakRate,magnitude)
     }
@@ -1301,7 +1322,7 @@ final class WandSustainedScroll {
             outputX=output.x;outputY=output.y;base=0;settling=false;keepOutput=false
             // A new direction never inherits fractional travel from the old one;
             // the travel already made pays for its first line at the next tick.
-            fractionX=output.x;fractionY=output.y
+            fractionX=0;fractionY=0;initialX=output.x;initialY=output.y
         }
         apply()
     }
@@ -1316,12 +1337,23 @@ final class WandSustainedScroll {
         let axis=rate==0 ? "none" : velocityX==0 ? "vertical" : velocityY==0 ? "horizontal" : "diagonal"
         return "ms=\(Int((seconds*1000).rounded())) end=\(ended) strokes=\(summary.strokes) directionChanges=\(summary.directionChanges) speedChanges=\(summary.speedChanges) ignoredRecoils=\(summary.ignoredRecoils) peakLinesPerSecond=\(Int(summary.peakRate.rounded())) finalLinesPerSecond=\(Int(rate.rounded())) axis=\(axis)"
     }
-    func tick(now:Double)->(x:Int32,y:Int32){
-        guard now.isFinite,now>=lastTick else{return (0,0)}
+    func tick(now:Double,pageUnitsPerLine:Double=1)->(x:Int32,y:Int32){
+        guard now.isFinite,now>=lastTick,pageUnitsPerLine.isFinite,pageUnitsPerLine>=1,pageUnitsPerLine<=1024 else{return (0,0)}
         let dt=min(0.05,now-lastTick);lastTick=now
+        // Keep the last direction/rate for the existing recoil and restroke
+        // classifier, but never manufacture sideways movement while held still.
+        // Vertical and diagonal page scrolling retain their latched speed.
+        if velocityX != 0 && velocityY == 0 && !stroking {return (0,0)}
+        // Fractions stay in physical line units between ticks. Only the final
+        // quantization changes: page pixels arrive at the same cadence, without
+        // waiting for a whole wheel line or replaying missed timer intervals.
+        let scale=velocityY == 0 ? 1:pageUnitsPerLine
         fractionX+=velocityX*dt;fractionY+=velocityY*dt
-        let x=Int32(fractionX.rounded(.towardZero)),y=Int32(fractionY.rounded(.towardZero))
-        fractionX-=Double(x);fractionY-=Double(y);return(x,y)
+        let unitsX=fractionX*scale+initialX,unitsY=fractionY*scale+initialY
+        let x=Int32(unitsX.rounded(.towardZero)),y=Int32(unitsY.rounded(.towardZero))
+        fractionX=(unitsX-Double(x))/scale;fractionY=(unitsY-Double(y))/scale
+        initialX=0;initialY=0
+        return(x,y)
     }
 }
 
@@ -1457,9 +1489,9 @@ final class WandHeldScroll {
         if lines != 0 {moved=true}
         return lines
     }
-    func continuation(now:Double)->(x:Int32,y:Int32){
+    func continuation(now:Double,pageUnitsPerLine:Double=1)->(x:Int32,y:Int32){
         guard active,sustaining,scrollable,qualified(now:now),!stale(now:now) else{return(0,0)}
-        let result=sustained.tick(now:now)
+        let result=sustained.tick(now:now,pageUnitsPerLine:pageUnitsPerLine)
         if result.x != 0 || result.y != 0 {moved=true}
         return result
     }

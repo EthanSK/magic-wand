@@ -18,6 +18,11 @@ except SystemExit:
 else:
     raise AssertionError("partial public migration was accepted")
 assert m.leaks(source)==[]
+# Both wireless updater modules and the changed transport adapters are canonical imports.
+for public in ["WandSenseUpdate.swift", "WandReceiverSenseUpdate.swift", "WandSenseLink.swift", "WandSenseProtocol.swift", "WandReceiverSense.swift", "WandReceiverActions.swift"]:
+    path="receiver/Sources/"+public
+    assert any(target==path for target,transform in m.FILES.values()), path
+    assert m.leaks(Path(path).read_text())==[], path
 assert m.leaks(source+'\nlet privateID="'+"-".join("0"*n for n in (8,4,4,4,12))+'"')
 print("PASS: public source stays byte-identical; partial source and private identity fail")
 `],{cwd:new URL('..',import.meta.url),encoding:'utf8'});
