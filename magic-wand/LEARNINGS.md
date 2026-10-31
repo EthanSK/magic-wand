@@ -1977,3 +1977,12 @@ must not reset the light-sleep timer or override the three-button manual shutdow
 Unit checks cover expiry, reset, file safety and darkness. Installed status
 confirmed activation and expiry while disconnected; prevention of actual
 physical standby still needs an awake device.
+
+## 2026-10-31 — Isolate rapid-click comparisons from other fixes
+
+When comparing a reported move-stop-move regression with the pre-rapid-click
+behaviour, disable only the live fast-stop shortcut. The disabled controller
+matched the original pre-shortcut click deadlines and actions over10000
+deterministic transitions. Keep pointer gain, filtering, position tracking and
+other controls unchanged so the physical comparison can answer the question.
+A passing comparison does not establish the cause of a live jump.

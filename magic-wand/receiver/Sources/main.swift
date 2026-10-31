@@ -137,7 +137,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // Ethan's 2026-10-30 "as little weirdness as possible" amendment pauses
     // the 300 ms repeat experiment; the captured no-click jumps were a
     // separate stale-origin defect, fixed by WandPointerOrigin below.
-    let dwell=WandDwellClick(fastStops:true)
+    // Ethan's temporary comparison with the pre-rapid-click behaviour (2026-10-31).
+    // Keep the original 200 ms stillness path; do not change pointer filtering,
+    // gain, coordinates or other controls while isolating this regression.
+    let dwell=WandDwellClick(fastStops:false)
     // Per physical wand: the Sense profile swaps in its own learned desk pose.
     var restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
     var deskSleep=WandDeskSleep()
