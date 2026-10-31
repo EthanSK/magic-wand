@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Receiver1.2.138 build143: page scrolling is30% more sensitive, with the existing gentle low-speed curve, cumulative flicks and1560 output lines/second ceiling. Sideways swipes, pointer motion and stroke timing are unchanged. Physical sensitivity acceptance pending.
 - Installed: Agentic Mouse 1.0.310 build 316 adds Brightness to the home HUD’s second layer, between Utility and the unchanged third-layer Zoom. Build 315’s restored dragging is retained. The installed app and rendered layout were checked; physical Brightness use remains unverified.
 - Installed: receiver 1.2.137 build 142 and Agentic Mouse 1.0.309 build 315. Clear sideways flicks can start before the 220 ms hold threshold; ordinary taps, page scrolling and dragging keep their timing, and accepted short swipes stay separate from click shortcuts. No pointer delay was added. Faster Back/Forward and abrupt-stop feel still need physical confirmation.
 - Installed: Agentic Mouse 1.0.308 build 314 adds built-in left/right window snapping to the Magnet card. Repeating at an occupied screen half moves the window to the neighbouring display. Existing HUD layout and wand controls are retained; standalone snapping apps stay installed. Focused geometry, cancellation and readback checks passed; physical cross-monitor acceptance remains unverified.
@@ -251,7 +252,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.137 (142) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.138 (143) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

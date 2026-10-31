@@ -12,8 +12,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.137",
-    "receiverBuild": "142",
+    "receiver": "1.2.138",
+    "receiverBuild": "143",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.311",
@@ -21,6 +21,7 @@
     "persistentImage": "full-20261025a"
   },
   "status": [
+    "Receiver1.2.138 build143: page scrolling is30% more sensitive, with the existing gentle low-speed curve, cumulative flicks and1560 output lines/second ceiling. Sideways swipes, pointer motion and stroke timing are unchanged. Physical sensitivity acceptance pending.",
     "Installed: Agentic Mouse 1.0.310 build 316 adds Brightness to the home HUD’s second layer, between Utility and the unchanged third-layer Zoom. Build 315’s restored dragging is retained. The installed app and rendered layout were checked; physical Brightness use remains unverified.",
     "Installed: receiver 1.2.137 build 142 and Agentic Mouse 1.0.309 build 315. Clear sideways flicks can start before the 220 ms hold threshold; ordinary taps, page scrolling and dragging keep their timing, and accepted short swipes stay separate from click shortcuts. No pointer delay was added. Faster Back/Forward and abrupt-stop feel still need physical confirmation.",
     "Installed: Agentic Mouse 1.0.308 build 314 adds built-in left/right window snapping to the Magnet card. Repeating at an occupied screen half moves the window to the neighbouring display. Existing HUD layout and wand controls are retained; standalone snapping apps stay installed. Focused geometry, cancellation and readback checks passed; physical cross-monitor acceptance remains unverified.",
@@ -437,7 +438,7 @@
       "horizontalMaxLinesPerSecond": 3000,
       "horizontalCurveMaxLinesPerSecond": 600,
       "pageLowSpeedGain": 0.5,
-      "sameDirectionPageFlicks": "Each distinct qualified same-direction page flick adds to the held speed, capped at1200 lines/second; deceleration does not lower it.",
+      "sameDirectionPageFlicks": "Each distinct qualified same-direction page flick adds to the held speed, capped at1560 output lines/second; deceleration does not lower it.",
       "earlyHorizontalIntent": {
         "minimumHorizontalTravelDegrees": 4,
         "strongSampleDegreesPerSecond": 40,
@@ -448,7 +449,9 @@
         "firstActiveHorizontalStrokeOnly": true,
         "requiresResolvedScrollTarget": true,
         "scope": "V3 clear sideways flicks only. The existing stroke classifier must already be active and purely horizontal, with the target resolved to scrolling. Ordinary taps, vertical and diagonal page scrolling, and dragging keep the 220 ms hold cutoff. Accepted short swipes cannot become clicks on release. No pointer delay is added; physical acceptance is pending."
-      }
+      },
+      "pageSensitivity": 1.3,
+      "pageOutputMaxLinesPerSecond": 1560
     },
     "flickScroll": {
       "default": false,
