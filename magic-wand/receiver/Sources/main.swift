@@ -1,3 +1,4 @@
+// Owns the wand connection and routes its controls to native input and feedback.
 import Foundation
 import AppKit
 import CoreBluetooth
@@ -28,18 +29,29 @@ func log(_ values: Any...) {
 struct WandNativeScrollGesture {
     private(set) var active=false
     private var anchor=CGPoint.zero
+    private var horizontalDelta:Int64=0
+    private var hadVerticalOutput=false
+    // A completion acknowledgement only; no new recognition threshold or input
+    // delay. Cancelled/page gestures must never look like accepted Back/Forward.
+    var onCompletedHorizontal:((Int64,CGPoint)->Void)?
     mutating func update(x:Int32,y:Int32,at point:CGPoint)->CGEvent? {
         guard x != 0 || y != 0 else{return nil}
         let phase:CGScrollPhase=active ? .changed:.began
         let position=active ? anchor:point
         guard let event=Self.event(x:x,y:y,phase:phase,at:position) else{return nil}
+        if !active {horizontalDelta=0;hadVerticalOutput=false}
+        horizontalDelta += Int64(x)
+        hadVerticalOutput = hadVerticalOutput || y != 0
         anchor=position;active=true
         return event
     }
     mutating func finish(cancelled:Bool)->CGEvent? {
         guard active else{return nil}
-        active=false
-        return Self.event(x:0,y:0,phase:cancelled ? .cancelled:.ended,at:anchor)
+        let delta=horizontalDelta,wasHorizontal = !hadVerticalOutput
+        active=false;horizontalDelta=0;hadVerticalOutput=false
+        guard let event=Self.event(x:0,y:0,phase:cancelled ? .cancelled:.ended,at:anchor) else{return nil}
+        if !cancelled,wasHorizontal,delta != 0 {onCompletedHorizontal?(delta,anchor)}
+        return event
     }
     private static func event(x:Int32,y:Int32,phase:CGScrollPhase,at point:CGPoint)->CGEvent? {
         guard let source=CGEventSource(stateID:.hidSystemState),
@@ -101,6 +113,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let flickScroll=WandFlickScroll()
     let heldScroll=WandHeldScroll()
     var nativeScroll=WandNativeScrollGesture()
+    let navigationFeedback=WandNavigationFeedback()
     var scrollFollowBefore=false
     var heldScrollAnchor:CGPoint?
     var heldTargetToken=UUID()
@@ -253,6 +266,16 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     override init() {
         commands = (try? JSONDecoder().decode([String].self, from: Data(contentsOf: Bundle.main.url(forResource: "wand-commands", withExtension: "json")!))) ?? []
         super.init()
+        nativeScroll.onCompletedHorizontal = { [weak self] delta, point in
+            // Post the native end event first. The acknowledgement is independent
+            // of the target app, so even a lagging app cannot postpone its fade.
+            DispatchQueue.main.async { [weak self] in
+                guard let self,self.ready,!self.restoring,!self.actionPause.paused,
+                      let direction=WandNavigationDirection(horizontalDelta:delta) else{return}
+                self.navigationFeedback.show(direction,at:point)
+                log("NAVIGATION_GESTURE",direction == .back ? "back":"forward")
+            }
+        }
         refreshPointerDisplays()
         displayObserver=NotificationCenter.default.addObserver(forName:NSApplication.didChangeScreenParametersNotification,object:nil,queue:.main){[weak self] _ in self?.refreshPointerDisplays()}
         context.onChange = {[weak self] active in
@@ -633,6 +656,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
     }
     func reset() {
+        navigationFeedback.dismiss()
         powerPolicyReady=false;loadingPowerPolicy=false;batteryRequested=Date.distantPast
         reviewTrace.boundary("receiver reset",mode:wandShortcutMode)
         reviewExitTimer?.invalidate();reviewExitTimer=nil;reviewExitGesture.reset();hudButtonReviewExit=false
@@ -2156,6 +2180,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func releaseButtons() { transition(to: 0, at: currentPointerOrigin()) }
     func stop() {
+        navigationFeedback.dismiss()
         sendReview(review.cancel());reviewTimer?.invalidate();reviewTimer=nil
         dwell.follow(false);dwellTimer?.invalidate();dwellTimer=nil;probeTimer?.invalidate();probeTimer=nil
         pendingRecenter?.invalidate();pendingRecenter=nil;endScreenshot(reason:"receiver stopped",contextActive:false,forgetPress:true)

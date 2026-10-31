@@ -1790,3 +1790,15 @@ telemetry records sweep speed, settling age and fallback reason without a new
 per-frame log. Receiver159 passed254 Wand,17 Control Stones and4 shared checks;
 the exact installed source/resources/signature were verified while the wand was
 away. Reconnection and physical feel remain for the user's return.
+
+## 2026-10-31 — Acknowledge a gesture without claiming navigation completed
+
+The receiver knows when it emits a completed native sideways scroll, but the
+destination app still decides between scrolling content and history navigation.
+Show Back gesture / Forward gesture at that boundary, never “page loaded”.
+Suppress acknowledgement for cancelled, vertical or zero-net gestures. Keep the
+fade off the input path, reuse one non-activating click-through panel, and replace
+its contents on a new gesture instead of queueing stale messages. The 850 ms
+visual lifetime is not an input delay. The native preview verified fade-out,
+replacement, readable one-line text and unchanged application focus. Automated
+checks verify the event boundaries; physical gesture acceptance is separate.

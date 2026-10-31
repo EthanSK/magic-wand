@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver160 adds a brief fading Back gesture / Forward gesture acknowledgement after a completed native sideways gesture. Cancelled, vertical and zero-net gestures do not acknowledge. Native preview verified the fade, replacement and retained app focus; all255 Wand,17 Control Stones and4 shared checks passed. Recognition feedback is independent of application navigation; scrolling, pointer timing and firmware8 are unchanged. Physical gesture confirmation remains pending while the wand is disconnected.
 - Installed: receiver159 keeps the quick-click opportunity through120 ms of settling only after fast sweeps averaging at least1500 pointer counts/second. Slower aiming keeps the existing pause. Invisible residual readings cannot rearm another click after a fast click; bounded per-click diagnostics distinguish quick decisions from fallbacks. All254 Wand,17 Control Stones and4 shared checks passed. Installed source, resources and signature match; no firmware was flashed. The wand disconnected as Ethan left, so physical acceptance and reconnect confirmation remain pending. Pointer movement, filtering, sensitivity and saved firmware8 are unchanged.
 - Installed: receiver158 and the Sense dashboard enforce a persisted ten-minute temporary sensor capture, followed by deletion two hours later. Reconnecting or restarting does not extend the window. Byte caps remain and deliberately saved references are excluded. Both live recorders report matching deadlines; source, resources, Bluetooth and firmware8 were verified. All253 Wand,17 Control Stones and4 shared checks passed, including expiry, restart and cleanup tests. Click and pointer behavior are unchanged.
 - Installed: receiver1.2.152 build157 preserves brisk-stop evidence across brief Bluetooth delivery gaps only when the sensor intervals remain continuous. Fresh stop confirmation, genuine sensor-gap rejection, the slow precision path, pointer filtering and the blue click cue are unchanged. All253 Wand,17 Control Stones and4 shared checks passed; installed source, resources, Bluetooth and firmware8 readback verified. The saved slow-aim exercise keeps its precision protection; physical reliability remains for user review.
@@ -265,7 +266,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.154 (159) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.155 (160) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
