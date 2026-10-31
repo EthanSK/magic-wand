@@ -1393,6 +1393,8 @@ final class WandHeldScroll {
     private(set) var circular=false
     private(set) var horizontal=false
     private(set) var sustaining=false
+    /// Disabled by default: Ethan prefers a plain tap to exit without clicking.
+    var quietStopEnabled=false
     let sustained:WandSustainedScroll
     private var scrollDirection=0.0,directionTravel=0.0,directionTravelX=0.0,sampleTime=0.0
     private var winding=0.0,windingToScroll=0.0,reverseTurn=0.0,reverseAt=0.0

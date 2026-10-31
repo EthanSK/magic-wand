@@ -1667,3 +1667,14 @@ never mode state, and cancels on input or a priority-state change. Its private
 request reuses the guide's validated same-user envelope; it accepts no code.
 The host regression checks cover dim/bright ownership, warning priority, demo
 expiry and teardown. Actual perceived brightness still needs human feedback.
+
+## 2026-10-31 — Keep exit clicks separate from stillness clicks
+
+A short mouse-button exit now stops follow without posting a click or leaving a
+delayed click timer. The automatic stillness click remains in its own dwell lane;
+centering and screenshot taps retain their original timing. The special quiet
+long-hold stop is disabled by default through `quietMouseHold`. The withdrawn early-stop/light experiment was removed rather than carrying
+extra dormant device code in the space-constrained saved Puck program.
+Focused checks cover the default and opt-in paths, tap repetition, double/triple
+shortcuts, real scroll phases and the unchanged stillness click. Installed
+readback confirms the flag is off; physical preference remains a separate check.

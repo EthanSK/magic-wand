@@ -73,9 +73,6 @@ final class Harness {
  let recenterGesture=WandRecenterGesture()
  var scrollFollowBefore=false,ready=true,restoring=false
  let dwell=WandDwellClick()
- var queuedExitClicks:[CGPoint]=[]
- func cancelMouseExitClick(){}
- func scheduleMouseExitClick(at point:CGPoint){queuedExitClicks.append(point);dwell.follow(false)}
  let screenshot=WandScreenshotGesture()
  var posted:[CGEvent]=[]
  var nativeScroll=WandNativeScrollGesture(),actionPause=PauseStub()
@@ -228,7 +225,7 @@ for sign in [-1.0,1.0] {
  expect(h.tripleClick.edge(down:false,now:0.18) == .none,"consumed release cannot join triple click")
  h.finishMouseButtonHold(now:0.18)
  expect(!h.recenterGesture.edge(down:false,now:0.18),"consumed release cannot join double click")
- expect(h.queuedExitClicks.isEmpty && h.mouseOn==1,"short swipe preserves scroll follow restoration without exit click")
+ expect(h.mouseOn==1,"short swipe preserves scroll follow restoration without exit click")
  expect(h.kinds().last == .native(.ended,x:0),"accepted short swipe ends instead of cancels")
  expect(h.heldScroll.consumes(buttons:1) && h.heldScroll.consumes(buttons:0),"firmware endpoint click consumed")
  expect(!h.heldScroll.consumes(buttons:1),"next ordinary click remains independent")
@@ -236,7 +233,7 @@ for sign in [-1.0,1.0] {
  expect(!h.heldScroll.earlyHorizontal,"fresh hold resets early intent")
  _=h.recenterGesture.edge(down:true,now:0.3);_=h.tripleClick.edge(down:true,now:0.3)
  h.physicalDuration=0.1;h.finishMouseButtonHold(now:0.4)
- expect(h.queuedExitClicks.count==1,"ordinary tap retains exit click")
+ expect(!h.dwell.following,"ordinary tap stops follow without a click")
  expect(!h.recenterGesture.edge(down:false,now:0.4),"fresh first tap is not a double")
  _=h.recenterGesture.edge(down:true,now:0.5)
  expect(h.recenterGesture.isSecondPress && h.recenterGesture.edge(down:false,now:0.6),"fresh ordinary double tap works")
@@ -244,7 +241,7 @@ for sign in [-1.0,1.0] {
 let earlyLost=Harness();earlyLost.heldScroll.begin(now:0,sustain:true)
 for i in 6...15 {let t=Double(i)/100;earlyLost.sample(x:120,now:t);earlyLost.tick(now:t)}
 earlyLost.finishMouseButtonHold(now:0.18,released:false)
-expect(earlyLost.kinds().last == .native(.cancelled,x:0) && earlyLost.mouseOn==0 && earlyLost.queuedExitClicks.isEmpty,"lost early gesture cancels without restoring follow")
+expect(earlyLost.kinds().last == .native(.cancelled,x:0) && earlyLost.mouseOn==0,"lost early gesture cancels without restoring follow")
 for (scrollable,resolving) in [(false,false),(true,true)] {
  let h=WandHeldScroll();h.begin(now:0,scrollable:scrollable,sustain:true,resolving:resolving)
  for i in 5..<20 {let t=Double(i)/100;h.confirmHeld(now:t);_=h.sample(x:150,y:0,dt:0.01,now:t)

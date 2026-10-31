@@ -173,6 +173,12 @@ acceleration shocks it retains the last usable rotation estimate. Physical feel
 still needs testing with the actual grip.
 
 
+### Optional quiet long-hold stop
+
+`quietMouseHold` is off by default in `feature-flags.json`. A normal tap exits
+follow without clicking; automatic stillness clicking remains enabled. Enabling
+this flag restores the earlier quiet long-hold stop on release.
+
 ### Sense wireless application updater
 
 The host updater needs one complete, updater-capable USB installation first. It updates

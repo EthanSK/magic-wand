@@ -26,9 +26,6 @@ final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
  var tripleClick=WandTripleClick(),pendingRecenter:Timer?
  var scrollFollowBefore=false
- var queuedExitClicks:[CGPoint]=[]
- func cancelMouseExitClick(){}
- func scheduleMouseExitClick(at point:CGPoint){queuedExitClicks.append(point);dwell.follow(false)}
  let context=SwitchAppContext()
  var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
