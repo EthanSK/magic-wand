@@ -124,8 +124,11 @@ extension WandReceiver {
             // Ethan prefers skipping missed normal pointer motion to catch-up.
             // Preserve historical gesture data for HUD/scroll/review, but never
             // reconstruct a merged run into multiple normal pointer movements.
-            let dropLate = dwell.following && !hudSession && !scrollActive && !heldScroll.active &&
-                !pointerRouter.mouseButtonHeld && !screenshot.ownsPointer
+            // This frame's own mask is the physical boundary (`WandSensePointerFrames`).
+            let frameMouseButtonDown = (steps.last?.mask ?? 0) & WandSenseButtons.mouseButton != 0
+            let dropLate = WandSensePointerFrames.pointerOwns(following: dwell.following, hudSession: hudSession,
+                scrollActive: scrollActive, hostHolding: heldScroll.active || pointerRouter.mouseButtonHeld,
+                frameMouseButtonDown: frameMouseButtonDown, screenshot: screenshot.ownsPointer)
             let times = gyro == nil ? [time] : WandSenseReplay.times(last: time, frame: frame, after: senseLastReading,
                 allowHistory: !dropLate && !steps.contains(where: { $0.synthetic }))
             senseLastReading = time
