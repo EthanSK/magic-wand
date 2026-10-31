@@ -48,12 +48,12 @@ using namespace Adafruit_LittleFS_Namespace;
 
 // Numeric firmware versions from 6 on; earlier images used dated letters
 // (the previous one was wand-sense-20261029e). Wireless updates only move up.
-static const char FIRMWARE[] = "wand-sense-8";
-static const uint32_t FIRMWARE_NUMBER = 8;
+static const char FIRMWARE[] = "wand-sense-9";
+static const uint32_t FIRMWARE_NUMBER = 9;
 // The image's own statement of its board and number. The receiver refuses a
 // package without exactly one, or for another board or number. Change the
 // number with FIRMWARE_NUMBER.
-static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;8";
+static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;9";
 static const uint32_t DEBOUNCE_MS = 10;            // Same as the checked diagnostic sketch.
 static const uint32_t HOST_TIMEOUT_MS = 2000;      // Host heartbeat is every 500 ms.
 static const uint32_t HEARTBEAT_FRAME_MS = 250;    // Liveness while the sensor is quiet.
@@ -86,7 +86,9 @@ static bool wokeFromOff = false;
 static char usbLine[112], bleLine[112]; // Update authorizations are about 80 characters.
 static uint8_t usbLength = 0, bleLength = 0;
 static uint8_t light[3] = {0, 0, 0};
-static bool lightKnown = false;
+static uint8_t shownLight[3] = {0, 0, 0};
+static bool shownLightKnown = false;
+static WandButtonLightFeedback buttonLightFeedback;
 static uint32_t batteryMv = 0;
 static bool charging = false;
 static const uint8_t CHARGE_STATUS = 23;           // Original Sense: active-low charger status, P0.17.
@@ -129,6 +131,7 @@ static Button buttons[3] = {{D8}, {D9}, {D10}};
 
 static uint8_t buttonMask() { uint8_t m = 0; for (int i = 0; i < 3; ++i) if (buttons[i].down()) m |= 1 << i; return m; }
 static bool anyPhysical() { for (auto &b : buttons) if (b.pressed || b.raw) return true; return false; }
+static uint8_t physicalButtonMask() { uint8_t m = 0; for (int i = 0; i < 3; ++i) if (buttons[i].pressed) m |= 1 << i; return m; }
 
 static void wakeLoop() { BaseType_t woken = pdFALSE; if (loopTask) vTaskNotifyGiveFromISR(loopTask, &woken); portYIELD_FROM_ISR(woken); }
 static void onIMUReady() { readyMicros = micros(); wakeLoop(); }
@@ -141,10 +144,15 @@ static void ledChannel(uint8_t pin, uint8_t value) {
     pinMode(pin, OUTPUT); digitalWrite(pin, HIGH);
   } else analogWrite(pin, 255 - value);
 }
+static void refreshLight(uint32_t now) {
+  const WandRgb output = buttonLightFeedback.apply({light[0], light[1], light[2]}, now);
+  if (shownLightKnown && shownLight[0] == output.r && shownLight[1] == output.g && shownLight[2] == output.b) return;
+  shownLight[0] = output.r; shownLight[1] = output.g; shownLight[2] = output.b; shownLightKnown = true;
+  ledChannel(LED_RED, output.r); ledChannel(LED_GREEN, output.g); ledChannel(LED_BLUE, output.b);
+}
 static void setLight(uint8_t r, uint8_t g, uint8_t b) {
-  if (lightKnown && light[0] == r && light[1] == g && light[2] == b) return;
-  light[0] = r; light[1] = g; light[2] = b; lightKnown = true;
-  ledChannel(LED_RED, r); ledChannel(LED_GREEN, g); ledChannel(LED_BLUE, b);
+  light[0] = r; light[1] = g; light[2] = b;
+  refreshLight(millis());
 }
 
 static void clearMerged();
@@ -360,6 +368,7 @@ static void sendLink() {
 // ---------- Power ----------
 static void powerOff() {
   // Button-wake standby: radio, sensor and lights off; any grip button wakes.
+  buttonLightFeedback.cancel();
   setLight(0, 0, 0);
   if (imuReady) { imu.writeRegister(0x0D, 0); imu.writeRegister(0x11, 0); imu.writeRegister(0x10, 0); }
   detachInterrupt(digitalPinToInterrupt(PIN_LSM6DS3TR_C_INT1));
@@ -414,6 +423,7 @@ static const char *enterUpdater(uint32_t version) {
 
   // Firmware family: three fast magenta flashes. This deliberate 600 ms wait
   // happens only on this authorized exit, never during ordinary input.
+  buttonLightFeedback.cancel();
   for (uint8_t step = 0; step < WAND_HANDOFF_STEPS; ++step) {
     const WandRgb c = wandHandoffColour(step); setLight(c.r, c.g, c.b); delay(WAND_HANDOFF_STEP_MS);
   }
@@ -622,6 +632,9 @@ void loop() {
   uint32_t now = millis();
   bool buttonChanged = false;
   for (auto &b : buttons) if (b.update(now)) buttonChanged = true;
+  // Independent of the transport and of wake-press action suppression. No wait
+  // for Bluetooth or host processing, and no extra motion/input timers.
+  if (buttonLightFeedback.observe(physicalButtonMask(), now)) refreshLight(now);
   if (buttonChanged) {
     // Ethan: dragging/scrolling only while held. Never replay a previous
     // control's queued motion with the new button state, including failed sends.

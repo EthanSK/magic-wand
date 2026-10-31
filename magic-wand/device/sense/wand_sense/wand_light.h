@@ -31,6 +31,8 @@
 //                              until the receiver confirms its version.
 //   Power (short white cue = every channel, distinct 100 ms phases):
 //     white flashes x2       = the all-button chord: going to standby.
+//     short white response   = a physical button was detected while otherwise
+//                              dark, including the consumed wake press.
 //     dark                   = standby, sleep or a minute offline.
 // Rules for new patterns: steady means a state, animation means a process in
 // progress; faster means more urgent or shorter. Every board-owned pattern
@@ -55,6 +57,33 @@
 static const uint32_t WAND_LOADING_BLINK_MS = 250;
 
 struct WandRgb { uint8_t r, g, b; };
+
+// Ethan: a button press must give feedback even while the Mac is reconnecting
+// or slow. A short local white acknowledgement fills only an otherwise dark
+// light; it never replaces recording red, a mode colour or a loading colour.
+// Observe the debounced physical mask, including the consumed wake press.
+// This changes the LED only: the host still owns button actions and gestures.
+struct WandButtonLightFeedback {
+  static const uint32_t DURATION_MS = 160;
+  uint8_t previousMask = 0;
+  uint32_t started = 0;
+  bool active = false;
+
+  bool observe(uint8_t physicalMask, uint32_t now) {
+    const bool rising = (physicalMask & ~previousMask) != 0;
+    previousMask = physicalMask;
+    if (physicalMask == 7) { const bool changed = active; active = false; return changed; }
+    if (rising) { started = now; active = true; return true; }
+    if (active && wandElapsed(now, started) >= DURATION_MS) { active = false; return true; }
+    return false;
+  }
+  void cancel() { active = false; }
+  WandRgb apply(WandRgb base, uint32_t now) const {
+    if (active && wandElapsed(now, started) < DURATION_MS && !base.r && !base.g && !base.b)
+      return {80, 80, 80};
+    return base;
+  }
+};
 
 // Distinct full-strength colours, ordered so neighbours contrast. It starts
 // with the established update orange. For XU, endSession() shows this same

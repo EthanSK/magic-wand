@@ -128,7 +128,7 @@ test('firmware lights stay in their own colour families and stop like every boar
 
 test('the firmware exposes no open updater and keeps the key off Bluetooth',()=>{
  assert.doesNotMatch(firmware,/^\s*BLEDfu\s+\w+\s*;|\.begin\(\);?\s*\/\/\s*dfu|bledfu\.begin|addService\(bledfu\)/m,'no open DFU control point is declared or started');
- assert.match(firmware,/static const char FIRMWARE\[\] = "wand-sense-8";\nstatic const uint32_t FIRMWARE_NUMBER = 8;/);
+ assert.match(firmware,/static const char FIRMWARE\[\] = "wand-sense-9";\nstatic const uint32_t FIRMWARE_NUMBER = 9;/);
  const number=firmware.match(/static const uint32_t FIRMWARE_NUMBER = (\d+);/)[1];
  assert.equal(firmware.match(/static const char FIRMWARE\[\] = "wand-sense-(\d+)";/)[1],number,'the name and number agree');
  assert.match(firmware,new RegExp(`static const char WAND_IMAGE_MARKER\\[\\] = "WANDIMG1;xiao-nrf52840-sense;${number}";`),'the image marker carries the same number');
@@ -210,4 +210,33 @@ test('pending version is read back before GO and failed results clear only after
  assert.match(firmware,/uint8_t pending\[4\] = \{\};/);
  assert.match(firmware,/wandAcknowledgeFailedResult\(line, length, FIRMWARE_NUMBER, updateTarget, updateResult\)/);
  assert.match(firmware,/wandClearUpdateRecord\(/);
+});
+
+test('local button acknowledgement works without a host and preserves dark idle, colours and standby',()=>{
+ run(`int main(){
+  WandButtonLightFeedback f;
+  const WandRgb dark={0,0,0},red={255,0,0},blue={0,0,89};
+  assert(f.apply(dark,0).r==0);
+  // Physical, debounced wake press counts even when its action is masked.
+  assert(f.observe(1,100));
+  assert(f.apply(dark,100).r>0);
+  assert(f.apply(red,101).r==255 && f.apply(red,101).g==0);
+  assert(f.apply(blue,101).b==89 && f.apply(blue,101).r==0);
+  assert(!f.observe(1,200)); // held input never extends the acknowledgement
+  assert(f.observe(0,260));
+  assert(f.apply(dark,260).r==0); // normal dark idle restored
+  assert(f.observe(2,300));assert(f.apply(dark,300).r>0);
+  f.observe(0,310);assert(f.observe(4,320));
+  assert(f.apply(dark,470).r>0); // later genuine press gets a fresh pulse
+  f.observe(7,475);assert(f.apply(dark,475).r==0); // sleep-chord gaps stay dark
+  f.observe(0,476);f.observe(1,480);f.cancel();assert(f.apply(dark,481).r==0);
+  WandButtonLightFeedback wrapped;
+  wrapped.observe(1,0xfffffff0U);
+  assert(wrapped.apply(dark,30).r>0);
+  assert(wrapped.observe(0,150));assert(wrapped.apply(dark,150).r==0);
+ }`);
+ const loop=firmware.slice(firmware.indexOf('void loop()'));
+ assert(loop.indexOf('buttonLightFeedback.observe(physicalButtonMask(), now)')<loop.indexOf('readCommands();'), 'local feedback precedes host commands');
+ assert.match(firmware,/physicalButtonMask\(\).*buttons\[i\]\.pressed/);
+ assert.match(firmware,/static void powerOff\(\)[\s\S]*?buttonLightFeedback.cancel\(\);\s*setLight\(0, 0, 0\)/);
 });

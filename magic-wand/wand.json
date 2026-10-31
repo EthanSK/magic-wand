@@ -12,15 +12,17 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.155",
-    "receiverBuild": "160",
+    "receiver": "1.2.156",
+    "receiverBuild": "161",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.315",
     "agenticMouseBuild": "321",
-    "persistentImage": "full-20261025a"
+    "persistentImage": "full-20261025a",
+    "senseFirmware": 9
   },
   "status": [
+    "Installed: Sense firmware9 acknowledges a physical button press locally for160 ms when the normal light is dark, including the consumed wake press. Idle darkness, existing mode colours, sleep and pointer timing are unchanged. USB recovery installed and confirmed firmware9 with the key, calibration and settings preserved after a failed wireless transfer. Physical light acceptance is pending; wireless reliability repair remains in progress.",
     "Installed: receiver160 adds a brief fading Back gesture / Forward gesture acknowledgement after a completed native sideways gesture. Cancelled, vertical and zero-net gestures do not acknowledge. Native preview verified the fade, replacement and retained app focus; all255 Wand,17 Control Stones and4 shared checks passed. Recognition feedback is independent of application navigation; scrolling, pointer timing and firmware8 are unchanged. Physical gesture confirmation remains pending while the wand is disconnected.",
     "Installed: receiver159 keeps the quick-click opportunity through120 ms of settling only after fast sweeps averaging at least1500 pointer counts/second. Slower aiming keeps the existing pause. Invisible residual readings cannot rearm another click after a fast click; bounded per-click diagnostics distinguish quick decisions from fallbacks. All254 Wand,17 Control Stones and4 shared checks passed. Installed source, resources and signature match; no firmware was flashed. The wand disconnected as Ethan left, so physical acceptance and reconnect confirmation remain pending. Pointer movement, filtering, sensitivity and saved firmware8 are unchanged.",
     "Installed: receiver158 and the Sense dashboard enforce a persisted ten-minute temporary sensor capture, followed by deletion two hours later. Reconnecting or restarting does not extend the window. Byte caps remain and deliberately saved references are excluded. Both live recorders report matching deadlines; source, resources, Bluetooth and firmware8 were verified. All253 Wand,17 Control Stones and4 shared checks passed, including expiry, restart and cleanup tests. Click and pointer behavior are unchanged.",
@@ -636,6 +638,20 @@
     "heldBrightness": 1.0,
     "scope": "Existing mode hue; its corresponding physical button only. Update, calibration, disconnected and sleep patterns retain their levels.",
     "demoSeconds": 8,
-    "demoRequestFile": "light-demo.request"
+    "demoRequestFile": "light-demo.request",
+    "buttonAcknowledgement": {
+      "introducedInFirmware": 9,
+      "durationMs": 160,
+      "rgb": [
+        80,
+        80,
+        80
+      ],
+      "onlyWhenBaseDark": true,
+      "includesConsumedWakePress": true,
+      "extendsWhileHeld": false,
+      "overridesModeColours": false,
+      "hardwareAcceptance": false
+    }
   }
 }

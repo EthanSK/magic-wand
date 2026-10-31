@@ -53,11 +53,22 @@ The wire channel names are the dashboard's legacy `wand-v1` keys, kept as compat
   negotiated interval, MTU, PHY and merged-frame counts as `Elink …` every 10 s.
 - Takes light (`L`), sensor (`M0` off, `M1` accelerometer about 1.6 Hz, `M2` both at 104 Hz),
   heartbeat (`H`), standby (`Z`) and end (`X`) commands; identity on `?`.
-- Without a host: orange, dark after one minute, button-wake power-off after five minutes;
+- Without a host: pulsing white, dark after one minute, button-wake power-off after five minutes;
   all three buttons flash every colour twice and power off. With the receiver, its canonical
   power policy owns the same choices. Power-off waits until every button is released; any
   one button wakes the board, and a button held at start-up is reported released until let go.
 - Advertises `Magic Wand Sense` with the board ID in its scan response.
+
+Firmware 9 adds a local button acknowledgement: when the normal status light is
+dark, a debounced physical press shows white for 160 ms. This includes the first
+wake press, whose mouse/HUD/speech action is intentionally consumed. The light
+does not wait for Bluetooth or the Mac. Existing mode colours take priority,
+and normal idle darkness returns afterward. The all-button standby chord and
+firmware-update patterns cancel the acknowledgement so their dark phases remain
+dark. This changes only light feedback; it adds no pointer or button-action wait.
+A light acknowledgement proves the firmware detected a press, not that the Mac
+completed its action. No light by itself cannot distinguish missing power from
+a button connection or startup failure.
 
 ## Receiver profile
 

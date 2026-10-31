@@ -1802,3 +1802,21 @@ its contents on a new gesture instead of queueing stale messages. The 850 ms
 visual lifetime is not an input delay. The native preview verified fade-out,
 replacement, readable one-line text and unchanged application focus. Automated
 checks verify the event boundaries; physical gesture acceptance is separate.
+
+## 2026-10-31 — Button acknowledgement must not depend on the host
+
+A later connected-but-idle snapshot cannot explain an earlier reported button
+press with no light. Separate physical edge detection, transport readiness and
+the host's chosen mode colour before attributing the symptom to idle or lag.
+An ordinary connected idle state may legitimately be dark; keep that policy.
+
+The Sense now acknowledges debounced physical rising edges locally with a short
+white overlay only over a dark base colour, including a consumed wake press.
+The base and displayed colour need separate caches so expiry restores darkness
+even without another host light command. Existing coloured modes take priority;
+standby and updater handoff cancel the overlay to retain their dark phases.
+This does not alter button actions, sleep timing or sensor/movement timing.
+Source tests cover expiry, held input, wake masking, cancellation and clock wrap;
+firmware compilation and physical light acceptance remain distinct checks.
+If a press still produces no light, inspect power and the physical button path;
+an acknowledgement alone does not prove the host completed the action.
