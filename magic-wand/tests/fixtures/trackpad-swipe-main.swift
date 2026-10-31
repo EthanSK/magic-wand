@@ -12,18 +12,34 @@ func check(_ ok:Bool,_ name:String,_ detail:@autoclosure()->String=""){if !ok {f
 
 var flat=WandSustainedScroll.Tuning();flat.horizontalGain=1
 let shipped=WandSustainedScroll.Tuning()
-check(shipped.horizontalGain==12.5 && shipped.horizontalMaxRate==3000 && shipped.maxRate==600 && shipped.horizontalGainFrom==8 && shipped.horizontalGainFull==30 && shipped.horizontalGainLevelSlope==0.364,"shipped horizontal gain")
+check(shipped.horizontalGain==12.5 && shipped.horizontalMaxRate==3000 && shipped.maxRate==1200 && shipped.horizontalCurveMaxRate==600 && shipped.horizontalGainFrom==8 && shipped.horizontalGainFull==30 && shipped.horizontalGainLevelSlope==0.364,"shipped horizontal gain")
 // The first installed build (2.5x, within the shared 600 ceiling). Ethan: "maybe five times".
-var previousBuild=shipped;previousBuild.horizontalGain=2.5;previousBuild.horizontalMaxRate=600
+var previousBuild=shipped;previousBuild.horizontalGain=2.5;previousBuild.horizontalMaxRate=600;previousBuild.maxRate=600
+// Receiver 135 (12.5x sideways, 600 page maximum), before the page/sideways split.
+var receiver135=shipped;receiver135.maxRate=600
 check(WandHeldScroll().sustained.tuning.horizontalGain==shipped.horizontalGain,"the receiver's held scroll uses the shipped gain")
 
-// 1. The shared (vertical/diagonal) curve is exactly Ethan's corrected one; the horizontal
-//    curve sits on or above it, is continuous, non-decreasing and bounded by 600.
+// 1. The page (vertical/diagonal) curve keeps Ethan's ordinary mapping min(120, 1.6 x speed)
+//    exactly through 120 deg/s, plateau included, then rises to the larger 1200 maximum.
+//    The horizontal curve sits on or above it, is continuous, non-decreasing and bounded by 3000.
 func original(_ p:Double)->Double {
     let o=min(120,max(0,p)*1.6)
     guard p>120 else{return o}
-    let e=min(1,(p-120)/120);return o+(600-o)*e*e
+    let e=min(1,(p-120)/120);return o+(1200-o)*e*e
 }
+let page135=WandSustainedScroll(tuning:receiver135)
+for peak in stride(from:0.0,through:1000.0,by:0.25) {
+    let now=WandSustainedScroll().linesPerSecond(peak:peak),old=page135.linesPerSecond(peak:peak)
+    if peak<=120 {check(now==old && now==min(120,peak*1.6),"ordinary page speed unchanged at \(f(peak))","\(now) vs \(old)")}
+    else {check(now>=old && now<=2*old+1e-9,"stronger page maximum above 120 deg/s at \(f(peak))","\(now) vs \(old)")}
+}
+check(WandSustainedScroll().linesPerSecond(peak:240)==2*page135.linesPerSecond(peak:240),"page maximum doubled")
+// Sideways swipes keep exactly the Receiver 135 strength within 20 degrees of level.
+for peak in stride(from:0.0,through:1000.0,by:0.25) {for slope in [0.0,0.2,0.364,0.45,0.55] {
+    let now=WandSustainedScroll().horizontalLinesPerSecond(peak:peak,slope:slope),old=WandSustainedScroll(tuning:receiver135).horizontalLinesPerSecond(peak:peak,slope:slope)
+    if slope<=0.364 {check(now==old,"sideways swipe strength unchanged at \(f(peak)) slope \(slope)","\(now) vs \(old)")}
+    else {check(now>=old && now>=WandSustainedScroll().linesPerSecond(peak:peak),"off-level sideways never below page speed at \(f(peak))")}
+}}
 let curve=WandSustainedScroll()
 var previous=0.0
 for peak in stride(from:0.0,through:1000.0,by:0.25) {

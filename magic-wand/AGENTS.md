@@ -133,9 +133,9 @@ through their build/check commands; never claim an illustration is physical veri
 - Control V3 page scrolling follows Ethan’s “drag up or down or left or right”: a straight stroke chooses velocity, holding still continues at that speed, another deliberate stroke changes direction or speed without release, and release stops. Do not re-enable circular page scrolling in V3. Preserve V2 and the independent HUD-button review gestures. User-requested — 2026-10-19.
 - Ethan: “I just wanted to add like extra sensitivity at the faster speeds. Did you have to change like the normal behavior? It just doesn't feel as good” Extra V3 scroll speed applies only above the original mapping's whole ordinary range, including its 120 lines/s plateau; ordinary strokes keep the exact original speed. User-requested — 2026-10-30.
 
-## Opus for UX
+## Opus for UX taste
 
-- Ethan: “Do any UX related stuff with Opus actually and bug fixing and stuff you do yourself and like testing and installing.” Use Opus for Magic Wand UX implementation; Codex owns bug fixes, verification and installation. Announce each use with “Opus for UX” and say why it is being used. User-requested — 2026-10-19.
+- Ethan: “anything that is not UX taste related you implement yourself because Opus is taking too long.” Codex implements functional behaviour, bug fixes, tests and installation. Use Opus only for UX taste decisions, such as visual composition and style; routine behaviour and mechanical UI implementation stay with Codex. This replaces the broader Opus-for-UX implementation rule. User-requested — 2026-10-31.
 - Ethan: “Can you just stop using Opus and do it yourself? I'm sick of waiting for this shit.” Use Codex directly for wand 3D model design, CAD implementation and verification unless Ethan explicitly requests Opus again. This replaces the earlier same-day Opus-for-models preference. User-requested — 2026-10-24.
 
 ## Current contextual hold and sleep behaviour

@@ -1089,20 +1089,26 @@ final class WandSustainedScroll {
         /// extra rate starts flat and grows with the square of the excess,
         /// reaching maxRate at highSpeedFull.
         var highSpeedFrom=120.0,highSpeedFull=240.0
-        /// Wheel lines per second (ten points each): 6,000 points per second.
-        var maxRate=600.0
+        /// Page (vertical and diagonal) wheel lines per second at highSpeedFull.
+        /// Ethan, 2026-10-30: the maximum page scroll was still "not enough",
+        /// with no change asked to the normal range: 600 became 1200. Everything up
+        /// to highSpeedFrom, including the 120 plateau, is unchanged.
+        var maxRate=1200.0
+        /// The extension top under the horizontal gain, kept at the validated
+        /// Receiver 135 value so sideways swipes keep exactly that strength.
+        var horizontalCurveMaxRate=600.0
         /// Ethan, 2026-10-30, on the native Back/Forward edge peek: "it's just
         /// not sensitive enough when doing those trackpad swipes". A stroke that
         /// scrolls only horizontally gets up to this multiple of the vertical
-        /// rate above, never beyond horizontalMaxRate. Vertical and diagonal
-        /// strokes keep that curve exactly. It scales velocity only: same timing,
+        /// rate above, never beyond horizontalMaxRate, and never below the page
+        /// rate. Vertical and diagonal strokes keep the page curve exactly. It scales velocity only: same timing,
         /// no buffer, no catch-up. The receiving app still decides scroll or history.
         /// After the 2.5x build worked in Chrome but needed "extreme swipe radii",
         /// Ethan asked for "maybe five times" more: 12.5, and a ceiling five times
         /// the shared maxRate, so stronger strokes are not clamped back to 600.
         var horizontalGain=12.5
         /// Horizontal-only wheel lines per second (30,000 points per second).
-        /// The shared maxRate for vertical and diagonal is unchanged.
+        /// Separate from the page maxRate for vertical and diagonal.
         var horizontalMaxRate=3000.0
         /// Degrees per second: the extra horizontal rate eases in (smoothstep)
         /// from none at horizontalGainFrom to all of it at horizontalGainFull, so
@@ -1195,25 +1201,29 @@ final class WandSustainedScroll {
     }
     /// Wheel lines per second for a stroke's representative speed. Continuous
     /// and rising; it sets velocity only, so it adds no delay or catch-up.
-    func linesPerSecond(peak:Double)->Double {
+    func linesPerSecond(peak:Double)->Double {curve(peak:peak,top:tuning.maxRate)}
+    /// The original mapping up to highSpeedFrom, then rising to `top`.
+    private func curve(peak:Double,top:Double)->Double {
         let ordinary=min(tuning.ordinaryMaxRate,max(0,peak)*linesPerDegree)
-        guard peak>tuning.highSpeedFrom,tuning.highSpeedFull>tuning.highSpeedFrom,tuning.maxRate>ordinary else{return ordinary}
+        guard peak>tuning.highSpeedFrom,tuning.highSpeedFull>tuning.highSpeedFrom,top>ordinary else{return ordinary}
         let excess=min(1,(peak-tuning.highSpeedFrom)/(tuning.highSpeedFull-tuning.highSpeedFrom))
-        return ordinary+(tuning.maxRate-ordinary)*excess*excess
+        return ordinary+(top-ordinary)*excess*excess
     }
     /// Wheel lines per second for a stroke whose output is horizontal only.
     /// `slope` is |vertical/horizontal| of the stroke itself. Never below the
-    /// vertical rate for the same speed and never above horizontalMaxRate; continuous and
-    /// non-decreasing in speed, so it changes no timing and adds no catch-up.
+    /// page rate for the same speed (so it is continuous with diagonal output at
+    /// the snap boundary) and never above horizontalMaxRate (unless the page
+    /// rate is); non-decreasing in speed, so it changes no timing and adds no catch-up.
     func horizontalLinesPerSecond(peak:Double,slope:Double=0)->Double {
-        let ordinary=linesPerSecond(peak:peak)
-        guard peak.isFinite,!slope.isNaN,tuning.horizontalGain>1 else{return ordinary}
+        let page=linesPerSecond(peak:peak)
+        guard peak.isFinite,!slope.isNaN,tuning.horizontalGain>1 else{return page}
+        let ordinary=curve(peak:peak,top:tuning.horizontalCurveMaxRate)
         let span=tuning.horizontalGainFull-tuning.horizontalGainFrom
         let rise=span>0 ? min(1,max(0,(peak-tuning.horizontalGainFrom)/span)) : (peak>=tuning.horizontalGainFull ? 1:0)
         let edge=tuning.axisSnap-tuning.horizontalGainLevelSlope
         let level=edge>0 ? min(1,max(0,(tuning.axisSnap-abs(slope))/edge)) : (abs(slope)<tuning.axisSnap ? 1:0)
         let gain=1+(tuning.horizontalGain-1)*rise*rise*(3-2*rise)*level
-        return max(ordinary,min(max(ordinary,tuning.horizontalMaxRate),ordinary*gain))
+        return max(page,ordinary,min(max(ordinary,tuning.horizontalMaxRate),ordinary*gain))
     }
     private func apply(){
         // Only an output that is purely horizontal is boosted; a diagonal or

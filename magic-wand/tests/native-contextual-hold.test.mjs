@@ -60,6 +60,7 @@ final class Harness {
  static var wheelPairs:[(Int32,Int32)]=[]
  func finishNativeScroll(cancelled:Bool){}
  func postNativeScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
+ func postHeldScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
  ${['beginMouseButtonHold','probeHoldTarget','restoreMouseAfterScroll','finishScroll','finishMouseButtonHold','reconcileMouseButtonHold','handleRaw'].map(method).join('\n')}
 }
