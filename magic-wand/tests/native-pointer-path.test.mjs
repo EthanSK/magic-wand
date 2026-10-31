@@ -24,6 +24,7 @@ test("direct Sense pointer keeps normal motion, quiet stopping, units, axes and 
 // stop-to-click single-shot; the repeat option stays off.
 test("the receiver's ordinary stop-to-click is single-shot", () => {
   const main = readFileSync(fileURLToPath(new URL("../receiver/Sources/main.swift", import.meta.url)), "utf8");
-  assert.match(main, /\n    let dwell=WandDwellClick\(\)\n/);
-  assert.doesNotMatch(main, /WandDwellClick\(repeatInterval/);
+  const constructor = main.match(/\blet dwell\s*=\s*WandDwellClick\(([^)]*)\)/);
+  assert.ok(constructor, "the live receiver creates its ordinary dwell controller");
+  assert.doesNotMatch(constructor[1], /\brepeatInterval\s*:/, "new click modes must not enable repeating clicks");
 });

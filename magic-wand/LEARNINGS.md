@@ -1678,3 +1678,15 @@ extra dormant device code in the space-constrained saved Puck program.
 Focused checks cover the default and opt-in paths, tap repetition, double/triple
 shortcuts, real scroll phases and the unchanged stillness click. Installed
 readback confirms the flag is off; physical preference remains a separate check.
+
+## 2026-10-31 — Faster clicks need a confirmed stop, not a quiet frame
+
+Keep the normal 200 ms pause for small or slow aiming. The optional fast stop
+classifier uses actual cursor travel to recognise a coherent brisk move, then
+requires multiple fresh quiet samples spanning16 ms; a lone zero frame, a
+radio gap or an overdue timer cannot fast-click. A slow final approach drops
+back to the ordinary pause. After scrolling, demand rest and a new pointer
+move before using the shortcut, so release motion cannot earn it. Pointer
+filtering and delivery are separate and unchanged. Replaying the saved slow
+reference produced identical clicks with no accelerated click in the labelled
+slow interval; synthetic cases cover the positive fast path and nearby guards.
