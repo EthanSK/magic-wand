@@ -1912,3 +1912,13 @@ competed with the live receiver and the user's other apps. Keep
 direct invocation. Verify the running test child count, not merely the shell's
 PATH. This avoids test-induced load; it does not identify the cause of an earlier
 unrecorded pointer jump.
+
+## 2026-10-31 — Separate a successful wireless write from recovery proof
+
+Receiver166 completed a real wireless update from firmware9 to firmware11:
+149,688 bytes, one packet per receipt, full validation, restart and exact-version
+Bluetooth readback. The transfer took about eight minutes; calibration, settings
+and the private update key were preserved. This proves that complete transfer,
+not physical recovery after forced power loss or a dropped link. Reconnect and
+lost-receipt recovery remain covered by the fake-transport tests, not deliberate
+hardware fault injection.
