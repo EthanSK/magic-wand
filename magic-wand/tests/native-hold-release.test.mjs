@@ -18,6 +18,7 @@ final class CGEvent {var location=CGPoint.zero;init?(source:Int?){ };func post(t
 final class Rest {var activated=false,stopped=0;func pointerActivated(){activated=true};func pointerStopped(){activated=false;stopped+=1}}
 final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
+ var tripleClick=WandTripleClick(),pendingRecenter:Timer?
  var scrollFollowBefore=false
  var queuedExitClicks:[CGPoint]=[]
  func cancelMouseExitClick(){}
@@ -53,7 +54,7 @@ final class Harness {
  func postHeldScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  func postSustainedScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
- ${['beginMouseButtonHold','restoreMouseAfterScroll','deviceFollowChanged','finishScroll','finishMouseButtonHold','reconcileMouseButtonHold','handleRaw','finishHorizontalStrokeIfNeeded'].map(method).join('\n')}
+ ${['beginMouseButtonHold','restoreMouseAfterScroll','deviceFollowChanged','finishScroll','finishMouseButtonHold','reconcileMouseButtonHold','handleRaw','consumeEarlyHorizontalIntent','finishHorizontalStrokeIfNeeded'].map(method).join('\n')}
 }
 let h=Harness();precondition(h.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 let now=ProcessInfo.processInfo.systemUptime

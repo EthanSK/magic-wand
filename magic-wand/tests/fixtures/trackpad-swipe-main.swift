@@ -120,7 +120,7 @@ for (name,hand,delivery,release) in swipes {
         let base=run(flat,hand,delivery,sign:sign,seed:seed,release:release)
         let boosted=run(shipped,hand,delivery,sign:sign,seed:seed,release:release)
         let firstBase=base.first({p,s in p != 0 || s != 0}) ?? 99,firstBoosted=boosted.first({p,s in p != 0 || s != 0}) ?? 99
-        check(firstBoosted<=firstBase && firstBoosted>=0.22,label+" first line no later, never before the hold decision","\(f(firstBoosted*1000)) vs \(f(firstBase*1000)) ms")
+        check(firstBoosted<=firstBase,label+" first line no later under the same early-intent policy","\(f(firstBoosted*1000)) vs \(f(firstBase*1000)) ms")
         check(boosted.total.s==0 && base.total.s==0,label+" horizontal only","\(boosted.total.s)")
         check(boosted.ticks.allSatisfy{Double($0.p)*sign>=0},label+" never the wrong way")
         // At most 50 ms at the horizontal ceiling, as the shared timer already allows.

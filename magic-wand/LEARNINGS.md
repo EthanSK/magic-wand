@@ -1620,3 +1620,21 @@ The next physical attempt prepared in about 12 ms and completed the firmware-7-t
 wireless update, including Bluetooth reconnection and durable result confirmation.
 That proves this tested path; it does not establish which individual operation
 caused the earlier gap or prove recovery after an interrupted transfer.
+
+## 2026-10-31 — Early sideways intent must own the short release
+
+Five clean recorded swipes first emitted native scroll events 224–230 ms after
+the held packet arrived. The existing 220 ms hold gate, followed by the output
+tick, explains that start delay; it does not establish a stop-classifier failure.
+The receiver now permits only a clear first horizontal stroke to qualify early,
+after the target is resolved to scrolling. Ordinary taps, page scrolling and
+dragging retain the original gate, with no new pointer delay.
+
+Early qualification must also consume the press through release. Otherwise a
+sub-220 ms swipe can be cancelled as a tap or join exit-click, double-click or
+triple-click handling. Clear those recognizers at qualification, suppress the
+endpoint click, preserve completed-scroll follow restoration, and reset on the
+next hold. Native phase, release, drag, page, tremor and knock regressions passed;
+26 short context presses rejected the early path in approximate recorded-input
+replay. Missing historical calibration and gravity timing limit that replay;
+faster physical Back/Forward and abrupt-stop acceptance remain unverified.

@@ -1155,6 +1155,7 @@ final class WandSustainedScroll {
     private let linesPerDegree:Double
     init(linesPerDegree:Double=1.6,tuning:Tuning=Tuning()){self.linesPerDegree=linesPerDegree;self.tuning=tuning}
     var started:Bool {velocityX != 0 || velocityY != 0}
+    var horizontalStrokeActive:Bool {stroking && velocityX != 0 && velocityY == 0}
     func reset(now:Double=0){
         velocityX=0;velocityY=0;summary=Summary();fractionX=0;fractionY=0;initialX=0;initialY=0;lastTick=now;horizontalBoundary=nil
         rateX=0;rateY=0;averaging=false;clock=0;lastArrival=nil
@@ -1357,6 +1358,24 @@ final class WandSustainedScroll {
     }
 }
 
+/// Conservative evidence for a clear sideways flick before the normal hold
+/// deadline. Uses the actual angular stream and the existing stroke classifier;
+/// peak speed alone would accept the brief switch knocks seen in the private
+/// "abrupt-stop swipes" reference. Ordinary taps keep their duration rule.
+struct WandEarlyHorizontalIntent {
+    private(set) var accepted=false
+    private var x=0.0,y=0.0,path=0.0,largest=0.0,strongSamples=0
+    mutating func sample(x dx:Double,y dy:Double,dt:Double,horizontal:Bool,eligible:Bool)->Bool {
+        guard !accepted,dx.isFinite,dy.isFinite,dt>0,dt<=0.05 else{return false}
+        let step=hypot(dx,dy)*dt
+        x+=dx*dt;y+=dy*dt;path+=step;largest=max(largest,step)
+        if abs(dx)>=40 {strongSamples+=1}
+        guard eligible,horizontal,abs(x)>=4,abs(y)<abs(x)*0.577,
+              abs(x)>=path*0.85,strongSamples>=4,largest<=path*0.35 else{return false}
+        accepted=true;return true
+    }
+}
+
 /// V2 changes only a mouse button hold. Short taps are still interpreted by the
 /// existing device callback; a used/long hold must never emit its old end click.
 final class WandHeldScroll {
@@ -1375,6 +1394,8 @@ final class WandHeldScroll {
     private var reverseSegments=0
     private let circle:WandCircularScroll
     private var started=0.0,confirmed=0.0,fraction=0.0,moved=false,dropClick=false,droppingClick=false
+    private var earlyIntent=WandEarlyHorizontalIntent()
+    var earlyHorizontal:Bool {earlyIntent.accepted}
     // Reuse the existing mouse button tap/hold cutoff; do not add a movement buffer.
     let holdSeconds:Double
     private let linesPerDegree:Double
@@ -1390,7 +1411,7 @@ final class WandHeldScroll {
         tuning.minDuration=0.06;tuning.window=1.0;tuning.idleEnd=0.35
         circle=WandCircularScroll(tuning:tuning)
     }
-    func reset(){directionalTravel=0;sustained.reset();sustaining=false;active=false;dragging=false;resolving=false;circular=false;horizontal=false;scrollDirection=0;directionTravel=0;directionTravelX=0;sampleTime=0;winding=0;windingToScroll=0;reverseTurn=0;reverseAt=0;reverseSegments=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
+    func reset(){earlyIntent=WandEarlyHorizontalIntent();directionalTravel=0;sustained.reset();sustaining=false;active=false;dragging=false;resolving=false;circular=false;horizontal=false;scrollDirection=0;directionTravel=0;directionTravelX=0;sampleTime=0;winding=0;windingToScroll=0;reverseTurn=0;reverseAt=0;reverseSegments=0;circle.reset();fraction=0;moved=false;dropClick=false;droppingClick=false}
     func begin(now:Double,scrollable:Bool=true,sustain:Bool=false,resolving:Bool=false){reset();active=true;started=now;confirmed=now;self.scrollable=scrollable;self.resolving=resolving && scrollable;sustaining=sustain;sustained.reset(now:now)}
     // A lease is renewed only by actual button samples, never by a timer.
     // Stop rather than keep a native drag or scroll alive after telemetry loss.
@@ -1422,7 +1443,7 @@ final class WandHeldScroll {
     @discardableResult
     func end(now:Double)->Bool {
         guard active else{return false}
-        active=false;dragging=false;sustained.reset();dropClick=moved || now-started>=0.22
+        active=false;dragging=false;sustained.reset();dropClick=moved || earlyHorizontal || now-started>=0.22
         fraction=0;circle.reset();circular=false;return dropClick
     }
     func sample(x:Double=0,y:Double,dt:Double,now:Double?=nil)->Int32 {
@@ -1430,8 +1451,17 @@ final class WandHeldScroll {
         guard active,scrollable,x.isFinite,y.isFinite,dt>0,dt<=0.05 else{return 0}
         // V3 measures a stroke from its first held reading, including the readings
         // before the 220 ms tap/hold decision. Only continuation() emits wheel
-        // lines, and it still waits for that decision, so taps never scroll.
-        if sustaining {sustained.sample(x:x,y:y,dt:dt,now:now);return 0}
+        // lines. A clear sideways flick can earn an earlier decision; ordinary
+        // taps and every page direction keep the existing hold deadline.
+        if sustaining {
+            sustained.sample(x:x,y:y,dt:dt,now:now)
+            if let now, !qualified(now:now) {
+                _=earlyIntent.sample(x:x,y:y,dt:dt,
+                    horizontal:sustained.horizontalStrokeActive && sustained.summary.strokes == 1,
+                    eligible:!resolving && !dragging)
+            }
+            return 0
+        }
         guard now.map({qualified(now:$0)}) ?? true else{return 0}
         sampleTime=now ?? sampleTime+dt
         // Ethan's "micro circles": smaller geometry below retains the same
@@ -1490,7 +1520,10 @@ final class WandHeldScroll {
         return lines
     }
     func continuation(now:Double,pageUnitsPerLine:Double=1)->(x:Int32,y:Int32){
-        guard active,sustaining,scrollable,qualified(now:now),!stale(now:now) else{return(0,0)}
+        guard active,sustaining,scrollable,!stale(now:now) else{return(0,0)}
+        // Early intent never opens the page-scrolling lane. Once its horizontal
+        // stroke ends, tick() is already silent until another real stroke.
+        guard qualified(now:now) || (earlyHorizontal && sustained.velocityX != 0 && sustained.velocityY == 0) else{return(0,0)}
         let result=sustained.tick(now:now,pageUnitsPerLine:pageUnitsPerLine)
         if result.x != 0 || result.y != 0 {moved=true}
         return result
