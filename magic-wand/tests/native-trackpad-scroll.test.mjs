@@ -79,6 +79,8 @@ final class Harness {
  let screenshot=WandScreenshotGesture()
  var posted:[CGEvent]=[]
  var nativeScroll=WandNativeScrollGesture(),actionPause=PauseStub()
+ final class Rest {func pointerStopped(){}};let restDetection=Rest()
+ func scheduleDwell(){}
  var scrollActive=false,scrollAnchor:CGPoint?,circleAnchor:CGPoint?,scrollWatchdog:Timer?,scrollPostedX=0,scrollPostedY=0
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?
  let heldScroll=WandHeldScroll();var controlVersion=WandControlVersion.sustainedV3,heldScrollDiagnostics=false,buttons=0

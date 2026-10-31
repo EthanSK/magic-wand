@@ -19,6 +19,7 @@ final class Harness {
  func cancelMouseExitClick(){}
  func scheduleMouseExitClick(at point:CGPoint){queuedExitClicks.append(point);dwell.follow(false)}
  var actionPause=PauseStub()
+ final class Rest {func pointerStopped(){}};let restDetection=Rest()
  func finishNativeScroll(cancelled:Bool){}
 
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}

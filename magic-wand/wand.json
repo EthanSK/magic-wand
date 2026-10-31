@@ -12,8 +12,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.141",
-    "receiverBuild": "146",
+    "receiver": "1.2.142",
+    "receiverBuild": "147",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.311",
@@ -21,6 +21,7 @@
     "persistentImage": "full-20261025a"
   },
   "status": [
+    "Installed: receiver1.2.142 build147 adds a long mouse-button hold begun in follow mode, without a scroll gesture, to stop follow on release without clicking. Existing taps, scrolling, dragging and screenshot shortcuts remain unchanged. Bluetooth reconnected; local checks pass. Physical quiet-hold acceptance is pending.",
     "Installed: receiver 1.2.141 build146 increases page-scroll output from1.3x to1.7x, including low speeds. The flick-and-hold curve, timing, horizontal swipe strength, pointer filter and both click behaviors are unchanged. Bluetooth reconnected and focused checks passed; physical sensitivity acceptance is pending.",
     "Receiver1.2.138 build143: page scrolling is30% more sensitive, with the existing gentle low-speed curve, cumulative flicks and1560 output lines/second ceiling. Sideways swipes, pointer motion and stroke timing are unchanged. Physical sensitivity acceptance pending.",
     "Installed: Agentic Mouse 1.0.310 build 316 adds Brightness to the home HUD\u2019s second layer, between Utility and the unchanged third-layer Zoom. Build 315\u2019s restored dragging is retained. The installed app and rendered layout were checked; physical Brightness use remains unverified.",
@@ -230,7 +231,11 @@
         ],
         [
           "Tap while following",
-          "Stop following without clicking"
+          "Stop following and click after the double/triple-click window"
+        ],
+        [
+          "Hold without scrolling while following",
+          "Turn off follow without clicking on release"
         ],
         [
           "Hold",
