@@ -48,12 +48,12 @@ using namespace Adafruit_LittleFS_Namespace;
 
 // Numeric firmware versions from 6 on; earlier images used dated letters
 // (the previous one was wand-sense-20261029e). Wireless updates only move up.
-static const char FIRMWARE[] = "wand-sense-7";
-static const uint32_t FIRMWARE_NUMBER = 7;
+static const char FIRMWARE[] = "wand-sense-8";
+static const uint32_t FIRMWARE_NUMBER = 8;
 // The image's own statement of its board and number. The receiver refuses a
 // package without exactly one, or for another board or number. Change the
 // number with FIRMWARE_NUMBER.
-static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;7";
+static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;8";
 static const uint32_t DEBOUNCE_MS = 10;            // Same as the checked diagnostic sketch.
 static const uint32_t HOST_TIMEOUT_MS = 2000;      // Host heartbeat is every 500 ms.
 static const uint32_t HEARTBEAT_FRAME_MS = 250;    // Liveness while the sensor is quiet.
@@ -79,6 +79,7 @@ static uint32_t hostAt = 0, offlineSince = 0, lastFrameAt = 0, lastBatteryAt = 0
 static bool stateDirty = false, sleepRequested = false, localDark = false; // sleepRequested: host Z only.
 static bool loadingBlink = false;                 // Offline after XU: the receiver is restarting; cycle the loading colours.
 static uint32_t loadingSince = 0;
+static uint32_t notReadySince = 0; // LED phase only: never used for input, link or power deadlines.
 static uint8_t chordPhase = 0;                     // Local all-three warning when no host owns the board.
 static uint32_t chordAt = 0;
 static bool wokeFromOff = false;
@@ -380,9 +381,10 @@ static void endSession(bool restarting) {
   if (session == NONE) return;
   nonceValid = false; // A challenge belongs to the session that asked for it.
   session = NONE; offlineSince = millis(); localDark = false; chordPhase = 0;
-  loadingBlink = restarting; loadingSince = offlineSince;
+  loadingBlink = restarting; loadingSince = offlineSince; notReadySince = offlineSince;
   setIMUMode(0); clearMerged(); frameWanted = false;
-  setLight(ORANGE[0], ORANGE[1], ORANGE[2]); // Disconnected orange, as on the Puck; also the first loading colour.
+  const WandRgb colour = restarting ? WAND_LOADING_COLOURS[0] : WAND_NOT_READY_WHITE;
+  setLight(colour.r, colour.g, colour.b); // XU keeps its colour cycle; ordinary disconnection is neutral white.
 }
 
 extern "C" void bootloader_util_app_start(uint32_t start_addr);
@@ -561,7 +563,8 @@ void setup() {
   pinMode(CHARGE_STATUS, INPUT_PULLUP);
   analogReference(AR_INTERNAL_3_0);
   analogReadResolution(12);
-  setLight(ORANGE[0], ORANGE[1], ORANGE[2]);
+  notReadySince = now;
+  setLight(WAND_NOT_READY_WHITE.r, WAND_NOT_READY_WHITE.g, WAND_NOT_READY_WHITE.b);
 
   // 500 deg/s: measured fast sweeps clipped at the Puck's 245 deg/s setting
   // (286.7 deg/s full scale). The host still converts to Puck counts.
@@ -670,7 +673,7 @@ void loop() {
   if (session == NONE) {
     // The Puck power policy's offline behaviour, kept on the board itself.
     // Any grip edge re-arms the offline timers and shows the disconnected light again.
-    if (stateDirty) { stateDirty = false; offlineSince = now; if (localDark && !chordPhase) { localDark = false; setLight(ORANGE[0], ORANGE[1], ORANGE[2]); } }
+    if (stateDirty) { stateDirty = false; offlineSince = now; if (localDark && !chordPhase) { localDark = false; notReadySince = now; setLight(WAND_NOT_READY_WHITE.r, WAND_NOT_READY_WHITE.g, WAND_NOT_READY_WHITE.b); } }
     if (!chordPhase && buttonMask() == 7) { chordPhase = 1; chordAt = now; loadingBlink = false; verifyBlink = false; }
     if (chordPhase) {
       // All three: flash every colour twice (100 ms steps), then sleep once released.
@@ -685,6 +688,11 @@ void loop() {
       // Loop-paced (it wakes at least every 5 ms): no timer, no wait, no session.
       // setLight() writes the LED only when the colour changes (every 250 ms).
       const WandRgb colour = wandLoadingColour(now, loadingSince);
+      setLight(colour.r, colour.g, colour.b);
+    } else if (!localDark) {
+      // Neutral not-ready indication: boot, plain X, lost link or host timeout.
+      // The existing one-minute dark, five-minute sleep and all input timing win.
+      const WandRgb colour = wandNotReadyColour(now, notReadySince);
       setLight(colour.r, colour.g, colour.b);
     }
   }

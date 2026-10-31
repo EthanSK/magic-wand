@@ -469,11 +469,52 @@ struct WandSenseUpdateSetup {
     mutating func reset() { keyBoardID = nil }
 }
 
+// ---------- Background preparation ----------
+/// Owns one disk/key read at a time. State is main-thread confined; the worker
+/// receives immutable inputs and delivers only its result back to the main queue.
+final class WandSenseUpdatePreparation {
+    struct Prepared { let package: WandSenseDFUPackage; let key: SymmetricKey }
+    struct Timing { let startedMS: Double; let endedMS: Double }
+    typealias Enqueue = (@escaping () -> Void) -> Void
+    private let work: Enqueue, deliver: Enqueue
+    private let clock: () -> Double
+    private var active: UUID?
+    private var cancelled = false
+    var busy: Bool { active != nil }
+
+    init(work: @escaping Enqueue = { job in DispatchQueue.global(qos: .userInitiated).async(execute: DispatchWorkItem(block: job)) },
+         deliver: @escaping Enqueue = { job in DispatchQueue.main.async(execute: job) },
+         clock: @escaping () -> Double = { ProcessInfo.processInfo.systemUptime * 1000 }) {
+        self.work = work; self.deliver = deliver; self.clock = clock
+    }
+    /// Cancellation keeps the slot occupied until the old worker returns, so
+    /// reconnects cannot accumulate overlapping disk reads or reuse old results.
+    func cancel() { if active != nil { cancelled = true } }
+    @discardableResult
+    func start(load: @escaping () throws -> Prepared,
+               complete: @escaping (Result<Prepared, Error>, Timing, Bool) -> Void) -> Bool {
+        guard active == nil else { return false }
+        let token = UUID(); active = token; cancelled = false
+        work { [self] in
+            let start = clock()
+            let result = Result { try load() }
+            let timing = Timing(startedMS: start, endedMS: clock())
+            deliver { [self] in
+                guard active == token else { return }
+                let valid = !cancelled
+                active = nil; cancelled = false
+                complete(result, timing, valid)
+            }
+        }
+        return true
+    }
+}
+
 // ---------- Flow ----------
 /// The whole update as a pure state machine; WandReceiverSenseUpdate.swift
 /// performs its effects. Each state has one way forward and fails closed.
 struct WandSenseUpdateFlow: Equatable {
-    enum State: String { case idle, challenging, authorizing, handingOver, transferring, restarting, verifying, reconciling, done, failed }
+    enum State: String { case idle, preparing, challenging, authorizing, handingOver, transferring, restarting, verifying, reconciling, done, failed }
     enum Effect: Equatable { case send(String), beginTransfer, report }
     private(set) var state = State.idle
     private(set) var detail = ""
@@ -483,6 +524,20 @@ struct WandSenseUpdateFlow: Equatable {
 
     var busy: Bool { ![.idle, .done, .failed].contains(state) }
 
+    mutating func prepare(boardID: String, target: Int) -> [Effect] {
+        guard !busy else { return [] }
+        self.boardID = boardID; self.target = target; state = .preparing; detail = ""
+        return [.report]
+    }
+    mutating func prepared(boardID: String, target: Int) -> [Effect] {
+        guard state == .preparing, self.boardID == boardID, self.target == target else { return [] }
+        state = .challenging
+        return [.send(WandSenseUpdateAuth.challenge), .report]
+    }
+    mutating func preparationFailed(_ reason: String) -> [Effect] {
+        guard state == .preparing else { return [] }
+        return fail(reason)
+    }
     /// Preflight already passed for this board and package.
     mutating func begin(boardID: String, target: Int) -> [Effect] {
         guard !busy else { return [] }
@@ -549,11 +604,12 @@ struct WandSenseUpdateFlow: Equatable {
     mutating func connectionLost() -> [Effect] {
         // Losing the link is expected once the board hands over.
         if state == .reconciling { return fail(detail + " Acknowledgement was interrupted; the update result is still unconfirmed.") }
-        guard state == .challenging || state == .authorizing else { return [] }
+        guard state == .preparing || state == .challenging || state == .authorizing else { return [] }
         return fail("The wand disconnected before authorizing the update. Its current firmware keeps running.")
     }
     mutating func timedOut() -> [Effect] {
         switch state {
+        case .preparing: return fail("Preparing the update timed out. Its current firmware keeps running.")
         case .challenging, .authorizing: return fail("The wand did not answer the update request. Its current firmware keeps running.")
         case .reconciling: return fail(detail + " The wand did not acknowledge clearing the update result.")
         case .restarting, .verifying: return fail("The wand did not reconnect after the transfer. Check the light; reset the wand or use USB recovery if it stays in updater mode.")

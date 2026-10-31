@@ -82,14 +82,14 @@
     "receiver/Sources/WandSenseUpdate.swift": {
       "importedFrom": "wand-sense-update.swift",
       "transform": "verbatim",
-      "originalSha256": "b0f2900bb5527fed1817d7ee95920265b3912063afd2f6c8747f673417139d58",
-      "publicSha256": "b0f2900bb5527fed1817d7ee95920265b3912063afd2f6c8747f673417139d58"
+      "originalSha256": "62af2c763da11bb29d92247121b840beadfe01e2a23e302c6c544cb3bd6335c1",
+      "publicSha256": "62af2c763da11bb29d92247121b840beadfe01e2a23e302c6c544cb3bd6335c1"
     },
     "receiver/Sources/WandReceiverSenseUpdate.swift": {
       "importedFrom": "wand-receiver-sense-update.swift",
       "transform": "verbatim",
-      "originalSha256": "f534352f82c0a0b8157da9da0f262e1d5207d78d645f37b9681866a09fa6da95",
-      "publicSha256": "f534352f82c0a0b8157da9da0f262e1d5207d78d645f37b9681866a09fa6da95"
+      "originalSha256": "b1b6fe14d4f81df39366e20bebf92e2538ab59dc37dbf100058b8c9b42efa93b",
+      "publicSha256": "b1b6fe14d4f81df39366e20bebf92e2538ab59dc37dbf100058b8c9b42efa93b"
     },
     "receiver/Sources/WandSenseLink.swift": {
       "importedFrom": "wand-sense-link.swift",
@@ -115,11 +115,53 @@
       "originalSha256": "4306fd56dad52de8cb92afb098e381d74bfe6ee8e159e682effe804ffd13f154",
       "publicSha256": "4306fd56dad52de8cb92afb098e381d74bfe6ee8e159e682effe804ffd13f154"
     },
+    "device/sense/wand_sense/wand_sense.ino": {
+      "importedFrom": "sense/wand_sense.ino",
+      "transform": "verbatim",
+      "originalSha256": "32a315bb5adc88165aa3df6eabd02388f4aa932dafe2bf0b86f3046f0416cb86",
+      "publicSha256": "32a315bb5adc88165aa3df6eabd02388f4aa932dafe2bf0b86f3046f0416cb86"
+    },
+    "device/sense/wand_sense/wand_time.h": {
+      "importedFrom": "sense/wand_time.h",
+      "transform": "verbatim",
+      "originalSha256": "36fa9c0980d18fe5cec49757585ae81fe9b443507bf933874e1b9f845110302e",
+      "publicSha256": "36fa9c0980d18fe5cec49757585ae81fe9b443507bf933874e1b9f845110302e"
+    },
+    "device/sense/wand_sense/wand_merge.h": {
+      "importedFrom": "sense/wand_merge.h",
+      "transform": "verbatim",
+      "originalSha256": "2b300fc63e8714f60f290bbe88ad3e8fa9ed834f9b5aa4c2c36e6b5be45aba03",
+      "publicSha256": "2b300fc63e8714f60f290bbe88ad3e8fa9ed834f9b5aa4c2c36e6b5be45aba03"
+    },
+    "device/sense/wand_sense/wand_light.h": {
+      "importedFrom": "sense/wand_light.h",
+      "transform": "verbatim",
+      "originalSha256": "f32c389b8de7d784eeee5184ecf8b4624c9fa2d2a42e24821ca28e6adf1a52b0",
+      "publicSha256": "f32c389b8de7d784eeee5184ecf8b4624c9fa2d2a42e24821ca28e6adf1a52b0"
+    },
+    "device/sense/wand_sense/wand_update.h": {
+      "importedFrom": "sense/wand_update.h",
+      "transform": "verbatim",
+      "originalSha256": "d062d3c72cdf0d0b4c9128256af0440c90f317a1422736a82319cbed7515df3a",
+      "publicSha256": "d062d3c72cdf0d0b4c9128256af0440c90f317a1422736a82319cbed7515df3a"
+    },
+    "device/sense/wand_sense/wand_usb_output.h": {
+      "importedFrom": "sense/wand_usb_output.h",
+      "transform": "verbatim",
+      "originalSha256": "10bc6d0ef80ac6c448daf02d51fd80ed66778651cdd04b5eef8985988b4cca5e",
+      "publicSha256": "10bc6d0ef80ac6c448daf02d51fd80ed66778651cdd04b5eef8985988b4cca5e"
+    },
+    "device/sense/wand_sense/wand_ble_output.h": {
+      "importedFrom": "sense/wand_ble_output.h",
+      "transform": "verbatim",
+      "originalSha256": "f8898a9950b479b799fa2a672b558ddd31b2ba7585816bbe1c39e4e3b10f04ef",
+      "publicSha256": "f8898a9950b479b799fa2a672b558ddd31b2ba7585816bbe1c39e4e3b10f04ef"
+    },
     "receiver/Info.plist": {
       "importedFrom": "Wand Receiver.app/Contents/Info.plist",
       "transform": "verbatim",
-      "originalSha256": "ff92e6bbbdd4f3c8c7e08b35147ceeede574b0db7e7f67b98b975d3505b1c7be",
-      "publicSha256": "ff92e6bbbdd4f3c8c7e08b35147ceeede574b0db7e7f67b98b975d3505b1c7be"
+      "originalSha256": "de5603aebd261966554c7862e5b5b4399762975a1059d655fecd8f87976a9d46",
+      "publicSha256": "de5603aebd261966554c7862e5b5b4399762975a1059d655fecd8f87976a9d46"
     }
   }
 }

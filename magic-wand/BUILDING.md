@@ -173,13 +173,21 @@ acceleration shocks it retains the last usable rotation estimate. Physical feel
 still needs testing with the actual grip.
 
 
-### Prepared Sense wireless application updater
+### Sense wireless application updater
 
-The host updater needs the complete firmware-6 USB installation first. It updates
+The host updater needs one complete, updater-capable USB installation first. It updates
 only the application, using an application-only Nordic/Adafruit legacy DFU package
 for the original XIAO nRF52840 Sense. It does not replace the bootloader or SoftDevice.
-Hardware transfer and interruption recovery remain unverified; USB recovery is still
-required when the bootloader cannot return to the application.
+The firmware-7-to-8 wireless transfer has been verified on the original Sense with
+bootloader 0.6.1, including restart, Bluetooth reconnection and result confirmation.
+Interruption recovery remains unverified; USB recovery is still required when the
+bootloader cannot return to the application. This is not a promise that USB will
+never be needed again.
+
+Firmware 8 pulses white every 275 ms while starting or waiting for a receiver,
+then uses the connected mode colour. The existing one-minute offline dark timeout
+still applies. Receiver-update colour cycling, magenta firmware handoff/verification
+and the shorter two-flash sleep cue remain separate.
 
 The existing receiver watches its private support directory for
 `firmware-update.request`. The installation workflow first checks Agent Flow is idle,

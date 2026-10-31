@@ -11,15 +11,17 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.135",
-    "receiverBuild": "140",
+    "receiver": "1.2.136",
+    "receiverBuild": "141",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
-    "agenticMouse": "1.0.307",
-    "agenticMouseBuild": "313",
+    "agenticMouse": "1.0.308",
+    "agenticMouseBuild": "314",
     "persistentImage": "full-20261025a"
   },
   "status": [
+    "Installed: Agentic Mouse 1.0.308 build 314 adds built-in left/right window snapping to the Magnet card. Repeating at an occupied screen half moves the window to the neighbouring display. Existing HUD layout and wand controls are retained; standalone snapping apps stay installed. Focused geometry, cancellation and readback checks passed; physical cross-monitor acceptance remains unverified.",
+    "Installed: receiver 1.2.136 build 141 and Sense firmware 8. The first wireless update completed, the wand restarted over Bluetooth, and the receiver confirmed firmware 8 with calibration and the update key preserved. Startup and ordinary disconnection pulse white every 275 ms until connection or the existing one-minute dark timeout. Receiver-restart colour cycling and the short sleep warning are unchanged. The first update attempt stopped before authorization; package and key checks now run outside the input thread, with the live connection rechecked before authorization. Interrupted wireless updates can still require USB recovery.",
     "Installed: receiver 1.2.135 build 140 and complete Sense firmware 7. Bluetooth works with USB removed, confirmed by live input and user feedback. Calibration and the update key are preserved. Page scrolling uses fine pixel output, sideways native gestures end at wrist stop, and the approved 300 ms exit-click window preserves double and triple shortcuts. All 247 receiver tests pass. The first wireless firmware transfer and physical acceptance of the latest scrolling remain unverified. The reviewed single-bank bootloader can require USB recovery after an interrupted update.",
     "Receiver140 prepared: verified single-bank updater policy for the actual0.6.1 bootloader, explicit USB-recovery acceptance required. Receiver139 pixel scrolling is installed. Firmware6 is installed but its long Bluetooth identity is truncated; packetized firmware7 repair is being prepared.",
     "Receiver1.2.134 build139 prepared: V3 pages use precise pixel output at the existing20ms cadence for smooth slow scrolling. Native sideways stroke endings and300ms exit-click cancellation are retained. Wireless host prepared; complete Sense6 still needs its first USB installation and hardware verification.",
@@ -528,7 +530,7 @@
       "name": "Agentic Mouse",
       "url": "https://ethansk.github.io/agentic-mouse/",
       "role": "Draws the HUD and runs its cards",
-      "availability": "Wand support is in Ethan’s local build and isn’t published yet."
+      "availability": "Public source includes wand support."
     },
     {
       "name": "Agent Flow",
