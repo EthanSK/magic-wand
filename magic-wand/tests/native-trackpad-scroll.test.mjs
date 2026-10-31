@@ -83,6 +83,7 @@ final class Harness {
  let heldScroll=WandHeldScroll();var controlVersion=WandControlVersion.sustainedV3,heldScrollDiagnostics=false,buttons=0
  var mouseOn=0,hudResumed=0
 ${wheel}
+ func flushPendingMove(){}
  func currentPointerOrigin()->CGPoint{.zero}
  var physicalDuration:Double?
  func mouseButtonPhysicalTapDuration()->Double?{physicalDuration}

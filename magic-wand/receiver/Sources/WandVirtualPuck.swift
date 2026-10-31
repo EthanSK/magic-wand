@@ -130,6 +130,16 @@ final class WandVirtualPuck {
         timer.resume()
     }
 
+    /// Keep this end-of-turn hand-off (2026-10-31, lag catch-up). Bluetooth
+    /// notifications already waiting on the main queue run before this block,
+    /// so after a stall every reading already available reaches the receiver
+    /// as one batch, and the receiver shows its motion as one combined move.
+    /// Flushing after each reading instead (an earlier, uninstalled candidate)
+    /// turns that backlog into one posted event per reading, which macOS then
+    /// plays back as a visible path after the hand has stopped. This adds no
+    /// timer or wait: the block runs as soon as the current main-queue work ends.
+    /// Routing never depends on the program having replied first: each frame
+    /// is judged by its own button mask (`WandSensePointerFrames`).
     private func emit(_ line: String) {
         guard !dead else { return }
         pending += line + "\n"

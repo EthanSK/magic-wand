@@ -82,6 +82,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var batteryRequested=Date.distantPast
     var pointerDisplays:[CGRect]=[]
     var deliveryPoint:CGPoint?
+    /// Combined pointer movement of the current receive turn (`postPointerMove`):
+    /// where it started, its latest destination and the button state it moves with.
+    var pendingMove:(start:CGPoint,end:CGPoint,buttons:Int)?
+    /// Receive turns in progress; movement is combined only inside one.
+    var moveCoalescing=0
+    /// Actual pointer events posted (one per combined turn segment).
+    var pointerEventsPosted=0
     var circleAnchor:CGPoint?,scrollAnchor:CGPoint?
     var displayObserver:NSObjectProtocol?
     // LOW aiming delay, loop scrolling and consumed-click removal live in the
@@ -794,12 +801,19 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// Extraction of the existing Puck UART line handler, unchanged, so the
     /// Sense profile's virtual Puck output reaches exactly the same code.
     func receiveText(_ text:String) {
+        // One receive turn: every line the program has already produced. Its
+        // pointer moves are combined and shown once at the end (`postPointerMove`).
+        moveCoalescing+=1
         deliveryPoint=currentPointerOrigin()
-        defer {deliveryPoint=nil}
+        defer {flushPendingMove();moveCoalescing-=1;deliveryPoint=nil}
         input += text.replacingOccurrences(of: "\r", with: "")
         if input.count > 16384 { input = String(input.suffix(4096)) }
         while let newline = input.firstIndex(of: "\n") {
             let line = String(input[..<newline]); input.removeSubrange(...newline)
+            // Only consecutive motion readings are combined. Any other line
+            // (button edge, HUD, scroll, mode, light) first shows the motion
+            // before it, so its effect lands after that motion, in order.
+            if pendingMove != nil, line.range(of:"@RAW ")==nil, line.range(of:"@IMU ")==nil {flushPendingMove()}
             if line.contains("Error") || line.contains("OUT OF MEMORY") || line.contains("Uncaught") { log("DEVICE_ERROR", line) }
             // Source echo may contain the word Error. Only actual runtime failures
             // invalidate a bridge load; a later ready marker cannot hide one.
@@ -1550,6 +1564,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// any line event. A later sideways stroke begins a fresh gesture. Same tick,
     /// same values: routing adds no delay, buffering or replay.
     func postHeldScroll(x:Int32,y:Int32,at point:CGPoint?) {
+        flushPendingMove() // preserve motion before this native action
         guard !actionPause.paused else{finishNativeScroll(cancelled:true);return}
         guard x != 0 || y != 0 else{return}
         if y == 0 {postNativeScroll(x:x,y:0,at:point);return}
@@ -1560,6 +1575,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// no history-swipe phase, while the horizontal stroke retains its native
     /// lifecycle. V2 and the two-button chord keep their ordinary line events.
     func postSustainedScroll(x:Int32,y:Int32,at point:CGPoint?) {
+        flushPendingMove() // preserve motion before this native action
         guard !actionPause.paused else{finishNativeScroll(cancelled:true);return}
         guard x != 0 || y != 0 else{return}
         if heldScroll.sustained.velocityY == 0 {postHeldScroll(x:x,y:y,at:point);return}
@@ -1593,6 +1609,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         finishNativeScroll(cancelled:boundary == .cancelled)
     }
     func postNativeScroll(x:Int32,y:Int32,at point:CGPoint?) {
+        flushPendingMove() // preserve motion before this native action
         guard !actionPause.paused else{finishNativeScroll(cancelled:true);return}
         let beginning = !nativeScroll.active
         if let event=nativeScroll.update(x:x,y:y,at:point ?? currentPointerOrigin()) {
@@ -1604,12 +1621,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// Every path that ends a held or chord scroll, starts a native drag, or
     /// tears the receiver down must come through here.
     func finishNativeScroll(cancelled:Bool) {
+        flushPendingMove() // preserve motion before this native action
         if let event=nativeScroll.finish(cancelled:cancelled) {
             event.post(tap:.cghidEventTap)
             log(cancelled ? "NATIVE_SCROLL_CANCEL" : "NATIVE_SCROLL_END")
         }
     }
     func postScroll(x:Int32,y:Int32){
+        flushPendingMove() // preserve motion before this native action
         // The two-button chord keeps its original line wheel events. Its raw
         // two-axis stream has no snapped axis, so it could not own a clean
         // sideways-only native gesture without flipping transports mid-chord.
@@ -1674,6 +1693,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// wand's earlier events, so anything posted before the warp lands first
     /// and the cursor finishes at the centre.
     func settleRecenteredCursor(at point:CGPoint) {
+        flushPendingMove() // preserve motion before this native action
         Self.mouseMovementEvent(buttons:0,from:point,to:point)?.post(tap:.cghidEventTap)
     }
     func refreshPointerDisplays() {
@@ -1858,8 +1878,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// lags the wand's own posted movement (`WandPointerOrigin`). macOS can
     /// report the wand's own position from several hundred ms earlier.
     func currentPointerOrigin()->CGPoint {
-        pointerOrigin.origin(system:WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays),
-                             now:ProcessInfo.processInfo.systemUptime)
+        // Anyone asking where the pointer is gets this turn's motion shown first.
+        flushPendingMove()
+        return pointerOrigin.origin(system:WandPointerBounds.clamp(CGEvent(source:nil)?.location ?? .zero,to:pointerDisplays),
+                                    now:ProcessInfo.processInfo.systemUptime)
     }
     /// Ethan's physical mouse and trackpad keep working alongside the wand.
     /// Observe only: these monitors never consume, delay or rewrite an event.
@@ -1904,14 +1926,47 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // follows too. Follow-on stop-to-click also stays available with an
         // open, unheld HUD; operating a HUD card still owns that press.
         let newPoint=WandPointerBounds.clamp(CGPoint(x:point.x+CGFloat(dx),y:point.y+CGFloat(dy)),to:pointerDisplays)
-        if let event=Self.mouseMovementEvent(buttons:buttons,from:point,to:newPoint) {
+        // Ethan (2026-10-31): "under lag ... it catches up and it like follows
+        // a path afterwards ... it can combine deltas if it's delta based."
+        // Every reading is still filtered, clamped at the real display edge and
+        // judged for clicks one by one, in order: the destination is exactly the
+        // same. Only the events shown are combined: within one receive turn,
+        // all motion already produced goes out as one ordinary move from where
+        // the turn started to its latest destination, instead of one event per
+        // reading for macOS to play back afterwards. No extra main-queue turn,
+        // timer, waiting for later readings or prediction is added. Old sensor
+        // readings are never summed or replayed (stale readings are dropped
+        // before the filter, `WandSenseStaleness`). A button edge, scroll, HUD
+        // or other line, a recenter or any origin query first shows the motion
+        // before it, so clicks and drags keep their exact order and place.
+        if moveCoalescing>0 {
+            if let pending=pendingMove, pending.buttons==buttons, pending.end==point {pendingMove=(pending.start,newPoint,buttons)}
+            else {flushPendingMove();pendingMove=(point,newPoint,buttons)}
+            pointerTravel += abs(newPoint.x-point.x)+abs(newPoint.y-point.y)
+        } else if let event=Self.mouseMovementEvent(buttons:buttons,from:point,to:newPoint) {
             event.post(tap:.cghidEventTap)
             pointerOrigin.moved(from:point,to:newPoint,now:ProcessInfo.processInfo.systemUptime)
             pointerTravel += abs(newPoint.x-point.x)+abs(newPoint.y-point.y)
+            pointerEventsPosted += 1
         }
         movementCount += 1
-        if movementCount == 1 || movementCount % 100 == 0 { log("MOVEMENT_REPORTS_POSTED", movementCount) }
+        if movementCount == 1 || movementCount % 100 == 0 { log("MOVEMENT_REPORTS_POSTED", movementCount, "events", pointerEventsPosted) }
         return newPoint
+    }
+    /// Shows this receive turn's combined movement: one ordinary move event
+    /// from where the turn started to its latest destination, with the same
+    /// button state (a drag stays a drag). Remembered as the wand's own point.
+    func flushPendingMove() {
+        guard let pending=pendingMove else{return}
+        pendingMove=nil
+        // Back where it started (or outward motion held at a display edge):
+        // nothing new to show.
+        guard pending.end != pending.start else{return}
+        if let event=Self.mouseMovementEvent(buttons:pending.buttons,from:pending.start,to:pending.end) {
+            event.post(tap:.cghidEventTap)
+            pointerOrigin.moved(from:pending.start,to:pending.end,now:ProcessInfo.processInfo.systemUptime)
+            pointerEventsPosted += 1
+        }
     }
     func handle(_ payload: String) {
         let values = payload.split(separator: ",", omittingEmptySubsequences: false)
@@ -2091,7 +2146,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let flick=flickScroll.sample(x:sample.angularX,y:sample.angularY,dt:Double(v[0])/1_000_000,now:now,
             eligible:flickScrollEnabled && dwell.following && !pointerRouter.mouseButtonHeld && buttons==0)
         if flick.consumesPointer {
-            if flickAnchor==nil {flickAnchor=deliveryPoint ?? currentPointerOrigin();setCircleLight(true)}
+            // A flick turns motion readings into wheel lines mid-turn: show the
+            // pointer motion before it first (currentPointerOrigin), then scroll there.
+            if flickAnchor==nil {flickAnchor=currentPointerOrigin();setCircleLight(true)}
             dwell.reset();scheduleDwell()
             if flick.lines != 0 {for event in Self.wheelEvents(x:0,y:flick.lines,at:flickAnchor){event.post(tap:.cghidEventTap)}}
             return
@@ -2229,6 +2286,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     func transition(to next: Int, at point: CGPoint) {
         // Paused: a held native button may still be released, never pressed.
         let next = actionPause.paused ? next & buttons : next
+        // A press or release lands after the motion that led to it, never
+        // before it, and never inside a combined move (`postPointerMove`).
+        if buttons & 3 != next & 3 {flushPendingMove()}
         for (mask, button) in [(1, CGMouseButton.left), (2, CGMouseButton.right)] where buttons & mask != next & mask {
             let down = next & mask != 0
             let event=Self.mouseButtonEvent(button:button,down:down,at:point)

@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver173 combines already available filtered pointer movement within each receive turn, preserving native action order and display-edge clamping. A bounded backward settling motion after a fast sweep keeps the quick-click opportunity; slow precision aiming, fresh-stop safeguards, pointer gain, smoothing and firmware11 are unchanged. Signed installed binary, resources, settings, live Bluetooth and automatic diagnostics are verified. All262 Wand,17 Control Stones and4 shared checks passed after installation. Physical feel remains for user review.
 - Installed: receiver172 fixes recorded jumps caused by late cursor-position reports. Own posted positions remain recognised during continuous movement and after recentering; observed physical mouse input hands control back immediately. Rapid-stop clicks are restored after the comparison still reproduced the jump. Filtering, gain, smoothing and firmware11 are unchanged. The signed installed app, resources, preserved settings, automatic diagnostic capture and live Bluetooth were verified. All261 Wand,17 Control Stones and4 shared checks passed after installation. Physical movement acceptance remains pending.
 - Installed: receiver171 temporarily disables the rapid-stop click shortcut for comparison with the pre-morning click behaviour. The original200 ms stillness decision path is retained. A deterministic comparison against the pre-rapid-click implementation matched10000 state transitions. Pointer filtering, gain, coordinates, scrolling and firmware11 are unchanged. The new queued-output candidate is not included. Installed version, signature, resources and live Bluetooth were verified; all260 Wand,17 Control Stones and4 shared checks passed. Ethan reported that the same jumps remained; the comparison ended and rapid-stop clicks were restored in receiver172.
 - Installed: receiver169 adds a private, automatically expiring update-work mode. It keeps an awake wand reachable during active development by preventing automatic deep standby; ordinary dark idle, pointer timing and manual three-button shutdown are unchanged. The lease survives a receiver restart and expires without further agent work. It cannot wake an already sleeping radio. Firmware11 is unchanged. The signed receiver and source snapshot match. Installed activation, automatic expiry and ending work were verified; all260 Wand,17 Control Stones and4 shared checks passed. Prevention of physical standby remains unverified while the wand is asleep.
@@ -273,7 +274,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.167 (172) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
+Receiver 1.2.168 (173) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 31 October 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

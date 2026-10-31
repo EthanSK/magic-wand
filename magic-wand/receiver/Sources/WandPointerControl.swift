@@ -270,8 +270,29 @@ struct WandFastStopClick {
     /// also accelerated a labelled slow-aim example; only this faster class
     /// gets the longer allowance. No pointer output or delay changes here.
     static let fastSweepSpeed=1500.0, fastSweepTail=0.12
+    /// Ethan (2026-10-31): "the abrupt stop for a fast click ... I want the
+    /// fastest behavior back." An abrupt stop after a fast sweep makes the wand
+    /// spring back a little before it is still. Receiver 172 log and capture,
+    /// 20:21:26: a 4500 px/s sweep, then about 30 px back over about 150 ms,
+    /// then still; the 120 ms allowance sent it to the 200 ms stillness click.
+    /// Settling that stays behind the furthest point reached (springing or
+    /// swinging back, up to `reboundDistance`) is part of that stop for up to
+    /// `reboundTail`. Any new progress past the turnaround is aiming again and
+    /// keeps the 120 ms allowance; slower moves keep 60 ms. A click still needs
+    /// the same fresh, fully quiet readings; nothing waits or is replayed.
+    /// Replayed on all saved recordings: every stop this helps followed a sweep
+    /// of 2900-5900 px/s and swung back at most 31 px within 210 ms. A 1539 px/s
+    /// hook and a 270 ms backward drift that then kept moving stay excluded.
+    static let reboundSpeed=2500.0, reboundTail=0.20, reboundDistance=50.0
     private var sweepSpeed=0.0, missReason="not qualified"
-    private var tail:Double {sweepSpeed>=Self.fastSweepSpeed ? Self.fastSweepTail:Self.slowTail}
+    /// Unit direction of the last brisk window and visible travel along it since.
+    private var sweepX=0.0, sweepY=0.0, along=0.0, furthest=0.0
+    private var rebounding:Bool {
+        sweepSpeed>=Self.reboundSpeed && furthest-along>=2 && furthest-along<=Self.reboundDistance
+    }
+    private var tail:Double {
+        sweepSpeed>=Self.fastSweepSpeed ? (rebounding ? Self.reboundTail:Self.fastSweepTail):Self.slowTail
+    }
     private var samples:[(time:Double,dt:Double,x:Double,y:Double)]=[]
     private var lastAt:Double?,lastMotion=0.0,lastBrisk=0.0,quietAt:Double?,quietCount=0,eligible=false
     private(set) var due:Double?
@@ -328,16 +349,21 @@ struct WandFastStopClick {
         if brisk {
             if !eligible {sweepSpeed=0}
             eligible=true;lastBrisk=now;sweepSpeed=max(sweepSpeed,path/elapsed);missReason="still moving"
+            let sx=samples.reduce(0){$0+$1.x},sy=samples.reduce(0){$0+$1.y},length=hypot(sx,sy)
+            if length>0 {sweepX=sx/length;sweepY=sy/length}
+            along=0;furthest=0
+        } else {
+            along+=Double(x)*sweepX+Double(y)*sweepY;furthest=max(furthest,along)
         }
         // A brief deceleration/settling tail is part of the same brisk stop.
         // Sustained slow aiming still clears the shortcut and uses200 ms.
-        else if eligible && now-lastBrisk>tail {eligible=false;missReason="settling window elapsed"}
+        if !brisk && eligible && now-lastBrisk>tail {eligible=false;missReason="settling window elapsed"}
     }
     /// One diagnostic per sent click, never per sensor frame. This makes a
     /// fallback distinguishable from a lost click without continuous logging.
     func report(now:Double)->String? {
         guard sweepSpeed>=Self.speed,lastBrisk>0,now-lastBrisk<2 else{return nil}
-        return String(format:"sweep=%.0f settleMs=%.0f motionAgeMs=%.0f reason=%@",sweepSpeed,(now-lastBrisk)*1000,(now-lastMotion)*1000,due == nil ? missReason:"confirmed")
+        return String(format:"sweep=%.0f settleMs=%.0f motionAgeMs=%.0f backPx=%.0f reason=%@",sweepSpeed,(now-lastBrisk)*1000,(now-lastMotion)*1000,furthest-along,due == nil ? missReason:"confirmed")
     }
 }
 

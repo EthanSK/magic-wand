@@ -85,5 +85,27 @@ for i in 86...90 {hidden.move(dx:4,dy:0,now:Double(i)*0.01,eligible:true,pointer
 let visibleAgain=finish(hidden,from:0.90,tail:[])
 expect(visibleAgain.0 != nil,"real visible movement rearms the next normal click")
 
+
+// Large travel with a short backward settling arc is still the same stop.
+let rebound=sweep(px:45,frames:10)
+let rr=finish(rebound,from:0.10,tail:[-5,-4,-3,-3,-3,-3,-2,-2,-2,-2,-1,-1,-1,-1,-1])
+expect(rr.1 && (rr.0 ?? 9)<0.30,"fast sweep and bounded settling arc clicks promptly (got \(rr))")
+// A brief host hiccup does not erase known movement when sensor time stays
+// continuous; genuinely missing sensor data still cannot earn a quick click.
+let batched=sweep(px:45,frames:10)
+batched.move(dx:-2,dy:0,now:0.16,eligible:true,sampleSeconds:0.01,pointerQuiet:false)
+let rb2=finish(batched,from:0.16,tail:[-2,-2,-2,-2,-2])
+expect(rb2.1,"continuous sensor movement survives a 60 ms delivery hiccup (got \(rb2))")
+let missing=sweep(px:45,frames:10)
+missing.move(dx:-2,dy:0,now:0.16,eligible:true,sampleSeconds:0.06,pointerQuiet:false)
+let rm=finish(missing,from:0.16,tail:[-2,-2,-2,-2,-2])
+expect(!rm.1,"missing sensor interval cannot impersonate continuous brisk movement (got \(rm))")
+let moderate=sweep(px:15,frames:10)
+let rmod=finish(moderate,from:0.10,tail:Array(repeating:-1,count:16))
+expect(!rmod.1,"moderate movement and a slow correction retain precision timing (got \(rmod))")
+let drift=sweep(px:45,frames:10)
+let rd=finish(drift,from:0.10,tail:Array(repeating:-1,count:30))
+expect(!rd.1,"long backward aiming never remains a quick-stop candidate (got \(rd))")
+
 print(failures==0 ? "ALL PASS":"\(failures) FAILED")
 exit(failures==0 ? 0:1)

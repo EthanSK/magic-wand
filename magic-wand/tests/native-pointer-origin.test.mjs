@@ -20,6 +20,7 @@ test('separate rapid batches continue from the wand\'s own last move, never a st
  assert.equal(source.split('CGEvent(source:nil)?.location').length-1,1,'only the origin helper reads the system cursor');
  assert(!/CGEvent\(source: nil\)\?\.location/.test(source),'no other spelling bypasses the helper');
  assert(method('postPointerMove').includes('pointerOrigin.moved(from:point,to:newPoint'),'every posted move is remembered');
+ assert(method('flushPendingMove').includes('pointerOrigin.moved(from:pending.start,to:pending.end'),'every combined move is remembered as the wand\'s own point');
  assert(method('recenterPointer').includes('pointerOrigin.begin(at:point'),'a recenter still wins until macOS reports it');
  // Ethan, 2026-10-31: "when I do a fast stop, it shouldn't move the mouse back
  // to the known position. It should just send the click." The stop-to-click
@@ -53,9 +54,11 @@ final class Harness {
  var recordingPointerPaused=false,hudSession=false,hudButtonHeld=false,hudEntryPress=false,pointerInHUD=false
  var buttons=0,pointerTravel=0.0,movementCount=0,pointerDisplays=[CGRect(x:0,y:0,width:3000,height:2000)]
  var pointerOrigin=WandPointerOrigin(),deliveryPoint:CGPoint?
+ var pendingMove:(start:CGPoint,end:CGPoint,buttons:Int)?,moveCoalescing=0,pointerEventsPosted=0
  static func mouseMovementEvent(buttons:Int,from:CGPoint,to:CGPoint)->Posted? {Posted(to:to)}
  ${method('currentPointerOrigin')}
  ${method('postPointerMove')}
+ ${method('flushPendingMove')}
  /// One receiveText batch, as the receiver runs it: the origin is chosen
  /// once, then each move carries the delivered point within the batch.
  func batch(_ moves:[(Int,Int)]) {

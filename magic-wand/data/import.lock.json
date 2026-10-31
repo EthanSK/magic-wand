@@ -34,8 +34,8 @@
     "receiver/Sources/main.swift": {
       "importedFrom": "wand-mac-receiver.swift",
       "transform": "receiver",
-      "originalSha256": "c004721c74b44fdc2939224d3105c03fac2c74b419b19634ac80d174e6d2db65",
-      "publicSha256": "c004721c74b44fdc2939224d3105c03fac2c74b419b19634ac80d174e6d2db65"
+      "originalSha256": "8b2a60dab89bb2a20cf01f0268bf7d3e2499a19af4c41320c91309b4b3c852ae",
+      "publicSha256": "8b2a60dab89bb2a20cf01f0268bf7d3e2499a19af4c41320c91309b4b3c852ae"
     },
     "receiver/Sources/WandControlTransport.swift": {
       "importedFrom": "wand-control-transport.swift",
@@ -67,11 +67,17 @@
       "originalSha256": "fcc9f9efb9535ef601a4730bb038f8195dffe81c8cb804069e5926eef7ba4646",
       "publicSha256": "fcc9f9efb9535ef601a4730bb038f8195dffe81c8cb804069e5926eef7ba4646"
     },
+    "receiver/Sources/WandVirtualPuck.swift": {
+      "importedFrom": "wand-virtual-puck.swift",
+      "transform": "verbatim",
+      "originalSha256": "8b9bbd5f3bba65df0ca5af8acfe824c74c52385aba31ad6f19aa5f50fe47d2df",
+      "publicSha256": "8b9bbd5f3bba65df0ca5af8acfe824c74c52385aba31ad6f19aa5f50fe47d2df"
+    },
     "receiver/Sources/WandPointerControl.swift": {
       "importedFrom": "wand-pointer-control.swift",
       "transform": "verbatim",
-      "originalSha256": "65850c49c35e72193e87da23d0fd09a26e71a704de6e6de99a4a02052a39d405",
-      "publicSha256": "65850c49c35e72193e87da23d0fd09a26e71a704de6e6de99a4a02052a39d405"
+      "originalSha256": "1f49adc1155d340c1034ef62fd52d582bd582072a715386257a8021dca212e1e",
+      "publicSha256": "1f49adc1155d340c1034ef62fd52d582bd582072a715386257a8021dca212e1e"
     },
     "receiver/Sources/WandNavigationFeedback.swift": {
       "importedFrom": "wand-navigation-feedback.swift",
@@ -172,8 +178,8 @@
     "receiver/Info.plist": {
       "importedFrom": "Wand Receiver.app/Contents/Info.plist",
       "transform": "verbatim",
-      "originalSha256": "df9d90ce973de826f5b8788e2ab8b6e46f080355e88cfdb3c75cf0b7f8ce629b",
-      "publicSha256": "df9d90ce973de826f5b8788e2ab8b6e46f080355e88cfdb3c75cf0b7f8ce629b"
+      "originalSha256": "bf914c3acf16fa05e78bde3467e6c85681bb934ea2e056ea6136794ea2c71a9a",
+      "publicSha256": "bf914c3acf16fa05e78bde3467e6c85681bb934ea2e056ea6136794ea2c71a9a"
     }
   }
 }

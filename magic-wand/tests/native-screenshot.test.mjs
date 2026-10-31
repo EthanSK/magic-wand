@@ -47,6 +47,7 @@ final class Harness {
  func cancelMouseExitClick(){}
  var scrollFollowBefore=false
  let context=SwitchAppContext()
+ var pendingMove:(start:CGPoint,end:CGPoint,buttons:Int)?,moveCoalescing=0,pointerEventsPosted=0
  var pointerTravel=0.0
  var actionPause=WandActionPause()
  let restDetection=Rest(),controls=Controls(),screenshot=WandScreenshotGesture()
@@ -92,7 +93,7 @@ final class Harness {
 ${bottom}
 ${follow}
  }}
- ${['setScreenshotActive','screenshotContextChanged','takeScreenshotPointer','screenshotMouseButton','startScreenshotShortcut','superviseScreenshot','checkScreenshot','latchScreenshotIfReady','handleScreenshotRaw','finishScreenshotDrag','endScreenshot','recognizeMouseButtonRecenter','recenterPointer','recordingChanged','manualPointerDuringRecording','deviceFollowChanged','enterPointerMode','postPointerMove','handleRaw','consumeEarlyHorizontalIntent','finishHorizontalStrokeIfNeeded','handleFrame','reconcileMouseButtonHold','scheduleDwell','noteClickGate'].map(method).join('\n')}
+ ${['setScreenshotActive','screenshotContextChanged','takeScreenshotPointer','screenshotMouseButton','startScreenshotShortcut','superviseScreenshot','checkScreenshot','latchScreenshotIfReady','handleScreenshotRaw','finishScreenshotDrag','endScreenshot','recognizeMouseButtonRecenter','recenterPointer','recordingChanged','manualPointerDuringRecording','deviceFollowChanged','enterPointerMode','postPointerMove','flushPendingMove','handleRaw','consumeEarlyHorizontalIntent','finishHorizontalStrokeIfNeeded','handleFrame','reconcileMouseButtonHold','scheduleDwell','noteClickGate'].map(method).join('\n')}
 }
 func wait(_ s:Double){RunLoop.main.run(until:Date().addingTimeInterval(s))}
 let move="10000,2680,0,4",heldMove="10000,2680,0,5",still="10000,0,0,4"

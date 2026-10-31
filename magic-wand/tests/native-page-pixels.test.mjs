@@ -24,6 +24,7 @@ final class Harness {
  var posted:[CGEvent]=[]
  let anchor=CGPoint(x:20,y:30)
  func currentPointerOrigin()->CGPoint{anchor}
+ func flushPendingMove(){}
  ${methods}
  func sample(x:Double,y:Double,now:Double){heldScroll.confirmHeld(now:now);_=heldScroll.sample(x:x,y:y,dt:0.01,now:now);finishHorizontalStrokeIfNeeded()}
  func tick(_ now:Double){let v=heldScroll.continuation(now:now,pageUnitsPerLine:WandSustainedScroll.pagePixelsPerLine);if v.x != 0 || v.y != 0 {postSustainedScroll(x:v.x,y:v.y,at:anchor)}}
