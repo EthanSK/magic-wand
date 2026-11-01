@@ -90,6 +90,14 @@ precondition(WandHoldTarget.classify(roles:["AXTextField","AXGroup"]) == .unknow
 
 precondition(WandHoldTarget.classify(roles:["AXStaticText","AXGroup","AXNotificationCenterAlert","AXScrollArea"]) == .drag,"a notification is a native drag target")
 
+// These exact subroles came from a live Notification Center banner probe.
+for role in ["AXNotificationCenterBanner","AXNotificationCenterAlertStack","AXNotificationCenterAlert"] {
+ precondition(WandHoldTarget.notificationRole(bundleIdentifier:"com.apple.notificationcenterui",role:"AXGroup",subrole:role)==role)
+ precondition(WandHoldTarget.classify(roles:["AXStaticText",role,"AXScrollArea"]) == .drag)
+ precondition(WandHoldTarget.notificationRole(bundleIdentifier:"test.editor",role:"AXGroup",subrole:role)==nil)
+}
+precondition(WandHoldTarget.notificationRole(bundleIdentifier:"com.apple.notificationcenterui",role:"AXGroup",subrole:"AXHostingView")==nil,"a widget is not a notification")
+
 // Screenshot mode owns the mouse button before any ordinary hold (native-screenshot
 // test). A screenshot context alone never turns an ordinary hold into a press.
 let shot=Harness();shot.screenshotActive=true
@@ -109,6 +117,12 @@ wait(0.22);Harness.wheelPairs=[]
 for _ in 0..<30 {scroll.handleRaw("10000,0,2680,1")}
 precondition(!Harness.wheelPairs.isEmpty && scroll.downs==0,"a scroll area scrolls and never drags")
 scroll.handleRaw("10000,0,2680,0");precondition(!scroll.heldScroll.active && scroll.buttons==0)
+
+// Single press-and-hold on a notification uses the very same native drag lane.
+let notification=press(["AXStaticText","AXNotificationCenterBanner","AXScrollArea"]);wait(0.27)
+notification.handleRaw("10000,0,2680,1")
+precondition(notification.downs==1 && notification.heldScroll.dragging,"one hold drags a banner without a preparatory tap")
+notification.handleRaw("10000,0,2680,0");precondition(notification.buttons==0)
 
 // Over a draggable target: a native drag after the existing 220 ms decision.
 let drag=press(["AXSlider","AXGroup","AXWindow"]);wait(0.05)

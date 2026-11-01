@@ -99,3 +99,22 @@ for i in 1...25 {
 }
 expect(!precisionTail.tick(now:0.26),"invisible slow aiming without a brisk move retains the ordinary intent protection")
 print("PASS: live motion intent preserves brisk-stop evidence and slow precision timing")
+
+// Separate fast gestures may follow immediately, including before the old
+// ordinary deadline cleans up its duplicate. Never reuse the previous travel.
+let chained=WandDwellClick(fastStops:true);chained.follow(true)
+var chainTime=0.0
+chained.move(dx:0,dy:0,now:chainTime,eligible:true)
+for stroke in 1...8 {
+ for _ in 1...5 {chainTime+=0.01;chained.move(dx:8,dy:0,now:chainTime,eligible:true)}
+ for _ in 1...2 {chainTime+=0.01;chained.move(dx:0,dy:0,now:chainTime,eligible:true)}
+ expect(chained.tick(now:chainTime+0.001) && chained.lastClickWasFast,"each fresh40px brisk stroke clicks quickly, stroke \(stroke)")
+}
+for _ in 1...30 {chainTime+=0.01;chained.move(dx:0,dy:0,now:chainTime,eligible:true);expect(!chained.tick(now:chainTime),"a completed chain never repeats while stationary")}
+// A full cancellation must still forget the timing; a genuine long gap cannot
+// borrow the preceding click's cadence to qualify a short new stroke.
+chained.reset();chainTime+=1
+for _ in 1...5 {chainTime+=0.01;chained.move(dx:8,dy:0,now:chainTime,eligible:true)}
+for _ in 1...2 {chainTime+=0.01;chained.move(dx:0,dy:0,now:chainTime,eligible:true)}
+expect(!chained.tick(now:chainTime+0.001),"mode cancellation still requires a new timing baseline")
+print("PASS: fast click chains consume travel but preserve real sample timing")

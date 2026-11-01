@@ -353,24 +353,22 @@ precondition(switching.postPointerMove(dx:7,dy:0,from:anchor)==CGPoint(x:407,y:4
 let independentReview=Harness();independentReview.selectedReviewMode="changes";independentReview.handleHUDButton("1")
 precondition(independentReview.postPointerMove(dx:8,dy:0,from:anchor)==CGPoint(x:408,y:400),"independent review commit holds retain the mouse button pointer lane")
 
-// Recording freezes delivery and forgets speech-time travel without changing
-// the latched follow choice. Exercise the actual receiver callback and emitter.
+// Speech changes only its light/status. Preserve follow, live drag/movement,
+// the tuned dwell deadline and the screenshot/rest choice on start AND stop.
 for following in [false,true] {
  let speech=Harness();speech.dwell.follow(following)
  speech.pointerRouter=WandPointerRouter(lowDelay:0.09)
  _=speech.pointerRouter.mouseButton(down:true)
  _=speech.pointerRouter.frame(dx:25,dy:0,buttons:0,hud:false,now:1)
- precondition(speech.pointerRouter.pendingCount==1)
  speech.dwell.move(dx:40,dy:0,now:1,eligible:true)
+ let armed=speech.dwell.armed
  speech.deliveryPoint=CGPoint(x:900,y:900)
- speech.recording.isRecording=true;speech.recordingChanged(true)
- precondition(!speech.dwell.following && speech.recordingPointerPaused && !speech.dwell.armed && speech.pointerRouter.pendingCount==0 && speech.deliveryPoint==nil)
- let before=CGEvent.posted
- for _ in 0..<100 {precondition(speech.postPointerMove(dx:50,dy:30,from:anchor)==anchor)}
- precondition(CGEvent.posted==before,"recording suppresses both pointer motion and native drag movement")
- speech.recording.isRecording=false;speech.recordingChanged(false)
- precondition(speech.dwell.following==following && !speech.dwell.armed && speech.pointerRouter.drain(now:100).isEmpty)
- precondition(speech.postPointerMove(dx:3,dy:-2,from:anchor)==CGPoint(x:403,y:398),"resume applies only new motion from the visible pointer")
+ for active in [true,false] {
+  speech.recording.isRecording=active;speech.recordingChanged(active)
+  precondition(speech.dwell.following==following && !speech.recordingPointerPaused && speech.dwell.armed==armed)
+  precondition(speech.pointerRouter.pendingCount==1 && speech.deliveryPoint==CGPoint(x:900,y:900),"speech is not a pointer ownership transition")
+  precondition(speech.postPointerMove(dx:3,dy:-2,from:anchor)==CGPoint(x:403,y:398),"recording itself never blocks the pointer emitter")
+ }
 }
 let manual=Harness();manual.dwell.follow(true)
 manual.recording.isRecording=true;manual.recordingChanged(true)

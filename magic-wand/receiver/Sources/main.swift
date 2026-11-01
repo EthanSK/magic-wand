@@ -400,40 +400,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         queue("setWandRecording("+(recording.isRecording ? "true":"false")+");")
     }
     func recordingChanged(_ active:Bool) {
-        invalidatePointerMotion()
-        // A recording transition is newer than a possible screenshot triple's
-        // first-click snapshot. Apply it to that snapshot too, so undoing the
-        // first two taps cannot undo a recording pause or its later restoration.
-        if var choice=clickFollowChoice {
-            if active {
-                choice.restore=choice.following || choice.rest.handOverToRecording()
-                choice.following=false;choice.paused=true
-            } else {
-                let resume=choice.paused && choice.restore == true
-                choice.paused=false;choice.restore=nil
-                if resume && restDetection.parked {choice.rest.restoreOnPickup()}
-                else if resume {choice.following=true}
-            }
-            clickFollowChoice=choice
-        }
-        // Ethan: recording switches mouse follow off once. It is not a lock:
-        // The mouse button can explicitly re-enter mouse mode while speech keeps running.
-        performPointer(pointerRouter.interrupt());motionFilter.reset();deliveryPoint=nil
-        if active {
-            // A resting wand keeps the user's choice in rest memory; recording
-            // takes it over so pickup during speech cannot switch it back on.
-            recordingRestoreFollow=dwell.following || restFollow.handOverToRecording()
-            recordingPointerPaused=true
-            dwell.follow(false);restDetection.pointerStopped()
-            queue("setMouseFollow(false);")
-        } else {
-            let resume=recordingPointerPaused && recordingRestoreFollow == true
-            recordingPointerPaused=false;recordingRestoreFollow=nil
-            // Still resting on the desk: resume on pickup, not on the table.
-            if resume && restDetection.parked {restFollow.restoreOnPickup()}
-            else if resume {dwell.follow(true);restDetection.pointerActivated();queue("setMouseFollow(true);")}
-        }
-        dwell.reset();scheduleDwell()
+        // Ethan (2026-11-01): speech must preserve his current mouse-follow
+        // choice. This is a light/status transition, not a pointer-mode change:
+        // do not cancel movement, a held drag, stillness, rest memory or a
+        // screenshot's first-tap snapshot. Stopping speech changes none either.
         log("RECORDING_STATE",active);syncRecordingLight();status()
     }
     /// The device's own follow report (`@FOLLOW`).
@@ -842,7 +812,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 loadingBridge=false;loadingRuntime=false;ready=true;motionFilter.reset();rawLastArrival=0;rawLastSample=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
                 restoreKnownCalibration();checkPowerPolicy()
                 requestBattery()
-                if let remembered=standbyResume {let resume=remembered && !recording.isRecording;standbyResume=nil;queue("setMouseFollow("+(resume ? "true":"false")+");");dwell.follow(resume);log("DEEP_STANDBY_RESUMED",resume)}
+                if let remembered=standbyResume {let resume=remembered;standbyResume=nil;queue("setMouseFollow("+(resume ? "true":"false")+");");dwell.follow(resume);log("DEEP_STANDBY_RESUMED",resume)}
                 if context.isActive {hudSession=true;hudOpenedAt=ProcessInfo.processInfo.systemUptime}
                 if let mode=selectedReviewMode {setWandShortcut(mode)}
                 queue("global.wandShot=0;global.wandRawPointer=true;global.wandRawBias=undefined;global.wandRawActive=false;global.WAND_UPDATING=false;setHUDOpen("+(context.isActive ? "true":"false")+");updateLights();")
@@ -1553,8 +1523,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 AXUIElementSetMessagingTimeout(item,Float(max(0.001,min(0.01,remaining))))
                 var subrole:CFTypeRef?
                 if AXUIElementCopyAttributeValue(item,kAXSubroleAttribute as CFString,&subrole) == .success,
-                   let value=subrole as? String,value=="AXNotificationCenterAlert" {
-                    probe.roles.append(value);return finished("decisive-role")
+                   let value=subrole as? String,
+                   let notification=WandHoldTarget.notificationRole(bundleIdentifier:probe.bundleIdentifier,role:name,subrole:value) {
+                    probe.roles.append(notification);return finished("decisive-role")
                 }
             }
             if WandHoldTarget.ends(at:name) {return finished("boundary")}

@@ -41,7 +41,7 @@ precondition(Harness.events==[centre,centre],"no stale point after the centre")
  const recenter=method('recenterPointer');assert(recenter.indexOf('invalidatePointerMotion()')<recenter.indexOf('CGWarpMouseCursorPosition'));
  const end=method('endScreenshot');assert(end.indexOf('transition(to:')<end.indexOf('invalidatePointerMotion()'),'finish the final drag before cancellation');
  assert(method('reset').includes('invalidatePointerMotion()'));
- assert(method('recordingChanged').includes('invalidatePointerMotion()'));
+ assert(!method('recordingChanged').includes('invalidatePointerMotion()'), 'speech preserves pointer ownership');
  assert(method('deviceFollowChanged').includes('if dwell.following != on {invalidatePointerMotion()}'),'repeated follow status does not reset a live gesture');
  const receive=method('receiveText');assert(receive.includes('pointerEpochAtEntry==pointerMotionEpoch {handleRaw'));
  assert(receive.includes('handle("0,0,"+button)'),'a button release in invalidated text still reaches the receiver');

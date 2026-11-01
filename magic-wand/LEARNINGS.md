@@ -2091,3 +2091,12 @@ The keep-awake lease is an absolute expiry, not a timer that renews itself. Etha
 ## Sensor continuity is separate from host delivery (receiver 188)
 
 A host processing gap above 250 ms previously reset Sense smoothing, continuous stillness and fractional movement even when physical readings remained continuous. An inert probe using the real input preamble and filter reproduced different output for the same readings after a 400 ms host stall. Carry the already aligned per-line sample time into the raw handler and screenshot path; use it only for continuity. Retain host arrival gaps for delivery diagnostics and the legacy Puck fallback. Genuine sensor gaps and explicit reset flags still reset. This does not establish the cause of every physical jump or solve operating-system output backlog.
+
+
+## 2026-11-01 — Chained fast clicks and Notification Center holds
+
+A completed fast click must consume travel and eligibility but keep the last real sample timestamp. A full reset discarded the first movement of the next immediately chained stroke: identical 40-count strokes alternated quick and ordinary timing. Mode cancellation still forgets that timestamp, and actual sample gaps still invalidate brisk evidence. Preserve ordinary dwell counters and timing.
+
+On current macOS, a real notification exposed AXNotificationCenterBanner or AXNotificationCenterAlertStack; only testing the older AXNotificationCenterAlert missed it and fell through to its scroll area. Recognise the observed subroles only for the Notification Center owner. Keep widgets, unknown answers, late answers and released holds scroll-safe.
+
+Ethan superseded the older recording-start follow pause: recording transitions now change only recording feedback and status. Preserve current pointer, drag, screenshot and rest ownership through start/stop and deep-standby restoration. Earlier recording-pause lessons describe the previous policy.

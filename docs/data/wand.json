@@ -11,8 +11,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.183",
-    "receiverBuild": "188",
+    "receiver": "1.2.184",
+    "receiverBuild": "189",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.323",
@@ -21,6 +21,7 @@
     "senseFirmware": 12
   },
   "status": [
+    "Installed: receiver 189 preserves mouse follow when recording starts or stops, allows fresh brisk move-stop clicks to chain, and supports notification dragging with one mouse-button hold. Ordinary precision clicks, pointer tuning, scrolling and firmware 12 are unchanged. Signed installation, saved settings, Bluetooth readiness, fourteen focused checks and all 294 repository checks passed. Physical acceptance remains pending.",
     "Installed: receiver 188 preserves Sense smoothing and continuous stillness across Mac delivery stalls by using physical reading times for sensor continuity. Genuine sensor gaps and the Puck path retain their reset behavior. No input skipping, delta combining, new pointer delay, click retuning or firmware change was added. Signed installation, preserved settings and live Bluetooth were verified; physical feel remains for user review.",
     "Installed: receiver 187 allows a renewable one-hour development keep-awake period. A wand change or feature discussion renews the hour; finishing a reply leaves the remaining time intact. Expiry restores ordinary sleep, while dark idle and manual shutdown remain unchanged. Pointer processing, gain, click timing and firmware 12 are unchanged.",
     "Installed: receiver 186 preserves the same continuous-stillness threshold and counts the full sensor report duration when recognising tiny restarts, keeping the approved 60 ms evidence bound at slower report rates. Pointer gain, smoothing, click timing, firmware 12 and the receiver 185 fixes remain. The signed installation and Bluetooth reconnection were verified; physical feel remains for user review.",
@@ -289,7 +290,7 @@
         "Control V3 keeps ordinary short taps and tap-then-hold dragging unchanged. Clear sideways flicks can qualify before the usual 220 ms hold cutoff; other gestures keep that cutoff.",
         "A plain hold scrolls a scroll area or drags a confirmed draggable target. Unknown targets keep scrolling. Tap, then hold the second press to drag explicitly. The pointer stays fixed while scrolling until release.",
         "The HUD button switches to the HUD. The pointer stays within real display edges.",
-        "Releasing a completed scroll restores the mouse-follow choice from before scrolling. On stays on; off stays off. A newer recording pause still wins.",
+        "Releasing a completed scroll restores the mouse-follow choice from before scrolling. On stays on; off stays off. Recording preserves the current follow choice.",
         "The mouse button never opens, closes or clears the HUD or review selection.",
         "V3 uses straight strokes in either axis, including diagonals. Holding still continues the captured speed; a new stroke can change speed or reverse without releasing. Much faster strokes go beyond the normal maximum, up to 600 lines per second. Circular page-scroll recognition is disabled; V2 remains selectable.",
         "Screenshot opens the native macOS selection and moves the pointer even with mouse follow off. After a triple tap, hold the mouse button and move to select the area, then release to capture. Finishing or cancelling restores the previous mouse-follow choice."
@@ -566,14 +567,15 @@
       "minimumFinalCountsPerSecond": 500,
       "quietConfirmationSeconds": 0.008,
       "maximumSampleGapSeconds": 0.04,
-      "scope": "The quick-stop opportunity observes the original ordinary click state without clearing its travel or deadline. A real correction after an early click retains the ordinary click; remaining on the same target suppresses its duplicate. Slow aiming, brief continuous-delivery-gap handling and fresh-stop safeguards stay unchanged. The backward-settling experiment is removed.",
+      "scope": "The quick-stop opportunity observes the original ordinary click state without clearing its travel or deadline. A real correction after an early click retains the ordinary click; remaining on the same target suppresses its duplicate. Slow aiming, brief continuous-delivery-gap handling and fresh-stop safeguards stay unchanged. The backward-settling experiment is removed. Completed clicks retain only the previous real sample timestamp so fresh brisk gestures can chain; travel and eligibility are consumed.",
       "slowTailSeconds": 0.06,
       "speedClock": "sensor sample duration",
       "maximumDeliveryGapSeconds": 0.08,
       "maximumContinuousSampleSeconds": 0.02,
       "fastSweepCountsPerSecond": 1500,
       "fastSweepTailSeconds": 0.12,
-      "preservesOrdinaryClickState": true
+      "preservesOrdinaryClickState": true,
+      "preservesSampleTimeAfterClick": true
     },
     "clickLight": {
       "durationMs": 90,

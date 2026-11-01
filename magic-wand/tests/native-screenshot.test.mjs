@@ -188,14 +188,14 @@ precondition(t.ups==1 && t.screenshot.phase == .done,"releasing the mouse button
 t.setScreenshotActive(false)
 precondition(t.recordingPointerPaused && !t.dwell.following && t.screenshot.phase == .idle,"recording pause and follow choice survive the screenshot")
 
-// Recording changes between taps are newer choices than the first-click snapshot.
+// Speech between taps preserves the first-tap follow choice; it is no longer a pause.
 let changed=make(follow:true);tap(changed);changed.receive("@FOLLOW 0");changed.recordingChanged(true)
 wait(0.06);tap(changed);wait(0.06);changed.receive("@BOTTOM 1")
-precondition(changed.recordingPointerPaused && !changed.dwell.following && changed.recordingRestoreFollow==true,"recording started between taps must retain the original follow choice and its newer pause")
+precondition(!changed.recordingPointerPaused && changed.dwell.following && changed.recordingRestoreFollow==nil,"speech between taps cannot overwrite the original screenshot follow choice")
 changed.receive("@BOTTOM 0");changed.endScreenshot(reason:"test cleanup",contextActive:false)
-let stopped=make(follow:false);stopped.recordingPointerPaused=true;stopped.recordingRestoreFollow=true
+let stopped=make(follow:false)
  tap(stopped);stopped.recordingChanged(false);wait(0.06);tap(stopped);wait(0.06);stopped.receive("@BOTTOM 1")
-precondition(!stopped.recordingPointerPaused && stopped.dwell.following,"recording stopped between taps must keep its newer restored follow choice")
+precondition(!stopped.recordingPointerPaused && !stopped.dwell.following,"speech ending between taps cannot enable follow")
 stopped.receive("@BOTTOM 0");stopped.endScreenshot(reason:"test cleanup",contextActive:false)
 
 // A double click alone still centres and enables follow, after the window.

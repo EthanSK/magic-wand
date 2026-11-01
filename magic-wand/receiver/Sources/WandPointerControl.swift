@@ -276,7 +276,11 @@ struct WandFastStopClick {
     private var lastAt:Double?,lastMotion=0.0,lastBrisk=0.0,quietAt:Double?,quietCount=0,eligible=false
     private(set) var due:Double?
     private var needsRest=false
-    mutating func reset(){self=Self()}
+    /// A completed click consumes its travel, never the previous real sample's
+    /// timing. Dropping that timing also dropped the first movement of Ethan's
+    /// next brisk stroke, so a quick chain alternated fast and ordinary clicks.
+    /// Mode changes still use the full reset; no old travel or position survives.
+    mutating func reset(keepingSampleTime:Bool=false){let sampleAt=lastAt;self=Self();if keepingSampleTime {lastAt=sampleAt}}
     mutating func requireRest(){reset();needsRest=true}
     mutating func sample(stopped:Bool,x:Int,y:Int,now:Double,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil){
         guard now.isFinite else{reset();return}
@@ -375,7 +379,7 @@ final class WandDwellClick {
         return repeatDue
     }
     var repeating:Bool {repeatDue != nil}
-    func reset(){x=0;y=0;fineX=0;fineY=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil;fastStop?.reset();lastClickWasFast=false;lastClickDiagnostic=nil;fastClickAwaitingMovement=false}
+    func reset(keepingFastSampleTime:Bool=false){x=0;y=0;fineX=0;fineY=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil;fastStop?.reset(keepingSampleTime:keepingFastSampleTime);lastClickWasFast=false;lastClickDiagnostic=nil;fastClickAwaitingMovement=false}
     func follow(_ on:Bool){if following != on {reset()};following=on}
     /// A scroll release may contain wrist recoil. Keep the old click pause
     /// until a quiet hand and a new pointer move establish a fresh gesture.
@@ -428,7 +432,7 @@ final class WandDwellClick {
             // Keep the original normal-click deadline and travel. A small real
             // correction can still receive exactly the ordinary click it would
             // have received with quick clicking disabled.
-            fastStop?.reset();fastClickAwaitingMovement=true
+            fastStop?.reset(keepingSampleTime:true);fastClickAwaitingMovement=true
             lastClickWasFast=true;lastClickDiagnostic=diagnostic
             return true
         }
@@ -436,7 +440,7 @@ final class WandDwellClick {
         // received its click. Consume only this duplicate at the original
         // deadline; hidden sensor residue must not click the target twice.
         let alreadyClicked=fastClickAwaitingMovement
-        reset();lastClickWasFast=false;lastClickDiagnostic=diagnostic
+        reset(keepingFastSampleTime:true);lastClickWasFast=false;lastClickDiagnostic=diagnostic
         if let interval=repeatInterval {repeatDue=now+interval}
         return !alreadyClicked
     }
@@ -1797,7 +1801,15 @@ final class WandHeldScroll {
 enum WandHoldTarget:String,Equatable {
     case scroll,drag,unknown
     /// Explicitly draggable controls and notification subroles win inside a scroll area.
-    static let draggableRoles:Set<String>=["AXScrollBar","AXValueIndicator","AXSlider","AXSplitter","AXNotificationCenterAlert"]
+    static let notificationSubroles:Set<String>=["AXNotificationCenterAlert","AXNotificationCenterBanner","AXNotificationCenterAlertStack"]
+    static let draggableRoles:Set<String>=Set(["AXScrollBar","AXValueIndicator","AXSlider","AXSplitter"]).union(notificationSubroles)
+    /// Verified macOS banners use Banner/AlertStack, not only the older Alert.
+    /// Scope the subrole to Notification Center: widgets and its empty scrolling
+    /// background still scroll; an unrelated app cannot opt itself into dragging.
+    static func notificationRole(bundleIdentifier:String,role:String,subrole:String)->String? {
+        guard bundleIdentifier=="com.apple.notificationcenterui",role=="AXGroup",notificationSubroles.contains(subrole) else{return nil}
+        return subrole
+    }
     /// A real scrolling surface: native scroll views and web documents.
     static let scrollRoles:Set<String>=["AXScrollArea","AXWebArea"]
     /// A window/app boundary ends the search but does not prove a drag target.

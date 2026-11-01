@@ -13,7 +13,7 @@ const source=readFileSync(new URL('../receiver/Sources/main.swift',import.meta.u
 const pointer=readFileSync(new URL('../receiver/Sources/WandPointerControl.swift',import.meta.url),'utf8');
 const ready=pointer.includes('struct WandRestFollowMemory')&&source.includes('restFollow.pickedUp(');
 
-test('pickup restores the pre-rest mouse state; manual choices and recording win',{skip:process.platform!=='darwin'||!ready},()=>{
+test('pickup restores the pre-rest mouse state; manual choices win and recording preserves follow',{skip:process.platform!=='darwin'||!ready},()=>{
  function method(name){const a=source.indexOf('    func '+name+'(');assert(a>=0,name);let b=source.indexOf('{',a)+1,depth=1;while(depth){if(source[b]==='{')depth++;if(source[b]==='}')depth--;b++;}return source.slice(a,b);}
  const code=`import Foundation
 func log(_ values:Any...){}
@@ -85,14 +85,13 @@ let manualOn=Harness();manualOn.dwell.follow(false);manualOn.rest(putDown:false)
 manualOn.bottomChoice(follow:true);manualOn.pickup()
 precondition(manualOn.dwell.following && manualOn.mouseOnRequests==0,"a deliberate switch on needs no automatic help")
 
-// Recording during rest wins: pickup while recording keeps pointing off,
-// and recording's own end restores the pre-rest choice.
+// Speech during rest leaves pickup and the pre-rest follow choice alone.
 let speech=Harness();speech.dwell.follow(true);speech.rest(putDown:true)
 speech.recording.isRecording=true;speech.recordingChanged(true)
 speech.pickup()
-precondition(!speech.dwell.following && speech.mouseOnRequests==0,"pickup cannot undo the recording pause")
+precondition(speech.dwell.following && speech.mouseOnRequests==1,"pickup during speech restores the same pre-rest choice")
 speech.recording.isRecording=false;speech.recordingChanged(false)
-precondition(speech.dwell.following && speech.mouseOnRequests==1,"recording end resumes the choice rest was hiding")
+precondition(speech.dwell.following && speech.mouseOnRequests==1,"recording end does not toggle the restored choice")
 
 // Recording that ends while the wand still rests waits for pickup.
 let desk=Harness();desk.dwell.follow(true);desk.rest(putDown:true)
@@ -102,13 +101,13 @@ precondition(!desk.dwell.following && desk.mouseOnRequests==0,"never turn mouse 
 desk.pickup()
 precondition(desk.dwell.following && desk.mouseOnRequests==1,"pickup then restores it once")
 
-// Rest during an active recording: the recording pause still owns pointing.
+// Rest during speech follows the same rest/pickup policy.
 let during=Harness();during.dwell.follow(true)
 during.recording.isRecording=true;during.recordingChanged(true)
 during.rest(putDown:false);during.pickup()
-precondition(!during.dwell.following && during.mouseOnRequests==0)
+precondition(during.dwell.following && during.mouseOnRequests==1)
 during.recording.isRecording=false;during.recordingChanged(false)
-precondition(during.dwell.following && during.mouseOnRequests==1,"Codex's one-time recording pause still resumes once")
+precondition(during.dwell.following && during.mouseOnRequests==1,"speech end preserves follow restored on pickup")
 
 // A manual choice during recording and rest wins over both.
 let both=Harness();both.dwell.follow(true);both.rest(putDown:true)
