@@ -326,7 +326,7 @@ Then open [127.0.0.1:8848](http://127.0.0.1:8848/). The demo needs an HTTP serve
 
 ## Updating the wand
 
-Change the wand first, then this repository: import the sources, update `wand.json`, rebuild and test. [AGENTS.md](AGENTS.md) has the exact steps and the rules that keep the website honest. [SOURCES.md](SOURCES.md) records where everything came from and what was left out.
+Change the wand first, then this repository: import the sources, update `wand.json`, rebuild and test. [AGENTS.md](AGENTS.md) has the exact steps and the rules that keep the website honest. [SOURCES.md](SOURCES.md) records where everything came from and what was left out. [Behaviour checkpoints](BEHAVIOUR_CHECKPOINTS.md) pins versions Ethan has liked, including their known exceptions, so future changes can be compared or selectively reverted.
 
 ## Licence
 
