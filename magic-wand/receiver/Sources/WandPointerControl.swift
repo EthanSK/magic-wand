@@ -745,7 +745,10 @@ struct WandPostClickStillness {
     mutating func arm(){active=true;coherentMotion=false;coherentDirection=false;quietFor=0;samples.removeAll(keepingCapacity:true);duration=0}
     mutating func reset(){active=false;coherentMotion=false;coherentDirection=false;quietFor=0;samples.removeAll(keepingCapacity:true);duration=0}
     mutating func permits(x:Double,y:Double,seconds:Double,fastSpeed:Double)->Bool {
-        let dt=min(0.025,max(0,seconds))
+        // Evidence uses the report's full elapsed time, even when pointer
+        // displacement is capped separately. Counting a50ms report as25ms
+        // would make the approved60ms tiny-restart window take100ms.
+        let dt=min(0.050,max(0,seconds))
         quietFor+=dt
         samples.append((x*dt,y*dt,dt));duration+=dt
         while samples.count>1 && (samples.count>16 || duration>0.060) {
@@ -764,7 +767,7 @@ struct WandPostClickStillness {
         // becomes a rest even before the first click. Only past readings are
         // classified here; no pointer positions are saved or replayed.
         if hypot(x,y)>=max(0.01,fastSpeed) {active=false;return true}
-        if active && quietFor<0.040 {coherentMotion=false;return false}
+        if active && quietFor<0.040 && quietFor+dt<=0.060 {coherentMotion=false;return false}
         if coherent {active=false;return true}
         if duration>=0.040 || active {
             if !active {quietFor=0}
