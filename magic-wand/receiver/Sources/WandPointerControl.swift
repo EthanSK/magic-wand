@@ -722,6 +722,37 @@ enum WandPointerPath: String {
     }
 }
 
+/// Ethan's post-click stillness: stop the visible wobble AFTER a click, without
+/// putting the old slow-speed cutoff back into ordinary aiming. Small restarts
+/// use at most 60 ms of recent direction evidence (approved 2026-11-01); a
+/// larger movement releases immediately. These vectors classify intent only:
+/// they are never emitted, summed into a cursor jump or replayed on release.
+struct WandPostClickStillness {
+    private(set) var active=false
+    private var samples:[(x:Double,y:Double,dt:Double)]=[]
+    private var duration=0.0
+    mutating func arm(){active=true;samples.removeAll(keepingCapacity:true);duration=0}
+    mutating func reset(){active=false;samples.removeAll(keepingCapacity:true);duration=0}
+    mutating func permits(x:Double,y:Double,seconds:Double,fastSpeed:Double)->Bool {
+        guard active else{return true}
+        if hypot(x,y)>=max(0.01,fastSpeed) {reset();return true}
+        let dt=min(0.025,max(0,seconds))
+        samples.append((x*dt,y*dt,dt));duration+=dt
+        while samples.count>1 && (samples.count>16 || duration>0.060) {
+            duration-=samples.removeFirst().dt
+        }
+        let sx=samples.reduce(0){$0+$1.x},sy=samples.reduce(0){$0+$1.y}
+        let travel=samples.reduce(0){$0+hypot($1.x,$1.y)},net=hypot(sx,sy)
+        // A tiny subpixel distance floor ignores rounding residue at the saved
+        // zero. Consistent slow movement and gentle curves pass; reversals in
+        // random tremor cancel. This applies only while resting after a click.
+        if samples.count>=3 && duration>=0.040 && net>=0.0005 && net>=travel*0.90 {
+            reset();return true
+        }
+        return false
+    }
+}
+
 final class WandMotionFilter {
     // Ethan's Switch App sensitivity means normal mouse HIGH, even while
     // The HUD button is held. Share the unrounded calculation; the mouse button alone owns LOW.
@@ -731,6 +762,16 @@ final class WandMotionFilter {
     struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0;var highY=0.0;var quietForClick=false}
     var path:WandPointerPath = .tuned
     private var directX=0.0,directY=0.0,smoothX=0.0,smoothY=0.0
+    private var postClickStillness=WandPostClickStillness()
+    var restingAfterClick:Bool {postClickStillness.active}
+    func holdAfterAutomaticClick(){
+        guard path == .direct else{return}
+        postClickStillness.arm();directX=0;directY=0
+    }
+    func cancelPostClickHold(){
+        guard postClickStillness.active else{return}
+        postClickStillness.reset();directX=0;directY=0
+    }
     /// Seconds. Ethan approved "about 8 ms of pointer smoothing delay to reduce
     /// jagged movement" (2026-10-29, "Make it as good as possible"): a causal
     /// exponential average of the calibrated rate in device time. It reduces
@@ -762,7 +803,7 @@ final class WandMotionFilter {
               abs(v[11])==1,abs(v[12])==1 else{return false}
         values=v;reset();return true
     }
-    func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0;directX=0;directY=0;smoothX=0;smoothY=0}
+    func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0;directX=0;directY=0;smoothX=0;smoothY=0;postClickStillness.reset()}
     func sample(rawX:Int,rawY:Int,microseconds:Int,held:Bool,resetState:Bool)->Result? {
         guard configured,(-65535...65535).contains(rawX),(-65535...65535).contains(rawY),
               (1...50000).contains(microseconds) else{return nil}
@@ -815,7 +856,13 @@ final class WandMotionFilter {
         // slack or drift decay: fine aiming is precise, broad travel is fast.
         let response=v[4]+(1-v[4])*blend*blend*(3-2*blend)
         let step=min(dt,Self.directMaxStep)*response
-        directX+=smoothX*step*gain*v[11];directY+=smoothY*step*gain*v[3]*v[12]
+        if held {postClickStillness.reset()}
+        if postClickStillness.permits(x:x,y:y,seconds:dt,fastSpeed:v[5]) {
+            directX+=smoothX*step*gain*v[11];directY+=smoothY*step*gain*v[3]*v[12]
+        } else {
+            // Discard resting motion; no catch-up when the hand starts again.
+            directX=0;directY=0
+        }
         let directCountX=Int(directX.rounded(.towardZero)),directCountY=Int(directY.rounded(.towardZero))
         directX-=Double(directCountX);directY-=Double(directCountY)
         return .init(x:max(-4095,min(4095,directCountX)),y:max(-4095,min(4095,directCountY)),intent:active,

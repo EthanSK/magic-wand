@@ -1705,6 +1705,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// Keep the own-position history (late macOS feedback), but discard input
     /// work which has not been posted. Fresh physical movement stays immediate.
     func invalidatePointerMotion() {
+        // A fresh follow/cancel/recenter boundary must not inherit a prior click hold.
+        motionFilter.cancelPostClickHold()
         pointerMotionEpoch &+= 1
         pointerMotionCutoff=ProcessInfo.processInfo.systemUptime
         dwell.reset();dwellTimer?.invalidate();dwellTimer=nil
@@ -2180,6 +2182,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             // tests/native-pointer-origin.test.mjs pins this.
             let point=self.currentPointerOrigin()
             self.transition(to:1,at:point);self.transition(to:0,at:point);log("HIGH_DWELL_CLICK")
+            // The click freezes subsequent tremor, never warps back to a saved
+            // click target. Deliberate movement releases the Sense-only hold.
+            self.motionFilter.holdAfterAutomaticClick()
             self.senseVirtual?.clickLight()
             if self.dwell.lastClickWasFast {log("FAST_STOP_CLICK")}
             if let diagnostic=self.dwell.lastClickDiagnostic {

@@ -242,3 +242,47 @@ for _ in 0..<52 {
 precondition(WandPointerPath.read(nil, default: .direct) == .direct && WandPointerPath.read("tuned", default: .direct) == .tuned &&
              WandPointerPath.read("smoothed", default: .tuned) == .tuned)
 print("PASS: tuned path unchanged; option values parse strictly")
+
+// A click may park the pointer, but cannot put the old speed cutoff back into
+// ordinary movement. Exercise the gesture's output, not native mouse events.
+let parked=filter(.direct)
+parked.holdAfterAutomaticClick()
+for i in 0..<208 {
+    let noise=[(0.12,0.0),(0.0,-0.12),(-0.12,0.0),(0.0,0.12)][i%4]
+    let s=parked.sample(rawX:Int((bias[0]+noise.0*counts).rounded()),rawY:Int((bias[1]+noise.1*counts).rounded()),microseconds:9615,held:false,resetState:false)!
+    precondition(s.x==0 && s.y==0 && parked.restingAfterClick,"random directions stay visually still after the click")
+}
+let firstFast=parked.sample(rawX:Int((bias[0]+20*counts).rounded()),rawY:Int(bias[1].rounded()),microseconds:9615,held:false,resetState:false)!
+precondition(!parked.restingAfterClick && firstFast.x != 0,"large movement releases the hold on its first reading")
+precondition(abs(firstFast.x)<40,"discarded tremor cannot be replayed into the first move")
+
+for curved in [false,true] {
+    let precise=filter(.direct);precise.holdAfterAutomaticClick()
+    var releasedAt=0,total=0
+    for i in 0..<104 {
+        let angle=curved ? Double(i)*0.015:0
+        let s=precise.sample(rawX:Int((bias[0]+0.1*cos(angle)*counts).rounded()),rawY:Int((bias[1]+0.1*sin(angle)*counts).rounded()),microseconds:9615,held:false,resetState:false)!
+        if !precise.restingAfterClick && releasedAt==0 {releasedAt=i+1}
+        total+=abs(s.x)+abs(s.y)
+    }
+    precondition(releasedAt>0 && Double(releasedAt)*0.009615<=0.060,"tiny straight/curved motion releases within the approved window: \(releasedAt)")
+    precondition(total>0,"deliberate fine motion still moves after the post-click hold")
+}
+let quiet=filter(.direct);quiet.holdAfterAutomaticClick()
+precondition(run(quiet,seconds:2)==(0,0) && quiet.restingAfterClick,"saved-zero rounding residue never releases the hold")
+let heldRelease=quiet.sample(rawX:Int(bias[0]),rawY:Int(bias[1]),microseconds:9615,held:true,resetState:false)!
+precondition(!quiet.restingAfterClick,"a held mouse-button operation is never trapped by post-click rest")
+quiet.holdAfterAutomaticClick();quiet.reset();precondition(!quiet.restingAfterClick,"recenter/reconnect reset cancels the rest")
+let legacy=filter(.tuned);legacy.holdAfterAutomaticClick()
+precondition(!legacy.restingAfterClick,"the Puck is not changed")
+var reversal=WandPostClickStillness();reversal.arm()
+for _ in 0..<4 {precondition(!reversal.permits(x:-0.1,y:0,seconds:0.009615,fastSpeed:2))}
+var restartFrame=0
+for i in 1...6 where restartFrame==0 {
+    if reversal.permits(x:0.1,y:0,seconds:0.009615,fastSpeed:2) {restartFrame=i}
+}
+precondition(restartFrame>0,"old opposite movement cannot extend the evidence window past 60 ms")
+print("PASS: post-click stillness suppresses tremor, preserves slow curves and never replays movement")
+
+let cancelledRest=filter(.direct);cancelledRest.holdAfterAutomaticClick();cancelledRest.cancelPostClickHold()
+precondition(!cancelledRest.restingAfterClick && run(cancelledRest,x:0.1,seconds:1).x != 0,"a new follow or cancel boundary restores ordinary tiny aiming")

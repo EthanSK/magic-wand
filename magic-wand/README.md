@@ -189,6 +189,8 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver 183 keeps the post-click stillness hold inside the current pointing session: a follow-mode change, cancellation or recenter clears it. Tiny ordinary aiming, click timing, the approved up-to-60 ms post-click restart check, current smoothing and sensitivity are preserved. Signed installation, preserved settings and Bluetooth reconnection were verified. Focused pointer, click, origin and cancellation checks passed; physical acceptance is pending.
+- Receiver 182 adds Sense post-click stillness: automatic clicks hold the visible pointer until deliberate movement resumes. Larger movement responds immediately; tiny restarts use the approved up-to-60 ms direction check. Ordinary slow aiming, click detection, sensitivity and 8 ms smoothing are unchanged. Suppressed movement is discarded, never replayed. Physical acceptance is pending.
 - Installed: receiver 181 removes the Sense pointer small-movement cutoff. Raw sensor input, calibration, the existing sensitivity curve and 8 ms smoothing are preserved. Click quietness remains a separate decision. All 291 repository checks and nine focused pointer/click checks passed; physical slow-movement acceptance remains pending. Firmware 12 is unchanged; intermittent device restarts are still under investigation.
 - Installed: receiver180 restores ordinary mouse-wheel output for V3 page scrolling and smaller Backwards / Forwards feedback. Native sideways swipe handling, speed tuning, the restored pre-scroll follow choice, firmware12 and all pointer/click behaviour are unchanged. The pointer core already matches the pre-combining baseline; no new movement queue was added. All291 repository checks and the rendered feedback pass; physical scroll feel remains for user review.
 - Installed: receiver 179 restores the previous mouse-follow choice after scrolling. On stays on; off stays off. A newer recording pause still wins. Signed installation, preserved settings and Bluetooth reconnection were verified. Pointer sensitivity, filtering, click timing and firmware 12 are unchanged. All 291 repository checks passed; physical scroll acceptance remains pending.
@@ -283,7 +285,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.176 (181) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 1 November 2026.
+Receiver 1.2.178 (183) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 1 November 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
