@@ -1,0 +1,65 @@
+{
+  "archive_sha256": "a5b547a23cd408627528ad998f35dd72ab3ad2989975155819963c470fd11dbb",
+  "build_instances": 2,
+  "printed_parts_g": 6.957,
+  "supports_and_brim_g": 6.65,
+  "total_slicer_g": 13.7,
+  "accounted_g": 13.606,
+  "startup_and_rounding_g": 0.094,
+  "features_g": {
+    "Brim": 0.10481595060162796,
+    "Outer wall": 2.5243906066983106,
+    "Gap infill": 0.6713101712011642,
+    "Support interface": 1.1824018862653924,
+    "Support transition": 0.32197306382380064,
+    "Support": 5.040696317781481,
+    "Inner wall": 2.041808145210013,
+    "Bottom surface": 0.00208233333700885,
+    "Overhang wall": 0.18630960287452528,
+    "Internal solid infill": 0.9737002963779402,
+    "Top surface": 0.3634989474103782,
+    "Bridge": 0.18086800716997117,
+    "Sparse infill": 0.012541134166211712
+  },
+  "object_features_g": {
+    "XIAO_Rod_Holder": {
+      "Brim": 0.10481595060162796,
+      "Outer wall": 0.36936102366862894,
+      "Gap infill": 0.09290607183984749,
+      "Overhang wall": 0.018616215212024605,
+      "Inner wall": 0.10449254866759812,
+      "Top surface": 0.009287534147755112,
+      "Internal solid infill": 0.0006112470671509666
+    },
+    "Carrier_rear": {
+      "Support interface": 1.1824018862653924,
+      "Support transition": 0.32197306382380064,
+      "Support": 5.040696317781481,
+      "Inner wall": 1.9373155965424158,
+      "Outer wall": 2.1550295830295956,
+      "Gap infill": 0.5784040993613159,
+      "Bottom surface": 0.00208233333700885,
+      "Internal solid infill": 0.9730890493107894,
+      "Overhang wall": 0.16769338766250108,
+      "Top surface": 0.3542114132626228,
+      "Bridge": 0.18086800716997117,
+      "Sparse infill": 0.012541134166211712
+    }
+  },
+  "object_mass_mapping_available": true,
+  "object_printed_parts_g": {
+    "XIAO_Rod_Holder": 0.595,
+    "Carrier_rear": 6.361
+  },
+  "settings": {
+    "printer_model": "Bambu Lab P1S",
+    "filament_type": [
+      "PETG"
+    ],
+    "layer_height": "0.2",
+    "wall_loops": "3",
+    "sparse_infill_density": "20%",
+    "support_type": "normal(auto)"
+  },
+  "scope": "One selected carrier and the unchanged R2 XIAO holder. Model/support/brim separate. Bought parts, tube, tape, glue and wires excluded; slicer estimate, not weighed."
+}

@@ -1,0 +1,18 @@
+{
+  "reviewer": "Claude Opus 5.5",
+  "scope": "Independent read-only review of the mechanical CAD; not physical testing",
+  "result": "Approved as a dimensional print prototype after socket-depth and structural corrections",
+  "parameters_sha256": "a381b5e8ed0ff92fcf5fbde71756afa3d5550d52a20036cdc2820e4acac6f7c6",
+  "geometry_checker_sha256": "b6cf435ee320ecf882c35afedcd4c0c6be1c52b4b6ab7066a9246df1d97aeddb",
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "reviewed_core_cad_sha256": "0c8144d6ecf8d3ab11d3a7085778b7820b57160df71cfe96ac32c0b8b6676549",
+  "reviewed_core_manifest_sha256": "e13cf4699758b6f383dda93fd1b610f7148c9e72b9342ecc4635f05c732b9ba8",
+  "final_cad_sha256": "18551251f3d834eb7447845623ee7b921483f2b7a26e58905b151fde3ea08a94",
+  "final_manifest_sha256": "5ae57837fb8b5f59a6502edc721fac09dea0b118a7b380ed6215f93d8630cb66",
+  "final_geometry_checker_sha256": "7b4dabbb2cc1ab90faca26dfe0d085c9e01921efcc1ce86be968ef579034ea08",
+  "final_comfort_delta": "Opus recommended removing four unused outer corner legs and unused left floor spurs; Codex implemented and verified connectivity, positive joints, removed free ends and all hardware/loading clearances. No added curved bridge or underside shell.",
+  "friction_design": "Opus and Codex agreed on one removable internal ring liner with the remaining rings as free guides. Physical drag and rotation resistance remain unmeasured.",
+  "export_delta": "Final print STL float32 seams normalised through Manifold, less than 0.01 mm3 volume change; print projects prepare that exact normal STL.",
+  "approval_boundary": "Opus approved the core CAD before the comfort cleanup, then independently recommended removing the unused outer legs/floor spurs and using a one-ring friction liner. Codex implemented those recommendations and checked the final exports. Post-cleanup STLs were not independently re-read by Opus."
+}

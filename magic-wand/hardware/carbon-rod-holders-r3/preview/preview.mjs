@@ -1,7 +1,8 @@
-// Show the actual R2/R3 accessory meshes. Reuse the established direct-input
-// viewer controls so wand scroll turns immediately, with no inertia or delay.
-import * as THREE from '../../../../../docs/lib/three-0.185.1/three.module.min.js';
+// Show the actual R2/R3 accessory meshes. Mouse scroll zooms; the explicit
+// wand override turns immediately, preserving drag modes and direct input.
+import * as THREE from '../../../../docs/lib/three-0.185.1/three.module.min.js';
 import { ViewInput, frameBounds, MODES } from '../../printed-loop-wand/preview/view-input.mjs';
+import { applyViewerWheel } from '../../carbon-rod-holders-r4/preview/wheel-input.mjs';
 
 const view = document.querySelector('#view');
 const ui = Object.fromEntries(['revision', 'parts', 'references', 'status', 'modes', 'plus', 'minus', 'reset', 'error'].map(id => [id, document.getElementById(id)]));
@@ -20,6 +21,9 @@ const camera = new THREE.PerspectiveCamera(32, 1, .1, 3000);
 const target = new THREE.Vector3();
 const models = new THREE.Group(); scene.add(models);
 let data;
+const override = document.getElementById('wand-scroll');
+function hint() { document.querySelector('.hint').textContent = `Drag to ${input.mode === 'turn' ? 'turn' : input.mode} · ${override.checked ? 'Scroll turns · Pinch zooms' : 'Scroll or pinch to zoom'}`; }
+override.addEventListener('change', hint);
 
 function render() {
   camera.position.set(...input.camera()); camera.lookAt(target.set(...input.target)); renderer.render(scene, camera);
@@ -32,7 +36,7 @@ function reset() {
 function chooseMode(mode) {
   if (!input.setMode(mode)) return;
   for (const b of ui.modes.children) b.setAttribute('aria-pressed', String(b.dataset.mode === mode));
-  render();
+  hint(); render();
 }
 function update() {
   if (!data) return;
@@ -72,7 +76,7 @@ canvas.addEventListener('pointerdown', e => { input.pointerDown(e.pointerId, e.c
 canvas.addEventListener('pointermove', e => { if (input.pointerMove(e.pointerId, e.clientX, e.clientY, view.clientHeight)) render(); });
 for (const name of ['pointerup', 'pointercancel', 'lostpointercapture']) canvas.addEventListener(name, e => input.pointerUp(e.pointerId));
 window.addEventListener('blur', () => input.cancel());
-canvas.addEventListener('wheel', e => { if (input.wheel(e, view.clientHeight, window.innerHeight)) { e.preventDefault(); render(); } }, { passive: false });
+canvas.addEventListener('wheel', e => { if (applyViewerWheel(input, e, view.clientHeight, window.innerHeight, document.getElementById('wand-scroll').checked)) { e.preventDefault(); render(); } }, { passive: false });
 canvas.addEventListener('keydown', e => { if (e.metaKey || e.altKey || e.ctrlKey) return; if (input.key(e, view.clientHeight)) { e.preventDefault(); chooseMode(input.mode); } });
 ui.modes.addEventListener('click', e => { const mode = e.target.closest('button')?.dataset.mode; if (MODES.includes(mode)) chooseMode(mode); });
 ui.plus.addEventListener('click', () => { input.zoomSteps(1); render(); });
