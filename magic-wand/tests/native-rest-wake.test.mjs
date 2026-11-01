@@ -33,7 +33,7 @@ final class Recording {var isRecording=false}
 final class Harness {
  func invalidatePointerMotion(){}
  var actionPause=WandActionPause()
- let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double,sampleTime:Double?=nil){screenshotRaw+=1}
  var ready=true,restoring=false,scrollActive=false,buttons=0,restDiagnosticsRemaining=0,hudSession=false
  var recordingPointerPaused=false,recordingRestoreFollow:Bool?
  var clickFollowChoice:(following:Bool,paused:Bool,restore:Bool?,rest:WandRestFollowMemory)?

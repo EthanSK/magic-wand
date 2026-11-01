@@ -28,7 +28,7 @@ final class Harness {
  var scrollFollowBefore=false,recordingPointerPaused=false
  let context=SwitchAppContext()
  var actionPause=WandActionPause()
- let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double,sampleTime:Double?=nil){screenshotRaw+=1}
  let restDetection=Rest()
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),motionFilter=WandMotionFilter(),dwell=WandDwellClick(),recenterGesture=WandRecenterGesture(),flickScroll=WandFlickScroll()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?
@@ -38,7 +38,7 @@ final class Harness {
  var screenshotActive=false,hudButtonHeld=false,hudButtonMouseX=0.0,hudButtonMouseSampleAt = -100.0
  var commands:[String]=[],scrollPostedX=0,scrollPostedY=0
  var scrollAnchor:CGPoint?,scrollWatchdog:Timer?
- var rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,frames=0,downs=0,light=false
+ var rawLastArrival=0.0,rawLastSample=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,frames=0,downs=0,light=false
  let holdTargetQueue=DispatchQueue(label:"test.hold-target")
  static var scriptedRoles:[String]=[]
  static var probeDelay=0.0

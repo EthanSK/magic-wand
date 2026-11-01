@@ -19,7 +19,7 @@ final class Harness {
  final class Rest {func pointerStopped(){}};let restDetection=Rest()
  func finishNativeScroll(cancelled:Bool){}
 
- let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double,sampleTime:Double?=nil){screenshotRaw+=1}
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),dwell=WandDwellClick()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?
  var pointerOrigin=WandPointerOrigin();func currentPointerOrigin()->CGPoint{pointerOrigin.origin(system:CGEvent(source:nil)?.location ?? .zero,now:ProcessInfo.processInfo.systemUptime)}

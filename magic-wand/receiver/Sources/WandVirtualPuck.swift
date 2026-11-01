@@ -22,7 +22,8 @@ final class WandVirtualPuck {
     /// one chunk, like one BLE notification batch (one shared delivery point).
     var onText: ((String) -> Void)?
     /// Physical frame times accompany lines through the one-turn hand-off.
-    /// They classify clicks; they never schedule or replay pointer motion.
+    /// They classify clicks and sensor continuity; they never schedule, pace
+    /// or replay pointer motion.
     var onTimedText: ((String, [Double]) -> Void)?
     var onLight: ((Double, Double, Double) -> Void)?
     var onSensor: ((Int) -> Void)?

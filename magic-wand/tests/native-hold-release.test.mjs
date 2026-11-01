@@ -24,7 +24,7 @@ final class Harness {
  var scrollFollowBefore=false
  let context=SwitchAppContext()
  var actionPause=WandActionPause()
- let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double,sampleTime:Double?=nil){screenshotRaw+=1}
  let restDetection=Rest()
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),motionFilter=WandMotionFilter(),dwell=WandDwellClick(),recenterGesture=WandRecenterGesture(),flickScroll=WandFlickScroll()
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?
@@ -36,7 +36,7 @@ final class Harness {
  var clickPoints:[CGPoint]=[]
  var recordingPointerPaused=false
  var scrollAnchor:CGPoint?,scrollWatchdog:Timer?
- var rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,wheels=0,frames=0,ups=0,downs=0,light=false
+ var rawLastArrival=0.0,rawLastSample=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,buttons=0,wheels=0,frames=0,ups=0,downs=0,light=false
  func transition(to:Int,at:CGPoint){if to==1 && buttons==0 {downs+=1;clickPoints.append(at)};buttons=to;if to==0 {ups+=1}}
  func queue(_ s:String){commands.append(s)}
  func enterPointerMode(){hudSession=false}

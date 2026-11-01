@@ -208,42 +208,22 @@ enum WandSenseReplay {
     }
 }
 
-/// Ethan: "If it skips ones ... I'd rather that [than] have it like try and
-/// replay missed movements." A reading that reaches the Mac this long after
-/// the best-case delivery is late radio backlog. In normal pointing it updates
-/// buttons, gravity and desk sensing but never moves the pointer; the pointer's
-/// bounded step then skips its time instead of catching up. Measured on real
-/// pointing (firmware c, Bluetooth): lag above best median 25 ms, p90 49 ms,
-/// p99 86 ms, so this drops only the late tail.
+/// Historical 75 ms age-gate experiment, retained for offline comparison tests.
+/// This is NOT an active input or output policy. Receiver 185 removed intake
+/// age-skipping: substituting nil gyro reset continuous smoothing/stillness.
+/// Ethan's "replay" also meant queued live catch-up, which this old predicate
+/// alone cannot diagnose. Its old threshold is not an approved new policy.
 enum WandSenseStaleness {
     static let limit = 0.075
     static func isStale(readingTime: Double, arrival: Double) -> Bool { arrival - readingTime > limit }
 }
 
-/// Which frames are ordinary pointer data: late readings are skipped and a merged
-/// run is applied once, never replayed (`WandSenseStaleness`, `WandSenseReplay`).
-/// Historically, held gestures kept reading history for scrolling and dragging.
-/// Ethan (2026-10-31): the physical button release is the boundary.
-/// The virtual Puck reports that release on the next main-queue turn, so frames
-/// from the same Bluetooth batch used to be judged as still held. A merged run
-/// containing the release was replayed reading by reading under the released
-/// mask: the program saw the release at the run's first reading, and readings
-/// past its 0.3 s clutch-release pause became pointer reports carrying the run's
-/// average, pre-release stroke included. Late post-release readings in that batch
-/// were kept too. Judge the hold by this frame's own mask instead: a release run
-/// is applied once, at its last reading, and late readings are skipped as in
-/// ordinary follow. Obsolete motion is dropped, never waited for or replayed.
-/// `tests/native-sense-release-frames.test.mjs` replays both cases.
-///
-/// Ethan (2026-10-31): "no old sensor readings should be buffered then
-/// replayed; continuous current motion only." Every lane that moves the
-/// visible cursor uses these same current-only rules: ordinary follow, a native
-/// drag (mouse button held on a drag target, once dragging) and a screenshot
-/// drag. Before this, a native drag or screenshot drag expanded a merged radio
-/// run into one cursor move per old reading and kept late readings, so a stall
-/// arrived as a sudden catch-up jump. Synthetic history is now disabled in all
-/// modes. This predicate additionally drops late cursor samples; held scrolling
-/// and HUD/review retain their ordinary per-report integration, never a replay.
+/// Historical pointer-ownership predicate retained for release-frame fixtures.
+/// Live intake does not call this predicate or age-drop packets. It processes
+/// each real report once, with synthetic history disabled in every mode.
+/// The historical release bug expanded a merged pre-release stroke into old
+/// readings after its button release. Tests preserve that regression evidence;
+/// this helper is not a current freshness gate and never changes live delivery.
 enum WandSensePointerFrames {
     static func pointerOwns(following: Bool, hudSession: Bool, scrollActive: Bool, hostHolding: Bool,
                             frameMouseButtonDown: Bool, hostDragging: Bool = false, screenshot: Bool) -> Bool {

@@ -2086,3 +2086,8 @@ A passing comparison does not establish the cause of a live jump.
 ## Renewable development reachability (2026-11-01)
 
 The keep-awake lease is an absolute expiry, not a timer that renews itself. Ethan changed it to one hour after the latest development activity or discussion, retaining the remaining window after a reply. The parser rejects unsafe files and expiries beyond an hour; ordinary dark idle, manual standby and independent offline sleep remain. Inert tests cover the exact hour boundary, over-limit rejection, unchanged-expiry refresh and automatic expiry. This does not diagnose an unexpected power loss or wake an already-off radio.
+
+
+## Sensor continuity is separate from host delivery (receiver 188)
+
+A host processing gap above 250 ms previously reset Sense smoothing, continuous stillness and fractional movement even when physical readings remained continuous. An inert probe using the real input preamble and filter reproduced different output for the same readings after a 400 ms host stall. Carry the already aligned per-line sample time into the raw handler and screenshot path; use it only for continuity. Retain host arrival gaps for delivery diagnostics and the legacy Puck fallback. Genuine sensor gaps and explicit reset flags still reset. This does not establish the cause of every physical jump or solve operating-system output backlog.

@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver 188 preserves Sense smoothing and continuous stillness across Mac delivery stalls by using physical reading times for sensor continuity. Genuine sensor gaps and the Puck path retain their reset behavior. No input skipping, delta combining, new pointer delay, click retuning or firmware change was added. Signed installation, preserved settings and live Bluetooth were verified; physical feel remains for user review.
 - Installed: receiver 187 allows a renewable one-hour development keep-awake period. A wand change or feature discussion renews the hour; finishing a reply leaves the remaining time intact. Expiry restores ordinary sleep, while dark idle and manual shutdown remain unchanged. Pointer processing, gain, click timing and firmware 12 are unchanged.
 - Installed: receiver 186 preserves the same continuous-stillness threshold and counts the full sensor report duration when recognising tiny restarts, keeping the approved 60 ms evidence bound at slower report rates. Pointer gain, smoothing, click timing, firmware 12 and the receiver 185 fixes remain. The signed installation and Bluetooth reconnection were verified; physical feel remains for user review.
 - Installed: receiver 185 restores continuous Sense stillness at the previous 2-unit quiet threshold while keeping coherent tiny motion available. Small deliberate target moves can re-arm an ordinary click; the 200 ms precision pause and rapid-stop click remain. Mouse-button shortcuts use physical sample times, consume their release cleanly and expire late recenter requests. Native screenshot dragging bypasses the stillness gate. Each accepted radio packet is processed once, without age-based skipping or synthetic replay. Signed installation, preserved settings and live Bluetooth were verified; physical feel remains for user review.
@@ -288,7 +289,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.182 (187) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 1 November 2026.
+Receiver 1.2.183 (188) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 1 November 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

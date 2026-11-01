@@ -54,7 +54,7 @@ final class Harness {
 
  var pointerTravel=0.0
  var actionPause=WandActionPause()
- let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double,sampleTime:Double?=nil){screenshotRaw+=1}
  let context=Context(),controls=Controls(),review=Review(),motionFilter=WandMotionFilter(),reviewTrace=Trace(),recording=Recording(),dwell=WandDwellClick()
  var deskSleep=WandDeskSleep()
  var recordingPointerPaused=false,recordingRestoreFollow:Bool?
@@ -416,7 +416,7 @@ final class Harness {
  func invalidatePointerMotion(){}
  func cancelMouseExitClick(){}
  var actionPause=WandActionPause()
- let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}
+ let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double,sampleTime:Double?=nil){screenshotRaw+=1}
  var ready=true,restoring=false,scrollActive=false,buttons=0,restDiagnosticsRemaining=0,hudSession=false
  var recordingPointerPaused=false
 ${source.includes('var restFollow=WandRestFollowMemory()')?' var restFollow=WandRestFollowMemory()':''}
@@ -493,7 +493,7 @@ struct Version {var usesHeldScroll=true}
 final class Harness {
  func invalidatePointerMotion(){}
  func cancelMouseExitClick(){}
- var loadingBridge=false,loadingRuntime=false,bridgeLoadFailed=false,ready=false,lightMode="",generation=0,rawLastArrival=0.0,hudSession=false,hudOpenedAt=0.0
+ var loadingBridge=false,loadingRuntime=false,bridgeLoadFailed=false,ready=false,lightMode="",generation=0,rawLastArrival=0.0,rawLastSample=0.0,hudSession=false,hudOpenedAt=0.0
  let commands=["PROGRAM"],modeBridge="bridge",context=Context(),motionFilter=Filter()
  var selectedReviewMode:String?
  var controlVersion=Version()

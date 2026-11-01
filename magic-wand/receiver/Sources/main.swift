@@ -138,7 +138,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var guide:WandGuideController?,guideMenuItem:NSMenuItem?
     var statusItem:NSStatusItem?,connectionMenuItem:NSMenuItem?,flickMenuItem:NSMenuItem?,rotationMenuItem:NSMenuItem?
 
-    var rawLastArrival=0.0,rawReports=0,rawWindowStart=0.0,rawMaxGap=0.0
+    var rawLastArrival=0.0,rawLastSample=0.0,rawReports=0,rawWindowStart=0.0,rawMaxGap=0.0
     // Ordinary stop-to-click stays single-shot (receiver 114 behaviour).
     // Ethan's 2026-10-30 "as little weirdness as possible" amendment pauses
     // the 300 ms repeat experiment; the captured no-click jumps were a
@@ -235,7 +235,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     var pointerGlobalMonitor:Any?,pointerLocalMonitor:Any?,pointerExternalLoggedAt = -Double.infinity
     /// Why stop-to-click cannot act right now (nil: it can).
     var clickGate:String?
-    /// Late readings kept out of normal pointing this session (`WandSenseStaleness`).
+    /// Legacy dashboard field, zero while age dropping is disabled. This is
+    /// not a measurement of live input backlog or proof that output is current.
     var senseStaleReadings=0
     let senseDashboard=WandSenseDashboardTap(path:support.appendingPathComponent("sense-dashboard.sock").path)
     /// Calibration belongs to one physical wand; a Sense never reads a Puck zero.
@@ -838,7 +839,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line == "WAND_PATCH_NEEDED" || line == ">WAND_PATCH_NEEDED" {loadModeBridge()}
             if line == "WAND_MODE_ROUTING_READY" || line == ">WAND_MODE_ROUTING_READY" {
                 guard !bridgeLoadFailed else {queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();");log("BRIDGE_LOAD_REJECTED");continue}
-                loadingBridge=false;loadingRuntime=false;ready=true;motionFilter.reset();rawLastArrival=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
+                loadingBridge=false;loadingRuntime=false;ready=true;motionFilter.reset();rawLastArrival=0;rawLastSample=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
                 restoreKnownCalibration();checkPowerPolicy()
                 requestBattery()
                 if let remembered=standbyResume {let resume=remembered && !recording.isRecording;standbyResume=nil;queue("setMouseFollow("+(resume ? "true":"false")+");");dwell.follow(resume);log("DEEP_STANDBY_RESUMED",resume)}
@@ -868,7 +869,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 if value=="0" || value=="1" {deviceFollowChanged(value=="1")}
             }
             if let marker=line.range(of:"@ZERO "),let data=String(line[marker.upperBound...]).data(using:.utf8),let config=try? JSONDecoder().decode([Double].self,from:data) {log("NATIVE_MOTION_CONFIG",motionFilter.configure(config))}
-            if let marker=line.range(of:"@RAW "), !paused, pointerEpochAtEntry==pointerMotionEpoch {handleRaw(String(line[marker.upperBound...]))}
+            if let marker=line.range(of:"@RAW "), !paused, pointerEpochAtEntry==pointerMotionEpoch {handleRaw(String(line[marker.upperBound...]),sampleTime:eventTimes.isEmpty ? nil:eventTime)}
             if let marker=line.range(of:"@IMU ") {handleIMU(String(line[marker.upperBound...]))}
             // Legacy held app-page packets never own a selected persistent review set.
             if let marker=line.range(of:"@REVIEW "),!paused,appMode=="vsCode",selectedReviewMode==nil {
@@ -1141,12 +1142,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// Screenshot motion: the same HIGH sensor-space calculation and gain as
     /// normal mouse follow. Mouse button down is only a click here, never LOW, and the
     /// wand's HUD-only flag is expected because follow may be off.
-    func handleScreenshotRaw(_ v:[Int],now:Double) {
+    func handleScreenshotRaw(_ v:[Int],now:Double,sampleTime:Double?=nil) {
         screenshot.telemetry(now:now)
         guard !scrollActive,AXIsProcessTrusted() else{return}
-        let gap=rawLastArrival>0 ? now-rawLastArrival : 0
+        let sampledAt=sampleTime.flatMap{$0.isFinite ? $0:nil} ?? now
+        let gap=rawLastSample>0 ? sampledAt-rawLastSample : 0
         guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:false,resetState:v[3]&2 != 0 || gap>0.25,applyStillness:false) else{return}
-        rawLastArrival=now
+        rawLastArrival=now;rawLastSample=sampledAt
         guard sample.x != 0 || sample.y != 0 else{return}
         let point=deliveryPoint ?? currentPointerOrigin()
         let moved=postPointerMove(dx:sample.x,dy:sample.y,from:point)
@@ -2088,7 +2090,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         performPointer(pointerRouter.mouseButton(down:false))
         dwell.reset();scheduleDwell();log("BOTTOM_HOLD_RECOVERED",reason)
     }
-    func handleRaw(_ payload:String){
+    func handleRaw(_ payload:String,sampleTime:Double?=nil){
         guard ready,!restoring else{return}
         let fields=payload.split(separator:",",omittingEmptySubsequences:false)
         guard fields.count==4 else{return}
@@ -2098,13 +2100,20 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         let now=ProcessInfo.processInfo.systemUptime
         // Screenshot mode precedes every ordinary mouse-button guard: its latched
         // drag must survive the latching tap's physical release.
-        if screenshot.ownsPointer {handleScreenshotRaw(v,now:now);return}
+        if screenshot.ownsPointer {handleScreenshotRaw(v,now:now,sampleTime:sampleTime);return}
         let released=heldScroll.active && v[3]&1 == 0
         reconcileMouseButtonHold(down:v[3]&1 != 0,now:now,reason:"motion button state")
         guard !released,!scrollActive,AXIsProcessTrusted() else{return}
         let gap=rawLastArrival>0 ? now-rawLastArrival : 0
-        guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:v[3]&1 != 0,resetState:v[3]&2 != 0 || gap>0.25) else{return}
-        rawLastArrival=now
+        // Ethan's "playing catch-up" means delayed live delivery. A busy Mac
+        // must not pretend the sensor stopped: keep smoothing/stillness state
+        // across delivery stalls when physical readings remain continuous.
+        // Puck has no per-line sample clock and retains its arrival-gap rule.
+        // This neither skips nor combines motion, nor changes click timing.
+        let sampledAt=sampleTime.flatMap{$0.isFinite ? $0:nil} ?? now
+        let sensorGap=rawLastSample>0 ? sampledAt-rawLastSample : 0
+        guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:v[3]&1 != 0,resetState:v[3]&2 != 0 || sensorGap>0.25) else{return}
+        rawLastArrival=now;rawLastSample=sampledAt
         // Held Switch App moves straight forward and back with real left/right
         // HIGH motion, reversals included. Ethan removed its circular latch:
         // "Just do normal scroll forward and backwards for the switch app

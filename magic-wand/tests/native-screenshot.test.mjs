@@ -64,7 +64,7 @@ final class Harness {
  var pointerOrigin=WandPointerOrigin();func currentPointerOrigin()->CGPoint{pointerOrigin.origin(system:CGEvent(source:nil)?.location ?? .zero,now:ProcessInfo.processInfo.systemUptime)}
  var heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,flickAnchor:CGPoint?,deliveryPoint:CGPoint?
  var pointerDisplays=[CGRect(x:0,y:0,width:2000,height:1000)]
- var buttons=0,movementCount=0,reportCount=0,rawLastArrival=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,hudButtonMouseX=0.0,hudButtonMouseSampleAt = -100.0
+ var buttons=0,movementCount=0,reportCount=0,rawLastArrival=0.0,rawLastSample=0.0,rawWindowStart=0.0,rawReports=0,rawMaxGap=0.0,hudButtonMouseX=0.0,hudButtonMouseSampleAt = -100.0
  var commands:[String]=[],downs=0,ups=0,holds=0,wheels=0
  static var selector=true
  static var moves:[(buttons:Int,to:CGPoint)]=[]
