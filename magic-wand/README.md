@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: Agentic Mouse333 keeps a selected HUD wedge locked through held adjustment; a separate plain tap unlocks it. Receiver192 adds a prompt settled first click after a slowed approach or nearby target change, plus300ms repeated clicks while the Sense pointer remains still. Brisk-stop clicks and the original precision fallback remain; slow aiming, gentle curves, cancellation and pointer output are protected by focused regression checks. Firmware13 is confirmed over Bluetooth with saved settings, calibration and update key preserved. The reversible6660Hz sensor experiment is active and labelled separately from measured delivery. Physical click and pointer feel remain for review.
 - Installed: Agentic Mouse 332 guides the centre outline toward the same valid wedge that a completed reach selects. Slow sideways aiming visits intervening wedges instead of freezing inside the ring and skipping them. Diagonal preview progress stays visible, and unchanged readings cannot continue a previous turn after the wand stops. Existing layout, sensitivity, hold and release actions, pointer behaviour, receiver 190 and firmware 12 are preserved. Signed installation and saved settings were verified. All 216 focused checks passed; physical feel remains for user review. The liked 330/190 baseline is saved in BEHAVIOUR_CHECKPOINTS.md.
 - Installed: receiver 190 shows Back and Forward with standard arrow icons. Agentic Mouse 330 adds slider double-click reset to the existing default size and draws the macOS 26 animated wheel backing with a vector mask. Saved size, selection geometry, animation timing, mouse mappings and firmware 12 are preserved. Signed installed source, settings and Bluetooth readiness were verified. All 294 wand repository checks and 1,259 native app tests passed, with four app tests skipped. Native mask and feedback previews were inspected; physical animation feel remains for user review.
 - Installed: receiver 189 preserves mouse follow when recording starts or stops, allows fresh brisk move-stop clicks to chain, and supports notification dragging with one mouse-button hold. Ordinary precision clicks, pointer tuning, scrolling and firmware 12 are unchanged. Signed installation, saved settings, Bluetooth readiness, fourteen focused checks and all 294 repository checks passed. Physical acceptance remains pending.
@@ -292,7 +293,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.185 (190) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 1 November 2026.
+Receiver 1.2.187 (192) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 1 November 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

@@ -50,6 +50,9 @@ enum Tap {case cghidEventTap}
 final class Posted {let to:CGPoint;init(to:CGPoint){self.to=to};func post(tap:Tap){Harness.landed.append(to)}}
 final class CGEvent {static var system=CGPoint.zero;var location:CGPoint {CGEvent.system};init?(source:Int?){}}
 final class Harness {
+ // Passive experiment counting has no input effect in this inert harness.
+ struct Experiment {func postedPointerEvent(){}}
+ let experiment=Experiment()
  static var landed:[CGPoint]=[]
  var actionPause=WandActionPause();let screenshot=WandScreenshotGesture()
  var recordingPointerPaused=false,hudSession=false,hudButtonHeld=false,hudEntryPress=false,pointerInHUD=false

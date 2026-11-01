@@ -20,6 +20,7 @@
 //          XU end because the receiver is restarting: cycle the loading colours until the next host
 //          UC update challenge  UA<version>,<size>,<crc16>,<hmac> authorized handoff  UV confirm update
 //          UR<running>,<target> acknowledge one failed update (explicit host request)
+//          R104/R208/R416/R833/R1660/R3330/R6660 rate experiment; R? readback
 //          K<key hex> / KX provision or remove the update key (USB only)
 //   board: U C <nonce> | U GO | U NO <reason> | U V ok | U KEY saved/removed
 // Readings are raw LSM6DS3TR-C counts (gyro 500 dps, accel 4 g). Each is sent
@@ -37,6 +38,7 @@
 #include "nrf_sdm.h"          // SD_FWID_GET / SD_SIZE_GET, as the core's utilities.c
 #include "nrf52/nrf_mbr.h"   // MBR_SIZE
 #include "wand_time.h"
+#include "WandSampleRate.h"
 #include "wand_merge.h"
 #include "wand_light.h"
 #include "wand_update.h"
@@ -48,12 +50,12 @@ using namespace Adafruit_LittleFS_Namespace;
 
 // Numeric firmware versions from 6 on; earlier images used dated letters
 // (the previous one was wand-sense-20261029e). Wireless updates only move up.
-static const char FIRMWARE[] = "wand-sense-12";
-static const uint32_t FIRMWARE_NUMBER = 12;
+static const char FIRMWARE[] = "wand-sense-13";
+static const uint32_t FIRMWARE_NUMBER = 13;
 // The image's own statement of its board and number. The receiver refuses a
 // package without exactly one, or for another board or number. Change the
 // number with FIRMWARE_NUMBER.
-static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;12";
+static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;13";
 static const uint32_t DEBOUNCE_MS = 10;            // Same as the checked diagnostic sketch.
 static const uint32_t HOST_TIMEOUT_MS = 2000;      // Host heartbeat is every 500 ms.
 static const uint32_t HEARTBEAT_FRAME_MS = 250;    // Liveness while the sensor is quiet.
@@ -66,7 +68,8 @@ BLEUart uart;
 static bool imuReady = false, bleReady = false, advReady = false, advDataReady = false;
 static uint32_t uartStatus = 0xffffffffUL, lastAdvRetry = 0;
 static uint8_t activeXL = 0, activeG = 0;
-static uint8_t imuMode = 0xff;                     // 0 off, 1 accelerometer ~1.6 Hz, 2 both at 104 Hz
+static uint16_t activeRateHz = 104; // Baseline survives reboot; an explicit host experiment selects another rate.
+static uint8_t imuMode = 0xff;                     // 0 off, 1 accelerometer ~1.6 Hz, 2 both at activeRateHz
 static uint8_t lowRateCount = 0;
 static TaskHandle_t loopTask = nullptr;
 static volatile uint32_t readyMicros = 0;
@@ -344,10 +347,10 @@ static void sendIdentity(Transport t) {
   char text[512], loader[16];
   wandBootloaderText(bootloaderVersion, loader);
   const int n = snprintf(text, sizeof(text),
-    "\nI{\"protocol\":\"wand-sense-1\",\"firmware\":\"%s\",\"id\":\"%08lx%08lx\",\"imu\":%s,\"gyroDpsPerLsb\":0.0175,\"accelGPerLsb\":0.000122,\"odr\":104,\"merge\":true,\"wake\":%s,"
+    "\nI{\"protocol\":\"wand-sense-1\",\"firmware\":\"%s\",\"id\":\"%08lx%08lx\",\"imu\":%s,\"gyroDpsPerLsb\":0.0175,\"accelGPerLsb\":0.000122,\"odr\":%u,\"rateControl\":true,\"merge\":true,\"wake\":%s,"
     "\"resetReason\":%lu,\"firmwareNumber\":%lu,\"bootloader\":\"%s\",\"softDevice\":%lu,\"codeStart\":%lu,\"bootloaderStart\":%lu,\"updater\":%u,\"updateKey\":%s,\"update\":\"%s\",\"updateTarget\":%lu}\n"
     "Eboot reset=%lu off=%u software=%u watchdog=%u lockup=%u pin=%u vbus=%u\n",
-    FIRMWARE, (unsigned long)NRF_FICR->DEVICEID[1], (unsigned long)NRF_FICR->DEVICEID[0], imuReady ? "true" : "false", wokeFromOff ? "true" : "false",
+    FIRMWARE, (unsigned long)NRF_FICR->DEVICEID[1], (unsigned long)NRF_FICR->DEVICEID[0], imuReady ? "true" : "false", unsigned(activeRateHz), wokeFromOff ? "true" : "false",
     (unsigned long)bootResetReason, (unsigned long)FIRMWARE_NUMBER, loader, (unsigned long)SD_FWID_GET(MBR_SIZE), (unsigned long)codeStart(), (unsigned long)bootloaderStart(),
     unsigned(WAND_UPDATE_PROTOCOL), updateKeyPresent ? "true" : "false", wandUpdateResultName(updateResult), (unsigned long)updateTarget,
     (unsigned long)bootResetReason, unsigned((bootResetReason & POWER_RESETREAS_OFF_Msk) != 0),
@@ -533,11 +536,49 @@ static void updateCommand(const char *line, uint8_t length, Transport from) {
   char reply[32]; snprintf(reply, sizeof(reply), "NO %s", failure); sendUpdate(from, reply);
 }
 
+// Change only output-data-rate bits, preserving range, axes, calibration and
+// filter selection. This direct-register path covers the data sheet's 3.33 and
+// 6.66 kHz settings, which Seeed LSM6DS3 2.0.7's settings switch omits.
+static bool configureSampleRate(const WandSampleRate &rate) {
+  if (!imuReady) return false;
+  uint8_t control6 = 0, control7 = 0;
+  if (imu.readRegister(&control6, 0x15) != IMU_SUCCESS || imu.readRegister(&control7, 0x16) != IMU_SUCCESS) return false;
+  // High-performance mode is required above 208 Hz (ST tables 55, 66, 70).
+  if (rate.hz > 208 && ((control6 & 0x10) || (control7 & 0x80))) return false;
+  const uint8_t oldXL = activeXL, oldG = activeG, mode = imuMode;
+  activeXL = uint8_t((activeXL & 0x0f) | rate.odrBits);
+  activeG = uint8_t((activeG & 0x0f) | rate.odrBits);
+  imuMode = 0xff; setIMUMode(mode);
+  uint8_t actualXL = 0, actualG = 0;
+  const uint8_t expectedXL = mode == 2 ? activeXL : mode == 1 ? uint8_t((activeXL & 0x0f) | 0x10) : 0;
+  const uint8_t expectedG = mode == 2 ? activeG : 0;
+  const bool valid = imu.readRegister(&actualXL, 0x10) == IMU_SUCCESS &&
+    imu.readRegister(&actualG, 0x11) == IMU_SUCCESS && actualXL == expectedXL && actualG == expectedG;
+  if (valid) { activeRateHz = rate.hz; return true; }
+  activeXL = oldXL; activeG = oldG; imuMode = 0xff; setIMUMode(mode);
+  return false;
+}
+static void sampleRateReport(Transport from, bool accepted) {
+  char text[96];
+  const int n = snprintf(text, sizeof(text), "\nErate hz=%u mode=%u ok=%u\n", unsigned(activeRateHz), unsigned(imuMode), unsigned(accepted));
+  if (n > 0 && n < int(sizeof(text))) writeTo(from, text, n);
+}
+
 static int hexValue(char c) { return c >= '0' && c <= '9' ? c - '0' : c >= 'a' && c <= 'f' ? c - 'a' + 10 : c >= 'A' && c <= 'F' ? c - 'A' + 10 : -1; }
 static void command(const char *line, uint8_t length, Transport from) {
   if (!length) return;
   const char c = line[0];
   if (c == '?') { if (length == 1) { sendIdentity(from); if (session == from) sendBattery(); } return; }
+  if (c == 'R') {
+    // Only the already selected link may change the experiment. Queries never
+    // restart a session, wake the sensor or change its current power mode.
+    if (session != from) return;
+    if (length == 2 && line[1] == '?') { sampleRateReport(from, true); return; }
+    WandSampleRate rate{};
+    if (!wandSampleRateCommand(line, length, rate)) return;
+    sampleRateReport(from, configureSampleRate(rate));
+    return;
+  }
   if (c == 'X') { if ((length == 1 || wandEndRestarting(line, length)) && session == from) endSession(wandEndRestarting(line, length)); return; }
   if (c == 'U' || c == 'K') { if (session == from) updateCommand(line, length, from); return; }
   if (c != 'H' && c != 'L' && c != 'M' && c != 'Z') return;

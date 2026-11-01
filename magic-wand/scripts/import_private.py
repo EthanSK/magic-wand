@@ -38,6 +38,8 @@ FILES = {
     "wand-update-work.swift": ("receiver/Sources/WandUpdateWork.swift", "verbatim"),
     "wand-virtual-puck.swift": ("receiver/Sources/WandVirtualPuck.swift", "verbatim"),
     "wand-pointer-control.swift": ("receiver/Sources/WandPointerControl.swift", "verbatim"),
+    "wand-experiment.swift": ("receiver/Sources/WandExperiment.swift", "verbatim"),
+    "wand-experiment-model.swift": ("receiver/Sources/WandExperimentModel.swift", "verbatim"),
     "wand-navigation-feedback.swift": ("receiver/Sources/WandNavigationFeedback.swift", "verbatim"),
     "wand-calibration.swift": ("receiver/Sources/WandCalibration.swift", "verbatim"),
     "wand-uart.swift": ("receiver/Sources/WandUART.swift", "verbatim"),
@@ -50,6 +52,7 @@ FILES = {
     # Publish the complete compiled Sense program from the same checked snapshot.
     "sense/wand_sense.ino": ("device/sense/wand_sense/wand_sense.ino", "verbatim"),
     "sense/wand-sense-host.js": ("device/sense/wand-sense-host.js", "verbatim"),
+    "sense/WandSampleRate.h": ("device/sense/wand_sense/WandSampleRate.h", "verbatim"),
     "sense/wand_time.h": ("device/sense/wand_sense/wand_time.h", "verbatim"),
     "sense/wand_merge.h": ("device/sense/wand_sense/wand_merge.h", "verbatim"),
     "sense/wand_light.h": ("device/sense/wand_sense/wand_light.h", "verbatim"),

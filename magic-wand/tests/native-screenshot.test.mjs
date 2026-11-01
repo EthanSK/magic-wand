@@ -43,12 +43,16 @@ final class Controls {var phases:[String]=[];var starts=0;var available=true
  func screenshotStart()->Bool{starts+=1;return available}}
 final class SwitchAppContext {var switchAppAdjusting=false,isActive=false}
 final class Harness {
+ // Passive experiment counting has no input effect in this inert harness.
+ struct Experiment {func postedPointerEvent(){}}
+ let experiment=Experiment()
  func invalidatePointerMotion(){}
  final class ClickLight {var count=0;func clickLight(){count+=1}}
  let senseVirtual:ClickLight?=ClickLight()
  func cancelMouseExitClick(){}
  var scrollFollowBefore=false
  let context=SwitchAppContext()
+ var repeatChainLogged=false
  var pointerEventsPosted=0
  var pointerTravel=0.0
  var actionPause=WandActionPause()
@@ -81,7 +85,9 @@ final class Harness {
  func status(){}
  var clickGate:String?,closedHUD:[String]=[]
  func closeHUD(reason:String,notifyNative:Bool=true){hudSession=false;closedHUD.append(reason)}
- func performPointer(_ a:[WandPointerRouter.Action]){}
+ var circleAnchor:CGPoint?
+ func postScroll(x:Int32,y:Int32){}
+ func scheduleLowDelay(){}
  func setCircleLight(_ on:Bool){if on {wheels+=1}}
  func cancelCircleScroll(){}
  func finishScroll(){}
@@ -95,7 +101,7 @@ final class Harness {
 ${bottom}
 ${follow}
  }}
- ${['setScreenshotActive','screenshotContextChanged','takeScreenshotPointer','screenshotMouseButton','startScreenshotShortcut','superviseScreenshot','checkScreenshot','latchScreenshotIfReady','handleScreenshotRaw','finishScreenshotDrag','endScreenshot','recognizeMouseButtonRecenter','recenterPointer','recordingChanged','manualPointerDuringRecording','deviceFollowChanged','enterPointerMode','postPointerMove','handleRaw','consumeEarlyHorizontalIntent','finishHorizontalStrokeIfNeeded','handleFrame','reconcileMouseButtonHold','scheduleDwell','noteClickGate'].map(method).join('\n')}
+ ${['setScreenshotActive','screenshotContextChanged','takeScreenshotPointer','screenshotMouseButton','startScreenshotShortcut','superviseScreenshot','checkScreenshot','latchScreenshotIfReady','handleScreenshotRaw','finishScreenshotDrag','endScreenshot','recognizeMouseButtonRecenter','recenterPointer','recordingChanged','manualPointerDuringRecording','deviceFollowChanged','enterPointerMode','postPointerMove','performPointer','handleRaw','consumeEarlyHorizontalIntent','finishHorizontalStrokeIfNeeded','handleFrame','reconcileMouseButtonHold','scheduleDwell','noteClickGate'].map(method).join('\n')}
 }
 func wait(_ s:Double){RunLoop.main.run(until:Date().addingTimeInterval(s))}
 let move="10000,2680,0,4",heldMove="10000,2680,0,5",still="10000,0,0,4"
@@ -139,10 +145,17 @@ for following in [false,true] {
 }
 
 // HIGH sensitivity: mouse button down for the click never selects LOW.
-let high=make(follow:false),low=make(follow:false);high.setScreenshotActive(true);low.setScreenshotActive(true)
+let high=make(follow:false),low=make(follow:false);high.motionFilter.path = .direct;low.motionFilter.path = .direct;high.setScreenshotActive(true);low.setScreenshotActive(true)
 Harness.moves=[];for _ in 0..<6 {high.handleRaw(move)};let highX=Harness.moves.reduce(0.0){$0+$1.to.x}
 Harness.moves=[];for _ in 0..<6 {low.handleRaw(heldMove)};let lowX=Harness.moves.reduce(0.0){$0+$1.to.x}
 precondition(highX==lowX,"physical mouse button state does not change screenshot sensitivity")
+
+// Screenshot movement and ordinary unheld HIGH share one filter/config/gain.
+// Stillness and the screenshot drag button are the intentional differences.
+let ordinary=make(follow:true);ordinary.motionFilter.path = .direct
+Harness.moves=[];for _ in 0..<6 {ordinary.handleRaw("10000,2680,0,0")}
+let ordinaryX=Harness.moves.reduce(0.0){$0+$1.to.x}
+precondition(ordinaryX==highX,"screenshot sensitivity matches ordinary unheld HIGH")
 
 // Cancellations always lift the native press.
 let cancelled=make(follow:false);cancelled.setScreenshotActive(true);cancelled.receive("@BOTTOM 1")

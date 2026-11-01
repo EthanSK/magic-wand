@@ -30,6 +30,8 @@ struct WandSenseInfo: Equatable {
     /// False when the board's built-in IMU did not start: buttons still work,
     /// pointing does not. The receiver reports it instead of implying motion.
     var motion = true
+    /// Firmware13 supports reversible, verified runtime IMU-rate experiments.
+    var rateControl = false
     /// Wireless update support from firmware 6 on (WandSenseUpdate.swift).
     var update = WandSenseUpdateSupport.none
     static func parse(_ json: String) -> WandSenseInfo? {
@@ -44,6 +46,7 @@ struct WandSenseInfo: Equatable {
         var info = WandSenseInfo(firmware: firmware, id: id.lowercased(), gyroDpsPerLsb: gyro, accelGPerLsb: accel,
                                  odr: odr, wake: v["wake"] as? Bool ?? false)
         info.motion = v["imu"] as? Bool ?? false
+        info.rateControl = v["rateControl"] as? Bool ?? false
         info.update = .parse(v)
         return info
     }

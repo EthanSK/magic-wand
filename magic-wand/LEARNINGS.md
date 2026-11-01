@@ -2100,3 +2100,17 @@ A completed fast click must consume travel and eligibility but keep the last rea
 On current macOS, a real notification exposed AXNotificationCenterBanner or AXNotificationCenterAlertStack; only testing the older AXNotificationCenterAlert missed it and fell through to its scroll area. Recognise the observed subroles only for the Notification Center owner. Keep widgets, unknown answers, late answers and released holds scroll-safe.
 
 Ethan superseded the older recording-start follow pause: recording transitions now change only recording feedback and status. Preserve current pointer, drag, screenshot and rest ownership through start/stop and deep-standby restoration. Earlier recording-pause lessons describe the previous policy.
+
+
+### 2026-11-01 — Visible stops, HUD terminal ownership and reversible Sense rate reporting
+
+- Receiver186–190 let accepted sub-pixel fine motion keep renewing the click veto even without a visible pointer step. Receiver191 bounds that extension relative to the last visible step and restores fast-stop quiet evidence for an invisible low-speed tail. Ordinary200ms precision timing, pointer gain/output and Puck behavior are preserved; this is separate from any later repeat-click amendment.
+- Native333 handles a terminal already consumed by an actual adjustment before the plain-tap-unlock branch. Otherwise a brief used hold could both adjust and unlock a dotted wedge. An unused tap still unlocks.
+- The original Sense's LSM6DS3TR-C supports nominal ODR up to6660Hz, but the installed library's switch ends at1660Hz and falls back to104for unsupported settings. Use verified register readback for experiments and retain the lower range bits. Never label configured sensorODR as native pointer-event throughput.
+- Runtime rate changes can be reversed with R104 without flashing. They do not change startup104, gain, power-mode choice, radio setup or updater. Installed short measurements saturated around1400readings/s represented in~230Bluetooth reports/s above1660Hz; do not present6.66kHz as the acquisition or cursor rate.
+- Input fixtures extracting postPointerMove/senseLine must supply the passive experiment counter as a no-op collaborator. Do not alter real motion routing to make a fixture compile. Screenshot HIGH parity must use real pointer action routing and ordinary flags0, since screenshot samples may legitimately carry HUD-only flags4.
+
+
+### 2026-11-01 — Sense settled first click and still repeats (receiver192)
+
+Ethan clarified that a first click should remain prompt even after slowing near the target, tiny nearby targets should rearm promptly, and a completely still pointer should repeat at the earlier300ms interval. The settled shortcut observes the existing direct-path stillness gate for60ms of fresh rest; it never changes pointer output. The existing brisk-stop shortcut and200ms fallback remain. Sense enables repeats on session start and clears that option on teardown; Puck and screenshot settling remain single-shot. A coherent fine restart cancels an old repeat before the first whole pixel, so accepted tiny aiming does not click the old target. Tests at104and240updates/s cover stopped approaches, nearby targets, balanced tremor, slow lines/curves, missing readings, mode cancellation and post-scroll recoil. The original 191 first fix is independent of the later repeating-click amendment.

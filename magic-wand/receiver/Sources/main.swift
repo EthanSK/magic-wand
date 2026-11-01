@@ -120,6 +120,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let heldScroll=WandHeldScroll()
     var nativeScroll=WandNativeScrollGesture()
     let navigationFeedback=WandNavigationFeedback()
+    let experiment=WandExperiment(url:support.appendingPathComponent("experiment.json"))
+    var experimentTimer:Timer?
     var scrollFollowBefore=false
     var heldScrollAnchor:CGPoint?
     var heldTargetToken=UUID()
@@ -148,6 +150,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     // (see WandPointerOrigin). Quick brisk-stop clicks and the ordinary 200 ms
     // stillness click are both back; filtering and gain are unchanged.
     let dwell=WandDwellClick(fastStops:true)
+    /// Sense sessions set `dwell.repeatInterval` (Ethan, 2026-11-01); the Puck
+    /// stays single-shot. One bounded log line per repeat chain.
+    var repeatChainLogged=false
     // Per physical wand: the Sense profile swaps in its own learned desk pose.
     var restDetection=WandRestDetection(cache:support.appendingPathComponent("desk-reference.json"))
     var deskSleep=WandDeskSleep()
@@ -368,6 +373,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         startActionRequests()
         refreshUpdateWork()
         startGuide()
+        // One presentation tick: no extra sensor polling, input buffer or pointer timer.
+        experimentTimer=WandRunLoop.commonTimer(interval:1,repeats:true){[weak self] _ in
+            guard let self else{return}
+            self.experiment.tick(now:ProcessInfo.processInfo.systemUptime,
+                maySend:self.ready && !self.restoring && !self.senseUpdate.flow.busy && !self.senseUpdate.preparation.busy,
+                send:{self.senseLink?.send($0)})
+        }
         status()
     }
     func restoreKnownCalibration() {
@@ -551,7 +563,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // stays the same. Derive the write key from the exact published value.
         let firmwareStatus: [String: Any] = isSense ? senseUpdateStatus : [:]
         let firmwareStatusData = (try? JSONSerialization.data(withJSONObject: firmwareStatus, options: [.sortedKeys])) ?? Data()
-        let batteryKey=key+"|"+String(batterySampleAt?.timeIntervalSince1970 ?? 0)+"|"+String(guide?.visible ?? false)+(guide?.lastRequest ?? "")+"|"+(clickGate ?? "")+String(decoding:firmwareStatusData,as:UTF8.self)+"|"+String(updateWork.expiresAt)
+        let experimentData=(try? JSONSerialization.data(withJSONObject:experiment.status,options:[.sortedKeys])) ?? Data()
+        let batteryKey=String(decoding:experimentData,as:UTF8.self)+key+"|"+String(batterySampleAt?.timeIntervalSince1970 ?? 0)+"|"+String(guide?.visible ?? false)+(guide?.lastRequest ?? "")+"|"+(clickGate ?? "")+String(decoding:firmwareStatusData,as:UTF8.self)+"|"+String(updateWork.expiresAt)
         guard batteryKey != lastStatusKey else { return }
         lastStatusKey = batteryKey
         var value: [String: Any] = ["pid": ProcessInfo.processInfo.processIdentifier, "connected": deviceConnected,
@@ -569,6 +582,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if let request=actionPause.lastRequest {value["actionsRequest"]=request}
         // The instruction panel's actual visibility; an agent's request id once applied.
         value["guideVisible"]=guide?.visible ?? false
+        value["experiment"]=experiment.status
         // Why stop-to-click is blocked right now, and the HUD session behind it.
         value["clickGate"]=clickGate ?? "open"
         value["hudSession"]=hudSession
@@ -1942,6 +1956,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             pointerOrigin.moved(from:point,to:newPoint,now:ProcessInfo.processInfo.systemUptime)
             pointerTravel += abs(newPoint.x-point.x)+abs(newPoint.y-point.y)
             pointerEventsPosted += 1
+            experiment.postedPointerEvent()
         }
         movementCount += 1
         if movementCount == 1 || movementCount % 100 == 0 { log("MOVEMENT_REPORTS_POSTED", movementCount, "events", pointerEventsPosted) }
@@ -1953,7 +1968,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
               (-4095...4095).contains(x), (-4095...4095).contains(y), (0...3).contains(b), !restoring, !scrollActive, AXIsProcessTrusted() else { return }
         handleFrame(x:x,y:y,b:b)
     }
-    func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil,fineMove:Bool=false){
+    func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil,fineMove:Bool=false,resting:Bool=false){
         // Screenshot mode owns the mouse button and the native button; the wand's legacy
         // button frames carry no motion in raw mode and must never act here.
         if screenshot.ownsPointer {return}
@@ -1979,7 +1994,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                                        hudSession:hudSession,hudShown:context.isActive,scrollActive:scrollActive,
                                        hudOperating:hudButtonHeld || hudEntryPress || pointerInHUD)
         noteClickGate(gate)
-        dwell.move(dx:stopX ?? x,dy:stopY ?? y,now:ProcessInfo.processInfo.systemUptime,eligible:gate == nil,pointerX:x,pointerY:y,sampleSeconds:sampleSeconds,pointerQuiet:pointerQuiet,fineMove:fineMove)
+        dwell.move(dx:stopX ?? x,dy:stopY ?? y,now:ProcessInfo.processInfo.systemUptime,eligible:gate == nil,pointerX:x,pointerY:y,sampleSeconds:sampleSeconds,pointerQuiet:pointerQuiet,fineMove:fineMove,resting:resting)
         scheduleDwell()
         if routed.buttons != b {log("CONSUMED_HOLD_CLICK_DROPPED")}
         transition(to: routed.buttons, at: point)
@@ -2141,10 +2156,18 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         flickAnchor=nil
         if wasFlick {setCircleLight(false);motionFilter.reset();dwell.reset();scheduleDwell();return}
-        dwell.intent(sample.intent || sample.fineMoving,now:now)
+        // The tuned filter's motion signal is the original click veto. Fine
+        // Sense aiming extends the pause inside WandDwellClick, bounded by its
+        // last visible step; an unbounded fine veto here (receiver186-190)
+        // made invisible sub-pixel flicker postpone clicks after real stops.
+        // While the Sense stillness gate holds the reading at rest, the tuned
+        // filter's slowly decaying motion signal is not evidence of movement;
+        // it would otherwise cancel 300 ms repeats and postpone stop clicks for
+        // up to ~0.6 s after a stroke. Unchanged whenever the hand is not at rest.
+        dwell.intent(sample.intent && !sample.resting,now:now)
         // Click settling is a separate decision from pointer output. Removing
         // Sense drift rejection must not silently disable the fast-stop click.
-        handleFrame(x:sample.x,y:sample.y,b:buttons,stopX:sample.stopX,stopY:sample.stopY,sampleSeconds:Double(v[0])/1_000_000,pointerQuiet:sample.quietForClick,fineMove:sample.fineMoving)
+        handleFrame(x:sample.x,y:sample.y,b:buttons,stopX:sample.stopX,stopY:sample.stopY,sampleSeconds:Double(v[0])/1_000_000,pointerQuiet:sample.quietForClick,fineMove:sample.fineMoving,resting:sample.resting)
     }
     /// Bounded click telemetry: one line when the reason stop-to-click cannot
     /// act changes (never per frame), and the current reason in status.json.
@@ -2187,8 +2210,12 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             self.motionFilter.holdAfterAutomaticClick()
             self.senseVirtual?.clickLight()
             if self.dwell.lastClickWasFast {log("FAST_STOP_CLICK")}
+            if self.dwell.lastClickWasSettled {log("SETTLED_STOP_CLICK")}
+            // One line per repeat chain, not per 300 ms repeat.
+            if self.dwell.lastClickWasRepeat && !self.repeatChainLogged {self.repeatChainLogged=true;log("REPEAT_STOP_CLICKS_STARTED")}
+            if !self.dwell.lastClickWasRepeat {self.repeatChainLogged=false}
             if let diagnostic=self.dwell.lastClickDiagnostic {
-                log("STOP_CLICK",self.dwell.lastClickWasFast ? "fast":"precision",diagnostic)
+                log("STOP_CLICK",self.dwell.lastClickWasFast ? "fast":(self.dwell.lastClickWasSettled ? "settled":"precision"),diagnostic)
             }
             // Re-arms only when repeats are enabled; single-shot schedules nothing.
             self.scheduleDwell()
@@ -2293,6 +2320,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if senseUpdate.flow.busy {
             stopAfterSenseUpdate = true; log("STOP_DEFERRED_FOR_FIRMWARE_UPDATE"); return
         }
+        experimentTimer?.invalidate();experimentTimer=nil;experiment.stop()
         stopPointerObservation()
         navigationFeedback.dismiss()
         sendReview(review.cancel());reviewTimer?.invalidate();reviewTimer=nil

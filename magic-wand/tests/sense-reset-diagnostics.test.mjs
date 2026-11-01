@@ -22,6 +22,7 @@ struct FICR {uint32_t DEVICEID[2]={UINT32_MAX,UINT32_MAX};}; FICR ficr; FICR *NR
 const char FIRMWARE[]="${version}";
 uint32_t FIRMWARE_NUMBER=UINT32_MAX,bootResetReason=UINT32_MAX,updateTarget=UINT32_MAX;
 bool imuReady=false,wokeFromOff=false,updateKeyPresent=false;
+uint16_t activeRateHz=6660;
 int WAND_UPDATE_PROTOCOL=255,updateResult=0,MBR_SIZE=0;
 const char *wandUpdateResultName(int){return "installed";}
 uint32_t SD_FWID_GET(int){return UINT32_MAX;} uint32_t codeStart(){return UINT32_MAX;} uint32_t bootloaderStart(){return UINT32_MAX;}

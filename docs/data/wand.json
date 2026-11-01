@@ -11,16 +11,17 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.185",
-    "receiverBuild": "190",
+    "receiver": "1.2.187",
+    "receiverBuild": "192",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
-    "agenticMouse": "1.0.326",
-    "agenticMouseBuild": "332",
+    "agenticMouse": "1.0.327",
+    "agenticMouseBuild": "333",
     "persistentImage": "full-20261025a",
-    "senseFirmware": 12
+    "senseFirmware": 13
   },
   "status": [
+    "Installed: Agentic Mouse333 keeps a selected HUD wedge locked through held adjustment; a separate plain tap unlocks it. Receiver192 adds a prompt settled first click after a slowed approach or nearby target change, plus300ms repeated clicks while the Sense pointer remains still. Brisk-stop clicks and the original precision fallback remain; slow aiming, gentle curves, cancellation and pointer output are protected by focused regression checks. Firmware13 is confirmed over Bluetooth with saved settings, calibration and update key preserved. The reversible6660Hz sensor experiment is active and labelled separately from measured delivery. Physical click and pointer feel remain for review.",
     "Installed: Agentic Mouse 332 guides the centre outline toward the same valid wedge that a completed reach selects. Slow sideways aiming visits intervening wedges instead of freezing inside the ring and skipping them. Diagonal preview progress stays visible, and unchanged readings cannot continue a previous turn after the wand stops. Existing layout, sensitivity, hold and release actions, pointer behaviour, receiver 190 and firmware 12 are preserved. Signed installation and saved settings were verified. All 216 focused checks passed; physical feel remains for user review. The liked 330/190 baseline is saved in BEHAVIOUR_CHECKPOINTS.md.",
     "Installed: receiver 190 shows Back and Forward with standard arrow icons. Agentic Mouse 330 adds slider double-click reset to the existing default size and draws the macOS 26 animated wheel backing with a vector mask. Saved size, selection geometry, animation timing, mouse mappings and firmware 12 are preserved. Signed installed source, settings and Bluetooth readiness were verified. All 294 wand repository checks and 1,259 native app tests passed, with four app tests skipped. Native mask and feedback previews were inspected; physical animation feel remains for user review.",
     "Installed: receiver 189 preserves mouse follow when recording starts or stops, allows fresh brisk move-stop clicks to chain, and supports notification dragging with one mouse-button hold. Ordinary precision clicks, pointer tuning, scrolling and firmware 12 are unchanged. Signed installation, saved settings, Bluetooth readiness, fourteen focused checks and all 294 repository checks passed. Physical acceptance remains pending.",
@@ -514,7 +515,7 @@
         "tuned"
       ],
       "pointerGain": 1.1725,
-      "scope": "Sense profile only. Direct uses calibrated, orientation-projected gyro rate, configured gain, 1.4 vertical gain, one-third held gain, about 8 ms of causal smoothing and the original speed curve. Pointer-output stillness uses the previous 2-unit quiet threshold and 2-to-4 transition, with coherent fine movement preserved. Raw sensor and angular gesture input remain available. After a stop or automatic click, tiny restarts use the approved at-most-60 ms evidence window; larger movement resumes immediately. Suppressed motion is discarded. Screenshot dragging and held precision bypass stillness. Fine deliberate target motion can re-arm a click while the ordinary 200 ms pause and fast-stop path remain. The Puck keeps its tuned filter."
+      "scope": "Sense profile only. Direct uses calibrated, orientation-projected gyro rate, configured gain, 1.4 vertical gain, one-third held gain, about 8 ms of causal smoothing and the original speed curve. Pointer-output stillness uses the previous 2-unit quiet threshold and 2-to-4 transition, with coherent fine movement preserved. Raw sensor and angular gesture input remain available. After a stop or automatic click, tiny restarts use the approved at-most-60 ms evidence window; larger movement resumes immediately. Suppressed motion is discarded. Screenshot dragging and held precision bypass stillness. Fine deliberate target motion can re-arm a click. Fresh settled Sense input adds a prompt first click after 60 ms of confirmed rest and repeats every 300 ms while still; accepted fine motion cancels an old repeat immediately. The ordinary 200 ms fallback and brisk-stop shortcut remain. The Puck keeps its tuned filter."
     },
     "recordingMouseBlinkMs": 0,
     "microCircles": {

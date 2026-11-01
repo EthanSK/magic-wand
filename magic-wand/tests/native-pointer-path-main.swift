@@ -96,11 +96,17 @@ precondition(steady(0.1)>0 && steady(1.5)>0, "no hard low-speed cutoff")
 precondition(steady(1.5)<steady(5.5) && steady(5.5)<steady(10) && steady(10)<steady(25), "fine, medium and broad sensitivity curve stays in place")
 for rate in [0.1,0.5,1.0,1.5] {
  let f=filter(.direct);var mx=0,my=0
+ // Receiver191: invisible coherent readings count as quiet for the brisk-stop
+ // click; the dwell's bounded fine continuation prevents a premature click.
+ let curveDwell=WandDwellClick(fastStops:true);curveDwell.follow(true)
  for i in 0..<416 {
   let angle=Double(i)/416 * Double.pi/3
   let o=f.sample(rawX:Int((bias[0]+rate*counts*cos(angle)).rounded()),rawY:Int((bias[1]+rate*counts*sin(angle)).rounded()),microseconds:9615,held:false,resetState:false)!
   mx+=o.x;my+=o.y
-  if i>=6 {precondition(!o.quietForClick,"coherent fine motion prevents a premature click")}
+  let at=10+Double(i)*0.009615
+  curveDwell.intent(o.intent,now:at)
+  curveDwell.move(dx:o.stopX,dy:o.stopY,now:at,eligible:true,pointerX:o.x,pointerY:o.y,sampleSeconds:0.009615,pointerQuiet:o.quietForClick,fineMove:o.fineMoving)
+  precondition(!curveDwell.tick(now:at),"coherent fine motion prevents a premature click: \(rate)")
  }
  precondition(mx<0 && my>0,"gentle low-speed curves reach both axes: \(rate), \(mx), \(my)")
 }
@@ -297,7 +303,7 @@ func exercise(_ phases:[(Double,Double,Double)],noise:Bool=false)->[(Double,Bool
    let angle=Double(n)*2 * Double.pi/26
    let rx=noise ? 0.6*sin(angle):x, ry=noise ? 0.5*cos(angle):y
    let s=f.sample(rawX:Int((rx*134).rounded()),rawY:Int((ry*134).rounded()),microseconds:9615,held:false,resetState:false)!
-   d.intent(s.intent || s.fineMoving,now:now)
+   d.intent(s.intent,now:now) // ordinary path without the rest flag (receiver191 call shape)
    d.move(dx:s.stopX,dy:s.stopY,now:now,eligible:true,pointerX:s.x,pointerY:s.y,sampleSeconds:0.009615,pointerQuiet:s.quietForClick,fineMove:s.fineMoving)
    if d.tick(now:now) { clicks.append((now-10,d.lastClickWasFast));f.holdAfterAutomaticClick() }
    now+=0.009615;n+=1

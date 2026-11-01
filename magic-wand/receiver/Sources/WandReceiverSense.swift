@@ -46,7 +46,11 @@ extension WandReceiver {
         }
         senseSessionNumber += 1
         senseInfo = info; senseTransport = transport; senseSession.reset(); senseClock.reset(); senseLastReading = -.infinity; senseStaleReadings = 0; senseMouseButtonTimer.reset(); senseHUDButtonTimer.reset()
+        // Ethan (2026-11-01): a still pointer repeats its stop-to-click every
+        // 300 ms. Sense only; any movement or cancellation ends the repeats.
+        dwell.repeatInterval = WandDwellClick.senseRepeatInterval
         senseUpdateIdentity(info, transport)
+        experiment.connection(hz: info.odr, supportsRateControl: info.rateControl, now: ProcessInfo.processInfo.systemUptime)
         restDetection = WandRestDetection(cache: support.appendingPathComponent("desk-reference-sense-\(info.id).json"))
         virtual.onTimedText = { [weak self, weak virtual] text, times in
             guard let self, let virtual, self.senseVirtual === virtual else { return }
@@ -89,7 +93,9 @@ extension WandReceiver {
         guard senseVirtual != nil || senseTransport != nil else { return }
         reset()
         senseVirtual?.teardown(); senseVirtual = nil
+        experiment.disconnected(now: ProcessInfo.processInfo.systemUptime)
         senseInfo = nil; senseTransport = nil; senseSession.reset(); senseClock.reset(); senseMouseButtonTimer.reset(); senseHUDButtonTimer.reset()
+        dwell.repeatInterval = nil // A later Puck session stays single-shot.
         senseDashboard.status(["type": "status", "state": "searching", "session": senseSessionNumber])
         status()
     }
@@ -117,6 +123,7 @@ extension WandReceiver {
                                              "recording":recording.isRecording,"hud":hudSession,
                                              "pointerPath":motionFilter.path.rawValue,"lateDropped":senseStaleReadings]])
             guard let steps = senseSession.accept(frame, arrival: arrival) else { return }
+            if frame.gyro != nil { experiment.received(readings: frame.count) }
             let time = senseClock.align(micros: frame.micros, arrival: arrival)
             let axes = deviceSettings.senseAxes
             let accel = frame.accel.map { WandSenseUnits.accel($0, info: info, axes: axes) }
@@ -156,7 +163,9 @@ extension WandReceiver {
             let usable = volts >= 2.5 && volts <= 4.5
             virtual.battery(volts: usable ? volts : nil,
                             percent: usable ? Int(max(0, min(100, ((volts - 3.3) / 0.85 * 100).rounded()))) : nil)
-        case .event(let text): log("SENSE_EVENT", text)
+        case .event(let text):
+            experiment.reply(text)
+            log("SENSE_EVENT", text)
         case .info, .update: break
         }
     }

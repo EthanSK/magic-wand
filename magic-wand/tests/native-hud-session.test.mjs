@@ -45,6 +45,9 @@ final class Trace {var boundaries:[String]=[];func boundary(_ reason:String,mode
 final class Controls {var phases:[String]=[];var points:[CGPoint]=[];func persistent(_ phase:String,x:Double=0,y:Double=0,mouseX:Double?=nil){phases.append(phase);points.append(CGPoint(x:x,y:y))}}
 final class Review {func cancel()->[Int]{[]};var isHeld=false;var committed=false;var starts:[String]=[];var modeChanges:[String]=[];var endings:[Bool]=[];var inputs=0;func beginDetents(mode:String,now:Double){starts.append(mode)};func changeMode(_ mode:String,now:Double)->[Int]{modeChanges.append(mode);return[]};func tick(now:Double)->[Int]{[]};func motion(y:Double,now:Double)->[Int]{[]};func detents(_ count:Int32,now:Double)->[Int]{inputs+=1;return[]};func endDetents(commit:Bool)->[Int]{endings.append(commit);committed=commit;return[]}}
 final class Harness {
+ // Passive experiment counting has no input effect in this inert harness.
+ struct Experiment {func postedPointerEvent(){}}
+ let experiment=Experiment()
  var physicalHUDDuration:Double?
  func hudButtonPhysicalDuration()->Double?{physicalHUDDuration}
  func invalidatePointerMotion(){}

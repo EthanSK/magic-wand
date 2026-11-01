@@ -264,3 +264,16 @@ fresh five-minute deep-standby grace period. The three-button manual shutdown
 still wins. This cannot remotely wake a radio that was already powered off.
 The physical Sense board retains its independent five-minute offline shutdown
 if the Mac disappears; the lease is not a promise to stay awake out of range.
+
+
+### Reversible Sense rate experiments
+
+Firmware13 and receiver191 support a reusable persistent bottom-left experiment label. The receiver reads a private `experiment.json` in its existing WandReceiver application-support directory, without restarting or creating a second Bluetooth connection:
+
+```json
+{"version":1,"visible":true,"label":"Refresh rate","sensorHz":6660}
+```
+
+Write the file atomically with owner-only permissions. Accepted rates are104,208,416,833,1660,3330 and6660Hz. The receiver sends a rate command only on supported firmware, confirms the firmware's readback, and limits unacknowledged retries. The label separately shows configured sensorHz, received readings/s (including the board's existing merged count), received reports/s and posted pointer events/s. An idle wand naturally reports no pointer events. It remains visible across app restarts until `visible` is set to false. Hiding the label does not itself revert an active experiment: set `sensorHz` to104 to revert. A board reboot starts at104Hz before the receiver reapplies an explicit saved experiment.
+
+This is an experiment, not a guaranteed end-to-end6660Hz mouse. The existing400kHz sensor bus cannot read every conversion at the highest ODR, and Bluetooth can represent multiple readings in one report. The panel counts what actually arrives; it does not queue or synthesize extra pointer positions.

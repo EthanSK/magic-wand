@@ -1,0 +1,119 @@
+import Foundation
+setbuf(stdout, nil)
+// Inert click-lane regressions (receiver192 candidate): the real WandMotionFilter
+// and WandDwellClick in handleRaw's call order (intent, move with the stillness
+// gate's rest flag, timer tick, post-click hold). No native input or hardware.
+// Ethan (2026-11-01): "it should detect clicks pretty fast always ... at least
+// the first click of the batch and then like if I haven't moved at all, then it
+// should repeat the click ... If I move a tiny bit to try and point at something
+// else nearby, then it should send the click faster as well."
+let config=[0,0,86.4*1.1725,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,1]
+let hz=Double(CommandLine.arguments.dropFirst().first ?? "104")!
+let dt=1/hz
+struct Click {let t:Double;let fast:Bool;let settled:Bool;let repeated:Bool}
+final class Hand {
+ let f=WandMotionFilter();let d:WandDwellClick
+ var now=10.0,n=0,clicks:[Click]=[],lastVisible = -Double.infinity
+ init(repeats:Bool=true){d=WandDwellClick(repeatInterval:repeats ? WandDwellClick.senseRepeatInterval:nil,fastStops:true);precondition(f.configure(config));f.path = .direct;d.follow(true)}
+ /// Pointer-axis rates in filter units/s; `wobble` adds the balanced 4 Hz
+ /// ellipse used by the stationary-noise regression ("trying to hold it still").
+ func run(_ seconds:Double,_ rate:(Double)->(Double,Double)={_ in (0,0)},wobble:Bool=false,eligible:Bool=true){
+  let start=now
+  for _ in 0..<Int((seconds*hz).rounded()) {
+   var (x,y)=rate(now-start)
+   if wobble {let a=Double(n)*2*Double.pi*4/hz;x+=0.6*sin(a);y+=0.5*cos(a)}
+   let s=f.sample(rawX:Int((x*134).rounded()),rawY:Int((y*134).rounded()),microseconds:Int((dt*1_000_000).rounded()),held:false,resetState:false)!
+   if s.x != 0 || s.y != 0 {lastVisible=now}
+   d.intent(s.intent && !s.resting,now:now) // receiver main.swift
+   d.move(dx:s.stopX,dy:s.stopY,now:now,eligible:eligible,pointerX:s.x,pointerY:s.y,sampleSeconds:dt,pointerQuiet:s.quietForClick,fineMove:s.fineMoving,resting:s.resting)
+   tick(until:now+dt)
+   now+=dt;n+=1
+  }
+ }
+ /// The receiver's one-shot timer: due work fires before the next reading.
+ func tick(until limit:Double){
+  while let due=d.nextDue,due<limit {
+   let at=max(due,now)
+   guard d.tick(now:at) else{break}
+   clicks.append(Click(t:at,fast:d.lastClickWasFast,settled:d.lastClickWasSettled,repeated:d.lastClickWasRepeat));f.holdAfterAutomaticClick()
+  }
+ }
+}
+
+// 1. A real move that slows toward the end, then a held hand. The brisk-stop
+// path cannot apply (its last brisk reading is >120 ms before the stop); the
+// first click of the batch still comes before the 200 ms pause could end.
+let slowed=Hand()
+slowed.run(0.3,wobble:true)
+slowed.run(0.15){_ in (30,0)}
+slowed.run(1.0){t in (30*max(0,1-t),0)} // decelerates to a stop over one second
+let stop1=slowed.lastVisible
+slowed.run(0.25,wobble:true)
+let first=slowed.clicks.first
+print("slowed approach: first click",first.map{($0.t-stop1,$0.fast,$0.settled)} as Any)
+precondition(first != nil && first!.settled && first!.t>stop1 && first!.t-stop1<0.19,"slowed stop clicks promptly: \(String(describing:first.map{($0.t-stop1,$0.fast,$0.settled)}))")
+precondition(slowed.clicks.count==1,"one click for one stop: \(slowed.clicks.map{$0.t-stop1})")
+
+// 2. Remaining still: repeat at the 300 ms rate, timed from the actual click.
+slowed.run(0.75,wobble:true)
+let chain=slowed.clicks
+print("still after the click",chain.map{($0.t-chain[0].t,$0.repeated)})
+precondition(chain.count>=3 && chain.dropFirst().allSatisfy{$0.repeated},"repeats while still: \(chain.map{$0.t-chain[0].t})")
+for (a,b) in zip(chain,chain.dropFirst()) {precondition(b.t-a.t>=0.299 && b.t-a.t<=0.32,"300 ms repeat spacing: \(b.t-a.t)")}
+
+// 3. A tiny move to a nearby target re-arms and clicks promptly as well.
+let before=slowed.clicks.count
+slowed.run(0.2){_ in (0.7,0)}
+let stop2=slowed.lastVisible
+slowed.run(0.25,wobble:true)
+let retarget=slowed.clicks.dropFirst(before).first
+print("tiny nearby target",retarget.map{($0.t-stop2,$0.settled,$0.repeated)} as Any)
+precondition(retarget != nil && !retarget!.repeated && retarget!.t>stop2 && retarget!.t-stop2<0.19,"tiny re-target clicks promptly: \(String(describing:retarget.map{($0.t-stop2,$0.settled)}))")
+
+// 4. Random still tremor never invents a first click, even with repeats on.
+let tremor=Hand();tremor.run(3,wobble:true)
+precondition(tremor.clicks.isEmpty,"tremor alone must not click: \(tremor.clicks.count)")
+
+// 5. Continuous slow aiming and gentle curves still never click mid-aim.
+for rate in [0.08,0.15,0.3,0.7,1.5] {
+ let aim=Hand();aim.run(3){_ in (rate,0)}
+ precondition(aim.clicks.isEmpty,"continuous slow aiming at \(rate) must not click: \(aim.clicks.count)")
+ let curve=Hand();curve.run(4){t in (rate*cos(t/4*Double.pi/3),rate*sin(t/4*Double.pi/3))}
+ precondition(curve.clicks.isEmpty,"gentle curve at \(rate) must not click: \(curve.clicks.count)")
+}
+print("PASS: prompt first and re-target clicks, 300 ms repeats while still, no tremor or slow-aim clicks")
+
+// 6. Cancellation ends a pending repeat: follow off, an ineligible reading
+// (mouse button, HUD operation, scroll) or a reset never emits afterwards.
+for cancel in ["none","follow","ineligible","reset"] {
+ let h=Hand();h.run(0.3,wobble:true);h.run(0.15){_ in (30,0)};h.run(0.25,wobble:true)
+ precondition(h.clicks.count==1,"\(cancel): one click before cancelling: \(h.clicks.count)")
+ switch cancel {
+ case "none": h.run(1,wobble:true)
+ case "follow": h.d.follow(false);h.run(1,wobble:true)
+ case "ineligible": h.run(1,wobble:true,eligible:false)
+ default: h.d.reset();h.run(1,wobble:true)
+ }
+ if cancel=="none" {precondition(h.clicks.count>=3,"control: a still pointer keeps repeating: \(h.clicks.count)")}
+ else {precondition(h.clicks.count==1,"\(cancel) cancels the repeat chain: \(h.clicks.count)")}
+}
+// 7. Scroll-release recoil cannot earn the settled shortcut: as for brisk
+// stops, it needs a quiet hand and then fresh movement first.
+let recoil=Hand();recoil.run(0.3,wobble:true);recoil.d.requireFreshFastGesture()
+recoil.run(0.12){_ in (30,0)};let recoilStop=recoil.lastVisible;recoil.run(0.5,wobble:true)
+precondition(recoil.clicks.first.map{!$0.settled && !$0.fast && $0.t-recoilStop>=0.2} ?? true,"release recoil keeps the ordinary pause: \(recoil.clicks.map{$0.t-recoilStop})")
+// 8. Silence never confirms a settled stop: telemetry stops after 30 ms of rest.
+let silent=Hand(repeats:false);silent.run(0.3,wobble:true);silent.run(0.15){_ in (30,0)}
+let silentStop=silent.lastVisible;silent.run(0.03,wobble:true)
+silent.tick(until:silentStop+0.19)
+precondition(silent.clicks.allSatisfy{$0.fast},"no settled click without fresh rest readings: \(silent.clicks.map{($0.t-silentStop,$0.settled)})")
+print("PASS: cancellation, scroll recoil and missing readings never produce a settled or repeat click")
+
+// A coherent sub-pixel re-target cancels repetition immediately, before its
+// first whole pixel exists; it must not click the old target mid-aim.
+let fineRestart=WandDwellClick(repeatInterval:0.3);fineRestart.follow(true)
+fineRestart.move(dx:12,dy:0,now:40,eligible:true)
+precondition(fineRestart.tick(now:40.2) && fineRestart.repeating)
+fineRestart.move(dx:0,dy:0,now:40.3,eligible:true,pointerX:0,pointerY:0,fineMove:true)
+precondition(!fineRestart.repeating,"accepted fine aiming cancels the old target repeat before a visible step")
+print("PASS: coherent sub-pixel restart cancels repetition")

@@ -28,6 +28,9 @@ final class Event {
 }
 final class CGEvent {static var system=CGPoint.zero;var location:CGPoint {CGEvent.system};init?(source:Int?){}}
 final class Harness {
+ // Passive experiment counting has no input effect in this inert harness.
+ struct Experiment {func postedPointerEvent(){}}
+ let experiment=Experiment()
  static var posted:[Posted]=[]
  var actionPause=WandActionPause();let screenshot=WandScreenshotGesture()
  var recordingPointerPaused=false,hudSession=false,hudButtonHeld=false,hudEntryPress=false,pointerInHUD=false

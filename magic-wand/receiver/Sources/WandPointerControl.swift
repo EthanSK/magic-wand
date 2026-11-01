@@ -282,6 +282,8 @@ struct WandFastStopClick {
     /// Mode changes still use the full reset; no old travel or position survives.
     mutating func reset(keepingSampleTime:Bool=false){let sampleAt=lastAt;self=Self();if keepingSampleTime {lastAt=sampleAt}}
     mutating func requireRest(){reset();needsRest=true}
+    /// After a scroll release, until a quiet hand is confirmed.
+    var awaitingRest:Bool {needsRest}
     mutating func sample(stopped:Bool,x:Int,y:Int,now:Double,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil){
         guard now.isFinite else{reset();return}
         let dt=lastAt.map{now-$0};lastAt=now
@@ -308,8 +310,11 @@ struct WandFastStopClick {
             // Ethan's brisk-stop exception uses the pointer he can see. The
             // ordinary precision path still follows the tuned stop guard;
             // hidden residual counts cannot postpone this recent brisk stop.
-            // But sub-pixel *accepted* movement is still precision aiming,
-            // even between integer cursor steps; it must not count as quiet.
+            // Ethan (2026-11-01): "when I move the pointer and then stop it ...
+            // the fast click thing doesn't even happen as much". A coherent
+            // sub-pixel reading with no visible step is quiet here, as before
+            // receiver186; a visible step (the branch below) is still motion,
+            // and only the brief tail after a brisk sweep is eligible.
             guard pointerQuiet ?? stopped else {
                 quietAt=nil;quietCount=0;due=nil
                 if eligible {missReason="not fully quiet"}
@@ -356,11 +361,25 @@ final class WandDwellClick {
     /// While the pointer stays settled after the first click,
     /// click again every `repeatInterval`. Any movement, intent, ineligible
     /// sample, button or mode change, or stale telemetry ends the repeats.
-    /// Nil (screenshot settling) never repeats.
-    let repeatInterval:Double?
+    /// Nil (screenshot settling, the Puck) never repeats. Ethan (2026-11-01):
+    /// "if I haven't moved at all, then it should repeat the click after, well,
+    /// the current rate" — the Sense session enables `senseRepeatInterval`.
+    var repeatInterval:Double?
+    static let senseRepeatInterval=0.3
+    /// Ethan (2026-11-01): "I slowed down like towards the end and it doesn't
+    /// count as like a fast motion. But still, like it should detect clicks
+    /// pretty fast always ... at least the first click of the batch". An armed
+    /// target clicks once the Sense stillness gate has held the pointer at rest
+    /// (balanced wobble, his "trying to hold it still") for his approved 60 ms
+    /// of idleness. Additive: the brisk-stop and 200 ms paths are unchanged;
+    /// coherent slow aiming is never rest, so it does not click mid-aim.
+    static let settleHold=0.06
     private var fastStop:WandFastStopClick?
     private(set) var lastClickWasFast=false
+    private(set) var lastClickWasSettled=false
+    private(set) var lastClickWasRepeat=false
     private(set) var lastClickDiagnostic:String?
+    private var restSince:Double?,settledDue:Double?,settleEligible=false,lastClickAt = -Double.infinity
     /// A quick click may replace the ordinary click only while the pointer stays
     /// at that same target. It must not erase the ordinary movement/timing state:
     /// Ethan's small correction after a rapid stop still needs its normal click.
@@ -372,18 +391,22 @@ final class WandDwellClick {
     private(set) var armed=false
     private(set) var repeatDue:Double?
     private var lastSeen = -Double.infinity
+    /// The newest visible pointer step. Equal to the stop counts on the tuned
+    /// and Puck paths, so their timing is unchanged.
+    private var lastVisible = -Double.infinity
     init(pause:Double=0.2,travel:Double=12,repeatInterval:Double?=nil,fastStops:Bool=false){self.pause=pause;self.travel=travel;self.repeatInterval=repeatInterval;fastStop=fastStops ? WandFastStopClick():nil}
     var nextDue:Double? {
         guard following else{return nil}
-        if armed {return max(min(max(lastMotion+pause,intentUntil),fastStop?.due ?? .infinity),inhibitedUntil)}
+        if armed {return max(min(max(lastMotion+pause,intentUntil),fastStop?.due ?? .infinity,settledDue ?? .infinity),inhibitedUntil)}
         return repeatDue
     }
     var repeating:Bool {repeatDue != nil}
-    func reset(keepingFastSampleTime:Bool=false){x=0;y=0;fineX=0;fineY=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil;fastStop?.reset(keepingSampleTime:keepingFastSampleTime);lastClickWasFast=false;lastClickDiagnostic=nil;fastClickAwaitingMovement=false}
+    func reset(keepingFastSampleTime:Bool=false){x=0;y=0;fineX=0;fineY=0;lastVisible = -Double.infinity;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil;fastStop?.reset(keepingSampleTime:keepingFastSampleTime);lastClickWasFast=false;lastClickWasSettled=false;lastClickWasRepeat=false;lastClickDiagnostic=nil;fastClickAwaitingMovement=false;restSince=nil;settledDue=nil;settleEligible=false;lastClickAt = -.infinity}
     func follow(_ on:Bool){if following != on {reset()};following=on}
     /// A scroll release may contain wrist recoil. Keep the old click pause
     /// until a quiet hand and a new pointer move establish a fresh gesture.
-    func requireFreshFastGesture(){fastStop?.requireRest()}
+    /// The settled shortcut follows the same rule.
+    func requireFreshFastGesture(){fastStop?.requireRest();settleEligible=false;settledDue=nil}
     func inhibit(until:Double){reset();inhibitedUntil=max(inhibitedUntil,until)}
     /// The device sees sub-pixel motion before integer cursor counts exist.
     /// A bounded heartbeat lease prevents both premature clicks and stuck state.
@@ -396,52 +419,88 @@ final class WandDwellClick {
         if moving {intentUntil=now+0.6;lastMotion=now;repeatDue=nil}
         else if intentUntil>0 {intentUntil=0;lastMotion=now}
     }
-    func move(dx:Int,dy:Int,now:Double,eligible:Bool,pointerX:Int?=nil,pointerY:Int?=nil,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil,fineMove:Bool=false){
+    /// `resting`: the direct Sense stillness gate is holding this reading at rest
+    /// (WandMotionFilter.Result.resting). Tuned and Puck callers never supply it.
+    func move(dx:Int,dy:Int,now:Double,eligible:Bool,pointerX:Int?=nil,pointerY:Int?=nil,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil,fineMove:Bool=false,resting:Bool=false){
         guard following,eligible,now>=inhibitedUntil else{reset();return}
         fastStop?.sample(stopped:dx==0 && dy==0,x:pointerX ?? dx,y:pointerY ?? dy,now:now,sampleSeconds:sampleSeconds,pointerQuiet:pointerQuiet)
         lastSeen=now
-        if (pointerX ?? dx) != 0 || (pointerY ?? dy) != 0 {fastClickAwaitingMovement=false}
+        let visibleX=Double(pointerX ?? dx),visibleY=Double(pointerY ?? dy)
+        let visibleStep=visibleX != 0 || visibleY != 0
+        // The 200 ms precision pause starts when the pointer Ethan can see
+        // stops. On the direct path, a visible step can come with zero tuned
+        // stop counts (radial slack); without this the click could fire while
+        // the pointer was still visibly moving. Arming is unchanged.
+        if visibleStep {fastClickAwaitingMovement=false;lastVisible=now;lastMotion=now;repeatDue=nil}
         // Only the direct Sense path supplies fineMove, after its noise/intent
         // decision. A real one-pixel target change can arm another ordinary
         // click; raw tremor and the legacy Puck do not lower the12-count gate.
+        // Ethan (2026-11-01): "if I've moved the wand just a little bit, it
+        // should kick again sooner. It waits too long." Receiver186 let every
+        // coherent sub-pixel reading restart the pause, even with no visible
+        // step; after real stops these flicker on and off, so replayed use
+        // waited up to 1.2 s and some stops never clicked. Invisible fine
+        // motion may extend the pause only within one pause interval of the
+        // last visible step, so continuous slow aiming (about 3 px/s or more)
+        // still never clicks mid-aim. No motion is delayed, buffered or replayed.
         if fineMove {
-            fineX+=Double(pointerX ?? dx);fineY+=Double(pointerY ?? dy)
-            if hypot(fineX,fineY)>=1 {armed=true;repeatDue=nil;lastMotion=now}
+            // A deliberate tiny restart ends the old target's repeats before
+            // its first whole pixel. This never changes or delays pointer output.
+            repeatDue=nil
+            fineX+=visibleX;fineY+=visibleY
+            if visibleStep && hypot(fineX,fineY)>=1 {armed=true}
+            else if now-lastVisible<=pause {lastMotion=now}
         }
-        guard dx != 0 || dy != 0 else{return}
-        repeatDue=nil
-        // The established ordinary click path keeps its original counters.
-        // Quick-stop recognition observes it; it never consumes this state.
-        x+=Double(dx);y+=Double(dy);lastMotion=now
-        if hypot(x,y)>=travel {armed=true}
+        if dx != 0 || dy != 0 {
+            repeatDue=nil
+            // The established ordinary click path keeps its original counters.
+            // Quick-stop recognition observes it; it never consumes this state.
+            x+=Double(dx);y+=Double(dy);lastMotion=now
+            if hypot(x,y)>=travel {armed=true}
+        }
+        // Settled stop: new visible movement toward an armed target (the first
+        // click of a batch, or a tiny nearby re-target) may click once the
+        // pointer is observed at rest for `settleHold`. Each confirmation comes
+        // from a fresh reading; silence never confirms it, and one target gets
+        // one quick click (the 300 ms repeats handle staying still).
+        if visibleStep && armed && !(fastStop?.awaitingRest ?? false) {settleEligible=true}
+        if resting && !visibleStep && dx==0 && dy==0 {
+            if restSince==nil {restSince=now}
+            if settledDue==nil,armed,settleEligible,!fastClickAwaitingMovement,now-(restSince ?? now)>=Self.settleHold {settledDue=now}
+        } else {restSince=nil;settledDue=nil}
     }
     func tick(now:Double)->Bool {
         guard let due=nextDue,now>=due else{return false}
         if !armed {
             // A repeat: only on a fresh, still settled pointer, never a burst.
             guard now-lastSeen<=Self.freshness, let interval=repeatInterval else{reset();return false}
-            repeatDue=now+interval
+            repeatDue=now+interval;lastClickAt=now
+            lastClickWasFast=false;lastClickWasSettled=false;lastClickWasRepeat=true;lastClickDiagnostic=nil
             return true
         }
-        let fast=(fastStop?.due).map{$0<lastMotion+pause} ?? false
+        let ordinaryDue=lastMotion+pause
+        let fast=(fastStop?.due).map{$0<ordinaryDue} ?? false
+        let settled = !fast && (settledDue.map{$0<ordinaryDue && $0<=now} ?? false)
         // An overdue quick decision cannot click later at a stale position.
-        if fast,now-lastSeen>WandFastStopClick.maximumGap {fastStop?.reset();return false}
+        if fast || settled,now-lastSeen>WandFastStopClick.maximumGap {fastStop?.reset();settledDue=nil;restSince=nil;return false}
         let diagnostic=fastStop?.report(now:now)
-        if fast {
+        if fast || settled {
             // An additional early opportunity, not a replacement state machine.
             // Keep the original normal-click deadline and travel. A small real
             // correction can still receive exactly the ordinary click it would
             // have received with quick clicking disabled.
-            fastStop?.reset(keepingSampleTime:true);fastClickAwaitingMovement=true
-            lastClickWasFast=true;lastClickDiagnostic=diagnostic
+            fastStop?.reset(keepingSampleTime:true);settledDue=nil;fastClickAwaitingMovement=true
+            lastClickWasFast=fast;lastClickWasSettled=settled;lastClickWasRepeat=false;lastClickDiagnostic=diagnostic;lastClickAt=now
             return true
         }
         // If nothing visibly moved after the quick click, that target already
         // received its click. Consume only this duplicate at the original
         // deadline; hidden sensor residue must not click the target twice.
-        let alreadyClicked=fastClickAwaitingMovement
+        // Repeats are timed from the actual quick click, never sooner.
+        let alreadyClicked=fastClickAwaitingMovement,quickAt=lastClickAt
         reset(keepingFastSampleTime:true);lastClickWasFast=false;lastClickDiagnostic=diagnostic
-        if let interval=repeatInterval {repeatDue=now+interval}
+        if !alreadyClicked {lastClickAt=now}
+        if let interval=repeatInterval {repeatDue=alreadyClicked ? max(now,quickAt+interval):now+interval}
         return !alreadyClicked
     }
 }
@@ -787,7 +846,9 @@ final class WandMotionFilter {
     // stopX/stopY: the tuned filter's counts, used only to decide stop-to-click
     // (dwell) and screenshot settling, so a direct pointer cannot disable or
     // flood those clicks with tremor- or bias-level counts. Equal to x/y when tuned.
-    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0;var highY=0.0;var quietForClick=false;var fineMoving=false}
+    /// `resting`: the direct path's continuous stillness gate held this reading
+    /// (balanced wobble or the post-click hold). Click evidence only.
+    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0;var highY=0.0;var quietForClick=false;var fineMoving=false;var resting=false}
     var path:WandPointerPath = .tuned
     private var directX=0.0,directY=0.0,smoothX=0.0,smoothY=0.0
     private var postClickStillness=WandPostClickStillness()
@@ -886,7 +947,15 @@ final class WandMotionFilter {
         if held || !applyStillness {postClickStillness.reset()}
         let permitted=held || !applyStillness || postClickStillness.permits(x:smoothX,y:smoothY,seconds:dt,fastSpeed:v[5])
         let fineMoving=permitted && postClickStillness.coherentMotion && smoothSpeed<=v[5] && smoothSpeed>0.01
-        let quietForClick = !permitted || (smoothSpeed<=v[5] && !fineMoving) || v[2]==0
+        // Brisk-stop quietness: below the quiet speed, a reading counts as quiet
+        // for the fast click; WandFastStopClick still treats every visible
+        // pointer step as motion. Receiver186 also marked coherent sub-pixel
+        // readings with no visible step as not quiet. Replayed receiver190 use
+        // (2026-11-01, 46/46 logged clicks reproduced) showed those invisible
+        // readings cancelling stops Ethan could see, e.g. a confirmed fast stop
+        // 1 ms before the next reading in the same Bluetooth batch. Ordinary
+        // fine aiming is protected separately in WandDwellClick.
+        let quietForClick = !permitted || smoothSpeed<=v[5] || v[2]==0
         // Outside a coherent intentional stroke, retain the old 2-to-4-unit
         // quiet knee instead of passing a one-frame noise spike at full gain.
         let knee=max(0,min(1,(smoothSpeed-v[5])/max(0.01,v[5])))
@@ -901,7 +970,7 @@ final class WandMotionFilter {
         directX-=Double(directCountX);directY-=Double(directCountY)
         return .init(x:max(-4095,min(4095,directCountX)),y:max(-4095,min(4095,directCountY)),intent:active,
                      angularX:x*v[11],angularY:y*v[12],highX:smoothX*step*v[2]*v[11],stopX:permitted ? tunedX:0,stopY:permitted ? tunedY:0,
-                     highY:smoothY*step*v[2]*v[3]*v[12],quietForClick:quietForClick,fineMoving:fineMoving)
+                     highY:smoothY*step*v[2]*v[3]*v[12],quietForClick:quietForClick,fineMoving:fineMoving,resting:!permitted)
     }
 
 }

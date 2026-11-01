@@ -12,13 +12,14 @@ import {createHmac,createHash} from 'node:crypto';
 // bootloader, the radio or a real board.
 const header=fileURLToPath(new URL('../device/sense/wand_sense/wand_update.h',import.meta.url));
 const usb=fileURLToPath(new URL('../device/sense/wand_sense/wand_usb_output.h',import.meta.url));
+const rateHeader=fileURLToPath(new URL('../device/sense/wand_sense/WandSampleRate.h',import.meta.url));
 const light=fileURLToPath(new URL('../device/sense/wand_sense/wand_light.h',import.meta.url));
 const firmware=readFileSync(new URL('../device/sense/wand_sense/wand_sense.ino',import.meta.url),'utf8');
 function run(body){
  const dir=mkdtempSync(join(tmpdir(),'wand-update-'));
  try {
   const source=join(dir,'check.cpp'),binary=join(dir,'check');
-  writeFileSync(source,`#include "${header}"\n#include "${light}"\n#include "${usb}"\n#include <string>\n#include <algorithm>\n#include <cassert>\n#include <cstring>\n#include <initializer_list>\n${body}\n`);
+  writeFileSync(source,`#include "${header}"\n#include "${light}"\n#include "${usb}"\n#include "${rateHeader}"\n#include <string>\n#include <algorithm>\n#include <cassert>\n#include <cstring>\n#include <initializer_list>\n${body}\n`);
   const built=spawnSync('c++',['-std=c++17','-Wall','-Werror','-Wno-unused-function','-Wno-unused-const-variable',source,'-o',binary],{encoding:'utf8'});
   assert.equal(built.status,0,built.stderr);
   const ran=spawnSync(binary,[],{encoding:'utf8'});assert.equal(ran.status,0,ran.stdout+ran.stderr);
@@ -51,6 +52,7 @@ test('malformed and disconnected command input cannot turn its suffix into sleep
  uint32_t millis(){return 100;}void sendIdentity(Transport){identities++;}void sendBattery(){}
  void endSession(bool){session=NONE;}void updateCommand(const char*,uint8_t,Transport){}
  void clearMerged(){}void setLight(int,int,int){}void setIMUMode(int){}
+ void sampleRateReport(Transport,bool){}bool configureSampleRate(const WandSampleRate&){return true;}
  ${commands}
  int main(){
  Serial.feed(std::string(112,'x')+"Z\\nH\\n");readCommands();assert(!sleepRequested&&session==USB_LINK);
@@ -209,7 +211,7 @@ test('firmware lights stay in their own colour families and stop like every boar
 
 test('the firmware exposes no open updater and keeps the key off Bluetooth',()=>{
  assert.doesNotMatch(firmware,/^\s*BLEDfu\s+\w+\s*;|\.begin\(\);?\s*\/\/\s*dfu|bledfu\.begin|addService\(bledfu\)/m,'no open DFU control point is declared or started');
- assert.match(firmware,/static const char FIRMWARE\[\] = "wand-sense-12";\nstatic const uint32_t FIRMWARE_NUMBER = 12;/);
+ assert.match(firmware,/static const char FIRMWARE\[\] = "wand-sense-13";\nstatic const uint32_t FIRMWARE_NUMBER = 13;/);
  const number=firmware.match(/static const uint32_t FIRMWARE_NUMBER = (\d+);/)[1];
  assert.equal(firmware.match(/static const char FIRMWARE\[\] = "wand-sense-(\d+)";/)[1],number,'the name and number agree');
  assert.match(firmware,new RegExp(`static const char WAND_IMAGE_MARKER\\[\\] = "WANDIMG1;xiao-nrf52840-sense;${number}";`),'the image marker carries the same number');

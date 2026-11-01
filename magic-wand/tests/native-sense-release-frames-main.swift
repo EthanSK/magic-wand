@@ -38,6 +38,8 @@ struct Settings { var senseAxes = WandSenseAxes.standard }
 final class Dashboard { func packet(_ v: [String: Any]) {} }
 enum Transport: String { case bluetooth = "Bluetooth" }
 final class Receiver {
+    struct Experiment { func received(readings:Int){}; func reply(_ event:String){} }
+    let experiment=Experiment()
     var senseVirtual: WandVirtualPuck?
     var senseInfo: WandSenseInfo?
     let senseDashboard = Dashboard()

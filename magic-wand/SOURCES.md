@@ -23,6 +23,8 @@ SHA-256; the private directory’s path isn’t recorded.
 | `receiver/Sources/WandRecordingState.swift` | Agent Flow recording state | None |
 | `receiver/Sources/WandReviewTrace.swift` | Bounded opt-in local review point capture | None |
 | `receiver/Sources/WandUART.swift` | Shared receiver and saved-program-console packet sizing | None |
+| `receiver/Sources/WandExperimentModel.swift` | Validated experiment configuration, rate readback and constant-memory counters | None |
+| `receiver/Sources/WandExperiment.swift` | Persistent non-activating experiment panel and bounded runtime rate requests | None |
 | `receiver/Sources/WandPointerControl.swift` | Display bounds, LOW routing, rough loops, HIGH dwell clicks and desk inference | None |
 | `receiver/Info.plist` | Receiver bundle 1.2.33 (38) | None |
 | `receiver/Sources/WandDeviceConfiguration.swift` | Written for this repository | New |
@@ -521,3 +523,12 @@ open gesture. A delayed physical tap cancels rather than accepting a swipe,
 and Bottom release leaves a two-button chord open for its own ordered end
 marker. The installed binary, settings and resources match the reviewed build;
 the board firmware was not flashed.
+
+
+## Sense runtime rate experiment (firmware13 / receiver191)
+
+The LSM6DS3TR-C is configured through verified ODR register nibbles:104,208,416,833,1660,3330 or6660Hz. The startup default stays104Hz. The stock library's setter stops at1660Hz, so the experimental command writes only the ODR nibble directly and verifies both register readbacks. The500deg/s and4g ranges, power-mode choice, gain, BLE configuration and updater are preserved. Above208Hz, a non-high-performance mode is refused rather than silently changing its other filtering bits. A failed write restores the old configuration.
+
+Configured frequency is not delivery frequency. Short installed Bluetooth measurements represented about106readings/s at104Hz,421at416Hz and1400–1420at1660–6660Hz, carried in about210–245reports/s at higher rates. The400kHz sensor bus and radio path do not acquire/transmit every6.66kHz conversion. These were brief inert-action measurements, not prolonged stability or pointer feel acceptance. Pointer event counts measure actual posted motion events and depend on movement; they are not display refresh rate.
+
+The experiment label shows confirmed readback and measured counters separately. It never invents samples, expands history, combines host pointer deltas or changes pointer sensitivity. Runtime R104 reverts the rate. Firmware13 does not make the experimental rate a new default.
