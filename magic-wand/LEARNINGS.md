@@ -2049,3 +2049,10 @@ A passing comparison does not establish the cause of a live jump.
 - Ethan reversed the leave-follow-off experiment. Use the existing captured follow choice when a genuine released scroll ends: on stays on, off stays off. A newer recording-start pause still wins; do not make restoration an unconditional enable.
 - Keep taps, native dragging, quiet-stop's disabled experiment and lost-telemetry cancellation separate from completed scrolling. Test both raw-up-first and edge-first release orders, repeated release reports, tiny accepted strokes and the shared chord/legacy release boundary.
 - The release samples must remain consumed, rather than moving or clicking during restoration. The focused native fixtures exercise these cases without sending real input.
+
+
+## Keep page-wheel transport separate from history swipes (2026-11-01)
+
+- Ethan requested the ordinary page-scroll transport again after finding continuous pixel scrolling laggier. V3 vertical and diagonal output now uses the existing wheel-event builder with line units; pure sideways strokes retain native phases so apps can interpret Back/Forward. The stroke classifier, speed curve, fractional wheel travel, reversal guard and output cadence are unchanged.
+- Route by the actual stroke velocity, not the rounded tick: a diagonal stroke can produce a zero vertical tick without becoming a history swipe. The inert native-event fixture covers that boundary, cancelled swipes, release, stale tick limits, anchors and debug pause.
+- The earlier pointer-core rollback was already present: movement, cursor-origin lookup and event construction match the pre-combining implementation apart from diagnostics. Keep the later cancellation and recenter safeguards; do not add a new queue or claim another rollback changed runtime behaviour. Physical feel under Mac load remains separate from this source comparison.

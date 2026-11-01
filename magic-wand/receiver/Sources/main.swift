@@ -1477,7 +1477,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             // A pause mid-gesture cancels it at once rather than leaving it open.
             if self.actionPause.paused {self.finishNativeScroll(cancelled:true)}
             guard self.ready,!self.restoring,!self.actionPause.paused,AXIsProcessTrusted() else{return}
-            let units=self.heldScroll.continuation(now:now,pageUnitsPerLine:WandSustainedScroll.pagePixelsPerLine)
+            let units=self.heldScroll.continuation(now:now)
             if units.x != 0 || units.y != 0 {
                 self.setCircleLight(true)
                 self.postSustainedScroll(x:units.x,y:units.y,at:self.heldScrollAnchor)
@@ -1582,24 +1582,17 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         finishNativeScroll(cancelled:true)
         for event in Self.wheelEvents(x:x,y:y,at:point) {event.post(tap:.cghidEventTap)}
     }
-    /// V3 page motion carries pixel units at the existing 20 ms cadence. It has
-    /// no history-swipe phase, while the horizontal stroke retains its native
-    /// lifecycle. V2 and the two-button chord keep their ordinary line events.
+    /// Ethan (2026-11-01): restore page scrolling's ordinary mouse-wheel output.
+    /// Keep the existing stroke-to-speed mapping and timer; only the final event
+    /// transport returns to lines. Pure sideways strokes still need their native
+    /// lifecycle so apps can interpret them as Back/Forward. Inspect the actual
+    /// stroke, not rounded output: a diagonal tick with y=0 is still page scroll.
     func postSustainedScroll(x:Int32,y:Int32,at point:CGPoint?) {
         guard !actionPause.paused else{finishNativeScroll(cancelled:true);return}
         guard x != 0 || y != 0 else{return}
         if heldScroll.sustained.velocityY == 0 {postHeldScroll(x:x,y:y,at:point);return}
         finishNativeScroll(cancelled:true)
-        if let event=Self.pagePixelEvent(x:x,y:y,at:point) {event.post(tap:.cghidEventTap)}
-    }
-    static func pagePixelEvent(x:Int32,y:Int32,at point:CGPoint?)->CGEvent? {
-        guard let source=CGEventSource(stateID:.hidSystemState),
-              let event=CGEvent(scrollWheelEvent2Source:source,units:.pixel,wheelCount:2,wheel1:y,wheel2:x,wheel3:0) else{return nil}
-        if let point {event.location=point}
-        event.setIntegerValueField(.scrollWheelEventIsContinuous,value:1)
-        event.setIntegerValueField(.scrollWheelEventScrollPhase,value:0)
-        event.setIntegerValueField(.scrollWheelEventMomentumPhase,value:0)
-        return event
+        for event in Self.wheelEvents(x:x,y:y,at:point) {event.post(tap:.cghidEventTap)}
     }
     /// A clear short sideways stroke owns this press, including its later up.
     /// Clear all tap recognizers now, before any physical-release ordering.

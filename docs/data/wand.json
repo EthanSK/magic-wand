@@ -11,8 +11,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.174",
-    "receiverBuild": "179",
+    "receiver": "1.2.175",
+    "receiverBuild": "180",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.323",
@@ -21,6 +21,7 @@
     "senseFirmware": 12
   },
   "status": [
+    "Installed: receiver180 restores ordinary mouse-wheel output for V3 page scrolling and smaller Backwards / Forwards feedback. Native sideways swipe handling, speed tuning, the restored pre-scroll follow choice, firmware12 and all pointer/click behaviour are unchanged. The pointer core already matches the pre-combining baseline; no new movement queue was added. All291 repository checks and the rendered feedback pass; physical scroll feel remains for user review.",
     "Installed: receiver 179 restores the previous mouse-follow choice after scrolling. On stays on; off stays off. A newer recording pause still wins. Signed installation, preserved settings and Bluetooth reconnection were verified. Pointer sensitivity, filtering, click timing and firmware 12 are unchanged. All 291 repository checks passed; physical scroll acceptance remains pending.",
     "Earlier firmware verification: the complete Sense firmware 12 wireless transfer and Bluetooth readback passed with calibration, settings and the update key preserved. Firmware 12 reports saved restart flags. A five-minute comparison stayed connected with sensor recording off, but another restart was later observed. The intermittent restart cause remains under investigation; mouse tuning, controls and sleep were unchanged by that update.",
     "Earlier receiver1.2.173 build178 uses physical Sense timing for HUD tap classification and keeps timer-based recentering from leaving a stale cursor origin. Live HUD motion remains immediate; pointer filtering, gain, ordinary clicks and firmware11 are unchanged. The debug view preserves idle readings, distinguishes accelerometer-only packets and shows finer motion over a two-second chart. Focused checks and Bluetooth reconnection passed; physical acceptance remains pending.",
@@ -459,7 +460,7 @@
       "highSpeedFullDegreesPerSecond": 240,
       "maxLinesPerSecond": 1200,
       "pointsPerLine": 10,
-      "scope": "V3 page scrolling emits precise pixels with fractional travel at the existing20ms cadence and no history-swipe phase. Fine speed and repeated flick increments retain their rate. Pure horizontal V3 output keeps native gesture phases, ends on wrist stop and has no stillness continuation. V2 and chords keep their existing wheel transport.",
+      "scope": "V3 vertical and diagonal page scrolling use ordinary mouse-wheel line events, restoring the pre-trackpad page transport. Existing stroke-to-speed mapping, fractional travel and timer cadence are unchanged. Pure horizontal V3 strokes retain native gesture phases for Back/Forward and end on wrist stop. V2 and chords keep their existing wheel transport.",
       "horizontalGain": 12.5,
       "horizontalGainFromDegreesPerSecond": 8,
       "horizontalGainFullDegreesPerSecond": 30,

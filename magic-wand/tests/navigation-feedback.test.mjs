@@ -44,6 +44,8 @@ precondition(completed == [7,-4])
 precondition(WandNavigationDirection(horizontalDelta:7) == .back)
 precondition(WandNavigationDirection(horizontalDelta:-4) == .forward)
 precondition(WandNavigationDirection(horizontalDelta:0) == nil)
+precondition(WandNavigationDirection.back.title == "Backwards")
+precondition(WandNavigationDirection.forward.title == "Forwards")
 precondition(WandNavigationPulse.opacity(at:0)==0)
 precondition(WandNavigationPulse.opacity(at:0.04)>0)
 precondition(WandNavigationPulse.opacity(at:0.08)==1)
@@ -52,6 +54,7 @@ precondition(WandNavigationPulse.opacity(at:0.65)>0 && WandNavigationPulse.opaci
 precondition(WandNavigationPulse.opacity(at:0.85)==0)
 let visible=CGRect(x:-1200,y:80,width:1100,height:800)
 precondition(visible.contains(WandNavigationPulse.frame(in:visible)))
+precondition(WandNavigationPulse.frame(in:visible).size == CGSize(width:220,height:44))
 print("Direction, completion, cancellation, reset and fade checks passed")
 `);
   const build=spawnSync('swiftc',[new URL('WandNavigationFeedback.swift',root).pathname,join(dir,'gesture.swift'),join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});

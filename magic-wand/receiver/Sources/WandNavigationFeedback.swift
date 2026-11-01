@@ -11,7 +11,7 @@ enum WandNavigationDirection: Equatable {
         self = horizontalDelta > 0 ? .back : .forward
     }
 
-    var title: String { self == .back ? "← Back gesture" : "Forward gesture →" }
+    var title: String { self == .back ? "Backwards" : "Forwards" }
 }
 
 enum WandNavigationPulse {
@@ -26,9 +26,9 @@ enum WandNavigationPulse {
     }
 
     static func frame(in visible: CGRect) -> CGRect {
-        let width = min(320, max(1, visible.width - 32))
+        let width = min(220, max(1, visible.width - 32))
         return CGRect(x: visible.midX - width / 2, y: visible.minY + 16,
-                      width: width, height: 60)
+                      width: width, height: 44)
     }
 }
 
@@ -37,7 +37,7 @@ private final class WandNavigationPanel: NSPanel {
     override var canBecomeMain: Bool { false }
 }
 
-/// Same large, single-line cyan capsule as the wand's transient status messages.
+/// Compact, single-line cyan acknowledgement; Ethan asked for smaller text.
 /// It never activates an app or intercepts the pointer. A new gesture replaces
 /// and re-pulses this one panel; there is no stale queue of acknowledgements.
 final class WandNavigationFeedback {
@@ -95,12 +95,12 @@ final class WandNavigationFeedback {
         let view = NSView()
         view.wantsLayer = true
         view.layer?.backgroundColor = NSColor(calibratedRed: 0, green: 205.0 / 255, blue: 1, alpha: 1).cgColor
-        view.layer?.cornerRadius = 30
+        view.layer?.cornerRadius = 22
         view.layer?.borderWidth = 1
         view.layer?.borderColor = NSColor.white.withAlphaComponent(0.28).cgColor
         let label = NSTextField(labelWithString: "")
-        let font = NSFont.systemFont(ofSize: 22, weight: .semibold)
-        label.font = font.fontDescriptor.withDesign(.rounded).flatMap { NSFont(descriptor: $0, size: 22) } ?? font
+        let font = NSFont.systemFont(ofSize: 18, weight: .semibold)
+        label.font = font.fontDescriptor.withDesign(.rounded).flatMap { NSFont(descriptor: $0, size: 18) } ?? font
         label.textColor = .black
         label.alignment = .center
         label.lineBreakMode = .byClipping
