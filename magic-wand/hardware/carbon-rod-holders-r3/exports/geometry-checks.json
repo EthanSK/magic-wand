@@ -1,0 +1,152 @@
+{
+  "reloaded_closed_single_bodies": true,
+  "physical_fit_verified": false,
+  "parts": {
+    "Key_Battery_Carrier": {
+      "solid_PETG_g": 4.12459768476366,
+      "bounds_mm": [
+        [
+          -34.70000076293945,
+          -12.5,
+          0.0
+        ],
+        [
+          34.400001525878906,
+          47.900001525878906,
+          14.100000381469727
+        ]
+      ],
+      "faces": 27154
+    },
+    "XIAO_Rod_Holder": {
+      "solid_PETG_g": 0.6629635400167093,
+      "bounds_mm": [
+        [
+          -10.600000381469727,
+          -5.0,
+          -5.400000095367432
+        ],
+        [
+          10.600000381469727,
+          23.399999618530273,
+          10.0
+        ]
+      ],
+      "faces": 3070
+    }
+  },
+  "checker_sha256": "8ee56a6f2d6d37cae737e1a0d0bfa50b66acf516da58ea511736913abbc22049",
+  "manifest_sha256": "0fc3d487dcf70c60777d15accca19ea5cec44c5f8d8b2933e3d9427441fcf8d9",
+  "carrier_clearance_mm3": {
+    "rod": 0.0,
+    "battery": 1.1633758820192574e-07,
+    "key_0_switch": 1.8303141131047989e-06,
+    "key_0_socket": 0.0,
+    "key_0_cap": 0.0,
+    "key_1_switch": 1.8303140865217985e-06,
+    "key_1_socket": 0.0,
+    "key_1_cap": 0.0,
+    "key_2_switch": 1.830314614134717e-06,
+    "key_2_socket": 0.0,
+    "key_2_cap": 0.0,
+    "key_3_switch": 2.7242642330842367e-06,
+    "key_3_socket": 0.0,
+    "key_3_cap": 0.0,
+    "key_4_switch": 1.8212200227669996e-06,
+    "key_4_socket": 0.0,
+    "key_4_cap": 0.0
+  },
+  "tip_clearance_mm3": {
+    "rod": 0.0,
+    "pcb": 3.4713733657197773e-07,
+    "usb": 0.0
+  },
+  "continuous_access_mm3": {
+    "battery_outward": 2.0813741105626158e-07,
+    "board_outward": 0.0,
+    "usb_plug_approach": 0.0,
+    "rod_axial_entry": 0.0
+  },
+  "switch_housing_entries_mm3": {
+    "-20.0": 0.0,
+    "0": 0.0,
+    "20.0": 0.0
+  },
+  "purchased_clip_capture_mm3": {
+    "-20.0": 0.7050012588501013,
+    "0": 0.7050012588501015,
+    "20.0": 0.7050012588501017
+  },
+  "r3": {
+    "five_keys": {
+      "0": {
+        "housing_entry_mm3": 0.0,
+        "clip_capture_mm3": 0.7050012588501013
+      },
+      "1": {
+        "housing_entry_mm3": 0.0,
+        "clip_capture_mm3": 0.7050012588501015
+      },
+      "2": {
+        "housing_entry_mm3": 0.0,
+        "clip_capture_mm3": 0.7050012588501017
+      },
+      "3": {
+        "housing_entry_mm3": 0.0,
+        "clip_capture_mm3": 0.705001258850101
+      },
+      "4": {
+        "housing_entry_mm3": 0.0,
+        "clip_capture_mm3": 0.7050012588501027
+      }
+    },
+    "bought_part_separation_mm3": {
+      "battery:key_0_cap": 0.0,
+      "battery:key_1_cap": 0.0,
+      "battery:key_2_cap": 0.0,
+      "battery:key_3_cap": 0.0,
+      "battery:key_4_cap": 0.0,
+      "key_0_cap:key_1_cap": 0.0,
+      "key_0_cap:key_2_cap": 0.0,
+      "key_0_cap:key_3_cap": 0.0,
+      "key_0_cap:key_4_cap": 0.0,
+      "key_1_cap:key_2_cap": 0.0,
+      "key_1_cap:key_3_cap": 0.0,
+      "key_1_cap:key_4_cap": 0.0,
+      "key_2_cap:key_3_cap": 0.0,
+      "key_2_cap:key_4_cap": 0.0,
+      "key_3_cap:key_4_cap": 0.0
+    },
+    "wire_vs_sensor_mm3": 0.0,
+    "wire_vs_tube_mm3": 0.0,
+    "reversed_usb_approach_mm3": 0.0,
+    "sensor_stl_identical_to_r2": true,
+    "upper_key_centres_mm": [
+      [
+        -25.0,
+        22.0
+      ],
+      [
+        25.0,
+        22.0
+      ]
+    ],
+    "bottom_key_centres_mm": [
+      [
+        -20.0,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        20.0,
+        0
+      ]
+    ],
+    "purchased_cap_travel_verified": false,
+    "cap_reference_limit": "Caps are illustrative external envelopes; actual underside and travel remain unmeasured, as in R1/R2."
+  },
+  "r3_checker_sha256": "ab602b36c1202fca76663e3968c5874ce6a3ba9ad3ed3b7821a1a3fa88b54fbe"
+}

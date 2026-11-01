@@ -1,0 +1,86 @@
+// Show the actual R2/R3 accessory meshes. Reuse the established direct-input
+// viewer controls so wand scroll turns immediately, with no inertia or delay.
+import * as THREE from '../../../../../docs/lib/three-0.185.1/three.module.min.js';
+import { ViewInput, frameBounds, MODES } from '../../printed-loop-wand/preview/view-input.mjs';
+
+const view = document.querySelector('#view');
+const ui = Object.fromEntries(['revision', 'parts', 'references', 'status', 'modes', 'plus', 'minus', 'reset', 'error'].map(id => [id, document.getElementById(id)]));
+const input = new ViewInput({ minDistance: 15, maxDistance: 1500 });
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x12151c);
+scene.add(new THREE.HemisphereLight(0xe8f4ff, 0x424154, 2.1));
+const light = new THREE.DirectionalLight(0xffffff, 3);
+light.position.set(-90, 160, 200); scene.add(light);
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+view.prepend(renderer.domElement);
+const canvas = renderer.domElement;
+canvas.tabIndex = 0; canvas.setAttribute('aria-label', '3D holders. Arrow keys turn; T, M and Z select turn, move and zoom.');
+const camera = new THREE.PerspectiveCamera(32, 1, .1, 3000);
+const target = new THREE.Vector3();
+const models = new THREE.Group(); scene.add(models);
+let data;
+
+function render() {
+  camera.position.set(...input.camera()); camera.lookAt(target.set(...input.target)); renderer.render(scene, camera);
+}
+function reset() {
+  const bounds = new THREE.Box3().setFromObject(models);
+  input.setHome(frameBounds(bounds.min.toArray(), bounds.max.toArray(), { aspect: camera.aspect, yaw: .38, pitch: .6, fov: camera.fov, padding: 1.2 }));
+  render();
+}
+function chooseMode(mode) {
+  if (!input.setMode(mode)) return;
+  for (const b of ui.modes.children) b.setAttribute('aria-pressed', String(b.dataset.mode === mode));
+  render();
+}
+function update() {
+  if (!data) return;
+  for (const child of [...models.children]) { models.remove(child); child.geometry.dispose(); child.material.dispose(); }
+  const revision = data[ui.revision.value];
+  document.getElementById('description').textContent = ui.revision.value === 'r3'
+    ? 'Three keys below, two above. The battery sits between the upper keys.'
+    : 'Three keys side by side. The battery sits above the middle key.';
+  const exportFolder = ui.revision.value === 'r3' ? '../exports/' : '../../carbon-rod-holders-r2/exports/';
+  for (const [id, file] of [['carrier-file', 'Key_Battery_Carrier.stl'], ['sensor-file', 'XIAO_Rod_Holder.stl'], ['project-file', 'Holder-pair-sliced.3mf']]) {
+    document.getElementById(id).href = exportFolder + file;
+  }
+  for (const item of revision.items) {
+    if (ui.parts.value !== 'both' && item.part !== ui.parts.value) continue;
+    if (!ui.references.checked && item.reference) continue;
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(item.vertices.flat(), 3));
+    geometry.setIndex(item.faces.flat()); geometry.computeVertexNormals();
+    const color = !item.reference ? (item.part === 'carrier' ? 0x38b4bb : 0xe8a749)
+      : item.name === 'rod' ? 0x303944 : item.name === 'pcb' ? 0x37835e
+      : item.name === 'battery' ? 0x64758b : item.name === 'wire' ? 0xc76754 : 0xd9e0e7;
+    const mesh = new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ color, roughness: .55, metalness: .05 }));
+    mesh.name = item.name;
+    if (ui.parts.value === 'both') mesh.position.x = item.part === 'carrier' ? -32 : 54;
+    models.add(mesh);
+  }
+  const masses = revision.mass?.object_printed_parts_g;
+  ui.status.textContent = masses ? `Carrier ${masses.Key_Battery_Carrier.toFixed(2)} g · XIAO holder ${masses.XIAO_Rod_Holder.toFixed(2)} g. Printed plastic, excluding brim.` : 'Model loaded. Print estimate unavailable.';
+  reset();
+}
+new ResizeObserver(() => {
+  renderer.setSize(view.clientWidth, view.clientHeight);
+  camera.aspect = view.clientWidth / Math.max(1, view.clientHeight); camera.updateProjectionMatrix();
+  if (data) reset();
+}).observe(view);
+canvas.addEventListener('pointerdown', e => { input.pointerDown(e.pointerId, e.clientX, e.clientY); canvas.setPointerCapture(e.pointerId); });
+canvas.addEventListener('pointermove', e => { if (input.pointerMove(e.pointerId, e.clientX, e.clientY, view.clientHeight)) render(); });
+for (const name of ['pointerup', 'pointercancel', 'lostpointercapture']) canvas.addEventListener(name, e => input.pointerUp(e.pointerId));
+window.addEventListener('blur', () => input.cancel());
+canvas.addEventListener('wheel', e => { if (input.wheel(e, view.clientHeight, window.innerHeight)) { e.preventDefault(); render(); } }, { passive: false });
+canvas.addEventListener('keydown', e => { if (e.metaKey || e.altKey || e.ctrlKey) return; if (input.key(e, view.clientHeight)) { e.preventDefault(); chooseMode(input.mode); } });
+ui.modes.addEventListener('click', e => { const mode = e.target.closest('button')?.dataset.mode; if (MODES.includes(mode)) chooseMode(mode); });
+ui.plus.addEventListener('click', () => { input.zoomSteps(1); render(); });
+ui.minus.addEventListener('click', () => { input.zoomSteps(-1); render(); });
+ui.reset.addEventListener('click', reset);
+for (const id of ['revision', 'parts', 'references']) ui[id].addEventListener('change', update);
+try {
+  const result = await fetch('../exports/review-scene.json', { cache: 'no-store' });
+  if (!result.ok) throw new Error(`Model request failed (${result.status})`);
+  data = await result.json(); update();
+} catch (error) { ui.error.style.display = 'grid'; ui.error.textContent = `Unable to load model: ${error.message}`; }

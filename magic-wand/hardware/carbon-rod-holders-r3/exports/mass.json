@@ -1,0 +1,55 @@
+{
+  "archive_sha256": "073de77f65a7bd4f8c5718ead7ad01f5f6506eaa82bd1ac8e6d2007c1fe74350",
+  "build_instances": 2,
+  "printed_parts_g": 4.334,
+  "supports_and_brim_g": 0.105,
+  "total_slicer_g": 4.53,
+  "accounted_g": 4.439,
+  "startup_and_rounding_g": 0.091,
+  "features_g": {
+    "Brim": 0.10481595060162796,
+    "Outer wall": 2.427557188447538,
+    "Gap infill": 0.6886716651096777,
+    "Overhang wall": 0.13742773809122183,
+    "Inner wall": 0.9861202502785662,
+    "Top surface": 0.06930622274389456,
+    "Internal solid infill": 0.02310364233139548,
+    "Bridge": 0.0015207252745615472
+  },
+  "object_features_g": {
+    "XIAO_Rod_Holder": {
+      "Brim": 0.10481595060162796,
+      "Outer wall": 0.36936117640402805,
+      "Gap infill": 0.09282964304614374,
+      "Overhang wall": 0.018616215212024605,
+      "Inner wall": 0.10449230429095958,
+      "Internal solid infill": 0.0006112776142307842,
+      "Top surface": 0.009287534147755112
+    },
+    "Key_Battery_Carrier": {
+      "Outer wall": 2.0581960120434446,
+      "Gap infill": 0.5958420220635331,
+      "Inner wall": 0.881627945987605,
+      "Overhang wall": 0.11881152287919701,
+      "Top surface": 0.06001868859613961,
+      "Internal solid infill": 0.0224923647171647,
+      "Bridge": 0.0015207252745615472
+    }
+  },
+  "object_mass_mapping_available": true,
+  "object_printed_parts_g": {
+    "XIAO_Rod_Holder": 0.595,
+    "Key_Battery_Carrier": 3.739
+  },
+  "settings": {
+    "printer_model": "Bambu Lab P1S",
+    "filament_type": [
+      "PETG"
+    ],
+    "layer_height": "0.2",
+    "wall_loops": "3",
+    "sparse_infill_density": "20%",
+    "support_type": "tree(auto)"
+  },
+  "scope": "One five-key carrier and one R2 sensor holder; purchased hardware, rod and tape excluded. Slicer estimate, not weighed."
+}
