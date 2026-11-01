@@ -21,6 +21,9 @@ final class WandVirtualPuck {
     /// Batched UART text: every line produced in one main-queue turn arrives in
     /// one chunk, like one BLE notification batch (one shared delivery point).
     var onText: ((String) -> Void)?
+    /// Physical frame times accompany lines through the one-turn hand-off.
+    /// They classify clicks; they never schedule or replay pointer motion.
+    var onTimedText: ((String, [Double]) -> Void)?
     var onLight: ((Double, Double, Double) -> Void)?
     var onSensor: ((Int) -> Void)?
     var onSleep: (() -> Void)?
@@ -28,7 +31,9 @@ final class WandVirtualPuck {
     private let context: JSContext
     private var api: JSValue?
     private var timers: [Int: DispatchSourceTimer] = [:]
-    private var pending = "", flushScheduled = false, dead = false
+    private struct Output { var line: String; let time: Double }
+    private var pending: [Output] = []
+    private var flushScheduled = false, dead = false
     private let clock: () -> Double
 
     init?(sources: Sources, clock: @escaping () -> Double = { ProcessInfo.processInfo.systemUptime }) {
@@ -40,7 +45,7 @@ final class WandVirtualPuck {
         let now: @convention(block) () -> Double = { [weak self] in self?.clock() ?? 0 }
         let schedule: @convention(block) (Int, Double, Bool) -> Void = { [weak self] id, ms, repeating in self?.schedule(id, ms: ms, repeating: repeating) }
         let cancel: @convention(block) (Int) -> Void = { [weak self] id in self?.timers.removeValue(forKey: id)?.cancel() }
-        let text: @convention(block) (String) -> Void = { [weak self] line in self?.emit(line) }
+        let text: @convention(block) (String, Double) -> Void = { [weak self] line, time in self?.emit(line, at: time) }
         let light: @convention(block) (Double, Double, Double) -> Void = { [weak self] r, g, b in self?.onLight?(r, g, b) }
         let sensor: @convention(block) (Int) -> Void = { [weak self] mode in self?.onSensor?(mode) }
         let sleep: @convention(block) () -> Void = { [weak self] in self?.onSleep?() }
@@ -108,22 +113,22 @@ final class WandVirtualPuck {
     /// A host recenter/cancel invalidates only queued pointer displacement.
     /// Keep button releases, dictation, HUD and power messages in their order.
     func discardPendingPointerMotion() {
-        pending=pending.split(separator:"\n",omittingEmptySubsequences:false).compactMap { part -> String? in
-            let line=String(part)
+        pending=pending.compactMap { output -> Output? in
+            let line=output.line
             if line.range(of:"@RAW ") != nil {return nil}
             if let marker=line.range(of:"@WAND ") {
                 let values=line[marker.upperBound...].split(separator:",")
                 if values.count==3,let button=Int(values[2]),(0...3).contains(button) {
-                    return String(line[..<marker.lowerBound])+"@WAND 0,0,"+String(button)
+                    return Output(line:String(line[..<marker.lowerBound])+"@WAND 0,0,"+String(button),time:output.time)
                 }
             }
-            return line
-        }.joined(separator:"\n")
+            return output
+        }
     }
 
     func teardown() {
         guard !dead else { return }
-        dead = true; pending = ""
+        dead = true; pending.removeAll()
         api?.invokeMethod("teardown", withArguments: [])
         for timer in timers.values { timer.cancel() }
         timers.removeAll(); api = nil
@@ -150,17 +155,20 @@ final class WandVirtualPuck {
     /// The receiver posts every accepted move separately; this text hand-off
     /// never combines pointer deltas. Cancellation can discard old pointer
     /// lines here without losing button releases or speech messages.
-    private func emit(_ line: String) {
+    private func emit(_ line: String, at time: Double) {
         guard !dead else { return }
-        pending += line + "\n"
+        let at = time.isFinite ? time : clock()
+        pending.append(contentsOf:line.split(separator:"\n",omittingEmptySubsequences:false).map{Output(line:String($0),time:at)})
         guard !flushScheduled else { return }
         flushScheduled = true
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.flushScheduled = false
-            guard !self.dead, !self.pending.isEmpty else { self.pending = ""; return }
-            let text = self.pending; self.pending = ""
-            self.onText?(text)
+            guard !self.dead, !self.pending.isEmpty else { self.pending.removeAll(); return }
+            let batch = self.pending; self.pending.removeAll(keepingCapacity:true)
+            let text = batch.map(\.line).joined(separator:"\n") + "\n"
+            if let timed = self.onTimedText { timed(text,batch.map(\.time)) }
+            else { self.onText?(text) }
         }
     }
 }

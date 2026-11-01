@@ -364,7 +364,7 @@ final class WandDwellClick {
     /// Repeats need live samples: a gap longer than this stops them.
     static let freshness=0.1
     private(set) var following=false
-    private var x=0.0,y=0.0,lastMotion=0.0,inhibitedUntil=0.0,intentUntil=0.0
+    private var x=0.0,y=0.0,fineX=0.0,fineY=0.0,lastMotion=0.0,inhibitedUntil=0.0,intentUntil=0.0
     private(set) var armed=false
     private(set) var repeatDue:Double?
     private var lastSeen = -Double.infinity
@@ -375,7 +375,7 @@ final class WandDwellClick {
         return repeatDue
     }
     var repeating:Bool {repeatDue != nil}
-    func reset(){x=0;y=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil;fastStop?.reset();lastClickWasFast=false;lastClickDiagnostic=nil;fastClickAwaitingMovement=false}
+    func reset(){x=0;y=0;fineX=0;fineY=0;armed=false;lastMotion=0;intentUntil=0;repeatDue=nil;fastStop?.reset();lastClickWasFast=false;lastClickDiagnostic=nil;fastClickAwaitingMovement=false}
     func follow(_ on:Bool){if following != on {reset()};following=on}
     /// A scroll release may contain wrist recoil. Keep the old click pause
     /// until a quiet hand and a new pointer move establish a fresh gesture.
@@ -392,11 +392,18 @@ final class WandDwellClick {
         if moving {intentUntil=now+0.6;lastMotion=now;repeatDue=nil}
         else if intentUntil>0 {intentUntil=0;lastMotion=now}
     }
-    func move(dx:Int,dy:Int,now:Double,eligible:Bool,pointerX:Int?=nil,pointerY:Int?=nil,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil){
+    func move(dx:Int,dy:Int,now:Double,eligible:Bool,pointerX:Int?=nil,pointerY:Int?=nil,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil,fineMove:Bool=false){
         guard following,eligible,now>=inhibitedUntil else{reset();return}
         fastStop?.sample(stopped:dx==0 && dy==0,x:pointerX ?? dx,y:pointerY ?? dy,now:now,sampleSeconds:sampleSeconds,pointerQuiet:pointerQuiet)
         lastSeen=now
         if (pointerX ?? dx) != 0 || (pointerY ?? dy) != 0 {fastClickAwaitingMovement=false}
+        // Only the direct Sense path supplies fineMove, after its noise/intent
+        // decision. A real one-pixel target change can arm another ordinary
+        // click; raw tremor and the legacy Puck do not lower the12-count gate.
+        if fineMove {
+            fineX+=Double(pointerX ?? dx);fineY+=Double(pointerY ?? dy)
+            if hypot(fineX,fineY)>=1 {armed=true;repeatDue=nil;lastMotion=now}
+        }
         guard dx != 0 || dy != 0 else{return}
         repeatDue=nil
         // The established ordinary click path keeps its original counters.
@@ -711,9 +718,9 @@ struct WandAngularStream {
 /// additions are the ones measured or approved since: Ethan's approved ~8 ms
 /// causal smoothing and a bounded step (see
 /// `WandMotionFilter.directSmoothing`). Nothing is buffered, replayed or
-/// predicted. Ethan removed the Sense pointer's drift/tiny-motion rejection
-/// on 2026-11-01. Quiet classification remains only in the click decision;
-/// it must never discard the pointer or the angular input to another gesture.
+/// predicted. Ethan removed early Sense drift/tiny-motion rejection, then
+/// asked to restore the same stillness sensitivity at pointer output. Raw
+/// angular input remains available to every gesture before that decision.
 /// Both paths are measured in the same units.
 enum WandPointerPath: String {
     case tuned, direct
@@ -722,21 +729,24 @@ enum WandPointerPath: String {
     }
 }
 
-/// Ethan's post-click stillness: stop the visible wobble AFTER a click, without
-/// putting the old slow-speed cutoff back into ordinary aiming. Small restarts
-/// use at most 60 ms of recent direction evidence (approved 2026-11-01); a
-/// larger movement releases immediately. These vectors classify intent only:
-/// they are never emitted, summed into a cursor jump or replayed on release.
+/// Formerly post-click-only stillness. Ethan clarified that balanced hand
+/// wobble must stay still before a click too, at the previous quiet sensitivity.
+/// Keep all raw input for gestures; classify only pointer output using a
+/// bounded 60 ms recent direction window. The short stop hold fits that bound
+/// at 104 Hz; larger movement releases immediately. Never emit stored vectors,
+/// sum them into a cursor jump or replay them on release.
 struct WandPostClickStillness {
     private(set) var active=false
+    private(set) var coherentMotion=false
+    private(set) var coherentDirection=false
     private var samples:[(x:Double,y:Double,dt:Double)]=[]
     private var duration=0.0
-    mutating func arm(){active=true;samples.removeAll(keepingCapacity:true);duration=0}
-    mutating func reset(){active=false;samples.removeAll(keepingCapacity:true);duration=0}
+    private var quietFor=0.0
+    mutating func arm(){active=true;coherentMotion=false;coherentDirection=false;quietFor=0;samples.removeAll(keepingCapacity:true);duration=0}
+    mutating func reset(){active=false;coherentMotion=false;coherentDirection=false;quietFor=0;samples.removeAll(keepingCapacity:true);duration=0}
     mutating func permits(x:Double,y:Double,seconds:Double,fastSpeed:Double)->Bool {
-        guard active else{return true}
-        if hypot(x,y)>=max(0.01,fastSpeed) {reset();return true}
         let dt=min(0.025,max(0,seconds))
+        quietFor+=dt
         samples.append((x*dt,y*dt,dt));duration+=dt
         while samples.count>1 && (samples.count>16 || duration>0.060) {
             duration-=samples.removeFirst().dt
@@ -745,11 +755,22 @@ struct WandPostClickStillness {
         let travel=samples.reduce(0){$0+hypot($1.x,$1.y)},net=hypot(sx,sy)
         // A tiny subpixel distance floor ignores rounding residue at the saved
         // zero. Consistent slow movement and gentle curves pass; reversals in
-        // random tremor cancel. This applies only while resting after a click.
-        if samples.count>=3 && duration>=0.040 && net>=0.0005 && net>=travel*0.90 {
-            reset();return true
+        // random tremor cancel. This also recognises rest before the first click.
+        let coherent=net>=0.0005 && net>=travel*0.98
+        coherentDirection=coherent
+        coherentMotion=coherent && duration>=0.040
+        // Keep the original quiet-speed value, not a new global low-speed
+        // cutoff. Coherent tiny motion passes; low-speed direction scatter
+        // becomes a rest even before the first click. Only past readings are
+        // classified here; no pointer positions are saved or replayed.
+        if hypot(x,y)>=max(0.01,fastSpeed) {active=false;return true}
+        if active && quietFor<0.040 {coherentMotion=false;return false}
+        if coherent {active=false;return true}
+        if duration>=0.040 || active {
+            if !active {quietFor=0}
+            active=true;coherentMotion=false;return false
         }
-        return false
+        return true
     }
 }
 
@@ -759,7 +780,7 @@ final class WandMotionFilter {
     // stopX/stopY: the tuned filter's counts, used only to decide stop-to-click
     // (dwell) and screenshot settling, so a direct pointer cannot disable or
     // flood those clicks with tremor- or bias-level counts. Equal to x/y when tuned.
-    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0;var highY=0.0;var quietForClick=false}
+    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0;var highY=0.0;var quietForClick=false;var fineMoving=false}
     var path:WandPointerPath = .tuned
     private var directX=0.0,directY=0.0,smoothX=0.0,smoothY=0.0
     private var postClickStillness=WandPostClickStillness()
@@ -804,7 +825,7 @@ final class WandMotionFilter {
         values=v;reset();return true
     }
     func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0;directX=0;directY=0;smoothX=0;smoothY=0;postClickStillness.reset()}
-    func sample(rawX:Int,rawY:Int,microseconds:Int,held:Bool,resetState:Bool)->Result? {
+    func sample(rawX:Int,rawY:Int,microseconds:Int,held:Bool,resetState:Bool,applyStillness:Bool=true)->Result? {
         guard configured,(-65535...65535).contains(rawX),(-65535...65535).contains(rawY),
               (1...50000).contains(microseconds) else{return nil}
         if resetState {reset()}
@@ -847,18 +868,24 @@ final class WandMotionFilter {
         let gain=v[2]*(held ? v[7] : 1)
         let smoothing=1-exp(-dt/Self.directSmoothing)
         smoothX+=smoothing*(x-smoothX);smoothY+=smoothing*(y-smoothY)
-        // Ethan: "get rid of the drift stuff" (2026-11-01). Every calibrated
-        // sample reaches movement, including very slow curves. Keep the existing
-        // quiet evidence ONLY for stop-to-click, never as a pointer output gate.
+        // Ethan: keep the new fine input, but stop balanced hand wobble using
+        // the same quiet sensitivity as before. Raw angular/gesture values are
+        // untouched; only the visible pointer goes through this decision.
         let smoothSpeed=sqrt(smoothX*smoothX+smoothY*smoothY)
-        let quietForClick=smoothSpeed<=v[5] || v[2]==0
         // Restore the original speed-based sensitivity curve, not its radial
         // slack or drift decay: fine aiming is precise, broad travel is fast.
         let response=v[4]+(1-v[4])*blend*blend*(3-2*blend)
         let step=min(dt,Self.directMaxStep)*response
-        if held {postClickStillness.reset()}
-        if postClickStillness.permits(x:x,y:y,seconds:dt,fastSpeed:v[5]) {
-            directX+=smoothX*step*gain*v[11];directY+=smoothY*step*gain*v[3]*v[12]
+        if held || !applyStillness {postClickStillness.reset()}
+        let permitted=held || !applyStillness || postClickStillness.permits(x:smoothX,y:smoothY,seconds:dt,fastSpeed:v[5])
+        let fineMoving=permitted && postClickStillness.coherentMotion && smoothSpeed<=v[5] && smoothSpeed>0.01
+        let quietForClick = !permitted || (smoothSpeed<=v[5] && !fineMoving) || v[2]==0
+        // Outside a coherent intentional stroke, retain the old 2-to-4-unit
+        // quiet knee instead of passing a one-frame noise spike at full gain.
+        let knee=max(0,min(1,(smoothSpeed-v[5])/max(0.01,v[5])))
+        let noiseScale=held || !applyStillness || postClickStillness.coherentDirection ? 1:knee*knee*(3-2*knee)
+        if permitted {
+            directX+=smoothX*step*gain*v[11]*noiseScale;directY+=smoothY*step*gain*v[3]*v[12]*noiseScale
         } else {
             // Discard resting motion; no catch-up when the hand starts again.
             directX=0;directY=0
@@ -866,8 +893,8 @@ final class WandMotionFilter {
         let directCountX=Int(directX.rounded(.towardZero)),directCountY=Int(directY.rounded(.towardZero))
         directX-=Double(directCountX);directY-=Double(directCountY)
         return .init(x:max(-4095,min(4095,directCountX)),y:max(-4095,min(4095,directCountY)),intent:active,
-                     angularX:x*v[11],angularY:y*v[12],highX:smoothX*step*v[2]*v[11],stopX:tunedX,stopY:tunedY,
-                     highY:smoothY*step*v[2]*v[3]*v[12],quietForClick:quietForClick)
+                     angularX:x*v[11],angularY:y*v[12],highX:smoothX*step*v[2]*v[11],stopX:permitted ? tunedX:0,stopY:permitted ? tunedY:0,
+                     highY:smoothY*step*v[2]*v[3]*v[12],quietForClick:quietForClick,fineMoving:fineMoving)
     }
 
 }

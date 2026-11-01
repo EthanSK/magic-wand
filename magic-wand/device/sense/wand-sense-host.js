@@ -45,7 +45,7 @@
           if (e.type !== "line") continue;
           if (/^Uncaught /.test(e.text)) { if (booting) bootErrors++; native.log(e.text); }
           if (booting) continue; // A boot is not a connection: the receiver hears nothing until its handshake.
-          native.text(e.text);
+          native.text(e.text, host.now());
         }
       },
       onError: function () {},

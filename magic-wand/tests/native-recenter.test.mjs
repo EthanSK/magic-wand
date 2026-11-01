@@ -15,6 +15,7 @@ test('mouse-button double tap always centres and enables follow across prior mod
  const recognize=body.indexOf('recognizeMouseButtonRecenter');
  const route=body.indexOf('if controlVersion.usesHeldScroll && !scrollActive');
  assert(finish>=0 && finish<recognize && recognize<route);
+ assert(body.slice(recognize,route).includes("pointerRouter.mouseButton(down:false)"),"consumed second release must release router ownership");
  assert(!body.includes('eligible:'));
  const code=`import Foundation
 func AXIsProcessTrusted()->Bool {true}
@@ -90,6 +91,28 @@ do {
  precondition(h.pointerOrigin.origin(system:CGPoint(x:900,y:400),now:now+0.09)==CGPoint(x:900,y:400),"after it, a physical mouse is adopted at once")
  now=20;h.pointerOrigin.begin(at:centre,now:now)
  precondition(h.pointerOrigin.origin(system:old,now:now+WandPointerOrigin.settle+0.01)==old && h.pointerOrigin.latest==nil,"bounded: never overrides the real cursor indefinitely")
+}
+// Additional delayed-delivery cases use the production recognizer above.
+do {
+ let delayed=Harness()
+ _=delayed.recognizeMouseButtonRecenter(down:true,now:1,receivedAt:10)
+ _=delayed.recognizeMouseButtonRecenter(down:false,now:1.08,receivedAt:10.01)
+ _=delayed.recognizeMouseButtonRecenter(down:true,now:2,receivedAt:10.02)
+ precondition(!delayed.recognizeMouseButtonRecenter(down:false,now:2.08,receivedAt:10.03),"old separate taps cannot become a double on delivery")
+ let partlyLate=Harness()
+ _=partlyLate.recognizeMouseButtonRecenter(down:true,now:20)
+ _=partlyLate.recognizeMouseButtonRecenter(down:false,now:20.08)
+ _=partlyLate.recognizeMouseButtonRecenter(down:true,now:20.18)
+ precondition(partlyLate.recognizeMouseButtonRecenter(down:false,now:20.26,receivedAt:20.46))
+ let timer=partlyLate.pendingRecenter!
+ precondition(timer.fireDate.timeIntervalSinceNow<0.15,"only remaining physical window is awaited")
+ let obsolete=Harness()
+ _=obsolete.recognizeMouseButtonRecenter(down:true,now:30)
+ _=obsolete.recognizeMouseButtonRecenter(down:false,now:30.08)
+ _=obsolete.recognizeMouseButtonRecenter(down:true,now:30.18)
+ precondition(obsolete.recognizeMouseButtonRecenter(down:false,now:30.26,receivedAt:31))
+ precondition(obsolete.pendingRecenter==nil,"an expired recenter is not scheduled later")
+ timer.invalidate();partlyLate.pendingRecenter=nil
 }
 print("PASS: global centre/follow (after the triple-click window) from off, mouse, HUD, scrolling, VS Code and drag; holds preserved")
 `;

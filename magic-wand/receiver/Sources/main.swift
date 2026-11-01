@@ -803,7 +803,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     /// Extraction of the existing Puck UART line handler, unchanged, so the
     /// Sense profile's virtual Puck output reaches exactly the same code.
-    func receiveText(_ text:String) {
+    func receiveText(_ text:String,eventTimes:[Double]=[]) {
         // Keep the cursor origin through this receive turn, but post every
         // accepted movement immediately. Never combine a backlog into a jump.
         let pointerEpochAtEntry=pointerMotionEpoch
@@ -811,8 +811,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         defer {deliveryPoint=nil}
         input += text.replacingOccurrences(of: "\r", with: "")
         if input.count > 16384 { input = String(input.suffix(4096)) }
+        var eventIndex=0
         while let newline = input.firstIndex(of: "\n") {
             let line = String(input[..<newline]); input.removeSubrange(...newline)
+            // Sense carries the frame's physical time through the UART hand-off.
+            // Main-queue delay must not turn separate taps into a double click.
+            let eventTime=eventIndex<eventTimes.count ? eventTimes[eventIndex] : ProcessInfo.processInfo.systemUptime
+            eventIndex+=1
             if line.contains("Error") || line.contains("OUT OF MEMORY") || line.contains("Uncaught") { log("DEVICE_ERROR", line) }
             // Source echo may contain the word Error. Only actual runtime failures
             // invalidate a bridge load; a later ready marker cannot hide one.
@@ -892,7 +897,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                 // so a consumed (scrolled) hold's endpoint click is dropped by order.
                 if value=="0" || value=="1" {
                     guard actionPause.admit(.mouseButton,down:value=="1") else {continue}
-                    if screenshotMouseButton(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
+                    if screenshotMouseButton(down:value=="1",now:eventTime) {continue}
                     if value=="1" {
                         if !scrollActive && !heldScroll.active {scrollFollowBefore=dwell.following}
                         manualPointerDuringRecording()
@@ -900,7 +905,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     // Finish the physical release before double-click recognition consumes it.
                     // Exiting follow never clicks; stillness clicking is independent.
                     if controlVersion.usesHeldScroll && value=="0" {finishMouseButtonHold(now:ProcessInfo.processInfo.systemUptime)}
-                    if recognizeMouseButtonRecenter(down:value=="1",now:ProcessInfo.processInfo.systemUptime) {continue}
+                    if recognizeMouseButtonRecenter(down:value=="1",now:eventTime,receivedAt:ProcessInfo.processInfo.systemUptime) {
+                        // Consuming a double-click must still release physical ownership.
+                        // Otherwise the next frame fabricates a held-scroll recovery.
+                        dwell.reset();scheduleDwell()
+                        performPointer(pointerRouter.mouseButton(down:false))
+                        continue
+                    }
                     if controlVersion.usesHeldScroll && !scrollActive {
                         if value=="1" {
                             beginMouseButtonHold(now:ProcessInfo.processInfo.systemUptime,following:scrollFollowBefore)
@@ -1134,7 +1145,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         screenshot.telemetry(now:now)
         guard !scrollActive,AXIsProcessTrusted() else{return}
         let gap=rawLastArrival>0 ? now-rawLastArrival : 0
-        guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:false,resetState:v[3]&2 != 0 || gap>0.25) else{return}
+        guard let sample=motionFilter.sample(rawX:v[1],rawY:v[2],microseconds:v[0],held:false,resetState:v[3]&2 != 0 || gap>0.25,applyStillness:false) else{return}
         rawLastArrival=now
         guard sample.x != 0 || sample.y != 0 else{return}
         let point=deliveryPoint ?? currentPointerOrigin()
@@ -1666,12 +1677,21 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     /// waits out the third press's 0.3 s window rather than jumping before a
     /// screenshot anchor. No pointer motion is buffered or replayed meanwhile.
     /// Previously recognizeBottomRecenter.
-    func recognizeMouseButtonRecenter(down:Bool,now:Double)->Bool {
+    func recognizeMouseButtonRecenter(down:Bool,now:Double,receivedAt:Double?=nil)->Bool {
         if down {recenterSuppressButtons=false}
         guard recenterGesture.edge(down:down,now:now) else{return false}
         pendingRecenter?.invalidate()
-        pendingRecenter=WandRunLoop.commonTimer(interval:WandTripleClick.window,repeats:false){[weak self] _ in
-            guard let self else{return};self.pendingRecenter=nil;self.recenterPointer()
+        let remaining=WandTripleClick.window-max(0,(receivedAt ?? now)-now)
+        // The triple-click window starts at the physical second release. It
+        // is not another300ms added after delayed delivery to the Mac.
+        guard remaining >= -WandTripleClick.window else {pendingRecenter=nil;return true}
+        let createdAt=ProcessInfo.processInfo.systemUptime
+        let expires=createdAt+max(0,remaining)+WandTripleClick.window
+        pendingRecenter=WandRunLoop.commonTimer(interval:max(0.001,remaining),repeats:false){[weak self] timer in
+            guard let self,self.pendingRecenter === timer else{return}
+            self.pendingRecenter=nil
+            guard ProcessInfo.processInfo.systemUptime<=expires else{return}
+            self.recenterPointer()
         }
         return true
     }
@@ -1960,7 +1980,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
               (-4095...4095).contains(x), (-4095...4095).contains(y), (0...3).contains(b), !restoring, !scrollActive, AXIsProcessTrusted() else { return }
         handleFrame(x:x,y:y,b:b)
     }
-    func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil){
+    func handleFrame(x:Int,y:Int,b:Int,stopX:Int?=nil,stopY:Int?=nil,sampleSeconds:Double?=nil,pointerQuiet:Bool?=nil,fineMove:Bool=false){
         // Screenshot mode owns the mouse button and the native button; the wand's legacy
         // button frames carry no motion in raw mode and must never act here.
         if screenshot.ownsPointer {return}
@@ -1986,7 +2006,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                                        hudSession:hudSession,hudShown:context.isActive,scrollActive:scrollActive,
                                        hudOperating:hudButtonHeld || hudEntryPress || pointerInHUD)
         noteClickGate(gate)
-        dwell.move(dx:stopX ?? x,dy:stopY ?? y,now:ProcessInfo.processInfo.systemUptime,eligible:gate == nil,pointerX:x,pointerY:y,sampleSeconds:sampleSeconds,pointerQuiet:pointerQuiet)
+        dwell.move(dx:stopX ?? x,dy:stopY ?? y,now:ProcessInfo.processInfo.systemUptime,eligible:gate == nil,pointerX:x,pointerY:y,sampleSeconds:sampleSeconds,pointerQuiet:pointerQuiet,fineMove:fineMove)
         scheduleDwell()
         if routed.buttons != b {log("CONSUMED_HOLD_CLICK_DROPPED")}
         transition(to: routed.buttons, at: point)
@@ -2141,10 +2161,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         flickAnchor=nil
         if wasFlick {setCircleLight(false);motionFilter.reset();dwell.reset();scheduleDwell();return}
-        dwell.intent(sample.intent,now:now)
+        dwell.intent(sample.intent || sample.fineMoving,now:now)
         // Click settling is a separate decision from pointer output. Removing
         // Sense drift rejection must not silently disable the fast-stop click.
-        handleFrame(x:sample.x,y:sample.y,b:buttons,stopX:sample.stopX,stopY:sample.stopY,sampleSeconds:Double(v[0])/1_000_000,pointerQuiet:sample.quietForClick)
+        handleFrame(x:sample.x,y:sample.y,b:buttons,stopX:sample.stopX,stopY:sample.stopY,sampleSeconds:Double(v[0])/1_000_000,pointerQuiet:sample.quietForClick,fineMove:sample.fineMoving)
     }
     /// Bounded click telemetry: one line when the reason stop-to-click cannot
     /// act changes (never per frame), and the current reason in status.json.

@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver 185 restores continuous Sense stillness at the previous 2-unit quiet threshold while keeping coherent tiny motion available. Small deliberate target moves can re-arm an ordinary click; the 200 ms precision pause and rapid-stop click remain. Mouse-button shortcuts use physical sample times, consume their release cleanly and expire late recenter requests. Native screenshot dragging bypasses the stillness gate. Each accepted radio packet is processed once, without age-based skipping or synthetic replay. Signed installation, preserved settings and live Bluetooth were verified; physical feel remains for user review.
 - Installed: receiver 183 keeps the post-click stillness hold inside the current pointing session: a follow-mode change, cancellation or recenter clears it. Tiny ordinary aiming, click timing, the approved up-to-60 ms post-click restart check, current smoothing and sensitivity are preserved. Signed installation, preserved settings and Bluetooth reconnection were verified. Focused pointer, click, origin and cancellation checks passed; physical acceptance is pending.
 - Receiver 182 adds Sense post-click stillness: automatic clicks hold the visible pointer until deliberate movement resumes. Larger movement responds immediately; tiny restarts use the approved up-to-60 ms direction check. Ordinary slow aiming, click detection, sensitivity and 8 ms smoothing are unchanged. Suppressed movement is discarded, never replayed. Physical acceptance is pending.
 - Installed: receiver 181 removes the Sense pointer small-movement cutoff. Raw sensor input, calibration, the existing sensitivity curve and 8 ms smoothing are preserved. Click quietness remains a separate decision. All 291 repository checks and nine focused pointer/click checks passed; physical slow-movement acceptance remains pending. Firmware 12 is unchanged; intermittent device restarts are still under investigation.
@@ -285,7 +286,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.178 (183) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 1 November 2026.
+Receiver 1.2.180 (185) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 1 November 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.

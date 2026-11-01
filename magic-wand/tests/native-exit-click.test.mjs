@@ -50,7 +50,7 @@ final class Harness {
  func startScreenshotShortcut(now:Double){screenshots+=1;pendingRecenter?.invalidate();pendingRecenter=nil;_=screenshot.requestShortcut(now:now)}
  func latchScreenshotIfReady(){}
  func finishScreenshotDrag(reason:String){}
- func edge(_ down:Bool){let line="@BOTTOM "+(down ? "1":"0");for _ in [0] {${bottom}}}
+ func edge(_ down:Bool){let eventTime=ProcessInfo.processInfo.systemUptime;let line="@BOTTOM "+(down ? "1":"0");for _ in [0] {${bottom}}}
  ${['beginMouseButtonHold','finishMouseButtonHold','reconcileMouseButtonHold','recognizeMouseButtonRecenter','screenshotMouseButton'].map(method).join('\n')}
 }
 func wait(_ s:Double){RunLoop.main.run(until:Date().addingTimeInterval(s))}

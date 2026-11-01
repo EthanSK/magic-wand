@@ -49,6 +49,7 @@ FILES = {
     "wand-receiver-actions.swift": ("receiver/Sources/WandReceiverActions.swift", "verbatim"),
     # Publish the complete compiled Sense program from the same checked snapshot.
     "sense/wand_sense.ino": ("device/sense/wand_sense/wand_sense.ino", "verbatim"),
+    "sense/wand-sense-host.js": ("device/sense/wand-sense-host.js", "verbatim"),
     "sense/wand_time.h": ("device/sense/wand_sense/wand_time.h", "verbatim"),
     "sense/wand_merge.h": ("device/sense/wand_sense/wand_merge.h", "verbatim"),
     "sense/wand_light.h": ("device/sense/wand_sense/wand_light.h", "verbatim"),

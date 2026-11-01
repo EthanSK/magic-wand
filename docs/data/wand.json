@@ -11,8 +11,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.178",
-    "receiverBuild": "183",
+    "receiver": "1.2.180",
+    "receiverBuild": "185",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.323",
@@ -21,6 +21,7 @@
     "senseFirmware": 12
   },
   "status": [
+    "Installed: receiver 185 restores continuous Sense stillness at the previous 2-unit quiet threshold while keeping coherent tiny motion available. Small deliberate target moves can re-arm an ordinary click; the 200 ms precision pause and rapid-stop click remain. Mouse-button shortcuts use physical sample times, consume their release cleanly and expire late recenter requests. Native screenshot dragging bypasses the stillness gate. Each accepted radio packet is processed once, without age-based skipping or synthetic replay. Signed installation, preserved settings and live Bluetooth were verified; physical feel remains for user review.",
     "Installed: receiver 183 keeps the post-click stillness hold inside the current pointing session: a follow-mode change, cancellation or recenter clears it. Tiny ordinary aiming, click timing, the approved up-to-60 ms post-click restart check, current smoothing and sensitivity are preserved. Signed installation, preserved settings and Bluetooth reconnection were verified. Focused pointer, click, origin and cancellation checks passed; physical acceptance is pending.",
     "Receiver 182 adds Sense post-click stillness: automatic clicks hold the visible pointer until deliberate movement resumes. Larger movement responds immediately; tiny restarts use the approved up-to-60 ms direction check. Ordinary slow aiming, click detection, sensitivity and 8 ms smoothing are unchanged. Suppressed movement is discarded, never replayed. Physical acceptance is pending.",
     "Installed: receiver 181 removes the Sense pointer small-movement cutoff. Raw sensor input, calibration, the existing sensitivity curve and 8 ms smoothing are preserved. Click quietness remains a separate decision. All 291 repository checks and nine focused pointer/click checks passed; physical slow-movement acceptance remains pending. Firmware 12 is unchanged; intermittent device restarts are still under investigation.",
@@ -507,7 +508,7 @@
         "tuned"
       ],
       "pointerGain": 1.1725,
-      "scope": "Sense profile only. Direct uses the calibrated, orientation-projected gyro rate with the configured gain, 1.4 vertical gain and one-third held gain. It retains about 8 ms of causal smoothing, the original speed-based sensitivity curve and a bounded step for late readings. Ordinary aiming has no pointer drift or small-movement cutoff. After an automatic click, a separate stillness hold suppresses wobble until larger movement or coherent tiny movement resumes; the approved tiny-restart evidence window is at most 60 ms. Suppressed or missed motion is not replayed. Quietness is evaluated separately for click decisions. Stop-to-click and screenshot settling retain the tuned stop detection. feature-flags.json \"sensePointer\": \"tuned\" or Options > Pointer filtering returns to the tuned filter. The Puck always uses the tuned filter."
+      "scope": "Sense profile only. Direct uses calibrated, orientation-projected gyro rate, configured gain, 1.4 vertical gain, one-third held gain, about 8 ms of causal smoothing and the original speed curve. Pointer-output stillness uses the previous 2-unit quiet threshold and 2-to-4 transition, with coherent fine movement preserved. Raw sensor and angular gesture input remain available. After a stop or automatic click, tiny restarts use the approved at-most-60 ms evidence window; larger movement resumes immediately. Suppressed motion is discarded. Screenshot dragging and held precision bypass stillness. Fine deliberate target motion can re-arm a click while the ordinary 200 ms pause and fast-stop path remain. The Puck keeps its tuned filter."
     },
     "recordingMouseBlinkMs": 0,
     "microCircles": {
@@ -587,7 +588,7 @@
     "pointerDelivery": {
       "coalescing": false,
       "additionalWaitMilliseconds": 0,
-      "scope": "Each accepted filtered move is posted separately and in order. Combining a backlog into one endpoint was withdrawn after jump feedback under load. Cursor-history tracking and cancellation of old movement on recenter or mode changes remain active."
+      "scope": "Each accepted radio report and filtered move is processed separately and in order, without age-based packet skipping, synthetic sample replay or combining a backlog into one endpoint. Cursor-origin history recognises delayed macOS feedback; it never posts old positions. A recenter or explicit cancellation discards movement captured before that boundary. The existing per-report step cap remains."
     }
   },
   "hud": {

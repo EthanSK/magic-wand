@@ -90,7 +90,7 @@ final class Harness {
  func finishMouseButtonHold(now:Double,released:Bool=true){}
  func probeHoldTarget(at:CGPoint,token:UUID){}
  func restoreMouseAfterScroll(hadScrollGesture:Bool=true){}
- func receive(_ line:String){for _ in [0] {
+ func receive(_ line:String){let eventTime=ProcessInfo.processInfo.systemUptime;for _ in [0] {
  let paused=actionPause.paused
 ${bottom}
 ${follow}

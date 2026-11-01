@@ -20,11 +20,9 @@ test("Sense release frames never replay obsolete stroke motion into the pointer"
   let end = sense.indexOf("{", start) + 1, depth = 1;
   while (depth) { if (sense[end] === "{") depth++; if (sense[end] === "}") depth--; end++; }
   const fixed = sense.slice(start, end);
-  const policy = /\/\/ This frame's own mask is the physical boundary[\s\S]*?screenshot: screenshot\.ownsPointer\)/;
-  assert.match(fixed, policy, "the frame-mask policy is the routing under test");
-  assert.match(fixed, /allowHistory: false/, "all live modes disable synthetic history, including scroll/HUD/review");
-  const original = fixed.replace(policy, "let dropLate = dwell.following && !hudSession && !scrollActive && !heldScroll.active &&\n                !pointerRouter.mouseButtonHeld && !screenshot.ownsPointer")
-    .replace("allowHistory: false", "allowHistory: !dropLate && !steps.contains(where: { $0.synthetic })");
+  assert.match(fixed, /allowHistory: false/, "live modes never expand merged history");
+  assert.doesNotMatch(fixed, /WandSenseStaleness.isStale/, "late delivery alone cannot reset continuous input");
+  const original = fixed.replace("allowHistory: false", "allowHistory: !steps.contains(where: { $0.synthetic })");
   const main = readFileSync(new URL("native-sense-release-frames-main.swift", import.meta.url), "utf8");
   const component = fileURLToPath(new URL("..", import.meta.url));
   const results = {};
@@ -60,9 +58,9 @@ test("Sense release frames never replay obsolete stroke motion into the pointer"
   assert.ok(o.batch.expectedAllPastPause > o.batch.expectedFreshPastPause, `scenario has late readings past the pause (${JSON.stringify(o.batch)})`);
   assert.equal(o.batch.batchRaw, o.batch.expectedAllPastPause, `reference replays late post-release readings (${JSON.stringify(o.batch)})`);
   assert.equal(o.batch.staleDropped, 0);
-  assert.equal(f.batch.batchRaw, f.batch.expectedFreshPastPause, `only readings within the stale limit reach the pointer (${JSON.stringify(f.batch)})`);
-  assert.equal(f.batch.staleDropped, f.batch.expectedStale, "late readings are counted as dropped, as in ordinary follow");
-  assert.ok(f.batch.batchCounts < o.batch.batchCounts);
+  assert.equal(f.batch.batchRaw, f.batch.expectedAllPastPause, `each real packet is applied once without age-based skipping (${JSON.stringify(f.batch)})`);
+  assert.equal(f.batch.staleDropped, 0, "late arrival does not reset the pointer filter");
+  assert.ok(f.batch.batchCounts > 0,"ordinary per-report movement remains available");
   assert.equal(o.hudOpen.reports, 60, "reference: a visible unheld HUD replays the entire old run");
   assert.equal(f.hudClosed.reports, 1);
   assert.equal(f.hudOpen.reports, 1, "a passive visible HUD keeps normal pointer freshness");
@@ -79,8 +77,8 @@ test("Sense release frames never replay obsolete stroke motion into the pointer"
   assert.equal(f.drag.merged, 1, `a native drag applies a merged run once (${JSON.stringify(f.drag)})`);
   assert.equal(o.drag.batchRaw, 50, "reference: a native drag replays a stalled backlog");
   assert.ok(f.drag.expectedStale > 0 && f.drag.expectedFresh > 0, `the stall has late and current readings (${JSON.stringify(f.drag)})`);
-  assert.equal(f.drag.batchRaw, f.drag.expectedFresh, "only readings within the stale limit move a native drag");
-  assert.equal(f.drag.staleDropped, f.drag.expectedStale, "late drag readings are counted as dropped");
+  assert.equal(f.drag.batchRaw, o.drag.batchRaw, "real drag packets remain ordered without synthetic replay");
+  assert.equal(f.drag.staleDropped, 0, "late delivery alone does not reset drag input");
   assert.ok(f.shot.streamed > 0, `screenshot motion streams normally (${JSON.stringify(f.shot)})`);
   assert.equal(o.shot.reports, 60, `reference: a screenshot drag replays a merged run (${JSON.stringify(o.shot)})`);
   assert.equal(f.shot.reports, 1, "a screenshot drag applies a merged run once");

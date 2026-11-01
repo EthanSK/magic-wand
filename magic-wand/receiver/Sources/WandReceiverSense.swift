@@ -48,9 +48,9 @@ extension WandReceiver {
         senseInfo = info; senseTransport = transport; senseSession.reset(); senseClock.reset(); senseLastReading = -.infinity; senseStaleReadings = 0; senseMouseButtonTimer.reset(); senseHUDButtonTimer.reset()
         senseUpdateIdentity(info, transport)
         restDetection = WandRestDetection(cache: support.appendingPathComponent("desk-reference-sense-\(info.id).json"))
-        virtual.onText = { [weak self, weak virtual] text in
+        virtual.onTimedText = { [weak self, weak virtual] text, times in
             guard let self, let virtual, self.senseVirtual === virtual else { return }
-            self.receiveText(text)
+            self.receiveText(text, eventTimes:times)
         }
         virtual.onLight = { [weak self] r, g, b in self?.senseLink?.send(WandSenseCommand.light(WandSenseLight.rgb(r, g, b))) }
         virtual.onSensor = { [weak self] mode in self?.senseLink?.send(WandSenseCommand.sensor(mode)) }
@@ -126,19 +126,10 @@ extension WandReceiver {
             // each radio report once at its latest time; do not manufacture a
             // sequence of historical samples from the board's merged average.
             // Button edges still arrive independently so a release cannot stick.
-            // This frame's own mask is the physical boundary (`WandSensePointerFrames`).
-            let frameMask = steps.last?.mask ?? 0
-            let frameMouseButtonDown = frameMask & WandSenseButtons.mouseButton != 0
-            let frameHUDButtonDown = frameMask & WandSenseButtons.hudButton != 0
-            // An unheld HUD permits normal follow/clicks. Match postPointerMove's
-            // actual HUD ownership, or an open passive menu replays radio backlog
-            // into the pointer even though closed-menu follow drops those frames.
-            // As for mouse release, the physical HUD bit wins over the host flag:
-            // @MIDDLE0 is handled only after this batch has already been routed.
-            let dropLate = WandSensePointerFrames.pointerOwns(following: dwell.following,
-                hudSession: frameHUDButtonDown && hudSession && (hudButtonHeld || hudEntryPress || pointerInHUD),
-                scrollActive: scrollActive, hostHolding: heldScroll.active || pointerRouter.mouseButtonHeld,
-                frameMouseButtonDown: frameMouseButtonDown, hostDragging: heldScroll.dragging, screenshot: screenshot.ownsPointer)
+            // Ethan requested natural per-report delivery, with no age-based
+            // skipping or catch-up. Keep each accepted packet once in order.
+            // A delayed valid sample is not a stream restart: nil gyro would
+            // clear the virtual raw state and reset stillness on its next sample.
             let times = gyro == nil ? [time] : WandSenseReplay.times(last: time, frame: frame, after: senseLastReading,
                 allowHistory: false)
             senseLastReading = time
@@ -147,9 +138,7 @@ extension WandReceiver {
                 // sampled before a recenter or cancellation. Preserve its
                 // physical button edges; do not move the new pointer origin.
                 if reading <= pointerMotionCutoff {return nil}
-                guard dropLate, gyro != nil, WandSenseStaleness.isStale(readingTime: reading, arrival: arrival) else { return gyro }
-                senseStaleReadings += 1
-                return nil
+                return gyro
             }
             for step in steps {
                 senseMouseButtonTimer.note(mask: step.mask, at: time, synthetic: step.synthetic)

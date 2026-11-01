@@ -100,7 +100,7 @@ for rate in [0.1,0.5,1.0,1.5] {
   let angle=Double(i)/416 * Double.pi/3
   let o=f.sample(rawX:Int((bias[0]+rate*counts*cos(angle)).rounded()),rawY:Int((bias[1]+rate*counts*sin(angle)).rounded()),microseconds:9615,held:false,resetState:false)!
   mx+=o.x;my+=o.y
-  precondition(o.quietForClick,"small movement keeps the old click-only quiet evidence")
+  if i>=6 {precondition(!o.quietForClick,"coherent fine motion prevents a premature click")}
  }
  precondition(mx<0 && my>0,"gentle low-speed curves reach both axes: \(rate), \(mx), \(my)")
 }
@@ -142,8 +142,8 @@ func dwellClicks(useStopCounts: Bool) -> (clicks: Int, stillCounts: Int, settled
 }
 let stop = dwellClicks(useStopCounts: true), raw = dwellClicks(useStopCounts: false)
 precondition(stop.clicks == 1, "exactly one stop-to-click after the sweep: \(stop.clicks)")
-precondition(stop.settledCounts > 0,"small sensor motion remains available to the pointer")
-precondition(raw.clicks == 0,"raw movement must not replace the separate stop-to-click evidence")
+precondition(stop.settledCounts == 0,"balanced rest no longer wobbles the visible pointer")
+precondition(raw.clicks == 1,"the visually quiet output agrees with a stop while click evidence remains separate")
 print("PASS: stop-to-click fires once independently of small pointer motion")
 
 // 7b. Ethan: "another tab will slide in and my mouse will still be over the
@@ -227,7 +227,7 @@ do {
         now += 0.009615
     }
     precondition(aimCounts >= 3, "3-unit aiming above the quiet threshold visibly moves the pointer: \(aimCounts)")
-    precondition(settledCounts > 0, "small sensor input is retained while click decisions still settle")
+    precondition(settledCounts == 0, "rest after the deliberate approach is visibly still")
     precondition(clickTimes.count == 1, "one stop-to-click for the whole approach: \(clickTimes)")
     precondition(clickTimes[0] > lastAim + 0.15, "the click follows the settle, never the slow approach")
     print("PASS: above-threshold aiming then settling clicks once with the 111 stop signal (last aim \(lastAim - 100), click \(clickTimes[0] - 100))")
@@ -286,3 +286,33 @@ print("PASS: post-click stillness suppresses tremor, preserves slow curves and n
 
 let cancelledRest=filter(.direct);cancelledRest.holdAfterAutomaticClick();cancelledRest.cancelPostClickHold()
 precondition(!cancelledRest.restingAfterClick && run(cancelledRest,x:0.1,seconds:1).x != 0,"a new follow or cancel boundary restores ordinary tiny aiming")
+
+// Fine targets must rearm a click without allowing balanced noise to click.
+func exercise(_ phases:[(Double,Double,Double)],noise:Bool=false)->[(Double,Bool)] {
+ let f=WandMotionFilter();precondition(f.configure([0,0,86.4*1.1725,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,1]));f.path = .direct
+ let d=WandDwellClick(fastStops:true);d.follow(true)
+ var now=10.0,clicks:[(Double,Bool)]=[],n=0
+ for (x,y,duration) in phases {
+  for _ in 0..<Int(duration*104) {
+   let angle=Double(n)*2 * Double.pi/26
+   let rx=noise ? 0.6*sin(angle):x, ry=noise ? 0.5*cos(angle):y
+   let s=f.sample(rawX:Int((rx*134).rounded()),rawY:Int((ry*134).rounded()),microseconds:9615,held:false,resetState:false)!
+   d.intent(s.intent || s.fineMoving,now:now)
+   d.move(dx:s.stopX,dy:s.stopY,now:now,eligible:true,pointerX:s.x,pointerY:s.y,sampleSeconds:0.009615,pointerQuiet:s.quietForClick,fineMove:s.fineMoving)
+   if d.tick(now:now) { clicks.append((now-10,d.lastClickWasFast));f.holdAfterAutomaticClick() }
+   now+=0.009615;n+=1
+  }
+ }
+ return clicks
+}
+let precise=exercise([(0,0,0.3),(0.7,0,0.25),(0,0,0.35),(-0.7,0,0.25),(0,0,0.35)])
+print("precise alternating clicks",precise)
+precondition(precise.count==2 && precise.allSatisfy{!$0.1})
+let stationary=exercise([(0,0,3)],noise:true)
+precondition(stationary.isEmpty,"noise must not invent a first click")
+let fast=exercise([(0,0,0.3),(50,0,0.25),(0,0,0.3),(0.7,0,0.25),(0,0,0.35)])
+print("fast then precise clicks",fast)
+precondition(fast.count==2 && fast[0].1 && !fast[1].1)
+let continuous=exercise([(0.7,0,2)])
+precondition(continuous.isEmpty,"continuous tiny aiming must not click before stopping")
+print("PASS: repeated fine targets, no noise clicks, fast then fine, continuous aim")
