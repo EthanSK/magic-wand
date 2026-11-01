@@ -2056,3 +2056,11 @@ A passing comparison does not establish the cause of a live jump.
 - Ethan requested the ordinary page-scroll transport again after finding continuous pixel scrolling laggier. V3 vertical and diagonal output now uses the existing wheel-event builder with line units; pure sideways strokes retain native phases so apps can interpret Back/Forward. The stroke classifier, speed curve, fractional wheel travel, reversal guard and output cadence are unchanged.
 - Route by the actual stroke velocity, not the rounded tick: a diagonal stroke can produce a zero vertical tick without becoming a history swipe. The inert native-event fixture covers that boundary, cancelled swipes, release, stale tick limits, anchors and debug pause.
 - The earlier pointer-core rollback was already present: movement, cursor-origin lookup and event construction match the pre-combining implementation apart from diagnostics. Keep the later cancellation and recenter safeguards; do not add a new queue or claim another rollback changed runtime behaviour. Physical feel under Mac load remains separate from this source comparison.
+
+
+## Keep Sense motion available; classify quietness only for clicks (2026-11-01)
+
+- The Sense direct-output quiet-speed knee erased deliberate slow movements and the subpixel remainder, even though raw sensor capture and angular gesture input retained them. The old 60 ms directional helper was unused, so its comments did not describe the active pointer path.
+- Ethan removed that output suppression. The direct path now applies the existing calibrated/orientation-projected rate, 8 ms causal smoothing, sensitivity curve and bounded step without a drift threshold. Remove unused fine-motion helper state; do not replace it with another hidden gate.
+- Preserve click decisions separately: stop counts stay identical to the tuned path, and quietForClick preserves the earlier quiet classification without filtering pointer movement. This prevents changing fast-stop click timing merely because slow motion becomes visible.
+- Synthetic tests cover small straight and curved motion, accumulated fractional pixels, unchanged gain/axes/held precision, independent click quietness, no stale replay and the legacy Puck filter. Physical drift/aiming acceptance still needs real use; removal is not proof that every tiny movement is intentional.

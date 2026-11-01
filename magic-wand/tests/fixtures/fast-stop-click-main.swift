@@ -64,7 +64,7 @@ func liveStop(briskFrames:Int,approachFrames:Int=0,rate:Double=40)->(delay:Doubl
   let sample=f.sample(rawX:Int((rateNow/0.00875).rounded()),rawY:0,microseconds:9615,held:false,resetState:false)!
   let now=Double(i)*dt;intentSeen = intentSeen || sample.intent
   d.intent(sample.intent,now:now)
-  d.move(dx:sample.stopX,dy:sample.stopY,now:now,eligible:true,pointerX:sample.x,pointerY:sample.y,sampleSeconds:dt,pointerQuiet:sample.highX==0 && sample.highY==0)
+  d.move(dx:sample.stopX,dy:sample.stopY,now:now,eligible:true,pointerX:sample.x,pointerY:sample.y,sampleSeconds:dt,pointerQuiet:sample.quietForClick)
   if d.tick(now:now) {count+=1;delay=now-stop;fast=d.lastClickWasFast}
  }
  expect(intentSeen,"the sequence exercised the real motion intent signal")

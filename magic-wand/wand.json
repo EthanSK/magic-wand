@@ -12,8 +12,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.175",
-    "receiverBuild": "180",
+    "receiver": "1.2.176",
+    "receiverBuild": "181",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.323",
@@ -22,6 +22,7 @@
     "senseFirmware": 12
   },
   "status": [
+    "Installed: receiver 181 removes the Sense pointer small-movement cutoff. Raw sensor input, calibration, the existing sensitivity curve and 8 ms smoothing are preserved. Click quietness remains a separate decision. All 291 repository checks and nine focused pointer/click checks passed; physical slow-movement acceptance remains pending. Firmware 12 is unchanged; intermittent device restarts are still under investigation.",
     "Installed: receiver180 restores ordinary mouse-wheel output for V3 page scrolling and smaller Backwards / Forwards feedback. Native sideways swipe handling, speed tuning, the restored pre-scroll follow choice, firmware12 and all pointer/click behaviour are unchanged. The pointer core already matches the pre-combining baseline; no new movement queue was added. All291 repository checks and the rendered feedback pass; physical scroll feel remains for user review.",
     "Installed: receiver 179 restores the previous mouse-follow choice after scrolling. On stays on; off stays off. A newer recording pause still wins. Signed installation, preserved settings and Bluetooth reconnection were verified. Pointer sensitivity, filtering, click timing and firmware 12 are unchanged. All 291 repository checks passed; physical scroll acceptance remains pending.",
     "Earlier firmware verification: the complete Sense firmware 12 wireless transfer and Bluetooth readback passed with calibration, settings and the update key preserved. Firmware 12 reports saved restart flags. A five-minute comparison stayed connected with sensor recording off, but another restart was later observed. The intermittent restart cause remains under investigation; mouse tuning, controls and sleep were unchanged by that update.",
@@ -505,7 +506,7 @@
         "tuned"
       ],
       "pointerGain": 1.1725,
-      "scope": "Sense profile only. Direct uses the calibrated, orientation-projected gyro rate with the configured gain, 1.4 vertical gain and one-third held gain. It retains about 8 ms of causal smoothing, the original speed-based sensitivity curve, a quiet-stop floor and a bounded step for late readings; it does not replay missed motion. The experimental sub-threshold fine-motion bypass is disabled. Stop-to-click and screenshot settling retain the tuned stop detection. feature-flags.json \"sensePointer\": \"tuned\" or Options > Pointer filtering returns to the tuned filter. The Puck always uses the tuned filter."
+      "scope": "Sense profile only. Direct uses the calibrated, orientation-projected gyro rate with the configured gain, 1.4 vertical gain and one-third held gain. It retains about 8 ms of causal smoothing, the original speed-based sensitivity curve and a bounded step for late readings. It has no pointer drift or small-movement cutoff, and does not replay missed motion. Quietness is evaluated separately for click decisions. Stop-to-click and screenshot settling retain the tuned stop detection. feature-flags.json \"sensePointer\": \"tuned\" or Options > Pointer filtering returns to the tuned filter. The Puck always uses the tuned filter."
     },
     "recordingMouseBlinkMs": 0,
     "microCircles": {

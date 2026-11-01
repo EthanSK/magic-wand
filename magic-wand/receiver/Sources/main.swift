@@ -2140,7 +2140,9 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         flickAnchor=nil
         if wasFlick {setCircleLight(false);motionFilter.reset();dwell.reset();scheduleDwell();return}
         dwell.intent(sample.intent,now:now)
-        handleFrame(x:sample.x,y:sample.y,b:buttons,stopX:sample.stopX,stopY:sample.stopY,sampleSeconds:Double(v[0])/1_000_000,pointerQuiet:sample.highX==0 && sample.highY==0)
+        // Click settling is a separate decision from pointer output. Removing
+        // Sense drift rejection must not silently disable the fast-stop click.
+        handleFrame(x:sample.x,y:sample.y,b:buttons,stopX:sample.stopX,stopY:sample.stopY,sampleSeconds:Double(v[0])/1_000_000,pointerQuiet:sample.quietForClick)
     }
     /// Bounded click telemetry: one line when the reason stop-to-click cannot
     /// act changes (never per frame), and the current reason in status.json.

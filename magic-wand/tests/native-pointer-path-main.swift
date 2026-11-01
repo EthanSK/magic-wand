@@ -20,11 +20,11 @@ func run(_ f: WandMotionFilter, x: Double = 0, y: Double = 0, seconds: Double, h
 }
 let perDegree = 86.4 * 1.1725 / 134 * counts   // counts per true degree at full speed = 86.4
 
-// 1. Ethan restored quiet tiny-motion stopping while keeping normal direct movement.
+// 1. Ethan removed Sense drift rejection: low-speed input reaches movement.
 let slowDirect = run(filter(.direct), x: 0.5, seconds: 1), slowTuned = run(filter(.tuned), x: 0.5, seconds: 1)
-precondition(slowDirect == (0,0), "still-hand level motion (0.5, about 0.6 deg/s) stops: \(slowDirect)")
+precondition(slowDirect.x < -10 && slowDirect.y == 0, "slow deliberate movement is no longer discarded: \(slowDirect)")
 precondition(slowTuned.x == 0, "the tuned filter swallows the same motion: \(slowTuned)")
-print("PASS: tiny motion stops on both paths")
+print("PASS: slow Sense movement is retained and Puck filtering is unchanged")
 let immediate=filter(.direct).sample(rawX:Int(bias[0]+30*counts),rawY:Int(bias[1]),microseconds:9615,held:false,resetState:false)!
 precondition(immediate.x != 0,"normal direct movement starts on its first sample")
 
@@ -41,7 +41,7 @@ func settled(_ f: WandMotionFilter, x: Double = 0, y: Double = 0, seconds: Doubl
 let fastDirect = settled(filter(.direct), x: 100, y: 100, seconds: 0.5), fastTuned = settled(filter(.tuned), x: 100, y: 100, seconds: 0.5)
 precondition(abs(Double(fastDirect.x) / Double(fastTuned.x) - 1) < 0.03 && abs(Double(fastDirect.y) / Double(fastTuned.y) - 1) < 0.03,
              "shared gain at speed: \(fastDirect) vs \(fastTuned)")
-// Within the stop knee's share of the decaying tail (under 4 deg/s, ~10 ms).
+// The existing causal smoothing has a short decaying tail; no future samples.
 precondition(abs(Double(fastDirect.x) + 50 * perDegree) < 100 * 0.008 * perDegree && abs(Double(fastDirect.y) - 1.4 * 50 * perDegree) < 1.4 * 100 * 0.008 * perDegree, "86.4 counts/° with the 1.4 vertical gain: \(fastDirect)")
 // 4. Held LOW precision keeps its one-third gain.
 let heldDirect = run(filter(.direct), x: 20, seconds: 0.5, held: true), freeDirect = run(filter(.direct), x: 20, seconds: 0.5)
@@ -89,39 +89,21 @@ let response = (0..<6).map { _ in Double(-stepFilter.sample(rawX: Int(bias[0] + 
 let full = 20 * 0.009615 * perDegree
 precondition(response[0] > 0.55 * full && response[0] < 0.8 * full, "first reading responds at once: \(response[0]) of \(full)")
 precondition(response[2] > 0.93 * full && response.allSatisfy { $0 <= full + 1 }, "settles within three readings, no overshoot: \(response)")
-// 6c. Continuous tiny-motion stop. CONFIG fineSpeed is 2 in the program's
-// 134-count units, about 2.34 true deg/s on the Sense: still at or below it,
-// part gain up to twice it, then full gain.
+// 6c. Low-speed and gentle-curve input is retained, with only the existing
+// gain curve, smoothing and pixel rounding. Quiet evidence is click-only.
 func steady(_ rate: Double) -> Double { Double(-run(filter(.direct), x: rate, seconds: 1).x) / (rate * perDegree) }
-precondition(steady(0.1) == 0 && steady(1.5) == 0, "restored quiet stop rejects sub-threshold drift")
-precondition(steady(1.5) < steady(5.5) && steady(5.5) < steady(10) && steady(10) < steady(25), "restored speed curve: fine aim, medium and broad travel")
-// Coherence alone must never promote sub-threshold drift into pointer movement.
-let fine = filter(.direct)
-var firstFine:Int?
-for i in 0..<104 {
-    let o=fine.sample(rawX:Int(bias[0]+1.5*counts),rawY:Int(bias[1]),microseconds:9615,held:false,resetState:false)!
-    if o.x != 0 && firstFine == nil {firstFine=i}
+precondition(steady(0.1)>0 && steady(1.5)>0, "no hard low-speed cutoff")
+precondition(steady(1.5)<steady(5.5) && steady(5.5)<steady(10) && steady(10)<steady(25), "fine, medium and broad sensitivity curve stays in place")
+for rate in [0.1,0.5,1.0,1.5] {
+ let f=filter(.direct);var mx=0,my=0
+ for i in 0..<416 {
+  let angle=Double(i)/416 * Double.pi/3
+  let o=f.sample(rawX:Int((bias[0]+rate*counts*cos(angle)).rounded()),rawY:Int((bias[1]+rate*counts*sin(angle)).rounded()),microseconds:9615,held:false,resetState:false)!
+  mx+=o.x;my+=o.y
+  precondition(o.quietForClick,"small movement keeps the old click-only quiet evidence")
+ }
+ precondition(mx<0 && my>0,"gentle low-speed curves reach both axes: \(rate), \(mx), \(my)")
 }
-precondition(firstFine == nil, "quiet-stop rollback does not reopen for coherent sub-threshold motion")
-let tinyNoise=filter(.direct)
-var noiseTotal=0
-for i in 0..<208 {
- let sign=i%2==0 ? 1.0 : -1.0
- noiseTotal += tinyNoise.sample(rawX:Int(bias[0]+sign*0.8*counts),rawY:Int(bias[1]),microseconds:9615,held:false,resetState:false)!.x
-}
-precondition(abs(noiseTotal)<=2, "back-and-forth wobble cancels without drift")
-print("PASS: restored quiet stop, wobble cancellation and unchanged speed response")
-
-// 2026-10-30: quiet hand drift was promoted to aiming by the 60 ms bypass.
-let driftStop=filter(.direct)
-var quietTail=0
-for i in 0..<520 {
-    let rate=i<32 ? 30.0 : 1.25+0.15*sin(Double(i)*0.12)
-    let sample=driftStop.sample(rawX:Int(bias[0]+rate*134),rawY:Int(bias[1]),microseconds:9615,held:false,resetState:false)!
-    if i>100 {quietTail+=abs(sample.x)+abs(sample.y)}
-}
-precondition(quietTail==0,"quiet drift must stay stopped after a sweep: \(quietTail)")
-
 // Near-threshold oscillation is not a stationary-hand recording. It must not
 // turn its alternating motion into sustained one-way creep.
 let oscillation=filter(.direct)
@@ -139,7 +121,7 @@ let gapFilter = filter(.direct); _ = run(gapFilter, x: 40, seconds: 0.2)
 let late = gapFilter.sample(rawX: Int(bias[0] + 40 * counts), rawY: Int(bias[1]), microseconds: 50000, held: false, resetState: false)!
 precondition(Double(abs(late.x)) <= 40 * 0.025 * perDegree + 1, "a 50 ms gap is not replayed: \(late.x)")
 precondition(abs(WandMotionFilter.directSmoothing - 0.008) < 1e-9, "the approved smoothing stays about 8 ms")
-print("PASS: approved 8 ms smoothing, continuous stop and bounded late step")
+print("PASS: approved 8 ms smoothing and bounded late step")
 
 // 7. Stop-to-click keeps the tuned stop counts: one click after real travel,
 // none from tremor alone and no flood while still.
@@ -160,9 +142,9 @@ func dwellClicks(useStopCounts: Bool) -> (clicks: Int, stillCounts: Int, settled
 }
 let stop = dwellClicks(useStopCounts: true), raw = dwellClicks(useStopCounts: false)
 precondition(stop.clicks == 1, "exactly one stop-to-click after the sweep: \(stop.clicks)")
-precondition(stop.settledCounts == 0,"settled tiny motion must not move the pointer")
-precondition(raw.clicks == 1,"quiet-motion stopping permits one click on direct counts too (\(raw.clicks))")
-print("PASS: stop-to-click fires once; tiny motion cannot keep moving the pointer")
+precondition(stop.settledCounts > 0,"small sensor motion remains available to the pointer")
+precondition(raw.clicks == 0,"raw movement must not replace the separate stop-to-click evidence")
+print("PASS: stop-to-click fires once independently of small pointer motion")
 
 // 7b. Ethan: "another tab will slide in and my mouse will still be over the
 // close button but it won't send a click again ... 300 milliseconds". The
@@ -245,7 +227,7 @@ do {
         now += 0.009615
     }
     precondition(aimCounts >= 3, "3-unit aiming above the quiet threshold visibly moves the pointer: \(aimCounts)")
-    precondition(settledCounts == 0, "settled tremor and zero error never move it")
+    precondition(settledCounts > 0, "small sensor input is retained while click decisions still settle")
     precondition(clickTimes.count == 1, "one stop-to-click for the whole approach: \(clickTimes)")
     precondition(clickTimes[0] > lastAim + 0.15, "the click follows the settle, never the slow approach")
     print("PASS: above-threshold aiming then settling clicks once with the 111 stop signal (last aim \(lastAim - 100), click \(clickTimes[0] - 100))")

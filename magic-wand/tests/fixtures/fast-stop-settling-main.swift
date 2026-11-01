@@ -56,7 +56,7 @@ func live(rate:Double,ramp:Int)->(Double,Bool,Int) {
   let s=f.sample(rawX:Int((r/0.00875).rounded()),rawY:0,microseconds:9615,held:false,resetState:false)!
   let now=Double(i)*dt
   d.intent(s.intent,now:now)
-  d.move(dx:s.stopX,dy:s.stopY,now:now,eligible:true,pointerX:s.x,pointerY:s.y,sampleSeconds:dt,pointerQuiet:s.highX==0 && s.highY==0)
+  d.move(dx:s.stopX,dy:s.stopY,now:now,eligible:true,pointerX:s.x,pointerY:s.y,sampleSeconds:dt,pointerQuiet:s.quietForClick)
   if d.tick(now:now){count+=1;delay=now-stop;fast=d.lastClickWasFast}
  }
  return (delay,fast,count)

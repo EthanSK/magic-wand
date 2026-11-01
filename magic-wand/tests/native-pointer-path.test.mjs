@@ -1,3 +1,4 @@
+// Runs inert pointer-math and click-isolation regressions; never sends live input.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, rmSync, copyFileSync, readFileSync } from "node:fs";
@@ -7,7 +8,7 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 
 // Bare check executable in a temporary directory: pointer maths only, no native input.
-test("direct Sense pointer keeps normal motion, quiet stopping, units, axes and held gain", { skip: process.platform !== "darwin" }, () => {
+test("direct Sense pointer retains slow motion, separate click evidence, units, axes and held gain", { skip: process.platform !== "darwin" }, () => {
   const dir = mkdtempSync(join(tmpdir(), "wand-pointer-path-"));
   try {
     copyFileSync(fileURLToPath(new URL("native-pointer-path-main.swift", import.meta.url)), join(dir, "main.swift"));

@@ -709,9 +709,12 @@ struct WandAngularStream {
 /// calibrated, orientation-projected gyro rate × time × the same gain, vertical
 /// gain and explicit held LOW gain, keeping the subpixel remainder. Its only
 /// additions are the ones measured or approved since: Ethan's approved ~8 ms
-/// causal smoothing, a continuous tiny-motion stop and a bounded step (see
+/// causal smoothing and a bounded step (see
 /// `WandMotionFilter.directSmoothing`). Nothing is buffered, replayed or
-/// predicted. Both paths are measured in the same units.
+/// predicted. Ethan removed the Sense pointer's drift/tiny-motion rejection
+/// on 2026-11-01. Quiet classification remains only in the click decision;
+/// it must never discard the pointer or the angular input to another gesture.
+/// Both paths are measured in the same units.
 enum WandPointerPath: String {
     case tuned, direct
     static func read(_ value: Any?, default fallback: WandPointerPath) -> WandPointerPath {
@@ -725,7 +728,7 @@ final class WandMotionFilter {
     // stopX/stopY: the tuned filter's counts, used only to decide stop-to-click
     // (dwell) and screenshot settling, so a direct pointer cannot disable or
     // flood those clicks with tremor- or bias-level counts. Equal to x/y when tuned.
-    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0;var highY=0.0}
+    struct Result {let x:Int,y:Int;let intent:Bool;let angularX:Double,angularY:Double;let highX:Double;var stopX=0,stopY=0;var highY=0.0;var quietForClick=false}
     var path:WandPointerPath = .tuned
     private var directX=0.0,directY=0.0,smoothX=0.0,smoothY=0.0
     /// Seconds. Ethan approved "about 8 ms of pointer smoothing delay to reduce
@@ -733,33 +736,10 @@ final class WandMotionFilter {
     /// exponential average of the calibrated rate in device time. It reduces
     /// per-reading sensor noise only; it is not the Puck's 150 ms intent filter.
     static let directSmoothing=0.008
-    /// Tiny-motion stop: the smoothed rate stops the pointer at or below the
-    /// existing slow-speed boundary (CONFIG fineSpeed: 2 in the program's
-    /// 134-count units, about 2.3 true deg/s on the Sense) and reaches full gain
-    /// at twice it. In recorded real pointing (2026-10-29, firmware c) about a
-    /// third of readings were at or below 2 deg/s and the hard on/off gate
-    /// crossed about 5 times a second; a continuous knee keeps the stop without
-    /// those jumps. Faster movement is unchanged.
-    static let directKneeFactor=2.0
     /// One reading moves at most this much device time. A longer gap (lost
     /// readings, a radio stall, a dropped stale reading) is skipped, never
     /// caught up from the next reading's rate. One missing reading still fits.
     static let directMaxStep=0.025
-    // Ethan: tiny coherent motion means intentional aiming; back-and-forth
-    // wobble should cancel. Only this formerly frozen slow band waits for
-    // directional evidence (approved 60 ms on 2026-10-29, tiny slow motion
-    // only; normal movement keeps the ~8 ms smoothing). Never replay its
-    // accumulated displacement: after confirmation, output this reading only.
-    private var fineSamples:[(x:Double,y:Double,time:Double)] = []
-    private var fineDuration=0.0
-    static let fineConfirmation=0.060
-    /// Smoothed rate below which nothing counts as aiming, in the program's
-    /// 134-count units (0.85 is about 1.0 true deg/s). Replayed over 25 min of
-    /// Ethan's real Sense use (2026-10-29, firmware c, gain 1.52425): 0.85
-    /// posted nothing while the hand was still (0.2 crept 250 counts), leaked
-    /// less wobble than receiver 111, and cut frozen deliberate slow motion
-    /// from 66% to 37%. Stop-to-click is unchanged (it judges tuned counts).
-    static let fineFloor=0.85
     private var values:[Double] = []
     private var fx=0.0,fy=0.0,ix=0.0,iy=0.0,meanSpeed=0.0,intentTime=0.0
     private var slackX=0.0,slackY=0.0,fractionX=0.0,fractionY=0.0
@@ -782,7 +762,7 @@ final class WandMotionFilter {
               abs(v[11])==1,abs(v[12])==1 else{return false}
         values=v;reset();return true
     }
-    func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0;directX=0;directY=0;smoothX=0;smoothY=0;fineSamples=[];fineDuration=0}
+    func reset(){fx=0;fy=0;ix=0;iy=0;meanSpeed=0;intentTime=0;slackX=0;slackY=0;fractionX=0;fractionY=0;directX=0;directY=0;smoothX=0;smoothY=0}
     func sample(rawX:Int,rawY:Int,microseconds:Int,held:Bool,resetState:Bool)->Result? {
         guard configured,(-65535...65535).contains(rawX),(-65535...65535).contains(rawY),
               (1...50000).contains(microseconds) else{return nil}
@@ -816,48 +796,31 @@ final class WandMotionFilter {
         let countX=Int(fractionX.rounded(.towardZero)),countY=Int(fractionY.rounded(.towardZero))
         fractionX-=Double(countX);fractionY-=Double(countY)
         let tunedX=max(-4095,min(4095,countX)),tunedY=max(-4095,min(4095,countY))
+        let tunedHighY=stepY*v[2]*v[3]*(v[4]+(1-v[4])*blend*blend*(3-2*blend))*v[12]
         guard path == .direct else {
             return .init(x:tunedX,y:tunedY,intent:active,angularX:x*v[11],angularY:y*v[12],highX:highX,stopX:tunedX,stopY:tunedY,
-                         highY:stepY*v[2]*v[3]*(v[4]+(1-v[4])*blend*blend*(3-2*blend))*v[12])
+                         highY:tunedHighY,quietForClick:highX==0 && tunedHighY==0)
         }
         // Direct: the same calibrated, projected rate (x, y), gain, vertical gain
         // and held choice as above, applied to every reading as it arrives.
         let gain=v[2]*(held ? v[7] : 1)
         let smoothing=1-exp(-dt/Self.directSmoothing)
         smoothX+=smoothing*(x-smoothX);smoothY+=smoothing*(y-smoothY)
-        // Ethan: keep direct normal movement, restore tiny-motion stopping.
-        // Reuse the existing slow-speed boundary; click timing keeps tuned quiet counts.
+        // Ethan: "get rid of the drift stuff" (2026-11-01). Every calibrated
+        // sample reaches movement, including very slow curves. Keep the existing
+        // quiet evidence ONLY for stop-to-click, never as a pointer output gate.
         let smoothSpeed=sqrt(smoothX*smoothX+smoothY*smoothY)
-        let knee=v[5]>0 ? min(1,max(0,(smoothSpeed-v[5])/(v[5]*(Self.directKneeFactor-1)))) : 1
-        // The 60 ms fine-motion escape mistook low-level hand drift for aiming.
-        // Restore the original quiet-stop floor; normal smoothing and gain stay unchanged.
+        let quietForClick=smoothSpeed<=v[5] || v[2]==0
         // Restore the original speed-based sensitivity curve, not its radial
         // slack or drift decay: fine aiming is precise, broad travel is fast.
         let response=v[4]+(1-v[4])*blend*blend*(3-2*blend)
-        let amount=knee
-        let step=min(dt,Self.directMaxStep)*response*amount
-        if amount==0 {directX=0;directY=0}
-        else {
-            directX+=smoothX*step*gain*v[11];directY+=smoothY*step*gain*v[3]*v[12]
-        }
+        let step=min(dt,Self.directMaxStep)*response
+        directX+=smoothX*step*gain*v[11];directY+=smoothY*step*gain*v[3]*v[12]
         let directCountX=Int(directX.rounded(.towardZero)),directCountY=Int(directY.rounded(.towardZero))
         directX-=Double(directCountX);directY-=Double(directCountY)
         return .init(x:max(-4095,min(4095,directCountX)),y:max(-4095,min(4095,directCountY)),intent:active,
-                     angularX:x*v[11],angularY:y*v[12],highX:smoothX*step*v[2]*v[11],stopX:tunedX,stopY:tunedY,highY:smoothY*step*v[2]*v[3]*v[12])
-    }
-    private func fineMovement(speed:Double,knee:Double,dt:Double)->Bool {
-        guard knee<1,speed>Self.fineFloor else {fineSamples=[];fineDuration=0;return false}
-        fineSamples.append((smoothX*dt,smoothY*dt,dt));fineDuration+=dt
-        while fineSamples.count>1,fineDuration-fineSamples[0].time>=Self.fineConfirmation {
-            fineDuration-=fineSamples.removeFirst().time
-        }
-        let x=fineSamples.reduce(0){$0+$1.x},y=fineSamples.reduce(0){$0+$1.y}
-        let distance=hypot(x,y),travel=fineSamples.reduce(0){$0+hypot($1.x,$1.y)}
-        let aligned=distance>0 && (smoothX*x+smoothY*y)>=0.85*speed*distance
-        guard travel>0,distance/travel>=0.85,aligned else {
-            fineSamples=[(smoothX*dt,smoothY*dt,dt)];fineDuration=dt;return false
-        }
-        return fineDuration>=max(0,Self.fineConfirmation-dt)
+                     angularX:x*v[11],angularY:y*v[12],highX:smoothX*step*v[2]*v[11],stopX:tunedX,stopY:tunedY,
+                     highY:smoothY*step*v[2]*v[3]*v[12],quietForClick:quietForClick)
     }
 
 }
