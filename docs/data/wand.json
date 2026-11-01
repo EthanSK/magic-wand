@@ -7,7 +7,7 @@
     "headline": "The age of AI doesn’t need a keyboard.",
     "detail": "The wand is my step toward that. It’s not a mouse replacement: lounge back with the wand and ask Computer Use for most things, ideally by talking through Hello Chat, then reach for your mouse and Agentic Mouse when you need precision. Keep the keyboard for text that has to be typed exactly, which I find is rare."
   },
-  "updated": "2026-10-31",
+  "updated": "2026-11-01",
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
@@ -15,12 +15,13 @@
     "receiverBuild": "178",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
-    "agenticMouse": "1.0.315",
-    "agenticMouseBuild": "321",
+    "agenticMouse": "1.0.323",
+    "agenticMouseBuild": "329",
     "persistentImage": "full-20261025a",
-    "senseFirmware": 11
+    "senseFirmware": 12
   },
   "status": [
+    "Installed: complete Sense firmware 12 reports saved restart flags with its connection message. The wireless transfer and Bluetooth readback passed with calibration, settings and the update key preserved. Receiver 178 and Agentic Mouse 1.0.323 build 329 remain installed. A five-minute comparison stayed connected with sensor recording off. The intermittent restart cause is not established; mouse tuning, controls and sleep are unchanged.",
     "Installed receiver1.2.173 build178 uses physical Sense timing for HUD tap classification and keeps timer-based recentering from leaving a stale cursor origin. Live HUD motion remains immediate; pointer filtering, gain, ordinary clicks and firmware11 are unchanged. The debug view preserves idle readings, distinguishes accelerometer-only packets and shows finer motion over a two-second chart. Focused checks and Bluetooth reconnection passed; physical acceptance remains pending.",
     "Installed: receiver 1.2.172 build177 removes native pointer-event combining. Accepted movement is posted separately; cursor-history tracking, recenter cancellation, filtering, gain and click logic are preserved. The debug dashboard shows finer raw values and holds idle readings steady. Physical jump acceptance and the independent review remain pending.",
     "Installed: receiver176 stops old-direction page output during a clear opposite stroke while retaining the existing reversal and recoil classifier. Native sideways gestures, pointer sensitivity, smoothing, click timing and firmware11 are unchanged. The synthetic reversal changed from 59 pixels of wrong-direction output to zero; the full V3 motion suite passed. Installed binary, live Bluetooth and preserved settings were verified. Physical feel remains for review. All 266 Wand, 17 Control Stones and 4 shared checks passed after installation.",

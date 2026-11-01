@@ -2036,3 +2036,10 @@ A passing comparison does not establish the cause of a live jump.
 - The Sense can report only acceleration while at rest. Preserve its validity flags instead of plotting zero-filled gyro fields as measurements. Keep the last actual gyro value separately from the current connection state.
 - A fresh connection heartbeat must not flash the motion chart's stale overlay on and off. Advance the chart clock normally; only a stale connection shows the overlay. Two seconds of adaptive-range history makes small current movement visible after an earlier large movement, without altering sensor or pointer input.
 - Native and dashboard fixtures cover timing, validity flags and held readings. A source-only check does not establish physical sensor quality.
+
+## Retain reset evidence before choosing a recovery policy (2026-11-01)
+
+- Unexpected disconnections followed by fresh device uptime establish a restart, not its cause. Host sensor logging does not issue a device reset; a quiet logging-off comparison alone cannot rule logging in or out. Keep failed exercises as incident evidence, not successful gesture references.
+- Capture the nRF52 reset-reason register before clearing it, then send the saved mask with identity. Keep the boot event in the same queued message: a separate event can be dropped when repeated discovery queries fill the four-slot output queue. Bound the complete formatter, including both lines, against the actual512-byte capacity.
+- Successful legacy Bluetooth DFU jumps directly into the replacement application. It need not set a processor-reset bit, so a zero mask after that update is expected. A zero mask after an unexplained restart cannot distinguish power-on, brownout or another direct application jump. The chip's reset-pin workaround can also clear some combined flags.
+- Firmware12's complete wireless transfer and Bluetooth readback were verified with calibration, settings and the update key preserved. The boot event arrived without raw sensor logging. This adds evidence; it does not prove the cause of the intermittent restart or justify installing an unverified watchdog recovery policy.

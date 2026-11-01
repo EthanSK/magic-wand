@@ -48,12 +48,12 @@ using namespace Adafruit_LittleFS_Namespace;
 
 // Numeric firmware versions from 6 on; earlier images used dated letters
 // (the previous one was wand-sense-20261029e). Wireless updates only move up.
-static const char FIRMWARE[] = "wand-sense-11";
-static const uint32_t FIRMWARE_NUMBER = 11;
+static const char FIRMWARE[] = "wand-sense-12";
+static const uint32_t FIRMWARE_NUMBER = 12;
 // The image's own statement of its board and number. The receiver refuses a
 // package without exactly one, or for another board or number. Change the
 // number with FIRMWARE_NUMBER.
-static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;11";
+static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;12";
 static const uint32_t DEBOUNCE_MS = 10;            // Same as the checked diagnostic sketch.
 static const uint32_t HOST_TIMEOUT_MS = 2000;      // Host heartbeat is every 500 ms.
 static const uint32_t HEARTBEAT_FRAME_MS = 250;    // Liveness while the sensor is quiet.
@@ -83,6 +83,10 @@ static uint32_t notReadySince = 0; // LED phase only: never used for input, link
 static uint8_t chordPhase = 0;                     // 1: manual chord warning; 2: cancellable offline warning.
 static uint32_t chordAt = 0;
 static bool wokeFromOff = false;
+// The Arduino core saves RESETREAS before clearing it. Keep every bit for the
+// reported dark/no-reconnect incident; zero cannot distinguish power-on from
+// brownout. This is diagnostic only: no new reset, sleep or input behavior.
+static uint32_t bootResetReason = 0;
 static char usbLine[112], bleLine[112]; // Update authorizations are about 80 characters.
 static uint8_t usbLength = 0, bleLength = 0;
 static bool usbDiscardLine = false, bleDiscardLine = false;
@@ -333,16 +337,24 @@ static void sendUpdate(Transport t, const char *text) {
   writeTo(t, line, snprintf(line, sizeof(line), "\nU %s\n", text));
 }
 
+// Keep the boot event in the same queued message as identity. A second queued
+// event could be lost when repeated discovery queries fill the four-slot queue.
+// Queries are rare; repeating the same boot facts is safe and avoids retries.
 static void sendIdentity(Transport t) {
   char text[512], loader[16];
   wandBootloaderText(bootloaderVersion, loader);
   const int n = snprintf(text, sizeof(text),
     "\nI{\"protocol\":\"wand-sense-1\",\"firmware\":\"%s\",\"id\":\"%08lx%08lx\",\"imu\":%s,\"gyroDpsPerLsb\":0.0175,\"accelGPerLsb\":0.000122,\"odr\":104,\"merge\":true,\"wake\":%s,"
-    "\"firmwareNumber\":%lu,\"bootloader\":\"%s\",\"softDevice\":%lu,\"codeStart\":%lu,\"bootloaderStart\":%lu,\"updater\":%u,\"updateKey\":%s,\"update\":\"%s\",\"updateTarget\":%lu}\n",
+    "\"resetReason\":%lu,\"firmwareNumber\":%lu,\"bootloader\":\"%s\",\"softDevice\":%lu,\"codeStart\":%lu,\"bootloaderStart\":%lu,\"updater\":%u,\"updateKey\":%s,\"update\":\"%s\",\"updateTarget\":%lu}\n"
+    "Eboot reset=%lu off=%u software=%u watchdog=%u lockup=%u pin=%u vbus=%u\n",
     FIRMWARE, (unsigned long)NRF_FICR->DEVICEID[1], (unsigned long)NRF_FICR->DEVICEID[0], imuReady ? "true" : "false", wokeFromOff ? "true" : "false",
-    (unsigned long)FIRMWARE_NUMBER, loader, (unsigned long)SD_FWID_GET(MBR_SIZE), (unsigned long)codeStart(), (unsigned long)bootloaderStart(),
-    unsigned(WAND_UPDATE_PROTOCOL), updateKeyPresent ? "true" : "false", wandUpdateResultName(updateResult), (unsigned long)updateTarget);
-  writeTo(t, text, n);
+    (unsigned long)bootResetReason, (unsigned long)FIRMWARE_NUMBER, loader, (unsigned long)SD_FWID_GET(MBR_SIZE), (unsigned long)codeStart(), (unsigned long)bootloaderStart(),
+    unsigned(WAND_UPDATE_PROTOCOL), updateKeyPresent ? "true" : "false", wandUpdateResultName(updateResult), (unsigned long)updateTarget,
+    (unsigned long)bootResetReason, unsigned((bootResetReason & POWER_RESETREAS_OFF_Msk) != 0),
+    unsigned((bootResetReason & POWER_RESETREAS_SREQ_Msk) != 0), unsigned((bootResetReason & POWER_RESETREAS_DOG_Msk) != 0),
+    unsigned((bootResetReason & POWER_RESETREAS_LOCKUP_Msk) != 0), unsigned((bootResetReason & POWER_RESETREAS_RESETPIN_Msk) != 0),
+    unsigned((bootResetReason & POWER_RESETREAS_VBUS_Msk) != 0));
+  if (n > 0 && n < int(sizeof(text))) writeTo(t, text, n);
   char radio[120];
   const int count = snprintf(radio, sizeof(radio), "\nEradio init=%u uart=%lu data=%u advertising=%u connected=%u\n", bleReady, (unsigned long)uartStatus, advDataReady, bleReady && Bluefruit.Advertising.isRunning(), bleReady && Bluefruit.connected());
   writeTo(t, radio, count);
@@ -537,6 +549,7 @@ static void command(const char *line, uint8_t length, Transport from) {
     // A new host session: current state only, never queued edges or old motion.
     session = from; clearMerged(); stateDirty = true; chordPhase = 0; localDark = false; loadingBlink = false; verifyBlink = false;
     lastBatteryAt = millis() - 10000; // Report the battery at once.
+
   }
   hostAt = millis();
   if (c == 'L' && length == 7) {
@@ -583,7 +596,8 @@ static void connectCallback(uint16_t handle) {
 
 void setup() {
   // The core saves and clears RESETREAS during start-up; informational only.
-  wokeFromOff = (readResetReason() & POWER_RESETREAS_OFF_Msk) != 0;
+  bootResetReason = readResetReason();
+  wokeFromOff = (bootResetReason & POWER_RESETREAS_OFF_Msk) != 0;
   loopTask = xTaskGetCurrentTaskHandle();
   Serial.begin(115200);
   const uint32_t now = millis();
