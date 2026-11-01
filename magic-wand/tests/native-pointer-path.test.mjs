@@ -23,9 +23,10 @@ test("direct Sense pointer retains slow motion, separate click evidence, units, 
 
 // Ethan's jump-back reports (2026-10-30) turned off repeats; the jumps were a
 // cursor-origin defect. Ethan (2026-11-01) asked again: "if I haven't moved at
-// all, then it should repeat the click". The Sense session repeats every
-// 300 ms; the dwell is constructed single-shot, so the Puck stays single-shot.
-test("Sense stop-to-click repeats every 300 ms; the Puck stays single-shot", () => {
+// all, then it should repeat the click", then slowed it: "every like one second
+// or so ... It should be quite a long delay". The Sense session repeats about
+// once a second; the dwell is constructed single-shot, so the Puck stays single-shot.
+test("Sense stop-to-click repeats about once a second; the Puck stays single-shot", () => {
   const main = readFileSync(fileURLToPath(new URL("../receiver/Sources/main.swift", import.meta.url)), "utf8");
   const constructor = main.match(/\blet dwell\s*=\s*WandDwellClick\(([^)]*)\)/);
   assert.ok(constructor, "the live receiver creates its ordinary dwell controller");
@@ -34,5 +35,5 @@ test("Sense stop-to-click repeats every 300 ms; the Puck stays single-shot", () 
   assert.match(sense, /dwell\.repeatInterval = WandDwellClick\.senseRepeatInterval/);
   assert.match(sense, /dwell\.repeatInterval = nil/);
   const control = readFileSync(fileURLToPath(new URL("../receiver/Sources/WandPointerControl.swift", import.meta.url)), "utf8");
-  assert.match(control, /static let senseRepeatInterval=0\.3\b/);
+  assert.match(control, /static let senseRepeatInterval=1\.0\b/, "stationary repeats are about one second apart");
 });

@@ -2162,7 +2162,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // made invisible sub-pixel flicker postpone clicks after real stops.
         // While the Sense stillness gate holds the reading at rest, the tuned
         // filter's slowly decaying motion signal is not evidence of movement;
-        // it would otherwise cancel 300 ms repeats and postpone stop clicks for
+        // it would otherwise cancel stationary repeats and postpone stop clicks for
         // up to ~0.6 s after a stroke. Unchanged whenever the hand is not at rest.
         dwell.intent(sample.intent && !sample.resting,now:now)
         // Click settling is a separate decision from pointer output. Removing

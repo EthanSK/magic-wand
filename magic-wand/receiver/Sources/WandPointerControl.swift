@@ -364,8 +364,15 @@ final class WandDwellClick {
     /// Nil (screenshot settling, the Puck) never repeats. Ethan (2026-11-01):
     /// "if I haven't moved at all, then it should repeat the click after, well,
     /// the current rate" — the Sense session enables `senseRepeatInterval`.
+    /// Ethan later the same day changed only the stationary spacing: "When the
+    /// pointer is still, it should send clicks every like one second or so ...
+    /// But if it hasn't moved, it shouldn't repeatedly do clicks. It should be
+    /// quite a long delay actually". A first click and a small nearby re-target
+    /// keep their own prompt brisk, settled and 200 ms paths, which ignore this
+    /// interval. Each repeat still needs a fresh reading, fires once even if its
+    /// timer is late, and any visible step or accepted fine motion cancels it.
     var repeatInterval:Double?
-    static let senseRepeatInterval=0.3
+    static let senseRepeatInterval=1.0
     /// Ethan (2026-11-01): "I slowed down like towards the end and it doesn't
     /// count as like a fast motion. But still, like it should detect clicks
     /// pretty fast always ... at least the first click of the batch". An armed
@@ -462,7 +469,7 @@ final class WandDwellClick {
         // click of a batch, or a tiny nearby re-target) may click once the
         // pointer is observed at rest for `settleHold`. Each confirmation comes
         // from a fresh reading; silence never confirms it, and one target gets
-        // one quick click (the 300 ms repeats handle staying still).
+        // one quick click (the slower stationary repeats handle staying still).
         if visibleStep && armed && !(fastStop?.awaitingRest ?? false) {settleEligible=true}
         if resting && !visibleStep && dx==0 && dy==0 {
             if restSince==nil {restSince=now}

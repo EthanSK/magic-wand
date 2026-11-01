@@ -46,8 +46,9 @@ extension WandReceiver {
         }
         senseSessionNumber += 1
         senseInfo = info; senseTransport = transport; senseSession.reset(); senseClock.reset(); senseLastReading = -.infinity; senseStaleReadings = 0; senseMouseButtonTimer.reset(); senseHUDButtonTimer.reset()
-        // Ethan (2026-11-01): a still pointer repeats its stop-to-click every
-        // 300 ms. Sense only; any movement or cancellation ends the repeats.
+        // Ethan (2026-11-01): a still pointer repeats its stop-to-click about
+        // once a second (`senseRepeatInterval`; he found 300 ms too fast).
+        // Sense only; any movement or cancellation ends the repeats.
         dwell.repeatInterval = WandDwellClick.senseRepeatInterval
         senseUpdateIdentity(info, transport)
         experiment.connection(hz: info.odr, supportsRateControl: info.rateControl, now: ProcessInfo.processInfo.systemUptime)

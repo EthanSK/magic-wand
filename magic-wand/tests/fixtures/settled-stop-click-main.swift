@@ -7,6 +7,8 @@ setbuf(stdout, nil)
 // the first click of the batch and then like if I haven't moved at all, then it
 // should repeat the click ... If I move a tiny bit to try and point at something
 // else nearby, then it should send the click faster as well."
+// Later the same day he slowed only the stationary repeat: "every like one
+// second or so ... if it hasn't moved ... It should be quite a long delay".
 let config=[0,0,86.4*1.1725,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,1]
 let hz=Double(CommandLine.arguments.dropFirst().first ?? "104")!
 let dt=1/hz
@@ -54,21 +56,29 @@ print("slowed approach: first click",first.map{($0.t-stop1,$0.fast,$0.settled)} 
 precondition(first != nil && first!.settled && first!.t>stop1 && first!.t-stop1<0.19,"slowed stop clicks promptly: \(String(describing:first.map{($0.t-stop1,$0.fast,$0.settled)}))")
 precondition(slowed.clicks.count==1,"one click for one stop: \(slowed.clicks.map{$0.t-stop1})")
 
-// 2. Remaining still: repeat at the 300 ms rate, timed from the actual click.
-slowed.run(0.75,wobble:true)
+// 2. Remaining still: about one stop-click per second (Ethan's later spacing),
+// timed from the actual click; never earlier, and a fresh reading each time.
+let spacing=WandDwellClick.senseRepeatInterval
+slowed.run(2.2,wobble:true)
 let chain=slowed.clicks
 print("still after the click",chain.map{($0.t-chain[0].t,$0.repeated)})
 precondition(chain.count>=3 && chain.dropFirst().allSatisfy{$0.repeated},"repeats while still: \(chain.map{$0.t-chain[0].t})")
-for (a,b) in zip(chain,chain.dropFirst()) {precondition(b.t-a.t>=0.299 && b.t-a.t<=0.32,"300 ms repeat spacing: \(b.t-a.t)")}
+for (a,b) in zip(chain,chain.dropFirst()) {precondition(b.t-a.t>=spacing-0.001 && b.t-a.t<=spacing+0.02,"one-second repeat spacing: \(b.t-a.t)")}
 
-// 3. A tiny move to a nearby target re-arms and clicks promptly as well.
+// 3. A tiny move to a nearby target re-arms and clicks promptly as well, well
+// before the next stationary repeat. Start it 0.2 s after a repeat, so that
+// repeat deadline is still 0.8 s away and cannot be what clicks.
+let lead=slowed.clicks.last!.t+0.2-slowed.now
+slowed.run(lead>=0 ? lead:lead+spacing,wobble:true)
+precondition(slowed.clicks.last!.repeated && slowed.now-slowed.clicks.last!.t<=0.25,"the re-target starts just after a repeat")
+let pendingRepeat=slowed.clicks.last!.t+spacing
 let before=slowed.clicks.count
 slowed.run(0.2){_ in (0.7,0)}
 let stop2=slowed.lastVisible
 slowed.run(0.25,wobble:true)
 let retarget=slowed.clicks.dropFirst(before).first
 print("tiny nearby target",retarget.map{($0.t-stop2,$0.settled,$0.repeated)} as Any)
-precondition(retarget != nil && !retarget!.repeated && retarget!.t>stop2 && retarget!.t-stop2<0.19,"tiny re-target clicks promptly: \(String(describing:retarget.map{($0.t-stop2,$0.settled)}))")
+precondition(retarget != nil && !retarget!.repeated && retarget!.t>stop2 && retarget!.t-stop2<0.19 && retarget!.t<pendingRepeat,"tiny re-target clicks promptly, before the stationary repeat: \(String(describing:retarget.map{($0.t-stop2,$0.settled)}))")
 
 // 4. Random still tremor never invents a first click, even with repeats on.
 let tremor=Hand();tremor.run(3,wobble:true)
@@ -81,7 +91,7 @@ for rate in [0.08,0.15,0.3,0.7,1.5] {
  let curve=Hand();curve.run(4){t in (rate*cos(t/4*Double.pi/3),rate*sin(t/4*Double.pi/3))}
  precondition(curve.clicks.isEmpty,"gentle curve at \(rate) must not click: \(curve.clicks.count)")
 }
-print("PASS: prompt first and re-target clicks, 300 ms repeats while still, no tremor or slow-aim clicks")
+print("PASS: prompt first and re-target clicks, one-second repeats while still, no tremor or slow-aim clicks")
 
 // 6. Cancellation ends a pending repeat: follow off, an ineligible reading
 // (mouse button, HUD operation, scroll) or a reset never emits afterwards.
@@ -89,12 +99,12 @@ for cancel in ["none","follow","ineligible","reset"] {
  let h=Hand();h.run(0.3,wobble:true);h.run(0.15){_ in (30,0)};h.run(0.25,wobble:true)
  precondition(h.clicks.count==1,"\(cancel): one click before cancelling: \(h.clicks.count)")
  switch cancel {
- case "none": h.run(1,wobble:true)
- case "follow": h.d.follow(false);h.run(1,wobble:true)
- case "ineligible": h.run(1,wobble:true,eligible:false)
- default: h.d.reset();h.run(1,wobble:true)
+ case "none": h.run(2.2,wobble:true)
+ case "follow": h.d.follow(false);h.run(2.2,wobble:true)
+ case "ineligible": h.run(2.2,wobble:true,eligible:false)
+ default: h.d.reset();h.run(2.2,wobble:true)
  }
- if cancel=="none" {precondition(h.clicks.count>=3,"control: a still pointer keeps repeating: \(h.clicks.count)")}
+ if cancel=="none" {precondition(h.clicks.count>=3 && zip(h.clicks,h.clicks.dropFirst()).allSatisfy{!$1.repeated || $1.t-$0.t>=spacing-0.001},"control: a still pointer repeats once a second: \(h.clicks.map{$0.t})")}
  else {precondition(h.clicks.count==1,"\(cancel) cancels the repeat chain: \(h.clicks.count)")}
 }
 // 7. Scroll-release recoil cannot earn the settled shortcut: as for brisk
@@ -117,3 +127,23 @@ precondition(fineRestart.tick(now:40.2) && fineRestart.repeating)
 fineRestart.move(dx:0,dy:0,now:40.3,eligible:true,pointerX:0,pointerY:0,fineMove:true)
 precondition(!fineRestart.repeating,"accepted fine aiming cancels the old target repeat before a visible step")
 print("PASS: coherent sub-pixel restart cancels repetition")
+
+// 9. Ethan's later stationary spacing, isolated from the motion filter: no
+// repeat before one interval, a fresh reading for each repeat, and a starved
+// timer clicks once (no catch-up burst). Silence ends the chain.
+let spaced=WandDwellClick(repeatInterval:spacing);spaced.follow(true)
+spaced.move(dx:12,dy:0,now:50,eligible:true)
+let firstDue=spaced.nextDue!
+precondition(spaced.tick(now:firstDue) && !spaced.lastClickWasRepeat,"ordinary first click after travel")
+let repeatAt=spaced.nextDue!
+precondition(abs(repeatAt-firstDue-spacing)<1e-9,"the next stationary repeat is one interval after the click")
+var t=firstDue
+while t+0.01<repeatAt {t+=0.01;spaced.move(dx:0,dy:0,now:t,eligible:true);precondition(!spaced.tick(now:t),"no stationary repeat before the interval")}
+spaced.move(dx:0,dy:0,now:repeatAt,eligible:true)
+precondition(spaced.tick(now:repeatAt) && spaced.lastClickWasRepeat,"a still, freshly reported pointer repeats")
+t=repeatAt
+while t<repeatAt+2.5 {t+=0.01;spaced.move(dx:0,dy:0,now:t,eligible:true)} // timer starved, readings continue
+precondition(spaced.tick(now:t) && !spaced.tick(now:t),"a late timer clicks once, never a burst")
+precondition(abs(spaced.nextDue!-t-spacing)<1e-9,"the next repeat is timed from the late click")
+precondition(!spaced.tick(now:t+1.5) && !spaced.repeating,"no repeat without a fresh reading; the chain ends")
+print("PASS: stationary repeats stay one interval apart, need fresh readings and never burst")

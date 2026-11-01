@@ -38,3 +38,23 @@ commits were read back before the next HUD edit. The previous release passed
 1,259 native Agentic Mouse tests (four skipped), the receiver's 294 checks, and
 its recorded installed review. Those checks are release evidence, separate
 from Ethan's feedback above.
+
+
+## 2026-11-01 — Liked quick initial and nearby-target clicks
+
+**User feedback:** “Okay, the click things seems to work. Record that, this commit. The current head fixes it. Or maybe it's the sensor being really fast”.
+
+| Component | Installed version | Source checkpoint |
+| --- | --- | --- |
+| Wand Receiver | 1.2.187 (192) | [c83491891022ffed0931cb23b33eee02f91f4c8a](https://github.com/EthanSK/magic-wand/commit/c83491891022ffed0931cb23b33eee02f91f4c8a)|
+| Agentic Mouse / wand HUD | 1.0.327 (333) | [11b50dc64dea90ea9b51f3bfee40aa35e3e8453e](https://github.com/EthanSK/agentic-mouse/commit/11b50dc64dea90ea9b51f3bfee40aa35e3e8453e)|
+| XIAO Sense firmware | 13 | Same Magic Wand source checkpoint; saved compiled firmware retained privately|
+| Active reversible rate experiment | 6660 Hz configured sensor ODR | Firmware 13 runtime rate control; received throughput is lower and measured separately|
+
+**Acceptance boundary:** Ethan likes the improved initial/nearby-target click behavior with this installed combination. He explicitly noted the improvement might also come from the higher sensor rate. No controlled comparison separated those causes, so preserve the complete combination as this checkpoint; do not claim the receiver or rate alone caused it.
+
+**Known exception at acceptance:** stationary repeats at 300 ms are too fast. Ethan wants about one second between clicks when the pointer has not moved, while a small intentional move to another target should still click quickly. That slower repeat adjustment is a follow-up to this checkpoint, not part of the accepted 192 source.
+
+**Preserve during the repeat adjustment:** first-click and tiny-retarget responsiveness, stillness thresholds, pointer output and smoothing, sensor rate, HUD/scroll/recenter cancellation, and the physical mouse profiles. Only the no-movement repeat interval should change.
+
+**Verification:** installed 192 binary matched its reviewed signed receipt; the receiver reported ready over Bluetooth with firmware13 and the6660Hz experiment active. The previous batch passed 279 Wand, 17 Control Stones and 4 shared checks. This records physical click feedback, not acceptance of every gesture or prolonged sensor-rate stability.

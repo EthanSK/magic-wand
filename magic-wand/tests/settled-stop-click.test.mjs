@@ -1,4 +1,4 @@
-// Inert click-lane regressions for the settled first click and 300 ms repeats; never sends live input.
+// Inert click-lane regressions for the settled first click and one-second stationary repeats; never sends live input.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,mkdtempSync,copyFileSync,rmSync} from 'node:fs';
@@ -30,6 +30,7 @@ test('slowed stops and tiny re-targets click promptly, still pointers repeat, tr
   assert.match(run.stdout,/PASS: prompt first and re-target clicks/);
   assert.match(run.stdout,/PASS: cancellation, scroll recoil and missing readings/);
   assert.match(run.stdout,/PASS: coherent sub-pixel restart cancels repetition/);
+  assert.match(run.stdout,/PASS: stationary repeats stay one interval apart/);
   }
  } finally {rmSync(dir,{recursive:true,force:true});}
 });
