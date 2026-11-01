@@ -21,6 +21,13 @@ func lease(_ text:String,mode:Int=0o600) throws {
  try FileManager.default.setAttributes([.posixPermissions:mode],ofItemAtPath:file.path)
 }
 var work=WandUpdateWork()
+precondition(WandUpdateWork.maximumSeconds==3600)
+try lease("{\\"version\\":1,\\"expiresAt\\":4600}")
+precondition(WandUpdateWork.read(from:file,now:1000)==4600,"one hour accepted")
+try lease("{\\"version\\":1,\\"expiresAt\\":4600.001}")
+precondition(WandUpdateWork.read(from:file,now:1000)==0,"beyond one hour rejected")
+try FileManager.default.removeItem(at:file)
+
 precondition(!work.refresh(from:file,now:1000))
 try lease("{\\"version\\":1,\\"expiresAt\\":1900}")
 precondition(work.refresh(from:file,now:1000) && work.active(at:1000))

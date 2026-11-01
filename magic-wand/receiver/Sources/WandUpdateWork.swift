@@ -5,14 +5,14 @@ import Darwin
 
 struct WandUpdateWork {
     static let fileName = "update-work.json"
-    static let maximumSeconds = 1800.0
+    static let maximumSeconds = 3600.0
     private(set) var expiresAt = 0.0
 
     func active(at now: Double) -> Bool { now.isFinite && now < expiresAt }
 
     /// A lease survives a receiver restart, but never keeps an abandoned wand
-    /// awake indefinitely. Agents renew it only while actually working and
-    /// clear it when done. Missing, expired or unsafe files mean normal sleep.
+    /// awake indefinitely. A wand change or feature discussion renews it for one hour.
+    /// Finishing a reply leaves the remaining hour in place. Missing, expired or unsafe files mean normal sleep.
     static func read(from url: URL, now: Double) -> Double {
         let fd = open(url.path, O_RDONLY | O_NOFOLLOW | O_NONBLOCK)
         guard fd >= 0 else { return 0 }

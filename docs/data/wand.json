@@ -11,8 +11,8 @@
   "site": "https://ethansk.github.io/magic-wand/",
   "repository": "https://github.com/EthanSK/magic-wand",
   "versions": {
-    "receiver": "1.2.181",
-    "receiverBuild": "186",
+    "receiver": "1.2.182",
+    "receiverBuild": "187",
     "deviceRuntime": "wand-7e734a872bfe",
     "bridgeRevision": "ec5338c62274347822dfca809649a8c424a7eaf4463cbd6bf465347f82fdd256",
     "agenticMouse": "1.0.323",
@@ -21,6 +21,7 @@
     "senseFirmware": 12
   },
   "status": [
+    "Installed: receiver 187 allows a renewable one-hour development keep-awake period. A wand change or feature discussion renews the hour; finishing a reply leaves the remaining time intact. Expiry restores ordinary sleep, while dark idle and manual shutdown remain unchanged. Pointer processing, gain, click timing and firmware 12 are unchanged.",
     "Installed: receiver 186 preserves the same continuous-stillness threshold and counts the full sensor report duration when recognising tiny restarts, keeping the approved 60 ms evidence bound at slower report rates. Pointer gain, smoothing, click timing, firmware 12 and the receiver 185 fixes remain. The signed installation and Bluetooth reconnection were verified; physical feel remains for user review.",
     "Installed: receiver 185 restores continuous Sense stillness at the previous 2-unit quiet threshold while keeping coherent tiny motion available. Small deliberate target moves can re-arm an ordinary click; the 200 ms precision pause and rapid-stop click remain. Mouse-button shortcuts use physical sample times, consume their release cleanly and expire late recenter requests. Native screenshot dragging bypasses the stillness gate. Each accepted radio packet is processed once, without age-based skipping or synthetic replay. Signed installation, preserved settings and live Bluetooth were verified; physical feel remains for user review.",
     "Installed: receiver 183 keeps the post-click stillness hold inside the current pointing session: a follow-mode change, cancellation or recenter clears it. Tiny ordinary aiming, click timing, the approved up-to-60 ms post-click restart check, current smoothing and sensitivity are preserved. Signed installation, preserved settings and Bluetooth reconnection were verified. Focused pointer, click, origin and cancellation checks passed; physical acceptance is pending.",
@@ -590,6 +591,12 @@
       "coalescing": false,
       "additionalWaitMilliseconds": 0,
       "scope": "Each accepted radio report and filtered move is processed separately and in order, without age-based packet skipping, synthetic sample replay or combining a backlog into one endpoint. Cursor-origin history recognises delayed macOS feedback; it never posts old positions. A recenter or explicit cancellation discards movement captured before that boundary. The existing per-report step cap remains."
+    },
+    "developmentKeepAwake": {
+      "maximumSeconds": 3600,
+      "renewOn": "Wand development changes and feature discussions",
+      "expiresWithoutRenewal": true,
+      "scope": "Keep an already-awake wand reachable for one hour after a development renewal. Leave the remaining hour after a reply; preserve dark idle, manual shutdown and normal offline sleep."
     }
   },
   "hud": {

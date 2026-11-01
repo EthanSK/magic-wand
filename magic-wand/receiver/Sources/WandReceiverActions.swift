@@ -28,7 +28,8 @@ extension WandReceiver {
         setActionsPaused(request.paused, request: request.id)
     }
 
-    /// The agent enables this lease before work and clears it after installation.
+    /// Ethan’s dead-man switch: renew for one hour on wand changes/discussion.
+    /// The remaining hour survives installation and the end of a reply.
     /// Refreshes only run on directory changes or the existing heartbeat, never
     /// on sensor delivery. An expired lease gives a fresh ordinary rest period.
     func refreshUpdateWork() {

@@ -2082,3 +2082,7 @@ A passing comparison does not establish the cause of a live jump.
 - These are source, inert runtime and recorded-data checks. They do not prove physical feel, identify radio jitter as the sole cause of jumps, or diagnose a hardware fault.
 
 - Follow-up in receiver186: do not reuse the25 ms cursor-displacement cap as the clock for stillness evidence. A50 ms sensor report counted as25 ms could stretch the approved tiny-restart interval to100 ms. Count full sensor duration for the evidence window and permit a coherent restart before another same-sized interval would exceed60 ms; the cursor cap itself remains unchanged. An inert regression covers report intervals from9.615 ms to50 ms.
+
+## Renewable development reachability (2026-11-01)
+
+The keep-awake lease is an absolute expiry, not a timer that renews itself. Ethan changed it to one hour after the latest development activity or discussion, retaining the remaining window after a reply. The parser rejects unsafe files and expiries beyond an hour; ordinary dark idle, manual standby and independent offline sleep remain. Inert tests cover the exact hour boundary, over-limit rejection, unchanged-expiry refresh and automatic expiry. This does not diagnose an unexpected power loss or wake an already-off radio.

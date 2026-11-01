@@ -252,8 +252,10 @@ script or installed application is needed.
 The private installation workflow can keep an already awake wand reachable while
 preparing changes. Atomically write a same-user mode-0600 `update-work.json` in
 Wand Receiver’s Application Support directory. Its only fields are `version: 1`
-and `expiresAt`: a Unix timestamp no more than 30 minutes ahead. Refresh the
-expiry while actually working; write zero when finished. The receiver reports
+and `expiresAt`: a Unix timestamp no more than one hour ahead. Renew it to one hour from
+each wand development change or feature discussion, and periodically during
+active work. Leave the remaining hour when a reply or installation finishes;
+write zero only for an explicit end/cancel, not ordinary completion. The receiver reports
 the applied `updateWork.active` and `updateWork.expiresAt` in `status.json`.
 
 The lease survives receiver replacement, keeps normal dark idle and all input
