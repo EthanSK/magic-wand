@@ -147,3 +147,25 @@ precondition(spaced.tick(now:t) && !spaced.tick(now:t),"a late timer clicks once
 precondition(abs(spaced.nextDue!-t-spacing)<1e-9,"the next repeat is timed from the late click")
 precondition(!spaced.tick(now:t+1.5) && !spaced.repeating,"no repeat without a fresh reading; the chain ends")
 print("PASS: stationary repeats stay one interval apart, need fresh readings and never burst")
+
+// A clicked Sense stroke cannot re-arm from its small unqualified settling tail.
+do {
+ let d=WandDwellClick(repeatInterval:1,fastStops:true);d.follow(true)
+ var now=10.0
+ func frame(_ x:Int=0,_ fine:Bool=false,_ rest:Bool=false){now+=0.01;d.move(dx:x,dy:0,now:now,eligible:true,pointerX:x,pointerY:0,sampleSeconds:0.01,pointerQuiet:x==0,fineMove:fine,resting:rest)}
+ frame()
+ for _ in 0..<6 {frame(8)}
+ for _ in 0..<3 {frame(0,false,true)}
+ precondition(d.tick(now:now) && d.lastClickWasFast,"the first fast stop stays prompt")
+ var duplicates=0
+ for _ in 0..<3 {
+  for _ in 0..<3 {frame(1)} // Below the original 12-count target gate; no coherent fine intent.
+  for _ in 0..<8 {frame(0,false,true);if d.tick(now:now){duplicates+=1}}
+ }
+ print("Unqualified settling tail extra clicks:",duplicates)
+ precondition(duplicates==0,"one stop reused its already-clicked travel")
+ frame(1,true)
+ for _ in 0..<8 {frame(0,false,true)}
+ precondition(d.tick(now:now) && d.lastClickWasSettled,"a fresh coherent one-pixel target still clicks promptly")
+ print("PASS: one stop is consumed once; tiny deliberate re-target stays quick")
+}

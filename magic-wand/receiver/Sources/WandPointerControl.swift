@@ -438,7 +438,7 @@ final class WandDwellClick {
         // stops. On the direct path, a visible step can come with zero tuned
         // stop counts (radial slack); without this the click could fire while
         // the pointer was still visibly moving. Arming is unchanged.
-        if visibleStep {fastClickAwaitingMovement=false;lastVisible=now;lastMotion=now;repeatDue=nil}
+        if visibleStep {if repeatInterval==nil {fastClickAwaitingMovement=false};lastVisible=now;lastMotion=now;repeatDue=nil}
         // Only the direct Sense path supplies fineMove, after its noise/intent
         // decision. A real one-pixel target change can arm another ordinary
         // click; raw tremor and the legacy Puck do not lower the12-count gate.
@@ -455,7 +455,7 @@ final class WandDwellClick {
             // its first whole pixel. This never changes or delays pointer output.
             repeatDue=nil
             fineX+=visibleX;fineY+=visibleY
-            if visibleStep && hypot(fineX,fineY)>=1 {armed=true}
+            if visibleStep && hypot(fineX,fineY)>=1 {armed=true;fastClickAwaitingMovement=false}
             else if now-lastVisible<=pause {lastMotion=now}
         }
         if dx != 0 || dy != 0 {
@@ -463,14 +463,14 @@ final class WandDwellClick {
             // The established ordinary click path keeps its original counters.
             // Quick-stop recognition observes it; it never consumes this state.
             x+=Double(dx);y+=Double(dy);lastMotion=now
-            if hypot(x,y)>=travel {armed=true}
+            if hypot(x,y)>=travel {armed=true;if repeatInterval != nil {fastClickAwaitingMovement=false}}
         }
         // Settled stop: new visible movement toward an armed target (the first
         // click of a batch, or a tiny nearby re-target) may click once the
         // pointer is observed at rest for `settleHold`. Each confirmation comes
         // from a fresh reading; silence never confirms it, and one target gets
         // one quick click (the slower stationary repeats handle staying still).
-        if visibleStep && armed && !(fastStop?.awaitingRest ?? false) {settleEligible=true}
+        if visibleStep && armed && !fastClickAwaitingMovement && !(fastStop?.awaitingRest ?? false) {settleEligible=true}
         if resting && !visibleStep && dx==0 && dy==0 {
             if restSince==nil {restSince=now}
             if settledDue==nil,armed,settleEligible,!fastClickAwaitingMovement,now-(restSince ?? now)>=Self.settleHold {settledDue=now}
@@ -497,6 +497,15 @@ final class WandDwellClick {
             // correction can still receive exactly the ordinary click it would
             // have received with quick clicking disabled.
             fastStop?.reset(keepingSampleTime:true);settledDue=nil;fastClickAwaitingMovement=true
+            if repeatInterval != nil {
+                // Sense: the clicked stroke's travel is spent. A few unqualified
+                // settling pixels must not spend it again (Ethan's rapid double/
+                // triple blue blink). Fresh ordinary travel or coherent tiny
+                // movement re-arms through the unchanged gates above. Keep the
+                // ordinary cleanup deadline: it absorbs invisible settling and
+                // schedules the one-second repeat, without emitting a duplicate.
+                x=0;y=0;fineX=0;fineY=0;settleEligible=false;restSince=nil
+            }
             lastClickWasFast=fast;lastClickWasSettled=settled;lastClickWasRepeat=false;lastClickDiagnostic=diagnostic;lastClickAt=now
             return true
         }

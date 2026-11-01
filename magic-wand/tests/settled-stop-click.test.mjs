@@ -31,6 +31,7 @@ test('slowed stops and tiny re-targets click promptly, still pointers repeat, tr
   assert.match(run.stdout,/PASS: cancellation, scroll recoil and missing readings/);
   assert.match(run.stdout,/PASS: coherent sub-pixel restart cancels repetition/);
   assert.match(run.stdout,/PASS: stationary repeats stay one interval apart/);
+  assert.match(run.stdout,/PASS: one stop is consumed once; tiny deliberate re-target stays quick/);
   }
  } finally {rmSync(dir,{recursive:true,force:true});}
 });
