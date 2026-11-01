@@ -25,7 +25,7 @@ final class Rest {var activated=false;func pointerActivated(){activated=true};fu
 final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
  var tripleClick=WandTripleClick(),pendingRecenter:Timer?
- var scrollFollowBefore=false
+ var scrollFollowBefore=false,recordingPointerPaused=false
  let context=SwitchAppContext()
  var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double){screenshotRaw+=1}

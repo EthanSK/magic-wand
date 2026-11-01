@@ -110,8 +110,8 @@ precondition(!h.heldScroll.active,"late telemetry must not restart a cancelled h
 h.heldScroll.begin(now:30);h.scrollActive=true
 h.finishMouseButtonHold(now:31)
 precondition(!h.heldScroll.active,"release teardown is independent of other mode state")
-// A completed scroll leaves follow off, for both raw-up-first and edge-first
-// delivery. Only the next deliberate mouse-button tap may enable it again.
+// A completed scroll restores its prior follow choice for both release orders.
+// Repeated raw/edge releases must not change that choice or replay movement.
 let config=[0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]
 for prior in [false,true] {
  for rawFirst in [false,true] {
@@ -126,10 +126,10 @@ for prior in [false,true] {
   precondition(exit.frames==0,"the release sample itself never moves or clicks")
   exit.finishMouseButtonHold(now:now+0.01);exit.handleRaw("10000,0,2680,0") // the other report of the same release
   exit.reconcileMouseButtonHold(down:false,now:now+0.02,reason:"sensor button state")
-  let expected="global.wandPointerPauseUntil=0;setMouseFollow(false);"
-  precondition(exit.commands.filter{$0==expected}.count==1,"stop follow exactly once")
-  precondition(!exit.dwell.following && !exit.restDetection.activated,"scroll leaves follow off from either prior choice")
-  precondition(logged.filter{$0=="SCROLL_FINISHED_MOUSE_OFF"}.count==1,"duplicate release cannot reactivate follow")
+  let expected="global.wandPointerPauseUntil=0;setMouseFollow("+(prior ? "true":"false")+");"
+  precondition(exit.commands.filter{$0==expected}.count==1,"restore follow exactly once")
+  precondition(exit.dwell.following==prior && exit.restDetection.activated==prior,"scroll restores its prior follow choice")
+  precondition(logged.filter{$0==(prior ? "SCROLL_FINISHED_MOUSE_ON":"SCROLL_FINISHED_MOUSE_OFF")}.count==1,"duplicate release restores only once")
   // The ordinary mouse-button callback can enable follow again, with no new wait.
   exit.deviceFollowChanged(true)
   precondition(exit.dwell.following && exit.restDetection.activated,"the next mouse-button tap enables follow")
@@ -140,7 +140,7 @@ for prior in [false,true] {
  }
  let chord=Harness();chord.dwell.follow(prior);chord.scrollFollowBefore=prior;chord.scrollActive=true
  chord.finishScroll(released:true)
- precondition(!chord.dwell.following && !chord.scrollActive && chord.commands==["global.wandPointerPauseUntil=0;setMouseFollow(false);"],"chord release leaves follow off")
+ precondition(chord.dwell.following==prior && !chord.scrollActive && chord.commands==["global.wandPointerPauseUntil=0;setMouseFollow("+(prior ? "true":"false")+");"],"chord release restores its prior follow choice")
  let watchdog=Harness();watchdog.dwell.follow(prior);watchdog.scrollActive=true
  watchdog.finishScroll()
  precondition(watchdog.dwell.following==prior && watchdog.commands.isEmpty,"a chord watchdog stop is not a release")
@@ -164,6 +164,18 @@ for prior in [false,true] {
  let lost=Harness();lost.dwell.follow(prior);lost.heldScroll.begin(now:100);lost.reconcileMouseButtonHold(down:false,now:101,reason:"timeout",released:false)
  precondition(lost.dwell.following==prior && !lost.commands.contains{$0.contains("setMouseFollow")},"lost telemetry must not activate mouse")
 }
+// All control versions share the same release boundary. Recording can acquire
+// the pointer while a scroll is held; that newer pause must not be undone.
+for version in [WandControlVersion.pointerV1,.scrollV2,.sustainedV3] {
+ for prior in [false,true] {
+  let restored=Harness();restored.controlVersion=version;restored.scrollFollowBefore=prior
+  restored.restoreMouseAfterScroll()
+  precondition(restored.dwell.following==prior,"no control version forces follow on or off")
+  let recording=Harness();recording.controlVersion=version;recording.scrollFollowBefore=prior;recording.recordingPointerPaused=true
+  recording.restoreMouseAfterScroll()
+  precondition(!recording.dwell.following && !recording.restDetection.activated,"newer recording pause wins")
+ }
+}
 // Quiet release is independent of edge order. Small unqualified hand noise is
 // not a scroll gesture; a real V3 stroke counts even before one pixel is emitted.
 for version in [WandControlVersion.scrollV2,.sustainedV3] {
@@ -184,7 +196,7 @@ smallStroke.beginMouseButtonHold(now:100,following:true)
 for i in 1...10 {_=smallStroke.heldScroll.sample(y:8,dt:0.01,now:100+Double(i)*0.01)}
 precondition(smallStroke.heldScroll.hasScrollGesture,"a qualified stroke is counted before output rounding")
 smallStroke.finishMouseButtonHold(now:100.4)
-precondition(!smallStroke.dwell.following && smallStroke.commands.contains{$0.contains("setMouseFollow(false)")},"a real scroll stroke stops follow even before whole-pixel output")
+precondition(smallStroke.dwell.following && smallStroke.commands.contains{$0.contains("setMouseFollow(true)")},"a real scroll stroke restores prior follow even before whole-pixel output")
 // Exiting follow sends no click; double/triple recognition stays independent. The
 // actual finish method owns both raw-up and edge-up, so duplicate reports are inert.
 for physicalDuration:Double? in [nil,0.12] {

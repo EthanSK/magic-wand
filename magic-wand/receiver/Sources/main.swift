@@ -1644,13 +1644,14 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         scrollPostedX+=Int(x);scrollPostedY+=Int(y)
     }
     /// Formerly enableMouseAfterScroll; restoreMouseAfterScroll is retained as
-    /// the existing release boundary. Ethan now wants a completed scroll to
-    /// leave follow off until the next mouse-button tap (2026-10-31).
-    /// An otherwise quiet hold is not a scroll: preserve its prior follow choice.
+    /// the existing release boundary. Ethan undid the scroll-turns-follow-off
+    /// experiment (2026-11-01): restore the choice from before the scroll.
+    /// A recording-start pause is newer and must still win. An otherwise quiet
+    /// hold also preserves its prior choice; never enable follow from off.
     /// Taps, native drags, lost telemetry and screenshots keep their own paths.
     func restoreMouseAfterScroll(hadScrollGesture:Bool=true){
         guard ready,!restoring else{return}
-        let followAfter = !hadScrollGesture && scrollFollowBefore
+        let followAfter = scrollFollowBefore && !recordingPointerPaused
         if followAfter {enterPointerMode()}
         motionFilter.reset();dwell.reset();dwell.follow(followAfter)
         dwell.requireFreshFastGesture()
@@ -1997,7 +1998,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         performPointer(routed.actions)
     }
     /// `released`: the physical release, as opposed to lost telemetry or a
-    /// screenshot taking over. A scroll leaves follow off; a quiet hold keeps its prior choice.
+    /// screenshot taking over. A released scroll or quiet hold restores its prior follow choice.
     /// Previously finishBottomHold.
     func finishMouseButtonHold(now:Double,released:Bool=true) {
         heldSafetyTimer?.invalidate();heldSafetyTimer=nil;heldTargetToken=UUID()

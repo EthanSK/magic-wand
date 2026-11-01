@@ -2043,3 +2043,9 @@ A passing comparison does not establish the cause of a live jump.
 - Capture the nRF52 reset-reason register before clearing it, then send the saved mask with identity. Keep the boot event in the same queued message: a separate event can be dropped when repeated discovery queries fill the four-slot output queue. Bound the complete formatter, including both lines, against the actual512-byte capacity.
 - Successful legacy Bluetooth DFU jumps directly into the replacement application. It need not set a processor-reset bit, so a zero mask after that update is expected. A zero mask after an unexplained restart cannot distinguish power-on, brownout or another direct application jump. The chip's reset-pin workaround can also clear some combined flags.
 - Firmware12's complete wireless transfer and Bluetooth readback were verified with calibration, settings and the update key preserved. The boot event arrived without raw sensor logging. This adds evidence; it does not prove the cause of the intermittent restart or justify installing an unverified watchdog recovery policy.
+
+## Restore the pre-scroll follow choice (2026-11-01)
+
+- Ethan reversed the leave-follow-off experiment. Use the existing captured follow choice when a genuine released scroll ends: on stays on, off stays off. A newer recording-start pause still wins; do not make restoration an unconditional enable.
+- Keep taps, native dragging, quiet-stop's disabled experiment and lost-telemetry cancellation separate from completed scrolling. Test both raw-up-first and edge-first release orders, repeated release reports, tiny accepted strokes and the shared chord/legacy release boundary.
+- The release samples must remain consumed, rather than moving or clicking during restoration. The focused native fixtures exercise these cases without sending real input.
