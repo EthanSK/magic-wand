@@ -11,7 +11,9 @@ enum WandNavigationDirection: Equatable {
         self = horizontalDelta > 0 ? .back : .forward
     }
 
-    var title: String { self == .back ? "Backwards" : "Forwards" }
+    var title: String { self == .back ? "Back" : "Forward" }
+    /// Ethan asked for the ordinary browser arrows, alongside Back / Forward.
+    var symbolName: String { self == .back ? "arrow.left" : "arrow.right" }
 }
 
 enum WandNavigationPulse {
@@ -43,6 +45,7 @@ private final class WandNavigationPanel: NSPanel {
 final class WandNavigationFeedback {
     private var panel: NSPanel?
     private var label: NSTextField?
+    private var arrow: NSImageView?
     private var timer: Timer?
     private var started: TimeInterval = 0
     private(set) var direction: WandNavigationDirection?
@@ -55,6 +58,7 @@ final class WandNavigationFeedback {
         self.panel = panel
         self.direction = direction
         label?.stringValue = direction.title
+        arrow?.image = NSImage(systemSymbolName: direction.symbolName, accessibilityDescription: nil)
         panel.setFrame(WandNavigationPulse.frame(in: screen.visibleFrame), display: true)
         timer?.invalidate()
         started = ProcessInfo.processInfo.systemUptime
@@ -105,13 +109,23 @@ final class WandNavigationFeedback {
         label.alignment = .center
         label.lineBreakMode = .byClipping
         label.maximumNumberOfLines = 1
-        label.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(label)
+        let arrow = NSImageView()
+        arrow.contentTintColor = .black
+        arrow.symbolConfiguration = NSImage.SymbolConfiguration(pointSize: 18, weight: .semibold)
+        arrow.setAccessibilityElement(false)
+        let row = NSStackView(views: [arrow, label])
+        row.orientation = .horizontal
+        row.alignment = .centerY
+        row.spacing = 8
+        row.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(row)
         NSLayoutConstraint.activate([
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            row.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            row.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            row.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 20),
+            row.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -20)
         ])
+        self.arrow = arrow
         panel.contentView = view
         self.label = label
         return panel

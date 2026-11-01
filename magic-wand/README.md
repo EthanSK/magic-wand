@@ -189,6 +189,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 ## Status
 
 <!-- wand:status -->
+- Installed: receiver 190 shows Back and Forward with standard arrow icons. Agentic Mouse 330 adds slider double-click reset to the existing default size and draws the macOS 26 animated wheel backing with a vector mask. Saved size, selection geometry, animation timing, mouse mappings and firmware 12 are preserved. Signed installed source, settings and Bluetooth readiness were verified. All 294 wand repository checks and 1,259 native app tests passed, with four app tests skipped. Native mask and feedback previews were inspected; physical animation feel remains for user review.
 - Installed: receiver 189 preserves mouse follow when recording starts or stops, allows fresh brisk move-stop clicks to chain, and supports notification dragging with one mouse-button hold. Ordinary precision clicks, pointer tuning, scrolling and firmware 12 are unchanged. Signed installation, saved settings, Bluetooth readiness, fourteen focused checks and all 294 repository checks passed. Physical acceptance remains pending.
 - Installed: receiver 188 preserves Sense smoothing and continuous stillness across Mac delivery stalls by using physical reading times for sensor continuity. Genuine sensor gaps and the Puck path retain their reset behavior. No input skipping, delta combining, new pointer delay, click retuning or firmware change was added. Signed installation, preserved settings and live Bluetooth were verified; physical feel remains for user review.
 - Installed: receiver 187 allows a renewable one-hour development keep-awake period. A wand change or feature discussion renews the hour; finishing a reply leaves the remaining time intact. Expiry restores ordinary sleep, while dark idle and manual shutdown remain unchanged. Pointer processing, gain, click timing and firmware 12 are unchanged.
@@ -290,7 +291,7 @@ Tiny starting nudges and reversals need to cross the angular tolerance; Ethan co
 - HIGH dwell, held rough circles and VS Code review pass automated checks; physical acceptance is pending.
 - End-to-end latency, accuracy and battery life haven’t been measured.
 
-Receiver 1.2.184 (189) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 1 November 2026.
+Receiver 1.2.185 (190) · device code `wand-7e734a872bfe` · bridge `ec5338c6` · updated 1 November 2026.
 <!-- /wand:status -->
 
 Source only: there’s no packaged receiver, signed app or release. [BUILDING.md](BUILDING.md) explains building the receiver and loading the device code.
