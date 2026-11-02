@@ -1,0 +1,205 @@
+{
+  "revision": "carbon-rod-holders-r7-spring-clips",
+  "source_sha256": {
+    "cad.py": "011fb648bbed706dac91a31513f82924f83b34a282c2b65190b207b1455273ba",
+    "parameters.json": "f2706b655bc2374caef20127dd1df6e3426b2ab09e018fcf947b2500b3429b17",
+    "reference_models.py": "ec7c8a29c6f6aa0dfc78778c832ecc9e14ff1cb15a481a129e20ff2f955dcdb4",
+    "../carbon-rod-holders-r2/cad.py": "88faf80920e129cdceca2c4456c4f313ac3d7b5525f777420061943c5f6f5ba9",
+    "../carbon-rod-holders-r2/parameters.json": "a78216383c2b8dd872f7444dcbb1d1a07ec9a663438244ebe0e086a34d9d1bad",
+    "../carbon-rod-holders/cad.py": "f82a695bb4dec8f009afaa78b65c15309b4d55ff8b699581d99e600aabe79991",
+    "../carbon-rod-holders/parameters.json": "48ec318ffeba5222402e4f622162d5b78132aff56697aa03dabd71664c451666",
+    "references/provenance.json": "1d683f52bcd002995c73f16a9f9ef5225e9c3e75fd7a263cbafb93f059b6b492",
+    "references/socket.json": "f1e8cc043e11d1419ed8deefa2e2bb2c04ef2028a972496b05614eda760a918d",
+    "references/switch.json": "738d3319ef0c9851badfab17a2a52f05f90faef2eb18e5648ad0675f30e2374e",
+    "references/SW_Hotswap_Kailh_Choc_V1.stp": "fab92f70c826ba4098760a695102d31080603f075b1d3eef210255ff1791ed0a",
+    "references/SW_Kailh_Choc_V1.stp": "aa07efd7a318f5dd2476100ad2d86b0283cb5e1f93ee89ce6bc8e27ba9ea4317"
+  },
+  "parts": {
+    "Carrier_front": {
+      "bounds_mm": [
+        [
+          -33.150001525878906,
+          -13.800000190734863,
+          -4.798541069030762
+        ],
+        [
+          33.79999923706055,
+          50.29999923706055,
+          11.119999885559082
+        ]
+      ],
+      "volume_mm3": 4996.102018346192,
+      "solid_PETG_g": 6.345049563299665,
+      "stl_float32_volume_change_mm3": 0.0011944731531912112,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "7018e83bf4aad1621fcffa3e7a683e34c80cede937f0189737c23409190c805b",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -33.150001525878906
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          50.29999923706055
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          11.11999988555909
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Carrier_rear": {
+      "bounds_mm": [
+        [
+          -33.150001525878906,
+          -13.800000190734863,
+          -7.599999904632568
+        ],
+        [
+          33.79999923706055,
+          53.29999923706055,
+          11.119999885559082
+        ]
+      ],
+      "volume_mm3": 5267.528905536026,
+      "solid_PETG_g": 6.689761710030753,
+      "stl_float32_volume_change_mm3": 0.00016446275549242273,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "4343e3a0e1f7478ccc76e9c56ba6582bffc067298f272691a474b4d25a13ec3b",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -33.150001525878906
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          53.29999923706055
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          11.119999885559091
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Carrier_lower": {
+      "bounds_mm": [
+        [
+          -33.150001525878906,
+          -56.79999923706055,
+          -4.798541069030762
+        ],
+        [
+          33.79999923706055,
+          33.20000076293945,
+          11.119999885559082
+        ]
+      ],
+      "volume_mm3": 5434.106971656146,
+      "solid_PETG_g": 6.901315854003305,
+      "stl_float32_volume_change_mm3": 0.0003557424042810453,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "edbacaea0a9ce7688dca23fcd12877118357ae741cfd28b7c9580656e9a252f7",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -33.150001525878906
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          33.20000076293945
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          11.119999885559087
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "XIAO_Rod_Holder": {
+      "bounds_mm": [
+        [
+          -10.600000381469727,
+          -5.0,
+          -4.798483848571777
+        ],
+        [
+          10.600000381469727,
+          23.399999618530273,
+          10.0
+        ]
+      ],
+      "volume_mm3": 497.2600812025055,
+      "solid_PETG_g": 0.631520303127182,
+      "stl_float32_volume_change_mm3": 7.335099934380196e-05,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "eb5a881927e213d1969ddf1f8b38f924c6d7a8759723c4249ba29981fd099b73",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.600000381469727
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          23.399999618530273
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          10.000000000000004
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false
+}

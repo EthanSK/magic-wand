@@ -1,0 +1,29 @@
+{
+  "reviewer": "Codex",
+  "scope": "R5 to R7 spring-clip carrier and XIAO holder; all battery variants, matching print exports and preview",
+  "result": "Source and final geometry reviewed; all final geometry and sliced-clearance checks passed. Physical fit, elastic force and fatigue remain unverified.",
+  "final_manifest_sha256": "6a500fb47a6da0592866607d5f230ef0760978340a674dc68cc2e54afc927628",
+  "final_cad_sha256": "011fb648bbed706dac91a31513f82924f83b34a282c2b65190b207b1455273ba",
+  "final_geometry_checker_sha256": "47f8b7d2bfe370e2ddb7e9ca1375d36829c076ff37e51647861662aa4cbd2a04",
+  "preserved": [
+    "five-key positions and flat switch/socket seats",
+    "three battery options and reserve envelope",
+    "XIAO PCB and USB orientation, with clear wire route",
+    "shared free-orbit viewer controls and explicit wheel override"
+  ],
+  "intentional_changes": [
+    "nearly closed C spring curves, 7.9 mm relaxed bore for nominal 8 mm tube",
+    "rounded 1 mm free arms, 1.6 mm carrier roots and 1.4 mm sensor roots",
+    "rear battery roots route around free arms; rear far clip moved 3 mm axially",
+    "six spring fit coupons, three key coupons and one combined centre test piece"
+  ],
+  "iterations": [
+    "Initial sensor hoop replacement disconnected its roots; restored upper connections and verified one closed body.",
+    "An added lower-arm clearance probe found rear cradle reinforcement and an end rail stiffened the arms; rerouted the roots and separated the far clip, then reran exports, clearances and slicing.",
+    "Used source Boolean geometry for the arm-relief subtraction, separately verifying exported clip bands and sliced model paths, to avoid coincident float32 subtraction artifacts."
+  ],
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "elastic_force_simulated": false,
+  "final_unresolved_code_findings": 0
+}

@@ -1,0 +1,19 @@
+<!doctype html>
+<!-- Interactive review of exported accessory meshes; preview.mjs owns selection and input. -->
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Magic Wand holders | slide-on models</title>
+<style>
+:root{color-scheme:dark;font:15px/1.5 system-ui;background:#12151c;color:#edf1f5}*{box-sizing:border-box}body{margin:0;display:grid;grid-template-columns:minmax(0,1fr) 300px;height:100vh}#view{position:relative;min-height:350px;min-width:0}canvas{display:block;max-width:100%;width:100%;height:100%;touch-action:none;outline-offset:-4px}aside{padding:25px 22px;background:#1d232e;border-left:1px solid #354051;overflow:auto}h1{font-size:23px;line-height:1.2;margin:0 0 12px}h2{font-size:14px;margin:24px 0 8px;color:#b5c4d5}p{color:#b5c4d5}button,select{font:inherit;color:inherit;background:#293342;border:1px solid #47576b;border-radius:7px;padding:8px 12px;cursor:pointer}select{width:100%;margin:5px 0}button[aria-pressed=true]{background:#237d83;border-color:#49b7bd}button:focus-visible,select:focus-visible{outline:2px solid #7ee5e7}.row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}label{display:block;margin:14px 0}input{accent-color:#49b7bd}.hint{max-width:calc(100% - 40px);background:#12151cdb;border-radius:5px;padding:4px 7px;position:absolute;left:20px;bottom:12px;color:#9dacc0;pointer-events:none}.tag{position:absolute;top:16px;left:20px;font-size:13px;color:#a9bacb}.note{font-size:13px;color:#d2b697}#status{font-size:13px;min-height:3em}a{color:#7ee5e7}#error{position:absolute;inset:0;display:none;place-items:center;padding:30px} @media(max-width:760px){body{height:auto;grid-template-columns:minmax(0,1fr)}#view{height:64vh}aside{border-left:0;border-top:1px solid #354051;padding:20px}h2{margin-top:15px}}
+</style></head><body>
+<main id="view"><span class="tag">Spring-clip carrier · R7 · millimetres</span><div id="error"></div><p class="hint">Drag to turn · Scroll or pinch to zoom</p></main>
+<aside><h1>Magic Wand Holders</h1><p id="description">Five keys, closer to the rod. Choose where the battery sits.</p>
+<label>Design<select id="revision"><option value="front">Battery above middle key</option><option value="rear">Battery behind rod</option><option value="lower">Battery below keys</option><option value="r5">Previous closed rings · R5</option></select></label>
+<label>Parts<select id="parts"><option value="both">Both holders</option><option value="carrier">Key + battery carrier</option><option value="sensor">XIAO holder</option></select></label>
+<label><input type="checkbox" id="references" checked> Reference parts</label>
+<label><input type="checkbox" id="caps" checked> Keycaps</label>
+<label><input type="checkbox" id="wand-scroll"> Scroll rotates (wand override)</label>
+<h2>View</h2><div class="row" id="modes"><button data-mode="turn" aria-pressed="true">Rotate</button><button data-mode="move" aria-pressed="false">Pan</button><button data-mode="zoom" aria-pressed="false">Zoom</button></div><div class="row"><button id="plus" aria-label="Zoom in">+</button><button id="minus" aria-label="Zoom out">−</button><button id="reset">Reset view</button></div>
+<h2>Print Estimate</h2><p id="status">Loading models…</p>
+<p class="note">Dimensional prototype. Switch and socket shapes use sourced component CAD. Caps are illustrative. Printed fit, key travel and strength still need a test print.</p>
+<p><a id="carrier-file" href="../exports/Carrier_front.stl">Carrier STL</a> · <a id="sensor-file" href="../exports/XIAO_Rod_Holder.stl">XIAO STL</a><br><a id="project-file" href="../exports/Holder-front-sliced.3mf">Bambu project</a></p>
+</aside><script type="module" src="preview.mjs"></script></body></html>
