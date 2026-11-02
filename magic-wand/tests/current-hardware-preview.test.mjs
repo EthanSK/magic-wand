@@ -3,30 +3,60 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { followCurrent, modelURL } from '../hardware/carbon-rod-holders/preview/current.mjs';
+import { followCurrent, modelURL, watchCurrent } from '../hardware/carbon-rod-holders/preview/current.mjs';
 
 const base = 'http://localhost/magic-wand/hardware/carbon-rod-holders/preview/';
 const record = (revision, hash = 'a') => ({ revision, scene_sha256: hash.repeat(64) });
 
+test('an already-open visible viewer detects updates without a focus change', () => {
+  const browserWindow = new EventTarget();
+  const browserDocument = new EventTarget();
+  browserDocument.hidden = false;
+  const timers = new Map();
+  let next = 0, checks = 0;
+  browserWindow.setInterval = (callback, delay) => {
+    assert.equal(delay, 1000);
+    timers.set(++next, callback);
+    return next;
+  };
+  browserWindow.clearInterval = id => timers.delete(id);
+  watchCurrent(() => checks++, browserWindow, browserDocument);
+  assert.equal(checks, 1);
+  timers.values().next().value();
+  assert.equal(checks, 2, 'visible-page update checking must not depend on focus');
+  browserWindow.dispatchEvent(new Event('focus'));
+  assert.equal(timers.size, 1, 'focus must not create duplicate watchers');
+  browserDocument.hidden = true;
+  browserDocument.dispatchEvent(new Event('visibilitychange'));
+  assert.equal(timers.size, 0, 'hidden viewers must stop regular checks');
+  browserDocument.hidden = false;
+  browserDocument.dispatchEvent(new Event('visibilitychange'));
+  assert.equal(checks, 4);
+  assert.equal(timers.size, 1);
+  browserWindow.dispatchEvent(new Event('pagehide'));
+  assert.equal(timers.size, 0);
+});
+
 test('the current viewer keeps its camera until the generated model changes', async () => {
   let value = record('carbon-rod-holders-r11-average-thumb');
-  let loads = 0;
-  const frame = { set src(url) { loads++; this.loaded = url; }, hidden: true };
+  const loads = [];
+  let reloads = 0;
+  const frame = { set src(url) { loads.push(url); }, hidden: true };
   const status = { hidden: false };
-  const refresh = followCurrent({ frame, status, base, fetchCurrent: async (url, options) => {
+  const refresh = followCurrent({ frame, status, base, reload: () => reloads++, fetchCurrent: async (url, options) => {
     assert.equal(url.href, `${base}current.json`);
     assert.equal(options.cache, 'no-store');
     return { ok: true, json: async () => value };
   } });
   await refresh();
-  const first = frame.loaded;
+  const first = loads[0];
   await refresh();
-  assert.equal(loads, 1, 'unchanged refresh must not reload the inspection camera');
+  assert.equal(loads.length, 1, 'unchanged refresh must not reload the inspection camera');
   value = record('carbon-rod-holders-r12-next-model', 'b');
   await refresh();
-  assert.equal(loads, 2);
-  assert.notEqual(frame.loaded, first);
-  assert.match(frame.loaded, /r12-next-model\/preview\/\?v=b{64}$/);
+  assert.equal(loads.length, 1, 'retain the current embedded model until its fresh page loads');
+  assert.equal(reloads, 1, 'a changed revision refreshes the same permanent page');
+  assert.match(first, /r11-average-thumb\/preview\/\?v=a{64}$/);
   assert.equal(status.hidden, true);
 });
 

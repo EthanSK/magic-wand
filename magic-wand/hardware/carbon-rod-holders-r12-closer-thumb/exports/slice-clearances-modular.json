@@ -1,0 +1,1773 @@
+{
+  "project_sha256": "3e17e3b3376b0b93bc72903ec4fdab0696fdbd122438c85c09eea64641de3b01",
+  "checker_sha256": "ed69dfcc9cd75be80ac6ce45a04f8c4fe3e86ba98cfa71381827622a764c6510",
+  "parser_sha256": "8a1cc5b7d4d900ac50f1206d3876240e4f90353b426794427d6e50c520f12b1b",
+  "manifest_sha256": "40ce91c841017aae18d53bda277b1a20a42f461da047c00b57980892536a423f",
+  "parts": {
+    "Key_Carrier": {
+      "normal_mesh_difference_mm3": 0.00014951742919352225,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 6910,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_switch": {
+          "checked_samples": 2486,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_socket": {
+          "checked_samples": 896,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_switch": {
+          "checked_samples": 2496,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_socket": {
+          "checked_samples": 920,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_switch": {
+          "checked_samples": 2488,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_socket": {
+          "checked_samples": 901,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_switch": {
+          "checked_samples": 2523,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_socket": {
+          "checked_samples": 907,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_switch": {
+          "checked_samples": 2514,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_socket": {
+          "checked_samples": 905,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        }
+      },
+      "removable_support_in_open_regions": {
+        "unloaded_clip_bore": {
+          "checked_samples": 11829,
+          "violations": {
+            "Support": 6912,
+            "Support interface": 2737,
+            "Support transition": 359
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                0.4725,
+                -8.037,
+                3.72
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.1775,
+                -8.037,
+                3.72
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -0.1176,
+                -8.037,
+                3.72
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -0.4127,
+                -8.037,
+                3.72
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -0.2829,
+                -9.591,
+                3.72
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.0005,
+                -9.591,
+                3.72
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.2839,
+                -9.591,
+                3.72
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.325,
+                -9.799,
+                3.72
+              ],
+              "feature": "Support interface",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "key_0_switch": {
+          "checked_samples": 8024,
+          "violations": {
+            "Support": 3226,
+            "Support interface": 37,
+            "Support transition": 25
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                -11.9,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -12.1933,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -12.4867,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -12.78,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -13.0733,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -13.3667,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -13.66,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -13.9533,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "key_0_socket": {
+          "checked_samples": 3042,
+          "violations": {
+            "Support": 363,
+            "Support transition": 256,
+            "Support interface": 600
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                -12.1268,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -12.4255,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -12.7242,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -14.2178,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -14.5165,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -14.8152,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -19.5773,
+                6.348,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -19.2778,
+                6.348,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "key_1_switch": {
+          "checked_samples": 7973,
+          "violations": {
+            "Support": 3193,
+            "Support interface": 75,
+            "Support transition": 25
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                6.6,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                6.3067,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                6.0133,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                5.72,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                5.4267,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                5.1333,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                4.84,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                4.5467,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "key_1_socket": {
+          "checked_samples": 2813,
+          "violations": {
+            "Support": 275,
+            "Support transition": 245,
+            "Support interface": 672
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                6.3936,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                6.0949,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                5.7962,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                4.3026,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                4.0039,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                3.7052,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -1.3203,
+                6.348,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -1.0226,
+                6.348,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "key_2_switch": {
+          "checked_samples": 8092,
+          "violations": {
+            "Support": 3175,
+            "Support interface": 87,
+            "Support transition": 27
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                25.1,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                24.8067,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                24.5133,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                24.22,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                23.9267,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                23.6333,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                23.34,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                23.0467,
+                -4.222,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "key_2_socket": {
+          "checked_samples": 2999,
+          "violations": {
+            "Support": 306,
+            "Support transition": 241,
+            "Support interface": 654
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                24.6153,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                24.3165,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                22.823,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                22.5242,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                22.2255,
+                3.471,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                17.1797,
+                6.348,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                17.4774,
+                6.348,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                17.775,
+                6.348,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "key_3_switch": {
+          "checked_samples": 7961,
+          "violations": {
+            "Support": 3642,
+            "Support interface": 36,
+            "Support transition": 28
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                -16.4,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -16.6933,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -16.9867,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -17.28,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -17.5733,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -17.8667,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -18.16,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -18.4533,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "key_3_socket": {
+          "checked_samples": 2734,
+          "violations": {
+            "Support": 330,
+            "Support transition": 255,
+            "Support interface": 682
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                -19.2192,
+                23.61,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -18.9216,
+                23.61,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -18.6239,
+                23.61,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -18.3263,
+                23.61,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -18.0287,
+                23.61,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -17.731,
+                23.61,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -17.4334,
+                23.61,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -17.1358,
+                23.61,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "key_4_switch": {
+          "checked_samples": 7873,
+          "violations": {
+            "Support": 3608,
+            "Support interface": 54,
+            "Support transition": 26
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                29.6,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                29.3067,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                29.0133,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                28.72,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                28.4267,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                28.1333,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                27.84,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                27.5467,
+                15.918,
+                10.92
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.5,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "key_4_socket": {
+          "checked_samples": 2750,
+          "violations": {
+            "Support": 329,
+            "Support transition": 238,
+            "Support interface": 679
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                21.7746,
+                26.487,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                22.069,
+                26.487,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                23.8351,
+                26.487,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                24.1295,
+                26.487,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                24.4238,
+                26.487,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                29.1952,
+                23.61,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                28.8976,
+                23.61,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                28.6,
+                23.61,
+                8.12
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            }
+          ]
+        }
+      },
+      "layer_starts": {
+        "checked_layers": 79,
+        "overlap_allowance_mm": 0.25,
+        "minimum_island_area_mm2": 0.15,
+        "floating_components": [],
+        "support_backed_islands": [
+          {
+            "layer_top_mm": 5.8,
+            "area_mm2": 8.157,
+            "print_xy_bounds_mm": [
+              31.5171,
+              42.45,
+              33.7829,
+              46.05
+            ],
+            "assembly_centre_mm": [
+              -0.0,
+              -12.0,
+              5.42
+            ],
+            "actual_support_top_z_mm": 5.6
+          }
+        ],
+        "largest_unbacked_layers": [
+          {
+            "layer_top_mm": 5.6,
+            "unbacked_mesh_area_mm2": 430.4289,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 6.0,
+            "unbacked_mesh_area_mm2": 315.7745,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 5.8,
+            "unbacked_mesh_area_mm2": 21.5049,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 0.8,
+            "unbacked_mesh_area_mm2": 12.9176,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 15.0,
+            "unbacked_mesh_area_mm2": 3.5103,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 6.2,
+            "unbacked_mesh_area_mm2": 2.1281,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          }
+        ],
+        "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+      }
+    },
+    "Battery_Holder": {
+      "normal_mesh_difference_mm3": 0.00010052495585735867,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 6288,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "battery_reserve": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "removable_support_in_open_regions": {
+        "unloaded_clip_bore": {
+          "checked_samples": 9377,
+          "violations": {
+            "Support": 4957,
+            "Support interface": 2778,
+            "Support transition": 371
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                -0.848,
+                12.4115,
+                3.65
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -0.5654,
+                12.418,
+                3.65
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                -0.2827,
+                12.4218,
+                3.65
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.0,
+                12.4231,
+                3.65
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.2827,
+                12.4218,
+                3.65
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.5654,
+                12.418,
+                3.65
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.848,
+                12.4115,
+                3.65
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.7377,
+                10.858,
+                3.65
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "battery_reserve": {
+          "checked_samples": 21628,
+          "violations": {
+            "Support": 16252,
+            "Support transition": 1656,
+            "Support interface": 3054
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                11.0893,
+                13.735,
+                11.45
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                10.7896,
+                13.735,
+                11.45
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                10.4899,
+                13.735,
+                11.45
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                10.1902,
+                13.735,
+                11.45
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                9.8905,
+                13.735,
+                11.45
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                9.5908,
+                13.735,
+                11.45
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                9.2911,
+                13.735,
+                11.45
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                8.9914,
+                13.735,
+                11.45
+              ],
+              "feature": "Support",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            }
+          ]
+        }
+      },
+      "layer_starts": {
+        "checked_layers": 93,
+        "overlap_allowance_mm": 0.25,
+        "minimum_island_area_mm2": 0.15,
+        "floating_components": [],
+        "support_backed_islands": [
+          {
+            "layer_top_mm": 1.6,
+            "area_mm2": 8.7292,
+            "print_xy_bounds_mm": [
+              26.8,
+              31.3,
+              30.0,
+              35.7
+            ],
+            "assembly_centre_mm": [
+              13.4,
+              -16.3,
+              12.35
+            ],
+            "actual_support_top_z_mm": 1.2
+          },
+          {
+            "layer_top_mm": 1.6,
+            "area_mm2": 8.7292,
+            "print_xy_bounds_mm": [
+              0.0,
+              31.3,
+              3.2,
+              35.7
+            ],
+            "assembly_centre_mm": [
+              -13.4,
+              -16.3,
+              12.35
+            ],
+            "actual_support_top_z_mm": 1.2
+          }
+        ],
+        "largest_unbacked_layers": [
+          {
+            "layer_top_mm": 6.2,
+            "unbacked_mesh_area_mm2": 72.1817,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 8.2,
+            "unbacked_mesh_area_mm2": 58.7871,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 1.6,
+            "unbacked_mesh_area_mm2": 17.4583,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 8.6,
+            "unbacked_mesh_area_mm2": 13.9567,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 4.4,
+            "unbacked_mesh_area_mm2": 11.3381,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 7.8,
+            "unbacked_mesh_area_mm2": 6.88,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 17.8,
+            "unbacked_mesh_area_mm2": 4.2188,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 8.8,
+            "unbacked_mesh_area_mm2": 2.9807,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 17.6,
+            "unbacked_mesh_area_mm2": 2.0808,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          }
+        ],
+        "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+      }
+    },
+    "Battery_End_Gate": {
+      "normal_mesh_difference_mm3": 1.6567661288001722e-06,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "removable_support_in_open_regions": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "layer_starts": {
+        "checked_layers": 8,
+        "overlap_allowance_mm": 0.25,
+        "minimum_island_area_mm2": 0.15,
+        "floating_components": [],
+        "support_backed_islands": [],
+        "largest_unbacked_layers": [],
+        "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+      }
+    },
+    "XIAO_Rod_Holder": {
+      "normal_mesh_difference_mm3": 4.401159333029367e-05,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 4562,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "board": {
+          "checked_samples": 54,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "usb": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_route": {
+          "checked_samples": 1383,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        }
+      },
+      "removable_support_in_open_regions": {
+        "unloaded_clip_bore": {
+          "checked_samples": 8628,
+          "violations": {
+            "Support interface": 2181,
+            "Support": 4141,
+            "Support transition": 543
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                0.0,
+                20.598,
+                3.6
+              ],
+              "feature": "Support interface",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.0,
+                20.885,
+                3.6
+              ],
+              "feature": "Support interface",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.0,
+                21.172,
+                3.6
+              ],
+              "feature": "Support interface",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.0,
+                21.459,
+                3.6
+              ],
+              "feature": "Support interface",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.0,
+                21.746,
+                3.6
+              ],
+              "feature": "Support interface",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.0,
+                22.033,
+                3.6
+              ],
+              "feature": "Support interface",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.0,
+                22.32,
+                3.6
+              ],
+              "feature": "Support interface",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            },
+            {
+              "assembly_xyz_mm": [
+                0.0,
+                22.607,
+                3.6
+              ],
+              "feature": "Support interface",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2
+            }
+          ]
+        },
+        "board": {
+          "checked_samples": 1996,
+          "violations": {
+            "Support transition": 290,
+            "Support": 1269,
+            "Support interface": 406
+          },
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [
+            {
+              "assembly_xyz_mm": [
+                -8.082,
+                3.446,
+                9.533
+              ],
+              "feature": "Support transition",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2667
+            },
+            {
+              "assembly_xyz_mm": [
+                -8.372,
+                3.446,
+                9.533
+              ],
+              "feature": "Support transition",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2667
+            },
+            {
+              "assembly_xyz_mm": [
+                -8.662,
+                3.446,
+                9.533
+              ],
+              "feature": "Support transition",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2667
+            },
+            {
+              "assembly_xyz_mm": [
+                -8.662,
+                3.446,
+                9.533
+              ],
+              "feature": "Support transition",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2667
+            },
+            {
+              "assembly_xyz_mm": [
+                -8.662,
+                3.178,
+                9.533
+              ],
+              "feature": "Support transition",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2667
+            },
+            {
+              "assembly_xyz_mm": [
+                -8.662,
+                2.91,
+                9.533
+              ],
+              "feature": "Support transition",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2667
+            },
+            {
+              "assembly_xyz_mm": [
+                -8.662,
+                2.642,
+                9.533
+              ],
+              "feature": "Support transition",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2667
+            },
+            {
+              "assembly_xyz_mm": [
+                -8.662,
+                2.374,
+                9.533
+              ],
+              "feature": "Support transition",
+              "line_width_mm": 0.42,
+              "layer_height_mm": 0.2667
+            }
+          ]
+        },
+        "usb": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_route": {
+          "checked_samples": 2994,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        }
+      },
+      "layer_starts": {
+        "checked_layers": 74,
+        "overlap_allowance_mm": 0.25,
+        "minimum_island_area_mm2": 0.15,
+        "floating_components": [],
+        "support_backed_islands": [],
+        "largest_unbacked_layers": [
+          {
+            "layer_top_mm": 9.6,
+            "unbacked_mesh_area_mm2": 34.3249,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 1.4,
+            "unbacked_mesh_area_mm2": 4.2812,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 0.4,
+            "unbacked_mesh_area_mm2": 2.4775,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 14.0,
+            "unbacked_mesh_area_mm2": 2.3413,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          },
+          {
+            "layer_top_mm": 5.4,
+            "unbacked_mesh_area_mm2": 2.202,
+            "note": "partial overhang/bridge review; not alone a floating start"
+          }
+        ],
+        "limitation": "Mesh-supported layer-island audit correlated with actual extrusion, not thermal/bridge/strength simulation. Review broad overhangs separately."
+      }
+    }
+  },
+  "path_samples": 587253,
+  "parser_stats": {
+    "straight_extruding_moves": 75192,
+    "arc_extruding_moves": 8483,
+    "support_extruding_moves": 26591,
+    "feature_samples": {
+      "Support": 194502,
+      "Brim": 3941,
+      "Outer wall": 139829,
+      "Gap infill": 31962,
+      "Support interface": 56210,
+      "Inner wall": 77178,
+      "Bottom surface": 146,
+      "Overhang wall": 6868,
+      "Internal solid infill": 39960,
+      "Support transition": 16192,
+      "Top surface": 13103,
+      "Bridge": 7362
+    }
+  },
+  "physical_fit_verified": false,
+  "support_removal_physically_verified": false,
+  "support_policy": "All model beads must clear bought parts. Normal supports are removable through open key seats, open cradle and short through-ring bores; remove and inspect before assembly.",
+  "xy_guard_mm": 0.12,
+  "z_guard_mm": 0.1,
+  "passed": true
+}

@@ -1,0 +1,18 @@
+{
+  "source": {
+    "title": "Firefighter Hand Anthropometry and Structural Glove Sizing: A New Perspective",
+    "authors": "Hsiao, Whitestone, Kau and Hildreth",
+    "year": 2015,
+    "doi": "10.1177/0018720815594933",
+    "url": "https://stacks.cdc.gov/view/cdc/201534/cdc_201534_DS1.pdf",
+    "table": "Table 2, journal page 1363, PDF page 5",
+    "definition": "Appendix A, journal page 1375 (PDF page 17): width at the first proximal knuckle from the base of the finger, measured from a flat hand scan",
+    "male_thumb_breadth_n": 855,
+    "male_thumb_breadth_mean_mm": 24.4,
+    "male_thumb_breadth_sd_mm": 1.6,
+    "population_limit": "US firefighters measured in 2009-2012, not a universal male or individual fit guarantee"
+  },
+  "design_reason": "Use the reported 24.4 mm male sample mean plus 0.3 mm each side, giving a 25 mm minimum opening. This is a small inward adjustment from R11, requested after viewing it. The grid and printed edge reach leave 25.4 mm centred clearance, with side-key centres at X +/-23.0 mm. The clearance remains an agent-selected allowance, not a personal fit measurement.",
+  "implementation": "Derive side-key spacing from the actual printed seat/floor inner reach and a quarter-millimetre grid. Check a full rectangular 25 mm opening above the rod crown against the final carrier and bought-part references. Retain compact inner load paths and the original interfaces.",
+  "physical_acceptance_verified": false
+}

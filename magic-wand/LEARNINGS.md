@@ -2199,3 +2199,11 @@ fixed address. Normal scene generation updates it atomically; rebuilding an
 older archive does not replace a newer current model. Returning to the tab
 checks the pointer without reloading an unchanged inspection camera. Keep
 the archived viewers available for deliberate comparisons.
+
+A viewer left open can stay stale without a new focus or visibility event,
+especially while its embedded model owns focus. Check the generated pointer
+regularly while the page is visible and stop those checks while hidden. An
+embedded source-attribute update left the old model painted during testing;
+refreshing the same permanent page on a changed revision/hash loaded the new
+model correctly. The unchanged-hash check preserves the inspection camera;
+checking files never delays input.

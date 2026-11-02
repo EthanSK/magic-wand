@@ -1,0 +1,31 @@
+{
+  "revision": "carbon-rod-holders-r12-closer-thumb",
+  "assembly": {
+    "battery_floor_raise_mm": 0.25,
+    "battery_end_clearance": 8.0,
+    "extra_slide_range": 40.0,
+    "sensor_display_offset_x": 85.0,
+    "default_key_orientation": "three-toward-tip",
+    "battery_entry_rotation_z_degrees": 180.0
+  },
+  "key_layout": {},
+  "ergonomics": {
+    "design_thumb_width_mm": 24.4,
+    "side_clearance_mm": 0.3,
+    "spacing_grid_mm": 0.25,
+    "rest_region_y_mm": [
+      14.5,
+      28.5
+    ],
+    "rest_region_z_mm": [
+      4.0,
+      20.0
+    ]
+  },
+  "battery_cage": {
+    "roof_clearance": 0.6,
+    "gate_slot_width": 1.6,
+    "gate_relaxed_width": 1.7,
+    "gate_fitted_width": 1.5
+  }
+}
