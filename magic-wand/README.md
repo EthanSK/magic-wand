@@ -145,6 +145,8 @@ The wand’s main HUD uses ordinary Enter, like the physical mice. Native wand i
 
 ## Hardware
 
+The [carbon-tube assembly blueprint](hardware/assembly-blueprint/README.md) records the current three-key hardware report, preserved CAD variants, weight evidence and reproducible length comparisons; it separates measured facts from design assumptions.
+
 - Puck.js v2.1 at the tip of a roughly 50 cm carbon-fibre tube.
 - Three separate wired momentary buttons on the grip: Top to `D30`, Middle to `D2`, Bottom to `D1`, each also to `GND`. The Puck’s internal pull-ups make a press read low.
 

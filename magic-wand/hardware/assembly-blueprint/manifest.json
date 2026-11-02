@@ -1,0 +1,389 @@
+{
+  "schema_version": 1,
+  "purpose": "Canonical assembly index and provenance for the carbon-tube wand. Compose CAD records; keep physical measurements separate from prototypes.",
+  "units": {
+    "length": "mm",
+    "mass": "g",
+    "inertia": "g mm^2"
+  },
+  "source_checked_date": "2026-11-02",
+  "default_profile": "physical-current",
+  "products": {
+    "tube": {
+      "name": "D-Pultrusion carbon-fibre tube, AT Models 510072",
+      "source": "https://www.align-trex.co.uk/carbon-fibre-tube-8mm-x-0-5metre-7mm-id.html",
+      "nominal_stock_length_mm": 500,
+      "mass_g": null,
+      "note": "Supplier Weight 0.200000 has no explicit unit or net-part scope; do not use as tube mass. Physical cut length unconfirmed."
+    },
+    "sensor_board": {
+      "name": "Seeed Studio XIAO nRF52840 Sense, original non-Plus",
+      "source": "https://wiki.seeedstudio.com/XIAO_BLE/",
+      "mass_g": null,
+      "note": "LSM6DS3TR-C IMU. Board revision, fitted headers, solder and exact installed board mass unconfirmed."
+    },
+    "battery": {
+      "name": "PKCell LP402025, 150 mAh, seller SKU 105318",
+      "source": "https://thepihut.com/products/150mah-3-7v-lipo-battery",
+      "drawing": "https://cdn.shopify.com/s/files/1/0176/3274/files/lp402025_150mah_3.7v_20190510.pdf?v=1677758450",
+      "mass_g": null,
+      "note": "Identified bought part, not proof this exact cell is currently fitted. Do not substitute another manufacturer\u2019s LP402025 weight."
+    },
+    "switch": {
+      "name": "Kailh Choc V1 red CPG135001D01, Adafruit 5113",
+      "source": "https://www.adafruit.com/product/5113",
+      "mass_g": null
+    },
+    "socket": {
+      "name": "Kailh CPG135001S30, Adafruit 5118",
+      "source": "https://www.adafruit.com/product/5118",
+      "mass_g": null,
+      "note": "2017/2024 drawing revisions differ; actual purchased revision uninspected."
+    },
+    "keycap": {
+      "name": "Milky-white slim Choc caps, Adafruit 5737",
+      "source": "https://www.adafruit.com/product/5737",
+      "mass_g": null
+    },
+    "wiring_retention": {
+      "name": "Fitted wires, solder, insulation, tape, glue and any connectors",
+      "mass_g": null,
+      "note": "One explicit residual group prevents unweighed assembly material from disappearing from the total."
+    }
+  },
+  "profiles": {
+    "physical-current": {
+      "status": "User-reported current three-key carbon-tube assembly; exact mechanical revision and measurements unverified",
+      "key_count": 3,
+      "key_count_basis": "Ethan confirmed three keys through the authorised side chat on 2 November 2026.",
+      "cad_revision": null,
+      "components": [
+        {
+          "id": "tube",
+          "quantity": 1
+        },
+        {
+          "id": "sensor_board",
+          "quantity": 1
+        },
+        {
+          "id": "battery",
+          "quantity": 1
+        },
+        {
+          "id": "switch",
+          "quantity": 3
+        },
+        {
+          "id": "socket",
+          "quantity": 3
+        },
+        {
+          "id": "keycap",
+          "quantity": 3
+        },
+        {
+          "id": "wiring_retention",
+          "quantity": 1
+        },
+        {
+          "id": "sensor_holder",
+          "quantity": 1
+        },
+        {
+          "id": "carrier",
+          "quantity": 1
+        }
+      ],
+      "note": "Holder/carrier construction and all dimensions/masses remain unconfirmed. Never infer R4 from its newer revision number.",
+      "reported_facts": {
+        "source": "Ethan, relayed by the authorised side chat on 2 November 2026",
+        "components": [
+          "three keys",
+          "one small battery",
+          "one XIAO Sense",
+          "carbon rod"
+        ],
+        "estimated_grip_distance_from_butt_mm": [
+          80,
+          100
+        ],
+        "precision": "User estimate; not a measured pivot or key placement"
+      }
+    },
+    "r2-three-key": {
+      "status": "CAD prototype; not evidence of fitted physical assembly",
+      "key_count": 3,
+      "cad_revision": "carbon-rod-holders-r2",
+      "parameters": "magic-wand/hardware/carbon-rod-holders-r2/parameters.json",
+      "geometry_manifest": "magic-wand/hardware/carbon-rod-holders-r2/exports/manifest.json",
+      "design_readme": "magic-wand/hardware/carbon-rod-holders-r2/README.md",
+      "assembly_reference": "magic-wand/hardware/carbon-rod-holders-r2/exports/Assembly-reference.glb",
+      "sliced_archive": "magic-wand/hardware/carbon-rod-holders-r2/exports/Holder-pair-sliced.3mf",
+      "components": [
+        {
+          "id": "tube",
+          "quantity": 1
+        },
+        {
+          "id": "sensor_board",
+          "quantity": 1
+        },
+        {
+          "id": "battery",
+          "quantity": 1
+        },
+        {
+          "id": "switch",
+          "quantity": 3
+        },
+        {
+          "id": "socket",
+          "quantity": 3
+        },
+        {
+          "id": "keycap",
+          "quantity": 3
+        },
+        {
+          "id": "wiring_retention",
+          "quantity": 1
+        },
+        {
+          "id": "sensor_holder",
+          "quantity": 1,
+          "mass_ref": {
+            "path": "magic-wand/hardware/carbon-rod-holders-r2/exports/mass.json",
+            "pointer": "/object_printed_parts_g/XIAO_Rod_Holder"
+          }
+        },
+        {
+          "id": "carrier",
+          "quantity": 1,
+          "mass_ref": {
+            "path": "magic-wand/hardware/carbon-rod-holders-r2/exports/mass.json",
+            "pointer": "/object_printed_parts_g/Key_Battery_Carrier"
+          }
+        }
+      ],
+      "note": "Source masses are sliced model plastic only, with supports/brim excluded. Source geometry and print transforms remain owned by the existing CAD manifest."
+    },
+    "r4-front": {
+      "status": "CAD prototype; not evidence of fitted physical assembly",
+      "key_count": 5,
+      "cad_revision": "carbon-rod-holders-r4",
+      "parameters": "magic-wand/hardware/carbon-rod-holders-r4/parameters.json",
+      "geometry_manifest": "magic-wand/hardware/carbon-rod-holders-r4/exports/manifest.json",
+      "design_readme": "magic-wand/hardware/carbon-rod-holders-r4/README.md",
+      "assembly_reference": "magic-wand/hardware/carbon-rod-holders-r4/preview/index.html",
+      "sliced_archive": "magic-wand/hardware/carbon-rod-holders-r4/exports/Holder-front-sliced.3mf",
+      "components": [
+        {
+          "id": "tube",
+          "quantity": 1
+        },
+        {
+          "id": "sensor_board",
+          "quantity": 1
+        },
+        {
+          "id": "battery",
+          "quantity": 1
+        },
+        {
+          "id": "switch",
+          "quantity": 5
+        },
+        {
+          "id": "socket",
+          "quantity": 5
+        },
+        {
+          "id": "keycap",
+          "quantity": 5
+        },
+        {
+          "id": "wiring_retention",
+          "quantity": 1
+        },
+        {
+          "id": "sensor_holder",
+          "quantity": 1,
+          "mass_ref": {
+            "path": "magic-wand/hardware/carbon-rod-holders-r4/exports/mass-front.json",
+            "pointer": "/object_printed_parts_g/XIAO_Rod_Holder"
+          }
+        },
+        {
+          "id": "carrier",
+          "quantity": 1,
+          "mass_ref": {
+            "path": "magic-wand/hardware/carbon-rod-holders-r4/exports/mass-front.json",
+            "pointer": "/object_printed_parts_g/Carrier_front"
+          }
+        }
+      ],
+      "note": "Source masses are sliced model plastic only, with supports/brim excluded. Source geometry and print transforms remain owned by the existing CAD manifest."
+    },
+    "r4-rear": {
+      "status": "CAD prototype; not evidence of fitted physical assembly",
+      "key_count": 5,
+      "cad_revision": "carbon-rod-holders-r4",
+      "parameters": "magic-wand/hardware/carbon-rod-holders-r4/parameters.json",
+      "geometry_manifest": "magic-wand/hardware/carbon-rod-holders-r4/exports/manifest.json",
+      "design_readme": "magic-wand/hardware/carbon-rod-holders-r4/README.md",
+      "assembly_reference": "magic-wand/hardware/carbon-rod-holders-r4/preview/index.html",
+      "sliced_archive": "magic-wand/hardware/carbon-rod-holders-r4/exports/Holder-rear-sliced.3mf",
+      "components": [
+        {
+          "id": "tube",
+          "quantity": 1
+        },
+        {
+          "id": "sensor_board",
+          "quantity": 1
+        },
+        {
+          "id": "battery",
+          "quantity": 1
+        },
+        {
+          "id": "switch",
+          "quantity": 5
+        },
+        {
+          "id": "socket",
+          "quantity": 5
+        },
+        {
+          "id": "keycap",
+          "quantity": 5
+        },
+        {
+          "id": "wiring_retention",
+          "quantity": 1
+        },
+        {
+          "id": "sensor_holder",
+          "quantity": 1,
+          "mass_ref": {
+            "path": "magic-wand/hardware/carbon-rod-holders-r4/exports/mass-rear.json",
+            "pointer": "/object_printed_parts_g/XIAO_Rod_Holder"
+          }
+        },
+        {
+          "id": "carrier",
+          "quantity": 1,
+          "mass_ref": {
+            "path": "magic-wand/hardware/carbon-rod-holders-r4/exports/mass-rear.json",
+            "pointer": "/object_printed_parts_g/Carrier_rear"
+          }
+        }
+      ],
+      "note": "Source masses are sliced model plastic only, with supports/brim excluded. Source geometry and print transforms remain owned by the existing CAD manifest."
+    },
+    "r4-lower": {
+      "status": "CAD prototype; not evidence of fitted physical assembly",
+      "key_count": 5,
+      "cad_revision": "carbon-rod-holders-r4",
+      "parameters": "magic-wand/hardware/carbon-rod-holders-r4/parameters.json",
+      "geometry_manifest": "magic-wand/hardware/carbon-rod-holders-r4/exports/manifest.json",
+      "design_readme": "magic-wand/hardware/carbon-rod-holders-r4/README.md",
+      "assembly_reference": "magic-wand/hardware/carbon-rod-holders-r4/preview/index.html",
+      "sliced_archive": "magic-wand/hardware/carbon-rod-holders-r4/exports/Holder-lower-sliced.3mf",
+      "components": [
+        {
+          "id": "tube",
+          "quantity": 1
+        },
+        {
+          "id": "sensor_board",
+          "quantity": 1
+        },
+        {
+          "id": "battery",
+          "quantity": 1
+        },
+        {
+          "id": "switch",
+          "quantity": 5
+        },
+        {
+          "id": "socket",
+          "quantity": 5
+        },
+        {
+          "id": "keycap",
+          "quantity": 5
+        },
+        {
+          "id": "wiring_retention",
+          "quantity": 1
+        },
+        {
+          "id": "sensor_holder",
+          "quantity": 1,
+          "mass_ref": {
+            "path": "magic-wand/hardware/carbon-rod-holders-r4/exports/mass-lower.json",
+            "pointer": "/object_printed_parts_g/XIAO_Rod_Holder"
+          }
+        },
+        {
+          "id": "carrier",
+          "quantity": 1,
+          "mass_ref": {
+            "path": "magic-wand/hardware/carbon-rod-holders-r4/exports/mass-lower.json",
+            "pointer": "/object_printed_parts_g/Carrier_lower"
+          }
+        }
+      ],
+      "note": "Source masses are sliced model plastic only, with supports/brim excluded. Source geometry and print transforms remain owned by the existing CAD manifest."
+    }
+  },
+  "physical_measurements": {
+    "evidence": null,
+    "tube_length_mm": null,
+    "grip_pivot_mm": null,
+    "components": {}
+  },
+  "coordinate_system": {
+    "description": "For physical measurements: origin at tube butt centre; +Y along tube toward sensor tip; X across keys, +Z toward key faces. Pivot is the chosen grip centre in this frame.",
+    "cad_note": "Existing CAD has local frames. Do not treat the R4 preview\u2019s short rod reference as the full tube, or its local sensor/carrier origins as an assembled placement. R2 GLB has a full illustrative tube and tip translation; it is a design reference, not a measurement."
+  },
+  "model_limits": [
+    "All unmeasured values stay null. A known subtotal is not assembled mass.",
+    "Point-mass component inertia excludes each part\u2019s own distributed inertia; the uniform tube includes it. This is a comparative rigid-body model, not measured hand tremor or comfort.",
+    "No cut, print, fit, sensor replacement, or pointer setting change is implied."
+  ],
+  "scenarios": {
+    "illustrative-lengths": {
+      "status": "Illustrative assumptions only; not measurements or a cutting instruction",
+      "tube_parameters": "magic-wand/hardware/carbon-rod-holders-r4/parameters.json",
+      "baseline_length_mm": 500,
+      "candidate_lengths_mm": [
+        350,
+        300,
+        250,
+        200
+      ],
+      "density_g_cm3": 1.6,
+      "tip_package_g": 4,
+      "near_grip_package_g": 17,
+      "grip_from_butt_mm": 90,
+      "range_inputs": {
+        "grip_from_butt_mm": [
+          80,
+          100
+        ],
+        "tip_package_g": [
+          2.5,
+          5.5
+        ]
+      },
+      "assumption_basis": "Values supplied in the authorised side chat for arithmetic checking only. Density, package masses and exact pivot have not been established for the physical wand.",
+      "placement": "Tube occupies Y=0..length; tip package is a point at Y=length; near-grip package is a point exactly at the grip pivot. All centres have X=Z=0.",
+      "comparison": "Retain the same packages and grip distance from the butt at each length. Compare transverse X inertia and signed gravitational torque with the wand horizontal.",
+      "limits": "Range is an envelope over the listed assumed endpoints, not a confidence interval. Near-grip package extent and human grip/arm dynamics omitted. No optimal length claim."
+    }
+  }
+}
