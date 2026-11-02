@@ -1,0 +1,136 @@
+{
+  "project": "Holder-modular-layout.3mf",
+  "sha256": "520419855fe802bc8219e80765d522dea91d355f3e8381e543869492845aadab",
+  "generator_sha256": "da16d61657006cdb58ee54cf7bf866b313d5a65339bc28481b0e0df6e669bf3e",
+  "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
+  "physical_print_verified": false,
+  "parts": [
+    "Key_Carrier",
+    "Battery_Holder",
+    "Battery_End_Gate",
+    "XIAO_Rod_Holder"
+  ],
+  "slice": {
+    "error_string": "Success.",
+    "export_time": 873,
+    "layer_height": 0.20000000298023224,
+    "plate_index": 0,
+    "prepare_time": 57,
+    "return_code": 0,
+    "sliced_plates": [
+      {
+        "feature_type_times": {
+          "Bottom surface": 3.464155435562134,
+          "Bridge": 41.49140167236328,
+          "Brim": 22.03551483154297,
+          "Custom": 362.4684753417969,
+          "Flush": 29.0,
+          "Gap infill": 183.71197509765625,
+          "Inner wall": 292.5366516113281,
+          "Internal solid infill": 131.0724334716797,
+          "Outer wall": 587.6729736328125,
+          "Overhang wall": 134.6200408935547,
+          "Support": 825.5869750976562,
+          "Support interface": 281.1443176269531,
+          "Support transition": 95.53495025634766,
+          "Top surface": 75.31307220458984,
+          "Travel": 880.6801147460938,
+          "Undefined": 865.4594116210938
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 13.335122108459473,
+            "total_used_g": 13.335122108459473
+          }
+        ],
+        "generate_support_material_time": 231,
+        "id": 1,
+        "infill_time": 62,
+        "layer_filament_change": 0,
+        "main_predication": 3525.809326171875,
+        "make_perimeters_time": 115,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 46.04999923706055,
+              "height": 15.918540954589844,
+              "width": 70.95000457763672,
+              "x": 50.0,
+              "y": 135.0,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Key_Carrier",
+            "triangle_count": 19002
+          },
+          {
+            "bbox": {
+              "depth": 35.70000076293945,
+              "height": 18.648540496826172,
+              "width": 30.0,
+              "x": 125.0,
+              "y": 130.0,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Battery_Holder",
+            "triangle_count": 8428
+          },
+          {
+            "bbox": {
+              "depth": 6.800000190734863,
+              "height": 1.600000023841858,
+              "width": 28.5,
+              "x": 175.0,
+              "y": 130.0,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Battery_End_Gate",
+            "triangle_count": 116
+          },
+          {
+            "bbox": {
+              "depth": 28.399999618530273,
+              "height": 14.798483848571777,
+              "width": 21.200000762939453,
+              "x": 210.0,
+              "y": 100.0,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "XIAO_Rod_Holder",
+            "triangle_count": 7904
+          }
+        ],
+        "sliced_time": 1523,
+        "sliced_time_with_cache": 1066,
+        "total_predication": 3931.0263671875,
+        "triangle_count": 35450,
+        "warning_message": ""
+      }
+    ],
+    "sparse_infill_density": 20.0,
+    "upward_compatible_machine": [
+      "Bambu Lab P1P 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab A1 0.4 nozzle",
+      "Bambu Lab H2D 0.4 nozzle",
+      "Bambu Lab H2D Pro 0.4 nozzle",
+      "Bambu Lab H2S 0.4 nozzle",
+      "Bambu Lab P2S 0.4 nozzle",
+      "Bambu Lab H2C 0.4 nozzle",
+      "Bambu Lab X2D 0.4 nozzle",
+      "Bambu Lab A2L 0.4 nozzle"
+    ],
+    "wall_loops": 3
+  },
+  "warnings": [],
+  "sliced_project_sha256": "dd98376654b3bd27d01d9f1bd22ae5ccc8e03f3f284d79ed0e6b6dc8b227d11a"
+}

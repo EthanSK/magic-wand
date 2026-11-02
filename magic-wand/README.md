@@ -147,7 +147,7 @@ The wand’s main HUD uses ordinary Enter, like the physical mice. Native wand i
 
 The [carbon-tube assembly blueprint](hardware/assembly-blueprint/README.md) records the current three-key hardware report, preserved CAD variants, weight evidence and reproducible length comparisons; it separates measured facts from design assumptions.
 
-The [R9 carbon-rod print prototypes](hardware/carbon-rod-holders-r9-slot-cage/README.md) align the five keys, use an independently sliding battery cage with a removable end gate, and point the XIAO USB toward the tip with external wiring. Editable CAD, print meshes, the checked PETG project and interactive preview stay together; physical fit and comfort remain unverified. [R8](hardware/carbon-rod-holders-r8-modular/README.md) is preserved.
+The [R10 carbon-rod print prototypes](hardware/carbon-rod-holders-r10-thumb-clearance/README.md) leave a researched thumb opening between the two lower side keys and keep the sliding battery cage above the keys, clear of the grip. Editable CAD, print meshes, the checked PETG project and interactive preview stay together; physical fit and comfort remain unverified. [R9](hardware/carbon-rod-holders-r9-slot-cage/README.md) and earlier models are preserved.
 
 - Puck.js v2.1 at the tip of a roughly 50 cm carbon-fibre tube.
 - Three separate wired momentary buttons on the grip: Top to `D30`, Middle to `D2`, Bottom to `D1`, each also to `GND`. The Puck’s internal pull-ups make a press read low.
