@@ -492,6 +492,8 @@ final class Dwell {func follow(_ on:Bool){}}
 struct Recording {var isRecording=false}
 struct Version {var usesHeldScroll=true}
 final class Harness {
+ var manualClickExperiment=false;func refreshManualClickExperiment(){}
+
  func invalidatePointerMotion(){}
  func cancelMouseExitClick(){}
  var loadingBridge=false,loadingRuntime=false,bridgeLoadFailed=false,ready=false,lightMode="",generation=0,rawLastArrival=0.0,rawLastSample=0.0,hudSession=false,hudOpenedAt=0.0
@@ -520,7 +522,7 @@ h.receive("WAND_MODE_ROUTING_READY")
 precondition(!h.ready && h.bridgeLoadFailed)
 let valid=Harness();valid.receive(">WAND_BRIDGE_READY");precondition(valid.sent.count==1)
 valid.receive("WAND_MODE_ROUTING_READY");precondition(valid.ready)
-precondition(valid.sent.contains("global.wandHostHeldScroll=true;"))
+precondition(valid.sent.contains("global.wandHostHeldScroll=true;global.wandManualClickExperiment=false;"),"new sessions explicitly keep the optional manual mode off until applied")
 print("UART regression passed")
 `;
  const dir=mkdtempSync(join(tmpdir(),'wand-uart-'));

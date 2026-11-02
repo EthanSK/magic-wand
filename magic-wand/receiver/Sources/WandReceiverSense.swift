@@ -108,6 +108,13 @@ extension WandReceiver {
         senseTransport == nil ? nil : senseMouseButtonTimer.lastPressDuration
     }
 
+    /// A quiet-hold decision needs physically held samples past the cutoff,
+    /// not a Mac timer that merely ran before a delayed short release arrived.
+    func mouseButtonPhysicalHoldDuration() -> Double? {
+        guard senseTransport != nil,senseMouseButtonTimer.upAt == nil else{return nil}
+        return senseMouseButtonTimer.currentPressDuration
+    }
+
     func hudButtonPhysicalDuration() -> Double? {
         senseTransport == nil ? nil : senseHUDButtonTimer.currentPressDuration
     }

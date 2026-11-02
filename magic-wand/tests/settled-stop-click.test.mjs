@@ -14,11 +14,10 @@ test('the receiver passes the stillness rest flag to the click lane only', ()=>{
  assert.match(main,/fineMove:sample\.fineMoving,resting:sample\.resting\)/);
  assert.match(main,/fineMove:fineMove,resting:resting\)/);
  const control=readFileSync(new URL('WandPointerControl.swift',sources),'utf8');
- assert.match(control,/static let settleHold=0\.06\b/,'Ethan approved 60 ms of idleness');
  assert.match(control,/resting:!permitted\)/);
 });
 
-test('slowed stops and tiny re-targets click promptly, still pointers repeat, tremor and slow aiming do not click', {skip:process.platform!=='darwin'}, ()=>{
+test('slow stops and tiny re-targets keep the precision pause, brisk stops stay quick, still pointers repeat', {skip:process.platform!=='darwin'}, ()=>{
  const dir=mkdtempSync(join(tmpdir(),'wand-settled-stop-'));
  try {
   copyFileSync(new URL('fixtures/settled-stop-click-main.swift',import.meta.url),join(dir,'main.swift'));
@@ -27,11 +26,11 @@ test('slowed stops and tiny re-targets click promptly, still pointers repeat, tr
   for(const hz of ['104','240']) {
   const run=spawnSync(join(dir,'check'),[hz],{encoding:'utf8',timeout:30000});
   assert.equal(run.status,0,run.stdout+run.stderr);
-  assert.match(run.stdout,/PASS: prompt first and re-target clicks/);
+  assert.match(run.stdout,/PASS: precision first and re-target clicks/);
   assert.match(run.stdout,/PASS: cancellation, scroll recoil and missing readings/);
   assert.match(run.stdout,/PASS: coherent sub-pixel restart cancels repetition/);
   assert.match(run.stdout,/PASS: stationary repeats stay one interval apart/);
-  assert.match(run.stdout,/PASS: one stop is consumed once; tiny deliberate re-target stays quick/);
+  assert.match(run.stdout,/PASS: one stop is consumed once; tiny deliberate re-target keeps precision pause/);
   }
  } finally {rmSync(dir,{recursive:true,force:true});}
 });

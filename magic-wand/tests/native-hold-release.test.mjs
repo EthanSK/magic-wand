@@ -21,7 +21,9 @@ final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
  func invalidatePointerMotion(){}
  var tripleClick=WandTripleClick(),pendingRecenter:Timer?
- var scrollFollowBefore=false
+ var scrollFollowBefore=false,manualClickExperiment=false
+ struct NativeStub {var active=false};var nativeScroll=NativeStub()
+ final class VirtualStub {var clicks=0;func clickLight(){clicks+=1}};var senseVirtual:VirtualStub?=VirtualStub()
  let context=SwitchAppContext()
  var actionPause=WandActionPause()
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double,sampleTime:Double?=nil){screenshotRaw+=1}
@@ -30,7 +32,7 @@ final class Harness {
  var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?,flickAnchor:CGPoint?
  var pointerOrigin=WandPointerOrigin();func currentPointerOrigin()->CGPoint{pointerOrigin.origin(system:CGEvent(source:nil)?.location ?? .zero,now:ProcessInfo.processInfo.systemUptime)}
  var controlVersion=WandControlVersion.scrollV2,ready=true,restoring=false,scrollActive=false,hudSession=false,flickScrollEnabled=false,heldScrollDiagnostics=false
- var physicalTapDuration:Double?=nil;func mouseButtonPhysicalTapDuration()->Double?{physicalTapDuration}
+ var physicalTapDuration:Double?=nil,physicalHoldDuration:Double?=nil;func mouseButtonPhysicalTapDuration()->Double?{physicalTapDuration};func mouseButtonPhysicalHoldDuration()->Double?{physicalHoldDuration}
  var screenshotActive=false,hudButtonHeld=false,hudButtonMouseX=0.0,hudButtonMouseSampleAt = -100.0
  var commands:[String]=[],scrollPostedX=0,scrollPostedY=0
  var clickPoints:[CGPoint]=[]
@@ -53,7 +55,7 @@ final class Harness {
  func postHeldScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  func postSustainedScroll(x:Int32,y:Int32,at:CGPoint?){_ = Self.wheelEvents(x:x,y:y,at:at)}
  static func wheelEvents(x:Int32,y:Int32,at:CGPoint?)->[CGEvent]{wheelPairs.append((x,y));return []}
- ${['beginMouseButtonHold','restoreMouseAfterScroll','deviceFollowChanged','finishScroll','finishMouseButtonHold','reconcileMouseButtonHold','handleRaw','consumeEarlyHorizontalIntent','finishHorizontalStrokeIfNeeded'].map(method).join('\n')}
+ ${['beginMouseButtonHold','stopManualQuietHold','restoreMouseAfterScroll','deviceFollowChanged','finishScroll','finishMouseButtonHold','reconcileMouseButtonHold','handleRaw','consumeEarlyHorizontalIntent','finishHorizontalStrokeIfNeeded'].map(method).join('\n')}
 }
 let h=Harness();precondition(h.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))
 let now=ProcessInfo.processInfo.systemUptime
@@ -219,6 +221,40 @@ let draggingClick=Harness();draggingClick.beginMouseButtonHold(now:100,following
 _=draggingClick.heldScroll.setTarget(scrollable:false,now:100.01);_=draggingClick.heldScroll.startDrag(now:100.3)
 draggingClick.physicalTapDuration=0.1;draggingClick.finishMouseButtonHold(now:100.4)
 precondition(draggingClick.downs==0 && draggingClick.downs==0,"even a delayed short-duration report cannot click after native dragging")
+
+// The manual-click experiment changes only an ordinary pointer tap/quiet hold.
+for physical:Double? in [nil,0.12] {
+ let manual=Harness();manual.manualClickExperiment=true;manual.dwell.follow(true)
+ manual.beginMouseButtonHold(now:100,following:true);manual.physicalTapDuration=physical
+ manual.finishMouseButtonHold(now:physical == nil ? 100.12:100.4)
+ precondition(manual.downs==1 && manual.buttons==0 && manual.dwell.following,"manual tap clicks once and keeps follow, including delayed physical tap")
+ precondition(manual.senseVirtual?.clicks==1,"the actual click owns its blue cue")
+ manual.finishMouseButtonHold(now:100.5);manual.reconcileMouseButtonHold(down:false,now:100.6,reason:"duplicate")
+ precondition(manual.downs==1,"duplicate up reports never click twice")
+}
+let manualEntry=Harness();manualEntry.manualClickExperiment=true
+manualEntry.beginMouseButtonHold(now:100,following:false);manualEntry.finishMouseButtonHold(now:100.12)
+precondition(manualEntry.downs==0,"an off-to-on entry tap has no manual click")
+let manualHold=Harness();manualHold.manualClickExperiment=true;manualHold.dwell.follow(true)
+manualHold.beginMouseButtonHold(now:100,following:true);manualHold.physicalHoldDuration=0.25
+manualHold.stopManualQuietHold(now:100.25)
+precondition(!manualHold.heldScroll.active && !manualHold.dwell.following && manualHold.downs==0,"quiet hold consumes input and stops follow at its existing decision")
+precondition(manualHold.commands.contains{$0.contains("setMouseFollow(false)")},"the device turns blue off at recognition, before release")
+manualHold.finishMouseButtonHold(now:100.4)
+precondition(manualHold.downs==0 && !manualHold.dwell.following,"quiet hold release stays silent and off")
+let lateManual=Harness();lateManual.manualClickExperiment=true;lateManual.dwell.follow(true)
+lateManual.beginMouseButtonHold(now:100,following:true);lateManual.physicalHoldDuration=0.12
+lateManual.stopManualQuietHold(now:100.4)
+precondition(lateManual.heldScroll.active && lateManual.dwell.following,"a Mac timer cannot turn a delayed short physical tap into a quiet hold")
+lateManual.physicalTapDuration=0.12;lateManual.finishMouseButtonHold(now:100.4)
+precondition(lateManual.downs==1 && lateManual.dwell.following,"the delayed manual tap still clicks once")
+let manualScroll=Harness();manualScroll.manualClickExperiment=true;manualScroll.controlVersion = .sustainedV3;manualScroll.dwell.follow(true)
+manualScroll.beginMouseButtonHold(now:100,following:true);manualScroll.physicalHoldDuration=0.3
+for i in 1...10 {_=manualScroll.heldScroll.sample(y:8,dt:0.01,now:100+Double(i)*0.01)}
+precondition(manualScroll.heldScroll.hasScrollGesture,"the protected V3 case contains an actual accepted scroll")
+manualScroll.stopManualQuietHold(now:100.3)
+precondition(manualScroll.heldScroll.active && manualScroll.dwell.following && manualScroll.downs==0,"a real scroll gesture keeps its hold ownership")
+print("Manual experiment: tap/entry/quiet hold/delayed physical release/scroll and exactly-once clicks passed")
 
 for horizontal in [false,true] {
  let axis=Harness();precondition(axis.motionFilter.configure([0,0,86.4,1.4,0.35,2,18,1.0/3,0.2,0.35,1,-1,-1]))

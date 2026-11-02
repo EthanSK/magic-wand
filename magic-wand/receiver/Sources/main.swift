@@ -122,6 +122,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     let navigationFeedback=WandNavigationFeedback()
     let experiment=WandExperiment(url:support.appendingPathComponent("experiment.json"))
     var experimentTimer:Timer?
+    var manualClickExperiment=false
     var scrollFollowBefore=false
     var heldScrollAnchor:CGPoint?
     var heldTargetToken=UUID()
@@ -291,11 +292,15 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         nativeScroll.onCompletedHorizontal = { [weak self] delta, point in
             // Post the native end event first. The acknowledgement is independent
             // of the target app, so even a lagging app cannot postpone its fade.
+            // Snapshot the foreground app at send time; it is not proof of
+            // the app under the fixed anchor, or of accepted page navigation.
+            let frontmost=NSWorkspace.shared.frontmostApplication?.bundleIdentifier ?? "unknown"
             DispatchQueue.main.async { [weak self] in
                 guard let self,self.ready,!self.restoring,!self.actionPause.paused,
                       let direction=WandNavigationDirection(horizontalDelta:delta) else{return}
                 self.navigationFeedback.show(direction,at:point)
-                log("NAVIGATION_GESTURE",direction == .back ? "back":"forward")
+                log("NAVIGATION_GESTURE",direction == .back ? "back":"forward",
+                    "nativePixels",delta*10,"anchorX",point.x,"anchorY",point.y,"frontmostBundle",frontmost)
             }
         }
         refreshPointerDisplays()
@@ -374,6 +379,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         refreshUpdateWork()
         startGuide()
         // One presentation tick: no extra sensor polling, input buffer or pointer timer.
+        experiment.onChange = { [weak self] in self?.refreshManualClickExperiment() }
         experimentTimer=WandRunLoop.commonTimer(interval:1,repeats:true){[weak self] _ in
             guard let self else{return}
             self.experiment.tick(now:ProcessInfo.processInfo.systemUptime,
@@ -446,7 +452,8 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         if flickScrollEnabled != flick {if flickScroll.active {setCircleLight(false);motionFilter.reset()};flickScrollEnabled=flick;flickScroll.reset();flickAnchor=nil}
         flickMenuItem?.state=flick ? .on : .off
         heldScrollDiagnostics=options.enabled("heldScrollDiagnostics")
-        heldScroll.quietStopEnabled=options.enabled("quietMouseHold")
+        refreshManualClickExperiment()
+        heldScroll.quietStopEnabled=manualClickExperiment || options.enabled("quietMouseHold")
         rotationMenuItem?.state=enabled ? .on : .off
         // Sense only: the direct pointer is the default; "sensePointer":"tuned"
         // returns to the Puck filter. A Puck always keeps the tuned filter.
@@ -468,6 +475,23 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             motionFilter.orientationCompensation=enabled;motionFilter.reset()
             log("ORIENTATION_COMPENSATION",enabled)
         }
+    }
+    /// A checkbox request and the applied mode are separate while a physical
+    /// hold/drag owns input. Release applies it promptly without stealing that
+    /// gesture; the panel shows the previous mode until this boundary passes.
+    func refreshManualClickExperiment() {
+        // V1/Puck keep their original tap and automatic-click lifecycle. The
+        // native manual tap/quiet hold owner exists only in ControlV2/V3.
+        let supported=isSense && controlVersion.usesHeldScroll
+        experiment.setManualClickSupport(supported,reason:isSense ? "Use Control V2 or V3 for Tap to click":"Tap to click needs a Sense wand")
+        let manual=supported && experiment.manualClick
+        if manual != manualClickExperiment && !heldScroll.active && !pointerRouter.mouseButtonHeld && buttons==0 {
+            manualClickExperiment=manual;dwell.reset();scheduleDwell()
+            heldScroll.quietStopEnabled=manual || options.enabled("quietMouseHold")
+            if ready {queue("global.wandManualClickExperiment="+(manual ? "true":"false")+";")}
+            log("MANUAL_CLICK_EXPERIMENT",manual)
+        }
+        experiment.setAppliedManualClick(manualClickExperiment)
     }
     func setupOptionsMenu() {
         let item=NSStatusBar.system.statusItem(withLength:NSStatusItem.variableLength)
@@ -824,13 +848,13 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             if line == "WAND_MODE_ROUTING_READY" || line == ">WAND_MODE_ROUTING_READY" {
                 guard !bridgeLoadFailed else {queue("global.WAND_UPDATING=true;global.wandMotionReady=false;updateLights();");log("BRIDGE_LOAD_REJECTED");continue}
                 loadingBridge=false;loadingRuntime=false;ready=true;motionFilter.reset();rawLastArrival=0;rawLastSample=0;generation+=1;log("RUNTIME_READY");syncRecordingLight();status()
-                restoreKnownCalibration();checkPowerPolicy()
+                restoreKnownCalibration();checkPowerPolicy();refreshManualClickExperiment()
                 requestBattery()
                 if let remembered=standbyResume {let resume=remembered;standbyResume=nil;queue("setMouseFollow("+(resume ? "true":"false")+");");dwell.follow(resume);log("DEEP_STANDBY_RESUMED",resume)}
                 if context.isActive {hudSession=true;hudOpenedAt=ProcessInfo.processInfo.systemUptime}
                 if let mode=selectedReviewMode {setWandShortcut(mode)}
                 queue("global.wandShot=0;global.wandRawPointer=true;global.wandRawBias=undefined;global.wandRawActive=false;global.WAND_UPDATING=false;setHUDOpen("+(context.isActive ? "true":"false")+");updateLights();")
-                queue("global.wandHostHeldScroll="+(controlVersion.usesHeldScroll ? "true":"false")+";")
+                queue("global.wandHostHeldScroll="+(controlVersion.usesHeldScroll ? "true":"false")+";global.wandManualClickExperiment="+(manualClickExperiment ? "true":"false")+";")
             }
             if line.hasPrefix("WAND_DIAG ") || line.hasPrefix(">WAND_DIAG ") || line.hasPrefix("WAND_CALLBACK_MATCH ") || line.hasPrefix(">WAND_CALLBACK_MATCH ") {log("DEVICE",line)}
             if line.hasPrefix("WAND_BATTERY ") || line.hasPrefix(">WAND_BATTERY "),let range=line.range(of:"WAND_BATTERY ") {handleBattery(String(line[range.upperBound...]))}
@@ -895,6 +919,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                         // Otherwise the next frame fabricates a held-scroll recovery.
                         dwell.reset();scheduleDwell()
                         performPointer(pointerRouter.mouseButton(down:false))
+                        refreshManualClickExperiment()
                         continue
                     }
                     if controlVersion.usesHeldScroll && !scrollActive {
@@ -907,6 +932,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
                     let endedLegacyScroll=value=="0" && pointerRouter.circle.active
                     dwell.reset();scheduleDwell();performPointer(pointerRouter.mouseButton(down:value=="1"))
                     if endedLegacyScroll {restoreMouseAfterScroll()}
+                    if value=="0" {refreshManualClickExperiment()}
                 }
             }
             if let marker=line.range(of:"@MIDDLE "){
@@ -1474,6 +1500,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             // A pause mid-gesture cancels it at once rather than leaving it open.
             if self.actionPause.paused {self.finishNativeScroll(cancelled:true)}
             guard self.ready,!self.restoring,!self.actionPause.paused,AXIsProcessTrusted() else{return}
+            self.stopManualQuietHold(now:now)
             let units=self.heldScroll.continuation(now:now)
             if units.x != 0 || units.y != 0 {
                 self.setCircleLight(true)
@@ -1482,6 +1509,19 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         }
         releaseButtons()
         if explicitDrag {log("BOTTOM_HOLD_TARGET","explicit drag")}
+    }
+    /// Ethan's touchpad experiment: an already-following quiet hold uses the
+    /// existing220ms decision, turns follow/blue off then, and is consumed until
+    /// release. A recognised scroll, native drag or second-press drag wins.
+    func stopManualQuietHold(now:Double) {
+        guard manualClickExperiment,scrollFollowBefore,heldScroll.active,heldScroll.scrollable,
+              (mouseButtonPhysicalHoldDuration() ?? 0)>=heldScroll.holdSeconds,heldScroll.qualified(now:now),!heldScroll.hasScrollGesture,
+              !heldScroll.dragging,!recenterGesture.isSecondPress,!scrollActive,
+              !screenshot.ownsPointer else{return}
+        finishMouseButtonHold(now:now,released:false)
+        dwell.follow(false);restDetection.pointerStopped();scheduleDwell()
+        queue("global.wandPointerPauseUntil=0;setMouseFollow(false);updateLights();")
+        log("MANUAL_CLICK_HOLD_STOP")
     }
     /// One bounded Accessibility hit test per hold, off the main thread. The
     /// gesture token drops any reply that arrives after the hold ended, and
@@ -1990,7 +2030,7 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
             closeHUD(reason:"context missing",notifyNative:false)
         }
         // Stop-to-click follows the tuned stop counts on either pointer path.
-        let gate=WandClickGate.blocker(recordingPaused:recordingPointerPaused,mouseButtonHeld:pointerRouter.mouseButtonHeld,buttons:b,
+        let gate=manualClickExperiment ? "manual-click experiment" : WandClickGate.blocker(recordingPaused:recordingPointerPaused,mouseButtonHeld:pointerRouter.mouseButtonHeld,buttons:b,
                                        hudSession:hudSession,hudShown:context.isActive,scrollActive:scrollActive,
                                        hudOperating:hudButtonHeld || hudEntryPress || pointerInHUD)
         noteClickGate(gate)
@@ -2033,15 +2073,30 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
         // physical timestamps: no new delay, and late delivery cannot turn a tap
         // into a quiet hold. Native dragging and lost telemetry keep their rules.
         let stopWithoutClick=heldScroll.quietStopEnabled && released && !shortRelease && scrollFollowBefore && !heldScroll.hasScrollGesture && !heldScroll.dragging && !scrollActive
-        let exitFollow=released && shortRelease && !earlyHorizontal && scrollFollowBefore && !heldScroll.dragging && !scrollActive
+        let manualTap=manualClickExperiment && released && shortRelease && !earlyHorizontal && scrollFollowBefore && !heldScroll.dragging && !scrollActive
+        let exitFollow = !manualClickExperiment && released && shortRelease && !earlyHorizontal && scrollFollowBefore && !heldScroll.dragging && !scrollActive
         if exitFollow && ready && !restoring && !actionPause.paused && !screenshot.ownsPointer && AXIsProcessTrusted() {
             dwell.follow(false);restDetection.pointerStopped();scheduleDwell()
             log("MOUSE_EXIT_WITHOUT_CLICK")
+        }
+        if manualTap && ready && !restoring && !actionPause.paused && !screenshot.ownsPointer && AXIsProcessTrusted() {
+            // No double-click delay: the existing physical-time double/triple
+            // recogniser follows this release and keeps its recenter/screenshot.
+            let point=currentPointerOrigin()
+            transition(to:1,at:point);transition(to:0,at:point)
+            senseVirtual?.clickLight();log("MANUAL_TAP_CLICK")
         }
         // A delayed short tap is not an accepted scroll. Cancel its native
         // phase so an app cannot commit history navigation on that release.
         if earlyHorizontal {
             log("HORIZONTAL_INTENT_RELEASE", "ms", Int(heldScroll.elapsed(now:now)*1000), "reason", released ? "release":"cancelled")
+        }
+        // Send only the unfinished current horizontal wheel interval, before
+        // its ended event. Physical release caps it; stale tails are refused.
+        if released && completedScroll && nativeScroll.active && heldScroll.sustaining {
+            let physicalEnd=physicalDuration.map { now-heldScroll.elapsed(now:now)+$0 } ?? now
+            let tail=heldScroll.sustained.finishHorizontalTick(now:min(now,physicalEnd))
+            if tail.x != 0 {postSustainedScroll(x:tail.x,y:0,at:heldScrollAnchor)}
         }
         finishNativeScroll(cancelled:!released || !completedScroll)
         if heldScrollDiagnostics && heldScroll.sustaining && completedScroll {
@@ -2179,10 +2234,10 @@ final class WandReceiver: NSObject, CBCentralManagerDelegate, CBPeripheralDelega
     }
     func scheduleDwell(){
         dwellTimer?.invalidate();dwellTimer=nil
-        guard ready,!restoring,!actionPause.paused,!recordingPointerPaused,!screenshot.ownsPointer,let due=dwell.nextDue else{return}
+        guard ready,!restoring,!actionPause.paused,!manualClickExperiment,!recordingPointerPaused,!screenshot.ownsPointer,let due=dwell.nextDue else{return}
         dwellTimer=WandRunLoop.commonTimer(interval:max(0.001,due-ProcessInfo.processInfo.systemUptime),repeats:false){[weak self] _ in
             guard let self else{return};self.dwellTimer=nil
-            guard self.ready,!self.restoring,!self.actionPause.paused,!self.screenshot.ownsPointer,!self.heldScroll.active,
+            guard self.ready,!self.restoring,!self.actionPause.paused,!self.manualClickExperiment,!self.screenshot.ownsPointer,!self.heldScroll.active,
                   WandClickGate.blocker(recordingPaused:self.recordingPointerPaused,mouseButtonHeld:self.pointerRouter.mouseButtonHeld,buttons:self.buttons,
                       hudSession:self.hudSession,hudShown:self.context.isActive,scrollActive:self.scrollActive,
                       hudOperating:self.hudButtonHeld || self.hudEntryPress || self.pointerInHUD)==nil,

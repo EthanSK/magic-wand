@@ -43,6 +43,8 @@ final class Controls {var phases:[String]=[];var starts=0;var available=true
  func screenshotStart()->Bool{starts+=1;return available}}
 final class SwitchAppContext {var switchAppAdjusting=false,isActive=false}
 final class Harness {
+ var manualClickExperiment=false;func refreshManualClickExperiment(){}
+
  // Passive experiment counting has no input effect in this inert harness.
  struct Experiment {func postedPointerEvent(){}}
  let experiment=Experiment()

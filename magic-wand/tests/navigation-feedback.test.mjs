@@ -10,6 +10,13 @@ test('navigation acknowledgement follows completed sideways gestures and fades w
  const root=new URL('../receiver/Sources/',import.meta.url);
  const source=readFileSync(new URL('main.swift',root),'utf8');
  const start=source.indexOf('struct WandNativeScrollGesture {'),end=source.indexOf('\nfinal class WandReceiver',start);
+ const callback=source.slice(source.indexOf('nativeScroll.onCompletedHorizontal ='),source.indexOf('        refreshPointerDisplays()',source.indexOf('nativeScroll.onCompletedHorizontal =')));
+ assert.match(callback,/DispatchQueue\.main\.async/,'feedback runs after the current native posting call returns');
+ assert.match(callback,/"nativePixels",delta\*10,"anchorX",point\.x,"anchorY",point\.y,"frontmostBundle",frontmost/,'the acknowledgement records sent native pixels and fixed anchor without claiming app navigation');
+ assert.match(callback,/let frontmost=NSWorkspace\.shared\.frontmostApplication/,'the app field describes foreground state rather than an unverified hit-test target');
+ const finish=source.slice(source.indexOf('    func finishNativeScroll('),source.indexOf('    func postScroll(',source.indexOf('    func finishNativeScroll(')));
+ assert(finish.indexOf('event.post(tap:.cghidEventTap)')<finish.indexOf('log(cancelled ?'),'the actual end event is posted before completion logging');
+
  assert(start>=0 && end>start);
  const dir=mkdtempSync(join(tmpdir(),'wand-navigation-feedback-'));
  try {

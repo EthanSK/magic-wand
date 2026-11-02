@@ -368,19 +368,17 @@ final class WandDwellClick {
     /// pointer is still, it should send clicks every like one second or so ...
     /// But if it hasn't moved, it shouldn't repeatedly do clicks. It should be
     /// quite a long delay actually". A first click and a small nearby re-target
-    /// keep their own prompt brisk, settled and 200 ms paths, which ignore this
+    /// keep their own brisk or 200 ms precision paths, which ignore this
     /// interval. Each repeat still needs a fresh reading, fires once even if its
     /// timer is late, and any visible step or accepted fine motion cancels it.
     var repeatInterval:Double?
     static let senseRepeatInterval=1.0
-    /// Ethan (2026-11-01): "I slowed down like towards the end and it doesn't
-    /// count as like a fast motion. But still, like it should detect clicks
-    /// pretty fast always ... at least the first click of the batch". An armed
-    /// target clicks once the Sense stillness gate has held the pointer at rest
-    /// (balanced wobble, his "trying to hold it still") for his approved 60 ms
-    /// of idleness. Additive: the brisk-stop and 200 ms paths are unchanged;
-    /// coherent slow aiming is never rest, so it does not click mid-aim.
-    static let settleHold=0.06
+    /// Ethan's recovered correction (2026-11-01): when "moving the mouse slowly
+    /// and not quickly" it "shouldn't do like the really fast click on stop
+    /// detection". Sense rest must observe the same precision pause, rather
+    /// than bypass it after60 ms. Only the existing distance/speed-qualified
+    /// brisk detector earns the quick opportunity. Pointer output never waits.
+    private var settleHold:Double {pause}
     private var fastStop:WandFastStopClick?
     private(set) var lastClickWasFast=false
     private(set) var lastClickWasSettled=false
@@ -473,7 +471,7 @@ final class WandDwellClick {
         if visibleStep && armed && !fastClickAwaitingMovement && !(fastStop?.awaitingRest ?? false) {settleEligible=true}
         if resting && !visibleStep && dx==0 && dy==0 {
             if restSince==nil {restSince=now}
-            if settledDue==nil,armed,settleEligible,!fastClickAwaitingMovement,now-(restSince ?? now)>=Self.settleHold {settledDue=now}
+            if settledDue==nil,armed,settleEligible,!fastClickAwaitingMovement,now-(restSince ?? now)>=settleHold {settledDue=now}
         } else {restSince=nil;settledDue=nil}
     }
     func tick(now:Double)->Bool {
@@ -1661,6 +1659,14 @@ final class WandSustainedScroll {
         let rate=hypot(velocityX,velocityY)
         let axis=rate==0 ? "none" : velocityX==0 ? "vertical" : velocityY==0 ? "horizontal" : "diagonal"
         return "ms=\(Int((seconds*1000).rounded())) end=\(ended) strokes=\(summary.strokes) directionChanges=\(summary.directionChanges) speedChanges=\(summary.speedChanges) ignoredRecoils=\(summary.ignoredRecoils) peakLinesPerSecond=\(Int(summary.peakRate.rounded())) finalLinesPerSecond=\(Int(rate.rounded())) axis=\(axis)"
+    }
+    /// A release can fall between the existing20ms wheel ticks. Deliver only
+    /// that unfinished horizontal interval; a late release never catches up old
+    /// output. Page scrolling, cancellation and the pointer do not use this path.
+    func finishHorizontalTick(now:Double)->(x:Int32,y:Int32) {
+        guard horizontalStrokeActive,now.isFinite,now>=lastTick,
+              now-lastTick<=0.0200001 else{return (0,0)}
+        return tick(now:now)
     }
     func tick(now:Double,pageUnitsPerLine:Double=1)->(x:Int32,y:Int32){
         guard now.isFinite,now>=lastTick,pageUnitsPerLine.isFinite,pageUnitsPerLine>=1,pageUnitsPerLine<=1024 else{return (0,0)}

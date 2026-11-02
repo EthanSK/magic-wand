@@ -1,6 +1,6 @@
 import Foundation
 setbuf(stdout, nil)
-// Inert click-lane regressions (receiver192 candidate): the real WandMotionFilter
+// Inert click-lane regressions (receiver195): the real WandMotionFilter
 // and WandDwellClick in handleRaw's call order (intent, move with the stillness
 // gate's rest flag, timer tick, post-click hold). No native input or hardware.
 // Ethan (2026-11-01): "it should detect clicks pretty fast always ... at least
@@ -43,8 +43,8 @@ final class Hand {
 }
 
 // 1. A real move that slows toward the end, then a held hand. The brisk-stop
-// path cannot apply (its last brisk reading is >120 ms before the stop); the
-// first click of the batch still comes before the 200 ms pause could end.
+// path cannot apply (its last brisk reading is >120 ms before the stop).
+// Ethan's recovered correction restores the ordinary 200 ms precision pause.
 let slowed=Hand()
 slowed.run(0.3,wobble:true)
 slowed.run(0.15){_ in (30,0)}
@@ -53,7 +53,7 @@ let stop1=slowed.lastVisible
 slowed.run(0.25,wobble:true)
 let first=slowed.clicks.first
 print("slowed approach: first click",first.map{($0.t-stop1,$0.fast,$0.settled)} as Any)
-precondition(first != nil && first!.settled && first!.t>stop1 && first!.t-stop1<0.19,"slowed stop clicks promptly: \(String(describing:first.map{($0.t-stop1,$0.fast,$0.settled)}))")
+precondition(first != nil && !first!.fast && first!.t-stop1>=0.2-1e-8 && first!.t-stop1<0.45,"slowed stop keeps the precision pause: \(String(describing:first.map{($0.t-stop1,$0.fast,$0.settled)}))")
 precondition(slowed.clicks.count==1,"one click for one stop: \(slowed.clicks.map{$0.t-stop1})")
 
 // 2. Remaining still: about one stop-click per second (Ethan's later spacing),
@@ -78,7 +78,7 @@ let stop2=slowed.lastVisible
 slowed.run(0.25,wobble:true)
 let retarget=slowed.clicks.dropFirst(before).first
 print("tiny nearby target",retarget.map{($0.t-stop2,$0.settled,$0.repeated)} as Any)
-precondition(retarget != nil && !retarget!.repeated && retarget!.t>stop2 && retarget!.t-stop2<0.19 && retarget!.t<pendingRepeat,"tiny re-target clicks promptly, before the stationary repeat: \(String(describing:retarget.map{($0.t-stop2,$0.settled)}))")
+precondition(retarget != nil && !retarget!.repeated && !retarget!.fast && retarget!.t-stop2>=0.2-1e-8 && retarget!.t-stop2<0.45 && retarget!.t<pendingRepeat,"tiny re-target keeps the precision pause, before the stationary repeat: \(String(describing:retarget.map{($0.t-stop2,$0.settled)}))")
 
 // 4. Random still tremor never invents a first click, even with repeats on.
 let tremor=Hand();tremor.run(3,wobble:true)
@@ -91,7 +91,7 @@ for rate in [0.08,0.15,0.3,0.7,1.5] {
  let curve=Hand();curve.run(4){t in (rate*cos(t/4*Double.pi/3),rate*sin(t/4*Double.pi/3))}
  precondition(curve.clicks.isEmpty,"gentle curve at \(rate) must not click: \(curve.clicks.count)")
 }
-print("PASS: prompt first and re-target clicks, one-second repeats while still, no tremor or slow-aim clicks")
+print("PASS: precision first and re-target clicks, one-second repeats while still, no tremor or slow-aim clicks")
 
 // 6. Cancellation ends a pending repeat: follow off, an ineligible reading
 // (mouse button, HUD operation, scroll) or a reset never emits afterwards.
@@ -166,6 +166,33 @@ do {
  precondition(duplicates==0,"one stop reused its already-clicked travel")
  frame(1,true)
  for _ in 0..<8 {frame(0,false,true)}
- precondition(d.tick(now:now) && d.lastClickWasSettled,"a fresh coherent one-pixel target still clicks promptly")
- print("PASS: one stop is consumed once; tiny deliberate re-target stays quick")
+ precondition(!d.tick(now:now),"a fresh one-pixel target must not inherit the brisk click")
+ for _ in 0..<14 {frame(0,false,true)}
+ precondition(d.tick(now:now) && !d.lastClickWasFast,"a fresh coherent one-pixel target still clicks after the precision pause")
+ print("PASS: one stop is consumed once; tiny deliberate re-target keeps precision pause")
 }
+
+// The recovered slow-pointer instruction applies to both a short precise move
+// and a longer slow approach. Distance alone must never earn a brisk click.
+// Use the actual timer boundary at both report rates, including a one-pixel
+// accepted target after a previous quick click; no native input is emitted.
+for (label,step,count,fine) in [("slow short",1,12,false),("slow long",1,100,false),("one pixel",1,1,true),("brisk",8,6,false)] {
+ let d=WandDwellClick(repeatInterval:1,fastStops:true);d.follow(true)
+ var t=80.0
+ d.move(dx:0,dy:0,now:t,eligible:true,sampleSeconds:dt)
+ for _ in 0..<count {
+  t+=dt;d.move(dx:fine ? 0:step,dy:0,now:t,eligible:true,pointerX:step,pointerY:0,sampleSeconds:dt,pointerQuiet:false,fineMove:fine)
+ }
+ let stopped=t
+ var clicked:Double?
+ while t-stopped<0.3 {
+  t+=dt;d.move(dx:0,dy:0,now:t,eligible:true,pointerX:0,pointerY:0,sampleSeconds:dt,pointerQuiet:true,resting:true)
+  if let due=d.nextDue,due<=t,d.tick(now:t){clicked=t;break}
+ }
+ precondition(clicked != nil,"\(label) still clicks")
+ let latency=clicked!-stopped
+ if label=="brisk" {precondition(d.lastClickWasFast && latency<0.06,"brisk distance and speed keep the fast opportunity: \(latency)")}
+ else {precondition(!d.lastClickWasFast && latency>=0.2-1e-8 && latency<0.2+2*dt,"\(label) requires the 200 ms precision pause: \(latency)")}
+ print("precision boundary",label,hz,latency)
+}
+print("PASS: slow short and long strokes plus one-pixel targets keep 200 ms; brisk stops stay fast")

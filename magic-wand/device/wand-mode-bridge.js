@@ -314,7 +314,8 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
   global.wandLastFollow=undefined;
   updateLights.replaceWith(function(){
     if(connected&&global.wandLastFollow!==moveLatched){global.wandLastFollow=moveLatched;Bluetooth.println('@FOLLOW '+(moveLatched?1:0));}
-    var move=moveLatched||!digitalRead(MOVE_PIN),hud=hudOpen||!digitalRead(HUD_PIN),rec=global.wandRecording||!digitalRead(STT_PIN);
+    // In manual mode, follow itself owns blue; a held off button stays dark.
+    var move=moveLatched||(!global.wandManualClickExperiment&&!digitalRead(MOVE_PIN)),hud=hudOpen||!digitalRead(HUD_PIN),rec=global.wandRecording||!digitalRead(STT_PIN);
     var mode=(global.WAND_UPDATING||global.wandMotionReady===false)?'update':!connected?'disconnected':(!bias||calibrationLit)?'calibration':global.wandDeskSleeping?'sleep':(scrollHeld||global.wandCircleScrolling)?'scroll':global.wandAppMode?'app':hud?'hud':rec?'recording':move?'mouse':'idle';
     lightLevels=mode==='update'||mode==='calibration'||mode==='disconnected'?[0.45,0.45,0.45]:mode==='recording'?[1,0,0]:mode==='scroll'?[0,1,1]:mode==='app'?(global.wandReviewFiles?[1,0,1]:[0,1,0]):mode==='mouse'?[0,0,1]:mode==='hud'?[0,1,0]:[0,0,0];
     if(connected&&mode!==global.wandLastLightState){global.wandLastLightState=mode;print('WAND_LIGHT_STATE '+mode+' '+JSON.stringify(lightLevels));}
@@ -385,7 +386,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       if(moveLatched)lastMoveTap=getTime();else clickTimes(1);
     }else if(moveGestureMode==='pointer'){
       if(dragging){dragging=false;states.push(0);pump();moveLatched=!!global.wandFollowBeforeHold;global.wandPointerPauseUntil=getTime()+CONFIG.releaseClickPause;cancelTapGesture();}
-      else {moveLatched=false;global.wandExitFollow=true;cancelTapGesture();lastMoveTap=getTime();}
+      // Ethan's tap-to-click experiment posts the click in the Mac receiver.
+      // Keep follow here; the native host alone owns click and hold/scroll gating.
+      else {moveLatched=!!global.wandManualClickExperiment;global.wandExitFollow=!moveLatched;cancelTapGesture();lastMoveTap=getTime();}
     }
     print('WAND_BUTTON_STATE '+JSON.stringify({mode:moveGestureMode,ms:Math.round((getTime()-global.wandPressStarted)*1000),follow:moveLatched}));
     global.wandMomentaryStarted=undefined;global.wandDragCandidate=false;global.wandFollowBeforeHold=false;moveGestureMode=undefined;secondTap=false;

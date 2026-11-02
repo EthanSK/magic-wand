@@ -9,11 +9,12 @@ struct WandExperimentConfiguration: Equatable {
     let visible: Bool
     let label: String
     let sensorHz: Int?
+    var manualClick = false
 
     static func parse(_ data: Data) -> Self? {
         guard data.count <= 2048,
               let value = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
-              Set(value.keys).isSubset(of: ["version", "visible", "label", "sensorHz"]),
+              Set(value.keys).isSubset(of: ["version", "visible", "label", "sensorHz", "manualClick"]),
               let version = value["version"] as? NSNumber,
               CFGetTypeID(version) != CFBooleanGetTypeID(), version.doubleValue == 1,
               let visibleNumber = value["visible"] as? NSNumber, CFGetTypeID(visibleNumber) == CFBooleanGetTypeID(),
@@ -28,7 +29,13 @@ struct WandExperimentConfiguration: Equatable {
                   rates.contains(number.intValue) else { return nil }
             hz = number.intValue
         }
-        return .init(visible: visible, label: label, sensorHz: hz)
+        var manualClick = false
+        if let raw = value["manualClick"] {
+            guard let number = raw as? NSNumber, CFGetTypeID(number) == CFBooleanGetTypeID(),
+                  let enabled = raw as? Bool else { return nil }
+            manualClick = enabled
+        }
+        return .init(visible: visible, label: label, sensorHz: hz, manualClick: manualClick)
     }
 }
 

@@ -1,3 +1,4 @@
+// Inert regression for existing hold/drag ownership with the manual experiment off.
 import {fileURLToPath as wandSourcePath} from 'node:url';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -24,6 +25,14 @@ final class CGEvent {var location=CGPoint.zero;init?(source:Int?){ };func post(t
 final class Rest {var activated=false;func pointerActivated(){activated=true};func pointerStopped(){activated=false}}
 final class SwitchAppContext {var switchAppAdjusting=false}
 final class Harness {
+ // This legacy-ownership fixture keeps the manual experiment off; its active
+ // mode is exercised by the dedicated native mode/tap/hold fixtures.
+ var manualClickExperiment=false
+ struct NativeStub {var active=false};var nativeScroll=NativeStub()
+ final class ClickLight {func clickLight(){}};var senseVirtual:ClickLight?=ClickLight()
+ func stopManualQuietHold(now:Double){}
+ func refreshManualClickExperiment(){}
+
  var tripleClick=WandTripleClick(),pendingRecenter:Timer?
  var scrollFollowBefore=false,recordingPointerPaused=false
  let context=SwitchAppContext()

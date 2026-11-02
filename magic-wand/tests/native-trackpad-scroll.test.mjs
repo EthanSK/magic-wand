@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdtempSync,rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 
 test('held scrolling supplies precise two-axis native phases without momentum or stale gesture state', {skip:process.platform!=='darwin'},()=>{
@@ -52,7 +53,7 @@ test('page scrolls use line wheel events; only sideways held output owns a nativ
  const start=source.indexOf('struct WandNativeScrollGesture {'),end=source.indexOf('\nfinal class WandReceiver',start);
  // Record instead of posting: this harness never sends real input. wheelEvents is the
  // receiver's own ordinary line-event builder, unchanged since before native gestures.
- const methods=['postHeldScroll','postNativeScroll','finishNativeScroll','postScroll','finishScroll','finishMouseButtonHold','finishHorizontalStrokeIfNeeded','consumeEarlyHorizontalIntent'].map(method).join('\n')
+ const methods=['postHeldScroll','postSustainedScroll','postNativeScroll','finishNativeScroll','postScroll','finishScroll','finishMouseButtonHold','finishHorizontalStrokeIfNeeded','consumeEarlyHorizontalIntent'].map(method).join('\n')
   .replaceAll('event.post(tap:.cghidEventTap)','posted.append(event)');
  const wheel=block(source.indexOf('    static func wheelEvents('));
  assert.ok(/startDrag\(now:now\) \{finishNativeScroll\(cancelled:true\);transition\(to:1,/.test(source),'drag start cancels the open scroll gesture first');
@@ -72,7 +73,8 @@ struct PauseStub {var paused=false}
 final class Harness {
  var tripleClick=WandTripleClick(),pendingRecenter:Timer?
  let recenterGesture=WandRecenterGesture()
- var scrollFollowBefore=false,ready=true,restoring=false
+ var scrollFollowBefore=false,ready=true,restoring=false,manualClickExperiment=false
+ final class VirtualStub {func clickLight(){}};var senseVirtual:VirtualStub?=VirtualStub()
  let dwell=WandDwellClick()
  let screenshot=WandScreenshotGesture()
  var posted:[CGEvent]=[]
@@ -295,5 +297,138 @@ test('horizontal held swipes travel further with unchanged timing, vertical, dia
   assert.equal(r.status,0,r.stderr);
   const t=spawnSync(join(dir,'check'),[],{encoding:'utf8'});assert.equal(t.status,0,t.stdout+t.stderr);
   console.log(t.stdout.trim());
+ } finally {rmSync(dir,{recursive:true,force:true});}
+});
+
+// A moving release must preserve only the current horizontal timer interval.
+// These are the real receiver methods with native posts recorded in memory.
+test('moving horizontal releases flush one fresh partial tick before ending, without reviving stale or other scrolls', {skip:process.platform!=='darwin'},()=>{
+ const root=fileURLToPath(new URL('../receiver/Sources/',import.meta.url));
+ const source=readFileSync(root+'main.swift','utf8');
+ const block=a=>{assert(a>=0);let b=source.indexOf('{',a)+1,depth=1;while(depth){if(source[b]==='{')depth++;if(source[b]==='}')depth--;b++;}return source.slice(a,b);};
+ const method=name=>block(source.indexOf('    func '+name+'('));
+ const start=source.indexOf('struct WandNativeScrollGesture {'),end=source.indexOf('\nfinal class WandReceiver',start);
+ assert(start>=0 && end>start);
+ const methods=['postHeldScroll','postSustainedScroll','postNativeScroll','finishNativeScroll','postScroll','finishScroll','finishMouseButtonHold','finishHorizontalStrokeIfNeeded'].map(method).join('\n')
+  .replaceAll('event.post(tap:.cghidEventTap)','posted.append(event)');
+ const wheel=block(source.indexOf('    static func wheelEvents('));
+ const code=`import Cocoa
+func log(_ values:Any...) {}
+${source.slice(start,end)}
+struct PauseStub {var paused=false}
+final class ReleaseHarness {
+ let heldScroll=WandHeldScroll()
+ var nativeScroll=WandNativeScrollGesture(),actionPause=PauseStub()
+ var posted:[CGEvent]=[]
+ var heldSafetyTimer:Timer?,heldTargetToken=UUID(),heldScrollAnchor:CGPoint?,deliveryPoint:CGPoint?
+ var scrollFollowBefore=false,ready=true,restoring=false,heldScrollDiagnostics=false,buttons=0
+ var scrollActive=false,scrollAnchor:CGPoint?,circleAnchor:CGPoint?,scrollWatchdog:Timer?,scrollPostedX=0,scrollPostedY=0
+ var manualClickExperiment=false
+ final class SenseStub {func clickLight(){}}
+ var senseVirtual:SenseStub?
+ let dwell=WandDwellClick(),screenshot=WandScreenshotGesture()
+ final class Rest {func pointerStopped(){}}
+ let restDetection=Rest()
+ var physicalDuration:Double?
+ var restored=0,resumed=0
+ let anchor=CGPoint(x:90,y:120)
+ func currentPointerOrigin()->CGPoint {anchor}
+ func mouseButtonPhysicalTapDuration()->Double? {physicalDuration}
+ func transition(to next:Int,at:CGPoint) {buttons=next}
+ func scheduleDwell(){}
+ func queue(_ message:String){}
+ func setCircleLight(_ on:Bool){}
+ func restoreMouseAfterScroll(hadScrollGesture:Bool=true){restored+=1}
+ func resumeHUDNavigation(){resumed+=1}
+ ${wheel}
+ ${methods}
+ func begin(sustain:Bool=true) {
+  heldScrollAnchor=anchor;heldScroll.begin(now:0,sustain:sustain)
+ }
+ func sample(to last:Int,x:Double=20,y:Double=0) {
+  for i in 1...last {
+   let now=Double(i)/1000
+   heldScroll.confirmHeld(now:now)
+   let units=heldScroll.sample(x:x,y:y,dt:0.001,now:now)
+   if !heldScroll.sustaining && units != 0 {
+    postHeldScroll(x:heldScroll.horizontal ? units:0,y:heldScroll.horizontal ? 0:units,at:heldScrollAnchor)
+   }
+   finishHorizontalStrokeIfNeeded()
+   if i%20==0 {
+    let tick=heldScroll.continuation(now:now)
+    if tick.x != 0 || tick.y != 0 {postSustainedScroll(x:tick.x,y:tick.y,at:heldScrollAnchor)}
+   }
+  }
+ }
+ var pixels:Int {posted.reduce(0){$0+Int(NSEvent(cgEvent:$1)!.scrollingDeltaX)}}
+ var phases:[NSEvent.Phase] {posted.map{NSEvent(cgEvent:$0)!.phase}}
+}
+func expect(_ ok:Bool,_ why:String){if !ok {print("FAIL: "+why);exit(1)}}
+
+// Same measured motion, released between the 240 and 260 ms timer ticks.
+for (release,expectedPixels) in [(0.249,200),(0.259,220)] {
+ let h=ReleaseHarness();h.begin();h.sample(to:Int((release*1000).rounded()))
+ expect(h.pixels==170,"baseline horizontal travel before release")
+ let before=h.posted.count
+ h.finishMouseButtonHold(now:release)
+ expect(h.pixels==expectedPixels,"the unfinished current interval is preserved")
+ expect(h.posted.count==before+2,"one changed event then one ended event")
+ expect(h.phases.suffix(2).elementsEqual([.changed,.ended]),"tail precedes native end")
+ expect(h.posted.allSatisfy{$0.location==h.anchor},"tail preserves the gesture anchor")
+ let after=h.posted.count;h.finishMouseButtonHold(now:release+0.01)
+ expect(h.posted.count==after,"duplicate release cannot replay the tail")
+}
+
+// A delayed host release uses the physical edge, never its later receipt time.
+let delayed=ReleaseHarness();delayed.begin();delayed.sample(to:249)
+delayed.physicalDuration=0.249;delayed.finishMouseButtonHold(now:0.259)
+expect(delayed.pixels==200,"physical duration caps the release tail")
+let past=ReleaseHarness();past.begin();past.sample(to:249)
+past.physicalDuration=0.235;past.finishMouseButtonHold(now:0.259)
+expect(past.pixels==170,"an edge older than the last tick cannot rewind or replay")
+let stale=ReleaseHarness();stale.begin();stale.sample(to:249)
+stale.finishMouseButtonHold(now:0.300)
+expect(stale.pixels==170 && stale.phases.last == .ended,"stale timer tail is discarded but gesture ends")
+
+let cancelled=ReleaseHarness();cancelled.begin();cancelled.sample(to:249)
+let cancelPixels=cancelled.pixels;cancelled.finishMouseButtonHold(now:0.249,released:false)
+expect(cancelled.pixels==cancelPixels && cancelled.phases.last == .cancelled,"cancellation adds no tail")
+
+for (x,y) in [(0.0,20.0),(20.0,20.0)] {
+ let page=ReleaseHarness();page.begin();page.sample(to:249,x:x,y:y)
+ let count=page.posted.count
+ expect(count>0 && page.posted.allSatisfy{!NSEvent(cgEvent:$0)!.hasPreciseScrollingDeltas},"page transport stays ordinary wheel input")
+ page.finishMouseButtonHold(now:0.249)
+ expect(page.posted.count==count,"vertical and diagonal release do not flush")
+}
+
+let stopped=ReleaseHarness();stopped.begin();stopped.sample(to:249)
+for i in 250...500 {
+ let now=Double(i)/1000;stopped.heldScroll.confirmHeld(now:now)
+ _=stopped.heldScroll.sample(x:0,y:0,dt:0.001,now:now)
+ stopped.finishHorizontalStrokeIfNeeded()
+}
+expect(!stopped.nativeScroll.active,"measured stop already ended the native gesture")
+let stoppedCount=stopped.posted.count;stopped.finishMouseButtonHold(now:0.501)
+expect(stopped.posted.count==stoppedCount,"button release does not revive an ended gesture")
+
+let v2=ReleaseHarness();v2.begin(sustain:false);v2.sample(to:349)
+let v2Pixels=v2.pixels;v2.finishMouseButtonHold(now:0.349)
+expect(v2.pixels==v2Pixels,"V2 release retains its previous travel")
+
+let chord=ReleaseHarness();chord.scrollActive=true;chord.scrollAnchor=chord.anchor
+chord.postScroll(x:3,y:2)
+let chordCount=chord.posted.count;chord.finishMouseButtonHold(now:0.249);chord.finishScroll(released:true)
+expect(chord.posted.count==chordCount && chord.posted.allSatisfy{!NSEvent(cgEvent:$0)!.hasPreciseScrollingDeltas},"chord release retains ordinary wheel events")
+print("PASS: moving release tail and physical edge cap; no duplicate, stale, cancelled, page, V2, chord or ended-gesture output")
+`;
+ const dir=mkdtempSync(join(tmpdir(),'wand-native-release-tail-'));
+ try {
+  writeFileSync(join(dir,'main.swift'),code);
+  const built=spawnSync('swiftc',['-O',root+'WandPointerControl.swift',join(dir,'main.swift'),'-o',join(dir,'check')],{encoding:'utf8'});
+  assert.equal(built.status,0,built.stderr);
+  const ran=spawnSync(join(dir,'check'),[],{encoding:'utf8'});
+  assert.equal(ran.status,0,ran.stdout+ran.stderr);
+  console.log(ran.stdout.trim());
  } finally {rmSync(dir,{recursive:true,force:true});}
 });

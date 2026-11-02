@@ -1,3 +1,4 @@
+// Inert regression for existing hold/drag ownership with the manual experiment off.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdtempSync,rmSync} from 'node:fs';
@@ -14,10 +15,19 @@ func AXIsProcessTrusted()->Bool {true}
 struct PauseStub {var paused=false}
 final class CGEvent {var location=CGPoint.zero;init?(source:Int?) {}}
 final class Harness {
+ // This legacy-ownership fixture keeps the manual experiment off; its active
+ // mode is exercised by the dedicated native mode/tap/hold fixtures.
+ var manualClickExperiment=false
+ struct NativeStub {var active=false};var nativeScroll=NativeStub()
+ final class ClickLight {func clickLight(){}};var senseVirtual:ClickLight?=ClickLight()
+ func stopManualQuietHold(now:Double){}
+ func refreshManualClickExperiment(){}
+
  var scrollFollowBefore=false,ready=true,restoring=false
  var actionPause=PauseStub()
  final class Rest {func pointerStopped(){}};let restDetection=Rest()
  func finishNativeScroll(cancelled:Bool){}
+ func postSustainedScroll(x:Int32,y:Int32,at:CGPoint?){}
 
  let screenshot=WandScreenshotGesture();var screenshotRaw=0;func handleScreenshotRaw(_ v:[Int],now:Double,sampleTime:Double?=nil){screenshotRaw+=1}
  let heldScroll=WandHeldScroll(),pointerRouter=WandPointerRouter(),dwell=WandDwellClick()

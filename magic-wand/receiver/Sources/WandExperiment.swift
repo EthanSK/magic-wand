@@ -19,6 +19,19 @@ final class WandExperiment {
     private var panel: NSPanel?
     private var title: NSTextField?, sensor: NSTextField?, delivery: NSTextField?
     private var screenID: NSNumber?
+    private var toggle: NSButton?
+    var onChange: (() -> Void)?
+    var manualClick: Bool { configuration?.manualClick ?? false }
+    private var appliedManualClick = false, manualClickSupported = false
+    private var manualClickUnavailableReason = "Use Control V2 or V3 for Tap to click"
+    func setManualClickSupport(_ supported: Bool, reason: String) {
+        guard manualClickSupported != supported || manualClickUnavailableReason != reason else { return }
+        manualClickSupported = supported; manualClickUnavailableReason = reason; render()
+    }
+    func setAppliedManualClick(_ enabled: Bool) {
+        guard appliedManualClick != enabled else { return }
+        appliedManualClick = enabled; render()
+    }
 
     init(url: URL) { configurationURL = url }
 
@@ -51,7 +64,7 @@ final class WandExperiment {
            let data = try? Data(contentsOf: configurationURL), data != source,
            let next = WandExperimentConfiguration.parse(data) {
             if configuration?.sensorHz != next.sensorHz { attempts = 0; rejected = false; sentAt = -.infinity }
-            source = data; configuration = next
+            source = data; configuration = next; onChange?()
         }
         if let value = counter.measure(now: now) { rates = value }
         if connected, rateControl, maySend, let desired = configuration?.sensorHz,
@@ -65,8 +78,9 @@ final class WandExperiment {
 
     var status: [String: Any] {
         var value: [String: Any] = ["visible": configuration?.visible ?? false, "connected": connected,
-                                   "rateControl": rateControl, "attempts": attempts, "rejected": rejected]
-        if let configuration { value["label"] = configuration.label; value["requestedHz"] = configuration.sensorHz }
+                                   "rateControl": rateControl, "attempts": attempts, "rejected": rejected,
+                                   "inputPath": "macOS events", "virtualMouse": "Not available in this build"]
+        if let configuration { value["label"] = configuration.label; value["requestedHz"] = configuration.sensorHz; value["manualClickSupported"] = manualClickSupported; value["manualClickUnavailableReason"] = manualClickUnavailableReason; value["manualClickDesired"] = configuration.manualClick; value["manualClickApplied"] = appliedManualClick; value["manualClick"] = appliedManualClick }
         if let confirmedHz { value["sensorHz"] = confirmedHz }
         if let rates { value["readingsPerSecond"] = rates.readings; value["reportsPerSecond"] = rates.frames; value["pointerEventsPerSecond"] = rates.pointerEvents }
         return value
@@ -74,20 +88,45 @@ final class WandExperiment {
 
     func stop() { panel?.orderOut(nil) }
 
+    // Keep the runtime checkbox and agent edits on the same canonical file.
+    // Preserve the settled416Hz request; switching click mode never retunes it.
+    @objc private func toggleManualClick(_ sender: NSButton) {
+        guard let current = configuration else { return }
+        let enabled = sender.state == .on
+        var value: [String: Any] = ["version": 1, "visible": current.visible,
+                                   "label": current.label, "manualClick": enabled]
+        if let hz = current.sensorHz { value["sensorHz"] = hz }
+        do {
+            let data = try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys])
+            try data.write(to: configurationURL, options: .atomic)
+            try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: configurationURL.path)
+            source = data
+            configuration = .init(visible: current.visible, label: current.label,
+                                  sensorHz: current.sensorHz, manualClick: enabled)
+            onChange?()
+        } catch { sender.state = current.manualClick ? .on : .off }
+        render()
+    }
+
     private func render() {
         guard let configuration, configuration.visible else { panel?.orderOut(nil); return }
         let panel = panel ?? makePanel()
         self.panel = panel
-        title?.stringValue = "Experiment · \(configuration.label)"
-        if connected {
-            var text = confirmedHz.map { "Sensor \(Self.number(Double($0))) Hz" } ?? "Sensor rate unavailable"
-            if let desired = configuration.sensorHz, desired != confirmedHz {
-                text += rejected ? " · Rate rejected" : !rateControl ? " · Firmware update needed" : attempts >= 3 ? " · Rate not confirmed" : " · Changing rate…"
-            }
-            sensor?.stringValue = text
-            if let rates {
-                delivery?.stringValue = "Readings \(Self.number(rates.readings))/s · Reports \(Self.number(rates.frames))/s · Pointer \(Self.number(rates.pointerEvents))/s"
-            } else { delivery?.stringValue = "Measuring delivery…" }
+        title?.stringValue = "Experiment · Tap to click"
+        toggle?.state = configuration.manualClick ? .on : .off
+        if connected && configuration.manualClick && !manualClickSupported {
+            sensor?.stringValue = manualClickUnavailableReason
+            delivery?.stringValue = "Automatic clicks on"
+        } else if connected && configuration.manualClick != appliedManualClick {
+            sensor?.stringValue = "Release mouse button to change mode"
+            delivery?.stringValue = appliedManualClick ? "Automatic clicks off" : "Automatic clicks on"
+        } else if connected {
+            sensor?.stringValue = appliedManualClick
+                ? "Tap mouse button to click · Hold mouse button without scrolling to stop following"
+                : "Automatic clicks on"
+            delivery?.stringValue = appliedManualClick
+                ? "Pointer off: tap to follow · Automatic clicks off"
+                : "Tap mouse button to stop following"
         } else {
             sensor?.stringValue = "Wand disconnected"
             delivery?.stringValue = "Waiting for Bluetooth or USB"
@@ -114,14 +153,14 @@ final class WandExperiment {
         }
         let visible = selected.visibleFrame
         let width = min(570, max(1, visible.width - 32))
-        let frame = CGRect(x: visible.minX + 16, y: visible.minY + 16, width: width, height: 105)
+        let frame = CGRect(x: visible.minX + 16, y: visible.minY + 16, width: width, height: 184)
         if panel.frame != frame { panel.setFrame(frame, display: true) }
     }
 
     private func makePanel() -> NSPanel {
         let panel = WandExperimentPanel(contentRect: .zero, styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
         panel.isOpaque = false; panel.backgroundColor = .clear; panel.hasShadow = true
-        panel.hidesOnDeactivate = false; panel.ignoresMouseEvents = true
+        panel.hidesOnDeactivate = false; panel.ignoresMouseEvents = false
         panel.level = NSWindow.Level(rawValue: NSWindow.Level.floating.rawValue + 3)
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.isReleasedWhenClosed = false
@@ -138,14 +177,26 @@ final class WandExperiment {
         }
         let title = label(20, .semibold, .white)
         let sensor = label(16, .medium, .systemCyan)
+        sensor.maximumNumberOfLines = 2; sensor.lineBreakMode = .byWordWrapping
+        sensor.preferredMaxLayoutWidth = 534
         let delivery = label(15, .regular, .white.withAlphaComponent(0.85))
-        let row = NSStackView(views: [title, sensor, delivery])
+        let toggle = NSButton(checkboxWithTitle: "Enable experiment", target: self, action: #selector(toggleManualClick(_:)))
+        toggle.font = .systemFont(ofSize: 17)
+        toggle.attributedTitle = NSAttributedString(string: "Enable experiment", attributes: [.font: NSFont.systemFont(ofSize: 17), .foregroundColor: NSColor.white])
+        toggle.state = configuration?.manualClick == true ? .on : .off
+        toggle.contentTintColor = .white
+        self.toggle = toggle
+        // The current build posts CGEvents. CoreHID is not a selectable backend
+        // here; keep that limitation visible without inventing an active path.
+        let inputStatus = label(13, .regular, .secondaryLabelColor)
+        inputStatus.stringValue = "Input: macOS events · Virtual mouse: Not available in this build"
+        let row = NSStackView(views: [title, toggle, sensor, delivery, inputStatus])
         row.orientation = .vertical; row.alignment = .leading; row.spacing = 5
         row.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(row)
         NSLayoutConstraint.activate([
             row.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
-            row.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -18),
+            row.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
             row.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         self.title = title; self.sensor = sensor; self.delivery = delivery
