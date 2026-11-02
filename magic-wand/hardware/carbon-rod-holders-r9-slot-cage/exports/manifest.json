@@ -1,0 +1,212 @@
+{
+  "revision": "carbon-rod-holders-r9-slot-cage",
+  "source_sha256": {
+    "cad.py": "a65a4fb289e999be76f56e94ceeb9d1a0cbc45028ac69b4a1fc03fbb5fb2448f",
+    "parameters.json": "95a44377ceacdd3956f3da365cdda6c9cae28ecc5de6f5e469b7642af0b2ef9f",
+    "../carbon-rod-holders-r7-spring-clips/cad.py": "011fb648bbed706dac91a31513f82924f83b34a282c2b65190b207b1455273ba",
+    "../carbon-rod-holders-r7-spring-clips/parameters.json": "f2706b655bc2374caef20127dd1df6e3426b2ab09e018fcf947b2500b3429b17",
+    "../carbon-rod-holders-r7-spring-clips/reference_models.py": "ec7c8a29c6f6aa0dfc78778c832ecc9e14ff1cb15a481a129e20ff2f955dcdb4",
+    "../carbon-rod-holders-r2/cad.py": "88faf80920e129cdceca2c4456c4f313ac3d7b5525f777420061943c5f6f5ba9",
+    "../carbon-rod-holders-r2/parameters.json": "a78216383c2b8dd872f7444dcbb1d1a07ec9a663438244ebe0e086a34d9d1bad",
+    "../carbon-rod-holders/cad.py": "f82a695bb4dec8f009afaa78b65c15309b4d55ff8b699581d99e600aabe79991",
+    "../carbon-rod-holders/parameters.json": "48ec318ffeba5222402e4f622162d5b78132aff56697aa03dabd71664c451666",
+    "../carbon-rod-holders-r7-spring-clips/references/provenance.json": "1d683f52bcd002995c73f16a9f9ef5225e9c3e75fd7a263cbafb93f059b6b492",
+    "../carbon-rod-holders-r7-spring-clips/references/socket.json": "f1e8cc043e11d1419ed8deefa2e2bb2c04ef2028a972496b05614eda760a918d",
+    "../carbon-rod-holders-r7-spring-clips/references/switch.json": "738d3319ef0c9851badfab17a2a52f05f90faef2eb18e5648ad0675f30e2374e",
+    "../carbon-rod-holders-r7-spring-clips/references/SW_Hotswap_Kailh_Choc_V1.stp": "fab92f70c826ba4098760a695102d31080603f075b1d3eef210255ff1791ed0a",
+    "../carbon-rod-holders-r7-spring-clips/references/SW_Kailh_Choc_V1.stp": "aa07efd7a318f5dd2476100ad2d86b0283cb5e1f93ee89ce6bc8e27ba9ea4317",
+    "../printed-loop-wand/shard-tube-r2/direct_switches.py": "08083422ab348a7992b68f964a3f09338bda31803be9b4c3e44f16a5fa39b4df"
+  },
+  "parts": {
+    "Key_Carrier": {
+      "bounds_mm": [
+        [
+          -28.149999618530273,
+          -13.800000190734863,
+          -4.798541069030762
+        ],
+        [
+          28.799999237060547,
+          32.25,
+          11.119999885559082
+        ]
+      ],
+      "volume_mm3": 3786.555541370282,
+      "solid_PETG_g": 4.808925537540258,
+      "stl_float32_volume_change_mm3": 0.00038439826676039957,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "4ac51ff6f529eaa89a57d42ea635c2f7285040b91e8c0e280ac1c71c8bba67ba",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -28.149999618530273
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          32.25
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          11.119999885559087
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Battery_Holder": {
+      "bounds_mm": [
+        [
+          -15.0,
+          -18.5,
+          -4.798541069030762
+        ],
+        [
+          15.0,
+          17.200000762939453,
+          13.850000381469727
+        ]
+      ],
+      "volume_mm3": 1048.3435363187073,
+      "solid_PETG_g": 1.3313962911247583,
+      "stl_float32_volume_change_mm3": 0.00020244642792022205,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "152db1be5a6f6358585269da2a9dc552564c3259bf093107cf30b0d704fbb6ee",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -15.0
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          17.200000762939453
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          13.85000038146973
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Battery_End_Gate": {
+      "bounds_mm": [
+        [
+          -14.25,
+          -17.100000381469727,
+          6.349999904632568
+        ],
+        [
+          14.25,
+          -15.5,
+          13.149999618530273
+        ]
+      ],
+      "volume_mm3": 104.81482703053359,
+      "solid_PETG_g": 0.13311483032877766,
+      "stl_float32_volume_change_mm3": 4.038282884266664e-05,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "dc3c06ccb0d6724af4e2a3197b4407dbb769daf81af9b209d768adabac74d13c",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.25
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -17.100000381469727
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          13.149999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "XIAO_Rod_Holder": {
+      "bounds_mm": [
+        [
+          -10.600000381469727,
+          -5.0,
+          -4.798483848571777
+        ],
+        [
+          10.600000381469727,
+          23.399999618530273,
+          10.0
+        ]
+      ],
+      "volume_mm3": 498.89054836990596,
+      "solid_PETG_g": 0.6335909964297806,
+      "stl_float32_volume_change_mm3": 6.995124459763247e-05,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "f8f4ea4e2d35b224a00c37fcf40f0a810baee8f4c664de7d7ca039af4b388ea1",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.600000381469727
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          23.399999618530273
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          10.000000000000004
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "fit_coupons": {
+    "fit-coupons/Battery-Gate-easier-fit.stl": "3d8aef2ee875b8a807b971552710b1e80d479f6f1b91b0d7fbdd1b136f9df69c"
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false
+}

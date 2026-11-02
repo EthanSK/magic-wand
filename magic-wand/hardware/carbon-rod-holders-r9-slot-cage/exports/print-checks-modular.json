@@ -1,0 +1,135 @@
+{
+  "project": "Holder-modular-layout.3mf",
+  "sha256": "683bcd028ba918a7add9de7d68332e860f6ba8eb6be372e45ae0ee5614512a88",
+  "generator_sha256": "b75567c6b05b8cbed436e4ec2fc348c148dbeffa49c3f41da63e3b38f99b7d4b",
+  "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
+  "physical_print_verified": false,
+  "parts": [
+    "Key_Carrier",
+    "Battery_Holder",
+    "Battery_End_Gate",
+    "XIAO_Rod_Holder"
+  ],
+  "slice": {
+    "error_string": "Success.",
+    "export_time": 463,
+    "layer_height": 0.20000000298023224,
+    "plate_index": 0,
+    "prepare_time": 42,
+    "return_code": 0,
+    "sliced_plates": [
+      {
+        "feature_type_times": {
+          "Bridge": 40.771820068359375,
+          "Brim": 22.03551483154297,
+          "Custom": 362.4812927246094,
+          "Flush": 29.0,
+          "Gap infill": 184.47666931152344,
+          "Inner wall": 285.20989990234375,
+          "Internal solid infill": 122.23515319824219,
+          "Outer wall": 578.9446411132812,
+          "Overhang wall": 134.27223205566406,
+          "Support": 822.567626953125,
+          "Support interface": 278.0599365234375,
+          "Support transition": 96.22987365722656,
+          "Top surface": 72.61663818359375,
+          "Travel": 862.868896484375,
+          "Undefined": 847.6353759765625
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 13.183121681213379,
+            "total_used_g": 13.183121681213379
+          }
+        ],
+        "generate_support_material_time": 213,
+        "id": 1,
+        "infill_time": 50,
+        "layer_filament_change": 0,
+        "main_predication": 3471.166015625,
+        "make_perimeters_time": 91,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 46.04999923706055,
+              "height": 15.918540954589844,
+              "width": 56.95000076293945,
+              "x": 50.0,
+              "y": 135.0,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Key_Carrier",
+            "triangle_count": 18624
+          },
+          {
+            "bbox": {
+              "depth": 35.70000076293945,
+              "height": 18.648540496826172,
+              "width": 30.0,
+              "x": 125.0,
+              "y": 130.0,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Battery_Holder",
+            "triangle_count": 8428
+          },
+          {
+            "bbox": {
+              "depth": 6.800000190734863,
+              "height": 1.600000023841858,
+              "width": 28.5,
+              "x": 175.0,
+              "y": 130.0,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Battery_End_Gate",
+            "triangle_count": 116
+          },
+          {
+            "bbox": {
+              "depth": 28.399999618530273,
+              "height": 14.798483848571777,
+              "width": 21.200000762939453,
+              "x": 210.0,
+              "y": 100.0,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "XIAO_Rod_Holder",
+            "triangle_count": 7904
+          }
+        ],
+        "sliced_time": 1382,
+        "sliced_time_with_cache": 985,
+        "total_predication": 3876.383056640625,
+        "triangle_count": 35072,
+        "warning_message": ""
+      }
+    ],
+    "sparse_infill_density": 20.0,
+    "upward_compatible_machine": [
+      "Bambu Lab P1P 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab A1 0.4 nozzle",
+      "Bambu Lab H2D 0.4 nozzle",
+      "Bambu Lab H2D Pro 0.4 nozzle",
+      "Bambu Lab H2S 0.4 nozzle",
+      "Bambu Lab P2S 0.4 nozzle",
+      "Bambu Lab H2C 0.4 nozzle",
+      "Bambu Lab X2D 0.4 nozzle",
+      "Bambu Lab A2L 0.4 nozzle"
+    ],
+    "wall_loops": 3
+  },
+  "warnings": [],
+  "sliced_project_sha256": "e6d09fb7dc756cfff08c6255fcff2783152ea60cddcef852f6fb7fd8e05995aa"
+}
