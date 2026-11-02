@@ -1,0 +1,54 @@
+{
+  "key_count": 3,
+  "cases": [
+    {
+      "pitch_mm": 20.0,
+      "centres_xy_mm": [
+        [
+          -20.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          20.0,
+          0.0
+        ]
+      ],
+      "outer_centre_span_mm": 40.0,
+      "reference_cap_gap_mm": 3.4,
+      "conservative_cap_gap_mm": 2.5,
+      "switch_body_gap_mm": 5.0,
+      "opening_bridge_mm": 5.9
+    },
+    {
+      "pitch_mm": 18.5,
+      "centres_xy_mm": [
+        [
+          -18.5,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ],
+        [
+          18.5,
+          0.0
+        ]
+      ],
+      "outer_centre_span_mm": 37.0,
+      "reference_cap_gap_mm": 1.9,
+      "conservative_cap_gap_mm": 1.0,
+      "switch_body_gap_mm": 3.5,
+      "opening_bridge_mm": 4.4
+    }
+  ],
+  "adjacent_travel_reduction_mm": 1.5,
+  "outer_travel_reduction_mm": 3.0,
+  "travel_reduction_percent": 7.499999999999996,
+  "cap_dimensions_measured": false,
+  "physical_thumb_travel_measured": false
+}

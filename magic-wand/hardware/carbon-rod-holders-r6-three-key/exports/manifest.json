@@ -1,0 +1,270 @@
+{
+  "revision": "carbon-rod-holders-r6-three-key",
+  "parts": {
+    "Key_Battery_Carrier": {
+      "bounds_mm": [
+        [
+          -28.149999618530273,
+          -13.800000190734863,
+          -5.800000190734863
+        ],
+        [
+          28.799999237060547,
+          50.29999923706055,
+          11.119999885559082
+        ]
+      ],
+      "volume_mm3": 3648.880305611369,
+      "solid_PETG_g": 4.634077988126438,
+      "watertight": true,
+      "body_count": 1,
+      "stl_float32_volume_change_mm3": 2.1805090000270866e-05,
+      "stl_sha256": "0d9fddd48e7b5801d32b541719bb4a831768c490b1093b208b6703e86f2df148",
+      "assembly_stl_sha256": "0bf7d4b55bcfc59125fb7e4c83e85ccb0db553167a1be7aec3848c436849eb0d",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -28.149999618530273
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          50.29999923706055
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          11.11999988555909
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "XIAO_Rod_Holder": {
+      "bounds_mm": [
+        [
+          -10.600000381469727,
+          -5.0,
+          -5.400000095367432
+        ],
+        [
+          10.600000381469727,
+          23.399999618530273,
+          10.0
+        ]
+      ],
+      "volume_mm3": 522.0185354462278,
+      "solid_PETG_g": 0.6629635400167093,
+      "stl_float32_volume_change_mm3": 0.0,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "652aa3415e4e84bef0a134e4c520bbe87843b1749d00ec8a9367a479e7b25ad3",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.600000381469727
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          23.399999618530273
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          10.000000000000004
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_stl_sha256": "af0334a9aec67d350909cd329d17f8c0ec69c320a9987216f0b5733311c16283",
+      "inherited_unchanged_from": "R4 / R2"
+    }
+  },
+  "key_count": 3,
+  "source_sha256": {
+    "../carbon-rod-holders/cad.py": "f82a695bb4dec8f009afaa78b65c15309b4d55ff8b699581d99e600aabe79991",
+    "../carbon-rod-holders/parameters.json": "48ec318ffeba5222402e4f622162d5b78132aff56697aa03dabd71664c451666",
+    "../carbon-rod-holders/verify_and_render.py": "8ee56a6f2d6d37cae737e1a0d0bfa50b66acf516da58ea511736913abbc22049",
+    "../carbon-rod-holders-r2/cad.py": "88faf80920e129cdceca2c4456c4f313ac3d7b5525f777420061943c5f6f5ba9",
+    "../carbon-rod-holders-r2/exports/Assembly-reference.glb": "41b65ed8e5e808d9f6f2026885b6518ff401a6226174409c5b7af70b8ba9a19c",
+    "../carbon-rod-holders-r2/parameters.json": "a78216383c2b8dd872f7444dcbb1d1a07ec9a663438244ebe0e086a34d9d1bad",
+    "../carbon-rod-holders-r4/cad.py": "18551251f3d834eb7447845623ee7b921483f2b7a26e58905b151fde3ea08a94",
+    "../carbon-rod-holders-r4/exports/XIAO_Rod_Holder-assembly.stl": "af0334a9aec67d350909cd329d17f8c0ec69c320a9987216f0b5733311c16283",
+    "../carbon-rod-holders-r4/exports/XIAO_Rod_Holder.stl": "652aa3415e4e84bef0a134e4c520bbe87843b1749d00ec8a9367a479e7b25ad3",
+    "../carbon-rod-holders-r4/exports/manifest.json": "5ae57837fb8b5f59a6502edc721fac09dea0b118a7b380ed6215f93d8630cb66",
+    "../carbon-rod-holders-r4/parameters.json": "a381b5e8ed0ff92fcf5fbde71756afa3d5550d52a20036cdc2820e4acac6f7c6",
+    "../carbon-rod-holders-r4/references/LICENSE-CC-BY-SA.txt": "0d7fcece7cb5d85d44c97680cd042f635d533fd32af93abb789ef7dbdb052fdf",
+    "../carbon-rod-holders-r4/references/SW_Hotswap_Kailh_Choc_V1.stp": "fab92f70c826ba4098760a695102d31080603f075b1d3eef210255ff1791ed0a",
+    "../carbon-rod-holders-r4/references/SW_Kailh_Choc_V1.stp": "aa07efd7a318f5dd2476100ad2d86b0283cb5e1f93ee89ce6bc8e27ba9ea4317",
+    "../carbon-rod-holders-r4/references/provenance.json": "1d683f52bcd002995c73f16a9f9ef5225e9c3e75fd7a263cbafb93f059b6b492",
+    "../carbon-rod-holders-r4/references/socket.json": "f1e8cc043e11d1419ed8deefa2e2bb2c04ef2028a972496b05614eda760a918d",
+    "../carbon-rod-holders-r4/references/switch.json": "738d3319ef0c9851badfab17a2a52f05f90faef2eb18e5648ad0675f30e2374e",
+    "../carbon-rod-holders-r4/requirements.txt": "48ceaa5a2e65df63a4a2f7c0069fd457a85b257bd79f696d8cbe945cc9d78742",
+    "cad.py": "6b6fd7f5c681f80e436da4482f3a32122f5e135e4df8c841b86e64e16159be2d",
+    "parameters.json": "e03e30edb966222c8567a7ff9555e0a27c90e10bb1cda789a430c05c0ffa370a",
+    "render.py": "0aa04deeb70626d7c25d3af4ba01a7821902312aa3d4e16620d5906d51c30e91",
+    "requirements.txt": "9c530c13d2f9f58a7f2a0ac910a173f909b2a13b0d37ee51854e68c067602b6d",
+    "verify_geometry.py": "8d3f400b7783da86332d04f0f644b7244d79bc30b6b93800fa2d597983d0e3e1",
+    "../printed-loop-wand/shard-tube-r2/direct_switches.py": "08083422ab348a7992b68f964a3f09338bda31803be9b4c3e44f16a5fa39b4df"
+  },
+  "runtime": {
+    "python": "3.14.4",
+    "numpy": "2.4.6",
+    "trimesh": "5.2.0",
+    "manifold3d": "3.5.4"
+  },
+  "assembly_reference": {
+    "physical_brief_alias": "V3",
+    "overall_length": 180.0,
+    "lower_key_cluster_edge_from_butt": 85.0,
+    "existing_lower_key_cluster_edge_from_butt": 100.0,
+    "modeled_edge": "lower edge of the illustrative keycaps",
+    "placement_status": "proposed 15mm move toward the butt to clear tip hardware within the selected 180mm envelope; hand fit unmeasured",
+    "grip_pivot_measured": false,
+    "rod_length": 174.5,
+    "tip_seating": {
+      "source": "../carbon-rod-holders-r2/exports/Assembly-reference.glb",
+      "source_frame_translation_y_mm": 451.6,
+      "tube_end_local_y_mm": 23.4,
+      "positive_end_overhang_mm": 5.5,
+      "overhang_owner": "R2 provisional 3mm wire-route envelope",
+      "seating": "frame upper sleeve end flush with tube end, preserving the R2 export mapping",
+      "physical_end_overhang_measured": false
+    },
+    "tip_local_origin_from_butt_mm": 151.1,
+    "carrier_local_origin_from_butt_mm": 93.75,
+    "carrier_move_from_existing_layout_mm": -15.0,
+    "lower_cap_edge_from_butt_mm": 85.0,
+    "rod_local_y_bounds_mm": [
+      -93.75,
+      80.75
+    ],
+    "butt_reference_y_mm": 0.0,
+    "tube_tip_reference_y_mm": 174.5,
+    "overall_tip_reference_y_mm": 180.0,
+    "pcb_reference_bounds_mm": [
+      [
+        -8.899999618530273,
+        152.39999389648438,
+        8.800000190734863
+      ],
+      [
+        8.899999618530273,
+        173.39999389648438,
+        9.800000190734863
+      ]
+    ],
+    "pcb_reference_center_from_butt_mm": 162.89999389648438,
+    "usb_reference_bounds_mm": [
+      [
+        -4.599999904632568,
+        150.39999389648438,
+        9.800000190734863
+      ],
+      [
+        4.599999904632568,
+        156.70001220703125,
+        13.0
+      ]
+    ],
+    "tip_frame_reference_bounds_mm": [
+      [
+        -10.600000381469727,
+        146.10000610351562,
+        -5.400000095367432
+      ],
+      [
+        10.600000381469727,
+        174.5,
+        10.0
+      ]
+    ],
+    "grip_pivot_from_butt_mm": null,
+    "printed_carrier_y_bounds_from_butt_mm": [
+      79.94999980926514,
+      144.04999923706055
+    ],
+    "bounds_source": "exported Assembly-reference.glb readback"
+  },
+  "carrier_local_to_reference": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      93.75
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "tip_local_to_reference": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      0.0,
+      151.1
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "print_to_assembly_space": "carrier-local; compose carrier_local_to_reference for the butt-zero GLB",
+  "assembly_glb_sha256": "d0fbe3c68467249d2ed9527e57a59efa796bedfe600588e2dc96a8f9aa92f901",
+  "reference_attribution": {
+    "source": "https://github.com/kiswitch/kiswitch",
+    "revision": "aefcf65038d48d2666ff14530d482be3c350fa6e",
+    "license": "CC BY-SA 4.0 with the KiCad exception",
+    "license_file": "../carbon-rod-holders-r4/references/LICENSE-CC-BY-SA.txt",
+    "authority": "Community CAD cross-checked with Kailh drawings; purchased batch unmeasured"
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "sliced": false
+}

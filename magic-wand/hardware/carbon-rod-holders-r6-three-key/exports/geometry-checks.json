@@ -1,0 +1,144 @@
+{
+  "passed": true,
+  "key_count": 3,
+  "pitch_mm": 18.5,
+  "checker_sha256": "8d3f400b7783da86332d04f0f644b7244d79bc30b6b93800fa2d597983d0e3e1",
+  "manifest_sha256": "342e9254b7bfc7030004e4f8f6a37a016e62747f4258c520da4fa17332ae5b20",
+  "bought_part_and_corridor_intersection_mm3": {
+    "rod": 0.0,
+    "battery": 0.0,
+    "key_0_switch": 0.0,
+    "key_0_socket": 8.622057564220045e-07,
+    "key_1_switch": 0.0,
+    "key_1_socket": 8.674744702446517e-07,
+    "key_2_switch": 0.0,
+    "key_2_socket": 8.622057505546948e-07,
+    "battery_reserve": 0.0,
+    "wire_bus": 1.0993914462419507e-07,
+    "full_tube_entry": 0.0
+  },
+  "socket_loading_route_intersection_mm3": {
+    "key_0_nominal": 8.622057564220045e-07,
+    "key_0_maximum_size_sensitivity": 8.891292623973959e-07,
+    "key_1_nominal": 8.674744702446517e-07,
+    "key_1_maximum_size_sensitivity": 8.86184016137433e-07,
+    "key_2_nominal": 8.622057505546948e-07,
+    "key_2_maximum_size_sensitivity": 8.891292806385839e-07
+  },
+  "socket_route_max_sample_step_mm": 0.2,
+  "front_rail_joint_overlap_mm3": {
+    "0": 17.756920766519478,
+    "1": 19.34558397588773,
+    "2": 17.756920290286246
+  },
+  "switch_clip_capture_mm3": {
+    "0": 0.6901634428472068,
+    "1": 0.6901617471961996,
+    "2": 0.6901634428472084
+  },
+  "switch_flange_stop_mm3": {
+    "0": 3.4817546453908528,
+    "1": 3.481753928222675,
+    "2": 3.481754645381545
+  },
+  "missing_ring_band_mm3": {
+    "-12": 0.0,
+    "11.5": 0.0,
+    "48.5": 0.0
+  },
+  "above_common_print_face_mm3": 0.0,
+  "illustrative_3_3mm_cap_swept_intersection_mm3": {
+    "0": 0.0,
+    "1": 0.0,
+    "2": 0.0
+  },
+  "illustrative_cap_pair_intersection_mm3": {
+    "0_1": 0.0,
+    "0_2": 0.0,
+    "1_2": 0.0
+  },
+  "assembly_reference_rod_y_bounds_mm": [
+    0.0,
+    174.5
+  ],
+  "assembly_reference_lower_cap_edges_from_butt_mm": {
+    "REFERENCE_key_2_cap": 85.0,
+    "REFERENCE_key_1_cap": 85.0,
+    "REFERENCE_key_0_cap": 85.0
+  },
+  "assembly_reference_carrier_y_bounds_mm": [
+    79.94999694824219,
+    144.0500030517578
+  ],
+  "assembly_reference_tip_frame_y_bounds_mm": [
+    146.10000610351562,
+    174.5
+  ],
+  "assembly_reference_overall_y_bounds_mm": [
+    0.0,
+    180.0
+  ],
+  "pcb_reference_bounds_mm": [
+    [
+      -8.899999618530273,
+      152.39999389648438,
+      8.800000190734863
+    ],
+    [
+      8.899999618530273,
+      173.39999389648438,
+      9.800000190734863
+    ]
+  ],
+  "usb_reference_bounds_mm": [
+    [
+      -4.599999904632568,
+      150.39999389648438,
+      9.800000190734863
+    ],
+    [
+      4.599999904632568,
+      156.70001220703125,
+      13.0
+    ]
+  ],
+  "pcb_reference_center_from_butt_mm": 162.89999389648438,
+  "carrier_to_tip_frame_axial_gap_mm": 2.0500030517578125,
+  "placement_collision_tests": {
+    "proposed": {
+      "maximum_intersection_mm3": 0.0,
+      "positive_intersections_mm3": {}
+    },
+    "existing_100mm_edge": {
+      "maximum_intersection_mm3": 68.7240923671593,
+      "positive_intersections_mm3": {
+        "carrier__XIAO_Rod_Holder": 9.868376996769099,
+        "battery_nominal__XIAO_Rod_Holder": 59.61860399240501,
+        "battery_nominal__REFERENCE_pcb": 16.020162277214695,
+        "battery_nominal__REFERENCE_usb": 2.667993101071946,
+        "battery_reserve__XIAO_Rod_Holder": 68.46633036633612,
+        "battery_reserve__REFERENCE_pcb": 38.27010700225334,
+        "battery_reserve__REFERENCE_usb": 68.7240923671593
+      }
+    },
+    "intermediate_90mm_edge": {
+      "maximum_intersection_mm3": 97.68430499941547,
+      "positive_intersections_mm3": {
+        "carrier__XIAO_Rod_Holder": 97.68430499941547
+      }
+    }
+  },
+  "carrier_to_usb_body_axial_gap_mm": 6.3499908447265625,
+  "external_usb_plug_mould_modeled": false,
+  "charging_lead_access_verified": false,
+  "charging_access_limit": "Only the USB connector body is modeled. Axial gaps and a sliding carrier do not establish clearance for an actual cable plug mould or lead bend.",
+  "tip_end_overhang_is_provisional_wire_envelope": true,
+  "edge_definition_is_assumed": true,
+  "grip_pivot_is_not_claimed": true,
+  "sensor_stls_unchanged": true,
+  "community_CAD_is_not_manufacturer_certified": true,
+  "purchased_cap_underside_and_full_travel_verified": false,
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "sliced": false
+}

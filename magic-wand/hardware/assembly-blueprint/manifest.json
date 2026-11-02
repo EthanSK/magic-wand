@@ -20,7 +20,17 @@
       "name": "Seeed Studio XIAO nRF52840 Sense, original non-Plus",
       "source": "https://wiki.seeedstudio.com/XIAO_BLE/",
       "mass_g": null,
-      "note": "LSM6DS3TR-C IMU. Board revision, fitted headers, solder and exact installed board mass unconfirmed."
+      "note": "LSM6DS3TR-C IMU. Board revision, fitted headers, solder and exact installed board mass unconfirmed.",
+      "supplier_related_mass_reference": {
+        "value_g": 3,
+        "sku": "101991465",
+        "packaging": "Tape and reel",
+        "source": "https://www.mouser.sg/en/ProductDetail/Seeed-Studio/101991465?qs=KLj0QfLrw0Ftlesc1ABhhQ%3D%3D",
+        "identity_source": "https://www.seeedstudio.com/Seeed-Studio-XIAO-nRF52840-Sense-Tape-Reel-p-6566.html",
+        "manufacturer_pdf": "https://files.seeedstudio.com/Bazaar/product_pdf/101991465.pdf",
+        "provenance": "Primary sources verified by coordinating agent on 2 November 2026; supplier product indexed Unit Weight 3g; manufacturer confirms original non-Plus tape-and-reel board identity.",
+        "scope": "Related packaging variant, not a weighed installed board. Normal retail SKU manufacturer PDF has no mass. Add the existing sliced holder estimate only for sensitivity; fitted solder, leads and retention remain unknown. Do not average conflicting net/gross retailer figures."
+      }
     },
     "battery": {
       "name": "PKCell LP402025, 150 mAh, seller SKU 105318",
@@ -104,11 +114,17 @@
           "one XIAO Sense",
           "carbon rod"
         ],
-        "estimated_grip_distance_from_butt_mm": [
-          80,
-          100
-        ],
-        "precision": "User estimate; not a measured pivot or key placement"
+        "precision": "Component count and approximate key-edge position are user reported; physical hand/wrist pivots, cut length and masses remain unmeasured.",
+        "key_cluster_lower_edge_from_butt_mm": 100,
+        "key_position_basis": "Approximate user report, corrected on 2 November 2026; represented in the proposed CAD as the lower edge of all three illustrative keycaps. Not a hand pivot.",
+        "hand_pivot_from_butt_mm": null,
+        "superseded_position_report": {
+          "range_mm": [
+            80,
+            100
+          ],
+          "scope": "Earlier ambiguous keys/grip wording; preserved only to identify the legacy mathematical hypothesis, not a measured or current pivot interval."
+        }
       }
     },
     "r2-three-key": {
@@ -357,7 +373,7 @@
   ],
   "scenarios": {
     "illustrative-lengths": {
-      "status": "Illustrative assumptions only; not measurements or a cutting instruction",
+      "status": "Legacy illustrative hypotheses only; 90 mm is not a measured grip, and listed lengths are bare tube lengths, not the preferred overall prototype length.",
       "tube_parameters": "magic-wand/hardware/carbon-rod-holders-r4/parameters.json",
       "baseline_length_mm": 500,
       "candidate_lengths_mm": [
@@ -380,10 +396,64 @@
           5.5
         ]
       },
-      "assumption_basis": "Values supplied in the authorised side chat for arithmetic checking only. Density, package masses and exact pivot have not been established for the physical wand.",
+      "assumption_basis": "Earlier side-chat arithmetic inputs. The ambiguous80\u2013100mm keys/grip wording was later corrected to a roughly100mm key lower edge, not a grip pivot. Retain these numerical axes only as hypothetical comparisons.",
       "placement": "Tube occupies Y=0..length; tip package is a point at Y=length; near-grip package is a point exactly at the grip pivot. All centres have X=Z=0.",
       "comparison": "Retain the same packages and grip distance from the butt at each length. Compare transverse X inertia and signed gravitational torque with the wand horizontal.",
-      "limits": "Range is an envelope over the listed assumed endpoints, not a confidence interval. Near-grip package extent and human grip/arm dynamics omitted. No optimal length claim."
+      "limits": "Range is an envelope over the listed assumed endpoints, not a confidence interval. Near-grip package extent and human grip/arm dynamics omitted. No optimal length claim.",
+      "range_input_scope": "Hypothetical axes and tip masses, not bounds on the current hand pivot or a confidence interval."
+    },
+    "preferred-geometry-sensitivity": {
+      "status": "Illustrative sensitivity for the selected physical V3 CAD envelope, not a measured hand model",
+      "brief": "physical-v3",
+      "pivot_hypotheses_from_butt_mm": [
+        0,
+        90,
+        125,
+        175
+      ],
+      "pivot_scope": "Numerical rotation axes for comparison only; not anthropometric estimates or a measured pivot range.",
+      "tip_point_hypotheses": [
+        "tube_end",
+        "pcb_geometric_center"
+      ],
+      "tip_point_scope": "Two illustrative locations for the whole lumped tip mass; the PCB geometric centre is not the centre of mass of the complete board-holder-wires package.",
+      "wire_addition_g": 1,
+      "wire_scope": "Per-gram coefficient for a uniform straight segment from key-row centre to the assumed tip location; actual wire mass, loops, endpoints and insulation are unmeasured."
+    }
+  },
+  "prototype_briefs": {
+    "physical-v3": {
+      "user_alias": "V3",
+      "alias_scope": "New physical prototype brief; not firmware Control V3 or historical holder R3.",
+      "status": "User-selected 180 mm overall; referenced CAD placement and collision checks passed, physical fit remains unverified",
+      "preferred_overall_length_mm": 180,
+      "preference_reason": "Latest explicit user choice: eighteen centimetres overall. This supersedes the earlier30cm preference and is not a mathematical optimum.",
+      "hand_pivot_from_butt_mm": null,
+      "cad_reference": {
+        "parameters": "magic-wand/hardware/carbon-rod-holders-r6-three-key/parameters.json",
+        "manifest": "magic-wand/hardware/carbon-rod-holders-r6-three-key/exports/manifest.json",
+        "assembly": "magic-wand/hardware/carbon-rod-holders-r6-three-key/exports/Assembly-reference.glb",
+        "readme": "magic-wand/hardware/carbon-rod-holders-r6-three-key/README.md",
+        "placement_pointer": "/assembly_reference",
+        "status": "Referenced CAD revision may still show an earlier envelope; compare source overall_length with preferred_overall_length_mm before treating it as current.",
+        "placement_image": "magic-wand/hardware/carbon-rod-holders-r6-three-key/exports/Assembly-placement.png",
+        "render_receipt": "magic-wand/hardware/carbon-rod-holders-r6-three-key/exports/render-receipt.json"
+      },
+      "cutting_status": "Overall envelope and derived nominal tube length are CAD assumptions, not a physical cut instruction or measured fitted length.",
+      "new_key_cluster_placement_mm": null,
+      "existing_layout_evidence": "Approximate100mm lower key-cluster edge describes the existing layout. It is not a fixed placement requirement for the new180mm prototype or a hand pivot.",
+      "choice_history": [
+        {
+          "overall_length_mm": 300,
+          "status": "superseded",
+          "reason": "Earlier choice favoured appearance/familiarity;25cm was considered too short at that time."
+        },
+        {
+          "overall_length_mm": 180,
+          "status": "current",
+          "reason": "Later explicit user choice supersedes earlier sizes; fit must be checked."
+        }
+      ]
     }
   }
 }

@@ -5,6 +5,13 @@ the existing editable CAD, dimensions, bought parts and sliced mass receipts.
 `derive.mjs` reads those sources at run time. Do not hand-maintain another copy
 of their dimensions or regenerated weight totals.
 
+The [mechanical study](mechanics/REPORT.md) derives the length, balance and
+inertia trade-offs and the user-selected 18 cm overall first prototype. The
+independent Opus review and corrective follow-up are complete. The report
+separates that review from Codex's subsequent 18 cm CAD calculations.
+The [source and regeneration instructions](mechanics/report-source.md#reproducibility-and-independent-checks)
+keep its figures and tables tied to this manifest.
+
 ## What is recovered
 
 - The original tube is identified as AT Models / D-Pultrusion **510072**:
@@ -24,8 +31,9 @@ of their dimensions or regenerated weight totals.
   and `cad.py` describe local accessory geometry. The short preview rod and
   coincident local origins do **not** define a complete 500 mm assembly.
 - Ethan confirmed the current wand has **three keys, one small battery, one
-  XIAO Sense and a carbon rod**, with the keys/grip estimated **8–10 cm from
-  the bottom**. This is an authorised side-chat report, not a measured survey.
+  XIAO Sense and a carbon rod**. His corrected placement report puts the
+  **lower edge of the key cluster approximately 10 cm from the butt**. This is
+  not a hand-pivot measurement; the earlier combined keys/grip wording was ambiguous.
 - No recovered record establishes the currently fitted holder revision,
   physical component positions, cut tube length, complete mass, balance point
   or moment of inertia. The default `physical-current` profile preserves this
@@ -35,6 +43,21 @@ The manifest lists every assembly group, including wiring, solder, insulation,
 tape/glue and connectors. Holder and carrier groups stay present even when
 their construction is unknown. Identify a physically absent group explicitly
 with a zero mass and evidence, rather than omitting it from the inventory.
+
+## Selected physical V3 prototype
+
+Ethan's latest choice is **18 cm overall**, superseding the earlier 30 cm
+preference. The reference CAD placement and collision checks passed; physical fit
+remains unverified. Here “V3” means this physical prototype brief, not firmware
+Control V3 or the historical holder R3.
+
+The [R6 three-key assembly](../carbon-rod-holders-r6-three-key/README.md) derives
+the proposed placement, tube length and tip overhang from its CAD source.
+An overall envelope is not the bare tube length, and the existing lower keycap
+edge is neither a new placement constraint nor a grip pivot. The referenced
+CAD length is checked against the selected brief when the report is regenerated.
+`prototype_briefs.physical-v3` preserves the choice history and references that source;
+the current physical cut length and hand pivot remain unknown.
 
 ## Weight evidence
 
@@ -49,6 +72,10 @@ an unambiguous net mass for these exact fitted items. AT Models' bare
 `Weight 0.200000` field has no stated unit or scope and is not used. Published
 weights for other makers' LP402025 batteries are not interchangeable with the
 PKCell purchase. See the exact source links in `manifest.json`.
+
+The board's `supplier_related_mass_reference` records the supplier-listed mass
+for a related original Sense tape-and-reel SKU. It is available for labelled
+sensitivity calculations; the fitted board's `mass_g` remains unknown.
 
 ## Reproduce or add physical measurements
 
@@ -111,7 +138,8 @@ using **assumed**, not measured, density 1.6 g/cm³, a 4 g tip package, a 17 g
 package exactly at a grip 90 mm from the butt, and the existing nominal 8/7 mm
 tube dimensions. The 500 mm baseline and shorter candidates retain those same
 packages. An additional endpoint envelope uses an 80–100 mm grip and 2.5–5.5 g
-tip; it is not a statistical uncertainty or a measurement interval. The source
+tip; these axes came from earlier ambiguous wording and are now only a
+hypothetical comparison, not a statistical uncertainty or physical pivot interval. The source
 inputs live only in `manifest.json`; the helper computes the comparison.
 
 For the same small mass moved along the tube, its resistance to turning about

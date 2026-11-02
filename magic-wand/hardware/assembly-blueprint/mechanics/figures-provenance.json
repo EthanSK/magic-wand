@@ -1,0 +1,21 @@
+{
+  "inputs": {
+    "results.json": "92312bca30fbdab9fff09eed265503e790e55431b626ae7d1980ad8aab22848a",
+    "render-study.py": "2ab748462c4601b2c34c1d05b9c7053bf0e9462cf63e893e5ec12eadb349f227",
+    "renderer-requirements.txt": "282188ac8d0a02a8f2f3b9846c69633d3df4e17f04526982560114f984fb98d4"
+  },
+  "outputs": {
+    "geometry-and-comparison.png": "5403065ad3a3af866b8f02092ff16c321a04722d21b85529c5b7aa3d831b643b",
+    "mechanical-pareto.png": "6bf458485747dc9772f473e00a1630f290b97d224a2568651722be5999fbad4b"
+  },
+  "renderer": {
+    "pillow": "12.2.0",
+    "matplotlib": "3.11.2",
+    "plot_backend": "Agg",
+    "font": "Arial",
+    "font_sha256": {
+      "Arial.ttf": "525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9",
+      "Arial Bold.ttf": "d72db21f9242aedd6b917d8549ad5921766b24d5f8d0becfda2ff4c620b3c2e0"
+    }
+  }
+}

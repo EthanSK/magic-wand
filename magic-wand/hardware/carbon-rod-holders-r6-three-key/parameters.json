@@ -1,0 +1,26 @@
+{
+  "revision": "carbon-rod-holders-r6-three-key",
+  "base_parameters": "../carbon-rod-holders-r4/parameters.json",
+  "keys": {
+    "count": 3,
+    "pitch": 18.5,
+    "baseline_pitch": 20.0,
+    "cap_reference_width": 16.6,
+    "cap_conservative_width": 17.5,
+    "cap_reference_length": 17.5,
+    "cap_reference_thickness": 3.0,
+    "cap_travel_check": 3.3
+  },
+  "battery_option": "front",
+  "assembly_reference": {
+    "physical_brief_alias": "V3",
+    "overall_length": 180.0,
+    "lower_key_cluster_edge_from_butt": 85.0,
+    "existing_lower_key_cluster_edge_from_butt": 100.0,
+    "modeled_edge": "lower edge of the illustrative keycaps",
+    "placement_status": "proposed 15mm move toward the butt to clear tip hardware within the selected 180mm envelope; hand fit unmeasured",
+    "grip_pivot_measured": false
+  },
+  "physical_fit_verified": false,
+  "cap_underside_verified": false
+}

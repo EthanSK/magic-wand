@@ -1,0 +1,2715 @@
+{
+  "scope": "Assumed scenario, not a fitted-wand optimum or a prediction of steadiness",
+  "inputs": {
+    "scenario": {
+      "status": "Legacy illustrative hypotheses only; 90 mm is not a measured grip, and listed lengths are bare tube lengths, not the preferred overall prototype length.",
+      "tube_parameters": "magic-wand/hardware/carbon-rod-holders-r4/parameters.json",
+      "baseline_length_mm": 500,
+      "candidate_lengths_mm": [
+        350,
+        300,
+        250,
+        200
+      ],
+      "density_g_cm3": 1.6,
+      "tip_package_g": 4,
+      "near_grip_package_g": 17,
+      "grip_from_butt_mm": 90,
+      "range_inputs": {
+        "grip_from_butt_mm": [
+          80,
+          100
+        ],
+        "tip_package_g": [
+          2.5,
+          5.5
+        ]
+      },
+      "assumption_basis": "Earlier side-chat arithmetic inputs. The ambiguous80–100mm keys/grip wording was later corrected to a roughly100mm key lower edge, not a grip pivot. Retain these numerical axes only as hypothetical comparisons.",
+      "placement": "Tube occupies Y=0..length; tip package is a point at Y=length; near-grip package is a point exactly at the grip pivot. All centres have X=Z=0.",
+      "comparison": "Retain the same packages and grip distance from the butt at each length. Compare transverse X inertia and signed gravitational torque with the wand horizontal.",
+      "limits": "Range is an envelope over the listed assumed endpoints, not a confidence interval. Near-grip package extent and human grip/arm dynamics omitted. No optimal length claim.",
+      "range_input_scope": "Hypothetical axes and tip masses, not bounds on the current hand pivot or a confidence interval."
+    },
+    "outer_mm": 8,
+    "inner_mm": 7,
+    "lambda_kg_per_m": 0.01884955592153875,
+    "radial_a_m2": 0.0000070625000000000006
+  },
+  "preferred_prototype": {
+    "brief": {
+      "user_alias": "V3",
+      "alias_scope": "New physical prototype brief; not firmware Control V3 or historical holder R3.",
+      "status": "User-selected 180 mm overall; referenced CAD placement and collision checks passed, physical fit remains unverified",
+      "preferred_overall_length_mm": 180,
+      "preference_reason": "Latest explicit user choice: eighteen centimetres overall. This supersedes the earlier30cm preference and is not a mathematical optimum.",
+      "hand_pivot_from_butt_mm": null,
+      "cad_reference": {
+        "parameters": "magic-wand/hardware/carbon-rod-holders-r6-three-key/parameters.json",
+        "manifest": "magic-wand/hardware/carbon-rod-holders-r6-three-key/exports/manifest.json",
+        "assembly": "magic-wand/hardware/carbon-rod-holders-r6-three-key/exports/Assembly-reference.glb",
+        "readme": "magic-wand/hardware/carbon-rod-holders-r6-three-key/README.md",
+        "placement_pointer": "/assembly_reference",
+        "status": "Referenced CAD revision may still show an earlier envelope; compare source overall_length with preferred_overall_length_mm before treating it as current.",
+        "placement_image": "magic-wand/hardware/carbon-rod-holders-r6-three-key/exports/Assembly-placement.png",
+        "render_receipt": "magic-wand/hardware/carbon-rod-holders-r6-three-key/exports/render-receipt.json"
+      },
+      "cutting_status": "Overall envelope and derived nominal tube length are CAD assumptions, not a physical cut instruction or measured fitted length.",
+      "new_key_cluster_placement_mm": null,
+      "existing_layout_evidence": "Approximate100mm lower key-cluster edge describes the existing layout. It is not a fixed placement requirement for the new180mm prototype or a hand pivot.",
+      "choice_history": [
+        {
+          "overall_length_mm": 300,
+          "status": "superseded",
+          "reason": "Earlier choice favoured appearance/familiarity;25cm was considered too short at that time."
+        },
+        {
+          "overall_length_mm": 180,
+          "status": "current",
+          "reason": "Later explicit user choice supersedes earlier sizes; fit must be checked."
+        }
+      ]
+    },
+    "placement": {
+      "physical_brief_alias": "V3",
+      "overall_length": 180,
+      "lower_key_cluster_edge_from_butt": 85,
+      "existing_lower_key_cluster_edge_from_butt": 100,
+      "modeled_edge": "lower edge of the illustrative keycaps",
+      "placement_status": "proposed 15mm move toward the butt to clear tip hardware within the selected 180mm envelope; hand fit unmeasured",
+      "grip_pivot_measured": false,
+      "rod_length": 174.5,
+      "tip_seating": {
+        "source": "../carbon-rod-holders-r2/exports/Assembly-reference.glb",
+        "source_frame_translation_y_mm": 451.6,
+        "tube_end_local_y_mm": 23.4,
+        "positive_end_overhang_mm": 5.5,
+        "overhang_owner": "R2 provisional 3mm wire-route envelope",
+        "seating": "frame upper sleeve end flush with tube end, preserving the R2 export mapping",
+        "physical_end_overhang_measured": false
+      },
+      "tip_local_origin_from_butt_mm": 151.1,
+      "carrier_local_origin_from_butt_mm": 93.75,
+      "carrier_move_from_existing_layout_mm": -15,
+      "lower_cap_edge_from_butt_mm": 85,
+      "rod_local_y_bounds_mm": [
+        -93.75,
+        80.75
+      ],
+      "butt_reference_y_mm": 0,
+      "tube_tip_reference_y_mm": 174.5,
+      "overall_tip_reference_y_mm": 180,
+      "pcb_reference_bounds_mm": [
+        [
+          -8.899999618530273,
+          152.39999389648438,
+          8.800000190734863
+        ],
+        [
+          8.899999618530273,
+          173.39999389648438,
+          9.800000190734863
+        ]
+      ],
+      "pcb_reference_center_from_butt_mm": 162.89999389648438,
+      "usb_reference_bounds_mm": [
+        [
+          -4.599999904632568,
+          150.39999389648438,
+          9.800000190734863
+        ],
+        [
+          4.599999904632568,
+          156.70001220703125,
+          13
+        ]
+      ],
+      "tip_frame_reference_bounds_mm": [
+        [
+          -10.600000381469727,
+          146.10000610351562,
+          -5.400000095367432
+        ],
+        [
+          10.600000381469727,
+          174.5,
+          10
+        ]
+      ],
+      "grip_pivot_from_butt_mm": null,
+      "printed_carrier_y_bounds_from_butt_mm": [
+        79.94999980926514,
+        144.04999923706055
+      ],
+      "bounds_source": "exported Assembly-reference.glb readback"
+    },
+    "pcb_reference_bounds_mm": [
+      [
+        -8.899999618530273,
+        152.39999389648438,
+        8.800000190734863
+      ],
+      [
+        8.899999618530273,
+        173.39999389648438,
+        9.800000190734863
+      ]
+    ],
+    "pcb_reference_centre_from_butt_mm": 162.89999389648438,
+    "reference_matches_selected_length": true,
+    "sensitivity_inputs": {
+      "status": "Illustrative sensitivity for the selected physical V3 CAD envelope, not a measured hand model",
+      "brief": "physical-v3",
+      "pivot_hypotheses_from_butt_mm": [
+        0,
+        90,
+        125,
+        175
+      ],
+      "pivot_scope": "Numerical rotation axes for comparison only; not anthropometric estimates or a measured pivot range.",
+      "tip_point_hypotheses": [
+        "tube_end",
+        "pcb_geometric_center"
+      ],
+      "tip_point_scope": "Two illustrative locations for the whole lumped tip mass; the PCB geometric centre is not the centre of mass of the complete board-holder-wires package.",
+      "wire_addition_g": 1,
+      "wire_scope": "Per-gram coefficient for a uniform straight segment from key-row centre to the assumed tip location; actual wire mass, loops, endpoints and insulation are unmeasured."
+    },
+    "cases": [
+      {
+        "pivot_hypothesis_mm": 0,
+        "tip_point_hypothesis": "tube_end",
+        "tip_point_mm": 174.5,
+        "mass_kg": 0.024289247508308513,
+        "first_moment_kg_m": 0.002578736845099918,
+        "inertia_kg_m2": 0.00030462442912381784,
+        "gravity_moment_N_m": 0.02528876968199911,
+        "inertia_fraction_of_500mm_tube": 0.1574385077511812,
+        "per_gram_wire": {
+          "mass_g": 1,
+          "inertia_kg_m2": 0.000018532895833333327,
+          "gravity_moment_N_m": 0.0013153169312500011
+        }
+      },
+      {
+        "pivot_hypothesis_mm": 0,
+        "tip_point_hypothesis": "pcb_geometric_center",
+        "tip_point_mm": 162.89999389648438,
+        "mass_kg": 0.024289247508308513,
+        "first_moment_kg_m": 0.0025323368206858553,
+        "inertia_kg_m2": 0.00028896906116971646,
+        "gravity_moment_N_m": 0.02483374088257894,
+        "inertia_fraction_of_500mm_tube": 0.15297324506586477,
+        "per_gram_wire": {
+          "mass_g": 1,
+          "inertia_kg_m2": 0.000016865781646423336,
+          "gravity_moment_N_m": 0.0012584383313224805
+        }
+      },
+      {
+        "pivot_hypothesis_mm": 90,
+        "tip_point_hypothesis": "tube_end",
+        "tip_point_mm": 174.5,
+        "mass_kg": 0.024289247508308513,
+        "first_moment_kg_m": 0.00039270456935215165,
+        "inertia_kg_m2": 0.000037194701823131616,
+        "gravity_moment_N_m": 0.0038511162650372776,
+        "inertia_fraction_of_500mm_tube": 0.03349879692306602,
+        "per_gram_wire": {
+          "mass_g": 1,
+          "inertia_kg_m2": 0.0000024903958333333332,
+          "gravity_moment_N_m": 0.00043271843125000046
+        }
+      },
+      {
+        "pivot_hypothesis_mm": 90,
+        "tip_point_hypothesis": "pcb_geometric_center",
+        "tip_point_mm": 162.89999389648438,
+        "mass_kg": 0.024289247508308513,
+        "first_moment_kg_m": 0.0003463045449380892,
+        "inertia_kg_m2": 0.000029891338263561454,
+        "gravity_moment_N_m": 0.003396087465617112,
+        "inertia_fraction_of_500mm_tube": 0.027862406145828984,
+        "per_gram_wire": {
+          "mass_g": 1,
+          "inertia_kg_m2": 0.0000018672821957397552,
+          "gravity_moment_N_m": 0.0003758398313224794
+        }
+      },
+      {
+        "pivot_hypothesis_mm": 125,
+        "tip_point_hypothesis": "tube_end",
+        "tip_point_mm": 174.5,
+        "mass_kg": 0.024289247508308513,
+        "first_moment_kg_m": -0.0004574190934386464,
+        "inertia_kg_m2": 0.00003945971016615893,
+        "gravity_moment_N_m": -0.004485748952670101,
+        "inertia_fraction_of_500mm_tube": 0.04276178265671242,
+        "per_gram_wire": {
+          "mass_g": 1,
+          "inertia_kg_m2": 6.26645833333336e-7,
+          "gravity_moment_N_m": 0.00008948568125000025
+        }
+      },
+      {
+        "pivot_hypothesis_mm": 125,
+        "tip_point_hypothesis": "pcb_geometric_center",
+        "tip_point_mm": 162.89999389648438,
+        "mass_kg": 0.024289247508308513,
+        "first_moment_kg_m": -0.0005038191178527089,
+        "inertia_kg_m2": 0.00003540434831557315,
+        "gravity_moment_N_m": -0.004940777752090267,
+        "inertia_fraction_of_500mm_tube": 0.03984651585316491,
+        "per_gram_wire": {
+          "mass_g": 1,
+          "inertia_kg_m2": 4.0953240936280813e-7,
+          "gravity_moment_N_m": 0.000032607081322478734
+        }
+      },
+      {
+        "pivot_hypothesis_mm": 175,
+        "tip_point_hypothesis": "tube_end",
+        "tip_point_mm": 174.5,
+        "mass_kg": 0.024289247508308513,
+        "first_moment_kg_m": -0.0016718814688540717,
+        "inertia_kg_m2": 0.0001459247382807948,
+        "gravity_moment_N_m": -0.01639555640653778,
+        "inertia_fraction_of_500mm_tube": 0.1860912170503997,
+        "per_gram_wire": {
+          "mass_g": 1,
+          "inertia_kg_m2": 0.0000022141458333333407,
+          "gravity_moment_N_m": -0.0004008468187499982
+        }
+      },
+      {
+        "pivot_hypothesis_mm": 175,
+        "tip_point_hypothesis": "pcb_geometric_center",
+        "tip_point_mm": 162.89999389648438,
+        "mass_kg": 0.024289247508308513,
+        "first_moment_kg_m": -0.0017182814932681341,
+        "inertia_kg_m2": 0.00014650937887161528,
+        "gravity_moment_N_m": -0.016850585205957946,
+        "inertia_fraction_of_500mm_tube": 0.19417167806823027,
+        "per_gram_wire": {
+          "mass_g": 1,
+          "inertia_kg_m2": 0.000002577032714538597,
+          "gravity_moment_N_m": -0.00045772541867751884
+        }
+      }
+    ],
+    "scope": "CAD-reference sensitivity only; numerical axes are not measured pivots and PCB centre is not package COM. No wiring mass has been assigned to the physical wand."
+  },
+  "baseline": {
+    "length_mm": 500,
+    "pivot_mm": 90,
+    "tip_g": 4,
+    "tube_g": 9.42477796076938,
+    "total_g": 30.42477796076938,
+    "inertia_kg_m2": 0.0011100904191394063,
+    "torque_N_m": 0.030870985806236644,
+    "centre_from_butt_mm": 193.46713056648042
+  },
+  "same_packages": [
+    {
+      "length_mm": 500,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.0011100904191394063,
+      "torque_N_m": 0.030870985806236644,
+      "centre_from_butt_mm": 193.46713056648042,
+      "inertia_fraction": 1,
+      "exact_ratio_envelope": {
+        "minimum": {
+          "pivot_m": 0.08,
+          "tip_mass_kg": 0.0025,
+          "ratio": 1
+        },
+        "maximum": {
+          "pivot_m": 0.1,
+          "tip_mass_kg": 0.0055,
+          "ratio": 1
+        },
+        "candidates_checked": 4
+      }
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.000385460300793966,
+      "torque_N_m": 0.015698233177944252,
+      "centre_from_butt_mm": 148.00464912333157,
+      "inertia_fraction": 0.3472332470834157,
+      "exact_ratio_envelope": {
+        "minimum": {
+          "pivot_m": 0.1,
+          "tip_mass_kg": 0.0025,
+          "ratio": 0.3225269780875015
+        },
+        "maximum": {
+          "pivot_m": 0.08,
+          "tip_mass_kg": 0.0055,
+          "ratio": 0.36684391062714866
+        },
+        "candidates_checked": 4
+      }
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00023920895871533282,
+      "torque_N_m": 0.011564903956403244,
+      "centre_from_butt_mm": 134.2430276045914,
+      "inertia_fraction": 0.21548601320312152,
+      "exact_ratio_envelope": {
+        "minimum": {
+          "pivot_m": 0.1,
+          "tip_mass_kg": 0.0025,
+          "ratio": 0.19368425118166224
+        },
+        "maximum": {
+          "pivot_m": 0.08,
+          "tip_mass_kg": 0.0055,
+          "ratio": 0.23374712434255668
+        },
+        "candidates_checked": 4
+      }
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.00013274965035431547,
+      "torque_N_m": 0.007893702228807134,
+      "centre_from_butt_mm": 121.30528302630795,
+      "inertia_fraction": 0.11958453839933973,
+      "exact_ratio_envelope": {
+        "minimum": {
+          "pivot_m": 0.1,
+          "tip_mass_kg": 0.0025,
+          "ratio": 0.10361775102240867
+        },
+        "maximum": {
+          "pivot_m": 0.08,
+          "tip_mass_kg": 0.0055,
+          "ratio": 0.13416998602355226
+        },
+        "candidates_checked": 4
+      }
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.00006136998673052913,
+      "torque_N_m": 0.004684627995155915,
+      "centre_from_butt_mm": 109.28545921253483,
+      "inertia_fraction": 0.05528377299040739,
+      "exact_ratio_envelope": {
+        "minimum": {
+          "pivot_m": 0.1,
+          "tip_mass_kg": 0.0025,
+          "ratio": 0.04649872953819438
+        },
+        "maximum": {
+          "pivot_m": 0.08,
+          "tip_mass_kg": 0.0055,
+          "ratio": 0.06483771139758059
+        },
+        "candidates_checked": 4
+      }
+    }
+  ],
+  "arbitrary_tube_tip_mass_ratio_bounds": [
+    {
+      "length_mm": 500,
+      "minimum": 1,
+      "maximum": 1,
+      "scope": "Any nonnegative uniform-tube/point-tip mass ratio; excludes finite grip/component intrinsic inertia"
+    },
+    {
+      "length_mm": 350,
+      "minimum": 0.2558416200436562,
+      "maximum": 0.41326530612244894,
+      "scope": "Any nonnegative uniform-tube/point-tip mass ratio; excludes finite grip/component intrinsic inertia"
+    },
+    {
+      "length_mm": 300,
+      "minimum": 0.13853674809730526,
+      "maximum": 0.2743764172335601,
+      "scope": "Any nonnegative uniform-tube/point-tip mass ratio; excludes finite grip/component intrinsic inertia"
+    },
+    {
+      "length_mm": 250,
+      "minimum": 0.06737820134122369,
+      "maximum": 0.16383219954648526,
+      "scope": "Any nonnegative uniform-tube/point-tip mass ratio; excludes finite grip/component intrinsic inertia"
+    },
+    {
+      "length_mm": 200,
+      "minimum": 0.029601277699573183,
+      "maximum": 0.08163265306122452,
+      "scope": "Any nonnegative uniform-tube/point-tip mass ratio; excludes finite grip/component intrinsic inertia"
+    }
+  ],
+  "related_supplier_sensitivity": {
+    "source": {
+      "value_g": 3,
+      "sku": "101991465",
+      "packaging": "Tape and reel",
+      "source": "https://www.mouser.sg/en/ProductDetail/Seeed-Studio/101991465?qs=KLj0QfLrw0Ftlesc1ABhhQ%3D%3D",
+      "identity_source": "https://www.seeedstudio.com/Seeed-Studio-XIAO-nRF52840-Sense-Tape-Reel-p-6566.html",
+      "manufacturer_pdf": "https://files.seeedstudio.com/Bazaar/product_pdf/101991465.pdf",
+      "provenance": "Primary sources verified by coordinating agent on 2 November 2026; supplier product indexed Unit Weight 3g; manufacturer confirms original non-Plus tape-and-reel board identity.",
+      "scope": "Related packaging variant, not a weighed installed board. Normal retail SKU manufacturer PDF has no mass. Add the existing sliced holder estimate only for sensitivity; fitted solder, leads and retention remain unknown. Do not average conflicting net/gross retailer figures."
+    },
+    "holder_slicer_g": 0.595,
+    "package_reference_before_extra_leads_g": 3.5949999999999998,
+    "baseline": {
+      "length_mm": 500,
+      "pivot_mm": 90,
+      "tip_g": 3.5949999999999998,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.019777960769378,
+      "inertia_kg_m2": 0.001042009919139406,
+      "torque_N_m": 0.02924259157373664,
+      "centre_from_butt_mm": 189.33166319950612
+    },
+    "half_grip_moment_target": {
+      "length_mm": 349.4680107629065,
+      "pivot_mm": 90,
+      "tip_g": 3.5949999999999998,
+      "tube_g": 6.587316811664315,
+      "total_g": 27.182316811664315,
+      "inertia_kg_m2": 0.000356412256153923,
+      "torque_N_m": 0.014621295786868322,
+      "centre_from_butt_mm": 144.85026339703904
+    },
+    "limit": "Related-SKU catalogue reference plus sliced plastic, not measured fitted tip mass or a guaranteed lower bound"
+  },
+  "explicit_half_grip_moment_target": {
+    "length_mm": 346.9803009692416,
+    "pivot_mm": 90,
+    "tip_g": 4,
+    "tube_g": 6.54042458679207,
+    "total_g": 27.54042458679207,
+    "inertia_kg_m2": 0.00037541212421391974,
+    "torque_N_m": 0.015435492903118322,
+    "centre_from_butt_mm": 147.15170555563643,
+    "inertia_fraction": 0.33818157308749375,
+    "target_is": "Agent-chosen experimental priority, not a measured or universal optimum",
+    "source_input_endpoint_range_mm": [
+      335.10463311719377,
+      343.8011913517523,
+      353.1968451225181,
+      361.8859387311456
+    ]
+  },
+  "constant_inertia_counterexample": [
+    {
+      "length_mm": 500,
+      "pivot_mm": 90,
+      "tip_g": 4.000000000000003,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.424777960769383,
+      "inertia_kg_m2": 0.0011100904191394068,
+      "torque_N_m": 0.030870985806236654,
+      "centre_from_butt_mm": 193.46713056648042,
+      "added_tip_ballast_g": 2.6645352591003757e-15,
+      "scope": "Counterexample only: artificial same-inertia constraint, not the design objective"
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 90,
+      "tip_g": 14.719380448897047,
+      "tube_g": 6.597344572538566,
+      "total_g": 38.316725021435616,
+      "inertia_kg_m2": 0.0011100904191394063,
+      "torque_N_m": 0.04302974837053007,
+      "centre_from_butt_mm": 204.51430681834958,
+      "added_tip_ballast_g": 10.719380448897047,
+      "scope": "Counterexample only: artificial same-inertia constraint, not the design objective"
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 90,
+      "tip_g": 23.747878921180813,
+      "tube_g": 5.654866776461628,
+      "total_g": 46.402745697642445,
+      "inertia_kg_m2": 0.0011100904191394068,
+      "torque_N_m": 0.05223361668910679,
+      "centre_from_butt_mm": 204.78515979941852,
+      "added_tip_ballast_g": 19.747878921180813,
+      "scope": "Counterexample only: artificial same-inertia constraint, not the design objective"
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 90,
+      "tip_g": 42.17737378066761,
+      "tube_g": 4.71238898038469,
+      "total_g": 63.889762761052296,
+      "inertia_kg_m2": 0.0011100904191394063,
+      "torque_N_m": 0.06779644504259656,
+      "centre_from_butt_mm": 198.20690389908117,
+      "added_tip_ballast_g": 38.17737378066761,
+      "scope": "Counterexample only: artificial same-inertia constraint, not the design objective"
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 90,
+      "tip_g": 90.67111011643614,
+      "tube_g": 3.7699111843077517,
+      "total_g": 111.4410213007439,
+      "inertia_kg_m2": 0.0011100904191394066,
+      "torque_N_m": 0.09817948461772424,
+      "centre_from_butt_mm": 179.83694790119642,
+      "added_tip_ballast_g": 86.67111011643614,
+      "scope": "Counterexample only: artificial same-inertia constraint, not the design objective"
+    }
+  ],
+  "conditional_inertia_targets": [
+    {
+      "length_mm": 237.00149454753404,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 4.467372924962006,
+      "total_g": 25.467372924962007,
+      "inertia_kg_m2": 0.0001110090419139406,
+      "torque_N_m": 0.007014985500849646,
+      "centre_from_butt_mm": 118.08807359164294,
+      "inertia_fraction": 0.1,
+      "scope": "Conditional inversion only: the chosen inertia fraction is not a measured steadiness requirement"
+    },
+    {
+      "length_mm": 314.57498149670505,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 5.929598705239162,
+      "total_g": 26.92959870523916,
+      "inertia_kg_m2": 0.00027752260478485137,
+      "torque_N_m": 0.012722046854766671,
+      "centre_from_butt_mm": 138.17330396218105,
+      "inertia_fraction": 0.25,
+      "scope": "Conditional inversion only: the chosen inertia fraction is not a measured steadiness requirement"
+    },
+    {
+      "length_mm": 395.0099488480473,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 7.445762120375432,
+      "total_g": 28.44576212037543,
+      "inertia_kg_m2": 0.0005550452095697034,
+      "torque_N_m": 0.019814299664903414,
+      "centre_from_butt_mm": 161.02978127850025,
+      "inertia_fraction": 0.5,
+      "scope": "Conditional inversion only: the chosen inertia fraction is not a measured steadiness requirement"
+    },
+    {
+      "length_mm": 453.0580533577473,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 8.539943112470349,
+      "total_g": 29.539943112470347,
+      "inertia_kg_m2": 0.0008325678143545546,
+      "torque_N_m": 0.025675597790325487,
+      "centre_from_butt_mm": 178.63193556267365,
+      "inertia_fraction": 0.75,
+      "scope": "Conditional inversion only: the chosen inertia fraction is not a measured steadiness requirement"
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.0011100904191394063,
+      "torque_N_m": 0.030870985806236644,
+      "centre_from_butt_mm": 193.46713056648042,
+      "inertia_fraction": 1,
+      "scope": "Conditional inversion only: the chosen inertia fraction is not a measured steadiness requirement"
+    }
+  ],
+  "balance_by_butt_counterweight": [
+    {
+      "length_mm": 500,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.0011100904191394063,
+      "torque_N_m": 0.030870985806236644,
+      "centre_from_butt_mm": 193.46713056648042,
+      "counterweight_at_butt_g": 34.97738304136779,
+      "balanced_total_g": 65.40216100213716,
+      "balanced_inertia_kg_m2": 0.0013934072217744854,
+      "balanced_torque_N_m": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.000385460300793966,
+      "torque_N_m": 0.015698233177944252,
+      "centre_from_butt_mm": 148.00464912333157,
+      "counterweight_at_butt_g": 17.786380985175313,
+      "balanced_total_g": 45.38372555771388,
+      "balanced_inertia_kg_m2": 0.0005295299867738861,
+      "balanced_torque_N_m": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00023920895871533282,
+      "torque_N_m": 0.011564903956403244,
+      "centre_from_butt_mm": 134.2430276045914,
+      "counterweight_at_butt_g": 13.103244517641084,
+      "balanced_total_g": 39.75811129410271,
+      "balanced_inertia_kg_m2": 0.00034534523930822563,
+      "balanced_torque_N_m": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.00013274965035431547,
+      "torque_N_m": 0.007893702228807134,
+      "centre_from_butt_mm": 121.30528302630795,
+      "counterweight_at_butt_g": 8.943706825705158,
+      "balanced_total_g": 34.656095806089844,
+      "balanced_inertia_kg_m2": 0.00020519367564252725,
+      "balanced_torque_N_m": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 90,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.00006136998673052913,
+      "torque_N_m": 0.004684627995155915,
+      "centre_from_butt_mm": 109.28545921253483,
+      "counterweight_at_butt_g": 5.307767909367528,
+      "balanced_total_g": 30.07767909367528,
+      "balanced_inertia_kg_m2": 0.0001043629067964061,
+      "balanced_torque_N_m": 0
+    }
+  ],
+  "per_gram_relocation": [
+    {
+      "length_mm": 500,
+      "from_tip_to_grip_torque_reduction_N_m": 0.0040207265,
+      "from_tip_to_grip_inertia_reduction_kg_m2": 0.00016809999999999997,
+      "from_tip_to_grip_total_mass_change_g": 0,
+      "scope": "Per gram moved; this is not a claim about board or battery mass"
+    },
+    {
+      "length_mm": 350,
+      "from_tip_to_grip_torque_reduction_N_m": 0.002549729,
+      "from_tip_to_grip_inertia_reduction_kg_m2": 0.0000676,
+      "from_tip_to_grip_total_mass_change_g": 0,
+      "scope": "Per gram moved; this is not a claim about board or battery mass"
+    },
+    {
+      "length_mm": 300,
+      "from_tip_to_grip_torque_reduction_N_m": 0.0020593965,
+      "from_tip_to_grip_inertia_reduction_kg_m2": 0.000044099999999999995,
+      "from_tip_to_grip_total_mass_change_g": 0,
+      "scope": "Per gram moved; this is not a claim about board or battery mass"
+    },
+    {
+      "length_mm": 250,
+      "from_tip_to_grip_torque_reduction_N_m": 0.001569064,
+      "from_tip_to_grip_inertia_reduction_kg_m2": 0.000025600000000000002,
+      "from_tip_to_grip_total_mass_change_g": 0,
+      "scope": "Per gram moved; this is not a claim about board or battery mass"
+    },
+    {
+      "length_mm": 200,
+      "from_tip_to_grip_torque_reduction_N_m": 0.0010787315,
+      "from_tip_to_grip_inertia_reduction_kg_m2": 0.0000121,
+      "from_tip_to_grip_total_mass_change_g": 0,
+      "scope": "Per gram moved; this is not a claim about board or battery mass"
+    }
+  ],
+  "pivot_to_balance_tube_and_tip_mm": 324.48912771013835,
+  "axial_ideal_minimum_balanced_mass_for_baseline_inertia_g": 30.083751196189876,
+  "illustrative_candidates": [
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.0004687921864099453,
+      "torque_N_m": 0.015712334794126436,
+      "centre_from_butt_mm": 132.66142797810178,
+      "tip_position_mm": 80,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 40.43860454408684,
+      "inertia_kg_m2": 0.0005328806765431771,
+      "torque_N_m": 0.007856167397063218,
+      "centre_from_butt_mm": 99.81042955604511,
+      "tip_position_mm": 80,
+      "counterweight_g": 10.013826583317467
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 50.45243112740431,
+      "inertia_kg_m2": 0.0005969691666764089,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 80,
+      "counterweight_g": 20.027653166634934
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.0006451921864099454,
+      "torque_N_m": 0.023949920794126438,
+      "centre_from_butt_mm": 160.2705037479602,
+      "tip_position_mm": 290,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 45.68860454408684,
+      "inertia_kg_m2": 0.0007428806765431772,
+      "torque_N_m": 0.011974960397063219,
+      "centre_from_butt_mm": 106.72671093482624,
+      "tip_position_mm": 290,
+      "counterweight_g": 15.263826583317467
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 60.95243112740431,
+      "inertia_kg_m2": 0.000840569166676409,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 290,
+      "counterweight_g": 30.527653166634934
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.0011743921864099452,
+      "torque_N_m": 0.032187506794126436,
+      "centre_from_butt_mm": 187.8795795178186,
+      "tip_position_mm": 500,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 50.93860454408684,
+      "inertia_kg_m2": 0.001305680676543177,
+      "torque_N_m": 0.016093753397063218,
+      "centre_from_butt_mm": 112.21733577811378,
+      "tip_position_mm": 500,
+      "counterweight_g": 20.513826583317467
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 71.45243112740431,
+      "inertia_kg_m2": 0.0014369691666764087,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 500,
+      "counterweight_g": 41.027653166634934
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.00040847360746102085,
+      "torque_N_m": 0.013863824818346852,
+      "centre_from_butt_mm": 146.465965863031,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 37.493361431346415,
+      "inertia_kg_m2": 0.0004791594421667912,
+      "torque_N_m": 0.006931912409173427,
+      "centre_from_butt_mm": 118.85289342093327,
+      "tip_position_mm": 100,
+      "counterweight_g": 7.068583470577033
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 44.56194490192345,
+      "inertia_kg_m2": 0.0005498452768725615,
+      "torque_N_m": 1.734723475976807e-18,
+      "centre_from_butt_mm": 100.00000000000001,
+      "tip_position_mm": 100,
+      "counterweight_g": 14.137166941154065
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.0005684736074610208,
+      "torque_N_m": 0.021709144818346852,
+      "centre_from_butt_mm": 172.76032373908663,
+      "tip_position_mm": 300,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 41.493361431346415,
+      "inertia_kg_m2": 0.0006791594421667912,
+      "torque_N_m": 0.010854572409173426,
+      "centre_from_butt_mm": 126.67555263964519,
+      "tip_position_mm": 300,
+      "counterweight_g": 11.068583470577034
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 52.56194490192345,
+      "inertia_kg_m2": 0.0007898452768725615,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100.00000000000003,
+      "tip_position_mm": 300,
+      "counterweight_g": 22.137166941154067
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.001048473607461021,
+      "torque_N_m": 0.02955446481834685,
+      "centre_from_butt_mm": 199.05468161514224,
+      "tip_position_mm": 500,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 45.493361431346415,
+      "inertia_kg_m2": 0.0011991594421667915,
+      "torque_N_m": 0.014777232409173427,
+      "centre_from_butt_mm": 133.12259854290366,
+      "tip_position_mm": 500,
+      "counterweight_g": 15.068583470577032
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 60.56194490192344,
+      "inertia_kg_m2": 0.0013498452768725617,
+      "torque_N_m": 3.469446951953614e-18,
+      "centre_from_butt_mm": 100.00000000000003,
+      "tip_position_mm": 500,
+      "counterweight_g": 30.137166941154064
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.00012693552102453526,
+      "torque_N_m": 0.0061462956694671046,
+      "centre_from_butt_mm": 102.71043624301538,
+      "tip_position_mm": 80,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 31.51451791248334,
+      "inertia_kg_m2": 0.0001520054304001818,
+      "torque_N_m": 0.0030731478347335527,
+      "centre_from_butt_mm": 89.94379377992801,
+      "tip_position_mm": 80,
+      "counterweight_g": 3.9171733399447723
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 35.43169125242811,
+      "inertia_kg_m2": 0.00017707533977582836,
+      "torque_N_m": 8.673617379884035e-19,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 80,
+      "counterweight_g": 7.834346679889545
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.0001998355210245353,
+      "torque_N_m": 0.011441886669467105,
+      "centre_from_butt_mm": 122.27753620731197,
+      "tip_position_mm": 215,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 34.88951791248334,
+      "inertia_kg_m2": 0.00024650543040018186,
+      "torque_N_m": 0.005720943334733554,
+      "centre_from_butt_mm": 96.72060556006859,
+      "tip_position_mm": 215,
+      "counterweight_g": 7.292173339944773
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 42.18169125242811,
+      "inertia_kg_m2": 0.00029317533977582836,
+      "torque_N_m": 3.469446951953614e-18,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 215,
+      "counterweight_g": 14.584346679889546
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.0004185355210245353,
+      "torque_N_m": 0.016737477669467104,
+      "centre_from_butt_mm": 141.84463617160856,
+      "tip_position_mm": 350,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 38.26451791248334,
+      "inertia_kg_m2": 0.00048680543040018184,
+      "torque_N_m": 0.008368738834733552,
+      "centre_from_butt_mm": 102.30196311756428,
+      "tip_position_mm": 350,
+      "counterweight_g": 10.667173339944773
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 48.93169125242811,
+      "inertia_kg_m2": 0.0005550753397758284,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 350,
+      "counterweight_g": 21.334346679889546
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.00010450454947790426,
+      "torque_N_m": 0.0048523386864214,
+      "centre_from_butt_mm": 117.92929177080163,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 30.07134878724053,
+      "inertia_kg_m2": 0.0001292445916249239,
+      "torque_N_m": 0.0024261693432107005,
+      "centre_from_butt_mm": 108.22711422825071,
+      "tip_position_mm": 100,
+      "counterweight_g": 2.4740042147019623
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 32.545353001942495,
+      "inertia_kg_m2": 0.00015398463377194353,
+      "torque_N_m": 8.673617379884035e-19,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 100,
+      "counterweight_g": 4.948008429403925
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.00016700454947790426,
+      "torque_N_m": 0.0097556636864214,
+      "centre_from_butt_mm": 136.04697692292808,
+      "tip_position_mm": 225,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 32.57134878724053,
+      "inertia_kg_m2": 0.0002167445916249239,
+      "torque_N_m": 0.0048778318432107,
+      "centre_from_butt_mm": 115.27110297824225,
+      "tip_position_mm": 225,
+      "counterweight_g": 4.974004214701963
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 37.545353001942495,
+      "inertia_kg_m2": 0.00026648463377194355,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 99.99999999999999,
+      "tip_position_mm": 225,
+      "counterweight_g": 9.948008429403925
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.00035450454947790426,
+      "torque_N_m": 0.0146589886864214,
+      "centre_from_butt_mm": 154.16466207505457,
+      "tip_position_mm": 350,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 35.07134878724053,
+      "inertia_kg_m2": 0.0004292445916249239,
+      "torque_N_m": 0.007329494343210701,
+      "centre_from_butt_mm": 121.31085479501466,
+      "tip_position_mm": 350,
+      "counterweight_g": 7.474004214701962
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 42.54535300194249,
+      "inertia_kg_m2": 0.0005039846337719435,
+      "torque_N_m": 1.734723475976807e-18,
+      "centre_from_butt_mm": 100.00000000000001,
+      "tip_position_mm": 350,
+      "counterweight_g": 14.948008429403924
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00007016028552473297,
+      "torque_N_m": 0.003881870949137117,
+      "centre_from_butt_mm": 94.85059661606986,
+      "tip_position_mm": 80,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 29.128870991163588,
+      "inertia_kg_m2": 0.00008599391249882553,
+      "torque_N_m": 0.0019409354745685587,
+      "centre_from_butt_mm": 86.79464498422192,
+      "tip_position_mm": 80,
+      "counterweight_g": 2.4740042147019605
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 31.602875205865548,
+      "inertia_kg_m2": 0.00010182753947291806,
+      "torque_N_m": 4.336808689942018e-19,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 80,
+      "counterweight_g": 4.948008429403921
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00011856028552473296,
+      "torque_N_m": 0.008196796949137117,
+      "centre_from_butt_mm": 111.35790103030746,
+      "tip_position_mm": 190,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 31.878870991163588,
+      "inertia_kg_m2": 0.0001519939124988255,
+      "torque_N_m": 0.0040983984745685586,
+      "centre_from_butt_mm": 93.10963419287964,
+      "tip_position_mm": 190,
+      "counterweight_g": 5.22400421470196
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 37.102875205865544,
+      "inertia_kg_m2": 0.00018542753947291805,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 190,
+      "counterweight_g": 10.44800842940392
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00026376028552473296,
+      "torque_N_m": 0.012511722949137117,
+      "centre_from_butt_mm": 127.86520544454505,
+      "tip_position_mm": 300,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 34.62887099116359,
+      "inertia_kg_m2": 0.00031479391249882553,
+      "torque_N_m": 0.006255861474568559,
+      "centre_from_butt_mm": 98.42163255449299,
+      "tip_position_mm": 300,
+      "counterweight_g": 7.974004214701961
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 42.60287520586555,
+      "inertia_kg_m2": 0.00036582753947291804,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 300,
+      "counterweight_g": 15.948008429403922
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.000056588605261225004,
+      "torque_N_m": 0.0027727649636693705,
+      "centre_from_butt_mm": 110.60756901147847,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 28.068583470577035,
+      "inertia_kg_m2": 0.00007072577220237908,
+      "torque_N_m": 0.001386382481834685,
+      "centre_from_butt_mm": 105.03665137073034,
+      "tip_position_mm": 100,
+      "counterweight_g": 1.413716694115407
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 29.48230016469244,
+      "inertia_kg_m2": 0.00008486293914353315,
+      "torque_N_m": -4.336808689942018e-19,
+      "centre_from_butt_mm": 100.00000000000001,
+      "tip_position_mm": 100,
+      "counterweight_g": 2.827433388230814
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00009658860526122501,
+      "torque_N_m": 0.00669542496366937,
+      "centre_from_butt_mm": 125.61420938805811,
+      "tip_position_mm": 200,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 30.068583470577035,
+      "inertia_kg_m2": 0.00013072577220237907,
+      "torque_N_m": 0.003347712481834685,
+      "centre_from_butt_mm": 111.35310114444144,
+      "tip_position_mm": 200,
+      "counterweight_g": 3.4137166941154065
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 33.48230016469244,
+      "inertia_kg_m2": 0.00016486293914353317,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100.00000000000001,
+      "tip_position_mm": 200,
+      "counterweight_g": 6.827433388230813
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00021658860526122504,
+      "torque_N_m": 0.01061808496366937,
+      "centre_from_butt_mm": 140.62084976463774,
+      "tip_position_mm": 300,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 32.06858347057703,
+      "inertia_kg_m2": 0.0002707257722023791,
+      "torque_N_m": 0.005309042481834685,
+      "centre_from_butt_mm": 116.88168328071772,
+      "tip_position_mm": 300,
+      "counterweight_g": 5.413716694115407
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 37.48230016469244,
+      "inertia_kg_m2": 0.0003248629391435332,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 300,
+      "counterweight_g": 10.827433388230814
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.000034119561538623234,
+      "torque_N_m": 0.0020795737227520287,
+      "centre_from_butt_mm": 88.24728905116847,
+      "tip_position_mm": 80,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 27.037748381117883,
+      "inertia_kg_m2": 0.00004260186170331568,
+      "torque_N_m": 0.0010397868613760144,
+      "centre_from_butt_mm": 83.92150820268385,
+      "tip_position_mm": 80,
+      "counterweight_g": 1.3253594007331944
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 28.363107781851078,
+      "inertia_kg_m2": 0.00005108416186800812,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 80,
+      "counterweight_g": 2.6507188014663887
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.00006301956153862323,
+      "torque_N_m": 0.005413834722752029,
+      "centre_from_butt_mm": 101.47048664122427,
+      "tip_position_mm": 165,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 29.162748381117883,
+      "inertia_kg_m2": 0.00008510186170331567,
+      "torque_N_m": 0.002706917361376015,
+      "centre_from_butt_mm": 89.4651144827412,
+      "tip_position_mm": 165,
+      "counterweight_g": 3.4503594007331944
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 32.61310778185108,
+      "inertia_kg_m2": 0.00010718416186800812,
+      "torque_N_m": 8.673617379884035e-19,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 165,
+      "counterweight_g": 6.900718801466389
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.00014971956153862325,
+      "torque_N_m": 0.00874809572275203,
+      "centre_from_butt_mm": 114.69368423128006,
+      "tip_position_mm": 250,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 31.287748381117883,
+      "inertia_kg_m2": 0.0001854018617033157,
+      "torque_N_m": 0.0043740478613760155,
+      "centre_from_butt_mm": 94.2556999188805,
+      "tip_position_mm": 250,
+      "counterweight_g": 5.575359400733195
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 36.86310778185108,
+      "inertia_kg_m2": 0.00022108416186800817,
+      "torque_N_m": 1.734723475976807e-18,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 250,
+      "counterweight_g": 11.15071880146639
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.000027522216966084677,
+      "torque_N_m": 0.0011553187348622377,
+      "centre_from_butt_mm": 104.58182725064916,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 26.301437602932776,
+      "inertia_kg_m2": 0.00003341270319156554,
+      "torque_N_m": 0.0005776593674311188,
+      "centre_from_butt_mm": 102.23960618214423,
+      "tip_position_mm": 100,
+      "counterweight_g": 0.5890486225480861
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 26.89048622548086,
+      "inertia_kg_m2": 0.000039303189417046406,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100.00000000000001,
+      "tip_position_mm": 100,
+      "counterweight_g": 1.1780972450961722
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.00005002221696608467,
+      "torque_N_m": 0.004097313734862237,
+      "centre_from_butt_mm": 116.2493545359925,
+      "tip_position_mm": 175,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 27.801437602932772,
+      "inertia_kg_m2": 0.00007091270319156552,
+      "torque_N_m": 0.0020486568674311185,
+      "centre_from_butt_mm": 107.51417481493014,
+      "tip_position_mm": 175,
+      "counterweight_g": 2.0890486225480855
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 29.89048622548086,
+      "inertia_kg_m2": 0.0000918031894170464,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100.00000000000001,
+      "tip_position_mm": 175,
+      "counterweight_g": 4.178097245096171
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.00011752221696608467,
+      "torque_N_m": 0.007039308734862237,
+      "centre_from_butt_mm": 127.91688182133585,
+      "tip_position_mm": 250,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 29.301437602932772,
+      "inertia_kg_m2": 0.00015341270319156554,
+      "torque_N_m": 0.0035196543674311186,
+      "centre_from_butt_mm": 112.24871172255679,
+      "tip_position_mm": 250,
+      "counterweight_g": 3.589048622548086
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 32.890486225480856,
+      "inertia_kg_m2": 0.0001893031894170464,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100.00000000000001,
+      "tip_position_mm": 250,
+      "counterweight_g": 7.178097245096172
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000014100960085821456,
+      "torque_N_m": 0.0007394039903118321,
+      "centre_from_butt_mm": 83.04394404667552,
+      "tip_position_mm": 80,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 25.24115008234622,
+      "inertia_kg_m2": 0.000017116889033267658,
+      "torque_N_m": 0.0003697019951559161,
+      "centre_from_butt_mm": 81.49355761207745,
+      "tip_position_mm": 80,
+      "counterweight_g": 0.47123889803846886
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.000020132817980713857,
+      "torque_N_m": 1.0842021724855044e-19,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 80,
+      "counterweight_g": 0.9424777960769377
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000028500960085821447,
+      "torque_N_m": 0.003092999990311832,
+      "centre_from_butt_mm": 92.73311887714665,
+      "tip_position_mm": 140,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 26.74115008234622,
+      "inertia_kg_m2": 0.00004111688903326765,
+      "torque_N_m": 0.0015464999951559162,
+      "centre_from_butt_mm": 85.89724493364952,
+      "tip_position_mm": 140,
+      "counterweight_g": 1.9712388980384687
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 28.712388980384688,
+      "inertia_kg_m2": 0.00005373281798071385,
+      "torque_N_m": 4.336808689942018e-19,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 140,
+      "counterweight_g": 3.9424777960769375
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.00007170096008582145,
+      "torque_N_m": 0.005446595990311832,
+      "centre_from_butt_mm": 102.42229370761778,
+      "tip_position_mm": 200,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 28.24115008234622,
+      "inertia_kg_m2": 0.00009391688903326766,
+      "torque_N_m": 0.002723297995155916,
+      "centre_from_butt_mm": 89.83313749735248,
+      "tip_position_mm": 200,
+      "counterweight_g": 3.471238898038469
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 31.712388980384688,
+      "inertia_kg_m2": 0.00011613281798071386,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 200,
+      "counterweight_g": 6.942477796076938
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000012592995612098343,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000012592995612098343,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000012592995612098343,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000022592995612098346,
+      "torque_N_m": 0.00196133,
+      "centre_from_butt_mm": 108.07431235872593,
+      "tip_position_mm": 150,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 25.76991118430775,
+      "inertia_kg_m2": 0.00003259299561209835,
+      "torque_N_m": 0.0009806650000000001,
+      "centre_from_butt_mm": 103.88049455369847,
+      "tip_position_mm": 150,
+      "counterweight_g": 0.9999999999999998
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 26.76991118430775,
+      "inertia_kg_m2": 0.00004259299561209835,
+      "torque_N_m": 4.336808689942018e-19,
+      "centre_from_butt_mm": 99.99999999999999,
+      "tip_position_mm": 150,
+      "counterweight_g": 1.9999999999999996
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.00005259299561209835,
+      "torque_N_m": 0.00392266,
+      "centre_from_butt_mm": 116.14862471745188,
+      "tip_position_mm": 200,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 26.76991118430775,
+      "inertia_kg_m2": 0.00007259299561209835,
+      "torque_N_m": 0.0019613300000000003,
+      "centre_from_butt_mm": 107.47107446950508,
+      "tip_position_mm": 200,
+      "counterweight_g": 1.9999999999999996
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 28.76991118430775,
+      "inertia_kg_m2": 0.00009259299561209836,
+      "torque_N_m": 8.673617379884035e-19,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 200,
+      "counterweight_g": 3.999999999999999
+    }
+  ],
+  "finite_candidate_frontier": [
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.0004687921864099453,
+      "torque_N_m": 0.015712334794126436,
+      "centre_from_butt_mm": 132.66142797810178,
+      "tip_position_mm": 80,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 40.43860454408684,
+      "inertia_kg_m2": 0.0005328806765431771,
+      "torque_N_m": 0.007856167397063218,
+      "centre_from_butt_mm": 99.81042955604511,
+      "tip_position_mm": 80,
+      "counterweight_g": 10.013826583317467
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 50.45243112740431,
+      "inertia_kg_m2": 0.0005969691666764089,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 80,
+      "counterweight_g": 20.027653166634934
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.0006451921864099454,
+      "torque_N_m": 0.023949920794126438,
+      "centre_from_butt_mm": 160.2705037479602,
+      "tip_position_mm": 290,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 45.68860454408684,
+      "inertia_kg_m2": 0.0007428806765431772,
+      "torque_N_m": 0.011974960397063219,
+      "centre_from_butt_mm": 106.72671093482624,
+      "tip_position_mm": 290,
+      "counterweight_g": 15.263826583317467
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.0011743921864099452,
+      "torque_N_m": 0.032187506794126436,
+      "centre_from_butt_mm": 187.8795795178186,
+      "tip_position_mm": 500,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 50.93860454408684,
+      "inertia_kg_m2": 0.001305680676543177,
+      "torque_N_m": 0.016093753397063218,
+      "centre_from_butt_mm": 112.21733577811378,
+      "tip_position_mm": 500,
+      "counterweight_g": 20.513826583317467
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 71.45243112740431,
+      "inertia_kg_m2": 0.0014369691666764087,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 500,
+      "counterweight_g": 41.027653166634934
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.00040847360746102085,
+      "torque_N_m": 0.013863824818346852,
+      "centre_from_butt_mm": 146.465965863031,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 37.493361431346415,
+      "inertia_kg_m2": 0.0004791594421667912,
+      "torque_N_m": 0.006931912409173427,
+      "centre_from_butt_mm": 118.85289342093327,
+      "tip_position_mm": 100,
+      "counterweight_g": 7.068583470577033
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 44.56194490192345,
+      "inertia_kg_m2": 0.0005498452768725615,
+      "torque_N_m": 1.734723475976807e-18,
+      "centre_from_butt_mm": 100.00000000000001,
+      "tip_position_mm": 100,
+      "counterweight_g": 14.137166941154065
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.0005684736074610208,
+      "torque_N_m": 0.021709144818346852,
+      "centre_from_butt_mm": 172.76032373908663,
+      "tip_position_mm": 300,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 41.493361431346415,
+      "inertia_kg_m2": 0.0006791594421667912,
+      "torque_N_m": 0.010854572409173426,
+      "centre_from_butt_mm": 126.67555263964519,
+      "tip_position_mm": 300,
+      "counterweight_g": 11.068583470577034
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 52.56194490192345,
+      "inertia_kg_m2": 0.0007898452768725615,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100.00000000000003,
+      "tip_position_mm": 300,
+      "counterweight_g": 22.137166941154067
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 30.42477796076938,
+      "inertia_kg_m2": 0.001048473607461021,
+      "torque_N_m": 0.02955446481834685,
+      "centre_from_butt_mm": 199.05468161514224,
+      "tip_position_mm": 500,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 45.493361431346415,
+      "inertia_kg_m2": 0.0011991594421667915,
+      "torque_N_m": 0.014777232409173427,
+      "centre_from_butt_mm": 133.12259854290366,
+      "tip_position_mm": 500,
+      "counterweight_g": 15.068583470577032
+    },
+    {
+      "length_mm": 500,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 9.42477796076938,
+      "total_g": 60.56194490192344,
+      "inertia_kg_m2": 0.0013498452768725617,
+      "torque_N_m": 3.469446951953614e-18,
+      "centre_from_butt_mm": 100.00000000000003,
+      "tip_position_mm": 500,
+      "counterweight_g": 30.137166941154064
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.00012693552102453526,
+      "torque_N_m": 0.0061462956694671046,
+      "centre_from_butt_mm": 102.71043624301538,
+      "tip_position_mm": 80,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 31.51451791248334,
+      "inertia_kg_m2": 0.0001520054304001818,
+      "torque_N_m": 0.0030731478347335527,
+      "centre_from_butt_mm": 89.94379377992801,
+      "tip_position_mm": 80,
+      "counterweight_g": 3.9171733399447723
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.0004185355210245353,
+      "torque_N_m": 0.016737477669467104,
+      "centre_from_butt_mm": 141.84463617160856,
+      "tip_position_mm": 350,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 38.26451791248334,
+      "inertia_kg_m2": 0.00048680543040018184,
+      "torque_N_m": 0.008368738834733552,
+      "centre_from_butt_mm": 102.30196311756428,
+      "tip_position_mm": 350,
+      "counterweight_g": 10.667173339944773
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 48.93169125242811,
+      "inertia_kg_m2": 0.0005550753397758284,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 350,
+      "counterweight_g": 21.334346679889546
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.00010450454947790426,
+      "torque_N_m": 0.0048523386864214,
+      "centre_from_butt_mm": 117.92929177080163,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 30.07134878724053,
+      "inertia_kg_m2": 0.0001292445916249239,
+      "torque_N_m": 0.0024261693432107005,
+      "centre_from_butt_mm": 108.22711422825071,
+      "tip_position_mm": 100,
+      "counterweight_g": 2.4740042147019623
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 32.545353001942495,
+      "inertia_kg_m2": 0.00015398463377194353,
+      "torque_N_m": 8.673617379884035e-19,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 100,
+      "counterweight_g": 4.948008429403925
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.00016700454947790426,
+      "torque_N_m": 0.0097556636864214,
+      "centre_from_butt_mm": 136.04697692292808,
+      "tip_position_mm": 225,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 32.57134878724053,
+      "inertia_kg_m2": 0.0002167445916249239,
+      "torque_N_m": 0.0048778318432107,
+      "centre_from_butt_mm": 115.27110297824225,
+      "tip_position_mm": 225,
+      "counterweight_g": 4.974004214701963
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 27.597344572538567,
+      "inertia_kg_m2": 0.00035450454947790426,
+      "torque_N_m": 0.0146589886864214,
+      "centre_from_butt_mm": 154.16466207505457,
+      "tip_position_mm": 350,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 35.07134878724053,
+      "inertia_kg_m2": 0.0004292445916249239,
+      "torque_N_m": 0.007329494343210701,
+      "centre_from_butt_mm": 121.31085479501466,
+      "tip_position_mm": 350,
+      "counterweight_g": 7.474004214701962
+    },
+    {
+      "length_mm": 350,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 6.597344572538566,
+      "total_g": 42.54535300194249,
+      "inertia_kg_m2": 0.0005039846337719435,
+      "torque_N_m": 1.734723475976807e-18,
+      "centre_from_butt_mm": 100.00000000000001,
+      "tip_position_mm": 350,
+      "counterweight_g": 14.948008429403924
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00007016028552473297,
+      "torque_N_m": 0.003881870949137117,
+      "centre_from_butt_mm": 94.85059661606986,
+      "tip_position_mm": 80,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 31.602875205865548,
+      "inertia_kg_m2": 0.00010182753947291806,
+      "torque_N_m": 4.336808689942018e-19,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 80,
+      "counterweight_g": 4.948008429403921
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00011856028552473296,
+      "torque_N_m": 0.008196796949137117,
+      "centre_from_butt_mm": 111.35790103030746,
+      "tip_position_mm": 190,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00026376028552473296,
+      "torque_N_m": 0.012511722949137117,
+      "centre_from_butt_mm": 127.86520544454505,
+      "tip_position_mm": 300,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 34.62887099116359,
+      "inertia_kg_m2": 0.00031479391249882553,
+      "torque_N_m": 0.006255861474568559,
+      "centre_from_butt_mm": 98.42163255449299,
+      "tip_position_mm": 300,
+      "counterweight_g": 7.974004214701961
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 42.60287520586555,
+      "inertia_kg_m2": 0.00036582753947291804,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 300,
+      "counterweight_g": 15.948008429403922
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.000056588605261225004,
+      "torque_N_m": 0.0027727649636693705,
+      "centre_from_butt_mm": 110.60756901147847,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 28.068583470577035,
+      "inertia_kg_m2": 0.00007072577220237908,
+      "torque_N_m": 0.001386382481834685,
+      "centre_from_butt_mm": 105.03665137073034,
+      "tip_position_mm": 100,
+      "counterweight_g": 1.413716694115407
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00009658860526122501,
+      "torque_N_m": 0.00669542496366937,
+      "centre_from_butt_mm": 125.61420938805811,
+      "tip_position_mm": 200,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 30.068583470577035,
+      "inertia_kg_m2": 0.00013072577220237907,
+      "torque_N_m": 0.003347712481834685,
+      "centre_from_butt_mm": 111.35310114444144,
+      "tip_position_mm": 200,
+      "counterweight_g": 3.4137166941154065
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 26.654866776461628,
+      "inertia_kg_m2": 0.00021658860526122504,
+      "torque_N_m": 0.01061808496366937,
+      "centre_from_butt_mm": 140.62084976463774,
+      "tip_position_mm": 300,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 32.06858347057703,
+      "inertia_kg_m2": 0.0002707257722023791,
+      "torque_N_m": 0.005309042481834685,
+      "centre_from_butt_mm": 116.88168328071772,
+      "tip_position_mm": 300,
+      "counterweight_g": 5.413716694115407
+    },
+    {
+      "length_mm": 300,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 5.654866776461628,
+      "total_g": 37.48230016469244,
+      "inertia_kg_m2": 0.0003248629391435332,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 300,
+      "counterweight_g": 10.827433388230814
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.000034119561538623234,
+      "torque_N_m": 0.0020795737227520287,
+      "centre_from_butt_mm": 88.24728905116847,
+      "tip_position_mm": 80,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 27.037748381117883,
+      "inertia_kg_m2": 0.00004260186170331568,
+      "torque_N_m": 0.0010397868613760144,
+      "centre_from_butt_mm": 83.92150820268385,
+      "tip_position_mm": 80,
+      "counterweight_g": 1.3253594007331944
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 28.363107781851078,
+      "inertia_kg_m2": 0.00005108416186800812,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 80,
+      "counterweight_g": 2.6507188014663887
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.00006301956153862323,
+      "torque_N_m": 0.005413834722752029,
+      "centre_from_butt_mm": 101.47048664122427,
+      "tip_position_mm": 165,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.00014971956153862325,
+      "torque_N_m": 0.00874809572275203,
+      "centre_from_butt_mm": 114.69368423128006,
+      "tip_position_mm": 250,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 31.287748381117883,
+      "inertia_kg_m2": 0.0001854018617033157,
+      "torque_N_m": 0.0043740478613760155,
+      "centre_from_butt_mm": 94.2556999188805,
+      "tip_position_mm": 250,
+      "counterweight_g": 5.575359400733195
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 36.86310778185108,
+      "inertia_kg_m2": 0.00022108416186800817,
+      "torque_N_m": 1.734723475976807e-18,
+      "centre_from_butt_mm": 80,
+      "tip_position_mm": 250,
+      "counterweight_g": 11.15071880146639
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.000027522216966084677,
+      "torque_N_m": 0.0011553187348622377,
+      "centre_from_butt_mm": 104.58182725064916,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 26.301437602932776,
+      "inertia_kg_m2": 0.00003341270319156554,
+      "torque_N_m": 0.0005776593674311188,
+      "centre_from_butt_mm": 102.23960618214423,
+      "tip_position_mm": 100,
+      "counterweight_g": 0.5890486225480861
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.00011752221696608467,
+      "torque_N_m": 0.007039308734862237,
+      "centre_from_butt_mm": 127.91688182133585,
+      "tip_position_mm": 250,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 29.301437602932772,
+      "inertia_kg_m2": 0.00015341270319156554,
+      "torque_N_m": 0.0035196543674311186,
+      "centre_from_butt_mm": 112.24871172255679,
+      "tip_position_mm": 250,
+      "counterweight_g": 3.589048622548086
+    },
+    {
+      "length_mm": 250,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 4.71238898038469,
+      "total_g": 32.890486225480856,
+      "inertia_kg_m2": 0.0001893031894170464,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100.00000000000001,
+      "tip_position_mm": 250,
+      "counterweight_g": 7.178097245096172
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000014100960085821456,
+      "torque_N_m": 0.0007394039903118321,
+      "centre_from_butt_mm": 83.04394404667552,
+      "tip_position_mm": 80,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 25.24115008234622,
+      "inertia_kg_m2": 0.000017116889033267658,
+      "torque_N_m": 0.0003697019951559161,
+      "centre_from_butt_mm": 81.49355761207745,
+      "tip_position_mm": 80,
+      "counterweight_g": 0.47123889803846886
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 25.712388980384688,
+      "inertia_kg_m2": 0.000020132817980713857,
+      "torque_N_m": 1.0842021724855044e-19,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 80,
+      "counterweight_g": 0.9424777960769377
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000028500960085821447,
+      "torque_N_m": 0.003092999990311832,
+      "centre_from_butt_mm": 92.73311887714665,
+      "tip_position_mm": 140,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 26.74115008234622,
+      "inertia_kg_m2": 0.00004111688903326765,
+      "torque_N_m": 0.0015464999951559162,
+      "centre_from_butt_mm": 85.89724493364952,
+      "tip_position_mm": 140,
+      "counterweight_g": 1.9712388980384687
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 28.712388980384688,
+      "inertia_kg_m2": 0.00005373281798071385,
+      "torque_N_m": 4.336808689942018e-19,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 140,
+      "counterweight_g": 3.9424777960769375
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.00007170096008582145,
+      "torque_N_m": 0.005446595990311832,
+      "centre_from_butt_mm": 102.42229370761778,
+      "tip_position_mm": 200,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 28.24115008234622,
+      "inertia_kg_m2": 0.00009391688903326766,
+      "torque_N_m": 0.002723297995155916,
+      "centre_from_butt_mm": 89.83313749735248,
+      "tip_position_mm": 200,
+      "counterweight_g": 3.471238898038469
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 80,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 31.712388980384688,
+      "inertia_kg_m2": 0.00011613281798071386,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 80.00000000000001,
+      "tip_position_mm": 200,
+      "counterweight_g": 6.942477796076938
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000012592995612098343,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000012592995612098343,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000012592995612098343,
+      "torque_N_m": 0,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 100,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.000022592995612098346,
+      "torque_N_m": 0.00196133,
+      "centre_from_butt_mm": 108.07431235872593,
+      "tip_position_mm": 150,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 25.76991118430775,
+      "inertia_kg_m2": 0.00003259299561209835,
+      "torque_N_m": 0.0009806650000000001,
+      "centre_from_butt_mm": 103.88049455369847,
+      "tip_position_mm": 150,
+      "counterweight_g": 0.9999999999999998
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 26.76991118430775,
+      "inertia_kg_m2": 0.00004259299561209835,
+      "torque_N_m": 4.336808689942018e-19,
+      "centre_from_butt_mm": 99.99999999999999,
+      "tip_position_mm": 150,
+      "counterweight_g": 1.9999999999999996
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 24.76991118430775,
+      "inertia_kg_m2": 0.00005259299561209835,
+      "torque_N_m": 0.00392266,
+      "centre_from_butt_mm": 116.14862471745188,
+      "tip_position_mm": 200,
+      "counterweight_g": 0
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 26.76991118430775,
+      "inertia_kg_m2": 0.00007259299561209835,
+      "torque_N_m": 0.0019613300000000003,
+      "centre_from_butt_mm": 107.47107446950508,
+      "tip_position_mm": 200,
+      "counterweight_g": 1.9999999999999996
+    },
+    {
+      "length_mm": 200,
+      "pivot_mm": 100,
+      "tip_g": 4,
+      "tube_g": 3.7699111843077517,
+      "total_g": 28.76991118430775,
+      "inertia_kg_m2": 0.00009259299561209836,
+      "torque_N_m": 8.673617379884035e-19,
+      "centre_from_butt_mm": 100,
+      "tip_position_mm": 200,
+      "counterweight_g": 3.999999999999999
+    }
+  ],
+  "frontier_scope": "Only this sampled finite set under min mass, min absolute static torque, min length, max transverse inertia. Inertia is not measured steadiness. No battery mass has been invented."
+}
