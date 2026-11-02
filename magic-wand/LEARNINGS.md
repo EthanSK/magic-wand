@@ -2181,3 +2181,21 @@ A battery cage needs the complete pouch loading path, not only seated clearance.
 Keycap spacing alone overstates usable thumb room: a sourced socket floor and rounded load rail can reach farther inward. R10 derives the side-key spacing from that actual reach, then checks a complete 30 mm rectangular rest region above the rod crown against the final frame and bought references. Population thumb statistics motivate an allowance; neither a male sample mean nor this geometric check establishes individual comfort. Keep the inner area open rather than adding a shelf solely to fill it.
 
 Moving the diagonals outward exposed microscopic enclosed negative-volume seams at replaced post corners. A small rounded floor foot below the socket recess closes them; final one-body, bought-part, loading and slice checks still apply. Define battery-above as positive tube Y independently of key rotation. Turning the cage entry toward the tip keeps the complete cell loading route clear of the keys at the normal gap.
+
+
+### 2026-11-02 — Keep average-thumb clearance distinct from larger-thumb allowance
+
+R10's 30 mm minimum opening used a 28 mm design thumb plus 1 mm each side.
+It was rejected as too spread out. R11 uses the same study's 24.4 mm male
+sample mean plus 0.8 mm each side, deriving X +/-23.5 mm side-key centres and
+26.4 mm actual centred frame clearance. This restores the earlier R8 side
+spacing while retaining the compact R9/R10 frame and above-keys battery.
+The allowance is a design choice, not a universal average or personal comfort
+measurement. Preserve final frame, socket-route, one-body and slice checks.
+
+Revision-specific preview links kept users on older models. The current
+holder viewer now reads a generated revision-and-scene-hash pointer at one
+fixed address. Normal scene generation updates it atomically; rebuilding an
+older archive does not replace a newer current model. Returning to the tab
+checks the pointer without reloading an unchanged inspection camera. Keep
+the archived viewers available for deliberate comparisons.

@@ -1,0 +1,87 @@
+{
+  "archive_sha256": "7b89ad402c28cd875651f9f4385dccd4bef92e66bb337447b7a562cb6310dd9d",
+  "build_instances": 4,
+  "printed_parts_g": 6.51,
+  "supports_and_brim_g": 6.668,
+  "total_slicer_g": 13.27,
+  "accounted_g": 13.178,
+  "startup_and_rounding_g": 0.092,
+  "features_g": {
+    "Support": 4.927760372969824,
+    "Brim": 0.09364674688418602,
+    "Outer wall": 2.600964529578365,
+    "Gap infill": 0.697844800443516,
+    "Support interface": 1.2681029405769957,
+    "Inner wall": 1.609517968274359,
+    "Bottom surface": 0.0039384044538084435,
+    "Overhang wall": 0.16101032808707755,
+    "Internal solid infill": 0.9296264197696278,
+    "Support transition": 0.37865372027286914,
+    "Top surface": 0.3348396160313108,
+    "Bridge": 0.17224636881516045
+  },
+  "object_features_g": {
+    "XIAO_Rod_Holder": {
+      "Support": 0.8493928956333473,
+      "Brim": 0.016006730918602715,
+      "Outer wall": 0.36287978864955783,
+      "Gap infill": 0.0928805955752795,
+      "Overhang wall": 0.016973820918549393,
+      "Support transition": 0.08037883659495294,
+      "Support interface": 0.30903790287502053,
+      "Inner wall": 0.08626834413087339,
+      "Top surface": 0.007843665326014746,
+      "Internal solid infill": 0.0004354180757206336
+    },
+    "Battery_End_Gate": {
+      "Brim": 0.0776400159655834,
+      "Outer wall": 0.05768886281844798,
+      "Gap infill": 0.015116436277317645,
+      "Inner wall": 0.04001233687577363,
+      "Top surface": 0.0074113935995153285
+    },
+    "Battery_Holder": {
+      "Support": 2.001650373687246,
+      "Outer wall": 0.7183640070869379,
+      "Gap infill": 0.29980168782135846,
+      "Support transition": 0.13374018625687603,
+      "Support interface": 0.33925101146901393,
+      "Internal solid infill": 0.016774440128579655,
+      "Overhang wall": 0.04389410704360017,
+      "Inner wall": 0.12074946016990719,
+      "Bridge": 0.0009080424946591517,
+      "Top surface": 0.01804238831765025
+    },
+    "Key_Carrier": {
+      "Support": 2.076717103648955,
+      "Support interface": 0.6198140262329093,
+      "Inner wall": 1.3624878270978031,
+      "Outer wall": 1.462031871023303,
+      "Gap infill": 0.29004608076955835,
+      "Bottom surface": 0.0039384044538084435,
+      "Internal solid infill": 0.9124165615653272,
+      "Overhang wall": 0.10014240012492823,
+      "Top surface": 0.3015421687881276,
+      "Support transition": 0.16453469742103785,
+      "Bridge": 0.1713383263205013
+    }
+  },
+  "object_mass_mapping_available": true,
+  "object_printed_parts_g": {
+    "XIAO_Rod_Holder": 0.567,
+    "Battery_End_Gate": 0.12,
+    "Battery_Holder": 1.219,
+    "Key_Carrier": 4.604
+  },
+  "settings": {
+    "printer_model": "Bambu Lab P1S",
+    "filament_type": [
+      "PETG"
+    ],
+    "layer_height": "0.2",
+    "wall_loops": "3",
+    "sparse_infill_density": "20%",
+    "support_type": "normal(auto)"
+  },
+  "scope": "One thumb-clearance key module, battery cage and end gate, and USB-up XIAO holder. Model/support/brim separate. Bought parts, tube, tape, glue and wires excluded; slicer estimate, not weighed."
+}

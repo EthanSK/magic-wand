@@ -1,0 +1,358 @@
+{
+  "manifest_sha256": "cd05b6ce8c04a6696a3b45e125b82b5736cd7e08fcbbd997932082da2f6cddf4",
+  "checker_sha256": "bbdc8768948cb01e1126ff00593a0ce5b26bf05c44f14f212522181552cae5ae",
+  "parts": {
+    "Key_Carrier": {
+      "spring_clips": {
+        "-12": {
+          "lower_arm_extra_material_mm3": 0.0,
+          "gap_intersection_mm3": 0.0,
+          "missing_clip_mm3": 1.1021215405477578e-07
+        },
+        "11.5": {
+          "lower_arm_extra_material_mm3": 0.0,
+          "gap_intersection_mm3": 0.0,
+          "missing_clip_mm3": 1.102121541057789e-07
+        }
+      },
+      "clip_diameter_mm": 7.9
+    },
+    "Battery_Holder": {
+      "spring_clips": {
+        "-14.8": {
+          "lower_arm_extra_material_mm3": 0.0,
+          "gap_intersection_mm3": 0.0,
+          "missing_clip_mm3": 1.2966299633831465e-07
+        },
+        "14.8": {
+          "lower_arm_extra_material_mm3": 0.0,
+          "gap_intersection_mm3": 0.0,
+          "missing_clip_mm3": 1.2907057471420595e-07
+        }
+      },
+      "clip_diameter_mm": 7.9
+    }
+  },
+  "poses": [
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 0,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 57.45,
+      "axial_frame_gap_mm": 7.99999923706055,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 0,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 97.45,
+      "axial_frame_gap_mm": 47.99999923706055,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 90,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 57.45,
+      "axial_frame_gap_mm": 7.99999923706055,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 90,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 97.45,
+      "axial_frame_gap_mm": 47.99999923706055,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 180,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 57.45,
+      "axial_frame_gap_mm": 7.99999923706055,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 180,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 97.45,
+      "axial_frame_gap_mm": 47.99999923706055,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 270,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 57.45,
+      "axial_frame_gap_mm": 7.99999923706055,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 270,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 97.45,
+      "axial_frame_gap_mm": 47.99999923706055,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 0,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 39.0,
+      "axial_frame_gap_mm": 7.999999046325684,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 0,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 79.0,
+      "axial_frame_gap_mm": 47.999999046325684,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 90,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 39.0,
+      "axial_frame_gap_mm": 7.999999046325684,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 90,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 79.0,
+      "axial_frame_gap_mm": 47.999999046325684,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 180,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 39.0,
+      "axial_frame_gap_mm": 7.999999046325684,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 180,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 79.0,
+      "axial_frame_gap_mm": 47.999999046325684,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 270,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 39.0,
+      "axial_frame_gap_mm": 7.999999046325684,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 270,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 79.0,
+      "axial_frame_gap_mm": 47.999999046325684,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    }
+  ],
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false,
+  "key_interface": {
+    "bought_part_intersections_mm3": {
+      "0_switch": 0.0,
+      "0_socket": 1.003768817338521e-06,
+      "0_max_socket": 1.0944928321793972e-06,
+      "1_switch": 0.0,
+      "1_socket": 1.0037688229551404e-06,
+      "1_max_socket": 1.0944928430611728e-06,
+      "2_switch": 0.0,
+      "2_socket": 1.0037688227295984e-06,
+      "2_max_socket": 1.0944928460829857e-06,
+      "3_switch": 0.0,
+      "3_socket": 1.0037688270013734e-06,
+      "3_max_socket": 1.0944929306468092e-06,
+      "4_switch": 0.0,
+      "4_socket": 1.0037688005518838e-06,
+      "4_max_socket": 1.0944929113812411e-06
+    },
+    "sampled_socket_routes_mm3": {
+      "0_nominal": 1.003768817338521e-06,
+      "0_maximum": 1.0944928321793972e-06,
+      "1_nominal": 1.0037688229551404e-06,
+      "1_maximum": 1.0944928430611728e-06,
+      "2_nominal": 1.0037688227295984e-06,
+      "2_maximum": 1.0944928460829857e-06,
+      "3_nominal": 1.0037688270013734e-06,
+      "3_maximum": 1.0944929306468092e-06,
+      "4_nominal": 1.0037688005518838e-06,
+      "4_maximum": 1.0944929113812411e-06
+    },
+    "front_rail_seat_overlap_mm3": [
+      17.770035276370482,
+      19.371810219987537,
+      17.770035276370475,
+      17.7700352763705,
+      17.77003527637048
+    ],
+    "removed_outer_pokes_mm3": {
+      "0": 0.0,
+      "2": 0.0,
+      "3": 0.0,
+      "4": 0.0
+    },
+    "illustrative_cap_travel_mm3": {
+      "0": 0.0,
+      "1": 0.0,
+      "2": 0.0,
+      "3": 0.0,
+      "4": 0.0
+    },
+    "side_key_half_spacing_mm": 23.5,
+    "purchased_cap_travel_verified": false,
+    "missing_four_flange_corner_lands_mm3": {
+      "-7.15,-7.15": 0.0,
+      "-7.15,7.15": 0.0,
+      "7.15,-7.15": 0.0,
+      "7.15,7.15": 0.0
+    }
+  },
+  "thumb_clearance": {
+    "required_width_mm": 26.0,
+    "centred_clear_width_mm": 26.399999618530273,
+    "left_inner_x_mm": -13.199999809265137,
+    "right_inner_x_mm": 14.550000190734863,
+    "checked_y_mm": [
+      14.5,
+      28.5
+    ],
+    "checked_z_mm": [
+      4.0,
+      20.0
+    ],
+    "intersection_mm3": {
+      "frame": 0.0,
+      "0_switch": 0.0,
+      "0_socket": 0.0,
+      "0_cap": 0.0,
+      "1_switch": 0.0,
+      "1_socket": 0.0,
+      "1_cap": 0.0,
+      "2_switch": 0.0,
+      "2_socket": 0.0,
+      "2_cap": 0.0,
+      "3_switch": 0.0,
+      "3_socket": 0.0,
+      "3_cap": 0.0,
+      "4_switch": 0.0,
+      "4_socket": 0.0,
+      "4_cap": 0.0
+    },
+    "physical_comfort_verified": false
+  },
+  "battery_reserve_intersection_mm3": 0.0,
+  "whole_battery_turn_clearance": "The checked axial frame gap is invariant under battery rotation about Y. Larger outward slides preserve that gap. Nesting underneath the key frame is not an intended placement.",
+  "sensor_board_usb_external_wire_clearance_mm3": {
+    "pcb": 3.4713733657197773e-07,
+    "usb": 0.0,
+    "wire": 0.0
+  },
+  "usb_direction": "positive Y toward tip and computer",
+  "battery_loading": {
+    "reserve_route_intersection_mm3": 0.0,
+    "idealized_fitted_gate_route_intersection_mm3": 0.0,
+    "intentional_gate_wedge_interference_mm3": 0.2524431134177679,
+    "nominal_cell_stopped_by_gate_mm3": 60.48000000000005,
+    "nominal_cell_stopped_at_far_end_mm3": 42.24786801880962,
+    "gate_force_and_retention_physically_verified": false
+  },
+  "passed": true
+}
