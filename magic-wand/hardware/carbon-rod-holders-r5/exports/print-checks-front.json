@@ -1,0 +1,109 @@
+{
+  "project": "Holder-front-layout.3mf",
+  "sha256": "6447c9f14f3ee740e0a8c383139c4e86687ca3a9cdedd99c6234a9cc2103402f",
+  "generator_sha256": "fe5c60433580c0b1fb4334fc62c789ecc1374976fa444a843a388c83c5aed70f",
+  "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
+  "physical_print_verified": false,
+  "parts": [
+    "Carrier_front",
+    "XIAO_Rod_Holder"
+  ],
+  "slice": {
+    "error_string": "Success.",
+    "export_time": 687,
+    "layer_height": 0.20000000298023224,
+    "plate_index": 0,
+    "prepare_time": 33,
+    "return_code": 0,
+    "sliced_plates": [
+      {
+        "feature_type_times": {
+          "Bottom surface": 2.418687343597412,
+          "Bridge": 43.404319763183594,
+          "Brim": 21.527286529541016,
+          "Custom": 362.1508483886719,
+          "Flush": 29.0,
+          "Gap infill": 158.97567749023438,
+          "Inner wall": 382.3086242675781,
+          "Internal solid infill": 149.15574645996094,
+          "Outer wall": 529.4067993164062,
+          "Overhang wall": 162.7816162109375,
+          "Sparse infill": 2.861809253692627,
+          "Support": 535.89013671875,
+          "Support interface": 203.2988739013672,
+          "Support transition": 70.68213653564453,
+          "Top surface": 81.98287963867188,
+          "Travel": 697.8313598632812,
+          "Undefined": 682.8390502929688
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 11.271380424499512,
+            "total_used_g": 11.271380424499512
+          }
+        ],
+        "generate_support_material_time": 196,
+        "id": 1,
+        "infill_time": 61,
+        "layer_filament_change": 0,
+        "main_predication": 3013.36767578125,
+        "make_perimeters_time": 92,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 64.0999984741211,
+              "height": 16.920000076293945,
+              "width": 66.94999694824219,
+              "x": 70.0,
+              "y": 130.0,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Carrier_front",
+            "triangle_count": 19198
+          },
+          {
+            "bbox": {
+              "depth": 28.399999618530273,
+              "height": 15.40000057220459,
+              "width": 21.200000762939453,
+              "x": 175.0,
+              "y": 100.0,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "XIAO_Rod_Holder",
+            "triangle_count": 3070
+          }
+        ],
+        "sliced_time": 1456,
+        "sliced_time_with_cache": 1064,
+        "total_predication": 3418.49560546875,
+        "triangle_count": 22268,
+        "warning_message": ""
+      }
+    ],
+    "sparse_infill_density": 20.0,
+    "upward_compatible_machine": [
+      "Bambu Lab P1P 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab A1 0.4 nozzle",
+      "Bambu Lab H2D 0.4 nozzle",
+      "Bambu Lab H2D Pro 0.4 nozzle",
+      "Bambu Lab H2S 0.4 nozzle",
+      "Bambu Lab P2S 0.4 nozzle",
+      "Bambu Lab H2C 0.4 nozzle",
+      "Bambu Lab X2D 0.4 nozzle",
+      "Bambu Lab A2L 0.4 nozzle"
+    ],
+    "wall_loops": 3
+  },
+  "warnings": [],
+  "sliced_project_sha256": "6dbf69554644f6a3190ef0ee4f0d82095891522bb10f66a82d85954ed229dc2f"
+}

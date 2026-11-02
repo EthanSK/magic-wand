@@ -1,0 +1,50 @@
+{
+  "revision": "carbon-rod-holders-r5-compact",
+  "rod": {
+    "diameter": 8.0,
+    "inside_diameter": 7.0,
+    "diametral_clearance": 0.4,
+    "ring_wall": 1.6,
+    "ring_width": 3.6
+  },
+  "keys": {
+    "pcb_z": 8.87,
+    "plate_bottom": 1.05,
+    "plate_thickness": 1.2,
+    "opening": 14.1,
+    "pitch": 18.5,
+    "upper_half_spacing": 23.5,
+    "row_spacing": 20.5,
+    "socket_floor_bottom": -4.85,
+    "socket_floor_top": -3.2,
+    "socket_pocket_bottom": -3.47
+  },
+  "battery": {
+    "nominal_width": 21.0,
+    "nominal_length": 27.5,
+    "nominal_thickness": 4.3,
+    "reserve_width": 22.0,
+    "reserve_length": 30.0,
+    "reserve_thickness": 6.0,
+    "clearance_per_side": 0.8,
+    "floor_z": 5.6,
+    "start_y": 15.0,
+    "floor_thickness": 1.4,
+    "reference_note": "Uses the larger of retailer nominal width and PKCell drawing maxima; drawing maxima are 20.5 x 27.5 x 4.3 mm, not measured wrapping."
+  },
+  "structure": {
+    "rail_radius": 1.25,
+    "root_radius": 1.6,
+    "wire_bus_diameter": 3.0,
+    "wire_bus_x": -7.0,
+    "wire_bus_z": 2.0
+  },
+  "print": {
+    "material": "PETG",
+    "density_g_cm3": 1.27,
+    "layer_height": 0.2,
+    "walls": 3,
+    "infill_percent": 20,
+    "nozzle": 0.4
+  }
+}

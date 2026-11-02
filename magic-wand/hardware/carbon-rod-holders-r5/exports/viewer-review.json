@@ -1,0 +1,27 @@
+{
+  "reviewer": "Claude Opus 5.5",
+  "scope": "Accessory-viewer UX, source and supplied screenshots; no physical wand testing",
+  "terminal_result": "success",
+  "final_review_blocking_findings": 0,
+  "chosen_rotation": "Continuous free orbit, including roll; standard views provide recovery. The first review preferred a turntable; the final targeted review accepted the chosen free-orbit scope.",
+  "minor_findings_fixed_by_Codex": [
+    "Toolbar shortcuts now work through the owning document, with text inputs protected.",
+    "Orientation indicator is initialized immediately.",
+    "R/P aliases match Rotate/Pan; T/M remain supported."
+  ],
+  "review_boundary": "Opus reviewed the completed control approach before these three minor corrections; Codex checked the final corrections and browser behavior.",
+  "manual_checks_by_Codex": [
+    "Mouse and keyboard rotate beyond a full revolution.",
+    "Pan and Frame work; standard views show the key face and underside.",
+    "Reference and design round trip preserves identical canvas pixels.",
+    "390px layout has 390px document width with no horizontal overflow.",
+    "Toolbar R/P/F shortcuts work after a view-button click."
+  ],
+  "code_sha256": {
+    "carbon-rod-holders-r5/preview/index.html": "7f28bd53f1253b91e25afc366f2b4e103659c4fccd679784d05f539e6a15adf1",
+    "carbon-rod-holders-r5/preview/preview.mjs": "1f7bfffa6b748c7cb97edbbced7856faeb45f2107c87ccf65eade22d705ab67f",
+    "printed-loop-wand/preview/free-view-input.mjs": "e1d4a6e5e53e6d75179a8dcdb98d6a28fd9f7c7c53f7606d32ac517297f69a63",
+    "printed-loop-wand/preview/free-view-controls.mjs": "384afd4f16b3932da3af9b23bcadf36e61705128468f04e0ff7d793de05f4eac"
+  },
+  "physical_hardware_tested": false
+}

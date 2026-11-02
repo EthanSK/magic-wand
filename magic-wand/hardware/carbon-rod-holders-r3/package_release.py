@@ -33,7 +33,7 @@ def package(out: Path) -> None:
     helpers = HERE.parent / 'printed-loop-wand'
     files += [helpers / 'shard-tube-r2' / name for name in ['direct_switches.py', 'print_projects.py', 'check_sliced_paths.py']]
     files += list((helpers / 'shard-tube-r2/print-settings').glob('*.json'))
-    files += [helpers / 'v20/compare_mass.py', helpers / 'preview/view-input.mjs']
+    files += [helpers / 'v20/compare_mass.py', helpers / 'preview/view-input.mjs', helpers / 'preview/free-view-input.mjs', helpers / 'preview/free-view-controls.mjs']
     files += list((ROOT / 'docs/lib/three-0.185.1').glob('*'))
     files += list((HERE / 'preview').glob('*')) + list(exports.glob('*'))
     mapping = {'source/' + str(path.relative_to(ROOT)): path for path in files if path.is_file()}

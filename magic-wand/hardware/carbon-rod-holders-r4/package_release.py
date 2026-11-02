@@ -51,7 +51,7 @@ def package(out):
     helpers=HERE.parent/'printed-loop-wand'
     files += [helpers/'shard-tube-r2'/n for n in ['direct_switches.py','print_projects.py','check_sliced_paths.py']]
     files += list((helpers/'shard-tube-r2/print-settings').glob('*.json'))
-    files += [helpers/'v20/compare_mass.py',helpers/'preview/view-input.mjs',ROOT/'LICENSE']
+    files += [helpers/'v20/compare_mass.py',helpers/'preview/view-input.mjs',helpers/'preview/free-view-input.mjs',helpers/'preview/free-view-controls.mjs',ROOT/'LICENSE']
     files += list((ROOT/'docs/lib/three-0.185.1').glob('*'))
     mapping={'source/'+str(p.relative_to(ROOT)):p for p in files if p.is_file()}
     mapping.update({'exports/'+str(p.relative_to(exports)):p for p in exports.rglob('*') if p.is_file()})
