@@ -34,3 +34,11 @@ Read [AGENTS.md](AGENTS.md) for shared rules, then the component instructions. T
 Shared rules are in `AGENTS.md`; component rules are in each component's `AGENTS.md`. All reusable skills live at the repository root in `.agents/skills/`. Claude Code 2.1.277 and later can read AGENTS.md directly when there is no overriding CLAUDE.md. The root `.claude/skills` is only a symbolic link for Claude's separately documented skill discovery, not another maintained skill directory.
 
 <!-- Previously magic-wand/.agents/skills; skills are centralized in root .agents/skills. -->
+
+## Licence
+
+Original Magic Wand software uses [Ethan Source-Available No-Sale Terms 1.0](LICENSE).
+You may use and modify it for yourself and share it without charge; selling it
+requires Ethan's written commercial licence. Control Stones, shared code,
+contributed material and hardware keep their existing terms.
+[LICENSING.md](LICENSING.md) defines the scope and preserved notices.

@@ -340,7 +340,9 @@ Change the wand first, then this repository: import the sources, update `wand.js
 
 ## Licence
 
-Original Magic Wand software uses [Ethan Source-Available No-Sale Terms 1.0](../LICENSE); see [LICENSING.md](../LICENSING.md) for scope and excluded material. Three.js keeps its MIT licence and the fonts their SIL Open Font License, in `docs/lib/` and `docs/fonts/`. Agentic Mouse’s HUD labels and colours come from its MIT-licensed public website. Puck.js and Espruino are products of Pur3 Ltd; this project isn’t affiliated with them.
+Original Magic Wand software uses [Ethan Source-Available No-Sale Terms 1.0](../LICENSE). You may use and modify it for yourself and share it without charge; selling it requires Ethan's written commercial licence. [LICENSING.md](../LICENSING.md) defines the scope, including contributed and third-party material that keeps its existing terms.
+
+Three.js keeps its MIT licence and the fonts their SIL Open Font License, in `docs/lib/` and `docs/fonts/`. Agentic Mouse’s HUD labels and colours were imported under MIT; [SOURCES.md](SOURCES.md) records that provenance. Puck.js and Espruino are products of Pur3 Ltd; this project isn’t affiliated with them.
 
 ## Hardware prototypes
 

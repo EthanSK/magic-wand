@@ -362,7 +362,9 @@ def artifacts(identifiers: dict[str, str]) -> dict[Path, str]:
     for card in hud["cards"]:
         card.update(manifest.get("hud", {}).get("cardOverrides", {}).get(str(card["cell"]), {}))
     public = {key: value for key, value in manifest.items() if not key.startswith("$")}
+    # The published terms come from the root source; never edit a website-only copy.
     out: dict[Path, str] = {
+        DOCS / "LICENSE.txt": (REPOSITORY / "LICENSE").read_text(),
         DOCS / "data" / "wand.json": json.dumps(public, indent=2, ensure_ascii=False) + "\n",
         DOCS / "data" / "hud.json": json.dumps(hud, indent=2, ensure_ascii=False) + "\n",
         DOCS / "device" / "wand-mouse-prototype.js": (ROOT / "device" / "wand-mouse-prototype.js").read_text(),
