@@ -1,0 +1,4205 @@
+{
+  "project_sha256": "9a5201e316fda8fdfb76361c809e910c7e85c437b266408aa81ee250e348c94a",
+  "checker_sha256": "6670107a2bb198f382b477a3b9c2eaeadd7ff904c79c9c427c08909a63f89985",
+  "parser_sha256": "8a1cc5b7d4d900ac50f1206d3876240e4f90353b426794427d6e50c520f12b1b",
+  "start_auditor_sha256": "6cfcc4485ca3ada2dcdfe48600be411d349572b96a4ed84a9c3481adbab80758",
+  "side_gap_checker_sha256": "73f1efcec846adc8d97a7c284c62394b5640d15cdb8b8b91a5c8e8ed4fd7d5b5",
+  "working_spaces_sha256": "f46e3bd3765a0704a220dfd99facdf92d47dfda86e3801db5f547fe45de92e34",
+  "manifest_sha256": "b74454505b2629a9e5bf7c5466cb7469f61915d7d574a73573603e02144eba6f",
+  "parts": {
+    "Key_Carrier": {
+      "normal_mesh_difference_mm3": 0.00018818761833801353,
+      "helper_mesh_difference_mm3": 0.00266553563755368,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 13972,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "external_wire_bus": {
+          "checked_samples": 1014,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "clip_gap_0": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_0_switch": {
+          "checked_samples": 3394,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_socket": {
+          "checked_samples": 2594,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_maximum_socket": {
+          "checked_samples": 2867,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_socket_loading": {
+          "checked_samples": 10955,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_maximum_socket_loading": {
+          "checked_samples": 11134,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_mount_opening": {
+          "checked_samples": 648,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_switch": {
+          "checked_samples": 5571,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_socket": {
+          "checked_samples": 2615,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_maximum_socket": {
+          "checked_samples": 2874,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_socket_loading": {
+          "checked_samples": 11450,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_maximum_socket_loading": {
+          "checked_samples": 11612,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_mount_opening": {
+          "checked_samples": 36,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_switch": {
+          "checked_samples": 3437,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_socket": {
+          "checked_samples": 2612,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_maximum_socket": {
+          "checked_samples": 2862,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_socket_loading": {
+          "checked_samples": 10942,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_maximum_socket_loading": {
+          "checked_samples": 11028,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_mount_opening": {
+          "checked_samples": 36,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_switch": {
+          "checked_samples": 3080,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_socket": {
+          "checked_samples": 2451,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_maximum_socket": {
+          "checked_samples": 2687,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_socket_loading": {
+          "checked_samples": 9949,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_maximum_socket_loading": {
+          "checked_samples": 10022,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_mount_opening": {
+          "checked_samples": 552,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_switch": {
+          "checked_samples": 3110,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_socket": {
+          "checked_samples": 2450,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_maximum_socket": {
+          "checked_samples": 2684,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_socket_loading": {
+          "checked_samples": 9986,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_maximum_socket_loading": {
+          "checked_samples": 10057,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_mount_opening": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "model_only_checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 13972,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "external_wire_bus": {
+          "checked_samples": 1014,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "clip_gap_0": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_0_switch": {
+          "checked_samples": 3394,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_socket": {
+          "checked_samples": 2594,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_maximum_socket": {
+          "checked_samples": 2867,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_socket_loading": {
+          "checked_samples": 10955,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_maximum_socket_loading": {
+          "checked_samples": 11134,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_0_mount_opening": {
+          "checked_samples": 648,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_switch": {
+          "checked_samples": 5571,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_socket": {
+          "checked_samples": 2615,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_maximum_socket": {
+          "checked_samples": 2874,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_socket_loading": {
+          "checked_samples": 11450,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_maximum_socket_loading": {
+          "checked_samples": 11612,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_1_mount_opening": {
+          "checked_samples": 36,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_switch": {
+          "checked_samples": 3437,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_socket": {
+          "checked_samples": 2612,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_maximum_socket": {
+          "checked_samples": 2862,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_socket_loading": {
+          "checked_samples": 10942,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_maximum_socket_loading": {
+          "checked_samples": 11028,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_2_mount_opening": {
+          "checked_samples": 36,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_switch": {
+          "checked_samples": 3080,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_socket": {
+          "checked_samples": 2451,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_maximum_socket": {
+          "checked_samples": 2687,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_socket_loading": {
+          "checked_samples": 9949,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_maximum_socket_loading": {
+          "checked_samples": 10022,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_3_mount_opening": {
+          "checked_samples": 552,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_switch": {
+          "checked_samples": 3110,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_socket": {
+          "checked_samples": 2450,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_maximum_socket": {
+          "checked_samples": 2684,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_socket_loading": {
+          "checked_samples": 9986,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_maximum_socket_loading": {
+          "checked_samples": 10057,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "key_4_mount_opening": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "support_only_checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "external_wire_bus": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_0": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_0_switch": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_0_socket": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_0_maximum_socket": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_0_socket_loading": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_0_maximum_socket_loading": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_0_mount_opening": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_1_switch": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_1_socket": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_1_maximum_socket": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_1_socket_loading": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_1_maximum_socket_loading": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_1_mount_opening": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_2_switch": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_2_socket": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_2_maximum_socket": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_2_socket_loading": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_2_maximum_socket_loading": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_2_mount_opening": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_3_switch": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_3_socket": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_3_maximum_socket": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_3_socket_loading": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_3_maximum_socket_loading": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_3_mount_opening": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_4_switch": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_4_socket": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_4_maximum_socket": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_4_socket_loading": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_4_maximum_socket_loading": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "key_4_mount_opening": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "layer_starts": {
+        "checked_layers": 230,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [
+          {
+            "layer_top_mm": 3.4,
+            "area_mm2": 1.4686,
+            "print_xy_bounds_mm": [
+              42.5937,
+              5.7379,
+              43.9064,
+              7.4064
+            ],
+            "assembly_centre_mm": [
+              10.6,
+              -10.5,
+              4.5479
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 25
+          },
+          {
+            "layer_top_mm": 3.4,
+            "area_mm2": 1.4686,
+            "print_xy_bounds_mm": [
+              39.8937,
+              5.7379,
+              41.2064,
+              7.4064
+            ],
+            "assembly_centre_mm": [
+              7.9,
+              -10.5,
+              4.5479
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 25
+          },
+          {
+            "layer_top_mm": 3.4,
+            "area_mm2": 1.4686,
+            "print_xy_bounds_mm": [
+              24.0937,
+              5.7379,
+              25.4064,
+              7.4064
+            ],
+            "assembly_centre_mm": [
+              -7.9,
+              -10.5,
+              4.5479
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 40
+          },
+          {
+            "layer_top_mm": 3.4,
+            "area_mm2": 1.4686,
+            "print_xy_bounds_mm": [
+              21.3937,
+              5.7379,
+              22.7064,
+              7.4064
+            ],
+            "assembly_centre_mm": [
+              -10.6,
+              -10.5,
+              4.5479
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 24
+          },
+          {
+            "layer_top_mm": 13.6,
+            "area_mm2": 19.367,
+            "print_xy_bounds_mm": [
+              47.7812,
+              5.45,
+              59.5188,
+              7.1
+            ],
+            "assembly_centre_mm": [
+              21.0,
+              -0.3,
+              4.845
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 257
+          },
+          {
+            "layer_top_mm": 13.6,
+            "area_mm2": 19.0821,
+            "print_xy_bounds_mm": [
+              29.2812,
+              5.45,
+              41.0188,
+              7.1
+            ],
+            "assembly_centre_mm": [
+              2.5,
+              -0.3,
+              4.845
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 248
+          },
+          {
+            "layer_top_mm": 13.6,
+            "area_mm2": 19.367,
+            "print_xy_bounds_mm": [
+              10.7812,
+              5.45,
+              22.5188,
+              7.1
+            ],
+            "assembly_centre_mm": [
+              -16.0,
+              -0.3,
+              4.845
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 276
+          },
+          {
+            "layer_top_mm": 34.0,
+            "area_mm2": 18.3294,
+            "print_xy_bounds_mm": [
+              52.5956,
+              5.45,
+              63.7044,
+              7.1
+            ],
+            "assembly_centre_mm": [
+              25.5,
+              20.1,
+              4.845
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 221
+          },
+          {
+            "layer_top_mm": 34.0,
+            "area_mm2": 18.3294,
+            "print_xy_bounds_mm": [
+              6.5956,
+              5.45,
+              17.7044,
+              7.1
+            ],
+            "assembly_centre_mm": [
+              -20.5,
+              20.1,
+              4.845
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 221
+          }
+        ],
+        "partial_overhangs": [
+          {
+            "layer_top_mm": 3.4,
+            "unbacked_mesh_area_mm2": 13.0271,
+            "print_xy_bounds_mm": [
+              26.4313,
+              0.2896,
+              38.8687,
+              1.4104
+            ],
+            "direct_lower_bead_samples": 205,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 3.4,
+            "unbacked_mesh_area_mm2": 19.6398,
+            "print_xy_bounds_mm": [
+              42.0114,
+              0.2896,
+              59.9104,
+              1.4104
+            ],
+            "direct_lower_bead_samples": 341,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 3.4,
+            "unbacked_mesh_area_mm2": 19.6375,
+            "print_xy_bounds_mm": [
+              5.4112,
+              0.2896,
+              23.2886,
+              1.4104
+            ],
+            "direct_lower_bead_samples": 362,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 4.0,
+            "unbacked_mesh_area_mm2": 41.3439,
+            "print_xy_bounds_mm": [
+              39.65,
+              2.0958,
+              51.15,
+              6.75
+            ],
+            "direct_lower_bead_samples": 105,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 4.0,
+            "unbacked_mesh_area_mm2": 41.3433,
+            "print_xy_bounds_mm": [
+              14.15,
+              2.0958,
+              25.65,
+              6.75
+            ],
+            "direct_lower_bead_samples": 105,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 19.1588,
+            "print_xy_bounds_mm": [
+              47.7812,
+              5.45,
+              59.5188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 240,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 18.9148,
+            "print_xy_bounds_mm": [
+              29.2812,
+              5.45,
+              41.0188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 247,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 19.1578,
+            "print_xy_bounds_mm": [
+              10.7812,
+              5.45,
+              22.5188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 272,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              44.2971,
+              0.0,
+              58.0029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              25.7971,
+              0.0,
+              39.5029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              7.2971,
+              0.0,
+              21.0029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 22.4,
+            "unbacked_mesh_area_mm2": 12.11,
+            "print_xy_bounds_mm": [
+              49.65,
+              1.4388,
+              52.789,
+              5.4807
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 22.4,
+            "unbacked_mesh_area_mm2": 12.11,
+            "print_xy_bounds_mm": [
+              31.15,
+              1.4388,
+              34.289,
+              5.4807
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 22.4,
+            "unbacked_mesh_area_mm2": 12.11,
+            "print_xy_bounds_mm": [
+              12.65,
+              1.4388,
+              15.789,
+              5.4807
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 2.1648,
+            "print_xy_bounds_mm": [
+              52.8656,
+              0.5986,
+              57.2154,
+              1.1014
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 2.1648,
+            "print_xy_bounds_mm": [
+              8.0846,
+              0.5986,
+              12.4344,
+              1.1014
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 16.5489,
+            "print_xy_bounds_mm": [
+              14.15,
+              0.0,
+              20.8803,
+              5.2109
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 16.5548,
+            "print_xy_bounds_mm": [
+              44.4197,
+              0.0,
+              51.15,
+              5.4819
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 10.5072,
+            "print_xy_bounds_mm": [
+              27.5409,
+              7.9297,
+              31.994,
+              15.9158
+            ],
+            "direct_lower_bead_samples": 122,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 10.5045,
+            "print_xy_bounds_mm": [
+              33.304,
+              7.929,
+              37.7591,
+              15.9185
+            ],
+            "direct_lower_bead_samples": 136,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.0,
+            "unbacked_mesh_area_mm2": 18.1308,
+            "print_xy_bounds_mm": [
+              52.5956,
+              5.45,
+              63.7044,
+              7.1
+            ],
+            "direct_lower_bead_samples": 221,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.0,
+            "unbacked_mesh_area_mm2": 18.1308,
+            "print_xy_bounds_mm": [
+              6.5956,
+              5.45,
+              17.7044,
+              7.1
+            ],
+            "direct_lower_bead_samples": 221,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 41.6,
+            "unbacked_mesh_area_mm2": 16.1728,
+            "print_xy_bounds_mm": [
+              48.8581,
+              0.0,
+              62.4419,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 41.6,
+            "unbacked_mesh_area_mm2": 16.1728,
+            "print_xy_bounds_mm": [
+              2.8581,
+              0.0,
+              16.4419,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 43.0,
+            "unbacked_mesh_area_mm2": 12.0987,
+            "print_xy_bounds_mm": [
+              8.0515,
+              1.4387,
+              11.15,
+              5.4809
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 43.0,
+            "unbacked_mesh_area_mm2": 12.0987,
+            "print_xy_bounds_mm": [
+              54.0515,
+              1.4387,
+              57.15,
+              5.4809
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "largest_unbacked_layers": [
+          {
+            "layer_top_mm": 4.0,
+            "unbacked_mesh_area_mm2": 41.3439,
+            "print_xy_bounds_mm": [
+              39.65,
+              2.0958,
+              51.15,
+              6.75
+            ],
+            "direct_lower_bead_samples": 105,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 4.0,
+            "unbacked_mesh_area_mm2": 41.3433,
+            "print_xy_bounds_mm": [
+              14.15,
+              2.0958,
+              25.65,
+              6.75
+            ],
+            "direct_lower_bead_samples": 105,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 3.4,
+            "unbacked_mesh_area_mm2": 19.6398,
+            "print_xy_bounds_mm": [
+              42.0114,
+              0.2896,
+              59.9104,
+              1.4104
+            ],
+            "direct_lower_bead_samples": 341,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 3.4,
+            "unbacked_mesh_area_mm2": 19.6375,
+            "print_xy_bounds_mm": [
+              5.4112,
+              0.2896,
+              23.2886,
+              1.4104
+            ],
+            "direct_lower_bead_samples": 362,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 19.1588,
+            "print_xy_bounds_mm": [
+              47.7812,
+              5.45,
+              59.5188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 240,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 19.1578,
+            "print_xy_bounds_mm": [
+              10.7812,
+              5.45,
+              22.5188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 272,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 18.9148,
+            "print_xy_bounds_mm": [
+              29.2812,
+              5.45,
+              41.0188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 247,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.0,
+            "unbacked_mesh_area_mm2": 18.1308,
+            "print_xy_bounds_mm": [
+              52.5956,
+              5.45,
+              63.7044,
+              7.1
+            ],
+            "direct_lower_bead_samples": 221,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.0,
+            "unbacked_mesh_area_mm2": 18.1308,
+            "print_xy_bounds_mm": [
+              6.5956,
+              5.45,
+              17.7044,
+              7.1
+            ],
+            "direct_lower_bead_samples": 221,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 16.5548,
+            "print_xy_bounds_mm": [
+              44.4197,
+              0.0,
+              51.15,
+              5.4819
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 16.5489,
+            "print_xy_bounds_mm": [
+              14.15,
+              0.0,
+              20.8803,
+              5.2109
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              44.2971,
+              0.0,
+              58.0029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              25.7971,
+              0.0,
+              39.5029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              7.2971,
+              0.0,
+              21.0029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 41.6,
+            "unbacked_mesh_area_mm2": 16.1728,
+            "print_xy_bounds_mm": [
+              48.8581,
+              0.0,
+              62.4419,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 41.6,
+            "unbacked_mesh_area_mm2": 16.1728,
+            "print_xy_bounds_mm": [
+              2.8581,
+              0.0,
+              16.4419,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "whole_print_layer_starts": {
+        "checked_layers": 230,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [
+          {
+            "layer_top_mm": 3.4,
+            "area_mm2": 1.4686,
+            "print_xy_bounds_mm": [
+              42.5937,
+              5.7379,
+              43.9064,
+              7.4064
+            ],
+            "assembly_centre_mm": [
+              10.6,
+              -10.5,
+              4.5479
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 25
+          },
+          {
+            "layer_top_mm": 3.4,
+            "area_mm2": 1.4686,
+            "print_xy_bounds_mm": [
+              39.8937,
+              5.7379,
+              41.2064,
+              7.4064
+            ],
+            "assembly_centre_mm": [
+              7.9,
+              -10.5,
+              4.5479
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 25
+          },
+          {
+            "layer_top_mm": 3.4,
+            "area_mm2": 1.4686,
+            "print_xy_bounds_mm": [
+              24.0937,
+              5.7379,
+              25.4064,
+              7.4064
+            ],
+            "assembly_centre_mm": [
+              -7.9,
+              -10.5,
+              4.5479
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 40
+          },
+          {
+            "layer_top_mm": 3.4,
+            "area_mm2": 1.4686,
+            "print_xy_bounds_mm": [
+              21.3937,
+              5.7379,
+              22.7064,
+              7.4064
+            ],
+            "assembly_centre_mm": [
+              -10.6,
+              -10.5,
+              4.5479
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 24
+          },
+          {
+            "layer_top_mm": 13.6,
+            "area_mm2": 19.367,
+            "print_xy_bounds_mm": [
+              47.7812,
+              5.45,
+              59.5188,
+              7.1
+            ],
+            "assembly_centre_mm": [
+              21.0,
+              -0.3,
+              4.845
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 257
+          },
+          {
+            "layer_top_mm": 13.6,
+            "area_mm2": 19.0821,
+            "print_xy_bounds_mm": [
+              29.2812,
+              5.45,
+              41.0188,
+              7.1
+            ],
+            "assembly_centre_mm": [
+              2.5,
+              -0.3,
+              4.845
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 248
+          },
+          {
+            "layer_top_mm": 13.6,
+            "area_mm2": 19.367,
+            "print_xy_bounds_mm": [
+              10.7812,
+              5.45,
+              22.5188,
+              7.1
+            ],
+            "assembly_centre_mm": [
+              -16.0,
+              -0.3,
+              4.845
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 276
+          },
+          {
+            "layer_top_mm": 34.0,
+            "area_mm2": 18.3294,
+            "print_xy_bounds_mm": [
+              52.5956,
+              5.45,
+              63.7044,
+              7.1
+            ],
+            "assembly_centre_mm": [
+              25.5,
+              20.1,
+              4.845
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 221
+          },
+          {
+            "layer_top_mm": 34.0,
+            "area_mm2": 18.3294,
+            "print_xy_bounds_mm": [
+              6.5956,
+              5.45,
+              17.7044,
+              7.1
+            ],
+            "assembly_centre_mm": [
+              -20.5,
+              20.1,
+              4.845
+            ],
+            "actual_vertical_gap_mm": 0.2,
+            "direct_lower_bead_samples": 221
+          }
+        ],
+        "partial_overhangs": [
+          {
+            "layer_top_mm": 3.4,
+            "unbacked_mesh_area_mm2": 13.0271,
+            "print_xy_bounds_mm": [
+              26.4313,
+              0.2896,
+              38.8687,
+              1.4104
+            ],
+            "direct_lower_bead_samples": 205,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 3.4,
+            "unbacked_mesh_area_mm2": 19.6398,
+            "print_xy_bounds_mm": [
+              42.0114,
+              0.2896,
+              59.9104,
+              1.4104
+            ],
+            "direct_lower_bead_samples": 341,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 3.4,
+            "unbacked_mesh_area_mm2": 19.6375,
+            "print_xy_bounds_mm": [
+              5.4112,
+              0.2896,
+              23.2886,
+              1.4104
+            ],
+            "direct_lower_bead_samples": 362,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 4.0,
+            "unbacked_mesh_area_mm2": 41.3439,
+            "print_xy_bounds_mm": [
+              39.65,
+              2.0958,
+              51.15,
+              6.75
+            ],
+            "direct_lower_bead_samples": 105,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 4.0,
+            "unbacked_mesh_area_mm2": 41.3433,
+            "print_xy_bounds_mm": [
+              14.15,
+              2.0958,
+              25.65,
+              6.75
+            ],
+            "direct_lower_bead_samples": 105,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 19.1588,
+            "print_xy_bounds_mm": [
+              47.7812,
+              5.45,
+              59.5188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 240,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 18.9148,
+            "print_xy_bounds_mm": [
+              29.2812,
+              5.45,
+              41.0188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 247,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 19.1578,
+            "print_xy_bounds_mm": [
+              10.7812,
+              5.45,
+              22.5188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 272,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              44.2971,
+              0.0,
+              58.0029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              25.7971,
+              0.0,
+              39.5029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              7.2971,
+              0.0,
+              21.0029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 22.4,
+            "unbacked_mesh_area_mm2": 12.11,
+            "print_xy_bounds_mm": [
+              49.65,
+              1.4388,
+              52.789,
+              5.4807
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 22.4,
+            "unbacked_mesh_area_mm2": 12.11,
+            "print_xy_bounds_mm": [
+              31.15,
+              1.4388,
+              34.289,
+              5.4807
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 22.4,
+            "unbacked_mesh_area_mm2": 12.11,
+            "print_xy_bounds_mm": [
+              12.65,
+              1.4388,
+              15.789,
+              5.4807
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 2.1648,
+            "print_xy_bounds_mm": [
+              52.8656,
+              0.5986,
+              57.2154,
+              1.1014
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 2.1648,
+            "print_xy_bounds_mm": [
+              8.0846,
+              0.5986,
+              12.4344,
+              1.1014
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 16.5489,
+            "print_xy_bounds_mm": [
+              14.15,
+              0.0,
+              20.8803,
+              5.2109
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 16.5548,
+            "print_xy_bounds_mm": [
+              44.4197,
+              0.0,
+              51.15,
+              5.4819
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 10.5072,
+            "print_xy_bounds_mm": [
+              27.5409,
+              7.9297,
+              31.994,
+              15.9158
+            ],
+            "direct_lower_bead_samples": 122,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 10.5045,
+            "print_xy_bounds_mm": [
+              33.304,
+              7.929,
+              37.7591,
+              15.9185
+            ],
+            "direct_lower_bead_samples": 136,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.0,
+            "unbacked_mesh_area_mm2": 18.1308,
+            "print_xy_bounds_mm": [
+              52.5956,
+              5.45,
+              63.7044,
+              7.1
+            ],
+            "direct_lower_bead_samples": 221,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.0,
+            "unbacked_mesh_area_mm2": 18.1308,
+            "print_xy_bounds_mm": [
+              6.5956,
+              5.45,
+              17.7044,
+              7.1
+            ],
+            "direct_lower_bead_samples": 221,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 41.6,
+            "unbacked_mesh_area_mm2": 16.1728,
+            "print_xy_bounds_mm": [
+              48.8581,
+              0.0,
+              62.4419,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 41.6,
+            "unbacked_mesh_area_mm2": 16.1728,
+            "print_xy_bounds_mm": [
+              2.8581,
+              0.0,
+              16.4419,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 43.0,
+            "unbacked_mesh_area_mm2": 12.0987,
+            "print_xy_bounds_mm": [
+              8.0515,
+              1.4387,
+              11.15,
+              5.4809
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 43.0,
+            "unbacked_mesh_area_mm2": 12.0987,
+            "print_xy_bounds_mm": [
+              54.0515,
+              1.4387,
+              57.15,
+              5.4809
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "largest_unbacked_layers": [
+          {
+            "layer_top_mm": 4.0,
+            "unbacked_mesh_area_mm2": 41.3439,
+            "print_xy_bounds_mm": [
+              39.65,
+              2.0958,
+              51.15,
+              6.75
+            ],
+            "direct_lower_bead_samples": 105,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 4.0,
+            "unbacked_mesh_area_mm2": 41.3433,
+            "print_xy_bounds_mm": [
+              14.15,
+              2.0958,
+              25.65,
+              6.75
+            ],
+            "direct_lower_bead_samples": 105,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 3.4,
+            "unbacked_mesh_area_mm2": 19.6398,
+            "print_xy_bounds_mm": [
+              42.0114,
+              0.2896,
+              59.9104,
+              1.4104
+            ],
+            "direct_lower_bead_samples": 341,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 3.4,
+            "unbacked_mesh_area_mm2": 19.6375,
+            "print_xy_bounds_mm": [
+              5.4112,
+              0.2896,
+              23.2886,
+              1.4104
+            ],
+            "direct_lower_bead_samples": 362,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 19.1588,
+            "print_xy_bounds_mm": [
+              47.7812,
+              5.45,
+              59.5188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 240,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 19.1578,
+            "print_xy_bounds_mm": [
+              10.7812,
+              5.45,
+              22.5188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 272,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 13.6,
+            "unbacked_mesh_area_mm2": 18.9148,
+            "print_xy_bounds_mm": [
+              29.2812,
+              5.45,
+              41.0188,
+              7.1
+            ],
+            "direct_lower_bead_samples": 247,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.0,
+            "unbacked_mesh_area_mm2": 18.1308,
+            "print_xy_bounds_mm": [
+              52.5956,
+              5.45,
+              63.7044,
+              7.1
+            ],
+            "direct_lower_bead_samples": 221,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.0,
+            "unbacked_mesh_area_mm2": 18.1308,
+            "print_xy_bounds_mm": [
+              6.5956,
+              5.45,
+              17.7044,
+              7.1
+            ],
+            "direct_lower_bead_samples": 221,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 16.5548,
+            "print_xy_bounds_mm": [
+              44.4197,
+              0.0,
+              51.15,
+              5.4819
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.8,
+            "unbacked_mesh_area_mm2": 16.5489,
+            "print_xy_bounds_mm": [
+              14.15,
+              0.0,
+              20.8803,
+              5.2109
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              44.2971,
+              0.0,
+              58.0029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              25.7971,
+              0.0,
+              39.5029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 21.0,
+            "unbacked_mesh_area_mm2": 16.3119,
+            "print_xy_bounds_mm": [
+              7.2971,
+              0.0,
+              21.0029,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 41.6,
+            "unbacked_mesh_area_mm2": 16.1728,
+            "print_xy_bounds_mm": [
+              48.8581,
+              0.0,
+              62.4419,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 41.6,
+            "unbacked_mesh_area_mm2": 16.1728,
+            "print_xy_bounds_mm": [
+              2.8581,
+              0.0,
+              16.4419,
+              1.2
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "helper_side_gap": {
+        "checked_helper_samples": 371766,
+        "excluded_bonded_tab_samples": 871,
+        "minimum_required_mm": 0.5,
+        "sampling_allowance_mm": 0.15,
+        "minimum_conservative_gap_mm": 0.52,
+        "violating_samples": 0,
+        "closest_layers": [
+          {
+            "layer_top_mm": 23.399999618530273,
+            "conservative_xy_gap_mm": 0.52
+          }
+        ],
+        "method": "Nearest actual bead centres in same/adjacent layer minus both measured half-widths and a full sampling step. Deliberate outer-rail cut tabs are excluded; functional-space checks exclude nothing."
+      }
+    },
+    "Battery_Holder": {
+      "normal_mesh_difference_mm3": 0.00013388180773234035,
+      "helper_mesh_difference_mm3": 0.0009544541311157966,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 13210,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "external_wire_bus": {
+          "checked_samples": 110,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "reverse_wire_bus": {
+          "checked_samples": 107,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "clip_gap_0": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "battery_reserve": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "battery_loading": {
+          "checked_samples": 150,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "gate_removal_route": {
+          "checked_samples": 1631,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "gate_slot_-1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "gate_slot_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "model_only_checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 13210,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "external_wire_bus": {
+          "checked_samples": 110,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "reverse_wire_bus": {
+          "checked_samples": 107,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "clip_gap_0": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "battery_reserve": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "battery_loading": {
+          "checked_samples": 150,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "gate_removal_route": {
+          "checked_samples": 1631,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "gate_slot_-1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "gate_slot_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "support_only_checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "external_wire_bus": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "reverse_wire_bus": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_0": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "battery_reserve": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "battery_loading": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "gate_removal_route": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "gate_slot_-1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "gate_slot_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "layer_starts": {
+        "checked_layers": 186,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "partial_overhangs": [
+          {
+            "layer_top_mm": 0.4,
+            "unbacked_mesh_area_mm2": 2.6662,
+            "print_xy_bounds_mm": [
+              3.857,
+              10.1686,
+              28.143,
+              17.5912
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 0.4,
+            "unbacked_mesh_area_mm2": 2.596,
+            "print_xy_bounds_mm": [
+              2.4881,
+              8.937,
+              29.5119,
+              18.96
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 1.8,
+            "unbacked_mesh_area_mm2": 6.2274,
+            "print_xy_bounds_mm": [
+              19.612,
+              13.257,
+              27.7162,
+              14.0401
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 1.8,
+            "unbacked_mesh_area_mm2": 6.2274,
+            "print_xy_bounds_mm": [
+              4.2838,
+              13.257,
+              12.388,
+              14.0401
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 2.0,
+            "unbacked_mesh_area_mm2": 4.6131,
+            "print_xy_bounds_mm": [
+              25.3685,
+              10.5988,
+              27.6315,
+              12.6485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 2.0,
+            "unbacked_mesh_area_mm2": 4.6131,
+            "print_xy_bounds_mm": [
+              4.3685,
+              10.5988,
+              6.6315,
+              12.6485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 3.4703,
+            "print_xy_bounds_mm": [
+              28.3816,
+              12.8285,
+              29.2184,
+              17.0856
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 3.4704,
+            "print_xy_bounds_mm": [
+              2.7816,
+              12.8284,
+              3.6184,
+              17.0856
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              17.1632,
+              17.8301,
+              27.6368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              4.3632,
+              17.8301,
+              14.8368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 12.8,
+            "unbacked_mesh_area_mm2": 10.7388,
+            "print_xy_bounds_mm": [
+              17.1216,
+              9.1303,
+              27.6768,
+              10.1667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 12.8,
+            "unbacked_mesh_area_mm2": 10.7415,
+            "print_xy_bounds_mm": [
+              4.3232,
+              9.1303,
+              14.8784,
+              10.1667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 3.4697,
+            "print_xy_bounds_mm": [
+              2.7816,
+              12.8284,
+              3.6184,
+              17.0846
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 3.4697,
+            "print_xy_bounds_mm": [
+              28.3816,
+              12.8285,
+              29.2184,
+              17.0846
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              17.1632,
+              17.8301,
+              27.6368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              4.3632,
+              17.8301,
+              14.8368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.4,
+            "unbacked_mesh_area_mm2": 12.8413,
+            "print_xy_bounds_mm": [
+              17.0575,
+              9.0306,
+              27.7389,
+              10.2665
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.4,
+            "unbacked_mesh_area_mm2": 12.8434,
+            "print_xy_bounds_mm": [
+              4.2611,
+              9.0306,
+              14.9425,
+              10.2665
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 3.4697,
+            "print_xy_bounds_mm": [
+              2.7816,
+              12.8284,
+              3.6184,
+              17.0846
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 3.4697,
+            "print_xy_bounds_mm": [
+              28.3816,
+              12.8285,
+              29.2184,
+              17.0846
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              17.1632,
+              17.8301,
+              27.6368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              4.3632,
+              17.8301,
+              14.8368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 32.0,
+            "unbacked_mesh_area_mm2": 13.3952,
+            "print_xy_bounds_mm": [
+              10.8909,
+              0.0,
+              15.3457,
+              10.2222
+            ],
+            "direct_lower_bead_samples": 108,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 32.0,
+            "unbacked_mesh_area_mm2": 13.4111,
+            "print_xy_bounds_mm": [
+              16.6555,
+              0.0029,
+              21.1091,
+              10.2223
+            ],
+            "direct_lower_bead_samples": 100,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 33.2,
+            "unbacked_mesh_area_mm2": 21.1178,
+            "print_xy_bounds_mm": [
+              27.9537,
+              9.2485,
+              31.6463,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 33.2,
+            "unbacked_mesh_area_mm2": 21.1312,
+            "print_xy_bounds_mm": [
+              0.3537,
+              9.2485,
+              4.0463,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.4,
+            "unbacked_mesh_area_mm2": 9.8062,
+            "print_xy_bounds_mm": [
+              17.9611,
+              9.0805,
+              27.7076,
+              10.2166
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.4,
+            "unbacked_mesh_area_mm2": 9.8151,
+            "print_xy_bounds_mm": [
+              4.2924,
+              9.0805,
+              14.0395,
+              10.2166
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 36.4,
+            "unbacked_mesh_area_mm2": 12.9518,
+            "print_xy_bounds_mm": [
+              27.8,
+              11.1891,
+              30.0097,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 36.4,
+            "unbacked_mesh_area_mm2": 12.9525,
+            "print_xy_bounds_mm": [
+              1.9903,
+              11.1891,
+              4.2,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "largest_unbacked_layers": [
+          {
+            "layer_top_mm": 33.2,
+            "unbacked_mesh_area_mm2": 21.1312,
+            "print_xy_bounds_mm": [
+              0.3537,
+              9.2485,
+              4.0463,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 33.2,
+            "unbacked_mesh_area_mm2": 21.1178,
+            "print_xy_bounds_mm": [
+              27.9537,
+              9.2485,
+              31.6463,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 32.0,
+            "unbacked_mesh_area_mm2": 13.4111,
+            "print_xy_bounds_mm": [
+              16.6555,
+              0.0029,
+              21.1091,
+              10.2223
+            ],
+            "direct_lower_bead_samples": 100,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 32.0,
+            "unbacked_mesh_area_mm2": 13.3952,
+            "print_xy_bounds_mm": [
+              10.8909,
+              0.0,
+              15.3457,
+              10.2222
+            ],
+            "direct_lower_bead_samples": 108,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 36.4,
+            "unbacked_mesh_area_mm2": 12.9525,
+            "print_xy_bounds_mm": [
+              1.9903,
+              11.1891,
+              4.2,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 36.4,
+            "unbacked_mesh_area_mm2": 12.9518,
+            "print_xy_bounds_mm": [
+              27.8,
+              11.1891,
+              30.0097,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.4,
+            "unbacked_mesh_area_mm2": 12.8434,
+            "print_xy_bounds_mm": [
+              4.2611,
+              9.0306,
+              14.9425,
+              10.2665
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.4,
+            "unbacked_mesh_area_mm2": 12.8413,
+            "print_xy_bounds_mm": [
+              17.0575,
+              9.0306,
+              27.7389,
+              10.2665
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 12.8,
+            "unbacked_mesh_area_mm2": 10.7415,
+            "print_xy_bounds_mm": [
+              4.3232,
+              9.1303,
+              14.8784,
+              10.1667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 12.8,
+            "unbacked_mesh_area_mm2": 10.7388,
+            "print_xy_bounds_mm": [
+              17.1216,
+              9.1303,
+              27.6768,
+              10.1667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.4,
+            "unbacked_mesh_area_mm2": 9.8151,
+            "print_xy_bounds_mm": [
+              4.2924,
+              9.0805,
+              14.0395,
+              10.2166
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.4,
+            "unbacked_mesh_area_mm2": 9.8062,
+            "print_xy_bounds_mm": [
+              17.9611,
+              9.0805,
+              27.7076,
+              10.2166
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              17.1632,
+              17.8301,
+              27.6368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              4.3632,
+              17.8301,
+              14.8368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              17.1632,
+              17.8301,
+              27.6368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              4.3632,
+              17.8301,
+              14.8368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "whole_print_layer_starts": {
+        "checked_layers": 186,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "partial_overhangs": [
+          {
+            "layer_top_mm": 0.4,
+            "unbacked_mesh_area_mm2": 2.6662,
+            "print_xy_bounds_mm": [
+              3.857,
+              10.1686,
+              28.143,
+              17.5912
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 0.4,
+            "unbacked_mesh_area_mm2": 2.596,
+            "print_xy_bounds_mm": [
+              2.4881,
+              8.937,
+              29.5119,
+              18.96
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 1.8,
+            "unbacked_mesh_area_mm2": 6.2274,
+            "print_xy_bounds_mm": [
+              19.612,
+              13.257,
+              27.7162,
+              14.0401
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 1.8,
+            "unbacked_mesh_area_mm2": 6.2274,
+            "print_xy_bounds_mm": [
+              4.2838,
+              13.257,
+              12.388,
+              14.0401
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 2.0,
+            "unbacked_mesh_area_mm2": 4.6131,
+            "print_xy_bounds_mm": [
+              25.3685,
+              10.5988,
+              27.6315,
+              12.6485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 2.0,
+            "unbacked_mesh_area_mm2": 4.6131,
+            "print_xy_bounds_mm": [
+              4.3685,
+              10.5988,
+              6.6315,
+              12.6485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 3.4703,
+            "print_xy_bounds_mm": [
+              28.3816,
+              12.8285,
+              29.2184,
+              17.0856
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 3.4704,
+            "print_xy_bounds_mm": [
+              2.7816,
+              12.8284,
+              3.6184,
+              17.0856
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              17.1632,
+              17.8301,
+              27.6368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              4.3632,
+              17.8301,
+              14.8368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 12.8,
+            "unbacked_mesh_area_mm2": 10.7388,
+            "print_xy_bounds_mm": [
+              17.1216,
+              9.1303,
+              27.6768,
+              10.1667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 12.8,
+            "unbacked_mesh_area_mm2": 10.7415,
+            "print_xy_bounds_mm": [
+              4.3232,
+              9.1303,
+              14.8784,
+              10.1667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 3.4697,
+            "print_xy_bounds_mm": [
+              2.7816,
+              12.8284,
+              3.6184,
+              17.0846
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 3.4697,
+            "print_xy_bounds_mm": [
+              28.3816,
+              12.8285,
+              29.2184,
+              17.0846
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              17.1632,
+              17.8301,
+              27.6368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              4.3632,
+              17.8301,
+              14.8368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.4,
+            "unbacked_mesh_area_mm2": 12.8413,
+            "print_xy_bounds_mm": [
+              17.0575,
+              9.0306,
+              27.7389,
+              10.2665
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.4,
+            "unbacked_mesh_area_mm2": 12.8434,
+            "print_xy_bounds_mm": [
+              4.2611,
+              9.0306,
+              14.9425,
+              10.2665
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 3.4697,
+            "print_xy_bounds_mm": [
+              2.7816,
+              12.8284,
+              3.6184,
+              17.0846
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 3.4697,
+            "print_xy_bounds_mm": [
+              28.3816,
+              12.8285,
+              29.2184,
+              17.0846
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              17.1632,
+              17.8301,
+              27.6368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              4.3632,
+              17.8301,
+              14.8368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 32.0,
+            "unbacked_mesh_area_mm2": 13.3952,
+            "print_xy_bounds_mm": [
+              10.8909,
+              0.0,
+              15.3457,
+              10.2222
+            ],
+            "direct_lower_bead_samples": 108,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 32.0,
+            "unbacked_mesh_area_mm2": 13.4111,
+            "print_xy_bounds_mm": [
+              16.6555,
+              0.0029,
+              21.1091,
+              10.2223
+            ],
+            "direct_lower_bead_samples": 100,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 33.2,
+            "unbacked_mesh_area_mm2": 21.1178,
+            "print_xy_bounds_mm": [
+              27.9537,
+              9.2485,
+              31.6463,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 33.2,
+            "unbacked_mesh_area_mm2": 21.1312,
+            "print_xy_bounds_mm": [
+              0.3537,
+              9.2485,
+              4.0463,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.4,
+            "unbacked_mesh_area_mm2": 9.8062,
+            "print_xy_bounds_mm": [
+              17.9611,
+              9.0805,
+              27.7076,
+              10.2166
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.4,
+            "unbacked_mesh_area_mm2": 9.8151,
+            "print_xy_bounds_mm": [
+              4.2924,
+              9.0805,
+              14.0395,
+              10.2166
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 36.4,
+            "unbacked_mesh_area_mm2": 12.9518,
+            "print_xy_bounds_mm": [
+              27.8,
+              11.1891,
+              30.0097,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 36.4,
+            "unbacked_mesh_area_mm2": 12.9525,
+            "print_xy_bounds_mm": [
+              1.9903,
+              11.1891,
+              4.2,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "largest_unbacked_layers": [
+          {
+            "layer_top_mm": 33.2,
+            "unbacked_mesh_area_mm2": 21.1312,
+            "print_xy_bounds_mm": [
+              0.3537,
+              9.2485,
+              4.0463,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 33.2,
+            "unbacked_mesh_area_mm2": 21.1178,
+            "print_xy_bounds_mm": [
+              27.9537,
+              9.2485,
+              31.6463,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 32.0,
+            "unbacked_mesh_area_mm2": 13.4111,
+            "print_xy_bounds_mm": [
+              16.6555,
+              0.0029,
+              21.1091,
+              10.2223
+            ],
+            "direct_lower_bead_samples": 100,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 32.0,
+            "unbacked_mesh_area_mm2": 13.3952,
+            "print_xy_bounds_mm": [
+              10.8909,
+              0.0,
+              15.3457,
+              10.2222
+            ],
+            "direct_lower_bead_samples": 108,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 36.4,
+            "unbacked_mesh_area_mm2": 12.9525,
+            "print_xy_bounds_mm": [
+              1.9903,
+              11.1891,
+              4.2,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 36.4,
+            "unbacked_mesh_area_mm2": 12.9518,
+            "print_xy_bounds_mm": [
+              27.8,
+              11.1891,
+              30.0097,
+              17.2485
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.4,
+            "unbacked_mesh_area_mm2": 12.8434,
+            "print_xy_bounds_mm": [
+              4.2611,
+              9.0306,
+              14.9425,
+              10.2665
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 23.4,
+            "unbacked_mesh_area_mm2": 12.8413,
+            "print_xy_bounds_mm": [
+              17.0575,
+              9.0306,
+              27.7389,
+              10.2665
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 12.8,
+            "unbacked_mesh_area_mm2": 10.7415,
+            "print_xy_bounds_mm": [
+              4.3232,
+              9.1303,
+              14.8784,
+              10.1667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 12.8,
+            "unbacked_mesh_area_mm2": 10.7388,
+            "print_xy_bounds_mm": [
+              17.1216,
+              9.1303,
+              27.6768,
+              10.1667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.4,
+            "unbacked_mesh_area_mm2": 9.8151,
+            "print_xy_bounds_mm": [
+              4.2924,
+              9.0805,
+              14.0395,
+              10.2166
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 34.4,
+            "unbacked_mesh_area_mm2": 9.8062,
+            "print_xy_bounds_mm": [
+              17.9611,
+              9.0805,
+              27.7076,
+              10.2166
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              17.1632,
+              17.8301,
+              27.6368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 10.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              4.3632,
+              17.8301,
+              14.8368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              17.1632,
+              17.8301,
+              27.6368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 18.0,
+            "unbacked_mesh_area_mm2": 8.6745,
+            "print_xy_bounds_mm": [
+              4.3632,
+              17.8301,
+              14.8368,
+              18.667
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "helper_side_gap": {
+        "checked_helper_samples": 83972,
+        "excluded_bonded_tab_samples": 0,
+        "minimum_required_mm": 0.5,
+        "sampling_allowance_mm": 0.15,
+        "minimum_conservative_gap_mm": 0.7361,
+        "violating_samples": 0,
+        "closest_layers": [],
+        "method": "Nearest actual bead centres in same/adjacent layer minus both measured half-widths and a full sampling step. Deliberate outer-rail cut tabs are excluded; functional-space checks exclude nothing."
+      }
+    },
+    "Battery_End_Gate": {
+      "normal_mesh_difference_mm3": 1.4051545950696679e-06,
+      "helper_mesh_difference_mm3": 0.0,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "model_only_checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "support_only_checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "layer_starts": {
+        "checked_layers": 13,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "partial_overhangs": [],
+        "largest_unbacked_layers": [],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "whole_print_layer_starts": {
+        "checked_layers": 13,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "partial_overhangs": [],
+        "largest_unbacked_layers": [],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "helper_side_gap": {
+        "checked_helper_samples": 0,
+        "excluded_bonded_tab_samples": 0,
+        "minimum_required_mm": 0.5,
+        "sampling_allowance_mm": 0.15,
+        "minimum_conservative_gap_mm": null,
+        "violating_samples": 0,
+        "closest_layers": [],
+        "method": "Nearest actual bead centres in same/adjacent layer minus both measured half-widths and a full sampling step. Deliberate outer-rail cut tabs are excluded; functional-space checks exclude nothing."
+      }
+    },
+    "XIAO_Rod_Holder": {
+      "normal_mesh_difference_mm3": 4.0644167496794564e-05,
+      "helper_mesh_difference_mm3": 0.0004163587854989912,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 17415,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "clip_gap_0": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "board": {
+          "checked_samples": 12,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "usb": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_route": {
+          "checked_samples": 18567,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        }
+      },
+      "model_only_checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 17415,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "clip_gap_0": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "board": {
+          "checked_samples": 12,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "usb": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_route": {
+          "checked_samples": 18567,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        }
+      },
+      "support_only_checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_0": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "board": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "usb": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_route": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "layer_starts": {
+        "checked_layers": 142,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "partial_overhangs": [
+          {
+            "layer_top_mm": 5.6,
+            "unbacked_mesh_area_mm2": 2.3223,
+            "print_xy_bounds_mm": [
+              19.1,
+              0.2,
+              20.5,
+              2.0
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 5.6,
+            "unbacked_mesh_area_mm2": 2.3223,
+            "print_xy_bounds_mm": [
+              1.9,
+              0.2,
+              3.3,
+              2.0
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 6.2,
+            "unbacked_mesh_area_mm2": 3.8241,
+            "print_xy_bounds_mm": [
+              20.5231,
+              0.0,
+              22.4,
+              2.8
+            ],
+            "direct_lower_bead_samples": 56,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 6.2,
+            "unbacked_mesh_area_mm2": 3.824,
+            "print_xy_bounds_mm": [
+              0.0,
+              0.0,
+              1.8769,
+              2.8
+            ],
+            "direct_lower_bead_samples": 59,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 23.733,
+            "print_xy_bounds_mm": [
+              1.8425,
+              2.3125,
+              20.5575,
+              6.916
+            ],
+            "direct_lower_bead_samples": 350,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 12.5256,
+            "print_xy_bounds_mm": [
+              1.2706,
+              3.0392,
+              21.1491,
+              9.4473
+            ],
+            "direct_lower_bead_samples": 2,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 4.5765,
+            "print_xy_bounds_mm": [
+              6.2595,
+              10.5603,
+              10.5483,
+              14.796
+            ],
+            "direct_lower_bead_samples": 87,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 4.5717,
+            "print_xy_bounds_mm": [
+              11.8517,
+              10.56,
+              16.1415,
+              14.7985
+            ],
+            "direct_lower_bead_samples": 66,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "largest_unbacked_layers": [
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 23.733,
+            "print_xy_bounds_mm": [
+              1.8425,
+              2.3125,
+              20.5575,
+              6.916
+            ],
+            "direct_lower_bead_samples": 350,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 12.5256,
+            "print_xy_bounds_mm": [
+              1.2706,
+              3.0392,
+              21.1491,
+              9.4473
+            ],
+            "direct_lower_bead_samples": 2,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 4.5765,
+            "print_xy_bounds_mm": [
+              6.2595,
+              10.5603,
+              10.5483,
+              14.796
+            ],
+            "direct_lower_bead_samples": 87,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 4.5717,
+            "print_xy_bounds_mm": [
+              11.8517,
+              10.56,
+              16.1415,
+              14.7985
+            ],
+            "direct_lower_bead_samples": 66,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 6.2,
+            "unbacked_mesh_area_mm2": 3.8241,
+            "print_xy_bounds_mm": [
+              20.5231,
+              0.0,
+              22.4,
+              2.8
+            ],
+            "direct_lower_bead_samples": 56,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 6.2,
+            "unbacked_mesh_area_mm2": 3.824,
+            "print_xy_bounds_mm": [
+              0.0,
+              0.0,
+              1.8769,
+              2.8
+            ],
+            "direct_lower_bead_samples": 59,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 5.6,
+            "unbacked_mesh_area_mm2": 2.3223,
+            "print_xy_bounds_mm": [
+              19.1,
+              0.2,
+              20.5,
+              2.0
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 5.6,
+            "unbacked_mesh_area_mm2": 2.3223,
+            "print_xy_bounds_mm": [
+              1.9,
+              0.2,
+              3.3,
+              2.0
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "whole_print_layer_starts": {
+        "checked_layers": 142,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "partial_overhangs": [
+          {
+            "layer_top_mm": 5.6,
+            "unbacked_mesh_area_mm2": 2.3223,
+            "print_xy_bounds_mm": [
+              19.1,
+              0.2,
+              20.5,
+              2.0
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 5.6,
+            "unbacked_mesh_area_mm2": 2.3223,
+            "print_xy_bounds_mm": [
+              1.9,
+              0.2,
+              3.3,
+              2.0
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 23.733,
+            "print_xy_bounds_mm": [
+              1.8425,
+              2.3125,
+              20.5575,
+              6.916
+            ],
+            "direct_lower_bead_samples": 350,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 12.5256,
+            "print_xy_bounds_mm": [
+              1.2706,
+              3.0392,
+              21.1491,
+              9.4473
+            ],
+            "direct_lower_bead_samples": 2,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 4.5765,
+            "print_xy_bounds_mm": [
+              6.2595,
+              10.5603,
+              10.5483,
+              14.796
+            ],
+            "direct_lower_bead_samples": 87,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 4.5717,
+            "print_xy_bounds_mm": [
+              11.8517,
+              10.56,
+              16.1415,
+              14.7985
+            ],
+            "direct_lower_bead_samples": 66,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "largest_unbacked_layers": [
+          {
+            "layer_top_mm": 26.0,
+            "unbacked_mesh_area_mm2": 23.733,
+            "print_xy_bounds_mm": [
+              1.8425,
+              2.3125,
+              20.5575,
+              6.916
+            ],
+            "direct_lower_bead_samples": 350,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 12.5256,
+            "print_xy_bounds_mm": [
+              1.2706,
+              3.0392,
+              21.1491,
+              9.4473
+            ],
+            "direct_lower_bead_samples": 2,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 4.5765,
+            "print_xy_bounds_mm": [
+              6.2595,
+              10.5603,
+              10.5483,
+              14.796
+            ],
+            "direct_lower_bead_samples": 87,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 26.2,
+            "unbacked_mesh_area_mm2": 4.5717,
+            "print_xy_bounds_mm": [
+              11.8517,
+              10.56,
+              16.1415,
+              14.7985
+            ],
+            "direct_lower_bead_samples": 66,
+            "actual_vertical_gap_mm": 0.2,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 5.6,
+            "unbacked_mesh_area_mm2": 2.3223,
+            "print_xy_bounds_mm": [
+              19.1,
+              0.2,
+              20.5,
+              2.0
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 5.6,
+            "unbacked_mesh_area_mm2": 2.3223,
+            "print_xy_bounds_mm": [
+              1.9,
+              0.2,
+              3.3,
+              2.0
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "helper_side_gap": {
+        "checked_helper_samples": 190129,
+        "excluded_bonded_tab_samples": 824,
+        "minimum_required_mm": 0.5,
+        "sampling_allowance_mm": 0.15,
+        "minimum_conservative_gap_mm": 0.7275,
+        "violating_samples": 0,
+        "closest_layers": [],
+        "method": "Nearest actual bead centres in same/adjacent layer minus both measured half-widths and a full sampling step. Deliberate outer-rail cut tabs are excluded; functional-space checks exclude nothing."
+      }
+    }
+  },
+  "path_samples": 1382932,
+  "parser_stats": {
+    "straight_extruding_moves": 117657,
+    "arc_extruding_moves": 17077,
+    "support_extruding_moves": 0,
+    "feature_samples": {
+      "Inner wall": 364846,
+      "Outer wall": 709623,
+      "Bottom surface": 10867,
+      "Gap infill": 161281,
+      "Internal solid infill": 80913,
+      "Top surface": 35547,
+      "Overhang wall": 11765,
+      "Sparse infill": 1147,
+      "Floating vertical shell": 1478,
+      "Bridge": 5465
+    }
+  },
+  "path_sample_step_mm": 0.15,
+  "unknowns": [
+    "Populated PCB underside and actual wire/solder bends are unmeasured.",
+    "PETG helper removal, print stability, fit, strength and fatigue require a physical coupon."
+  ],
+  "physical_fit_verified": false,
+  "support_removal_physically_verified": false,
+  "support_policy": "Model, support, interface, transition and brim beads must clear every functional region. No removable-support exception.",
+  "xy_guard_mm": 0.12,
+  "z_guard_mm": 0.1,
+  "passed": true
+}

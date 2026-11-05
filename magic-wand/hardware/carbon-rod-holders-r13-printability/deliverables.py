@@ -1,0 +1,7 @@
+"""One naming policy separates printable trials from preparation-only meshes."""
+def normal_name(part):
+    return part+'-SOURCE-REQUIRES-PREPARATION.stl'
+
+def project_name(directory):
+    return ('PRINT-FIRST-Key-Clip-Test.3mf' if directory.name.startswith('fit-coupon')
+            else 'AFTER-KEY-TEST-Holder-R13-sliced.3mf')

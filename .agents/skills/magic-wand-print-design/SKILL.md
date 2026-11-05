@@ -1,6 +1,6 @@
 ---
 name: magic-wand-print-design
-description: Revise the Magic Wand printable hardware, CAD, assembly preview or Bambu projects while preserving its helix, tapered silhouette, both handed grips and tested mechanical interfaces.
+description: Revise Magic Wand printable hardware, CAD, assembly previews and Bambu projects while preserving the helix, tapered silhouette, both handed grips and tested interfaces. Before finishing every 3D model, audit actual sliced holes, supports, removal access and likely snap points with Opus.
 ---
 
 # Magic Wand print design
@@ -29,6 +29,8 @@ Read the frozen [V20 design principles](../../../magic-wand/hardware/printed-loo
 - Locking interfaces serve the approved grip position and silhouette. Do not silently sacrifice those priorities to reuse old pegs, cap dimensions or joint heights. Verify the cap, buttons, cell, wires and complete attachment path after resolving the packaging.
 
 ## Before calling it final
+
+Before finishing every model or print project, use the repository's [printability-audit](../printability-audit/SKILL.md). It owns the recurring Opus review of actual holes, support removal and likely snap points, with minimal design changes. The earlier Codex-only CAD preference still governs implementation; the newer 5 November request authorizes the final Opus review.
 
 Map each requested change to a source parameter or feature and a check. Compare old/new assembled views, not just the print plate. Check the core-radius profile for monotonic taper; explicitly check the helix is generated. Inspect both handed handles and count both in the actual 3MF build. Check new joints inside the chosen silhouette instead of making the silhouette fit arbitrary collars.
 

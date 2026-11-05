@@ -1,0 +1,464 @@
+{
+  "project_sha256": "0e017855a338b606d129a3a1922d3995911a441bbb8649a780ea96b396634005",
+  "manifest_sha256": "1ba2a55c010810e16fd4f84b325298d0c2fc367c4b17e224c1ac1b2f5c132cfc",
+  "checker_sha256": "dc19a555347676e9ed3e8027f7b61beb6b955c2bf826fab9f6c1ecb5a3e35dd0",
+  "physical_strength_verified": false,
+  "method": "Ray intersections through final exported assembly STLs; actual G-code radial track clusters at clip midplanes. No force/fatigue simulation.",
+  "clips": {
+    "Battery_Holder": [
+      {
+        "axial_centre_mm": -14.8,
+        "radial_STL_sections_mm": {
+          "-70": 1.0005,
+          "-55": 1.0048,
+          "0": 1.15,
+          "90": 1.9,
+          "180": 1.15,
+          "235": 1.0048,
+          "250": 1.0005
+        },
+        "sampled_actual_layer_assembly_y_mm": -14.79999925559082,
+        "radial_extrusion_track_centres_mm": {
+          "-55": [
+            4.163,
+            4.452,
+            4.734
+          ],
+          "90": [
+            4.153,
+            4.548,
+            5.215,
+            5.6
+          ],
+          "235": [
+            4.163,
+            4.451,
+            4.737
+          ]
+        }
+      },
+      {
+        "axial_centre_mm": 17.0,
+        "radial_STL_sections_mm": {
+          "-70": 1.0005,
+          "-55": 1.0048,
+          "0": 1.15,
+          "90": 1.9,
+          "180": 1.15,
+          "235": 1.0048,
+          "250": 1.0005
+        },
+        "sampled_actual_layer_assembly_y_mm": 16.99999926621399,
+        "radial_extrusion_track_centres_mm": {
+          "-55": [
+            4.163,
+            4.451,
+            4.736
+          ],
+          "90": [
+            4.155,
+            4.549,
+            4.886,
+            5.209,
+            5.6
+          ],
+          "235": [
+            4.163,
+            4.452,
+            4.735
+          ]
+        }
+      }
+    ]
+  },
+  "fixed_reinforcement": {
+    "battery_crossbars_diameter_mm": 2.0,
+    "battery_previous_crossbars_diameter_mm": 1.4,
+    "key_fixed_load_rail_width_mm": 1.4,
+    "key_fixed_load_rail_depth_mm": 3.2,
+    "key_load_path_scanned_local_y_mm": [
+      -9.4,
+      5.2
+    ],
+    "battery_bridge_half_span_mm": 12.8,
+    "sensor_outer_rail_width_mm": 2.0,
+    "sensor_previous_rail_width_mm": 1.2,
+    "sensor_fixed_root_diameter_mm": 2.1,
+    "sensor_previous_fixed_root_diameter_mm": 1.6,
+    "gate_central_grab_bar_depth_mm": 2.7,
+    "gate_previous_grab_bar_depth_mm": 1.6,
+    "gate_sliding_wedge_neck_width_mm": 1.2,
+    "gate_sliding_wedge_depth_mm": 1.6,
+    "note": "These are source dimensions with exported one-body/interface checks, not breaking-force predictions. Sliding wedge dimensions and spring profiles remain unchanged."
+  },
+  "per_part_weak_point_decisions": {
+    "Battery_Holder": [
+      {
+        "feature": "Reinforced roof crossbars",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              6,
+              -8,
+              13.45
+            ],
+            "section_direction_assembly": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "STL_section_mm": 2.0,
+            "sampled_layer_assembly_y_mm": -8.000000018530272,
+            "sampled_layer_section_mm": 2.0,
+            "extrusion_track_centres_relative_mm": [
+              -0.771,
+              -0.378,
+              0.0,
+              0.378,
+              0.77
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              6,
+              0,
+              13.45
+            ],
+            "section_direction_assembly": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "STL_section_mm": 2.0,
+            "sampled_layer_assembly_y_mm": -1.8530272427597083e-08,
+            "sampled_layer_section_mm": 2.0,
+            "extrusion_track_centres_relative_mm": [
+              -0.771,
+              -0.378,
+              0.0,
+              0.378,
+              0.77
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              6,
+              8,
+              13.45
+            ],
+            "section_direction_assembly": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "STL_section_mm": 2.0,
+            "sampled_layer_assembly_y_mm": 7.999999027795413,
+            "sampled_layer_section_mm": 2.0,
+            "extrusion_track_centres_relative_mm": [
+              -0.771,
+              -0.378,
+              0.0,
+              0.378,
+              0.77
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 2.0,
+        "minimum_sampled_track_count": 5,
+        "load_case": "Battery retention and accidental snags bend the cage hoops.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Grow crossbars from 1.4 to 2 mm and connect longitudinal stringers; sag and retention remain unverified.",
+        "required_physical_test": "Inspect all hoop/stringer joints and bridge sag, then gently load the real cell without pouch pressure.",
+        "physical_strength_verified": false
+      },
+      {
+        "feature": "Reinforced floor crossbars",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              6,
+              -5.266666666666667,
+              4.85
+            ],
+            "section_direction_assembly": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "STL_section_mm": 2.0,
+            "sampled_layer_assembly_y_mm": -5.2000007814697256,
+            "sampled_layer_section_mm": 1.9735,
+            "extrusion_track_centres_relative_mm": [
+              -0.757,
+              -0.365,
+              0.0,
+              0.364,
+              0.756
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              6,
+              5.266666666666667,
+              4.85
+            ],
+            "section_direction_assembly": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "STL_section_mm": 2.0,
+            "sampled_layer_assembly_y_mm": 5.19999883706055,
+            "sampled_layer_section_mm": 1.9735,
+            "extrusion_track_centres_relative_mm": [
+              -0.784,
+              -0.392,
+              0.0,
+              0.391,
+              0.783
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 2.0,
+        "minimum_sampled_track_count": 5,
+        "load_case": "Cell weight and sliding insertion load the floor.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Reinforce outside the battery reserve; the full cell-loading route remains clear.",
+        "required_physical_test": "Slide the real cell in and out and inspect floor joints for cracking or whitening.",
+        "physical_strength_verified": false
+      },
+      {
+        "feature": "Outside gate-guide walls",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              -15,
+              -16.3,
+              8.85
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 1.6,
+            "sampled_layer_assembly_y_mm": -16.200000781469726,
+            "sampled_layer_section_mm": 1.6,
+            "extrusion_track_centres_relative_mm": [
+              -0.59,
+              -0.198,
+              0.198,
+              0.59
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              15,
+              -16.3,
+              8.85
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 1.6,
+            "sampled_layer_assembly_y_mm": -16.200000781469726,
+            "sampled_layer_section_mm": 1.6,
+            "extrusion_track_centres_relative_mm": [
+              -0.59,
+              -0.198,
+              0.198,
+              0.59
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 1.6,
+        "minimum_sampled_track_count": 4,
+        "load_case": "Gate wedging can split thin outside walls across their printed layers.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Grow the outside wall from 0.8 to 1.6 mm and add an outside diagonal; preserve the slot.",
+        "required_physical_test": "Try the real gate gently; stop if it binds or whitens either guide. Never force it against the cell.",
+        "physical_strength_verified": false
+      },
+      {
+        "feature": "Outside guide diagonal braces",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              -14.5,
+              -11.25,
+              12.65
+            ],
+            "section_direction_assembly": [
+              0.7525766947068778,
+              0.0,
+              -0.658504607868518
+            ],
+            "STL_section_mm": 1.5826,
+            "sampled_layer_assembly_y_mm": -11.200000781469726,
+            "sampled_layer_section_mm": 1.5826,
+            "extrusion_track_centres_relative_mm": [
+              -0.575,
+              -0.177,
+              0.167,
+              0.568
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              14.5,
+              -11.25,
+              12.65
+            ],
+            "section_direction_assembly": [
+              -0.7525766947068778,
+              0.0,
+              -0.658504607868518
+            ],
+            "STL_section_mm": 1.5826,
+            "sampled_layer_assembly_y_mm": -11.200000781469726,
+            "sampled_layer_section_mm": 1.5826,
+            "extrusion_track_centres_relative_mm": [
+              -0.576,
+              -0.162,
+              0.181,
+              0.585
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 1.5826,
+        "minimum_sampled_track_count": 4,
+        "load_case": "Guide bending transfers through a diagonal into the roof post.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Add a 1.6 mm outside brace without entering the gate route; check the actual root and diagonal print.",
+        "required_physical_test": "Inspect both diagonals for gaps or layer splits before trying the gate.",
+        "physical_strength_verified": false
+      },
+      {
+        "feature": "Centre roof stringer",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              0,
+              4,
+              13.45
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 2.0,
+            "sampled_layer_assembly_y_mm": 3.999999027795413,
+            "sampled_layer_section_mm": 2.0,
+            "extrusion_track_centres_relative_mm": [
+              -0.786,
+              -0.389,
+              0.369,
+              0.786
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 2.0,
+        "minimum_sampled_track_count": 4,
+        "load_case": "Roof bars transmit retention loads through the longitudinal centre support.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Join successive crossbars with a 2 mm stringer, reducing the unsupported crossbar span.",
+        "required_physical_test": "Inspect every crossbar/stringer junction and the free end after helper removal.",
+        "physical_strength_verified": false
+      }
+    ],
+    "Battery_End_Gate": [
+      {
+        "feature": "Both sliding-wedge narrow ends",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              -13.4,
+              -16.3,
+              12.75
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 1.24,
+            "sampled_layer_assembly_y_mm": -16.300000012599945,
+            "sampled_layer_section_mm": 1.24,
+            "extrusion_track_centres_relative_mm": [
+              -0.407,
+              -0.0,
+              0.407
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              13.4,
+              -16.3,
+              12.75
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 1.24,
+            "sampled_layer_assembly_y_mm": -16.300000012599945,
+            "sampled_layer_section_mm": 1.24,
+            "extrusion_track_centres_relative_mm": [
+              -0.407,
+              -0.0,
+              0.407
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 1.24,
+        "minimum_sampled_track_count": 3,
+        "load_case": "Gate insertion and removal flex its narrow sliding wedges.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Preserve the wedge fit, print its broad face on the bed and use the reinforced centre as the handle.",
+        "required_physical_test": "Cycle the gate without a cell first; inspect narrow ends and verify removal by the central bar.",
+        "physical_strength_verified": false
+      },
+      {
+        "feature": "Central grab bar",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              0,
+              -16.3,
+              8.85
+            ],
+            "section_direction_assembly": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "STL_section_mm": 1.8,
+            "sampled_layer_assembly_y_mm": -16.300000012599945,
+            "sampled_layer_section_mm": 1.8,
+            "extrusion_track_centres_relative_mm": [
+              -0.69,
+              -0.298,
+              -0.0,
+              0.298,
+              0.69
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 1.8,
+        "minimum_sampled_track_count": 5,
+        "load_case": "Pulling at the centre distributes removal load instead of using a wedge as a handle.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Increase the print depth from 1.6 to 2.7 mm outside the cell and sliding paths.",
+        "required_physical_test": "Pull at the central bar, checking that both wedges release together without bowing or cracks.",
+        "physical_strength_verified": false
+      }
+    ]
+  },
+  "full_set_physically_ready": false,
+  "qualification": "Geometric and extrusion-section screening only. Physical trial is required for every listed load case; no guaranteed breaking force or fatigue life.",
+  "passed": true
+}

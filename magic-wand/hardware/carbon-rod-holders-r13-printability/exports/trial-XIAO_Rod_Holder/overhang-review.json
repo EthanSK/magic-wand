@@ -1,0 +1,288 @@
+{
+  "slice_sha256": "c9196be79f0d0c62c761b36eb8f88183ddea826fefcf66a2577ed0b8a67b1d3c",
+  "decisions_sha256": "2a228ae39ac2e2266ef49dfe6f041c8de14275d3796f2f08f56f520b2ae2eedb",
+  "qualifier_sha256": "573c3e57ccdcccff726e47a5735a986b675f04df1450a5616711bf29f00a34c2",
+  "project_sha256": "dc4b10755fec33c991ade499cc25c6391e49415de694ba1d4de141467aa5301c",
+  "partial_overhang_threshold_mm2": 2.0,
+  "cases": {
+    "fe2147fe6319e04daff7": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 5.6,
+      "unbacked_mesh_area_mm2": 2.3228,
+      "print_xy_bounds_mm": [
+        19.1,
+        0.2,
+        20.5,
+        2.0
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Early fixed rail roots",
+      "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+      "required_test": "Inspect both root shoulders and the full-height sensor trial."
+    },
+    "4120169d873d370842c6": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 5.6,
+      "unbacked_mesh_area_mm2": 2.3228,
+      "print_xy_bounds_mm": [
+        1.9,
+        0.2,
+        3.3,
+        2.0
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Early fixed rail roots",
+      "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+      "required_test": "Inspect both root shoulders and the full-height sensor trial."
+    },
+    "a56d324697d1e61b8d02": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 6.2,
+      "unbacked_mesh_area_mm2": 3.8192,
+      "print_xy_bounds_mm": [
+        20.5231,
+        0.0,
+        22.4,
+        2.8
+      ],
+      "direct_lower_bead_samples": 56,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "PCB rail first faces",
+      "reason": "Exterior starters and fixed-rail ties back the rail starts; remove the deliberate ties before peeling helpers. Actual directly-beneath backing: 56 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Check rail bonding, cleanup and the real populated-board underside."
+    },
+    "88f075f743d04383c676": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 6.2,
+      "unbacked_mesh_area_mm2": 3.824,
+      "print_xy_bounds_mm": [
+        0.0,
+        0.0,
+        1.8769,
+        2.8
+      ],
+      "direct_lower_bead_samples": 60,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "PCB rail first faces",
+      "reason": "Exterior starters and fixed-rail ties back the rail starts; remove the deliberate ties before peeling helpers. Actual directly-beneath backing: 60 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Check rail bonding, cleanup and the real populated-board underside."
+    },
+    "7258de06787f302d0dd8": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 26.0,
+      "unbacked_mesh_area_mm2": 23.7366,
+      "print_xy_bounds_mm": [
+        1.8425,
+        2.3125,
+        20.5798,
+        6.916
+      ],
+      "direct_lower_bead_samples": 350,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late fixed diagonals",
+      "reason": "Dedicated projected exterior walls back the late V-shaped diagonals before the C face exists. Actual directly-beneath backing: 350 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Inspect both complete diagonals and their crown junction before fitting hardware."
+    },
+    "739957320a02d7c6e3eb": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 26.2,
+      "unbacked_mesh_area_mm2": 12.5279,
+      "print_xy_bounds_mm": [
+        1.2706,
+        3.041,
+        21.1491,
+        9.4473
+      ],
+      "direct_lower_bead_samples": 2,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late C face and root junctions",
+      "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 2 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+    },
+    "5477e2ec18dc5d708978": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 26.2,
+      "unbacked_mesh_area_mm2": 4.5765,
+      "print_xy_bounds_mm": [
+        6.2595,
+        10.5603,
+        10.5483,
+        14.796
+      ],
+      "direct_lower_bead_samples": 87,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late C face and root junctions",
+      "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 87 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+    },
+    "036ce011ca9f3a8893b5": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 26.2,
+      "unbacked_mesh_area_mm2": 4.5725,
+      "print_xy_bounds_mm": [
+        11.8517,
+        10.5489,
+        16.144,
+        14.7985
+      ],
+      "direct_lower_bead_samples": 66,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late C face and root junctions",
+      "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 66 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+    },
+    "351b5e61a717d99dc5b4": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 5.6,
+      "unbacked_mesh_area_mm2": 2.3228,
+      "print_xy_bounds_mm": [
+        19.1,
+        0.2,
+        20.5,
+        2.0
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Early fixed rail roots",
+      "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+      "required_test": "Inspect both root shoulders and the full-height sensor trial."
+    },
+    "d5c84b7eed613afbbf97": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 5.6,
+      "unbacked_mesh_area_mm2": 2.3228,
+      "print_xy_bounds_mm": [
+        1.9,
+        0.2,
+        3.3,
+        2.0
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Early fixed rail roots",
+      "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+      "required_test": "Inspect both root shoulders and the full-height sensor trial."
+    },
+    "1c7e65e9dde2be8c54b3": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 26.0,
+      "unbacked_mesh_area_mm2": 23.7366,
+      "print_xy_bounds_mm": [
+        1.8425,
+        2.3125,
+        20.5798,
+        6.916
+      ],
+      "direct_lower_bead_samples": 350,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late fixed diagonals",
+      "reason": "Dedicated projected exterior walls back the late V-shaped diagonals before the C face exists. Actual directly-beneath backing: 350 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Inspect both complete diagonals and their crown junction before fitting hardware."
+    },
+    "159e2ffaf95ebc9cd2a2": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 26.2,
+      "unbacked_mesh_area_mm2": 12.5279,
+      "print_xy_bounds_mm": [
+        1.2706,
+        3.041,
+        21.1491,
+        9.4473
+      ],
+      "direct_lower_bead_samples": 2,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late C face and root junctions",
+      "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 2 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+    },
+    "d071dba6aa1ea8579500": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 26.2,
+      "unbacked_mesh_area_mm2": 4.5765,
+      "print_xy_bounds_mm": [
+        6.2595,
+        10.5603,
+        10.5483,
+        14.796
+      ],
+      "direct_lower_bead_samples": 87,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late C face and root junctions",
+      "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 87 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+    },
+    "a43699f99d3497cadba5": {
+      "part": "XIAO_Rod_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 26.2,
+      "unbacked_mesh_area_mm2": 4.5725,
+      "print_xy_bounds_mm": [
+        11.8517,
+        10.5489,
+        16.144,
+        14.7985
+      ],
+      "direct_lower_bead_samples": 66,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late C face and root junctions",
+      "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 66 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+    }
+  },
+  "unreviewed_cases": [],
+  "obsolete_decisions": [],
+  "unreviewed_warnings": [],
+  "warning_decisions": {
+    "It seems object XIAO_Rod_Holder has floating cantilever. Please re-orient the object or enable support generation.": {
+      "decision": "bounded-physical-trial",
+      "reason": "Retain the warning. Dedicated aids back the late diagonals/C face; curved starts, full-height adhesion, cleanup and populated-board fit still require the complete sensor trial."
+    }
+  },
+  "test_recipe_audited": true,
+  "full_set_ready": false,
+  "physical_print_verified": false,
+  "qualification": "Bounded experiment only. Stop if helpers fuse, a bridge droops into a fit, a guide binds or any part cracks/whitens. Full-set readiness requires successful physical trials."
+}

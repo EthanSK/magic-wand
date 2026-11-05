@@ -138,7 +138,7 @@ through their build/check commands; never claim an illustration is physical veri
 ## Opus for UX taste
 
 - Ethan: “anything that is not UX taste related you implement yourself because Opus is taking too long.” Codex implements functional behaviour, bug fixes, tests and installation. Use Opus only for UX taste decisions, such as visual composition and style; routine behaviour and mechanical UI implementation stay with Codex. This replaces the broader Opus-for-UX implementation rule. User-requested — 2026-10-31.
-- Ethan: “Can you just stop using Opus and do it yourself? I'm sick of waiting for this shit.” Use Codex directly for wand 3D model design, CAD implementation and verification unless Ethan explicitly requests Opus again. This replaces the earlier same-day Opus-for-models preference. User-requested — 2026-10-24.
+- Ethan: “Can you just stop using Opus and do it yourself? I'm sick of waiting for this shit.” Use Codex directly for wand CAD implementation. His newer 5 November request adds the final Opus printability and snap-risk review through [printability-audit](../.agents/skills/printability-audit/SKILL.md); it does not delegate routine CAD implementation. This retains the earlier implementation preference. User-requested — 2026-10-24; review scope updated — 2026-11-05.
 
 ## Current contextual hold and sleep behaviour
 

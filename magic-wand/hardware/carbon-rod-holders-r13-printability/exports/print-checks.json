@@ -1,0 +1,185 @@
+{
+  "layout_sha256": "f91428ec6b9c20299ec1cd39ba75bcc9514dbf172c85fdddd9159454fc47243c",
+  "generator_sha256": "70623e512182aa64414e5556e306c8eb6420969b4dfaa86eb4c17643883a0728",
+  "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
+  "parts": [
+    "Key_Carrier",
+    "Battery_Holder",
+    "Battery_End_Gate",
+    "XIAO_Rod_Holder"
+  ],
+  "helper_sha256": {
+    "Key_Carrier-PRINT-HELPER-assembly.stl": "545bb62c116ea7ca4078ddb44dc7f16dde56acd45197cf535b56fc00f08e7659",
+    "XIAO_Rod_Holder-PRINT-HELPER-assembly.stl": "865fa7aac5f3cb52cafdab1ebc022c03ed9c1e88d1cbdeae35d241cf8d691a5d",
+    "Battery_Holder-PRINT-HELPER-assembly.stl": "b25851e0fdaf81b8bf3e371dcbb8823c1a67dd43eae430e9d76146af9d5961a0"
+  },
+  "support_policy": "Automatic supports off; labelled exterior CAD breakaway walls; actual beads require separate audit.",
+  "physical_print_verified": false,
+  "slice": {
+    "error_string": "Success.",
+    "export_time": 3007,
+    "layer_height": 0.20000000298023224,
+    "plate_index": 0,
+    "prepare_time": 556,
+    "return_code": 0,
+    "sliced_plates": [
+      {
+        "feature_type_times": {
+          "Bottom surface": 51.454681396484375,
+          "Bridge": 16.893043518066406,
+          "Custom": 362.7375183105469,
+          "Flush": 29.0,
+          "Gap infill": 520.5322875976562,
+          "Inner wall": 823.4033203125,
+          "Internal solid infill": 158.70166015625,
+          "Outer wall": 1903.2451171875,
+          "Overhang wall": 104.05709075927734,
+          "Sparse infill": 2.705962896347046,
+          "Top surface": 114.57664489746094,
+          "Travel": 1195.517333984375,
+          "Undefined": 1180.0927734375
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 16.67612075805664,
+            "total_used_g": 16.67612075805664
+          }
+        ],
+        "generate_support_material_time": 124,
+        "id": 1,
+        "infill_time": 207,
+        "layer_filament_change": 0,
+        "main_predication": 4862.5634765625,
+        "make_perimeters_time": 693,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 19.698945999145508,
+              "height": 46.04999923706055,
+              "width": 66.6500015258789,
+              "x": 30.0,
+              "y": 89.8499984741211,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Key_Carrier",
+            "triangle_count": 140048
+          },
+          {
+            "bbox": {
+              "depth": 23.500003814697266,
+              "height": 37.29999923706055,
+              "width": 34.0,
+              "x": 114.0,
+              "y": 96.29853820800781,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Battery_Holder",
+            "triangle_count": 69204
+          },
+          {
+            "bbox": {
+              "depth": 6.800000190734863,
+              "height": 2.7000010013580322,
+              "width": 28.5,
+              "x": 170.0,
+              "y": 130.0,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Battery_End_Gate",
+            "triangle_count": 276
+          },
+          {
+            "bbox": {
+              "depth": 19.5,
+              "height": 28.450000762939453,
+              "width": 25.000001907348633,
+              "x": 208.6999969482422,
+              "y": 169.0,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "XIAO_Rod_Holder",
+            "triangle_count": 103790
+          }
+        ],
+        "sliced_time": 5326,
+        "sliced_time_with_cache": 4063,
+        "total_predication": 5267.845703125,
+        "triangle_count": 313318,
+        "warning_message": "It seems object XIAO_Rod_Holder has floating cantilever. Please re-orient the object or enable support generation."
+      }
+    ],
+    "sparse_infill_density": 20.0,
+    "upward_compatible_machine": [
+      "Bambu Lab P1P 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab A1 0.4 nozzle",
+      "Bambu Lab H2D 0.4 nozzle",
+      "Bambu Lab H2D Pro 0.4 nozzle",
+      "Bambu Lab H2S 0.4 nozzle",
+      "Bambu Lab P2S 0.4 nozzle",
+      "Bambu Lab H2C 0.4 nozzle",
+      "Bambu Lab X2D 0.4 nozzle",
+      "Bambu Lab A2L 0.4 nozzle"
+    ],
+    "wall_loops": 3
+  },
+  "warnings": [
+    "It seems object XIAO_Rod_Holder has floating cantilever. Please re-orient the object or enable support generation."
+  ],
+  "delivered_settings_registration": {
+    "required_keys": [
+      "bridge_no_support",
+      "brim_object_gap",
+      "brim_type",
+      "brim_width",
+      "enable_prime_tower",
+      "enable_support",
+      "layer_height",
+      "max_bridge_length",
+      "sparse_infill_density",
+      "support_on_build_plate_only",
+      "support_threshold_angle",
+      "wall_loops"
+    ],
+    "registered_keys": [
+      "bridge_no_support",
+      "brim_object_gap",
+      "brim_type",
+      "brim_width",
+      "enable_prime_tower",
+      "enable_support",
+      "layer_height",
+      "max_bridge_length",
+      "sparse_infill_density",
+      "support_on_build_plate_only",
+      "support_threshold_angle",
+      "wall_loops"
+    ],
+    "cli_dropped_keys": [
+      "bridge_no_support",
+      "brim_object_gap",
+      "brim_type",
+      "brim_width",
+      "enable_support",
+      "layer_height",
+      "max_bridge_length",
+      "sparse_infill_density",
+      "support_on_build_plate_only",
+      "support_threshold_angle",
+      "wall_loops"
+    ],
+    "values_unchanged": true
+  },
+  "sliced_project_filename": "AFTER-KEY-TEST-Holder-R13-sliced.3mf",
+  "sliced_project_sha256": "721f81dfbeea205400d360f27479cdcaeb260c84bb676be1f72eae6b297345ba"
+}

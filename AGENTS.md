@@ -23,5 +23,6 @@
 
 ## Project skills
 
+- Before finishing or delivering any 3D model, coupon or print project in this repository, use [printability-audit](.agents/skills/printability-audit/SKILL.md). Fully analyse the actual slice with Opus for holes filled by supports, support removal and anything too weak that could snap easily; fix problems while changing the design as little as possible. This is a project skill. User-requested — 2026-11-05.
 - For Wand device, receiver, integration, publication or hardware work, read [magic-wand-dev](.agents/skills/magic-wand-dev/SKILL.md). Its Wand-specific steps do not apply to unrelated devices.
 - Before Wand regression or fragile changes, read [learnings](.agents/skills/learnings/SKILL.md) and the relevant component lessons.

@@ -1,0 +1,141 @@
+{
+  "layout_sha256": "f735aeae8b02dde680ad1ef82367f3574ff1bf06c2b1a414be824675505df028",
+  "generator_sha256": "70623e512182aa64414e5556e306c8eb6420969b4dfaa86eb4c17643883a0728",
+  "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
+  "parts": [
+    "Key_Carrier"
+  ],
+  "helper_sha256": {
+    "Key_Carrier-PRINT-HELPER-assembly.stl": "545bb62c116ea7ca4078ddb44dc7f16dde56acd45197cf535b56fc00f08e7659"
+  },
+  "support_policy": "Automatic supports off; labelled exterior CAD breakaway walls; actual beads require separate audit.",
+  "physical_print_verified": false,
+  "slice": {
+    "error_string": "Success.",
+    "export_time": 1594,
+    "layer_height": 0.20000000298023224,
+    "plate_index": 0,
+    "prepare_time": 234,
+    "return_code": 0,
+    "sliced_plates": [
+      {
+        "feature_type_times": {
+          "Bottom surface": 24.718191146850586,
+          "Bridge": 13.592156410217285,
+          "Custom": 362.3645935058594,
+          "Flush": 29.0,
+          "Gap infill": 483.3243103027344,
+          "Inner wall": 615.179931640625,
+          "Internal solid infill": 79.44188690185547,
+          "Outer wall": 1428.628662109375,
+          "Overhang wall": 65.30239868164062,
+          "Sparse infill": 2.8751890659332275,
+          "Top surface": 69.36083984375,
+          "Travel": 608.9015502929688,
+          "Undefined": 593.4771728515625
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 10.026644706726074,
+            "total_used_g": 10.026644706726074
+          }
+        ],
+        "generate_support_material_time": 105,
+        "id": 1,
+        "infill_time": 70,
+        "layer_filament_change": 0,
+        "main_predication": 3362.169189453125,
+        "make_perimeters_time": 218,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 19.698945999145508,
+              "height": 46.04999923706055,
+              "width": 66.6500015258789,
+              "x": 30.0,
+              "y": 89.8499984741211,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Key_Carrier",
+            "triangle_count": 140048
+          }
+        ],
+        "sliced_time": 2112,
+        "sliced_time_with_cache": 1649,
+        "total_predication": 3767.078857421875,
+        "triangle_count": 140048,
+        "warning_message": "It seems object Key_Carrier has floating cantilever. Please re-orient the object or enable support generation."
+      }
+    ],
+    "sparse_infill_density": 20.0,
+    "upward_compatible_machine": [
+      "Bambu Lab P1P 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab A1 0.4 nozzle",
+      "Bambu Lab H2D 0.4 nozzle",
+      "Bambu Lab H2D Pro 0.4 nozzle",
+      "Bambu Lab H2S 0.4 nozzle",
+      "Bambu Lab P2S 0.4 nozzle",
+      "Bambu Lab H2C 0.4 nozzle",
+      "Bambu Lab X2D 0.4 nozzle",
+      "Bambu Lab A2L 0.4 nozzle"
+    ],
+    "wall_loops": 3
+  },
+  "warnings": [
+    "It seems object Key_Carrier has floating cantilever. Please re-orient the object or enable support generation."
+  ],
+  "delivered_settings_registration": {
+    "required_keys": [
+      "bridge_no_support",
+      "brim_object_gap",
+      "brim_type",
+      "brim_width",
+      "enable_prime_tower",
+      "enable_support",
+      "layer_height",
+      "max_bridge_length",
+      "sparse_infill_density",
+      "support_on_build_plate_only",
+      "support_threshold_angle",
+      "wall_loops"
+    ],
+    "registered_keys": [
+      "bridge_no_support",
+      "brim_object_gap",
+      "brim_type",
+      "brim_width",
+      "enable_prime_tower",
+      "enable_support",
+      "layer_height",
+      "max_bridge_length",
+      "sparse_infill_density",
+      "support_on_build_plate_only",
+      "support_threshold_angle",
+      "wall_loops"
+    ],
+    "cli_dropped_keys": [
+      "bridge_no_support",
+      "brim_object_gap",
+      "brim_type",
+      "brim_width",
+      "enable_support",
+      "layer_height",
+      "max_bridge_length",
+      "sparse_infill_density",
+      "support_on_build_plate_only",
+      "support_threshold_angle",
+      "wall_loops"
+    ],
+    "values_unchanged": true
+  },
+  "sliced_project_filename": "AFTER-KEY-TEST-Holder-R13-sliced.3mf",
+  "sliced_project_sha256": "8dd69b422c4a2f8848bb05570bd635b325f233c91bd029620f74c2663edf8420"
+}

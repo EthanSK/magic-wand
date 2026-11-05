@@ -1,0 +1,57 @@
+{
+  "revision": "carbon-rod-holders-r13-printability-key-clip-coupon",
+  "coupon": true,
+  "clip_diameter_mm": 7.9,
+  "key_indices": [
+    1
+  ],
+  "parts": {
+    "Key_Carrier": {
+      "bounds_mm": [
+        [
+          -9.649999618530273,
+          -13.800000190734863,
+          -4.798541069030762
+        ],
+        [
+          11.550000190734863,
+          13.300000190734863,
+          11.119999885559082
+        ]
+      ],
+      "volume_mm3": 1202.2884642850383,
+      "solid_PETG_g": 1.5269063496419988,
+      "stl_sha256": "8a817ce98fdb1a5b8dc844d83ab9b137e112fa2572b4256dfacd34a9c7c6eddb",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -9.649999618530273
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -13.800000190734863
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          11.119999885559082
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "source_manifest_sha256": "b74454505b2629a9e5bf7c5466cb7469f61915d7d574a73573603e02144eba6f",
+  "generator_sha256": "e12beb4ef560c2fd010bc54cded44702ba0726a7caa42ca9c5ad3d73cd0219ec",
+  "physical_fit_verified": false,
+  "construction": "One sourced seat, original load rails/diagonals and two full clips; no neighbouring seat crops. Upper joints and full-height stability require complete-part trials."
+}

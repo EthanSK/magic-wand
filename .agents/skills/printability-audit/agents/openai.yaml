@@ -1,0 +1,4 @@
+interface:
+  display_name: "Printability Audit"
+  short_description: "Audit sliced openings, supports and weak points with Opus"
+  default_prompt: "Use $printability-audit to check these final project models, actual slices and likely snap points with Opus; make the smallest necessary repairs."

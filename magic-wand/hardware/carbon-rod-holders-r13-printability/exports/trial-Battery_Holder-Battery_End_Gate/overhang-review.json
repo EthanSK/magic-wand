@@ -1,0 +1,1162 @@
+{
+  "slice_sha256": "524608a862022748f8b779a165fa034e4f071715f1111ed5b74fa321ab6e7cc4",
+  "decisions_sha256": "2a228ae39ac2e2266ef49dfe6f041c8de14275d3796f2f08f56f520b2ae2eedb",
+  "qualifier_sha256": "573c3e57ccdcccff726e47a5735a986b675f04df1450a5616711bf29f00a34c2",
+  "project_sha256": "0e017855a338b606d129a3a1922d3995911a441bbb8649a780ea96b396634005",
+  "partial_overhang_threshold_mm2": 2.0,
+  "cases": {
+    "cfc6f65841bfd8463b7e": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 0.4,
+      "unbacked_mesh_area_mm2": 2.6662,
+      "print_xy_bounds_mm": [
+        3.8568,
+        10.1686,
+        28.143,
+        17.5912
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far-frame rounded growth",
+      "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+      "required_test": "Inspect first-layer contact and the complete cage for lifting."
+    },
+    "829dce2a55559adeb64e": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 0.4,
+      "unbacked_mesh_area_mm2": 2.5979,
+      "print_xy_bounds_mm": [
+        2.4881,
+        8.937,
+        29.5119,
+        18.96
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far-frame rounded growth",
+      "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+      "required_test": "Inspect first-layer contact and the complete cage for lifting."
+    },
+    "774f0c7e9315190915c8": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 1.8,
+      "unbacked_mesh_area_mm2": 6.2274,
+      "print_xy_bounds_mm": [
+        19.612,
+        13.257,
+        27.7162,
+        14.0401
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far cell-stop ledges",
+      "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+      "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+    },
+    "5e0999d5fb6cf48953ff": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 1.8,
+      "unbacked_mesh_area_mm2": 6.2274,
+      "print_xy_bounds_mm": [
+        4.2838,
+        13.257,
+        12.388,
+        14.0401
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far cell-stop ledges",
+      "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+      "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+    },
+    "307084bbcbe05dd384e4": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 2.0,
+      "unbacked_mesh_area_mm2": 4.6131,
+      "print_xy_bounds_mm": [
+        25.3685,
+        10.5988,
+        27.6315,
+        12.6485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far-frame foot transitions",
+      "reason": "Rounded stop/foot transitions follow the existing far frame.",
+      "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+    },
+    "b3c422daee99bbba90c4": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 2.0,
+      "unbacked_mesh_area_mm2": 4.6131,
+      "print_xy_bounds_mm": [
+        4.3685,
+        10.5988,
+        6.6315,
+        12.6485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far-frame foot transitions",
+      "reason": "Rounded stop/foot transitions follow the existing far frame.",
+      "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+    },
+    "dbdff2352efce385f1b7": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 10.0,
+      "unbacked_mesh_area_mm2": 3.4704,
+      "print_xy_bounds_mm": [
+        2.7816,
+        12.8285,
+        3.6184,
+        17.0856
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Roof hoop",
+      "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+      "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+    },
+    "d7d6d5c3f242d48491da": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 10.0,
+      "unbacked_mesh_area_mm2": 3.4703,
+      "print_xy_bounds_mm": [
+        28.3816,
+        12.8284,
+        29.2184,
+        17.0856
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Roof hoop",
+      "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+      "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+    },
+    "e4bce14c2bef96ead553": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 10.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        17.1632,
+        17.8301,
+        27.6368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Roof hoop",
+      "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+      "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+    },
+    "81901ba1eeadf6b21452": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 10.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        4.3632,
+        17.8301,
+        14.8368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Roof hoop",
+      "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+      "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+    },
+    "9b6d68160ff06455bf62": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 12.8,
+      "unbacked_mesh_area_mm2": 10.7388,
+      "print_xy_bounds_mm": [
+        17.1216,
+        9.1303,
+        27.6768,
+        10.1667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Floor crossbar",
+      "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+      "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+    },
+    "446e5eb8be1da3acec33": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 12.8,
+      "unbacked_mesh_area_mm2": 10.7381,
+      "print_xy_bounds_mm": [
+        4.3232,
+        9.1303,
+        14.8784,
+        10.1667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Floor crossbar",
+      "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+      "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+    },
+    "52bcd5bd9bdaa7c88f83": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 18.0,
+      "unbacked_mesh_area_mm2": 3.4697,
+      "print_xy_bounds_mm": [
+        2.7816,
+        12.8284,
+        3.6184,
+        17.0846
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Centre roof hoop",
+      "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+      "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+    },
+    "a0d8640dfae0d21189c8": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 18.0,
+      "unbacked_mesh_area_mm2": 3.4697,
+      "print_xy_bounds_mm": [
+        28.3816,
+        12.8284,
+        29.2184,
+        17.0846
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Centre roof hoop",
+      "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+      "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+    },
+    "02459aaca2413a8b243d": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 18.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        17.1632,
+        17.8301,
+        27.6368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Centre roof hoop",
+      "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+      "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+    },
+    "b39984248deb96b22871": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 18.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        4.3632,
+        17.8301,
+        14.8368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Centre roof hoop",
+      "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+      "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+    },
+    "c944e23317b373f0a385": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 23.4,
+      "unbacked_mesh_area_mm2": 12.8413,
+      "print_xy_bounds_mm": [
+        17.0575,
+        9.0306,
+        27.7389,
+        10.2665
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Near floor-bar first actual bridge",
+      "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+      "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+    },
+    "0de76cccc4e6c1c63ec2": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 23.4,
+      "unbacked_mesh_area_mm2": 12.8412,
+      "print_xy_bounds_mm": [
+        4.2611,
+        9.0306,
+        14.9425,
+        10.2665
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Near floor-bar first actual bridge",
+      "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+      "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+    },
+    "00ac173405893052a519": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 26.0,
+      "unbacked_mesh_area_mm2": 3.4697,
+      "print_xy_bounds_mm": [
+        28.3816,
+        12.8284,
+        29.2184,
+        17.0846
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry-side roof hoop",
+      "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+      "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+    },
+    "ff7bd43117659e23c827": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 26.0,
+      "unbacked_mesh_area_mm2": 3.4697,
+      "print_xy_bounds_mm": [
+        2.7816,
+        12.8284,
+        3.6184,
+        17.0846
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry-side roof hoop",
+      "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+      "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+    },
+    "f6cfb055e6e43adb4607": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 26.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        17.1632,
+        17.8301,
+        27.6368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry-side roof hoop",
+      "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+      "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+    },
+    "1ccfa6dc5657841dfc73": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 26.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        4.3632,
+        17.8301,
+        14.8368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry-side roof hoop",
+      "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+      "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+    },
+    "41b3c659d5f5a45fb789": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 32.0,
+      "unbacked_mesh_area_mm2": 13.3958,
+      "print_xy_bounds_mm": [
+        10.8909,
+        0.0,
+        15.3458,
+        10.2222
+      ],
+      "direct_lower_bead_samples": 104,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Near clip first face",
+      "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 104 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+    },
+    "149c727ada273ac8fc67": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 32.0,
+      "unbacked_mesh_area_mm2": 13.4111,
+      "print_xy_bounds_mm": [
+        16.6555,
+        0.0029,
+        21.1091,
+        10.2223
+      ],
+      "direct_lower_bead_samples": 100,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Near clip first face",
+      "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 100 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+    },
+    "102b4c08c9578b3c54bb": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 33.2,
+      "unbacked_mesh_area_mm2": 21.1188,
+      "print_xy_bounds_mm": [
+        27.9537,
+        9.2485,
+        31.6463,
+        17.2485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Gate-guide first faces",
+      "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+      "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+    },
+    "c9468ded5343fd67f298": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 33.2,
+      "unbacked_mesh_area_mm2": 21.1223,
+      "print_xy_bounds_mm": [
+        0.3537,
+        9.2485,
+        4.0463,
+        17.2485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Gate-guide first faces",
+      "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+      "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+    },
+    "5c71f9580d49775e872c": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 34.4,
+      "unbacked_mesh_area_mm2": 9.8062,
+      "print_xy_bounds_mm": [
+        17.9657,
+        9.0805,
+        27.7076,
+        10.2166
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry floor/guide transitions",
+      "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+      "required_test": "Inspect transition bonding and the full sliding route."
+    },
+    "91de015996c406ebd588": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 34.4,
+      "unbacked_mesh_area_mm2": 9.8116,
+      "print_xy_bounds_mm": [
+        4.2924,
+        9.0805,
+        14.0419,
+        10.2166
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry floor/guide transitions",
+      "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+      "required_test": "Inspect transition bonding and the full sliding route."
+    },
+    "d21aa88d8f043339ce9b": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 36.4,
+      "unbacked_mesh_area_mm2": 12.9303,
+      "print_xy_bounds_mm": [
+        27.8,
+        11.1891,
+        30.0097,
+        17.2485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Guide slot back walls",
+      "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+      "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+    },
+    "38469e2959ac2ac74ac0": {
+      "part": "Battery_Holder",
+      "scope": "layer_starts",
+      "layer_top_mm": 36.4,
+      "unbacked_mesh_area_mm2": 12.9523,
+      "print_xy_bounds_mm": [
+        1.9903,
+        11.1891,
+        4.2,
+        17.2485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Guide slot back walls",
+      "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+      "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+    },
+    "e8452741e0e20fc4227a": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 0.4,
+      "unbacked_mesh_area_mm2": 2.6662,
+      "print_xy_bounds_mm": [
+        3.8568,
+        10.1686,
+        28.143,
+        17.5912
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far-frame rounded growth",
+      "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+      "required_test": "Inspect first-layer contact and the complete cage for lifting."
+    },
+    "f7610f6dfdde7c3edfef": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 0.4,
+      "unbacked_mesh_area_mm2": 2.5979,
+      "print_xy_bounds_mm": [
+        2.4881,
+        8.937,
+        29.5119,
+        18.96
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far-frame rounded growth",
+      "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+      "required_test": "Inspect first-layer contact and the complete cage for lifting."
+    },
+    "eb237c82a087055ba371": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 1.8,
+      "unbacked_mesh_area_mm2": 6.2274,
+      "print_xy_bounds_mm": [
+        19.612,
+        13.257,
+        27.7162,
+        14.0401
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far cell-stop ledges",
+      "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+      "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+    },
+    "c5821dffc227e5c64ba3": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 1.8,
+      "unbacked_mesh_area_mm2": 6.2274,
+      "print_xy_bounds_mm": [
+        4.2838,
+        13.257,
+        12.388,
+        14.0401
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far cell-stop ledges",
+      "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+      "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+    },
+    "229f2f739d8d309c8774": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 2.0,
+      "unbacked_mesh_area_mm2": 4.6131,
+      "print_xy_bounds_mm": [
+        25.3685,
+        10.5988,
+        27.6315,
+        12.6485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far-frame foot transitions",
+      "reason": "Rounded stop/foot transitions follow the existing far frame.",
+      "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+    },
+    "0e7d200f99887122e99a": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 2.0,
+      "unbacked_mesh_area_mm2": 4.6131,
+      "print_xy_bounds_mm": [
+        4.3685,
+        10.5988,
+        6.6315,
+        12.6485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Far-frame foot transitions",
+      "reason": "Rounded stop/foot transitions follow the existing far frame.",
+      "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+    },
+    "caf6fa52be20283a4ebe": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 10.0,
+      "unbacked_mesh_area_mm2": 3.4704,
+      "print_xy_bounds_mm": [
+        2.7816,
+        12.8285,
+        3.6184,
+        17.0856
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Roof hoop",
+      "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+      "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+    },
+    "65e18585263a659dc3c4": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 10.0,
+      "unbacked_mesh_area_mm2": 3.4703,
+      "print_xy_bounds_mm": [
+        28.3816,
+        12.8284,
+        29.2184,
+        17.0856
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Roof hoop",
+      "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+      "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+    },
+    "46f62f3bc5b9aeca7de5": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 10.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        17.1632,
+        17.8301,
+        27.6368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Roof hoop",
+      "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+      "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+    },
+    "f559c60cdc511dafe264": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 10.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        4.3632,
+        17.8301,
+        14.8368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Roof hoop",
+      "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+      "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+    },
+    "52b8ac380619a1667e3b": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 12.8,
+      "unbacked_mesh_area_mm2": 10.7388,
+      "print_xy_bounds_mm": [
+        17.1216,
+        9.1303,
+        27.6768,
+        10.1667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Floor crossbar",
+      "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+      "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+    },
+    "aa4cb3bcdf6eb47bd49d": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 12.8,
+      "unbacked_mesh_area_mm2": 10.7381,
+      "print_xy_bounds_mm": [
+        4.3232,
+        9.1303,
+        14.8784,
+        10.1667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Floor crossbar",
+      "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+      "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+    },
+    "d8840e593bea30b74579": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 18.0,
+      "unbacked_mesh_area_mm2": 3.4697,
+      "print_xy_bounds_mm": [
+        2.7816,
+        12.8284,
+        3.6184,
+        17.0846
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Centre roof hoop",
+      "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+      "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+    },
+    "c76a52837eecaa1df618": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 18.0,
+      "unbacked_mesh_area_mm2": 3.4697,
+      "print_xy_bounds_mm": [
+        28.3816,
+        12.8284,
+        29.2184,
+        17.0846
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Centre roof hoop",
+      "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+      "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+    },
+    "87fe188a93bec1313b76": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 18.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        17.1632,
+        17.8301,
+        27.6368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Centre roof hoop",
+      "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+      "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+    },
+    "57a03ebf26bcd5a6d707": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 18.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        4.3632,
+        17.8301,
+        14.8368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Centre roof hoop",
+      "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+      "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+    },
+    "2bb0dad7b1b33620933a": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 23.4,
+      "unbacked_mesh_area_mm2": 12.8413,
+      "print_xy_bounds_mm": [
+        17.0575,
+        9.0306,
+        27.7389,
+        10.2665
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Near floor-bar first actual bridge",
+      "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+      "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+    },
+    "0f2414fc3213c7ec9998": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 23.4,
+      "unbacked_mesh_area_mm2": 12.8412,
+      "print_xy_bounds_mm": [
+        4.2611,
+        9.0306,
+        14.9425,
+        10.2665
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Near floor-bar first actual bridge",
+      "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+      "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+    },
+    "5f2507022cf9148a0e90": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 26.0,
+      "unbacked_mesh_area_mm2": 3.4697,
+      "print_xy_bounds_mm": [
+        28.3816,
+        12.8284,
+        29.2184,
+        17.0846
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry-side roof hoop",
+      "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+      "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+    },
+    "37f5b8a8d55c5c7a520f": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 26.0,
+      "unbacked_mesh_area_mm2": 3.4697,
+      "print_xy_bounds_mm": [
+        2.7816,
+        12.8284,
+        3.6184,
+        17.0846
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry-side roof hoop",
+      "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+      "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+    },
+    "7ff19d94796c7a8aeb76": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 26.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        17.1632,
+        17.8301,
+        27.6368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry-side roof hoop",
+      "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+      "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+    },
+    "7677fd66c5a49237cd7d": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 26.0,
+      "unbacked_mesh_area_mm2": 8.6745,
+      "print_xy_bounds_mm": [
+        4.3632,
+        17.8301,
+        14.8368,
+        18.667
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry-side roof hoop",
+      "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+      "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+    },
+    "99fe428d55fbd6898d13": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 32.0,
+      "unbacked_mesh_area_mm2": 13.3958,
+      "print_xy_bounds_mm": [
+        10.8909,
+        0.0,
+        15.3458,
+        10.2222
+      ],
+      "direct_lower_bead_samples": 104,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Near clip first face",
+      "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 104 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+    },
+    "e7fe05cfbc3cba1db863": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 32.0,
+      "unbacked_mesh_area_mm2": 13.4111,
+      "print_xy_bounds_mm": [
+        16.6555,
+        0.0029,
+        21.1091,
+        10.2223
+      ],
+      "direct_lower_bead_samples": 100,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Near clip first face",
+      "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 100 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+    },
+    "68ddaba80fd3b5c39e74": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 33.2,
+      "unbacked_mesh_area_mm2": 21.1188,
+      "print_xy_bounds_mm": [
+        27.9537,
+        9.2485,
+        31.6463,
+        17.2485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Gate-guide first faces",
+      "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+      "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+    },
+    "74297ca36dd19fec9f6e": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 33.2,
+      "unbacked_mesh_area_mm2": 21.1223,
+      "print_xy_bounds_mm": [
+        0.3537,
+        9.2485,
+        4.0463,
+        17.2485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Gate-guide first faces",
+      "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+      "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+    },
+    "d3cbfd56539b074b016d": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 34.4,
+      "unbacked_mesh_area_mm2": 9.8062,
+      "print_xy_bounds_mm": [
+        17.9657,
+        9.0805,
+        27.7076,
+        10.2166
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry floor/guide transitions",
+      "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+      "required_test": "Inspect transition bonding and the full sliding route."
+    },
+    "fed6d45629d5c54a8fe7": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 34.4,
+      "unbacked_mesh_area_mm2": 9.8116,
+      "print_xy_bounds_mm": [
+        4.2924,
+        9.0805,
+        14.0419,
+        10.2166
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Entry floor/guide transitions",
+      "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+      "required_test": "Inspect transition bonding and the full sliding route."
+    },
+    "94bb8b99313030ec20ee": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 36.4,
+      "unbacked_mesh_area_mm2": 12.9303,
+      "print_xy_bounds_mm": [
+        27.8,
+        11.1891,
+        30.0097,
+        17.2485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Guide slot back walls",
+      "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+      "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+    },
+    "8026399f65ae768e717e": {
+      "part": "Battery_Holder",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 36.4,
+      "unbacked_mesh_area_mm2": 12.9523,
+      "print_xy_bounds_mm": [
+        1.9903,
+        11.1891,
+        4.2,
+        17.2485
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Guide slot back walls",
+      "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+      "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+    }
+  },
+  "unreviewed_cases": [],
+  "obsolete_decisions": [],
+  "unreviewed_warnings": [],
+  "warning_decisions": {
+    "It seems object Battery_Holder has floating cantilever. Please re-orient the object or enable support generation.": {
+      "decision": "bounded-physical-trial",
+      "reason": "Retain the warning. Actual C-face backing is checked, but roof/floor bridges, guide shoulders, adhesion and gate cleanup still require the complete cage/gate trial."
+    }
+  },
+  "test_recipe_audited": true,
+  "full_set_ready": false,
+  "physical_print_verified": false,
+  "qualification": "Bounded experiment only. Stop if helpers fuse, a bridge droops into a fit, a guide binds or any part cracks/whitens. Full-set readiness requires successful physical trials."
+}

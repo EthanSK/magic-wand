@@ -1,0 +1,250 @@
+{
+  "slice_sha256": "b039c09717379135f7a79aee3058b017672a45038203cc9996853ca671924399",
+  "decisions_sha256": "2a228ae39ac2e2266ef49dfe6f041c8de14275d3796f2f08f56f520b2ae2eedb",
+  "qualifier_sha256": "573c3e57ccdcccff726e47a5735a986b675f04df1450a5616711bf29f00a34c2",
+  "project_sha256": "c0ea1b7c1eafac8df10eeca4f3fcd7b0054acd999fae0de57dc19c2f7c86e24a",
+  "partial_overhang_threshold_mm2": 2.0,
+  "cases": {
+    "8cc04aa7482875123a68": {
+      "part": "Key_Carrier",
+      "scope": "layer_starts",
+      "layer_top_mm": 3.4,
+      "unbacked_mesh_area_mm2": 13.0268,
+      "print_xy_bounds_mm": [
+        3.4313,
+        0.2896,
+        15.8687,
+        1.4104
+      ],
+      "direct_lower_bead_samples": 228,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Front load bars and leading legs",
+      "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 228 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+    },
+    "3ae84416ddfcd4f9cc34": {
+      "part": "Key_Carrier",
+      "scope": "layer_starts",
+      "layer_top_mm": 13.6,
+      "unbacked_mesh_area_mm2": 18.9154,
+      "print_xy_bounds_mm": [
+        6.2812,
+        5.45,
+        18.0188,
+        7.1
+      ],
+      "direct_lower_bead_samples": 253,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Socket floors",
+      "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 253 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+    },
+    "8c6ccdf7166da43523c9": {
+      "part": "Key_Carrier",
+      "scope": "layer_starts",
+      "layer_top_mm": 21.0,
+      "unbacked_mesh_area_mm2": 16.3119,
+      "print_xy_bounds_mm": [
+        2.7971,
+        0.0,
+        16.5029,
+        1.2
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Rear mounting-opening bridge",
+      "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+      "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+    },
+    "15c133c67ad1f5e02279": {
+      "part": "Key_Carrier",
+      "scope": "layer_starts",
+      "layer_top_mm": 22.4,
+      "unbacked_mesh_area_mm2": 12.11,
+      "print_xy_bounds_mm": [
+        8.15,
+        1.4388,
+        11.289,
+        5.4807
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Rear socket wall",
+      "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+      "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+    },
+    "abd5e1b7dd7e898099ce": {
+      "part": "Key_Carrier",
+      "scope": "layer_starts",
+      "layer_top_mm": 23.8,
+      "unbacked_mesh_area_mm2": 10.5021,
+      "print_xy_bounds_mm": [
+        4.5409,
+        7.9297,
+        8.9939,
+        15.9159
+      ],
+      "direct_lower_bead_samples": 133,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late clip and rear load paths",
+      "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 133 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+    },
+    "bdf54e4cff4014b45241": {
+      "part": "Key_Carrier",
+      "scope": "layer_starts",
+      "layer_top_mm": 23.8,
+      "unbacked_mesh_area_mm2": 10.5092,
+      "print_xy_bounds_mm": [
+        10.304,
+        7.929,
+        14.7591,
+        15.9185
+      ],
+      "direct_lower_bead_samples": 133,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late clip and rear load paths",
+      "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 133 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+    },
+    "263d368bc7130ea1a9ed": {
+      "part": "Key_Carrier",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 3.4,
+      "unbacked_mesh_area_mm2": 13.0268,
+      "print_xy_bounds_mm": [
+        3.4313,
+        0.2896,
+        15.8687,
+        1.4104
+      ],
+      "direct_lower_bead_samples": 228,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Front load bars and leading legs",
+      "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 228 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+    },
+    "77eb81b9042d50538644": {
+      "part": "Key_Carrier",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 13.6,
+      "unbacked_mesh_area_mm2": 18.9154,
+      "print_xy_bounds_mm": [
+        6.2812,
+        5.45,
+        18.0188,
+        7.1
+      ],
+      "direct_lower_bead_samples": 253,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Socket floors",
+      "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 253 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+    },
+    "9f409010cb1a5b1e3718": {
+      "part": "Key_Carrier",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 21.0,
+      "unbacked_mesh_area_mm2": 16.3119,
+      "print_xy_bounds_mm": [
+        2.7971,
+        0.0,
+        16.5029,
+        1.2
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Rear mounting-opening bridge",
+      "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+      "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+    },
+    "6c65229ee655cb28197f": {
+      "part": "Key_Carrier",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 22.4,
+      "unbacked_mesh_area_mm2": 12.11,
+      "print_xy_bounds_mm": [
+        8.15,
+        1.4388,
+        11.289,
+        5.4807
+      ],
+      "direct_lower_bead_samples": 0,
+      "actual_vertical_gap_mm": null,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Rear socket wall",
+      "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+      "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+    },
+    "f5589d2ebd59efda0b1c": {
+      "part": "Key_Carrier",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 23.8,
+      "unbacked_mesh_area_mm2": 10.5021,
+      "print_xy_bounds_mm": [
+        4.5409,
+        7.9297,
+        8.9939,
+        15.9159
+      ],
+      "direct_lower_bead_samples": 133,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late clip and rear load paths",
+      "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 133 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+    },
+    "9e5819736163c51583c2": {
+      "part": "Key_Carrier",
+      "scope": "whole_print_layer_starts",
+      "layer_top_mm": 23.8,
+      "unbacked_mesh_area_mm2": 10.5092,
+      "print_xy_bounds_mm": [
+        10.304,
+        7.929,
+        14.7591,
+        15.9185
+      ],
+      "direct_lower_bead_samples": 133,
+      "actual_vertical_gap_mm": 0.2,
+      "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+      "decision": "bounded-physical-trial",
+      "feature": "Late clip and rear load paths",
+      "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 133 sampled bead centres at a 0.2 mm vertical gap.",
+      "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+    }
+  },
+  "unreviewed_cases": [],
+  "obsolete_decisions": [],
+  "unreviewed_warnings": [],
+  "warning_decisions": {
+    "It seems object Key_Carrier has floating cantilever. Please re-orient the object or enable support generation.": {
+      "decision": "bounded-physical-trial",
+      "reason": "Retain the warning. Ordinary CAD aids are separated from the part; independently checked actual starts do not establish bridge sag or full-height adhesion. Print the small key trial first, then the full carrier as a trial."
+    }
+  },
+  "test_recipe_audited": true,
+  "full_set_ready": false,
+  "physical_print_verified": false,
+  "qualification": "Bounded experiment only. Stop if helpers fuse, a bridge droops into a fit, a guide binds or any part cracks/whitens. Full-set readiness requires successful physical trials."
+}

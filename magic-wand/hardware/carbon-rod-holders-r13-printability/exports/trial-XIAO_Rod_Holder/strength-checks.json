@@ -1,0 +1,268 @@
+{
+  "project_sha256": "dc4b10755fec33c991ade499cc25c6391e49415de694ba1d4de141467aa5301c",
+  "manifest_sha256": "5d9b9b7d665cdc93d88ad4850ea436cd04d979281b4ce91390ad66255380ff0f",
+  "checker_sha256": "dc19a555347676e9ed3e8027f7b61beb6b955c2bf826fab9f6c1ecb5a3e35dd0",
+  "physical_strength_verified": false,
+  "method": "Ray intersections through final exported assembly STLs; actual G-code radial track clusters at clip midplanes. No force/fatigue simulation.",
+  "clips": {
+    "XIAO_Rod_Holder": [
+      {
+        "axial_centre_mm": -3.8,
+        "radial_STL_sections_mm": {
+          "-70": 1.0003,
+          "-55": 1.0032,
+          "0": 1.1,
+          "90": 2.27,
+          "180": 1.1,
+          "235": 1.0032,
+          "250": 1.0003
+        },
+        "sampled_actual_layer_assembly_y_mm": -3.8500001615814217,
+        "radial_extrusion_track_centres_mm": {
+          "-55": [
+            4.163,
+            4.449,
+            4.732
+          ],
+          "90": [
+            4.159,
+            4.546,
+            5.071,
+            5.591
+          ],
+          "235": [
+            4.163,
+            4.451,
+            4.733
+          ]
+        }
+      },
+      {
+        "axial_centre_mm": 22.2,
+        "radial_STL_sections_mm": {
+          "-70": 1.0003,
+          "-55": 1.0032,
+          "0": 1.1,
+          "90": 2.1705,
+          "180": 1.1,
+          "235": 1.0032,
+          "250": 1.0003
+        },
+        "sampled_actual_layer_assembly_y_mm": 22.150000553674317,
+        "radial_extrusion_track_centres_mm": {
+          "-55": [
+            4.163,
+            4.452,
+            4.733
+          ],
+          "90": [
+            4.158,
+            4.551,
+            5.036,
+            5.557
+          ],
+          "235": [
+            4.163,
+            4.451,
+            4.732
+          ]
+        }
+      }
+    ]
+  },
+  "fixed_reinforcement": {
+    "battery_crossbars_diameter_mm": 2.0,
+    "battery_previous_crossbars_diameter_mm": 1.4,
+    "key_fixed_load_rail_width_mm": 1.4,
+    "key_fixed_load_rail_depth_mm": 3.2,
+    "key_load_path_scanned_local_y_mm": [
+      -9.4,
+      5.2
+    ],
+    "battery_bridge_half_span_mm": 12.8,
+    "sensor_outer_rail_width_mm": 2.0,
+    "sensor_previous_rail_width_mm": 1.2,
+    "sensor_fixed_root_diameter_mm": 2.1,
+    "sensor_previous_fixed_root_diameter_mm": 1.6,
+    "gate_central_grab_bar_depth_mm": 2.7,
+    "gate_previous_grab_bar_depth_mm": 1.6,
+    "gate_sliding_wedge_neck_width_mm": 1.2,
+    "gate_sliding_wedge_depth_mm": 1.6,
+    "note": "These are source dimensions with exported one-body/interface checks, not breaking-force predictions. Sliding wedge dimensions and spring profiles remain unchanged."
+  },
+  "per_part_weak_point_decisions": {
+    "XIAO_Rod_Holder": [
+      {
+        "feature": "Fixed outside PCB rails",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              -10.2,
+              10,
+              8.4
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 2.0,
+            "sampled_layer_assembly_y_mm": 9.949999790734864,
+            "sampled_layer_section_mm": 2.0,
+            "extrusion_track_centres_relative_mm": [
+              -0.79,
+              -0.398,
+              0.0,
+              0.398,
+              0.79
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              10.2,
+              10,
+              8.4
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 2.0,
+            "sampled_layer_assembly_y_mm": 9.949999790734864,
+            "sampled_layer_section_mm": 2.0,
+            "extrusion_track_centres_relative_mm": [
+              -0.79,
+              -0.398,
+              0.0,
+              0.398,
+              0.79
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 2.0,
+        "minimum_sampled_track_count": 5,
+        "load_case": "PCB insertion and USB lead snags load the rails and their roots.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Grow the fixed rails outward from 1.2 to 2 mm and fixed roots from 1.6 to 2.1 mm; keep bearing faces.",
+        "required_physical_test": "Check the actual populated PCB underside and insert without forcing; gently check lead strain.",
+        "physical_strength_verified": false
+      },
+      {
+        "feature": "Fixed front diagonal root sections",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              -6.95,
+              -1,
+              5.735
+            ],
+            "section_direction_assembly": [
+              0.5666364164014929,
+              0.0,
+              0.8239679433131328
+            ],
+            "STL_section_mm": 3.2134,
+            "sampled_layer_assembly_y_mm": -1.0500002092651375,
+            "sampled_layer_section_mm": 3.1537,
+            "extrusion_track_centres_relative_mm": [
+              -0.74,
+              -0.357,
+              -0.03,
+              0.38,
+              0.904,
+              1.694
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              6.95,
+              -1,
+              5.735
+            ],
+            "section_direction_assembly": [
+              -0.5666364164014929,
+              0.0,
+              0.8239679433131328
+            ],
+            "STL_section_mm": 3.2134,
+            "sampled_layer_assembly_y_mm": -1.0500002092651375,
+            "sampled_layer_section_mm": 3.1537,
+            "extrusion_track_centres_relative_mm": [
+              -0.74,
+              -0.357,
+              -0.03,
+              0.38,
+              0.903,
+              1.694
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 3.2134,
+        "minimum_sampled_track_count": 6,
+        "load_case": "PCB and USB loads pass through the intersecting diagonals into the clip crown.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Thicken fixed ribs to 2.1 mm nominal diameter; intersecting roots are wider than the individual rib.",
+        "required_physical_test": "Inspect root bonding and check the complete holder under gentle board/lead handling.",
+        "physical_strength_verified": false
+      },
+      {
+        "feature": "Axial rails beside the rod",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              -4.8,
+              10,
+              0
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 2.0,
+            "sampled_layer_assembly_y_mm": 9.949999790734864,
+            "sampled_layer_section_mm": 2.0,
+            "extrusion_track_centres_relative_mm": [
+              -1.186,
+              -0.778,
+              0.0,
+              0.39
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              4.8,
+              10,
+              0
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 2.0,
+            "sampled_layer_assembly_y_mm": 9.949999790734864,
+            "sampled_layer_section_mm": 2.0,
+            "extrusion_track_centres_relative_mm": [
+              -0.398,
+              0.006,
+              0.779,
+              1.186
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 2.0,
+        "minimum_sampled_track_count": 4,
+        "load_case": "Rod sliding and lateral handling bend the thin rails between the clips.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Thicken the fixed middle rail from 1.25 to 2 mm, stopping before the free clip arms; retain the bore and spring profile.",
+        "required_physical_test": "Print the full-height sensor holder and slide onto the rod from its end; inspect rails and clip roots.",
+        "physical_strength_verified": false
+      }
+    ]
+  },
+  "full_set_physically_ready": false,
+  "qualification": "Geometric and extrusion-section screening only. Physical trial is required for every listed load case; no guaranteed breaking force or fatigue life.",
+  "passed": true
+}

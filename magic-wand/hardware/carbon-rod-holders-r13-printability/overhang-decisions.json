@@ -1,0 +1,1762 @@
+{
+  "reviewer": "Codex",
+  "scope": "Exact inspected R13 snapshot; bounded physical experiments only, never full-set readiness.",
+  "projects": {
+    "exports": {
+      "7f21e36d3cc1ed0aee41": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 205 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "d9da937a22756cef0805": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 341 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "53805d8a1f25ce265c72": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 362 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "49f5997572476b5e71ca": {
+        "decision": "bounded-physical-trial",
+        "feature": "Deep front fixed webs",
+        "reason": "The first full web infill starts at 4.0 mm; the preceding border is not credited as interior backing. Interior-only exterior caps back that actual infill with one empty layer while preserving ordinary sideways clearance from the earlier border. Actual directly-beneath backing: 105 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Remove the aids without levering a web; inspect both full-height carrier webs for droop or weak bonding."
+      },
+      "f92573e638e701cd43ea": {
+        "decision": "bounded-physical-trial",
+        "feature": "Deep front fixed webs",
+        "reason": "The first full web infill starts at 4.0 mm; the preceding border is not credited as interior backing. Interior-only exterior caps back that actual infill with one empty layer while preserving ordinary sideways clearance from the earlier border. Actual directly-beneath backing: 106 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Remove the aids without levering a web; inspect both full-height carrier webs for droop or weak bonding."
+      },
+      "4b11b1ba3973a1f8b20b": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 240 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "56e0380596981a7070e2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 247 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "18bd79cbc3707eccc197": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 265 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "175e9a9f5f7a72e2ef5e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "a51320e8a994edab390d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "3f741b7659d386bea8ff": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "c6e67a68eb587ee301ae": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "e24c9fa33b6d3ec89941": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "ceef31e7225e35e95967": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "0d33c4b3fd109f288f7d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "88cffcbbd8344eb9b501": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "f9604206df5038bc1f8a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "857dd5ea173b34229125": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "136b070029df60fc5513": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 122 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "eded02a9f1daf7352756": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 136 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "4426e3f43ecb05e1e829": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper socket floors",
+        "reason": "These floor starts have the same real-gap backing recipe as the small key trial; their full-height location is not covered by that small trial. Actual directly-beneath backing: 221 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both upper floors and full-height adhesion before loading the upper switches."
+      },
+      "ec99a0b7e47480b00e50": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper socket floors",
+        "reason": "These floor starts have the same real-gap backing recipe as the small key trial; their full-height location is not covered by that small trial. Actual directly-beneath backing: 221 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both upper floors and full-height adhesion before loading the upper switches."
+      },
+      "c3db6e27d6fffcecd35d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper mounting-opening bridges",
+        "reason": "The second row retains the 14.1 mm bridge and original switch interface; a passing small trial is the prerequisite.",
+        "required_test": "Check both actual upper switches and reject any bridge sag entering their openings."
+      },
+      "ab7d8180479e4fb9cec6": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper mounting-opening bridges",
+        "reason": "The second row retains the 14.1 mm bridge and original switch interface; a passing small trial is the prerequisite.",
+        "required_test": "Check both actual upper switches and reject any bridge sag entering their openings."
+      },
+      "66a482437b4cbf63d4c0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear walls and rounded posts",
+        "reason": "Rear-wall bridges repeat the small trial; rounded post/rail junctions remain connected. The obsolete detached 0.27 mm strip was trimmed.",
+        "required_test": "Inspect upper rear walls and post bonding; repeatedly press the upper keys and check whitening or layer splits."
+      },
+      "335e37844855250c3dc7": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear walls and rounded posts",
+        "reason": "Rear-wall bridges repeat the small trial; rounded post/rail junctions remain connected. The obsolete detached 0.27 mm strip was trimmed.",
+        "required_test": "Inspect upper rear walls and post bonding; repeatedly press the upper keys and check whitening or layer splits."
+      },
+      "3668ebf60a9e33eb67d6": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 205 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "6ae0ab1ab0cd8b575f8a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 341 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "6ff4aa438a2f1d7881af": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 362 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "028ba2223b2c45975af5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Deep front fixed webs",
+        "reason": "The first full web infill starts at 4.0 mm; the preceding border is not credited as interior backing. Interior-only exterior caps back that actual infill with one empty layer while preserving ordinary sideways clearance from the earlier border. Actual directly-beneath backing: 105 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Remove the aids without levering a web; inspect both full-height carrier webs for droop or weak bonding."
+      },
+      "94a4c5696056cbd0c3b8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Deep front fixed webs",
+        "reason": "The first full web infill starts at 4.0 mm; the preceding border is not credited as interior backing. Interior-only exterior caps back that actual infill with one empty layer while preserving ordinary sideways clearance from the earlier border. Actual directly-beneath backing: 106 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Remove the aids without levering a web; inspect both full-height carrier webs for droop or weak bonding."
+      },
+      "20878de989d78d905d4b": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 240 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "0a41a4a76d82d7916470": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 247 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "d84029fb2d18a365e027": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 265 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "7561a8e69c005fe368c0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "47ab76219b2aa7047a71": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "7dc276de0e392ab220a8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "1ec27d5f08d4be79bb29": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "999d70775bfe6e09e2c6": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "664d138074a1a7bb7009": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "c814804066e80128b265": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "fc86cdb986bf375a2aa6": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "58dcd00252aa4037f227": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "bef5436dd29f156b7728": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "64ed141322a30b44b6ba": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 122 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "551d55180c77d518d041": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 136 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "226d776a4a13f2efc72a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper socket floors",
+        "reason": "These floor starts have the same real-gap backing recipe as the small key trial; their full-height location is not covered by that small trial. Actual directly-beneath backing: 221 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both upper floors and full-height adhesion before loading the upper switches."
+      },
+      "2e858a2fca4dcf7592e5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper socket floors",
+        "reason": "These floor starts have the same real-gap backing recipe as the small key trial; their full-height location is not covered by that small trial. Actual directly-beneath backing: 221 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both upper floors and full-height adhesion before loading the upper switches."
+      },
+      "b5d61a115897ed1cbef2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper mounting-opening bridges",
+        "reason": "The second row retains the 14.1 mm bridge and original switch interface; a passing small trial is the prerequisite.",
+        "required_test": "Check both actual upper switches and reject any bridge sag entering their openings."
+      },
+      "eb0ef674164a1c3332e1": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper mounting-opening bridges",
+        "reason": "The second row retains the 14.1 mm bridge and original switch interface; a passing small trial is the prerequisite.",
+        "required_test": "Check both actual upper switches and reject any bridge sag entering their openings."
+      },
+      "9192fb734c3cb5e0aec3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear walls and rounded posts",
+        "reason": "Rear-wall bridges repeat the small trial; rounded post/rail junctions remain connected. The obsolete detached 0.27 mm strip was trimmed.",
+        "required_test": "Inspect upper rear walls and post bonding; repeatedly press the upper keys and check whitening or layer splits."
+      },
+      "8b40499dab61be971c67": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear walls and rounded posts",
+        "reason": "Rear-wall bridges repeat the small trial; rounded post/rail junctions remain connected. The obsolete detached 0.27 mm strip was trimmed.",
+        "required_test": "Inspect upper rear walls and post bonding; repeatedly press the upper keys and check whitening or layer splits."
+      },
+      "626049f8df580d76e4dc": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded growth",
+        "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting."
+      },
+      "2ed11aeb0437a213487e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded growth",
+        "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting."
+      },
+      "774f0c7e9315190915c8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+        "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+      },
+      "5e0999d5fb6cf48953ff": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+        "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+      },
+      "307084bbcbe05dd384e4": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded stop/foot transitions follow the existing far frame.",
+        "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+      },
+      "b3c422daee99bbba90c4": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded stop/foot transitions follow the existing far frame.",
+        "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+      },
+      "9b1b688ceb4ec827b76b": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "c97dda783b810ead30f8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "e4bce14c2bef96ead553": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "81901ba1eeadf6b21452": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "9b6d68160ff06455bf62": {
+        "decision": "bounded-physical-trial",
+        "feature": "Floor crossbar",
+        "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+        "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+      },
+      "79e030ef359637bde634": {
+        "decision": "bounded-physical-trial",
+        "feature": "Floor crossbar",
+        "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+        "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+      },
+      "52bcd5bd9bdaa7c88f83": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "677f131dd6cb1b7b9854": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "02459aaca2413a8b243d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "b39984248deb96b22871": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "c944e23317b373f0a385": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+        "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+      },
+      "a96ae7a102d8454cc144": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+        "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+      },
+      "ff7bd43117659e23c827": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "aa60f34eb0f6d5fb79b7": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "f6cfb055e6e43adb4607": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "1ccfa6dc5657841dfc73": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "21df200d7776d0d576a3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 104 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+      },
+      "149c727ada273ac8fc67": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 100 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+      },
+      "102b4c08c9578b3c54bb": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide first faces",
+        "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+        "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+      },
+      "022c35c3b7c40398db07": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide first faces",
+        "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+        "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+      },
+      "5c71f9580d49775e872c": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor/guide transitions",
+        "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+        "required_test": "Inspect transition bonding and the full sliding route."
+      },
+      "2c59bad3b8d4dc2d7980": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor/guide transitions",
+        "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+        "required_test": "Inspect transition bonding and the full sliding route."
+      },
+      "9fc37ad7187a1449a666": {
+        "decision": "bounded-physical-trial",
+        "feature": "Guide slot back walls",
+        "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+        "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+      },
+      "c23084a6fdcfb561e223": {
+        "decision": "bounded-physical-trial",
+        "feature": "Guide slot back walls",
+        "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+        "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+      },
+      "e403f32a64a857c1cf3d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded growth",
+        "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting."
+      },
+      "a18da67debbe0cfce955": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded growth",
+        "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting."
+      },
+      "eb237c82a087055ba371": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+        "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+      },
+      "c5821dffc227e5c64ba3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+        "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+      },
+      "229f2f739d8d309c8774": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded stop/foot transitions follow the existing far frame.",
+        "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+      },
+      "0e7d200f99887122e99a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded stop/foot transitions follow the existing far frame.",
+        "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+      },
+      "53373f5aaea6d35f4e8e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "f2deddabaabea06e8c5c": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "46f62f3bc5b9aeca7de5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "f559c60cdc511dafe264": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "52b8ac380619a1667e3b": {
+        "decision": "bounded-physical-trial",
+        "feature": "Floor crossbar",
+        "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+        "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+      },
+      "73cac8c6bd37bf1eeeec": {
+        "decision": "bounded-physical-trial",
+        "feature": "Floor crossbar",
+        "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+        "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+      },
+      "d8840e593bea30b74579": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "ddd9c51ed7b8ca1db9c6": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "87fe188a93bec1313b76": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "57a03ebf26bcd5a6d707": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "2bb0dad7b1b33620933a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+        "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+      },
+      "22464dc47c2d7c363981": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+        "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+      },
+      "37f5b8a8d55c5c7a520f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "dc23180d96b692fd2b21": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "7ff19d94796c7a8aeb76": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "7677fd66c5a49237cd7d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "e94c32dda24253500843": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 104 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+      },
+      "e7fe05cfbc3cba1db863": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 100 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+      },
+      "68ddaba80fd3b5c39e74": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide first faces",
+        "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+        "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+      },
+      "60788709639fc74e1dcc": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide first faces",
+        "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+        "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+      },
+      "d3cbfd56539b074b016d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor/guide transitions",
+        "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+        "required_test": "Inspect transition bonding and the full sliding route."
+      },
+      "3a7b897eb446bcf2ecd3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor/guide transitions",
+        "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+        "required_test": "Inspect transition bonding and the full sliding route."
+      },
+      "0c9cf78640942d9e069f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Guide slot back walls",
+        "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+        "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+      },
+      "9b023f85aa75185104c7": {
+        "decision": "bounded-physical-trial",
+        "feature": "Guide slot back walls",
+        "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+        "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+      },
+      "0d8ff45fb12726b18cfe": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+        "required_test": "Inspect both root shoulders and the full-height sensor trial."
+      },
+      "f42052ba79cb1527fd2d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+        "required_test": "Inspect both root shoulders and the full-height sensor trial."
+      },
+      "9fdf8ab8f33da3b44bad": {
+        "decision": "bounded-physical-trial",
+        "feature": "PCB rail first faces",
+        "reason": "Exterior starters and fixed-rail ties back the rail starts; remove the deliberate ties before peeling helpers. Actual directly-beneath backing: 56 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check rail bonding, cleanup and the real populated-board underside."
+      },
+      "88f075f743d04383c676": {
+        "decision": "bounded-physical-trial",
+        "feature": "PCB rail first faces",
+        "reason": "Exterior starters and fixed-rail ties back the rail starts; remove the deliberate ties before peeling helpers. Actual directly-beneath backing: 60 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check rail bonding, cleanup and the real populated-board underside."
+      },
+      "2ba7ea1c0284e337f1f3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late fixed diagonals",
+        "reason": "Dedicated projected exterior walls back the late V-shaped diagonals before the C face exists. Actual directly-beneath backing: 350 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both complete diagonals and their crown junction before fitting hardware."
+      },
+      "ad7826a4eab8feab4f4c": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 2 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      },
+      "5477e2ec18dc5d708978": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 87 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      },
+      "036ce011ca9f3a8893b5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 66 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      },
+      "397a8e5a7f0e7007281d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+        "required_test": "Inspect both root shoulders and the full-height sensor trial."
+      },
+      "228f8c7da4b623cedaef": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+        "required_test": "Inspect both root shoulders and the full-height sensor trial."
+      },
+      "7308616f69de7da4fe93": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late fixed diagonals",
+        "reason": "Dedicated projected exterior walls back the late V-shaped diagonals before the C face exists. Actual directly-beneath backing: 350 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both complete diagonals and their crown junction before fitting hardware."
+      },
+      "733f2a1815fce4e28fb7": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 2 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      },
+      "d071dba6aa1ea8579500": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 87 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      },
+      "a43699f99d3497cadba5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 66 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      }
+    },
+    "exports/fit-coupon": {
+      "8cc04aa7482875123a68": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 228 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "3ae84416ddfcd4f9cc34": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 253 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "8c6ccdf7166da43523c9": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "15c133c67ad1f5e02279": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "abd5e1b7dd7e898099ce": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 133 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "bdf54e4cff4014b45241": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 133 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "263d368bc7130ea1a9ed": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 228 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "77eb81b9042d50538644": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 253 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "9f409010cb1a5b1e3718": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "6c65229ee655cb28197f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "f5589d2ebd59efda0b1c": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 133 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "9e5819736163c51583c2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 133 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      }
+    },
+    "exports/fit-coupon-8.0": {
+      "8cc04aa7482875123a68": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 228 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "8685ce1eef66835100a8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 254 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "8c6ccdf7166da43523c9": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "15c133c67ad1f5e02279": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "9ca34704cf1fe0a1aa64": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 134 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "b722e95811ddee8890dc": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 132 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "263d368bc7130ea1a9ed": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 228 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "0d94c7793888507a9b1f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 254 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "9f409010cb1a5b1e3718": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "6c65229ee655cb28197f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "839b40e09c0b0544e570": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 134 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "1924f95e2f31098f8772": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 132 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      }
+    },
+    "exports/fit-coupon-8.1": {
+      "a22827d22247b228375a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 227 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "443a615c5035286490e8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 258 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "8c6ccdf7166da43523c9": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "15c133c67ad1f5e02279": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "4913738610359009e71f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 141 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "15975fd35b4f465e3e23": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 145 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "953806abc2cb71cce08e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 227 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "968688995efdfaa1578c": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 258 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "9f409010cb1a5b1e3718": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "6c65229ee655cb28197f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "e8adeea9213caba39953": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 141 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "3448384442538c13a086": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 145 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      }
+    },
+    "exports/trial-Key_Carrier": {
+      "7f21e36d3cc1ed0aee41": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 205 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "d9da937a22756cef0805": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 341 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "53805d8a1f25ce265c72": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 362 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "49f5997572476b5e71ca": {
+        "decision": "bounded-physical-trial",
+        "feature": "Deep front fixed webs",
+        "reason": "The first full web infill starts at 4.0 mm; the preceding border is not credited as interior backing. Interior-only exterior caps back that actual infill with one empty layer while preserving ordinary sideways clearance from the earlier border. Actual directly-beneath backing: 105 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Remove the aids without levering a web; inspect both full-height carrier webs for droop or weak bonding."
+      },
+      "f92573e638e701cd43ea": {
+        "decision": "bounded-physical-trial",
+        "feature": "Deep front fixed webs",
+        "reason": "The first full web infill starts at 4.0 mm; the preceding border is not credited as interior backing. Interior-only exterior caps back that actual infill with one empty layer while preserving ordinary sideways clearance from the earlier border. Actual directly-beneath backing: 106 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Remove the aids without levering a web; inspect both full-height carrier webs for droop or weak bonding."
+      },
+      "4b11b1ba3973a1f8b20b": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 240 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "56e0380596981a7070e2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 247 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "18bd79cbc3707eccc197": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 265 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "175e9a9f5f7a72e2ef5e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "a51320e8a994edab390d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "3f741b7659d386bea8ff": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "c6e67a68eb587ee301ae": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "e24c9fa33b6d3ec89941": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "ceef31e7225e35e95967": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "0d33c4b3fd109f288f7d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "88cffcbbd8344eb9b501": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "f9604206df5038bc1f8a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "857dd5ea173b34229125": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "136b070029df60fc5513": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 122 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "eded02a9f1daf7352756": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 136 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "4426e3f43ecb05e1e829": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper socket floors",
+        "reason": "These floor starts have the same real-gap backing recipe as the small key trial; their full-height location is not covered by that small trial. Actual directly-beneath backing: 221 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both upper floors and full-height adhesion before loading the upper switches."
+      },
+      "ec99a0b7e47480b00e50": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper socket floors",
+        "reason": "These floor starts have the same real-gap backing recipe as the small key trial; their full-height location is not covered by that small trial. Actual directly-beneath backing: 221 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both upper floors and full-height adhesion before loading the upper switches."
+      },
+      "c3db6e27d6fffcecd35d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper mounting-opening bridges",
+        "reason": "The second row retains the 14.1 mm bridge and original switch interface; a passing small trial is the prerequisite.",
+        "required_test": "Check both actual upper switches and reject any bridge sag entering their openings."
+      },
+      "ab7d8180479e4fb9cec6": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper mounting-opening bridges",
+        "reason": "The second row retains the 14.1 mm bridge and original switch interface; a passing small trial is the prerequisite.",
+        "required_test": "Check both actual upper switches and reject any bridge sag entering their openings."
+      },
+      "66a482437b4cbf63d4c0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear walls and rounded posts",
+        "reason": "Rear-wall bridges repeat the small trial; rounded post/rail junctions remain connected. The obsolete detached 0.27 mm strip was trimmed.",
+        "required_test": "Inspect upper rear walls and post bonding; repeatedly press the upper keys and check whitening or layer splits."
+      },
+      "335e37844855250c3dc7": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear walls and rounded posts",
+        "reason": "Rear-wall bridges repeat the small trial; rounded post/rail junctions remain connected. The obsolete detached 0.27 mm strip was trimmed.",
+        "required_test": "Inspect upper rear walls and post bonding; repeatedly press the upper keys and check whitening or layer splits."
+      },
+      "3668ebf60a9e33eb67d6": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 205 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "6ae0ab1ab0cd8b575f8a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 341 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "6ff4aa438a2f1d7881af": {
+        "decision": "bounded-physical-trial",
+        "feature": "Front load bars and leading legs",
+        "reason": "All three broad front-bar starts have bed-grown exterior caps one empty layer below their actual first extrusion. Lower front diagonals have their own exterior posts; later rail growth is ramped. The wide bar bounds are not accepted as unsupported bridges. Actual directly-beneath backing: 362 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect every first bar/leg and helper release, then test full-height adhesion and bonding."
+      },
+      "028ba2223b2c45975af5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Deep front fixed webs",
+        "reason": "The first full web infill starts at 4.0 mm; the preceding border is not credited as interior backing. Interior-only exterior caps back that actual infill with one empty layer while preserving ordinary sideways clearance from the earlier border. Actual directly-beneath backing: 105 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Remove the aids without levering a web; inspect both full-height carrier webs for droop or weak bonding."
+      },
+      "94a4c5696056cbd0c3b8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Deep front fixed webs",
+        "reason": "The first full web infill starts at 4.0 mm; the preceding border is not credited as interior backing. Interior-only exterior caps back that actual infill with one empty layer while preserving ordinary sideways clearance from the earlier border. Actual directly-beneath backing: 106 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Remove the aids without levering a web; inspect both full-height carrier webs for droop or weak bonding."
+      },
+      "20878de989d78d905d4b": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 240 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "0a41a4a76d82d7916470": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 247 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "d84029fb2d18a365e027": {
+        "decision": "bounded-physical-trial",
+        "feature": "Socket floors",
+        "reason": "The isolated floor starts use explicit exterior backing. Preserve the 1.2 mm local floor and the complete socket insertion path. Actual directly-beneath backing: 265 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Try the real socket and switch; stop if the floor bends, cracks or cannot be cleaned."
+      },
+      "7561a8e69c005fe368c0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "47ab76219b2aa7047a71": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "7dc276de0e392ab220a8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear mounting-opening bridge",
+        "reason": "A 14.1 mm opening requires a bridge between the side lands. The remaining nominal fit allowance makes real sag a material uncertainty.",
+        "required_test": "Test a real switch in the small trial; reject any droop into the opening before printing a full carrier."
+      },
+      "1ec27d5f08d4be79bb29": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "999d70775bfe6e09e2c6": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "664d138074a1a7bb7009": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear socket wall",
+        "reason": "The 3 mm rear wall connects an existing floor and rear mounting lip across a 4.47 mm clear gap.",
+        "required_test": "Inspect its bridge and socket location in the small trial; stop on droop, cracking or looseness."
+      },
+      "c814804066e80128b265": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "fc86cdb986bf375a2aa6": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "58dcd00252aa4037f227": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "bef5436dd29f156b7728": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "64ed141322a30b44b6ba": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 122 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "551d55180c77d518d041": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late clip and rear load paths",
+        "reason": "The C face has a separate exterior cap; rear webs grow between existing floor/post/rail anchors. The exposed rear-web component bounds are at most 6.8 mm across X. Actual directly-beneath backing: 136 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check cap release, both clip bores and rear web bonding; then repeatedly press the full carrier keys."
+      },
+      "226d776a4a13f2efc72a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper socket floors",
+        "reason": "These floor starts have the same real-gap backing recipe as the small key trial; their full-height location is not covered by that small trial. Actual directly-beneath backing: 221 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both upper floors and full-height adhesion before loading the upper switches."
+      },
+      "2e858a2fca4dcf7592e5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper socket floors",
+        "reason": "These floor starts have the same real-gap backing recipe as the small key trial; their full-height location is not covered by that small trial. Actual directly-beneath backing: 221 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both upper floors and full-height adhesion before loading the upper switches."
+      },
+      "b5d61a115897ed1cbef2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper mounting-opening bridges",
+        "reason": "The second row retains the 14.1 mm bridge and original switch interface; a passing small trial is the prerequisite.",
+        "required_test": "Check both actual upper switches and reject any bridge sag entering their openings."
+      },
+      "eb0ef674164a1c3332e1": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper mounting-opening bridges",
+        "reason": "The second row retains the 14.1 mm bridge and original switch interface; a passing small trial is the prerequisite.",
+        "required_test": "Check both actual upper switches and reject any bridge sag entering their openings."
+      },
+      "9192fb734c3cb5e0aec3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear walls and rounded posts",
+        "reason": "Rear-wall bridges repeat the small trial; rounded post/rail junctions remain connected. The obsolete detached 0.27 mm strip was trimmed.",
+        "required_test": "Inspect upper rear walls and post bonding; repeatedly press the upper keys and check whitening or layer splits."
+      },
+      "8b40499dab61be971c67": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear walls and rounded posts",
+        "reason": "Rear-wall bridges repeat the small trial; rounded post/rail junctions remain connected. The obsolete detached 0.27 mm strip was trimmed.",
+        "required_test": "Inspect upper rear walls and post bonding; repeatedly press the upper keys and check whitening or layer splits."
+      }
+    },
+    "exports/trial-Battery_Holder-Battery_End_Gate": {
+      "cfc6f65841bfd8463b7e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded growth",
+        "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting."
+      },
+      "829dce2a55559adeb64e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded growth",
+        "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting."
+      },
+      "774f0c7e9315190915c8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+        "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+      },
+      "5e0999d5fb6cf48953ff": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+        "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+      },
+      "307084bbcbe05dd384e4": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded stop/foot transitions follow the existing far frame.",
+        "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+      },
+      "b3c422daee99bbba90c4": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded stop/foot transitions follow the existing far frame.",
+        "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+      },
+      "dbdff2352efce385f1b7": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "d7d6d5c3f242d48491da": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "e4bce14c2bef96ead553": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "81901ba1eeadf6b21452": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "9b6d68160ff06455bf62": {
+        "decision": "bounded-physical-trial",
+        "feature": "Floor crossbar",
+        "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+        "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+      },
+      "446e5eb8be1da3acec33": {
+        "decision": "bounded-physical-trial",
+        "feature": "Floor crossbar",
+        "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+        "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+      },
+      "52bcd5bd9bdaa7c88f83": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "a0d8640dfae0d21189c8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "02459aaca2413a8b243d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "b39984248deb96b22871": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "c944e23317b373f0a385": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+        "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+      },
+      "0de76cccc4e6c1c63ec2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+        "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+      },
+      "00ac173405893052a519": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "ff7bd43117659e23c827": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "f6cfb055e6e43adb4607": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "1ccfa6dc5657841dfc73": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "41b3c659d5f5a45fb789": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 104 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+      },
+      "149c727ada273ac8fc67": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 100 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+      },
+      "102b4c08c9578b3c54bb": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide first faces",
+        "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+        "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+      },
+      "c9468ded5343fd67f298": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide first faces",
+        "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+        "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+      },
+      "5c71f9580d49775e872c": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor/guide transitions",
+        "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+        "required_test": "Inspect transition bonding and the full sliding route."
+      },
+      "91de015996c406ebd588": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor/guide transitions",
+        "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+        "required_test": "Inspect transition bonding and the full sliding route."
+      },
+      "d21aa88d8f043339ce9b": {
+        "decision": "bounded-physical-trial",
+        "feature": "Guide slot back walls",
+        "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+        "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+      },
+      "38469e2959ac2ac74ac0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Guide slot back walls",
+        "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+        "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+      },
+      "e8452741e0e20fc4227a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded growth",
+        "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting."
+      },
+      "f7610f6dfdde7c3edfef": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded growth",
+        "reason": "Rounded edge growth follows the bed-facing far frame and flat clip face; the long bounds do not describe a free full-width bridge.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting."
+      },
+      "eb237c82a087055ba371": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+        "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+      },
+      "c5821dffc227e5c64ba3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The distal stop grows from the established far frame; small inward ledges remain a print trial.",
+        "required_test": "Inspect the stop underside and load the real cell without forcing or pouch pressure."
+      },
+      "229f2f739d8d309c8774": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded stop/foot transitions follow the existing far frame.",
+        "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+      },
+      "0e7d200f99887122e99a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded stop/foot transitions follow the existing far frame.",
+        "required_test": "Inspect the far-end joints and stop if a foot peels or splits."
+      },
+      "caf6fa52be20283a4ebe": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "65e18585263a659dc3c4": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "46f62f3bc5b9aeca7de5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "f559c60cdc511dafe264": {
+        "decision": "bounded-physical-trial",
+        "feature": "Roof hoop",
+        "reason": "The hoop crosses between established side and centre stringers with 12.8 mm centre spacing.",
+        "required_test": "Inspect hoop sag and all stringer junctions in the full cage trial."
+      },
+      "52b8ac380619a1667e3b": {
+        "decision": "bounded-physical-trial",
+        "feature": "Floor crossbar",
+        "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+        "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+      },
+      "aa4cb3bcdf6eb47bd49d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Floor crossbar",
+        "reason": "The floor bar crosses the same bounded side/centre support spacing.",
+        "required_test": "Inspect droop and floor bonding before sliding in the real cell."
+      },
+      "d8840e593bea30b74579": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "c76a52837eecaa1df618": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "87fe188a93bec1313b76": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "57a03ebf26bcd5a6d707": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof hoop",
+        "reason": "A second bounded hoop uses the same established stringers; no support enters the battery reserve.",
+        "required_test": "Inspect the whole hoop and cell reserve, then check gentle retention."
+      },
+      "2bb0dad7b1b33620933a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+        "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+      },
+      "0f2414fc3213c7ec9998": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first real floor-bar beads cross the side/centre stringers at this layer, with about 10.5 mm overhang-wall and 11.5 mm gap-infill runs within the 12.8 mm support-centre spacing. Earlier round-bar mesh slivers were not printed and provide no backing. This is an explicit bounded PETG bridge trial.",
+        "required_test": "Inspect the first floor bridge for droop and bonding, then cracks and the complete cell-loading route before loading the cell."
+      },
+      "5f2507022cf9148a0e90": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "37f5b8a8d55c5c7a520f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "7ff19d94796c7a8aeb76": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "7677fd66c5a49237cd7d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry-side roof hoop",
+        "reason": "The third bounded hoop retains the centre and side stringer anchors.",
+        "required_test": "Inspect the entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "99fe428d55fbd6898d13": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 104 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+      },
+      "e7fe05cfbc3cba1db863": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses an exterior split cap; the bore and relief remain empty. Actual directly-beneath backing: 100 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Cut/peel short helper sections outward, then slide onto the bare rod without snapping sideways."
+      },
+      "68ddaba80fd3b5c39e74": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide first faces",
+        "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+        "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+      },
+      "74297ca36dd19fec9f6e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide first faces",
+        "reason": "Outside diagonals bring the guide starts into the established roof posts. The remaining broad shoulder is a bounded cage trial, not a force qualification.",
+        "required_test": "Inspect both braces and guide shoulders before trying the empty gate."
+      },
+      "d3cbfd56539b074b016d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor/guide transitions",
+        "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+        "required_test": "Inspect transition bonding and the full sliding route."
+      },
+      "fed6d45629d5c54a8fe7": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor/guide transitions",
+        "reason": "The round floor rail and guide shoulders grow from the existing side rails and braces.",
+        "required_test": "Inspect transition bonding and the full sliding route."
+      },
+      "94bb8b99313030ec20ee": {
+        "decision": "bounded-physical-trial",
+        "feature": "Guide slot back walls",
+        "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+        "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+      },
+      "8026399f65ae768e717e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Guide slot back walls",
+        "reason": "Closing the guide back spans the existing slot, approximately 2.4 mm, without changing its fit.",
+        "required_test": "Cycle the empty gate; reject binding, whitening or a drooping back wall."
+      }
+    },
+    "exports/trial-XIAO_Rod_Holder": {
+      "fe2147fe6319e04daff7": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+        "required_test": "Inspect both root shoulders and the full-height sensor trial."
+      },
+      "4120169d873d370842c6": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+        "required_test": "Inspect both root shoulders and the full-height sensor trial."
+      },
+      "a56d324697d1e61b8d02": {
+        "decision": "bounded-physical-trial",
+        "feature": "PCB rail first faces",
+        "reason": "Exterior starters and fixed-rail ties back the rail starts; remove the deliberate ties before peeling helpers. Actual directly-beneath backing: 56 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check rail bonding, cleanup and the real populated-board underside."
+      },
+      "88f075f743d04383c676": {
+        "decision": "bounded-physical-trial",
+        "feature": "PCB rail first faces",
+        "reason": "Exterior starters and fixed-rail ties back the rail starts; remove the deliberate ties before peeling helpers. Actual directly-beneath backing: 60 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Check rail bonding, cleanup and the real populated-board underside."
+      },
+      "7258de06787f302d0dd8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late fixed diagonals",
+        "reason": "Dedicated projected exterior walls back the late V-shaped diagonals before the C face exists. Actual directly-beneath backing: 350 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both complete diagonals and their crown junction before fitting hardware."
+      },
+      "739957320a02d7c6e3eb": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 2 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      },
+      "5477e2ec18dc5d708978": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 87 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      },
+      "036ce011ca9f3a8893b5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 66 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      },
+      "351b5e61a717d99dc5b4": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+        "required_test": "Inspect both root shoulders and the full-height sensor trial."
+      },
+      "d5c84b7eed613afbbf97": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed roots grow from the established front diagonals; the PCB bearing plane stays fixed.",
+        "required_test": "Inspect both root shoulders and the full-height sensor trial."
+      },
+      "1c7e65e9dde2be8c54b3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late fixed diagonals",
+        "reason": "Dedicated projected exterior walls back the late V-shaped diagonals before the C face exists. Actual directly-beneath backing: 350 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect both complete diagonals and their crown junction before fitting hardware."
+      },
+      "159e2ffaf95ebc9cd2a2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 2 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      },
+      "d071dba6aa1ea8579500": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 87 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      },
+      "a43699f99d3497cadba5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and root junctions",
+        "reason": "The previous fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts; short curved/root growth remains a physical print risk. Actual directly-beneath backing: 66 sampled bead centres at a 0.2 mm vertical gap.",
+        "required_test": "Inspect the complete C and crown/diagonal bonding; reject sag, fused aids or cracks before rod sliding."
+      }
+    }
+  },
+  "slicer_warnings": {
+    "It seems object XIAO_Rod_Holder has floating cantilever. Please re-orient the object or enable support generation.": {
+      "decision": "bounded-physical-trial",
+      "reason": "Retain the warning. Dedicated aids back the late diagonals/C face; curved starts, full-height adhesion, cleanup and populated-board fit still require the complete sensor trial."
+    },
+    "It seems object Key_Carrier has floating cantilever. Please re-orient the object or enable support generation.": {
+      "decision": "bounded-physical-trial",
+      "reason": "Retain the warning. Ordinary CAD aids are separated from the part; independently checked actual starts do not establish bridge sag or full-height adhesion. Print the small key trial first, then the full carrier as a trial."
+    },
+    "It seems object Battery_Holder has floating cantilever. Please re-orient the object or enable support generation.": {
+      "decision": "bounded-physical-trial",
+      "reason": "Retain the warning. Actual C-face backing is checked, but roof/floor bridges, guide shoulders, adhesion and gate cleanup still require the complete cage/gate trial."
+    }
+  }
+}

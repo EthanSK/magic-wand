@@ -1,0 +1,1421 @@
+{
+  "project_sha256": "252067453ea356e4a8fc0190007883e9a834c737a59efe6ad2e89bf65a1797a5",
+  "manifest_sha256": "80aad13df6c4f1f07473709ee99f936dccf41a893d8a8fea6676af0e398e8427",
+  "checker_sha256": "dc19a555347676e9ed3e8027f7b61beb6b955c2bf826fab9f6c1ecb5a3e35dd0",
+  "physical_strength_verified": false,
+  "method": "Ray intersections through final exported assembly STLs; actual G-code radial track clusters at clip midplanes. No force/fatigue simulation.",
+  "clips": {
+    "Key_Carrier": [
+      {
+        "axial_centre_mm": -12,
+        "radial_STL_sections_mm": {
+          "-70": 1.0005,
+          "-55": 1.0048,
+          "0": 1.15,
+          "90": 1.6,
+          "180": 1.15,
+          "235": 1.0048,
+          "250": 1.0005
+        },
+        "sampled_actual_layer_assembly_y_mm": -12.000000247683714,
+        "radial_extrusion_track_centres_mm": {
+          "-55": [
+            4.213,
+            4.502,
+            4.785
+          ],
+          "90": [
+            4.205,
+            4.597,
+            4.996,
+            5.381
+          ],
+          "235": [
+            4.213,
+            4.502,
+            4.784
+          ]
+        }
+      },
+      {
+        "axial_centre_mm": 11.5,
+        "radial_STL_sections_mm": {
+          "-70": 1.0005,
+          "-55": 1.0048,
+          "0": 1.15,
+          "90": 1.67,
+          "180": 1.15,
+          "235": 1.0048,
+          "250": 1.0005
+        },
+        "sampled_actual_layer_assembly_y_mm": 11.599999418530274,
+        "radial_extrusion_track_centres_mm": {
+          "-55": [
+            4.214,
+            4.502,
+            4.784
+          ],
+          "90": [
+            4.208,
+            4.6,
+            4.834,
+            5.07,
+            5.462
+          ],
+          "235": [
+            4.214,
+            4.502,
+            4.782
+          ]
+        }
+      }
+    ]
+  },
+  "key_to_clip_load_paths": {
+    "1": {
+      "sections": [
+        {
+          "assembly_y_mm": -9.4,
+          "mesh_area_mm2": 59.7118,
+          "printed_area_mm2": 55.4615,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            3.6084,
+            3.4875
+          ],
+          "individual_rail_printed_area_mm2": [
+            2.7887,
+            2.2213
+          ]
+        },
+        {
+          "assembly_y_mm": -9.2,
+          "mesh_area_mm2": 58.0135,
+          "printed_area_mm2": 56.7473,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            3.9204,
+            3.916
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.737,
+            3.4043
+          ]
+        },
+        {
+          "assembly_y_mm": -9.0,
+          "mesh_area_mm2": 56.8408,
+          "printed_area_mm2": 56.0754,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            4.1686,
+            4.1638
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.0165,
+            3.9854
+          ]
+        },
+        {
+          "assembly_y_mm": -8.8,
+          "mesh_area_mm2": 53.8777,
+          "printed_area_mm2": 53.4007,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            4.2801,
+            4.275
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.1959,
+            4.1906
+          ]
+        },
+        {
+          "assembly_y_mm": -8.6,
+          "mesh_area_mm2": 49.192,
+          "printed_area_mm2": 48.7917,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            4.3016,
+            4.2936
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.251,
+            4.2405
+          ]
+        },
+        {
+          "assembly_y_mm": -8.4,
+          "mesh_area_mm2": 42.9767,
+          "printed_area_mm2": 42.456,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            4.2651,
+            4.256
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.2146,
+            4.1966
+          ]
+        },
+        {
+          "assembly_y_mm": -8.2,
+          "mesh_area_mm2": 35.1702,
+          "printed_area_mm2": 34.6076,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            4.1843,
+            4.1799
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.0565,
+            4.091
+          ]
+        },
+        {
+          "assembly_y_mm": -8.0,
+          "mesh_area_mm2": 32.655,
+          "printed_area_mm2": 31.0149,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            4.0869,
+            4.0869
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.0922,
+            3.8783
+          ]
+        },
+        {
+          "assembly_y_mm": -7.8,
+          "mesh_area_mm2": 30.5787,
+          "printed_area_mm2": 29.7819,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            3.8442,
+            3.8442
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.699,
+            3.5124
+          ]
+        },
+        {
+          "assembly_y_mm": -7.6,
+          "mesh_area_mm2": 29.8043,
+          "printed_area_mm2": 29.0608,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            4.0219,
+            4.0219
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.8061,
+            3.8063
+          ]
+        },
+        {
+          "assembly_y_mm": -7.4,
+          "mesh_area_mm2": 29.2567,
+          "printed_area_mm2": 27.5051,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            4.2934,
+            4.2934
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.5769,
+            3.577
+          ]
+        },
+        {
+          "assembly_y_mm": -7.2,
+          "mesh_area_mm2": 28.7625,
+          "printed_area_mm2": 28.1012,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            4.4941,
+            4.4941
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3209,
+            4.3174
+          ]
+        },
+        {
+          "assembly_y_mm": -7.0,
+          "mesh_area_mm2": 11.5333,
+          "printed_area_mm2": 11.1532,
+          "individual_full_depth_rail_screen_applies": false,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3258,
+            4.3287
+          ]
+        },
+        {
+          "assembly_y_mm": -6.8,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.8112,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3866
+          ]
+        },
+        {
+          "assembly_y_mm": -6.6,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -6.4,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -6.2,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -6.0,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -5.8,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -5.6,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -5.4,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -5.2,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -5.0,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -4.8,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -4.6,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -4.4,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -4.2,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -4.0,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -3.8,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -3.6,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -3.4,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -3.2,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -3.0,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -2.8,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -2.6,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -2.4,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -2.2,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -2.0,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -1.8,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -1.6,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -1.4,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -1.2,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -1.0,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -0.8,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -0.6,
+          "mesh_area_mm2": 11.37,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -0.4,
+          "mesh_area_mm2": 29.4145,
+          "printed_area_mm2": 10.803,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -0.2,
+          "mesh_area_mm2": 31.2135,
+          "printed_area_mm2": 29.735,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": -0.0,
+          "mesh_area_mm2": 32.3308,
+          "printed_area_mm2": 30.8035,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4249,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3307,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 0.2,
+          "mesh_area_mm2": 32.9447,
+          "printed_area_mm2": 31.6578,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.3467,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.2424,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 0.4,
+          "mesh_area_mm2": 33.1935,
+          "printed_area_mm2": 31.9822,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.2384,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.1269,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 0.6,
+          "mesh_area_mm2": 33.4125,
+          "printed_area_mm2": 32.2104,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.1591,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.0421,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 0.8,
+          "mesh_area_mm2": 33.549,
+          "printed_area_mm2": 32.3691,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.0509,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.9322,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 1.0,
+          "mesh_area_mm2": 33.6752,
+          "printed_area_mm2": 32.4955,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.9715,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.8413,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 1.2,
+          "mesh_area_mm2": 32.4264,
+          "printed_area_mm2": 31.3828,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.8634,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.7658,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 1.4,
+          "mesh_area_mm2": 32.3221,
+          "printed_area_mm2": 31.2963,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.7839,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.6861,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 1.6,
+          "mesh_area_mm2": 32.1618,
+          "printed_area_mm2": 31.1555,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.676,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.5781,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 1.8,
+          "mesh_area_mm2": 31.9996,
+          "printed_area_mm2": 31.0127,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.5963,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.4981,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 2.0,
+          "mesh_area_mm2": 31.7896,
+          "printed_area_mm2": 30.5823,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.4885,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1531,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 2.2,
+          "mesh_area_mm2": 31.5884,
+          "printed_area_mm2": 30.45,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.4087,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1422,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 2.4,
+          "mesh_area_mm2": 31.3356,
+          "printed_area_mm2": 30.3319,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.301,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1422,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 2.6,
+          "mesh_area_mm2": 31.125,
+          "printed_area_mm2": 30.1892,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.2325,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1422,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 2.8,
+          "mesh_area_mm2": 31.008,
+          "printed_area_mm2": 30.0744,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.2268,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1422,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 3.0,
+          "mesh_area_mm2": 30.8965,
+          "printed_area_mm2": 29.9634,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.2268,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1422,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 3.2,
+          "mesh_area_mm2": 30.7851,
+          "printed_area_mm2": 29.8594,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.2268,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1422,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 3.4,
+          "mesh_area_mm2": 30.6782,
+          "printed_area_mm2": 29.7638,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.2268,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1422,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 3.6,
+          "mesh_area_mm2": 30.5831,
+          "printed_area_mm2": 29.6728,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.2268,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1422,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 3.8,
+          "mesh_area_mm2": 30.4881,
+          "printed_area_mm2": 29.5844,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.2268,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1422,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 4.0,
+          "mesh_area_mm2": 30.3931,
+          "printed_area_mm2": 29.4962,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.2268,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1422,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 4.2,
+          "mesh_area_mm2": 30.2981,
+          "printed_area_mm2": 29.4048,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.2268,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1422,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 4.4,
+          "mesh_area_mm2": 30.257,
+          "printed_area_mm2": 29.3206,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            3.2806,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.1463,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 4.6,
+          "mesh_area_mm2": 31.3699,
+          "printed_area_mm2": 29.4081,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            3.3227,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 4.8,
+          "mesh_area_mm2": 31.2749,
+          "printed_area_mm2": 30.3993,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.4146,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 5.0,
+          "mesh_area_mm2": 31.2789,
+          "printed_area_mm2": 30.2863,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        },
+        {
+          "assembly_y_mm": 5.2,
+          "mesh_area_mm2": 31.3517,
+          "printed_area_mm2": 30.3681,
+          "individual_full_depth_rail_screen_applies": true,
+          "individual_rail_mesh_area_mm2": [
+            4.4886,
+            4.4886
+          ],
+          "individual_rail_printed_area_mm2": [
+            4.3855,
+            4.3867
+          ]
+        }
+      ],
+      "minimum_mesh_area_mm2": 11.37,
+      "minimum_printed_area_mm2": 10.803,
+      "previous_upper_key_mesh_bottleneck_mm2": 2.76,
+      "screen_threshold_mesh_mm2": 8.0,
+      "screen_threshold_printed_mm2": 5.0,
+      "decision": "Outboard fixed rails bypass the thin switch rims; screen against a narrow interlayer bottleneck, not a rated breaking force.",
+      "physical_test": "Press each upper key while mounted and inspect the complete key-to-clip path for whitening, layer splits or excess bending."
+    }
+  },
+  "key_socket_floor_sampled_sections_mm": {
+    "0,5": 1.2,
+    "3,5": 1.38,
+    "2.5,5.5": 1.38,
+    "5,5": 1.38,
+    "3,7": 1.38,
+    "0,7": 1.2
+  },
+  "key_floor_note": "The central rod-clearance cut reduces the floor locally to 1.2 mm; away from the rod it is 1.38 mm. Do not report 1.38 mm as the minimum.",
+  "fixed_reinforcement": {
+    "battery_crossbars_diameter_mm": 2.0,
+    "battery_previous_crossbars_diameter_mm": 1.4,
+    "key_fixed_load_rail_width_mm": 1.4,
+    "key_fixed_load_rail_depth_mm": 3.2,
+    "key_load_path_scanned_local_y_mm": [
+      -9.4,
+      5.2
+    ],
+    "battery_bridge_half_span_mm": 12.8,
+    "sensor_outer_rail_width_mm": 2.0,
+    "sensor_previous_rail_width_mm": 1.2,
+    "sensor_fixed_root_diameter_mm": 2.1,
+    "sensor_previous_fixed_root_diameter_mm": 1.6,
+    "gate_central_grab_bar_depth_mm": 2.7,
+    "gate_previous_grab_bar_depth_mm": 1.6,
+    "gate_sliding_wedge_neck_width_mm": 1.2,
+    "gate_sliding_wedge_depth_mm": 1.6,
+    "note": "These are source dimensions with exported one-body/interface checks, not breaking-force predictions. Sliding wedge dimensions and spring profiles remain unchanged."
+  },
+  "per_part_weak_point_decisions": {
+    "Key_Carrier": [
+      {
+        "feature": "Switch-opening side rims",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              -7.625,
+              0,
+              10.52
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 1.15,
+            "sampled_layer_assembly_y_mm": -9.265134437441702e-09,
+            "sampled_layer_section_mm": 1.15,
+            "extrusion_track_centres_relative_mm": [
+              -0.365,
+              0.365
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              7.625,
+              0,
+              10.52
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 1.15,
+            "sampled_layer_assembly_y_mm": -9.265134437441702e-09,
+            "sampled_layer_section_mm": 1.15,
+            "extrusion_track_centres_relative_mm": [
+              -0.365,
+              0.365
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 1.15,
+        "minimum_sampled_track_count": 2,
+        "load_case": "Switch insertion loads the rim; fixed outboard rails bypass its thin section for the key-to-clip pressing load.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Preserve the bought switch opening and scan the complete reinforced load path separately; the rim still needs a real insertion trial.",
+        "required_physical_test": "Insert the actual switch, press normally and inspect whitening or layer separation on every tested seat.",
+        "physical_strength_verified": false
+      },
+      {
+        "feature": "Socket floor above rod cut",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              0,
+              5,
+              4.8
+            ],
+            "section_direction_assembly": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "STL_section_mm": 1.2,
+            "sampled_layer_assembly_y_mm": 4.999999037060547,
+            "sampled_layer_section_mm": 1.2,
+            "extrusion_track_centres_relative_mm": [
+              -0.39,
+              -0.004,
+              0.39
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              3,
+              5,
+              4.8
+            ],
+            "section_direction_assembly": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "STL_section_mm": 1.38,
+            "sampled_layer_assembly_y_mm": 4.999999037060547,
+            "sampled_layer_section_mm": 1.38,
+            "extrusion_track_centres_relative_mm": [
+              -0.57,
+              -0.09,
+              0.39
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              3,
+              7,
+              4.8
+            ],
+            "section_direction_assembly": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "STL_section_mm": 1.38,
+            "sampled_layer_assembly_y_mm": 6.999999037060547,
+            "sampled_layer_section_mm": 1.38,
+            "extrusion_track_centres_relative_mm": [
+              -0.57,
+              -0.09,
+              0.39
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 1.2,
+        "minimum_sampled_track_count": 3,
+        "load_case": "Socket insertion, removal and pressing load a locally thin floor.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Keep the socket and rod clearance. Direct backing and a real socket trial are required.",
+        "required_physical_test": "Remove helpers without levering the floor; insert and remove a real socket and press the key.",
+        "physical_strength_verified": false
+      },
+      {
+        "feature": "Outboard fixed key load rails",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              -8.4,
+              -4,
+              8.67
+            ],
+            "section_direction_assembly": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "STL_section_mm": 3.2,
+            "sampled_layer_assembly_y_mm": -4.000000009265134,
+            "sampled_layer_section_mm": 3.2,
+            "extrusion_track_centres_relative_mm": [
+              -1.39,
+              0.0,
+              1.39
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              8.4,
+              -4,
+              8.67
+            ],
+            "section_direction_assembly": [
+              0.0,
+              0.0,
+              1.0
+            ],
+            "STL_section_mm": 3.2,
+            "sampled_layer_assembly_y_mm": -4.000000009265134,
+            "sampled_layer_section_mm": 3.2,
+            "extrusion_track_centres_relative_mm": [
+              -1.39,
+              0.0,
+              1.39
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 3.2,
+        "minimum_sampled_track_count": 3,
+        "load_case": "Upper-key pressing and insertion transfer through the front-to-rear connection, across layer lines in this orientation.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Add outboard fixed rails while preserving mounting lands and complete switch/socket routes; scan every intervening layer as well as these probes.",
+        "required_physical_test": "Try the repaired coupon first, then repeatedly press both upper keys while mounted; stop on whitening, separation or excess bending.",
+        "physical_strength_verified": false
+      },
+      {
+        "feature": "Fixed rear socket posts",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              -7.9,
+              9.6,
+              7.0
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 1.9,
+            "sampled_layer_assembly_y_mm": 9.599999418530274,
+            "sampled_layer_section_mm": 1.9,
+            "extrusion_track_centres_relative_mm": [
+              -0.72,
+              -0.328,
+              0.0,
+              0.328,
+              0.72
+            ]
+          },
+          {
+            "probe_assembly_mm": [
+              7.9,
+              9.6,
+              7.0
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 1.9,
+            "sampled_layer_assembly_y_mm": 9.599999418530274,
+            "sampled_layer_section_mm": 1.9,
+            "extrusion_track_centres_relative_mm": [
+              -0.72,
+              -0.328,
+              -0.0,
+              0.328,
+              0.72
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 1.9,
+        "minimum_sampled_track_count": 5,
+        "load_case": "Socket insertion and key pressing load the rear columns.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Retain the 1.9 mm rounded fixed columns; trim an obsolete 0.27 mm detached leading strip that the slicer omitted.",
+        "required_physical_test": "Inspect the rear columns after cleanup and under repeated key pressing; bought-part routes must remain clear.",
+        "physical_strength_verified": false
+      },
+      {
+        "feature": "Fixed socket-side stops",
+        "probes": [
+          {
+            "probe_assembly_mm": [
+              8.525,
+              6.0,
+              7.0
+            ],
+            "section_direction_assembly": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "STL_section_mm": 1.35,
+            "sampled_layer_assembly_y_mm": 5.999999037060547,
+            "sampled_layer_section_mm": 1.35,
+            "extrusion_track_centres_relative_mm": [
+              -0.465,
+              -0.0,
+              0.465
+            ]
+          }
+        ],
+        "minimum_sampled_section_mm": 1.35,
+        "minimum_sampled_track_count": 3,
+        "load_case": "Socket insertion and sideways handling load a narrow stop between the floor and mounting lip.",
+        "layer_direction": "Assembly Y is the layer axis; XZ is the layer plane.",
+        "decision": "Retain the 1.35 mm bought-interface stop. Its 4.47 mm clear printed bridge must be tested in the key coupon.",
+        "required_physical_test": "Inspect the stop bridge and push the seated socket gently sideways; stop on cracking, whitening or looseness.",
+        "physical_strength_verified": false
+      }
+    ]
+  },
+  "full_set_physically_ready": false,
+  "qualification": "Geometric and extrusion-section screening only. Physical trial is required for every listed load case; no guaranteed breaking force or fatigue life.",
+  "passed": true
+}
