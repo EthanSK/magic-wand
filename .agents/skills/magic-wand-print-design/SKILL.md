@@ -1,11 +1,23 @@
 ---
 name: magic-wand-print-design
-description: Revise Magic Wand printable hardware, CAD, assembly previews and Bambu projects while preserving the helix, tapered silhouette, both handed grips and tested interfaces. Before finishing every 3D model, audit actual sliced holes, supports, removal access and likely snap points with Opus.
+description: Revise Magic Wand printable hardware, CAD, assembly previews and Bambu projects while preserving the helix, tapered silhouette, both handed grips and tested interfaces. Use Opus for model changes when usage is available, and audit actual sliced holes, supports and likely snap points before finishing.
 ---
 
 # Magic Wand print design
 
 Read this skill before any wand CAD, print-layout or mechanical preview change. Follow the repository's magic-wand-dev skill and hardware lessons. Mechanical print versions are separate from firmware control versions.
+
+## Continuous improvement
+
+Preserve Ethan's explicit project rules and useful verified mechanical lessons here or in the owning component's LEARNINGS.md. Refine guidance when it changes future design decisions; preserve unrelated rules, distinguish measured evidence from physical acceptance and keep guesses, private transcripts, paths, receipts and credentials out of public files. Mark agent-discovered material workflow additions Self-improved with date, reason and evidence; user-requested changes retain their own attribution. Validate affected models/checks and the skill before finishing.
+
+## Skill usage announcement
+
+Tell Ethan this skill is active and briefly why, using response-preferences when available. Reuse the announcement for the same ongoing model work.
+
+## Model changes
+
+User-requested — 2026-11-06: “From now on it does all the model changes please, if there's usage.” Use Opus for all model changes while usage is available, including thinking through how Ethan holds the wand and implementing the geometry. This replaces the earlier Codex-only CAD preference. Codex coordinates verification and publication; follow the host's Claude-invocation workflow and report unavailable coverage honestly. Implementation does not replace the final independent printability audit below.
 
 ## User design rules
 
@@ -30,15 +42,15 @@ Read the frozen [V20 design principles](../../../magic-wand/hardware/printed-loo
 
 ## Before calling it final
 
-Before finishing every model or print project, use the repository's [printability-audit](../printability-audit/SKILL.md). It owns the recurring Opus review of actual holes, support removal and likely snap points, with minimal design changes. The earlier Codex-only CAD preference still governs implementation; the newer 5 November request authorizes the final Opus review.
+Before finishing every model or print project, use the repository's [printability-audit](../printability-audit/SKILL.md). It owns the recurring independent Opus review of actual holes, support removal and likely snap points, with minimal design changes. Keep implementation and independent review distinct.
 
 Map each requested change to a source parameter or feature and a check. Compare old/new assembled views, not just the print plate. Check the core-radius profile for monotonic taper; explicitly check the helix is generated. Inspect both handed handles and count both in the actual 3MF build. Check new joints inside the chosen silhouette instead of making the silhouette fit arbitrary collars.
 
 Run manifold, wire/board/USB, joint motion and lid capture checks as applicable. Slice in the actual PETG setup and compare like-for-like material estimates, including supports. Support contact blockers do not alone stop tree branches or descending normal-support columns entering hollow passages; block their landing-source regions where needed and inspect sliced paths. Separate CAD clearance, slicer evidence and physical print acceptance. If the battery product is still unknown, retain its provisional status rather than inventing a fit.
 
-## Maintain verified learnings
+## Verified design lessons
 
-Before work, read the applicable stored lessons here and in magic-wand/LEARNINGS.md. During meaningful discoveries and before completion, update this user-maintained skill when a verified lesson changes future design decisions, without another reminder. Keep user preferences distinct from measured behaviour and hypotheses. Consolidate corrections, preserve unrelated guidance and avoid private transcripts, paths, receipts or credentials. Scope maintenance to this skill and its resources; no background learning process is created.
+Before work, read the applicable lessons here and in magic-wand/LEARNINGS.md. Preserve worthwhile verified improvements during the same task; this does not create a background learning process.
 
 - 2026-10-26 — Explicit user correction: the V3 candidate lost the helix and used narrow spans between wider joint collars. Preserve the helix and a monotonic shaft silhouette while hollowing/thinning the interior. Source geometry and assembled preview establish the regression; neither the old nor replacement design is physically strength-verified.
 - 2026-10-26 — Explicit project requirement: complete means both handed handles. Exporting a right-hand STL separately does not meet that requirement if the opened complete 3MF has only the left handle.
