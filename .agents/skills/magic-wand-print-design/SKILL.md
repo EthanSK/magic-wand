@@ -7,6 +7,8 @@ description: Revise Magic Wand printable hardware, CAD, assembly previews and Ba
 
 Read this skill before any wand CAD, print-layout or mechanical preview change. Follow the repository's magic-wand-dev skill and hardware lessons. Mechanical print versions are separate from firmware control versions.
 
+Before running CAD, exporters or geometry probes, follow the printability audit's [allocation-efficient geometry workflow](../printability-audit/references/geometry-budget.md). Use complete batched queries and serial owned jobs; fix excessive allocation rather than imposing hard RAM limits or a host-pressure gate. This applies to implementation and reviewers alike. User-corrected — 2026-11-06.
+
 ## Continuous improvement
 
 Preserve Ethan's explicit project rules and useful verified mechanical lessons here or in the owning component's LEARNINGS.md. Refine guidance when it changes future design decisions; preserve unrelated rules, distinguish measured evidence from physical acceptance and keep guesses, private transcripts, paths, receipts and credentials out of public files. Mark agent-discovered material workflow additions Self-improved with date, reason and evidence; user-requested changes retain their own attribution. Validate affected models/checks and the skill before finishing.

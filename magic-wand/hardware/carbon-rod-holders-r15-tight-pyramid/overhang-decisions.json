@@ -1,0 +1,1114 @@
+{
+  "reviewer": "Codex primary",
+  "scope": "Exact R15 actual paths and every broad-overhang layer, with final independent Opus artifact review. Unchanged battery/gate/sensor case rows alone retain earlier decisions. Battery/gate images match the first R15 review; the sensor image differs there but matches R14 and was freshly inspected in the final review. Physical acceptance and full-set readiness remain false.",
+  "projects": {
+    "exports": {
+      "fded312d60a5de702150": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "The two outer lower floors remain separate helper-backed islands before joining the rear frame. Their leading residual bands are about 0.6 mm deep. The centre floor also grows from the front spine; its right-side wing gap and edge bands remain partial. Neither percentage coverage nor one empty layer establishes physical adhesion. Actual patch area 18.1308 mm\u00b2; conservative directly-beneath coverage 68.74% (12.4623 mm\u00b2), residual 5.6685 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 247 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch the lower floor starts for curl or movement. Inspect each complete floor, the central spine-to-wing gap and the loading route after cooling; reject sag, fused aids or damage and fit sockets without force."
+      },
+      "e512c077b7720016e19d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "The two outer lower floors remain separate helper-backed islands before joining the rear frame. Their leading residual bands are about 0.6 mm deep. The centre floor also grows from the front spine; its right-side wing gap and edge bands remain partial. Neither percentage coverage nor one empty layer establishes physical adhesion. Actual patch area 3.9372 mm\u00b2; conservative directly-beneath coverage 40.64% (1.6002 mm\u00b2), residual 2.3370 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 37 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch the lower floor starts for curl or movement. Inspect each complete floor, the central spine-to-wing gap and the loading route after cooling; reject sag, fused aids or damage and fit sockets without force."
+      },
+      "94629d5e0c948eaa0ce0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "8ac1aeaadaba6a8ff806": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "746de557d142f2628074": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "204f9ed7f01bddbd40eb": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear-post leading shoulders",
+        "reason": "These short leading patches grow into the rounded fixed rear socket posts and rails. They are connected to earlier material sideways, with no directly-beneath helper credited for the exposed shoulder. Actual patch area 2.6399 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.6399 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both post shoulders and their bonds. Reject curling during printing and cracks, whitening or looseness on socket insertion or pressing."
+      },
+      "177150721def7bd3d40e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear-post leading shoulders",
+        "reason": "These short leading patches grow into the rounded fixed rear socket posts and rails. They are connected to earlier material sideways, with no directly-beneath helper credited for the exposed shoulder. Actual patch area 2.6402 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.6402 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both post shoulders and their bonds. Reject curling during printing and cracks, whitening or looseness on socket insertion or pressing."
+      },
+      "bf86dd9d081663863507": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 2.4669 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.4669 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "bbd03449c48a8dd0aa95": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 9.6310 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.6310 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "cac9fc9f64edb04e92da": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 9.6310 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.6310 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "bbd8d778e7b678f4c76e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 4.6900 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 4.6900 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "12e447dbc53c64c23482": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.5339 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.5339 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "c59cfb474a5e64a623d2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.5333 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.5333 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "05b5be4b928f9db057f2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 2.9888 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.9888 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "3e9f87a20c68d2ad6b56": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.0201 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.0201 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "8a7d0cc4a362c8e47e25": {
+        "decision": "bounded-physical-trial",
+        "feature": "Later rear-wall and key-row web shoulders",
+        "reason": "These late rear-wall and fixed row-connection shoulders grow from earlier rails, posts and webs. Their broad undersides are measured separately from the helper-backed rear C face and remain physical bridge/shoulder experiments. Actual patch area 17.0131 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 17.0131 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect all rear-wall undersides and row-web joints. Reject print curl, sag in a route, weak bonds or whitening under repeated upper-key loads."
+      },
+      "0251e3b956ee14c48013": {
+        "decision": "bounded-physical-trial",
+        "feature": "Later rear-wall and key-row web shoulders",
+        "reason": "These late rear-wall and fixed row-connection shoulders grow from earlier rails, posts and webs. Their broad undersides are measured separately from the helper-backed rear C face and remain physical bridge/shoulder experiments. Actual patch area 17.3869 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 17.3869 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect all rear-wall undersides and row-web joints. Reject print curl, sag in a route, weak bonds or whitening under repeated upper-key loads."
+      },
+      "1cd429fab0dbd8b702ae": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper floors joined to the rear spine",
+        "reason": "Both upper floor fronts now join the fixed rear spine as they start, eliminating the earlier free inner tongue and upper floor islands. The remaining outer regions have only partial exterior aid backing, with measured leading residual strips; no full-backing or physical release claim is made. Actual patch area 16.5896 mm\u00b2; conservative directly-beneath coverage 59.58% (9.8844 mm\u00b2), residual 6.7051 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 196 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch both complete upper floor starts from print height 25.2 through 26.4 mm and stop on curl or movement. Remove aids outward, inspect every edge and fit the real sockets without force."
+      },
+      "2c63c5120f496083eed5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper floors joined to the rear spine",
+        "reason": "Both upper floor fronts now join the fixed rear spine as they start, eliminating the earlier free inner tongue and upper floor islands. The remaining outer regions have only partial exterior aid backing, with measured leading residual strips; no full-backing or physical release claim is made. Actual patch area 10.0649 mm\u00b2; conservative directly-beneath coverage 56.67% (5.7040 mm\u00b2), residual 4.3608 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 102 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch both complete upper floor starts from print height 25.2 through 26.4 mm and stop on curl or movement. Remove aids outward, inspect every edge and fit the real sockets without force."
+      },
+      "9c3fbe3d4a6f79998627": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths span the retained 14.1 mm upper switch windows between established side lands. These paths are not assumed to have bridge flow/speed merely from their shape. The current working-space pass cannot predict PETG sag. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject droop or strings in either upper window. Switches must seat without force and caps must complete independent travel without rubbing."
+      },
+      "3b7d7f3ee8335d594965": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths span the retained 14.1 mm upper switch windows between established side lands. These paths are not assumed to have bridge flow/speed merely from their shape. The current working-space pass cannot predict PETG sag. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject droop or strings in either upper window. Switches must seat without force and caps must complete independent travel without rubbing."
+      },
+      "ea706aefafd5f5e6a27e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear socket-wall growth",
+        "reason": "The upper rear walls span the retained approximately 4.47 mm socket-wall gap between established floor/post and mounting-lip regions. The rear spine improves the whole load path without providing directly-beneath backing for every late wall shoulder. Actual patch area 12.0987 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.0987 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete rear-wall spans and every post/rail bond. Repeatedly press both upper keys while mounted; stop on whitening, cracks, front-clip lift or excess bending."
+      },
+      "4b3cd1f8f161d3f60a59": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear socket-wall growth",
+        "reason": "The upper rear walls span the retained approximately 4.47 mm socket-wall gap between established floor/post and mounting-lip regions. The rear spine improves the whole load path without providing directly-beneath backing for every late wall shoulder. Actual patch area 12.0987 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.0987 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete rear-wall spans and every post/rail bond. Repeatedly press both upper keys while mounted; stop on whitening, cracks, front-clip lift or excess bending."
+      },
+      "fb266842f81db5960137": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "The two outer lower floors remain separate helper-backed islands before joining the rear frame. Their leading residual bands are about 0.6 mm deep. The centre floor also grows from the front spine; its right-side wing gap and edge bands remain partial. Neither percentage coverage nor one empty layer establishes physical adhesion. Actual patch area 18.1308 mm\u00b2; conservative directly-beneath coverage 68.74% (12.4623 mm\u00b2), residual 5.6685 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 247 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch the lower floor starts for curl or movement. Inspect each complete floor, the central spine-to-wing gap and the loading route after cooling; reject sag, fused aids or damage and fit sockets without force."
+      },
+      "a8d387a24dcfebbb13b1": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "The two outer lower floors remain separate helper-backed islands before joining the rear frame. Their leading residual bands are about 0.6 mm deep. The centre floor also grows from the front spine; its right-side wing gap and edge bands remain partial. Neither percentage coverage nor one empty layer establishes physical adhesion. Actual patch area 3.9372 mm\u00b2; conservative directly-beneath coverage 40.64% (1.6002 mm\u00b2), residual 2.3370 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 37 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch the lower floor starts for curl or movement. Inspect each complete floor, the central spine-to-wing gap and the loading route after cooling; reject sag, fused aids or damage and fit sockets without force."
+      },
+      "0d110fb59b958906eeee": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "01edbc4e3a4c18514ddf": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "07712417c1789c839d00": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "f5977ca542a3582eb35e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear-post leading shoulders",
+        "reason": "These short leading patches grow into the rounded fixed rear socket posts and rails. They are connected to earlier material sideways, with no directly-beneath helper credited for the exposed shoulder. Actual patch area 2.6399 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.6399 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both post shoulders and their bonds. Reject curling during printing and cracks, whitening or looseness on socket insertion or pressing."
+      },
+      "1e8ad7a8ed8bd53d4ebd": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear-post leading shoulders",
+        "reason": "These short leading patches grow into the rounded fixed rear socket posts and rails. They are connected to earlier material sideways, with no directly-beneath helper credited for the exposed shoulder. Actual patch area 2.6402 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.6402 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both post shoulders and their bonds. Reject curling during printing and cracks, whitening or looseness on socket insertion or pressing."
+      },
+      "3f87ae5636d274523cb5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 2.4669 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.4669 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "56379b01ec1b772ff13b": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 9.6310 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.6310 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "926ab5f23e3b4279a211": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 9.6310 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.6310 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "f29a258508d8084859ff": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 4.6900 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 4.6900 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "9e66a729304e30943cad": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.5339 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.5339 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "7ce3a1f12e3c748d2edf": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.5333 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.5333 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "5cc088e3ea9865d70567": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 2.9888 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.9888 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "b4766cea75d41f4615bc": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.0201 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.0201 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "bcf24a9e919475b31735": {
+        "decision": "bounded-physical-trial",
+        "feature": "Later rear-wall and key-row web shoulders",
+        "reason": "These late rear-wall and fixed row-connection shoulders grow from earlier rails, posts and webs. Their broad undersides are measured separately from the helper-backed rear C face and remain physical bridge/shoulder experiments. Actual patch area 17.0131 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 17.0131 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect all rear-wall undersides and row-web joints. Reject print curl, sag in a route, weak bonds or whitening under repeated upper-key loads."
+      },
+      "e0736e6d26b4d2640b59": {
+        "decision": "bounded-physical-trial",
+        "feature": "Later rear-wall and key-row web shoulders",
+        "reason": "These late rear-wall and fixed row-connection shoulders grow from earlier rails, posts and webs. Their broad undersides are measured separately from the helper-backed rear C face and remain physical bridge/shoulder experiments. Actual patch area 17.3869 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 17.3869 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect all rear-wall undersides and row-web joints. Reject print curl, sag in a route, weak bonds or whitening under repeated upper-key loads."
+      },
+      "5326c69bcda52319c2df": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper floors joined to the rear spine",
+        "reason": "Both upper floor fronts now join the fixed rear spine as they start, eliminating the earlier free inner tongue and upper floor islands. The remaining outer regions have only partial exterior aid backing, with measured leading residual strips; no full-backing or physical release claim is made. Actual patch area 16.5896 mm\u00b2; conservative directly-beneath coverage 59.58% (9.8844 mm\u00b2), residual 6.7051 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 196 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch both complete upper floor starts from print height 25.2 through 26.4 mm and stop on curl or movement. Remove aids outward, inspect every edge and fit the real sockets without force."
+      },
+      "3dce4eb7616cb6f1d3aa": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper floors joined to the rear spine",
+        "reason": "Both upper floor fronts now join the fixed rear spine as they start, eliminating the earlier free inner tongue and upper floor islands. The remaining outer regions have only partial exterior aid backing, with measured leading residual strips; no full-backing or physical release claim is made. Actual patch area 10.0649 mm\u00b2; conservative directly-beneath coverage 56.67% (5.7040 mm\u00b2), residual 4.3608 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 102 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch both complete upper floor starts from print height 25.2 through 26.4 mm and stop on curl or movement. Remove aids outward, inspect every edge and fit the real sockets without force."
+      },
+      "d9284fdb3ebc934c874e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths span the retained 14.1 mm upper switch windows between established side lands. These paths are not assumed to have bridge flow/speed merely from their shape. The current working-space pass cannot predict PETG sag. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject droop or strings in either upper window. Switches must seat without force and caps must complete independent travel without rubbing."
+      },
+      "4d20d2c4f8a91098b006": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths span the retained 14.1 mm upper switch windows between established side lands. These paths are not assumed to have bridge flow/speed merely from their shape. The current working-space pass cannot predict PETG sag. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject droop or strings in either upper window. Switches must seat without force and caps must complete independent travel without rubbing."
+      },
+      "1a015e9e365c6238ac31": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear socket-wall growth",
+        "reason": "The upper rear walls span the retained approximately 4.47 mm socket-wall gap between established floor/post and mounting-lip regions. The rear spine improves the whole load path without providing directly-beneath backing for every late wall shoulder. Actual patch area 12.0987 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.0987 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete rear-wall spans and every post/rail bond. Repeatedly press both upper keys while mounted; stop on whitening, cracks, front-clip lift or excess bending."
+      },
+      "5d6267cd9c7be4ac7d81": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear socket-wall growth",
+        "reason": "The upper rear walls span the retained approximately 4.47 mm socket-wall gap between established floor/post and mounting-lip regions. The rear spine improves the whole load path without providing directly-beneath backing for every late wall shoulder. Actual patch area 12.0987 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.0987 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete rear-wall spans and every post/rail bond. Repeatedly press both upper keys while mounted; stop on whitening, cracks, front-clip lift or excess bending."
+      },
+      "3159007a94b18a1c3487": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded edge growth",
+        "reason": "Rounded second-layer growth follows the existing bed-facing far frame and flat clip face. Long connected bounds do not represent a free full-width bridge. Actual patch area 2.6652 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.6652 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting or separated edge lines."
+      },
+      "59cac3cc2fffd3314860": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded edge growth",
+        "reason": "Rounded second-layer growth follows the existing bed-facing far frame and flat clip face. Long connected bounds do not represent a free full-width bridge. Actual patch area 2.5967 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.5967 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting or separated edge lines."
+      },
+      "341b62e4a375c9e7366e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The cell-stop ledges grow inward from established far-frame material; they remain a local overhang and retention experiment. Actual patch area 6.2274 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 6.2274 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both ledges and their roots before loading the real cell gently; no forcing or pouch pressure."
+      },
+      "61721484a6162abfc348": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The cell-stop ledges grow inward from established far-frame material; they remain a local overhang and retention experiment. Actual patch area 6.2274 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 6.2274 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both ledges and their roots before loading the real cell gently; no forcing or pouch pressure."
+      },
+      "c44209e1707493515fec": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded foot and stop transitions grow from the actual printed far frame. Actual patch area 4.6131 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 4.6131 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every far-end foot and stop bond; reject peeling, voids or splitting."
+      },
+      "3793447856d22a2332c5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded foot and stop transitions grow from the actual printed far frame. Actual patch area 4.6131 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 4.6131 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every far-end foot and stop bond; reject peeling, voids or splitting."
+      },
+      "3cff4c1c63f534a944f2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far roof hoop bridge",
+        "reason": "The reinforced roof hoop spans existing side and centre stringers with 12.8 mm support-centre spacing. A passed path scan does not predict physical bridge sag. Actual patch area 3.4703 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4703 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the entire hoop and all stringer bonds before attempting cell retention."
+      },
+      "4ef2001c526e2bacf2ec": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far roof hoop bridge",
+        "reason": "The reinforced roof hoop spans existing side and centre stringers with 12.8 mm support-centre spacing. A passed path scan does not predict physical bridge sag. Actual patch area 3.4704 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4704 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the entire hoop and all stringer bonds before attempting cell retention."
+      },
+      "57ed55a8dad4450117d8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far roof hoop bridge",
+        "reason": "The reinforced roof hoop spans existing side and centre stringers with 12.8 mm support-centre spacing. A passed path scan does not predict physical bridge sag. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the entire hoop and all stringer bonds before attempting cell retention."
+      },
+      "42405c0bc6198c3107c2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far roof hoop bridge",
+        "reason": "The reinforced roof hoop spans existing side and centre stringers with 12.8 mm support-centre spacing. A passed path scan does not predict physical bridge sag. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the entire hoop and all stringer bonds before attempting cell retention."
+      },
+      "5f3f2917924cb4c3a4c0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far floor-crossbar bridge",
+        "reason": "The reinforced floor crossbar bridges the established side and centre stringers; the source support-centre spacing is 12.8 mm. Actual patch area 10.7388 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 10.7388 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the full floor bridge for droop and joint bonding before sliding in a cell."
+      },
+      "f9af68bd4fccc0acb7e6": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far floor-crossbar bridge",
+        "reason": "The reinforced floor crossbar bridges the established side and centre stringers; the source support-centre spacing is 12.8 mm. Actual patch area 10.7415 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 10.7415 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the full floor bridge for droop and joint bonding before sliding in a cell."
+      },
+      "c0d0e5401fe3e54094e8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof-hoop bridge",
+        "reason": "The centre roof hoop crosses the same established centre/side stringer layout without support entering the battery reserve. Actual patch area 3.4697 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4697 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect full hoop sag and bonds, then verify gentle retention without pouch pressure."
+      },
+      "228b518ce4111569a984": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof-hoop bridge",
+        "reason": "The centre roof hoop crosses the same established centre/side stringer layout without support entering the battery reserve. Actual patch area 3.4697 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4697 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect full hoop sag and bonds, then verify gentle retention without pouch pressure."
+      },
+      "7cc267b277128a6bc1a4": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof-hoop bridge",
+        "reason": "The centre roof hoop crosses the same established centre/side stringer layout without support entering the battery reserve. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect full hoop sag and bonds, then verify gentle retention without pouch pressure."
+      },
+      "82a7cee5b015a2149b69": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof-hoop bridge",
+        "reason": "The centre roof hoop crosses the same established centre/side stringer layout without support entering the battery reserve. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect full hoop sag and bonds, then verify gentle retention without pouch pressure."
+      },
+      "17c84391a3815d90792e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first actual near floor-bar extrusion bridges the existing side and centre stringers within their 12.8 mm support-centre spacing. Earlier unprinted round-bar mesh slivers are not credited as backing. Actual patch area 12.8413 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.8413 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete first bridge and its end bonds, check the whole loading route, and reject droop, whitening or cracks before placing the cell."
+      },
+      "fa50d69c51cae344ea72": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first actual near floor-bar extrusion bridges the existing side and centre stringers within their 12.8 mm support-centre spacing. Earlier unprinted round-bar mesh slivers are not credited as backing. Actual patch area 12.8434 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.8434 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete first bridge and its end bonds, check the whole loading route, and reject droop, whitening or cracks before placing the cell."
+      },
+      "87f763da2bf48b2fdc3c": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry roof-hoop bridge",
+        "reason": "The entry-side roof hoop retains the centre and side stringer anchors. Actual patch area 3.4697 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4697 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "029f58b4faeca8fcf502": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry roof-hoop bridge",
+        "reason": "The entry-side roof hoop retains the centre and side stringer anchors. Actual patch area 3.4697 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4697 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "6b4720d0a3dafe2dad05": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry roof-hoop bridge",
+        "reason": "The entry-side roof hoop retains the centre and side stringer anchors. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "28fc6ff3d4a130f57999": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry roof-hoop bridge",
+        "reason": "The entry-side roof hoop retains the centre and side stringer anchors. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "ab486399b09ffae78719": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses a split exterior cap. Actual paths leave the bore and spring relief clear; cleanup remains untested. Actual patch area 13.3958 mm\u00b2; conservative directly-beneath coverage 37.80% (5.0641 mm\u00b2), residual 8.3316 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 104 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Cut and peel short cap sections outward, then slide the cooled holder from a bare rod end without snapping it sideways."
+      },
+      "51b67af13b2bf731a3a8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses a split exterior cap. Actual paths leave the bore and spring relief clear; cleanup remains untested. Actual patch area 13.4111 mm\u00b2; conservative directly-beneath coverage 39.49% (5.2961 mm\u00b2), residual 8.1150 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 100 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Cut and peel short cap sections outward, then slide the cooled holder from a bare rod end without snapping it sideways."
+      },
+      "89ae96c0fd5463f7d1c0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide shoulders",
+        "reason": "Outside diagonals tie the guide starts into established roof posts; the remaining broad shoulder is an explicit local print experiment. Actual patch area 21.1188 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 21.1188 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both guide shoulders and diagonal bonds before cycling the empty gate. Stop on binding, whitening or splitting."
+      },
+      "e976feffe335af9848b9": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide shoulders",
+        "reason": "Outside diagonals tie the guide starts into established roof posts; the remaining broad shoulder is an explicit local print experiment. Actual patch area 21.1290 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 21.1290 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both guide shoulders and diagonal bonds before cycling the empty gate. Stop on binding, whitening or splitting."
+      },
+      "e5a8144211c403a79e21": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor and guide transitions",
+        "reason": "Round floor rails and guide shoulders grow from established side rails and braces. Actual patch area 9.8062 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.8062 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect transition bonds and the complete sliding route before loading a cell."
+      },
+      "9597a52bb184cc741d38": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor and guide transitions",
+        "reason": "Round floor rails and guide shoulders grow from established side rails and braces. Actual patch area 9.8148 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.8148 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect transition bonds and the complete sliding route before loading a cell."
+      },
+      "5f3df667941f82c334c8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-slot back-wall closure",
+        "reason": "The guide back wall closes the existing approximately 2.4 mm slot span while preserving its clearance. Actual patch area 12.9518 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.9518 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Cycle the empty gate by the centre grab bar; reject binding, whitening or a drooping back wall."
+      },
+      "2fdbf293801ae838731e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-slot back-wall closure",
+        "reason": "The guide back wall closes the existing approximately 2.4 mm slot span while preserving its clearance. Actual patch area 12.9529 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.9529 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Cycle the empty gate by the centre grab bar; reject binding, whitening or a drooping back wall."
+      },
+      "1859c25b941dc222801e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded edge growth",
+        "reason": "Rounded second-layer growth follows the existing bed-facing far frame and flat clip face. Long connected bounds do not represent a free full-width bridge. Actual patch area 2.6652 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.6652 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting or separated edge lines."
+      },
+      "c3ab0c023bd6dacaf44e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame rounded edge growth",
+        "reason": "Rounded second-layer growth follows the existing bed-facing far frame and flat clip face. Long connected bounds do not represent a free full-width bridge. Actual patch area 2.5967 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.5967 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect first-layer contact and the complete cage for lifting or separated edge lines."
+      },
+      "e10c5d510da22061e84b": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The cell-stop ledges grow inward from established far-frame material; they remain a local overhang and retention experiment. Actual patch area 6.2274 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 6.2274 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both ledges and their roots before loading the real cell gently; no forcing or pouch pressure."
+      },
+      "05de1e785a36381b88f3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far cell-stop ledges",
+        "reason": "The cell-stop ledges grow inward from established far-frame material; they remain a local overhang and retention experiment. Actual patch area 6.2274 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 6.2274 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both ledges and their roots before loading the real cell gently; no forcing or pouch pressure."
+      },
+      "253a85a8e00e901c4028": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded foot and stop transitions grow from the actual printed far frame. Actual patch area 4.6131 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 4.6131 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every far-end foot and stop bond; reject peeling, voids or splitting."
+      },
+      "bfb6e4af842288b8c0ca": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far-frame foot transitions",
+        "reason": "Rounded foot and stop transitions grow from the actual printed far frame. Actual patch area 4.6131 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 4.6131 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every far-end foot and stop bond; reject peeling, voids or splitting."
+      },
+      "dcf11dc0328e0fc703ee": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far roof hoop bridge",
+        "reason": "The reinforced roof hoop spans existing side and centre stringers with 12.8 mm support-centre spacing. A passed path scan does not predict physical bridge sag. Actual patch area 3.4703 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4703 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the entire hoop and all stringer bonds before attempting cell retention."
+      },
+      "7df42dc12108e6140e9f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far roof hoop bridge",
+        "reason": "The reinforced roof hoop spans existing side and centre stringers with 12.8 mm support-centre spacing. A passed path scan does not predict physical bridge sag. Actual patch area 3.4704 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4704 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the entire hoop and all stringer bonds before attempting cell retention."
+      },
+      "350953bb21c7fe9862c5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far roof hoop bridge",
+        "reason": "The reinforced roof hoop spans existing side and centre stringers with 12.8 mm support-centre spacing. A passed path scan does not predict physical bridge sag. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the entire hoop and all stringer bonds before attempting cell retention."
+      },
+      "1684272891728ecaba35": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far roof hoop bridge",
+        "reason": "The reinforced roof hoop spans existing side and centre stringers with 12.8 mm support-centre spacing. A passed path scan does not predict physical bridge sag. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the entire hoop and all stringer bonds before attempting cell retention."
+      },
+      "ba9a23abc52d89064cdd": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far floor-crossbar bridge",
+        "reason": "The reinforced floor crossbar bridges the established side and centre stringers; the source support-centre spacing is 12.8 mm. Actual patch area 10.7388 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 10.7388 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the full floor bridge for droop and joint bonding before sliding in a cell."
+      },
+      "6fcdd34f9de17cd77e7f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Far floor-crossbar bridge",
+        "reason": "The reinforced floor crossbar bridges the established side and centre stringers; the source support-centre spacing is 12.8 mm. Actual patch area 10.7415 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 10.7415 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the full floor bridge for droop and joint bonding before sliding in a cell."
+      },
+      "9622a7ea0323ee18bcd3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof-hoop bridge",
+        "reason": "The centre roof hoop crosses the same established centre/side stringer layout without support entering the battery reserve. Actual patch area 3.4697 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4697 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect full hoop sag and bonds, then verify gentle retention without pouch pressure."
+      },
+      "d3bd2f8d098d9836468a": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof-hoop bridge",
+        "reason": "The centre roof hoop crosses the same established centre/side stringer layout without support entering the battery reserve. Actual patch area 3.4697 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4697 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect full hoop sag and bonds, then verify gentle retention without pouch pressure."
+      },
+      "f1857e38a47a22fa5355": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof-hoop bridge",
+        "reason": "The centre roof hoop crosses the same established centre/side stringer layout without support entering the battery reserve. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect full hoop sag and bonds, then verify gentle retention without pouch pressure."
+      },
+      "76ebb97cdf2e8cae7bb2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Centre roof-hoop bridge",
+        "reason": "The centre roof hoop crosses the same established centre/side stringer layout without support entering the battery reserve. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect full hoop sag and bonds, then verify gentle retention without pouch pressure."
+      },
+      "1ae7bd15e2113f3092d0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first actual near floor-bar extrusion bridges the existing side and centre stringers within their 12.8 mm support-centre spacing. Earlier unprinted round-bar mesh slivers are not credited as backing. Actual patch area 12.8413 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.8413 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete first bridge and its end bonds, check the whole loading route, and reject droop, whitening or cracks before placing the cell."
+      },
+      "04be84477ddcedc01612": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near floor-bar first actual bridge",
+        "reason": "The first actual near floor-bar extrusion bridges the existing side and centre stringers within their 12.8 mm support-centre spacing. Earlier unprinted round-bar mesh slivers are not credited as backing. Actual patch area 12.8434 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.8434 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete first bridge and its end bonds, check the whole loading route, and reject droop, whitening or cracks before placing the cell."
+      },
+      "e8a81ca6d5919ec4ce60": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry roof-hoop bridge",
+        "reason": "The entry-side roof hoop retains the centre and side stringer anchors. Actual patch area 3.4697 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4697 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "9d4aa7a99d2e43deb02f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry roof-hoop bridge",
+        "reason": "The entry-side roof hoop retains the centre and side stringer anchors. Actual patch area 3.4697 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.4697 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "9ce430e8383f14b2dda7": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry roof-hoop bridge",
+        "reason": "The entry-side roof hoop retains the centre and side stringer anchors. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "21a31e69546ceecb7263": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry roof-hoop bridge",
+        "reason": "The entry-side roof hoop retains the centre and side stringer anchors. Actual patch area 8.6745 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 8.6745 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect the complete entry hoop and verify the cell passes without rubbing or pouch pressure."
+      },
+      "0b34664aa7d13d50c8ef": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses a split exterior cap. Actual paths leave the bore and spring relief clear; cleanup remains untested. Actual patch area 13.3958 mm\u00b2; conservative directly-beneath coverage 37.80% (5.0641 mm\u00b2), residual 8.3316 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 104 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Cut and peel short cap sections outward, then slide the cooled holder from a bare rod end without snapping it sideways."
+      },
+      "6d4b51ae027238615c2c": {
+        "decision": "bounded-physical-trial",
+        "feature": "Near clip first face",
+        "reason": "The late C face uses a split exterior cap. Actual paths leave the bore and spring relief clear; cleanup remains untested. Actual patch area 13.4111 mm\u00b2; conservative directly-beneath coverage 39.49% (5.2961 mm\u00b2), residual 8.1150 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 100 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Cut and peel short cap sections outward, then slide the cooled holder from a bare rod end without snapping it sideways."
+      },
+      "faaeea20d253d351aff2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide shoulders",
+        "reason": "Outside diagonals tie the guide starts into established roof posts; the remaining broad shoulder is an explicit local print experiment. Actual patch area 21.1188 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 21.1188 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both guide shoulders and diagonal bonds before cycling the empty gate. Stop on binding, whitening or splitting."
+      },
+      "f8c50208a83482ff889c": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-guide shoulders",
+        "reason": "Outside diagonals tie the guide starts into established roof posts; the remaining broad shoulder is an explicit local print experiment. Actual patch area 21.1290 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 21.1290 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both guide shoulders and diagonal bonds before cycling the empty gate. Stop on binding, whitening or splitting."
+      },
+      "11beda5cbe7676deeb26": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor and guide transitions",
+        "reason": "Round floor rails and guide shoulders grow from established side rails and braces. Actual patch area 9.8062 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.8062 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect transition bonds and the complete sliding route before loading a cell."
+      },
+      "fd202534dc3e9cce9e62": {
+        "decision": "bounded-physical-trial",
+        "feature": "Entry floor and guide transitions",
+        "reason": "Round floor rails and guide shoulders grow from established side rails and braces. Actual patch area 9.8148 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.8148 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect transition bonds and the complete sliding route before loading a cell."
+      },
+      "ade8ca51283967de1ed0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-slot back-wall closure",
+        "reason": "The guide back wall closes the existing approximately 2.4 mm slot span while preserving its clearance. Actual patch area 12.9518 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.9518 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Cycle the empty gate by the centre grab bar; reject binding, whitening or a drooping back wall."
+      },
+      "0b34f775eb3ab13787f4": {
+        "decision": "bounded-physical-trial",
+        "feature": "Gate-slot back-wall closure",
+        "reason": "The guide back wall closes the existing approximately 2.4 mm slot span while preserving its clearance. Actual patch area 12.9529 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.9529 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Cycle the empty gate by the centre grab bar; reject binding, whitening or a drooping back wall."
+      },
+      "3ad9f26a24db73e5cd51": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed shoulders grow from established front diagonals while keeping PCB bearing surfaces fixed. Actual patch area 2.3223 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.3223 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete root shoulders for missing beads, roughness or weak bonds before inserting the board."
+      },
+      "875056bbc2c58fbee5f4": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed shoulders grow from established front diagonals while keeping PCB bearing surfaces fixed. Actual patch area 2.3223 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.3223 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete root shoulders for missing beads, roughness or weak bonds before inserting the board."
+      },
+      "d9514485e92a9f63d2a9": {
+        "decision": "bounded-physical-trial",
+        "feature": "PCB-rail first faces",
+        "reason": "Exterior starters and deliberate fixed-rail ties back the rail starts; functional spaces include every helper and tab without exclusion. Actual patch area 3.8241 mm\u00b2; conservative directly-beneath coverage 37.83% (1.4467 mm\u00b2), residual 2.3773 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 56 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Cut the labelled fixed-rail ties before peeling helpers outward. Check rail bonding and the actual populated PCB underside without force."
+      },
+      "8519d117087b27b0dfce": {
+        "decision": "bounded-physical-trial",
+        "feature": "PCB-rail first faces",
+        "reason": "Exterior starters and deliberate fixed-rail ties back the rail starts; functional spaces include every helper and tab without exclusion. Actual patch area 3.8240 mm\u00b2; conservative directly-beneath coverage 37.81% (1.4459 mm\u00b2), residual 2.3782 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 60 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Cut the labelled fixed-rail ties before peeling helpers outward. Check rail bonding and the actual populated PCB underside without force."
+      },
+      "f69d075e47747c5763ea": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late fixed diagonal starts",
+        "reason": "Projected exterior walls back the late V diagonals before the C face is printed. Actual lower plastic, measured gap and partial coverage are used rather than unprinted mesh. Actual patch area 23.7331 mm\u00b2; conservative directly-beneath coverage 86.70% (20.5766 mm\u00b2), residual 3.1565 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 350 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Inspect both complete diagonals, their crown junctions and cleanup before fitting hardware."
+      },
+      "723a7a38b10bb451f969": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and diagonal-root growth",
+        "reason": "The prior fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts. Short curved/root growth and incomplete backing remain physical print risks. Actual patch area 12.5282 mm\u00b2; conservative directly-beneath coverage 0.93% (0.1162 mm\u00b2), residual 12.4121 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 2 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Inspect the complete C and all crown/diagonal bonds; reject sag, fused aids or cracks before rod sliding and gentle board/lead handling."
+      },
+      "756c634cfb9bdb09beea": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and diagonal-root growth",
+        "reason": "The prior fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts. Short curved/root growth and incomplete backing remain physical print risks. Actual patch area 4.5765 mm\u00b2; conservative directly-beneath coverage 61.42% (2.8107 mm\u00b2), residual 1.7657 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 87 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Inspect the complete C and all crown/diagonal bonds; reject sag, fused aids or cracks before rod sliding and gentle board/lead handling."
+      },
+      "6081dba1d167228971a3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and diagonal-root growth",
+        "reason": "The prior fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts. Short curved/root growth and incomplete backing remain physical print risks. Actual patch area 4.5725 mm\u00b2; conservative directly-beneath coverage 61.12% (2.7945 mm\u00b2), residual 1.7780 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 66 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Inspect the complete C and all crown/diagonal bonds; reject sag, fused aids or cracks before rod sliding and gentle board/lead handling."
+      },
+      "3b0da0237bda0ce5f302": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed shoulders grow from established front diagonals while keeping PCB bearing surfaces fixed. Actual patch area 2.3223 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.3223 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete root shoulders for missing beads, roughness or weak bonds before inserting the board."
+      },
+      "82462a6247f3b194cfb5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Early fixed rail roots",
+        "reason": "Rounded fixed shoulders grow from established front diagonals while keeping PCB bearing surfaces fixed. Actual patch area 2.3223 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.3223 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete root shoulders for missing beads, roughness or weak bonds before inserting the board."
+      },
+      "540c4d1fde5d7fcae7b3": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late fixed diagonal starts",
+        "reason": "Projected exterior walls back the late V diagonals before the C face is printed. Actual lower plastic, measured gap and partial coverage are used rather than unprinted mesh. Actual patch area 23.7331 mm\u00b2; conservative directly-beneath coverage 86.70% (20.5766 mm\u00b2), residual 3.1565 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 350 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Inspect both complete diagonals, their crown junctions and cleanup before fitting hardware."
+      },
+      "4c3fb10413341b29cb67": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and diagonal-root growth",
+        "reason": "The prior fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts. Short curved/root growth and incomplete backing remain physical print risks. Actual patch area 12.5282 mm\u00b2; conservative directly-beneath coverage 0.93% (0.1162 mm\u00b2), residual 12.4121 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 2 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Inspect the complete C and all crown/diagonal bonds; reject sag, fused aids or cracks before rod sliding and gentle board/lead handling."
+      },
+      "464c57cfeac306d8f1b0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and diagonal-root growth",
+        "reason": "The prior fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts. Short curved/root growth and incomplete backing remain physical print risks. Actual patch area 4.5765 mm\u00b2; conservative directly-beneath coverage 61.42% (2.8107 mm\u00b2), residual 1.7657 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 87 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Inspect the complete C and all crown/diagonal bonds; reject sag, fused aids or cracks before rod sliding and gentle board/lead handling."
+      },
+      "c15155216c0f907643d0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Late C face and diagonal-root growth",
+        "reason": "The prior fixed-diagonal layer anchors the crown and split exterior aids back the free-arm starts. Short curved/root growth and incomplete backing remain physical print risks. Actual patch area 4.5725 mm\u00b2; conservative directly-beneath coverage 61.12% (2.7945 mm\u00b2), residual 1.7780 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 66 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Inspect the complete C and all crown/diagonal bonds; reject sag, fused aids or cracks before rod sliding and gentle board/lead handling."
+      },
+      "110ef32db4b3341390e2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Bed-grown bumper chamfer and chin",
+        "reason": "Current toolpaths and first-layer view show this thin 45-degree growth fringe joins the bed-grown bumper sideways. No directly-beneath helper is credited; this is not full backing. Current patch 11.1937 mm\u00b2; directly-beneath coverage 0.000% (0.0000 mm\u00b2); residual 11.1937 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Inspect first-layer adhesion and the entire bumper/chin. Stop on lift or curl; reject rough, split or poking finger-contact edges."
+      },
+      "0a7c4a1bbf7e098d7c6f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "Current paths show the lower floor over its exterior aid with a 0.2 mm actual vertical release gap. The approximately 0.6 mm leading residual strip and the central spine-to-wing gap still need physical validation; partial coverage is not adhesion proof. Current patch 18.1296 mm\u00b2; directly-beneath coverage 71.103% (12.8907 mm\u00b2); residual 5.2389 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Watch all lower floor starts for curl or shift. Inspect the complete floor edges and spine-to-wing gaps after cooling; reject sag, fusion or damage and fit sockets without force."
+      },
+      "8740cffdd65be743e241": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear C-clip first face",
+        "reason": "Current paths show both curved shoulders over the split exterior cap, with a 0.2 mm actual vertical release gap. The widened fixed spine crown improves the local section without filling the bore or immobilising the spring arms. Curved residual shoulder strips remain partial, and release is untested. Current patch 9.6654 mm\u00b2; directly-beneath coverage 54.796% (5.2962 mm\u00b2); residual 4.3691 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Check the empty layer in Bambu preview. Remove cooled cap halves outward while holding the fixed crown, never levering spring arms; reject fusion, bore droop, damage or excessive force."
+      },
+      "2bb7e85c5db73ff9b1f8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear C-clip first face",
+        "reason": "Current paths show both curved shoulders over the split exterior cap, with a 0.2 mm actual vertical release gap. The widened fixed spine crown improves the local section without filling the bore or immobilising the spring arms. Curved residual shoulder strips remain partial, and release is untested. Current patch 9.7081 mm\u00b2; directly-beneath coverage 64.033% (6.2164 mm\u00b2); residual 3.4917 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Check the empty layer in Bambu preview. Remove cooled cap halves outward while holding the fixed crown, never levering spring arms; reject fusion, bore droop, damage or excessive force."
+      },
+      "7f05840bdeddc194c965": {
+        "decision": "bounded-physical-trial",
+        "feature": "Bed-grown bumper chamfer and chin",
+        "reason": "Current toolpaths and first-layer view show this thin 45-degree growth fringe joins the bed-grown bumper sideways. No directly-beneath helper is credited; this is not full backing. Current patch 11.1937 mm\u00b2; directly-beneath coverage 0.000% (0.0000 mm\u00b2); residual 11.1937 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Inspect first-layer adhesion and the entire bumper/chin. Stop on lift or curl; reject rough, split or poking finger-contact edges."
+      },
+      "0914dcbc5f170835ffb0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "Current paths show the lower floor over its exterior aid with a 0.2 mm actual vertical release gap. The approximately 0.6 mm leading residual strip and the central spine-to-wing gap still need physical validation; partial coverage is not adhesion proof. Current patch 18.1296 mm\u00b2; directly-beneath coverage 71.103% (12.8907 mm\u00b2); residual 5.2389 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Watch all lower floor starts for curl or shift. Inspect the complete floor edges and spine-to-wing gaps after cooling; reject sag, fusion or damage and fit sockets without force."
+      },
+      "4a55a3c672e3f2ff9193": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear C-clip first face",
+        "reason": "Current paths show both curved shoulders over the split exterior cap, with a 0.2 mm actual vertical release gap. The widened fixed spine crown improves the local section without filling the bore or immobilising the spring arms. Curved residual shoulder strips remain partial, and release is untested. Current patch 9.6654 mm\u00b2; directly-beneath coverage 54.796% (5.2962 mm\u00b2); residual 4.3691 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Check the empty layer in Bambu preview. Remove cooled cap halves outward while holding the fixed crown, never levering spring arms; reject fusion, bore droop, damage or excessive force."
+      },
+      "9ecc8ad766c22c6d5190": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear C-clip first face",
+        "reason": "Current paths show both curved shoulders over the split exterior cap, with a 0.2 mm actual vertical release gap. The widened fixed spine crown improves the local section without filling the bore or immobilising the spring arms. Curved residual shoulder strips remain partial, and release is untested. Current patch 9.7081 mm\u00b2; directly-beneath coverage 64.033% (6.2164 mm\u00b2); residual 3.4917 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Check the empty layer in Bambu preview. Remove cooled cap halves outward while holding the fixed crown, never levering spring arms; reject fusion, bore droop, damage or excessive force."
+      }
+    },
+    "exports/trial-Key_Carrier": {
+      "fded312d60a5de702150": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "The two outer lower floors remain separate helper-backed islands before joining the rear frame. Their leading residual bands are about 0.6 mm deep. The centre floor also grows from the front spine; its right-side wing gap and edge bands remain partial. Neither percentage coverage nor one empty layer establishes physical adhesion. Actual patch area 18.1308 mm\u00b2; conservative directly-beneath coverage 68.74% (12.4623 mm\u00b2), residual 5.6685 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 247 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch the lower floor starts for curl or movement. Inspect each complete floor, the central spine-to-wing gap and the loading route after cooling; reject sag, fused aids or damage and fit sockets without force."
+      },
+      "e512c077b7720016e19d": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "The two outer lower floors remain separate helper-backed islands before joining the rear frame. Their leading residual bands are about 0.6 mm deep. The centre floor also grows from the front spine; its right-side wing gap and edge bands remain partial. Neither percentage coverage nor one empty layer establishes physical adhesion. Actual patch area 3.9372 mm\u00b2; conservative directly-beneath coverage 40.64% (1.6002 mm\u00b2), residual 2.3370 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 37 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch the lower floor starts for curl or movement. Inspect each complete floor, the central spine-to-wing gap and the loading route after cooling; reject sag, fused aids or damage and fit sockets without force."
+      },
+      "94629d5e0c948eaa0ce0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "8ac1aeaadaba6a8ff806": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "746de557d142f2628074": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "204f9ed7f01bddbd40eb": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear-post leading shoulders",
+        "reason": "These short leading patches grow into the rounded fixed rear socket posts and rails. They are connected to earlier material sideways, with no directly-beneath helper credited for the exposed shoulder. Actual patch area 2.6399 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.6399 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both post shoulders and their bonds. Reject curling during printing and cracks, whitening or looseness on socket insertion or pressing."
+      },
+      "177150721def7bd3d40e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear-post leading shoulders",
+        "reason": "These short leading patches grow into the rounded fixed rear socket posts and rails. They are connected to earlier material sideways, with no directly-beneath helper credited for the exposed shoulder. Actual patch area 2.6402 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.6402 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both post shoulders and their bonds. Reject curling during printing and cracks, whitening or looseness on socket insertion or pressing."
+      },
+      "bf86dd9d081663863507": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 2.4669 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.4669 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "bbd03449c48a8dd0aa95": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 9.6310 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.6310 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "cac9fc9f64edb04e92da": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 9.6310 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.6310 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "bbd8d778e7b678f4c76e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 4.6900 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 4.6900 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "12e447dbc53c64c23482": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.5339 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.5339 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "c59cfb474a5e64a623d2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.5333 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.5333 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "05b5be4b928f9db057f2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 2.9888 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.9888 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "3e9f87a20c68d2ad6b56": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.0201 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.0201 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "8a7d0cc4a362c8e47e25": {
+        "decision": "bounded-physical-trial",
+        "feature": "Later rear-wall and key-row web shoulders",
+        "reason": "These late rear-wall and fixed row-connection shoulders grow from earlier rails, posts and webs. Their broad undersides are measured separately from the helper-backed rear C face and remain physical bridge/shoulder experiments. Actual patch area 17.0131 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 17.0131 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect all rear-wall undersides and row-web joints. Reject print curl, sag in a route, weak bonds or whitening under repeated upper-key loads."
+      },
+      "0251e3b956ee14c48013": {
+        "decision": "bounded-physical-trial",
+        "feature": "Later rear-wall and key-row web shoulders",
+        "reason": "These late rear-wall and fixed row-connection shoulders grow from earlier rails, posts and webs. Their broad undersides are measured separately from the helper-backed rear C face and remain physical bridge/shoulder experiments. Actual patch area 17.3869 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 17.3869 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect all rear-wall undersides and row-web joints. Reject print curl, sag in a route, weak bonds or whitening under repeated upper-key loads."
+      },
+      "1cd429fab0dbd8b702ae": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper floors joined to the rear spine",
+        "reason": "Both upper floor fronts now join the fixed rear spine as they start, eliminating the earlier free inner tongue and upper floor islands. The remaining outer regions have only partial exterior aid backing, with measured leading residual strips; no full-backing or physical release claim is made. Actual patch area 16.5896 mm\u00b2; conservative directly-beneath coverage 59.58% (9.8844 mm\u00b2), residual 6.7051 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 196 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch both complete upper floor starts from print height 25.2 through 26.4 mm and stop on curl or movement. Remove aids outward, inspect every edge and fit the real sockets without force."
+      },
+      "2c63c5120f496083eed5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper floors joined to the rear spine",
+        "reason": "Both upper floor fronts now join the fixed rear spine as they start, eliminating the earlier free inner tongue and upper floor islands. The remaining outer regions have only partial exterior aid backing, with measured leading residual strips; no full-backing or physical release claim is made. Actual patch area 10.0649 mm\u00b2; conservative directly-beneath coverage 56.67% (5.7040 mm\u00b2), residual 4.3608 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 102 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch both complete upper floor starts from print height 25.2 through 26.4 mm and stop on curl or movement. Remove aids outward, inspect every edge and fit the real sockets without force."
+      },
+      "9c3fbe3d4a6f79998627": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths span the retained 14.1 mm upper switch windows between established side lands. These paths are not assumed to have bridge flow/speed merely from their shape. The current working-space pass cannot predict PETG sag. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject droop or strings in either upper window. Switches must seat without force and caps must complete independent travel without rubbing."
+      },
+      "3b7d7f3ee8335d594965": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths span the retained 14.1 mm upper switch windows between established side lands. These paths are not assumed to have bridge flow/speed merely from their shape. The current working-space pass cannot predict PETG sag. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject droop or strings in either upper window. Switches must seat without force and caps must complete independent travel without rubbing."
+      },
+      "ea706aefafd5f5e6a27e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear socket-wall growth",
+        "reason": "The upper rear walls span the retained approximately 4.47 mm socket-wall gap between established floor/post and mounting-lip regions. The rear spine improves the whole load path without providing directly-beneath backing for every late wall shoulder. Actual patch area 12.0987 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.0987 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete rear-wall spans and every post/rail bond. Repeatedly press both upper keys while mounted; stop on whitening, cracks, front-clip lift or excess bending."
+      },
+      "4b3cd1f8f161d3f60a59": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear socket-wall growth",
+        "reason": "The upper rear walls span the retained approximately 4.47 mm socket-wall gap between established floor/post and mounting-lip regions. The rear spine improves the whole load path without providing directly-beneath backing for every late wall shoulder. Actual patch area 12.0987 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.0987 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete rear-wall spans and every post/rail bond. Repeatedly press both upper keys while mounted; stop on whitening, cracks, front-clip lift or excess bending."
+      },
+      "fb266842f81db5960137": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "The two outer lower floors remain separate helper-backed islands before joining the rear frame. Their leading residual bands are about 0.6 mm deep. The centre floor also grows from the front spine; its right-side wing gap and edge bands remain partial. Neither percentage coverage nor one empty layer establishes physical adhesion. Actual patch area 18.1308 mm\u00b2; conservative directly-beneath coverage 68.74% (12.4623 mm\u00b2), residual 5.6685 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 247 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch the lower floor starts for curl or movement. Inspect each complete floor, the central spine-to-wing gap and the loading route after cooling; reject sag, fused aids or damage and fit sockets without force."
+      },
+      "a8d387a24dcfebbb13b1": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "The two outer lower floors remain separate helper-backed islands before joining the rear frame. Their leading residual bands are about 0.6 mm deep. The centre floor also grows from the front spine; its right-side wing gap and edge bands remain partial. Neither percentage coverage nor one empty layer establishes physical adhesion. Actual patch area 3.9372 mm\u00b2; conservative directly-beneath coverage 40.64% (1.6002 mm\u00b2), residual 2.3370 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 37 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch the lower floor starts for curl or movement. Inspect each complete floor, the central spine-to-wing gap and the loading route after cooling; reject sag, fused aids or damage and fit sockets without force."
+      },
+      "0d110fb59b958906eeee": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "01edbc4e3a4c18514ddf": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "07712417c1789c839d00": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths cross the retained 14.1 mm switch window between established side lands. These roof paths need not be labelled as bridges by the slicer. Working-space scans pass, but layer quantisation and real PETG sag still affect usable clearance. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject sag or strings in every lower switch window. Fit the real switches without force; a numerical opening pass does not clear physical roof droop."
+      },
+      "f5977ca542a3582eb35e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear-post leading shoulders",
+        "reason": "These short leading patches grow into the rounded fixed rear socket posts and rails. They are connected to earlier material sideways, with no directly-beneath helper credited for the exposed shoulder. Actual patch area 2.6399 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.6399 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both post shoulders and their bonds. Reject curling during printing and cracks, whitening or looseness on socket insertion or pressing."
+      },
+      "1e8ad7a8ed8bd53d4ebd": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear-post leading shoulders",
+        "reason": "These short leading patches grow into the rounded fixed rear socket posts and rails. They are connected to earlier material sideways, with no directly-beneath helper credited for the exposed shoulder. Actual patch area 2.6402 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.6402 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both post shoulders and their bonds. Reject curling during printing and cracks, whitening or looseness on socket insertion or pressing."
+      },
+      "3f87ae5636d274523cb5": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 2.4669 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.4669 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "56379b01ec1b772ff13b": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 9.6310 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.6310 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "926ab5f23e3b4279a211": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 9.6310 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 9.6310 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "f29a258508d8084859ff": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower rear walls and row-web starts",
+        "reason": "The lower rear socket walls and first fixed row-connection regions grow from established rails/posts. Closing the rows flattens some connecting hulls into bridge-like starts; full connected-body and load-path screens do not prove these local undersides print cleanly. Actual patch area 4.6900 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 4.6900 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Watch these rear-wall and web starts for curling. Inspect all underside spans and end bonds before loading the upper keys; stop on sag into a fit, separation or excess bending."
+      },
+      "9e66a729304e30943cad": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.5339 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.5339 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "7ce3a1f12e3c748d2edf": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.5333 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.5333 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "5cc088e3ea9865d70567": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 2.9888 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 2.9888 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "b4766cea75d41f4615bc": {
+        "decision": "bounded-physical-trial",
+        "feature": "Fixed row-diagonal growth",
+        "reason": "The shortened row distance leaves nearly flat fixed diagonals between established key frames. These broad patches are partly cantilevered or bridge-like, not fully supported just because one edge is connected. They remain explicit full-carrier trial risks. Actual patch area 3.0201 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 3.0201 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect every diagonal underside and both end bonds. Stop printing on curl or a nozzle catch; reject sag, whitening, cracks or weak joints during repeated upper-key presses."
+      },
+      "bcf24a9e919475b31735": {
+        "decision": "bounded-physical-trial",
+        "feature": "Later rear-wall and key-row web shoulders",
+        "reason": "These late rear-wall and fixed row-connection shoulders grow from earlier rails, posts and webs. Their broad undersides are measured separately from the helper-backed rear C face and remain physical bridge/shoulder experiments. Actual patch area 17.0131 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 17.0131 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect all rear-wall undersides and row-web joints. Reject print curl, sag in a route, weak bonds or whitening under repeated upper-key loads."
+      },
+      "e0736e6d26b4d2640b59": {
+        "decision": "bounded-physical-trial",
+        "feature": "Later rear-wall and key-row web shoulders",
+        "reason": "These late rear-wall and fixed row-connection shoulders grow from earlier rails, posts and webs. Their broad undersides are measured separately from the helper-backed rear C face and remain physical bridge/shoulder experiments. Actual patch area 17.3869 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 17.3869 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect all rear-wall undersides and row-web joints. Reject print curl, sag in a route, weak bonds or whitening under repeated upper-key loads."
+      },
+      "5326c69bcda52319c2df": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper floors joined to the rear spine",
+        "reason": "Both upper floor fronts now join the fixed rear spine as they start, eliminating the earlier free inner tongue and upper floor islands. The remaining outer regions have only partial exterior aid backing, with measured leading residual strips; no full-backing or physical release claim is made. Actual patch area 16.5896 mm\u00b2; conservative directly-beneath coverage 59.58% (9.8844 mm\u00b2), residual 6.7051 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 196 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch both complete upper floor starts from print height 25.2 through 26.4 mm and stop on curl or movement. Remove aids outward, inspect every edge and fit the real sockets without force."
+      },
+      "3dce4eb7616cb6f1d3aa": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper floors joined to the rear spine",
+        "reason": "Both upper floor fronts now join the fixed rear spine as they start, eliminating the earlier free inner tongue and upper floor islands. The remaining outer regions have only partial exterior aid backing, with measured leading residual strips; no full-backing or physical release claim is made. Actual patch area 10.0649 mm\u00b2; conservative directly-beneath coverage 56.67% (5.7040 mm\u00b2), residual 4.3608 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. 102 qualifying lower-bead-centre samples have a 0.2 mm actual vertical gap.",
+        "required_test": "Watch both complete upper floor starts from print height 25.2 through 26.4 mm and stop on curl or movement. Remove aids outward, inspect every edge and fit the real sockets without force."
+      },
+      "d9284fdb3ebc934c874e": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths span the retained 14.1 mm upper switch windows between established side lands. These paths are not assumed to have bridge flow/speed merely from their shape. The current working-space pass cannot predict PETG sag. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject droop or strings in either upper window. Switches must seat without force and caps must complete independent travel without rubbing."
+      },
+      "4d20d2c4f8a91098b006": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper switch-window roof spans",
+        "reason": "Ordinary wall and gap-fill paths span the retained 14.1 mm upper switch windows between established side lands. These paths are not assumed to have bridge flow/speed merely from their shape. The current working-space pass cannot predict PETG sag. Actual patch area 16.1728 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 16.1728 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Reject droop or strings in either upper window. Switches must seat without force and caps must complete independent travel without rubbing."
+      },
+      "1a015e9e365c6238ac31": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear socket-wall growth",
+        "reason": "The upper rear walls span the retained approximately 4.47 mm socket-wall gap between established floor/post and mounting-lip regions. The rear spine improves the whole load path without providing directly-beneath backing for every late wall shoulder. Actual patch area 12.0987 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.0987 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete rear-wall spans and every post/rail bond. Repeatedly press both upper keys while mounted; stop on whitening, cracks, front-clip lift or excess bending."
+      },
+      "5d6267cd9c7be4ac7d81": {
+        "decision": "bounded-physical-trial",
+        "feature": "Upper rear socket-wall growth",
+        "reason": "The upper rear walls span the retained approximately 4.47 mm socket-wall gap between established floor/post and mounting-lip regions. The rear spine improves the whole load path without providing directly-beneath backing for every late wall shoulder. Actual patch area 12.0987 mm\u00b2; conservative directly-beneath coverage 0.00% (0.0000 mm\u00b2), residual 12.0987 mm\u00b2. Residual bounds are retained in the slice report; neither a bead count nor a valid gap implies full backing. No direct lower helper bead is credited for this patch.",
+        "required_test": "Inspect both complete rear-wall spans and every post/rail bond. Repeatedly press both upper keys while mounted; stop on whitening, cracks, front-clip lift or excess bending."
+      },
+      "110ef32db4b3341390e2": {
+        "decision": "bounded-physical-trial",
+        "feature": "Bed-grown bumper chamfer and chin",
+        "reason": "Current toolpaths and first-layer view show this thin 45-degree growth fringe joins the bed-grown bumper sideways. No directly-beneath helper is credited; this is not full backing. Current patch 11.1937 mm\u00b2; directly-beneath coverage 0.000% (0.0000 mm\u00b2); residual 11.1937 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Inspect first-layer adhesion and the entire bumper/chin. Stop on lift or curl; reject rough, split or poking finger-contact edges."
+      },
+      "0a7c4a1bbf7e098d7c6f": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "Current paths show the lower floor over its exterior aid with a 0.2 mm actual vertical release gap. The approximately 0.6 mm leading residual strip and the central spine-to-wing gap still need physical validation; partial coverage is not adhesion proof. Current patch 18.1296 mm\u00b2; directly-beneath coverage 71.103% (12.8907 mm\u00b2); residual 5.2389 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Watch all lower floor starts for curl or shift. Inspect the complete floor edges and spine-to-wing gaps after cooling; reject sag, fusion or damage and fit sockets without force."
+      },
+      "8740cffdd65be743e241": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear C-clip first face",
+        "reason": "Current paths show both curved shoulders over the split exterior cap, with a 0.2 mm actual vertical release gap. The widened fixed spine crown improves the local section without filling the bore or immobilising the spring arms. Curved residual shoulder strips remain partial, and release is untested. Current patch 9.6654 mm\u00b2; directly-beneath coverage 54.796% (5.2962 mm\u00b2); residual 4.3691 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Check the empty layer in Bambu preview. Remove cooled cap halves outward while holding the fixed crown, never levering spring arms; reject fusion, bore droop, damage or excessive force."
+      },
+      "2bb7e85c5db73ff9b1f8": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear C-clip first face",
+        "reason": "Current paths show both curved shoulders over the split exterior cap, with a 0.2 mm actual vertical release gap. The widened fixed spine crown improves the local section without filling the bore or immobilising the spring arms. Curved residual shoulder strips remain partial, and release is untested. Current patch 9.7081 mm\u00b2; directly-beneath coverage 64.033% (6.2164 mm\u00b2); residual 3.4917 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Check the empty layer in Bambu preview. Remove cooled cap halves outward while holding the fixed crown, never levering spring arms; reject fusion, bore droop, damage or excessive force."
+      },
+      "7f05840bdeddc194c965": {
+        "decision": "bounded-physical-trial",
+        "feature": "Bed-grown bumper chamfer and chin",
+        "reason": "Current toolpaths and first-layer view show this thin 45-degree growth fringe joins the bed-grown bumper sideways. No directly-beneath helper is credited; this is not full backing. Current patch 11.1937 mm\u00b2; directly-beneath coverage 0.000% (0.0000 mm\u00b2); residual 11.1937 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Inspect first-layer adhesion and the entire bumper/chin. Stop on lift or curl; reject rough, split or poking finger-contact edges."
+      },
+      "0914dcbc5f170835ffb0": {
+        "decision": "bounded-physical-trial",
+        "feature": "Lower socket-floor starts",
+        "reason": "Current paths show the lower floor over its exterior aid with a 0.2 mm actual vertical release gap. The approximately 0.6 mm leading residual strip and the central spine-to-wing gap still need physical validation; partial coverage is not adhesion proof. Current patch 18.1296 mm\u00b2; directly-beneath coverage 71.103% (12.8907 mm\u00b2); residual 5.2389 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Watch all lower floor starts for curl or shift. Inspect the complete floor edges and spine-to-wing gaps after cooling; reject sag, fusion or damage and fit sockets without force."
+      },
+      "4a55a3c672e3f2ff9193": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear C-clip first face",
+        "reason": "Current paths show both curved shoulders over the split exterior cap, with a 0.2 mm actual vertical release gap. The widened fixed spine crown improves the local section without filling the bore or immobilising the spring arms. Curved residual shoulder strips remain partial, and release is untested. Current patch 9.6654 mm\u00b2; directly-beneath coverage 54.796% (5.2962 mm\u00b2); residual 4.3691 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Check the empty layer in Bambu preview. Remove cooled cap halves outward while holding the fixed crown, never levering spring arms; reject fusion, bore droop, damage or excessive force."
+      },
+      "9ecc8ad766c22c6d5190": {
+        "decision": "bounded-physical-trial",
+        "feature": "Rear C-clip first face",
+        "reason": "Current paths show both curved shoulders over the split exterior cap, with a 0.2 mm actual vertical release gap. The widened fixed spine crown improves the local section without filling the bore or immobilising the spring arms. Curved residual shoulder strips remain partial, and release is untested. Current patch 9.7081 mm\u00b2; directly-beneath coverage 64.033% (6.2164 mm\u00b2); residual 3.4917 mm\u00b2. Exact residual bounds and actual bead samples remain in the matching slice report.",
+        "required_test": "Check the empty layer in Bambu preview. Remove cooled cap halves outward while holding the fixed crown, never levering spring arms; reject fusion, bore droop, damage or excessive force."
+      }
+    }
+  },
+  "slicer_warnings": {
+    "It seems object Key_Carrier has floating cantilever. Please re-orient the object or enable support generation.": {
+      "decision": "bounded-physical-trial",
+      "reason": "The complete five-key carrier includes deliberately separated ordinary-model printing aids. Whole-print starts, actual backing gaps, helper side gaps and all34 working spaces passed. The two outer lower floor islands, partly backed upper floor edges, 14.1 mm opening roofs, flattened row webs and chin growth remain explicit physical print experiments. Both upper floors now join a fixed rear spine; real cap dimensions must be measured before printing.",
+      "required_test": "Print this complete carrier first. Reject fused aids, droop in a working opening, damaged floors, weak bonds, whitening or excessive bending before proceeding to other parts."
+    },
+    "It seems object Battery_Holder has floating cantilever. Please re-orient the object or enable support generation.": {
+      "decision": "bounded-physical-trial",
+      "reason": "The reopened actual slice flags the cage. Its unchanged exported geometry has 30 normal and 30 whole-print partial-overhang cases, zero floating or missing printed components, explicit exterior clip backing and a measured helper side gap. The actual layer views show roof/floor crossbars spanning side and centre stringers with 12.8 mm support-centre spacing, plus separate guide-shoulder and rear-clip starts. These remain physical bridge/sag and release experiments, not a warning-free or strength claim.",
+      "required_test": "Only after the complete key-carrier trial passes, print the cage. Inspect every crossbar and hoop, guide shoulder, clip bore and helper release for sag, weak bonds or fusion. Reject damage or excess force. Test the gate empty before gently checking pouch-safe loading and retention; do not compress or force a cell."
+    }
+  }
+}

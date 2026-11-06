@@ -108,6 +108,23 @@ function pythonCases(script, input) {
   return JSON.parse(result.stdout);
 }
 
+test("numeric loopback startup preserves its address without a DNS lookup", () => {
+  const result = pythonCases(`
+import server
+from pathlib import Path
+from unittest.mock import patch
+with patch('socket.getfqdn', side_effect=AssertionError('startup must not resolve a numeric loopback address')):
+    instance = server.LoopbackHTTPServer((server.BIND, 0), server.make_handler(monitor.Monitor(Path('synthetic-fixture')), 0))
+    try:
+        print(json.dumps({'address': instance.server_address[0], 'port': instance.server_port, 'name': instance.server_name}))
+    finally:
+        instance.server_close()
+`, null);
+  assert.equal(result.address, "127.0.0.1");
+  assert.equal(result.name, "127.0.0.1");
+  assert.ok(result.port > 0);
+});
+
 test("echoed device source mentioning Error is not a runtime error", () => {
   const lines = [
     "Uncaught SyntaxError: Unexpected end of Input",

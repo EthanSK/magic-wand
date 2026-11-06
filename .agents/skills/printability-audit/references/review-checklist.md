@@ -6,6 +6,7 @@ Read before finishing every project 3D model, revised export or print-project de
 
 - Identify the latest intended revision and exact project, source, normal STLs, transforms and settings. Preserve delivered archives. Inspect the final exported meshes and full build list, not a similar source solid or an older screenshot.
 - List every printed part and every working opening: switch/keycap/socket seats, pins and solder, sliding rod bores and clip gaps, USB/wires, battery entry/reserve, gates, grooves, locks and small holes. Record what must fit, its complete insertion/removal path and the evidence for its size. Keep unknown bought-part dimensions explicit.
+- Self-improved — 2026-11-06: rectangular cap dimensions must be mapped to the mounted switch's stem axis before using them for spacing. The R15 independent review found that a plausible 90-degree reference rotation changed the nominal sideways gap from 1.2 to 0.3 mm. Use bought-part drawings or a mounted measurement; while orientation is unknown, screen both orientations and retain a pre-print measurement gate. Do not lower a clearance threshold merely to match the chosen layout.
 - Use the real printer/nozzle/material/layer/wall/infill/support/brim recipe. Read effective per-object overrides as well as global settings. Regenerate and re-slice after relevant changes; check that reopening the portable project retains them.
 
 ## Examine the real slice
@@ -23,6 +24,8 @@ Read before finishing every project 3D model, revised export or print-project de
 - Compare layer direction with those loads. A change that clears a hole may weaken a spring across layers or leave a tall narrow print unstable. Preserve intended flexible arms and interference while reinforcing fixed roots and adding smooth transitions outside functional keepouts.
 - Scan the complete per-layer section between each loaded body and its anchors after an orientation change. Identify the actual narrowest connection and compare printed material there, including each intended reinforcing rail. A thick joint elsewhere or a collection of convenient point probes does not clear a thin interlayer bottleneck.
 - Use calculations only with stated loads and sourced material/print assumptions; do not invent a breaking force or call a geometry check a strength simulation. Include small representative fit/flex/bridge coupons where the uncertainty matters. Printed force, retention, fatigue, toughness and comfort require real tests.
+
+Self-improved — 2026-11-06: a track count or a median-width bead envelope does not measure filled material. For a questionable loaded neck, inspect each track's feature and actual width and the union of its footprints across the section; report internal unfilled intervals explicitly. R15's targeted four-ray check distinguished two separated walls from variable-width gap fill without claiming breaking force.
 
 ## Independent review, repair and handoff
 
@@ -52,6 +55,8 @@ Self-improved — 2026-11-05: the R13 actual-layer checks exposed false backing 
 Verify actual vertical gaps on the final layer grid. Credit support only from bead centres directly beneath the feature, never merely within a sideways search radius. Derive normal-layer backing from actual bead footprints, clipped to the mesh only to locate the part; unprinted mesh slivers and empty infill spaces are not supporting plastic. Measure the true gap; a nominal 0.24 mm space can become two empty 0.2 mm layers. Snap intended contact tops to the actual layer grid and verify the resulting G-code.
 
 State partial backing explicitly. A count of lower beads and their qualifying gap does not show that the whole broad area is supported or measure the minimum separation. Inspect the residual span and anchors, and measure the covered area when needed to justify the decision; keep the adjacent-layer clearance check separate.
+
+Self-improved — 2026-11-06: the R15 independent toolpath review identified a 5.15 mm free floor tongue behind a partly backed first layer, and contact faces exactly on slicing mid-planes. Record the longest unsupported span, distance to real plastic below, and how many layers an island remains separate before joining the frame; an area percentage alone understates nozzle-catch and detachment risks. Avoid relying on a boundary face's inclusion/exclusion for helper release. Check the final empty layers after re-slicing, and state any slicer-version or placement dependence explicitly.
 
 Measure sideways clearance between actual helper and part beads, especially beside thin struts, floors and springs. Establish a tested or explicitly provisional contact recipe. Give every helper an outward removal route: split trapped axial shells, avoid long close runs beside delicate parts, and brace tall thin starters. Identify any deliberate cut tabs, bond them only to substantial fixed areas away from fit surfaces, and include them in every working-space scan.
 

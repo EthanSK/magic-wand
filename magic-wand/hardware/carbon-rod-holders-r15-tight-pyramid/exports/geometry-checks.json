@@ -1,0 +1,542 @@
+{
+  "manifest_sha256": "7b8b23e2f2142ed0b5c2e994b5c90e59306a4a651860f3cd11066518ac7656ad",
+  "checker_sha256": "d15131ef45f3bb7571a671ea0e730caf3298441366cf989e931cdfb4dddda550",
+  "parts": {
+    "Key_Carrier": {
+      "spring_clips": {
+        "-6.1000000000000005": {
+          "lower_arm_extra_material_mm3": 0.0,
+          "gap_intersection_mm3": 0.0,
+          "missing_clip_mm3": 1.0944279378410434e-07
+        },
+        "11.5": {
+          "lower_arm_extra_material_mm3": 0.0,
+          "gap_intersection_mm3": 0.0,
+          "missing_clip_mm3": 1.102121541057789e-07
+        }
+      },
+      "clip_diameter_mm": 7.9
+    },
+    "Battery_Holder": {
+      "spring_clips": {
+        "-14.8": {
+          "lower_arm_extra_material_mm3": 0.0,
+          "gap_intersection_mm3": 0.0,
+          "missing_clip_mm3": 1.2966299633831465e-07
+        },
+        "17.0": {
+          "lower_arm_extra_material_mm3": 0.0,
+          "gap_intersection_mm3": 0.0,
+          "missing_clip_mm3": 1.2866797674876579e-07
+        }
+      },
+      "clip_diameter_mm": 7.9
+    }
+  },
+  "poses": [
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 0,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 56.349999999999994,
+      "axial_frame_gap_mm": 8.0000015258789,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 0,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 96.35,
+      "axial_frame_gap_mm": 48.0000015258789,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 90,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 56.349999999999994,
+      "axial_frame_gap_mm": 8.0000015258789,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 90,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 96.35,
+      "axial_frame_gap_mm": 48.0000015258789,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 180,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 56.349999999999994,
+      "axial_frame_gap_mm": 8.0000015258789,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 180,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 96.35,
+      "axial_frame_gap_mm": 48.0000015258789,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 270,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 56.349999999999994,
+      "axial_frame_gap_mm": 8.0000015258789,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": false,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 270,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 96.35,
+      "axial_frame_gap_mm": 48.0000015258789,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 0,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 34.7,
+      "axial_frame_gap_mm": 8.000000667572024,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 0,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 74.7,
+      "axial_frame_gap_mm": 48.000000667572024,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 90,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 34.7,
+      "axial_frame_gap_mm": 8.000000667572024,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 90,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 74.7,
+      "axial_frame_gap_mm": 48.000000667572024,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 180,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 34.7,
+      "axial_frame_gap_mm": 8.000000667572024,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 180,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 74.7,
+      "axial_frame_gap_mm": 48.000000667572024,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 270,
+      "extra_slide_mm": 0,
+      "battery_y_mm": 34.7,
+      "axial_frame_gap_mm": 8.000000667572024,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    },
+    {
+      "flipped": true,
+      "battery_end": "tip-above-keys",
+      "battery_roll_degrees": 270,
+      "extra_slide_mm": 40.0,
+      "battery_y_mm": 74.7,
+      "axial_frame_gap_mm": 48.000000667572024,
+      "intersection_mm3": {
+        "frames": 0.0,
+        "cell": 0.0
+      },
+      "whole_cell_loading_past_keys_mm3": 0.0
+    }
+  ],
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false,
+  "key_interface": {
+    "bought_part_intersections_mm3": {
+      "0_switch": 0.0,
+      "0_socket": 1.686889082486679e-06,
+      "0_max_socket": 1.8866675172386745e-06,
+      "1_switch": 0.0,
+      "1_socket": 1.7589175007036963e-06,
+      "1_max_socket": 1.3364964402666862e-05,
+      "2_switch": 0.0,
+      "2_socket": 1.724400512071171e-06,
+      "2_max_socket": 1.8612919189065175e-06,
+      "3_switch": 5.116784979390483e-07,
+      "3_socket": 1.680953672106357e-06,
+      "3_max_socket": 1.8801036933888537e-06,
+      "4_switch": 9.822030794322875e-08,
+      "4_socket": 1.700352532854937e-06,
+      "4_max_socket": 1.8812494948389307e-06
+    },
+    "sampled_socket_routes_mm3": {
+      "0_nominal": 1.686889082486679e-06,
+      "0_maximum": 9.979300461092825e-06,
+      "1_nominal": 1.7589175007036963e-06,
+      "1_maximum": 1.3364964402666862e-05,
+      "2_nominal": 1.724400512071171e-06,
+      "2_maximum": 1.1231525153361445e-05,
+      "3_nominal": 1.680953672106357e-06,
+      "3_maximum": 9.857525814117213e-06,
+      "4_nominal": 1.700352532854937e-06,
+      "4_maximum": 9.935441106109103e-06
+    },
+    "upper_front_rail_seat_and_lower_rail_to_bumper_overlap_mm3": [
+      1.3211864226596024,
+      3.1482495515848754,
+      3.1482499713133465,
+      3.148250142149427,
+      3.1482498350166837,
+      1.3211864760520686,
+      19.35483497714693,
+      19.354834977146933
+    ],
+    "removed_outer_pokes_mm3": {
+      "0": 0.0,
+      "2": 0.0,
+      "3": 0.0,
+      "4": 0.0
+    },
+    "illustrative_cap_travel_mm3": {
+      "0": 0.0,
+      "1": 0.0,
+      "2": 0.0,
+      "3": 0.0,
+      "4": 0.0
+    },
+    "side_key_half_spacing_mm": 9.35,
+    "purchased_cap_travel_verified": false,
+    "socket_route_poses_checked": 189,
+    "working_space_route_identical": true,
+    "exported_carve_route_poses": {
+      "key_0_socket_loading": {
+        "poses": 189,
+        "poses_meeting_material": 4
+      },
+      "key_0_maximum_socket_loading": {
+        "poses": 189,
+        "poses_meeting_material": 44
+      },
+      "key_1_socket_loading": {
+        "poses": 189,
+        "poses_meeting_material": 17
+      },
+      "key_1_maximum_socket_loading": {
+        "poses": 189,
+        "poses_meeting_material": 51
+      },
+      "key_2_socket_loading": {
+        "poses": 189,
+        "poses_meeting_material": 4
+      },
+      "key_2_maximum_socket_loading": {
+        "poses": 189,
+        "poses_meeting_material": 44
+      },
+      "key_3_socket_loading": {
+        "poses": 189,
+        "poses_meeting_material": 4
+      },
+      "key_3_maximum_socket_loading": {
+        "poses": 189,
+        "poses_meeting_material": 44
+      },
+      "key_4_socket_loading": {
+        "poses": 189,
+        "poses_meeting_material": 4
+      },
+      "key_4_maximum_socket_loading": {
+        "poses": 189,
+        "poses_meeting_material": 44
+      }
+    },
+    "missing_flange_corner_lands_mm3": {
+      "0:-7.15,-7.15": 0.0,
+      "0:-7.15,7.15": 0.0,
+      "0:7.15,-7.15": 0.0,
+      "0:7.15,7.15": 0.0,
+      "1:-7.15,-7.15": 0.0,
+      "1:-7.15,7.15": 0.0,
+      "1:7.15,-7.15": 0.0,
+      "1:7.15,7.15": 0.0,
+      "2:-7.15,-7.15": 0.0,
+      "2:-7.15,7.15": 0.0,
+      "2:7.15,-7.15": 0.0,
+      "2:7.15,7.15": 0.0,
+      "3:-7.15,-7.15": 0.0,
+      "3:-7.15,7.15": 0.0,
+      "3:7.15,-7.15": 0.0,
+      "3:7.15,7.15": 0.0,
+      "4:-7.15,-7.15": 0.0,
+      "4:-7.15,7.15": 0.0,
+      "4:7.15,-7.15": 0.0,
+      "4:7.15,7.15": 0.0
+    }
+  },
+  "lower_front_recess": {
+    "front_plane_y_mm": -7.9,
+    "lower_reference_cap_front_y_mm": -8.3,
+    "recess_behind_reference_cap_front_mm": 0.40000000000000036,
+    "material_ahead_of_plane_mm3": 0.0,
+    "switch_flange_land_front_y_mm": -7.5,
+    "chin": {
+      "front_y_mm": -7.9,
+      "front_z_mm": 8.7,
+      "back_y_mm": -6.2,
+      "bottom_z_mm": 7.0,
+      "angle_degrees": 45.0,
+      "recess_at_chin_bottom_behind_reference_cap_front_mm": 2.1000000000000005
+    },
+    "missing_continuous_bumper_core_mm3": 0.0,
+    "missing_lip_below_switch_housing_mm3": 0.0,
+    "material_under_chin_mm3": 4.885460192113877e-06,
+    "softened_edge_corner_material_mm3": {
+      "top_front": 0.0,
+      "chin_front_-18.7": 0.0,
+      "chin_front_0": 0.0,
+      "chin_front_18.7": 0.0,
+      "outer_corner_-1": 0.0,
+      "outer_corner_1": 0.0,
+      "front_clip_crown_edge": 0.0
+    },
+    "missing_front_clip_tie_and_spine_probe_mm3": {
+      "left_diagonal": 0.0,
+      "right_diagonal": 0.0,
+      "spine_left": 0.0,
+      "spine_right": 0.0,
+      "spine_root": 0.0
+    },
+    "missing_rear_floor_spine_probe_mm3": {
+      "rear_spine_left": 0.0,
+      "rear_spine_right": 0.0,
+      "rear_spine_root_left": 0.0,
+      "upper_left_floor_join": 0.0,
+      "rear_spine_root_right": 0.0,
+      "upper_right_floor_join": 0.0
+    },
+    "spine_neck_vertical_sections_at_x0_mm": {
+      "front": {
+        "-4.25": 1.3605,
+        "-4.15": 1.3647,
+        "-4.05": 1.3688,
+        "-3.95": 1.3729,
+        "-3.85": 1.3771,
+        "-3.75": 1.3812,
+        "-3.65": 1.3853,
+        "-3.55": 1.3895,
+        "-3.45": 1.3936,
+        "-3.35": 1.3977,
+        "-3.25": 1.4018,
+        "-3.15": 1.406
+      },
+      "rear": {
+        "13.35": 1.3589,
+        "13.45": 1.3621,
+        "13.55": 1.3653,
+        "13.65": 1.3686,
+        "13.75": 1.3718,
+        "13.85": 1.375,
+        "13.95": 1.3782,
+        "14.05": 1.3814,
+        "14.15": 1.3847,
+        "14.25": 1.3879,
+        "14.35": 1.3911,
+        "14.45": 1.3943
+      }
+    },
+    "spine_neck_screen_mm": 1.25,
+    "spine_crown_seed_outside_ring_mm3": {
+      "front": 0.0,
+      "rear": 0.0
+    },
+    "missing_front_clip_free_arm_mm3": 0.0001046900976812976,
+    "front_clip_y_mm": -6.1000000000000005,
+    "previous_front_clip_y_mm": -12.0,
+    "previous_front_y_mm": -13.8,
+    "note": "Geometric recess and edge screening only. Reference cap dimensions are inferred, not measured; finger comfort is not measured.",
+    "physical_comfort_verified": false
+  },
+  "cap_orientation": {
+    "stem_post_centres_mm": {
+      "-1": [
+        -2.85,
+        0.0
+      ],
+      "1": [
+        2.85,
+        0.0
+      ]
+    },
+    "stem_post_axis": "X",
+    "reference_cap_x_mm": 17.5,
+    "reference_cap_y_mm": 16.6,
+    "nominal_cap_gap_x_mm": 1.1999999999999993,
+    "nominal_cap_gap_y_mm": 1.1999999999999993,
+    "dimension_source": "Adafruit 5111 same-family page lists 17.5 x 16.6 mm; the 5737 page lists no dimensions. Inferred, not measured.",
+    "evidence": [
+      "Sourced Kailh Choc V1 switch mesh: two stem posts at X +/-2.25..3.45 mm (5.7 mm apart along X).",
+      "Adafruit 5737 official underside photo: both stem sockets lie along the visually wider cap axis; segmented width/height ratio 1.054-1.057, matching 17.5/16.6 = 1.054."
+    ],
+    "purchased_cap_dimensions_verified": false,
+    "mounted_cap_measurement_required_before_print": true
+  },
+  "pyramid_layout": {
+    "centres_mm": [
+      [
+        -18.7,
+        0
+      ],
+      [
+        0,
+        0
+      ],
+      [
+        18.7,
+        0
+      ],
+      [
+        -9.35,
+        17.8
+      ],
+      [
+        9.35,
+        17.8
+      ]
+    ],
+    "default_orientation": "two-toward-tip",
+    "reference_cap_size_mm": [
+      17.5,
+      16.6
+    ],
+    "independent_stroke_mm": 3.0,
+    "side_allowance_per_cap_mm": 0.4,
+    "minimum_swept_envelope_gap_mm": 0.3999999999999986,
+    "pairwise_swept_envelope_gaps_mm": {
+      "0_1": 0.3999999999999986,
+      "0_2": 19.099999999999998,
+      "0_3": 0.3999999999999986,
+      "0_4": 9.758201678588119,
+      "1_2": 0.3999999999999986,
+      "1_3": 0.3999999999999986,
+      "1_4": 0.3999999999999986,
+      "2_3": 9.758201678588119,
+      "2_4": 0.3999999999999986,
+      "3_4": 0.39999999999999925
+    },
+    "bought_cap_dimensions_and_play_verified": false,
+    "physical_comfort_verified": false
+  },
+  "battery_reserve_intersection_mm3": 0.0,
+  "whole_battery_turn_clearance": "The checked axial frame gap is invariant under battery rotation about Y. Larger outward slides preserve that gap. Nesting underneath the key frame is not an intended placement.",
+  "sensor_board_usb_external_wire_clearance_mm3": {
+    "pcb": 3.471373361278885e-07,
+    "usb": 0.0,
+    "wire": 0.0
+  },
+  "usb_direction": "positive Y toward tip and computer",
+  "battery_loading": {
+    "reserve_route_intersection_mm3": 0.0,
+    "idealized_fitted_gate_route_intersection_mm3": 0.0,
+    "intentional_gate_wedge_interference_mm3": 0.2524431134177679,
+    "nominal_cell_stopped_by_gate_mm3": 93.91069434952186,
+    "nominal_cell_stopped_at_far_end_mm3": 42.24786735965971,
+    "gate_force_and_retention_physically_verified": false
+  },
+  "sensor_lower_spring_arm_change_mm3": 7.1930113513614906e-06,
+  "passed": true
+}

@@ -2249,3 +2249,31 @@ when HUD/review closes, without inventing another follow-on edge. Cancellation
 clears the pending entry. Readable and compact bridge fixtures cover the edge
 order, Sense raw flags, manual-click mode, held controls and sleep restoration.
 The unchanged exit, click and shortcut timing remains in its existing owners.
+
+
+### 2026-11-06 — Tight joined frames and a recessed print-bed face
+
+Tighter neighbouring key frames can refill a bought interface after individual seats were cleared. Cut the complete switch, nominal/maximum socket and loading-route spaces from the final joined carrier, then recheck every key and all 20 bearing lands. R15's exact geometry and all-bead reports exercise this boundary; cap size/play and physical fitting remain separate.
+
+Recessing the finger-contact front also moves the carrier's print-bed face. Remove obsolete front starters and cut tabs, adapt later floor aids to that new start, and rescan actual gaps and complete printed load paths. R15's centre spine/right-wing replacement avoids the old taper becoming a steep helper overhang. A shallower front and passing section screen do not prove equivalent bending capacity, comfort or fatigue; inspect actual old/new front and side exports and use the complete carrier trial.
+
+The first independent R15 review found that the illustrative rectangular cap had its axes reversed relative to the sourced switch's stem-post axis and supplier underside photo. Correcting that reference changed the spacing trade-off: rows could move closer, but the sideways centres needed to widen under the retained provisional play allowance. Supplier-family dimensions and photo proportions do not verify the bought cap. Measure it mounted, including sideways movement, before printing; do not describe a reference gap as a measured real gap.
+
+Partial backing percentages hid the initial upper-left floor's 5.15 mm free tongue and its long period as a separate printed island. The revised rear spine joins both upper floor fronts before they start; the actual trial retains only the lower outer floor islands. Record unsupported spans, island duration and the real prior-layer plastic as well as area coverage. R15 also moves named helper contacts away from slicing mid-planes and checks their phase explicitly; this reduces boundary sensitivity in the checked 0.2 mm recipe, not uncertainty about other slicers or physical release.
+
+### 2026-11-06 — Bound geometry queries and the whole command lifetime
+
+The trimesh triangle-ray backend builds candidate triangle/ray lists and then expands arrays for those pairs. Point-grid size alone is therefore not a memory bound. Split contains/nearest-point work by both points and triangle candidates, retaining every result and tolerance; prefer equivalent exact sections for planar comparisons. A foreground tool timeout can leave a calculation running in the background, so it is not proof of termination and must not be followed by an overlapping probe.
+
+A detailed socket at 189 sampled loading poses also made a monolithic 3D union exceed the temporary guard during R15 regeneration. An exact per-pose representation avoids materialising that enormous envelope: subtraction distributes over the complete poses, as do layer sections. Preserve every pose, hardware shape, tolerance and label, and independently check every pose against the exported model. That source change exported the complete four-part CAD in about 18 seconds with about 547 MiB measured peak on the worker; this is resource evidence, not print or physical acceptance.
+
+The job runner holds one host-wide lease and cleans up on timeout, cancellation or leftover background descendants. Take a fresh child snapshot after leader exit, retain the lease in the direct child, defer cancellation until its handle is saved, and prevent a second signal interrupting cleanup. Complete-result query batching and the tiny real-library fixture preserve classifications and nearest-point results. Ethan rejected the temporary hard RAM limit and pressure-based refusal; they were removed. Resource prevention belongs in the actual allocation/ownership paths and viewer disposal, not an artificial RAM threshold. The earlier panic's missing PID-to-command stack still prevents a unique causal attribution.
+
+### 2026-11-06 — Numeric loopback startup does not need reverse DNS
+
+A synthetic Mini debug-server test timed out before reporting its listening port. A six-second faulthandler probe showed the main thread in socket.getfqdn, called by HTTPServer.server_bind after the socket bind. The server already uses the fixed numeric loopback address. Reuse TCPServer.server_bind for its socket options and bind, then set server_name/server_port from the bound numeric address rather than blocking on a reverse lookup. The focused suite covers forced DNS failure, real ephemeral binding and the existing read-only/privacy endpoints; all twelve cases passed. This source-tool fix does not start or restart an installed receiver or a paused monitor.
+
+
+### 2026-11-06 — Two neck tracks do not mean a solid-filled section
+
+A mesh neck around 1.37 mm thick can slice as two 0.42 mm walls with an internal interval around 0.53 mm wide; a count of two tracks does not measure plastic coverage. A median-width envelope can also understate the extent when thin gap-fill and ordinary walls are mixed. For a named questionable layer/ray, use actual feature widths and footprint unions, preserve the full parser state and disclose hollow sections as physical-trial risks. R15's four-ray check used existing exact G-code and native sections; it did not require a dense mesh point grid or a new strength claim.

@@ -1,0 +1,68 @@
+{
+  "revision": "carbon-rod-holders-r15-tight-pyramid",
+  "reinforcement": {
+    "battery_rib_radius_mm": 1.0,
+    "battery_far_frame_y_mm": 17.8,
+    "battery_far_clip_y_mm": 17.0,
+    "battery_stringer_entry_y_mm": -14.0,
+    "gate_guide_outer_wall_mm": 1.6,
+    "gate_guide_brace_radius_mm": 0.8,
+    "upper_joint_depth_mm": 2.0,
+    "key_load_rail_outer_x_mm": 9.1,
+    "key_load_rail_bottom_mm": -1.8
+  },
+  "key_layout": {
+    "pitch": 18.7,
+    "upper_half_spacing": 9.35,
+    "row_spacing": 17.8
+  },
+  "assembly": {
+    "default_key_orientation": "two-toward-tip"
+  },
+  "finger_recess": {
+    "front_plane_y_mm": -7.9,
+    "bumper_back_y_mm": -7.05,
+    "bumper_key_offset_mm": 8.2,
+    "top_edge_chamfer_mm": 0.35,
+    "chin_front_z_mm": 8.7,
+    "chin_back_y_mm": -6.2,
+    "chin_bottom_z_mm": 7.0,
+    "lip_top_z_mm": 8.7,
+    "lip_back_y_mm": -4.5,
+    "outer_corner_cut_key_offset_mm": 7.7,
+    "ring_tie_y_mm": -6.6,
+    "ring_tie_radius_mm": 1.6,
+    "ring_tie_outer_x_mm": 8.6,
+    "ring_tie_outer_z_mm": 8.2,
+    "spine_half_width_mm": 5.4,
+    "clip_crown_edge_chamfer_mm": 0.5,
+    "clip_crown_chamfer_half_width_mm": 2.2,
+    "rear_spine_root_x_mm": [-6.0, 7.0],
+    "rear_spine_crown_y_offset_mm": -0.5,
+    "spine_crown_half_width_mm": 1.5,
+    "spine_crown_bottom_z_mm": 4.1,
+    "spine_crown_outer_radius_mm": 5.48,
+    "spine_neck_minimum_section_mm": 1.25,
+    "physical_comfort_verified": false
+  },
+  "print_layer_guard": {
+    "layer_height_mm": 0.2,
+    "minimum_helper_contact_face_distance_from_slicing_midplane_mm": 0.04
+  },
+  "cap_clearance_screen": {
+    "reference_width_mm": 17.5,
+    "reference_length_mm": 16.6,
+    "reference_orientation": "17.5 mm along X, the switch stem-post axis; 16.6 mm along Y",
+    "orientation_evidence": [
+      "Sourced Kailh Choc V1 switch mesh: two stem posts at X +/-2.25..3.45 mm (5.7 mm apart along X).",
+      "Adafruit 5737 official underside photo: both stem sockets lie along the visually wider cap axis; segmented width/height ratio 1.054-1.057, matching 17.5/16.6 = 1.054."
+    ],
+    "dimension_source": "Adafruit 5111 same-family page lists 17.5 x 16.6 mm; the 5737 page lists no dimensions. Inferred, not measured.",
+    "unreliable_photo_scale_estimate_mm": [18.2, 17.3],
+    "stroke_mm": 3.0,
+    "lateral_allowance_per_cap_side_mm": 0.4,
+    "minimum_residual_gap_mm": 0.4,
+    "purchased_cap_dimensions_verified": false,
+    "mounted_cap_measurement_required_before_print": true
+  }
+}

@@ -15,6 +15,7 @@ import json
 import sys
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from socketserver import TCPServer
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from monitor import DEFAULT_SUPPORT, RECEIVER_PROCESS, Monitor, ProcessProbe  # noqa: E402
@@ -23,6 +24,20 @@ HERE = Path(__file__).resolve().parent
 FONTS = HERE.parents[1] / "docs" / "fonts"
 DEFAULT_PORT = 8770
 BIND = "127.0.0.1"
+
+
+class LoopbackHTTPServer(ThreadingHTTPServer):
+    """Bind the fixed numeric loopback address without reverse DNS.
+
+    HTTPServer normally looks up a name only to fill server_name. That lookup
+    can stall an otherwise ready local monitor. Keep the standard TCP bind
+    and socket options, and use the already-known literal for its metadata.
+    """
+    def server_bind(self) -> None:
+        TCPServer.server_bind(self)
+        self.server_name = self.server_address[0]
+        self.server_port = self.server_address[1]
+
 
 # A fixed allowlist: request paths never reach the filesystem directly.
 STATIC = {
@@ -119,7 +134,7 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("port must be between 0 and 65535")
     monitor = Monitor(args.support_dir, ProcessProbe(expected=args.process_name))
     try:
-        server = ThreadingHTTPServer((BIND, args.port), make_handler(monitor, args.port))
+        server = LoopbackHTTPServer((BIND, args.port), make_handler(monitor, args.port))
     except OSError as error:
         print("Couldn’t listen on %s:%d: %s" % (BIND, args.port, error.strerror or error), file=sys.stderr)
         return 1
