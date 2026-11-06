@@ -55,7 +55,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(connected&&(hudOpen||global.wandReviewTracking))Bluetooth.println('@NAV '+Math.round(hudX*1000)+','+Math.round(hudY*1000));
   });
   // The gyro runs while anything uses motion (follow, HUD or review).
-  global.wandGyro=function(){if(connected&&!global.wandDeskSleeping&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();};
+  global.wandGyro=function(){if(connected&&!global.wandDeskSleeping&&(moveLatched||!digitalRead(MOVE_PIN)||hudOpen||global.wandReviewTracking))wakeGyro();else if(bias)sleepGyro();};
   // Closing the HUD must not forget a HUD-button press that is still down: its
   // release edge must still reach the Mac (a lost release swallowed the next
   // hold and left the HUD button held, 2026-10-29).
@@ -81,7 +81,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(global.wandReviewTracking===!!active)return;
     global.wandReviewTracking=!!active;
     if(active){hudX=0;hudY=0;if(hudTimer===undefined)hudTimer=setInterval(hudReport,30);if(!global.wandDeskSleeping)wakeGyro();}
-    else if(!hudOpen){wandStopHUD();if(!moveLatched)sleepGyro();}
+    else if(!hudOpen){wandStopHUD();wandGyro();}
   };
   // Keep the actual registered sensor callback, including its saved scope.
   var mh=Puck['#onaccel'];if(typeof mh==='function')mh=[mh];
@@ -182,7 +182,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     if(!gyroAwake){global.wandPowerDownGyro();return;}
     global.wandSleepTimer=setTimeout(function(){
       global.wandSleepTimer=undefined;
-      if(!moveLatched&&!hudOpen&&!scrollHeld&&!global.wandReviewTracking&&!global.wandShot)global.wandPowerDownGyro();
+      if(!moveLatched&&digitalRead(MOVE_PIN)&&!hudOpen&&!scrollHeld&&!global.wandReviewTracking&&!global.wandShot)global.wandPowerDownGyro();
     },1000);
   });
   // A minute of confirmed desk rest is timed by the existing Mac detector.
@@ -198,7 +198,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       global.wandPowerDownGyro();
     }else{
       if((hudOpen||global.wandReviewTracking)&&hudTimer===undefined)hudTimer=setInterval(hudReport,30);
-      if(connected&&(moveLatched||hudOpen||global.wandReviewTracking))wakeGyro();
+      wandGyro();
     }
     updateLights();
   };
@@ -276,7 +276,7 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
     var hx=(g[C.xAxis]-bias[C.xAxis])/134,hy=(g[C.yAxis]-bias[C.yAxis])/134,hm=M.sqrt(hx*hx+hy*hy),rf=M.max(noise[C.xAxis],noise[C.yAxis]),keep=G.wandReviewTracking?(hm<=rf?0:(hm-rf)/hm):radialKeep(hx,hy);
     hudX+=hx*keep*dt*C.xSign;hudY+=hy*keep*dt*C.ySign;
   }
-  if (!connected || !moveLatched || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging)) {
+  if (!connected || (!moveLatched && digitalRead(MOVE_PIN)) || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging)) {
     G.wandSlackX=G.wandSlackY=0;
     fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;return;
   }
@@ -342,7 +342,9 @@ delete global.wr;delete global.wc;delete global.wk;delete global.wv;
       moveGestureMode=moveLatched?'pointer':'enable';
       global.wandMomentaryStarted=moveGestureMode==='enable'?getTime():undefined;
       if(moveGestureMode==='enable'){
-        moveLatched=true;
+        // Ethan: from follow off, enable only on key up. Keep held precision,
+        // scrolling and dragging independent: warming the sensor is not a
+        // follow choice, and releasing a short entry tap below owns that choice.
         if(connected)wakeGyro();
       }
       // Remember the previous tap for the Mac's full double-click window, even
@@ -499,7 +501,7 @@ if(global.wandRawPointer)global.wandLiveMotionCallback.replaceWith(function(a) {
   // Sending these readings does not click or scroll yet: the receiver owns
   // the existing tap/hold decision. V1 keeps its original pointer behavior.
   var hostHold=!!G.wandHostHeldScroll&&!digitalRead(MOVE_PIN);
-  if (!connected || (!moveLatched && !hudOpen && !G.wandShot && !hostHold) || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging && !hostHold)) {
+  if (!connected || (!moveLatched && digitalRead(MOVE_PIN) && !hudOpen && !G.wandShot && !hostHold) || tapPending || now<(G.wandPointerPauseUntil||0) || (moveGestureMode==="pointer" && !dragging && !hostHold)) {
     G.wandSlackX=G.wandSlackY=0;
     fractionX=fractionY=moveX=moveY=filteredX=filteredY=0;return;
   }

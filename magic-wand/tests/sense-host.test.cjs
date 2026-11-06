@@ -97,7 +97,8 @@ test("Sense buttons drive the canonical lanes and motion uses the real reading t
   s.lines.length = 0;
   s.frames(1, 1); // The mouse button down
   assert(s.lines.includes("@BOTTOM 1"));
-  assert.equal(s.ctx.moveLatched, true);
+  assert.equal(s.ctx.moveLatched, false, "down warms sensing without enabling follow");
+  assert(!s.lines.includes("@FOLLOW 1"), "entry waits for the physical release frame");
   assert.equal(s.imu.at(-1), 2, "gyro requested at the accepted 104 Hz");
   s.frames(2, 1);
   s.frames(1, 0); // short tap: follow latches without a click

@@ -2237,3 +2237,15 @@ R14 centres two upper keys above three after the outboard pair was rejected for 
 A correct default in scene parameters did not select the UI control: the inherited renderer read the first HTML option. Derive the initial selection from the canonical parameters and inspect the effective generated control. The inherited renderer also still described the superseded wide thumb opening. Bind the effective renderer and HTML to the viewer receipt, not only CAD and JSON, so a display-only correction refreshes the permanent viewer too. Preserve archived revisions; HTTP/source checks are not a manual browser or physical trial.
 
 A count of directly-beneath beads does not measure the covered fraction. R14 measurements found about 35% backing of the left upper initial floor patch and 64% on the right, despite a valid one-empty-layer gap on both. A single chosen section could misleadingly suggest the right floor was fully backed. Record conservative actual-bead area and residual patches across the whole starting face, with an explicit physical sag check; retain gap and sideways-separation checks independently.
+
+
+## Follow entry belongs to physical release (2026-11-06)
+
+A short mouse-button entry now leaves latched follow off throughout the press
+and enables it only on release. Sensor ownership must stay separate: held
+precision, scrolling and explicit dragging still need fresh readings while that
+follow choice is off. Keep the held pin in motion/sleep eligibility, including
+when HUD/review closes, without inventing another follow-on edge. Cancellation
+clears the pending entry. Readable and compact bridge fixtures cover the edge
+order, Sense raw flags, manual-click mode, held controls and sleep restoration.
+The unchanged exit, click and shortcut timing remains in its existing owners.

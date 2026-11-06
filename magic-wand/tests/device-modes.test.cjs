@@ -20,10 +20,10 @@ for (const bridge of ["readable", "fragments"]) {
     // Hold from idle: temporary movement, one endpoint click on release, sensor kept warm briefly.
     frames.length = 0;
     w.edge("D1", 0);
-    assert(ctx.moveLatched && w.device.awake);
+    assert(!ctx.moveLatched && w.device.awake, "entry down warms sensing without enabling follow");
     assert.deepEqual(w.colors(), [0, 0, 1], "bottom down refreshes blue immediately");
     w.advance(0.5);
-    assert(ctx.moveLatched && !ctx.dragging);
+    assert(!ctx.moveLatched && !ctx.dragging, "held entry stays separate from latched follow");
     w.edge("D1", 1);
     assert(!ctx.moveLatched && w.device.awake, "held entry stops pointer immediately but keeps sensor warm");
     w.advance(1.01);
