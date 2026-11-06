@@ -1,0 +1,214 @@
+{
+  "revision": "carbon-rod-holders-r14-pyramid",
+  "source_sha256": {
+    "cad.py": "757abea12d4b9c20d080843d2efa3866687e70462c9cc2a7bcb002dc53b2b83c",
+    "parameters.json": "87baa4337d9d57c5eecdfddd5fcd052ed7b7e6f46ef4a4e7b6cae184373e3de5",
+    "working_spaces.py": "f46e3bd3765a0704a220dfd99facdf92d47dfda86e3801db5f547fe45de92e34",
+    "deliverables.py": "fe7c324fed0f802a34db4f23879edcd759bf9c470c5a31de0186714855c3e3ca",
+    "../carbon-rod-holders-r12-closer-thumb/cad.py": "a6b944dd2cbb3584327e034f8bb50f0a3207238ddb8f7e6d8e97f717b871c841",
+    "../carbon-rod-holders-r12-closer-thumb/parameters.json": "05b512f3ac931c74e19023fb254de94d4217720b8d898659072e7ddf0fe64b6d",
+    "../carbon-rod-holders-r12-closer-thumb/ergonomics.json": "3b63c7decd6eece92bb2f864228f8ce14f24199098a2dea787d96a2aaee91c24",
+    "../carbon-rod-holders-r7-spring-clips/cad.py": "011fb648bbed706dac91a31513f82924f83b34a282c2b65190b207b1455273ba",
+    "../carbon-rod-holders-r7-spring-clips/parameters.json": "f2706b655bc2374caef20127dd1df6e3426b2ab09e018fcf947b2500b3429b17",
+    "../carbon-rod-holders-r7-spring-clips/reference_models.py": "ec7c8a29c6f6aa0dfc78778c832ecc9e14ff1cb15a481a129e20ff2f955dcdb4",
+    "../carbon-rod-holders-r2/cad.py": "88faf80920e129cdceca2c4456c4f313ac3d7b5525f777420061943c5f6f5ba9",
+    "../carbon-rod-holders-r2/parameters.json": "a78216383c2b8dd872f7444dcbb1d1a07ec9a663438244ebe0e086a34d9d1bad",
+    "../carbon-rod-holders/cad.py": "f82a695bb4dec8f009afaa78b65c15309b4d55ff8b699581d99e600aabe79991",
+    "../carbon-rod-holders/parameters.json": "48ec318ffeba5222402e4f622162d5b78132aff56697aa03dabd71664c451666",
+    "../carbon-rod-holders-r7-spring-clips/references/provenance.json": "1d683f52bcd002995c73f16a9f9ef5225e9c3e75fd7a263cbafb93f059b6b492",
+    "../carbon-rod-holders-r7-spring-clips/references/socket.json": "f1e8cc043e11d1419ed8deefa2e2bb2c04ef2028a972496b05614eda760a918d",
+    "../carbon-rod-holders-r7-spring-clips/references/switch.json": "738d3319ef0c9851badfab17a2a52f05f90faef2eb18e5648ad0675f30e2374e",
+    "../carbon-rod-holders-r7-spring-clips/references/SW_Hotswap_Kailh_Choc_V1.stp": "fab92f70c826ba4098760a695102d31080603f075b1d3eef210255ff1791ed0a",
+    "../carbon-rod-holders-r7-spring-clips/references/SW_Kailh_Choc_V1.stp": "aa07efd7a318f5dd2476100ad2d86b0283cb5e1f93ee89ce6bc8e27ba9ea4317",
+    "../printed-loop-wand/shard-tube-r2/direct_switches.py": "08083422ab348a7992b68f964a3f09338bda31803be9b4c3e44f16a5fa39b4df"
+  },
+  "parts": {
+    "Key_Carrier": {
+      "bounds_mm": [
+        [
+          -28.049999237060547,
+          -13.800000190734863,
+          -4.798541069030762
+        ],
+        [
+          28.700000762939453,
+          31.049999237060547,
+          11.119999885559082
+        ]
+      ],
+      "volume_mm3": 4447.086851886298,
+      "solid_PETG_g": 5.6478003018955985,
+      "stl_float32_volume_change_mm3": 4.9129436774819624e-05,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "7d613ae59cd53d927e109814fed2c2d05aba322037536239e44870b9bc2d0426",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -28.049999237060547
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -13.800000190734863
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          11.119999885559082
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Battery_Holder": {
+      "bounds_mm": [
+        [
+          -16.0,
+          -18.5,
+          -4.798541069030762
+        ],
+        [
+          16.0,
+          18.799999237060547,
+          14.449999809265137
+        ]
+      ],
+      "volume_mm3": 2036.9617608796013,
+      "solid_PETG_g": 2.586941436317094,
+      "stl_float32_volume_change_mm3": 0.0002640469299421966,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "37662b7d702bd34b7aab760122e5678528e7d0c71d738e5f5e42fe2bd4b6a8d6",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -16.0
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          18.799999237060547
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.7985410690307635
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Battery_End_Gate": {
+      "bounds_mm": [
+        [
+          -14.25,
+          -18.200000762939453,
+          6.349999904632568
+        ],
+        [
+          14.25,
+          -15.5,
+          13.149999618530273
+        ]
+      ],
+      "volume_mm3": 141.0698612999254,
+      "solid_PETG_g": 0.17915872385090528,
+      "stl_float32_volume_change_mm3": 2.709573692527556e-06,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "d641d5824732b228981ee034a28979756c682e2911d98c9cce2bf42a9e645fcf",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.25
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          -15.5
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          6.349999904632568
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "XIAO_Rod_Holder": {
+      "bounds_mm": [
+        [
+          -11.199999809265137,
+          -5.050000190734863,
+          -4.798483848571777
+        ],
+        [
+          11.199999809265137,
+          23.399999618530273,
+          10.0
+        ]
+      ],
+      "volume_mm3": 776.6078584084662,
+      "solid_PETG_g": 0.9862919801787522,
+      "stl_float32_volume_change_mm3": 5.191865170672827e-06,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "4fde8bb0d2c93f2c98a9074d22e22f4c0456123e81d2adae49691c9920bd3419",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -11.199999809265137
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -5.050000190734864
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          10.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false
+}

@@ -1,0 +1,30 @@
+{
+  "revision": "carbon-rod-holders-r14-pyramid",
+  "reinforcement": {
+    "battery_rib_radius_mm": 1.0,
+    "battery_far_frame_y_mm": 17.8,
+    "battery_far_clip_y_mm": 17.0,
+    "battery_stringer_entry_y_mm": -14.0,
+    "gate_guide_outer_wall_mm": 1.6,
+    "gate_guide_brace_radius_mm": 0.8,
+    "upper_joint_depth_mm": 2.0,
+    "key_load_rail_outer_x_mm": 9.1,
+    "key_load_rail_bottom_mm": -1.8
+  },
+  "key_layout": {
+    "pitch": 18.4,
+    "upper_half_spacing": 9.2,
+    "row_spacing": 19.3
+  },
+  "assembly": {
+    "default_key_orientation": "two-toward-tip"
+  },
+  "cap_clearance_screen": {
+    "reference_width_mm": 16.6,
+    "reference_length_mm": 17.5,
+    "stroke_mm": 3.0,
+    "lateral_allowance_per_cap_side_mm": 0.4,
+    "minimum_residual_gap_mm": 1.0,
+    "purchased_cap_dimensions_verified": false
+  }
+}

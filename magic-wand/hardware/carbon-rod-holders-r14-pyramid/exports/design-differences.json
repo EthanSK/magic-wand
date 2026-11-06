@@ -1,0 +1,32 @@
+{
+  "generator_sha256": "0481bac8a576ea654be74421ab2d6388128a84d31c6a084b2e26e80b9e1037b3",
+  "manifest_sha256": "e2a2cec654de3572de9f2918feb9a82d39995f7e37d12cfddde5d53b81f294f6",
+  "previous_manifest_sha256": "b74454505b2629a9e5bf7c5466cb7469f61915d7d574a73573603e02144eba6f",
+  "parts": {
+    "Key_Carrier": {
+      "added_mm3": 1366.83524,
+      "removed_mm3": 1420.28338,
+      "r14_sha256": "24fb3f49785e091c7a34a95eb9d22a31fbadf97f9b6613933c24e3ef4dbb38ee",
+      "r13_sha256": "30b193c9766685cea67f7b0a662177e72a07642022cb22503fc2ec2ada5a2d16"
+    },
+    "Battery_Holder": {
+      "added_mm3": 0.0,
+      "removed_mm3": 0.0,
+      "r14_sha256": "25888e0d2b3ed9f41f34184938346c42f93546372134a8bb562ebb940377a37f",
+      "r13_sha256": "25888e0d2b3ed9f41f34184938346c42f93546372134a8bb562ebb940377a37f"
+    },
+    "Battery_End_Gate": {
+      "added_mm3": 0.0,
+      "removed_mm3": 0.0,
+      "r14_sha256": "aa47b3745b5e87ac4be1f8ff1612ecf8a74ad9e9a5db56e8563822f5d1684af0",
+      "r13_sha256": "aa47b3745b5e87ac4be1f8ff1612ecf8a74ad9e9a5db56e8563822f5d1684af0"
+    },
+    "XIAO_Rod_Holder": {
+      "added_mm3": 0.0,
+      "removed_mm3": 0.0,
+      "r14_sha256": "80f2fef127005917efd9811fb14473e8475bfbdebe461d5570de82a492a426ff",
+      "r13_sha256": "80f2fef127005917efd9811fb14473e8475bfbdebe461d5570de82a492a426ff"
+    }
+  },
+  "method": "Boolean volumes between final exported assembly STLs; numerical surface differences are not physical measurements."
+}

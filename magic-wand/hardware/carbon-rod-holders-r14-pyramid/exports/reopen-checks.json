@@ -1,0 +1,122 @@
+{
+  "input_project_sha256": "83abdc65881df8e379d3e1b110e5cdc1da1d31a57909998e14ba31c7b2408c10",
+  "reopened_project_sha256": "94d52065b5104cf32039070f9e282906bab837ad67d91c3e2fb3d1a3f05c1394",
+  "generator_sha256": "3d430583754893126b0dc238fea93078a54676066d1cc02d3941b7dcf835b48f",
+  "effective_settings_equal": true,
+  "effective_settings": {
+    "global": {
+      "enable_support": "0",
+      "support_type": "tree(auto)",
+      "brim_type": "no_brim",
+      "layer_height": "0.2",
+      "wall_loops": "3",
+      "sparse_infill_density": "20%",
+      "printer_settings_id": "Bambu Lab P1S 0.4 nozzle",
+      "filament_settings_id": [
+        "Generic PETG"
+      ],
+      "bridge_no_support": "1",
+      "max_bridge_length": "12"
+    },
+    "objects": {
+      "Key_Carrier": {
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "brim_type": "no_brim",
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "printer_settings_id": "Bambu Lab P1S 0.4 nozzle",
+        "filament_settings_id": [
+          "Generic PETG"
+        ],
+        "bridge_no_support": "1",
+        "max_bridge_length": "12"
+      },
+      "Battery_Holder": {
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "brim_type": "no_brim",
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "printer_settings_id": "Bambu Lab P1S 0.4 nozzle",
+        "filament_settings_id": [
+          "Generic PETG"
+        ],
+        "bridge_no_support": "1",
+        "max_bridge_length": "12"
+      },
+      "Battery_End_Gate": {
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "brim_type": "no_brim",
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "printer_settings_id": "Bambu Lab P1S 0.4 nozzle",
+        "filament_settings_id": [
+          "Generic PETG"
+        ],
+        "bridge_no_support": "1",
+        "max_bridge_length": "12"
+      },
+      "XIAO_Rod_Holder": {
+        "enable_support": "0",
+        "support_type": "tree(auto)",
+        "brim_type": "no_brim",
+        "layer_height": "0.2",
+        "wall_loops": "3",
+        "sparse_infill_density": "20%",
+        "printer_settings_id": "Bambu Lab P1S 0.4 nozzle",
+        "filament_settings_id": [
+          "Generic PETG"
+        ],
+        "bridge_no_support": "1",
+        "max_bridge_length": "12"
+      }
+    },
+    "all_embedded_global_keys": 584,
+    "all_embedded_global_values_sha256": "f7158db6904d5f28ce81206b219710e6b6bb2c03f046d34face1b6caabea8731"
+  },
+  "actual_paths_passed": true,
+  "actual_paths_report_sha256": "cb56af64383d51a6a6d70fd1d1f254c93da31ad21376aa538ea912af6c839a34",
+  "warnings": [
+    "It seems object Key_Carrier has floating cantilever. Please re-orient the object or enable support generation."
+  ],
+  "cli_return_code": 0,
+  "gui_test_performed": false,
+  "physical_print_verified": false,
+  "delivered_settings_registration": {
+    "required_keys": [
+      "bridge_no_support",
+      "brim_object_gap",
+      "brim_type",
+      "brim_width",
+      "enable_prime_tower",
+      "enable_support",
+      "layer_height",
+      "max_bridge_length",
+      "sparse_infill_density",
+      "support_on_build_plate_only",
+      "support_threshold_angle",
+      "wall_loops"
+    ],
+    "registered_keys": [
+      "bridge_no_support",
+      "brim_object_gap",
+      "brim_type",
+      "brim_width",
+      "enable_prime_tower",
+      "enable_support",
+      "layer_height",
+      "max_bridge_length",
+      "sparse_infill_density",
+      "support_on_build_plate_only",
+      "support_threshold_angle",
+      "wall_loops"
+    ],
+    "cli_dropped_keys": [],
+    "values_unchanged": true
+  }
+}
