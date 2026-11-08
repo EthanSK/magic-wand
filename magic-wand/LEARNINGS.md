@@ -2307,6 +2307,21 @@ removal. Re-run the exact slice and reload checks after recipe changes: the late
 the meshes were unchanged. These digital improvements do not prove adhesion,
 cleanup, strength or physical fit.
 
+The R17 trial completed, but physical cleanup failed: Ethan reported breaking the
+XIAO holder while removing its base, and the battery base was also too difficult
+to remove. The main anchors used six 2.2 mm wide necks, fused through four 0.2 mm
+layers. This establishes an unsuccessful removal design, not a measured break
+force or a unique fracture cause. Review removal as a load case: keep narrow,
+accessible sacrificial connections on strong fixed faces and check their actual
+printed sections. A connected anchor is not automatically a usable anchor.
+
+The user confirmed that the battery moved vertically inside its holder, rather
+than the holder moving on the rod; the awkward projections were the removable
+end gate's legs. Preserve the accepted length/width fit and replaceable access.
+The inherited 4.9 mm bay leaves at least 0.6 mm over the protected LP402025's
+4.3 mm maximum drawing thickness. Removing that play must not require squeezing
+the pouch; the actual bought pack thickness remains unmeasured.
+
 An envelope around a solder fillet is not a complete wire-exit check. R17's first
 top-bar draft ended its pad-side keepout 2.4 mm above the PCB and put the bar at
 2.5 mm, across pads used by the current pin plan. Passing that finite box did not
