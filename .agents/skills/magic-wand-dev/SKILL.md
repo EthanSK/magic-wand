@@ -54,7 +54,7 @@ For wand HUD controls, navigation, presentation, wording or lifecycle, read [the
    from synthetic checks and Ethan's physical acceptance. Update `wand.json` with control,
    version or status changes. Import through `scripts/import_private.py`; do not publish
    private receipts, settings or logs. Regenerate with `python3 scripts/build.py`.
-7. Run `npm run check` from the repository root for every component and the privacy scan; perform the applicable browser and real-device checks from AGENTS.
+7. Select checks under the root [AGENTS.md](../../../AGENTS.md) policy, including its focused CAD/documentation checks and full-suite requirement for software/shared changes; perform applicable browser and real-device checks.
    Commit completed changes regularly. For an authorized publication, verify the remote
    commit, CI and deployed assets rather than stopping at a local commit.
 

@@ -1,6 +1,6 @@
 # Final printability and strength review
 
-Read before finishing every project 3D model, revised export or print-project delivery. The aim is a model that can actually be printed, cleaned and assembled, with the smallest necessary change to the intended design. A valid mesh and a slicer success message do not establish that result.
+Use the relevant sections when a changed feature, uncertainty or physical failure needs deeper checking. The core delivery checks and evidence-reuse rules live in [SKILL.md](../SKILL.md); do not repeat an unchanged historical investigation just because it appears here. The aim is a model that can actually be printed, cleaned and assembled with minimal design changes. A valid mesh and a slicer success message do not establish that result.
 
 ## Establish the actual delivery
 
@@ -38,7 +38,7 @@ Retain a concise reproducible report with exact hashes, per-part opening/support
 
 ## Why holes close or shrink
 
-Research the applicable mechanism rather than attributing every blocked hole to support. Check actual bead paths and physical evidence separately:
+For an unresolved blocked-hole or size problem, research the applicable mechanism rather than attributing everything to support. Reuse settled, sourced explanations; this is not a fresh web-research requirement for every delivery. Check actual bead paths and physical evidence separately:
 
 - Slicer supports, interfaces or branches, including columns descending from a different source above the opening.
 - Bridge/arch sag at horizontal roofs and the top edge of an opening in an upright wall. Toolpaths cannot predict the real droop.
