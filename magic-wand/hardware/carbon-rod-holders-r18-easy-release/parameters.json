@@ -1,0 +1,158 @@
+{
+  "revision": "carbon-rod-holders-r18-easy-release",
+  "print": {
+    "printer": "Bambu Lab A1 mini 0.4 nozzle",
+    "filament": "Generic PETG @BBL A1M",
+    "process": "0.20mm Standard @BBL A1M",
+    "layer_height_mm": 0.2,
+    "walls": 3,
+    "infill_percent": 20,
+    "automatic_support": false,
+    "brim": false,
+    "plate_scope": "Battery holder, one-tab end door, three flat cell spacers, XIAO holder and near keeper. Key_Carrier is unchanged and not reprinted.",
+    "z_hop_mm": 0.6
+  },
+  "door": {
+    "half_x_mm": 12.8,
+    "y_mm": [
+      -15.8,
+      -14.0
+    ],
+    "z_mm": [
+      6.35,
+      14.7
+    ],
+    "opening_top_z_mm": 10.35,
+    "tongue_z_mm": [
+      10.35,
+      12.3
+    ],
+    "tongue_root_x_mm": -10.0,
+    "tongue_tip_x_mm": 4.0,
+    "slit_mm": 0.6,
+    "tooth_half_x_mm": 1.8,
+    "tooth_yz_mm": [
+      [
+        -14.15,
+        10.8
+      ],
+      [
+        -14.15,
+        11.5
+      ],
+      [
+        -13.4,
+        11.5
+      ],
+      [
+        -13.4,
+        10.85
+      ]
+    ],
+    "bridge": {
+      "front_y_mm": -13.8,
+      "arrow_start_y_mm": -5.0,
+      "pocket_half_x_mm": 2.5,
+      "pocket_back_y_mm": -13.15,
+      "pocket_ceiling_z_mm": 11.6,
+      "chamfer_start_z_mm": 12.0
+    },
+    "tab_x_mm": [
+      -1.2,
+      3.4
+    ],
+    "tab_top_z_mm": 13.2,
+    "window_top_z_mm": 13.7,
+    "window_x_mm": [
+      -1.8,
+      4.0
+    ]
+  },
+  "spacers": {
+    "thickness_mm": [
+      0.4,
+      0.6,
+      0.8
+    ],
+    "half_x_mm": 10.3,
+    "y_mm": [
+      -13.7,
+      13.7
+    ],
+    "protection_notch_half_x_mm": 6.5,
+    "protection_end_y_mm": -11.5,
+    "basis": "Reserve height 4.9 mm. Catalogue maximum pack 4.3 mm, nominal code thickness 4.0 mm; the bought pack is unmeasured. Gap left with no spacer: 0.6 over maximum, 0.9 over nominal. Use the thickest spacer that lets the cell and door go in without force."
+  },
+  "xiao": {
+    "web_inner_x_z_z": [
+      1.5,
+      5.0,
+      6.2
+    ],
+    "web_outer_x_z_z": [
+      11.0,
+      6.0,
+      7.25
+    ],
+    "hoop": {
+      "y_mm": [
+        20.7,
+        23.4
+      ],
+      "bar_y_mm": [
+        22.6,
+        23.4
+      ],
+      "shoulder_inner_x_mm": 7.6,
+      "shoulder_under_z_mm": 10.35,
+      "under_usb_z_mm": 13.7,
+      "top_z_mm": 15.6,
+      "arrow_half_x_mm": 4.6
+    }
+  },
+  "keeper": {
+    "front_y_mm": 1.1,
+    "bar_y_mm": [
+      -5.0,
+      -1.3
+    ],
+    "rear_apex_y_mm": -3.4,
+    "tongue": {
+      "x_mm": [
+        -6.6,
+        1.6
+      ],
+      "y_mm": [
+        -0.9,
+        1.1
+      ],
+      "slit_mm": 0.6,
+      "thin_from_z_mm": 10.75,
+      "tooth_x_mm": [
+        -1.5,
+        1.5
+      ],
+      "tooth_y_mm": [
+        -0.45,
+        0.75
+      ],
+      "tooth_bottom_z_mm": 9.8
+    },
+    "ridge": {
+      "crest_y_mm": -1.0,
+      "crest_z_mm": 10.15,
+      "base_z_mm": 6.0
+    }
+  },
+  "anchors": {
+    "thickness_mm": 0.4,
+    "gap_mm": 1.0,
+    "pad_half_length_mm": 4.0,
+    "pad_depth_mm": 4.5,
+    "pull_tab_length_mm": 5.0,
+    "tie_width_mm": 1.0,
+    "tie_overlap_mm": 0.4
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false
+}

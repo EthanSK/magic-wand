@@ -1,0 +1,113 @@
+{
+  "generator_sha256": "a20072ad129af3c510f2c9679b91fb5c559f8ce2609c73ec1f628226c5f05725",
+  "parameters": {
+    "thickness_mm": 0.4,
+    "gap_mm": 1.0,
+    "pad_half_length_mm": 4.0,
+    "pad_depth_mm": 4.5,
+    "pull_tab_length_mm": 5.0,
+    "tie_width_mm": 1.0,
+    "tie_overlap_mm": 0.4
+  },
+  "parts": {
+    "Battery_Holder": {
+      "thickness_mm": 0.4,
+      "flange_area_mm2": 355.01,
+      "tie_section_each_mm2": 0.4,
+      "tie_count": 6,
+      "separate_pads": 6,
+      "solid_PETG_g": 0.1846,
+      "first_layer_area_mm2": 190.83,
+      "sites_print_xy_outward": [
+        [
+          6.0,
+          17.18,
+          0,
+          1
+        ],
+        [
+          23.2,
+          17.18,
+          0,
+          1
+        ],
+        [
+          2.4,
+          13.0,
+          -1,
+          0
+        ],
+        [
+          26.8,
+          13.0,
+          1,
+          0
+        ],
+        [
+          5.0,
+          9.0,
+          0,
+          -1
+        ],
+        [
+          24.2,
+          9.0,
+          0,
+          -1
+        ]
+      ],
+      "stl_sha256": "2a67cfa09f6329bb7ae5e51f33192d2cb0dad95b8c6de17af601c6452e9b64f1"
+    },
+    "XIAO_Rod_Holder": {
+      "thickness_mm": 0.4,
+      "flange_area_mm2": 324.94,
+      "tie_section_each_mm2": 0.4,
+      "tie_count": 6,
+      "separate_pads": 4,
+      "solid_PETG_g": 0.1694,
+      "first_layer_area_mm2": 178.23,
+      "sites_print_xy_outward": [
+        [
+          2.6,
+          12.9,
+          -1,
+          0
+        ],
+        [
+          26.6,
+          12.9,
+          1,
+          0
+        ],
+        [
+          2.6,
+          17.4,
+          -1,
+          0
+        ],
+        [
+          26.6,
+          17.4,
+          1,
+          0
+        ],
+        [
+          9.6,
+          20.429628372192383,
+          0,
+          1
+        ],
+        [
+          19.6,
+          20.429628372192383,
+          0,
+          1
+        ]
+      ],
+      "stl_sha256": "74432abe6636ab936784e4e733f7acd8d73ce9bfb14662e016a03ca6362a56d8"
+    }
+  },
+  "r17_neck_section_each_mm2": 1.7600000000000002,
+  "r17_neck_count_each_holder": 6,
+  "physical_adhesion_or_release_verified": false
+}

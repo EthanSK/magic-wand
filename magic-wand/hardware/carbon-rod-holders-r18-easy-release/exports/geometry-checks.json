@@ -1,0 +1,229 @@
+{
+  "manifest_sha256": "a197616fac0e2de0b227cb722c1e9cbd91bfc659c829439f1ad28da31258d054",
+  "checker_sha256": "0d920443692415c5138ac39e26175365aa405186abff1421619ddbf7886f9c30",
+  "physical_fit_verified": false,
+  "working_space_overlap_mm3": {
+    "Battery_Holder": {
+      "unloaded_clip_bore": 1e-06,
+      "clip_gap_near": 0.0,
+      "clip_gap_far": 0.0,
+      "external_wire_bus": 0.0,
+      "reverse_wire_bus": 0.0,
+      "cell_reserve": 0.0,
+      "cell_loading": 0.0,
+      "gate_removal_route": 0.0,
+      "gate_slot_+1": 2e-06,
+      "gate_slot_-1": 2e-06,
+      "lead_exit": 0.0
+    },
+    "Battery_End_Door": {
+      "tongue_slit": 0.0
+    },
+    "XIAO_Rod_Holder": {
+      "unloaded_clip_bore": 0.000417,
+      "clip_gap_near": 0.0,
+      "clip_gap_far": 0.0,
+      "board": 0.0,
+      "board_travel": 0.0,
+      "usb_connector": 0.0,
+      "usb_plug_body": 0.0,
+      "board_underside_centre": 0.0,
+      "wire_route": 0.0,
+      "component_shield": 0.0,
+      "component_usb_c": 0.0,
+      "component_antenna": 0.0,
+      "component_pdm_microphone": 0.0,
+      "component_reset_button": 0.0,
+      "component_user_led": 0.0,
+      "component_charge_led": 0.0,
+      "castellation_solder": 0.0,
+      "wire_exit_up_out_00": 0.0,
+      "wire_exit_up_out_01": 0.0,
+      "wire_exit_up_out_02": 0.0,
+      "wire_exit_up_out_03": 0.0,
+      "wire_exit_up_out_04": 0.0,
+      "wire_exit_up_out_05": 0.0,
+      "wire_exit_up_out_06": 0.0,
+      "wire_exit_up_out_07": 0.0,
+      "wire_exit_up_out_08": 0.0,
+      "wire_exit_up_out_09": 0.0,
+      "wire_exit_up_out_10": 0.0,
+      "wire_exit_up_out_11": 0.0,
+      "wire_exit_up_out_12": 0.0,
+      "wire_exit_up_out_13": 0.0,
+      "wire_exit_down_outboard_+1": 0.0,
+      "wire_run_past_near_post_+1": 0.0,
+      "wire_exit_down_outboard_-1": 0.0,
+      "wire_run_past_near_post_-1": 0.0,
+      "board_insertion": 0.0,
+      "retainer_groove_+1": 1e-06,
+      "retainer_groove_-1": 1e-06,
+      "retainer_route": 0.0
+    },
+    "XIAO_Near_Keeper": {
+      "tongue_slit": 0.0
+    },
+    "Battery_Spacer_0p4mm": {},
+    "Battery_Spacer_0p6mm": {},
+    "Battery_Spacer_0p8mm": {}
+  },
+  "Battery_End_Door": {
+    "free_legs": 0,
+    "release": "Push the exposed centre tab toward the outside with a thumbnail from the cell side, then lift by the top bar.",
+    "seated_overlap_mm3": 0.0,
+    "tooth_overlap_when_lifted_mm3": {
+      "0.3": 0.288,
+      "0.5": 0.576,
+      "0.8": 0.7932
+    },
+    "plate_thickness_mm": 1.8,
+    "slot_float_y_mm": {
+      "outward": 0.15,
+      "inward": 0.15
+    },
+    "y_float_checks": {
+      "-0.15": {
+        "seated_overlap_mm3": 0.0,
+        "tooth_overlap_lifted_0p3_mm3": 0.18,
+        "tooth_engagement_y_mm": 0.25,
+        "tooth_clearance_to_pocket_back_mm": 0.4,
+        "bar_deflection_needed_with_0p05_margin_mm": 0.3,
+        "release_route_max_overlap_mm3": 0.0,
+        "catalogue_max_pack_overlap_mm3": 0.0
+      },
+      "+0.00": {
+        "seated_overlap_mm3": 0.0,
+        "tooth_overlap_lifted_0p3_mm3": 0.288,
+        "tooth_engagement_y_mm": 0.4,
+        "tooth_clearance_to_pocket_back_mm": 0.25,
+        "bar_deflection_needed_with_0p05_margin_mm": 0.45,
+        "release_route_max_overlap_mm3": 0.0,
+        "catalogue_max_pack_overlap_mm3": 0.0
+      },
+      "+0.15": {
+        "seated_overlap_mm3": 1e-05,
+        "tooth_overlap_lifted_0p3_mm3": 0.396,
+        "tooth_engagement_y_mm": 0.55,
+        "tooth_clearance_to_pocket_back_mm": 0.1,
+        "bar_deflection_needed_with_0p05_margin_mm": 0.6,
+        "release_route_max_overlap_mm3": 1e-05,
+        "catalogue_max_pack_overlap_mm3": 0.0
+      }
+    },
+    "release_check_scope": "Tooth moved rigidly by the needed deflection; bar bending shape is not modelled.",
+    "spring": {
+      "length_mm": 8.2,
+      "width_mm": 1.950000000000001,
+      "thickness_mm": 1.8000000000000007,
+      "deflection_mm": 0.6,
+      "estimated_force_N": 6.19,
+      "estimated_root_strain_percent": 2.41,
+      "status": "Beam estimate, assumed 2000 MPa modulus; force is unmeasured.",
+      "load_point": "Root to the tooth edge nearest the root: the shortest loaded span, so the stiffest case."
+    },
+    "side_clearance_in_slot_mm": 0.2
+  },
+  "Battery_vertical_fit": {
+    "reserve_height_mm": 4.9,
+    "catalogue_maximum_pack_mm": 4.3,
+    "nominal_code_thickness_mm": 4.0,
+    "remaining_gap_mm_by_spacer": {
+      "0.4": {
+        "over_catalogue_max": 0.2,
+        "over_nominal_code": 0.5
+      },
+      "0.6": {
+        "over_catalogue_max": 0.0,
+        "over_nominal_code": 0.3
+      },
+      "0.8": {
+        "over_catalogue_max": -0.2,
+        "over_nominal_code": 0.1
+      }
+    },
+    "status": "The bought pack is unmeasured; negative means that spacer cannot fit a pack of that thickness."
+  },
+  "XIAO_Rod_Holder": {
+    "side_allowance_per_side_mm": 1.11,
+    "reset_open_from_above_with_0p3_margin_mm3_blocked": 0.0,
+    "shoulder_to_reset_x_gap_mm": 1.08,
+    "shoulder_gap_over_pcb_mm": 0.3,
+    "hoop_gap_over_usb_shell_mm": 0.44,
+    "wire_exit_regions_checked": 18
+  },
+  "XIAO_Near_Keeper": {
+    "tooth_overlap_when_pulled_mm3": {
+      "0.1": 0.0,
+      "0.5": 0.135,
+      "1.0": 0.3675,
+      "1.5": 0.3525
+    },
+    "spring": {
+      "length_mm": 5.1,
+      "width_mm": 2.0,
+      "thickness_mm": 1.2,
+      "deflection_mm": 0.35,
+      "estimated_force_N": 4.56,
+      "estimated_root_strain_percent": 2.42,
+      "status": "Beam estimate, assumed 2000 MPa modulus; force is unmeasured."
+    },
+    "ears_captured_by_rigid_grooves": true
+  },
+  "XIAO_body_islands_every_mm": {
+    "4": 1,
+    "7": 1,
+    "10": 1,
+    "13": 1,
+    "16": 1,
+    "19": 1,
+    "22": 1,
+    "25": 1
+  },
+  "orientation_comparison": {
+    "Battery_Holder": {
+      "upright_far_end_on_bed (chosen)": {
+        "height_mm": 35.6,
+        "clip_band_area_needing_support_mm2": 0.0,
+        "clip_arc_in_layer_plane": true
+      },
+      "open_top_up": {
+        "height_mm": 17.18,
+        "clip_band_area_needing_support_mm2": 40.1,
+        "clip_arc_in_layer_plane": false
+      },
+      "open_top_down": {
+        "height_mm": 17.18,
+        "clip_band_area_needing_support_mm2": 16.9,
+        "clip_arc_in_layer_plane": false
+      },
+      "side_on_bed": {
+        "height_mm": 29.2,
+        "clip_band_area_needing_support_mm2": 52.6,
+        "clip_arc_in_layer_plane": false
+      }
+    },
+    "XIAO_Rod_Holder": {
+      "upright_far_end_on_bed (chosen)": {
+        "height_mm": 28.4,
+        "clip_band_area_needing_support_mm2": 0.0,
+        "clip_arc_in_layer_plane": true
+      },
+      "open_top_up": {
+        "height_mm": 20.43,
+        "clip_band_area_needing_support_mm2": 25.7,
+        "clip_arc_in_layer_plane": false
+      },
+      "open_top_down": {
+        "height_mm": 20.43,
+        "clip_band_area_needing_support_mm2": 8.9,
+        "clip_arc_in_layer_plane": false
+      },
+      "side_on_bed": {
+        "height_mm": 29.2,
+        "clip_band_area_needing_support_mm2": 32.8,
+        "clip_arc_in_layer_plane": false
+      }
+    }
+  },
+  "passed": true
+}

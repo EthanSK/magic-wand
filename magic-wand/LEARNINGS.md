@@ -2333,6 +2333,12 @@ explicitly unknown rather than inferring them from a bare-board STEP.
 The final GUI reload silently changed 0.6 mm Normal travel lift to 0.4 mm Auto.
 Read effective GUI values and audit its actual re-sliced paths before sending;
 a prepared archive's embedded settings alone do not establish the sent recipe.
+A GUI save/open transition also left the checked source archive as a model-only
+file without G-code. Restoring its exact hash recovered the reviewed source.
+Keep the immutable checked archive separate from Studio's editable working
+layout, and bind the final exported print paths independently before sending.
+This observation does not establish which Studio save path caused the overwrite.
+
 Studio's sliced-file export can omit source meshes and object-instance mapping.
 Use the reviewed geometry as an explicit expectation, verify path placements and
 map actual object IDs, rather than treating absent meshes as a successful check.
