@@ -1,0 +1,378 @@
+{
+  "layout_sha256": "90d1d15add7cd8c23628b3cb5294be70692087346a1e8d8bd798adc7d0b64e91",
+  "generator_sha256": "dbd379040d379913b0a53babd50b5210e1876ff950906766b8ec25d8d0d11049",
+  "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
+  "parts": [
+    "Key_Carrier",
+    "Battery_Holder",
+    "Battery_End_Gate",
+    "XIAO_Rod_Holder"
+  ],
+  "plate_bounds_mm": {
+    "Key_Carrier": [
+      [
+        60.0,
+        40.0,
+        0.0
+      ],
+      [
+        115.4000015,
+        55.9496288,
+        35.2000008
+      ]
+    ],
+    "Battery_Holder": [
+      [
+        135.0,
+        45.0,
+        0.0
+      ],
+      [
+        164.2000008,
+        62.1796284,
+        35.5999985
+      ]
+    ],
+    "Battery_End_Gate": [
+      [
+        60.0,
+        120.0,
+        0.0
+      ],
+      [
+        86.1000004,
+        126.0,
+        1.59999895
+      ]
+    ],
+    "XIAO_Rod_Holder": [
+      [
+        135.0,
+        110.0,
+        0.0
+      ],
+      [
+        157.6000004,
+        124.8296289,
+        28.3999996
+      ]
+    ]
+  },
+  "printer": "Bambu Lab A1 mini 0.4 nozzle",
+  "process": "0.20mm Standard @BBL A1M",
+  "filament": [
+    "Generic PETG @BBL A1M"
+  ],
+  "nozzle_c": [
+    "255"
+  ],
+  "bed_c": [
+    "70"
+  ],
+  "overrides": {
+    "wall_loops": "3",
+    "sparse_infill_density": "20%",
+    "layer_height": "0.2",
+    "initial_layer_print_height": "0.2",
+    "enable_support": "0",
+    "brim_type": "no_brim",
+    "enable_prime_tower": "0",
+    "print_sequence": "by layer",
+    "bridge_no_support": "1",
+    "max_bridge_length": "12",
+    "initial_layer_speed": [
+      "20"
+    ],
+    "initial_layer_infill_speed": [
+      "30"
+    ]
+  },
+  "local_recipe": {
+    "Key_Carrier_bands_mm": [
+      [
+        16.0,
+        16.8
+      ],
+      [
+        33.8,
+        35.2
+      ]
+    ],
+    "Battery_Holder_bands_mm": [
+      [
+        33.6,
+        34.4
+      ]
+    ],
+    "speeds_mm_s": {
+      "outer_wall_speed": 15,
+      "inner_wall_speed": 15,
+      "gap_infill_speed": 12,
+      "internal_solid_infill_speed": 20,
+      "sparse_infill_speed": 20,
+      "top_surface_speed": 20,
+      "bridge_speed": 12,
+      "overhang_1_4_speed": 15,
+      "overhang_2_4_speed": 12,
+      "overhang_3_4_speed": 10,
+      "overhang_4_4_speed": 8
+    },
+    "reason": "The bay opening and clip-relief spans (14.1-15.6 mm) and the gate-slot cap print across air; the slow local speeds give each span time to set. Cooling is not part of the local recipe: fan is a filament-profile setting (fan_min_speed 40 %, fan_cooling_layer_time 30 s), so in these long layers the base fan falls to 40 % and only paths the slicer classifies as overhang wall or bridge get the 90 % overhang/bridge fan; gap-fill and inner-wall paths in the bands print at 40 %. Actual F, M106 and per-feature path lengths by fan level are read back from the G-code into slice-clearances.json; digital evidence does not predict PETG droop, inspect and trim the roofs."
+  },
+  "band_modifiers": {
+    "Key_Carrier": [
+      {
+        "band_mm": [
+          16.0,
+          16.8
+        ],
+        "modifier_id": 109,
+        "speeds_mm_s": {
+          "outer_wall_speed": 15,
+          "inner_wall_speed": 15,
+          "gap_infill_speed": 12,
+          "internal_solid_infill_speed": 20,
+          "sparse_infill_speed": 20,
+          "top_surface_speed": 20,
+          "bridge_speed": 12,
+          "overhang_1_4_speed": 15,
+          "overhang_2_4_speed": 12,
+          "overhang_3_4_speed": 10,
+          "overhang_4_4_speed": 8
+        },
+        "wall_loops": null
+      },
+      {
+        "band_mm": [
+          33.8,
+          35.2
+        ],
+        "modifier_id": 110,
+        "speeds_mm_s": {
+          "outer_wall_speed": 15,
+          "inner_wall_speed": 15,
+          "gap_infill_speed": 12,
+          "internal_solid_infill_speed": 20,
+          "sparse_infill_speed": 20,
+          "top_surface_speed": 20,
+          "bridge_speed": 12,
+          "overhang_1_4_speed": 15,
+          "overhang_2_4_speed": 12,
+          "overhang_3_4_speed": 10,
+          "overhang_4_4_speed": 8
+        },
+        "wall_loops": null
+      }
+    ],
+    "Battery_Holder": [
+      {
+        "band_mm": [
+          33.6,
+          34.4
+        ],
+        "modifier_id": 111,
+        "speeds_mm_s": {
+          "outer_wall_speed": 15,
+          "inner_wall_speed": 15,
+          "gap_infill_speed": 12,
+          "internal_solid_infill_speed": 20,
+          "sparse_infill_speed": 20,
+          "top_surface_speed": 20,
+          "bridge_speed": 12,
+          "overhang_1_4_speed": 15,
+          "overhang_2_4_speed": 12,
+          "overhang_3_4_speed": 10,
+          "overhang_4_4_speed": 8
+        },
+        "wall_loops": null
+      }
+    ]
+  },
+  "support_policy": "No automatic support, no brim, no CAD print helpers; rings not on the bed use arc lead-in skirts.",
+  "physical_print_verified": false,
+  "slice": {
+    "error_string": "Success.",
+    "layer_height": 0.20000000298023224,
+    "peak_rss_mb": 237.578125,
+    "plate_index": 0,
+    "return_code": 0,
+    "sliced_plates": [
+      {
+        "feature_type_times": {
+          "Bottom surface": 8.601975440979004,
+          "Bridge": 16.116497039794922,
+          "Custom": 34.77541732788086,
+          "Gap infill": 375.25360107421875,
+          "Inner wall": 903.843017578125,
+          "Internal solid infill": 205.09373474121094,
+          "Outer wall": 1289.1629638671875,
+          "Overhang wall": 26.03696632385254,
+          "Sparse infill": 19.757545471191406,
+          "Top surface": 57.992637634277344,
+          "Travel": 636.3989868164062,
+          "Undefined": 620.680419921875
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 9.496891021728516,
+            "total_used_g": 9.496891021728516
+          }
+        ],
+        "id": 1,
+        "layer_filament_change": 0,
+        "main_predication": 3538.05029296875,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 15.949628829956055,
+              "height": 35.20000076293945,
+              "width": 55.400001525878906,
+              "x": 60.0,
+              "y": 40.0,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Key_Carrier",
+            "triangle_count": 77490
+          },
+          {
+            "bbox": {
+              "depth": 17.179628372192383,
+              "height": 35.599998474121094,
+              "width": 29.200000762939453,
+              "x": 135.0,
+              "y": 45.0,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Battery_Holder",
+            "triangle_count": 8640
+          },
+          {
+            "bbox": {
+              "depth": 6.0,
+              "height": 1.599998950958252,
+              "width": 26.100000381469727,
+              "x": 60.0,
+              "y": 120.0,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "Battery_End_Gate",
+            "triangle_count": 164
+          },
+          {
+            "bbox": {
+              "depth": 14.829628944396973,
+              "height": 28.399999618530273,
+              "width": 22.600000381469727,
+              "x": 135.0,
+              "y": 110.0,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "XIAO_Rod_Holder",
+            "triangle_count": 7642
+          }
+        ],
+        "times": {
+          "conflict_check_time": 15,
+          "detect_overhangs_time": 3,
+          "export_gcode_time": 1087,
+          "flush_plan_time": 0,
+          "generate_support_material_time": 27,
+          "infill_generate_time": 14,
+          "infill_time": 55,
+          "ironing_time": 0,
+          "make_perimeters_time": 157,
+          "multifilament_segment_2d_time": 0,
+          "other_slice_time": 1,
+          "prepare_infill_time": 41,
+          "region_split_time": 0,
+          "skirt_brim_time": 1,
+          "slice_layers_time": 57,
+          "sliced_time": 1378,
+          "sliced_time_with_cache": 1088,
+          "support_detect_time": 0,
+          "support_interface_time": 0,
+          "support_normal_generate_time": 0,
+          "support_toolpath_time": 0,
+          "support_tree_generate_time": 0,
+          "toolpath_time": 20,
+          "wall_time": 100,
+          "wipe_tower_time": 2
+        },
+        "total_predication": 3557.076904296875,
+        "triangle_count": 93936,
+        "warning_message": ""
+      }
+    ],
+    "sparse_infill_density": 20.0,
+    "times": {
+      "export_3mf_time": 263,
+      "export_slicedata_time": 0,
+      "export_time": 709,
+      "import_time": 83,
+      "load_slicedata_time": 0,
+      "prepare_time": 86
+    },
+    "upward_compatible_machine": [
+      "Bambu Lab P1S 0.4 nozzle",
+      "Bambu Lab P1P 0.4 nozzle",
+      "Bambu Lab X1 0.4 nozzle",
+      "Bambu Lab X1 Carbon 0.4 nozzle",
+      "Bambu Lab X1E 0.4 nozzle",
+      "Bambu Lab A1 0.4 nozzle",
+      "Bambu Lab H2D 0.4 nozzle",
+      "Bambu Lab H2D Pro 0.4 nozzle",
+      "Bambu Lab H2S 0.4 nozzle",
+      "Bambu Lab P2S 0.4 nozzle",
+      "Bambu Lab H2C 0.4 nozzle",
+      "Bambu Lab X2D 0.4 nozzle",
+      "Bambu Lab A2L 0.4 nozzle",
+      "Bambu Lab H3C 0.4 nozzle"
+    ],
+    "wall_loops": 3
+  },
+  "warnings": [],
+  "delivered_settings_registration": {
+    "required_keys": [
+      "bridge_no_support",
+      "brim_type",
+      "enable_prime_tower",
+      "enable_support",
+      "initial_layer_infill_speed",
+      "initial_layer_print_height",
+      "initial_layer_speed",
+      "layer_height",
+      "max_bridge_length",
+      "print_sequence",
+      "sparse_infill_density",
+      "wall_loops"
+    ],
+    "registered_keys": [
+      "bridge_no_support",
+      "brim_type",
+      "enable_prime_tower",
+      "enable_support",
+      "initial_layer_infill_speed",
+      "initial_layer_print_height",
+      "initial_layer_speed",
+      "layer_height",
+      "max_bridge_length",
+      "print_sequence",
+      "sparse_infill_density",
+      "wall_loops"
+    ],
+    "cli_dropped_keys": [],
+    "values_unchanged": true
+  },
+  "sliced_project_filename": "R16-A1-mini-PETG.gcode.3mf",
+  "sliced_project_sha256": "8afab7971a9e0b2be91e67ce96772cd254594bdf28cf83d7082942a21e580e45",
+  "bambu_studio_version": "02.09.01.70",
+  "cli_launch": "offline CLI with --datadir in task scratch and a process-private HOME/CFFIXED_USER_HOME (no window-state restoration); 240 s subprocess timeout"
+}

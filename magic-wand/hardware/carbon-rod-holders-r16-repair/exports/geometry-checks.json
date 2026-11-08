@@ -1,0 +1,686 @@
+{
+  "manifest_sha256": "66637d2bd87fd880ed5248f52757d8a70ed3db7c7d2fcbf381fbf79a26ec375c",
+  "checker_sha256": "c1ec50f5b8ab076eee203b17c027ff53f2a3c579ff3a56caf6d34f8d3698d6bb",
+  "parts": {
+    "Key_Carrier": {
+      "cap_envelope_gaps_mm": {
+        "0_1": 0.3999999999999986,
+        "0_2": 19.099999999999998,
+        "0_3": 0.3999999999999986,
+        "0_4": 9.758201678588119,
+        "1_2": 0.3999999999999986,
+        "1_3": 0.3999999999999986,
+        "1_4": 0.3999999999999986,
+        "2_3": 9.758201678588119,
+        "2_4": 0.3999999999999986,
+        "3_4": 0.39999999999999925
+      },
+      "minimum_cap_gap_mm": 0.3999999999999986,
+      "flange_land_missing_mm3": {
+        "0:-7.15,-7.15": 0.0,
+        "0:-7.15,7.15": 0.0,
+        "0:7.15,-7.15": 0.0,
+        "0:7.15,7.15": 0.0,
+        "1:-7.15,-7.15": 0.0,
+        "1:-7.15,7.15": 0.0,
+        "1:7.15,-7.15": 0.0,
+        "1:7.15,7.15": 0.0,
+        "2:-7.15,-7.15": 0.0,
+        "2:-7.15,7.15": 0.0,
+        "2:7.15,-7.15": 0.0,
+        "2:7.15,7.15": 0.0,
+        "3:-7.15,-7.15": 0.0,
+        "3:-7.15,7.15": 0.0,
+        "3:7.15,-7.15": 0.0,
+        "3:7.15,7.15": 0.0,
+        "4:-7.15,-7.15": 0.0,
+        "4:-7.15,7.15": 0.0,
+        "4:7.15,-7.15": 0.0,
+        "4:7.15,7.15": 0.0
+      },
+      "housing_seat_missing_mm3": {
+        "0:-6.3,-6.3": 0.0,
+        "0:6.3,-6.3": 0.0,
+        "0:6.3,6.3": 0.0,
+        "0:-2.5,6.3": 0.0,
+        "0:0,-6.4": 0.0,
+        "1:-6.3,-6.3": 0.0,
+        "1:6.3,-6.3": 0.0,
+        "1:6.3,6.3": 0.0,
+        "1:-2.5,6.3": 0.0,
+        "1:0,-6.4": 0.0,
+        "2:-6.3,-6.3": 0.0,
+        "2:6.3,-6.3": 0.0,
+        "2:6.3,6.3": 0.0,
+        "2:-2.5,6.3": 0.0,
+        "2:0,-6.4": 0.0,
+        "3:-6.3,-6.3": 0.0,
+        "3:6.3,-6.3": 0.0,
+        "3:6.3,6.3": 0.0,
+        "3:-2.5,6.3": 0.0,
+        "3:0,-6.4": 0.0,
+        "4:-6.3,-6.3": 0.0,
+        "4:6.3,-6.3": 0.0,
+        "4:6.3,6.3": 0.0,
+        "4:-2.5,6.3": 0.0,
+        "4:0,-6.4": 0.0
+      },
+      "material_ahead_of_front_mm3": 0.0,
+      "front_y_mm": -8.3,
+      "lower_reference_cap_front_y_mm": -8.3,
+      "rings": {
+        "mid": {
+          "lower_arm_extra_material_mm3": 3.5934706393196316e-05,
+          "missing_band_mm3": 0.002354923288847286,
+          "gap_intersection_mm3": 0.0,
+          "skirted": true
+        },
+        "rear": {
+          "lower_arm_extra_material_mm3": 3.18298292156802e-06,
+          "missing_band_mm3": 1.3124218845512787e-07,
+          "gap_intersection_mm3": 0.0,
+          "skirted": false
+        }
+      },
+      "key_rotations_degrees": [
+        0,
+        0,
+        0,
+        180,
+        0
+      ],
+      "socket_insertion_route_mm": 6.0,
+      "window_ligaments": {
+        "key_0": {
+          "rotation_degrees": 0,
+          "window_to_hole_mm": {
+            "hole_at_+0.00_+0.00_r1.80": 3.574,
+            "hole_at_+5.51_+0.00_r1.00": 9.0557,
+            "hole_at_-5.51_+0.00_r1.00": 1.204,
+            "hole_at_+0.00_+5.87_r1.55": 2.236,
+            "hole_at_+5.00_+3.86_r1.55": 7.25
+          },
+          "minimum_mm": 1.204,
+          "window_area_mm2": 12.8
+        },
+        "key_1": {
+          "rotation_degrees": 0,
+          "window_to_hole_mm": {
+            "hole_at_+0.00_+0.00_r1.80": 3.574,
+            "hole_at_+5.51_+0.00_r1.00": 9.0557,
+            "hole_at_-5.51_+0.00_r1.00": 1.204,
+            "hole_at_+0.00_+5.87_r1.55": 2.236,
+            "hole_at_+5.00_+3.86_r1.55": 7.25
+          },
+          "minimum_mm": 1.204,
+          "window_area_mm2": 12.8
+        },
+        "key_2": {
+          "rotation_degrees": 0,
+          "window_to_hole_mm": {
+            "hole_at_+0.00_+0.00_r1.80": 3.574,
+            "hole_at_+5.51_+0.00_r1.00": 9.0557,
+            "hole_at_-5.51_+0.00_r1.00": 1.204,
+            "hole_at_+0.00_+5.87_r1.55": 2.236,
+            "hole_at_+5.00_+3.86_r1.55": 7.25
+          },
+          "minimum_mm": 1.204,
+          "window_area_mm2": 12.8
+        },
+        "key_3": {
+          "rotation_degrees": 180,
+          "window_to_hole_mm": {
+            "hole_at_-0.00_-0.00_r1.80": 2.8333,
+            "hole_at_-5.51_-0.00_r1.00": 8.68,
+            "hole_at_+5.51_-0.00_r1.00": 1.2358,
+            "hole_at_-0.00_-5.87_r1.55": 2.2754,
+            "hole_at_-5.00_-3.86_r1.55": 7.25
+          },
+          "minimum_mm": 1.2358,
+          "window_area_mm2": 11.36
+        },
+        "key_4": {
+          "rotation_degrees": 0,
+          "window_to_hole_mm": {
+            "hole_at_+0.00_+0.00_r1.80": 3.574,
+            "hole_at_+5.51_+0.00_r1.00": 9.0557,
+            "hole_at_-5.51_+0.00_r1.00": 1.204,
+            "hole_at_+0.00_+5.87_r1.55": 2.236,
+            "hole_at_+5.00_+3.86_r1.55": 7.25
+          },
+          "minimum_mm": 1.204,
+          "window_area_mm2": 12.8
+        }
+      },
+      "minimum_window_ligament_mm": 1.204,
+      "socket_to_rod_clearance": {
+        "nominal_socket_above_rod_surface_mm": 1.6,
+        "nominal_socket_above_rigid_corridor_mm": 1.4,
+        "maximum_socket_above_rod_surface_mm": 1.6,
+        "rod_diameter_mm": 8.0,
+        "rigid_corridor_diameter_mm": 8.4,
+        "note": "Lower-middle key socket underside above the rod; the switch pins are not structural, support the socket from below while pressing the switch in."
+      }
+    },
+    "Battery_Holder": {
+      "cell_outside_reserve_mm3": 0.0,
+      "cell_loading_route_intersection_mm3": 0.0,
+      "gate_relaxed_wedge_interference_mm3": 0.231928678262356,
+      "gate_fitted_removal_route_mm3": 0.0,
+      "cell_stopped_at_closed_end_mm3": 145.5456779189698,
+      "cell_stopped_by_gate_stubs_mm3": 31.199999999999978,
+      "gate_touching_seated_cell_mm3": 0.0,
+      "nominal_play_mm": {
+        "width_total_mm": 0.6999999999999993,
+        "length_total_mm": 0.5,
+        "thickness_total_mm": 0.6000000000000005
+      },
+      "floor_plastic_fraction_under_cell": 0.5642148608918183,
+      "roof_plastic_fraction_over_cell": 0.3587808563144856,
+      "lead_exit_intersection_mm3": 0.0,
+      "rings": {
+        "near": {
+          "lower_arm_extra_material_mm3": 3.5056999843582756e-05,
+          "missing_band_mm3": 5.356492468092918e-06
+        },
+        "far": {
+          "lower_arm_extra_material_mm3": 2.299708491586618e-06,
+          "missing_band_mm3": 1.2866797645231553e-07
+        }
+      },
+      "note": "Play is against the manufacturer maximum envelope; the real cell, printed shrinkage and lead bumps are unmeasured."
+    },
+    "XIAO_Rod_Holder": {
+      "board_outline_mm": {
+        "length": 20.955,
+        "width": 17.78,
+        "corner_radius": 1.905,
+        "source": "official plain XIAO nRF52840 outline (0.825 x 0.700 in, R0.075 in) as measured by the parent from the plain STEP; the fitted Sense header configuration is NOT derived from it and remains unknown"
+      },
+      "board_nominal_y_mm": [
+        1.3,
+        22.255
+      ],
+      "board_usb_wire_intersection_mm3": {
+        "pcb": 1.7560352909413747e-07,
+        "usb": 0.0,
+        "wire": 0.0,
+        "usb_plug_body": 0.0,
+        "pad_access_top": 0.0
+      },
+      "free_travel_mm": {
+        "dx_-0.305": {
+          "near_mm": 0.1224,
+          "far_mm": 0.3486,
+          "analytic_near_mm": 0.1193,
+          "analytic_far_mm": 0.345
+        },
+        "dx_-0.152": {
+          "near_mm": 0.2749,
+          "far_mm": 0.3568,
+          "analytic_near_mm": 0.2718,
+          "analytic_far_mm": 0.3519
+        },
+        "dx_+0.000": {
+          "near_mm": 0.4265,
+          "far_mm": 0.377,
+          "analytic_near_mm": 0.4243,
+          "analytic_far_mm": 0.3712
+        },
+        "dx_+0.152": {
+          "near_mm": 0.2749,
+          "far_mm": 0.3568,
+          "analytic_near_mm": 0.2718,
+          "analytic_far_mm": 0.3519
+        },
+        "dx_+0.305": {
+          "near_mm": 0.1224,
+          "far_mm": 0.3486,
+          "analytic_near_mm": 0.1193,
+          "analytic_far_mm": 0.345
+        }
+      },
+      "lateral_play_to_rails_mm": 0.31,
+      "cradle_contact_under_board": {
+        "+x_near": {
+          "minimum_area_mm2": 0.9125,
+          "minimum_y_extent_mm": 1.839,
+          "worst_pose_dx_dy_mm": [
+            -0.305,
+            0.34
+          ],
+          "nominal_area_mm2": 2.0739
+        },
+        "+x_far": {
+          "minimum_area_mm2": 0.7205,
+          "minimum_y_extent_mm": 0.8525,
+          "worst_pose_dx_dy_mm": [
+            0.0,
+            -0.419
+          ],
+          "nominal_area_mm2": 1.3075
+        },
+        "-x_near": {
+          "minimum_area_mm2": 0.9125,
+          "minimum_y_extent_mm": 1.839,
+          "worst_pose_dx_dy_mm": [
+            0.305,
+            0.34
+          ],
+          "nominal_area_mm2": 2.0739
+        },
+        "-x_far": {
+          "minimum_area_mm2": 0.7205,
+          "minimum_y_extent_mm": 0.8525,
+          "worst_pose_dx_dy_mm": [
+            0.0,
+            -0.419
+          ],
+          "nominal_area_mm2": 1.3075
+        }
+      },
+      "stop_engagement_0p2_past_travel_mm3": {
+        "dx_-0.305": {
+          "near_+x_mm3": 0.0,
+          "far_+x_mm3": 0.0113,
+          "near_-x_mm3": 0.1346,
+          "far_-x_mm3": 0.1112
+        },
+        "dx_+0.000": {
+          "near_+x_mm3": 0.1346,
+          "far_+x_mm3": 0.0681,
+          "near_-x_mm3": 0.1346,
+          "far_-x_mm3": 0.0681
+        },
+        "dx_+0.305": {
+          "near_+x_mm3": 0.1346,
+          "far_+x_mm3": 0.1112,
+          "near_-x_mm3": 0.0,
+          "far_-x_mm3": 0.0113
+        }
+      },
+      "assumed_pad_material": {
+        "+1_pad_0": {
+          "material_within_1mm_below_board_mm3": 0.18577,
+          "material_within_0p05mm_below_board_mm3": 0.001351,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.027,
+          "highest_material_gap_below_board_mm": 0.0
+        },
+        "+1_pad_1": {
+          "material_within_1mm_below_board_mm3": 0.02091,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": 0.7561
+        },
+        "+1_pad_2": {
+          "material_within_1mm_below_board_mm3": 0.0,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": null
+        },
+        "+1_pad_3": {
+          "material_within_1mm_below_board_mm3": 0.23108,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": 0.6768
+        },
+        "+1_pad_4": {
+          "material_within_1mm_below_board_mm3": 0.06475,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": 0.536
+        },
+        "+1_pad_5": {
+          "material_within_1mm_below_board_mm3": 0.0,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": null
+        },
+        "+1_pad_6": {
+          "material_within_1mm_below_board_mm3": 0.0,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": null
+        },
+        "-1_pad_0": {
+          "material_within_1mm_below_board_mm3": 0.18577,
+          "material_within_0p05mm_below_board_mm3": 0.001351,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.027,
+          "highest_material_gap_below_board_mm": 0.0
+        },
+        "-1_pad_1": {
+          "material_within_1mm_below_board_mm3": 0.02091,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": 0.7561
+        },
+        "-1_pad_2": {
+          "material_within_1mm_below_board_mm3": 0.0,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": null
+        },
+        "-1_pad_3": {
+          "material_within_1mm_below_board_mm3": 0.23108,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": 0.6768
+        },
+        "-1_pad_4": {
+          "material_within_1mm_below_board_mm3": 0.06475,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": 0.536
+        },
+        "-1_pad_5": {
+          "material_within_1mm_below_board_mm3": 0.0,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": null
+        },
+        "-1_pad_6": {
+          "material_within_1mm_below_board_mm3": 0.0,
+          "material_within_0p05mm_below_board_mm3": 0.0,
+          "mean_contact_region_area_over_top_0p05mm_mm2": 0.0,
+          "highest_material_gap_below_board_mm": null
+        }
+      },
+      "material_within_1mm_below_all_assumed_pads_mm3": 1.005,
+      "pad_record_note": "Per-pad material in two depth bands; the top 0.05 mm mean area describes near-plane CAD material, not printed contact or a measured solder footprint.",
+      "underside_clearance_between_cradles_mm": {
+        "assembly_y_range_mm": [
+          4.3,
+          20.904999999999998
+        ],
+        "whole_board_width": 0.536,
+        "centre_abs_x_le_4": 1.84
+      },
+      "castellation_assumption": "Stated assumption for the pad/solder record only: 7 castellated pads per long edge at 2.54 mm pitch centred on the board length, pads 1.8 mm long from the edge and 1.0 mm wide. The near ledge lead lies under the first pad on each side; keep the underside of those pads free of solder bumps and solder the external wires on the top side (the rails at X 9.2 already require flush castellations).",
+      "mid_strut_missing_mm3": {
+        "+1": 0.0,
+        "-1": 0.0
+      },
+      "rings": {
+        "near": {
+          "lower_arm_extra_material_mm3": 2.373699661527814e-05,
+          "missing_band_mm3": 4.7120762118511685e-06
+        },
+        "far": {
+          "lower_arm_extra_material_mm3": 9.985583330064743e-07,
+          "missing_band_mm3": 3.061899709773412e-06
+        }
+      },
+      "usb_direction": "positive Y toward tip",
+      "header_caveat": "The rails at X 9.2 mm, the end bars, the near gussets, the diagonal struts and the cradles all assume no header plastic below the board edges. A board with pre-soldered underside headers is not fitted by this or any earlier holder; the fitted header configuration is unknown.",
+      "note": "Exact booleans of the official rounded outline against the final assembly mesh at 25 poses covering the full lateral and axial play. Contact areas are geometric, not a measured seat; printed-bead survival is in slice-clearances.json."
+    }
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false,
+  "working_spaces": {
+    "Key_Carrier": {
+      "unloaded_clip_bore": {
+        "intersection_mm3": 1.4694755876885462e-06
+      },
+      "clip_gap_mid": {
+        "intersection_mm3": 0.0
+      },
+      "clip_gap_rear": {
+        "intersection_mm3": 0.0
+      },
+      "external_wire_bus": {
+        "intersection_mm3": 0.0
+      },
+      "key_0_switch": {
+        "intersection_mm3": 0.0
+      },
+      "key_0_socket": {
+        "intersection_mm3": 2.621644798771337e-06
+      },
+      "key_0_maximum_socket": {
+        "intersection_mm3": 7.2760825317228706e-06
+      },
+      "key_0_socket_loading": {
+        "poses": 31,
+        "worst_pose_intersection_mm3": 2.6216447987648997e-06
+      },
+      "key_0_maximum_socket_loading": {
+        "poses": 31,
+        "worst_pose_intersection_mm3": 7.2760825317228706e-06
+      },
+      "key_0_socket_tape_zone": {
+        "intersection_mm3": 0.0
+      },
+      "key_0_mount_opening": {
+        "intersection_mm3": 2.5326050250449695e-07
+      },
+      "key_0_clip_relief": {
+        "intersection_mm3": 1.294419200857547e-07
+      },
+      "key_0_cap_travel": {
+        "intersection_mm3": 0.0
+      },
+      "key_1_switch": {
+        "intersection_mm3": 0.0
+      },
+      "key_1_socket": {
+        "intersection_mm3": 2.509073473409408e-06
+      },
+      "key_1_maximum_socket": {
+        "intersection_mm3": 9.597022660204867e-06
+      },
+      "key_1_socket_loading": {
+        "poses": 31,
+        "worst_pose_intersection_mm3": 2.509073473336218e-06
+      },
+      "key_1_maximum_socket_loading": {
+        "poses": 31,
+        "worst_pose_intersection_mm3": 9.597022660204867e-06
+      },
+      "key_1_socket_tape_zone": {
+        "intersection_mm3": 0.0
+      },
+      "key_1_mount_opening": {
+        "intersection_mm3": 5.027428445438835e-07
+      },
+      "key_1_clip_relief": {
+        "intersection_mm3": 1.8076853886525044e-08
+      },
+      "key_1_cap_travel": {
+        "intersection_mm3": 0.0
+      },
+      "key_2_switch": {
+        "intersection_mm3": 0.0
+      },
+      "key_2_socket": {
+        "intersection_mm3": 2.6348698403816326e-06
+      },
+      "key_2_maximum_socket": {
+        "intersection_mm3": 9.591699531789216e-06
+      },
+      "key_2_socket_loading": {
+        "poses": 31,
+        "worst_pose_intersection_mm3": 2.6348698402156925e-06
+      },
+      "key_2_maximum_socket_loading": {
+        "poses": 31,
+        "worst_pose_intersection_mm3": 9.591699531789216e-06
+      },
+      "key_2_socket_tape_zone": {
+        "intersection_mm3": 0.0
+      },
+      "key_2_mount_opening": {
+        "intersection_mm3": 9.287843489355164e-07
+      },
+      "key_2_clip_relief": {
+        "intersection_mm3": 1.336370839030663e-07
+      },
+      "key_2_cap_travel": {
+        "intersection_mm3": 0.0
+      },
+      "key_3_switch": {
+        "intersection_mm3": 2.766192956268451e-10
+      },
+      "key_3_socket": {
+        "intersection_mm3": 2.828288417481089e-06
+      },
+      "key_3_maximum_socket": {
+        "intersection_mm3": 9.154582649068625e-06
+      },
+      "key_3_socket_loading": {
+        "poses": 31,
+        "worst_pose_intersection_mm3": 2.828288417241192e-06
+      },
+      "key_3_maximum_socket_loading": {
+        "poses": 31,
+        "worst_pose_intersection_mm3": 9.154582649068625e-06
+      },
+      "key_3_socket_tape_zone": {
+        "intersection_mm3": 0.0
+      },
+      "key_3_mount_opening": {
+        "intersection_mm3": 1.555291387549935e-06
+      },
+      "key_3_clip_relief": {
+        "intersection_mm3": 1.4186767860064346e-06
+      },
+      "key_3_cap_travel": {
+        "intersection_mm3": 0.0
+      },
+      "key_4_switch": {
+        "intersection_mm3": 9.070355454039483e-10
+      },
+      "key_4_socket": {
+        "intersection_mm3": 2.476350259365251e-06
+      },
+      "key_4_maximum_socket": {
+        "intersection_mm3": 1.2296306407900567e-05
+      },
+      "key_4_socket_loading": {
+        "poses": 31,
+        "worst_pose_intersection_mm3": 2.47635025928603e-06
+      },
+      "key_4_maximum_socket_loading": {
+        "poses": 31,
+        "worst_pose_intersection_mm3": 1.2296306407900567e-05
+      },
+      "key_4_socket_tape_zone": {
+        "intersection_mm3": 0.0
+      },
+      "key_4_mount_opening": {
+        "intersection_mm3": 2.8429577046014262e-05
+      },
+      "key_4_clip_relief": {
+        "intersection_mm3": 5.270655573837612e-07
+      },
+      "key_4_cap_travel": {
+        "intersection_mm3": 0.0
+      }
+    },
+    "Battery_Holder": {
+      "unloaded_clip_bore": {
+        "intersection_mm3": 1.4702433165925831e-06
+      },
+      "clip_gap_near": {
+        "intersection_mm3": 0.0
+      },
+      "clip_gap_far": {
+        "intersection_mm3": 0.0
+      },
+      "external_wire_bus": {
+        "intersection_mm3": 0.0
+      },
+      "reverse_wire_bus": {
+        "intersection_mm3": 0.0
+      },
+      "cell_reserve": {
+        "intersection_mm3": 0.0
+      },
+      "cell_loading": {
+        "intersection_mm3": 0.0
+      },
+      "gate_removal_route": {
+        "poses": 61,
+        "worst_pose_intersection_mm3": 0.0
+      },
+      "gate_slot_+1": {
+        "intersection_mm3": 9.58557247798808e-07
+      },
+      "gate_slot_-1": {
+        "intersection_mm3": 2.7585444856219617e-06
+      },
+      "lead_exit": {
+        "intersection_mm3": 0.0
+      }
+    },
+    "Battery_End_Gate": {
+      "unloaded_clip_bore": {
+        "intersection_mm3": 0.0
+      }
+    },
+    "XIAO_Rod_Holder": {
+      "unloaded_clip_bore": {
+        "intersection_mm3": 0.000416900013478847
+      },
+      "clip_gap_near": {
+        "intersection_mm3": 0.0
+      },
+      "clip_gap_far": {
+        "intersection_mm3": 0.0
+      },
+      "board": {
+        "intersection_mm3": 1.7560352909413747e-07
+      },
+      "usb": {
+        "intersection_mm3": 0.0
+      },
+      "wire_route": {
+        "intersection_mm3": 0.0
+      },
+      "usb_plug_body": {
+        "intersection_mm3": 0.0
+      },
+      "pad_access_top": {
+        "intersection_mm3": 0.0
+      },
+      "board_travel": {
+        "intersection_mm3": 3.3679424834007657e-07
+      },
+      "board_underside_centre": {
+        "intersection_mm3": 0.0
+      }
+    }
+  },
+  "assembled_stack": {
+    "carrier_y_mm": [
+      -8.300000190734863,
+      26.899999618530273
+    ],
+    "battery_module_y_mm": [
+      34.900000762939456,
+      70.49999923706055
+    ],
+    "xiao_holder_y_mm": [
+      78.5,
+      106.89999961853027
+    ],
+    "end_gaps_mm": 8.0
+  },
+  "minimum_sections_mm": {
+    "carrier_saddle_neck_at_slab": 4.54,
+    "carrier_inter_row_strip": 3.5,
+    "carrier_outer_wall_lower_left": 1.2,
+    "carrier_plate_lip": 1.25,
+    "carrier_backplate_thin": 1.2,
+    "carrier_backplate_socket_pad": 1.459,
+    "xiao_rail": 2.0,
+    "xiao_keel": 3.0,
+    "xiao_far_bar": 2.603,
+    "battery_side_chord_bottom": 1.6,
+    "battery_floor_spine": 5.4,
+    "gate_wedge_neck": 1.518,
+    "gate_bar": 1.9
+  },
+  "passed": true
+}

@@ -10,6 +10,8 @@ One repository for Magic Wand, Control Stones and future controller projects. Ea
 
 The [published Magic Wand website](https://ethansk.github.io/magic-wand/) keeps its existing address and is served from `docs/`.
 
+The current [carbon-rod holder test prototype](magic-wand/hardware/carbon-rod-holders-r16-repair/README.md) has five keys, a separate sliding battery cage and a XIAO board holder. Use the [current 3D viewer](magic-wand/hardware/carbon-rod-holders/preview/) and the revision’s print and assembly checks before a physical trial.
+
 ## Development
 
 ```sh

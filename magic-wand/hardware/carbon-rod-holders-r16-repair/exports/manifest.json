@@ -1,0 +1,296 @@
+{
+  "revision": "carbon-rod-holders-r16-repair",
+  "source_sha256": {
+    "holder16.py": "b44f93894404aaa6e1ee4b30c0db34ac9fc3fa298db8f607af3bdd0cc3dd4cd7",
+    "parameters.json": "03a53347dddc7465892ef6486c5e1024bfd287bd2a1e2aaa03c6d08e7983ac2a",
+    "spaces16.py": "286d6d993d6f52a255027f74eac7752c9e879f911ff43041eeae523432caedae",
+    "../carbon-rod-holders-r15-tight-pyramid/cad.py": "ab004fa6f197fdae3df994f03f3838f7cf07ea04728f88dd4d23b534c4366215",
+    "../carbon-rod-holders-r15-tight-pyramid/parameters.json": "3feea2def182889d3b1d0c45f59b10b3761bd16e04363b675360e4c0321270de",
+    "../carbon-rod-holders-r15-tight-pyramid/working_spaces.py": "af7ce49ca8e7463f9902385eda458bced9089b2392c373e45f8658ec136826f3",
+    "../carbon-rod-holders-r15-tight-pyramid/deliverables.py": "38d4d653db3743872e42f0712fb5c0340fb47a7109b8a01496ad9cee6b468ebd",
+    "../carbon-rod-holders-r12-closer-thumb/cad.py": "a6b944dd2cbb3584327e034f8bb50f0a3207238ddb8f7e6d8e97f717b871c841",
+    "../carbon-rod-holders-r12-closer-thumb/parameters.json": "05b512f3ac931c74e19023fb254de94d4217720b8d898659072e7ddf0fe64b6d",
+    "../carbon-rod-holders-r12-closer-thumb/ergonomics.json": "3b63c7decd6eece92bb2f864228f8ce14f24199098a2dea787d96a2aaee91c24",
+    "../carbon-rod-holders-r7-spring-clips/cad.py": "011fb648bbed706dac91a31513f82924f83b34a282c2b65190b207b1455273ba",
+    "../carbon-rod-holders-r7-spring-clips/parameters.json": "f2706b655bc2374caef20127dd1df6e3426b2ab09e018fcf947b2500b3429b17",
+    "../carbon-rod-holders-r7-spring-clips/reference_models.py": "ec7c8a29c6f6aa0dfc78778c832ecc9e14ff1cb15a481a129e20ff2f955dcdb4",
+    "../carbon-rod-holders-r2/cad.py": "88faf80920e129cdceca2c4456c4f313ac3d7b5525f777420061943c5f6f5ba9",
+    "../carbon-rod-holders-r2/parameters.json": "a78216383c2b8dd872f7444dcbb1d1a07ec9a663438244ebe0e086a34d9d1bad",
+    "../carbon-rod-holders/cad.py": "f82a695bb4dec8f009afaa78b65c15309b4d55ff8b699581d99e600aabe79991",
+    "../carbon-rod-holders/parameters.json": "48ec318ffeba5222402e4f622162d5b78132aff56697aa03dabd71664c451666",
+    "../carbon-rod-holders-r7-spring-clips/references/provenance.json": "1d683f52bcd002995c73f16a9f9ef5225e9c3e75fd7a263cbafb93f059b6b492",
+    "../carbon-rod-holders-r7-spring-clips/references/socket.json": "f1e8cc043e11d1419ed8deefa2e2bb2c04ef2028a972496b05614eda760a918d",
+    "../carbon-rod-holders-r7-spring-clips/references/switch.json": "738d3319ef0c9851badfab17a2a52f05f90faef2eb18e5648ad0675f30e2374e",
+    "../carbon-rod-holders-r7-spring-clips/references/SW_Hotswap_Kailh_Choc_V1.stp": "fab92f70c826ba4098760a695102d31080603f075b1d3eef210255ff1791ed0a",
+    "../carbon-rod-holders-r7-spring-clips/references/SW_Kailh_Choc_V1.stp": "aa07efd7a318f5dd2476100ad2d86b0283cb5e1f93ee89ce6bc8e27ba9ea4317",
+    "../printed-loop-wand/shard-tube-r2/direct_switches.py": "08083422ab348a7992b68f964a3f09338bda31803be9b4c3e44f16a5fa39b4df"
+  },
+  "parts": {
+    "Key_Carrier": {
+      "bounds_mm": [
+        [
+          -27.700000762939453,
+          -8.300000190734863,
+          -4.829628944396973
+        ],
+        [
+          27.700000762939453,
+          26.899999618530273,
+          11.119999885559082
+        ]
+      ],
+      "volume_mm3": 4091.4258207114613,
+      "solid_PETG_g": 5.196110792303556,
+      "print_height_mm": 35.20000076293945,
+      "stl_float32_volume_change_mm3": 0.00014258690362112247,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "2dab77208d18cde474d206ac90c9bb345d315751fa23769fd27e74df5eb4d2f0",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -27.700000762939453
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          26.899999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.8296289443969735
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Battery_Holder": {
+      "bounds_mm": [
+        [
+          -14.600000381469727,
+          -17.799999237060547,
+          -4.829628944396973
+        ],
+        [
+          14.600000381469727,
+          17.799999237060547,
+          12.350000381469727
+        ]
+      ],
+      "volume_mm3": 2583.2315915962686,
+      "solid_PETG_g": 3.280704121327261,
+      "print_height_mm": 35.599998474121094,
+      "stl_float32_volume_change_mm3": 0.00041036901166080497,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "d89953fbf16be4a342b78fb6f8129380b3adab91bda031b52e737f483d2018a1",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.600000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          17.799999237060547
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Battery_End_Gate": {
+      "bounds_mm": [
+        [
+          -13.050000190734863,
+          -15.699999809265137,
+          6.25
+        ],
+        [
+          13.050000190734863,
+          -14.100000381469727,
+          12.25
+        ]
+      ],
+      "volume_mm3": 130.40906783460164,
+      "solid_PETG_g": 0.1656195161499441,
+      "print_height_mm": 1.599998950958252,
+      "stl_float32_volume_change_mm3": 3.207531085536175e-05,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "480d0bbfa64c43e8516e5c840fd743f864267646a7281aadad27bea7d70ce9cc",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -13.050000190734863
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          -14.100000381469727
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          6.25
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "XIAO_Rod_Holder": {
+      "bounds_mm": [
+        [
+          -11.300000190734863,
+          -5.0,
+          -4.829628944396973
+        ],
+        [
+          11.300000190734863,
+          23.399999618530273,
+          10.0
+        ]
+      ],
+      "volume_mm3": 1380.2427009785606,
+      "solid_PETG_g": 1.7529082302427719,
+      "print_height_mm": 28.399999618530273,
+      "stl_float32_volume_change_mm3": 8.711418399798276e-05,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "00a21c72ca20ced4851caf6b496eb4d7ff5740cfc8cd6f362870de00ce58fb60",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -11.300000190734863
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          23.399999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false,
+  "working_space_carve": {
+    "carrier": {
+      "key_0_socket_loading": {
+        "poses": 31,
+        "poses_meeting_material": 1
+      },
+      "key_0_maximum_socket_loading": {
+        "poses": 31,
+        "poses_meeting_material": 5
+      },
+      "key_1_socket_loading": {
+        "poses": 31,
+        "poses_meeting_material": 1
+      },
+      "key_1_maximum_socket_loading": {
+        "poses": 31,
+        "poses_meeting_material": 5
+      },
+      "key_2_socket_loading": {
+        "poses": 31,
+        "poses_meeting_material": 1
+      },
+      "key_2_maximum_socket_loading": {
+        "poses": 31,
+        "poses_meeting_material": 5
+      },
+      "key_3_socket_loading": {
+        "poses": 31,
+        "poses_meeting_material": 4
+      },
+      "key_3_maximum_socket_loading": {
+        "poses": 31,
+        "poses_meeting_material": 9
+      },
+      "key_4_socket_loading": {
+        "poses": 31,
+        "poses_meeting_material": 1
+      },
+      "key_4_maximum_socket_loading": {
+        "poses": 31,
+        "poses_meeting_material": 9
+      }
+    },
+    "battery": {
+      "gate_removal_route": {
+        "poses": 61,
+        "poses_meeting_material": 0
+      }
+    }
+  },
+  "print_helpers": "none; rings not on the bed use 45-degree arc lead-in skirts",
+  "cell": {
+    "name": "PKCell LP402025 150 mAh with protection PCB",
+    "manufacturer_max_mm": {
+      "width": 20.5,
+      "length": 27.5,
+      "thickness": 4.3
+    },
+    "retailer_text_mm": {
+      "width": 21.0,
+      "length": 26.0,
+      "thickness": 4.0
+    },
+    "leads": "UL1007 24 AWG, 100 +/- 5 mm, JST-PHR-2P drawn; fitted connector unverified",
+    "measured": false
+  },
+  "cap_clearance_screen": {
+    "reference_width_mm": 17.5,
+    "reference_length_mm": 16.6,
+    "stroke_mm": 3.0,
+    "lateral_allowance_per_cap_side_mm": 0.4,
+    "minimum_residual_gap_mm": 0.4,
+    "purchased_cap_dimensions_verified": false,
+    "mounted_cap_measurement_required_before_print": true
+  }
+}

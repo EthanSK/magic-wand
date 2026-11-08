@@ -1,0 +1,52 @@
+{
+  "generator_sha256": "c193b552d66106173b836c458585ade7c49b8f0982aa8ee66ffa0f907704dbbc",
+  "slice_audit_sha256": "219f5746e400857f2304b6b9328221800880b9cf2d4e20551176047cdf39a300",
+  "assumptions": "Reproducible curved-beam screen of the clip-arm stiffness change caused by the lead-in skirt.\n\nStated assumptions: each arm is a curved cantilever on the R7 wall profile (1.0 mm tip to the\nroot wall, 7.9 mm bore), clamped where the crown leaves the saddle (the bonded angle measured in\nslice-clearances.json), loaded radially at the tip, elastic and linear. The skirt adds width\nk*s along the arm (s = arc distance to the tip, k = 1/tan(lead angle)) with its radial thickness\ntapering linearly from the wall to the skin. Castigliano tip compliance; Young's modulus cancels.\nThis is a relative screening ratio, not a measured force, fatigue life or slide feel.",
+  "lead_angle_degrees": 45.0,
+  "skin_mm": 1.05,
+  "rings": {
+    "Key_Carrier:mid": {
+      "bonded_degrees_above_equator": 47,
+      "free_arc_mm": 9.62,
+      "skirted": true,
+      "stiffness_ratio_vs_plain_arm_same_root": 2.263,
+      "stiffness_ratio_vs_r15_like_arm_bonded_at_47_degrees": 2.263
+    },
+    "Key_Carrier:rear": {
+      "bonded_degrees_above_equator": 47,
+      "free_arc_mm": 9.62,
+      "skirted": false,
+      "stiffness_ratio_vs_plain_arm_same_root": 1.0,
+      "stiffness_ratio_vs_r15_like_arm_bonded_at_47_degrees": 1.0
+    },
+    "Battery_Holder:near": {
+      "bonded_degrees_above_equator": 47,
+      "free_arc_mm": 9.62,
+      "skirted": true,
+      "stiffness_ratio_vs_plain_arm_same_root": 2.263,
+      "stiffness_ratio_vs_r15_like_arm_bonded_at_47_degrees": 2.263
+    },
+    "Battery_Holder:far": {
+      "bonded_degrees_above_equator": 56,
+      "free_arc_mm": 10.36,
+      "skirted": false,
+      "stiffness_ratio_vs_plain_arm_same_root": 1.0,
+      "stiffness_ratio_vs_r15_like_arm_bonded_at_47_degrees": 0.958
+    },
+    "XIAO_Rod_Holder:near": {
+      "bonded_degrees_above_equator": 46,
+      "free_arc_mm": 9.49,
+      "skirted": true,
+      "stiffness_ratio_vs_plain_arm_same_root": 3.03,
+      "stiffness_ratio_vs_r15_like_arm_bonded_at_47_degrees": 3.051
+    },
+    "XIAO_Rod_Holder:far": {
+      "bonded_degrees_above_equator": 56,
+      "free_arc_mm": 10.3,
+      "skirted": false,
+      "stiffness_ratio_vs_plain_arm_same_root": 1.0,
+      "stiffness_ratio_vs_r15_like_arm_bonded_at_47_degrees": 0.951
+    }
+  },
+  "physical_force_verified": false
+}

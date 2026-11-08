@@ -21,6 +21,18 @@ Tell Ethan this skill is active and briefly why, using response-preferences when
 
 User-requested — 2026-11-06: “From now on it does all the model changes please, if there's usage.” Use Opus for all model changes while usage is available, including thinking through how Ethan holds the wand and implementing the geometry. This replaces the earlier Codex-only CAD preference. Codex coordinates verification and publication; follow the host's Claude-invocation workflow and report unavailable coverage honestly. Implementation does not replace the final independent printability audit below.
 
+## Prototype holder priorities
+
+User-requested — 2026-11-07: think through the whole held assembly from the actual components before redesigning it, so avoidable fitting and comfort mistakes do not keep requiring another print.
+
+- The parent agent gathers the bought component identities, authoritative drawings, relevant earlier decisions and working-reference photos, then gives the model author the whole source-linked fit brief. Separate fitted or measured parts from catalogue assumptions, basket ideas and later orders. Inspect the photos themselves; preserve unresolved dimensions as unknown rather than certifying a generic CAD reference as the bought assembly.
+- “Let's not make the holes too snug.” Prefer sensible clearance and “little bits sticking out to hold it in place where needed”, with robust local tabs or ledges so similar prototype components can be removed and swapped. Optional glue or tape is acceptable for component retention. This replaces the older glue-free tight-capture preference for these prototype holders; it does not authorize bonding an adjustable holder to the rod or making wires structural retainers.
+- Material should serve actual support and positive load paths. Strengthen loaded joints and fixed roots without filling working openings or turning intended springs solid. Prefer simple, understandable rod attachments; distinguish removable print helpers from the permanent structure. Keep the existing adjustable slide-on intent unless Ethan changes it.
+- Skin-contact edges should be “rounded, like nice and smooth”, not hard edged. At the five-key holder's lower/front edge beneath the three lower keys, avoid a projecting lip or poking corner; a sharp chamfer or V-notch is not a substitute for genuine rounding. Preserve switch lands, travel and substantial joints while shaping the contact.
+- Keep open structures light and attractive: pointed or arrow-like flowing patterns are welcome instead of arbitrary rectangular windows, with enough printable material at their connections. A snug battery should not jiggle, but must retain insertion clearance and must never squeeze the pouch or load its protection electronics.
+
+These prototype-holder priorities do not import the full Shard wand's helix or loop geometry into carbon-rod accessories. Keep the applicable design's established interfaces and ergonomic layout.
+
 ## User design rules
 
 - Preserve the original counter-wound helix / criss-cross pattern and recognisable wand silhouette. Reducing mass means thinner walls and hollow interiors; it does not authorize removing decoration or replacing the shape.

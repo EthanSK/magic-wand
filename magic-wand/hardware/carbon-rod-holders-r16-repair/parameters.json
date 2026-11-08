@@ -1,0 +1,294 @@
+{
+  "revision": "carbon-rod-holders-r16-repair",
+  "print": {
+    "printer": "Bambu Lab A1 mini 0.4 nozzle",
+    "filament": "Generic PETG @BBL A1M",
+    "process": "0.20mm Standard @BBL A1M",
+    "layer_height_mm": 0.2,
+    "walls": 3,
+    "infill_percent": 20,
+    "nozzle_c": 255,
+    "bed_c": 70,
+    "automatic_support": false,
+    "brim": false,
+    "cad_print_helpers": "none",
+    "local_recipe": {
+      "Key_Carrier_bands_mm": [
+        [
+          16.0,
+          16.8
+        ],
+        [
+          33.8,
+          35.2
+        ]
+      ],
+      "Battery_Holder_bands_mm": [
+        [
+          33.6,
+          34.4
+        ]
+      ],
+      "speeds_mm_s": {
+        "outer_wall_speed": 15,
+        "inner_wall_speed": 15,
+        "gap_infill_speed": 12,
+        "internal_solid_infill_speed": 20,
+        "sparse_infill_speed": 20,
+        "top_surface_speed": 20,
+        "bridge_speed": 12,
+        "overhang_1_4_speed": 15,
+        "overhang_2_4_speed": 12,
+        "overhang_3_4_speed": 10,
+        "overhang_4_4_speed": 8
+      },
+      "reason": "The bay opening and clip-relief spans (14.1-15.6 mm) and the gate-slot cap print across air; the slow local speeds give each span time to set. Cooling is not part of the local recipe: fan is a filament-profile setting (fan_min_speed 40 %, fan_cooling_layer_time 30 s), so in these long layers the base fan falls to 40 % and only paths the slicer classifies as overhang wall or bridge get the 90 % overhang/bridge fan; gap-fill and inner-wall paths in the bands print at 40 %. Actual F, M106 and per-feature path lengths by fan level are read back from the G-code into slice-clearances.json; digital evidence does not predict PETG droop, inspect and trim the roofs."
+    }
+  },
+  "arrow_ring": {
+    "description": "Every clip ring that is not on the print bed grows from a 45-degree arc lead-in skirt instead of starting in air over a removable helper. The skirt is part of the free arm, so the arm root is wider than the band and the arm is stiffer than a plain arm; the bore, gap angle and R7 wall profile are unchanged, and the free arc is set by where the crown leaves the saddle (see arm_bonding).",
+    "lead_angle_degrees": 45.0,
+    "skin_thickness_mm": 1.05,
+    "saddle_bottom_z_mm": 3.0,
+    "saddle_top_half_width_mm": 1.5,
+    "root_phi_degrees_above_equator": 49.0,
+    "saddle_max_half_width_mm": 3.8,
+    "arm_bonding": "The crown is bonded to the saddle down to where the ring wall leaves the saddle bottom: 46-47 degrees above the equator on the skirted rings and 56 degrees on the plain far rings bonded by their end bars or plate (radial sections in slice-clearances.json). The free arm runs from that angle to the tip at -75 degrees (121-122 degrees of arc skirted, 131 plain) and is widened by the skirt. Spring force is unmeasured; arm_stiffness16.py is a stated-assumption curved-beam screen only."
+  },
+  "key_layout": {
+    "pitch": 18.7,
+    "upper_half_spacing": 9.35,
+    "row_spacing": 17.8
+  },
+  "assembly": {
+    "default_key_orientation": "two-toward-tip"
+  },
+  "bay": {
+    "plate_opening_mm": 14.1,
+    "plate_bottom_mm": 1.05,
+    "plate_thickness_mm": 1.2,
+    "clip_relief_half_x_mm": 7.8,
+    "clip_relief_half_y_mm": 7.15,
+    "backplate_thickness_mm": 1.6,
+    "centre_post_hole_mm": 3.6,
+    "side_post_hole_mm": 2.0,
+    "side_post_x_mm": 5.51,
+    "socket_boss_hole_mm": 3.1,
+    "socket_boss_centres_mm": [
+      [
+        0.0,
+        5.87
+      ],
+      [
+        5.0,
+        3.86
+      ]
+    ],
+    "socket_body_top_shift_mm": 0.2,
+    "lightening_window_mm": {
+      "x": [
+        -7.0,
+        -3.8
+      ],
+      "y": [
+        2.2,
+        7.0
+      ],
+      "shape": "pentagon pointing toward the index finger"
+    },
+    "backplate_thin_mm": 1.2,
+    "lightening_window_turned_key_setback_mm": 0.45,
+    "window_ligament_mm": "The turned key's window is mirrored, so its flat edge faces the side-post hole's teardrop peak; that edge is set back 0.45 mm (window Y -7.0 to -2.65 in the key frame) so every window-to-hole ligament is at least 1.2 mm. verify16.py measures each key's actual ligament on the final section.",
+    "socket_insertion_route_mm": 6.0,
+    "teardrop_hole_tops": "every backplate hole ends in a 45-degree peak toward -Y (print up) so its roof is printed as 45-degree overhangs rather than a flat bridge; sag is a physical result",
+    "socket_retention": "REQUIRED prototype step: one strip of polyimide (Kapton) tape across each socket underside and its wires onto the backplate. The switch pins locate but do not retain the socket; the tape also insulates the solder from the carbon rod and relieves wire strain. Printed snap hooks were rejected as fragile across layers.",
+    "assembly_order": "Fit, wire and tape every socket while the carrier is OFF the rod, with the carrier upside down on the bench. Then support each socket from below with a finger or a flat tool while its switch is pressed in from above: the switch pins are not structural and the rod would otherwise be the only backing under the lower-middle socket (clearance recorded in geometry-checks.json). Slide the carrier onto the rod only after all five switches are seated."
+  },
+  "slab": {
+    "lower_half_x_mm": 27.7,
+    "upper_half_x_mm": 18.35,
+    "front_y_mm": -8.3,
+    "lower_rear_y_mm": 9.1,
+    "upper_front_y_mm": 8.7,
+    "rear_y_mm": 26.9,
+    "plan_corner_radius_mm": 3.0,
+    "nose_top_radius_mm": 0.6,
+    "nose_finger_radius_mm": 2.4,
+    "shoulder_angle_degrees": 45.0
+  },
+  "carrier_rings": {
+    "ring_width_mm": 3.6,
+    "mid_band_y_mm": [
+      9.0,
+      12.6
+    ],
+    "rear_band_y_mm": [
+      23.3,
+      26.9
+    ],
+    "saddle_y_mm": [
+      9.0,
+      26.9
+    ],
+    "note": "No ring under the index finger: the front stays clear for the finger and for straight socket insertion. Two rings: between the rows and at the tip end, as on the battery holder."
+  },
+  "cell": {
+    "name": "PKCell LP402025 150 mAh with protection PCB",
+    "manufacturer_max_mm": {
+      "width": 20.5,
+      "length": 27.5,
+      "thickness": 4.3
+    },
+    "retailer_text_mm": {
+      "width": 21.0,
+      "length": 26.0,
+      "thickness": 4.0
+    },
+    "leads": "UL1007 24 AWG, 100 +/- 5 mm, JST-PHR-2P drawn; fitted connector unverified",
+    "measured": false
+  },
+  "cage": {
+    "reserve_mm": {
+      "width": 21.2,
+      "length": 28.0,
+      "thickness": 4.9
+    },
+    "floor_z_mm": 5.85,
+    "bar_mm": 1.6,
+    "floor_bar_thickness_mm": 1.65,
+    "side_rail_x_mm": [
+      10.6,
+      12.2
+    ],
+    "chevron_pitch_mm": 7.0,
+    "end_plate_y_mm": [
+      15.8,
+      17.8
+    ],
+    "far_band_y_mm": [
+      14.2,
+      17.8
+    ],
+    "near_band_y_mm": [
+      -17.8,
+      -14.2
+    ],
+    "gate_slot_y_mm": [
+      -15.95,
+      -13.85
+    ],
+    "gate_thickness_mm": 1.6,
+    "gate_y_mm": [
+      -15.7,
+      -14.1
+    ],
+    "guide_x_mm": [
+      10.6,
+      14.6
+    ],
+    "guide_y_mm": [
+      -17.15,
+      -12.65
+    ],
+    "slot_x_centre_mm": 12.2,
+    "slot_width_mm": 1.6,
+    "gate_relaxed_width_mm": 1.7,
+    "gate_fitted_width_mm": 1.5,
+    "stop_block_x_mm": [
+      4.5,
+      10.6
+    ],
+    "gate_stub_x_mm": [
+      6.5,
+      9.0
+    ],
+    "wire_exit_clear_x_mm": 6.5,
+    "spine_half_x_mm": 0.9,
+    "saddle_half_x_mm": 3.7,
+    "end_window_half_x_mm": 4.2,
+    "guide_cap_chamfer_mm": 1.0,
+    "loading": "Insert the cell non-lead end first from the gate end; the leads stay trailing at the gate and leave through the 13 mm centre opening between the gate stubs."
+  },
+  "sensor": {
+    "rail_x_mm": [
+      9.2,
+      11.2
+    ],
+    "rail_z_mm": [
+      7.2,
+      10.0
+    ],
+    "y_mm": [
+      -5.0,
+      23.4
+    ],
+    "board_outline_mm": {
+      "length": 20.955,
+      "width": 17.78,
+      "corner_radius": 1.905,
+      "source": "official plain XIAO nRF52840 outline (0.825 x 0.700 in, R0.075 in) as measured by the parent from the plain STEP; the fitted Sense header configuration is NOT derived from it and remains unknown"
+    },
+    "board_near_end_y_mm": 1.3,
+    "cradle_inner_x_mm": 7.3,
+    "ledge_under_board_mm": [
+      1.0,
+      1.3
+    ],
+    "near_tab_y0_mm": -0.7,
+    "stop_clearance_mm": 0.3,
+    "stop_height_mm": 1.1,
+    "cradles": "Each board corner rests on an L-shaped end cradle joined to its rail: a 1.0 mm thick ledge from the rail to |X| 7.3 under the first 1.0 mm (near) or 1.3 mm (far) of the board, and a stop face above the board plane. The near ledge is led in at 45 degrees from the rail (its lead runs under the board edge to Y 4.2); the near stop face is a 45-degree line in plan tangent to the board corner arc offset by stop_clearance, because a flat face at Y 1.0 reaching |X| 7.3 cannot be printed at 45 degrees or less in this orientation. The two near faces form a self-centring V: nominal axial travel to contact stop_clearance*sqrt(2) = 0.42 mm, first contact after 0.11 mm with the board hard against one rail. The far ledge and far stop stand on the bed and run continuously from the bed.",
+    "keel_x_mm": 1.5,
+    "keel_z_mm": [
+      4.2,
+      6.2
+    ],
+    "near_band_y_mm": [
+      -5.0,
+      -2.6
+    ],
+    "far_band_y_mm": [
+      21.0,
+      23.4
+    ],
+    "bar_width_mm": 2.2,
+    "bar_crown_mm": [
+      1.6,
+      5.4
+    ],
+    "bar_rail_mm": [
+      10.2,
+      7.0
+    ],
+    "clip_width_mm": 2.4,
+    "ledge_thickness_mm": 1.0,
+    "far_stop_y_mm": 22.6,
+    "strut_rail_mm": [
+      10.2,
+      14.0,
+      7.6
+    ],
+    "strut_keel_mm": [
+      1.2,
+      6.0,
+      5.2
+    ],
+    "strut_width_mm": 1.6,
+    "board_retention": "REQUIRED prototype step: tape the board down across the rails; the rails, ledges, near V stops and far stops carry sideways, USB-plug and unplug loads, nothing printed holds the board down.",
+    "board_underside_clear_mm": 1.5,
+    "castellation_assumption": "Stated assumption for the pad/solder record only: 7 castellated pads per long edge at 2.54 mm pitch centred on the board length, pads 1.8 mm long from the edge and 1.0 mm wide. The near ledge lead lies under the first pad on each side; keep the underside of those pads free of solder bumps and solder the external wires on the top side (the rails at X 9.2 already require flush castellations).",
+    "header_caveat": "The rails at X 9.2 mm, the end bars, the near gussets, the diagonal struts and the cradles all assume no header plastic below the board edges. A board with pre-soldered underside headers is not fitted by this or any earlier holder; the fitted header configuration is unknown."
+  },
+  "cap_clearance_screen": {
+    "reference_width_mm": 17.5,
+    "reference_length_mm": 16.6,
+    "stroke_mm": 3.0,
+    "lateral_allowance_per_cap_side_mm": 0.4,
+    "minimum_residual_gap_mm": 0.4,
+    "purchased_cap_dimensions_verified": false,
+    "mounted_cap_measurement_required_before_print": true
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false
+}
