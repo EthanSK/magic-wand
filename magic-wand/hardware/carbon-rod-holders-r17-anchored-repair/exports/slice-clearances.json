@@ -1,0 +1,5663 @@
+{
+  "project_sha256": "d110a43a1153f0ef095cb5e9e054bee555330169fccb3aeef60ab375cad6d2ba",
+  "manifest_sha256": "e18db6c59e0b03709bd131fef57016264c087602a2c677025e4a597c2def11e1",
+  "checker_sha256": "df0ed14c211e71c42ef892f37d641072c8dcd05c19c1854f297493871613c64f",
+  "travel_parser_sha256": "05b6c3fb0926b982e05098b72c25cbeefafad309e925eeb3e4efcc0b97ecf273",
+  "r16_slice_helpers_sha256": "0285c289bb3aaf7045df4b3a48dec10b4939cba21c35771bc8b3c343193b46bb",
+  "parser_sha256": "8a1cc5b7d4d900ac50f1206d3876240e4f90353b426794427d6e50c520f12b1b",
+  "start_auditor_sha256": "5e95e3edd3962d7e85fe4762ec3d9ed2762e25ee3fdd4c739ae37202c840d2dd",
+  "features": [
+    "Outer wall",
+    "Inner wall",
+    "Gap infill",
+    "Bottom surface",
+    "Internal solid infill",
+    "Top surface",
+    "Sparse infill",
+    "Floating vertical shell",
+    "Bridge",
+    "Overhang wall"
+  ],
+  "parser_stats": {
+    "straight_extruding_moves": 35278,
+    "arc_extruding_moves": 3937,
+    "support_extruding_moves": 0,
+    "feature_samples": {
+      "Outer wall": 224496,
+      "Inner wall": 163946,
+      "Gap infill": 65995,
+      "Bottom surface": 3977,
+      "Internal solid infill": 19509,
+      "Top surface": 20129,
+      "Sparse infill": 1870,
+      "Floating vertical shell": 2507,
+      "Bridge": 982,
+      "Overhang wall": 120
+    }
+  },
+  "settings": {
+    "printer_settings_id": "Bambu Lab A1 mini 0.4 nozzle",
+    "print_settings_id": "0.20mm Standard @BBL A1M",
+    "filament_settings_id": [
+      "Generic PETG @BBL A1M"
+    ],
+    "layer_height": "0.2",
+    "wall_loops": "3",
+    "sparse_infill_density": "20%",
+    "enable_support": "0",
+    "brim_type": "no_brim",
+    "nozzle_temperature": [
+      "255"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "initial_layer_speed": [
+      "20"
+    ],
+    "z_hop": [
+      "0.6"
+    ],
+    "elefant_foot_compensation": "0"
+  },
+  "parts": {
+    "Battery_Holder": {
+      "normal_mesh_difference_mm3": 6.932683441292246e-05,
+      "anchor_mesh_difference_mm3": 1.1471168805329833e-05,
+      "anchor_part_label": "REMOVE AFTER PRINT - Battery_Holder bed anchor",
+      "path_samples": 283590,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 23379,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "clip_gap_near": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_far": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "external_wire_bus": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "reverse_wire_bus": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "cell_reserve": {
+          "checked_samples": 25291,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "cell_loading": {
+          "checked_samples": 27991,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "gate_removal_route": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": [],
+          "poses": 61
+        },
+        "gate_slot_+1": {
+          "checked_samples": 297,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "gate_slot_-1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "lead_exit": {
+          "checked_samples": 1950,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "gate_detent_notch_+1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "gate_detent_notch_-1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "swept_space_poses": {
+        "gate_removal_route": 61
+      },
+      "layer_starts": {
+        "checked_layers": 178,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "largest_unbacked_layers": [
+          {
+            "layer_top_mm": 2.0,
+            "unbacked_mesh_area_mm2": 2.9439,
+            "print_xy_bounds_mm": [
+              22.4004,
+              10.9728,
+              24.2196,
+              13.0782
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "direct_backed_area_mm2": 0.0,
+            "direct_backed_fraction": 0.0,
+            "residual_unbacked_area_mm2": 2.9439,
+            "residual_print_xy_bounds_mm": [
+              [
+                22.4004,
+                10.9728,
+                24.2196,
+                13.0782
+              ]
+            ],
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 1.4,
+            "unbacked_mesh_area_mm2": 2.4098,
+            "print_xy_bounds_mm": [
+              6.6254,
+              11.7259,
+              8.927,
+              14.6172
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "direct_backed_area_mm2": 0.0,
+            "direct_backed_fraction": 0.0,
+            "residual_unbacked_area_mm2": 2.4098,
+            "residual_print_xy_bounds_mm": [
+              [
+                6.6254,
+                11.7259,
+                8.927,
+                14.6172
+              ]
+            ],
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "partial_overhangs": [
+        {
+          "layer_top_mm": 1.4,
+          "unbacked_mesh_area_mm2": 2.4098,
+          "print_xy_bounds_mm": [
+            6.6254,
+            11.7259,
+            8.927,
+            14.6172
+          ],
+          "direct_lower_bead_samples": 0,
+          "actual_vertical_gap_mm": null,
+          "direct_backed_area_mm2": 0.0,
+          "direct_backed_fraction": 0.0,
+          "residual_unbacked_area_mm2": 2.4098,
+          "residual_print_xy_bounds_mm": [
+            [
+              6.6254,
+              11.7259,
+              8.927,
+              14.6172
+            ]
+          ],
+          "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+          "assembly_centre_mm": [
+            -6.824,
+            16.5,
+            8.342
+          ],
+          "decision_class": "internal shell transition inside a solid region (slicer behaviour, enclosed by walls)"
+        },
+        {
+          "layer_top_mm": 2.0,
+          "unbacked_mesh_area_mm2": 2.9439,
+          "print_xy_bounds_mm": [
+            22.4004,
+            10.9728,
+            24.2196,
+            13.0782
+          ],
+          "direct_lower_bead_samples": 0,
+          "actual_vertical_gap_mm": null,
+          "direct_backed_area_mm2": 0.0,
+          "direct_backed_fraction": 0.0,
+          "residual_unbacked_area_mm2": 2.9439,
+          "residual_print_xy_bounds_mm": [
+            [
+              22.4004,
+              10.9728,
+              24.2196,
+              13.0782
+            ]
+          ],
+          "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing.",
+          "assembly_centre_mm": [
+            8.71,
+            15.9,
+            7.196
+          ],
+          "decision_class": "internal shell transition inside a solid region (slicer behaviour, enclosed by walls)"
+        }
+      ],
+      "unclassified_overhangs": [],
+      "anchor_necks": {
+        "neck_count": 6,
+        "layers": [
+          0.2,
+          0.4,
+          0.6,
+          0.8
+        ],
+        "minimum_centre_line_bead_coverage": 1.0,
+        "minimum_neck_bead_fraction": 0.9917,
+        "minimum_flange_to_part_bead_gap_away_from_necks_mm": 1.001,
+        "designed_gap_mm": 1.0,
+        "rows": [
+          {
+            "layer_top_mm": 0.2,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9945
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9945
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9945
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9945
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.994
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.994
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9924
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.993
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.993
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9924
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.993
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.993
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9927
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.993
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9927
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9917
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9922
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9918
+          }
+        ],
+        "method": "Actual 12-gon bead footprints in each anchor layer: coverage along each neck in its joining direction, a single printed island reaching the part and the flange, and the bead gap everywhere else."
+      },
+      "anchor_bead_samples": 21491,
+      "anchor_beads_against_print_time_keep_clear": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "clip_gap_near": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "clip_gap_far": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "gate_slot_+1": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "gate_slot_-1": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "gate_detent_notch_+1": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "gate_detent_notch_-1": {
+          "checked_samples": 0,
+          "violations": {}
+        }
+      }
+    },
+    "Battery_End_Gate": {
+      "normal_mesh_difference_mm3": 2.429690912864678e-06,
+      "anchor_mesh_difference_mm3": 2.4797464869378163e-06,
+      "anchor_part_label": "REMOVE AFTER PRINT - Battery_End_Gate bed anchor",
+      "path_samples": 13924,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "swept_space_poses": {},
+      "layer_starts": {
+        "checked_layers": 8,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "largest_unbacked_layers": [],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "partial_overhangs": [],
+      "unclassified_overhangs": [],
+      "anchor_necks": {
+        "neck_count": 2,
+        "layers": [
+          0.2,
+          0.4
+        ],
+        "minimum_centre_line_bead_coverage": 1.0,
+        "minimum_neck_bead_fraction": 0.9903,
+        "minimum_flange_to_part_bead_gap_away_from_necks_mm": 1.001,
+        "designed_gap_mm": 1.0,
+        "rows": [
+          {
+            "layer_top_mm": 0.2,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9939
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9938
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9903
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.992
+          }
+        ],
+        "method": "Actual 12-gon bead footprints in each anchor layer: coverage along each neck in its joining direction, a single printed island reaching the part and the flange, and the bead gap everywhere else."
+      },
+      "anchor_bead_samples": 2349,
+      "anchor_beads_against_print_time_keep_clear": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {}
+        }
+      }
+    },
+    "XIAO_Rod_Holder": {
+      "normal_mesh_difference_mm3": 4.125526149704962e-05,
+      "anchor_mesh_difference_mm3": 3.371178540504579e-06,
+      "anchor_part_label": "REMOVE AFTER PRINT - XIAO_Rod_Holder bed anchor",
+      "path_samples": 188097,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 19211,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "clip_gap_near": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "clip_gap_far": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "board": {
+          "checked_samples": 448,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "board_travel": {
+          "checked_samples": 979,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "usb_connector": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "usb_plug_body": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "board_underside_centre": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_route": {
+          "checked_samples": 2181,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "component_shield": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "component_usb_c": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "component_antenna": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "component_pdm_microphone": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "component_reset_button": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "component_user_led": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "component_charge_led": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "castellation_solder": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_00": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_01": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_02": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_03": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_04": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_05": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_06": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_07": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_08": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_09": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_10": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_11": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_12": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_up_out_13": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_down_outboard_+1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_run_past_near_post_+1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_exit_down_outboard_-1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "wire_run_past_near_post_-1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "board_insertion": {
+          "checked_samples": 2005,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [],
+          "poses": 21
+        },
+        "retainer_groove_+1": {
+          "checked_samples": 223,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "retainer_detent_notch_+1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "retainer_groove_-1": {
+          "checked_samples": 213,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": []
+        },
+        "retainer_detent_notch_-1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "retainer_route": {
+          "checked_samples": 2852,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [],
+          "poses": 33
+        }
+      },
+      "swept_space_poses": {
+        "board_insertion": 21,
+        "retainer_route": 33
+      },
+      "layer_starts": {
+        "checked_layers": 142,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "largest_unbacked_layers": [],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "partial_overhangs": [],
+      "unclassified_overhangs": [],
+      "anchor_necks": {
+        "neck_count": 6,
+        "layers": [
+          0.2,
+          0.4,
+          0.6,
+          0.8
+        ],
+        "minimum_centre_line_bead_coverage": 1.0,
+        "minimum_neck_bead_fraction": 0.9916,
+        "minimum_flange_to_part_bead_gap_away_from_necks_mm": 0.991,
+        "designed_gap_mm": 1.0,
+        "rows": [
+          {
+            "layer_top_mm": 0.2,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9938
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9938
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9946
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9946
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9931
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9932
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9933
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9931
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9925
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9924
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9935
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9936
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9933
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9931
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9925
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9924
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9935
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9936
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9927
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9926
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9927
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9916
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9932
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9935
+          }
+        ],
+        "method": "Actual 12-gon bead footprints in each anchor layer: coverage along each neck in its joining direction, a single printed island reaching the part and the flange, and the bead gap everywhere else."
+      },
+      "anchor_bead_samples": 18357,
+      "anchor_beads_against_print_time_keep_clear": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "clip_gap_near": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "clip_gap_far": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "retainer_groove_+1": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "retainer_detent_notch_+1": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "retainer_groove_-1": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "retainer_detent_notch_-1": {
+          "checked_samples": 0,
+          "violations": {}
+        }
+      }
+    },
+    "XIAO_Top_Retainer": {
+      "normal_mesh_difference_mm3": 4.7376608800644685e-06,
+      "anchor_mesh_difference_mm3": 2.649397081722869e-07,
+      "anchor_part_label": "REMOVE AFTER PRINT - XIAO_Top_Retainer bed anchor",
+      "path_samples": 17920,
+      "checks": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "retainer_spring_slit_+1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        },
+        "retainer_spring_slit_-1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": []
+        }
+      },
+      "swept_space_poses": {},
+      "layer_starts": {
+        "checked_layers": 8,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "largest_unbacked_layers": [],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "partial_overhangs": [],
+      "unclassified_overhangs": [],
+      "anchor_necks": {
+        "neck_count": 2,
+        "layers": [
+          0.2,
+          0.4
+        ],
+        "minimum_centre_line_bead_coverage": 1.0,
+        "minimum_neck_bead_fraction": 0.9548,
+        "minimum_flange_to_part_bead_gap_away_from_necks_mm": 1.198,
+        "designed_gap_mm": 1.0,
+        "rows": [
+          {
+            "layer_top_mm": 0.2,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9548
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9548
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.987
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9702
+          }
+        ],
+        "method": "Actual 12-gon bead footprints in each anchor layer: coverage along each neck in its joining direction, a single printed island reaching the part and the flange, and the bead gap everywhere else."
+      },
+      "anchor_bead_samples": 2928,
+      "anchor_beads_against_print_time_keep_clear": {
+        "unloaded_clip_bore": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "retainer_spring_slit_+1": {
+          "checked_samples": 0,
+          "violations": {}
+        },
+        "retainer_spring_slit_-1": {
+          "checked_samples": 0,
+          "violations": {}
+        }
+      }
+    }
+  },
+  "physical_print_verified": false,
+  "slice_info_warnings": [
+    {
+      "msg": "not_support_traditional_timelapse",
+      "level": "2",
+      "error_code": "10018003"
+    },
+    {
+      "msg": "not_support_traditional_timelapse",
+      "level": "3",
+      "error_code": "1000C003"
+    }
+  ],
+  "slice_info_warning_note": "not_support_traditional_timelapse appears at levels 2 and 3 on this project, the committed R16 project and the offline re-slice of the retry, whose printer timelapse still recorded. What Bambu Studio means by it was not established.",
+  "band_recipe_actual": {
+    "bands_mm": {
+      "Battery_Holder": [
+        [
+          33.6,
+          34.4
+        ]
+      ]
+    },
+    "requested_speeds_mm_s": {
+      "outer_wall_speed": 15,
+      "inner_wall_speed": 15,
+      "gap_infill_speed": 12,
+      "internal_solid_infill_speed": 20,
+      "sparse_infill_speed": 20,
+      "top_surface_speed": 20,
+      "bridge_speed": 12,
+      "overhang_1_4_speed": 15,
+      "overhang_2_4_speed": 12,
+      "overhang_3_4_speed": 10,
+      "overhang_4_4_speed": 8
+    },
+    "actual_in_bands": {
+      "Battery_Holder": {
+        "33.8": {
+          "features_mm_s": {
+            "Inner wall": [
+              15.0
+            ],
+            "Outer wall": [
+              15.0
+            ],
+            "Gap infill": [
+              12.0
+            ]
+          },
+          "fan_M106_0_255": [
+            178
+          ],
+          "feature_length_mm_by_fan": {
+            "Inner wall": {
+              "178": 55.9
+            },
+            "Outer wall": {
+              "178": 104.6
+            },
+            "Gap infill": {
+              "178": 45.2
+            }
+          }
+        },
+        "34.0": {
+          "features_mm_s": {
+            "Inner wall": [
+              12.9,
+              15.0
+            ],
+            "Outer wall": [
+              9.8,
+              10.2,
+              10.6,
+              10.8,
+              11.0,
+              11.4,
+              11.8,
+              14.1,
+              15.0
+            ],
+            "Overhang wall": [
+              12.0
+            ],
+            "Gap infill": [
+              12.0
+            ]
+          },
+          "fan_M106_0_255": [
+            170,
+            229
+          ],
+          "feature_length_mm_by_fan": {
+            "Inner wall": {
+              "170": 59.1,
+              "229": 2.3
+            },
+            "Outer wall": {
+              "170": 91.8,
+              "229": 10.6
+            },
+            "Overhang wall": {
+              "229": 1.9
+            },
+            "Gap infill": {
+              "170": 56.0
+            }
+          }
+        },
+        "34.2": {
+          "features_mm_s": {
+            "Inner wall": [
+              15.0
+            ],
+            "Outer wall": [
+              10.6,
+              12.9,
+              15.0
+            ],
+            "Gap infill": [
+              12.0
+            ]
+          },
+          "fan_M106_0_255": [
+            168,
+            229
+          ],
+          "feature_length_mm_by_fan": {
+            "Inner wall": {
+              "168": 61.4
+            },
+            "Outer wall": {
+              "168": 91.7,
+              "229": 12.5
+            },
+            "Gap infill": {
+              "168": 55.1
+            }
+          }
+        },
+        "34.4": {
+          "features_mm_s": {
+            "Inner wall": [
+              15.0
+            ],
+            "Outer wall": [
+              10.6,
+              12.9,
+              15.0
+            ],
+            "Gap infill": [
+              12.0
+            ]
+          },
+          "fan_M106_0_255": [
+            170,
+            229
+          ],
+          "feature_length_mm_by_fan": {
+            "Inner wall": {
+              "170": 61.4
+            },
+            "Outer wall": {
+              "170": 91.7,
+              "229": 12.5
+            },
+            "Gap infill": {
+              "170": 54.8
+            }
+          }
+        }
+      }
+    },
+    "features_faster_than_requested": []
+  },
+  "strength": {
+    "rings": {
+      "Battery_Holder": {
+        "near": {
+          "band_y_mm": [
+            -17.8,
+            -14.2
+          ],
+          "radial_STL_sections_mm": {
+            "-70": 1.0005,
+            "-55": 1.0048,
+            "0": 1.15,
+            "90": 1.9,
+            "180": 1.15,
+            "235": 1.0048,
+            "250": 1.0005
+          },
+          "sampled_layer_assembly_y_mm": -16.000000037060545,
+          "radial_track_centres_mm": {
+            "-55": [
+              4.163,
+              4.452,
+              4.735
+            ],
+            "90": [
+              4.158,
+              4.551,
+              4.899,
+              5.25,
+              5.643
+            ],
+            "235": [
+              4.163,
+              4.451,
+              4.734
+            ]
+          },
+          "arm_bonding": {
+            "crown_bonded_down_to_degrees_above_equator": 47,
+            "free_arm_arc_degrees": 122,
+            "method": "Radial exported-mesh sections every degree at the band centre; bonded where the section exceeds the R7 wall profile by more than 0.15 mm."
+          },
+          "lead_in_skirt": {
+            "rays": 72,
+            "minimum_STL_radial_section_mm": 1.014,
+            "minimum_track_count": 2,
+            "samples": [
+              {
+                "assembly_y_mm": -13.9,
+                "phi_degrees": -58.2,
+                "side": 1,
+                "STL_radial_mm": 1.014,
+                "tracks": [
+                  -0.247,
+                  0.058,
+                  0.353
+                ],
+                "layer_top_mm": -13.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.256
+                ],
+                "along": [
+                  -0.247,
+                  0.058,
+                  0.353,
+                  0.353,
+                  0.355
+                ]
+              },
+              {
+                "assembly_y_mm": -13.9,
+                "phi_degrees": -58.2,
+                "side": -1,
+                "STL_radial_mm": 1.014,
+                "tracks": [
+                  -0.247,
+                  0.059,
+                  0.351
+                ],
+                "layer_top_mm": -13.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.261
+                ],
+                "along": [
+                  -0.247,
+                  0.059,
+                  0.351,
+                  0.351,
+                  0.352
+                ]
+              },
+              {
+                "assembly_y_mm": -13.9,
+                "phi_degrees": -22.5,
+                "side": 1,
+                "STL_radial_mm": 1.057,
+                "tracks": [
+                  -0.241,
+                  0.076,
+                  0.393
+                ],
+                "layer_top_mm": -13.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.296,
+                  0.296
+                ],
+                "along": [
+                  -0.241,
+                  0.074,
+                  0.077,
+                  0.393
+                ]
+              },
+              {
+                "assembly_y_mm": -13.9,
+                "phi_degrees": -22.5,
+                "side": -1,
+                "STL_radial_mm": 1.056,
+                "tracks": [
+                  -0.242,
+                  0.076,
+                  0.391
+                ],
+                "layer_top_mm": -13.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.261
+                ],
+                "along": [
+                  -0.242,
+                  0.076,
+                  0.388,
+                  0.393
+                ]
+              },
+              {
+                "assembly_y_mm": -13.9,
+                "phi_degrees": 13.3,
+                "side": 1,
+                "STL_radial_mm": 1.219,
+                "tracks": [
+                  -0.241,
+                  0.158,
+                  0.551
+                ],
+                "layer_top_mm": -13.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.47,
+                  0.43,
+                  0.43
+                ],
+                "along": [
+                  -0.241,
+                  0.153,
+                  0.158,
+                  0.158,
+                  0.546,
+                  0.556
+                ]
+              },
+              {
+                "assembly_y_mm": -13.9,
+                "phi_degrees": 13.3,
+                "side": -1,
+                "STL_radial_mm": 1.219,
+                "tracks": [
+                  -0.242,
+                  0.155,
+                  0.553
+                ],
+                "layer_top_mm": -13.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.454,
+                  0.454
+                ],
+                "along": [
+                  -0.242,
+                  0.155,
+                  0.155,
+                  0.553
+                ]
+              },
+              {
+                "assembly_y_mm": -13.9,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.075
+                ],
+                "layer_top_mm": -13.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.415,
+                  0.415,
+                  0.519,
+                  1.029,
+                  1.12
+                ]
+              },
+              {
+                "assembly_y_mm": -13.9,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.461,
+                  1.075
+                ],
+                "layer_top_mm": -13.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.415,
+                  0.461,
+                  0.553,
+                  1.029,
+                  1.12
+                ]
+              },
+              {
+                "assembly_y_mm": -12.9,
+                "phi_degrees": -45.3,
+                "side": 1,
+                "STL_radial_mm": 1.034,
+                "tracks": [
+                  -0.246,
+                  0.067,
+                  0.375
+                ],
+                "layer_top_mm": -12.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.278
+                ],
+                "along": [
+                  -0.246,
+                  0.067,
+                  0.374,
+                  0.375,
+                  0.375
+                ]
+              },
+              {
+                "assembly_y_mm": -12.9,
+                "phi_degrees": -45.3,
+                "side": -1,
+                "STL_radial_mm": 1.034,
+                "tracks": [
+                  -0.247,
+                  0.068,
+                  0.37
+                ],
+                "layer_top_mm": -12.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.281
+                ],
+                "along": [
+                  -0.247,
+                  0.068,
+                  0.37
+                ]
+              },
+              {
+                "assembly_y_mm": -12.9,
+                "phi_degrees": -13.9,
+                "side": 1,
+                "STL_radial_mm": 1.077,
+                "tracks": [
+                  -0.242,
+                  0.087,
+                  0.411
+                ],
+                "layer_top_mm": -12.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.33,
+                  0.278,
+                  0.278
+                ],
+                "along": [
+                  -0.242,
+                  0.084,
+                  0.087,
+                  0.088,
+                  0.411
+                ]
+              },
+              {
+                "assembly_y_mm": -12.9,
+                "phi_degrees": -13.9,
+                "side": -1,
+                "STL_radial_mm": 1.076,
+                "tracks": [
+                  -0.243,
+                  0.087,
+                  0.413
+                ],
+                "layer_top_mm": -12.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.281
+                ],
+                "along": [
+                  -0.243,
+                  0.087,
+                  0.413
+                ]
+              },
+              {
+                "assembly_y_mm": -12.9,
+                "phi_degrees": 17.6,
+                "side": 1,
+                "STL_radial_mm": 1.218,
+                "tracks": [
+                  -0.241,
+                  0.153,
+                  0.543
+                ],
+                "layer_top_mm": -12.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.463,
+                  0.463,
+                  0.417
+                ],
+                "along": [
+                  -0.241,
+                  0.149,
+                  0.153,
+                  0.153,
+                  0.543
+                ]
+              },
+              {
+                "assembly_y_mm": -12.9,
+                "phi_degrees": 17.6,
+                "side": -1,
+                "STL_radial_mm": 1.217,
+                "tracks": [
+                  -0.242,
+                  0.156,
+                  0.544
+                ],
+                "layer_top_mm": -12.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.43
+                ],
+                "along": [
+                  -0.242,
+                  0.156,
+                  0.544
+                ]
+              },
+              {
+                "assembly_y_mm": -12.9,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.061
+                ],
+                "layer_top_mm": -12.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.405,
+                  0.415,
+                  0.415,
+                  0.519,
+                  1.011,
+                  1.111
+                ]
+              },
+              {
+                "assembly_y_mm": -12.9,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.06
+                ],
+                "layer_top_mm": -12.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.405,
+                  0.415,
+                  0.415,
+                  0.519,
+                  1.01,
+                  1.111
+                ]
+              },
+              {
+                "assembly_y_mm": -11.9,
+                "phi_degrees": -32.4,
+                "side": 1,
+                "STL_radial_mm": 1.045,
+                "tracks": [
+                  -0.242,
+                  0.073,
+                  0.384
+                ],
+                "layer_top_mm": -11.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.281
+                ],
+                "along": [
+                  -0.242,
+                  -0.242,
+                  0.073,
+                  0.384,
+                  0.384
+                ]
+              },
+              {
+                "assembly_y_mm": -11.9,
+                "phi_degrees": -32.4,
+                "side": -1,
+                "STL_radial_mm": 1.045,
+                "tracks": [
+                  -0.245,
+                  0.068,
+                  0.384
+                ],
+                "layer_top_mm": -11.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.29
+                ],
+                "along": [
+                  -0.245,
+                  0.068,
+                  0.384
+                ]
+              },
+              {
+                "assembly_y_mm": -11.9,
+                "phi_degrees": -5.3,
+                "side": 1,
+                "STL_radial_mm": 1.093,
+                "tracks": [
+                  -0.242,
+                  0.094,
+                  0.427
+                ],
+                "layer_top_mm": -11.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.317
+                ],
+                "along": [
+                  -0.242,
+                  0.094,
+                  0.427
+                ]
+              },
+              {
+                "assembly_y_mm": -11.9,
+                "phi_degrees": -5.3,
+                "side": -1,
+                "STL_radial_mm": 1.093,
+                "tracks": [
+                  -0.244,
+                  0.095,
+                  0.426
+                ],
+                "layer_top_mm": -11.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.344,
+                  0.29
+                ],
+                "along": [
+                  -0.244,
+                  0.095,
+                  0.095,
+                  0.426
+                ]
+              },
+              {
+                "assembly_y_mm": -11.9,
+                "phi_degrees": 21.9,
+                "side": 1,
+                "STL_radial_mm": 1.212,
+                "tracks": [
+                  -0.243,
+                  0.149,
+                  0.54
+                ],
+                "layer_top_mm": -11.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.454
+                ],
+                "along": [
+                  -0.243,
+                  0.149,
+                  0.535,
+                  0.544
+                ]
+              },
+              {
+                "assembly_y_mm": -11.9,
+                "phi_degrees": 21.9,
+                "side": -1,
+                "STL_radial_mm": 1.212,
+                "tracks": [
+                  -0.244,
+                  0.151,
+                  0.54
+                ],
+                "layer_top_mm": -11.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.435,
+                  0.435
+                ],
+                "along": [
+                  -0.244,
+                  0.149,
+                  0.153,
+                  0.535,
+                  0.544
+                ]
+              },
+              {
+                "assembly_y_mm": -11.9,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.047
+                ],
+                "layer_top_mm": -11.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.415,
+                  0.415,
+                  0.519,
+                  0.992,
+                  1.101
+                ]
+              },
+              {
+                "assembly_y_mm": -11.9,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.047
+                ],
+                "layer_top_mm": -11.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.415,
+                  0.415,
+                  0.519,
+                  0.992,
+                  1.101
+                ]
+              },
+              {
+                "assembly_y_mm": -10.9,
+                "phi_degrees": -19.5,
+                "side": 1,
+                "STL_radial_mm": 1.054,
+                "tracks": [
+                  -0.25,
+                  0.075,
+                  0.391
+                ],
+                "layer_top_mm": -10.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.291
+                ],
+                "along": [
+                  -0.25,
+                  -0.25,
+                  -0.25,
+                  0.075,
+                  0.391,
+                  0.391,
+                  0.393
+                ]
+              },
+              {
+                "assembly_y_mm": -10.9,
+                "phi_degrees": -19.5,
+                "side": -1,
+                "STL_radial_mm": 1.054,
+                "tracks": [
+                  -0.245,
+                  0.073,
+                  0.394
+                ],
+                "layer_top_mm": -10.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.299
+                ],
+                "along": [
+                  -0.245,
+                  0.073,
+                  0.394
+                ]
+              },
+              {
+                "assembly_y_mm": -10.9,
+                "phi_degrees": 3.4,
+                "side": 1,
+                "STL_radial_mm": 1.105,
+                "tracks": [
+                  -0.248,
+                  0.099,
+                  0.438
+                ],
+                "layer_top_mm": -10.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.331
+                ],
+                "along": [
+                  -0.248,
+                  0.099,
+                  0.438
+                ]
+              },
+              {
+                "assembly_y_mm": -10.9,
+                "phi_degrees": 3.4,
+                "side": -1,
+                "STL_radial_mm": 1.103,
+                "tracks": [
+                  -0.244,
+                  0.098,
+                  0.441
+                ],
+                "layer_top_mm": -10.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.35,
+                  0.35,
+                  0.299
+                ],
+                "along": [
+                  -0.244,
+                  0.098,
+                  0.098,
+                  0.1,
+                  0.441
+                ]
+              },
+              {
+                "assembly_y_mm": -10.9,
+                "phi_degrees": 26.2,
+                "side": 1,
+                "STL_radial_mm": 1.203,
+                "tracks": [
+                  -0.246,
+                  0.148,
+                  0.53
+                ],
+                "layer_top_mm": -10.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.419
+                ],
+                "along": [
+                  -0.246,
+                  0.148,
+                  0.53
+                ]
+              },
+              {
+                "assembly_y_mm": -10.9,
+                "phi_degrees": 26.2,
+                "side": -1,
+                "STL_radial_mm": 1.202,
+                "tracks": [
+                  -0.244,
+                  0.146,
+                  0.532
+                ],
+                "layer_top_mm": -10.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.447,
+                  0.399
+                ],
+                "along": [
+                  -0.244,
+                  0.146,
+                  0.146,
+                  0.532
+                ]
+              },
+              {
+                "assembly_y_mm": -10.9,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.062
+                ],
+                "layer_top_mm": -10.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.005,
+                  0.006,
+                  0.405,
+                  0.415,
+                  0.415,
+                  0.519,
+                  1.013,
+                  1.112
+                ]
+              },
+              {
+                "assembly_y_mm": -10.9,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.062
+                ],
+                "layer_top_mm": -10.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.005,
+                  0.006,
+                  0.415,
+                  0.415,
+                  0.519,
+                  1.013,
+                  1.112
+                ]
+              },
+              {
+                "assembly_y_mm": -9.9,
+                "phi_degrees": -6.5,
+                "side": 1,
+                "STL_radial_mm": 1.063,
+                "tracks": [
+                  -0.247,
+                  0.078,
+                  0.399
+                ],
+                "layer_top_mm": -9.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.304
+                ],
+                "along": [
+                  -0.247,
+                  0.078,
+                  0.399,
+                  0.399
+                ]
+              },
+              {
+                "assembly_y_mm": -9.9,
+                "phi_degrees": -6.5,
+                "side": -1,
+                "STL_radial_mm": 1.063,
+                "tracks": [
+                  -0.25,
+                  0.08,
+                  0.395
+                ],
+                "layer_top_mm": -9.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.305,
+                  0.305
+                ],
+                "along": [
+                  -0.25,
+                  -0.25,
+                  -0.249,
+                  0.08,
+                  0.08,
+                  0.394,
+                  0.396
+                ]
+              },
+              {
+                "assembly_y_mm": -9.9,
+                "phi_degrees": 12.0,
+                "side": 1,
+                "STL_radial_mm": 1.113,
+                "tracks": [
+                  -0.241,
+                  0.104,
+                  0.445
+                ],
+                "layer_top_mm": -9.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.354
+                ],
+                "along": [
+                  -0.241,
+                  0.104,
+                  0.442,
+                  0.448
+                ]
+              },
+              {
+                "assembly_y_mm": -9.9,
+                "phi_degrees": 12.0,
+                "side": -1,
+                "STL_radial_mm": 1.111,
+                "tracks": [
+                  -0.247,
+                  0.102,
+                  0.442
+                ],
+                "layer_top_mm": -9.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.357,
+                  0.305
+                ],
+                "along": [
+                  -0.247,
+                  0.102,
+                  0.103,
+                  0.442
+                ]
+              },
+              {
+                "assembly_y_mm": -9.9,
+                "phi_degrees": 30.5,
+                "side": 1,
+                "STL_radial_mm": 1.191,
+                "tracks": [
+                  -0.242,
+                  0.139,
+                  0.52
+                ],
+                "layer_top_mm": -9.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.398
+                ],
+                "along": [
+                  -0.242,
+                  -0.241,
+                  0.139,
+                  0.52
+                ]
+              },
+              {
+                "assembly_y_mm": -9.9,
+                "phi_degrees": 30.5,
+                "side": -1,
+                "STL_radial_mm": 1.189,
+                "tracks": [
+                  -0.245,
+                  0.139,
+                  0.518
+                ],
+                "layer_top_mm": -9.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.4
+                ],
+                "along": [
+                  -0.245,
+                  0.139,
+                  0.518
+                ]
+              },
+              {
+                "assembly_y_mm": -9.9,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.051
+                ],
+                "layer_top_mm": -9.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.405,
+                  0.415,
+                  0.415,
+                  0.519,
+                  0.997,
+                  1.104
+                ]
+              },
+              {
+                "assembly_y_mm": -9.9,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.05
+                ],
+                "layer_top_mm": -9.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.405,
+                  0.415,
+                  0.415,
+                  0.519,
+                  0.997,
+                  1.104
+                ]
+              },
+              {
+                "assembly_y_mm": -8.9,
+                "phi_degrees": 6.4,
+                "side": 1,
+                "STL_radial_mm": 1.072,
+                "tracks": [
+                  -0.245,
+                  0.082,
+                  0.408
+                ],
+                "layer_top_mm": -8.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.31
+                ],
+                "along": [
+                  -0.246,
+                  -0.245,
+                  0.082,
+                  0.408,
+                  0.408
+                ]
+              },
+              {
+                "assembly_y_mm": -8.9,
+                "phi_degrees": 6.4,
+                "side": -1,
+                "STL_radial_mm": 1.072,
+                "tracks": [
+                  -0.248,
+                  0.082,
+                  0.403
+                ],
+                "layer_top_mm": -8.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.308
+                ],
+                "along": [
+                  -0.248,
+                  0.082,
+                  0.403,
+                  0.403
+                ]
+              },
+              {
+                "assembly_y_mm": -8.9,
+                "phi_degrees": 20.6,
+                "side": 1,
+                "STL_radial_mm": 1.115,
+                "tracks": [
+                  -0.25,
+                  0.103,
+                  0.449
+                ],
+                "layer_top_mm": -8.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.356
+                ],
+                "along": [
+                  -0.25,
+                  -0.25,
+                  0.103,
+                  0.449
+                ]
+              },
+              {
+                "assembly_y_mm": -8.9,
+                "phi_degrees": 20.6,
+                "side": -1,
+                "STL_radial_mm": 1.115,
+                "tracks": [
+                  -0.243,
+                  0.101,
+                  0.442
+                ],
+                "layer_top_mm": -8.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.355
+                ],
+                "along": [
+                  -0.243,
+                  0.101,
+                  0.442
+                ]
+              },
+              {
+                "assembly_y_mm": -8.9,
+                "phi_degrees": 34.8,
+                "side": 1,
+                "STL_radial_mm": 1.174,
+                "tracks": [
+                  -0.247,
+                  0.129,
+                  0.506
+                ],
+                "layer_top_mm": -8.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.402
+                ],
+                "along": [
+                  -0.248,
+                  -0.247,
+                  0.129,
+                  0.506
+                ]
+              },
+              {
+                "assembly_y_mm": -8.9,
+                "phi_degrees": 34.8,
+                "side": -1,
+                "STL_radial_mm": 1.174,
+                "tracks": [
+                  -0.243,
+                  0.131,
+                  0.501
+                ],
+                "layer_top_mm": -8.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.402,
+                  0.402
+                ],
+                "along": [
+                  -0.244,
+                  -0.243,
+                  0.129,
+                  0.132,
+                  0.501
+                ]
+              },
+              {
+                "assembly_y_mm": -8.9,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.064
+                ],
+                "layer_top_mm": -8.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.006,
+                  0.405,
+                  0.415,
+                  0.415,
+                  0.519,
+                  1.015,
+                  1.113
+                ]
+              },
+              {
+                "assembly_y_mm": -8.9,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.063
+                ],
+                "layer_top_mm": -8.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.006,
+                  0.405,
+                  0.415,
+                  0.415,
+                  0.519,
+                  1.014,
+                  1.112
+                ]
+              },
+              {
+                "assembly_y_mm": -7.9,
+                "phi_degrees": 19.3,
+                "side": 1,
+                "STL_radial_mm": 1.082,
+                "tracks": [
+                  -0.247,
+                  0.087,
+                  0.407
+                ],
+                "layer_top_mm": -7.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.312
+                ],
+                "along": [
+                  -0.247,
+                  0.087,
+                  0.407
+                ]
+              },
+              {
+                "assembly_y_mm": -7.9,
+                "phi_degrees": 19.3,
+                "side": -1,
+                "STL_radial_mm": 1.082,
+                "tracks": [
+                  -0.245,
+                  0.086,
+                  0.413
+                ],
+                "layer_top_mm": -7.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.314,
+                  0.314
+                ],
+                "along": [
+                  -0.246,
+                  -0.245,
+                  0.085,
+                  0.087,
+                  0.411,
+                  0.416
+                ]
+              },
+              {
+                "assembly_y_mm": -7.9,
+                "phi_degrees": 29.2,
+                "side": 1,
+                "STL_radial_mm": 1.115,
+                "tracks": [
+                  -0.242,
+                  0.102,
+                  0.447
+                ],
+                "layer_top_mm": -7.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.312,
+                  0.358,
+                  0.358
+                ],
+                "along": [
+                  -0.242,
+                  -0.241,
+                  0.101,
+                  0.102,
+                  0.104,
+                  0.447
+                ]
+              },
+              {
+                "assembly_y_mm": -7.9,
+                "phi_degrees": 29.2,
+                "side": -1,
+                "STL_radial_mm": 1.114,
+                "tracks": [
+                  -0.243,
+                  0.104,
+                  0.444
+                ],
+                "layer_top_mm": -7.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.366,
+                  0.314,
+                  0.314
+                ],
+                "along": [
+                  -0.243,
+                  0.099,
+                  0.104,
+                  0.104,
+                  0.444
+                ]
+              },
+              {
+                "assembly_y_mm": -7.9,
+                "phi_degrees": 39.1,
+                "side": 1,
+                "STL_radial_mm": 1.155,
+                "tracks": [
+                  -0.241,
+                  0.122,
+                  0.488
+                ],
+                "layer_top_mm": -7.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.358
+                ],
+                "along": [
+                  -0.242,
+                  -0.241,
+                  0.122,
+                  0.488
+                ]
+              },
+              {
+                "assembly_y_mm": -7.9,
+                "phi_degrees": 39.1,
+                "side": -1,
+                "STL_radial_mm": 1.154,
+                "tracks": [
+                  -0.242,
+                  0.122,
+                  0.486
+                ],
+                "layer_top_mm": -7.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.366
+                ],
+                "along": [
+                  -0.243,
+                  -0.242,
+                  0.122,
+                  0.486
+                ]
+              },
+              {
+                "assembly_y_mm": -7.9,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.053
+                ],
+                "layer_top_mm": -7.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.415,
+                  0.415,
+                  0.519,
+                  1.001,
+                  1.106
+                ]
+              },
+              {
+                "assembly_y_mm": -7.9,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.053
+                ],
+                "layer_top_mm": -7.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.415,
+                  0.415,
+                  0.519,
+                  1.0,
+                  1.105
+                ]
+              },
+              {
+                "assembly_y_mm": -6.9,
+                "phi_degrees": 30.9,
+                "side": 1,
+                "STL_radial_mm": 1.086,
+                "tracks": [
+                  -0.242,
+                  0.088,
+                  0.411
+                ],
+                "layer_top_mm": -6.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.318,
+                  0.318
+                ],
+                "along": [
+                  -0.243,
+                  -0.242,
+                  0.086,
+                  0.09,
+                  0.411
+                ]
+              },
+              {
+                "assembly_y_mm": -6.9,
+                "phi_degrees": 30.9,
+                "side": -1,
+                "STL_radial_mm": 1.086,
+                "tracks": [
+                  -0.242,
+                  0.088,
+                  0.403
+                ],
+                "layer_top_mm": -6.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.328
+                ],
+                "along": [
+                  -0.242,
+                  -0.242,
+                  0.088,
+                  0.403,
+                  0.403,
+                  0.409
+                ]
+              },
+              {
+                "assembly_y_mm": -6.9,
+                "phi_degrees": 36.9,
+                "side": 1,
+                "STL_radial_mm": 1.107,
+                "tracks": [
+                  -0.243,
+                  0.099,
+                  0.438
+                ],
+                "layer_top_mm": -6.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.318
+                ],
+                "along": [
+                  -0.243,
+                  0.099,
+                  0.438
+                ]
+              },
+              {
+                "assembly_y_mm": -6.9,
+                "phi_degrees": 36.9,
+                "side": -1,
+                "STL_radial_mm": 1.107,
+                "tracks": [
+                  -0.242,
+                  0.1,
+                  0.44
+                ],
+                "layer_top_mm": -6.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.328
+                ],
+                "along": [
+                  -0.242,
+                  0.1,
+                  0.44
+                ]
+              },
+              {
+                "assembly_y_mm": -6.9,
+                "phi_degrees": 43.0,
+                "side": 1,
+                "STL_radial_mm": 1.244,
+                "tracks": [
+                  -0.243,
+                  0.092,
+                  0.461
+                ],
+                "layer_top_mm": -6.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.347,
+                  0.334,
+                  0.334,
+                  0.282,
+                  0.282,
+                  0.282
+                ],
+                "along": [
+                  -0.243,
+                  -0.243,
+                  -0.042,
+                  0.025,
+                  0.092,
+                  0.092,
+                  0.108,
+                  0.108,
+                  0.46,
+                  0.461,
+                  0.562
+                ]
+              },
+              {
+                "assembly_y_mm": -6.9,
+                "phi_degrees": 43.0,
+                "side": -1,
+                "STL_radial_mm": 1.244,
+                "tracks": [
+                  -0.242,
+                  0.112,
+                  0.463
+                ],
+                "layer_top_mm": -6.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.328,
+                  0.328
+                ],
+                "along": [
+                  -0.243,
+                  -0.242,
+                  0.11,
+                  0.115,
+                  0.463,
+                  0.463,
+                  0.563
+                ]
+              },
+              {
+                "assembly_y_mm": -6.9,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.043
+                ],
+                "layer_top_mm": -6.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.005,
+                  0.006,
+                  0.405,
+                  0.415,
+                  0.415,
+                  0.519,
+                  0.987,
+                  1.099
+                ]
+              },
+              {
+                "assembly_y_mm": -6.9,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.044
+                ],
+                "layer_top_mm": -6.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.005,
+                  0.006,
+                  0.405,
+                  0.415,
+                  0.415,
+                  0.519,
+                  0.988,
+                  1.099
+                ]
+              },
+              {
+                "assembly_y_mm": -5.9,
+                "phi_degrees": 43.8,
+                "side": 1,
+                "STL_radial_mm": 1.318,
+                "tracks": [
+                  -0.25,
+                  0.56
+                ],
+                "layer_top_mm": -5.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  -0.25,
+                  0.512,
+                  0.607
+                ]
+              },
+              {
+                "assembly_y_mm": -5.9,
+                "phi_degrees": 43.8,
+                "side": -1,
+                "STL_radial_mm": 1.318,
+                "tracks": [
+                  -0.25,
+                  0.56
+                ],
+                "layer_top_mm": -5.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  -0.25,
+                  0.512,
+                  0.607
+                ]
+              },
+              {
+                "assembly_y_mm": -5.9,
+                "phi_degrees": 45.6,
+                "side": 1,
+                "STL_radial_mm": 1.477,
+                "tracks": [
+                  -0.118,
+                  0.753
+                ],
+                "layer_top_mm": -5.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  -0.242,
+                  -0.242,
+                  -0.118,
+                  0.006,
+                  0.006,
+                  0.704,
+                  0.802
+                ]
+              },
+              {
+                "assembly_y_mm": -5.9,
+                "phi_degrees": 45.6,
+                "side": -1,
+                "STL_radial_mm": 1.477,
+                "tracks": [
+                  -0.118,
+                  0.753
+                ],
+                "layer_top_mm": -5.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  -0.242,
+                  -0.242,
+                  -0.118,
+                  0.006,
+                  0.006,
+                  0.704,
+                  0.802
+                ]
+              },
+              {
+                "assembly_y_mm": -5.9,
+                "phi_degrees": 47.3,
+                "side": 1,
+                "STL_radial_mm": 1.651,
+                "tracks": [
+                  -0.056,
+                  0.852
+                ],
+                "layer_top_mm": -5.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  -0.243,
+                  -0.243,
+                  -0.118,
+                  0.006,
+                  0.006,
+                  0.006,
+                  0.801,
+                  0.902
+                ]
+              },
+              {
+                "assembly_y_mm": -5.9,
+                "phi_degrees": 47.3,
+                "side": -1,
+                "STL_radial_mm": 1.651,
+                "tracks": [
+                  -0.056,
+                  0.852
+                ],
+                "layer_top_mm": -5.800001181469728,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  -0.243,
+                  -0.243,
+                  -0.118,
+                  0.006,
+                  0.006,
+                  0.006,
+                  0.801,
+                  0.902
+                ]
+              },
+              {
+                "assembly_y_mm": -5.9,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.055
+                ],
+                "layer_top_mm": -5.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.415,
+                  0.415,
+                  0.519,
+                  1.004,
+                  1.107
+                ]
+              },
+              {
+                "assembly_y_mm": -5.9,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.596,
+                "tracks": [
+                  0.006,
+                  0.415,
+                  1.055
+                ],
+                "layer_top_mm": -5.800001181469728,
+                "widths": [
+                  0.45,
+                  0.45,
+                  0.45,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.415,
+                  0.415,
+                  0.519,
+                  1.004,
+                  1.107
+                ]
+              }
+            ],
+            "skin_mm": 1.05,
+            "method": "Native ray sections of the exported assembly STL through the skirt on 4 angles per 1 mm layer step, at least 1 mm inside the sloped leading edge, with actual bead-centre clusters on each ray."
+          },
+          "band_start_backing": {
+            "feature": "band y -17.8",
+            "band_face_assembly_y_mm": -14.2,
+            "first_band_layer_top_assembly_y_mm": -14.4,
+            "first_band_layer_middle_assembly_y_mm": -14.3,
+            "previous_layer_top_assembly_y_mm": -14.200000000000001,
+            "band_first_layer_bead_area_mm2": 32.064,
+            "directly_backed_fraction": 0.9393,
+            "lateral_expansion_mm": 0.0,
+            "screen_fraction": 0.9,
+            "reference_failure": "R15 XIAO far clip face: 0.9 percent directly backed over a separate helper."
+          }
+        },
+        "far": {
+          "band_y_mm": [
+            14.2,
+            17.8
+          ],
+          "radial_STL_sections_mm": {
+            "-70": 1.0005,
+            "-55": 1.0048,
+            "0": 1.15,
+            "90": 2.65,
+            "180": 1.15,
+            "235": 1.0048,
+            "250": 1.0005
+          },
+          "sampled_layer_assembly_y_mm": 15.999999247683716,
+          "radial_track_centres_mm": {
+            "-55": [
+              4.163,
+              4.45,
+              4.734
+            ],
+            "90": [
+              4.16,
+              4.546,
+              4.958,
+              5.275,
+              5.593
+            ],
+            "235": [
+              4.163,
+              4.45,
+              4.734
+            ]
+          },
+          "arm_bonding": {
+            "crown_bonded_down_to_degrees_above_equator": 56,
+            "free_arm_arc_degrees": 131,
+            "method": "Radial exported-mesh sections every degree at the band centre; bonded where the section exceeds the R7 wall profile by more than 0.15 mm."
+          }
+        }
+      },
+      "XIAO_Rod_Holder": {
+        "near": {
+          "band_y_mm": [
+            -5.0,
+            -2.6
+          ],
+          "radial_STL_sections_mm": {
+            "-70": 1.0003,
+            "-55": 1.0032,
+            "0": 1.1,
+            "90": 2.25,
+            "180": 1.1,
+            "235": 1.0032,
+            "250": 1.0003
+          },
+          "sampled_layer_assembly_y_mm": -3.800001153674316,
+          "radial_track_centres_mm": {
+            "-55": [
+              4.163,
+              4.449,
+              4.732
+            ],
+            "90": [
+              4.16,
+              4.55,
+              5.077,
+              5.601
+            ],
+            "235": [
+              4.163,
+              4.45,
+              4.732
+            ]
+          },
+          "arm_bonding": {
+            "crown_bonded_down_to_degrees_above_equator": 46,
+            "free_arm_arc_degrees": 121,
+            "method": "Radial exported-mesh sections every degree at the band centre; bonded where the section exceeds the R7 wall profile by more than 0.15 mm."
+          },
+          "lead_in_skirt": {
+            "rays": 72,
+            "minimum_STL_radial_section_mm": 1.013,
+            "minimum_track_count": 2,
+            "samples": [
+              {
+                "assembly_y_mm": -2.3,
+                "phi_degrees": -58.2,
+                "side": 1,
+                "STL_radial_mm": 1.013,
+                "tracks": [
+                  -0.247,
+                  0.059,
+                  0.352
+                ],
+                "layer_top_mm": -2.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.256
+                ],
+                "along": [
+                  -0.247,
+                  0.059,
+                  0.352,
+                  0.352,
+                  0.355
+                ]
+              },
+              {
+                "assembly_y_mm": -2.3,
+                "phi_degrees": -58.2,
+                "side": -1,
+                "STL_radial_mm": 1.013,
+                "tracks": [
+                  -0.248,
+                  0.055,
+                  0.355
+                ],
+                "layer_top_mm": -2.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.26
+                ],
+                "along": [
+                  -0.248,
+                  0.055,
+                  0.355
+                ]
+              },
+              {
+                "assembly_y_mm": -2.3,
+                "phi_degrees": -22.5,
+                "side": 1,
+                "STL_radial_mm": 1.039,
+                "tracks": [
+                  -0.241,
+                  0.07,
+                  0.377
+                ],
+                "layer_top_mm": -2.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.256,
+                  0.256
+                ],
+                "along": [
+                  -0.241,
+                  0.07,
+                  0.07,
+                  0.377
+                ]
+              },
+              {
+                "assembly_y_mm": -2.3,
+                "phi_degrees": -22.5,
+                "side": -1,
+                "STL_radial_mm": 1.039,
+                "tracks": [
+                  -0.249,
+                  0.068,
+                  0.376
+                ],
+                "layer_top_mm": -2.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.26,
+                  0.26
+                ],
+                "along": [
+                  -0.249,
+                  0.068,
+                  0.069,
+                  0.374,
+                  0.377
+                ]
+              },
+              {
+                "assembly_y_mm": -2.3,
+                "phi_degrees": 13.3,
+                "side": 1,
+                "STL_radial_mm": 1.147,
+                "tracks": [
+                  -0.241,
+                  0.12,
+                  0.481
+                ],
+                "layer_top_mm": -2.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.383,
+                  0.383
+                ],
+                "along": [
+                  -0.241,
+                  0.118,
+                  0.122,
+                  0.481
+                ]
+              },
+              {
+                "assembly_y_mm": -2.3,
+                "phi_degrees": 13.3,
+                "side": -1,
+                "STL_radial_mm": 1.147,
+                "tracks": [
+                  -0.249,
+                  0.12,
+                  0.481
+                ],
+                "layer_top_mm": -2.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.368
+                ],
+                "along": [
+                  -0.249,
+                  0.12,
+                  0.481
+                ]
+              },
+              {
+                "assembly_y_mm": -2.3,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.429,
+                  0.849
+                ],
+                "layer_top_mm": -2.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.495
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.429,
+                  0.844,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": -2.3,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.43,
+                  0.849
+                ],
+                "layer_top_mm": -2.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.501
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.43,
+                  0.844,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": -1.3,
+                "phi_degrees": -45.3,
+                "side": 1,
+                "STL_radial_mm": 1.032,
+                "tracks": [
+                  -0.242,
+                  0.061,
+                  0.374
+                ],
+                "layer_top_mm": -1.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.267
+                ],
+                "along": [
+                  -0.243,
+                  -0.242,
+                  0.061,
+                  0.374,
+                  0.374
+                ]
+              },
+              {
+                "assembly_y_mm": -1.3,
+                "phi_degrees": -45.3,
+                "side": -1,
+                "STL_radial_mm": 1.032,
+                "tracks": [
+                  -0.249,
+                  0.067,
+                  0.367
+                ],
+                "layer_top_mm": -1.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.266
+                ],
+                "along": [
+                  -0.249,
+                  0.067,
+                  0.367
+                ]
+              },
+              {
+                "assembly_y_mm": -1.3,
+                "phi_degrees": -13.9,
+                "side": 1,
+                "STL_radial_mm": 1.056,
+                "tracks": [
+                  -0.242,
+                  0.077,
+                  0.393
+                ],
+                "layer_top_mm": -1.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.302
+                ],
+                "along": [
+                  -0.242,
+                  0.077,
+                  0.391,
+                  0.395
+                ]
+              },
+              {
+                "assembly_y_mm": -1.3,
+                "phi_degrees": -13.9,
+                "side": -1,
+                "STL_radial_mm": 1.055,
+                "tracks": [
+                  -0.247,
+                  0.077,
+                  0.389
+                ],
+                "layer_top_mm": -1.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.299
+                ],
+                "along": [
+                  -0.247,
+                  0.077,
+                  0.389
+                ]
+              },
+              {
+                "assembly_y_mm": -1.3,
+                "phi_degrees": 17.6,
+                "side": 1,
+                "STL_radial_mm": 1.148,
+                "tracks": [
+                  -0.241,
+                  0.122,
+                  0.48
+                ],
+                "layer_top_mm": -1.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.4,
+                  0.351
+                ],
+                "along": [
+                  -0.241,
+                  0.122,
+                  0.122,
+                  0.476,
+                  0.483
+                ]
+              },
+              {
+                "assembly_y_mm": -1.3,
+                "phi_degrees": 17.6,
+                "side": -1,
+                "STL_radial_mm": 1.148,
+                "tracks": [
+                  -0.245,
+                  0.121,
+                  0.478
+                ],
+                "layer_top_mm": -1.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.392,
+                  0.392,
+                  0.392
+                ],
+                "along": [
+                  -0.245,
+                  0.119,
+                  0.121,
+                  0.121,
+                  0.478
+                ]
+              },
+              {
+                "assembly_y_mm": -1.3,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.427,
+                  0.848
+                ],
+                "layer_top_mm": -1.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.495,
+                  0.495
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.425,
+                  0.429,
+                  0.843,
+                  0.853
+                ]
+              },
+              {
+                "assembly_y_mm": -1.3,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.428,
+                  0.848
+                ],
+                "layer_top_mm": -1.2000007722045893,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.502,
+                  0.502
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.426,
+                  0.431,
+                  0.843,
+                  0.853
+                ]
+              },
+              {
+                "assembly_y_mm": -0.3,
+                "phi_degrees": -32.4,
+                "side": 1,
+                "STL_radial_mm": 1.041,
+                "tracks": [
+                  -0.242,
+                  0.07,
+                  0.375
+                ],
+                "layer_top_mm": -0.20000077220458934,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.287,
+                  0.287
+                ],
+                "along": [
+                  -0.242,
+                  -0.242,
+                  0.07,
+                  0.071,
+                  0.373,
+                  0.377
+                ]
+              },
+              {
+                "assembly_y_mm": -0.3,
+                "phi_degrees": -32.4,
+                "side": -1,
+                "STL_radial_mm": 1.041,
+                "tracks": [
+                  -0.242,
+                  0.07,
+                  0.376
+                ],
+                "layer_top_mm": -0.20000077220458934,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.286,
+                  0.286
+                ],
+                "along": [
+                  -0.242,
+                  -0.242,
+                  0.07,
+                  0.071,
+                  0.375,
+                  0.377
+                ]
+              },
+              {
+                "assembly_y_mm": -0.3,
+                "phi_degrees": -5.3,
+                "side": 1,
+                "STL_radial_mm": 1.069,
+                "tracks": [
+                  -0.243,
+                  0.083,
+                  0.401
+                ],
+                "layer_top_mm": -0.20000077220458934,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.287,
+                  0.287
+                ],
+                "along": [
+                  -0.243,
+                  0.082,
+                  0.084,
+                  0.401
+                ]
+              },
+              {
+                "assembly_y_mm": -0.3,
+                "phi_degrees": -5.3,
+                "side": -1,
+                "STL_radial_mm": 1.069,
+                "tracks": [
+                  -0.241,
+                  0.082,
+                  0.407
+                ],
+                "layer_top_mm": -0.20000077220458934,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.286
+                ],
+                "along": [
+                  -0.241,
+                  0.082,
+                  0.407
+                ]
+              },
+              {
+                "assembly_y_mm": -0.3,
+                "phi_degrees": 21.9,
+                "side": 1,
+                "STL_radial_mm": 1.146,
+                "tracks": [
+                  -0.242,
+                  0.121,
+                  0.472
+                ],
+                "layer_top_mm": -0.20000077220458934,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.388,
+                  0.388
+                ],
+                "along": [
+                  -0.242,
+                  0.121,
+                  0.122,
+                  0.472
+                ]
+              },
+              {
+                "assembly_y_mm": -0.3,
+                "phi_degrees": 21.9,
+                "side": -1,
+                "STL_radial_mm": 1.146,
+                "tracks": [
+                  -0.241,
+                  0.12,
+                  0.48
+                ],
+                "layer_top_mm": -0.20000077220458934,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.386,
+                  0.386
+                ],
+                "along": [
+                  -0.241,
+                  0.119,
+                  0.122,
+                  0.477,
+                  0.483
+                ]
+              },
+              {
+                "assembly_y_mm": -0.3,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.007,
+                  0.201,
+                  0.427,
+                  0.849
+                ],
+                "layer_top_mm": -0.20000077220458934,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.495,
+                  0.495,
+                  0.433
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.201,
+                  0.425,
+                  0.429,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": -0.3,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.007,
+                  0.428,
+                  0.849
+                ],
+                "layer_top_mm": -0.20000077220458934,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.502,
+                  0.502
+                ],
+                "along": [
+                  0.007,
+                  0.426,
+                  0.431,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 0.7,
+                "phi_degrees": -19.5,
+                "side": 1,
+                "STL_radial_mm": 1.049,
+                "tracks": [
+                  -0.25,
+                  0.074,
+                  0.383
+                ],
+                "layer_top_mm": 0.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.288,
+                  0.288,
+                  0.288
+                ],
+                "along": [
+                  -0.25,
+                  0.074,
+                  0.074,
+                  0.075,
+                  0.383
+                ]
+              },
+              {
+                "assembly_y_mm": 0.7,
+                "phi_degrees": -19.5,
+                "side": -1,
+                "STL_radial_mm": 1.049,
+                "tracks": [
+                  -0.243,
+                  0.068,
+                  0.385
+                ],
+                "layer_top_mm": 0.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.293,
+                  0.293
+                ],
+                "along": [
+                  -0.243,
+                  0.067,
+                  0.069,
+                  0.385
+                ]
+              },
+              {
+                "assembly_y_mm": 0.7,
+                "phi_degrees": 3.4,
+                "side": 1,
+                "STL_radial_mm": 1.079,
+                "tracks": [
+                  -0.244,
+                  0.088,
+                  0.415
+                ],
+                "layer_top_mm": 0.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.288
+                ],
+                "along": [
+                  -0.244,
+                  0.088,
+                  0.415
+                ]
+              },
+              {
+                "assembly_y_mm": 0.7,
+                "phi_degrees": 3.4,
+                "side": -1,
+                "STL_radial_mm": 1.078,
+                "tracks": [
+                  -0.242,
+                  0.087,
+                  0.41
+                ],
+                "layer_top_mm": 0.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.293
+                ],
+                "along": [
+                  -0.242,
+                  0.087,
+                  0.41
+                ]
+              },
+              {
+                "assembly_y_mm": 0.7,
+                "phi_degrees": 26.2,
+                "side": 1,
+                "STL_radial_mm": 1.142,
+                "tracks": [
+                  -0.243,
+                  0.118,
+                  0.475
+                ],
+                "layer_top_mm": 0.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.382
+                ],
+                "along": [
+                  -0.243,
+                  0.118,
+                  0.475
+                ]
+              },
+              {
+                "assembly_y_mm": 0.7,
+                "phi_degrees": 26.2,
+                "side": -1,
+                "STL_radial_mm": 1.141,
+                "tracks": [
+                  -0.241,
+                  0.119,
+                  0.472
+                ],
+                "layer_top_mm": 0.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.393,
+                  0.344
+                ],
+                "along": [
+                  -0.241,
+                  0.119,
+                  0.119,
+                  0.472
+                ]
+              },
+              {
+                "assembly_y_mm": 0.7,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.194,
+                  0.427,
+                  0.849
+                ],
+                "layer_top_mm": 0.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.495,
+                  0.495,
+                  0.416,
+                  0.416
+                ],
+                "along": [
+                  0.006,
+                  0.006,
+                  0.184,
+                  0.203,
+                  0.425,
+                  0.429,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 0.7,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.428,
+                  0.849
+                ],
+                "layer_top_mm": 0.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.502,
+                  0.502
+                ],
+                "along": [
+                  0.004,
+                  0.007,
+                  0.426,
+                  0.431,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 1.7,
+                "phi_degrees": -6.5,
+                "side": 1,
+                "STL_radial_mm": 1.056,
+                "tracks": [
+                  -0.242,
+                  0.076,
+                  0.394
+                ],
+                "layer_top_mm": 1.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.297
+                ],
+                "along": [
+                  -0.242,
+                  -0.242,
+                  0.076,
+                  0.394,
+                  0.394
+                ]
+              },
+              {
+                "assembly_y_mm": 1.7,
+                "phi_degrees": -6.5,
+                "side": -1,
+                "STL_radial_mm": 1.056,
+                "tracks": [
+                  -0.242,
+                  0.078,
+                  0.393
+                ],
+                "layer_top_mm": 1.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.296,
+                  0.296
+                ],
+                "along": [
+                  -0.242,
+                  -0.242,
+                  0.078,
+                  0.078,
+                  0.393,
+                  0.393
+                ]
+              },
+              {
+                "assembly_y_mm": 1.7,
+                "phi_degrees": 12.0,
+                "side": 1,
+                "STL_radial_mm": 1.086,
+                "tracks": [
+                  -0.241,
+                  0.09,
+                  0.42
+                ],
+                "layer_top_mm": 1.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.297
+                ],
+                "along": [
+                  -0.241,
+                  0.09,
+                  0.42
+                ]
+              },
+              {
+                "assembly_y_mm": 1.7,
+                "phi_degrees": 12.0,
+                "side": -1,
+                "STL_radial_mm": 1.085,
+                "tracks": [
+                  -0.241,
+                  0.089,
+                  0.421
+                ],
+                "layer_top_mm": 1.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.296
+                ],
+                "along": [
+                  -0.241,
+                  0.089,
+                  0.421
+                ]
+              },
+              {
+                "assembly_y_mm": 1.7,
+                "phi_degrees": 30.5,
+                "side": 1,
+                "STL_radial_mm": 1.135,
+                "tracks": [
+                  -0.241,
+                  0.114,
+                  0.471
+                ],
+                "layer_top_mm": 1.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.345
+                ],
+                "along": [
+                  -0.241,
+                  0.114,
+                  0.471
+                ]
+              },
+              {
+                "assembly_y_mm": 1.7,
+                "phi_degrees": 30.5,
+                "side": -1,
+                "STL_radial_mm": 1.134,
+                "tracks": [
+                  -0.241,
+                  0.112,
+                  0.47
+                ],
+                "layer_top_mm": 1.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.344
+                ],
+                "along": [
+                  -0.241,
+                  0.112,
+                  0.47
+                ]
+              },
+              {
+                "assembly_y_mm": 1.7,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.19,
+                  0.427,
+                  0.849
+                ],
+                "layer_top_mm": 1.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.495,
+                  0.495,
+                  0.39
+                ],
+                "along": [
+                  0.006,
+                  0.006,
+                  0.19,
+                  0.425,
+                  0.429,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 1.7,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.007,
+                  0.428,
+                  0.849
+                ],
+                "layer_top_mm": 1.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.502,
+                  0.502
+                ],
+                "along": [
+                  0.006,
+                  0.007,
+                  0.426,
+                  0.431,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 2.7,
+                "phi_degrees": 6.4,
+                "side": 1,
+                "STL_radial_mm": 1.062,
+                "tracks": [
+                  -0.248,
+                  0.08,
+                  0.399
+                ],
+                "layer_top_mm": 2.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.305
+                ],
+                "along": [
+                  -0.248,
+                  0.08,
+                  0.399,
+                  0.399
+                ]
+              },
+              {
+                "assembly_y_mm": 2.7,
+                "phi_degrees": 6.4,
+                "side": -1,
+                "STL_radial_mm": 1.062,
+                "tracks": [
+                  -0.248,
+                  0.078,
+                  0.398
+                ],
+                "layer_top_mm": 2.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.3
+                ],
+                "along": [
+                  -0.248,
+                  0.078,
+                  0.398
+                ]
+              },
+              {
+                "assembly_y_mm": 2.7,
+                "phi_degrees": 20.6,
+                "side": 1,
+                "STL_radial_mm": 1.088,
+                "tracks": [
+                  -0.243,
+                  0.091,
+                  0.422
+                ],
+                "layer_top_mm": 2.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.305
+                ],
+                "along": [
+                  -0.243,
+                  0.091,
+                  0.422
+                ]
+              },
+              {
+                "assembly_y_mm": 2.7,
+                "phi_degrees": 20.6,
+                "side": -1,
+                "STL_radial_mm": 1.088,
+                "tracks": [
+                  -0.243,
+                  0.092,
+                  0.42
+                ],
+                "layer_top_mm": 2.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.3
+                ],
+                "along": [
+                  -0.244,
+                  -0.243,
+                  0.092,
+                  0.42
+                ]
+              },
+              {
+                "assembly_y_mm": 2.7,
+                "phi_degrees": 34.8,
+                "side": 1,
+                "STL_radial_mm": 1.125,
+                "tracks": [
+                  -0.243,
+                  0.109,
+                  0.458
+                ],
+                "layer_top_mm": 2.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.36
+                ],
+                "along": [
+                  -0.243,
+                  -0.243,
+                  0.109,
+                  0.458
+                ]
+              },
+              {
+                "assembly_y_mm": 2.7,
+                "phi_degrees": 34.8,
+                "side": -1,
+                "STL_radial_mm": 1.125,
+                "tracks": [
+                  -0.244,
+                  0.109,
+                  0.456
+                ],
+                "layer_top_mm": 2.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.348,
+                  0.348
+                ],
+                "along": [
+                  -0.244,
+                  -0.243,
+                  0.108,
+                  0.11,
+                  0.456
+                ]
+              },
+              {
+                "assembly_y_mm": 2.7,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.082,
+                  0.427,
+                  0.849
+                ],
+                "layer_top_mm": 2.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.495,
+                  0.495,
+                  0.36,
+                  0.36
+                ],
+                "along": [
+                  0.007,
+                  0.007,
+                  0.157,
+                  0.177,
+                  0.425,
+                  0.429,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 2.7,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.428,
+                  0.849
+                ],
+                "layer_top_mm": 2.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.502,
+                  0.502
+                ],
+                "along": [
+                  0.006,
+                  0.006,
+                  0.426,
+                  0.43,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 3.7,
+                "phi_degrees": 19.3,
+                "side": 1,
+                "STL_radial_mm": 1.068,
+                "tracks": [
+                  -0.241,
+                  0.081,
+                  0.405
+                ],
+                "layer_top_mm": 3.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.303
+                ],
+                "along": [
+                  -0.241,
+                  0.081,
+                  0.405,
+                  0.405
+                ]
+              },
+              {
+                "assembly_y_mm": 3.7,
+                "phi_degrees": 19.3,
+                "side": -1,
+                "STL_radial_mm": 1.068,
+                "tracks": [
+                  -0.241,
+                  0.077,
+                  0.397
+                ],
+                "layer_top_mm": 3.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.293
+                ],
+                "along": [
+                  -0.241,
+                  0.077,
+                  0.397
+                ]
+              },
+              {
+                "assembly_y_mm": 3.7,
+                "phi_degrees": 29.2,
+                "side": 1,
+                "STL_radial_mm": 1.089,
+                "tracks": [
+                  -0.242,
+                  0.09,
+                  0.424
+                ],
+                "layer_top_mm": 3.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.303,
+                  0.303
+                ],
+                "along": [
+                  -0.242,
+                  -0.241,
+                  0.089,
+                  0.092,
+                  0.422,
+                  0.426
+                ]
+              },
+              {
+                "assembly_y_mm": 3.7,
+                "phi_degrees": 29.2,
+                "side": -1,
+                "STL_radial_mm": 1.088,
+                "tracks": [
+                  -0.241,
+                  0.09,
+                  0.423
+                ],
+                "layer_top_mm": 3.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.325
+                ],
+                "along": [
+                  -0.242,
+                  -0.241,
+                  0.09,
+                  0.423
+                ]
+              },
+              {
+                "assembly_y_mm": 3.7,
+                "phi_degrees": 39.1,
+                "side": 1,
+                "STL_radial_mm": 1.114,
+                "tracks": [
+                  -0.241,
+                  0.027,
+                  0.45
+                ],
+                "layer_top_mm": 3.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.13,
+                  0.341
+                ],
+                "along": [
+                  -0.242,
+                  -0.241,
+                  -0.045,
+                  0.099,
+                  0.45
+                ]
+              },
+              {
+                "assembly_y_mm": 3.7,
+                "phi_degrees": 39.1,
+                "side": -1,
+                "STL_radial_mm": 1.113,
+                "tracks": [
+                  -0.241,
+                  0.03,
+                  0.449
+                ],
+                "layer_top_mm": 3.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.325,
+                  0.13
+                ],
+                "along": [
+                  -0.241,
+                  -0.241,
+                  -0.045,
+                  0.105,
+                  0.449
+                ]
+              },
+              {
+                "assembly_y_mm": 3.7,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.438,
+                  0.849
+                ],
+                "layer_top_mm": 3.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.495,
+                  0.495,
+                  0.13,
+                  0.13,
+                  0.341
+                ],
+                "along": [
+                  0.006,
+                  0.006,
+                  0.159,
+                  0.425,
+                  0.429,
+                  0.446,
+                  0.52,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 3.7,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.007,
+                  0.431,
+                  0.849
+                ],
+                "layer_top_mm": 3.7999992277954107,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.13,
+                  0.502,
+                  0.502
+                ],
+                "along": [
+                  0.007,
+                  0.007,
+                  0.426,
+                  0.431,
+                  0.519,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 4.7,
+                "phi_degrees": 32.2,
+                "side": 1,
+                "STL_radial_mm": 1.074,
+                "tracks": [
+                  -0.243,
+                  0.083,
+                  0.401
+                ],
+                "layer_top_mm": 4.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.307,
+                  0.307,
+                  0.307
+                ],
+                "along": [
+                  -0.243,
+                  0.083,
+                  0.083,
+                  0.084,
+                  0.401
+                ]
+              },
+              {
+                "assembly_y_mm": 4.7,
+                "phi_degrees": 32.2,
+                "side": -1,
+                "STL_radial_mm": 1.074,
+                "tracks": [
+                  -0.249,
+                  0.084,
+                  0.401
+                ],
+                "layer_top_mm": 4.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.307,
+                  0.307
+                ],
+                "along": [
+                  -0.25,
+                  -0.249,
+                  -0.249,
+                  0.084,
+                  0.085,
+                  0.401
+                ]
+              },
+              {
+                "assembly_y_mm": 4.7,
+                "phi_degrees": 37.8,
+                "side": 1,
+                "STL_radial_mm": 1.087,
+                "tracks": [
+                  -0.243,
+                  0.09,
+                  0.421
+                ],
+                "layer_top_mm": 4.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.307
+                ],
+                "along": [
+                  -0.243,
+                  -0.243,
+                  0.09,
+                  0.419,
+                  0.423
+                ]
+              },
+              {
+                "assembly_y_mm": 4.7,
+                "phi_degrees": 37.8,
+                "side": -1,
+                "STL_radial_mm": 1.086,
+                "tracks": [
+                  -0.25,
+                  0.091,
+                  0.421
+                ],
+                "layer_top_mm": 4.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.307,
+                  0.307,
+                  0.307
+                ],
+                "along": [
+                  -0.25,
+                  -0.249,
+                  0.089,
+                  0.091,
+                  0.091,
+                  0.418,
+                  0.423
+                ]
+              },
+              {
+                "assembly_y_mm": 4.7,
+                "phi_degrees": 43.4,
+                "side": 1,
+                "STL_radial_mm": 1.28,
+                "tracks": [
+                  -0.243,
+                  0.1,
+                  0.531
+                ],
+                "layer_top_mm": 4.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.307
+                ],
+                "along": [
+                  -0.243,
+                  -0.242,
+                  0.1,
+                  0.531
+                ]
+              },
+              {
+                "assembly_y_mm": 4.7,
+                "phi_degrees": 43.4,
+                "side": -1,
+                "STL_radial_mm": 1.28,
+                "tracks": [
+                  -0.246,
+                  0.104,
+                  0.531
+                ],
+                "layer_top_mm": 4.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.307
+                ],
+                "along": [
+                  -0.247,
+                  -0.244,
+                  0.104,
+                  0.531
+                ]
+              },
+              {
+                "assembly_y_mm": 4.7,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.427,
+                  0.849
+                ],
+                "layer_top_mm": 4.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.495,
+                  0.495
+                ],
+                "along": [
+                  0.005,
+                  0.006,
+                  0.425,
+                  0.429,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 4.7,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.428,
+                  0.849
+                ],
+                "layer_top_mm": 4.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.502,
+                  0.502
+                ],
+                "along": [
+                  0.006,
+                  0.426,
+                  0.431,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 5.7,
+                "phi_degrees": 43.8,
+                "side": 1,
+                "STL_radial_mm": 1.318,
+                "tracks": [
+                  -0.249,
+                  0.544
+                ],
+                "layer_top_mm": 5.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  -0.249,
+                  0.498,
+                  0.59
+                ]
+              },
+              {
+                "assembly_y_mm": 5.7,
+                "phi_degrees": 43.8,
+                "side": -1,
+                "STL_radial_mm": 1.318,
+                "tracks": [
+                  -0.249,
+                  0.543
+                ],
+                "layer_top_mm": 5.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42
+                ],
+                "along": [
+                  -0.249,
+                  0.497,
+                  0.589
+                ]
+              },
+              {
+                "assembly_y_mm": 5.7,
+                "phi_degrees": 45.6,
+                "side": 1,
+                "STL_radial_mm": 1.477,
+                "tracks": [
+                  -0.118,
+                  0.422,
+                  0.683
+                ],
+                "layer_top_mm": 5.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.495
+                ],
+                "along": [
+                  -0.242,
+                  -0.242,
+                  -0.118,
+                  0.006,
+                  0.006,
+                  0.422,
+                  0.683,
+                  0.683,
+                  0.76
+                ]
+              },
+              {
+                "assembly_y_mm": 5.7,
+                "phi_degrees": 45.6,
+                "side": -1,
+                "STL_radial_mm": 1.477,
+                "tracks": [
+                  -0.118,
+                  0.422,
+                  0.683
+                ],
+                "layer_top_mm": 5.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.502
+                ],
+                "along": [
+                  -0.242,
+                  -0.242,
+                  -0.118,
+                  0.006,
+                  0.006,
+                  0.422,
+                  0.683,
+                  0.683,
+                  0.76
+                ]
+              },
+              {
+                "assembly_y_mm": 5.7,
+                "phi_degrees": 47.3,
+                "side": 1,
+                "STL_radial_mm": 1.499,
+                "tracks": [
+                  -0.056,
+                  0.424,
+                  0.837
+                ],
+                "layer_top_mm": 5.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.495,
+                  0.495
+                ],
+                "along": [
+                  -0.243,
+                  -0.243,
+                  -0.118,
+                  0.006,
+                  0.006,
+                  0.006,
+                  0.423,
+                  0.425,
+                  0.837,
+                  0.837
+                ]
+              },
+              {
+                "assembly_y_mm": 5.7,
+                "phi_degrees": 47.3,
+                "side": -1,
+                "STL_radial_mm": 1.499,
+                "tracks": [
+                  -0.056,
+                  0.425,
+                  0.837
+                ],
+                "layer_top_mm": 5.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.502,
+                  0.502
+                ],
+                "along": [
+                  -0.243,
+                  -0.243,
+                  -0.118,
+                  0.006,
+                  0.006,
+                  0.006,
+                  0.424,
+                  0.426,
+                  0.837,
+                  0.837
+                ]
+              },
+              {
+                "assembly_y_mm": 5.7,
+                "phi_degrees": 49.0,
+                "side": 1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.427,
+                  0.848
+                ],
+                "layer_top_mm": 5.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.495,
+                  0.495
+                ],
+                "along": [
+                  0.005,
+                  0.006,
+                  0.425,
+                  0.429,
+                  0.843,
+                  0.854
+                ]
+              },
+              {
+                "assembly_y_mm": 5.7,
+                "phi_degrees": 49.0,
+                "side": -1,
+                "STL_radial_mm": 1.262,
+                "tracks": [
+                  0.006,
+                  0.428,
+                  0.848
+                ],
+                "layer_top_mm": 5.799999227795411,
+                "widths": [
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.42,
+                  0.502,
+                  0.502
+                ],
+                "along": [
+                  0.006,
+                  0.006,
+                  0.426,
+                  0.431,
+                  0.843,
+                  0.854
+                ]
+              }
+            ],
+            "skin_mm": 1.05,
+            "method": "Native ray sections of the exported assembly STL through the skirt on 4 angles per 1 mm layer step, at least 1 mm inside the sloped leading edge, with actual bead-centre clusters on each ray."
+          },
+          "band_start_backing": {
+            "feature": "band y -5",
+            "band_face_assembly_y_mm": -2.6,
+            "first_band_layer_top_assembly_y_mm": -2.8,
+            "first_band_layer_middle_assembly_y_mm": -2.7,
+            "previous_layer_top_assembly_y_mm": -2.5999999999999996,
+            "band_first_layer_bead_area_mm2": 30.483,
+            "directly_backed_fraction": 0.9437,
+            "lateral_expansion_mm": 0.0,
+            "screen_fraction": 0.9,
+            "reference_failure": "R15 XIAO far clip face: 0.9 percent directly backed over a separate helper."
+          }
+        },
+        "far": {
+          "band_y_mm": [
+            21.0,
+            23.4
+          ],
+          "radial_STL_sections_mm": {
+            "-70": 1.0003,
+            "-55": 1.0032,
+            "0": 1.1,
+            "90": 2.25,
+            "180": 1.1,
+            "235": 1.0032,
+            "250": 1.0003
+          },
+          "sampled_layer_assembly_y_mm": 22.19999956158142,
+          "radial_track_centres_mm": {
+            "-55": [
+              4.162,
+              4.45,
+              4.732
+            ],
+            "90": [
+              4.154,
+              4.542,
+              5.092,
+              5.601
+            ],
+            "235": [
+              4.162,
+              4.449,
+              4.732
+            ]
+          },
+          "arm_bonding": {
+            "crown_bonded_down_to_degrees_above_equator": 56,
+            "free_arm_arc_degrees": 131,
+            "method": "Radial exported-mesh sections every degree at the band centre; bonded where the section exceeds the R7 wall profile by more than 0.15 mm."
+          }
+        }
+      }
+    },
+    "path_scans": {
+      "Battery_Holder": [
+        {
+          "feature": "U-channel: whole section, every layer between the gate guides and the end plate",
+          "assembly_y_range_mm": [
+            -12.6,
+            15.7
+          ],
+          "window_x_z_mm": [
+            -15,
+            15,
+            3.0,
+            12.5
+          ],
+          "layers_scanned": 141,
+          "minimum_mesh_section_mm2": 59.455,
+          "minimum_mesh_layer_top_mm": 9.6,
+          "minimum_printed_area_mm2": 58.154,
+          "minimum_printed_layer_top_mm": 9.6,
+          "minimum_printed_fraction": 0.7897,
+          "screen_area_mm2": 40.0,
+          "screen_fraction": 0.6,
+          "load_case": "Cell weight, rod loads and any toolhead contact during printing load this section.",
+          "decision": "Continuous floor, side walls and roof flanges in one wall loop per layer.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        }
+      ],
+      "XIAO_Rod_Holder": [
+        {
+          "feature": "Rails, keel, struts and retainer posts, every layer",
+          "assembly_y_range_mm": [
+            -2.6,
+            21.0
+          ],
+          "window_x_z_mm": [
+            -14.5,
+            14.5,
+            -1,
+            15
+          ],
+          "layers_scanned": 118,
+          "minimum_mesh_section_mm2": 17.2,
+          "minimum_mesh_layer_top_mm": 15.8,
+          "minimum_printed_area_mm2": 16.793,
+          "minimum_printed_layer_top_mm": 15.8,
+          "minimum_printed_fraction": 0.9398,
+          "screen_area_mm2": 15.0,
+          "screen_fraction": 0.6,
+          "load_case": "Board and USB loads pass along the rails into both ring planes.",
+          "decision": "Rails 2 x 2.8 mm, keel, struts as R16 with the rail moved 0.8 mm outward.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        },
+        {
+          "feature": "Near +X contact ledge, top 0.45 mm under the board, every layer",
+          "assembly_y_range_mm": [
+            1.6,
+            2.7
+          ],
+          "window_x_z_mm": [
+            7.3,
+            10.0,
+            8.350000000000001,
+            8.8
+          ],
+          "layers_scanned": 5,
+          "minimum_mesh_section_mm2": 1.215,
+          "minimum_mesh_layer_top_mm": 1.6,
+          "minimum_printed_area_mm2": 1.167,
+          "minimum_printed_layer_top_mm": 1.6,
+          "minimum_printed_fraction": 0.9604,
+          "screen_area_mm2": 0.4,
+          "screen_fraction": 0.5,
+          "load_case": "A board corner rests here.",
+          "decision": "Contact only ahead of the first solder pad.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        },
+        {
+          "feature": "Far +X ledge under the board",
+          "assembly_y_range_mm": [
+            20.955,
+            22.255
+          ],
+          "window_x_z_mm": [
+            7.3,
+            10.0,
+            8.350000000000001,
+            8.8
+          ],
+          "layers_scanned": 6,
+          "minimum_mesh_section_mm2": 1.215,
+          "minimum_mesh_layer_top_mm": 21.0,
+          "minimum_printed_area_mm2": 1.165,
+          "minimum_printed_layer_top_mm": 21.2,
+          "minimum_printed_fraction": 0.959,
+          "screen_area_mm2": 0.5,
+          "screen_fraction": 0.5,
+          "load_case": "A board corner rests here; it stands on the bed.",
+          "decision": "As R16.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        },
+        {
+          "feature": "Near post +X through the groove, every layer",
+          "assembly_y_range_mm": [
+            -4.9,
+            -0.4
+          ],
+          "window_x_z_mm": [
+            10.0,
+            14.6,
+            7.2,
+            13.15
+          ],
+          "layers_scanned": 22,
+          "minimum_mesh_section_mm2": 19.725,
+          "minimum_mesh_layer_top_mm": -2.0,
+          "minimum_printed_area_mm2": 19.142,
+          "minimum_printed_layer_top_mm": -2.0,
+          "minimum_printed_fraction": 0.9692,
+          "screen_area_mm2": 12.0,
+          "screen_fraction": 0.5,
+          "load_case": "The plate bears here if the board or a wire pulls upward.",
+          "decision": "C-section of floor, outer wall and lip, carried straight into the rail.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        },
+        {
+          "feature": "Groove lip +X over the plate, every layer",
+          "assembly_y_range_mm": [
+            -4.9,
+            -0.5
+          ],
+          "window_x_z_mm": [
+            10.9,
+            13.2,
+            12.15,
+            13.15
+          ],
+          "layers_scanned": 21,
+          "minimum_mesh_section_mm2": 2.3,
+          "minimum_mesh_layer_top_mm": -4.8,
+          "minimum_printed_area_mm2": 2.23,
+          "minimum_printed_layer_top_mm": -2.4,
+          "minimum_printed_fraction": 0.9695,
+          "screen_area_mm2": 1.5,
+          "screen_fraction": 0.5,
+          "load_case": "Holds the plate down; the upward load path of the retainer.",
+          "decision": "A short lip tied to the outer wall in every layer.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        },
+        {
+          "feature": "Far finger +X, every layer",
+          "assembly_y_range_mm": [
+            20.8,
+            22.5
+          ],
+          "window_x_z_mm": [
+            6.8,
+            12.0,
+            10.35,
+            11.85
+          ],
+          "layers_scanned": 8,
+          "minimum_mesh_section_mm2": 7.8,
+          "minimum_mesh_layer_top_mm": 20.8,
+          "minimum_printed_area_mm2": 7.488,
+          "minimum_printed_layer_top_mm": 21.0,
+          "minimum_printed_fraction": 0.96,
+          "screen_area_mm2": 5.0,
+          "screen_fraction": 0.5,
+          "load_case": "Holds the USB end down, including a tug on the cable. Loaded across layers, so its strength is a physical test.",
+          "decision": "Tied to the rail along its length and standing on the bed-side block, not on a free cantilever.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        },
+        {
+          "feature": "Near -X contact ledge, top 0.45 mm under the board, every layer",
+          "assembly_y_range_mm": [
+            1.6,
+            2.7
+          ],
+          "window_x_z_mm": [
+            -10.0,
+            -7.3,
+            8.350000000000001,
+            8.8
+          ],
+          "layers_scanned": 5,
+          "minimum_mesh_section_mm2": 1.215,
+          "minimum_mesh_layer_top_mm": 1.6,
+          "minimum_printed_area_mm2": 1.167,
+          "minimum_printed_layer_top_mm": 1.6,
+          "minimum_printed_fraction": 0.9604,
+          "screen_area_mm2": 0.4,
+          "screen_fraction": 0.5,
+          "load_case": "A board corner rests here.",
+          "decision": "Contact only ahead of the first solder pad.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        },
+        {
+          "feature": "Far -X ledge under the board",
+          "assembly_y_range_mm": [
+            20.955,
+            22.255
+          ],
+          "window_x_z_mm": [
+            -10.0,
+            -7.3,
+            8.350000000000001,
+            8.8
+          ],
+          "layers_scanned": 6,
+          "minimum_mesh_section_mm2": 1.215,
+          "minimum_mesh_layer_top_mm": 21.0,
+          "minimum_printed_area_mm2": 1.153,
+          "minimum_printed_layer_top_mm": 21.0,
+          "minimum_printed_fraction": 0.9492,
+          "screen_area_mm2": 0.5,
+          "screen_fraction": 0.5,
+          "load_case": "A board corner rests here; it stands on the bed.",
+          "decision": "As R16.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        },
+        {
+          "feature": "Near post -X through the groove, every layer",
+          "assembly_y_range_mm": [
+            -4.9,
+            -0.4
+          ],
+          "window_x_z_mm": [
+            -14.6,
+            -10.0,
+            7.2,
+            13.15
+          ],
+          "layers_scanned": 22,
+          "minimum_mesh_section_mm2": 19.725,
+          "minimum_mesh_layer_top_mm": -2.0,
+          "minimum_printed_area_mm2": 19.143,
+          "minimum_printed_layer_top_mm": -2.0,
+          "minimum_printed_fraction": 0.9692,
+          "screen_area_mm2": 12.0,
+          "screen_fraction": 0.5,
+          "load_case": "The plate bears here if the board or a wire pulls upward.",
+          "decision": "C-section of floor, outer wall and lip, carried straight into the rail.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        },
+        {
+          "feature": "Groove lip -X over the plate, every layer",
+          "assembly_y_range_mm": [
+            -4.9,
+            -0.5
+          ],
+          "window_x_z_mm": [
+            -13.2,
+            -10.9,
+            12.15,
+            13.15
+          ],
+          "layers_scanned": 21,
+          "minimum_mesh_section_mm2": 2.3,
+          "minimum_mesh_layer_top_mm": -4.8,
+          "minimum_printed_area_mm2": 2.23,
+          "minimum_printed_layer_top_mm": -2.6,
+          "minimum_printed_fraction": 0.9694,
+          "screen_area_mm2": 1.5,
+          "screen_fraction": 0.5,
+          "load_case": "Holds the plate down; the upward load path of the retainer.",
+          "decision": "A short lip tied to the outer wall in every layer.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        },
+        {
+          "feature": "Far finger -X, every layer",
+          "assembly_y_range_mm": [
+            20.8,
+            22.5
+          ],
+          "window_x_z_mm": [
+            -12.0,
+            -6.8,
+            10.35,
+            11.85
+          ],
+          "layers_scanned": 8,
+          "minimum_mesh_section_mm2": 7.8,
+          "minimum_mesh_layer_top_mm": 20.8,
+          "minimum_printed_area_mm2": 7.489,
+          "minimum_printed_layer_top_mm": 21.0,
+          "minimum_printed_fraction": 0.9601,
+          "screen_area_mm2": 5.0,
+          "screen_fraction": 0.5,
+          "load_case": "Holds the USB end down, including a tug on the cable. Loaded across layers, so its strength is a physical test.",
+          "decision": "Tied to the rail along its length and standing on the bed-side block, not on a free cantilever.",
+          "physical_strength_verified": false,
+          "note": "Complete intervening-layer scan: every printed layer in the range, whole mesh section in the window and conservative inscribed bead footprints. Not a breaking force."
+        }
+      ]
+    }
+  },
+  "battery_travel_exposure_from_layer_top_20_mm": {
+    "travels_over_part": 7498,
+    "wipe_moves_excluded": 2280,
+    "layer_top_range_mm": [
+      20.0,
+      null
+    ],
+    "length_split_mm": 2.0,
+    "layers_with_outer_wall_crossed_at_layer_height": 0,
+    "any_wall_all": {
+      "travels_crossing": 1313,
+      "of_which_at_layer_height": 77,
+      "lowest_nozzle_height_mm": 0.0,
+      "median_nozzle_height_mm": 0.6,
+      "longest_flat_move_mm": 0.962
+    },
+    "any_wall_longer_than_2_mm": {
+      "travels_crossing": 464,
+      "of_which_at_layer_height": 0,
+      "lowest_nozzle_height_mm": 0.6,
+      "median_nozzle_height_mm": 0.6,
+      "longest_flat_move_mm": 0.0
+    },
+    "any_wall_up_to_2_mm": {
+      "travels_crossing": 849,
+      "of_which_at_layer_height": 77,
+      "lowest_nozzle_height_mm": 0.0,
+      "median_nozzle_height_mm": 0.6,
+      "longest_flat_move_mm": 0.962
+    },
+    "outer_wall_all": {
+      "travels_crossing": 27,
+      "of_which_at_layer_height": 0,
+      "lowest_nozzle_height_mm": 0.6,
+      "median_nozzle_height_mm": 0.6,
+      "longest_flat_move_mm": 0.0
+    },
+    "outer_wall_longer_than_2_mm": {
+      "travels_crossing": 9,
+      "of_which_at_layer_height": 0,
+      "lowest_nozzle_height_mm": 0.6,
+      "median_nozzle_height_mm": 0.6,
+      "longest_flat_move_mm": 0.0
+    },
+    "outer_wall_up_to_2_mm": {
+      "travels_crossing": 18,
+      "of_which_at_layer_height": 0,
+      "lowest_nozzle_height_mm": 0.6,
+      "median_nozzle_height_mm": 0.6,
+      "longest_flat_move_mm": 0.0
+    },
+    "method": "G0/G1/G2/G3 including helix lifts and ramped travels; a wipe is a move with negative E; each crossing of an earlier same-layer wall inside the plan box is credited with the interpolated nozzle height there."
+  },
+  "images_sha256": {
+    "Battery_Holder-layer-views.png": "1e510194c59b20424406bea8c8b1076c357688150fa6300715dc9df0bff81929",
+    "Battery_End_Gate-layer-views.png": "7ebc350c0531e9fc53228116bd92a5c11017dfb5e2983332ce83cd5f2d1b3148",
+    "XIAO_Rod_Holder-layer-views.png": "9c01380e585382f865942a00e11e737c89039aa20499485ac12cd84d86a2bef4",
+    "XIAO_Top_Retainer-layer-views.png": "a6e87e8c7e8c3ed89285a7b7efe2b662acfc53594d4102e992dc23894feb0bee"
+  },
+  "passed": true
+}

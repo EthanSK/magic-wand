@@ -1,0 +1,726 @@
+{
+  "project_sha256": "c6df3c727a62a4b1e983550c05ebb80e1c368809de5d0042fbc537072ef774b3",
+  "geometry_expectation_archive_sha256": "d110a43a1153f0ef095cb5e9e054bee555330169fccb3aeef60ab375cad6d2ba",
+  "manifest_sha256": "e18db6c59e0b03709bd131fef57016264c087602a2c677025e4a597c2def11e1",
+  "checker_sha256": "df0ed14c211e71c42ef892f37d641072c8dcd05c19c1854f297493871613c64f",
+  "passed": true,
+  "physical_print_verified": false,
+  "settings": {
+    "printer_settings_id": "Bambu Lab A1 mini 0.4 nozzle",
+    "print_settings_id": "0.20mm Standard @BBL A1M",
+    "filament_settings_id": [
+      "Generic PETG @BBL A1M"
+    ],
+    "layer_height": "0.2",
+    "wall_loops": "3",
+    "sparse_infill_density": "20%",
+    "enable_support": "0",
+    "brim_type": "no_brim",
+    "nozzle_temperature": [
+      "255"
+    ],
+    "textured_plate_temp": [
+      "70"
+    ],
+    "initial_layer_speed": [
+      "20"
+    ],
+    "z_hop": [
+      "0.6"
+    ],
+    "elefant_foot_compensation": "0"
+  },
+  "band_recipe_actual": {
+    "bands_mm": {
+      "Battery_Holder": [
+        [
+          33.6,
+          34.4
+        ]
+      ]
+    },
+    "requested_speeds_mm_s": {
+      "outer_wall_speed": 15,
+      "inner_wall_speed": 15,
+      "gap_infill_speed": 12,
+      "internal_solid_infill_speed": 20,
+      "sparse_infill_speed": 20,
+      "top_surface_speed": 20,
+      "bridge_speed": 12,
+      "overhang_1_4_speed": 15,
+      "overhang_2_4_speed": 12,
+      "overhang_3_4_speed": 10,
+      "overhang_4_4_speed": 8
+    },
+    "actual_in_bands": {
+      "Battery_Holder": {
+        "33.8": {
+          "features_mm_s": {
+            "Inner wall": [
+              15.0
+            ],
+            "Outer wall": [
+              15.0
+            ],
+            "Gap infill": [
+              12.0
+            ]
+          },
+          "fan_M106_0_255": [
+            173
+          ],
+          "feature_length_mm_by_fan": {
+            "Inner wall": {
+              "173": 55.9
+            },
+            "Outer wall": {
+              "173": 104.6
+            },
+            "Gap infill": {
+              "173": 45.2
+            }
+          }
+        },
+        "34.0": {
+          "features_mm_s": {
+            "Inner wall": [
+              12.9,
+              15.0
+            ],
+            "Outer wall": [
+              9.8,
+              10.2,
+              10.6,
+              10.8,
+              11.0,
+              11.4,
+              11.8,
+              14.1,
+              15.0
+            ],
+            "Overhang wall": [
+              12.0
+            ],
+            "Gap infill": [
+              12.0
+            ]
+          },
+          "fan_M106_0_255": [
+            165,
+            229
+          ],
+          "feature_length_mm_by_fan": {
+            "Inner wall": {
+              "165": 59.1,
+              "229": 2.3
+            },
+            "Outer wall": {
+              "165": 91.8,
+              "229": 10.6
+            },
+            "Overhang wall": {
+              "229": 1.9
+            },
+            "Gap infill": {
+              "165": 56.0
+            }
+          }
+        },
+        "34.2": {
+          "features_mm_s": {
+            "Inner wall": [
+              15.0
+            ],
+            "Outer wall": [
+              10.6,
+              12.9,
+              15.0
+            ],
+            "Gap infill": [
+              12.0
+            ]
+          },
+          "fan_M106_0_255": [
+            165,
+            229
+          ],
+          "feature_length_mm_by_fan": {
+            "Inner wall": {
+              "165": 61.4
+            },
+            "Outer wall": {
+              "165": 91.7,
+              "229": 12.5
+            },
+            "Gap infill": {
+              "165": 55.1
+            }
+          }
+        },
+        "34.4": {
+          "features_mm_s": {
+            "Inner wall": [
+              15.0
+            ],
+            "Outer wall": [
+              10.6,
+              12.9,
+              15.0
+            ],
+            "Gap infill": [
+              12.0
+            ]
+          },
+          "fan_M106_0_255": [
+            165,
+            229
+          ],
+          "feature_length_mm_by_fan": {
+            "Inner wall": {
+              "165": 61.4
+            },
+            "Outer wall": {
+              "165": 91.7,
+              "229": 12.5
+            },
+            "Gap infill": {
+              "165": 54.8
+            }
+          }
+        }
+      }
+    },
+    "features_faster_than_requested": []
+  },
+  "gui_gcode_label_map": {
+    "590": "Battery_Holder",
+    "607": "Battery_End_Gate",
+    "624": "XIAO_Rod_Holder",
+    "641": "XIAO_Top_Retainer"
+  },
+  "method": "GUI sliced-file export omits source meshes. Actual exported GUI G-code audited against independently reviewed source geometry and placements; actual unique label IDs mapped by verified XY path bounds.",
+  "parts": {
+    "Battery_Holder": {
+      "checks_clear": true,
+      "layer_starts": {
+        "checked_layers": 178,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "largest_unbacked_layers": [
+          {
+            "layer_top_mm": 2.0,
+            "unbacked_mesh_area_mm2": 2.9439,
+            "print_xy_bounds_mm": [
+              22.4004,
+              10.9728,
+              24.2196,
+              13.0782
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "direct_backed_area_mm2": 0.0,
+            "direct_backed_fraction": 0.0,
+            "residual_unbacked_area_mm2": 2.9439,
+            "residual_print_xy_bounds_mm": [
+              [
+                22.4004,
+                10.9728,
+                24.2196,
+                13.0782
+              ]
+            ],
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          },
+          {
+            "layer_top_mm": 1.4,
+            "unbacked_mesh_area_mm2": 2.4098,
+            "print_xy_bounds_mm": [
+              6.6254,
+              11.7259,
+              8.927,
+              14.6172
+            ],
+            "direct_lower_bead_samples": 0,
+            "actual_vertical_gap_mm": null,
+            "direct_backed_area_mm2": 0.0,
+            "direct_backed_fraction": 0.0,
+            "residual_unbacked_area_mm2": 2.4098,
+            "residual_print_xy_bounds_mm": [
+              [
+                6.6254,
+                11.7259,
+                8.927,
+                14.6172
+              ]
+            ],
+            "note": "Requires an explicit bridge/backing decision; a nearby sideways bead is not backing."
+          }
+        ],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "anchor_necks": {
+        "neck_count": 6,
+        "layers": [
+          0.2,
+          0.4,
+          0.6,
+          0.8
+        ],
+        "minimum_centre_line_bead_coverage": 1.0,
+        "minimum_neck_bead_fraction": 0.9917,
+        "minimum_flange_to_part_bead_gap_away_from_necks_mm": 1.001,
+        "designed_gap_mm": 1.0,
+        "rows": [
+          {
+            "layer_top_mm": 0.2,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9945
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9945
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9945
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9945
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.994
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.994
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9924
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.993
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.993
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9924
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9923
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.993
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.993
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9927
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.993
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9927
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9917
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9922
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9918
+          }
+        ],
+        "method": "Actual 12-gon bead footprints in each anchor layer: coverage along each neck in its joining direction, a single printed island reaching the part and the flange, and the bead gap everywhere else."
+      }
+    },
+    "Battery_End_Gate": {
+      "checks_clear": true,
+      "layer_starts": {
+        "checked_layers": 8,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "largest_unbacked_layers": [],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "anchor_necks": {
+        "neck_count": 2,
+        "layers": [
+          0.2,
+          0.4
+        ],
+        "minimum_centre_line_bead_coverage": 1.0,
+        "minimum_neck_bead_fraction": 0.9903,
+        "minimum_flange_to_part_bead_gap_away_from_necks_mm": 1.001,
+        "designed_gap_mm": 1.0,
+        "rows": [
+          {
+            "layer_top_mm": 0.2,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9939
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9938
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9903
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.992
+          }
+        ],
+        "method": "Actual 12-gon bead footprints in each anchor layer: coverage along each neck in its joining direction, a single printed island reaching the part and the flange, and the bead gap everywhere else."
+      }
+    },
+    "XIAO_Rod_Holder": {
+      "checks_clear": true,
+      "layer_starts": {
+        "checked_layers": 142,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "largest_unbacked_layers": [],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "anchor_necks": {
+        "neck_count": 6,
+        "layers": [
+          0.2,
+          0.4,
+          0.6,
+          0.8
+        ],
+        "minimum_centre_line_bead_coverage": 1.0,
+        "minimum_neck_bead_fraction": 0.9916,
+        "minimum_flange_to_part_bead_gap_away_from_necks_mm": 0.991,
+        "designed_gap_mm": 1.0,
+        "rows": [
+          {
+            "layer_top_mm": 0.2,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9938
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9938
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9946
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9946
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9931
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9932
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9933
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9931
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9925
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9924
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9935
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9936
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9933
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9931
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9925
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9924
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9935
+          },
+          {
+            "layer_top_mm": 0.6,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9936
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9927
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9926
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 2,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9927
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 3,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9916
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 4,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9932
+          },
+          {
+            "layer_top_mm": 0.8,
+            "neck": 5,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9935
+          }
+        ],
+        "method": "Actual 12-gon bead footprints in each anchor layer: coverage along each neck in its joining direction, a single printed island reaching the part and the flange, and the bead gap everywhere else."
+      }
+    },
+    "XIAO_Top_Retainer": {
+      "checks_clear": true,
+      "layer_starts": {
+        "checked_layers": 8,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "largest_unbacked_layers": [],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "anchor_necks": {
+        "neck_count": 2,
+        "layers": [
+          0.2,
+          0.4
+        ],
+        "minimum_centre_line_bead_coverage": 1.0,
+        "minimum_neck_bead_fraction": 0.9548,
+        "minimum_flange_to_part_bead_gap_away_from_necks_mm": 1.198,
+        "designed_gap_mm": 1.0,
+        "rows": [
+          {
+            "layer_top_mm": 0.2,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9548
+          },
+          {
+            "layer_top_mm": 0.2,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9548
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 0,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.987
+          },
+          {
+            "layer_top_mm": 0.4,
+            "neck": 1,
+            "centre_line_bead_coverage": 1.0,
+            "neck_area_bead_fraction": 0.9702
+          }
+        ],
+        "method": "Actual 12-gon bead footprints in each anchor layer: coverage along each neck in its joining direction, a single printed island reaching the part and the flange, and the bead gap everywhere else."
+      }
+    }
+  },
+  "known_detector_limit": "Broad-overhang pass omits retainer spring-arm first-layer loss and short layer-two bridge; independent review accepted a monitored trial. Inspect tips and arm movement after print.",
+  "send_options": {
+    "timelapse": true,
+    "bed_levelling": true,
+    "flow_dynamics_calibration": true,
+    "external_spool": "PETG"
+  },
+  "gui_estimate": {
+    "seconds": 3504,
+    "grams": 6.27
+  },
+  "warning": "Instant/traditional timelapse may cause surface imperfections; recording selected, saved-file playback not yet verified.",
+  "trial_state": "Accepted by printer; preparation and live camera observed. Static start record; not live status or physical acceptance."
+}

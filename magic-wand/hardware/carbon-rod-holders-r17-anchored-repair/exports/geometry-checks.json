@@ -1,0 +1,339 @@
+{
+  "manifest_sha256": "e18db6c59e0b03709bd131fef57016264c087602a2c677025e4a597c2def11e1",
+  "checker_sha256": "c59ff40b28bbcd4487a40463925fbc5f2e5d0865ccd2a23863266723f552e0e7",
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "working_spaces": {
+    "Battery_Holder": {
+      "unloaded_clip_bore": {
+        "intersection_mm3": 1.4702433165925831e-06
+      },
+      "clip_gap_near": {
+        "intersection_mm3": 0.0
+      },
+      "clip_gap_far": {
+        "intersection_mm3": 0.0
+      },
+      "external_wire_bus": {
+        "intersection_mm3": 0.0
+      },
+      "reverse_wire_bus": {
+        "intersection_mm3": 0.0
+      },
+      "cell_reserve": {
+        "intersection_mm3": 0.0
+      },
+      "cell_loading": {
+        "intersection_mm3": 0.0
+      },
+      "gate_removal_route": {
+        "poses": 61,
+        "worst_pose_intersection_mm3": 0.0
+      },
+      "gate_slot_+1": {
+        "intersection_mm3": 1.8463135921494481e-06
+      },
+      "gate_slot_-1": {
+        "intersection_mm3": 1.8463135908272475e-06
+      },
+      "lead_exit": {
+        "intersection_mm3": 0.0
+      },
+      "gate_detent_notch_+1": {
+        "intersection_mm3": 0.0
+      },
+      "gate_detent_notch_-1": {
+        "intersection_mm3": 0.0
+      }
+    },
+    "Battery_End_Gate": {
+      "unloaded_clip_bore": {
+        "intersection_mm3": 0.0
+      }
+    },
+    "XIAO_Rod_Holder": {
+      "unloaded_clip_bore": {
+        "intersection_mm3": 0.00041689816077619446
+      },
+      "clip_gap_near": {
+        "intersection_mm3": 0.0
+      },
+      "clip_gap_far": {
+        "intersection_mm3": 0.0
+      },
+      "board": {
+        "intersection_mm3": 9.28870492384811e-08
+      },
+      "board_travel": {
+        "intersection_mm3": 3.515065759617083e-07
+      },
+      "usb_connector": {
+        "intersection_mm3": 0.0
+      },
+      "usb_plug_body": {
+        "intersection_mm3": 0.0
+      },
+      "board_underside_centre": {
+        "intersection_mm3": 0.0
+      },
+      "wire_route": {
+        "intersection_mm3": 0.0
+      },
+      "component_shield": {
+        "intersection_mm3": 0.0
+      },
+      "component_usb_c": {
+        "intersection_mm3": 0.0
+      },
+      "component_antenna": {
+        "intersection_mm3": 0.0
+      },
+      "component_pdm_microphone": {
+        "intersection_mm3": 0.0
+      },
+      "component_reset_button": {
+        "intersection_mm3": 0.0
+      },
+      "component_user_led": {
+        "intersection_mm3": 0.0
+      },
+      "component_charge_led": {
+        "intersection_mm3": 0.0
+      },
+      "castellation_solder": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_00": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_01": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_02": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_03": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_04": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_05": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_06": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_07": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_08": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_09": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_10": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_11": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_12": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_up_out_13": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_down_outboard_+1": {
+        "intersection_mm3": 0.0
+      },
+      "wire_run_past_near_post_+1": {
+        "intersection_mm3": 0.0
+      },
+      "wire_exit_down_outboard_-1": {
+        "intersection_mm3": 0.0
+      },
+      "wire_run_past_near_post_-1": {
+        "intersection_mm3": 0.0
+      },
+      "board_insertion": {
+        "poses": 21,
+        "worst_pose_intersection_mm3": 1.1615112140821032e-07
+      },
+      "retainer_groove_+1": {
+        "intersection_mm3": 9.475708906941596e-07
+      },
+      "retainer_detent_notch_+1": {
+        "intersection_mm3": 0.0
+      },
+      "retainer_groove_-1": {
+        "intersection_mm3": 9.643873478049794e-07
+      },
+      "retainer_detent_notch_-1": {
+        "intersection_mm3": 0.0
+      },
+      "retainer_route": {
+        "poses": 33,
+        "worst_pose_intersection_mm3": 0.0
+      }
+    },
+    "XIAO_Top_Retainer": {
+      "unloaded_clip_bore": {
+        "intersection_mm3": 0.0
+      },
+      "retainer_spring_slit_+1": {
+        "intersection_mm3": 0.0
+      },
+      "retainer_spring_slit_-1": {
+        "intersection_mm3": 0.0
+      }
+    }
+  },
+  "rod_interface_vs_r16": {
+    "Battery_Holder": {
+      "-17.8..-14.2": {
+        "symmetric_difference_mm3": 0.0,
+        "band_volume_mm3": 75.247
+      },
+      "14.2..17.8": {
+        "symmetric_difference_mm3": 0.0,
+        "band_volume_mm3": 75.247
+      }
+    },
+    "XIAO_Rod_Holder": {
+      "-5..-2.6": {
+        "symmetric_difference_mm3": 0.0,
+        "band_volume_mm3": 48.089
+      },
+      "21..23.4": {
+        "symmetric_difference_mm3": 0.0,
+        "band_volume_mm3": 48.089
+      }
+    }
+  },
+  "Battery_Holder": {
+    "cell_clearance_flange_overlap_per_side_mm": 2.25,
+    "solid_PETG_g": 3.653296336510679,
+    "r16_solid_PETG_g": 3.280704121327261,
+    "printed_islands_r16": {
+      "layers_sampled_4_to_28_mm": 120,
+      "max_islands": 13,
+      "median_islands": 9.0,
+      "smallest_island_mm2": 2.56,
+      "median_total_area_mm2": 53.17,
+      "layers_at_one_island": 0
+    },
+    "printed_islands_r17": {
+      "layers_sampled_4_to_28_mm": 120,
+      "max_islands": 1,
+      "median_islands": 1.0,
+      "smallest_island_mm2": 59.455,
+      "median_total_area_mm2": 60.47,
+      "layers_at_one_island": 120
+    }
+  },
+  "Battery_End_Gate": {
+    "relaxed_seated_overlap_mm3": 0.0,
+    "clearance_to_cap_ramp_with_legs_flexed_mm": 0.48,
+    "free_travel_toward_cap_with_bump_in_notch_mm": 0.26,
+    "free_travel_toward_plus_y_wall_mm": 0.26,
+    "bump_overlap_mm3_when_lifted_by_mm": {
+      "0.5": 0.0651,
+      "1.0": 0.4081,
+      "1.5": 0.4844,
+      "2.5": 0.4844,
+      "4.0": 0.4844
+    },
+    "detent_bump_overlap_with_wall_mm": 0.25,
+    "leg_side_clearance_to_wall_mm": 0.2,
+    "stiffness_screen": {
+      "assumed_modulus_MPa": 2000.0,
+      "deflection_mm": 0.25,
+      "estimated_force_N_each_leg": 2.92,
+      "estimated_leg_root_stress_MPa": 23.6,
+      "estimated_leg_root_strain_percent": 1.18,
+      "status": "Estimate from beam formulas with an assumed modulus; real force is unmeasured."
+    },
+    "solid_PETG_g": 0.16066000659484486
+  },
+  "XIAO_Rod_Holder": {
+    "official_board_mm": {
+      "length": 20.955,
+      "width": 17.78,
+      "corner_radius": 1.905
+    },
+    "pcb_thickness_from_official_step_mm": 1.25,
+    "rail_inner_half_width_mm": 10.0,
+    "side_allowance_per_side_mm": 1.11,
+    "r16_side_allowance_per_side_mm": 0.31,
+    "axial_travel_mm": {
+      "to_near_V": 0.424,
+      "to_far_stop_on_centre": 0.371
+    },
+    "minimum_ledge_contact_under_each_corner_mm2": {
+      "+X near": 0.469,
+      "-X near": 0.469,
+      "+X far": 0.846,
+      "-X far": 0.846
+    },
+    "board_poses": 13,
+    "stop_engagement_0p2_past_travel_mm3": {
+      "near": 0.2961,
+      "far": 0.4448
+    },
+    "minimum_finger_overlap_over_board_corner_at_any_reachable_pose_mm2": {
+      "+X near": 1.324,
+      "-X near": 1.324,
+      "+X far": 1.817,
+      "-X far": 1.817
+    },
+    "material_over_pad_rows_above_rail_top_mm3": {
+      "holder": 0.0,
+      "seated_plate": 0.0
+    },
+    "pad_rows_assembly_y_mm": {
+      "first_pad_starts": 3.278,
+      "last_pad_ends": 20.157
+    },
+    "wire_exit_corridors_checked": 19,
+    "plate_removal_vs_every_wire_route_max_overlap_mm3": 0.0,
+    "insertion": {
+      "tilt_degrees": 6.0,
+      "slide_mm": 2.0,
+      "steps": 21,
+      "how": "Tilt the near end up about 6 degrees, slide the USB end under the two far fingers, then lower the near end onto its ledges and slide the plate in. The side wires stay outside the rails."
+    },
+    "solid_PETG_g": 2.1770938411190626
+  },
+  "XIAO_Top_Retainer": {
+    "plate_underside_above_pcb_top_mm": 0.3,
+    "far_finger_underside_above_pcb_top_mm": 0.3,
+    "clearance_in_groove_mm": {
+      "under_plate": 0.1,
+      "over_plate": 0.2,
+      "at_back_wall": 0.2
+    },
+    "relaxed_seated_overlap_mm3": 0.0,
+    "bump_overlap_mm3_when_pulled_by_mm": {
+      "0.5": 0.0569,
+      "1.0": 0.3614,
+      "1.5": 0.4283,
+      "2.5": 0.4283
+    },
+    "detent_bump_overlap_with_wall_mm": 0.25,
+    "stiffness_screen": {
+      "assumed_modulus_MPa": 2000.0,
+      "deflection_mm": 0.25,
+      "arm_length_mm": 4.2,
+      "arm_width_mm": 0.85,
+      "estimated_force_N_each_arm": 1.66,
+      "estimated_root_stress_MPa": 36.1,
+      "estimated_root_strain_percent": 1.81,
+      "status": "Estimate from a cantilever formula with an assumed modulus; real force is unmeasured."
+    },
+    "contact_with_board": "None at nominal. The plate and far fingers are stops above bare PCB corners; they bear only if the board lifts by more than 0.3 mm.",
+    "solid_PETG_g": 0.20301115157565428
+  },
+  "passed": true
+}

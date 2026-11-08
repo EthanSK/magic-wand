@@ -1,0 +1,279 @@
+{
+  "input": "Offline Bambu Studio CLI re-slice of the prepared 8 mm outer-brim R16 project; not the file the printer ran",
+  "input_sha256": "434697a40f50531b4d06a24e369903d3867ca69cecdb38e03deaaf72043b6d5c",
+  "generator_sha256": "b17cb8509f7b82d89c5dab54d1a8a576d4f76765d667b21a5ea00ab3f4a67f63",
+  "travel_parser_sha256": "2b3d8f557ee3f1cd9ba298abf431611c174a5f40da634278a1a6c4611c7a7ce2",
+  "r17_project_sha256": "3ad7aa4f544c3c87c24484832bddc16496f32bb02d4cc4c43903e7787d5b49b9",
+  "settings_read_from_retry_project": {
+    "brim_type": "outer_only",
+    "brim_width": "8",
+    "brim_object_gap": "0.1",
+    "initial_layer_line_width": "0.5",
+    "textured_plate_temp": [
+      "70"
+    ],
+    "nozzle_temperature": [
+      "255"
+    ],
+    "z_hop": [
+      "0.4"
+    ],
+    "z_hop_types": [
+      "Auto Lift"
+    ],
+    "wall_loops": "3",
+    "enable_support": "0"
+  },
+  "timelapse": {
+    "source": "Camera timelapse of the failed retry, 185 frames; not committed. The plate had 178 layers, and frames near the end are identical, so frame number is treated as approximately layer number. That mapping is an inference.",
+    "observations": [
+      {
+        "frames": "0-109",
+        "observation": "No visible anomaly on the battery holder."
+      },
+      {
+        "frames": "109-110",
+        "observation": "A discrete change between consecutive frames: the top of the open battery lattice is disturbed and two upright posts are exposed. Layer 110 of 178 prints at Z 22 mm in the retry G-code."
+      },
+      {
+        "frames": "111-112",
+        "observation": "Loose strands appear at the top of the battery holder."
+      },
+      {
+        "frames": "112-147",
+        "observation": "A growing nest of misplaced filament on the battery holder. The base stays on the plate through this period."
+      },
+      {
+        "frames": "148",
+        "observation": "The whole battery holder leaves its position, about 38 layers after the first visible change. The 8 mm outer brim stays on the plate with a clean part-shaped opening."
+      }
+    ],
+    "reading": "The first visible failure is high up in the part, not at the bed. Loss of the part from the bed came second. What triggered the first change (curl, a travel strike, or the lattice simply breaking under the nozzle) is not visible and is not established."
+  },
+  "which_part_and_what_opening": {
+    "part": "Battery_Holder",
+    "opening": "The opening left in the brim is the part's own first-layer outline: the end plate plus the ring. It is bare plate because no brim is printed under a part. The disc found inside the ring is brim plastic printed inside the 7.9 mm bore through the 30-degree clip gap.",
+    "uncertainty": "Identified from plate position and footprint shape against the delivered layout; no physical part was measured."
+  },
+  "first_layer_seam_by_part": {
+    "Key_Carrier": {
+      "first_layer_area_mm2": 162.35,
+      "print_height_mm": 35.2,
+      "brim_to_outer_wall_bead_edge_gap_mm": {
+        "min": 0.059,
+        "median": 0.08,
+        "p95": 0.116
+      },
+      "fraction_of_outer_wall_with_brim_bead_touching": 0.0,
+      "brim_samples_inside_the_3p9_mm_bore_radius": 1238,
+      "closest_brim_sample_to_bore_axis_mm": 0.54,
+      "elastic_screen_bed_edge_tension_MPa_per_N_applied_at_top": {
+        "load_along_X": 0.0555,
+        "load_along_Y": 0.2036
+      }
+    },
+    "Battery_Holder": {
+      "first_layer_area_mm2": 190.83,
+      "print_height_mm": 35.6,
+      "brim_to_outer_wall_bead_edge_gap_mm": {
+        "min": 0.058,
+        "median": 0.081,
+        "p95": 2.493
+      },
+      "fraction_of_outer_wall_with_brim_bead_touching": 0.0,
+      "brim_samples_inside_the_3p9_mm_bore_radius": 1233,
+      "closest_brim_sample_to_bore_axis_mm": 0.535,
+      "elastic_screen_bed_edge_tension_MPa_per_N_applied_at_top": {
+        "load_along_X": 0.0434,
+        "load_along_Y": 0.1616
+      }
+    },
+    "Battery_End_Gate": {
+      "first_layer_area_mm2": 81.51,
+      "print_height_mm": 1.6,
+      "brim_to_outer_wall_bead_edge_gap_mm": {
+        "min": 0.063,
+        "median": 0.08,
+        "p95": 0.146
+      },
+      "fraction_of_outer_wall_with_brim_bead_touching": 0.0,
+      "brim_samples_inside_the_3p9_mm_bore_radius": 388,
+      "closest_brim_sample_to_bore_axis_mm": 1.843,
+      "elastic_screen_bed_edge_tension_MPa_per_N_applied_at_top": {
+        "load_along_X": 0.0036,
+        "load_along_Y": 0.0263
+      }
+    },
+    "XIAO_Rod_Holder": {
+      "first_layer_area_mm2": 94.87,
+      "print_height_mm": 28.4,
+      "brim_to_outer_wall_bead_edge_gap_mm": {
+        "min": 0.06,
+        "median": 0.081,
+        "p95": 0.219
+      },
+      "fraction_of_outer_wall_with_brim_bead_touching": 0.0,
+      "brim_samples_inside_the_3p9_mm_bore_radius": 1231,
+      "closest_brim_sample_to_bore_axis_mm": 0.535,
+      "elastic_screen_bed_edge_tension_MPa_per_N_applied_at_top": {
+        "load_along_X": 0.0803,
+        "load_along_Y": 0.2489
+      }
+    }
+  },
+  "upper_battery_printed_islands": {
+    "r16_retry": [
+      {
+        "layer_top_mm": 18.0,
+        "islands": 9,
+        "largest_mm2": 11.05,
+        "smallest_mm2": 2.46,
+        "total_mm2": 50.1
+      },
+      {
+        "layer_top_mm": 20.0,
+        "islands": 9,
+        "largest_mm2": 9.15,
+        "smallest_mm2": 2.54,
+        "total_mm2": 52.33
+      },
+      {
+        "layer_top_mm": 22.0,
+        "islands": 13,
+        "largest_mm2": 16.15,
+        "smallest_mm2": 2.46,
+        "total_mm2": 66.49
+      },
+      {
+        "layer_top_mm": 24.0,
+        "islands": 8,
+        "largest_mm2": 24.58,
+        "smallest_mm2": 2.46,
+        "total_mm2": 61.71
+      },
+      {
+        "layer_top_mm": 26.0,
+        "islands": 9,
+        "largest_mm2": 22.91,
+        "smallest_mm2": 2.46,
+        "total_mm2": 63.35
+      },
+      {
+        "layer_top_mm": 28.0,
+        "islands": 11,
+        "largest_mm2": 27.42,
+        "smallest_mm2": 2.46,
+        "total_mm2": 67.78
+      },
+      {
+        "layer_top_mm": 30.0,
+        "islands": 4,
+        "largest_mm2": 41.32,
+        "smallest_mm2": 7.83,
+        "total_mm2": 104.77
+      }
+    ],
+    "r17": [
+      {
+        "layer_top_mm": 18.0,
+        "islands": 1,
+        "largest_mm2": 59.42,
+        "smallest_mm2": 59.42,
+        "total_mm2": 59.42
+      },
+      {
+        "layer_top_mm": 20.0,
+        "islands": 1,
+        "largest_mm2": 59.8,
+        "smallest_mm2": 59.8,
+        "total_mm2": 59.8
+      },
+      {
+        "layer_top_mm": 22.0,
+        "islands": 1,
+        "largest_mm2": 64.3,
+        "smallest_mm2": 64.3,
+        "total_mm2": 64.3
+      },
+      {
+        "layer_top_mm": 24.0,
+        "islands": 1,
+        "largest_mm2": 66.64,
+        "smallest_mm2": 66.64,
+        "total_mm2": 66.64
+      },
+      {
+        "layer_top_mm": 26.0,
+        "islands": 1,
+        "largest_mm2": 71.04,
+        "smallest_mm2": 71.04,
+        "total_mm2": 71.04
+      },
+      {
+        "layer_top_mm": 28.0,
+        "islands": 1,
+        "largest_mm2": 75.52,
+        "smallest_mm2": 75.52,
+        "total_mm2": 75.52
+      },
+      {
+        "layer_top_mm": 30.0,
+        "islands": 1,
+        "largest_mm2": 111.55,
+        "smallest_mm2": 111.55,
+        "total_mm2": 111.55
+      }
+    ]
+  },
+  "travel_over_battery_holder_from_layer_top_18_mm": {
+    "r16_retry": {
+      "travels_over_part": 946,
+      "wipe_moves_excluded": 81,
+      "layer_top_range_mm": [
+        18.0,
+        null
+      ],
+      "layers_with_outer_wall_crossed_at_layer_height": 88,
+      "travels_crossing_any_wall": 734,
+      "of_which_at_layer_height_any_wall": 283,
+      "lowest_nozzle_height_above_layer_at_crossing_any_wall_mm": 0.0,
+      "median_nozzle_height_above_layer_at_crossing_any_wall_mm": 0.065,
+      "travels_crossing_outer_wall": 648,
+      "of_which_at_layer_height_outer_wall": 160,
+      "lowest_nozzle_height_above_layer_at_crossing_outer_wall_mm": 0.0,
+      "median_nozzle_height_above_layer_at_crossing_outer_wall_mm": 0.088,
+      "method": "G0/G1/G2/G3 including helix lifts and ramped travels; a wipe is a move with negative E; each crossing of an earlier same-layer wall inside the plan box is credited with the interpolated nozzle height at that point."
+    },
+    "r17": {
+      "travels_over_part": 1431,
+      "wipe_moves_excluded": 34,
+      "layer_top_range_mm": [
+        18.0,
+        null
+      ],
+      "layers_with_outer_wall_crossed_at_layer_height": 0,
+      "travels_crossing_any_wall": 439,
+      "of_which_at_layer_height_any_wall": 0,
+      "lowest_nozzle_height_above_layer_at_crossing_any_wall_mm": 0.6,
+      "median_nozzle_height_above_layer_at_crossing_any_wall_mm": 0.6,
+      "travels_crossing_outer_wall": 23,
+      "of_which_at_layer_height_outer_wall": 0,
+      "lowest_nozzle_height_above_layer_at_crossing_outer_wall_mm": 0.6,
+      "median_nozzle_height_above_layer_at_crossing_outer_wall_mm": 0.6,
+      "method": "G0/G1/G2/G3 including helix lifts and ramped travels; a wipe is a move with negative E; each crossing of an earlier same-layer wall inside the plan box is credited with the interpolated nozzle height at that point."
+    }
+  },
+  "findings": [
+    "The seam was not mechanically joined: the median bead-edge gap between outer wall and brim was under 0.1 mm and no outer-wall sample had a brim bead touching it.",
+    "The brim stayed on the plate, so brim-to-plate adhesion did not fail first in the retry.",
+    "The first visible change was at about layer 110, in the top of an open lattice that the slice prints as many separate islands; base release followed about 38 layers later.",
+    "R17 replaces those islands with one connected section, adds fused multi-layer anchors, and uses a 0.6 mm hop."
+  ],
+  "not_established": [
+    "What initiated the first change at layer 110: curl, a travel strike or a lattice break.",
+    "Adhesion force, peel force or the force on the part at any time.",
+    "Whether the printer ran exactly this G-code.",
+    "Whether plate cleanliness contributed."
+  ],
+  "physical_print_verified": false
+}

@@ -2285,3 +2285,44 @@ Self-improved — verified R16 draft review: a rectangular PCB reference credite
 A global print-up teardrop direction can approach a locally rotated lightening window differently. Four R16 key templates retained a 1.2 mm strip while the rotated key had approximately 0.79 mm. Measure every final rotated interface and its surviving printed material rather than copying a template minimum into the report. A local strip width and a whole-layer section answer different questions; neither establishes breaking force or fatigue.
 
 Slowing an opening roof can also change its cooling. In the checked Generic PETG recipe, longer layers exceeded the 30-second cooling threshold: ordinary gap fill received 40 percent part fan while paths tagged as overhangs or bridges received 90 percent. Read actual speed and fan state per affected extrusion feature after a local recipe change. Do not describe all unsupported paths as receiving bridge cooling, or infer absence of physical sag from those commands.
+
+### 2026-11-08 — Separate an upper print failure from its later bed release
+
+Self-improved — the R16 brimmed retry recording showed the battery lattice becoming
+ragged while its base was still in place, followed later by the whole holder
+moving away while its wide brim remained. A clean part-shaped opening in a brim
+does not by itself establish a fractured model joint or the initiating cause.
+Check the earlier layers and distinguish brim-to-bed adhesion, part-to-bed
+adhesion, the brim/part seam and the part's upper load paths. The exact printer-run
+G-code and fracture surface were not recovered, so nozzle contact, curl and the
+initial break mechanism remain hypotheses.
+
+R17's checked replacement uses a continuous battery channel and labelled fused
+bed-anchor necks outside the working spaces. Its actual-bead audit checks every
+neck layer for a continuous connection and the gap everywhere else; it does not
+infer attachment from brim width. Keep anchors distinct from functional parts,
+provide cutter access on fixed faces and do not load flexible clip arms during
+removal. Re-run the exact slice and reload checks after recipe changes: the late
+0.6 mm travel-lift change had invalidated the earlier slice receipt even though
+the meshes were unchanged. These digital improvements do not prove adhesion,
+cleanup, strength or physical fit.
+
+An envelope around a solder fillet is not a complete wire-exit check. R17's first
+top-bar draft ended its pad-side keepout 2.4 mm above the PCB and put the bar at
+2.5 mm, across pads used by the current pin plan. Passing that finite box did not
+establish a path for the real wire bend. Check a continuous exit to the external
+wire route, the populated-board loading motion and retainer removal with wires
+present. Keep actual solder/wire dimensions and unassigned prototype pins
+explicitly unknown rather than inferring them from a bare-board STEP.
+
+The final GUI reload silently changed 0.6 mm Normal travel lift to 0.4 mm Auto.
+Read effective GUI values and audit its actual re-sliced paths before sending;
+a prepared archive's embedded settings alone do not establish the sent recipe.
+Studio's sliced-file export can omit source meshes and object-instance mapping.
+Use the reviewed geometry as an explicit expectation, verify path placements and
+map actual object IDs, rather than treating absent meshes as a successful check.
+
+A narrow bed-side relief can make a spring arm disappear on layer one while
+later layers still print. The broad-overhang detector missed R17's short 3.5 mm
+second-layer retainer bridge. Independent review exposed it; keep that detector
+limit and the accepted physical trial condition beside the passing receipt.

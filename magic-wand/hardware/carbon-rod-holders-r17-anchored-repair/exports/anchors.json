@@ -1,0 +1,161 @@
+{
+  "generator_sha256": "5eb0e3634243f146afc67d016a3ac37e78dc8aa73ff9ee61ee21028a6e1d15ca",
+  "parameters": {
+    "thickness_mm": 0.8,
+    "gap_mm": 1.0,
+    "band_mm": 4.0,
+    "corner_radius_mm": 1.5,
+    "neck_width_mm": 2.2,
+    "neck_overlap_mm": 0.4,
+    "flat_part_thickness_mm": 0.4,
+    "reason": "In an offline re-slice of the retry recipe the brim sat about 0.08 mm from the part with no bead touching it: a single-layer film with no fused joint. These are 4-layer flanges tied to the part by fused necks on fixed faces and kept out of every bore, clip gap and working space.",
+    "removal": "After the print has cooled, cut each neck with side cutters at the fixed face of the part, approaching from the flange side, then lift the flange away. Never lever against a ring arm, a thin ledge or a retainer finger."
+  },
+  "parts": {
+    "Battery_Holder": {
+      "thickness_mm": 0.8,
+      "flange_area_mm2": 273.22,
+      "plan_area_mm2": 291.71,
+      "volume_mm3": 233.37,
+      "solid_PETG_g": 0.2964,
+      "neck_count": 6,
+      "neck_sites_print_xy_outward_mm": [
+        [
+          6.0,
+          17.18,
+          0,
+          1
+        ],
+        [
+          23.2,
+          17.18,
+          0,
+          1
+        ],
+        [
+          2.4,
+          13.0,
+          -1,
+          0
+        ],
+        [
+          26.8,
+          13.0,
+          1,
+          0
+        ],
+        [
+          5.0,
+          9.0,
+          0,
+          -1
+        ],
+        [
+          24.2,
+          9.0,
+          0,
+          -1
+        ]
+      ],
+      "first_layer_area_mm2": 190.83,
+      "stl_sha256": "7ad1e51b796fa9c865aa9c6097d8dcb0a3814d379449537d26d28339895e8ed9"
+    },
+    "Battery_End_Gate": {
+      "thickness_mm": 0.4,
+      "flange_area_mm2": 58.05,
+      "plan_area_mm2": 63.65,
+      "volume_mm3": 25.46,
+      "solid_PETG_g": 0.0323,
+      "neck_count": 2,
+      "neck_sites_print_xy_outward_mm": [
+        [
+          7.2,
+          6.0,
+          0,
+          1
+        ],
+        [
+          19.3,
+          6.0,
+          0,
+          1
+        ]
+      ],
+      "first_layer_area_mm2": 79.06,
+      "stl_sha256": "278d513c622798e0c454467fdf30d083a2a69beeafad22a97ba473fcd8e2c62c"
+    },
+    "XIAO_Rod_Holder": {
+      "thickness_mm": 0.8,
+      "flange_area_mm2": 218.33,
+      "plan_area_mm2": 236.47,
+      "volume_mm3": 189.18,
+      "solid_PETG_g": 0.2403,
+      "neck_count": 6,
+      "neck_sites_print_xy_outward_mm": [
+        [
+          2.6,
+          12.7,
+          -1,
+          0
+        ],
+        [
+          26.6,
+          12.7,
+          1,
+          0
+        ],
+        [
+          4.6,
+          16.68,
+          0,
+          1
+        ],
+        [
+          24.6,
+          16.68,
+          0,
+          1
+        ],
+        [
+          5.6,
+          10.0,
+          0,
+          -1
+        ],
+        [
+          23.6,
+          10.0,
+          0,
+          -1
+        ]
+      ],
+      "first_layer_area_mm2": 122.69,
+      "stl_sha256": "bae1c887f365a59d5c842a4519bd6ded345ee639fa86bf5890acfe2b618099b7"
+    },
+    "XIAO_Top_Retainer": {
+      "thickness_mm": 0.4,
+      "flange_area_mm2": 75.45,
+      "plan_area_mm2": 81.64,
+      "volume_mm3": 32.66,
+      "solid_PETG_g": 0.0415,
+      "neck_count": 2,
+      "neck_sites_print_xy_outward_mm": [
+        [
+          1.65,
+          10.0,
+          0,
+          1
+        ],
+        [
+          25.25,
+          10.0,
+          0,
+          1
+        ]
+      ],
+      "first_layer_area_mm2": 80.54,
+      "stl_sha256": "5a48640c450f63e16662e0ff5d98bfe3565c7800df0620033cef29ae252d40d8"
+    }
+  },
+  "physical_adhesion_verified": false
+}

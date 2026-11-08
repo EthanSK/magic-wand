@@ -1,0 +1,71 @@
+{
+  "generator_sha256": "0c9c99d97898f9ff4f1e9c5b3b2cfe78cf31528e2d91627ef5e4e94412c84215",
+  "input_project_sha256": "d110a43a1153f0ef095cb5e9e054bee555330169fccb3aeef60ab375cad6d2ba",
+  "registered_audit_sha256": "e7e54347d982d42d8fce21d565797250143c55c0e89ec0a1794faf8aee8675bf",
+  "resliced_project_sha256": "99a833a370f3aefe82dbcea78516ee734746ac8fb717cadc50e6d97189f378ae",
+  "resliced_audit_sha256": "4b8a3d664be83837c3c4815b5801c992c89079a91ed669149a6812a2b05546a4",
+  "effective_settings_identical": {
+    "bridge_no_support": true,
+    "brim_type": true,
+    "curr_bed_type": true,
+    "elefant_foot_compensation": true,
+    "enable_prime_tower": true,
+    "enable_support": true,
+    "fan_cooling_layer_time": true,
+    "fan_max_speed": true,
+    "fan_min_speed": true,
+    "filament_settings_id": true,
+    "initial_layer_infill_speed": true,
+    "initial_layer_print_height": true,
+    "initial_layer_speed": true,
+    "layer_height": true,
+    "max_bridge_length": true,
+    "nozzle_temperature": true,
+    "print_sequence": true,
+    "print_settings_id": true,
+    "printer_settings_id": true,
+    "reduce_crossing_wall": true,
+    "slow_down_layer_time": true,
+    "sparse_infill_density": true,
+    "textured_plate_temp": true,
+    "wall_loops": true,
+    "z_hop": true,
+    "z_hop_types": true
+  },
+  "modifier_settings_identical": true,
+  "modifier_effective_bounds_identical": {
+    "Battery_Holder: SLOW BAND 33.6-34.4 mm - modifier, not printed": true
+  },
+  "normalized_gcode_identical": false,
+  "resliced_actual_bead_audit_passed": true,
+  "slicer_warnings": [],
+  "slice_info_warnings_delivered": [
+    {
+      "msg": "not_support_traditional_timelapse",
+      "level": "2",
+      "error_code": "10018003"
+    },
+    {
+      "msg": "not_support_traditional_timelapse",
+      "level": "3",
+      "error_code": "1000C003"
+    }
+  ],
+  "slice_info_warnings_resliced": [
+    {
+      "msg": "not_support_traditional_timelapse",
+      "level": "2",
+      "error_code": "10018003"
+    },
+    {
+      "msg": "not_support_traditional_timelapse",
+      "level": "3",
+      "error_code": "1000C003"
+    }
+  ],
+  "slice_info_warnings_unchanged": true,
+  "gui_reopen_verified": false,
+  "physical_print_verified": false,
+  "resliced_artifacts_in_private_scratch_only": true,
+  "passed": true
+}

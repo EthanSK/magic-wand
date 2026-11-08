@@ -1,0 +1,293 @@
+{
+  "revision": "carbon-rod-holders-r17-anchored-repair",
+  "print": {
+    "printer": "Bambu Lab A1 mini 0.4 nozzle",
+    "filament": "Generic PETG @BBL A1M",
+    "process": "0.20mm Standard @BBL A1M",
+    "layer_height_mm": 0.2,
+    "walls": 3,
+    "infill_percent": 20,
+    "automatic_support": false,
+    "brim": false,
+    "plate_scope": "Battery_Holder, Battery_End_Gate, XIAO_Rod_Holder and XIAO_Top_Retainer. Key_Carrier is unchanged from R16 and is not reprinted: Ethan called the printed R16 carrier pretty good.",
+    "z_hop_mm": 0.6
+  },
+  "cage": {
+    "roof_flange_inner_x_mm": 8.0,
+    "floor_thin_mm": 1.2,
+    "floor_full_half_x_mm": 3.0,
+    "flange_lead_chamfer_mm": 0.8,
+    "wall_start_y_mm": -13.0,
+    "design": "Continuous U-channel replacing the R16 open lattice. In the retry timelapse the first visible change was at the top of the lattice at about layer 110, with the base still in place; what started it is not known. The R16 slice prints 9-13 separate islands of 2.5-16 mm2 per layer in that region, and the channel prints one connected loop, with the same cell reserve, wire exit, end plate and rings.",
+    "cap_ramp_start_xy_mm": [
+      13.0,
+      -15.95
+    ],
+    "cap_ramp_end_y_mm": -17.15,
+    "cap_reason": "The R16 guide cap closed each slot with a flat 2.2 x 6 mm patch printed over air, 0.25 mm from the gate. A 45-degree ramp grows inward from the outer wall one layer at a time, so nothing starts over air, and the gate face stays at least 0.45 mm clear of it.",
+    "chevron": {
+      "depth_mm": 0.4,
+      "pitch_mm": 7.0,
+      "apex_y_mm": [
+        -3.0,
+        4.0,
+        11.0
+      ],
+      "half_height_mm": 1.9,
+      "run_mm": 3.3,
+      "band_mm": 1.1,
+      "centre_z_mm": 8.3,
+      "note": "Shallow relief on the outside faces only, keeping the pointed look without opening the wall or the floor. Each section stays one connected loop."
+    }
+  },
+  "sensor": {
+    "rail_x_mm": [
+      10.0,
+      12.0
+    ],
+    "bar_rail_mm": [
+      11.0,
+      7.0
+    ],
+    "strut_rail_mm": [
+      11.0,
+      15.0,
+      7.6
+    ],
+    "board_thickness_mm": 1.25,
+    "board_top_z_mm": 10.05,
+    "side_allowance_mm": 1.11,
+    "near_contact_limit_y_mm": 2.7,
+    "lead_top_drop_mm": 0.5,
+    "lead_thickness_mm": 0.7,
+    "ramp_length_mm": 0.5,
+    "near_stop_clip_y_mm": 2.6,
+    "side_allowance_reason": "Ethan: it needs to be a bit wider and the solder sticks out a little. The rail inner face moves from |X| 9.2 to 10.0: 1.11 mm per side past the official 17.78 mm outline. The near V stops and far stops still locate the board, so the extra side room does not loosen it axially."
+  },
+  "retainer": {
+    "description": "Removable top plate that slides in from the near end, like the battery gate closing its cage. Rigid grooves capture it from above and a small sprung bump stops it sliding back. It and two fixed far-corner fingers overhang only the bare corners of the board, beyond the first and last pad rows, so nothing printed sits over or beside any solder pad.",
+    "plate_z_mm": [
+      10.35,
+      11.95
+    ],
+    "first_layer_relief_mm": 0.2,
+    "tab_x_mm": [
+      10.6,
+      13.0
+    ],
+    "tab_y_mm": [
+      -7.0,
+      -0.5
+    ],
+    "ear_clear_of_post_y_mm": -5.0,
+    "crossbar": {
+      "rear_x": 10.7,
+      "rear_edge_y_mm": -5.0,
+      "front_edge_y_mm": -2.6,
+      "apex_shift_mm": 2.4
+    },
+    "finger_x_mm": [
+      6.8,
+      9.4
+    ],
+    "finger_tip_y_mm": 3.0,
+    "finger_root_y_mm": -3.0,
+    "groove": {
+      "back_x_mm": 13.2,
+      "floor_z_mm": 10.25,
+      "ceiling_z_mm": 12.15,
+      "closed_end_y_mm": -0.3,
+      "lip_inner_x_mm": 10.9
+    },
+    "post": {
+      "outer_x_mm": 14.6,
+      "top_z_mm": 13.15,
+      "full_y_mm": [
+        -5.0,
+        -0.2
+      ],
+      "lead_end_y_mm": 3.0
+    },
+    "spring": {
+      "slit_x_mm": [
+        11.55,
+        12.15
+      ],
+      "slit_y_mm": [
+        -5.8,
+        -0.4
+      ],
+      "bump_y_mm": -1.6,
+      "bump_height_mm": 0.45,
+      "bump_overlap_mm": 0.25,
+      "notch_depth_mm": 0.35
+    },
+    "far_finger": {
+      "x_mm": [
+        6.8,
+        12.0
+      ],
+      "y_mm": [
+        20.7,
+        22.6
+      ],
+      "z_mm": [
+        10.35,
+        11.85
+      ],
+      "root_y_mm": [
+        22.6,
+        23.4
+      ]
+    },
+    "route_travel_mm": 12.0,
+    "fit_basis": "Loose by design: 0.1 / 0.2 mm under and over the plate, 0.2 mm at the groove wall, so printing tolerance cannot jam it. Retention from above comes from the rigid groove, not friction. A strip of removable tape is the fallback. Neither fit has been physically tested."
+  },
+  "xiao_official_mm": {
+    "source": "Seeed XIAO nRF52840 3D model (STEP, plain board) and XIAO nRF52840 Sense DXF. Board-centred: u across the width, v along the length with USB toward +v, h above the PCB top. The STEP is the plain nRF52840 plus the PDM microphone; the IMU is not modelled, and any Sense part is assumed lower than the shield.",
+    "outline": {
+      "length": 20.955,
+      "width": 17.78,
+      "corner_radius": 1.905
+    },
+    "pcb_thickness": 1.25,
+    "castellation_v_centres": [
+      -7.68,
+      -5.14,
+      -2.6,
+      -0.06,
+      2.48,
+      5.02,
+      7.56
+    ],
+    "pad_land_half_v": 0.82,
+    "components": {
+      "shield": {
+        "u": [
+          -6.3,
+          6.3
+        ],
+        "v": [
+          -7.06,
+          3.54
+        ],
+        "h": 2.0
+      },
+      "usb_c": {
+        "u": [
+          -4.48,
+          4.46
+        ],
+        "v": [
+          4.7,
+          12.0
+        ],
+        "h": 3.21,
+        "below_top": 0.99
+      },
+      "antenna": {
+        "u": [
+          -3.41,
+          -0.21
+        ],
+        "v": [
+          -10.2,
+          -8.6
+        ],
+        "h": 0.5
+      },
+      "pdm_microphone": {
+        "u": [
+          2.84,
+          6.34
+        ],
+        "v": [
+          -10.25,
+          -7.6
+        ],
+        "h": 0.94
+      },
+      "reset_button": {
+        "u": [
+          -6.52,
+          -4.92
+        ],
+        "v": [
+          7.3,
+          9.9
+        ],
+        "h": 0.73
+      },
+      "user_led": {
+        "u": [
+          5.2,
+          6.2
+        ],
+        "v": [
+          7.19,
+          8.19
+        ],
+        "h": 0.3
+      },
+      "charge_led": {
+        "u": [
+          5.07,
+          6.34
+        ],
+        "v": [
+          9.53,
+          10.16
+        ],
+        "h": 0.3
+      }
+    }
+  },
+  "anchors": {
+    "thickness_mm": 0.8,
+    "gap_mm": 1.0,
+    "band_mm": 4.0,
+    "corner_radius_mm": 1.5,
+    "neck_width_mm": 2.2,
+    "neck_overlap_mm": 0.4,
+    "flat_part_thickness_mm": 0.4,
+    "reason": "In an offline re-slice of the retry recipe the brim sat about 0.08 mm from the part with no bead touching it: a single-layer film with no fused joint. These are 4-layer flanges tied to the part by fused necks on fixed faces and kept out of every bore, clip gap and working space.",
+    "removal": "After the print has cooled, cut each neck with side cutters at the fixed face of the part, approaching from the flange side, then lift the flange away. Never lever against a ring arm, a thin ledge or a retainer finger."
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false,
+  "gate": {
+    "leg_half_width_mm": 0.6,
+    "detent_z_mm": 7.25,
+    "bump_height_mm": 0.45,
+    "bump_overlap_mm": 0.25,
+    "notch_depth_mm": 0.35,
+    "fit": "Each leg clears the slot wall by 0.2 mm and carries a small bump that clicks into a notch in the outer wall. Nothing wedges: the inner side of each leg is free, and the long gate bar and leg bow about 0.25 mm while it passes. The bump is in the layer plane of the flat-printed gate. Click force and hold are unmeasured; tape over the gate is the fallback if it is loose."
+  },
+  "wire_exit": {
+    "provisional_wire_outer_diameter_mm": 1.0,
+    "corridor_width_mm": 1.64,
+    "exit_height_above_board_mm": 8.0,
+    "outboard_x_mm": [
+      12.1,
+      16.5
+    ],
+    "run_x_mm": [
+      14.8,
+      17.5
+    ],
+    "run_y_mm": [
+      -9.0,
+      20.16
+    ],
+    "stub_height_mm": 1.5,
+    "pins_in_use": "D8 D9 D10 and GND on the +X side (pin-plan.json). The other pins for the remaining keys are not known, so all 14 castellations are kept open.",
+    "basis": "Provisional envelope: a 1.0 mm wire (28 AWG silicone is about 0.9-1.0 mm) inside the 1.64 mm width of each pad, rising from the pad and running outboard. It does not depend on solder height. Actual wire gauge, joints and bends are not measured."
+  },
+  "insertion": {
+    "tilt_degrees": 6.0,
+    "slide_mm": 2.0,
+    "steps": 21,
+    "how": "Tilt the near end up about 6 degrees, slide the USB end under the two far fingers, then lower the near end onto its ledges and slide the plate in. The side wires stay outside the rails."
+  }
+}
