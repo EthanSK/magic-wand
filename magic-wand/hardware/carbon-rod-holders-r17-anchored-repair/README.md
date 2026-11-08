@@ -14,11 +14,11 @@ remain unverified. This is a start record, not a live status feed.**
 - Battery: a continuous open U-channel replaces the thin chevron lattice. Across
   120 sampled body layers, the cross-section is now one connected island; R16 had
   a median of nine. The body has a 1.2 mm floor with a thicker central load path,
-  open top and retaining side flanges. The PKCell LP402025 reserve, end gate,
+  open top and retaining side flanges. The PKCell LP402025 reserve,
   wire routes and free rod-clip arms are preserved. The end gate now uses free
   sprung legs and small detents, rather than a rigid interference wedge.
 - This is a deliberate visual trade-off: the battery holder is plainer and about
-  0.42 g heavier by full-solid CAD volume. It retains an arrow-like end opening,
+  0.37 g heavier by full-solid CAD volume. It retains an arrow-like end opening,
   with shallow outer chevrons rather than R16's through-wall decorative lattice.
   The new shape is not physically proven.
 - XIAO: each rail moves 0.8 mm outward, increasing nominal allowance beyond the
