@@ -1,12 +1,13 @@
 {
-  "generator_sha256": "619f1d289a24341a35a3fc5325194706f6a8f1af41a5e652435cf45a443bc276",
-  "input_project_sha256": "8e3b08b5a52cc97aca47152f09dc0b80dba43d238d29714636ca9b7007107d35",
-  "registered_audit_sha256": "749e9bccc204a6820165a30665d224e4549c5e562bdc39feec5316605d48d947",
-  "resliced_project_sha256": "b9a2d471a0e019ba20b0ad92baa749cd7fc3de85e3811339df57a2ac63110698",
-  "resliced_audit_sha256": "a62579c442de345778bef4d2b89de3c2f12fd44acc4d79990146c4b4584aabbc",
+  "generator_sha256": "39227eb55b73d22c46a96fcbf47db2b44d749581aa5a450b11a6e634332390a7",
+  "input_project_sha256": "e654cd966ec62417b9a5b0e97dbd9d55cc004a8d849b631eb0b138268b091246",
+  "registered_audit_sha256": "2e5438096a08d2904d607da117ec0bf834ea01ca74e7ed3db29a6facebd420a2",
+  "resliced_project_sha256": "82689b76c66679285a2f70de4f11c5fcd1888f8350cd3b2a29faf7372cfcf18d",
+  "resliced_audit_sha256": "d3dafde9baea8f0bdc24d09759ea65011a98d126bff917f189c631994929c685",
   "effective_settings_identical": {
     "bridge_no_support": true,
     "brim_type": true,
+    "change_filament_gcode": true,
     "curr_bed_type": true,
     "elefant_foot_compensation": true,
     "enable_prime_tower": true,
@@ -18,7 +19,10 @@
     "initial_layer_infill_speed": true,
     "initial_layer_print_height": true,
     "initial_layer_speed": true,
+    "layer_change_gcode": true,
     "layer_height": true,
+    "machine_end_gcode": true,
+    "machine_start_gcode": true,
     "max_bridge_length": true,
     "nozzle_temperature": true,
     "print_sequence": true,
@@ -28,6 +32,7 @@
     "slow_down_layer_time": true,
     "sparse_infill_density": true,
     "textured_plate_temp": true,
+    "time_lapse_gcode": true,
     "wall_loops": true,
     "z_hop": true,
     "z_hop_types": true
@@ -67,5 +72,23 @@
   "gui_reopen_verified": false,
   "physical_print_verified": false,
   "resliced_artifacts_in_private_scratch_only": true,
+  "executable_commands": {
+    "passed": true,
+    "project_sha256": "82689b76c66679285a2f70de4f11c5fcd1888f8350cd3b2a29faf7372cfcf18d",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "layer_change_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 255.0,
+    "first_object_bed_target_c": 70.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ]
+  },
   "passed": true
 }

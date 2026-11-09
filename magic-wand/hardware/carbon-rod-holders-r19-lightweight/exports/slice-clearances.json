@@ -1,5 +1,5 @@
 {
-  "project_sha256": "8e3b08b5a52cc97aca47152f09dc0b80dba43d238d29714636ca9b7007107d35",
+  "project_sha256": "e654cd966ec62417b9a5b0e97dbd9d55cc004a8d849b631eb0b138268b091246",
   "manifest_sha256": "43b8b6e1c74ed2079bf53b8efadaacc9d051d33f3f698865a2bd8a232f5d287a",
   "checker_sha256": "7e54759ac0ba03a6b104c0b181b486c965399b42d1e50e4e72ac485c5714d71c",
   "travel_parser_sha256": "05b6c3fb0926b982e05098b72c25cbeefafad309e925eeb3e4efcc0b97ecf273",
@@ -22,7 +22,7 @@
     "arc_extruding_moves": 3402,
     "support_extruding_moves": 0,
     "feature_samples": {
-      "Inner wall": 119683,
+      "Inner wall": 119682,
       "Outer wall": 207150,
       "Gap infill": 60851,
       "Bottom surface": 23240,
@@ -316,7 +316,7 @@
       "normal_mesh_difference_mm3": 4.596759103114318e-05,
       "anchor_mesh_difference_mm3": 1.4074810055142656e-06,
       "anchor_part_label": "REMOVE AFTER PRINT - XIAO_Rod_Holder tear-off pads",
-      "path_samples": 158040,
+      "path_samples": 158039,
       "checks": {
         "unloaded_clip_bore": {
           "checked_samples": 18983,
@@ -967,17 +967,17 @@
             ]
           },
           "fan_M106_0_255": [
-            216
+            211
           ],
           "feature_length_mm_by_fan": {
             "Inner wall": {
-              "216": 27.5
+              "211": 27.5
             },
             "Outer wall": {
-              "216": 73.0
+              "211": 73.0
             },
             "Gap infill": {
-              "216": 41.4
+              "211": 41.4
             }
           }
         },
@@ -996,19 +996,19 @@
             ]
           },
           "fan_M106_0_255": [
-            214,
+            209,
             229
           ],
           "feature_length_mm_by_fan": {
             "Inner wall": {
-              "214": 27.6
+              "209": 27.6
             },
             "Outer wall": {
-              "214": 60.6,
+              "209": 60.6,
               "229": 12.4
             },
             "Gap infill": {
-              "214": 40.9
+              "209": 40.9
             }
           }
         },
@@ -1027,19 +1027,19 @@
             ]
           },
           "fan_M106_0_255": [
-            209,
+            204,
             229
           ],
           "feature_length_mm_by_fan": {
             "Inner wall": {
-              "209": 52.1
+              "204": 52.1
             },
             "Outer wall": {
-              "209": 60.5,
+              "204": 60.5,
               "229": 12.5
             },
             "Gap infill": {
-              "209": 29.1
+              "204": 29.1
             }
           }
         },
@@ -1058,19 +1058,19 @@
             ]
           },
           "fan_M106_0_255": [
-            201,
+            196,
             229
           ],
           "feature_length_mm_by_fan": {
             "Inner wall": {
-              "201": 52.2
+              "196": 52.2
             },
             "Outer wall": {
-              "201": 60.5,
+              "196": 60.5,
               "229": 12.5
             },
             "Gap infill": {
-              "201": 42.1
+              "196": 42.1
             }
           }
         }
@@ -6064,7 +6064,7 @@
       "XIAO_Rod_Holder": {
         "islands_checked": 366,
         "smallest_printed_fraction_of_an_island": 0.87,
-        "at_layer_top_y_mm": 10.4,
+        "at_layer_top_y_mm": 17.8,
         "island_area_mm2": 8.5,
         "smallest_printed_area_of_an_island_mm2": 4.07,
         "smallest_printed_island_layer_y_mm": 18.8,
@@ -6073,8 +6073,8 @@
     }
   },
   "battery_travel_exposure_from_layer_top_20_mm": {
-    "travels_over_part": 5464,
-    "wipe_moves_excluded": 1546,
+    "travels_over_part": 5428,
+    "wipe_moves_excluded": 1545,
     "layer_top_range_mm": [
       20.0,
       null
@@ -6082,42 +6082,42 @@
     "length_split_mm": 2.0,
     "layers_with_outer_wall_crossed_at_layer_height": 20,
     "any_wall_all": {
-      "travels_crossing": 725,
+      "travels_crossing": 690,
       "of_which_at_layer_height": 136,
       "lowest_nozzle_height_mm": 0.0,
       "median_nozzle_height_mm": 0.6,
       "longest_flat_move_mm": 0.988
     },
     "any_wall_longer_than_2_mm": {
-      "travels_crossing": 320,
+      "travels_crossing": 306,
       "of_which_at_layer_height": 0,
       "lowest_nozzle_height_mm": 0.6,
       "median_nozzle_height_mm": 0.6,
       "longest_flat_move_mm": 0.0
     },
     "any_wall_up_to_2_mm": {
-      "travels_crossing": 405,
+      "travels_crossing": 384,
       "of_which_at_layer_height": 136,
       "lowest_nozzle_height_mm": 0.0,
       "median_nozzle_height_mm": 0.6,
       "longest_flat_move_mm": 0.988
     },
     "outer_wall_all": {
-      "travels_crossing": 229,
+      "travels_crossing": 199,
       "of_which_at_layer_height": 20,
       "lowest_nozzle_height_mm": 0.0,
       "median_nozzle_height_mm": 0.6,
       "longest_flat_move_mm": 0.436
     },
     "outer_wall_longer_than_2_mm": {
-      "travels_crossing": 159,
+      "travels_crossing": 145,
       "of_which_at_layer_height": 0,
       "lowest_nozzle_height_mm": 0.6,
       "median_nozzle_height_mm": 0.6,
       "longest_flat_move_mm": 0.0
     },
     "outer_wall_up_to_2_mm": {
-      "travels_crossing": 70,
+      "travels_crossing": 54,
       "of_which_at_layer_height": 20,
       "lowest_nozzle_height_mm": 0.0,
       "median_nozzle_height_mm": 0.6,

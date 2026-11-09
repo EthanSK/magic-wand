@@ -50,7 +50,8 @@ def run(scratch: Path) -> None:
     keys = set(project19.PROCESS_OVERRIDES) | set(project19.PRINTER_OVERRIDES) | {
         'printer_settings_id', 'print_settings_id', 'filament_settings_id', 'curr_bed_type',
         'nozzle_temperature', 'textured_plate_temp', 'elefant_foot_compensation',
-        'fan_min_speed', 'fan_max_speed', 'slow_down_layer_time', 'fan_cooling_layer_time'}
+        'fan_min_speed', 'fan_max_speed', 'slow_down_layer_time', 'fan_cooling_layer_time',
+        'machine_start_gcode', 'machine_end_gcode', 'layer_change_gcode', 'time_lapse_gcode', 'change_filament_gcode'}
     settings_equal = {key: before.get(key) == after.get(key) for key in sorted(keys)}
     modifiers_before = common.modifier_settings(before_model)
     modifiers_after = common.modifier_settings(after_model)
@@ -82,6 +83,7 @@ def run(scratch: Path) -> None:
         'slice_info_warnings_unchanged': slice_info_before == slice_info_after,
         'gui_reopen_verified': False, 'physical_print_verified': False,
         'resliced_artifacts_in_private_scratch_only': True,
+        'executable_commands': project19.command_audit(result_path, project19.settings()),
     }
     report['passed'] = bool(all(settings_equal.values()) and report['modifier_settings_identical']
                             and all(placement_equal.values()) and audit['passed'] and not warnings and slice_info_before == slice_info_after)

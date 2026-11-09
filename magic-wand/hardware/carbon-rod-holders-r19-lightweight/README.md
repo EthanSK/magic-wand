@@ -6,8 +6,10 @@ R18 and every older revision are unchanged. The key carrier is not reprinted.
 
 **Status: digital geometry, slice checks and independent Opus review of the
 corrections passed. Seven review findings are addressed in [the audit](AUDIT.md).
-Not printed; no real R19 Studio export checked. Fit, retention, strength and
-cleanup are unverified. Ethan was still testing R18 fit when this was designed,
+No successful physical R19 trial yet; no real R19 Studio export checked. A first
+attempt was stopped after a machine-command defect; the corrected source below
+uses the proper A1 mini templates. Fit, retention, strength and cleanup are
+unverified. Ethan was still testing R18 fit when this was designed,
 so any fit change he finds still needs to be applied.**
 
 ## How much lighter
@@ -25,8 +27,9 @@ The door, keeper and three spacers are the same R18 meshes, byte for byte, so th
 are not counted as savings. Sliced figures are filament fed, not a weighed part.
 Full numbers are in [the mass comparison](exports/mass-comparison.json).
 
-The whole plate falls from 8.01 g and about 56 minutes to 6.30 g and about 47
-minutes on the CLI estimate, including all three spacers.
+The corrected R19 whole plate is estimated at 6.28 g and about 56 minutes,
+including the proper A1 mini startup and all three spacers. The earlier
+47-minute estimate came from the rejected generic startup and must not be used.
 
 ## What changed
 
@@ -83,6 +86,13 @@ A1 mini, 0.4 mm nozzle, textured PEI, Generic PETG, 255 C / 70 C, 0.2 mm layers,
 Studio has reset travel lift on reload before: check it again. Timelapse is
 enabled in the send dialog, not in this archive.
 
+The builder resolves both inherited settings and the included A1 mini command
+templates. Its executable-command audit rejects an incorrect or merely
+conditional temperature wait, an unexpected printing-temperature change,
+absolute object extrusion, unresolved placeholders or missing heater shutdown.
+Profile names and temperature metadata alone are insufficient. Older revision
+generators are preserved; re-audit their actual commands before any reuse.
+
 Tear-off pads are unchanged in type: 0.4 mm thick, 1.0 x 0.4 mm ties, six per
 holder, on six battery pads and four XIAO pads. The battery's side ties moved
 0.3 mm inward to the narrower frame. The XIAO's upper side ties moved onto the
@@ -115,5 +125,13 @@ Run through the repository geometry runner, in order: `holder19.py`, `anchors19.
 `mass19.py`. `gui-audit19.py` audits a final Studio export against this source
 slice. Its source-receipt guard accepts R19 and rejects the R18 archive. The full
 audit passed on a synthetic meshless Studio-format fixture holding the exact R19
-G-code from before the review corrections, and again on the final CLI archive.
-Neither is a real Studio export. A real R19 Studio export has not yet been checked.
+G-code from before the review corrections, and again on the CLI archive before
+the machine-template correction. Neither is a real Studio export. The corrected
+source passes the actual-bead and executable-command audits; a real R19 Studio
+export has not yet been checked.
+
+For changes to the profile resolver or command audit, also run
+`<cad-python> -m unittest discover -s magic-wand/hardware/carbon-rod-holders-r19-lightweight -p test_project19.py -v`
+from the repository root. Ten regressions include the false-positive case where
+an early or AMS-only 255 C wait hides a final 205 C wait followed by a non-waiting
+255 C target. The command audit also runs automatically on every builder slice.

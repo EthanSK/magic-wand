@@ -893,6 +893,20 @@ removable support where needed; the face-angle summary alone does not establish 
 print. Test the mating coupons before claiming printed fit.
 
 Bambu CLI profiles must be fully resolved rather than raw bundled files with `inherits`.
+Resolve `include` templates too: the A1 mini's startup, shutdown, layer-change,
+timelapse and filament-change commands are separate included profiles. Omitting
+them left a generic 205 C startup in an archive whose PETG metadata said 255 C,
+with no executable command to raise it. The R19 physical attempt was stopped
+after malformed first-layer deposits; that observation does not isolate every
+contributor to the failed layer. `project19.py` now resolves those templates and
+rejects a sliced archive unless the official machine macros match, the actual
+first-object temperature and final unconditional waits match the material/plate, later object
+temperatures remain correct, and the end sequence switches both heaters off.
+The regression reproduces the misleading-metadata case independently of a real
+printer, including an early or AMS-only 255 C wait followed by a final 205 C wait
+and a non-waiting 255 C target. Digital acceptance still does not establish physical adhesion or fit.
+Self-improved — 2026-11-09; evidence: the R19 builder, command audit and
+`carbon-rod-holders-r19-lightweight/test_project19.py` regression.
 When packaging a local 3MF with altered process values, register those keys in the process
 slot of `different_settings_to_system`. Otherwise Studio can load the named system preset
 and discard the values even though the original CLI slice used them. Verify by opening and

@@ -1,6 +1,6 @@
 {
-  "layout_sha256": "14612441d7f8d27fbf8b66826fee1bf45b3a73e6e4b1de59964e5abc73c845e0",
-  "generator_sha256": "32cd5bec30f0808fc5f1a4ed2b14f68fc801150d26ee8dddb7e83d4a3d539916",
+  "layout_sha256": "0a14e6b500f817b951d890614c5f16a62c13fd9797ca68ce73d80480d181d1df",
+  "generator_sha256": "a70beebc3b524bac199d4b7b221157f36051aaf65671d4fabb9625698367aa60",
   "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
   "parts": [
     "Battery_Holder",
@@ -215,29 +215,30 @@
         "feature_type_times": {
           "Bottom surface": 130.01412963867188,
           "Bridge": 1.7098175287246704,
-          "Custom": 34.49263000488281,
-          "Gap infill": 352.3505554199219,
-          "Inner wall": 584.0906982421875,
-          "Internal solid infill": 80.32111358642578,
-          "Outer wall": 1036.236572265625,
+          "Custom": 364.1436767578125,
+          "Flush": 28.0,
+          "Gap infill": 347.671142578125,
+          "Inner wall": 570.4345092773438,
+          "Internal solid infill": 80.15193176269531,
+          "Outer wall": 1006.65380859375,
           "Overhang wall": 0.43432068824768066,
           "Sparse infill": 0.3202754557132721,
-          "Top surface": 125.01492309570312,
-          "Travel": 505.9492492675781,
-          "Undefined": 490.67633056640625
+          "Top surface": 124.50733947753906,
+          "Travel": 732.7588500976562,
+          "Undefined": 714.3987426757812
         },
         "filament_change_times": 0,
         "filaments": [
           {
             "filament_id": "GFG99",
             "id": 1,
-            "main_used_g": 6.298888683319092,
-            "total_used_g": 6.298888683319092
+            "main_used_g": 6.2797722816467285,
+            "total_used_g": 6.2797722816467285
           }
         ],
         "id": 1,
         "layer_filament_change": 0,
-        "main_predication": 2816.643798828125,
+        "main_predication": 2966.84619140625,
         "obj_cached_cnt": 0,
         "objects": [
           {
@@ -333,33 +334,33 @@
           }
         ],
         "times": {
-          "conflict_check_time": 17,
-          "detect_overhangs_time": 3,
-          "export_gcode_time": 4744,
+          "conflict_check_time": 14,
+          "detect_overhangs_time": 5,
+          "export_gcode_time": 863,
           "flush_plan_time": 0,
-          "generate_support_material_time": 24,
-          "infill_generate_time": 35,
-          "infill_time": 70,
+          "generate_support_material_time": 21,
+          "infill_generate_time": 32,
+          "infill_time": 95,
           "ironing_time": 0,
-          "make_perimeters_time": 134,
+          "make_perimeters_time": 160,
           "multifilament_segment_2d_time": 0,
-          "other_slice_time": 1,
-          "prepare_infill_time": 35,
-          "region_split_time": 1,
+          "other_slice_time": 4,
+          "prepare_infill_time": 63,
+          "region_split_time": 3,
           "skirt_brim_time": 0,
-          "slice_layers_time": 45,
-          "sliced_time": 5019,
-          "sliced_time_with_cache": 4744,
+          "slice_layers_time": 52,
+          "sliced_time": 1207,
+          "sliced_time_with_cache": 863,
           "support_detect_time": 0,
           "support_interface_time": 0,
           "support_normal_generate_time": 0,
           "support_toolpath_time": 0,
           "support_tree_generate_time": 0,
-          "toolpath_time": 18,
-          "wall_time": 88,
-          "wipe_tower_time": 5
+          "toolpath_time": 34,
+          "wall_time": 105,
+          "wipe_tower_time": 6
         },
-        "total_predication": 2835.833251953125,
+        "total_predication": 3368.629638671875,
         "triangle_count": 18188,
         "warning_message": ""
       }
@@ -371,7 +372,25 @@
     "values_unchanged": true
   },
   "sliced_project_filename": "R19-A1-mini-PETG.gcode.3mf",
-  "sliced_project_sha256": "8e3b08b5a52cc97aca47152f09dc0b80dba43d238d29714636ca9b7007107d35",
+  "sliced_project_sha256": "e654cd966ec62417b9a5b0e97dbd9d55cc004a8d849b631eb0b138268b091246",
+  "executable_commands": {
+    "passed": true,
+    "project_sha256": "e654cd966ec62417b9a5b0e97dbd9d55cc004a8d849b631eb0b138268b091246",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "layer_change_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 255.0,
+    "first_object_bed_target_c": 70.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ]
+  },
   "slice_info_warnings": [
     {
       "msg": "not_support_traditional_timelapse",

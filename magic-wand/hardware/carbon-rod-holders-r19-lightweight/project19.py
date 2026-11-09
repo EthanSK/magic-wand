@@ -25,11 +25,66 @@ ORIGINS = {'Battery_Holder': (30, 115), 'XIAO_Rod_Holder': (110, 115), 'Battery_
 META = {'name', 'inherits', 'type', 'from', 'version', 'setting_id', 'instantiation', 'description', 'compatible_printers', 'compatible_printers_condition'}
 
 
-def resolve(kind, name):
+def resolve(kind: str, name: str) -> dict:
     data = json.loads((PROFILES / kind / (name + '.json')).read_text()); parent = data.get('inherits', '')
     result = resolve(kind, parent) if parent else {}
+    # Bambu's A1 mini commands live in included templates, not its inheritance chain.
+    # Ignoring include left the generic 205 C startup/end sequence in a PETG file.
+    for included in data.get('include', []):
+        result.update({k: v for k, v in resolve(kind, included).items() if k not in META})
     result.update(data)
     return result
+
+
+def command_audit(path: Path, expected: dict) -> dict:
+    """Reject the old 205 C fallback and check executable temperatures, not profile labels."""
+    with zipfile.ZipFile(path) as archive:
+        config = json.loads(archive.read('Metadata/project_settings.config'))
+        text = archive.read('Metadata/plate_1.gcode').decode()
+    machine = resolve('machine', expected['printer_settings_id'])
+    keys = ('machine_start_gcode', 'machine_end_gcode', 'layer_change_gcode', 'time_lapse_gcode', 'change_filament_gcode')
+    assert all(config.get(key) == machine[key] for key in keys), 'Machine command templates differ from the resolved A1 mini profile'
+    executable = text.split('; EXECUTABLE_BLOCK_START', 1)[1]
+    before, objects = executable.split('; start printing object,', 1)
+    assert 'machine: A1 mini' in before, 'Executable startup is not labelled for the A1 mini'
+    commands = '\n'.join(line.split(';', 1)[0].strip() for line in executable.splitlines())
+    assert not re.search(r'[{}\[\]]', commands), 'Unresolved placeholder in executable commands'
+    def targets(lines: str, commands: str) -> list[float]:
+        return [float(m.group(1)) for line in lines.splitlines()
+                if (m := re.match(r'^(?:' + commands + r')\s+[^;]*?\bS(-?\d+(?:\.\d+)?)\b', line.strip()))]
+    def unconditional(lines: str) -> str:
+        # An AMS-only or flag-gated wait cannot prove an external-spool print is hot.
+        rows = []; flags = 0; ams = 0
+        for raw in lines.splitlines():
+            line = raw.split(';', 1)[0].strip()
+            if re.match(r'^M622\s', line): flags += 1
+            elif re.match(r'^M623\b', line): flags -= 1
+            elif re.match(r'^M620\s+S', line): ams += 1
+            elif re.match(r'^M621\s+S', line): ams -= 1
+            elif not flags and not ams: rows.append(line)
+            assert flags >= 0 and ams >= 0, 'Unbalanced firmware gates'
+        assert flags == 0 and ams == 0, 'Open firmware gate at the first object'
+        return '\n'.join(rows)
+    nozzle = float(expected['nozzle_temperature_initial_layer'][0])
+    bed = float(expected['textured_plate_temp_initial_layer'][0])
+    nozzle_targets = targets(before, 'M104|M109'); bed_targets = targets(before, 'M140|M190')
+    assert nozzle_targets and nozzle_targets[-1] == nozzle, ('First object nozzle target', nozzle_targets[-1:], nozzle)
+    ungated = unconditional(before)
+    assert targets(ungated, 'M109')[-1:] == [nozzle], 'No final unconditional wait for the PETG printing temperature'
+    after_wait = re.split(r'^M109\s', ungated, flags=re.M)[-1].split('\n', 1)[-1]
+    assert all(v == nozzle for v in targets(after_wait, 'M104|M109')), 'Nozzle target changed after its final wait'
+    assert bed_targets and bed_targets[-1] == bed, ('First object bed target', bed_targets[-1:], bed)
+    assert targets(ungated, 'M190')[-1:] == [bed], 'No final unconditional bed-temperature wait'
+    body, ending = objects.rsplit('; filament end gcode', 1) if '; filament end gcode' in objects else objects.rsplit('; MACHINE_END_GCODE_START', 1)
+    assert all(v == float(expected['nozzle_temperature'][0]) for v in targets(body, 'M104|M109')), 'Unexpected nozzle change during object printing'
+    assert all(v == bed for v in targets(body, 'M140|M190')), 'Unexpected bed change during object printing'
+    modes = re.findall(r'^M8[23]\b', before, re.M)
+    assert modes[-1:] == ['M83'] and not re.search(r'^M82\b', body, re.M), 'Object extrusion must stay relative (M83)'
+    assert targets(ending, 'M104|M109')[-1:] == [0.0], 'End sequence does not turn off the nozzle'
+    assert targets(ending, 'M140|M190')[-1:] == [0.0], 'End sequence does not turn off the bed'
+    return {'passed': True, 'project_sha256': h.sha(path), 'official_machine_templates_match': list(keys),
+            'first_object_nozzle_target_c': nozzle, 'first_object_bed_target_c': bed,
+            'printing_temperature_wait_present': True, 'ending_heater_targets_c': [0, 0]}
 
 
 def settings():
@@ -146,6 +201,7 @@ def build(scratch, do_slice):
         report['slice'] = {k: v for k, v in result.items() if k in ('return_code', 'error_string', 'sliced_plates')}; report['warnings'] = [p['warning_message'] for p in result['sliced_plates'] if p.get('warning_message')]
         (out / target).write_bytes((scratch / target).read_bytes())
         report['delivered_settings_registration'] = restore_registration(out / target, cfg); report['sliced_project_filename'] = target; report['sliced_project_sha256'] = h.sha(out / target)
+        report['executable_commands'] = command_audit(out / target, cfg)
         report['slice_info_warnings'] = slice_info_warnings(out / target)
         match = re.search(r'BambuStudio Version (\S+)', (scratch / 'slice.log').read_text()); report['bambu_studio_version'] = match.group(1) if match else None
     (out / (label + '-print-checks.json')).write_text(json.dumps(report, indent=2) + '\n')

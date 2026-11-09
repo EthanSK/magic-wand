@@ -2,20 +2,52 @@
 
 Authoring checks, plus independent Claude Opus 5.5 review and a scoped review of
 the corrections, accepted the final geometry and slice as a digitally checked
-candidate. Seven findings and their dispositions are at the end. Nothing here
-has been printed, and no real R19 Studio export has been audited. A digital pass
+candidate. Seven findings and their dispositions are at the end. No R19 component
+has completed a successful physical trial, and no real R19 Studio export has been audited. A digital pass
 does not prove strength, fit, pouch safety, spring force, fatigue or clean tear-off.
 
 ## Exact artifacts
 
 - CLI slice `exports/R19-A1-mini-PETG.gcode.3mf`, SHA-256
-  `8e3b08b5a52cc97aca47152f09dc0b80dba43d238d29714636ca9b7007107d35`.
+  `e654cd966ec62417b9a5b0e97dbd9d55cc004a8d849b631eb0b138268b091246`.
 - Layout `exports/R19-A1-mini-PETG-layout.3mf`, SHA-256
-  `14612441d7f8d27fbf8b66826fee1bf45b3a73e6e4b1de59964e5abc73c845e0`.
+  `0a14e6b500f817b951d890614c5f16a62c13fd9797ca68ce73d80480d181d1df`.
 - `Battery_Holder` print STL `4319800ff7cc512b63d352a3d291bf8403eca331f873c6e0116c44b9ab1baa9b`.
 - `XIAO_Rod_Holder` print STL `7efef5ada69c6668f4b9a105de5e6d155afbcd2d41f9327666b33f4f2952fce6`.
 - Door, keeper and spacers are byte-identical to R18. `holder19.py` asserts this
   on every export and records the hashes in `exports/manifest.json`.
+
+## Machine-command correction, 9 November 2026
+
+The original archive declared PETG at 255 C but executed a generic 205 C startup
+with no later temperature increase. A physical first-layer attempt was stopped.
+The builder had resolved `inherits` while omitting the five included A1 mini
+command templates. The corrected archive above includes the official startup,
+shutdown, layer-change, timelapse and filament-change routines. Geometry and
+bought-part interfaces are unchanged. The new actual-bead, short-feature,
+reopen/re-slice and mass checks passed on the corrected source.
+
+Claude Opus 5.5 independently inspected the actual corrected command stream and
+accepted it for a physical trial: the final unconditional `M109 S255` precedes
+every object, the bed waits at 70 C, object extrusion stays relative, and both
+heaters are switched off at shutdown. The review also found that the first
+guard could accept an earlier gated 255 C wait while a final wait was 205 C.
+That counterexample is now rejected by the guard and ten focused regressions.
+The guard additionally rejects unresolved executable placeholders, a wrong
+machine header, mid-print bed changes and absolute object extrusion.
+
+The review suggested turning Timelapse off to avoid its extra parking moves.
+That suggestion was not adopted because Timelapse is explicitly required for
+these trials. The official by-layer capture routine parks at maximum layer Z
+plus 0.4 mm; normal object travel retains the checked 0.6 mm lift. The traditional
+timelapse quality warnings remain, and physical adhesion still needs observation.
+No guarantee of later print success, clean release, fit or strength follows.
+
+The earlier archive hash `8e3b08b5a52cc97aca47152f09dc0b80dba43d238d29714636ca9b7007107d35`
+is superseded and must not be printed. Older generators have not been revised
+by this repair; resolve their included templates and audit their executable
+commands before reuse. Review attribution for this correction: Codex identified
+the missing-template defect; Opus identified the conditional-wait guard defect.
 
 ## What passed
 
@@ -38,7 +70,7 @@ does not prove strength, fit, pouch safety, spring force, fatigue or clean tear-
 | One reopen and re-slice | Same audit passed; normalized G-code differs |
 | Studio-export adapter source binding | Matching R19 accepted; mismatched R18 rejected |
 | Studio-format adapter fixture | Full audit passed with the exact R19 G-code from before the review corrections, in a synthetic meshless container; no real R19 GUI export checked |
-| Adapter on the final CLI archive | Passed, with the CLI archive standing in for an export. This is not a real Studio export |
+| Adapter on the earlier CLI archive | Passed before the machine-template correction, with the CLI archive standing in for an export. Not repeated as a synthetic GUI export after the correction; the corrected actual-bead audit passed separately |
 
 The slice retains `not_support_traditional_timelapse` warnings at levels 2 and 3,
 as R16, R17 and R18 did. This is not a warning-free slice.
