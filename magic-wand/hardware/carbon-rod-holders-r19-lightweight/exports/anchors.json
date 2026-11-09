@@ -1,0 +1,310 @@
+{
+  "generator_sha256": "3bd1b6aed685430fc9939293a59bd63d33a762430b773b49a0e352004ed65586",
+  "parameters": {
+    "thickness_mm": 0.4,
+    "gap_mm": 1.0,
+    "pad_half_length_mm": 4.0,
+    "pad_depth_mm": 4.5,
+    "pull_tab_length_mm": 5.0,
+    "tie_width_mm": 1.0,
+    "tie_overlap_mm": 0.4,
+    "xiao_upper_side_tie_print_y_mm": 15.8
+  },
+  "parts": {
+    "Battery_Holder": {
+      "thickness_mm": 0.4,
+      "flange_area_mm2": 355.01,
+      "tie_section_each_mm2": 0.4,
+      "tie_count": 6,
+      "separate_pads": 6,
+      "solid_PETG_g": 0.1846,
+      "first_layer_area_mm2": 143.06,
+      "sites_print_xy_outward": [
+        [
+          5.599999213218689,
+          17.18,
+          0,
+          1
+        ],
+        [
+          22.79999921321869,
+          17.18,
+          0,
+          1
+        ],
+        [
+          2.2999992132186886,
+          13.0,
+          -1,
+          0
+        ],
+        [
+          26.099999213218688,
+          13.0,
+          1,
+          0
+        ],
+        [
+          4.599999213218689,
+          9.0,
+          0,
+          -1
+        ],
+        [
+          23.79999921321869,
+          9.0,
+          0,
+          -1
+        ]
+      ],
+      "tie_sites": [
+        {
+          "site_print_xy": [
+            5.6,
+            17.18
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            8.15,
+            2.531,
+            2.49
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            22.8,
+            17.18
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            2.49,
+            2.531,
+            8.15
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            2.3,
+            13.0
+          ],
+          "outward": [
+            -1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            3.1,
+            3.1,
+            3.1
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            26.1,
+            13.0
+          ],
+          "outward": [
+            1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            3.1,
+            3.1,
+            3.1
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            4.6,
+            9.0
+          ],
+          "outward": [
+            0,
+            -1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            8.15,
+            8.15,
+            8.15
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            23.8,
+            9.0
+          ],
+          "outward": [
+            0,
+            -1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            8.15,
+            8.15,
+            8.15
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        }
+      ],
+      "stl_sha256": "ce03ffe6cd5ed7d3f52760f9f5d7c2876bc5192261f3b74a959924f973c4cc62"
+    },
+    "XIAO_Rod_Holder": {
+      "thickness_mm": 0.4,
+      "flange_area_mm2": 294.54,
+      "tie_section_each_mm2": 0.4,
+      "tie_count": 6,
+      "separate_pads": 4,
+      "solid_PETG_g": 0.154,
+      "first_layer_area_mm2": 164.28,
+      "sites_print_xy_outward": [
+        [
+          2.6000003814697266,
+          12.9,
+          -1,
+          0
+        ],
+        [
+          26.600000381469727,
+          12.9,
+          1,
+          0
+        ],
+        [
+          2.6000003814697266,
+          15.8,
+          -1,
+          0
+        ],
+        [
+          26.600000381469727,
+          15.8,
+          1,
+          0
+        ],
+        [
+          9.600000381469727,
+          20.129629135131836,
+          0,
+          1
+        ],
+        [
+          19.600000381469727,
+          20.129629135131836,
+          0,
+          1
+        ]
+      ],
+      "tie_sites": [
+        {
+          "site_print_xy": [
+            2.6,
+            12.9
+          ],
+          "outward": [
+            -1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.683,
+            4.7,
+            4.7
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.1491
+        },
+        {
+          "site_print_xy": [
+            26.6,
+            12.9
+          ],
+          "outward": [
+            1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.683,
+            4.7,
+            4.7
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.1491
+        },
+        {
+          "site_print_xy": [
+            2.6,
+            15.8
+          ],
+          "outward": [
+            -1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.4,
+            4.4,
+            4.4
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            26.6,
+            15.8
+          ],
+          "outward": [
+            1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.4,
+            4.4,
+            4.4
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            9.6,
+            20.13
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            1.6,
+            1.6,
+            1.6
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            19.6,
+            20.13
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            1.6,
+            1.6,
+            1.6
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        }
+      ],
+      "stl_sha256": "1cd7e8097164200bf9ea14a5be3bd2d951b8b6dafc3739d5680d4a77c9befa03"
+    }
+  },
+  "r17_neck_section_each_mm2": 1.7600000000000002,
+  "r17_neck_count_each_holder": 6,
+  "physical_adhesion_or_release_verified": false
+}

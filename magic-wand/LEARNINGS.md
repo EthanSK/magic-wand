@@ -2315,6 +2315,29 @@ force or a unique fracture cause. Review removal as a load case: keep narrow,
 accessible sacrificial connections on strong fixed faces and check their actual
 printed sections. A connected anchor is not automatically a usable anchor.
 
+R18 then completed all 178 layers with no printer error. Ethan reported that both
+holders work and neither failed this time, but the assembly feels heavy, especially
+at the tip. This supports preserving R18 as the successful print baseline; it does
+not prove the solid webs are necessary or establish fatigue/strength margins.
+For lightening, compare each holder under matching sliced settings and keep
+helper/spacer plastic separate from installed structure. Opening a back panel
+must retain connected, printable load paths at both rod rings and the tested
+component/retainer interfaces. Catalogue dimensions remain distinct from measured
+battery/board fit.
+
+Opening a solid back needs per-member checks, not only a watertight mesh or total
+layer area. R19 review found crossbars closer to the solder-pad rows despite a
+passing generic board envelope, and retained anchor sites beside newly cut
+windows. Check the actual populated pad rows and the fixed material behind each
+sacrificial tie after every local cut. Keep solder protrusion unmeasured until a
+real assembly establishes it.
+
+A widest inscribed core is not a minimum neck thickness. List narrow ligaments
+separately, and do not compare a locally braced member with a whole holder as a
+claim about relative whole-body stiffness. Similarly, retaining a ring's bore
+and section does not preserve its spring force when its bonded support changes.
+These geometric screens do not establish printed strength or fatigue.
+
 The user confirmed that the battery moved vertically inside its holder, rather
 than the holder moving on the rod; the awkward projections were the removable
 end gate's legs. Preserve the accepted length/width fit and replaceable access.

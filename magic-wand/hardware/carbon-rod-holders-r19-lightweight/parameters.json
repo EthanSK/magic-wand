@@ -1,0 +1,143 @@
+{
+  "revision": "carbon-rod-holders-r19-lightweight",
+  "print": {
+    "printer": "Bambu Lab A1 mini 0.4 nozzle",
+    "filament": "Generic PETG @BBL A1M",
+    "process": "0.20mm Standard @BBL A1M",
+    "layer_height_mm": 0.2,
+    "walls": 3,
+    "infill_percent": 20,
+    "automatic_support": false,
+    "brim": false,
+    "z_hop_mm": 0.6,
+    "plate_scope": "Same seven objects as R18. Only the two holders change; the door, keeper and spacers are the unchanged R18 parts. The key carrier is not reprinted."
+  },
+  "ribs": {
+    "note": "Open floor is a ladder of arrow-headed windows. Each cross bar grows at 45 degrees from both the keel and the wall, meets in the middle, then runs 1.2 mm as one continuous strip. That strip ties the wall to the keel in the layer plane, which diagonal ribs do not: a rib only joins at its far end. The window's pointed end faces print-up.",
+    "strip_y_mm": 1.2
+  },
+  "battery": {
+    "wall_outer_x_mm": 11.9,
+    "wall_bottom_z_mm": 4.35,
+    "wall_valley_z_mm": 9.0,
+    "rib_z_mm": [
+      4.35,
+      5.85
+    ],
+    "keel_half_x_mm": 1.5,
+    "guide_outer_x_mm": 14.2,
+    "arrow_root_y_mm": -2.4,
+    "tooth_centres_y_mm": [
+      2.7,
+      11.4
+    ],
+    "tooth_flat_half_y_mm": 1.0,
+    "tooth_inner_x_mm": 8.6,
+    "tooth_tip_half_y_mm": 0.6,
+    "tooth_chamfer_mm": 0.6,
+    "plate_y_mm": [
+      16.6,
+      17.8
+    ],
+    "window": {
+      "half_x_mm": 8.8,
+      "z0_mm": 6.0,
+      "shoulder_z_mm": 9.8,
+      "apex_z_mm": 10.7
+    },
+    "stop_x_mm": [
+      8.8,
+      10.6
+    ],
+    "far_flank_half_x_mm": 3.7,
+    "near_saddle_narrow_half_x_mm": 0.9,
+    "bar_cap_y_mm": [
+      8.6,
+      0.0,
+      -8.0
+    ],
+    "bar_chamfer_mm": 0.4,
+    "ring_gusset": {
+      "start_x_mm": 3.4,
+      "width_x_mm": 3.1
+    }
+  },
+  "xiao": {
+    "rib_inner_x_z_z": [
+      1.5,
+      4.9,
+      6.2
+    ],
+    "rib_outer_x_z_z": [
+      12.0,
+      6.75,
+      8.05
+    ],
+    "post_chamfer": {
+      "x0_mm": 12.05,
+      "z0_mm": 7.15,
+      "x1_mm": 16.0,
+      "z1_mm": 11.1
+    },
+    "rail_mid_top_z_mm": 9.4,
+    "rail_mid_y_mm": [
+      3.0,
+      20.7
+    ],
+    "hoop": {
+      "column_y_mm": [
+        22.0,
+        23.4
+      ],
+      "lip_y_mm": [
+        20.7,
+        23.4
+      ],
+      "lip_top_z_mm": 11.55,
+      "top_z_mm": 15.3,
+      "hole_xz_mm": [
+        [
+          9.0,
+          11.55
+        ],
+        [
+          10.8,
+          11.55
+        ],
+        [
+          10.8,
+          14.1
+        ],
+        [
+          9.0,
+          12.75
+        ]
+      ]
+    },
+    "bar_cap_y_mm": [
+      13.4,
+      6.0,
+      -1.6
+    ],
+    "ring_gusset": {
+      "start_x_mm": 2.2,
+      "width_x_mm": 2.4
+    },
+    "bar_rail_depth_mm": 1.9,
+    "solder_clearance_floor_z_mm": 7.8,
+    "solder_clearance_note": "At least 1.0 mm of air under every castellation pad. Bars pass below the board edge and run on under the rail, where their lower part grows down from the rail at 45 degrees.",
+    "bar_cap_note": "Bar caps are kept off exact layer mid-planes (print Z = 23.4 - Y), so the slicer cannot go either way on the top layer of a bar."
+  },
+  "anchors": {
+    "thickness_mm": 0.4,
+    "gap_mm": 1.0,
+    "pad_half_length_mm": 4.0,
+    "pad_depth_mm": 4.5,
+    "pull_tab_length_mm": 5.0,
+    "tie_width_mm": 1.0,
+    "tie_overlap_mm": 0.4,
+    "xiao_upper_side_tie_print_y_mm": 15.8
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false
+}

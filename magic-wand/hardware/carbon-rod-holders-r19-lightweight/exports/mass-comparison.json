@@ -1,0 +1,216 @@
+{
+  "generator_sha256": "9f34ce8d4d8886964adce843bbca18fbc6b280d419268dbab184a60639a251e1",
+  "same_recipe_keys_compared": [
+    "layer_height",
+    "initial_layer_print_height",
+    "wall_loops",
+    "sparse_infill_density",
+    "sparse_infill_pattern",
+    "nozzle_temperature",
+    "textured_plate_temp",
+    "filament_density",
+    "filament_flow_ratio",
+    "filament_settings_id",
+    "print_settings_id",
+    "printer_settings_id",
+    "z_hop",
+    "z_hop_types",
+    "enable_support",
+    "brim_type"
+  ],
+  "recipe_differences": {},
+  "R18": {
+    "project_sha256": "6e796431d061d52c2164ca99cf1ad007eab9a8cd6f654408325405938af5e4f3",
+    "objects": {
+      "Battery_Holder": {
+        "cad_solid_volume_mm3": 3008.4,
+        "cad_solid_g": 3.821,
+        "sliced_object_g": 3.448,
+        "sliced_tear_off_pads_and_ties_g": 0.175,
+        "extrusion_moves": 18345
+      },
+      "Battery_End_Door": {
+        "cad_solid_volume_mm3": 268.8,
+        "cad_solid_g": 0.341,
+        "sliced_object_g": 0.317,
+        "sliced_tear_off_pads_and_ties_g": 0.0,
+        "extrusion_moves": 1099
+      },
+      "XIAO_Rod_Holder": {
+        "cad_solid_volume_mm3": 2062.9,
+        "cad_solid_g": 2.62,
+        "sliced_object_g": 2.398,
+        "sliced_tear_off_pads_and_ties_g": 0.16,
+        "extrusion_moves": 14451
+      },
+      "XIAO_Near_Keeper": {
+        "cad_solid_volume_mm3": 222.7,
+        "cad_solid_g": 0.283,
+        "sliced_object_g": 0.262,
+        "sliced_tear_off_pads_and_ties_g": 0.0,
+        "extrusion_moves": 1892
+      },
+      "Battery_Spacer_0p4mm": {
+        "cad_solid_volume_mm3": 213.4,
+        "cad_solid_g": 0.271,
+        "sliced_object_g": 0.257,
+        "sliced_tear_off_pads_and_ties_g": 0.0,
+        "extrusion_moves": 343
+      },
+      "Battery_Spacer_0p6mm": {
+        "cad_solid_volume_mm3": 319.9,
+        "cad_solid_g": 0.406,
+        "sliced_object_g": 0.386,
+        "sliced_tear_off_pads_and_ties_g": 0.0,
+        "extrusion_moves": 654
+      },
+      "Battery_Spacer_0p8mm": {
+        "cad_solid_volume_mm3": 426.3,
+        "cad_solid_g": 0.541,
+        "sliced_object_g": 0.515,
+        "sliced_tear_off_pads_and_ties_g": 0.0,
+        "extrusion_moves": 1006
+      }
+    },
+    "purge_and_unassigned_extrusion_g": 0.137,
+    "all_extrusion_moves_g": 8.057,
+    "slicer_reported_weight_g": 8.01,
+    "difference_extrusion_minus_slicer_g": 0.047,
+    "slicer_prediction_s": 3383.0,
+    "density_g_cm3": 1.27,
+    "retract_and_unprime_excluded_mm": -1.6
+  },
+  "R19": {
+    "project_sha256": "8e3b08b5a52cc97aca47152f09dc0b80dba43d238d29714636ca9b7007107d35",
+    "objects": {
+      "Battery_Holder": {
+        "cad_solid_volume_mm3": 2046.8,
+        "cad_solid_g": 2.599,
+        "sliced_object_g": 2.404,
+        "sliced_tear_off_pads_and_ties_g": 0.175,
+        "extrusion_moves": 16279
+      },
+      "Battery_End_Door": {
+        "cad_solid_volume_mm3": 268.8,
+        "cad_solid_g": 0.341,
+        "sliced_object_g": 0.317,
+        "sliced_tear_off_pads_and_ties_g": 0.0,
+        "extrusion_moves": 1099
+      },
+      "XIAO_Rod_Holder": {
+        "cad_solid_volume_mm3": 1518.3,
+        "cad_solid_g": 1.928,
+        "sliced_object_g": 1.745,
+        "sliced_tear_off_pads_and_ties_g": 0.145,
+        "extrusion_moves": 14835
+      },
+      "XIAO_Near_Keeper": {
+        "cad_solid_volume_mm3": 222.7,
+        "cad_solid_g": 0.283,
+        "sliced_object_g": 0.262,
+        "sliced_tear_off_pads_and_ties_g": 0.0,
+        "extrusion_moves": 1892
+      },
+      "Battery_Spacer_0p4mm": {
+        "cad_solid_volume_mm3": 213.4,
+        "cad_solid_g": 0.271,
+        "sliced_object_g": 0.257,
+        "sliced_tear_off_pads_and_ties_g": 0.0,
+        "extrusion_moves": 343
+      },
+      "Battery_Spacer_0p6mm": {
+        "cad_solid_volume_mm3": 319.9,
+        "cad_solid_g": 0.406,
+        "sliced_object_g": 0.386,
+        "sliced_tear_off_pads_and_ties_g": 0.0,
+        "extrusion_moves": 654
+      },
+      "Battery_Spacer_0p8mm": {
+        "cad_solid_volume_mm3": 426.3,
+        "cad_solid_g": 0.541,
+        "sliced_object_g": 0.515,
+        "sliced_tear_off_pads_and_ties_g": 0.0,
+        "extrusion_moves": 1006
+      }
+    },
+    "purge_and_unassigned_extrusion_g": 0.137,
+    "all_extrusion_moves_g": 6.345,
+    "slicer_reported_weight_g": 6.3,
+    "difference_extrusion_minus_slicer_g": 0.045,
+    "slicer_prediction_s": 2835.0,
+    "density_g_cm3": 1.27,
+    "retract_and_unprime_excluded_mm": -1.6
+  },
+  "holder_comparison_excluding_pads_and_ties": {
+    "Battery_Holder_g": {
+      "r18_g": 3.448,
+      "r19_g": 2.404,
+      "difference_g": -1.044,
+      "percent": -30.3
+    },
+    "XIAO_Rod_Holder_g": {
+      "r18_g": 2.398,
+      "r19_g": 1.745,
+      "difference_g": -0.653,
+      "percent": -27.2
+    },
+    "both_holders_g": {
+      "r18_g": 5.846,
+      "r19_g": 4.149,
+      "difference_g": -1.697,
+      "percent": -29.0
+    },
+    "Battery_Holder_CAD_g": {
+      "r18_g": 3.821,
+      "r19_g": 2.599,
+      "difference_g": -1.222,
+      "percent": -32.0
+    },
+    "XIAO_Rod_Holder_CAD_g": {
+      "r18_g": 2.62,
+      "r19_g": 1.928,
+      "difference_g": -0.692,
+      "percent": -26.4
+    },
+    "both_holders_CAD_g": {
+      "r18_g": 6.441,
+      "r19_g": 4.527,
+      "difference_g": -1.914,
+      "percent": -29.7
+    }
+  },
+  "door_keeper_spacers_sliced_g_r18_r19": {
+    "Battery_End_Door": [
+      0.317,
+      0.317
+    ],
+    "XIAO_Near_Keeper": [
+      0.262,
+      0.262
+    ],
+    "Battery_Spacer_0p4mm": [
+      0.257,
+      0.257
+    ],
+    "Battery_Spacer_0p6mm": [
+      0.386,
+      0.386
+    ],
+    "Battery_Spacer_0p8mm": [
+      0.515,
+      0.515
+    ]
+  },
+  "tear_off_pads_and_ties_g_not_installed": {
+    "R18": {
+      "Battery_Holder": 0.175,
+      "XIAO_Rod_Holder": 0.16
+    },
+    "R19": {
+      "Battery_Holder": 0.175,
+      "XIAO_Rod_Holder": 0.145
+    }
+  },
+  "closure_note": "Assigned moves plus purge equal all extrusion moves by construction. Against the slicer weight the largest difference is 0.047 g, which also covers filament-change and prime moves outside the extrusion parser.",
+  "limit": "Sliced grams come from filament fed, not from weighing a printed part. Tear-off pads and ties are excluded from holder mass; the stub left after snipping a tie is not counted."
+}
