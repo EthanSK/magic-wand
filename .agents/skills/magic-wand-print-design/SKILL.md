@@ -1,6 +1,6 @@
 ---
 name: magic-wand-print-design
-description: Revise Magic Wand printable hardware, CAD, assembly previews and Bambu projects while preserving the helix, tapered silhouette, both handed grips and tested interfaces. Use Opus for model changes when usage is available, and audit actual sliced holes, supports and likely snap points before finishing.
+description: Revise Magic Wand printable hardware, CAD, assembly previews and Bambu projects while preserving the helix, tapered silhouette, both handed grips and tested interfaces. Use Fable 5.2 for model changes within included usage, and audit actual sliced holes, supports and likely snap points before finishing.
 ---
 
 # Magic Wand print design
@@ -19,7 +19,7 @@ Tell Ethan this skill is active and briefly why, using response-preferences when
 
 ## Model changes
 
-User-requested — 2026-11-06: “From now on it does all the model changes please, if there's usage.” Use Opus for all model changes while usage is available, including thinking through how Ethan holds the wand and implementing the geometry. This replaces the earlier Codex-only CAD preference. Codex coordinates verification and publication; follow the host's Claude-invocation workflow and report unavailable coverage honestly. Implementation does not replace the final independent printability audit below.
+User-requested — 2026-11-09: “make all the 3D models with Fable 5.2. But don't burn credits there.” Use Fable 5.2 for wand model design and implementation through included subscription usage, with no paid API credits or overage. Preserve useful existing model-session context. If the requested model or included usage is unavailable, report the writing limitation before substituting an author; independent read-only work can continue. This supersedes the 6 November Opus-author preference. Codex coordinates verification and publication; follow the host's Claude-invocation workflow and verify the actual model. Implementation does not replace the final independent printability audit below.
 
 ## Prototype holder priorities
 
@@ -30,6 +30,7 @@ User-requested — 2026-11-07: think through the whole held assembly from the ac
 - Material should serve actual support and positive load paths. Strengthen loaded joints and fixed roots without filling working openings or turning intended springs solid. Prefer simple, understandable rod attachments; distinguish removable print helpers from the permanent structure. Keep the existing adjustable slide-on intent unless Ethan changes it.
 - Print bases and supports must come away without breaking the holder. Ethan: "Just have like a very narrow connection to the actual main component." Prefer accessible sacrificial connections on strong fixed faces; check their realised printed sections and removal direction, as well as adhesion. Keep the battery gate easy to push in and release, with the battery replaceable and held against vertical movement without squeezing its pouch. User-corrected — 2026-11-08.
 - Skin-contact edges should be “rounded, like nice and smooth”, not hard edged. At the five-key holder's lower/front edge beneath the three lower keys, avoid a projecting lip or poking corner; a sharp chamfer or V-notch is not a substitute for genuine rounding. Preserve switch lands, travel and substantial joints while shaping the contact.
+- User-requested — 2026-11-09: fingers should not rest directly on exposed switch/socket contacts beneath the keys. Prefer a shallow open protective structure, such as a few smooth beams from the key-holder edges toward the rod support forming 3D triangles, instead of a heavy solid cover. Check the actual finger-rest area, electrical/component clearance, wiring and assembly/removal routes; an attractive sparse net is insufficient if the resting finger still reaches the contacts. Reassess unnecessary carrier thickness while preserving its real loaded joints and switch interfaces.
 - Keep open structures light and attractive: pointed or arrow-like flowing patterns are welcome instead of arbitrary rectangular windows, with enough printable material at their connections. A snug battery should not jiggle, but must retain insertion clearance and must never squeeze the pouch or load its protection electronics.
 
 These prototype-holder priorities do not import the full Shard wand's helix or loop geometry into carbon-rod accessories. Keep the applicable design's established interfaces and ergonomic layout.

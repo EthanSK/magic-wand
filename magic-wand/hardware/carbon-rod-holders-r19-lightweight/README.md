@@ -120,6 +120,13 @@ ledge, keeper lip, bar or wall. Inspect the bars and walls for cracks.
 
 ## Assemble
 
+Open the [interactive assembly guide](preview/index.html) for the actual exported
+R19 holder, keeper, door and spacer meshes. Choose XIAO or Battery, then play,
+pause, scrub or select a named step. Rotate and zoom at any point; Frame fits
+the current pose. The XIAO loading tilt and slide come from the same CAD values
+as the checked insertion route. The guide illustrates the sequence, not latch
+flex, insertion force or physical fit. It never changes a print file or printer.
+
 As R18. Slide the cell and spacer in together as a sled, non-wire end first, using
 the thickest spacer that goes in without force. The bars have a small lead-in, but
 if the sled catches on a bar, stop and lift its leading edge rather than pushing.

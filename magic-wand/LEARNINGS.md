@@ -2398,3 +2398,15 @@ The actual CAD uses 2.4 mm bands at both XIAO rod rings; only the near ring adds
 the inherited sloping print lead-in skirt. Compare the band separately from that
 extension when explaining apparent ring width. The hoop's triangular lightening
 openings are also separate from the side grooves used by the removable keeper.
+
+### 2026-11-09 — Assembly playback shares controls, not model instructions
+
+Self-improved — the R19 assembly guide reads the actual exported assembly meshes
+and derives its board pivot, tilt and slide from the checked CAD. Share playback
+and camera controls across viewers, but keep each model's motion recipe with
+that revision. Evaluate the full pose from the selected step and fraction so
+backward scrubbing, replay and switching parts cannot accumulate transforms.
+Pause and cancel a pending animation frame before replacing the recipe; preserve
+the requested slider value before pause redraws its controls. Both transitions
+were exercised in the browser alongside an unchanged R16 viewer. Illustrative
+electronics and latch motion remain distinct from physical fit and force.

@@ -1,5 +1,6 @@
 // Shared immediate mouse/touch bindings and view helpers for the accessory
 // viewers. Keep these controls identical across old and current geometry.
+import { installAssemblyControls } from './assembly-controls.mjs';
 export function bindFreeViewControls({ canvas, input, height, width = height, render, wheel, chooseMode, fit, changed = () => {} }) {
   canvas.addEventListener('pointerdown', event => {
     if (![0, 1, 2].includes(event.button)) return;
@@ -45,7 +46,7 @@ export function bindFreeViewControls({ canvas, input, height, width = height, re
   });
 }
 
-export function installViewTools({ view, input, fit, render }) {
+export function installViewTools({ view, input, fit, render, assembly }) {
   const reset = document.getElementById('reset');
   reset.parentElement.style.cssText = 'display:grid;grid-template-columns:36px 36px 1fr 1.4fr;gap:6px';
   const frame = document.createElement('button');
@@ -95,5 +96,8 @@ export function installViewTools({ view, input, fit, render }) {
     }
   } };
   controls.update();
+  // Animation is opt-in: old revisions keep their camera/input behaviour and
+  // never inherit a newer model's assembly directions by accident.
+  if (assembly) controls.assembly = installAssemblyControls(assembly);
   return controls;
 }
