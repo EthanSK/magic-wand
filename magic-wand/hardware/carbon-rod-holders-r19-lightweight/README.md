@@ -4,13 +4,14 @@ R19 answers one physical complaint about the successful R18 print: the wand tip
 is too heavy, and the flat backs of the two holders are a poor use of plastic.
 R18 and every older revision are unchanged. The key carrier is not reprinted.
 
-**Status: digital geometry, slice checks and independent Opus review of the
-corrections passed. Seven review findings are addressed in [the audit](AUDIT.md).
-No successful physical R19 trial yet; no real R19 Studio export checked. A first
-attempt was stopped after a machine-command defect; the corrected source below
-uses the proper A1 mini templates. Fit, retention, strength and cleanup are
-unverified. Ethan was still testing R18 fit when this was designed,
-so any fit change he finds still needs to be applied.**
+**Status: Ethan reported the corrected R19 print completed successfully on
+9 November. The XIAO holder has noticeable fine fluff, the battery holder has
+less, and one XIAO rod ring looks thinner to him. Board fitting is still being
+tested; fit, retention, strength and full cleanup are not yet accepted. Digital
+geometry, slice checks and independent Opus review passed; seven review findings
+are addressed in [the audit](AUDIT.md). No real R19 Studio export has been checked.
+The earlier attempt stopped after a machine-command defect; the corrected source
+below uses the proper A1 mini templates.**
 
 ## How much lighter
 
@@ -57,6 +58,12 @@ so those clips will not behave exactly like R18's. Rod grip and fatigue are
 unverified. The XIAO rings keep R18's 121 and 131 degrees. Ring width was not
 halved: narrowing both battery rings from 3.6 to 2.4 mm would save only about
 0.08 g, so the ring sections are retained while the surrounding support is reduced.
+
+Both XIAO ring bands are 2.4 mm wide along the rod. The near ring also has an
+integral sloping print lead-in skirt; the far ring is a plain band. This makes
+their overall widths look different even though the underlying bands match.
+That explains the designed asymmetry, not the completeness of a particular
+printed ring, which has not been photographed or measured here.
 
 **Battery holder.** Walls 1.6 to 1.3 mm. Roof flanges beyond the arrow roof become
 two retaining teeth per side. The end plate becomes a 1.2 mm frame with a large
@@ -116,6 +123,18 @@ ledge, keeper lip, bar or wall. Inspect the bars and walls for cracks.
 As R18. Slide the cell and spacer in together as a sled, non-wire end first, using
 the thickest spacer that goes in without force. The bars have a small lead-in, but
 if the sled catches on a bar, stop and lift its leading edge rather than pushing.
+
+For the XIAO board, tilt the near end up slightly, slide the USB end under the
+fixed hoop, then lower the board onto its ledges with the wires outside the rails.
+Slide the separate near keeper into the two side grooves until its tooth engages
+the ridge. The tiny triangular openings in the fixed hoop shoulders remove
+material; they are not keeper sockets. The battery door is a different part:
+its broad ends drop into the battery holder's vertical slots.
+
+See the actual exported meshes in the [assembled XIAO view](exports/XIAO_Rod_Holder-overview.png),
+[assembled battery view](exports/Battery_Holder-overview.png) and
+[complete wand reference](exports/assembled-view.png). Orange shows the removable
+keeper or door; translucent hardware is illustrative, not a measured fit result.
 
 ## Reproduce
 

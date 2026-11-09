@@ -2384,3 +2384,17 @@ A narrow bed-side relief can make a spring arm disappear on layer one while
 later layers still print. The broad-overhang detector missed R17's short 3.5 mm
 second-layer retainer bridge. Independent review exposed it; keep that detector
 limit and the accepted physical trial condition beside the passing receipt.
+
+### 2026-11-09 — R19 completion, surface quality and ring appearance are separate
+
+Ethan reported that the corrected R19 print completed successfully. He observed
+more fine fluff on the XIAO holder than on the battery holder and a comparatively
+thin-looking XIAO rod ring, while board fitting was still underway. This establishes
+print completion, not full cleanup, retention or strength acceptance. Fine hairs
+suggest stringing, but no photograph or filament-moisture measurement established
+its cause. Do not encode a hotter recipe as the solution from this description.
+
+The actual CAD uses 2.4 mm bands at both XIAO rod rings; only the near ring adds
+the inherited sloping print lead-in skirt. Compare the band separately from that
+extension when explaining apparent ring width. The hoop's triangular lightening
+openings are also separate from the side grooves used by the removable keeper.
