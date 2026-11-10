@@ -1,0 +1,116 @@
+{
+  "revision": "carbon-rod-holders-r22-integrated-guard",
+  "print": {
+    "printer": "Bambu Lab A1 mini 0.4 nozzle",
+    "filament": "Generic PETG @BBL A1M",
+    "process": "0.20mm Standard @BBL A1M",
+    "layer_height_mm": 0.2,
+    "walls": 3,
+    "infill_percent": 20,
+    "automatic_support": false,
+    "brim": false,
+    "z_hop_mm": 0.6,
+    "timelapse": "Smooth, with its separate disposable wipe tower at x 120 / y 20 (the upright 'random thing' on the R20 plate)",
+    "local_recipe": {
+      "Key_Carrier_upper_band_mm": [16.0, 16.8],
+      "Key_Carrier_lower_band_r16_mm": [33.8, 35.2],
+      "Battery_Holder_bands_mm": [[31.0, 31.8]],
+      "note": "Same slow-band speeds as R16-R20. The key holder prints standing on its rear end (print Z = rear Y - Y). The upper-row roof band stays fixed relative to the rear end. holder22.key_carrier_bands() shifts the lower-row band only when row_shift_mm changes."
+    }
+  },
+  "key_holder": {
+    "row_shift_mm": 0.0,
+    "r16_row_spacing_mm": 17.8,
+    "row_shift_note": "The print candidate uses 17.8 mm between rows. At 17.0 mm, the 16.6 mm reference caps would leave 0.4 mm nominal gap and overlap by 0.4 mm after allowing 0.4 mm of movement per cap. Actual cap dimensions and lateral play are unmeasured.",
+    "ring_bore_mm": 7.8,
+    "upper_left_socket_print_relief": {
+      "x_mm": [-5.75, -4.3],
+      "yz_profile_mm": [[10.3, 7.45], [10.75, 7.0], [12.0, 7.0], [12.45, 7.45], [12.0, 7.86], [10.75, 7.86]],
+      "note": "Taper out the sliver beside the upper-left socket's inner corner. Variable-width inner wall paths crossed the maximum socket envelope here even though the CAD carved it. The tapers grow no faster than the 0.2 mm layers can support."
+    },
+    "shoulder_curve": {
+      "length_mm": 15.0,
+      "shape": "x(Y) = upper + (lower - upper) * (1 + cos(pi * (Y - lower_rear_y) / length)) / 2: tangent to the lower side edge at Y 9.1 and to the upper side edge at Y 24.1; steepest plan slope 0.979 (44.4 degrees), so every print layer grows at most 45 degrees.",
+      "samples": 61
+    },
+    "top_edge_round_mm": 0.6,
+    "top_edge_round_steps": 8,
+    "top_edge_note": "Every top plan edge (nose, sides, curved shoulders, upper sides, rear) gets a 0.6 mm round, built as 0.075 mm terraces of inward plan offsets. Replaces R16's two straight 0.6 mm side and nose rounds; the 2.4 mm index-finger round under the nose is unchanged."
+  },
+  "guard": {
+    "concept": "Thin rounded runner beams, part of the key holder. Each one leaves the holder's underside at 45 degrees behind the lower sockets, runs forward low under the socket band, and rises at 45 degrees back into the underside just before the 2.4 mm nose round. No free ends, rings, keel or plate; the rod stays exposed between the inner runners.",
+    "loading": "Keys 0 and 2 (lower left and lower right): solder outside, slide the socket in sideways from the outer side, 1.8 mm below its seat and above the runners, then lift it onto its two bosses. Key 1 loads straight up. Keys 3 and 4 load from below but must stay about 1 mm away from the rod until 2 mm below the seat (dogleg_note). No runner passes under keys 1, 3 or 4.",
+    "z0_mm": 0.8,
+    "thickness_mm": 1.4,
+    "width_mm": 1.6,
+    "section_round_mm": 0.6,
+    "underside_ref_z_mm": 7.67,
+    "blend_half_length_mm": 0.75,
+    "end_inside_slab_z_mm": 7.75,
+    "max_plan_slope": 0.95,
+    "slide_lift_mm": 1.8,
+    "slide_travel_mm": 22.0,
+    "slide_keys": [0, 2],
+    "straight_soldered_keys": [1],
+    "dogleg_keys": [3, 4],
+    "dogleg_outward_mm": 1.0,
+    "dogleg_level_dz_mm": 2.0,
+    "dogleg_note": "Keys 3 and 4 still load from below, but their inner terminal's stated solder allowance would pass 0.4 mm into the rod ring if pushed straight up. Keep the socket about 1 mm away from the rod until it is 2 mm below its seat, then move it in and press it up. Key 1 is clear straight up.",
+    "beams": [
+      {"name": "R1", "root_y_mm": 18.4, "riser_corner_y_mm": 1.0, "plan_y_x_mm": [[18.4, 12.1], [-9.0, 12.1]]},
+      {"name": "R2", "root_y_mm": 16.2, "riser_corner_y_mm": 1.0, "plan_y_x_mm": [[16.2, 17.6], [-9.0, 17.6]]},
+      {"name": "R3", "root_y_mm": 16.2, "riser_corner_y_mm": 1.0, "plan_y_x_mm": [[16.2, 22.3], [8.0, 22.3], [3.0, 26.3], [-9.0, 26.3]]},
+      {"name": "L1", "root_y_mm": 16.0, "riser_corner_y_mm": 1.0, "plan_y_x_mm": [[16.0, -22.0], [8.0, -22.0], [3.0, -26.0], [-9.0, -26.0]]},
+      {"name": "L2", "root_y_mm": 16.0, "riser_corner_y_mm": 1.0, "plan_y_x_mm": [[16.0, -22.0], [-9.0, -22.0]]},
+      {"name": "L3", "root_y_mm": 16.0, "riser_corner_y_mm": 1.0, "plan_y_x_mm": [[16.0, -22.0], [8.3, -22.0], [2.4, -16.4], [-9.0, -16.4]]}
+    ],
+    "assumed_allowances": {
+      "note": "R20's stated, unmeasured allowances, reused unchanged.",
+      "fingertip_probe_radii_mm": [5.0, 6.0, 7.0, 8.0]
+    }
+  },
+  "battery": {
+    "slot_mouth_leadin": {
+      "depth_y_mm": 0.45,
+      "height_z_mm": 0.6,
+      "note": "The hard part of putting the door in is its centre catch tooth (X +/-1.8 mm) riding over the 0.4 mm lip at the top of the slot, plus the door plate entering the two side slots. R22 replaces the lip's 0.35 x 0.35 mm 45-degree chamfer with a longer lead-in on the cell-side slot face, 0.45 mm deep over the top 0.6 mm: the tooth is pushed aside 0.75 mm per mm of travel instead of 1:1, and the side slots get the same wider mouth. The lead-in ends 0.15 mm above the pocket ceiling, so the 0.4 mm hook face under the lip and the seated fit are unchanged. That face prints before the slot gap, so nothing starts over air."
+    },
+    "easy_door_trial": {
+      "tooth_trim_mm": 0.15,
+      "tooth_half_x_mm": 2.0,
+      "note": "Labelled trial alternative: the R19 door with 0.15 mm off the cell-side face of its centre catch tooth, so it hooks 0.25 mm under the lip instead of 0.4 mm: easier to push in and pull out, and it holds less firmly. Try the standard door first. Neither force is measured."
+    }
+  },
+  "cable_clip": {
+    "name": "Cable_Clip_12_Wire",
+    "conductors": 12,
+    "conductor_od_mm": 1.5,
+    "harness_note": "Five passive key switches to GND with internal pull-ups (wand_sense.ino lines 10-14): five signal wires plus one to five return wires, plus battery positive and negative. Twelve covers five separate returns. 1.5 mm is a conservative stated insulation diameter, not a measurement.",
+    "layout": {"outer_count": 9, "outer_radius_mm": 2.3, "outer_step_degrees": 40.0, "inner_count": 3, "inner_radius_mm": 0.8660254, "inner_step_degrees": 120.0, "inner_start_degrees": 20.0},
+    "rod_bore_mm": 7.9,
+    "rod_root_wall_mm": 1.4,
+    "axial_width_mm": 2.4,
+    "cable_bore_mm": 7.0,
+    "cable_wall_mm": 1.2,
+    "cable_entry_gap_mm": 1.7,
+    "centres_mm": 9.2,
+    "cable_chamfer_mm": 0.3,
+    "pad_thickness_mm": 0.4,
+    "tie_width_mm": 0.7
+  },
+  "anchors": {
+    "note": "R19/R20 tear-off pad recipe. Key holder sites as R20 on its rear (bed) face; battery and XIAO sites as R19.",
+    "thickness_mm": 0.4,
+    "gap_mm": 1.0,
+    "pad_half_length_mm": 4.0,
+    "pad_depth_mm": 4.5,
+    "pull_tab_length_mm": 5.0,
+    "tie_width_mm": 1.0,
+    "tie_overlap_mm": 0.4,
+    "xiao_upper_side_tie_print_y_mm": 15.8,
+    "key_carrier_sites": [[-9.0, "slab_top", 0, 1], [9.0, "slab_top", 0, 1], [-11.5, "slab_bottom", 0, -1], [11.5, "slab_bottom", 0, -1]]
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false
+}

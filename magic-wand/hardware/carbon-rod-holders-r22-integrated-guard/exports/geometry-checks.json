@@ -1,0 +1,602 @@
+{
+  "revision": "carbon-rod-holders-r22-integrated-guard",
+  "generator_sha256": "d1b02c9b4a3b3c069b90156a6ed35e725929b2f0461c9ded822f8b72cab75ac1",
+  "holder22_sha256": "1167ff86be2fed28db6c5ee9f609c80f448b02b88f44fcd70673a4bc166e3f90",
+  "parameters_sha256": "4caa2ab1bacf156297bdc4d81cd9001d6ca59a4770bd81e86f2a20e070e2ce3e",
+  "key_carrier": {
+    "volume_mm3": 4453.65,
+    "bodies": 1,
+    "runner_volume_mm3": 263.21,
+    "runner_PETG_g": 0.334,
+    "layer_growth": {
+      "desired_mm3": 265.63,
+      "trimmed_unsupported_mm3": 6.422
+    },
+    "runners": {
+      "R1": {
+        "layers": 122,
+        "free_layers": 100,
+        "min_free_area_mm2": 1.924,
+        "min_free_thickness_mm": 1.4,
+        "rear_root_bond_layers": 11,
+        "rear_root_bond_y_mm": [
+          16.4,
+          18.4
+        ],
+        "front_root_bond_layers": 11,
+        "front_root_bond_y_mm": [
+          -5.8,
+          -3.8
+        ],
+        "layers_with_no_runner_section_y_mm": [],
+        "lowest_z_mm": 0.8
+      },
+      "R2": {
+        "layers": 111,
+        "free_layers": 89,
+        "min_free_area_mm2": 1.924,
+        "min_free_thickness_mm": 1.4,
+        "rear_root_bond_layers": 11,
+        "rear_root_bond_y_mm": [
+          14.2,
+          16.2
+        ],
+        "front_root_bond_layers": 11,
+        "front_root_bond_y_mm": [
+          -5.8,
+          -3.8
+        ],
+        "layers_with_no_runner_section_y_mm": [],
+        "lowest_z_mm": 0.8
+      },
+      "R3": {
+        "layers": 109,
+        "free_layers": 87,
+        "min_free_area_mm2": 1.924,
+        "min_free_thickness_mm": 1.4,
+        "rear_root_bond_layers": 11,
+        "rear_root_bond_y_mm": [
+          13.8,
+          15.8
+        ],
+        "front_root_bond_layers": 11,
+        "front_root_bond_y_mm": [
+          -5.8,
+          -3.8
+        ],
+        "layers_with_no_runner_section_y_mm": [],
+        "lowest_z_mm": 0.8
+      },
+      "L1": {
+        "layers": 108,
+        "free_layers": 86,
+        "min_free_area_mm2": 1.924,
+        "min_free_thickness_mm": 1.4,
+        "rear_root_bond_layers": 11,
+        "rear_root_bond_y_mm": [
+          13.6,
+          15.6
+        ],
+        "front_root_bond_layers": 11,
+        "front_root_bond_y_mm": [
+          -5.8,
+          -3.8
+        ],
+        "layers_with_no_runner_section_y_mm": [],
+        "lowest_z_mm": 0.8
+      },
+      "L2": {
+        "layers": 108,
+        "free_layers": 86,
+        "min_free_area_mm2": 1.924,
+        "min_free_thickness_mm": 1.4,
+        "rear_root_bond_layers": 11,
+        "rear_root_bond_y_mm": [
+          13.6,
+          15.6
+        ],
+        "front_root_bond_layers": 11,
+        "front_root_bond_y_mm": [
+          -5.8,
+          -3.8
+        ],
+        "layers_with_no_runner_section_y_mm": [],
+        "lowest_z_mm": 0.8
+      },
+      "L3": {
+        "layers": 108,
+        "free_layers": 86,
+        "min_free_area_mm2": 1.924,
+        "min_free_thickness_mm": 1.4,
+        "rear_root_bond_layers": 11,
+        "rear_root_bond_y_mm": [
+          13.6,
+          15.6
+        ],
+        "front_root_bond_layers": 11,
+        "front_root_bond_y_mm": [
+          -5.8,
+          -3.8
+        ],
+        "layers_with_no_runner_section_y_mm": [],
+        "lowest_z_mm": 0.8
+      }
+    },
+    "routes": {
+      "key_0": {
+        "route": "sideways slide then lift",
+        "poses": 51,
+        "max_overlap_mm3": 0.0,
+        "poses_over_threshold": 0,
+        "straight_up_with_solder_allowance_max_overlap_mm3": 17.7165,
+        "extra_drop_allowed_mm": 0.35,
+        "lift_mm": 1.8,
+        "entry_side": "-X (left edge)"
+      },
+      "key_1": {
+        "route": "straight up from 6 mm below",
+        "poses": 31,
+        "max_overlap_mm3": 0.0,
+        "poses_over_threshold": 0,
+        "straight_up_with_solder_allowance_max_overlap_mm3": 0.0
+      },
+      "key_2": {
+        "route": "sideways slide then lift",
+        "poses": 51,
+        "max_overlap_mm3": 0.0,
+        "poses_over_threshold": 0,
+        "straight_up_with_solder_allowance_max_overlap_mm3": 16.7252,
+        "extra_drop_allowed_mm": 0.35,
+        "lift_mm": 1.8,
+        "entry_side": "+X (right edge)"
+      },
+      "key_3": {
+        "route": "up 1 mm away from the rod, in 2 mm below the seat, then up",
+        "poses": 41,
+        "max_overlap_mm3": 0.0,
+        "poses_over_threshold": 0,
+        "straight_up_with_solder_allowance_max_overlap_mm3": 2.9445
+      },
+      "key_4": {
+        "route": "up 1 mm away from the rod, in 2 mm below the seat, then up",
+        "poses": 41,
+        "max_overlap_mm3": 0.0,
+        "poses_over_threshold": 0,
+        "straight_up_with_solder_allowance_max_overlap_mm3": 1.8728
+      },
+      "carve_log_final": {
+        "key_1_socket_loading": {
+          "poses": 31,
+          "poses_meeting_material": 1
+        },
+        "key_1_maximum_socket_loading": {
+          "poses": 31,
+          "poses_meeting_material": 5
+        },
+        "key_3_socket_loading": {
+          "poses": 31,
+          "poses_meeting_material": 4
+        },
+        "key_3_maximum_socket_loading": {
+          "poses": 31,
+          "poses_meeting_material": 5
+        },
+        "key_4_socket_loading": {
+          "poses": 31,
+          "poses_meeting_material": 1
+        },
+        "key_4_maximum_socket_loading": {
+          "poses": 31,
+          "poses_meeting_material": 5
+        },
+        "key_0_soldered_socket_slide": {
+          "poses": 51,
+          "poses_meeting_material": 4
+        },
+        "key_2_soldered_socket_slide": {
+          "poses": 51,
+          "poses_meeting_material": 4
+        },
+        "key_3_soldered_socket_dogleg": {
+          "poses": 41,
+          "poses_meeting_material": 5
+        },
+        "key_4_soldered_socket_dogleg": {
+          "poses": 41,
+          "poses_meeting_material": 5
+        },
+        "key_1_soldered_socket_straight": {
+          "poses": 31,
+          "poses_meeting_material": 5
+        }
+      },
+      "carve_log_final_poses_meeting_material": 44
+    },
+    "seated_runner_overlaps_mm3": {
+      "runners_vs_key_0_switch": 0.0,
+      "runners_vs_key_0_socket": 0.0,
+      "runners_vs_key_0_maximum_socket": 0.0,
+      "runners_vs_key_0_tape_and_wire_under_socket": 0.0,
+      "runners_vs_key_1_switch": 0.0,
+      "runners_vs_key_1_socket": 0.0,
+      "runners_vs_key_1_maximum_socket": 0.0,
+      "runners_vs_key_1_tape_and_wire_under_socket": 0.0,
+      "runners_vs_key_2_switch": 0.0,
+      "runners_vs_key_2_socket": 0.0,
+      "runners_vs_key_2_maximum_socket": 0.0,
+      "runners_vs_key_2_tape_and_wire_under_socket": 0.0,
+      "runners_vs_key_3_switch": 0.0,
+      "runners_vs_key_3_socket": 0.0,
+      "runners_vs_key_3_maximum_socket": 0.0,
+      "runners_vs_key_3_tape_and_wire_under_socket": 0.0,
+      "runners_vs_key_4_switch": 0.0,
+      "runners_vs_key_4_socket": 0.0,
+      "runners_vs_key_4_maximum_socket": 0.0,
+      "runners_vs_key_4_tape_and_wire_under_socket": 0.0,
+      "runners_vs_wire_bus": 0.0,
+      "runners_vs_key_0_terminal_0": 0.0,
+      "runners_vs_key_0_terminal_1": 0.0,
+      "runners_vs_key_1_terminal_0": 0.0,
+      "runners_vs_key_1_terminal_1": 0.0,
+      "runners_vs_key_2_terminal_0": 0.0,
+      "runners_vs_key_2_terminal_1": 0.0,
+      "runners_vs_key_3_terminal_0": 0.0,
+      "runners_vs_key_3_terminal_1": 0.0,
+      "runners_vs_key_4_terminal_0": 0.0,
+      "runners_vs_key_4_terminal_1": 0.0,
+      "runners_vs_rod_corridor_r4.2": 0.0
+    },
+    "seated_holder_overlaps_mm3": {
+      "carrier_vs_key_0_switch": -0.0,
+      "carrier_vs_key_0_maximum_socket": 0.0,
+      "carrier_vs_key_1_switch": -0.0,
+      "carrier_vs_key_1_maximum_socket": 0.0,
+      "carrier_vs_key_2_switch": -0.0,
+      "carrier_vs_key_2_maximum_socket": 0.0,
+      "carrier_vs_key_3_switch": -0.0,
+      "carrier_vs_key_3_maximum_socket": 0.0,
+      "carrier_vs_key_4_switch": 0.0,
+      "carrier_vs_key_4_maximum_socket": 0.0,
+      "carrier_vs_key_0_terminal_0": -0.0,
+      "carrier_vs_key_0_terminal_1": 0.0,
+      "carrier_vs_key_1_terminal_0": -0.0,
+      "carrier_vs_key_1_terminal_1": -0.0,
+      "carrier_vs_key_2_terminal_0": 0.0,
+      "carrier_vs_key_2_terminal_1": 0.0,
+      "carrier_vs_key_3_terminal_0": -0.0,
+      "carrier_vs_key_3_terminal_1": 0.0,
+      "carrier_vs_key_4_terminal_0": -0.0,
+      "carrier_vs_key_4_terminal_1": 0.0
+    },
+    "fingertip_probe_r22": {
+      "key_0_terminal_0": {
+        "R5": "9/9 blocked",
+        "R6": "9/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_0_terminal_1": {
+        "R5": "2/9 blocked",
+        "R6": "6/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_1_terminal_0": {
+        "R5": "9/9 blocked",
+        "R6": "9/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_1_terminal_1": {
+        "R5": "9/9 blocked",
+        "R6": "9/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_2_terminal_0": {
+        "R5": "9/9 blocked",
+        "R6": "9/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_2_terminal_1": {
+        "R5": "9/9 blocked",
+        "R6": "9/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_3_terminal_0": {
+        "R5": "9/9 blocked",
+        "R6": "9/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_3_terminal_1": {
+        "R5": "1/9 blocked",
+        "R6": "3/9 blocked",
+        "R7": "4/9 blocked",
+        "R8": "5/9 blocked"
+      },
+      "key_4_terminal_0": {
+        "R5": "9/9 blocked",
+        "R6": "9/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_4_terminal_1": {
+        "R5": "0/9 blocked",
+        "R6": "0/9 blocked",
+        "R7": "0/9 blocked",
+        "R8": "0/9 blocked"
+      }
+    },
+    "fingertip_probe_without_runners": {
+      "key_0_terminal_0": {
+        "R5": "0/9 blocked",
+        "R6": "0/9 blocked",
+        "R7": "0/9 blocked",
+        "R8": "0/9 blocked"
+      },
+      "key_0_terminal_1": {
+        "R5": "0/9 blocked",
+        "R6": "3/9 blocked",
+        "R7": "6/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_1_terminal_0": {
+        "R5": "9/9 blocked",
+        "R6": "9/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_1_terminal_1": {
+        "R5": "6/9 blocked",
+        "R6": "9/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_2_terminal_0": {
+        "R5": "0/9 blocked",
+        "R6": "0/9 blocked",
+        "R7": "0/9 blocked",
+        "R8": "0/9 blocked"
+      },
+      "key_2_terminal_1": {
+        "R5": "0/9 blocked",
+        "R6": "0/9 blocked",
+        "R7": "0/9 blocked",
+        "R8": "0/9 blocked"
+      },
+      "key_3_terminal_0": {
+        "R5": "9/9 blocked",
+        "R6": "9/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_3_terminal_1": {
+        "R5": "0/9 blocked",
+        "R6": "0/9 blocked",
+        "R7": "0/9 blocked",
+        "R8": "0/9 blocked"
+      },
+      "key_4_terminal_0": {
+        "R5": "9/9 blocked",
+        "R6": "9/9 blocked",
+        "R7": "9/9 blocked",
+        "R8": "9/9 blocked"
+      },
+      "key_4_terminal_1": {
+        "R5": "0/9 blocked",
+        "R6": "0/9 blocked",
+        "R7": "0/9 blocked",
+        "R8": "0/9 blocked"
+      }
+    },
+    "row_spacing_table": {
+      "rows": [
+        {
+          "shift_mm": 0.0,
+          "row_spacing_mm": 17.8,
+          "reference_cap_gap_mm": 1.2,
+          "after_0.4mm_play_each_cap_mm": 0.4,
+          "meets_r16_screen_min_0.4mm": true,
+          "max_socket_gap_key0_key3_mm": 1.2
+        },
+        {
+          "shift_mm": 0.4,
+          "row_spacing_mm": 17.4,
+          "reference_cap_gap_mm": 0.8,
+          "after_0.4mm_play_each_cap_mm": 0.0,
+          "meets_r16_screen_min_0.4mm": false,
+          "max_socket_gap_key0_key3_mm": 0.8
+        },
+        {
+          "shift_mm": 0.8,
+          "row_spacing_mm": 17.0,
+          "reference_cap_gap_mm": 0.4,
+          "after_0.4mm_play_each_cap_mm": -0.4,
+          "meets_r16_screen_min_0.4mm": false,
+          "max_socket_gap_key0_key3_mm": 0.4
+        },
+        {
+          "shift_mm": 1.0,
+          "row_spacing_mm": 16.8,
+          "reference_cap_gap_mm": 0.2,
+          "after_0.4mm_play_each_cap_mm": -0.6,
+          "meets_r16_screen_min_0.4mm": false,
+          "max_socket_gap_key0_key3_mm": 0.2
+        }
+      ],
+      "used_shift_mm": 0.0,
+      "basis": "Reference caps 17.5 x 16.6 mm with 0.4 mm lateral play each (R16 cap screen); purchased caps not measured. Socket gap from the bounding boxes of the maximum socket (key0 rear 8.3, key3 front 9.5 - shift)."
+    },
+    "shoulder": {
+      "max_plan_slope": 0.9791,
+      "max_angle_degrees": 44.4,
+      "prints_at_45_or_less": true,
+      "outline_area_mm2": 1749.75,
+      "ends_y_mm": [
+        9.1,
+        24.1
+      ]
+    }
+  },
+  "battery": {
+    "leadin_removed_mm3": 2.4819,
+    "working_spaces_overlap_mm3": {
+      "unloaded_clip_bore": -0.0,
+      "clip_gap_near": 0.0,
+      "external_wire_bus": 0.0,
+      "reverse_wire_bus": 0.0,
+      "cell_reserve": 0.0,
+      "cell_loading": 0.0,
+      "gate_slot_+1": 0.0,
+      "gate_slot_-1": 0.0,
+      "lead_exit": 0.0,
+      "clip_gap_far": 0.0
+    },
+    "Battery_End_Door_into_R20": {
+      "max_overlap_mm3": 0.8235,
+      "seated_overlap_mm3": 0.0,
+      "first_contact_height_mm": 1.25
+    },
+    "Battery_End_Door_into_R22": {
+      "max_overlap_mm3": 0.6961,
+      "seated_overlap_mm3": 0.0,
+      "first_contact_height_mm": 1.25
+    },
+    "Battery_End_Door_Easy_Trial_into_R20": {
+      "max_overlap_mm3": 0.4725,
+      "seated_overlap_mm3": 0.0,
+      "first_contact_height_mm": 1.25
+    },
+    "Battery_End_Door_Easy_Trial_into_R22": {
+      "max_overlap_mm3": 0.3558,
+      "seated_overlap_mm3": 0.0,
+      "first_contact_height_mm": 1.25
+    },
+    "note": "Rigid CAD overlaps of the door dropped straight into its slots. Overlap near the seat is the designed catch/press fit inherited from R19/R20, not a new interference; compare R20 and R22 rows."
+  },
+  "xiao": {
+    "board_underside_z_mm": 8.8,
+    "grid_points": 1498,
+    "percent_of_board_area_with_clearance": {
+      ">=1mm": 97.4,
+      ">=1.5mm": 90.1,
+      ">=2mm": 80.2,
+      ">=3mm": 47.4
+    },
+    "min_clearance_under_pad_band_mm": 0.343,
+    "percent_pad_band_with_2mm_or_more": 50.9,
+    "min_clearance_under_centre_mm": 1.2,
+    "keeper_route_max_overlap_mm3": 0.3675,
+    "keeper_seated_overlap_mm3": 0.0,
+    "decision": "R20 body kept: Ethan reports the board sits almost flush and the R19 keeper was never printed for R20. Clearance under the board is listed here so a relief body can be made if the keeper cannot slide over a board lifted by underside solder."
+  },
+  "cable_clip": {
+    "section_z_mm": 1.2,
+    "cable_bore_free_radius_mm": 3.5,
+    "wire_envelope_radius_mm": 3.05,
+    "radial_slack_mm": 0.45,
+    "each_wire_clearance_to_plastic_mm": [
+      0.762,
+      0.45,
+      0.45,
+      0.45,
+      0.45,
+      0.45,
+      0.45,
+      0.45,
+      0.45,
+      1.884,
+      1.884,
+      1.884
+    ],
+    "all_wires_inside_bore": true,
+    "min_wire_centre_spacing_mm": 1.5,
+    "slit_free_opening_mm": 1.7,
+    "slit_minus_wire_od_mm": 0.2,
+    "rod_bore_free_radius_mm": 3.95,
+    "waist_material_on_axis_mm": 1.751,
+    "volume_mm3": 134.53,
+    "solid_PETG_g": 0.1709,
+    "basis": "12 equal 1.5 mm conductors (stated envelope, not measured). One wire passes the slit at a time; real wire OD, stiffness and clip force are physical trials."
+  },
+  "exports": {
+    "Key_Carrier": {
+      "sha_matches_manifest": true,
+      "watertight": true,
+      "bodies": 1,
+      "volume_mm3": 4453.65,
+      "anchor_present": true,
+      "export_vs_source_drift_mm3": 0.01568
+    },
+    "Battery_Holder": {
+      "sha_matches_manifest": true,
+      "watertight": true,
+      "bodies": 1,
+      "volume_mm3": 1948.41,
+      "anchor_present": true
+    },
+    "Battery_End_Door": {
+      "sha_matches_manifest": true,
+      "watertight": true,
+      "bodies": 1,
+      "volume_mm3": 268.77,
+      "byte_identical_to_source_revision": true
+    },
+    "Battery_End_Door_Easy_Trial": {
+      "sha_matches_manifest": true,
+      "watertight": true,
+      "bodies": 1,
+      "volume_mm3": 268.41
+    },
+    "XIAO_Rod_Holder": {
+      "sha_matches_manifest": true,
+      "watertight": true,
+      "bodies": 1,
+      "volume_mm3": 1633.08,
+      "byte_identical_to_source_revision": true,
+      "anchor_present": true
+    },
+    "XIAO_Near_Keeper": {
+      "sha_matches_manifest": true,
+      "watertight": true,
+      "bodies": 1,
+      "volume_mm3": 222.73,
+      "byte_identical_to_source_revision": true
+    },
+    "Battery_Spacer_0p4mm": {
+      "sha_matches_manifest": true,
+      "watertight": true,
+      "bodies": 1,
+      "volume_mm3": 213.41,
+      "byte_identical_to_source_revision": true
+    },
+    "Battery_Spacer_0p6mm": {
+      "sha_matches_manifest": true,
+      "watertight": true,
+      "bodies": 1,
+      "volume_mm3": 319.93,
+      "byte_identical_to_source_revision": true
+    },
+    "Battery_Spacer_0p8mm": {
+      "sha_matches_manifest": true,
+      "watertight": true,
+      "bodies": 1,
+      "volume_mm3": 426.33,
+      "byte_identical_to_source_revision": true
+    },
+    "Cable_Clip_12_Wire": {
+      "sha_matches_manifest": true,
+      "watertight": true,
+      "bodies": 1,
+      "volume_mm3": 134.53,
+      "anchor_present": true
+    },
+    "build_list_covers_plate": true
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false
+}

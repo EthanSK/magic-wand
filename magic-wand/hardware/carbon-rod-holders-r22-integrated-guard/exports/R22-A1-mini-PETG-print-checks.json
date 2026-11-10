@@ -1,0 +1,537 @@
+{
+  "layout_sha256": "fdd8f95d821c82648d487697433b4779977f6bedfce74634f515d32b7f660fb8",
+  "generator_sha256": "a68a7309de05c4d5cd13f13996e9aea74176043f55bc363a22935e128ee3ca27",
+  "project19_sha256": "a70beebc3b524bac199d4b7b221157f36051aaf65671d4fabb9625698367aa60",
+  "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
+  "manifest_sha256": "6746736902af093a8036fcef0eb3b0c88485c3cec435a9d37c73127773bef1ec",
+  "anchors_sha256": "1f9d5b43aa716a0e93d070107832361b5c5e2596a8340ee1036beeed7c726c2f",
+  "parts": [
+    "Key_Carrier",
+    "Battery_Holder",
+    "Battery_End_Door",
+    "Battery_End_Door_Easy_Trial",
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Battery_Spacer_0p4mm",
+    "Battery_Spacer_0p6mm",
+    "Battery_Spacer_0p8mm",
+    "Cable_Clip_12_Wire"
+  ],
+  "plate_origins_mm": {
+    "Key_Carrier": [
+      22,
+      136
+    ],
+    "XIAO_Rod_Holder": [
+      105,
+      128
+    ],
+    "Battery_Holder": [
+      25,
+      86
+    ],
+    "Battery_End_Door": [
+      75,
+      85
+    ],
+    "Battery_End_Door_Easy_Trial": [
+      120,
+      85
+    ],
+    "XIAO_Near_Keeper": [
+      85,
+      50
+    ],
+    "Cable_Clip_12_Wire": [
+      32,
+      48
+    ],
+    "Battery_Spacer_0p4mm": [
+      15,
+      12
+    ],
+    "Battery_Spacer_0p6mm": [
+      48,
+      12
+    ],
+    "Battery_Spacer_0p8mm": [
+      81,
+      12
+    ]
+  },
+  "plate_extents_mm": {
+    "Key_Carrier": [
+      [
+        22.0,
+        136.0,
+        0.0
+      ],
+      [
+        77.4000015258789,
+        162.10133171081543,
+        35.20000076293945
+      ]
+    ],
+    "Battery_Holder": [
+      [
+        16.800000190734863,
+        84.5,
+        0.0
+      ],
+      [
+        61.599998474121094,
+        113.68000030517578,
+        33.0
+      ]
+    ],
+    "Battery_End_Door": [
+      [
+        75.0,
+        85.0,
+        0.0
+      ],
+      [
+        100.60000038146973,
+        93.35000038146973,
+        2.400001049041748
+      ]
+    ],
+    "Battery_End_Door_Easy_Trial": [
+      [
+        120.0,
+        85.0,
+        0.0
+      ],
+      [
+        145.60000038146973,
+        93.35000038146973,
+        2.2500009536743164
+      ]
+    ],
+    "XIAO_Rod_Holder": [
+      [
+        97.10000038146973,
+        128.0,
+        0.0
+      ],
+      [
+        142.0999984741211,
+        158.62962913513184,
+        28.399999618530273
+      ]
+    ],
+    "XIAO_Near_Keeper": [
+      [
+        85.0,
+        50.0,
+        0.0
+      ],
+      [
+        111.0,
+        60.0,
+        2.1500000953674316
+      ]
+    ],
+    "Battery_Spacer_0p4mm": [
+      [
+        15.0,
+        12.0,
+        0.0
+      ],
+      [
+        35.60000038146973,
+        39.39999961853027,
+        0.4000000059604645
+      ]
+    ],
+    "Battery_Spacer_0p6mm": [
+      [
+        48.0,
+        12.0,
+        0.0
+      ],
+      [
+        68.60000038146973,
+        39.39999961853027,
+        0.6000000238418579
+      ]
+    ],
+    "Battery_Spacer_0p8mm": [
+      [
+        81.0,
+        12.0,
+        0.0
+      ],
+      [
+        101.60000038146973,
+        39.39999961853027,
+        0.800000011920929
+      ]
+    ],
+    "Cable_Clip_12_Wire": [
+      [
+        32.0,
+        45.85380530357361,
+        0.0
+      ],
+      [
+        50.43351936340332,
+        60.25380516052246,
+        2.4000000953674316
+      ]
+    ]
+  },
+  "printer": "Bambu Lab A1 mini 0.4 nozzle",
+  "process": "0.20mm Standard @BBL A1M",
+  "filament": [
+    "Generic PETG @BBL A1M"
+  ],
+  "nozzle_c": [
+    "255"
+  ],
+  "bed_c": [
+    "70"
+  ],
+  "process_overrides": {
+    "wall_loops": "3",
+    "sparse_infill_density": "20%",
+    "layer_height": "0.2",
+    "initial_layer_print_height": "0.2",
+    "enable_support": "0",
+    "brim_type": "no_brim",
+    "enable_prime_tower": "1",
+    "print_sequence": "by layer",
+    "bridge_no_support": "1",
+    "max_bridge_length": "12",
+    "initial_layer_speed": [
+      "20"
+    ],
+    "initial_layer_infill_speed": [
+      "30"
+    ],
+    "reduce_crossing_wall": "1",
+    "timelapse_type": "1",
+    "wipe_tower_x": [
+      "120"
+    ],
+    "wipe_tower_y": [
+      "20"
+    ]
+  },
+  "printer_overrides": {
+    "z_hop": [
+      "0.6"
+    ],
+    "z_hop_types": [
+      "Normal Lift"
+    ]
+  },
+  "slow_bands_mm": {
+    "Key_Carrier": [
+      [
+        16.0,
+        16.8
+      ],
+      [
+        33.8,
+        35.2
+      ]
+    ],
+    "Battery_Holder": [
+      [
+        31.0,
+        31.8
+      ]
+    ]
+  },
+  "local_recipe": {
+    "Key_Carrier_bands_mm": [
+      [
+        16.0,
+        16.8
+      ],
+      [
+        33.8,
+        35.2
+      ]
+    ],
+    "Battery_Holder_bands_mm": [
+      [
+        31.0,
+        31.8
+      ]
+    ],
+    "speeds_mm_s": {
+      "outer_wall_speed": 15,
+      "inner_wall_speed": 15,
+      "gap_infill_speed": 12,
+      "internal_solid_infill_speed": 20,
+      "sparse_infill_speed": 20,
+      "top_surface_speed": 20,
+      "bridge_speed": 12,
+      "overhang_1_4_speed": 15,
+      "overhang_2_4_speed": 12,
+      "overhang_3_4_speed": 10,
+      "overhang_4_4_speed": 8
+    },
+    "reason": "The bay opening and clip-relief spans (14.1-15.6 mm) and the gate-slot cap print across air; the slow local speeds give each span time to set. Cooling is not part of the local recipe: fan is a filament-profile setting (fan_min_speed 40 %, fan_cooling_layer_time 30 s), so in these long layers the base fan falls to 40 % and only paths the slicer classifies as overhang wall or bridge get the 90 % overhang/bridge fan; gap-fill and inner-wall paths in the bands print at 40 %. Actual F, M106 and per-feature path lengths by fan level are read back from the G-code into slice-clearances.json; digital evidence does not predict PETG droop, inspect and trim the roofs."
+  },
+  "adhesion_policy": "The key, battery and XIAO holders and the cable clip have labelled tear-off pads. The flat doors, keeper and spacers print directly on the plate. No slicer brim or automatic support.",
+  "physical_print_verified": false,
+  "slice": {
+    "error_string": "Success.",
+    "return_code": 0,
+    "sliced_plates": [
+      {
+        "feature_type_times": {
+          "Bottom surface": 144.7064208984375,
+          "Bridge": 22.731163024902344,
+          "Custom": 365.1888732910156,
+          "Flush": 28.0,
+          "Gap infill": 265.0188293457031,
+          "Inner wall": 1121.636962890625,
+          "Internal solid infill": 247.3066864013672,
+          "Outer wall": 1326.537353515625,
+          "Overhang wall": 19.48346519470215,
+          "Prime tower": 251.38543701171875,
+          "Sparse infill": 27.646726608276367,
+          "Top surface": 153.25392150878906,
+          "Travel": 1283.180419921875,
+          "Undefined": 1264.8602294921875
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 12.059636116027832,
+            "total_used_g": 13.83266830444336
+          }
+        ],
+        "id": 1,
+        "layer_filament_change": 0,
+        "main_predication": 4582.9208984375,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 26.10133171081543,
+              "height": 35.20000076293945,
+              "width": 55.400001525878906,
+              "x": 22.0,
+              "y": 136.0,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Key_Carrier",
+            "triangle_count": 152390
+          },
+          {
+            "bbox": {
+              "depth": 29.18000030517578,
+              "height": 33.0,
+              "width": 44.79999923706055,
+              "x": 16.80000114440918,
+              "y": 84.5,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Battery_Holder",
+            "triangle_count": 8968
+          },
+          {
+            "bbox": {
+              "depth": 8.350000381469727,
+              "height": 2.400001049041748,
+              "width": 25.600000381469727,
+              "x": 75.0,
+              "y": 85.0,
+              "z": -8.881784197001252e-16
+            },
+            "id": 13,
+            "name": "Battery_End_Door",
+            "triangle_count": 124
+          },
+          {
+            "bbox": {
+              "depth": 8.350000381469727,
+              "height": 2.2500009536743164,
+              "width": 25.600000381469727,
+              "x": 120.0,
+              "y": 85.0,
+              "z": -8.881784197001252e-16
+            },
+            "id": 17,
+            "name": "Battery_End_Door_Easy_Trial",
+            "triangle_count": 124
+          },
+          {
+            "bbox": {
+              "depth": 30.629629135131836,
+              "height": 28.399999618530273,
+              "width": 45.0,
+              "x": 97.0999984741211,
+              "y": 128.0,
+              "z": 0.0
+            },
+            "id": 21,
+            "name": "XIAO_Rod_Holder",
+            "triangle_count": 8514
+          },
+          {
+            "bbox": {
+              "depth": 10.0,
+              "height": 2.1500000953674316,
+              "width": 26.0,
+              "x": 85.0,
+              "y": 50.0,
+              "z": 0.0
+            },
+            "id": 25,
+            "name": "XIAO_Near_Keeper",
+            "triangle_count": 208
+          },
+          {
+            "bbox": {
+              "depth": 27.399999618530273,
+              "height": 0.4000000059604645,
+              "width": 20.600000381469727,
+              "x": 15.0,
+              "y": 12.0,
+              "z": 0.0
+            },
+            "id": 29,
+            "name": "Battery_Spacer_0p4mm",
+            "triangle_count": 132
+          },
+          {
+            "bbox": {
+              "depth": 27.399999618530273,
+              "height": 0.6000000238418579,
+              "width": 20.600000381469727,
+              "x": 48.0,
+              "y": 12.0,
+              "z": 0.0
+            },
+            "id": 33,
+            "name": "Battery_Spacer_0p6mm",
+            "triangle_count": 168
+          },
+          {
+            "bbox": {
+              "depth": 27.399999618530273,
+              "height": 0.800000011920929,
+              "width": 20.600000381469727,
+              "x": 81.0,
+              "y": 12.0,
+              "z": 0.0
+            },
+            "id": 37,
+            "name": "Battery_Spacer_0p8mm",
+            "triangle_count": 204
+          },
+          {
+            "bbox": {
+              "depth": 14.399999618530273,
+              "height": 2.4000000953674316,
+              "width": 18.43351936340332,
+              "x": 32.0,
+              "y": 45.85380554199219,
+              "z": 0.0
+            },
+            "id": 41,
+            "name": "Cable_Clip_12_Wire",
+            "triangle_count": 6452
+          }
+        ],
+        "times": {
+          "conflict_check_time": 50,
+          "detect_overhangs_time": 13,
+          "export_gcode_time": 7428,
+          "flush_plan_time": 0,
+          "generate_support_material_time": 70,
+          "infill_generate_time": 36,
+          "infill_time": 115,
+          "ironing_time": 0,
+          "make_perimeters_time": 231,
+          "multifilament_segment_2d_time": 0,
+          "other_slice_time": 3,
+          "prepare_infill_time": 79,
+          "region_split_time": 0,
+          "skirt_brim_time": 0,
+          "slice_layers_time": 79,
+          "sliced_time": 7969,
+          "sliced_time_with_cache": 7428,
+          "support_detect_time": 0,
+          "support_interface_time": 0,
+          "support_normal_generate_time": 0,
+          "support_toolpath_time": 0,
+          "support_tree_generate_time": 0,
+          "toolpath_time": 21,
+          "wall_time": 151,
+          "wipe_tower_time": 37
+        },
+        "total_predication": 5237.1748046875,
+        "triangle_count": 177284,
+        "warning_message": ""
+      }
+    ]
+  },
+  "warnings": [],
+  "delivered_settings_registration": {
+    "cli_dropped_keys": [],
+    "values_unchanged": true
+  },
+  "sliced_project_filename": "R22-A1-mini-PETG.gcode.3mf",
+  "sliced_project_sha256": "14e787d5b9e3060ffd2d82038f439c2acd6d9a31b4e9e3f862e5ba648d8abe46",
+  "executable_commands": {
+    "passed": true,
+    "project_sha256": "14e787d5b9e3060ffd2d82038f439c2acd6d9a31b4e9e3f862e5ba648d8abe46",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "layer_change_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 255.0,
+    "first_object_bed_target_c": 70.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ]
+  },
+  "slice_info_warnings": [],
+  "bambu_studio_version": "02.09.01.70",
+  "project20_sha256": "f38f2c10b9fda22c3e48eb02bdfb0b1f02bd239aa64384592cd571b042bd26de",
+  "object_wall_generators": {
+    "Key_Carrier": "arachne"
+  },
+  "key_carrier_solid_fill_bounds_mm": [
+    [
+      [
+        24.5,
+        8.75,
+        0.4
+      ],
+      [
+        30.9,
+        13.95,
+        1.8
+      ]
+    ],
+    [
+      [
+        24.5,
+        8.75,
+        16.2
+      ],
+      [
+        30.9,
+        13.95,
+        17.6
+      ]
+    ]
+  ]
+}

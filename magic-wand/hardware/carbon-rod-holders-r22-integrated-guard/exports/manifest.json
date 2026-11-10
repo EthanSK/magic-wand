@@ -1,0 +1,581 @@
+{
+  "revision": "carbon-rod-holders-r22-integrated-guard",
+  "source_sha256": {
+    "holder22.py": "1167ff86be2fed28db6c5ee9f609c80f448b02b88f44fcd70673a4bc166e3f90",
+    "parameters.json": "4caa2ab1bacf156297bdc4d81cd9001d6ca59a4770bd81e86f2a20e070e2ce3e",
+    "../carbon-rod-holders-r20-finger-guard/holder20.py": "cda2eb3d89e16f8053c9fcd19f307ff0c5f10fdbbe68fab6462cb06c46ad90ca",
+    "../carbon-rod-holders-r20-finger-guard/parameters.json": "2aec2329800475e6508c70048dc447cf132c918535b1d4ef6503cff52cb20361",
+    "../carbon-rod-holders-r19-lightweight/holder19.py": "b6676a636d83558b73070f2b758985c6c42d0ed88576cf37226132fb82781a78",
+    "../carbon-rod-holders-r19-lightweight/parameters.json": "262cf0cba359bfe98a7de87f1c9bd836df62e3606c91a2e75301bac70ed73d8a",
+    "../carbon-rod-holders-r18-easy-release/holder18.py": "8f57edd254db75d7f2aaaaaffe93a98616504cec0a8574c6ccab247af3b94ab6",
+    "../carbon-rod-holders-r18-easy-release/parameters.json": "7873348e6c28b65b95761b9c4437e1c2bdf4345f4e8c20c7f05630bab600e7c0",
+    "../carbon-rod-holders-r17-anchored-repair/holder17.py": "9a63b8804df9d5fd5751c864ed7667f36f4c42934984b967978d3b9ee61aadb1",
+    "../carbon-rod-holders-r17-anchored-repair/parameters.json": "841c50b7a1fdedc202c626bf98faa91d53941abaffb8bedff932bb5616162d97",
+    "../carbon-rod-holders-r16-repair/holder16.py": "b44f93894404aaa6e1ee4b30c0db34ac9fc3fa298db8f607af3bdd0cc3dd4cd7",
+    "../carbon-rod-holders-r16-repair/spaces16.py": "286d6d993d6f52a255027f74eac7752c9e879f911ff43041eeae523432caedae",
+    "../carbon-rod-holders-r16-repair/parameters.json": "03a53347dddc7465892ef6486c5e1024bfd287bd2a1e2aaa03c6d08e7983ac2a"
+  },
+  "parts": {
+    "Key_Carrier": {
+      "bounds_mm": [
+        [
+          -27.700000762939453,
+          -8.300000190734863,
+          -4.781332969665527
+        ],
+        [
+          27.700000762939453,
+          26.899999618530273,
+          11.119999885559082
+        ]
+      ],
+      "volume_mm3": 4453.651486800828,
+      "solid_PETG_g": 5.656137388237052,
+      "print_height_mm": 35.20000076293945,
+      "body_count": 1,
+      "watertight": true,
+      "export_drift_mm3": 0.00168,
+      "stl_sha256": "bd071087ca49edff5cb31313a6b126158cc277f4f7e04f1671e6fe8a49df8d85",
+      "assembly_stl_sha256": "1f524ec3c5f62f3da6ba983519d7e4c4b2dd275c047c6fdb3081768ae56fcb7b",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -27.700000762939453
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          26.899999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.781332969665528
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Battery_Holder": {
+      "bounds_mm": [
+        [
+          -14.199999809265137,
+          -17.799999237060547,
+          -4.829628944396973
+        ],
+        [
+          14.199999809265137,
+          15.199999809265137,
+          12.350000381469727
+        ]
+      ],
+      "volume_mm3": 1948.4150061867858,
+      "solid_PETG_g": 2.474487057857218,
+      "print_height_mm": 33.0,
+      "body_count": 1,
+      "watertight": true,
+      "export_drift_mm3": 0.00077,
+      "stl_sha256": "9cc3092d47c87013ccf8d617dff542264d88e313cf7dc60bbcddf7061fde7326",
+      "assembly_stl_sha256": "1e37e83b49571ca8d68703b31ea5b0c324925d2e3eb8a891c6eea68568171fd6",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.199999809265137
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          15.199999809265137
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Battery_End_Door": {
+      "bounds_mm": [
+        [
+          -12.800000190734863,
+          -15.800000190734863,
+          6.349999904632568
+        ],
+        [
+          12.800000190734863,
+          -13.399999618530273,
+          14.699999809265137
+        ]
+      ],
+      "volume_mm3": 268.7652268491739,
+      "solid_PETG_g": 0.3413318380984509,
+      "print_height_mm": 2.400001049041748,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "fb7d11bbf99a2cbdd22f962dadb8b147591668362d7ddf452e32087d69c3caec",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.800000190734863
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -15.800000190734865
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          14.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "copied_from": "../carbon-rod-holders-r19-lightweight"
+    },
+    "Battery_End_Door_Easy_Trial": {
+      "bounds_mm": [
+        [
+          -12.800000190734863,
+          -15.800000190734863,
+          6.349999904632568
+        ],
+        [
+          12.800000190734863,
+          -13.549999237060547,
+          14.699999809265137
+        ]
+      ],
+      "volume_mm3": 268.41152819406904,
+      "solid_PETG_g": 0.3408826408064677,
+      "print_height_mm": 2.2500009536743164,
+      "body_count": 1,
+      "watertight": true,
+      "export_drift_mm3": 3e-05,
+      "stl_sha256": "1d3b77d681d58890ed942072ab0e55130d914fba87f9e93ccf9542e61305ed26",
+      "assembly_stl_sha256": "d43fa86f9d632156034c9fe0a94a7d41d66c1682bf2d7e8a2e2ffef44489f0cf",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.800000190734863
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -15.800000190734865
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          14.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "XIAO_Rod_Holder": {
+      "bounds_mm": [
+        [
+          -14.600000381469727,
+          -5.0,
+          -4.829628944396973
+        ],
+        [
+          14.600000381469727,
+          23.399999618530273,
+          15.300000190734863
+        ]
+      ],
+      "volume_mm3": 1633.0786082123843,
+      "solid_PETG_g": 2.074009832429728,
+      "print_height_mm": 28.399999618530273,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "7b839a6f549308dcb82baf1b9cfa1836c4d3309a1686e08451d41626a5878b30",
+      "assembly_stl_sha256": "ef4a5efa406add6141d9e67f0501a6303684105e449d858bbb39fe2de3d658e9",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.600000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          23.399999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "copied_from": "../carbon-rod-holders-r20-finger-guard"
+    },
+    "XIAO_Near_Keeper": {
+      "bounds_mm": [
+        [
+          -13.0,
+          -7.0,
+          9.800000190734863
+        ],
+        [
+          13.0,
+          3.0,
+          11.949999809265137
+        ]
+      ],
+      "volume_mm3": 222.7338113690556,
+      "solid_PETG_g": 0.2828719404387006,
+      "print_height_mm": 2.1500000953674316,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "a5974e52c23839d0b1214408b57ac908ad75d9328dff9e2c60f3b2239a5ee760",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -13.0
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          3.0
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          11.949999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "copied_from": "../carbon-rod-holders-r19-lightweight"
+    },
+    "Battery_Spacer_0p4mm": {
+      "bounds_mm": [
+        [
+          -10.300000190734863,
+          -13.699999809265137,
+          5.849999904632568
+        ],
+        [
+          10.300000190734863,
+          13.699999809265137,
+          6.25
+        ]
+      ],
+      "volume_mm3": 213.41324807972288,
+      "solid_PETG_g": 0.27103482506124804,
+      "print_height_mm": 0.4000000059604645,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "001e39e87ac1c742b778973345a96eb3401f026abdf86d75dc696b411fc6fd9f",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.300000190734863
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -13.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          5.849999904632568
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "copied_from": "../carbon-rod-holders-r19-lightweight"
+    },
+    "Battery_Spacer_0p6mm": {
+      "bounds_mm": [
+        [
+          -10.300000190734863,
+          -13.699999809265137,
+          5.849999904632568
+        ],
+        [
+          10.300000190734863,
+          13.699999809265137,
+          6.449999809265137
+        ]
+      ],
+      "volume_mm3": 319.9337608003779,
+      "solid_PETG_g": 0.4063158762164799,
+      "print_height_mm": 0.6000000238418579,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "64003602370c88d7b7cdf4c1a9dd02aa88bf4a1b1d8ee3c9fd2f935cb8ad4eb2",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.300000190734863
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -13.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          5.849999904632568
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "copied_from": "../carbon-rod-holders-r19-lightweight"
+    },
+    "Battery_Spacer_0p8mm": {
+      "bounds_mm": [
+        [
+          -10.300000190734863,
+          -13.699999809265137,
+          5.849999904632568
+        ],
+        [
+          10.300000190734863,
+          13.699999809265137,
+          6.650000095367432
+        ]
+      ],
+      "volume_mm3": 426.33053831068156,
+      "solid_PETG_g": 0.5414397836545656,
+      "print_height_mm": 0.800000011920929,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "ec2294e39734af33a133cfbb4964e536f2adc8cff103fb11eab408ffd3873666",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.300000190734863
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -13.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          5.849999904632568
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "copied_from": "../carbon-rod-holders-r19-lightweight"
+    },
+    "Cable_Clip_12_Wire": {
+      "bounds_mm": [
+        [
+          -4.798483848571777,
+          -5.053805351257324,
+          0.0
+        ],
+        [
+          13.635035514831543,
+          5.053805351257324,
+          2.4000000953674316
+        ]
+      ],
+      "volume_mm3": 134.53316142837184,
+      "solid_PETG_g": 0.17085711501403225,
+      "print_height_mm": 2.4000000953674316,
+      "body_count": 1,
+      "watertight": true,
+      "export_drift_mm3": 4e-05,
+      "stl_sha256": "4806c7ae867d9fb2b4d2c0d2db31f4be76b0c6020774341253f1108765e2ab8d",
+      "assembly_stl_sha256": "aa5c140054e25616aded0fd2101d4a207fa4d69f3bc86a93150326cdd65f7881",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -4.798483848571777
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -5.053805351257324
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_frame": "Own frame: rod axis along Z at the origin, printed flat."
+    }
+  },
+  "plate_parts": [
+    "Key_Carrier",
+    "Battery_Holder",
+    "Battery_End_Door",
+    "Battery_End_Door_Easy_Trial",
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Battery_Spacer_0p4mm",
+    "Battery_Spacer_0p6mm",
+    "Battery_Spacer_0p8mm",
+    "Cable_Clip_12_Wire"
+  ],
+  "anchored_parts": [
+    "Key_Carrier",
+    "Battery_Holder",
+    "XIAO_Rod_Holder",
+    "Cable_Clip_12_Wire"
+  ],
+  "build_list": {
+    "Key_Carrier": "R22 key holder with the built-in guard runners and curved shoulders. Supersedes the R20 key holder and the separate R20 Finger_Guard.",
+    "Battery_Holder": "R22 battery holder: the R20 holder plus a lead-in at the top of each door slot. Takes either door below.",
+    "Battery_End_Door": "Standard door, byte-identical to R19. Fits the R19, R20 and R22 battery holders. Try this first.",
+    "Battery_End_Door_Easy_Trial": "Trial door: the standard door with its centre catch tooth 0.15 mm shallower (hooks 0.25 mm instead of 0.4 mm). Easier in and out, holds less firmly. Use only if the standard door is still too stiff.",
+    "XIAO_Rod_Holder": "R20 XIAO holder, byte-identical copy (unchanged body; the board already sits almost flush).",
+    "XIAO_Near_Keeper": "R19 XIAO keeper, byte-identical, ORIGINAL-COMPATIBLE: fits the R19 and R20 XIAO holders (R20 never printed one). Slides over the near end of the board and holds it down.",
+    "Battery_Spacer_0p4mm": "R19 cell spacer, reprinted.",
+    "Battery_Spacer_0p6mm": "R19 cell spacer, reprinted.",
+    "Battery_Spacer_0p8mm": "R19 cell spacer, reprinted.",
+    "Cable_Clip_12_Wire": "R22 cable clip for the full harness (12 x 1.5 mm conductors). Supersedes the R21 4 mm clip."
+  },
+  "row_shift_mm": 0.0,
+  "row_spacing_mm": 17.8,
+  "key_positions_mm": [
+    [
+      -18.7,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      18.7,
+      0
+    ],
+    [
+      -9.35,
+      17.8
+    ],
+    [
+      9.35,
+      17.8
+    ]
+  ],
+  "key_rotations_degrees": [
+    0,
+    0,
+    0,
+    180,
+    0
+  ],
+  "key_carrier_slow_bands_mm": [
+    [
+      16.0,
+      16.8
+    ],
+    [
+      33.8,
+      35.2
+    ]
+  ],
+  "guard_layer_growth": {
+    "desired_mm3": 265.63,
+    "trimmed_unsupported_mm3": 6.422
+  },
+  "assembly_frame": "Each part in its own frame, rod axis along Y (cable clip: own flat frame, rod axis Z).",
+  "superseded_stl_sha256": {
+    "Key_Carrier (R20)": "d9ffa43656a44add8a81fade5d2ead5f8a1f2c9524c0680786a9827aa3881d57",
+    "Finger_Guard (R20, separate; still fits R16/R20 key holders)": "8f1f5508ce5752e30a2c4badc352259215722d17fc42c000eded8f64b426287c",
+    "Battery_Holder (R20)": "51f3142cc251291813a4820f92aecc9aa46cf1b7b753fc557e659e6bbfe03f7e",
+    "Cable_Clip_4mm (R21)": "cee64ade58125cfeac4e2656f975eac9e7f61036540e70d7fe6a84b9cf90a0ec"
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false
+}

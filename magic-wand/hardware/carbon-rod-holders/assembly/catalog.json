@@ -1,6 +1,17 @@
 {
-  "current": "r20",
+  "current": "r22",
   "versions": [
-    { "id": "r20", "label": "Printed R20", "legacy": true, "helper": "tower-r20.json" }
+    {
+      "id": "r22",
+      "label": "R22 candidate",
+      "guide": "../../carbon-rod-holders-r22-integrated-guard/exports/assembly-guide.json",
+      "helper": "../../carbon-rod-holders-r22-integrated-guard/exports/timelapse-tower.json"
+    },
+    {
+      "id": "r20",
+      "label": "Printed R20",
+      "legacy": true,
+      "helper": "tower-r20.json"
+    }
   ]
 }

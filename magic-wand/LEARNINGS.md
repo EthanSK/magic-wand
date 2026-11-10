@@ -2445,3 +2445,21 @@ case. Rebuild the final written STL, return it through its real transform and
 compare against the source solid. `holder20.export` rejects drift above 0.02 mm3.
 Do not generalise the successful radius into a universal tolerance or infer a
 physical printing cause from this digital library behaviour.
+
+### 2026-11-10 — Check the material inside narrow printed beams
+
+Self-improved — R22's classic slice left part of the core empty inside thin
+guard beams even when the full-section coverage passed. Variable-width walls
+on the key holder filled the cores, but their new bead widths intruded at one
+upper socket corner. A local tapered relief cleared that insertion path. The
+final exact slice covers at least 99.69% of the inset core across 126 free-span
+sections, with all audited working spaces clear after pad removal. Check both
+member cores and nearby fit clearances when changing wall generators, then
+check the reopened slice. These are deposition estimates, with physical
+strength and fit still to be tested.
+
+Two short internal shell loops also started over sparse infill gaps despite
+having solid CAD below them. Small solid-fill modifiers put plastic directly
+under those starts. Review actual backing at partial overhangs, including the
+order of the affected extrusion moves. A connected mesh can contain a loose
+loop within an otherwise supported layer.
