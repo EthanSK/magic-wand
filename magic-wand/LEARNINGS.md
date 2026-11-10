@@ -2446,6 +2446,12 @@ compare against the source solid. `holder20.export` rejects drift above 0.02 mm3
 Do not generalise the successful radius into a universal tolerance or infer a
 physical printing cause from this digital library behaviour.
 
+Self-improved — R23 also exposed seam triangles collapsing on the STL's
+float32 coordinate grid, even though the source solid was closed. Check the
+written assembly and print meshes separately. R23 normalises on that grid
+and rebuilds both files, requiring a closed single solid and less than
+0.02 mm³ symmetric difference after mapping back into assembly coordinates.
+
 ### 2026-11-10 — Check the material inside narrow printed beams
 
 Self-improved — R22's classic slice left part of the core empty inside thin
@@ -2463,3 +2469,53 @@ having solid CAD below them. Small solid-fill modifiers put plastic directly
 under those starts. Review actual backing at partial overhangs, including the
 order of the affected extrusion moves. A connected mesh can contain a loose
 loop within an otherwise supported layer.
+
+### 2026-11-10 — R22 guard strength in hand
+
+The printer finished R22. Ethan liked the key holder overall but reported
+that its underside guard ribs snapped when pressed. He also saw one missing
+printed line on one side. He reversed the side while looking underneath, so
+inspect both sides. The report does not establish which side was affected or
+whether the line was omitted in slicing or lost during printing.
+
+Keep the open finger guard and the Choc insertion routes while strengthening
+the ribs and their rounded roots. Check the actual path across each rib on
+both sides, including its first few layers and joints. The earlier section
+coverage did not establish hand strength. Include upper-row reinforcement
+only where the prewired sockets and caps still have room to move.
+
+### 2026-11-10 — Identify R22 retainers by their fitted parts
+
+Ethan reported a missing battery top. The comparison photo showed the
+R22 holder with empty door slots and one separate piece whose outline
+looks like the XIAO keeper. The exact sent R22 toolpaths contained both
+battery doors. That establishes the plate contents, with physical
+deposition and recovery of the doors still unconfirmed. The R22 assembly
+recipe shows the battery sliding in from the end and either battery door
+pressing straight down into the two end slots. The keeper slides along
+the XIAO holder. Identify the actual part and its insertion direction
+before changing dimensions.
+
+### 2026-11-10 — Verify the bought switch board and its whole insertion route
+
+The purchased centre-click kit is Endgame Gear's
+[OP1 Universal Switch Set](https://endgamegear.com/products/op1-universal-switch-set),
+EGG-SP-U1, sold as PER-EGG-01645. Verify the order before choosing the model.
+The published product photos identify the stock board and its plug, but there
+is no dimensioned board drawing in the product information. Keep the
+photo-derived envelope and the actual fit separate. R23 keeps an accessible
+slide-in route and provides different paddle stops for a first unpowered trial.
+The [wiring guide](hardware/xiao-wand-dashboard/README.md#op1-centre-click)
+owns the contact check and the connection to the existing mouse input.
+
+Self-improved — R23's initial Studio tree-support trials passed the slice
+warning check, but deposited support in the switch and cap approaches and
+at the hinge bore entrance. The seated board bay was clear. Inspect the
+entire insertion approach in the actual slice, including narrow pin
+entrances and the space needed to remove any support.
+
+Self-improved — the first extended CAD investigation did not leave an
+editable candidate. Resuming the same author session with the confirmed
+kit, a bounded fit trial and an explicit first source deliverable produced
+a model that could be checked. Get a saved candidate and an early slice
+before investing in detailed mechanical refinement.

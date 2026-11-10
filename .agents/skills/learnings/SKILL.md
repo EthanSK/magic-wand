@@ -24,7 +24,10 @@ Reuse an announcement for the same ongoing task; do not repeat it at every comma
   behaviour. Follow [AGENTS.md](../../../magic-wand/AGENTS.md) and inspect current code and live evidence;
   an old incident description does not establish the current installed state.
 - Save reusable, verified technical lessons in `LEARNINGS.md` in the same task. Include the
-  symptom, established cause, decision that prevents recurrence, and verification boundary.
+  symptom, established cause when known, the decision that follows, and the verification boundary.
+- User-requested — 2026-11-10: For Wand modelling and printing, save useful learnings as
+  you go. Update the owning record when a component fit decision, slice check or physical
+  trial yields reusable evidence, before moving on to the next stage.
 - Merge with the existing relevant section instead of repeating the same lesson. Keep source
   test results, live telemetry and user physical acceptance distinct.
 - Durable user rules belong in `AGENTS.md` or the relevant skill, not in incident notes.

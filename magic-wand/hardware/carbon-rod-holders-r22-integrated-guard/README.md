@@ -2,8 +2,9 @@
 
 R22 responds to Ethan's comments on the R20 print. R16 to R21 and their exports are unchanged.
 
-**Status: digital candidate. The exact meshes, routes, working spaces and a sliced PETG plate pass their checks.
-Nothing has been printed. Fit, grip, comfort, snap force and strength still need a physical trial; these checks do not establish them.**
+**Status: the R22 PETG job finished.** The key holder printed and its thin guard runners
+snapped under finger pressure. The toolpaths include both battery doors. The comparison
+photo shows empty door slots, so whether the loose doors printed successfully is unconfirmed.
 
 [Open the assembly guide](../carbon-rod-holders/assembly/?version=r22) and choose a component in the dropdown.
 
@@ -72,6 +73,9 @@ The slicer's full-plate estimate, including the wipe tower, is in `exports/R22-A
   The change is one parameter (`row_shift_mm`).
 
 ## Battery
+
+Slide the battery in end-first. Push its door straight down into the two end slots.
+The XIAO keeper is a different part with small ears and slides along the XIAO holder.
 
 The hard part of fitting the door is its centre catch tooth (X ±1.8 mm) riding over the 0.4 mm lip at the slot top,
 plus the door plate entering the two side slots.
