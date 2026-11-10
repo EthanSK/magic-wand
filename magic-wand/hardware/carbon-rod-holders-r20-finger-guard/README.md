@@ -30,6 +30,8 @@ reprinted. Full numbers are in [the geometry checks](exports/geometry-checks.jso
 
 ## Fitting animation
 
+[Choose a component in the wand assembly guide](../carbon-rod-holders/assembly/?version=r20). It shows the printed R20 holders with the R19 keepers and door, the separate cable clip, and the disposable timelapse tower.
+
 [Play the dimensioned R20 fitting animation](preview/). It uses the exact
 exported guard and key-holder meshes plus the existing electronics and stated
 wire envelopes. Choose **Open hand end** to slide the guard into place; choose
