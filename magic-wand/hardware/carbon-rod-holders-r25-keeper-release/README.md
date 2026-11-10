@@ -23,8 +23,10 @@ over the original sloped ridge.
 
 [Open Keys](../carbon-rod-holders/assembly/?version=r25&component=keys) to see
 the assembled key area. Choose **Potential components** under **Keys view**
-to compare the five centre-click concepts. **Hide other keycaps** clears the
-four outer caps from the view while keeping the centre cap visible.
+to see each concept assemble, mount, press and release. **Comparison only**
+contains the direct switch-hole pivot, which needs a switch hold-down.
+**Hide other keycaps** clears the four outer caps from the view while keeping
+the centre cap visible.
 
 Assembly modules can declare their own visibility buttons in
 `helperActions` using an `id`, `hideLabel`, `showLabel` and the `actors`

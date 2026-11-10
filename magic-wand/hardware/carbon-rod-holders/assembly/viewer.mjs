@@ -5,7 +5,7 @@ import { FreeViewInput } from '../../printed-loop-wand/preview/free-view-input.m
 import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/preview/free-view-controls.mjs';
 import { applyViewerWheel } from '../../carbon-rod-holders-r7-spring-clips/preview/wheel-input.mjs';
 import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
-import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=helper-actions';
+import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=retained-caps-2';
 import { legacyR20 } from './legacy-r20.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');
@@ -15,6 +15,7 @@ const keyHeights = document.getElementById('key-heights');
 const keyMechanism = document.getElementById('key-mechanism');
 const annotationHost = document.getElementById('annotations');
 const annotationToggle = document.getElementById('annotation-toggle');
+const conceptStatus = document.getElementById('concept-status');
 const actionHost = document.getElementById('model-actions');
 const hiddenActions = new Set();
 const input = new FreeViewInput({ minDistance: 8, maxDistance: 900 });
@@ -29,6 +30,7 @@ canvas.setAttribute('aria-label', '3D assembly. Drag to rotate; scroll or pinch 
 let guide, guideUrl, group, actors = {}, module, tools, catalog, loadId = 0, versionLoadId = 0;
 let keyViews;
 let showAnnotations = true, annotations = [];
+let manualCutaway = false, effectiveCutaway;
 const geometries = new Map();
 
 function renderAnnotations() {
@@ -67,7 +69,8 @@ function setAnnotations(records = []) {
     line.setAttribute('aria-hidden', 'true'); dot.setAttribute('aria-hidden', 'true');
     card.dataset.side = record.side;
     const title = document.createElement('strong');
-    title.textContent = record.title; card.append(title, document.createTextNode(record.text));
+    title.textContent = record.title; card.append(title);
+    if (record.text) card.append(document.createTextNode(record.text));
     return {
       line, dot, card, columnIndex: sideCount[record.side]++,
       point: new THREE.Vector3(), actor: { id: record.actor, anchor: new THREE.Vector3(...record.point) },
@@ -119,8 +122,11 @@ function reset() {
   input.syncAngles();
   fit();
 }
-function setCutaway(active) {
-  keyMechanism.setAttribute('aria-pressed', String(active));
+function updateCutaway(index, fraction) {
+  const automatic = module.steps[index]?.reveal && (index !== module.steps.length - 1 || fraction < 1);
+  const active = Boolean(manualCutaway || automatic);
+  if (effectiveCutaway === active) return;
+  effectiveCutaway = active;
   for (const [id, object] of Object.entries(actors)) {
     if (!module?.actors[id].cutaway) continue;
     object.material.opacity = active ? .22 : 1;
@@ -128,10 +134,10 @@ function setCutaway(active) {
     object.material.depthWrite = !active;
     object.material.needsUpdate = true;
   }
-  render();
 }
 function chooseMode(mode) { input.setMode(mode); for (const button of document.querySelectorAll('[data-mode]')) button.setAttribute('aria-pressed', String(button.dataset.mode === mode)); render(); }
 function applyPose({ index, fraction }) {
+  const startOfReplay = module.concept && index === 0 && Number(document.body.dataset.step) > 0;
   const sample = sampledPose(module, index, fraction);
   for (const [id, object] of Object.entries(actors)) {
     const m = sample[id] || identity();
@@ -139,7 +145,10 @@ function applyPose({ index, fraction }) {
     object.matrixWorldNeedsUpdate = true;
     if (object.morphTargetInfluences) object.morphTargetInfluences[0] = sample.morphs?.[id] ?? 0;
   }
-  document.body.dataset.step = String(index); document.body.dataset.fraction = String(fraction); render();
+  updateCutaway(index, fraction);
+  document.body.dataset.step = String(index); document.body.dataset.fraction = String(fraction);
+  if (startOfReplay) fit();
+  else render();
 }
 async function geometry(record, sourceUrl) {
   if (record.geometry) {
@@ -200,7 +209,11 @@ async function chooseModule() {
     group = nextGroup; actors = nextActors; module = next; scene.add(group);
     setAnnotations(module.annotations);
     installModelActions(module.helperActions);
-    setCutaway(false);
+    manualCutaway = false; effectiveCutaway = undefined;
+    keyMechanism.setAttribute('aria-pressed', 'false');
+    conceptStatus.hidden = !module.status;
+    conceptStatus.textContent = module.status ?? '';
+    conceptStatus.dataset.limited = String(Boolean(module.comparisonOnly));
     document.getElementById('part-note').textContent = module.note;
     document.getElementById('parts').replaceChildren(...Object.entries(module.actors).map(([id, actor]) => {
       const item = document.createElement('li'); item.textContent = actor.label || id.replaceAll('_', ' '); item.style.setProperty('--part-color', actor.color || '#29a5b7'); return item;
@@ -251,12 +264,14 @@ async function chooseVersion(preferred, preferredKeysView) {
     nextGuide.modules = grouped.modules;
     keyViews = grouped.views;
     const potential = document.createElement('optgroup');
+    const comparison = document.createElement('optgroup');
     potential.label = 'Potential components';
+    comparison.label = 'Comparison only';
     keysView.replaceChildren();
     for (const [id, value] of Object.entries(keyViews)) {
-      (value.concept ? potential : keysView).append(new Option(value.label, id));
+      (value.comparisonOnly ? comparison : value.concept ? potential : keysView).append(new Option(value.label, id));
     }
-    keysView.append(potential);
+    keysView.append(potential, comparison);
     const legacyView = preferred !== 'key' && Object.hasOwn(keyViews, preferred) ? preferred : 'centre';
     keysView.value = Object.hasOwn(keyViews, preferredKeysView) ? preferredKeysView : legacyView;
     if (Object.hasOwn(keyViews, preferred)) preferred = 'keys';
@@ -292,13 +307,14 @@ try {
     fit();
   });
   keyMechanism.addEventListener('click', () => {
-    const active = keyMechanism.getAttribute('aria-pressed') !== 'true';
-    setCutaway(active);
-    if (active) {
+    manualCutaway = !manualCutaway;
+    keyMechanism.setAttribute('aria-pressed', String(manualCutaway));
+    updateCutaway(Number(document.body.dataset.step), Number(document.body.dataset.fraction));
+    if (manualCutaway) {
       input.rotation.setFromEuler(new THREE.Euler(1.23, 0, .64, 'ZXY'));
       input.syncAngles();
       fit();
-    }
+    } else render();
   });
   annotationToggle.addEventListener('click', () => {
     showAnnotations = !showAnnotations;

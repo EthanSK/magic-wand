@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { validateGuide, sampledPose, identity, groupKeys } from '../hardware/carbon-rod-holders/assembly/assembly-data.mjs';
 import { legacyR20 } from '../hardware/carbon-rod-holders/assembly/legacy-r20.mjs';
-import { UPPER_KEY_SHIFT } from '../hardware/carbon-rod-holders/assembly/keycap-concepts.mjs';
+import { GUIDED_CAPTURE, UPPER_KEY_SHIFT } from '../hardware/carbon-rod-holders/assembly/keycap-concepts.mjs';
 
 test('R25 Keys opens seated with the centre paddle and four capped Choc switches', () => {
   const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
@@ -60,7 +60,7 @@ test('R25 concept views press and return beside the same capped keys', () => {
   const seated = views.centre.steps.at(-1).samples.at(-1);
   for (const [id, view] of variants) {
     validateGuide({ ...guide, modules: { [id]: view } });
-    const [rest, down, returned] = view.steps.map(step => step.samples.at(-1));
+    const [rest, down, returned] = view.steps.slice(-3).map(step => step.samples.at(-1));
     assert.deepEqual(rest.cap, returned.cap);
     assert.notDeepEqual(rest.cap, down.cap);
     assert.equal(rest.plunger[11], 0);
@@ -78,9 +78,28 @@ test('R25 concept views press and return beside the same capped keys', () => {
         if (mesh.faces) assert.ok(mesh.faces.flat().every(i => i >= 0 && i < mesh.vertices.length));
       }
     }
+    assert.equal(view.annotations.length, 2);
+    assert.ok(view.annotations.every(annotation => view.actors[annotation.actor]));
+    for (let index = 1; index < view.steps.length; index++) {
+      const from = view.steps[index - 1].samples.at(-1), to = view.steps[index].samples[0];
+      for (const actor of Object.keys(view.actors)) {
+        assert.ok(from[actor].every((n, i) => Math.abs(n - to[actor][i]) < 1e-8), `${id}/${index}/${actor}`);
+        assert.ok(Math.abs((from.morphs?.[actor] ?? 0) - (to.morphs?.[actor] ?? 0)) < 1e-8);
+      }
+    }
   }
+  const guided = views.concept_slider;
+  const { pinZ, pinRadius, slotBottom, slotTop, travel } = GUIDED_CAPTURE;
+  assert.ok(pinZ - pinRadius - slotBottom > 0 && pinZ - pinRadius - slotBottom < .1);
+  assert.ok(slotTop - travel > pinZ + pinRadius);
+  const pinStep = guided.steps.find(step => step.title === 'Slide In Both Keeper Pins');
+  assert.equal(pinStep.samples[0].keeperRight[3] - pinStep.samples.at(-1).keeperRight[3], 5);
+  const pressed = guided.steps.at(-2).samples.at(-1);
+  assert.equal(pressed.keeperRight[11], 0);
+  assert.equal(pressed.cap[11], -travel);
+  assert.equal(views.concept_direct.comparisonOnly, true);
   const holder = views.concept_carrier;
-  const motion = holder.steps.flatMap(step => step.samples);
+  const motion = holder.steps.flatMap(step => step.samples).filter(sample => sample.keycap_3[11] < 11);
   for (const id of ['cap', 'hinge', 'hingeSupports']) {
     for (const sample of motion) for (const [x, y, z] of holder.actors[id].geometry.vertices) {
       const m = sample[id];
