@@ -2346,6 +2346,14 @@ windows. Check the actual populated pad rows and the fixed material behind each
 sacrificial tie after every local cut. Keep solder protrusion unmeasured until a
 real assembly establishes it.
 
+Assembly checks must identify the approach end, not just the seated pose. R20's
+guard clears the key holder from the open hand end but collides with its rings
+from the opposite end. The original 19 mm route covered only the hand-end final
+approach; the later 0.25 mm, 60 mm route and dimensioned animation make the end
+explicit. A nominal 0.3 mm stop gap is not physical fit proof. Show blocked
+approaches without animating through them, and keep unmeasured surrounding
+modules and wire routes explicit.
+
 R20's guard also passed a whole-layer area screen while seven separate members
 relied on narrow end rims to transfer load. Check the connecting rims and each
 root, not the sum of those islands. Likewise, six individually bordered key

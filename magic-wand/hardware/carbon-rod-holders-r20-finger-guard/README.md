@@ -6,11 +6,11 @@ the board, one XIAO rod ring looks short, the battery holder runs on past the
 cell, the key holder twists when a side key is pressed, and the key holder looks
 heavier than it needs to be. R16 to R19 and their exports are unchanged.
 
-**Status: prepared for a controlled prototype fit trial; not printed. The revised
-meshes, actual toolpaths, member checks, reload/re-slice and modelled guard
-slide-on checks pass. The independent Opus 5.5 follow-up found no remaining
-blocker (see [the audit](AUDIT.md)). Fit, grip, comfort, strength and cleanup
-remain unverified until a physical trial.**
+**Status: the first R20 trial has printed. Fitting and cleanup are under review.
+The revised meshes, actual toolpaths, member checks and reload/re-slice passed.
+The dimensioned animation shows the clear hand-end approach and the obstructed
+ring-end approach. Fit, grip, comfort and strength still require physical
+acceptance; digital checks do not establish those.**
 
 ## What is on the plate
 
@@ -27,6 +27,22 @@ holder adds 0.146 g at the board; the other two holders lose mass. These are CAD
 solid figures at 1.27 g/cm3; earlier parts sliced at about 0.90 to 0.93 of that.
 The battery door, XIAO keeper and cell spacers are the R19 parts and are not
 reprinted. Full numbers are in [the geometry checks](exports/geometry-checks.json).
+
+## Fitting animation
+
+[Play the dimensioned R20 fitting animation](preview/). It uses the exact
+exported guard and key-holder meshes plus the existing electronics and stated
+wire envelopes. Choose **Open hand end** to slide the guard into place; choose
+**Ring end · blocked** to see where the key-holder rings stop it. Playback does
+not pass through the measured obstruction.
+
+The full approach is sampled every 0.25 mm. The open hand-end path from -60 mm
+to the seated position is clear in this model; from the opposite end, the first
+sampled overlap is at +35.0 mm, so playback stops at +35.25 mm. Seated guard end
+Y=8.7 mm and first key-holder ring Y=9.0 mm leave only 0.3 mm nominal clearance.
+Other holders along the real rod are not included; remove them from the approach
+if needed. Actual solder, wires, deformation and print tolerances remain
+unmeasured. Do not force a binding part.
 
 ## Finger guard
 
