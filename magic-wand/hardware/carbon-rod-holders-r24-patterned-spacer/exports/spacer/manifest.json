@@ -1,0 +1,71 @@
+{
+  "revision": "carbon-rod-holders-r24-patterned-spacer",
+  "parts": {
+    "Battery_Spacer_0p4mm_Patterned": {
+      "model": "Battery_Spacer_0p4mm_Patterned",
+      "revision": "carbon-rod-holders-r24-patterned-spacer",
+      "replaces_on_plate": "Battery_Spacer_0p4mm (R22 copy of the R18 flat spacer)",
+      "stl_sha256": "877fc3fa46fcf733a731bada09ecb778a5c76bd04eef5654a94bfc6321a913c2",
+      "assembly_stl_sha256": "858554c19d6cd344ed09d3c7f7749c532b8670c3475fa07e05193003b609d35e",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.300000190734863
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -13.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          5.849999904632568
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "print_height_mm": 0.4,
+      "assembly_export_drift_mm3": 3.3e-05,
+      "print_export_drift_mm3": 6e-05,
+      "reference_assembly_stl_sha256": "ca66dacb268cf0c3f99f6b143194289b09d9f8a6ccee07a67de2be6a12602dc0",
+      "source_sha256": {
+        "spacer24.py": "a980ce3119b2a26337763bc4340a9cedf6efcaaceb6bb93165f241dbf66ef56f",
+        "holder18.py": "8f57edd254db75d7f2aaaaaffe93a98616504cec0a8574c6ccab247af3b94ab6",
+        "r18-parameters.json": "7873348e6c28b65b95761b9c4437e1c2bdf4345f4e8c20c7f05630bab600e7c0"
+      },
+      "geometry_checks": {
+        "thickness_mm": 0.4,
+        "layers_at_0p2mm": 2,
+        "reference_volume_mm3": 213.413,
+        "patterned_volume_mm3": 178.642,
+        "mass_removed_mm3": 34.771,
+        "mass_removed_PETG_g": 0.0442,
+        "mass_removed_fraction": 0.163,
+        "patterned_PETG_g": 0.2269,
+        "volume_outside_reference_mm3": 0.0,
+        "bodies": 1,
+        "through_openings": 27,
+        "opening_inscribed_diameters_mm": {
+          "min": 1.3,
+          "max": 1.699
+        },
+        "min_web_mm": 1.2,
+        "largest_sliver_below_min_web_mm2": 0.0237,
+        "continuous_frame_mm": 1.6,
+        "frame_missing_mm2_excluding_nicks": 0.0,
+        "status": "CAD geometry only. Sag into windows, bed release of the lace and fit are not physically verified."
+      },
+      "physical_fit_verified": false
+    }
+  },
+  "physical_fit_verified": false
+}

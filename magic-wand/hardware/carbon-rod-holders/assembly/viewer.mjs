@@ -36,7 +36,11 @@ function fit() {
   if (bounds.isEmpty()) bounds.setFromObject(group);
   bounds.expandByScalar(2); input.fitBounds(bounds.min.toArray(), bounds.max.toArray(), { aspect: camera.aspect }); render();
 }
-function reset() { input.rotation.setFromEuler(new THREE.Euler(.95, 0, .65, 'ZXY')); input.syncAngles(); fit(); }
+function reset() {
+  input.rotation.setFromEuler(new THREE.Euler(...(module?.rotation ?? [.95, 0, .65]), 'ZXY'));
+  input.syncAngles();
+  fit();
+}
 function chooseMode(mode) { input.setMode(mode); for (const button of document.querySelectorAll('[data-mode]')) button.setAttribute('aria-pressed', String(button.dataset.mode === mode)); render(); }
 function applyPose({ index, fraction }) {
   const sample = sampledPose(module, index, fraction);
@@ -44,6 +48,7 @@ function applyPose({ index, fraction }) {
     const m = sample[id] || identity();
     object.matrix.set(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11], 0, 0, 0, 1);
     object.matrixWorldNeedsUpdate = true;
+    if (object.morphTargetInfluences) object.morphTargetInfluences[0] = sample.morphs?.[id] ?? 0;
   }
   document.body.dataset.step = String(index); document.body.dataset.fraction = String(fraction); render();
 }
@@ -78,10 +83,21 @@ async function chooseModule() {
   const next = guide.modules[modules.value], sourceUrl = guideUrl, nextActors = {}, nextGroup = new THREE.Group();
   try {
     for (const [id, record] of Object.entries(next.actors)) {
-      const g = await geometry(record, sourceUrl), color = record.color || '#29a5b7', opacity = record.opacity ?? 1;
+      const rest = await geometry(record, sourceUrl);
+      const color = record.color || '#29a5b7', opacity = record.opacity ?? 1;
+      let g = rest;
+      if (record.morphFile) {
+        const target = await geometry({ file: record.morphFile, baseUrl: record.baseUrl }, sourceUrl);
+        const positions = target.getAttribute('position');
+        if (positions.count !== rest.getAttribute('position').count) throw new Error('Assembly spring shapes do not match');
+        // The target shares the exact STL vertex order. Only this component owns
+        // the morph binding, so an ordinary view can still reuse the cached STL.
+        g = rest.clone();
+        g.morphAttributes.position = [positions];
+      }
       const material = record.lines ? new THREE.LineBasicMaterial({ color, transparent: opacity < 1, opacity }) : new THREE.MeshStandardMaterial({ color, roughness: .5, metalness: .08, flatShading: true, transparent: opacity < 1, opacity, depthWrite: opacity === 1 });
       const object = record.lines ? new THREE.LineSegments(g, material) : new THREE.Mesh(g, material);
-      object.userData.ownedGeometry = !record.file;
+      object.userData.ownedGeometry = !record.file || Boolean(record.morphFile);
       object.matrixAutoUpdate = false; nextGroup.add(object); nextActors[id] = object;
     }
     if (request !== loadId) { disposeGroup(nextGroup); return; }

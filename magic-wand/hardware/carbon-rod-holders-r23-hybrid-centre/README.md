@@ -8,6 +8,10 @@ plug attached. The exposed end keeps the plug and cable bend accessible.
 [Play the assembly guide](../carbon-rod-holders/assembly/?version=r23&component=centre).
 The Component menu shows all three paddles, the four Choc keys, the XIAO
 holder and keeper, both battery doors and the cable clip.
+The XIAO view shows the stock USB-C shell, shield and smaller protrusions
+at the measured heights from the Seeed model. The [latch
+cutaway](../carbon-rod-holders/assembly/?version=r23&component=xiao_latch)
+shares the original R22 keeper motion.
 
 ## Key Holder Guard
 

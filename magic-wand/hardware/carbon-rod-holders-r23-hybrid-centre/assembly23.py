@@ -22,6 +22,15 @@ PADDLES = {
     "centre_shallow": ("Centre_Paddle_Shallow_Trial", "Centre Click · Shallow Paddle"),
     "centre_deep": ("Centre_Paddle_Deep_Trial", "Centre Click · Deep Paddle"),
 }
+XIAO_COMPONENTS = {
+    "usb_c": ("USB-C shell", "#aeb8c1"),
+    "shield": ("Radio shield", "#c7ccd2"),
+    "antenna": ("Antenna", "#5260a0"),
+    "pdm_microphone": ("Microphone", "#62666b"),
+    "reset_button": ("Reset button", "#9a9390"),
+    "user_led": ("User LED", "#f0ddb8"),
+    "charge_led": ("Charge LED", "#e8c092"),
+}
 
 
 def translation(x: float = 0., y: float = 0., z: float = 0.) -> list[float]:
@@ -31,8 +40,26 @@ def translation(x: float = 0., y: float = 0., z: float = 0.) -> list[float]:
 
 
 def relative_actor(record: dict, source: Path, target: Path) -> dict:
-    path = (source / record["file"]).resolve(strict=True)
-    return {**record, "file": os.path.relpath(path, target)}
+    return {**record, **{key: os.path.relpath((source / record[key]).resolve(strict=True), target)
+                        for key in ("file", "morphFile") if key in record}}
+
+
+def show_xiao_components(module: dict, current: Path, holder) -> None:
+    """Draw the stock board's measured protrusions in its existing assembly frame."""
+    # R17 records the measurements from Seeed's STEP and Sense outline. The
+    # guide uses those same bounds without changing either printed mesh.
+    board = holder.h22.h18.h17
+    module["actors"]["board"].update(label="XIAO nRF52840 Sense board", color="#333b3d")
+    for name, (label, color) in XIAO_COMPONENTS.items():
+        file = f"guide/xiao_{name}.stl"
+        holder.mesh(board.component_box(name)).export(current / file)
+        module["actors"][f"board_{name}"] = {"label": label, "file": file, "color": color}
+    module["note"] = "The board and its raised parts use Seeed's measured dimensions. Solder and fitted wires vary."
+    for step in module["steps"]:
+        if step["title"] == "Slide Onto the Rod":
+            step["caption"] = "Slide the holder onto the rod end-first. The USB-C port, antenna and reset button stay accessible."
+        for pose in step["samples"]:
+            pose.update({f"board_{name}": pose["board"] for name in XIAO_COMPONENTS})
 
 
 def reuse_modules(guide: dict, previous: Path, current: Path, carrier: Path, holder) -> dict:
@@ -40,6 +67,7 @@ def reuse_modules(guide: dict, previous: Path, current: Path, carrier: Path, hol
     for module in modules.values():
         module["actors"] = {key: relative_actor(actor, previous, current)
                             for key, actor in module["actors"].items()}
+    show_xiao_components(modules["xiao"], current, holder)
     key = modules["key"]
     key.update(label="Four Choc Keys · R23",
                note="Fit the four Choc switches here. Choose Centre Click to fit the OP1 board and paddle.")
@@ -198,9 +226,9 @@ def build(holder, make_current: bool = False) -> None:
     mesh_hashes = {}
     for module in modules.values():
         for actor in module["actors"].values():
-            filename = actor["file"]
-            if filename not in mesh_hashes:
-                mesh_hashes[filename] = holder.sha(exports / filename)
+            for filename in (actor[key] for key in ("file", "morphFile") if key in actor):
+                if filename not in mesh_hashes:
+                    mesh_hashes[filename] = holder.sha(exports / filename)
     for name, record in manifest["parts"].items():
         if mesh_hashes.get(f"{name}-assembly.stl") != record["assembly_stl_sha256"]:
             raise ValueError(f"Assembly guide does not use the exported {name} mesh")

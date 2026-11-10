@@ -10,6 +10,7 @@ import subprocess
 from xml.etree import ElementTree as ET
 
 import holder23 as holder
+from project23 import LABEL
 import roundtrip22
 import slice23
 
@@ -32,9 +33,9 @@ def object_recipe(model):
     return recipe
 
 
-def run(scratch, staged_exports):
-    source = holder.OUT / "R23-A1-mini-PETG.gcode.3mf"
-    audit_path = holder.OUT / "slice-clearances.json"
+def run(scratch, staged_exports, *, label=LABEL, exports=holder.OUT):
+    source = exports / f"{label}.gcode.3mf"
+    audit_path = exports / "slice-clearances.json"
     audit = json.loads(audit_path.read_text())
     assert audit["passed"] and audit["project_sha256"] == holder.sha(source)
     scratch = scratch.resolve()
@@ -87,11 +88,11 @@ def run(scratch, staged_exports):
             shutil.copyfile(staged_exports / filename, replay / filename)
         reopened_project = replay / source.name
         shutil.copyfile(output, reopened_project)
-        settings_receipt = json.loads((holder.OUT / "R23-A1-mini-PETG-print-checks.json").read_text())
+        settings_receipt = json.loads((exports / f"{label}-print-checks.json").read_text())
         settings_receipt["executable_commands"] = studio.command_audit(reopened_project, before)
-        (replay / "R23-A1-mini-PETG-print-checks.json").write_text(json.dumps(settings_receipt))
+        (replay / f"{label}-print-checks.json").write_text(json.dumps(settings_receipt))
         replay_audit = replay / "slice-clearances.json"
-        slice23.inspect(holder.HERE, replay, replay_audit)
+        slice23.inspect(holder.HERE, replay, replay_audit, label=label)
         receipt = json.loads(replay_audit.read_text())
     report = {"project_sha256": holder.sha(source), "reslice_sha256": holder.sha(output),
               "checker_sha256": holder.sha(Path(__file__)), "source_audit_sha256": holder.sha(audit_path),
@@ -99,7 +100,7 @@ def run(scratch, staged_exports):
               "normalized_toolpaths_identical": equal_paths, "resliced_path_checks_passed": receipt["passed"],
               "resliced_path_parts_checked": list(receipt["parts"]), "slicer_warnings": [], "passed": True,
               "physical_print_verified": False}
-    (holder.OUT / "roundtrip-checks.json").write_text(json.dumps(report, indent=2) + "\n")
+    (exports / "roundtrip-checks.json").write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report), flush=True)
 
 

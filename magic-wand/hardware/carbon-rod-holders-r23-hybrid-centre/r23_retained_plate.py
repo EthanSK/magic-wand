@@ -19,8 +19,9 @@ RETAINED_PARTS = (
 )
 
 
-def retained_plate_sources(source_exports: Path, staged_exports: Path) -> tuple[dict, dict]:
-    """Check and stage the six carried-forward models and their print helpers."""
+def retained_plate_sources(source_exports: Path, staged_exports: Path,
+                           names: tuple[str, ...] = RETAINED_PARTS) -> tuple[dict, dict]:
+    """Check and stage the selected carried-forward models and print helpers."""
     source_exports = source_exports.resolve(strict=True)
     source_manifest = source_exports / "manifest.json"
     manifest = json.loads(source_manifest.read_text())
@@ -34,7 +35,7 @@ def retained_plate_sources(source_exports: Path, staged_exports: Path) -> tuple[
         raise ValueError("R22 assembly and plate manifests differ")
 
     parts, pads, inputs = {}, {}, []
-    for name in RETAINED_PARTS:
+    for name in names:
         record = manifest["parts"][name]
         if name not in manifest["plate_parts"] or not record["watertight"] or record["body_count"] != 1:
             raise ValueError(f"Unverified R22 plate source for {name}")

@@ -84,3 +84,35 @@ test('R23 assembly stays tied to the exported carrier and fit variants', () => {
     assert.ok(tower.segments.length > 0);
   }
 });
+
+test('the original XIAO catch flexes and releases in both assembly views', () => {
+  const hardware = new URL('../hardware/', import.meta.url);
+  const path = new URL('carbon-rod-holders-r22-integrated-guard/exports/assembly-guide.json', hardware);
+  const { modules } = validateGuide(JSON.parse(readFileSync(path)));
+  const guidePath = new URL('carbon-rod-holders-r23-hybrid-centre/exports/assembly-guide.json', hardware);
+  const reused = validateGuide(JSON.parse(readFileSync(guidePath)));
+  const read = (file, base = path) => readFileSync(new URL(file, base));
+  for (const [module, nextModule] of [[modules.xiao, reused.modules.xiao], [modules.xiao_latch, reused.modules.xiao_latch]]) {
+    const { file, morphFile } = module.actors.keeper;
+    const rest = read(file), raised = read(morphFile);
+    assert.equal(raised.readUInt32LE(80), rest.readUInt32LE(80));
+    assert.deepEqual(read(nextModule.actors.keeper.morphFile, guidePath), raised);
+    let lifted = 0;
+    for (let face = 84; face < rest.length; face += 50) {
+      for (let vertex = face + 12; vertex < face + 48; vertex += 12) {
+        assert.equal(raised.readFloatLE(vertex), rest.readFloatLE(vertex));
+        assert.equal(raised.readFloatLE(vertex + 4), rest.readFloatLE(vertex + 4));
+        lifted = Math.max(lifted, raised.readFloatLE(vertex + 8) - rest.readFloatLE(vertex + 8));
+      }
+    }
+    assert.ok(lifted > .4);
+    const insert = module.steps.find(step => step.samples.some(pose => pose.morphs?.keeper > 0));
+    const release = module.steps.at(-1);
+    assert.equal(insert.samples.at(-1).keeper[7], 0);
+    assert.equal(insert.samples.at(-1).morphs.keeper, 0);
+    const movement = step => step.samples.map(({ keeper, morphs }) => [keeper, morphs.keeper]);
+    assert.deepEqual(movement(release), movement(insert).reverse());
+    assert.equal(insert.checks.max_overlap_with_drawn_bend_mm3, 0);
+    assert.ok(insert.checks.max_rigid_overlap_mm3 > .05);
+  }
+});

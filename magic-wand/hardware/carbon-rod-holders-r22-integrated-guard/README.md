@@ -92,6 +92,13 @@ The R20 body is kept, because the board already sits almost flush and the R19 ke
 Reprint the keeper and fit it: lay the board in (tilt the near end up, slide the USB end under the far fingers, lower),
 then check that the board sits flat before sliding the keeper over the near end. If it rocks or sits high, stop and check where the solder is catching.
 
+The two prongs keep the board down. The side ears ride in the grooves, and
+the tooth under the spring tab catches the holder ridge. [Watch the side
+section](../carbon-rod-holders/assembly/?version=r22&component=xiao_latch) to
+see the click and release. The spring is joined to the rest of the keeper
+outside the slice. Pull evenly on the side ears to remove it. The R22 toolpaths
+include all five tooth layers. Physical catch engagement still needs checking.
+
 Clearance under the board in the R20 body:
 - 80% of the board area has at least 2 mm, and 47% has at least 3 mm.
 - Half the pad band (outer 2 mm of each long edge) has at least 2 mm.

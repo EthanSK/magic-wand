@@ -21,6 +21,7 @@ from r23_retained_plate import RETAINED_PARTS, retained_plate_sources
 
 
 LABEL = "R23-A1-mini-PETG"
+WIRE_CLIP = "Cable_Clip_12_Wire"
 NEW_ORIGINS = {
     "Centre_Paddle": (15, 12),
     "Centre_Paddle_Shallow_Trial": (48, 12),
@@ -45,7 +46,8 @@ def configure_fit_trial(path: Path, configure_previous, support: bool, holder, s
         if part == "Key_Carrier" and support:
             overrides = KEY_SUPPORT
             carrier = obj
-        elif part in (*NEW_ORIGINS, "Battery_End_Door", "Battery_End_Door_Easy_Trial", "XIAO_Near_Keeper"):
+        elif (part in (*NEW_ORIGINS, "Battery_End_Door", "Battery_End_Door_Easy_Trial", "XIAO_Near_Keeper")
+              or part.startswith("Battery_Spacer_")):
             overrides = FLAT_BRIM
         else:
             continue
@@ -90,11 +92,15 @@ def stage_changed_part(name: str, record: dict, source_exports: Path, staged_exp
         raise ValueError(f"R23 mesh differs from its manifest: {name}")
 
     assembly_mesh = trimesh.load_mesh(assembly)
-    rotation = holder.PRINT_ROT["Key_Carrier" if name == "Key_Carrier" else "Centre_Paddle"]
     oriented = assembly_mesh.copy()
-    oriented.apply_transform(rotation)
-    to_print = trimesh.transformations.translation_matrix(-oriented.bounds[0]) @ rotation
-    oriented.apply_translation(-oriented.bounds[0])
+    if "print_to_assembly" in record:
+        to_print = np.linalg.inv(np.asarray(record["print_to_assembly"]))
+        oriented.apply_transform(to_print)
+    else:
+        rotation = holder.PRINT_ROT["Key_Carrier" if name == "Key_Carrier" else "Centre_Paddle"]
+        oriented.apply_transform(rotation)
+        to_print = trimesh.transformations.translation_matrix(-oriented.bounds[0]) @ rotation
+        oriented.apply_translation(-oriented.bounds[0])
     written = trimesh.load_mesh(normal)
     if not assembly_mesh.is_watertight or not written.is_watertight:
         raise ValueError(f"Open R23 mesh: {name}")
@@ -106,7 +112,10 @@ def stage_changed_part(name: str, record: dict, source_exports: Path, staged_exp
             "print_to_assembly": np.linalg.inv(to_print).tolist()}
 
 
-def build(revision: Path, scratch: Path, do_slice: bool, support: bool) -> None:
+def build(revision: Path, scratch: Path, do_slice: bool, support: bool, *,
+          label: str = LABEL, without_wire_clip: bool = False,
+          extra_exports: tuple[Path, ...] = (), extra_origins: dict | None = None,
+          delivery: Path | None = None) -> None:
     revision = revision.resolve(strict=True)
     sys.path.insert(0, str(revision))
     import holder23 as holder
@@ -120,7 +129,19 @@ def build(revision: Path, scratch: Path, do_slice: bool, support: bool) -> None:
     old_manifest = json.loads((old_exports / "manifest.json").read_text())
     new_manifest = json.loads((new_exports / "manifest.json").read_text())
     old_anchors = json.loads((old_exports / "anchors.json").read_text())
-    parts, anchors = retained_plate_sources(old_exports, staged_exports)
+    omit = {WIRE_CLIP} if without_wire_clip else set()
+    extra_parts = {}
+    for exports in extra_exports:
+        manifest = json.loads((exports / "manifest.json").read_text())
+        for name, record in manifest["parts"].items():
+            if name in extra_parts:
+                raise ValueError(f"Duplicate new plate source: {name}")
+            extra_parts[name] = (record, exports)
+    omit.update(extra_parts)
+    retained = tuple(name for name in RETAINED_PARTS if name not in omit)
+    parts, anchors = retained_plate_sources(old_exports, staged_exports, retained)
+    for name, (record, exports) in extra_parts.items():
+        parts[name] = stage_changed_part(name, record, exports, staged_exports, holder)
     new_parts = new_manifest["parts"]
     expected = {"Key_Carrier", *NEW_ORIGINS}
     if set(new_parts) != expected:
@@ -149,7 +170,8 @@ def build(revision: Path, scratch: Path, do_slice: bool, support: bool) -> None:
         raise ValueError("R22 key carrier pad differs from its checked source")
     (staged_exports / pad_file).symlink_to(old_exports / pad_file)
 
-    order = (carrier, *RETAINED_PARTS, *NEW_ORIGINS)
+    order = (carrier, *(name for name in RETAINED_PARTS if name in parts), *NEW_ORIGINS,
+             *(name for name in extra_parts if name not in RETAINED_PARTS))
     (staged_exports / "manifest.json").write_text(json.dumps({
         **new_manifest, "parts": parts, "plate_parts": order,
         "anchored_parts": list(anchors), "retained_r22_manifest_sha256": holder.sha(old_exports / "manifest.json"),
@@ -165,31 +187,36 @@ def build(revision: Path, scratch: Path, do_slice: bool, support: bool) -> None:
         R19=old_holder.R19, R20=old_holder.R20, P=old_holder.P, LOCAL=old_holder.LOCAL,
         base=old_holder.base, sha=old_holder.sha, key_carrier_bands=old_holder.key_carrier_bands,
     )
-    previous.ORIGINS = {**{name: previous.ORIGINS[name] for name in order if name not in NEW_ORIGINS},
-                        **NEW_ORIGINS}
-    previous.LABEL = LABEL
-    previous.PLATE_NAME = "Magic Wand R23 centre click and keepers - A1 mini PETG"
+    origins = {**previous.ORIGINS, **NEW_ORIGINS, **(extra_origins or {})}
+    previous.ORIGINS = {name: origins[name] for name in order}
+    previous.LABEL = label
+    previous.PLATE_NAME = f"Magic Wand {label.split('-')[0]} centre click and keepers - A1 mini PETG"
+    if without_wire_clip:
+        previous.PLATE_NAME += " - no wire clip"
     configure_previous = previous.configure_layout
     previous.configure_layout = lambda path: configure_fit_trial(
         path, configure_previous, support, holder, previous.studio.p19,
         np.asarray(parts[carrier]["print_to_assembly"]))
     previous.build(scratch / "studio", do_slice)
 
-    report_file = f"{LABEL}-print-checks.json"
+    report_file = f"{label}-print-checks.json"
     report = json.loads((staged_exports / report_file).read_text())
     report["r23_generator_sha256"] = holder.sha(Path(__file__))
+    pads = "The carrier, battery and XIAO holders"
+    if not without_wire_clip:
+        pads += " and the cable clip"
     report["adhesion_policy"] = (
-        "The carrier, battery and XIAO holders and the cable clip have checked removable pads. "
-        "The flat doors, keeper and paddles use separate 3 mm removable outer brims."
+        f"{pads} have checked removable pads. "
+        "The flat parts use separate 3 mm removable outer brims."
     )
     report["flat_part_brim"] = FLAT_BRIM
     report["key_carrier_support"] = KEY_SUPPORT if support else {}
     (staged_exports / report_file).write_text(json.dumps(report, indent=2) + "\n")
-    deliverables = [f"{LABEL}-layout.3mf", report_file]
+    deliverables = [f"{label}-layout.3mf", report_file]
     if do_slice:
-        deliverables.append(f"{LABEL}.gcode.3mf")
+        deliverables.append(f"{label}.gcode.3mf")
     for name in deliverables:
-        copyfile(staged_exports / name, new_exports / name)
+        copyfile(staged_exports / name, (delivery or new_exports) / name)
 
 
 if __name__ == "__main__":

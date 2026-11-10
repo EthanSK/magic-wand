@@ -14,6 +14,8 @@ import manifold3d as mf
 import numpy as np
 import trimesh
 
+from project23 import LABEL
+
 
 def working_spaces(holder, name: str) -> dict:
     old = holder.h22
@@ -84,15 +86,63 @@ def inspect_guard(holder, old, actual, samples, widths, tops, transform) -> dict
     return rows
 
 
-def inspect(revision: Path, exports: Path, report_path: Path) -> None:
+def inspect_spacer(old, actual, xyz, widths, tops, expected_holes) -> dict:
+    # Check the same clear core through both layers, including all nearby beads
+    # such as the outer brim. A circle in one layer alone is not a through-hole.
+    layer_tops = np.unique(np.round(tops, 4))
+    assert len(layer_tops) == 2 and np.allclose(layer_tops, [.2, .4])
+    solid = actual.slice(.1)
+    holes = []
+    for polygon in solid.to_polygons():
+        x, y = np.asarray(polygon).T
+        if np.dot(x, np.roll(y, -1)) < np.dot(y, np.roll(x, -1)):
+            holes.append(mf.CrossSection([np.asarray(polygon)[::-1]]))
+    assert len(holes) == expected_holes
+    all_beads = []
+    coverage = []
+    for top in layer_tops:
+        layer = abs(tops - top) < .001
+        beads = old.START.bead_footprints(old.Q, xyz[layer, :2], widths[layer])
+        all_beads.append(beads)
+        coverage.append((beads ^ solid).area() / solid.area())
+    through = mf.CrossSection.batch_boolean(all_beads, mf.OpType.Add)
+    open_regions = [hole - through for hole in holes]
+    clear_gauge_mm = .65
+    return {"layer_tops_mm": layer_tops.tolist(), "holes": len(holes),
+            "open_through_both_layers": sum(not r.offset(-clear_gauge_mm / 2).is_empty()
+                                           for r in open_regions),
+            "clear_gauge_mm": clear_gauge_mm,
+            "smallest_remaining_opening_mm2": round(min(r.area() for r in open_regions), 4),
+            "minimum_layer_material_coverage": round(min(coverage), 4)}
+
+
+def inspect_keeper_tooth(holder, old, xyz, widths, tops, transform) -> dict:
+    tongue = holder.h22.h18.K["tongue"]
+    tooth = holder.box(*tongue["tooth_x_mm"], *tongue["tooth_y_mm"],
+                      tongue["tooth_bottom_z_mm"], tongue["thin_from_z_mm"])
+    tooth = tooth.transform(np.linalg.inv(transform)[:3, :])
+    rows = []
+    for top in np.unique(np.round(tops, 4)):
+        section = tooth.slice(float(top) - .1)
+        if section.is_empty():
+            continue
+        core = section.offset(-.24)
+        selected = abs(tops - top) < .001
+        beads = old.START.bead_footprints(old.Q, xyz[selected, :2], widths[selected])
+        rows.append({"top_mm": float(top), "core_coverage": round((core ^ beads).area() / core.area(), 4)})
+    assert rows, "Keeper tooth check found no layers"
+    return {"tooth_layers": rows, "min_tooth_core_coverage": min(row["core_coverage"] for row in rows)}
+
+
+def inspect(revision: Path, exports: Path, report_path: Path, *, label: str = LABEL) -> None:
     sys.path.insert(0, str(revision.resolve(strict=True)))
     import holder23 as holder
     import slice22 as old
 
-    project = exports / "R23-A1-mini-PETG.gcode.3mf"
+    project = exports / f"{label}.gcode.3mf"
     manifest = json.loads((exports / "manifest.json").read_text())
     anchors = json.loads((exports / "anchors.json").read_text())["parts"]
-    layout = json.loads((exports / "R23-A1-mini-PETG-print-checks.json").read_text())
+    layout = json.loads((exports / f"{label}-print-checks.json").read_text())
     data, features, stats, settings, offset, objects, _, _ = old.previous.s16.read_project(project)
     assert set(objects) == set(manifest["plate_parts"])
     assert settings["timelapse_type"] == "1" and settings["enable_prime_tower"] == "1"
@@ -209,6 +259,18 @@ def inspect(revision: Path, exports: Path, report_path: Path) -> None:
             if any(max(layer["opening_intrusion_mm2"].values()) > .01 or layer["components"] != 1
                    or layer["pads_joined"] is False for layer in row["cable_layers"]):
                 failures.append((name, "cable opening or connection"))
+        if name.startswith("Battery_Spacer_") and "geometry_checks" in record:
+            windows = inspect_spacer(old, actual, xyz, widths, tops,
+                                     record["geometry_checks"]["through_openings"])
+            row["patterned_openings"] = windows
+            if (windows["open_through_both_layers"] != windows["holes"]
+                    or windows["minimum_layer_material_coverage"] < .90):
+                failures.append((name, "spacer openings or material incomplete"))
+        if name == "XIAO_Near_Keeper":
+            tooth = inspect_keeper_tooth(holder, old, xyz[model], widths[model], tops[model], transform)
+            row["keeper_tooth"] = tooth
+            if tooth["min_tooth_core_coverage"] < .90:
+                failures.append((name, "keeper catch tooth underfilled"))
         rows[name] = row
         print(name, "first layer", row["first_layer_bead_area_mm2"],
               "supports", row["support_samples"], "brim", row["brim_samples"],
@@ -221,7 +283,7 @@ def inspect(revision: Path, exports: Path, report_path: Path) -> None:
         "parts": rows, "failures": failures, "passed": not failures, "physical_print_verified": False,
     }, indent=2) + "\n")
     if failures:
-        raise ValueError(f"R23 toolpath checks failed: {failures}")
+        raise ValueError(f"{label} toolpath checks failed: {failures}")
 
 
 if __name__ == "__main__":

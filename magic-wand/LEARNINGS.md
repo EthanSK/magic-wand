@@ -2493,10 +2493,30 @@ keeper. The exact sent R22 toolpaths contained both battery doors. Physical
 deposition and recovery of the doors are still unconfirmed, and the
 handling report is inconclusive about battery fit.
 
-Ethan subsequently tried the shell in its cradle. He reported a good fit
-and said the pin slotted in well. The exact print revision in hand remains
-unconfirmed. Preserve the working mating surfaces when changing the wire
-clearance or improving the assembly view.
+After matching the two inserts to their holders, Ethan reported that the
+battery insert fit and was the right height. He also reported that the
+XIAO board sat well in its cradle and its pin slotted in, but the board
+could lift out. The exact print revision and keeper engagement during
+the lift-out remain unconfirmed. He liked the USB opening height and
+described the side gap as only a little wide. Preserve those proven
+mating surfaces and plug access.
+
+His subsequent hands-on check identified the correct R22 keeper. Its two
+corner prongs hold the board nicely without wobble, and he explicitly
+asked to keep them. He separately reported that the keeper itself slides
+out, then said it might work as-is once he understood the tab. Preserve
+the successful corner geometry. Show the existing spring tongue, tooth,
+holder ridge and complete seating/removal before deciding on a hardware
+change. The hardware close-ups show leads in front of this area and do not
+establish whether the hidden tooth has engaged. Wires are not structural
+keepers. The proposed wider top pads were set aside after this correction.
+
+The exact R22 toolpaths include the core of all five catch-tooth layers.
+The assembly viewer's side section shows the tooth riding over the ridge
+and dropping behind it. An even pull on the ears lifts the tooth back over
+the sloped ridge. This is a releasable catch. CAD checks the motion and
+toolpaths check deposition intent. Whether the printed keeper catches
+and resists a light pull still needs a hands-on check.
 
 The battery slides in from the end, then either battery door presses
 straight down into the two slots. The XIAO keeper slides along its holder.
@@ -2504,6 +2524,17 @@ R23 reused the R22 meshes for both holders, both battery doors and the
 XIAO keeper, with the same insertion directions. Its battery animation
 shows the cell without the optional spacer. Identify the fitted part and
 its insertion direction before changing dimensions.
+
+The battery door's central arch is an open wire passage. Its small tab
+operates the sprung catch under the lip. The standalone figure-eight is
+the separate wire grip, so omitting it can keep both holder latches and
+their serviceable wire routes.
+
+Ethan's battery shook out when he tried relying on friction alone. He
+parked that idea. Keep the positive door catch and replaceability. The
+requested 0.4 mm patterned spacer is a specific optional fit trial,
+separate from the established preference to omit ordinary loose spacers
+from routine plates. Do not compress a pouch to take up clearance.
 
 ### 2026-11-10 — Verify the bought switch board and its whole insertion route
 

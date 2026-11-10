@@ -13,6 +13,7 @@ from pathlib import Path
 import json, math
 import numpy as np, manifold3d as mf
 import holder22 as h
+import latch22
 
 OUT = h.HERE / 'exports'; GUIDE = OUT / 'guide'; base = h.base; G = h.G; C = h.C
 I = [1., 0, 0, 0, 0, 1., 0, 0, 0, 0, 1., 0]
@@ -97,11 +98,11 @@ def key_module():
 
 
 def xiao_module():
-    body = h.read(OUT / 'XIAO_Rod_Holder-assembly.stl'); keeper = h.read(OUT / 'XIAO_Near_Keeper-assembly.stl'); board = h.h19.board_outline(); rod = base.references()['rod']
+    body = h.read(OUT / 'XIAO_Rod_Holder-assembly.stl'); board = h.h19.board_outline(); rod = base.references()['rod']
     files = {'board': write('xiao_board', board), 'rod': write('rod_y', rod)}
     actors = {'holder': {'label': 'XIAO holder (R20 body, unchanged)', 'file': 'XIAO_Rod_Holder-assembly.stl', 'color': '#29a5b7'},
               'board': {'label': 'XIAO nRF52840 Sense board (official outline, illustrative)', 'file': files['board'], 'color': '#2f7d4f'},
-              'keeper': {'label': 'Near keeper (R19, original-compatible)', 'file': 'XIAO_Near_Keeper-assembly.stl', 'color': '#d9822b'},
+              'keeper': {'label': 'Near keeper (R19, original-compatible)', 'file': 'XIAO_Near_Keeper-assembly.stl', 'morphFile': latch22.write_pair('xiao_keeper', source='XIAO_Near_Keeper-assembly.stl')[1], 'color': '#d9822b'},
               'rod': {'label': 'Carbon rod (illustrative)', 'file': files['rod'], 'color': '#3b3b3b', 'frame': False}}
     poses = [np.array(p) for p in h.h18.h17.insertion_poses()]; first = M(poses[0]); route = h.h19.RET['route_travel_mm'] if 'route_travel_mm' in h.h19.RET else 12.
     state = {'holder': I, 'board': compose(T(0, 0, 10), first), 'keeper': T(0, -route, 0), 'rod': T(0, 80, 0)}
@@ -113,14 +114,16 @@ def xiao_module():
     for p in poses:
         state['board'] = M(p); samples.append(sample()); hits.append(overlap(body, board.transform(np.asarray(p)[:3, :4])))
     steps = [prep, step('Lay In the Board', 'Tilt the near end of the board up about 6 degrees, slide the USB end under the two far fingers, then lower the near end onto its ledges. Side wires stay outside the walls. Underside solder must leave room: see the clearance map in geometry-checks.json.', samples, {'max_board_overlap_mm3': round(max(hits), 4)})]
-    samples = []; hits = []
-    for d in np.linspace(route, 0, 33):
-        state['keeper'] = T(0, -d, 0); samples.append(sample()); hits.append(overlap(body, keeper.translate((0, -float(d), 0))))
-    steps.append(step('Slide On the Keeper', 'Check that the board sits flat on its ledges. If solder makes it rock or sit high, stop before fitting the keeper. With the board seated, slide the keeper over the near end until its tongue clicks.', samples, {'max_keeper_overlap_mm3': round(max(hits), 4), 'seated_overlap_mm3': round(hits[-1], 4), 'note': 'Overlap during the slide is the keeper tongue flexing past its tooth (designed); seated overlap is zero.'}))
+    path = latch22.push_path(); state['keeper'] = T(0, path[0][0], 0)
+    steps.append(step('Find the Prongs and Ears', 'The two prongs lie over the bare board corners. The side ears slide in the holder grooves. The spring tab underneath catches the holder ridge.', [sample()], duration=4))
+    steps.append(step('Slide On the Keeper', 'Check that the board sits flat on its ledges. If solder makes it rock or sit high, stop before fitting the keeper. With the ears in the side grooves, push the keeper over the near end. The tongue bends up over the ridge and clicks down behind it.', latch22.keeper_samples(state, sample, path),
+                      {**latch22.collision_checks(body, board.transform(np.asarray(poses[-1])[:3, :4])), 'note': 'Overlaps use the exported meshes with the drawn tongue bend; the bend is a visual beam model.'}, duration=4))
+    steps.append(step('Check the Catch', 'When fully seated, the tooth sits behind the ridge and the spring tab is flat again. Pull back gently to feel the catch. If it slides out freely after seating, check that the tooth and ridge are clear.', [sample()], duration=3))
     samples = []
-    for d in np.linspace(80, 0, 33): state['rod'] = T(0, d, 0); samples.append(sample())
+    for d in np.linspace(80, 0, 33): state['rod'] = T(0, d, 0); samples.append({**sample(), 'morphs': {'keeper': 0.}})
     steps.append(step('Slide Onto the Rod', 'Slide the holder onto the rod end-first. USB, camera, antenna and reset stay uncovered.', samples))
-    steps.append(step('Seated', 'Board held by the side walls, cheeks and near stops, and kept down by the keeper.', [sample()], duration=2))
+    steps.append(step('Seated', 'Board held by the side walls, cheeks and near stops, and kept down by the keeper.', [{**sample(), 'morphs': {'keeper': 0.}}], duration=2))
+    steps.append(step('Removing the Keeper', 'Pull back on both ears. The ridge is 45 degrees on this side too, so the tongue rides up and lets go. Take the keeper off before lifting the board.', latch22.keeper_samples(state, sample, path[::-1]), duration=4))
     return {'label': 'XIAO holder · R20 body + keeper', 'note': 'Board outline from the official XIAO nRF52840 drawing. Underside solder bumps are not modelled; see the clearance map.', 'actors': actors, 'steps': steps}
 
 
@@ -207,6 +210,10 @@ def validate(guide):
                 for a in mod['actors']: assert len(s[a]) == 12 and all(math.isfinite(v) for v in s[a]), (name, a)
         for a, rec in mod['actors'].items():
             assert 'file' in rec and (OUT / rec['file']).exists(), (name, a)
+            if 'morphFile' in rec: assert (OUT / rec['morphFile']).exists(), (name, a)
+        for st in mod['steps']:
+            for s in st['samples']:
+                assert all(k in mod['actors'] and 'morphFile' in mod['actors'][k] and 0 <= v <= 1 for k, v in s.get('morphs', {}).items()), (name, st['title'])
 
 
 def main(target=None, require_fresh_exports=True):
@@ -214,10 +221,12 @@ def main(target=None, require_fresh_exports=True):
     man = json.loads((OUT / 'manifest.json').read_text())
     src = h.key_carrier(); exp = h.read(OUT / 'Key_Carrier-assembly.stl'); drift = float((src - exp).volume() + (exp - src).volume())
     assert drift < .05 or not require_fresh_exports, ('Exports are older than the CAD source: regenerate the exports first', drift)
+    xiao = xiao_module()
+    latch = next(s['checks'] for s in xiao['steps'] if s['title'] == 'Slide On the Keeper')
     guide = {'schema_version': 2, 'units': 'mm', 'revision': h.LOCAL['revision'],
-             'sources': {'generator_sha256': h.sha(Path(__file__)), 'holder22_sha256': h.sha(h.HERE / 'holder22.py'), 'parameters_sha256': h.sha(h.HERE / 'parameters.json'), 'manifest_sha256': h.sha(OUT / 'manifest.json'),
+             'sources': {'generator_sha256': h.sha(Path(__file__)), 'latch_generator_sha256': h.sha(h.HERE / 'latch22.py'), 'holder22_sha256': h.sha(h.HERE / 'holder22.py'), 'parameters_sha256': h.sha(h.HERE / 'parameters.json'), 'manifest_sha256': h.sha(OUT / 'manifest.json'),
                          'assembly_mesh_sha256': {n: h.sha(OUT / (n + '-assembly.stl')) for n in man['plate_parts']}, 'key_carrier_export_vs_source_drift_mm3': round(drift, 5)},
-             'modules': {'key': key_module(), 'xiao': xiao_module(), 'battery': battery_module(), 'cable': cable_module()},
+             'modules': {'key': key_module(), 'xiao': xiao, 'xiao_latch': latch22.cutaway_module(step, latch), 'battery': battery_module(), 'cable': cable_module()},
              'physical_fit_verified': False}
     validate(guide); target.write_text(json.dumps(guide, separators=(',', ':')) + '\n')
     print(json.dumps({n: {s['title']: s.get('checks') for s in m['steps'] if s.get('checks')} for n, m in guide['modules'].items()}, default=str)[:3000], flush=True)
