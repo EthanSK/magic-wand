@@ -1,0 +1,205 @@
+{
+  "revision": "carbon-rod-holders-r23-hybrid-centre",
+  "parts": {
+    "Key_Carrier": {
+      "volume_mm3": 5442.186,
+      "solid_PETG_g": 6.912,
+      "assembly_bounds_mm": [
+        [
+          -27.7,
+          -19.0,
+          -4.781
+        ],
+        [
+          27.7,
+          26.9,
+          20.0
+        ]
+      ],
+      "print_height_mm": 45.9,
+      "stl_sha256": "b2fa5d314382ae506e6a21c32aa6510c6f011ac99120d4ef9f53f7fbc683b56c",
+      "assembly_stl_sha256": "0769ca282e7156c2550fb2061f86dcb9a333bbc972fecf7d0540eedc4fd147ab",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -27.700000762939453
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          26.899999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.781332969665528
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000362,
+      "print_export_drift_mm3": 0.001256
+    },
+    "Centre_Paddle": {
+      "volume_mm3": 1006.412,
+      "solid_PETG_g": 1.278,
+      "assembly_bounds_mm": [
+        [
+          -8.4,
+          -19.5,
+          11.12
+        ],
+        [
+          8.4,
+          8.2,
+          20.8
+        ]
+      ],
+      "print_height_mm": 9.68,
+      "stl_sha256": "35b733bdcece87a29fe901f6a8cf30b0074f2f89cc00fb717e3ba059fc86bf8e",
+      "assembly_stl_sha256": "17840612c34f946864e9930d3ac8c9b01ae53720fafb864b6ee213eabf668b22",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -8.399999618530273
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          8.199999809265137
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          20.79999923706055
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000138,
+      "print_export_drift_mm3": 0.000465
+    },
+    "Centre_Paddle_Shallow_Trial": {
+      "volume_mm3": 1004.012,
+      "solid_PETG_g": 1.275,
+      "assembly_bounds_mm": [
+        [
+          -8.4,
+          -19.5,
+          11.12
+        ],
+        [
+          8.4,
+          8.2,
+          20.8
+        ]
+      ],
+      "print_height_mm": 9.68,
+      "stl_sha256": "a9eb8ab69ed3c293459ca1f5c53e7a0f686ce385fe96baff29853fb36fdc4438",
+      "assembly_stl_sha256": "4685b872daf9c3b9da7d7a363008f47eddc1e56b4122699ae659e6d6d7b0afe9",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -8.399999618530273
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          8.199999809265137
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          20.79999923706055
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000138,
+      "print_export_drift_mm3": 0.000466
+    },
+    "Centre_Paddle_Deep_Trial": {
+      "volume_mm3": 1008.812,
+      "solid_PETG_g": 1.281,
+      "assembly_bounds_mm": [
+        [
+          -8.4,
+          -19.5,
+          11.12
+        ],
+        [
+          8.4,
+          8.2,
+          20.8
+        ]
+      ],
+      "print_height_mm": 9.68,
+      "stl_sha256": "e809e70c32811095a0a3d655b4ddc8fc81c25cc28e223828b81b042632c42cb6",
+      "assembly_stl_sha256": "5b393c99909d3bafc948a007d418afac6fb5db48fa84d03985b9100f2098736e",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -8.399999618530273
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          8.199999809265137
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          20.79999923706055
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000138,
+      "print_export_drift_mm3": 0.000467
+    }
+  },
+  "r22_key_carrier_assembly_sha256": "1f524ec3c5f62f3da6ba983519d7e4c4b2dd275c047c6fdb3081768ae56fcb7b",
+  "source_sha256": {
+    "holder23.py": "a6f4b98f115e41b5daed8b919679d0864fa26ee59fc957012a0af4ef8ddc091b",
+    "guard23.py": "e16b9dcca6d9a4571ef49ee80a8a9a0f1e1a3cc11aedab5e86ec2a35896a7daf",
+    "parameters.json": "ea6e18c173e46e2a33f270f010e051a7a64817eaef3576d9fcb0bad14cf57889"
+  },
+  "unchanged_r22_parts": "Battery_Holder, Battery_End_Door, Battery_End_Door_Easy_Trial, XIAO_Rod_Holder, XIAO_Near_Keeper, Cable_Clip_12_Wire: use the R22 exports.",
+  "loose_hardware": [
+    "1.75 mm filament offcut ~22 mm as the hinge pin",
+    "optional tape across the board front onto the cheeks"
+  ],
+  "physical_fit_verified": false
+}

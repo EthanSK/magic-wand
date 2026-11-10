@@ -1,0 +1,311 @@
+{
+  "schema": "r23-centre-motion-1",
+  "units": "mm/degrees",
+  "axis": {
+    "point_mm": [
+      0,
+      -17.0,
+      18.0
+    ],
+    "direction": [
+      1,
+      0,
+      0
+    ],
+    "positive": "lifts the rear edge"
+  },
+  "modelled_pose": "hard_stop (angle 0)",
+  "variants": {
+    "Centre_Paddle": {
+      "poses_deg": {
+        "released": 3.0432,
+        "rest_on_plunger": 2.1481,
+        "actuation_nominal": 1.0741,
+        "hard_stop": 0.0
+      },
+      "matrices_3x4": {
+        "released": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.99859,
+            -0.05309,
+            0.931641
+          ],
+          [
+            0.0,
+            0.05309,
+            0.99859,
+            0.92791
+          ]
+        ],
+        "rest_on_plunger": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.999297,
+            -0.037482,
+            0.662738
+          ],
+          [
+            0.0,
+            0.037482,
+            0.999297,
+            0.64985
+          ]
+        ],
+        "actuation_nominal": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.999824,
+            -0.018746,
+            0.334434
+          ],
+          [
+            0.0,
+            0.018746,
+            0.999824,
+            0.321838
+          ]
+        ],
+        "hard_stop": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            -0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        ]
+      }
+    },
+    "Centre_Paddle_Shallow_Trial": {
+      "poses_deg": {
+        "released": 2.3277,
+        "rest_on_plunger": 1.4323,
+        "actuation_nominal": 0.3581,
+        "hard_stop": 0.0
+      },
+      "matrices_3x4": {
+        "released": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.999175,
+            -0.040615,
+            0.717037
+          ],
+          [
+            0.0,
+            0.040615,
+            0.999175,
+            0.705302
+          ]
+        ],
+        "rest_on_plunger": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.999688,
+            -0.024996,
+            0.444618
+          ],
+          [
+            0.0,
+            0.024996,
+            0.999688,
+            0.430558
+          ]
+        ],
+        "actuation_nominal": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.99998,
+            -0.00625,
+            0.112164
+          ],
+          [
+            0.0,
+            0.00625,
+            0.99998,
+            0.106597
+          ]
+        ],
+        "hard_stop": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            -0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        ]
+      }
+    },
+    "Centre_Paddle_Deep_Trial": {
+      "poses_deg": {
+        "released": 3.7581,
+        "rest_on_plunger": 2.8633,
+        "actuation_nominal": 1.7897,
+        "hard_stop": 0.0
+      },
+      "matrices_3x4": {
+        "released": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.99785,
+            -0.065544,
+            1.143243
+          ],
+          [
+            0.0,
+            0.065544,
+            0.99785,
+            1.15296
+          ]
+        ],
+        "rest_on_plunger": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.998752,
+            -0.049953,
+            0.877934
+          ],
+          [
+            0.0,
+            0.049953,
+            0.998752,
+            0.871676
+          ]
+        ],
+        "actuation_nominal": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.999512,
+            -0.031232,
+            0.553878
+          ],
+          [
+            0.0,
+            0.031232,
+            0.999512,
+            0.53972
+          ]
+        ],
+        "hard_stop": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            -0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ]
+        ]
+      }
+    }
+  },
+  "press_sequence": [
+    "released",
+    "rest_on_plunger",
+    "actuation_nominal",
+    "hard_stop",
+    "actuation_nominal",
+    "rest_on_plunger",
+    "released"
+  ],
+  "basis": "Plunger depression at the stop is set by the ridge height, independent of where the plunger sits along the body. Released gap is a design value; pretravel 0.3 mm is the Omron D2F-class nominal, not the OP1 switch. There is no separate up-stop: at rest the paddle lies on the plunger.",
+  "references": {
+    "op1_board_envelope": "guide/op1_board_envelope.stl",
+    "op1_socket_barrels": "guide/op1_socket_barrels.stl",
+    "op1_switch_body": "guide/op1_switch_body.stl",
+    "op1_switch_plunger_free": "guide/op1_switch_plunger_free.stl",
+    "op1_white_plug_envelope": "guide/op1_white_plug_envelope.stl",
+    "op1_pigtail_route": "guide/op1_pigtail_route.stl",
+    "hinge_pin_1p75_filament": "guide/hinge_pin_1p75_filament.stl",
+    "rod_y": "guide/rod_y.stl"
+  },
+  "physical_travel_verified": false
+}

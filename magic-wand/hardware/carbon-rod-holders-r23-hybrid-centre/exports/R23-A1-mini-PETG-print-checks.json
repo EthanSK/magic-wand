@@ -1,0 +1,552 @@
+{
+  "layout_sha256": "d44b5fb49f6ca52ca63a2b160887a5fe2c0dd1f1fa6fcc83a0017960204b7985",
+  "generator_sha256": "a68a7309de05c4d5cd13f13996e9aea74176043f55bc363a22935e128ee3ca27",
+  "project19_sha256": "a70beebc3b524bac199d4b7b221157f36051aaf65671d4fabb9625698367aa60",
+  "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
+  "manifest_sha256": "c4947e861fa15b67bc769d117657cf4129b30a46c8ca764de579660b125218c0",
+  "anchors_sha256": "e5e7c38a20a6d308e9e13ec861e120c15db57a111a721aebfc54da920dbe6c2d",
+  "parts": [
+    "Key_Carrier",
+    "Battery_Holder",
+    "Battery_End_Door",
+    "Battery_End_Door_Easy_Trial",
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Cable_Clip_12_Wire",
+    "Centre_Paddle",
+    "Centre_Paddle_Shallow_Trial",
+    "Centre_Paddle_Deep_Trial"
+  ],
+  "plate_origins_mm": {
+    "Key_Carrier": [
+      22,
+      136
+    ],
+    "Battery_Holder": [
+      25,
+      86
+    ],
+    "Battery_End_Door": [
+      75,
+      85
+    ],
+    "Battery_End_Door_Easy_Trial": [
+      120,
+      85
+    ],
+    "XIAO_Rod_Holder": [
+      105,
+      128
+    ],
+    "XIAO_Near_Keeper": [
+      85,
+      50
+    ],
+    "Cable_Clip_12_Wire": [
+      32,
+      48
+    ],
+    "Centre_Paddle": [
+      15,
+      12
+    ],
+    "Centre_Paddle_Shallow_Trial": [
+      48,
+      12
+    ],
+    "Centre_Paddle_Deep_Trial": [
+      81,
+      12
+    ]
+  },
+  "plate_extents_mm": {
+    "Key_Carrier": [
+      [
+        22.0,
+        136.0,
+        0.0
+      ],
+      [
+        77.4000015258789,
+        162.10133171081543,
+        45.900001525878906
+      ]
+    ],
+    "Battery_Holder": [
+      [
+        16.800000190734863,
+        84.5,
+        0.0
+      ],
+      [
+        61.599998474121094,
+        113.68000030517578,
+        33.0
+      ]
+    ],
+    "Battery_End_Door": [
+      [
+        75.0,
+        85.0,
+        0.0
+      ],
+      [
+        100.60000038146973,
+        93.35000038146973,
+        2.400001049041748
+      ]
+    ],
+    "Battery_End_Door_Easy_Trial": [
+      [
+        120.0,
+        85.0,
+        0.0
+      ],
+      [
+        145.60000038146973,
+        93.35000038146973,
+        2.2500009536743164
+      ]
+    ],
+    "XIAO_Rod_Holder": [
+      [
+        97.10000038146973,
+        128.0,
+        0.0
+      ],
+      [
+        142.0999984741211,
+        158.62962913513184,
+        28.399999618530273
+      ]
+    ],
+    "XIAO_Near_Keeper": [
+      [
+        85.0,
+        50.0,
+        0.0
+      ],
+      [
+        111.0,
+        60.0,
+        2.1500000953674316
+      ]
+    ],
+    "Cable_Clip_12_Wire": [
+      [
+        32.0,
+        45.85380530357361,
+        0.0
+      ],
+      [
+        50.43351936340332,
+        60.25380516052246,
+        2.4000000953674316
+      ]
+    ],
+    "Centre_Paddle": [
+      [
+        15.0,
+        12.0,
+        0.0
+      ],
+      [
+        31.799999237060547,
+        39.70000076293945,
+        9.679999351501465
+      ]
+    ],
+    "Centre_Paddle_Shallow_Trial": [
+      [
+        48.0,
+        12.0,
+        0.0
+      ],
+      [
+        64.79999923706055,
+        39.70000076293945,
+        9.679999351501465
+      ]
+    ],
+    "Centre_Paddle_Deep_Trial": [
+      [
+        81.0,
+        12.0,
+        0.0
+      ],
+      [
+        97.79999923706055,
+        39.70000076293945,
+        9.679999351501465
+      ]
+    ]
+  },
+  "printer": "Bambu Lab A1 mini 0.4 nozzle",
+  "process": "0.20mm Standard @BBL A1M",
+  "filament": [
+    "Generic PETG @BBL A1M"
+  ],
+  "nozzle_c": [
+    "255"
+  ],
+  "bed_c": [
+    "70"
+  ],
+  "process_overrides": {
+    "wall_loops": "3",
+    "sparse_infill_density": "20%",
+    "layer_height": "0.2",
+    "initial_layer_print_height": "0.2",
+    "enable_support": "0",
+    "brim_type": "no_brim",
+    "enable_prime_tower": "1",
+    "print_sequence": "by layer",
+    "bridge_no_support": "1",
+    "max_bridge_length": "12",
+    "initial_layer_speed": [
+      "20"
+    ],
+    "initial_layer_infill_speed": [
+      "30"
+    ],
+    "reduce_crossing_wall": "1",
+    "timelapse_type": "1",
+    "wipe_tower_x": [
+      "120"
+    ],
+    "wipe_tower_y": [
+      "20"
+    ]
+  },
+  "printer_overrides": {
+    "z_hop": [
+      "0.6"
+    ],
+    "z_hop_types": [
+      "Normal Lift"
+    ]
+  },
+  "slow_bands_mm": {
+    "Key_Carrier": [
+      [
+        16.0,
+        16.8
+      ],
+      [
+        33.8,
+        35.2
+      ]
+    ],
+    "Battery_Holder": [
+      [
+        31.0,
+        31.8
+      ]
+    ]
+  },
+  "local_recipe": {
+    "Key_Carrier_bands_mm": [
+      [
+        16.0,
+        16.8
+      ],
+      [
+        33.8,
+        35.2
+      ]
+    ],
+    "Battery_Holder_bands_mm": [
+      [
+        31.0,
+        31.8
+      ]
+    ],
+    "speeds_mm_s": {
+      "outer_wall_speed": 15,
+      "inner_wall_speed": 15,
+      "gap_infill_speed": 12,
+      "internal_solid_infill_speed": 20,
+      "sparse_infill_speed": 20,
+      "top_surface_speed": 20,
+      "bridge_speed": 12,
+      "overhang_1_4_speed": 15,
+      "overhang_2_4_speed": 12,
+      "overhang_3_4_speed": 10,
+      "overhang_4_4_speed": 8
+    },
+    "reason": "The bay opening and clip-relief spans (14.1-15.6 mm) and the gate-slot cap print across air; the slow local speeds give each span time to set. Cooling is not part of the local recipe: fan is a filament-profile setting (fan_min_speed 40 %, fan_cooling_layer_time 30 s), so in these long layers the base fan falls to 40 % and only paths the slicer classifies as overhang wall or bridge get the 90 % overhang/bridge fan; gap-fill and inner-wall paths in the bands print at 40 %. Actual F, M106 and per-feature path lengths by fan level are read back from the G-code into slice-clearances.json; digital evidence does not predict PETG droop, inspect and trim the roofs."
+  },
+  "adhesion_policy": "The carrier, battery and XIAO holders and the cable clip have checked removable pads. The flat doors, keeper and paddles use separate 3 mm removable outer brims.",
+  "physical_print_verified": false,
+  "slice": {
+    "error_string": "Success.",
+    "return_code": 0,
+    "sliced_plates": [
+      {
+        "feature_type_times": {
+          "Bottom surface": 127.63995361328125,
+          "Bridge": 19.966516494750977,
+          "Brim": 160.46658325195312,
+          "Custom": 365.2312927246094,
+          "Flush": 28.0,
+          "Gap infill": 319.49957275390625,
+          "Inner wall": 1372.49072265625,
+          "Internal solid infill": 417.7890625,
+          "Outer wall": 1588.1597900390625,
+          "Overhang wall": 17.606657028198242,
+          "Prime tower": 361.40679931640625,
+          "Sparse infill": 15.716239929199219,
+          "Top surface": 150.23094177246094,
+          "Travel": 1595.2509765625,
+          "Undefined": 1576.8885498046875
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 16.052940368652344,
+            "total_used_g": 18.752925872802734
+          }
+        ],
+        "id": 1,
+        "layer_filament_change": 0,
+        "main_predication": 5755.89111328125,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 26.10133171081543,
+              "height": 45.900001525878906,
+              "width": 55.400001525878906,
+              "x": 22.0,
+              "y": 136.0,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Key_Carrier",
+            "triangle_count": 140036
+          },
+          {
+            "bbox": {
+              "depth": 29.18000030517578,
+              "height": 33.0,
+              "width": 44.79999923706055,
+              "x": 16.80000114440918,
+              "y": 84.5,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Battery_Holder",
+            "triangle_count": 8968
+          },
+          {
+            "bbox": {
+              "depth": 8.350000381469727,
+              "height": 2.400001049041748,
+              "width": 25.600000381469727,
+              "x": 75.0,
+              "y": 85.0,
+              "z": -8.881784197001252e-16
+            },
+            "id": 13,
+            "name": "Battery_End_Door",
+            "triangle_count": 124
+          },
+          {
+            "bbox": {
+              "depth": 8.350000381469727,
+              "height": 2.2500009536743164,
+              "width": 25.600000381469727,
+              "x": 120.0,
+              "y": 85.0,
+              "z": -8.881784197001252e-16
+            },
+            "id": 17,
+            "name": "Battery_End_Door_Easy_Trial",
+            "triangle_count": 124
+          },
+          {
+            "bbox": {
+              "depth": 30.629629135131836,
+              "height": 28.399999618530273,
+              "width": 45.0,
+              "x": 97.0999984741211,
+              "y": 128.0,
+              "z": 0.0
+            },
+            "id": 21,
+            "name": "XIAO_Rod_Holder",
+            "triangle_count": 8514
+          },
+          {
+            "bbox": {
+              "depth": 10.0,
+              "height": 2.1500000953674316,
+              "width": 26.0,
+              "x": 85.0,
+              "y": 50.0,
+              "z": 0.0
+            },
+            "id": 25,
+            "name": "XIAO_Near_Keeper",
+            "triangle_count": 208
+          },
+          {
+            "bbox": {
+              "depth": 14.399999618530273,
+              "height": 2.4000000953674316,
+              "width": 18.43351936340332,
+              "x": 32.0,
+              "y": 45.85380554199219,
+              "z": 0.0
+            },
+            "id": 29,
+            "name": "Cable_Clip_12_Wire",
+            "triangle_count": 6452
+          },
+          {
+            "bbox": {
+              "depth": 27.700000762939453,
+              "height": 9.679999351501465,
+              "width": 16.799999237060547,
+              "x": 15.0,
+              "y": 12.0,
+              "z": 0.0
+            },
+            "id": 33,
+            "name": "Centre_Paddle",
+            "triangle_count": 1860
+          },
+          {
+            "bbox": {
+              "depth": 27.700000762939453,
+              "height": 9.679999351501465,
+              "width": 16.799999237060547,
+              "x": 48.0,
+              "y": 12.0,
+              "z": 0.0
+            },
+            "id": 37,
+            "name": "Centre_Paddle_Shallow_Trial",
+            "triangle_count": 1860
+          },
+          {
+            "bbox": {
+              "depth": 27.700000762939453,
+              "height": 9.679999351501465,
+              "width": 16.799999237060547,
+              "x": 81.0,
+              "y": 12.0,
+              "z": 0.0
+            },
+            "id": 41,
+            "name": "Centre_Paddle_Deep_Trial",
+            "triangle_count": 1860
+          }
+        ],
+        "times": {
+          "conflict_check_time": 40,
+          "detect_overhangs_time": 5,
+          "export_gcode_time": 4171,
+          "flush_plan_time": 0,
+          "generate_support_material_time": 71,
+          "infill_generate_time": 39,
+          "infill_time": 119,
+          "ironing_time": 0,
+          "make_perimeters_time": 315,
+          "multifilament_segment_2d_time": 0,
+          "other_slice_time": 3,
+          "prepare_infill_time": 80,
+          "region_split_time": 2,
+          "skirt_brim_time": 11,
+          "slice_layers_time": 99,
+          "sliced_time": 4799,
+          "sliced_time_with_cache": 4182,
+          "support_detect_time": 44,
+          "support_interface_time": 0,
+          "support_normal_generate_time": 0,
+          "support_toolpath_time": 0,
+          "support_tree_generate_time": 27,
+          "toolpath_time": 26,
+          "wall_time": 214,
+          "wipe_tower_time": 38
+        },
+        "total_predication": 6520.16650390625,
+        "triangle_count": 170006,
+        "warning_message": ""
+      }
+    ]
+  },
+  "warnings": [],
+  "delivered_settings_registration": {
+    "cli_dropped_keys": [],
+    "values_unchanged": true
+  },
+  "sliced_project_filename": "R23-A1-mini-PETG.gcode.3mf",
+  "sliced_project_sha256": "a3a31fbdac9c725cded090f1d413f9a4cf93da9fab17951cab130bca24f45801",
+  "executable_commands": {
+    "passed": true,
+    "project_sha256": "a3a31fbdac9c725cded090f1d413f9a4cf93da9fab17951cab130bca24f45801",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "layer_change_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 255.0,
+    "first_object_bed_target_c": 70.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ]
+  },
+  "slice_info_warnings": [],
+  "bambu_studio_version": "02.09.01.70",
+  "project20_sha256": "f38f2c10b9fda22c3e48eb02bdfb0b1f02bd239aa64384592cd571b042bd26de",
+  "object_wall_generators": {
+    "Key_Carrier": "arachne"
+  },
+  "key_carrier_solid_fill_bounds_mm": [
+    [
+      [
+        24.5,
+        8.75,
+        0.4
+      ],
+      [
+        30.9,
+        13.95,
+        1.8
+      ]
+    ],
+    [
+      [
+        24.5,
+        8.75,
+        16.2
+      ],
+      [
+        30.9,
+        13.95,
+        17.6
+      ]
+    ]
+  ],
+  "r23_generator_sha256": "7cd5d674adc734b09a74d5f8514c2b6b7a1f83b8d94a6ab5ca5f3a4c9b8a9d86",
+  "flat_part_brim": {
+    "brim_type": "outer_only",
+    "brim_width": "3",
+    "brim_object_gap": "0.15"
+  },
+  "key_carrier_support": {
+    "enable_support": "1",
+    "support_type": "tree(auto)",
+    "support_on_build_plate_only": "1",
+    "support_top_z_distance": "0.24",
+    "support_critical_regions_only": "1",
+    "support_object_xy_distance": "0.65"
+  }
+}

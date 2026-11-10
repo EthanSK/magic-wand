@@ -1,0 +1,279 @@
+{
+  "revision": "carbon-rod-holders-r23-hybrid-centre",
+  "guard_reinforcement": {
+    "members": {
+      "R1": {
+        "side": "right (+X)",
+        "free_span_y_mm": [
+          1.6,
+          10.4
+        ],
+        "final_mesh_min_section_in_free_span_mm2": 4.088,
+        "r22_nominal_section_mm2": 1.924,
+        "growth_trimmed_unsupported_mm3": 2.389,
+        "member_volume_in_final_mm3": 107.41
+      },
+      "R2": {
+        "side": "right (+X)",
+        "free_span_y_mm": [
+          1.6,
+          8.2
+        ],
+        "final_mesh_min_section_in_free_span_mm2": 3.369,
+        "r22_nominal_section_mm2": 1.924,
+        "growth_trimmed_unsupported_mm3": 2.419,
+        "member_volume_in_final_mm3": 95.2
+      },
+      "R3": {
+        "side": "right (+X)",
+        "free_span_y_mm": [
+          1.6,
+          8.2
+        ],
+        "final_mesh_min_section_in_free_span_mm2": 3.346,
+        "r22_nominal_section_mm2": 2.552,
+        "growth_trimmed_unsupported_mm3": 8.898,
+        "member_volume_in_final_mm3": 89.68
+      },
+      "L1": {
+        "side": "left (-X)",
+        "free_span_y_mm": [
+          1.6,
+          8.0
+        ],
+        "final_mesh_min_section_in_free_span_mm2": 3.346,
+        "r22_nominal_section_mm2": 2.552,
+        "growth_trimmed_unsupported_mm3": 8.875,
+        "member_volume_in_final_mm3": 88.81
+      },
+      "L2": {
+        "side": "left (-X)",
+        "free_span_y_mm": [
+          1.6,
+          8.0
+        ],
+        "final_mesh_min_section_in_free_span_mm2": 3.346,
+        "r22_nominal_section_mm2": 1.924,
+        "growth_trimmed_unsupported_mm3": 8.777,
+        "member_volume_in_final_mm3": 83.52
+      },
+      "L3": {
+        "side": "left (-X)",
+        "free_span_y_mm": [
+          1.6,
+          8.0
+        ],
+        "final_mesh_min_section_in_free_span_mm2": 3.346,
+        "r22_nominal_section_mm2": 2.772,
+        "growth_trimmed_unsupported_mm3": 10.061,
+        "member_volume_in_final_mm3": 90.53
+      }
+    },
+    "section_mm": {
+      "width": 2.4,
+      "thickness": 2.0,
+      "corner_round": 0.9,
+      "blend_half_length": 0.8,
+      "blend_note": "0.8 is the largest root blend that keeps L3's height change out of its plan turn (Y 8.3); larger blends make one layer turn in plan and height at once."
+    },
+    "layer_growth": "Each 0.2 mm print layer (print Z = 26.9 - Y) grows at most 0.2 mm beyond the layer below (R22 guard_layers rule); unsupported excess is trimmed, not modelled."
+  },
+  "carrier_edit": {
+    "added_mm3": 1128.63,
+    "removed_mm3": 140.11,
+    "edit_volume_outside_centre_zone_mm3 (|X|<11.5, Y -19.5..10.7; residue is mesh re-triangulation)": 193.4841
+  },
+  "other_keys_unchanged": {
+    "key_0": {
+      "switch_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "cap_travel_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "soldered_route_max_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "r23_edit_touching_route_mm3": 0.0
+    },
+    "key_2": {
+      "switch_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "cap_travel_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "soldered_route_max_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "r23_edit_touching_route_mm3": 0.0
+    },
+    "key_3": {
+      "switch_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "cap_travel_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "soldered_route_max_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "r23_edit_touching_route_mm3": 0.0
+    },
+    "key_4": {
+      "switch_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "cap_travel_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "soldered_route_max_overlap_new_vs_r22_mm3": [
+        0.0,
+        0.0
+      ],
+      "r23_edit_touching_route_mm3": 0.0
+    }
+  },
+  "stock_module": {
+    "board_module_seated_overlap_mm3": 0.0,
+    "board_module_front_slide_max_overlap_mm3 (30 mm, 0.5 mm steps, switch and plug attached, paddle off)": 0.0,
+    "switch_lifted_0p4_seated_overlap_mm3": 0.0,
+    "barrel_tip_to_guard_floor_mm": 0.4,
+    "guard_floor_thickness_mm": 0.4,
+    "guard_floor_to_rod_corridor_mm": 0.2,
+    "plug_bottom_to_rod_top_mm": 0.6,
+    "plug_overlap_with_rod_mm3": 0.0,
+    "cable_overlap_with_rod_mm3": 0.0,
+    "cable_overlap_with_carrier_mm3": 0.0,
+    "board_rear_end_to_upper_clip_reliefs_mm": 0.65,
+    "board_side_clearance_to_channel_mm": 0.4,
+    "board_top_to_lip_underside_mm": 0.2,
+    "lip_overlap_of_board_edge_mm": 0.5,
+    "board_front_past_nose_mm": 11.7,
+    "plug_front_past_nose_mm": 17.7,
+    "cable_bend_front_past_nose_mm": 22.6
+  },
+  "paddles": {
+    "Centre_Paddle": {
+      "poses_deg": {
+        "released": 3.0432,
+        "rest_on_plunger": 2.1481,
+        "actuation_nominal": 1.0741,
+        "hard_stop": 0.0
+      },
+      "max_overlap_with_carrier_over_travel_mm3": 0.0,
+      "max_overlap_with_switch_body_nominal_mm3": 0.0,
+      "ridge_to_housing_at_stop_mm": 0.3,
+      "plunger_depression_at_stop_mm": 0.6,
+      "stop_contact: overlap when pushed 0.05 mm past stop (mm3, >0 means skirts land on the webs)": 0.9912,
+      "neighbour_cap_travel_overlap_mm3": {
+        "key_0": 0.0,
+        "key_2": 0.0,
+        "key_3": 0.0,
+        "key_4": 0.0
+      },
+      "skirt_rear_gap_at_rest_mm": 0.904,
+      "pin_overlap_with_paddle_mm3": 0.0,
+      "pin_overlap_with_carrier_mm3": 0.0
+    },
+    "Centre_Paddle_Shallow_Trial": {
+      "poses_deg": {
+        "released": 2.3277,
+        "rest_on_plunger": 1.4323,
+        "actuation_nominal": 0.3581,
+        "hard_stop": 0.0
+      },
+      "max_overlap_with_carrier_over_travel_mm3": 0.0,
+      "max_overlap_with_switch_body_nominal_mm3": 0.0,
+      "ridge_to_housing_at_stop_mm": 0.5,
+      "plunger_depression_at_stop_mm": 0.4,
+      "stop_contact: overlap when pushed 0.05 mm past stop (mm3, >0 means skirts land on the webs)": 0.9912,
+      "neighbour_cap_travel_overlap_mm3": {
+        "key_0": 0.0,
+        "key_2": 0.0,
+        "key_3": 0.0,
+        "key_4": 0.0
+      },
+      "skirt_rear_gap_at_rest_mm": 0.602,
+      "pin_overlap_with_paddle_mm3": 0.0,
+      "pin_overlap_with_carrier_mm3": 0.0
+    },
+    "Centre_Paddle_Deep_Trial": {
+      "poses_deg": {
+        "released": 3.7581,
+        "rest_on_plunger": 2.8633,
+        "actuation_nominal": 1.7897,
+        "hard_stop": 0.0
+      },
+      "max_overlap_with_carrier_over_travel_mm3": 0.0,
+      "max_overlap_with_switch_body_nominal_mm3": 0.0,
+      "ridge_to_housing_at_stop_mm": 0.1,
+      "plunger_depression_at_stop_mm": 0.8,
+      "stop_contact: overlap when pushed 0.05 mm past stop (mm3, >0 means skirts land on the webs)": 0.9912,
+      "neighbour_cap_travel_overlap_mm3": {
+        "key_0": 0.0,
+        "key_2": 0.0,
+        "key_3": 0.0,
+        "key_4": 0.0
+      },
+      "skirt_rear_gap_at_rest_mm": 1.207,
+      "pin_overlap_with_paddle_mm3": 0.0,
+      "pin_overlap_with_carrier_mm3": 0.0
+    }
+  },
+  "heights_mm": {
+    "paddle_top": 20.8,
+    "choc_cap_top_r22": 17.97,
+    "paddle_proud_of_choc_caps": 2.83,
+    "housing_top_nominal": 17.3,
+    "plunger_free_nominal": 18.2
+  },
+  "existing_cutout_check": {
+    "bay_opening_mm": 14.1,
+    "board_length_mm": 30.0,
+    "fits": false,
+    "rear_route": "Blocked: upper-key clip reliefs from Y 10.65 at |X| >= 1.55, saddle solid at |X| < 4.96 from Z -4.75 to 11.12, keys 3/4 sockets from |X| 4.68. So the connector end goes forward."
+  },
+  "statics_20N_stated_press": [
+    {
+      "press_y_mm": -14.0,
+      "stop_load_N": 6.0,
+      "hinge_load_N": 14.0
+    },
+    {
+      "press_y_mm": -10.0,
+      "stop_load_N": 14.0,
+      "hinge_load_N": 6.0
+    },
+    {
+      "press_y_mm": -7.0,
+      "stop_load_N": 20.0,
+      "hinge_load_N": 0.0,
+      "note": "press inside the skirt contact span"
+    },
+    {
+      "press_y_mm": 0.0,
+      "stop_load_N": 20.0,
+      "hinge_load_N": 0.0,
+      "note": "press inside the skirt contact span"
+    },
+    {
+      "press_y_mm": 6.0,
+      "stop_load_N": 20.0,
+      "hinge_load_N": 0.0,
+      "note": "press inside the skirt contact span"
+    }
+  ],
+  "physical_fit_verified": false
+}

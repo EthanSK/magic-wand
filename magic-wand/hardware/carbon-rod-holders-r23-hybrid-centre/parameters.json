@@ -1,0 +1,77 @@
+{
+  "revision": "carbon-rod-holders-r23-hybrid-centre",
+  "scope": "The lower-middle key uses a slide-in seat for the stock Endgame Gear OP1 socket board (EGG-SP-U1) under a rounded hinged paddle. Four Choc V1 seats and the rod clips retain the R22 geometry. The six underside guard runners keep their R22 paths with thicker, rounder sections.",
+  "stock_board_estimate": {
+    "basis": "Official vendor renders and a ~30 x 7-10 mm, two-eyelet (about 17.4 mm apart) description. Not a drawing or a measurement. Every value below is a planning envelope.",
+    "length_nominal_mm": 30.0,
+    "width_envelope_mm": 10.4,
+    "thickness_mm": 1.6,
+    "middle_contact_to_short_end_mm": 11.0,
+    "middle_contact_to_connector_end_mm": 19.0,
+    "socket_pitch_mm": 5.08,
+    "socket_barrel_envelope_diameter_mm": 2.6,
+    "socket_barrel_protrusion_below_board_mm": 4.0,
+    "plug_envelope": {"along_board_mm": [-6.0, 3.0], "across_mm": 9.0, "below_board_mm": 4.6, "note": "Right-angle header at the connector end, barrel side, pins pointing out along the board. White plug and cable leave along the board axis."},
+    "cable_bundle_diameter_mm": 2.6
+  },
+  "switch_estimate": {
+    "basis": "Omron D2F-class body (catalogue 12.8 x 5.8 x 6.5 mm), enlarged slightly. Plunger position along the body, free height and travel are unmeasured.",
+    "body_mm": [5.9, 12.9, 6.5],
+    "seat_lift_range_mm": [0.0, 0.4],
+    "plunger_free_above_body_mm": 0.9,
+    "plunger_width_x_mm": 1.6
+  },
+  "layout": {
+    "board_bottom_z_mm": 9.2,
+    "middle_contact_y_mm": -1.0,
+    "z_limits_note": "board_bottom_z = max(rod corridor 4.2 + 0.4 floor + 0.2 + barrel protrusion 4.0 = 8.8, rod top 4.0 + 0.6 + plug depth 4.6 = 9.2).",
+    "channel_half_x_mm": 5.6,
+    "lip_inner_half_x_mm": 4.7,
+    "lip_underside_z_mm": 11.0,
+    "fill_half_x_mm": 7.2,
+    "fill_top_z_mm": 11.5,
+    "channel_rear_y_mm": 10.3,
+    "barrel_pocket_half_x_mm": 1.9,
+    "guard_floor_z_mm": [4.4, 4.8],
+    "guard_tub_half_x_mm": 3.6
+  },
+  "hood": {
+    "cheek_x_mm": [8.6, 11.0],
+    "cheek_front_y_mm": -19.0,
+    "cheek_bottom_z_mm": 7.6,
+    "cheek_top_z_mm": 20.0,
+    "growth": "Cheek top rises from the slab top at 45 degrees towards the front, so the carrier still prints standing on its rear face."
+  },
+  "hinge": {
+    "axis_y_mm": -17.0,
+    "axis_z_mm": 18.0,
+    "pin": "1.75 mm PETG filament offcut, about 22 mm long, pushed in from the side. No bought hardware.",
+    "bore_diameter_mm": 2.0,
+    "paddle_arm_x_mm": [7.2, 8.4]
+  },
+  "paddle": {
+    "half_x_mm": 8.4,
+    "y_mm": [-19.5, 8.2],
+    "plate_z_mm": [19.2, 20.8],
+    "top_round_mm": 0.6,
+    "skirt_x_mm": [7.4, 8.4],
+    "skirt_y_mm": [-7.0, 7.0],
+    "stop_surface_z_mm": 11.12,
+    "ridge_half_x_mm": 0.6,
+    "ridge_y_mm": [-6.0, 4.0],
+    "plunger_depression_at_stop_mm": 0.6,
+    "released_gap_mm": 0.25,
+    "variants": {"Centre_Paddle": 0.0, "Centre_Paddle_Shallow_Trial": -0.2, "Centre_Paddle_Deep_Trial": 0.2},
+    "variant_note": "Ridge offset (mm downward). Deep: try if the switch does not click before the stop. Shallow: try if the paddle sits lifted or the switch never releases."
+  },
+  "guard_reinforcement": {
+    "reason": "R22 runners snapped when pressed by hand (physical report). Same six runner paths, larger rounded section and softer root curves. The side and cause of the one missing printed line are unknown.",
+    "r22_section_mm": {"width": 1.6, "thickness": 1.4, "corner_round": 0.6, "blend_half_length": 0.75},
+    "r23_section_mm": {"width": 2.4, "thickness": 2.0, "corner_round": 0.9, "blend_half_length": 0.8, "blend_note": "0.8 is the largest root blend that keeps L3's height change out of its plan turn (Y 8.3); larger blends make one layer turn in plan and height at once."},
+    "bottom_z_unchanged_mm": 0.8,
+    "upper_row_beams": "Not added: under keys 3/4 the dogleg soldered routes, the rings/saddle and the wire bus leave no load path that clears full insertion."
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false
+}

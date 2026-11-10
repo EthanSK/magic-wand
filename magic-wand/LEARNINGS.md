@@ -2514,6 +2514,15 @@ at the hinge bore entrance. The seated board bay was clear. Inspect the
 entire insertion approach in the actual slice, including narrow pin
 entrances and the space needed to remove any support.
 
+The checked R23 slice used six keep-out regions at the cap, hinge and board
+approaches. Studio generated no support extrusion there, or elsewhere on
+the plate. The reinforced ribs had filled free spans on both sides. At
+the right inner rib, the first flagged spot was an edge of a backed outer
+wall, with the rib proper starting two layers later. Check the connected
+extrusion and preceding layer to distinguish the two. Reopening R23 kept
+the settings but produced slightly different toolpaths. Audit those paths
+again before assuming the saved layout reproduces the same result.
+
 Self-improved — the first extended CAD investigation did not leave an
 editable candidate. Resuming the same author session with the confirmed
 kit, a bounded fit trial and an explicit first source deliverable produced

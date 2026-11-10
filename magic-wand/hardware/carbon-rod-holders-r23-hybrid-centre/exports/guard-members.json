@@ -1,0 +1,140 @@
+{
+  "R1": {
+    "file": "guide/guard_runner_R1.stl",
+    "volume_mm3": 107.411,
+    "growth": {
+      "desired_mm3": 107.635,
+      "trimmed_unsupported_mm3": 2.389
+    },
+    "min_layer_section_mm2": 0.301,
+    "layers": 122,
+    "y_span_mm": [
+      -5.8,
+      18.4
+    ]
+  },
+  "R2": {
+    "file": "guide/guard_runner_R2.stl",
+    "volume_mm3": 95.196,
+    "growth": {
+      "desired_mm3": 95.675,
+      "trimmed_unsupported_mm3": 2.419
+    },
+    "min_layer_section_mm2": 0.376,
+    "layers": 111,
+    "y_span_mm": [
+      -5.8,
+      16.2
+    ]
+  },
+  "R3": {
+    "file": "guide/guard_runner_R3.stl",
+    "volume_mm3": 89.678,
+    "growth": {
+      "desired_mm3": 96.835,
+      "trimmed_unsupported_mm3": 8.898
+    },
+    "min_layer_section_mm2": 0.113,
+    "layers": 110,
+    "y_span_mm": [
+      -5.8,
+      16.2
+    ]
+  },
+  "L1": {
+    "file": "guide/guard_runner_L1.stl",
+    "volume_mm3": 88.806,
+    "growth": {
+      "desired_mm3": 95.932,
+      "trimmed_unsupported_mm3": 8.875
+    },
+    "min_layer_section_mm2": 0.113,
+    "layers": 108,
+    "y_span_mm": [
+      -5.8,
+      15.6
+    ]
+  },
+  "L2": {
+    "file": "guide/guard_runner_L2.stl",
+    "volume_mm3": 83.515,
+    "growth": {
+      "desired_mm3": 90.645,
+      "trimmed_unsupported_mm3": 8.777
+    },
+    "min_layer_section_mm2": 0.113,
+    "layers": 108,
+    "y_span_mm": [
+      -5.8,
+      15.6
+    ]
+  },
+  "L3": {
+    "file": "guide/guard_runner_L3.stl",
+    "volume_mm3": 90.527,
+    "growth": {
+      "desired_mm3": 98.922,
+      "trimmed_unsupported_mm3": 10.061
+    },
+    "min_layer_section_mm2": 0.113,
+    "layers": 108,
+    "y_span_mm": [
+      -5.8,
+      15.6
+    ]
+  },
+  "r22_min_section_mm2": {
+    "R1": 1.924,
+    "R2": 1.924,
+    "R3": 1.924,
+    "L1": 1.924,
+    "L2": 1.924,
+    "L3": 1.924
+  },
+  "carve_log": {
+    "key_1_socket_loading": {
+      "poses": 31,
+      "poses_meeting_material": 1
+    },
+    "key_1_maximum_socket_loading": {
+      "poses": 31,
+      "poses_meeting_material": 5
+    },
+    "key_3_socket_loading": {
+      "poses": 31,
+      "poses_meeting_material": 4
+    },
+    "key_3_maximum_socket_loading": {
+      "poses": 31,
+      "poses_meeting_material": 5
+    },
+    "key_4_socket_loading": {
+      "poses": 31,
+      "poses_meeting_material": 1
+    },
+    "key_4_maximum_socket_loading": {
+      "poses": 31,
+      "poses_meeting_material": 5
+    },
+    "key_0_soldered_socket_slide": {
+      "poses": 51,
+      "poses_meeting_material": 4
+    },
+    "key_2_soldered_socket_slide": {
+      "poses": 51,
+      "poses_meeting_material": 4
+    },
+    "key_3_soldered_socket_dogleg": {
+      "poses": 41,
+      "poses_meeting_material": 5
+    },
+    "key_4_soldered_socket_dogleg": {
+      "poses": 41,
+      "poses_meeting_material": 5
+    },
+    "key_1_soldered_socket_straight": {
+      "poses": 31,
+      "poses_meeting_material": 5
+    }
+  }
+}
