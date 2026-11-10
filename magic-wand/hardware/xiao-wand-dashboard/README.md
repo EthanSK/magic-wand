@@ -82,6 +82,19 @@ Manual browser mode closes its previous reader when switching sources. It has no
 
 Use the two metal switch/socket contacts; an ordinary mechanical switch has no polarity. All three share GND. Internal pull-ups make pressed LOW. **No 3V3 wire goes to these switches.** The checked mapping is included in `pin-plan.json`; this dashboard does not depend on another unpublished wiring page.
 
+### OP1 centre click
+
+The [Endgame Gear OP1 Universal Switch Set](https://endgamegear.com/products/op1-universal-switch-set) supplies a socket board and a removable harness. Seat the microswitch in the supplied board. Identify the contacts at the free end of the harness with a meter in continuity mode while the board and harness are disconnected from power.
+
+1. Find the two wires that beep only while the switch is pressed. These are COM and NO.
+2. Release the switch. Test each of those wires against the third wire. The one that now beeps is COM. The other is NO.
+3. Fit the switch in the holder and repeat the check while the harness is still disconnected. Make sure the pair closes on a press and opens on release.
+4. Connect COM to GND and NO to the existing centre input, D8. Insulate the unused wire.
+
+Identify the wires by the meter readings. The connector order and colours on the physical harness are unverified.
+
+### Diagnostic firmware
+
 The sketch is `firmware/wand_diagnostics/wand_diagnostics.ino`, compiled for `Seeeduino:nrf52:xiaonRF52840Sense` with Seeed nRF52 core **1.1.13** and Seeed Arduino LSM6DS3 **2.0.7**. It is not for MG24 or Sense Plus. Use the established private installation workflow for an authorised upload. This repository publishes source and does not install or restart hardware.
 
 The sketch debounces switches for 10 ms and keeps cumulative press counters. USB snapshots are scheduled every 20 ms and Bluetooth snapshots at most every 50 ms when connected. Those are publication targets, not measured transport performance or latency. `imu` is null when no fresh six-axis sample is available; buttons remain valid independently. There is no finger multiplexer, battery reporting, RGB status, sleep, mouse, HUD or dictation code in this sketch.
