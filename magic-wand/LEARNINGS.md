@@ -2518,6 +2518,20 @@ the sloped ridge. This is a releasable catch. CAD checks the motion and
 toolpaths check deposition intent. Whether the printed keeper catches
 and resists a light pull still needs a hands-on check.
 
+After watching the cutaway, Ethan confirmed the keeper can slide back
+over the R22 release ramp too easily for handling. The sample may have
+bent during experimentation. He likes the original prongs and wants a
+small deliberate lift before removal. R25 makes a separate matched
+holder and keeper trial. Its short vertical stop and rounded lift edge
+preserve the earlier board position and the keeper's tooth and prongs.
+Keep the R22 and R24 assemblies available. Check the near-vertical stop
+in actual layers because the holder prints in the slide direction.
+The first full-height stop left an unsupported strip in Studio's paths,
+and adding side shoulders produced a floating-region warning. A short
+vertical face over a gradual root, with a crest long enough for two
+fully deposited layers, passed the delivered and reopened slice checks.
+The printed grip, fingernail access and spring wear still need a fit trial.
+
 The battery slides in from the end, then either battery door presses
 straight down into the two slots. The XIAO keeper slides along its holder.
 R23 reused the R22 meshes for both holders, both battery doors and the

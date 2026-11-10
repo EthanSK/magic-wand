@@ -1,0 +1,816 @@
+{
+  "project_sha256": "e2c37f79fe8a4d90c3e05e916c4ec067a668aae11b6390ee52a0f0bc63d2bb11",
+  "checker_sha256": "05978b23e4ea7440e96ce328dee72c1bd4e653a8cb5f938e2f219a4676f6c87a",
+  "manifest_sha256": "45e19fc763620f00646fda546300b3d855c7cc339cee6a6d4c37d42e4d3d8061",
+  "anchors_sha256": "85904333dbc78029b5b32d838f1b92995257a2f5290f5325e18c74389e4c89f1",
+  "features": [
+    "Prime tower",
+    "Outer wall",
+    "Inner wall",
+    "Gap infill",
+    "Bottom surface",
+    "Brim",
+    "Internal solid infill",
+    "Top surface",
+    "Overhang wall"
+  ],
+  "statistics": {
+    "straight_extruding_moves": 18056,
+    "arc_extruding_moves": 4236,
+    "support_extruding_moves": 0,
+    "feature_samples": {
+      "Prime tower": 78953,
+      "Outer wall": 91255,
+      "Inner wall": 50219,
+      "Gap infill": 29997,
+      "Bottom surface": 2534,
+      "Brim": 4576,
+      "Internal solid infill": 6236,
+      "Top surface": 10369,
+      "Overhang wall": 78
+    }
+  },
+  "tower_bounds_mm": [
+    [
+      116.52291870117188,
+      16.502185821533203
+    ],
+    [
+      134.33184814453125,
+      34.310081481933594
+    ]
+  ],
+  "parts": {
+    "XIAO_Rod_Holder": {
+      "first_layer_bead_area_mm2": 457.309,
+      "brim_samples": 0,
+      "support_samples": 0,
+      "layer_starts": {
+        "checked_layers": 142,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "partial_overhangs": [],
+        "largest_unbacked_layers": [],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "working_spaces": {
+        "unloaded_clip_bore": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 21016,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "external_support_exception": null,
+            "examples": []
+          }
+        },
+        "clip_gap_near": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "clip_gap_far": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "board": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 441,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "external_support_exception": null,
+            "examples": []
+          }
+        },
+        "usb_connector": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "usb_plug_body": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "board_underside_centre": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_route": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 93,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "external_support_exception": null,
+            "examples": []
+          }
+        },
+        "component_shield": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "component_usb_c": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "component_antenna": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "component_pdm_microphone": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "component_reset_button": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "component_user_led": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "component_charge_led": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "castellation_solder": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_exit_down_outboard_+1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_run_past_near_post_+1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_exit_down_outboard_-1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_run_past_near_post_-1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "board_insertion": {
+          "poses": 21,
+          "worst": {
+            "checked_samples": 2420,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "external_support_exception": null,
+            "examples": []
+          }
+        },
+        "retainer_groove_+1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 346,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "external_support_exception": null,
+            "examples": []
+          }
+        },
+        "retainer_groove_-1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "retainer_route": {
+          "poses": 33,
+          "worst": {
+            "checked_samples": 2847,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "external_support_exception": null,
+            "examples": []
+          }
+        },
+        "solder_underside_row0_+1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 105,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "external_support_exception": null,
+            "examples": []
+          }
+        },
+        "solder_underside_row0_-1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 105,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "external_support_exception": null,
+            "examples": []
+          }
+        },
+        "solder_underside_row1_+1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "solder_underside_row1_-1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "solder_underside_row2_+1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "solder_underside_row2_-1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "solder_underside_row3_+1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "solder_underside_row3_-1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "solder_underside_row4_+1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "solder_underside_row4_-1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "solder_underside_row5_+1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "solder_underside_row5_-1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "solder_underside_row6_+1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "solder_underside_row6_-1": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "board_travel_between_cheeks": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 756,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "external_support_exception": null,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_00": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_00": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_01": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_01": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_02": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_02": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_03": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_03": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_04": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_04": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_05": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_05": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_06": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_06": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_07": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_07": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_08": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_08": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_09": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_09": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_10": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_10": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_11": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_11": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_12": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_12": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_up_from_pad_13": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        },
+        "wire_out_over_wall_13": {
+          "poses": 1,
+          "worst": {
+            "checked_samples": 0,
+            "violations": {},
+            "removable_external_support_samples": 0,
+            "examples": []
+          }
+        }
+      },
+      "tower_gap_mm": 84.885,
+      "ties": {
+        "tie_count": 6,
+        "layers": [
+          0.2,
+          0.4
+        ],
+        "smallest_centre_line_bead_coverage": 1.0,
+        "smallest_pad_to_part_bead_gap_away_from_ties_mm": 0.987,
+        "designed_gap_mm": 1.0,
+        "separate_pads_printed_in_each_layer": [
+          4,
+          4
+        ],
+        "rows": [
+          {
+            "layer_top_mm": 0.2,
+            "tie": 0,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.961
+          },
+          {
+            "layer_top_mm": 0.2,
+            "tie": 1,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.961
+          },
+          {
+            "layer_top_mm": 0.2,
+            "tie": 2,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.9654
+          },
+          {
+            "layer_top_mm": 0.2,
+            "tie": 3,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.9648
+          },
+          {
+            "layer_top_mm": 0.2,
+            "tie": 4,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.9648
+          },
+          {
+            "layer_top_mm": 0.2,
+            "tie": 5,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.9648
+          },
+          {
+            "layer_top_mm": 0.4,
+            "tie": 0,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.8917
+          },
+          {
+            "layer_top_mm": 0.4,
+            "tie": 1,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.8886
+          },
+          {
+            "layer_top_mm": 0.4,
+            "tie": 2,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.8867
+          },
+          {
+            "layer_top_mm": 0.4,
+            "tie": 3,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.8914
+          },
+          {
+            "layer_top_mm": 0.4,
+            "tie": 4,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.8888
+          },
+          {
+            "layer_top_mm": 0.4,
+            "tie": 5,
+            "centre_line_bead_coverage": 1.0,
+            "tie_area_bead_fraction": 0.8897
+          }
+        ]
+      }
+    },
+    "XIAO_Near_Keeper": {
+      "first_layer_bead_area_mm2": 139.992,
+      "brim_samples": 4576,
+      "support_samples": 0,
+      "layer_starts": {
+        "checked_layers": 11,
+        "floating_components": [],
+        "missing_printed_components": [],
+        "support_backed_islands": [],
+        "partial_overhangs": [],
+        "largest_unbacked_layers": [],
+        "required_empty_layer_gap_mm": 0.2,
+        "section_plane_guard_mm": 0.001,
+        "boundary_witness_grid": 3,
+        "sideways_backing_credit_mm": 0,
+        "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+        "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+      },
+      "working_spaces": {},
+      "tower_gap_mm": 32.272,
+      "keeper_tooth": {
+        "tooth_layers": [
+          {
+            "top_mm": 1.399999976158142,
+            "core_coverage": 1.0
+          },
+          {
+            "top_mm": 1.600000023841858,
+            "core_coverage": 1.0
+          },
+          {
+            "top_mm": 1.7999999523162842,
+            "core_coverage": 1.0
+          },
+          {
+            "top_mm": 2.0,
+            "core_coverage": 1.0
+          },
+          {
+            "top_mm": 2.200000047683716,
+            "core_coverage": 1.0
+          }
+        ],
+        "min_tooth_core_coverage": 1.0
+      }
+    }
+  },
+  "failures": [],
+  "passed": true,
+  "physical_print_verified": false
+}

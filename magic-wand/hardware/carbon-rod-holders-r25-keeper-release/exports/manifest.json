@@ -1,0 +1,148 @@
+{
+  "revision": "carbon-rod-holders-r25-keeper-release",
+  "plate_parts": [
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper"
+  ],
+  "anchored_parts": [
+    "XIAO_Rod_Holder"
+  ],
+  "parts": {
+    "XIAO_Rod_Holder": {
+      "bounds_mm": [
+        [
+          -14.600000381469727,
+          -5.0,
+          -4.829628944396973
+        ],
+        [
+          14.600000381469727,
+          23.399999618530273,
+          15.300000190734863
+        ]
+      ],
+      "volume_mm3": 1635.4247172000196,
+      "solid_PETG_g": 2.076989390844025,
+      "print_height_mm": 28.399999618530273,
+      "body_count": 1,
+      "watertight": true,
+      "export_drift_mm3": 0.00031,
+      "stl_sha256": "3fed2e866012105587bfc353c7bb79edcd3e2b039359f7a18b62655b9bf49ec8",
+      "assembly_stl_sha256": "24cf0b4639c0963936af27d730aed54b8829489130458068c6db7b242c1c9225",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.600000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          23.399999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "XIAO_Near_Keeper": {
+      "bounds_mm": [
+        [
+          -13.0,
+          -7.0,
+          9.800000190734863
+        ],
+        [
+          13.0,
+          3.0,
+          11.949999809265137
+        ]
+      ],
+      "volume_mm3": 225.38841717374507,
+      "solid_PETG_g": 0.2862432898106563,
+      "print_height_mm": 2.1500000953674316,
+      "body_count": 1,
+      "watertight": true,
+      "export_drift_mm3": 2e-05,
+      "stl_sha256": "5b68a366eb62caa3124429d183cd74c69f7246e1a33624363c095e6f86e237b0",
+      "assembly_stl_sha256": "e2011d0460def13d454df6219e4410851127471df108780e0c79bd5267e19d60",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -13.0
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          3.0
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          11.949999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "geometry_checks": {
+    "stop_face_deg_from_horizontal": 90.0,
+    "tooth_height_below_crest_mm": 0.26,
+    "travel_to_stop_mm": 0.19,
+    "drawn_lift_at_nearest_tooth_edge_mm": 0.4,
+    "drawn_lift_at_free_tip_mm": 0.816,
+    "blocked_straight_pull_overlap_mm3": 0.1092,
+    "matched_path_overlap_mm3": {
+      "insert": 0.0,
+      "pull_to_stop": 0.0,
+      "lift": 0.0,
+      "remove": 0.0,
+      "relax": 0.0
+    },
+    "added_lip_component_overlap_mm3": {
+      "PCB": 0.0,
+      "shield": 0.0,
+      "usb_c": 0.0,
+      "antenna": 0.0,
+      "pdm_microphone": 0.0,
+      "reset_button": 0.0,
+      "user_led": 0.0,
+      "charge_led": 0.0
+    },
+    "added_ridge_board_path_overlap_mm3": 0.0,
+    "compatible_path_overlap_mm3": {
+      "R25_keeper_R22_holder": 0.0,
+      "R22_keeper_R25_holder": {
+        "insert": 0.0,
+        "pull_to_stop": 0.0,
+        "lift": 0.0,
+        "remove": 0.0,
+        "relax": 0.0
+      }
+    },
+    "physical_fit_and_retention_verified": false
+  },
+  "generator_sha256": "20cd5fae9c4728c24fcc5590b1a25141c8ccf71bcc5ec7fc103652873b949638",
+  "base_r22_manifest_sha256": "6746736902af093a8036fcef0eb3b0c88485c3cec435a9d37c73127773bef1ec",
+  "physical_fit_verified": false
+}

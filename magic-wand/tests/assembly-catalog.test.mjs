@@ -116,3 +116,23 @@ test('the original XIAO catch flexes and releases in both assembly views', () =>
     assert.ok(insert.checks.max_rigid_overlap_mm3 > .05);
   }
 });
+
+test('R25 shows the stopped pull, deliberate lift and board removal', () => {
+  const path = new URL('../hardware/carbon-rod-holders-r25-keeper-release/exports/assembly-guide.json', import.meta.url);
+  const { modules } = validateGuide(JSON.parse(readFileSync(path)));
+  for (const module of [modules.xiao, modules.xiao_latch]) {
+    const samples = title => module.steps.find(step => step.title === title).samples;
+    const stop = samples('Pull Gently to Check the Stop').at(-1);
+    const lift = samples('Lift the Rounded Tab');
+    const slide = samples('Slide the Keeper Out');
+    assert.ok(stop.keeper[7] < 0 && stop.morphs.keeper === 0);
+    assert.ok(lift.every(pose => pose.keeper[7] === stop.keeper[7]));
+    assert.equal(lift.at(-1).morphs.keeper, 1);
+    assert.ok(slide.every(pose => pose.morphs.keeper === 1));
+    assert.ok(slide.at(-1).keeper[7] < stop.keeper[7]);
+    assert.equal(samples('Let the Tab Settle').at(-1).morphs.keeper, 0);
+  }
+  assert.ok(modules.xiao.steps.some(step => step.title === 'Lift the Board Out'));
+  assert.ok(modules.xiao.steps.some(step => step.title === 'Slide the Holder Off the Rod'));
+  assert.ok(modules.battery_spacer && modules.centre);
+});
