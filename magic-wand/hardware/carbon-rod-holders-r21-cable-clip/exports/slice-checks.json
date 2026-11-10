@@ -1,0 +1,425 @@
+{
+  "project_sha256": "813a0678712992297505ba08d5cc3ccca064f3ac55915b2789d300a5baeb93b4",
+  "manifest_sha256": "aab5695044fb323d2f6cdf1faea66d69b79ef8384a9035c7fc1214ea307eb155",
+  "checker_sha256": "e375c7f882a1152072c4534f9ff5ecca679e0626c585cff1217239600594007c",
+  "project_generator_sha256": "9a3dba189fba15e32fbf5ca890ba77e09a5739e979ca7facde33814fe4ca9a2a",
+  "actual_commands": {
+    "passed": true,
+    "first_extrusion_nozzle_c": 255.0,
+    "first_extrusion_bed_c": 70.0,
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "layer_change_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "boundary": "first non-custom extrusion feature",
+    "unconditional_temperature_waits": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "project_sha256": "813a0678712992297505ba08d5cc3ccca064f3ac55915b2789d300a5baeb93b4"
+  },
+  "features": [
+    "Prime tower",
+    "Inner wall",
+    "Outer wall",
+    "Gap infill",
+    "Top surface",
+    "Internal solid infill"
+  ],
+  "parser_stats": {
+    "straight_extruding_moves": 622,
+    "arc_extruding_moves": 800,
+    "support_extruding_moves": 0,
+    "feature_samples": {
+      "Prime tower": 8289,
+      "Inner wall": 489,
+      "Outer wall": 6952,
+      "Gap infill": 3717,
+      "Top surface": 203,
+      "Internal solid infill": 15
+    }
+  },
+  "path_samples": 11376,
+  "all_layers": [
+    {
+      "top_mm": 0.20000000298023224,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.9761816768473872,
+      "tie_coverage": [
+        1.0,
+        1.0
+      ],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.3486309434857855,
+          4.807180643186304
+        ],
+        "rod:90": [
+          4.348630945067036,
+          4.807396325421624
+        ],
+        "cable:-90": [
+          2.341899742560164,
+          2.7504928527510266
+        ],
+        "cable:90": [
+          2.3538993197647775,
+          2.7471816789735968
+        ]
+      }
+    },
+    {
+      "top_mm": 0.4000000059604645,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.9565941189209031,
+      "tie_coverage": [
+        1.0,
+        1.0
+      ],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.166467008130853,
+          4.500012225937963,
+          4.843947413416647
+        ],
+        "rod:90": [
+          4.154494539733337,
+          4.499132485610747,
+          4.846542063150402
+        ],
+        "cable:-90": [
+          2.2077941919563275,
+          2.4965203179166133,
+          2.7888709806251986
+        ],
+        "cable:90": [
+          2.2099581286570924,
+          2.4965611473009393,
+          2.784553973507225
+        ]
+      }
+    },
+    {
+      "top_mm": 0.6000000238418579,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.9808088096985521,
+      "tie_coverage": [],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.159870973875111,
+          4.497536916167069,
+          4.840624085912237
+        ],
+        "rod:90": [
+          4.157862000387001,
+          4.50084314867755,
+          4.845301694018553
+        ],
+        "cable:-90": [
+          2.206062014303382,
+          2.48889688686705,
+          2.790123040184086
+        ],
+        "cable:90": [
+          2.206064389475038,
+          2.4997167369138222,
+          2.7869245180923983
+        ]
+      }
+    },
+    {
+      "top_mm": 0.800000011920929,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.9794050580857131,
+      "tie_coverage": [],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.161824015191366,
+          4.498002448601038,
+          4.840620509279504
+        ],
+        "rod:90": [
+          4.159823923682669,
+          4.500272594980665,
+          4.848208002731338
+        ],
+        "cable:-90": [
+          2.2098767039031615,
+          2.4993637624157805,
+          2.789848637994315
+        ],
+        "cable:90": [
+          2.209876232358254,
+          2.4988118926930225,
+          2.786640005673066
+        ]
+      }
+    },
+    {
+      "top_mm": 1.0,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.9800765319836282,
+      "tie_coverage": [],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.160847403802312,
+          4.499051995498844,
+          4.8428335267182945
+        ],
+        "rod:90": [
+          4.158839093750967,
+          4.498295840532042,
+          4.845301694018553
+        ],
+        "cable:-90": [
+          2.2108093563579985,
+          2.4980930349824364,
+          2.7899860003534735
+        ],
+        "cable:90": [
+          2.2108085449778696,
+          2.499712252216735,
+          2.7869245180923983
+        ]
+      }
+    },
+    {
+      "top_mm": 1.2000000476837158,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.978932236257996,
+      "tie_coverage": [],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.161824015191366,
+          4.498549080640663,
+          4.841455377790186
+        ],
+        "rod:90": [
+          4.159823923682669,
+          4.492831234989412,
+          4.848860192571937
+        ],
+        "cable:-90": [
+          2.2098767039031615,
+          2.49872654285056,
+          2.7899860003534735
+        ],
+        "cable:90": [
+          2.209876232358254,
+          2.4996359521676528,
+          2.7849987434338908
+        ]
+      }
+    },
+    {
+      "top_mm": 1.399999976158142,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.9789834312806323,
+      "tie_coverage": [],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.161824015191366,
+          4.497345707962478,
+          4.841396328327502
+        ],
+        "rod:90": [
+          4.159823923682669,
+          4.500438803360328,
+          4.8495416230804285
+        ],
+        "cable:-90": [
+          2.2098767039031615,
+          2.4927420255855415,
+          2.78813977987475
+        ],
+        "cable:90": [
+          2.209876232358254,
+          2.4992842139364964,
+          2.7846495456254488
+        ]
+      }
+    },
+    {
+      "top_mm": 1.600000023841858,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.97894824118296,
+      "tie_coverage": [],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.161824015191366,
+          4.499051995498844,
+          4.841726990241094
+        ],
+        "rod:90": [
+          4.159823923682669,
+          4.499000580105295,
+          4.848208002731338
+        ],
+        "cable:-90": [
+          2.2098767039031615,
+          2.49872654285056,
+          2.78813977987475
+        ],
+        "cable:90": [
+          2.209876232358254,
+          2.4906381970146674,
+          2.7856393963906916
+        ]
+      }
+    },
+    {
+      "top_mm": 1.7999999523162842,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.9808709383225381,
+      "tie_coverage": [],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.159870973875111,
+          4.501677901452282,
+          4.840614656046363
+        ],
+        "rod:90": [
+          4.157862000387001,
+          4.499143263095599,
+          4.84810066897621
+        ],
+        "cable:-90": [
+          2.208944400678065,
+          2.4897895943214117,
+          2.789608474231394
+        ],
+        "cable:90": [
+          2.2089519016342556,
+          2.499713455645049,
+          2.7856393963906916
+        ]
+      }
+    },
+    {
+      "top_mm": 2.0,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.9802101847891165,
+      "tie_coverage": [],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.159870973875111,
+          4.498270321891112,
+          4.840080335041564
+        ],
+        "rod:90": [
+          4.157862000387001,
+          4.496537808188318,
+          4.84810066897621
+        ],
+        "cable:-90": [
+          2.208944400678065,
+          2.499997271423897,
+          2.7899334842337664
+        ],
+        "cable:90": [
+          2.2089519016342556,
+          2.498810349463296,
+          2.78465149840547
+        ]
+      }
+    },
+    {
+      "top_mm": 2.200000047683716,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.980405822285025,
+      "tie_coverage": [],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.159870973875111,
+          4.499994141382098,
+          4.841726990241094
+        ],
+        "rod:90": [
+          4.157862000387001,
+          4.498052463068836,
+          4.84810066897621
+        ],
+        "cable:-90": [
+          2.208944400678065,
+          2.4903480076783255,
+          2.789353285858849
+        ],
+        "cable:90": [
+          2.2089519016342556,
+          2.499211608595008,
+          2.7856502864589316
+        ]
+      }
+    },
+    {
+      "top_mm": 2.4000000953674316,
+      "connected_pieces": 1,
+      "source_area_printed_fraction": 0.9694233130218803,
+      "tie_coverage": [],
+      "ring_track_centres_mm": {
+        "rod:-90": [
+          4.306840692686157,
+          4.571703033695335,
+          4.84103643050092
+        ],
+        "rod:90": [
+          4.3068406942675015,
+          4.571687911151226,
+          4.845674118757154
+        ],
+        "cable:-90": [
+          2.3061546005653843,
+          2.549774541920066,
+          2.789353285858849
+        ],
+        "cable:90": [
+          2.3061546021467976,
+          2.548622546835993,
+          2.7846495456254488
+        ]
+      }
+    }
+  ],
+  "working_openings": [
+    "rod_bore_7p7mm",
+    "cable_bore_3p7mm",
+    "rod_entry",
+    "cable_entry"
+  ],
+  "source_mesh_matches": true,
+  "source_stl_difference_mm3": 2.026273271285562e-05,
+  "anchor_mesh_difference_mm3": 0.0,
+  "pad_bead_gaps": [
+    {
+      "layer_top_mm": 0.20000000298023224,
+      "minimum_bead_gap_away_from_ties_mm": 0.60234375
+    },
+    {
+      "layer_top_mm": 0.4000000059604645,
+      "minimum_bead_gap_away_from_ties_mm": 0.5859375
+    }
+  ],
+  "layer_starts": {
+    "checked_layers": 12,
+    "floating_components": [],
+    "missing_printed_components": [],
+    "support_backed_islands": [],
+    "largest_unbacked_layers": [],
+    "required_empty_layer_gap_mm": 0.2,
+    "section_plane_guard_mm": 0.001,
+    "boundary_witness_grid": 3,
+    "sideways_backing_credit_mm": 0,
+    "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+    "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation."
+  },
+  "partly_backed_regions": [],
+  "tower_clearance_mm": 68.0309840431288,
+  "image": "clip-and-paths.png",
+  "image_sha256": "3ea0aed39ce23336ce0c678bb4a97c157cc53426b894e139497e6b2c0894d00f",
+  "physical_print_verified": false,
+  "passed": true
+}

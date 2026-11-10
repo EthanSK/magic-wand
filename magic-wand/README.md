@@ -149,6 +149,8 @@ The [carbon-tube assembly blueprint](hardware/assembly-blueprint/README.md) reco
 
 The [R20 carbon-rod prototype](hardware/carbon-rod-holders-r20-finger-guard/README.md) is the latest prepared four-part A1 mini/PETG trial: a removable finger guard, lighter key carrier with firmer rod grip, shorter battery cage and walled XIAO board holder. Its [digital print audit](hardware/carbon-rod-holders-r20-finger-guard/AUDIT.md) covers the final toolpaths and assembly routes; physical fit, cleanup, retention, strength and comfort still need a trial. The close two-over-three key layout and bought-part interfaces are retained.
 
+The separate [R21 cable clip](hardware/carbon-rod-holders-r21-cable-clip/README.md) is a 0.13 g split figure-of-eight guide for cables between the board and battery. Its prepared PETG trial prints flat; actual wire fit and spring grip are still unmeasured. It does not replace any R20 holder.
+
 The [R19 animated assembly guide](hardware/carbon-rod-holders-r19-lightweight/preview/) shows the earlier holders and their door, keeper and spacer, which R20 reuses. The fixed-address [holder viewer](hardware/carbon-rod-holders/preview/) still shows [R16](hardware/carbon-rod-holders-r16-repair/README.md). Editable CAD, normal meshes and prepared projects stay with each revision; [R15](hardware/carbon-rod-holders-r15-tight-pyramid/README.md), [R14](hardware/carbon-rod-holders-r14-pyramid/README.md), [R13](hardware/carbon-rod-holders-r13-printability/README.md), [R12](hardware/carbon-rod-holders-r12-closer-thumb/README.md) and earlier deliveries are preserved. Fit and tape the insulated sockets off the rod, supporting each socket while inserting its switch.
 
 - Puck.js v2.1 at the tip of a roughly 50 cm carbon-fibre tube.

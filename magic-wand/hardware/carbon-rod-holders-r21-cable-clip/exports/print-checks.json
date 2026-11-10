@@ -1,0 +1,50 @@
+{
+  "project_sha256": "813a0678712992297505ba08d5cc3ccca064f3ac55915b2789d300a5baeb93b4",
+  "layout_sha256": "3d6afa133bc730af44eba8cbfaa59cd45d0c528c62d617f5aa281a980a064c29",
+  "manifest_sha256": "aab5695044fb323d2f6cdf1faea66d69b79ef8384a9035c7fc1214ea307eb155",
+  "generator_sha256": "9a3dba189fba15e32fbf5ca890ba77e09a5739e979ca7facde33814fe4ca9a2a",
+  "profile_resolver_sha256": "a70beebc3b524bac199d4b7b221157f36051aaf65671d4fabb9625698367aa60",
+  "parts": [
+    "Cable_Clip_4mm"
+  ],
+  "plate_extents_mm": {
+    "Cable_Clip_4mm": [
+      [
+        70.0,
+        90.0,
+        0.0
+      ],
+      [
+        85.03086471557617,
+        104.0,
+        2.4000000953674316
+      ]
+    ]
+  },
+  "slow_bands_mm": {},
+  "registration": {
+    "cli_dropped_keys": [],
+    "values_unchanged": true
+  },
+  "warnings": [],
+  "actual_commands": {
+    "passed": true,
+    "first_extrusion_nozzle_c": 255.0,
+    "first_extrusion_bed_c": 70.0,
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "layer_change_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "boundary": "first non-custom extrusion feature",
+    "unconditional_temperature_waits": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "project_sha256": "813a0678712992297505ba08d5cc3ccca064f3ac55915b2789d300a5baeb93b4"
+  },
+  "physical_print_verified": false
+}

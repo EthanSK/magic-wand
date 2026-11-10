@@ -62,6 +62,8 @@ Read the frozen [V20 design principles](../../../magic-wand/hardware/printed-loo
 
 ## Before calling it final
 
+User-requested — 2026-11-10: “slicing is super quick, so we should do it regularly at intervals to make sure that the 3D model is going into plan.” Slice at useful checkpoints during design, especially after changing thin members, openings, print orientation or adhesion helpers, so actual layer problems are caught before the final pass. Reuse unchanged checked results; do not wait until a long design pass ends to inspect the first real toolpaths.
+
 Before finishing every model or print project, use the repository's [printability-audit](../printability-audit/SKILL.md). It owns the recurring independent Opus review of actual holes, support removal and likely snap points, with minimal design changes. Keep implementation and independent review distinct.
 
 Map each requested change to a source parameter or feature and a check. Compare old/new assembled views, not just the print plate. Check the core-radius profile for monotonic taper; explicitly check the helix is generated. Inspect both handed handles and count both in the actual 3MF build. Check new joints inside the chosen silhouette instead of making the silhouette fit arbitrary collars.

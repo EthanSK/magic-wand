@@ -1,0 +1,97 @@
+{
+  "revision": "R21 split cable clip",
+  "parameters": {
+    "rod_mm": 8.0,
+    "rod_bore_mm": 7.9,
+    "rod_root_wall_mm": 1.4,
+    "axial_width_mm": 2.4,
+    "cable_bore_mm": 4.0,
+    "cable_wall_mm": 1.0,
+    "cable_entry_gap_mm": 0.8,
+    "centres_mm": 7.4,
+    "cable_chamfer_mm": 0.2,
+    "pad_thickness_mm": 0.4,
+    "tie_width_mm": 0.7
+  },
+  "plate_parts": [
+    "Cable_Clip_4mm"
+  ],
+  "sources": {
+    "clip21.py": "2d6d8b981738107bce2341ec88c713d59e1b746113e0dc472e9517349d70c607",
+    "../carbon-rod-holders-r7-spring-clips/cad.py": "011fb648bbed706dac91a31513f82924f83b34a282c2b65190b207b1455273ba",
+    "../carbon-rod-holders-r7-spring-clips/parameters.json": "f2706b655bc2374caef20127dd1df6e3426b2ab09e018fcf947b2500b3429b17"
+  },
+  "parts": {
+    "Cable_Clip_4mm": {
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -4.798484057188034
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -7.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "stl_sha256": "cee64ade58125cfeac4e2656f975eac9e7f61036540e70d7fe6a84b9cf90a0ec",
+      "volume_mm3": 102.543644496418,
+      "solid_PETG_g": 0.13023042851045086,
+      "print_height_mm": 2.4,
+      "body_count": 1,
+      "watertight": true
+    }
+  },
+  "exports": {
+    "part": {
+      "sha256": "cee64ade58125cfeac4e2656f975eac9e7f61036540e70d7fe6a84b9cf90a0ec",
+      "volume_mm3": 102.543644496418,
+      "bounds_mm": [
+        [
+          0.0,
+          1.9461944103240967,
+          0.0
+        ],
+        [
+          15.030864715576172,
+          12.053805351257324,
+          2.4000000953674316
+        ]
+      ]
+    },
+    "pads": {
+      "sha256": "541d585b0a96d2785fe083a5bd11f2af03d9e01f57366de9006284a6cc7cb409",
+      "volume_mm3": 8.071999448895474,
+      "bounds_mm": [
+        [
+          8.298483848571777,
+          0.0,
+          0.0
+        ],
+        [
+          11.298483848571777,
+          14.0,
+          0.4000000059604645
+        ]
+      ]
+    }
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "wire_size_basis": "4 mm loose guide based on the earlier provisional 3 mm wire corridor; actual cable bundle is unmeasured."
+}
