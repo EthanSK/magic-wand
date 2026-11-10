@@ -3,8 +3,9 @@
 R22 responds to Ethan's comments on the R20 print. R16 to R21 and their exports are unchanged.
 
 **Status: the R22 PETG job finished.** The key holder printed and its thin guard runners
-snapped under finger pressure. The toolpaths include both battery doors. The comparison
-photo shows empty door slots, so whether the loose doors printed successfully is unconfirmed.
+snapped under finger pressure. The toolpaths include both battery doors.
+[Fit observations](../../LEARNINGS.md#2026-11-10--identify-r22-retainers-by-their-fitted-parts)
+record the possible mix-up with the XIAO holder and the later good cradle and pin fit.
 
 [Open the assembly guide](../carbon-rod-holders/assembly/?version=r22) and choose a component in the dropdown.
 

@@ -2486,15 +2486,24 @@ only where the prewired sockets and caps still have room to move.
 
 ### 2026-11-10 — Identify R22 retainers by their fitted parts
 
-Ethan reported a missing battery top. The comparison photo showed the
-R22 holder with empty door slots and one separate piece whose outline
-looks like the XIAO keeper. The exact sent R22 toolpaths contained both
-battery doors. That establishes the plate contents, with physical
-deposition and recovery of the doors still unconfirmed. The R22 assembly
-recipe shows the battery sliding in from the end and either battery door
-pressing straight down into the two end slots. The keeper slides along
-the XIAO holder. Identify the actual part and its insertion direction
-before changing dimensions.
+Ethan reported a missing battery top and trouble fitting it, then said he
+might have been looking at the XIAO Sense holder. The comparison photo
+showed open end slots and one loose piece whose outline looks like the XIAO
+keeper. The exact sent R22 toolpaths contained both battery doors. Physical
+deposition and recovery of the doors are still unconfirmed, and the
+handling report is inconclusive about battery fit.
+
+Ethan subsequently tried the shell in its cradle. He reported a good fit
+and said the pin slotted in well. The exact print revision in hand remains
+unconfirmed. Preserve the working mating surfaces when changing the wire
+clearance or improving the assembly view.
+
+The battery slides in from the end, then either battery door presses
+straight down into the two slots. The XIAO keeper slides along its holder.
+R23 reused the R22 meshes for both holders, both battery doors and the
+XIAO keeper, with the same insertion directions. Its battery animation
+shows the cell without the optional spacer. Identify the fitted part and
+its insertion direction before changing dimensions.
 
 ### 2026-11-10 — Verify the bought switch board and its whole insertion route
 
