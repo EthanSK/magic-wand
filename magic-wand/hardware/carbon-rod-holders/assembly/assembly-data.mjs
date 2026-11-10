@@ -1,6 +1,8 @@
 // Render the same discrete poses used by the owning model's assembly checks.
 // Keep all components in one menu; adding a component to its guide includes it
 // here without maintaining another list of model names in the user interface.
+import { potentialKeyViews } from './keycap-concepts.mjs?v=4';
+
 export const identity = () => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
 export const translated = (x = 0, y = 0, z = 0) => [1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z];
 
@@ -10,14 +12,64 @@ export function sampledPose(module, index, fraction) {
   return samples[Math.round(Math.max(0, Math.min(1, fraction)) * (samples.length - 1))];
 }
 
+// Milky-white Choc slim keycap (Adafruit 5737). Use the project’s 16.6 × 17.5 mm
+// Choc outline, which agrees with the vendor's quarter-scale photo. The exposed
+// cap height above the illustrative switch stem is a mounted-photo estimate.
+// https://www.adafruit.com/product/5737
+const CHOC_STEM_TOP = 8.05;
+const CHOC_CAP_RISE = 3;
+const CHOC_CAP_OUTLINE = [16.6, 17.5];
+
+function chocCapGeometry(base = CHOC_STEM_TOP, top = CHOC_STEM_TOP + CHOC_CAP_RISE, skirt = .85) {
+  const [halfX, halfY] = CHOC_CAP_OUTLINE.map(size => size / 2);
+  const corners = (inset, z) => [
+    [-halfX + inset, -halfY + inset, z], [halfX - inset, -halfY + inset, z],
+    [halfX - inset, halfY - inset, z], [-halfX + inset, halfY - inset, z],
+  ];
+  const vertices = [
+    ...corners(0, base), ...corners(0, base + skirt),
+    ...corners(1.45, top), [0, 0, top - .25],
+  ];
+  const faces = [[0, 2, 1], [0, 3, 2]];
+  for (let i = 0; i < 4; i++) {
+    const j = (i + 1) % 4;
+    faces.push([i, j, j + 4], [i, j + 4, i + 4]);
+    faces.push([i + 4, j + 4, j + 8], [i + 4, j + 8, i + 8]);
+    faces.push([i + 8, j + 8, 12]);
+  }
+  return { vertices, faces };
+}
+
 export function groupKeys(modules) {
   const { key, centre, centre_shallow, centre_deep, ...others } = modules;
   const seated = key.steps.at(-1).samples.at(-1);
   const sockets = Object.fromEntries(Object.entries(key.actors).filter(([id]) => id.startsWith('socket_')));
   const socketPoses = Object.fromEntries(Object.keys(sockets).map(id => [id, seated[id]]));
+  const capGeometry = chocCapGeometry();
+  const caps = {}, capPoses = {};
+  for (const id of Object.keys(key.actors).filter(id => id.startsWith('switch_'))) {
+    const capId = id.replace('switch_', 'keycap_');
+    caps[capId] = { label: 'Choc keycap (reference)', color: '#e5dbc9', geometry: capGeometry };
+    capPoses[capId] = seated[id];
+  }
+  const liftedCaps = height => Object.fromEntries(Object.entries(capPoses).map(([id, pose]) => {
+    const lifted = [...pose];
+    lifted[11] += height;
+    return [id, lifted];
+  }));
+  const capFit = {
+    title: 'Fit the Keycaps',
+    caption: 'Line up the two pegs on each outer cap and press it straight onto its Choc stem.',
+    duration: 2,
+    samples: Array.from({ length: 25 }, (_, index) => ({ ...seated, ...liftedCaps(18 * (1 - index / 24)) })),
+  };
+  const keySteps = key.steps.map(step => ({
+    ...step,
+    samples: step.samples.map(pose => ({ ...pose, ...liftedCaps(18) })),
+  }));
 
   function paddleView(module, label) {
-    const actors = { ...sockets, ...module.actors };
+    const actors = { ...sockets, ...module.actors, ...caps };
     // The centre installation guide already carries the four seated switches.
     // Include them in the camera bounds when the keys are shown together.
     for (const id of Object.keys(actors).filter(id => id.startsWith('switch_'))) {
@@ -25,17 +77,22 @@ export function groupKeys(modules) {
     }
     const steps = module.steps.map(step => ({
       ...step,
-      samples: step.samples.map(pose => ({ ...socketPoses, ...pose })),
+      samples: step.samples.map(pose => ({ ...socketPoses, ...pose, ...capPoses })),
     }));
-    return { ...module, label, actors, steps, openSeated: true };
+    const note = 'The Choc caps use a reference shape and estimated seated height. The OP1 board, plug and switch also use estimated dimensions.';
+    return { ...module, label, note, actors, steps, openSeated: true, rotation: [.92, 0, .34] };
   }
 
   const views = {
     centre: paddleView(centre, 'Standard paddle'),
     centre_shallow: paddleView(centre_shallow, 'Shallow paddle'),
     centre_deep: paddleView(centre_deep, 'Deep paddle'),
-    key: { ...key, label: 'Fit Choc switches', note: 'Fit the four outer switches and their sockets.' },
+    key: {
+      ...key, label: 'Fit Choc switches and caps', note: 'Fit the outer switches and sockets, then press on the four keycaps.',
+      actors: { ...key.actors, ...caps }, steps: [...keySteps, capFit],
+    },
   };
+  Object.assign(views, potentialKeyViews(views.centre, chocCapGeometry(18.7, 19.92, .3)));
   return { modules: { keys: { ...views.centre, label: 'Keys' }, ...others }, views };
 }
 
@@ -52,7 +109,8 @@ export function validateGuide(guide) {
           if (!Array.isArray(matrix) || matrix.length !== 12 || !matrix.every(Number.isFinite)) throw new Error(`Missing part pose: ${name}/${actor}`);
         }
         for (const [actor, weight] of Object.entries(sample.morphs ?? {})) {
-          if (!module.actors[actor]?.morphFile || !Number.isFinite(weight) || weight < 0 || weight > 1) throw new Error(`Invalid spring pose: ${name}/${actor}`);
+          const record = module.actors[actor];
+          if (!(record?.morphFile || record?.morphGeometry) || !Number.isFinite(weight) || weight < 0 || weight > 1) throw new Error(`Invalid spring pose: ${name}/${actor}`);
         }
       }
     }

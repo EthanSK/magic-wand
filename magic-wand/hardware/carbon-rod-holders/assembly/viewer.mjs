@@ -5,12 +5,16 @@ import { FreeViewInput } from '../../printed-loop-wand/preview/free-view-input.m
 import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/preview/free-view-controls.mjs';
 import { applyViewerWheel } from '../../carbon-rod-holders-r7-spring-clips/preview/wheel-input.mjs';
 import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
-import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=keys-view';
+import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=keycap-annotations-2';
 import { legacyR20 } from './legacy-r20.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');
 const versions = document.getElementById('version'), modules = document.getElementById('module');
 const keysView = document.getElementById('keys-view');
+const keyHeights = document.getElementById('key-heights');
+const keyMechanism = document.getElementById('key-mechanism');
+const annotationHost = document.getElementById('annotations');
+const annotationToggle = document.getElementById('annotation-toggle');
 const input = new FreeViewInput({ minDistance: 8, maxDistance: 900 });
 const scene = new THREE.Scene(); scene.background = new THREE.Color(0x12151c);
 scene.add(new THREE.HemisphereLight(0xe8f4ff, 0x424154, 2.5));
@@ -22,13 +26,61 @@ const canvas = renderer.domElement; canvas.tabIndex = 0;
 canvas.setAttribute('aria-label', '3D assembly. Drag to rotate; scroll or pinch to zoom.');
 let guide, guideUrl, group, actors = {}, module, tools, catalog, loadId = 0, versionLoadId = 0;
 let keyViews;
+let showAnnotations = true, annotations = [];
 const geometries = new Map();
+
+function renderAnnotations() {
+  if (annotationHost.hidden) return;
+  const width = view.clientWidth, height = view.clientHeight;
+  for (const { point, actor, line, dot, card, columnIndex } of annotations) {
+    const projected = point.copy(actor.anchor).applyMatrix4(actors[actor.id].matrixWorld).project(camera);
+    const x = (projected.x + 1) * width / 2, y = (1 - projected.y) * height / 2;
+    const visible = projected.z >= -1 && projected.z <= 1 && x >= 0 && x <= width && y >= 0 && y <= height;
+    line.hidden = dot.hidden = !visible;
+    const rowY = height * (.24 + columnIndex * .27);
+    const cardTop = Math.max(42, Math.min(height - card.offsetHeight - 32, rowY - card.offsetHeight / 2));
+    card.style.top = `${cardTop}px`;
+    if (!visible) continue;
+    const startX = card.dataset.side === 'left' ? card.offsetLeft + card.offsetWidth : card.offsetLeft;
+    const startY = cardTop + card.offsetHeight / 2;
+    line.style.width = `${Math.hypot(x - startX, y - startY)}px`;
+    line.style.transform = `translate(${startX}px,${startY}px) rotate(${Math.atan2(y - startY, x - startX)}rad)`;
+    dot.style.transform = `translate(${x - 3}px,${y - 3}px)`;
+  }
+}
+
+function showAnnotationControls() {
+  annotationToggle.hidden = annotations.length === 0;
+  annotationHost.hidden = annotations.length === 0 || !showAnnotations;
+  annotationToggle.textContent = showAnnotations ? 'Hide annotations' : 'Show annotations';
+  annotationToggle.setAttribute('aria-expanded', String(showAnnotations));
+}
+
+function setAnnotations(records = []) {
+  const sideCount = { left: 0, right: 0 };
+  annotationHost.replaceChildren();
+  annotations = records.map(record => {
+    const line = document.createElement('span'), dot = document.createElement('span'), card = document.createElement('div');
+    line.className = 'annotation-leader'; dot.className = 'annotation-anchor'; card.className = 'assembly-annotation';
+    line.setAttribute('aria-hidden', 'true'); dot.setAttribute('aria-hidden', 'true');
+    card.dataset.side = record.side;
+    const title = document.createElement('strong');
+    title.textContent = record.title; card.append(title, document.createTextNode(record.text));
+    return {
+      line, dot, card, columnIndex: sideCount[record.side]++,
+      point: new THREE.Vector3(), actor: { id: record.actor, anchor: new THREE.Vector3(...record.point) },
+    };
+  });
+  annotationHost.append(...annotations.flatMap(({ line, dot }) => [line, dot]), ...annotations.map(({ card }) => card));
+  showAnnotationControls();
+}
 
 function render() {
   camera.position.set(...input.camera());
   camera.up.set(...input.cameraUp());
   camera.lookAt(...input.target);
   renderer.render(scene, camera);
+  renderAnnotations();
   tools?.update();
 }
 function fit() {
@@ -42,6 +94,17 @@ function reset() {
   input.rotation.setFromEuler(new THREE.Euler(...(module?.rotation ?? [.95, 0, .65]), 'ZXY'));
   input.syncAngles();
   fit();
+}
+function setCutaway(active) {
+  keyMechanism.setAttribute('aria-pressed', String(active));
+  for (const [id, object] of Object.entries(actors)) {
+    if (!module?.actors[id].cutaway) continue;
+    object.material.opacity = active ? .22 : 1;
+    object.material.transparent = active;
+    object.material.depthWrite = !active;
+    object.material.needsUpdate = true;
+  }
+  render();
 }
 function chooseMode(mode) { input.setMode(mode); for (const button of document.querySelectorAll('[data-mode]')) button.setAttribute('aria-pressed', String(button.dataset.mode === mode)); render(); }
 function applyPose({ index, fraction }) {
@@ -84,21 +147,24 @@ async function chooseModule() {
   const request = ++loadId; tools?.assembly.pause(); document.body.dataset.ready = 'loading';
   const isKeys = modules.value === 'keys' && keyViews;
   document.getElementById('keys-view-options').hidden = !isKeys;
+  keyHeights.hidden = !isKeys || keysView.value === 'key';
   const next = isKeys ? keyViews[keysView.value] : guide.modules[modules.value];
+  keyMechanism.hidden = !next.concept;
   const sourceUrl = guideUrl, nextActors = {}, nextGroup = new THREE.Group();
   try {
     for (const [id, record] of Object.entries(next.actors)) {
       const rest = await geometry(record, sourceUrl);
       const color = record.color || '#29a5b7', opacity = record.opacity ?? 1;
       let g = rest;
-      if (record.morphFile) {
-        const target = await geometry({ file: record.morphFile, baseUrl: record.baseUrl }, sourceUrl);
+      if (record.morphFile || record.morphGeometry) {
+        const target = await geometry({ file: record.morphFile, geometry: record.morphGeometry, baseUrl: record.baseUrl }, sourceUrl);
         const positions = target.getAttribute('position');
         if (positions.count !== rest.getAttribute('position').count) throw new Error('Assembly spring shapes do not match');
         // The target shares the exact STL vertex order. Only this component owns
         // the morph binding, so an ordinary view can still reuse the cached STL.
         g = rest.clone();
         g.morphAttributes.position = [positions];
+        if (record.morphGeometry) { rest.dispose(); target.dispose(); }
       }
       const material = record.lines ? new THREE.LineBasicMaterial({ color, transparent: opacity < 1, opacity }) : new THREE.MeshStandardMaterial({ color, roughness: .5, metalness: .08, flatShading: true, transparent: opacity < 1, opacity, depthWrite: opacity === 1 });
       const object = record.lines ? new THREE.LineSegments(g, material) : new THREE.Mesh(g, material);
@@ -108,6 +174,8 @@ async function chooseModule() {
     if (request !== loadId) { disposeGroup(nextGroup); return; }
     if (group) { scene.remove(group); disposeGroup(group); }
     group = nextGroup; actors = nextActors; module = next; scene.add(group);
+    setAnnotations(module.annotations);
+    setCutaway(false);
     document.getElementById('part-note').textContent = module.note;
     document.getElementById('parts').replaceChildren(...Object.entries(module.actors).map(([id, actor]) => {
       const item = document.createElement('li'); item.textContent = actor.label || id.replaceAll('_', ' '); item.style.setProperty('--part-color', actor.color || '#29a5b7'); return item;
@@ -157,7 +225,13 @@ async function chooseVersion(preferred, preferredKeysView) {
     const grouped = groupKeys(nextGuide.modules);
     nextGuide.modules = grouped.modules;
     keyViews = grouped.views;
-    keysView.replaceChildren(...Object.entries(keyViews).map(([id, value]) => new Option(value.label, id)));
+    const potential = document.createElement('optgroup');
+    potential.label = 'Potential components';
+    keysView.replaceChildren();
+    for (const [id, value] of Object.entries(keyViews)) {
+      (value.concept ? potential : keysView).append(new Option(value.label, id));
+    }
+    keysView.append(potential);
     const legacyView = preferred !== 'key' && Object.hasOwn(keyViews, preferred) ? preferred : 'centre';
     keysView.value = Object.hasOwn(keyViews, preferredKeysView) ? preferredKeysView : legacyView;
     if (Object.hasOwn(keyViews, preferred)) preferred = 'keys';
@@ -185,6 +259,27 @@ try {
   document.getElementById('reset').addEventListener('click', reset);
   modules.addEventListener('change', () => chooseModule());
   keysView.addEventListener('change', () => chooseModule());
+  keyHeights.addEventListener('click', () => {
+    tools.assembly.pause();
+    tools.assembly.timeline.seek(tools.assembly.timeline.duration);
+    input.rotation.setFromEuler(new THREE.Euler(1.47, 0, 0, 'ZXY'));
+    input.syncAngles();
+    fit();
+  });
+  keyMechanism.addEventListener('click', () => {
+    const active = keyMechanism.getAttribute('aria-pressed') !== 'true';
+    setCutaway(active);
+    if (active) {
+      input.rotation.setFromEuler(new THREE.Euler(1.23, 0, .64, 'ZXY'));
+      input.syncAngles();
+      fit();
+    }
+  });
+  annotationToggle.addEventListener('click', () => {
+    showAnnotations = !showAnnotations;
+    showAnnotationControls();
+    renderAnnotations();
+  });
   versions.addEventListener('change', () => {
     const requestedVersion = versions.value;
     chooseVersion(modules.value).catch(error => {

@@ -5,8 +5,9 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { validateGuide, sampledPose, identity, groupKeys } from '../hardware/carbon-rod-holders/assembly/assembly-data.mjs';
 import { legacyR20 } from '../hardware/carbon-rod-holders/assembly/legacy-r20.mjs';
+import { UPPER_KEY_SHIFT } from '../hardware/carbon-rod-holders/assembly/keycap-concepts.mjs';
 
-test('R25 Keys opens seated with the centre paddle and four framed Choc switches', () => {
+test('R25 Keys opens seated with the centre paddle and four capped Choc switches', () => {
   const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
   const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
   const version = catalog.versions.find(entry => entry.id === 'r25');
@@ -28,9 +29,61 @@ test('R25 Keys opens seated with the centre paddle and four framed Choc switches
       assert.equal(view.actors[`switch_${key}`].frame, true);
       assert.deepEqual(last[`switch_${key}`], original.steps.at(-1).samples.at(-1)[`switch_${key}`]);
       assert.deepEqual(last[`socket_${key}`], guide.modules.key.steps.at(-1).samples.at(-1)[`socket_${key}`]);
+      assert.ok(view.actors[`keycap_${key}`].geometry.faces.length > 0);
+      assert.deepEqual(last[`keycap_${key}`], last[`switch_${key}`]);
     }
   }
-  assert.equal(views.key.steps, guide.modules.key.steps);
+  assert.deepEqual(views.key.steps.slice(0, -1).map(step => step.title), guide.modules.key.steps.map(step => step.title));
+  const capStep = views.key.steps.length - 1;
+  assert.equal(views.key.steps[capStep].title, 'Fit the Keycaps');
+  for (const key of [0, 2, 3, 4]) {
+    const start = sampledPose(views.key, capStep, 0)[`keycap_${key}`];
+    const end = sampledPose(views.key, capStep, 1)[`keycap_${key}`];
+    assert.equal(start[11] - end[11], 18);
+    assert.deepEqual(end, sampledPose(views.key, capStep, 1)[`switch_${key}`]);
+  }
+});
+
+test('R25 concept views press and return beside the same capped keys', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+  const guide = JSON.parse(readFileSync(new URL(catalog.versions.find(entry => entry.id === 'r25').guide, directory)));
+  const { views } = groupKeys(guide.modules);
+  const variants = Object.entries(views).filter(([, view]) => view.concept);
+  assert.deepEqual(variants.map(([id]) => id), [
+    'concept_slider', 'concept_flexure', 'concept_pivot', 'concept_direct', 'concept_carrier',
+  ]);
+  const seated = views.centre.steps.at(-1).samples.at(-1);
+  for (const [id, view] of variants) {
+    validateGuide({ ...guide, modules: { [id]: view } });
+    const [rest, down, returned] = view.steps.map(step => step.samples.at(-1));
+    assert.deepEqual(rest.cap, returned.cap);
+    assert.notDeepEqual(rest.cap, down.cap);
+    assert.equal(rest.plunger[11], 0);
+    assert.ok(down.plunger[11] < 0);
+    assert.deepEqual(rest.board, down.board);
+    assert.equal(rest.board[5], -1);
+    for (const key of [0, 2, 3, 4]) {
+      const expected = [...seated[`keycap_${key}`]];
+      if (id === 'concept_carrier' && key >= 3) expected[3] += key === 3 ? -UPPER_KEY_SHIFT : UPPER_KEY_SHIFT;
+      assert.deepEqual(down[`keycap_${key}`], expected);
+    }
+    for (const actor of Object.values(view.actors)) {
+      for (const mesh of [actor.geometry, actor.morphGeometry].filter(Boolean)) {
+        assert.ok(mesh.vertices.flat().every(Number.isFinite));
+        if (mesh.faces) assert.ok(mesh.faces.flat().every(i => i >= 0 && i < mesh.vertices.length));
+      }
+    }
+  }
+  const holder = views.concept_carrier;
+  const motion = holder.steps.flatMap(step => step.samples);
+  for (const id of ['cap', 'hinge', 'hingeSupports']) {
+    for (const sample of motion) for (const [x, y, z] of holder.actors[id].geometry.vertices) {
+      const m = sample[id];
+      const along = y * m[5] + z * m[6] + m[7];
+      if (along >= 17.8 - 17.5 / 2) assert.ok(Math.abs(x) <= 9.35 + UPPER_KEY_SHIFT - 16.6 / 2);
+    }
+  }
 });
 
 test('printed-parts catalog includes every assembly and preserves physical-fit limits', async () => {
