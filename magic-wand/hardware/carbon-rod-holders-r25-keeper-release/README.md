@@ -19,6 +19,17 @@ do not measure how much force the printed catch takes or how it will wear.
 The new keeper also seats in the R22 holder. That pair still releases
 over the original sloped ridge.
 
+## Centre-click viewer
+
+[Open Keys](../carbon-rod-holders/assembly/?version=r25&component=keys) to see
+the assembled key area. Choose **Potential components** under **Keys view**
+to compare the five centre-click concepts. **Hide other keycaps** clears the
+four outer caps from the view while keeping the centre cap visible.
+
+Assembly modules can declare their own visibility buttons in
+`helperActions` using an `id`, `hideLabel`, `showLabel` and the `actors`
+to toggle. Reuse the same action ID across views that should share visibility.
+
 ## Print and fit
 
 The two-part trial plate uses the A1 mini PETG recipe with a 255°C nozzle

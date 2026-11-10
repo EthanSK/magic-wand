@@ -5,7 +5,7 @@ import { FreeViewInput } from '../../printed-loop-wand/preview/free-view-input.m
 import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/preview/free-view-controls.mjs';
 import { applyViewerWheel } from '../../carbon-rod-holders-r7-spring-clips/preview/wheel-input.mjs';
 import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
-import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=keycap-annotations-2';
+import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=helper-actions';
 import { legacyR20 } from './legacy-r20.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');
@@ -15,6 +15,8 @@ const keyHeights = document.getElementById('key-heights');
 const keyMechanism = document.getElementById('key-mechanism');
 const annotationHost = document.getElementById('annotations');
 const annotationToggle = document.getElementById('annotation-toggle');
+const actionHost = document.getElementById('model-actions');
+const hiddenActions = new Set();
 const input = new FreeViewInput({ minDistance: 8, maxDistance: 900 });
 const scene = new THREE.Scene(); scene.background = new THREE.Color(0x12151c);
 scene.add(new THREE.HemisphereLight(0xe8f4ff, 0x424154, 2.5));
@@ -86,9 +88,31 @@ function render() {
 function fit() {
   if (!group) return;
   const bounds = new THREE.Box3();
-  for (const [id, object] of Object.entries(actors)) if (module.actors[id].frame !== false) bounds.expandByObject(object);
+  for (const [id, object] of Object.entries(actors)) if (object.visible && module.actors[id].frame !== false) bounds.expandByObject(object);
   if (bounds.isEmpty()) bounds.setFromObject(group);
   bounds.expandByScalar(2); input.fitBounds(bounds.min.toArray(), bounds.max.toArray(), { aspect: camera.aspect }); render();
+}
+function installModelActions(actions = []) {
+  function applyVisibility() {
+    const hiddenActors = new Set(actions.filter(action => hiddenActions.has(action.id)).flatMap(action => action.actors));
+    for (const [id, object] of Object.entries(actors)) object.visible = !hiddenActors.has(id);
+  }
+  actionHost.hidden = actions.length === 0;
+  actionHost.replaceChildren(...actions.map(action => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    const update = () => { button.textContent = hiddenActions.has(action.id) ? action.showLabel : action.hideLabel; };
+    update();
+    button.addEventListener('click', () => {
+      if (hiddenActions.has(action.id)) hiddenActions.delete(action.id);
+      else hiddenActions.add(action.id);
+      applyVisibility();
+      update();
+      render();
+    });
+    return button;
+  }));
+  applyVisibility();
 }
 function reset() {
   input.rotation.setFromEuler(new THREE.Euler(...(module?.rotation ?? [.95, 0, .65]), 'ZXY'));
@@ -175,6 +199,7 @@ async function chooseModule() {
     if (group) { scene.remove(group); disposeGroup(group); }
     group = nextGroup; actors = nextActors; module = next; scene.add(group);
     setAnnotations(module.annotations);
+    installModelActions(module.helperActions);
     setCutaway(false);
     document.getElementById('part-note').textContent = module.note;
     document.getElementById('parts').replaceChildren(...Object.entries(module.actors).map(([id, actor]) => {

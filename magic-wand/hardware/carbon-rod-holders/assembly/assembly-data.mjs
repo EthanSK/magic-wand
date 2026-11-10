@@ -93,6 +93,12 @@ export function groupKeys(modules) {
     },
   };
   Object.assign(views, potentialKeyViews(views.centre, chocCapGeometry(18.7, 19.92, .3)));
+  // Model-specific helper actions name the actors they affect. The viewer can
+  // add controls from this data without knowing which parts make up a model.
+  const otherKeycaps = {
+    id: 'other-keycaps', hideLabel: 'Hide other keycaps', showLabel: 'Show other keycaps', actors: Object.keys(caps),
+  };
+  for (const view of Object.values(views)) view.helperActions = [otherKeycaps];
   return { modules: { keys: { ...views.centre, label: 'Keys' }, ...others }, views };
 }
 
@@ -101,6 +107,10 @@ export function validateGuide(guide) {
   for (const [name, module] of Object.entries(guide.modules)) {
     if (!module.label || !Object.keys(module.actors || {}).length || !module.steps?.length) throw new Error(`Missing component: ${name}`);
     if (module.rotation && (module.rotation.length !== 3 || !module.rotation.every(Number.isFinite))) throw new Error(`Invalid assembly view: ${name}`);
+    for (const action of module.helperActions ?? []) {
+      if (!action.id || !action.hideLabel || !action.showLabel || !action.actors?.length
+          || action.actors.some(id => !Object.hasOwn(module.actors, id))) throw new Error(`Invalid helper action: ${name}`);
+    }
     for (const step of module.steps) {
       if (!step.title || !step.caption || !(step.duration > 0) || !step.samples?.length) throw new Error(`Missing assembly steps: ${name}`);
       for (const sample of step.samples) {

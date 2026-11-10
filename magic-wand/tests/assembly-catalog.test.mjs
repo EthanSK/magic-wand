@@ -18,6 +18,10 @@ test('R25 Keys opens seated with the centre paddle and four capped Choc switches
   assert.equal(modules.keys.label, 'Keys');
   assert.ok(Object.keys(views).every(id => !Object.hasOwn(modules, id)));
   validateGuide({ ...guide, modules: views });
+  for (const view of Object.values(views)) {
+    assert.deepEqual(view.helperActions[0].actors, ['keycap_0', 'keycap_2', 'keycap_3', 'keycap_4']);
+    assert.equal(view.helperActions[0].hideLabel, 'Hide other keycaps');
+  }
   for (const id of ['centre', 'centre_shallow', 'centre_deep']) {
     const view = views[id];
     const original = guide.modules[id];
