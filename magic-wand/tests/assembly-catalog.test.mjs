@@ -3,8 +3,35 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { validateGuide, sampledPose, identity } from '../hardware/carbon-rod-holders/assembly/assembly-data.mjs';
+import { validateGuide, sampledPose, identity, groupKeys } from '../hardware/carbon-rod-holders/assembly/assembly-data.mjs';
 import { legacyR20 } from '../hardware/carbon-rod-holders/assembly/legacy-r20.mjs';
+
+test('R25 Keys opens seated with the centre paddle and four framed Choc switches', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+  const version = catalog.versions.find(entry => entry.id === 'r25');
+  const guide = JSON.parse(readFileSync(new URL(version.guide, directory)));
+  assert.equal(version.groupKeys, true);
+  const { modules, views } = groupKeys(guide.modules);
+  assert.equal(Object.keys(modules)[0], 'keys');
+  assert.equal(modules.keys.label, 'Keys');
+  assert.ok(Object.keys(views).every(id => !Object.hasOwn(modules, id)));
+  validateGuide({ ...guide, modules: views });
+  for (const id of ['centre', 'centre_shallow', 'centre_deep']) {
+    const view = views[id];
+    const original = guide.modules[id];
+    const last = sampledPose(view, view.steps.length - 1, 1);
+    assert.equal(view.openSeated, true);
+    assert.deepEqual(last.paddle, original.steps.at(-1).samples.at(-1).paddle);
+    assert.equal(view.actors.paddle.file, original.actors.paddle.file);
+    for (const key of [0, 2, 3, 4]) {
+      assert.equal(view.actors[`switch_${key}`].frame, true);
+      assert.deepEqual(last[`switch_${key}`], original.steps.at(-1).samples.at(-1)[`switch_${key}`]);
+      assert.deepEqual(last[`socket_${key}`], guide.modules.key.steps.at(-1).samples.at(-1)[`socket_${key}`]);
+    }
+  }
+  assert.equal(views.key.steps, guide.modules.key.steps);
+});
 
 test('printed-parts catalog includes every assembly and preserves physical-fit limits', async () => {
   const oldFetch = globalThis.fetch;

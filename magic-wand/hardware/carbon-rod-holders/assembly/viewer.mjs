@@ -5,11 +5,12 @@ import { FreeViewInput } from '../../printed-loop-wand/preview/free-view-input.m
 import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/preview/free-view-controls.mjs';
 import { applyViewerWheel } from '../../carbon-rod-holders-r7-spring-clips/preview/wheel-input.mjs';
 import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
-import { sampledPose, validateGuide, identity } from './assembly-data.mjs';
+import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=keys-view';
 import { legacyR20 } from './legacy-r20.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');
 const versions = document.getElementById('version'), modules = document.getElementById('module');
+const keysView = document.getElementById('keys-view');
 const input = new FreeViewInput({ minDistance: 8, maxDistance: 900 });
 const scene = new THREE.Scene(); scene.background = new THREE.Color(0x12151c);
 scene.add(new THREE.HemisphereLight(0xe8f4ff, 0x424154, 2.5));
@@ -20,6 +21,7 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); view.prepend(renderer.dom
 const canvas = renderer.domElement; canvas.tabIndex = 0;
 canvas.setAttribute('aria-label', '3D assembly. Drag to rotate; scroll or pinch to zoom.');
 let guide, guideUrl, group, actors = {}, module, tools, catalog, loadId = 0, versionLoadId = 0;
+let keyViews;
 const geometries = new Map();
 
 function render() {
@@ -80,7 +82,10 @@ async function geometry(record, sourceUrl) {
 }
 async function chooseModule() {
   const request = ++loadId; tools?.assembly.pause(); document.body.dataset.ready = 'loading';
-  const next = guide.modules[modules.value], sourceUrl = guideUrl, nextActors = {}, nextGroup = new THREE.Group();
+  const isKeys = modules.value === 'keys' && keyViews;
+  document.getElementById('keys-view-options').hidden = !isKeys;
+  const next = isKeys ? keyViews[keysView.value] : guide.modules[modules.value];
+  const sourceUrl = guideUrl, nextActors = {}, nextGroup = new THREE.Group();
   try {
     for (const [id, record] of Object.entries(next.actors)) {
       const rest = await geometry(record, sourceUrl);
@@ -108,8 +113,15 @@ async function chooseModule() {
       const item = document.createElement('li'); item.textContent = actor.label || id.replaceAll('_', ' '); item.style.setProperty('--part-color', actor.color || '#29a5b7'); return item;
     }));
     document.body.dataset.module = modules.value;
-    tools.assembly.setSteps(module.steps); reset();
-    const url = new URL(location.href); url.searchParams.set('version', versions.value); url.searchParams.set('component', modules.value); history.replaceState(null, '', url);
+    tools.assembly.setSteps(module.steps);
+    if (module.openSeated) tools.assembly.timeline.seek(tools.assembly.timeline.duration);
+    reset();
+    const url = new URL(location.href);
+    url.searchParams.set('version', versions.value);
+    url.searchParams.set('component', modules.value);
+    if (isKeys && keysView.value !== 'centre') url.searchParams.set('keyView', keysView.value);
+    else url.searchParams.delete('keyView');
+    history.replaceState(null, '', url);
     document.body.dataset.ready = 'true'; document.getElementById('error').style.display = 'none';
   } catch (error) {
     disposeGroup(nextGroup);
@@ -125,7 +137,7 @@ function disposeGroup(value) {
   }
 }
 function showError(error) { const box = document.getElementById('error'); box.style.display = 'grid'; box.textContent = error.message; document.body.dataset.ready = 'error'; }
-async function chooseVersion(preferred) {
+async function chooseVersion(preferred, preferredKeysView) {
   const versionRequest = ++versionLoadId; ++loadId;
   tools?.assembly.pause();
   modules.disabled = true;
@@ -140,6 +152,16 @@ async function chooseVersion(preferred) {
     nextGuide.modules.wipe_tower = { label: 'Wipe tower · discard', note: 'This upright piece is a print helper, not part of the wand. It catches nozzle ooze between smooth-timelapse photos. The lines show its actual sliced paths.', actors: { tower: actor }, steps: [{ title: 'Remove After Printing', caption: 'Let the plate cool, then remove and discard the tower. It does not attach to any holder.', duration: 2, samples: [{ tower: identity() }] }] };
   }
   if (versionRequest !== versionLoadId) return;
+  keyViews = undefined;
+  if (version.groupKeys) {
+    const grouped = groupKeys(nextGuide.modules);
+    nextGuide.modules = grouped.modules;
+    keyViews = grouped.views;
+    keysView.replaceChildren(...Object.entries(keyViews).map(([id, value]) => new Option(value.label, id)));
+    const legacyView = preferred !== 'key' && Object.hasOwn(keyViews, preferred) ? preferred : 'centre';
+    keysView.value = Object.hasOwn(keyViews, preferredKeysView) ? preferredKeysView : legacyView;
+    if (Object.hasOwn(keyViews, preferred)) preferred = 'keys';
+  }
   guideUrl = nextGuideUrl; guide = nextGuide;
   modules.replaceChildren(...Object.entries(guide.modules).map(([id, value]) => new Option(value.label, id)));
   modules.disabled = false;
@@ -162,6 +184,7 @@ try {
   document.getElementById('minus').addEventListener('click', () => { input.zoom(1 / .82); render(); });
   document.getElementById('reset').addEventListener('click', reset);
   modules.addEventListener('change', () => chooseModule());
+  keysView.addEventListener('change', () => chooseModule());
   versions.addEventListener('change', () => {
     const requestedVersion = versions.value;
     chooseVersion(modules.value).catch(error => {
@@ -174,5 +197,5 @@ try {
     });
   });
   new ResizeObserver(() => { camera.aspect = view.clientWidth / view.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(view.clientWidth, view.clientHeight, false); render(); }).observe(view);
-  await chooseVersion(requested.get('component'));
+  await chooseVersion(requested.get('component'), requested.get('keyView'));
 } catch (error) { showError(error); }

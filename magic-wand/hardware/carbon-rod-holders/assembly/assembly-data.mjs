@@ -10,6 +10,35 @@ export function sampledPose(module, index, fraction) {
   return samples[Math.round(Math.max(0, Math.min(1, fraction)) * (samples.length - 1))];
 }
 
+export function groupKeys(modules) {
+  const { key, centre, centre_shallow, centre_deep, ...others } = modules;
+  const seated = key.steps.at(-1).samples.at(-1);
+  const sockets = Object.fromEntries(Object.entries(key.actors).filter(([id]) => id.startsWith('socket_')));
+  const socketPoses = Object.fromEntries(Object.keys(sockets).map(id => [id, seated[id]]));
+
+  function paddleView(module, label) {
+    const actors = { ...sockets, ...module.actors };
+    // The centre installation guide already carries the four seated switches.
+    // Include them in the camera bounds when the keys are shown together.
+    for (const id of Object.keys(actors).filter(id => id.startsWith('switch_'))) {
+      actors[id] = { ...actors[id], frame: true };
+    }
+    const steps = module.steps.map(step => ({
+      ...step,
+      samples: step.samples.map(pose => ({ ...socketPoses, ...pose })),
+    }));
+    return { ...module, label, actors, steps, openSeated: true };
+  }
+
+  const views = {
+    centre: paddleView(centre, 'Standard paddle'),
+    centre_shallow: paddleView(centre_shallow, 'Shallow paddle'),
+    centre_deep: paddleView(centre_deep, 'Deep paddle'),
+    key: { ...key, label: 'Fit Choc switches', note: 'Fit the four outer switches and their sockets.' },
+  };
+  return { modules: { keys: { ...views.centre, label: 'Keys' }, ...others }, views };
+}
+
 export function validateGuide(guide) {
   if (guide.schema_version !== 2 || guide.units !== 'mm' || !guide.modules || !Object.keys(guide.modules).length) throw new Error('Assembly guide is incomplete');
   for (const [name, module] of Object.entries(guide.modules)) {
