@@ -1,0 +1,327 @@
+{
+  "layout_sha256": "d33648a6ca2f1cb75e8c4bc3c5a58417084ccfef33f1dd04f3613e19c9cd4727",
+  "generator_sha256": "f38f2c10b9fda22c3e48eb02bdfb0b1f02bd239aa64384592cd571b042bd26de",
+  "project19_sha256": "a70beebc3b524bac199d4b7b221157f36051aaf65671d4fabb9625698367aa60",
+  "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
+  "manifest_sha256": "1e6ff69e4e7df11e1dc86106c2e4703d6b887c0e0596aea85920cbbfe77536b5",
+  "anchors_sha256": "0b3963d6735a2933d316ed5e2e7ed6282e2e0494ed5938a61e34e26b85af7c73",
+  "parts": [
+    "Key_Carrier",
+    "Battery_Holder",
+    "XIAO_Rod_Holder",
+    "Finger_Guard"
+  ],
+  "plate_origins_mm": {
+    "Key_Carrier": [
+      20,
+      125
+    ],
+    "Finger_Guard": [
+      95,
+      130
+    ],
+    "Battery_Holder": [
+      25,
+      75
+    ],
+    "XIAO_Rod_Holder": [
+      100,
+      75
+    ]
+  },
+  "plate_extents_mm": {
+    "Key_Carrier": [
+      [
+        20.0,
+        125.0,
+        0.0
+      ],
+      [
+        75.4000015258789,
+        151.4013328552246,
+        35.20000076293945
+      ]
+    ],
+    "Battery_Holder": [
+      [
+        16.800000190734863,
+        73.5,
+        0.0
+      ],
+      [
+        61.599998474121094,
+        102.68000030517578,
+        33.0
+      ]
+    ],
+    "XIAO_Rod_Holder": [
+      [
+        92.10000038146973,
+        75.0,
+        0.0
+      ],
+      [
+        137.0999984741211,
+        105.62962913513184,
+        28.399999618530273
+      ]
+    ],
+    "Finger_Guard": [
+      [
+        95.0,
+        130.0,
+        0.0
+      ],
+      [
+        154.79999923706055,
+        150.11560249328613,
+        17.0
+      ]
+    ]
+  },
+  "printer": "Bambu Lab A1 mini 0.4 nozzle",
+  "process": "0.20mm Standard @BBL A1M",
+  "filament": [
+    "Generic PETG @BBL A1M"
+  ],
+  "nozzle_c": [
+    "255"
+  ],
+  "bed_c": [
+    "70"
+  ],
+  "process_overrides": {
+    "wall_loops": "3",
+    "sparse_infill_density": "20%",
+    "layer_height": "0.2",
+    "initial_layer_print_height": "0.2",
+    "enable_support": "0",
+    "brim_type": "no_brim",
+    "enable_prime_tower": "1",
+    "print_sequence": "by layer",
+    "bridge_no_support": "1",
+    "max_bridge_length": "12",
+    "initial_layer_speed": [
+      "20"
+    ],
+    "initial_layer_infill_speed": [
+      "30"
+    ],
+    "reduce_crossing_wall": "1",
+    "timelapse_type": "1",
+    "wipe_tower_x": [
+      "120"
+    ],
+    "wipe_tower_y": [
+      "20"
+    ]
+  },
+  "printer_overrides": {
+    "z_hop": [
+      "0.6"
+    ],
+    "z_hop_types": [
+      "Normal Lift"
+    ]
+  },
+  "slow_bands_mm": {
+    "Key_Carrier": [
+      [
+        16.0,
+        16.8
+      ],
+      [
+        33.8,
+        35.2
+      ]
+    ],
+    "Battery_Holder": [
+      [
+        31.0,
+        31.8
+      ]
+    ]
+  },
+  "local_recipe": {
+    "Key_Carrier_bands_mm": [
+      [
+        16.0,
+        16.8
+      ],
+      [
+        33.8,
+        35.2
+      ]
+    ],
+    "Battery_Holder_bands_mm": [
+      [
+        31.0,
+        31.8
+      ]
+    ],
+    "speeds_mm_s": {
+      "outer_wall_speed": 15,
+      "inner_wall_speed": 15,
+      "gap_infill_speed": 12,
+      "internal_solid_infill_speed": 20,
+      "sparse_infill_speed": 20,
+      "top_surface_speed": 20,
+      "bridge_speed": 12,
+      "overhang_1_4_speed": 15,
+      "overhang_2_4_speed": 12,
+      "overhang_3_4_speed": 10,
+      "overhang_4_4_speed": 8
+    },
+    "reason": "The bay opening and clip-relief spans (14.1-15.6 mm) and the gate-slot cap print across air; the slow local speeds give each span time to set. Cooling is not part of the local recipe: fan is a filament-profile setting (fan_min_speed 40 %, fan_cooling_layer_time 30 s), so in these long layers the base fan falls to 40 % and only paths the slicer classifies as overhang wall or bridge get the 90 % overhang/bridge fan; gap-fill and inner-wall paths in the bands print at 40 %. Actual F, M106 and per-feature path lengths by fan level are read back from the G-code into slice-clearances.json; digital evidence does not predict PETG droop, inspect and trim the roofs."
+  },
+  "adhesion_policy": "No slicer brim: it would run into the open rod rings. Every object has labelled 0.4 mm tear-off pads on 1.0 x 0.4 mm ties instead. No automatic support.",
+  "physical_print_verified": false,
+  "slice": {
+    "error_string": "Success.",
+    "return_code": 0,
+    "sliced_plates": [
+      {
+        "feature_type_times": {
+          "Bottom surface": 47.87521743774414,
+          "Bridge": 10.20327091217041,
+          "Custom": 364.7244567871094,
+          "Flush": 28.0,
+          "Gap infill": 497.0124206542969,
+          "Inner wall": 831.3345947265625,
+          "Internal solid infill": 155.73379516601562,
+          "Outer wall": 1250.0172119140625,
+          "Overhang wall": 19.532907485961914,
+          "Prime tower": 251.9853973388672,
+          "Sparse infill": 13.963258743286133,
+          "Top surface": 111.40574645996094,
+          "Travel": 1153.31982421875,
+          "Undefined": 1135.5283203125
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 10.9076566696167,
+            "total_used_g": 12.680689811706543
+          }
+        ],
+        "id": 1,
+        "layer_filament_change": 0,
+        "main_predication": 4062.51171875,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 26.40133285522461,
+              "height": 35.20000076293945,
+              "width": 55.400001525878906,
+              "x": 20.0,
+              "y": 125.0,
+              "z": 0.0
+            },
+            "id": 5,
+            "name": "Key_Carrier",
+            "triangle_count": 77812
+          },
+          {
+            "bbox": {
+              "depth": 29.18000030517578,
+              "height": 33.0,
+              "width": 44.79999923706055,
+              "x": 16.80000114440918,
+              "y": 73.5,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "Battery_Holder",
+            "triangle_count": 8972
+          },
+          {
+            "bbox": {
+              "depth": 30.629629135131836,
+              "height": 28.399999618530273,
+              "width": 45.0,
+              "x": 92.0999984741211,
+              "y": 75.0,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "XIAO_Rod_Holder",
+            "triangle_count": 8514
+          },
+          {
+            "bbox": {
+              "depth": 20.115602493286133,
+              "height": 17.0,
+              "width": 59.79999923706055,
+              "x": 95.0,
+              "y": 130.0,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "Finger_Guard",
+            "triangle_count": 33244
+          }
+        ],
+        "times": {
+          "conflict_check_time": 66,
+          "detect_overhangs_time": 35,
+          "export_gcode_time": 11502,
+          "flush_plan_time": 0,
+          "generate_support_material_time": 126,
+          "infill_generate_time": 109,
+          "infill_time": 307,
+          "ironing_time": 0,
+          "make_perimeters_time": 982,
+          "multifilament_segment_2d_time": 0,
+          "other_slice_time": 9,
+          "prepare_infill_time": 198,
+          "region_split_time": 25,
+          "skirt_brim_time": 0,
+          "slice_layers_time": 340,
+          "sliced_time": 13253,
+          "sliced_time_with_cache": 11502,
+          "support_detect_time": 0,
+          "support_interface_time": 0,
+          "support_normal_generate_time": 0,
+          "support_toolpath_time": 0,
+          "support_tree_generate_time": 0,
+          "toolpath_time": 122,
+          "wall_time": 616,
+          "wipe_tower_time": 87
+        },
+        "total_predication": 4717.43017578125,
+        "triangle_count": 128542,
+        "warning_message": ""
+      }
+    ]
+  },
+  "warnings": [],
+  "delivered_settings_registration": {
+    "cli_dropped_keys": [],
+    "values_unchanged": true
+  },
+  "sliced_project_filename": "R20-A1-mini-PETG.gcode.3mf",
+  "sliced_project_sha256": "e4208007036bd96445c72094a4980838b76dc9cb19c27f3af7798723bdd06f89",
+  "executable_commands": {
+    "passed": true,
+    "project_sha256": "e4208007036bd96445c72094a4980838b76dc9cb19c27f3af7798723bdd06f89",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "layer_change_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 255.0,
+    "first_object_bed_target_c": 70.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ]
+  },
+  "slice_info_warnings": [],
+  "bambu_studio_version": "02.09.01.70"
+}

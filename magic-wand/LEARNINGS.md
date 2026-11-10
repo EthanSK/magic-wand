@@ -2346,6 +2346,13 @@ windows. Check the actual populated pad rows and the fixed material behind each
 sacrificial tie after every local cut. Keep solder protrusion unmeasured until a
 real assembly establishes it.
 
+R20's guard also passed a whole-layer area screen while seven separate members
+relied on narrow end rims to transfer load. Check the connecting rims and each
+root, not the sum of those islands. Likewise, six individually bordered key
+windows aligned their cuts through the same eleven layers: inspect material
+loss along the print direction as well as the margin around each hole. These
+were digital review findings, not observed physical fractures.
+
 A widest inscribed core is not a minimum neck thickness. List narrow ligaments
 separately, and do not compare a locally braced member with a whole holder as a
 claim about relative whole-body stiffness. Similarly, retaining a ring's bore
@@ -2410,3 +2417,23 @@ Pause and cancel a pending animation frame before replacing the recipe; preserve
 the requested slider value before pause redraws its controls. Both transitions
 were exercised in the browser alongside an unchanged R16 viewer. Illustrative
 electronics and latch motion remain distinct from physical fit and force.
+
+### 2026-11-09 — Timelapse compatibility and exported-solid identity
+
+Self-improved — R20's A1 mini slice raised `not_support_traditional_timelapse`
+with Traditional capture and no wipe tower. The installed Studio text requires a
+tower for Smooth capture. Smooth with a generated tower removed the warning in
+the final slice and after reloading and re-slicing that exact archive. Check the
+actual tower footprint, including its own brim, against the bed and every
+component/pad, rather than trusting its configured location. The R20 checker
+found a roughly 19.2 mm footprint over 39 mm from the holders. Its plastic is
+discarded capture material, separate from installed wand mass. Still verify the
+send-dialog Timelapse switch and a playable saved video on a real job.
+
+Self-improved — a successful Manifold simplify/export can change a solid near
+tangent bore/chamfer faces without reporting an error. R20 guard trials at
+4.2–4.3 mm keel-bore radius changed 1–3.5 mm3 on rebuilding; 4.5 mm avoided that
+case. Rebuild the final written STL, return it through its real transform and
+compare against the source solid. `holder20.export` rejects drift above 0.02 mm3.
+Do not generalise the successful radius into a universal tolerance or infer a
+physical printing cause from this digital library behaviour.

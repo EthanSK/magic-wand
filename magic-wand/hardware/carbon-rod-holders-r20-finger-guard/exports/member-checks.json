@@ -1,0 +1,101 @@
+{
+  "manifest_sha256": "1e6ff69e4e7df11e1dc86106c2e4703d6b887c0e0596aea85920cbbfe77536b5",
+  "checker_sha256": "7fb1b142f59fb1ff0b852b180e82079061a69ac1f0aff10c92a365e33f42b7a0",
+  "scope": "Exported meshes. slice20.py repeats both on actual beads.",
+  "physical_strength_verified": false,
+  "Finger_Guard": {
+    "layers": 85,
+    "layers_where_gunwale_and_keel_are_one_piece": {
+      "rear": {
+        "+X": 9,
+        "-X": 9
+      },
+      "front": {
+        "+X": 11,
+        "-X": 11
+      }
+    },
+    "rim_height_at_each_bay_centre_mm": {
+      "rear": {
+        "+X bay 0": 1.8,
+        "+X bay 1": 1.8,
+        "+X bay 2": 1.8,
+        "-X bay 0": 1.8,
+        "-X bay 1": 1.8,
+        "-X bay 2": 1.8
+      },
+      "front": {
+        "+X bay 0": 2.2,
+        "+X bay 1": 2.2,
+        "+X bay 2": 2.2,
+        "-X bay 0": 2.2,
+        "-X bay 1": 2.2,
+        "-X bay 2": 2.2
+      }
+    },
+    "layers_with_separate_members_only": 65,
+    "pieces_in_those_layers": [
+      7
+    ],
+    "smallest_rail_section_in_those_layers_mm2": {
+      "+X rail 0": 2.859,
+      "+X rail 1": 2.859,
+      "-X rail 0": 2.859,
+      "-X rail 1": 2.859
+    },
+    "rail_section_as_designed_mm2": 3.0
+  },
+  "Key_Carrier_against_R16": {
+    "whole_mm2": {
+      "smallest_r20_over_r16": 0.843,
+      "at_y_mm": 12.0,
+      "r20_mm2": 131.2,
+      "r16_mm2": 155.67,
+      "layers_reduced_by_more_than_2_percent": 44,
+      "smallest_layer_r20_mm2": 63.67,
+      "smallest_layer_r20_at_y_mm": -0.0,
+      "smallest_layer_r16_mm2": 63.67,
+      "smallest_layer_r16_at_y_mm": -0.0
+    },
+    "board_mm2": {
+      "smallest_r20_over_r16": 0.729,
+      "at_y_mm": 22.6,
+      "r20_mm2": 28.35,
+      "r16_mm2": 38.91,
+      "layers_reduced_by_more_than_2_percent": 45,
+      "smallest_layer_r20_mm2": 14.0,
+      "smallest_layer_r20_at_y_mm": -7.8,
+      "smallest_layer_r16_mm2": 14.0,
+      "smallest_layer_r16_at_y_mm": -7.8
+    },
+    "lower_row_board_level": {
+      "layers": 76,
+      "largest_area_loss_mm2": 0.0,
+      "layers_split_into_more_pieces_than_r16": 0
+    },
+    "bands_of_layers_that_lose_section": [
+      {
+        "y_mm": [
+          20.4,
+          24.2
+        ],
+        "smallest_r20_over_r16": 0.869
+      },
+      {
+        "y_mm": [
+          12.4,
+          15.0
+        ],
+        "smallest_r20_over_r16": 0.915
+      },
+      {
+        "y_mm": [
+          10.2,
+          12.0
+        ],
+        "smallest_r20_over_r16": 0.843
+      }
+    ]
+  },
+  "passed": true
+}

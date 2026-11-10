@@ -1,0 +1,228 @@
+{
+  "revision": "carbon-rod-holders-r20-finger-guard",
+  "source_sha256": {
+    "holder20.py": "cda2eb3d89e16f8053c9fcd19f307ff0c5f10fdbbe68fab6462cb06c46ad90ca",
+    "parameters.json": "2aec2329800475e6508c70048dc447cf132c918535b1d4ef6503cff52cb20361",
+    "../carbon-rod-holders-r19-lightweight/holder19.py": "b6676a636d83558b73070f2b758985c6c42d0ed88576cf37226132fb82781a78",
+    "../carbon-rod-holders-r19-lightweight/parameters.json": "262cf0cba359bfe98a7de87f1c9bd836df62e3606c91a2e75301bac70ed73d8a",
+    "../carbon-rod-holders-r18-easy-release/holder18.py": "8f57edd254db75d7f2aaaaaffe93a98616504cec0a8574c6ccab247af3b94ab6",
+    "../carbon-rod-holders-r18-easy-release/parameters.json": "7873348e6c28b65b95761b9c4437e1c2bdf4345f4e8c20c7f05630bab600e7c0",
+    "../carbon-rod-holders-r17-anchored-repair/holder17.py": "9a63b8804df9d5fd5751c864ed7667f36f4c42934984b967978d3b9ee61aadb1",
+    "../carbon-rod-holders-r17-anchored-repair/parameters.json": "841c50b7a1fdedc202c626bf98faa91d53941abaffb8bedff932bb5616162d97",
+    "../carbon-rod-holders-r16-repair/holder16.py": "b44f93894404aaa6e1ee4b30c0db34ac9fc3fa298db8f607af3bdd0cc3dd4cd7",
+    "../carbon-rod-holders-r16-repair/spaces16.py": "286d6d993d6f52a255027f74eac7752c9e879f911ff43041eeae523432caedae",
+    "../carbon-rod-holders-r16-repair/parameters.json": "03a53347dddc7465892ef6486c5e1024bfd287bd2a1e2aaa03c6d08e7983ac2a"
+  },
+  "parts": {
+    "Key_Carrier": {
+      "bounds_mm": [
+        [
+          -27.700000762939453,
+          -8.300000190734863,
+          -4.781332969665527
+        ],
+        [
+          27.700000762939453,
+          26.899999618530273,
+          11.119999885559082
+        ]
+      ],
+      "volume_mm3": 3999.758692852785,
+      "solid_PETG_g": 5.079693539923037,
+      "print_height_mm": 35.20000076293945,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "d9ffa43656a44add8a81fade5d2ead5f8a1f2c9524c0680786a9827aa3881d57",
+      "assembly_stl_sha256": "0fc8373fd9bb9fb6727c8e48e9113bd8bdb61ed71d6b9e5651d3de46d353012a",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -27.700000762939453
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          26.899999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.781332969665528
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Battery_Holder": {
+      "bounds_mm": [
+        [
+          -14.199999809265137,
+          -17.799999237060547,
+          -4.829628944396973
+        ],
+        [
+          14.199999809265137,
+          15.199999809265137,
+          12.350000381469727
+        ]
+      ],
+      "volume_mm3": 1950.8968600275773,
+      "solid_PETG_g": 2.477639012235023,
+      "print_height_mm": 33.0,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "51f3142cc251291813a4820f92aecc9aa46cf1b7b753fc557e659e6bbfe03f7e",
+      "assembly_stl_sha256": "a186d272738502d0a71da0fbabc8171e9df7a004f6c07faa01853d5b20f3f826",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.199999809265137
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          15.199999809265137
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "XIAO_Rod_Holder": {
+      "bounds_mm": [
+        [
+          -14.600000381469727,
+          -5.0,
+          -4.829628944396973
+        ],
+        [
+          14.600000381469727,
+          23.399999618530273,
+          15.300000190734863
+        ]
+      ],
+      "volume_mm3": 1633.0786082123843,
+      "solid_PETG_g": 2.074009832429728,
+      "print_height_mm": 28.399999618530273,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "7b839a6f549308dcb82baf1b9cfa1836c4d3309a1686e08451d41626a5878b30",
+      "assembly_stl_sha256": "ef4a5efa406add6141d9e67f0501a6303684105e449d858bbb39fe2de3d658e9",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.600000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          23.399999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    "Finger_Guard": {
+      "bounds_mm": [
+        [
+          -29.899999618530273,
+          -8.300000190734863,
+          -7.536102294921875
+        ],
+        [
+          29.899999618530273,
+          8.699999809265137,
+          7.400000095367432
+        ]
+      ],
+      "volume_mm3": 1307.7718466069832,
+      "solid_PETG_g": 1.6608702451908688,
+      "print_height_mm": 17.0,
+      "body_count": 1,
+      "watertight": true,
+      "stl_sha256": "8f1f5508ce5752e30a2c4badc352259215722d17fc42c000eded8f64b426287c",
+      "assembly_stl_sha256": "907c1f2cdbbb808092996021a4c94c26b4ca91e0a0c5956ddf55af2bfc51a78e",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -29.899999618530273
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          8.699999809265137
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -7.536102294921877
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  },
+  "plate_parts": [
+    "Key_Carrier",
+    "Battery_Holder",
+    "XIAO_Rod_Holder",
+    "Finger_Guard"
+  ],
+  "assembly_frame": "Each part is in its own frame, rod axis along Y. Finger_Guard shares the Key_Carrier frame.",
+  "unchanged_from_r19_stl_sha256": {
+    "Battery_End_Door": "fb7d11bbf99a2cbdd22f962dadb8b147591668362d7ddf452e32087d69c3caec",
+    "XIAO_Near_Keeper": "a5974e52c23839d0b1214408b57ac908ad75d9328dff9e2c60f3b2239a5ee760",
+    "Battery_Spacer_0p4mm": "001e39e87ac1c742b778973345a96eb3401f026abdf86d75dc696b411fc6fd9f",
+    "Battery_Spacer_0p6mm": "64003602370c88d7b7cdf4c1a9dd02aa88bf4a1b1d8ee3c9fd2f935cb8ad4eb2",
+    "Battery_Spacer_0p8mm": "ec2294e39734af33a133cfbb4964e536f2adc8cff103fb11eab408ffd3873666"
+  },
+  "superseded_stl_sha256": {
+    "Key_Carrier (R16)": "2dab77208d18cde474d206ac90c9bb345d315751fa23769fd27e74df5eb4d2f0",
+    "Battery_Holder (R19)": "4319800ff7cc512b63d352a3d291bf8403eca331f873c6e0116c44b9ab1baa9b",
+    "XIAO_Rod_Holder (R19)": "7efef5ada69c6668f4b9a105de5e6d155afbcd2d41f9327666b33f4f2952fce6"
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false
+}

@@ -1,0 +1,1335 @@
+{
+  "manifest_sha256": "1e6ff69e4e7df11e1dc86106c2e4703d6b887c0e0596aea85920cbbfe77536b5",
+  "checker_sha256": "2840d31987cc8b4ae00918c035b5aed96ac1b7e9256472511cb2ac49db759adb",
+  "physical_fit_verified": false,
+  "physical_comfort_verified": false,
+  "physical_strength_verified": false,
+  "Key_Carrier": {
+    "solid_mm3": 3999.8,
+    "solid_PETG_g": 5.08,
+    "r16_solid_PETG_g": 5.196,
+    "change_solid_PETG_g": -0.116,
+    "ring_bore_mm": 7.8,
+    "r16_ring_bore_mm": 7.9,
+    "nominal_squeeze_on_8_mm_rod_mm": {
+      "r16": 0.1,
+      "r20": 0.2
+    },
+    "windows_added": {
+      "under_upper_switch_fronts": 4,
+      "shoulders": 2,
+      "removed_mm3": 90.5
+    },
+    "ring_change_mm3": {
+      "added_inside_the_old_bore": 12.62,
+      "removed_from_the_outside": 13.75
+    },
+    "change_outside_windows_and_rings_mm3": 1e-05,
+    "working_space_overlap_mm3": {
+      "unloaded_clip_bore": 2e-06,
+      "clip_gap_mid": 0.0,
+      "clip_gap_rear": 0.0,
+      "external_wire_bus": 0.0,
+      "key_0_switch": 0.0,
+      "key_0_socket": 3e-06,
+      "key_0_maximum_socket": 7e-06,
+      "key_0_socket_loading": 3e-06,
+      "key_0_maximum_socket_loading": 7e-06,
+      "key_0_socket_tape_zone": 0.0,
+      "key_0_mount_opening": 0.0,
+      "key_0_clip_relief": 0.0,
+      "key_0_cap_travel": 0.0,
+      "key_1_switch": 0.0,
+      "key_1_socket": 2e-06,
+      "key_1_maximum_socket": 1e-05,
+      "key_1_socket_loading": 2e-06,
+      "key_1_maximum_socket_loading": 1e-05,
+      "key_1_socket_tape_zone": 0.0,
+      "key_1_mount_opening": 1e-06,
+      "key_1_clip_relief": 0.0,
+      "key_1_cap_travel": 0.0,
+      "key_2_switch": 0.0,
+      "key_2_socket": 3e-06,
+      "key_2_maximum_socket": 1e-05,
+      "key_2_socket_loading": 3e-06,
+      "key_2_maximum_socket_loading": 1e-05,
+      "key_2_socket_tape_zone": 0.0,
+      "key_2_mount_opening": 1e-06,
+      "key_2_clip_relief": 0.0,
+      "key_2_cap_travel": 0.0,
+      "key_3_switch": 0.0,
+      "key_3_socket": 3e-06,
+      "key_3_maximum_socket": 9e-06,
+      "key_3_socket_loading": 3e-06,
+      "key_3_maximum_socket_loading": 9e-06,
+      "key_3_socket_tape_zone": 0.0,
+      "key_3_mount_opening": 2e-06,
+      "key_3_clip_relief": 1e-06,
+      "key_3_cap_travel": 0.0,
+      "key_4_switch": 0.0,
+      "key_4_socket": 2e-06,
+      "key_4_maximum_socket": 1.2e-05,
+      "key_4_socket_loading": 2e-06,
+      "key_4_maximum_socket_loading": 1.2e-05,
+      "key_4_socket_tape_zone": 0.0,
+      "key_4_mount_opening": 2.8e-05,
+      "key_4_clip_relief": 1e-06,
+      "key_4_cap_travel": 0.0
+    },
+    "plastic_narrower_than_1p18_mm_by_level": {
+      "windows_keep_a_1p19_mm_border": {
+        "socket_board_level": {
+          "windows": 6,
+          "largest_shortfall_of_a_1p19_mm_border_mm2": 0.0
+        },
+        "switch_plate_level": {
+          "windows": 2,
+          "largest_shortfall_of_a_1p19_mm_border_mm2": 0.0
+        }
+      },
+      "cut_from_the_lower_row_mm3": 0.0
+    },
+    "by_level": {
+      "rings_saddle_and_lead_in_below_the_slab": {
+        "z_mm": [
+          -20,
+          7.27
+        ],
+        "r16_solid_PETG_g": 0.92,
+        "r20_solid_PETG_g": 0.919
+      },
+      "socket_board_level": {
+        "z_mm": [
+          7.27,
+          8.87
+        ],
+        "r16_solid_PETG_g": 2.451,
+        "r20_solid_PETG_g": 2.361
+      },
+      "clip_relief_level": {
+        "z_mm": [
+          8.87,
+          9.92
+        ],
+        "r16_solid_PETG_g": 0.765,
+        "r20_solid_PETG_g": 0.753
+      },
+      "switch_plate": {
+        "z_mm": [
+          9.92,
+          11.12
+        ],
+        "r16_solid_PETG_g": 1.06,
+        "r20_solid_PETG_g": 1.047
+      }
+    },
+    "why_3p85_mm_thick": "Kailh Choc V1 needs a 1.2 mm plate whose top sits 2.2 mm above the board the housing rests on, and its hot-swap socket is made for a 1.6 mm board: 1.2 + 1.05 + 1.6 = 3.85 mm. None of the three can be thinner where a key sits. Away from the sockets the board level was already 1.2 mm.",
+    "not_taken": "Larger windows need new 12-15 mm flat bridges or thin the board level where the R15 key holder snapped. The saddle and rings are the twist load path and are left solid.",
+    "status": "Rod grip, twist friction and insertion force are unmeasured. The R16 key holder remains the fallback."
+  },
+  "Battery_Holder": {
+    "solid_mm3": 1950.9,
+    "solid_PETG_g": 2.478,
+    "r19_solid_PETG_g": 2.599,
+    "change_solid_PETG_g": -0.122,
+    "length_mm": 33.0,
+    "r19_length_mm": 35.6,
+    "removed": "2.6 mm of empty gap between the cell stop and the end frame",
+    "cell_stop_y_mm": 14.0,
+    "cell_stop": "end frame side posts, X 8.8-10.6 mm each side, where the two corner blocks were",
+    "difference_from_r19_up_to_the_far_ring_mm3": 0.0,
+    "difference_of_end_frame_and_ring_from_r19_moved_mm3": 1e-05,
+    "bed_section_difference_from_r19_mm2": 1.1e-05,
+    "working_space_overlap_mm3": {
+      "unloaded_clip_bore": 1e-06,
+      "clip_gap_near": 0.0,
+      "external_wire_bus": 0.0,
+      "reverse_wire_bus": 0.0,
+      "cell_reserve": 0.0,
+      "cell_loading": 0.0,
+      "gate_removal_route": 0.0,
+      "gate_slot_+1": 2e-06,
+      "gate_slot_-1": 3e-06,
+      "lead_exit": 0.0,
+      "clip_gap_far": 0.0
+    },
+    "reserve_moved_0p6_mm_past_the_stop_overlap_mm3": {
+      "r20": 17.448,
+      "r19": 9.288
+    },
+    "reserve_moved_sideways_or_vertically_overlap_mm3": {
+      "+Z": 127.175,
+      "-Z": 27.454,
+      "+X": 100.091,
+      "-X": 100.091
+    },
+    "door_and_all_three_spacers_overlap_mm3": 0.0,
+    "status": "Identified from the phone photo as the closed end; no dimension was taken from the photo. Cell fit and door use the unchanged R19 geometry and are unverified on the shorter part."
+  },
+  "XIAO_Rod_Holder": {
+    "solid_mm3": 1633.1,
+    "solid_PETG_g": 2.074,
+    "r19_solid_PETG_g": 1.928,
+    "change_solid_PETG_g": 0.146,
+    "removed_from_r19_mm3": 0.0,
+    "added_outside_ring_walls_and_cheeks_mm3": 0.0,
+    "side_walls": {
+      "inner_face_x_mm": 10.0,
+      "gap_to_board_edge_mm": 1.11,
+      "top_above_board_top_mm": 1.15,
+      "board_sits_this_deep_between_them_mm": 2.4,
+      "beside_pad_rows_y_mm": [
+        3.2,
+        20.75
+      ],
+      "thickness_mm": 1.2
+    },
+    "far_corner_cheeks": {
+      "inner_face_x_mm": 9.2,
+      "gap_to_board_edge_mm": 0.31,
+      "y_mm": [
+        20.3,
+        23.4
+      ],
+      "last_pad_allowance_ends_y_mm": 20.16
+    },
+    "board_free_sideways_travel_each_way_mm": {
+      "r20": 0.32,
+      "r19_at_the_usb_end": 0.44
+    },
+    "board_axial_travel_mm": {
+      "toward_near_stops": 0.42,
+      "toward_far_stops": 0.37
+    },
+    "far_ring": {
+      "band_y_mm": [
+        19.8,
+        23.4
+      ],
+      "width_mm": 3.6,
+      "r19_width_mm": 2.4,
+      "bore_mm": 7.9,
+      "root_wall_mm": 1.4,
+      "crown_bonded_to_degrees_from_crown": {
+        "added_1p2_mm_strip": 15.5,
+        "r19_band_on_the_v_bars": 36.5
+      },
+      "free_arm_arc_degrees": {
+        "added_1p2_mm_strip": 149.5,
+        "r19_band_on_the_v_bars": 128.5
+      },
+      "added_arms_to_nearest_other_plastic_mm": 1.15,
+      "near_ring": "unchanged: 2.4 mm band with its 45-degree print lead-in"
+    },
+    "working_space_overlap_mm3": {
+      "unloaded_clip_bore": 0.000504,
+      "clip_gap_near": 0.0,
+      "clip_gap_far": 0.0,
+      "board": 0.0,
+      "usb_connector": 0.0,
+      "usb_plug_body": 0.0,
+      "board_underside_centre": 0.0,
+      "wire_route": 0.0,
+      "component_shield": 0.0,
+      "component_usb_c": 0.0,
+      "component_antenna": 0.0,
+      "component_pdm_microphone": 0.0,
+      "component_reset_button": 0.0,
+      "component_user_led": 0.0,
+      "component_charge_led": 0.0,
+      "castellation_solder": 0.0,
+      "wire_exit_down_outboard_+1": 0.0,
+      "wire_run_past_near_post_+1": 0.0,
+      "wire_exit_down_outboard_-1": 0.0,
+      "wire_run_past_near_post_-1": 0.0,
+      "board_insertion": 0.001023,
+      "retainer_groove_+1": 1e-06,
+      "retainer_groove_-1": 1e-06,
+      "retainer_route": 0.0,
+      "solder_underside_row0_+1": 0.0,
+      "solder_underside_row0_-1": 0.0,
+      "solder_underside_row1_+1": 0.0,
+      "solder_underside_row1_-1": 0.0,
+      "solder_underside_row2_+1": 0.0,
+      "solder_underside_row2_-1": 0.0,
+      "solder_underside_row3_+1": 0.0,
+      "solder_underside_row3_-1": 0.0,
+      "solder_underside_row4_+1": 0.0,
+      "solder_underside_row4_-1": 0.0,
+      "solder_underside_row5_+1": 0.0,
+      "solder_underside_row5_-1": 0.0,
+      "solder_underside_row6_+1": 0.0,
+      "solder_underside_row6_-1": 0.0,
+      "board_travel_between_cheeks": 0.0,
+      "wire_up_from_pad_00": 0.0,
+      "wire_out_over_wall_00": 0.0,
+      "wire_up_from_pad_01": 0.0,
+      "wire_out_over_wall_01": 0.0,
+      "wire_up_from_pad_02": 0.0,
+      "wire_out_over_wall_02": 0.0,
+      "wire_up_from_pad_03": 0.0,
+      "wire_out_over_wall_03": 0.0,
+      "wire_up_from_pad_04": 0.0,
+      "wire_out_over_wall_04": 0.0,
+      "wire_up_from_pad_05": 0.0,
+      "wire_out_over_wall_05": 0.0,
+      "wire_up_from_pad_06": 0.0,
+      "wire_out_over_wall_06": 0.0,
+      "wire_up_from_pad_07": 0.0,
+      "wire_out_over_wall_07": 0.0,
+      "wire_up_from_pad_08": 0.0,
+      "wire_out_over_wall_08": 0.0,
+      "wire_up_from_pad_09": 0.0,
+      "wire_out_over_wall_09": 0.0,
+      "wire_up_from_pad_10": 0.0,
+      "wire_out_over_wall_10": 0.0,
+      "wire_up_from_pad_11": 0.0,
+      "wire_out_over_wall_11": 0.0,
+      "wire_up_from_pad_12": 0.0,
+      "wire_out_over_wall_12": 0.0,
+      "wire_up_from_pad_13": 0.0,
+      "wire_out_over_wall_13": 0.0
+    },
+    "keeper_and_component_overlap_mm3": 0.0,
+    "status": "Wires must now rise 1.15 mm before turning outward. Real solder, wire and header sizes are unmeasured; board fit and keeper retention are unverified."
+  },
+  "Finger_Guard": {
+    "solid_mm3": 1307.8,
+    "solid_PETG_g": 1.661,
+    "bounds_mm": [
+      -29.9,
+      -8.3,
+      -7.536,
+      29.9,
+      8.7,
+      7.4
+    ],
+    "below_rod_axis_mm": 7.54,
+    "below_rod_surface_mm": 3.54,
+    "wider_than_key_holder_each_side_mm": 2.2,
+    "wing_angle_degrees": 18.69,
+    "bay_clear_width_mm": 7.69,
+    "own_keep_clear_overlap_mm3": {
+      "unloaded_clip_bore": 0.000191,
+      "rigid_rod_corridor_between_rings": 0.0,
+      "wire_crossing_sector_over_rod": 0.0,
+      "six_windows_between_the_rails": 0.0
+    },
+    "seated": {
+      "key_holder": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 0.3
+      },
+      "r16_key_holder": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 0.3
+      },
+      "key_0_switch": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 1.859
+      },
+      "key_0_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 4.245
+      },
+      "key_0_maximum_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 4.204
+      },
+      "key_0_tape_and_wire_under_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 2.337
+      },
+      "key_1_switch": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 3.581
+      },
+      "key_1_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 1.983
+      },
+      "key_1_maximum_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 1.98
+      },
+      "key_1_tape_and_wire_under_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 0.75
+      },
+      "key_2_switch": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 1.859
+      },
+      "key_2_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 0.819
+      },
+      "key_2_maximum_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 0.619
+      },
+      "key_2_tape_and_wire_under_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 0.6
+      },
+      "key_3_switch": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 6.023
+      },
+      "key_3_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 3.882
+      },
+      "key_3_maximum_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 3.786
+      },
+      "key_3_tape_and_wire_under_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 1.102
+      },
+      "key_4_switch": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 6.024
+      },
+      "key_4_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 8.0
+      },
+      "key_4_maximum_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 8.0
+      },
+      "key_4_tape_and_wire_under_socket": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 8.0
+      },
+      "wire_bus": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 0.781
+      },
+      "key_0_terminal_0": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 2.5
+      },
+      "key_0_terminal_1": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 5.143
+      },
+      "key_1_terminal_0": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 0.72
+      },
+      "key_1_terminal_1": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 3.652
+      },
+      "key_2_terminal_0": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 4.724
+      },
+      "key_2_terminal_1": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 0.22
+      },
+      "key_3_terminal_0": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 2.107
+      },
+      "key_3_terminal_1": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 5.397
+      },
+      "key_4_terminal_0": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 8.0
+      },
+      "key_4_terminal_1": {
+        "overlap_mm3": 0.0,
+        "smallest_gap_mm": 8.0
+      }
+    },
+    "smallest_gap_to_lower_row_bought_parts_and_allowances_mm": 0.22,
+    "slide_on_route": {
+      "steps_mm": [
+        0.25,
+        19.0,
+        0.25
+      ],
+      "largest_overlap_mm3": 0.0,
+      "obstacles": "R20 and R16 key holders, switches, largest sockets, tape and wire zones under sockets, terminal allowances"
+    },
+    "pushed_home": {
+      "free_travel_toward_tip_mm": 0.3,
+      "stop_bounds_mm": [
+        -5.0,
+        9.0,
+        -4.8,
+        5.0,
+        9.05,
+        3.65
+      ],
+      "stop": "guard rear ring against the key holder middle ring"
+    },
+    "twist_until_a_pad_bears": {
+      "+1": {
+        "free_twist_degrees": 0.63,
+        "first_contact_bounds_mm": [
+          -27.7,
+          -5.7,
+          7.67,
+          -25.91,
+          -1.1,
+          7.7
+        ]
+      },
+      "-1": {
+        "free_twist_degrees": 0.63,
+        "first_contact_bounds_mm": [
+          25.91,
+          -5.7,
+          7.67,
+          27.7,
+          -1.1,
+          7.7
+        ]
+      }
+    },
+    "free_arm_to_hull_gap_mm": 0.781,
+    "ring_skirt_lead_mm": 9.01,
+    "fits": "the R20 key holder and the accepted R16 one"
+  },
+  "fingertip_probe": {
+    "method": "Rigid ball rolled from outside over the key holder, rod, switches, sockets and guard on a 0.25 mm grid; clearance is centre distance minus radius, so a negative or near-zero value means the ball touches. Grid error about 0.25 mm.",
+    "lower_row_summary_by_ball_radius_mm": {
+      "5": {
+        "bare_key_holder_smallest_clearance_to_allowance_mm": -0.63,
+        "with_guard_smallest_clearance_to_allowance_mm": 0.97,
+        "with_guard_smallest_clearance_to_metal_mm": 1.84,
+        "closest_with_guard": "key_2_terminal_0",
+        "lower_row_with_guard": {
+          "key_0_terminal_0": {
+            "metal": 2.67,
+            "with_stated_solder_and_wire_allowance": 1.28
+          },
+          "key_0_terminal_1": {
+            "metal": 2.44,
+            "with_stated_solder_and_wire_allowance": 1.12
+          },
+          "key_1_terminal_0": {
+            "metal": 6.0,
+            "with_stated_solder_and_wire_allowance": 4.32
+          },
+          "key_1_terminal_1": {
+            "metal": 2.47,
+            "with_stated_solder_and_wire_allowance": 1.12
+          },
+          "key_2_terminal_0": {
+            "metal": 2.42,
+            "with_stated_solder_and_wire_allowance": 0.97
+          },
+          "key_2_terminal_1": {
+            "metal": 1.84,
+            "with_stated_solder_and_wire_allowance": 1.28
+          }
+        }
+      },
+      "6": {
+        "bare_key_holder_smallest_clearance_to_allowance_mm": -0.63,
+        "with_guard_smallest_clearance_to_allowance_mm": 1.26,
+        "with_guard_smallest_clearance_to_metal_mm": 1.91,
+        "closest_with_guard": "key_2_terminal_0",
+        "lower_row_with_guard": {
+          "key_0_terminal_0": {
+            "metal": 3.25,
+            "with_stated_solder_and_wire_allowance": 1.81
+          },
+          "key_0_terminal_1": {
+            "metal": 6.52,
+            "with_stated_solder_and_wire_allowance": 5.0
+          },
+          "key_1_terminal_0": {
+            "metal": 6.88,
+            "with_stated_solder_and_wire_allowance": 5.2
+          },
+          "key_1_terminal_1": {
+            "metal": 4.58,
+            "with_stated_solder_and_wire_allowance": 3.14
+          },
+          "key_2_terminal_0": {
+            "metal": 2.84,
+            "with_stated_solder_and_wire_allowance": 1.26
+          },
+          "key_2_terminal_1": {
+            "metal": 1.91,
+            "with_stated_solder_and_wire_allowance": 1.33
+          }
+        }
+      },
+      "7": {
+        "bare_key_holder_smallest_clearance_to_allowance_mm": -0.63,
+        "with_guard_smallest_clearance_to_allowance_mm": 1.97,
+        "with_guard_smallest_clearance_to_metal_mm": 3.48,
+        "closest_with_guard": "key_0_terminal_0",
+        "lower_row_with_guard": {
+          "key_0_terminal_0": {
+            "metal": 3.48,
+            "with_stated_solder_and_wire_allowance": 1.97
+          },
+          "key_0_terminal_1": {
+            "metal": 7.13,
+            "with_stated_solder_and_wire_allowance": 5.6
+          },
+          "key_1_terminal_0": {
+            "metal": 7.63,
+            "with_stated_solder_and_wire_allowance": 5.95
+          },
+          "key_1_terminal_1": {
+            "metal": 6.65,
+            "with_stated_solder_and_wire_allowance": 5.07
+          },
+          "key_2_terminal_0": {
+            "metal": 4.69,
+            "with_stated_solder_and_wire_allowance": 3.07
+          },
+          "key_2_terminal_1": {
+            "metal": 3.53,
+            "with_stated_solder_and_wire_allowance": 2.12
+          }
+        }
+      },
+      "8": {
+        "bare_key_holder_smallest_clearance_to_allowance_mm": -0.63,
+        "with_guard_smallest_clearance_to_allowance_mm": 2.21,
+        "with_guard_smallest_clearance_to_metal_mm": 3.67,
+        "closest_with_guard": "key_0_terminal_0",
+        "lower_row_with_guard": {
+          "key_0_terminal_0": {
+            "metal": 3.67,
+            "with_stated_solder_and_wire_allowance": 2.21
+          },
+          "key_0_terminal_1": {
+            "metal": 7.37,
+            "with_stated_solder_and_wire_allowance": 5.83
+          },
+          "key_1_terminal_0": {
+            "metal": 8.07,
+            "with_stated_solder_and_wire_allowance": 6.39
+          },
+          "key_1_terminal_1": {
+            "metal": 7.6,
+            "with_stated_solder_and_wire_allowance": 5.98
+          },
+          "key_2_terminal_0": {
+            "metal": 5.34,
+            "with_stated_solder_and_wire_allowance": 3.74
+          },
+          "key_2_terminal_1": {
+            "metal": 3.73,
+            "with_stated_solder_and_wire_allowance": 2.26
+          }
+        }
+      }
+    },
+    "by_ball_radius_mm": {
+      "5": {
+        "bare_key_holder": {
+          "key_0_terminal_0": {
+            "metal": 1.49,
+            "with_stated_solder_and_wire_allowance": -0.09
+          },
+          "key_0_terminal_1": {
+            "metal": 1.62,
+            "with_stated_solder_and_wire_allowance": 0.05
+          },
+          "key_1_terminal_0": {
+            "metal": 3.25,
+            "with_stated_solder_and_wire_allowance": 1.71
+          },
+          "key_1_terminal_1": {
+            "metal": 1.53,
+            "with_stated_solder_and_wire_allowance": -0.06
+          },
+          "key_2_terminal_0": {
+            "metal": 1.52,
+            "with_stated_solder_and_wire_allowance": -0.07
+          },
+          "key_2_terminal_1": {
+            "metal": -0.03,
+            "with_stated_solder_and_wire_allowance": -0.63
+          },
+          "key_3_terminal_0": {
+            "metal": 2.24,
+            "with_stated_solder_and_wire_allowance": 0.81
+          },
+          "key_3_terminal_1": {
+            "metal": 1.51,
+            "with_stated_solder_and_wire_allowance": -0.08
+          },
+          "key_4_terminal_0": {
+            "metal": 2.19,
+            "with_stated_solder_and_wire_allowance": 0.72
+          },
+          "key_4_terminal_1": {
+            "metal": 0.28,
+            "with_stated_solder_and_wire_allowance": -0.29
+          }
+        },
+        "with_guard": {
+          "key_0_terminal_0": {
+            "metal": 2.67,
+            "with_stated_solder_and_wire_allowance": 1.28
+          },
+          "key_0_terminal_1": {
+            "metal": 2.44,
+            "with_stated_solder_and_wire_allowance": 1.12
+          },
+          "key_1_terminal_0": {
+            "metal": 6.0,
+            "with_stated_solder_and_wire_allowance": 4.32
+          },
+          "key_1_terminal_1": {
+            "metal": 2.47,
+            "with_stated_solder_and_wire_allowance": 1.12
+          },
+          "key_2_terminal_0": {
+            "metal": 2.42,
+            "with_stated_solder_and_wire_allowance": 0.97
+          },
+          "key_2_terminal_1": {
+            "metal": 1.84,
+            "with_stated_solder_and_wire_allowance": 1.28
+          },
+          "key_3_terminal_0": {
+            "metal": 2.26,
+            "with_stated_solder_and_wire_allowance": 0.89
+          },
+          "key_3_terminal_1": {
+            "metal": 1.51,
+            "with_stated_solder_and_wire_allowance": -0.08
+          },
+          "key_4_terminal_0": {
+            "metal": 2.19,
+            "with_stated_solder_and_wire_allowance": 0.72
+          },
+          "key_4_terminal_1": {
+            "metal": 0.28,
+            "with_stated_solder_and_wire_allowance": -0.29
+          }
+        }
+      },
+      "6": {
+        "bare_key_holder": {
+          "key_0_terminal_0": {
+            "metal": 1.47,
+            "with_stated_solder_and_wire_allowance": -0.1
+          },
+          "key_0_terminal_1": {
+            "metal": 1.62,
+            "with_stated_solder_and_wire_allowance": 0.02
+          },
+          "key_1_terminal_0": {
+            "metal": 3.5,
+            "with_stated_solder_and_wire_allowance": 1.95
+          },
+          "key_1_terminal_1": {
+            "metal": 1.51,
+            "with_stated_solder_and_wire_allowance": -0.07
+          },
+          "key_2_terminal_0": {
+            "metal": 1.5,
+            "with_stated_solder_and_wire_allowance": -0.08
+          },
+          "key_2_terminal_1": {
+            "metal": -0.03,
+            "with_stated_solder_and_wire_allowance": -0.63
+          },
+          "key_3_terminal_0": {
+            "metal": 2.57,
+            "with_stated_solder_and_wire_allowance": 1.16
+          },
+          "key_3_terminal_1": {
+            "metal": 1.49,
+            "with_stated_solder_and_wire_allowance": -0.09
+          },
+          "key_4_terminal_0": {
+            "metal": 2.47,
+            "with_stated_solder_and_wire_allowance": 0.98
+          },
+          "key_4_terminal_1": {
+            "metal": 0.31,
+            "with_stated_solder_and_wire_allowance": -0.26
+          }
+        },
+        "with_guard": {
+          "key_0_terminal_0": {
+            "metal": 3.25,
+            "with_stated_solder_and_wire_allowance": 1.81
+          },
+          "key_0_terminal_1": {
+            "metal": 6.52,
+            "with_stated_solder_and_wire_allowance": 5.0
+          },
+          "key_1_terminal_0": {
+            "metal": 6.88,
+            "with_stated_solder_and_wire_allowance": 5.2
+          },
+          "key_1_terminal_1": {
+            "metal": 4.58,
+            "with_stated_solder_and_wire_allowance": 3.14
+          },
+          "key_2_terminal_0": {
+            "metal": 2.84,
+            "with_stated_solder_and_wire_allowance": 1.26
+          },
+          "key_2_terminal_1": {
+            "metal": 1.91,
+            "with_stated_solder_and_wire_allowance": 1.33
+          },
+          "key_3_terminal_0": {
+            "metal": 2.75,
+            "with_stated_solder_and_wire_allowance": 1.33
+          },
+          "key_3_terminal_1": {
+            "metal": 1.49,
+            "with_stated_solder_and_wire_allowance": -0.09
+          },
+          "key_4_terminal_0": {
+            "metal": 2.47,
+            "with_stated_solder_and_wire_allowance": 0.98
+          },
+          "key_4_terminal_1": {
+            "metal": 0.31,
+            "with_stated_solder_and_wire_allowance": -0.26
+          }
+        }
+      },
+      "7": {
+        "bare_key_holder": {
+          "key_0_terminal_0": {
+            "metal": 1.46,
+            "with_stated_solder_and_wire_allowance": -0.1
+          },
+          "key_0_terminal_1": {
+            "metal": 1.62,
+            "with_stated_solder_and_wire_allowance": -0.0
+          },
+          "key_1_terminal_0": {
+            "metal": 3.91,
+            "with_stated_solder_and_wire_allowance": 2.36
+          },
+          "key_1_terminal_1": {
+            "metal": 1.53,
+            "with_stated_solder_and_wire_allowance": -0.05
+          },
+          "key_2_terminal_0": {
+            "metal": 1.48,
+            "with_stated_solder_and_wire_allowance": -0.09
+          },
+          "key_2_terminal_1": {
+            "metal": -0.03,
+            "with_stated_solder_and_wire_allowance": -0.63
+          },
+          "key_3_terminal_0": {
+            "metal": 2.8,
+            "with_stated_solder_and_wire_allowance": 1.4
+          },
+          "key_3_terminal_1": {
+            "metal": 1.47,
+            "with_stated_solder_and_wire_allowance": -0.09
+          },
+          "key_4_terminal_0": {
+            "metal": 2.71,
+            "with_stated_solder_and_wire_allowance": 1.28
+          },
+          "key_4_terminal_1": {
+            "metal": 0.34,
+            "with_stated_solder_and_wire_allowance": -0.23
+          }
+        },
+        "with_guard": {
+          "key_0_terminal_0": {
+            "metal": 3.48,
+            "with_stated_solder_and_wire_allowance": 1.97
+          },
+          "key_0_terminal_1": {
+            "metal": 7.13,
+            "with_stated_solder_and_wire_allowance": 5.6
+          },
+          "key_1_terminal_0": {
+            "metal": 7.63,
+            "with_stated_solder_and_wire_allowance": 5.95
+          },
+          "key_1_terminal_1": {
+            "metal": 6.65,
+            "with_stated_solder_and_wire_allowance": 5.07
+          },
+          "key_2_terminal_0": {
+            "metal": 4.69,
+            "with_stated_solder_and_wire_allowance": 3.07
+          },
+          "key_2_terminal_1": {
+            "metal": 3.53,
+            "with_stated_solder_and_wire_allowance": 2.12
+          },
+          "key_3_terminal_0": {
+            "metal": 3.26,
+            "with_stated_solder_and_wire_allowance": 1.8
+          },
+          "key_3_terminal_1": {
+            "metal": 1.49,
+            "with_stated_solder_and_wire_allowance": -0.09
+          },
+          "key_4_terminal_0": {
+            "metal": 2.71,
+            "with_stated_solder_and_wire_allowance": 1.28
+          },
+          "key_4_terminal_1": {
+            "metal": 0.34,
+            "with_stated_solder_and_wire_allowance": -0.23
+          }
+        }
+      },
+      "8": {
+        "bare_key_holder": {
+          "key_0_terminal_0": {
+            "metal": 1.45,
+            "with_stated_solder_and_wire_allowance": -0.1
+          },
+          "key_0_terminal_1": {
+            "metal": 1.61,
+            "with_stated_solder_and_wire_allowance": -0.02
+          },
+          "key_1_terminal_0": {
+            "metal": 4.16,
+            "with_stated_solder_and_wire_allowance": 2.61
+          },
+          "key_1_terminal_1": {
+            "metal": 1.68,
+            "with_stated_solder_and_wire_allowance": 0.08
+          },
+          "key_2_terminal_0": {
+            "metal": 1.47,
+            "with_stated_solder_and_wire_allowance": -0.09
+          },
+          "key_2_terminal_1": {
+            "metal": -0.03,
+            "with_stated_solder_and_wire_allowance": -0.63
+          },
+          "key_3_terminal_0": {
+            "metal": 3.01,
+            "with_stated_solder_and_wire_allowance": 1.63
+          },
+          "key_3_terminal_1": {
+            "metal": 1.46,
+            "with_stated_solder_and_wire_allowance": -0.1
+          },
+          "key_4_terminal_0": {
+            "metal": 2.94,
+            "with_stated_solder_and_wire_allowance": 1.5
+          },
+          "key_4_terminal_1": {
+            "metal": 0.37,
+            "with_stated_solder_and_wire_allowance": -0.2
+          }
+        },
+        "with_guard": {
+          "key_0_terminal_0": {
+            "metal": 3.67,
+            "with_stated_solder_and_wire_allowance": 2.21
+          },
+          "key_0_terminal_1": {
+            "metal": 7.37,
+            "with_stated_solder_and_wire_allowance": 5.83
+          },
+          "key_1_terminal_0": {
+            "metal": 8.07,
+            "with_stated_solder_and_wire_allowance": 6.39
+          },
+          "key_1_terminal_1": {
+            "metal": 7.6,
+            "with_stated_solder_and_wire_allowance": 5.98
+          },
+          "key_2_terminal_0": {
+            "metal": 5.34,
+            "with_stated_solder_and_wire_allowance": 3.74
+          },
+          "key_2_terminal_1": {
+            "metal": 3.73,
+            "with_stated_solder_and_wire_allowance": 2.26
+          },
+          "key_3_terminal_0": {
+            "metal": 3.64,
+            "with_stated_solder_and_wire_allowance": 2.17
+          },
+          "key_3_terminal_1": {
+            "metal": 1.56,
+            "with_stated_solder_and_wire_allowance": -0.08
+          },
+          "key_4_terminal_0": {
+            "metal": 2.94,
+            "with_stated_solder_and_wire_allowance": 1.5
+          },
+          "key_4_terminal_1": {
+            "metal": 0.37,
+            "with_stated_solder_and_wire_allowance": -0.2
+          }
+        }
+      }
+    },
+    "limits": "A fingertip is soft and not a ball; hand size and solder height are unmeasured. The upper two keys sit forward of the guard and are not covered by it. The closest approaches are from the open rear, between the guard and the upper row, not from the hand side."
+  },
+  "print_layers": {
+    "Finger_Guard": {
+      "layers": 85,
+      "first_layer_area_mm2": 128.55,
+      "first_layer_islands": 1,
+      "floating_starts": [],
+      "regions_growing_faster_than_45_degrees": 11,
+      "widest_such_region": {
+        "layer": 74,
+        "print_z_mm": 15.0,
+        "area_mm2": 0.885,
+        "width_mm": 0.557,
+        "bounds": [
+          35.55,
+          1.85,
+          36.81,
+          3.54
+        ]
+      },
+      "all_such_regions": [
+        {
+          "layer": 26,
+          "print_z_mm": 5.4,
+          "area_mm2": 0.034,
+          "width_mm": 0.108,
+          "bounds": [
+            31.25,
+            3.53,
+            31.46,
+            3.86
+          ]
+        },
+        {
+          "layer": 26,
+          "print_z_mm": 5.4,
+          "area_mm2": 0.034,
+          "width_mm": 0.108,
+          "bounds": [
+            28.34,
+            3.53,
+            28.55,
+            3.86
+          ]
+        },
+        {
+          "layer": 71,
+          "print_z_mm": 14.4,
+          "area_mm2": 0.417,
+          "width_mm": 0.167,
+          "bounds": [
+            28.66,
+            3.27,
+            31.14,
+            3.61
+          ]
+        },
+        {
+          "layer": 71,
+          "print_z_mm": 14.4,
+          "area_mm2": 0.25,
+          "width_mm": 0.369,
+          "bounds": [
+            32.55,
+            10.53,
+            33.31,
+            11.19
+          ]
+        },
+        {
+          "layer": 71,
+          "print_z_mm": 14.4,
+          "area_mm2": 0.25,
+          "width_mm": 0.369,
+          "bounds": [
+            26.49,
+            10.53,
+            27.25,
+            11.19
+          ]
+        },
+        {
+          "layer": 74,
+          "print_z_mm": 15.0,
+          "area_mm2": 0.885,
+          "width_mm": 0.557,
+          "bounds": [
+            35.55,
+            1.85,
+            36.81,
+            3.54
+          ]
+        },
+        {
+          "layer": 74,
+          "print_z_mm": 15.0,
+          "area_mm2": 0.885,
+          "width_mm": 0.557,
+          "bounds": [
+            22.99,
+            1.85,
+            24.25,
+            3.54
+          ]
+        },
+        {
+          "layer": 74,
+          "print_z_mm": 15.0,
+          "area_mm2": 0.885,
+          "width_mm": 0.557,
+          "bounds": [
+            13.81,
+            4.95,
+            15.08,
+            6.64
+          ]
+        },
+        {
+          "layer": 74,
+          "print_z_mm": 15.0,
+          "area_mm2": 0.885,
+          "width_mm": 0.557,
+          "bounds": [
+            44.72,
+            4.95,
+            45.99,
+            6.64
+          ]
+        },
+        {
+          "layer": 74,
+          "print_z_mm": 15.0,
+          "area_mm2": 0.885,
+          "width_mm": 0.557,
+          "bounds": [
+            53.9,
+            8.06,
+            55.17,
+            9.75
+          ]
+        },
+        {
+          "layer": 74,
+          "print_z_mm": 15.0,
+          "area_mm2": 0.885,
+          "width_mm": 0.557,
+          "bounds": [
+            4.63,
+            8.06,
+            5.9,
+            9.75
+          ]
+        }
+      ],
+      "thin": {
+        "narrower_than_mm": 0.8,
+        "largest_area_in_one_layer_mm2": 4.681,
+        "layer": 84
+      }
+    },
+    "Key_Carrier": {
+      "layers": 176,
+      "first_layer_area_mm2": 162.47,
+      "first_layer_islands": 1,
+      "floating_starts": [],
+      "regions_growing_faster_than_45_degrees": 33,
+      "widest_such_region": {
+        "layer": 81,
+        "print_z_mm": 16.4,
+        "area_mm2": 28.141,
+        "width_mm": 2.019,
+        "bounds": [
+          29.62,
+          13.88,
+          44.48,
+          15.9
+        ]
+      },
+      "predecessor": {
+        "layers": 176,
+        "first_layer_area_mm2": 162.35,
+        "regions_growing_faster_than_45_degrees": 33,
+        "widest_such_region": {
+          "layer": 81,
+          "print_z_mm": 16.4,
+          "area_mm2": 28.141,
+          "width_mm": 2.019,
+          "bounds": [
+            29.62,
+            13.93,
+            44.48,
+            15.95
+          ]
+        }
+      },
+      "spans_wider_than_1_mm": {
+        "r20": [
+          2.0,
+          2.0,
+          2.0,
+          2.0,
+          2.0
+        ],
+        "predecessor": [
+          2.0,
+          2.0,
+          2.0,
+          2.0,
+          2.0
+        ]
+      }
+    },
+    "Battery_Holder": {
+      "layers": 165,
+      "first_layer_area_mm2": 143.06,
+      "first_layer_islands": 1,
+      "floating_starts": [],
+      "regions_growing_faster_than_45_degrees": 34,
+      "widest_such_region": {
+        "layer": 147,
+        "print_z_mm": 29.6,
+        "area_mm2": 0.248,
+        "width_mm": 0.366,
+        "bounds": [
+          13.04,
+          0.03,
+          13.55,
+          0.84
+        ]
+      },
+      "predecessor": {
+        "layers": 178,
+        "first_layer_area_mm2": 143.06,
+        "regions_growing_faster_than_45_degrees": 34,
+        "widest_such_region": {
+          "layer": 160,
+          "print_z_mm": 32.2,
+          "area_mm2": 0.248,
+          "width_mm": 0.366,
+          "bounds": [
+            13.04,
+            0.03,
+            13.55,
+            0.84
+          ]
+        }
+      },
+      "spans_wider_than_1_mm": {
+        "r20": [],
+        "predecessor": []
+      }
+    },
+    "XIAO_Rod_Holder": {
+      "layers": 142,
+      "first_layer_area_mm2": 164.96,
+      "first_layer_islands": 1,
+      "floating_starts": [],
+      "regions_growing_faster_than_45_degrees": 28,
+      "widest_such_region": {
+        "layer": 104,
+        "print_z_mm": 21.0,
+        "area_mm2": 0.323,
+        "width_mm": 0.369,
+        "bounds": [
+          4.83,
+          13.86,
+          5.2,
+          14.73
+        ]
+      },
+      "predecessor": {
+        "layers": 142,
+        "first_layer_area_mm2": 164.28,
+        "regions_growing_faster_than_45_degrees": 28,
+        "widest_such_region": {
+          "layer": 104,
+          "print_z_mm": 21.0,
+          "area_mm2": 0.323,
+          "width_mm": 0.369,
+          "bounds": [
+            4.83,
+            13.86,
+            5.2,
+            14.73
+          ]
+        }
+      },
+      "spans_wider_than_1_mm": {
+        "r20": [],
+        "predecessor": []
+      }
+    }
+  },
+  "print_orientation": {
+    "all": "Rod axis vertical, as every ring in this family is printed, so ring arms are closed loops inside each layer.",
+    "Finger_Guard": "Rear face (toward the tip) on the bed. Rear ring plain on the bed; front ring at the top on a 45-degree arc lead-in; the rounded finger edge is the last layer.",
+    "Key_Carrier": "Unchanged from R16: tip edge on the bed, nose last. Every new window points toward the nose, so its roof is two 45-degree slopes.",
+    "Battery_Holder": "Unchanged from R19: closed end on the bed. Same bed footprint; 13 layers shorter.",
+    "XIAO_Rod_Holder": "Unchanged from R19: USB end on the bed. Walls grow from the fixed hoop lips; cheeks and the taller far ring start on the bed."
+  },
+  "screens": {
+    "rings_relative_stiffness": {
+      "reference": "R19 XIAO far ring (2.4 mm, plain, bonded 34 degrees from the crown) = 1.00",
+      "r19_xiao_near_skirted": 3.19,
+      "r19_battery_far": 1.71,
+      "r19_battery_near_skirted": 4.04,
+      "r20_xiao_far_3p6_if_fully_bonded_like_r19": 1.5,
+      "r20_guard_rear_plain": 1.13,
+      "r20_guard_front_skirted": 3.41,
+      "pairs": {
+        "r19_xiao_holder": 4.19,
+        "r19_battery_holder": 5.75,
+        "r20_xiao_holder_upper_bound": 4.69,
+        "r20_guard": 4.54
+      },
+      "status": "Relative curved-beam screen, elastic, modulus cancels. Not a measured slide force, grip or fatigue life."
+    },
+    "rail": {
+      "free_span_mm": 9.56,
+      "section_mm": [
+        2.0,
+        1.5
+      ],
+      "bending_stress_MPa_per_N_at_midspan_fixed_ends": 1.59,
+      "deflection_mm_per_N_assuming_2000_MPa": 0.004,
+      "layer_direction": "Rails run along the rod, so this bending acts across the printed layers: the weaker direction. Rims, wings and ring arms are loaded inside their layers.",
+      "status": "Ideal-beam estimate with an assumed modulus. Layer bond strength is unmeasured."
+    }
+  },
+  "installed_mass_solid_PETG_g": {
+    "r16_r19": {
+      "Key_Carrier": 5.196,
+      "Battery_Holder": 2.599,
+      "XIAO_Rod_Holder": 1.928
+    },
+    "r20": {
+      "Key_Carrier": 5.08,
+      "Battery_Holder": 2.478,
+      "XIAO_Rod_Holder": 2.074,
+      "Finger_Guard": 1.661
+    },
+    "change_by_part": {
+      "Key_Carrier": -0.116,
+      "Battery_Holder": -0.121,
+      "XIAO_Rod_Holder": 0.146,
+      "Finger_Guard": 1.661
+    },
+    "three_revised_parts_change": -0.091,
+    "finger_guard_added": 1.661,
+    "net_change_with_guard": 1.57,
+    "unchanged_and_not_counted": "battery door, XIAO keeper, one cell spacer",
+    "note": "CAD solid at 1.27 g/cm3. Earlier sliced parts came out at about 0.90 to 0.93 of CAD solid. Tear-off pads and purge are not installed mass."
+  },
+  "passed": true
+}

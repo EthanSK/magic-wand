@@ -1,0 +1,262 @@
+{
+  "revision": "carbon-rod-holders-r20-finger-guard",
+  "print": {
+    "printer": "Bambu Lab A1 mini 0.4 nozzle",
+    "filament": "Generic PETG @BBL A1M",
+    "process": "0.20mm Standard @BBL A1M",
+    "layer_height_mm": 0.2,
+    "walls": 3,
+    "infill_percent": 20,
+    "automatic_support": false,
+    "brim": false,
+    "z_hop_mm": 0.6,
+    "plate_scope": "Four objects, each with labelled tear-off pads: Key_Carrier (tighter rings, lightening windows), Battery_Holder (closed end 2.6 mm shorter), XIAO_Rod_Holder (side walls, far corner cheeks, wider far ring) and the new Finger_Guard. The R19 battery door, XIAO keeper and cell spacers are unchanged and are not reprinted.",
+    "adhesion": "No slicer brim: on these parts a brim would run into the open rod rings. Every object carries designed 0.4 mm tear-off pads on 1.0 x 0.4 mm ties instead, placed on faces that are neither rod bores nor skin contact.",
+    "local_recipe": {
+      "Key_Carrier_bands_mm": [
+        [
+          16.0,
+          16.8
+        ],
+        [
+          33.8,
+          35.2
+        ]
+      ],
+      "Battery_Holder_bands_mm": [
+        [
+          31.0,
+          31.8
+        ]
+      ],
+      "note": "Same slow-band speeds as R16/R19. The battery band moves 2.6 mm down with the shortened closed end."
+    }
+  },
+  "guard": {
+    "concept": "A separate slide-on basket under the three lower keys. Two straight wings run from a gunwale beside each outer key-holder edge down to a keel under the rod, so slab, wings and keel form a triangle around the rod. In each wing only the front and rear rims cross from gunwale to keel; the two rails between them run along the rod. Two spring rings of the existing R7 profile, crown down, hold the keel on the rod.",
+    "why_removable": "Every socket loads straight up from below and is then taped and backed with a finger or flat tool. Beams joined to the key holder would cross those routes: the lower-left and upper-left socket routes are 1.3 mm apart, so no beam fits between them. A separate guard also fits the accepted, already wired R16 key holder without a reprint.",
+    "y_front_mm": -8.3,
+    "y_rear_mm": 8.7,
+    "layer_mm": 0.2,
+    "gunwale_inner_x_mm": 28.6,
+    "gunwale_outer_x_mm": 29.9,
+    "gunwale_top_z_mm": 7.4,
+    "gunwale_root_u_mm": 0.6,
+    "chine_inner_z_mm": 3.5,
+    "ring_clear_radius_mm": 5.85,
+    "face_thickness_mm": 1.5,
+    "apex_outer_radius_mm": 4.0,
+    "keel_half_x_mm": 2.4,
+    "keel_bore_radius_mm": 4.5,
+    "keel_bore_note": "0.3 mm outside the 4.2 mm rigid rod corridor of the other holders. The ring bore chamfers end at 4.2 mm; a keel bore at or within 0.1 mm of that left faces the mesh library could not simplify consistently (the export now checks this).",
+    "rails_per_side": 2,
+    "rail_width_mm": 2.0,
+    "edge_radius_mm": 0.4,
+    "rear_rim_mm": 1.8,
+    "front_rim_mm": 1.8,
+    "arrow_min_opening_mm": 0.8,
+    "front_round_outer_mm": 1.0,
+    "front_round_inner_mm": 0.3,
+    "ring": {
+      "note": "R7 wall profile and 7.9 mm relaxed bore, as on every holder. Crown down on the keel, so the opening faces the key holder. The opening is 90 degrees instead of 30 so wires that cross over the rod under the lower-middle socket stay clear; the arms still wrap 45 degrees past the rod's widest point. Root wall 1.2 mm keeps the stated-assumption stiffness screen near the XIAO holder's ring pair.",
+      "width_mm": 2.4,
+      "root_wall_mm": 1.2,
+      "gap_degrees": 90.0,
+      "wire_crossing_clear_half_angle_degrees": 36.0,
+      "bond_half_angle_degrees": 22.0,
+      "skirt_root_inside_bond_degrees": 2.0,
+      "rear_band_y_mm": [
+        6.3,
+        8.7
+      ],
+      "front_band_y_mm": [
+        -7.9,
+        -5.5
+      ]
+    },
+    "prop_tab": {
+      "note": "One small pad per side under the plain nose underside of the key holder. A pressed wing closes this gap and then bears on the key holder, completing the triangle. Kept in front of the socket pads at any axial position the rings allow.",
+      "inner_x_mm": 26.0,
+      "z_mm": [
+        5.6,
+        7.37
+      ],
+      "y_mm": [
+        -5.7,
+        -2.7
+      ],
+      "gap_to_key_holder_mm": 0.3
+    },
+    "assumed_allowances": {
+      "note": "Not measured on the built wand. The guard is checked against these stated envelopes, not against real solder or wire.",
+      "solder_and_wire_below_tab_mm": 1.5,
+      "solder_and_wire_beyond_tab_end_mm": 0.6,
+      "solder_and_wire_beside_tab_mm": 0.8,
+      "tape_and_wire_below_socket_body_mm": 1.2,
+      "fingertip_probe_radii_mm": [
+        5.0,
+        6.0,
+        7.0,
+        8.0
+      ]
+    },
+    "rear_gusset_mm": 2.0,
+    "transverse_note": "Only the two rims run from gunwale to keel; the rails between them run along the rod. Both rims are 1.8 mm (the front one prints 2.2 mm before its windows open), and every rail, keel and gunwale root at the rear rim has a 2.0 mm 45-degree gusset like the front gables. The gussets narrow going up the print, so they add no overhang."
+  },
+  "xiao": {
+    "far_ring_band_y_mm": [
+      19.8,
+      23.4
+    ],
+    "r19_far_ring_band_y_mm": [
+      21.0,
+      23.4
+    ],
+    "note": "R19 solid plus three additions; nothing is removed. Far ring 3.6 mm instead of 2.4 mm along the rod (bore, wall, opening, V-bar roots unchanged). Side walls on the rails. Two far-corner cheeks. Keeper, hoop, posts, ledges, USB, reset and bed footprint outside the cheeks are the R19 geometry.",
+    "wall": {
+      "x_mm": [
+        10.0,
+        11.2
+      ],
+      "y_mm": [
+        3.2,
+        20.75
+      ],
+      "top_z_mm": 11.2,
+      "bottom_z_mm": 9.3,
+      "note": "A side wall on each rail beside all seven pad rows, 1.15 mm above the board top and 1.11 mm from the board edge: room for castellation solder, and something the board visibly sits between. Wires leave the pads upward and pass over the wall."
+    },
+    "far_cheek": {
+      "x_mm": [
+        9.2,
+        10.05
+      ],
+      "y_mm": [
+        20.3,
+        23.4
+      ],
+      "z_mm": [
+        8.8,
+        10.4
+      ],
+      "note": "Locates the board sideways at the two bare USB-end corners, beyond the last pad, with 0.31 mm each side. The near corners keep their 0.3 mm V stops."
+    },
+    "board_travel_check_mm": {
+      "sideways": 0.25,
+      "note": "Board poses restated for the cheeks: seated, both axial stops, and 0.25 mm either side."
+    }
+  },
+  "anchors": {
+    "note": "R19 recipe on all four objects. Guard pads sit inside the V on the wings' inner faces, each tie at the centre of a window bay on the rear rim, away from the rail roots, so no stub is left on a skin-contact face.",
+    "thickness_mm": 0.4,
+    "gap_mm": 1.0,
+    "pad_half_length_mm": 4.0,
+    "pad_depth_mm": 4.5,
+    "pull_tab_length_mm": 5.0,
+    "tie_width_mm": 1.0,
+    "tie_overlap_mm": 0.4,
+    "xiao_upper_side_tie_print_y_mm": 15.8,
+    "sites_assembly_x_print_y_outward": {
+      "Key_Carrier": [
+        [
+          -9.0,
+          "slab_top",
+          0,
+          1
+        ],
+        [
+          9.0,
+          "slab_top",
+          0,
+          1
+        ],
+        [
+          -11.5,
+          "slab_bottom",
+          0,
+          -1
+        ],
+        [
+          11.5,
+          "slab_bottom",
+          0,
+          -1
+        ]
+      ],
+      "Finger_Guard": [
+        [
+          "-bay2",
+          "wing_inner",
+          0,
+          1
+        ],
+        [
+          "-bay1",
+          "wing_inner",
+          0,
+          1
+        ],
+        [
+          "bay1",
+          "wing_inner",
+          0,
+          1
+        ],
+        [
+          "bay2",
+          "wing_inner",
+          0,
+          1
+        ]
+      ]
+    }
+  },
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "physical_comfort_verified": false,
+  "key_holder": {
+    "ring_bore_mm": 7.8,
+    "r16_ring_bore_mm": 7.9,
+    "ring_note": "Only this part's two rings change: relaxed bore 7.8 mm instead of 7.9 mm on the 8 mm rod, so the nominal squeeze on the rod doubles from 0.1 to 0.2 mm on diameter. Wall profile, widths, 30 degree opening, lead-in and saddle are the R16 ones. The shared rod constants and every other holder keep 7.9 mm. Real slide force and twist friction are unmeasured.",
+    "front_window": {
+      "x_mm": [
+        1.8,
+        6.2
+      ],
+      "flat_y_mm": -2.7,
+      "upper_row_rect_mm": 1.2,
+      "turned_flat_y_mm": 6.4,
+      "turned_rect_mm": 2.0,
+      "note": "Two arrow windows per upper key through the 1.2 mm socket-board level under the switch front, key frame, point toward the nose (print-up), with at least 1.2 mm of plastic to every post hole, socket pad and neighbouring window. The three lower keys get none: six windows there all fell in the same eleven print layers and cut that layer section from 91 to 59 mm2, at the board level where the R15 key holder snapped.",
+      "lower_row": false
+    },
+    "shoulder_window": {
+      "x_mm": [
+        19.6,
+        22.6
+      ],
+      "flat_y_mm": 12.0,
+      "rect_mm": 0.7,
+      "note": "One small arrow window through each 45-degree shoulder, at least 1.5 mm from its sloped edge."
+    }
+  },
+  "battery": {
+    "plate_y_mm": [
+      14.0,
+      15.2
+    ],
+    "far_band_y_mm": [
+      11.6,
+      15.2
+    ],
+    "r19_plate_y_mm": [
+      16.6,
+      17.8
+    ],
+    "r19_far_band_y_mm": [
+      14.2,
+      17.8
+    ],
+    "note": "The closed end moves 2.6 mm toward the cell. In R19 the cell stopped on two small corner blocks at Y 14.0, then came a 2.6 mm empty gap, then the 1.2 mm end frame at Y 16.6. That gap only existed so the 3.6 mm far ring could sit wholly behind the cell; the ring's crown is in the floor, so it can sit under the cell end instead. The end frame's side posts are now the stop, at the same Y 14.0 and the same 8.8-10.6 mm contact width. Cell bay, teeth, door end, floor bars and both rings' sections are otherwise unchanged."
+  }
+}
