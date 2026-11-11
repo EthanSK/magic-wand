@@ -10,6 +10,7 @@ import numpy as np
 import trimesh
 
 import holder26 as d
+import copper26
 from assembly23 import relative_actor, translation
 from audit26 import keeper_pin, lead
 
@@ -190,6 +191,8 @@ def build(current):
                 for actor in (f"switch_{key}", f"socket_{key}"):
                     frame[actor][3] += (-1 if key == 0 else 1) * d.LOWER_SHIFT
     modules["dfr"] = add_dfr(modules["centre"], keys)
+    copper26.verify()
+    modules["copper"] = copper26.animation(modules["dfr"])
     # The earlier OP1 paddles and Cirque comparison remain available under R25.
     for key in ("centre", "centre_shallow", "centre_deep"):
         del modules[key]
@@ -198,6 +201,7 @@ def build(current):
     guide = {"schema_version": 2, "units": "mm", "revision": d.REVISION, "physical_fit_verified": False,
              "sources": {"r25_guide_sha256": d.h.sha(source), "manifest_sha256": d.h.sha(d.OUT / "manifest.json"),
                          "generator_sha256": d.h.sha(__file__),
+                         "copper_model_sha256": d.h.sha(copper26.__file__),
                          "meshes_sha256": {file: d.h.sha(d.OUT / file) for file in sorted(assets)}},
              "modules": modules}
     path = d.OUT / "assembly-guide.json"

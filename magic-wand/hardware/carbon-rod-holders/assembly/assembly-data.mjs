@@ -41,7 +41,7 @@ function chocCapGeometry(base = CHOC_STEM_TOP, top = CHOC_STEM_TOP + CHOC_CAP_RI
 }
 
 export function groupKeys(modules) {
-  const { key, centre, centre_shallow, centre_deep, dfr, ...others } = modules;
+  const { key, centre, centre_shallow, centre_deep, dfr, copper, ...others } = modules;
   const seated = key.steps.at(-1).samples.at(-1);
   const sockets = Object.fromEntries(Object.entries(key.actors).filter(([id]) => id.startsWith('socket_')));
   const socketPoses = Object.fromEntries(Object.keys(sockets).map(id => [id, seated[id]]));
@@ -89,6 +89,7 @@ export function groupKeys(modules) {
   };
   const views = dfr ? {
     dfr: { ...paddleView(dfr, dfr.label), note: dfr.note }, key: fitChoc,
+    ...(copper ? { copper: { ...paddleView(copper, copper.label), note: copper.note } } : {}),
   } : {
     centre: paddleView(centre, 'Standard paddle'),
     centre_shallow: paddleView(centre_shallow, 'Shallow paddle'),

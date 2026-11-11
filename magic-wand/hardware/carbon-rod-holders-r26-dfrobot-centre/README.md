@@ -5,7 +5,9 @@ Touch Sensor V2 above the OP1 mechanical switch. The four outer switches
 are Choc V1. The two lower Choc centres move outward by 2.8 mm each. The
 upper centres stay 18.7 mm apart and 17.8 mm behind the lower row. The
 published DFR0030 outline is 22 × 30 mm. Its edge thickness, cable housing
-and the stock OP1 board use estimated fit envelopes.
+and the stock OP1 board use estimated fit envelopes. The OP1 board
+slides in on edge rails and is held by a removable latch, so its mounting
+holes do not set the fit. See the [OP1 clearance assumptions](../carbon-rod-holders-r23-hybrid-centre/parameters.json).
 
 [Watch the assembly](../carbon-rod-holders/assembly/?version=r26&component=keys).
 Choose **Fit Choc switches and caps** to see the four Choc sockets and
@@ -86,5 +88,25 @@ PETG hinge flex, and the lead's slack with the rest of the harness fitted.
 The lower runners block the sampled straight-up fingertip paths. The upper
 socket area still has exposed terminals for wiring and service.
 
+## Removable copper insert preview
+
+[Watch the compact insert assemble and click](../carbon-rod-holders/assembly/?version=r26&component=keys&keyView=copper).
+The 18 × 17.3 mm cap keeps the stock OP1 click. Stick 0.07 mm copper tape
+to the insert and slide it in from the hinge end while the cap is off.
+The rails support the insert beneath the 1 mm insulating cover. Once
+the cap snaps on, the fixed hinge stops the insert's tab from withdrawing.
+
+The lead goes over the hinge between the two upper keys. Unplug it at
+the fixed connection, lift off the cap, and slide the insert out for
+service. The connection shown is illustrative. The touch circuit can
+sit elsewhere on the wand, so its board size does not set the cap size.
+
+The nominal foil-to-cover gap is 0.10 mm. The preview leaves out a pressure
+spring. Fit, foil adhesion, and detection through the actual cover still
+need a physical test. The preview meshes are separate from the four-part
+DFRobot print plate.
+
+[Model source](copper26.py) · [Fit checks](exports/copper-insert-checks.json)
+
 [DFRobot dimensions and pin labels](https://wiki.dfrobot.com/dfr0030/) ·
-[Endgame Gear OP1 stock switch boards](https://www.endgamegear.co.uk/en-gb/accessories/op1-universal-switch-pack)
+[Endgame Gear OP1 stock switch boards](https://www.endgamegear.de/en-de/op1-universal-switch-set-2x-switch-pcbs-14-switches/GAMO-1112.html)

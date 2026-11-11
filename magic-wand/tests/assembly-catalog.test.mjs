@@ -83,6 +83,38 @@ test('R26 uses the printed DFRobot parts and moves only the lower outer keys', (
   }
 });
 
+test('R26 copper insert stays locked for the click and slides out after disconnecting', () => {
+  const dir = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', dir)));
+  const url = new URL(catalog.versions.find(entry => entry.id === 'r26').guide, dir);
+  const guide = JSON.parse(readFileSync(url));
+  const { views } = groupKeys(guide.modules);
+  const view = views.copper;
+  validateGuide({ ...guide, modules: { copper: view } });
+  const measured = JSON.parse(readFileSync(new URL('copper-insert-checks.json', url)));
+  assert.equal(measured.passed, true);
+  assert.equal(measured.touch_sensitivity_verified, false);
+  assert.equal(measured.print_validated, false);
+  const at = title => view.steps.findIndex(step => step.title === title);
+  const press = at('Press and Release');
+  const down = sampledPose(view, press, .5);
+  assert.ok(down.plunger[11] < -.45);
+  assert.deepEqual(down.foil, down.cap);
+  assert.deepEqual(down.insert, down.cap);
+  assert.deepEqual(down.terminal, identity());
+  assert.deepEqual(sampledPose(view, press, 0).cap, sampledPose(view, press, 1).cap);
+  const disconnect = at('Disconnect the Lead');
+  assert.ok(disconnect < at('Lift the Cap Off') && disconnect < at('Slide the Insert Out'));
+  assert.deepEqual(sampledPose(view, disconnect, 1).morphs.wire, [0, 0]);
+  const removed = sampledPose(view, at('Slide the Insert Out'), 1);
+  assert.ok(removed.insert[7] - removed.cap[7] > 17);
+  assert.deepEqual(removed.foil, removed.insert);
+  for (let i = 1; i < view.steps.length; i++) {
+    const end = sampledPose(view, i - 1, 1), start = sampledPose(view, i, 0);
+    assert.equal(JSON.stringify(end), JSON.stringify(start), view.steps[i].title);
+  }
+});
+
 test('R25 concept views press and return beside the same capped keys', () => {
   const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
   const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));

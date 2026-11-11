@@ -2601,6 +2601,12 @@ flat with about 104 mm² of first-layer plastic. Its initial brim crossed
 the plug clearance, so the checked plate prints this latch directly on
 the bed.
 
+Self-improved — 2026-11-11: The R26 copper insert preview uses the fixed
+hinge to trap a removable carrier tab. Check that the tab stays captured
+through the full click stroke, then check that the insert slides free
+with the cap off. Model the lead over the same stroke and verify that its
+fixed endpoint stays fixed. Fit and touch sensitivity need a physical trial.
+
 Self-improved — the first extended CAD investigation did not leave an
 editable candidate. Resuming the same author session with the confirmed
 kit, a bounded fit trial and an explicit first source deliverable produced
