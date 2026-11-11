@@ -100,16 +100,18 @@ test('R25 concept views press and return beside the same capped keys', () => {
   assert.equal(views.concept_direct.comparisonOnly, true);
   const holder = views.concept_carrier;
   assert.equal(holder.actors.hinge, undefined);
-  const { eyeHalfWidth, boreRadius, pinTip, pinRadius: snapRadius, spread } = HOLDER_SNAP;
-  assert.ok(eyeHalfWidth - pinTip >= .49 && pinTip + spread > eyeHalfWidth);
-  assert.ok(boreRadius > snapRadius && pinTip > 0);
+  const { axisY, axisZ, supportInner, supportOuter, boreRadius, pinTip, pinRadius: snapRadius, squeeze } = HOLDER_SNAP;
+  assert.ok(pinTip - supportInner > .39 && pinTip < supportOuter);
+  assert.ok(pinTip - squeeze < supportInner && boreRadius > snapRadius);
   const motion = holder.steps.flatMap(step => step.samples);
-  const flexStep = holder.steps.find(step => step.title === 'Flex Both Arms Out');
-  const snapStep = holder.steps.find(step => step.title === 'Let the Pins Snap In');
+  const flexStep = holder.steps.find(step => step.title === 'Squeeze Both Arms In');
+  const snapStep = holder.steps.find(step => step.title === 'Let the Pins Snap Outward');
   const removeStep = holder.steps.find(step => step.title === 'Remove and Refit the Cap');
   assert.equal(flexStep.samples.at(-1).morphs.snapRight, 1);
   assert.equal(snapStep.samples.at(-1).morphs.snapRight, 0);
   assert.ok(removeStep.samples.some(sample => sample.cap[11] > 0 && sample.morphs.snapRight === 1));
+  const keyGapHalf = 9.35 + UPPER_KEY_SHIFT - 16.6 / 2;
+  assert.ok(keyGapHalf > supportOuter && keyGapHalf < 2);
   for (const id of ['cap', 'snapLeft', 'snapRight', 'hingeSupports']) {
     const actor = holder.actors[id];
     for (const sample of motion) for (const [index, [x, y, z]] of actor.geometry.vertices.entries()) {
@@ -117,7 +119,14 @@ test('R25 concept views press and return beside the same capped keys', () => {
       const along = y * m[5] + z * m[6] + m[7];
       const openedX = actor.morphGeometry?.vertices[index][0] ?? x;
       const worldX = x + (openedX - x) * (sample.morphs?.[id] ?? 0) + m[3];
-      if (along >= 17.8 - 17.5 / 2) assert.ok(Math.abs(worldX) <= 9.35 + UPPER_KEY_SHIFT - 16.6 / 2);
+      if (along >= 17.8 - 17.5 / 2) assert.ok(Math.abs(worldX) <= keyGapHalf);
+      if (actor.morphGeometry) {
+        assert.ok(Math.sign(worldX) === Math.sign(x), 'squeezed arms stay on opposite sides');
+        const height = y * m[9] + z * m[10] + m[11];
+        if (Math.abs(worldX) >= supportInner && Math.abs(along - axisY) <= 1.36 && height <= axisZ + 1.34) {
+          assert.ok(Math.hypot(along - axisY, height - axisZ) < boreRadius, 'moving arm clears the fixed socket wall');
+        }
+      }
     }
   }
   const stopTop = Math.max(...holder.actors.stops.geometry.vertices.map(([, , z]) => z));

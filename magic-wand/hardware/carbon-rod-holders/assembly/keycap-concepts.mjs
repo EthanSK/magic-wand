@@ -6,11 +6,11 @@ const holeY = [-3.6, 1.6], holeZ = 13.75, bodyHalfWidth = 2.95;
 const travel = .55, freeGap = .08, plungerY = -4.2;
 const hingeY = 6.9, hingeZ = 18, clipHingeZ = 17.55;
 const holderHingeY = 10.2;
-export const UPPER_KEY_SHIFT = 1.15;
+export const UPPER_KEY_SHIFT = .86;
 export const GUIDED_CAPTURE = Object.freeze({ pinZ: 17.2, pinRadius: .5, slotBottom: 16.66, slotTop: 18.37, travel });
 export const HOLDER_SNAP = Object.freeze({
-  axisY: holderHingeY, axisZ: hingeZ, eyeHalfWidth: .64, boreRadius: .77,
-  pinTip: .14, pinRadius: .65, rootY: 4, tipOuter: 1.5, spread: .59,
+  axisY: holderHingeY, axisZ: hingeZ, supportInner: 1.15, supportOuter: 1.79, boreRadius: .77,
+  pinTip: 1.55, pinRadius: .65, tipInner: .52, tipOuter: 1.11, squeeze: .46, rootY: 4,
 });
 const steps = 25;
 
@@ -110,18 +110,19 @@ function hingeUpStop(axisY, halfWidth, cheekStart) {
   ];
 }
 function snapArm(side) {
-  // User's “bend it out, place it, flex out” hinge. The pins are part of
-  // the cap, and the thick root blends into the narrower flexible section.
-  const { axisY, axisZ, pinTip, pinRadius, tipOuter } = HOLDER_SNAP;
+  // Ethan's “hinge extrusions jut facing outwards” keeps the flexible arms
+  // between the fixed sockets. Squeezing them uses room inside the hinge gap.
+  const { axisY, axisZ, pinTip, pinRadius, tipInner, tipOuter } = HOLDER_SNAP;
+  const shoulder = pinTip - .14;
   const profiles = [
-    [3.55, .38, 1.8, 17.38, 19.05],
-    [4, .48, 1.72, 17.43, 18.87],
-    [4.4, .61, 1.61, 17.49, 18.67],
-    [4.8, .71, 1.53, 17.53, 18.56],
-    [5.25, .75, 1.49, 17.53, 18.56],
-    [8.9, .75, 1.49, 17.34, 18.61],
-    [axisY - .75, .75, tipOuter, 17.19, 18.67],
-    [axisY + 1.05, .75, tipOuter, 17.19, 18.67],
+    [3.55, .27, 1.46, 17.38, 19.05],
+    [4, .36, 1.37, 17.43, 18.87],
+    [4.4, .42, 1.27, 17.49, 18.67],
+    [4.8, .48, 1.19, 17.53, 18.56],
+    [5.25, tipInner, tipOuter, 17.53, 18.56],
+    [8.9, tipInner, tipOuter, 17.34, 18.61],
+    [axisY - .75, tipInner, tipOuter, 17.19, 18.67],
+    [axisY + 1.05, tipInner, tipOuter, 17.19, 18.67],
   ];
   const vertices = profiles.flatMap(([y, near, far, bottom, top]) => {
     const [lo, hi] = mirrored(side, near, far);
@@ -135,21 +136,22 @@ function snapArm(side) {
       faces.push([start + i, start + i + 4, start + j + 4], [start + i, start + j + 4, start + j]);
     }
   }
-  const nose = roundPin(...mirrored(side, pinTip, .29), axisY, axisZ, pinRadius);
+  const nose = roundPin(...mirrored(side, shoulder, pinTip), axisY, axisZ, pinRadius);
   nose.vertices = nose.vertices.map(([x, y, z]) => Math.abs(Math.abs(x) - pinTip) < 1e-8
     ? [x, axisY + (y - axisY) * .72, axisZ + (z - axisZ) * .72]
     : [x, y, z]);
   return joined([
-    { vertices, faces }, nose, roundPin(...mirrored(side, .29, .97), axisY, axisZ, pinRadius),
-    box(...mirrored(side, .94, 1.83), 7.85, 8.47, 17.72, 18.27),
-    box(...mirrored(side, .80, 1.43), axisY + .93, axisY + 1.72, 18.36, 18.66),
+    { vertices, faces }, nose, roundPin(...mirrored(side, .97, shoulder), axisY, axisZ, pinRadius),
+    // Leave the grip faces above the sockets and behind the back of the cap.
+    box(...mirrored(side, .52, tipOuter), 8.82, 9.3, 18.02, 19.77),
+    box(...mirrored(side, .55, 1.05), axisY + .93, axisY + 1.72, 18.36, 18.66),
   ]);
 }
 function flexSnapArm(geometry) {
-  const { rootY, axisY, spread } = HOLDER_SNAP;
+  const { rootY, axisY, pinRadius, squeeze } = HOLDER_SNAP;
   return { ...geometry, vertices: geometry.vertices.map(([x, y, z]) => {
-    const t = Math.max(0, Math.min(1, (y - rootY) / (axisY - rootY)));
-    return [x + Math.sign(x) * spread * t * t * (3 - t) / 2, y, z];
+    const t = Math.max(0, Math.min(1, (y - rootY) / (axisY - pinRadius - rootY)));
+    return [x - Math.sign(x) * squeeze * t * t * (3 - t) / 2, y, z];
   }) };
 }
 function clipFrame(kind) {
@@ -217,7 +219,7 @@ function callouts(kind, axis = [0, 0]) {
     flexure: { actor: 'flexure', point: [3.7, 0, 18], title: 'Strips are part of the frame' },
     pivot: { actor: 'hinge', point: [3.5, ...axis], title: 'Pin captures the hinge' },
     direct: { actor: 'rightClaws', point: [3, ...axis], title: 'Two pins in one hole' },
-    carrier: { actor: 'snapRight', point: [1.05, ...axis], title: 'Built-in pins snap in' },
+    carrier: { actor: 'snapRight', point: [HOLDER_SNAP.pinTip, ...axis], title: 'Pins snap outward' },
   };
   return [
     { side: 'left', actor: 'cap', point: [0, -7.5, 19.8], title: 'Press here' },
@@ -290,11 +292,10 @@ export function potentialKeyViews(assembled, capGeometry) {
       actors.frame = makeActor('One-piece four-claw frame', '#67b7e7', frame, { morphGeometry: spreadArms(frame) });
     }
     if (carrier) {
-      const { eyeHalfWidth, boreRadius } = HOLDER_SNAP;
-      actors.hingeSupports = makeActor('Fixed hinge eye and opening stop', '#67b7e7', joined([
-        pinSupport(-eyeHalfWidth, eyeHalfWidth, holderHingeY, hingeZ, boreRadius, 11.04),
-        box(-1.28, 1.28, holderHingeY + 1.43, holderHingeY + 1.9, 18.04, 18.32),
-        box(-eyeHalfWidth, eyeHalfWidth, holderHingeY + 1.22, holderHingeY + 1.64, 18.04, 18.32),
+      const { supportInner, supportOuter, boreRadius } = HOLDER_SNAP;
+      actors.hingeSupports = makeActor('Fixed hinge sockets and opening stop', '#67b7e7', joined([
+        ...sides.map(side => pinSupport(...mirrored(side, supportInner, supportOuter), holderHingeY, hingeZ, boreRadius, 11.04)),
+        box(-supportOuter, supportOuter, holderHingeY + 1.31, holderHingeY + 1.9, 18.04, 18.32),
       ]));
       for (const [id, side, label] of [['snapLeft', -1, 'Left'], ['snapRight', 1, 'Right']]) {
         const arm = snapArm(side);
@@ -331,10 +332,10 @@ export function potentialKeyViews(assembled, capGeometry) {
     const fits = [];
     const movingParts = ['cap', 'frame', 'stops', 'flexure', 'hinge', 'keeperLeft', 'keeperRight', 'leftClaws', 'rightClaws', 'snapLeft', 'snapRight']
       .filter(id => actors[id] && !(id === 'stops' && (carrier || direct)));
-    const together = (along, lift, spread = 0) => {
+    const together = (along, lift, armFlex = 0) => {
       const pose = { ...rest, morphs: {} };
       for (const id of movingParts) pose[id] = shift(rest[id], 0, along, lift);
-      for (const id of ['frame', 'leftClaws', 'rightClaws', 'snapLeft', 'snapRight']) if (actors[id]) pose.morphs[id] = spread;
+      for (const id of ['frame', 'leftClaws', 'rightClaws', 'snapLeft', 'snapRight']) if (actors[id]) pose.morphs[id] = armFlex;
       return pose;
     };
     const beforeMount = () => {
@@ -386,13 +387,13 @@ export function potentialKeyViews(assembled, capGeometry) {
       'The two strips join the cap to the clip frame. They bend during a press and keep the cap attached when released.', 1.4,
       () => together(stageY, 0), true));
     if (carrier) {
-      fits.push(sampled('Flex Both Arms Out', 'Spread the two arms just enough for the built-in pins to clear the hinge eye.', 1.6,
+      fits.push(sampled('Squeeze Both Arms In', 'Pinch the tabs to pull the pins between the two fixed sockets.', 1.6,
         progress => together(0, approachHeight, progress), true));
-      fits.push(sampled('Lower the Cap onto the Hinge', 'Keep the arms spread and lower the cap until the pins line up with the hole.', 2,
+      fits.push(sampled('Lower the Cap onto the Hinge', 'Keep the arms squeezed and lower the cap until the pins line up with the sockets.', 2,
         progress => together(0, approachHeight * (1 - progress), 1), true));
-      fits.push(sampled('Let the Pins Snap In', 'Release both arms. The pins enter from opposite sides and the cap is free to pivot.', 1.6,
+      fits.push(sampled('Let the Pins Snap Outward', 'Release the tabs. The pins move outward into the sockets and the cap can pivot.', 1.6,
         progress => together(0, 0, 1 - progress), true));
-      fits.push(sampled('Remove and Refit the Cap', 'Pull the arms apart at the small tabs before lifting. Lower the cap again and release the arms to refit it.', 4, progress => {
+      fits.push(sampled('Remove and Refit the Cap', 'Pinch the tabs before lifting. Lower the cap again and let the pins snap back into the sockets.', 4, progress => {
         const out = 1 - Math.abs(2 * progress - 1);
         return together(0, approachHeight * Math.max(0, (out - .35) / .65), Math.min(1, out / .35));
       }, true));
