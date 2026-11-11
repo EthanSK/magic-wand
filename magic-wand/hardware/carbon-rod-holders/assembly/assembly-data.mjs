@@ -1,7 +1,7 @@
 // Render the same discrete poses used by the owning model's assembly checks.
 // Keep all components in one menu; adding a component to its guide includes it
 // here without maintaining another list of model names in the user interface.
-import { potentialKeyViews } from './keycap-concepts.mjs?v=outward-hinge';
+import { potentialKeyViews } from './keycap-concepts.mjs?v=cirque-cap-view';
 
 export const identity = () => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
 export const translated = (x = 0, y = 0, z = 0) => [1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z];
@@ -120,7 +120,10 @@ export function validateGuide(guide) {
         }
         for (const [actor, weight] of Object.entries(sample.morphs ?? {})) {
           const record = module.actors[actor];
-          if (!(record?.morphFile || record?.morphGeometry) || !Number.isFinite(weight) || weight < 0 || weight > 1) throw new Error(`Invalid spring pose: ${name}/${actor}`);
+          const count = record?.morphGeometries?.length ?? (record?.morphFile || record?.morphGeometry ? 1 : 0);
+          const weights = Array.isArray(weight) ? weight : [weight];
+          if (!count || weights.length !== count || weights.some(value => !Number.isFinite(value) || value < 0 || value > 1)
+              || weights.reduce((sum, value) => sum + value, 0) > 1 + 1e-8) throw new Error(`Invalid spring pose: ${name}/${actor}`);
         }
       }
     }

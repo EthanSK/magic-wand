@@ -1,5 +1,6 @@
 // Viewer-only concepts. The body, hole positions, stops and wiring are
 // illustrations for comparing motion. They do not define printable geometry.
+import { cirqueKeycap } from './cirque-keycap.mjs?v=cirque-cap-view';
 const translate = (x = 0, y = 0, z = 0) => [1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z];
 const rotateBoard = [-1, 0, 0, 0, 0, -1, 0, -2, 0, 0, 1, 0];
 const holeY = [-3.6, 1.6], holeZ = 13.75, bodyHalfWidth = 2.95;
@@ -264,7 +265,7 @@ export function potentialKeyViews(assembled, capGeometry) {
     vertices: [[0, 23.8, 6.25], [0, 26.5, 6.25], [0, 26.5, 6.25], [5.2, 26.5, 5.4],
       [5.2, 26.5, 5.4], [7.1, 20, 2.9]],
   }, { lines: true, frame: false });
-  return Object.fromEntries(Object.entries(variants).map(([kind, variant]) => {
+  const views = Object.fromEntries(Object.entries(variants).map(([kind, variant]) => {
     const direct = kind === 'direct', carrier = kind === 'carrier';
     const stopX = direct ? 2.65 : 5.85;
     const padHalf = carrier ? .63 : .45;
@@ -425,4 +426,9 @@ export function potentialKeyViews(assembled, capGeometry) {
       ],
     }];
   }));
+  views.concept_touch = cirqueKeycap(views.concept_carrier, seated, {
+    box, joined, mirrored, roundPin, pinSupport, shift, sampled, travel, freeGap,
+    axis: [holderHingeY, hingeZ], capMotion: progress => capMotion([holderHingeY, hingeZ], progress),
+  });
+  return views;
 }

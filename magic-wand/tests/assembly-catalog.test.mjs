@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { validateGuide, sampledPose, identity, groupKeys } from '../hardware/carbon-rod-holders/assembly/assembly-data.mjs';
 import { legacyR20 } from '../hardware/carbon-rod-holders/assembly/legacy-r20.mjs';
 import { GUIDED_CAPTURE, HOLDER_SNAP, UPPER_KEY_SHIFT } from '../hardware/carbon-rod-holders/assembly/keycap-concepts.mjs';
+import { CIRQUE_LAYOUT } from '../hardware/carbon-rod-holders/assembly/cirque-keycap.mjs';
 
 test('R25 Keys opens seated with the centre paddle and four capped Choc switches', () => {
   const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
@@ -55,25 +56,28 @@ test('R25 concept views press and return beside the same capped keys', () => {
   const { views } = groupKeys(guide.modules);
   const variants = Object.entries(views).filter(([, view]) => view.concept);
   assert.deepEqual(variants.map(([id]) => id), [
-    'concept_slider', 'concept_flexure', 'concept_pivot', 'concept_direct', 'concept_carrier',
+    'concept_slider', 'concept_flexure', 'concept_pivot', 'concept_direct', 'concept_carrier', 'concept_touch',
   ]);
   const seated = views.centre.steps.at(-1).samples.at(-1);
   for (const [id, view] of variants) {
     validateGuide({ ...guide, modules: { [id]: view } });
-    const [rest, down, returned] = view.steps.slice(-3).map(step => step.samples.at(-1));
+    const pressIndex = view.steps.findIndex(step => step.title.startsWith('Press'));
+    const press = view.steps[pressIndex];
+    const rest = press.samples[0], down = press.samples.at(-1);
+    const returned = view.steps[pressIndex + 1].samples.at(-1);
     assert.deepEqual(rest.cap, returned.cap);
     assert.notDeepEqual(rest.cap, down.cap);
     assert.equal(rest.plunger[11], 0);
     assert.ok(down.plunger[11] < 0);
     assert.deepEqual(rest.board, down.board);
-    assert.equal(rest.board[5], -1);
+    assert.equal(rest.board[5], id === 'concept_touch' ? 1 : -1);
     for (const key of [0, 2, 3, 4]) {
       const expected = [...seated[`keycap_${key}`]];
-      if (id === 'concept_carrier' && key >= 3) expected[3] += key === 3 ? -UPPER_KEY_SHIFT : UPPER_KEY_SHIFT;
+      if (['concept_carrier', 'concept_touch'].includes(id) && key >= 3) expected[3] += key === 3 ? -UPPER_KEY_SHIFT : UPPER_KEY_SHIFT;
       assert.deepEqual(down[`keycap_${key}`], expected);
     }
     for (const actor of Object.values(view.actors)) {
-      for (const mesh of [actor.geometry, actor.morphGeometry].filter(Boolean)) {
+      for (const mesh of [actor.geometry, actor.morphGeometry, ...(actor.morphGeometries ?? [])].filter(Boolean)) {
         assert.ok(mesh.vertices.flat().every(Number.isFinite));
         if (mesh.faces) assert.ok(mesh.faces.flat().every(i => i >= 0 && i < mesh.vertices.length));
       }
@@ -84,7 +88,10 @@ test('R25 concept views press and return beside the same capped keys', () => {
       const from = view.steps[index - 1].samples.at(-1), to = view.steps[index].samples[0];
       for (const actor of Object.keys(view.actors)) {
         assert.ok(from[actor].every((n, i) => Math.abs(n - to[actor][i]) < 1e-8), `${id}/${index}/${actor}`);
-        assert.ok(Math.abs((from.morphs?.[actor] ?? 0) - (to.morphs?.[actor] ?? 0)) < 1e-8);
+        const before = [from.morphs?.[actor] ?? 0].flat(), after = [to.morphs?.[actor] ?? 0].flat();
+        for (let i = 0; i < Math.max(before.length, after.length); i++) {
+          assert.ok(Math.abs((before[i] ?? 0) - (after[i] ?? 0)) < 1e-8, `${id}/${index}/${actor} flex`);
+        }
       }
     }
   }
@@ -131,6 +138,105 @@ test('R25 concept views press and return beside the same capped keys', () => {
   }
   const stopTop = Math.max(...holder.actors.stops.geometry.vertices.map(([, , z]) => z));
   assert.ok(stopTop - 11.04 < 3);
+});
+
+test('R25 Cirque cap clears its neighbours and releases after unplugging the ribbon', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+  const guideUrl = new URL(catalog.versions.find(entry => entry.id === 'r25').guide, directory);
+  const { modules } = JSON.parse(readFileSync(guideUrl));
+  const { views } = groupKeys(modules);
+  const view = views.concept_touch;
+  const { actors, steps } = view;
+  const { pinTip, armInner, squeeze, switchX, attachLift, disconnect, stopX, sensorDepth, sensorRadius, top } = CIRQUE_LAYOUT;
+  assert.ok(pinTip - armInner > .40 && pinTip - squeeze < armInner);
+  assert.match(view.status, /physical fit unverified/);
+  const press = steps.find(step => step.title === 'Press to Click');
+  const release = steps.find(step => step.title === 'Disconnect and Lift Off');
+  const rest = press.samples[0];
+  const bodyRight = Math.max(...actors.body.geometry.vertices.map(vertex => vertex[0])) + switchX;
+  const frontStops = actors.stops.geometry.vertices.filter(vertex => vertex[1] < 0);
+  const frontStopTop = Math.max(...frontStops.map(vertex => vertex[2]));
+  function points(id, sample) {
+    const { geometry, morphGeometry, morphGeometries } = actors[id], pose = sample[id];
+    const targets = morphGeometries ?? (morphGeometry ? [morphGeometry] : []);
+    const weights = [sample.morphs?.[id] ?? 0].flat();
+    return geometry.vertices.map((vertex, index) => {
+      const v = vertex.map((value, axis) => targets.reduce((coordinate, target, i) =>
+        coordinate + (weights[i] ?? 0) * (target.vertices[index][axis] - value), value));
+      return [0, 4, 8].map(j => pose[j] * v[0] + pose[j + 1] * v[1] + pose[j + 2] * v[2] + pose[j + 3]);
+    });
+  }
+  const rightKey = Math.min(...points('keycap_2', rest).map(vertex => vertex[0]));
+  const upperKeyFront = Math.min(...points('keycap_4', rest).map(vertex => vertex[1]));
+  const upperKeyInner = Math.min(...points('keycap_4', rest).map(vertex => vertex[0]));
+  function meshExtent(id, axis) {
+    const mesh = readFileSync(new URL(actors[id].file, guideUrl)), pose = rest[id];
+    const row = axis * 4;
+    let min = Infinity, max = -Infinity;
+    for (let triangle = 0; triangle < mesh.readUInt32LE(80); triangle++) {
+      for (let corner = 0; corner < 3; corner++) {
+        const offset = 96 + triangle * 50 + corner * 12;
+        const value = pose[row] * mesh.readFloatLE(offset) + pose[row + 1] * mesh.readFloatLE(offset + 4)
+          + pose[row + 2] * mesh.readFloatLE(offset + 8) + pose[row + 3];
+        min = Math.min(min, value);
+        max = Math.max(max, value);
+      }
+    }
+    return [min, max];
+  }
+  const [boardFront, boardBack] = meshExtent('board', 1);
+  const [, plugBack] = meshExtent('plug', 1);
+  const [upperSwitchFront] = meshExtent('switch_3', 1);
+  const [plugBottom] = meshExtent('plug', 2);
+  const [, rodTop] = meshExtent('rod', 2);
+  assert.ok(upperSwitchFront - boardBack > .25 && plugBack < boardFront + 4);
+  assert.ok(plugBottom - rodTop > .5);
+  assert.equal(Math.max(...points('sensorBoard', rest).map(vertex => vertex[0])), sensorRadius);
+  assert.ok(Math.abs(top - Math.min(...points('sensorConnector', rest).map(vertex => vertex[2])) - sensorDepth) < 1e-8);
+  // The first mesh in the cradle is the support ring. Its bottom inner
+  // row is the actual polygon that the connector must clear on insertion.
+  const cradle = actors.cap.geometry.vertices;
+  const ringSections = cradle.findIndex(vertex => vertex[2] !== cradle[0][2]);
+  const opening = cradle.slice(6 * ringSections, 7 * ringSections);
+  function clearsOpening([x, y]) {
+    let inside = false;
+    for (let i = 0; i < opening.length; i++) {
+      const [ax, ay] = opening[i], [bx, by] = opening[(i + 1) % opening.length];
+      if ((ay > y) !== (by > y) && x < ax + (bx - ax) * (y - ay) / (by - ay)) inside = !inside;
+    }
+    return inside;
+  }
+  assert.ok(points('sensorConnector', rest).every(clearsOpening), 'connector corners clear the support ledge');
+  const feed = steps.find(step => step.title === 'Seat the Touchpad');
+  for (const sample of feed.samples) {
+    assert.ok(points('ribbon', sample).every(clearsOpening), 'straight ribbon feeds through the ledge opening');
+  }
+  for (const sample of steps.flatMap(step => step.samples)) {
+    for (const id of ['cap', 'sensorSurface', 'sensorBoard', 'sensorConnector', 'snapLeft', 'snapRight', 'hingeSupports', 'ribbon']) {
+      for (const [x, y] of points(id, sample)) {
+        assert.ok(Math.abs(x) < rightKey, `${id} clears the side keys`);
+        if (y >= upperKeyFront) assert.ok(Math.abs(x) < upperKeyInner, `${id} clears the upper keys`);
+      }
+    }
+    assert.ok(points('sensorConnector', sample).every(([x]) => x - bodyRight >= .5));
+    assert.ok(points('ribbon', sample).every(([x]) => x > bodyRight + .5));
+  }
+  for (const sample of press.samples) {
+    const feet = points('cap', sample).filter(([x, , z]) => Math.abs(Math.abs(x) - stopX) <= .631 && z < 15);
+    assert.ok(feet.length > 0 && feet.every(([, , z]) => z >= frontStopTop - 1e-8));
+    assert.deepEqual(points('ribbon', sample).slice(-4), points('ribbon', rest).slice(-4));
+  }
+  const pressed = press.samples.at(-1);
+  const footZ = Math.min(...points('cap', pressed).filter(([x]) => Math.abs(Math.abs(x) - stopX) <= .631).map(vertex => vertex[2]));
+  assert.ok(Math.abs(footZ - frontStopTop) < 1e-8);
+  assert.ok(Math.abs(pressed.plunger[11] - rest.plunger[11] + .47) < 1e-8);
+  for (const sample of release.samples.filter(sample => sample.cap[11] > 0)) {
+    assert.equal(sample.flexDock[3] - rest.flexDock[3], disconnect);
+    assert.equal(sample.morphs.hingeSupports, 1);
+  }
+  assert.equal(release.samples.at(-1).cap[11], attachLift);
+  assert.equal(steps.at(-1).samples.at(-1).cap[11], 0);
 });
 
 test('printed-parts catalog includes every assembly and preserves physical-fit limits', async () => {

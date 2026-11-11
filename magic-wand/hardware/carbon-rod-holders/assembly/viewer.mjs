@@ -5,7 +5,7 @@ import { FreeViewInput } from '../../printed-loop-wand/preview/free-view-input.m
 import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/preview/free-view-controls.mjs';
 import { applyViewerWheel } from '../../carbon-rod-holders-r7-spring-clips/preview/wheel-input.mjs';
 import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
-import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=outward-hinge';
+import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=cirque-cap-view';
 import { legacyR20 } from './legacy-r20.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');
@@ -143,7 +143,12 @@ function applyPose({ index, fraction }) {
     const m = sample[id] || identity();
     object.matrix.set(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11], 0, 0, 0, 1);
     object.matrixWorldNeedsUpdate = true;
-    if (object.morphTargetInfluences) object.morphTargetInfluences[0] = sample.morphs?.[id] ?? 0;
+    if (object.morphTargetInfluences) {
+      const weights = sample.morphs?.[id];
+      for (let i = 0; i < object.morphTargetInfluences.length; i++) {
+        object.morphTargetInfluences[i] = Array.isArray(weights) ? weights[i] ?? 0 : i === 0 ? weights ?? 0 : 0;
+      }
+    }
   }
   updateCutaway(index, fraction);
   document.body.dataset.step = String(index); document.body.dataset.fraction = String(fraction);
@@ -189,19 +194,23 @@ async function chooseModule() {
       const rest = await geometry(record, sourceUrl);
       const color = record.color || '#29a5b7', opacity = record.opacity ?? 1;
       let g = rest;
-      if (record.morphFile || record.morphGeometry) {
-        const target = await geometry({ file: record.morphFile, geometry: record.morphGeometry, baseUrl: record.baseUrl }, sourceUrl);
-        const positions = target.getAttribute('position');
-        if (positions.count !== rest.getAttribute('position').count) throw new Error('Assembly spring shapes do not match');
-        // The target shares the exact STL vertex order. Only this component owns
+      const morphSources = record.morphGeometries?.map(geometry => ({ geometry }))
+        ?? (record.morphFile || record.morphGeometry
+          ? [{ file: record.morphFile, geometry: record.morphGeometry, baseUrl: record.baseUrl }] : []);
+      if (morphSources.length) {
+        const targets = await Promise.all(morphSources.map(source => geometry(source, sourceUrl)));
+        const positions = targets.map(target => target.getAttribute('position'));
+        if (positions.some(position => position.count !== rest.getAttribute('position').count)) throw new Error('Assembly spring shapes do not match');
+        // Each target shares the exact vertex order. Only this component owns
         // the morph binding, so an ordinary view can still reuse the cached STL.
         g = rest.clone();
-        g.morphAttributes.position = [positions];
-        if (record.morphGeometry) { rest.dispose(); target.dispose(); }
+        g.morphAttributes.position = positions;
+        if (record.geometry) rest.dispose();
+        targets.forEach((target, index) => { if (morphSources[index].geometry) target.dispose(); });
       }
       const material = record.lines ? new THREE.LineBasicMaterial({ color, transparent: opacity < 1, opacity }) : new THREE.MeshStandardMaterial({ color, roughness: .5, metalness: .08, flatShading: true, transparent: opacity < 1, opacity, depthWrite: opacity === 1 });
       const object = record.lines ? new THREE.LineSegments(g, material) : new THREE.Mesh(g, material);
-      object.userData.ownedGeometry = !record.file || Boolean(record.morphFile);
+      object.userData.ownedGeometry = !record.file || morphSources.length > 0;
       object.matrixAutoUpdate = false; nextGroup.add(object); nextActors[id] = object;
     }
     if (request !== loadId) { disposeGroup(nextGroup); return; }

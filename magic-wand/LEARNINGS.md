@@ -2562,6 +2562,13 @@ slide-in route and provides different paddle stops for a first unpowered trial.
 The [wiring guide](hardware/xiao-wand-dashboard/README.md#op1-centre-click)
 owns the contact check and the connection to the existing mouse input.
 
+For the Cirque centre-cap preview, check the connector corners against the
+rendered ledge opening. Evenly sampled arcs can bridge the corners of a
+rectangular relief. Feed the ribbon through the opening straight, then form
+the bend beneath the cap. A seated cable path alone does not establish a
+clear insertion path. This is viewer geometry. The connector revision,
+printed retention and flex life still need physical verification.
+
 Self-improved — R23's initial Studio tree-support trials passed the slice
 warning check, but deposited support in the switch and cap approaches and
 at the hinge bore entrance. The seated board bay was clear. Inspect the
