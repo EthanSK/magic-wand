@@ -545,82 +545,84 @@ test('R29 tray arms bend their real vertices and snap their tabs into the fixed 
   }
 });
 
-test('R30 holds the DFR0030 through its two holes and the hinge detail beside Keys shows the same bracket', () => {
-  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
-  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
-  const version = catalog.versions.find(entry => entry.id === 'r30');
-  assert.equal(version.groupKeys, true);
-  const url = new URL(version.guide, directory);
-  const guide = JSON.parse(readFileSync(url));
-  const { modules, views } = groupKeys(guide.modules);
-  validateGuide({ ...guide, modules: views });
-  validateGuide({ ...guide, modules });
-  assert.deepEqual(Object.keys(modules).slice(0, 2), ['keys', 'snap_hinge']);
-  assert.equal(modules.keys.label, 'Keys · full assembly');
-  assert.equal(modules.snap_hinge.label, 'Keys · snap hinge detail');
-  assert.ok(modules.cable && modules.battery && modules.xiao);
-  const sha = file => createHash('sha256').update(readFileSync(new URL(file, url))).digest('hex');
-  for (const module of Object.values(guide.modules)) {
-    for (const actor of Object.values(module.actors)) {
-      for (const file of [actor.file, actor.morphFile].filter(Boolean)) assert.equal(guide.sources.meshes_sha256[file], sha(file), file);
+for (const [revision, hingeShift] of [['r30', 2], ['r31', 21.05]]) {
+  test(`${revision.toUpperCase()} holds the DFR0030 through its two holes and the hinge detail beside Keys shows the same bracket`, () => {
+    const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+    const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+    const version = catalog.versions.find(entry => entry.id === revision);
+    assert.equal(version.groupKeys, true);
+    const url = new URL(version.guide, directory);
+    const guide = JSON.parse(readFileSync(url));
+    const { modules, views } = groupKeys(guide.modules);
+    validateGuide({ ...guide, modules: views });
+    validateGuide({ ...guide, modules });
+    assert.deepEqual(Object.keys(modules).slice(0, 2), ['keys', 'snap_hinge']);
+    assert.equal(modules.keys.label, 'Keys · full assembly');
+    assert.equal(modules.snap_hinge.label, 'Keys · snap hinge detail');
+    assert.ok(modules.cable && modules.battery && modules.xiao);
+    const sha = file => createHash('sha256').update(readFileSync(new URL(file, url))).digest('hex');
+    for (const module of Object.values(guide.modules)) {
+      for (const actor of Object.values(module.actors)) {
+        for (const file of [actor.file, actor.morphFile].filter(Boolean)) assert.equal(guide.sources.meshes_sha256[file], sha(file), file);
+      }
     }
-  }
-  const report = JSON.parse(readFileSync(new URL('geometry-checks.json', url)));
-  const { checks } = report;
-  assert.equal(checks.passed, true);
-  assert.equal(report.print_validated, false);
-  assert.equal(report.physical_fit_verified, false);
-  assert.deepEqual(checks.board_outline_mm, [22, 35]);
-  for (const key of Object.keys(checks).filter(key => key.endsWith('overlap_mm3'))) assert.ok(checks[key] < .035, key);
-  for (const value of Object.values(checks.board_on_posts_overlap_by_pitch_mm3)) assert.ok(value < .035);
-  assert.ok(checks.board_lateral_capture_contact_mm3 > .04 && checks.board_along_capture_contact_mm3 > .04);
-  assert.ok(checks.board_to_clip_lift_contact_mm3 > .04 && checks.clip_head_capture_contact_mm3 > .04);
-  assert.ok(checks.released_tab_axial_engagement_mm >= .6 && checks.squeezed_tab_clear_of_support_mm > .2);
-  assert.equal(Object.keys(checks.guard_runners).length, 6);
-  const view = views.dfr;
-  assert.equal(view.actors.touch_pin, undefined);
-  assert.equal(view.actors.op1_latch, undefined);
-  assert.equal(view.actors.keeper_pin, undefined);
-  assert.equal(checks.hinge_moved_towards_two_key_end_mm, 2);
-  assert.ok(view.actors.clip_left && view.actors.clip_right);
-  const closeUp = guide.modules.snap_hinge;
-  assert.deepEqual(Object.keys(closeUp.actors).sort(), ['cap', 'carrier']);
-  assert.equal(closeUp.actors.cap.file, view.actors.cap.file);
-  assert.equal(closeUp.actors.cap.morphFile, view.actors.cap.morphFile);
-  assert.ok(closeUp.steps.length >= 6);
-  for (const module of [view, closeUp]) {
-    for (const annotation of module.annotations.filter(item => item.step)) {
-      assert.equal(module.steps.filter(step => step.title === annotation.step).length, 1, annotation.title);
+    const report = JSON.parse(readFileSync(new URL('geometry-checks.json', url)));
+    const { checks } = report;
+    assert.equal(checks.passed, true);
+    assert.equal(report.print_validated, false);
+    assert.equal(report.physical_fit_verified, false);
+    assert.deepEqual(checks.board_outline_mm, [22, 35]);
+    for (const key of Object.keys(checks).filter(key => key.endsWith('overlap_mm3'))) assert.ok(checks[key] < .035, key);
+    for (const value of Object.values(checks.board_on_posts_overlap_by_pitch_mm3)) assert.ok(value < .035);
+    assert.ok(checks.board_lateral_capture_contact_mm3 > .04 && checks.board_along_capture_contact_mm3 > .04);
+    assert.ok(checks.board_to_clip_lift_contact_mm3 > .04 && checks.clip_head_capture_contact_mm3 > .04);
+    assert.ok(checks.released_tab_axial_engagement_mm >= .6 && checks.squeezed_tab_clear_of_support_mm > .2);
+    assert.equal(Object.keys(checks.guard_runners).length, 6);
+    const view = views.dfr;
+    assert.equal(view.actors.touch_pin, undefined);
+    assert.equal(view.actors.op1_latch, undefined);
+    assert.equal(view.actors.keeper_pin, undefined);
+    assert.ok(Math.abs(checks.hinge_moved_towards_two_key_end_mm - hingeShift) < 1e-8);
+    assert.ok(view.actors.clip_left && view.actors.clip_right);
+    const closeUp = guide.modules.snap_hinge;
+    assert.deepEqual(Object.keys(closeUp.actors).sort(), ['cap', 'carrier']);
+    assert.equal(closeUp.actors.cap.file, view.actors.cap.file);
+    assert.equal(closeUp.actors.cap.morphFile, view.actors.cap.morphFile);
+    assert.ok(closeUp.steps.length >= 6);
+    for (const module of [view, closeUp]) {
+      for (const annotation of module.annotations.filter(item => item.step)) {
+        assert.equal(module.steps.filter(step => step.title === annotation.step).length, 1, annotation.title);
+      }
     }
-  }
-  for (const step of closeUp.steps) {
-    const full = view.steps.find(candidate => candidate.title === step.title);
-    assert.equal(step.samples.length, full.samples.length);
-    for (const [i, pose] of step.samples.entries()) {
-      for (const field of ['cap', 'carrier', 'morphs']) assert.deepEqual(pose[field], full.samples[i][field]);
+    for (const step of closeUp.steps) {
+      const full = view.steps.find(candidate => candidate.title === step.title);
+      assert.equal(step.samples.length, full.samples.length);
+      for (const [i, pose] of step.samples.entries()) {
+        for (const field of ['cap', 'carrier', 'morphs']) assert.deepEqual(pose[field], full.samples[i][field]);
+      }
     }
-  }
-  const at = title => view.steps.findIndex(step => step.title === title);
-  const end = sampledPose(view, view.steps.length - 1, 1);
-  for (const id of ['sensor', 'electrode', 'connector', 'clip_left', 'clip_right']) assert.deepEqual(end[id], end.cap);
-  const down = sampledPose(view, at('Touch, Click and Release'), .5);
-  assert.ok(down.plunger[11] < -.45);
-  for (const id of ['sensor', 'electrode', 'connector', 'clip_left', 'clip_right']) assert.deepEqual(down[id], down.cap);
-  assert.ok(at('Let the Tabs Snap Into the Holes') < at('Fit the Board Over the Posts'));
-  assert.ok(at('Fit the Board Over the Posts') < at('Clip the Posts'));
-  assert.ok(at('Pull Off the Clips') < at('Lift the Board Off the Posts'));
-  assert.ok(at('Lift the Board Off the Posts') < at('Pinch to Release the Tabs'));
-  const off = sampledPose(view, at('Lift the Board Off the Posts'), 1);
-  assert.ok(off.sensor[11] - off.cap[11] > 10);
-  assert.ok(view.steps[at('Lower Between the Supports')].samples.every(sample => sample.morphs.cap === 1));
-  for (let i = 1; i < view.steps.length; i++) {
-    const before = view.steps[i - 1].samples.at(-1), after = view.steps[i].samples[0];
-    for (const actor of Object.keys(view.actors)) {
-      assert.ok(before[actor].every((n, j) => Math.abs(n - after[actor][j]) < 1e-8), `${view.steps[i].title}/${actor}`);
+    const at = title => view.steps.findIndex(step => step.title === title);
+    const end = sampledPose(view, view.steps.length - 1, 1);
+    for (const id of ['sensor', 'electrode', 'connector', 'clip_left', 'clip_right']) assert.deepEqual(end[id], end.cap);
+    const down = sampledPose(view, at('Touch, Click and Release'), .5);
+    assert.ok(down.plunger[11] < -.45);
+    for (const id of ['sensor', 'electrode', 'connector', 'clip_left', 'clip_right']) assert.deepEqual(down[id], down.cap);
+    assert.ok(at('Let the Tabs Snap Into the Holes') < at('Fit the Board Over the Posts'));
+    assert.ok(at('Fit the Board Over the Posts') < at('Clip the Posts'));
+    assert.ok(at('Pull Off the Clips') < at('Lift the Board Off the Posts'));
+    assert.ok(at('Lift the Board Off the Posts') < at('Pinch to Release the Tabs'));
+    const off = sampledPose(view, at('Lift the Board Off the Posts'), 1);
+    assert.ok(off.sensor[11] - off.cap[11] > 10);
+    assert.ok(view.steps[at('Lower Between the Supports')].samples.every(sample => sample.morphs.cap === 1));
+    for (let i = 1; i < view.steps.length; i++) {
+      const before = view.steps[i - 1].samples.at(-1), after = view.steps[i].samples[0];
+      for (const actor of Object.keys(view.actors)) {
+        assert.ok(before[actor].every((n, j) => Math.abs(n - after[actor][j]) < 1e-8), `${view.steps[i].title}/${actor}`);
+      }
+      assert.ok(Math.abs((before.morphs?.cap ?? 0) - (after.morphs?.cap ?? 0)) < 1e-8, `${view.steps[i].title} flex`);
     }
-    assert.ok(Math.abs((before.morphs?.cap ?? 0) - (after.morphs?.cap ?? 0)) < 1e-8, `${view.steps[i].title} flex`);
-  }
-});
+  });
+}
 
 test('R27 fits the copper keys closer and loads the OP1 behind a flat bottom', () => {
   const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);

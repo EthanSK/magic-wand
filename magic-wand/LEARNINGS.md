@@ -16,6 +16,18 @@ instance of the existing dwell detector so previously accumulated travel cannot 
 a fresh selection immediately. These checks establish simulated state transitions,
 not physical screenshot acceptance. Verified 25 October 2026.
 
+## Rear-pivot DFRobot bracket
+
+R31 moves the joint near the connector end by reversing the flexible arms.
+Keep the fixed holes and arm tabs on the same axis and test the whole
+pinch, lowering, release and click sequence. Changing arm direction also
+changes the printable orientation. Front-down printing needed narrow
+diagonal ribs beneath the floor and arm-root crossbars, plus a sloped
+underside on the post heads. Check the actual deposited layers again.
+A larger finger lever arm also increases the switch lever arm when its
+position stays fixed. Compare both distances before claiming an easier
+click.
+
 ## DFR0030 V2 board mounts
 
 The Pi Hut receipt identifies DFR0030. The vendor text lists 22 × 30 mm
