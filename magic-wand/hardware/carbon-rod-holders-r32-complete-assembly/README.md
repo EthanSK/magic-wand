@@ -12,8 +12,10 @@ removed. Fit the two kit screws through the eyelets, connect the plug from
 below, then push the switch into its three sockets and refit the keycaps. The
 board sits at the R31 height of 9.2–10.8 mm in the assembly frame. It is turned
 25° around the switch actuator so that the white plug and cable exit beside
-the rod. The opening accounts separately for the metal contacts, socket
-barrels, white plug and wire bend.
+the rod. At 0° the plug and wire overlap the 8 mm rod. At 20° they clear when
+seated, but the plug still crosses the rod during insertion. The modelled
+25° insertion path clears it. The opening accounts separately for the metal
+contacts, socket barrels, white plug and wire bend.
 
 The [Endgame Gear kit photos](https://endgamegear.com/products/op1-universal-switch-set)
 give an estimated 30 × 10 mm outline and 17.9 mm eyelet pitch. Scaling the
@@ -34,8 +36,13 @@ bracket remain the same. The two flexing arms have 1.2 × 1.4 mm sections and a
 free span of about 10.8 mm. The orange crossbar ties the rails together and
 carries the pusher and stop feet. Diagonal ribs help print it front-down. The
 six key guard runners are tall on edge to resist finger pressure while leaving
-room for sockets and solder. A later weight pass can open the crossbar between
-its loaded areas and evaluate lower crosswise guards with the same clearances.
+room for sockets and solder. The next weight pass can open the crossbar between
+its loaded areas and try rounded crosswise ribs from the carrier edges to the
+rigid part of the rod mount. In the rear-down print orientation a flat rib
+across the gap would start as a bridge. Tapering the ribs back into both roots
+could build them up in layers and leave a short join in the middle. Check the
+rod clip's flex, the wire route and prewired switch insertion in CAD, then
+verify that the sliced paths keep those spaces clear.
 
 ## Complete plate
 

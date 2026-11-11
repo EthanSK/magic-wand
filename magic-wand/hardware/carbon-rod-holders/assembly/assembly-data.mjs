@@ -81,7 +81,7 @@ export function groupKeys(modules) {
       samples: step.samples.map(pose => ({ ...socketPoses, ...capPoses, ...pose })),
     }));
     const note = 'The Choc caps use a reference shape and estimated seated height. The OP1 board, plug and switch also use estimated dimensions.';
-    return { ...module, label, note, actors, steps, openSeated: true, rotation: module.rotation ?? [.92, 0, .34] };
+    return { ...module, label, note, actors, steps, rotation: module.rotation ?? [.92, 0, .34] };
   }
 
   const fitChoc = {

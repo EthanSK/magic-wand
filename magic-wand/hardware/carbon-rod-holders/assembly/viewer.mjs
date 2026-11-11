@@ -291,8 +291,8 @@ async function chooseModule() {
       const item = document.createElement('li'); item.textContent = actor.label || id.replaceAll('_', ' '); item.style.setProperty('--part-color', actor.color || '#29a5b7'); return item;
     }));
     document.body.dataset.module = modules.value;
+    // Start each assembly at step one. Compare cap heights explicitly seats the parts.
     tools.assembly.setSteps(module.steps);
-    if (module.openSeated) tools.assembly.timeline.seek(tools.assembly.timeline.duration);
     reset();
     const url = new URL(location.href);
     url.searchParams.set('version', versions.value);

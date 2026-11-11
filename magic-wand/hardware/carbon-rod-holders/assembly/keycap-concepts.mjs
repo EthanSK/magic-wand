@@ -414,7 +414,7 @@ export function potentialKeyViews(assembled, capGeometry) {
         }, true));
     }
     return [`concept_${kind}`, {
-      label: variant.label, concept: true, openSeated: true, rotation: [.9, 0, .27],
+      label: variant.label, concept: true, rotation: [.9, 0, .27],
       status: direct ? 'Needs a switch hold-down' : 'Concept · fit unverified',
       comparisonOnly: direct,
       note: direct ? 'This pivot needs a switch hold-down and only works near the front edge.' : 'The hardware dimensions and printed fit still need checking.',

@@ -2461,6 +2461,11 @@ the requested slider value before pause redraws its controls. Both transitions
 were exercised in the browser alongside an unchanged R16 viewer. Illustrative
 electronics and latch motion remain distinct from physical fit and force.
 
+User-corrected — 2026-11-11: Open the assembly paused on step one, including
+when changing views. The old seated-on-open flag jumped past the whole recipe.
+The shared timeline already starts at zero when it loads a recipe. Keep the
+assembled pose available through the explicit Compare cap heights action.
+
 ### 2026-11-09 — Timelapse compatibility and exported-solid identity
 
 Self-improved — R20's A1 mini slice raised `not_support_traditional_timelapse`

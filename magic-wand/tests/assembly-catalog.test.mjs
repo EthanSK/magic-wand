@@ -67,7 +67,7 @@ test('old component and key-view links resolve inside the new component groups',
   }
 });
 
-test('R25 Keys opens seated with the centre paddle and four capped Choc switches', () => {
+test('R25 Keys finishes with the centre paddle and four capped Choc switches', () => {
   const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
   const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
   const version = catalog.versions.find(entry => entry.id === 'r25');
@@ -87,7 +87,6 @@ test('R25 Keys opens seated with the centre paddle and four capped Choc switches
     const view = views[id];
     const original = guide.modules[id];
     const last = sampledPose(view, view.steps.length - 1, 1);
-    assert.equal(view.openSeated, true);
     assert.deepEqual(last.paddle, original.steps.at(-1).samples.at(-1).paddle);
     assert.equal(view.actors.paddle.file, original.actors.paddle.file);
     for (const key of [0, 2, 3, 4]) {
