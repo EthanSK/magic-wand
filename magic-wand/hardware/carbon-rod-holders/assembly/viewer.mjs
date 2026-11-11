@@ -234,7 +234,7 @@ async function chooseModule() {
     const url = new URL(location.href);
     url.searchParams.set('version', versions.value);
     url.searchParams.set('component', modules.value);
-    if (isKeys && keysView.value !== 'centre') url.searchParams.set('keyView', keysView.value);
+    if (isKeys && keysView.value !== Object.keys(keyViews)[0]) url.searchParams.set('keyView', keysView.value);
     else url.searchParams.delete('keyView');
     history.replaceState(null, '', url);
     document.body.dataset.ready = 'true'; document.getElementById('error').style.display = 'none';
@@ -280,8 +280,9 @@ async function chooseVersion(preferred, preferredKeysView) {
     for (const [id, value] of Object.entries(keyViews)) {
       (value.comparisonOnly ? comparison : value.concept ? potential : keysView).append(new Option(value.label, id));
     }
-    keysView.append(potential, comparison);
-    const legacyView = preferred !== 'key' && Object.hasOwn(keyViews, preferred) ? preferred : 'centre';
+    if (potential.childElementCount) keysView.append(potential);
+    if (comparison.childElementCount) keysView.append(comparison);
+    const legacyView = preferred !== 'key' && Object.hasOwn(keyViews, preferred) ? preferred : Object.keys(keyViews)[0];
     keysView.value = Object.hasOwn(keyViews, preferredKeysView) ? preferredKeysView : legacyView;
     if (Object.hasOwn(keyViews, preferred)) preferred = 'keys';
   }

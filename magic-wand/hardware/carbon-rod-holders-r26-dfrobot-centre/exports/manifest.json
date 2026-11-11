@@ -1,0 +1,164 @@
+{
+  "revision": "carbon-rod-holders-r26-dfrobot-centre",
+  "physical_fit_verified": false,
+  "source_sha256": {
+    "holder26.py": "924d95904c5de272f46468cd01ea724e43f9099489b7138f810a40caf9baa568",
+    "parameters.json": "ea6e18c173e46e2a33f270f010e051a7a64817eaef3576d9fcb0bad14cf57889"
+  },
+  "purchased_board": "DFRobot DFR0030 Gravity Digital Capacitive Touch Sensor V2",
+  "outline_mm": [
+    22,
+    30
+  ],
+  "pcb_edge_thickness_estimate_mm": 1.6,
+  "lower_outer_key_shift_each_mm": 2.8,
+  "upper_key_shift_mm": 0.0,
+  "parts": {
+    "Key_Carrier": {
+      "volume_mm3": 5658.8,
+      "solid_PETG_g": 7.187,
+      "assembly_bounds_mm": [
+        [
+          -30.5,
+          -19.0,
+          -4.781
+        ],
+        [
+          30.5,
+          26.9,
+          19.78
+        ]
+      ],
+      "print_height_mm": 45.9,
+      "stl_sha256": "56ce2473ed0471eba5e2ddb063e90c200877393421091d4fea79952e0c7897e5",
+      "assembly_stl_sha256": "72d9c49ef785d217651cd58ace2da7a3d9321ea48a6e216834cd1368ca65bf10",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -30.5
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          26.899999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.781332969665528
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000618,
+      "print_export_drift_mm3": 0.00182
+    },
+    "DFRobot_Paddle": {
+      "volume_mm3": 1255.554,
+      "solid_PETG_g": 1.595,
+      "assembly_bounds_mm": [
+        [
+          -12.49,
+          -28.67,
+          13.05
+        ],
+        [
+          12.49,
+          8.2,
+          22.75
+        ]
+      ],
+      "print_height_mm": 36.87,
+      "stl_sha256": "75682cb28ffdfa3cf9d462b17e02be7cfeeddec294a043d7bf2ff88317012332",
+      "assembly_stl_sha256": "7eea426933902da894d69c0128f8a0670c66b1d5ed051e84e31f70b55f5da340",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.489999771118164
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          8.199999809265135
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          13.050000190734863
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000272,
+      "print_export_drift_mm3": 0.000355
+    },
+    "DFRobot_Front_Keeper": {
+      "volume_mm3": 102.997,
+      "solid_PETG_g": 0.131,
+      "assembly_bounds_mm": [
+        [
+          -4.91,
+          -28.22,
+          17.09
+        ],
+        [
+          4.91,
+          -24.86,
+          21.22
+        ]
+      ],
+      "print_height_mm": 9.82,
+      "stl_sha256": "6c61b98a3b9b60675984efee3e75e5ab6bc2600c43441e065dcb8ba064a6afdd",
+      "assembly_stl_sha256": "214478461fc148874d8878ca2fa491d92d098fdf7fcd7bae9300f3ae66d6c97c",
+      "print_to_assembly": [
+        [
+          6.123233995736766e-17,
+          0.0,
+          1.0,
+          -4.909999847412109
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -28.219999313354492
+        ],
+        [
+          -1.0,
+          -0.0,
+          6.123233995736766e-17,
+          21.219999313354492
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000105,
+      "print_export_drift_mm3": 9.6e-05
+    }
+  },
+  "plate_parts": [
+    "Key_Carrier",
+    "DFRobot_Paddle",
+    "DFRobot_Front_Keeper"
+  ]
+}

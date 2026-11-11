@@ -41,7 +41,7 @@ function chocCapGeometry(base = CHOC_STEM_TOP, top = CHOC_STEM_TOP + CHOC_CAP_RI
 }
 
 export function groupKeys(modules) {
-  const { key, centre, centre_shallow, centre_deep, ...others } = modules;
+  const { key, centre, centre_shallow, centre_deep, dfr, ...others } = modules;
   const seated = key.steps.at(-1).samples.at(-1);
   const sockets = Object.fromEntries(Object.entries(key.actors).filter(([id]) => id.startsWith('socket_')));
   const socketPoses = Object.fromEntries(Object.keys(sockets).map(id => [id, seated[id]]));
@@ -83,23 +83,26 @@ export function groupKeys(modules) {
     return { ...module, label, note, actors, steps, openSeated: true, rotation: [.92, 0, .34] };
   }
 
-  const views = {
+  const fitChoc = {
+    ...key, label: 'Fit Choc switches and caps', note: 'Fit the outer switches and sockets, then press on the four keycaps.',
+    actors: { ...key.actors, ...caps }, steps: [...keySteps, capFit],
+  };
+  const views = dfr ? {
+    dfr: { ...paddleView(dfr, dfr.label), note: dfr.note }, key: fitChoc,
+  } : {
     centre: paddleView(centre, 'Standard paddle'),
     centre_shallow: paddleView(centre_shallow, 'Shallow paddle'),
     centre_deep: paddleView(centre_deep, 'Deep paddle'),
-    key: {
-      ...key, label: 'Fit Choc switches and caps', note: 'Fit the outer switches and sockets, then press on the four keycaps.',
-      actors: { ...key.actors, ...caps }, steps: [...keySteps, capFit],
-    },
+    key: fitChoc,
   };
-  Object.assign(views, potentialKeyViews(views.centre, chocCapGeometry(18.7, 19.92, .3)));
+  if (!dfr) Object.assign(views, potentialKeyViews(views.centre, chocCapGeometry(18.7, 19.92, .3)));
   // Model-specific helper actions name the actors they affect. The viewer can
   // add controls from this data without knowing which parts make up a model.
   const otherKeycaps = {
     id: 'other-keycaps', hideLabel: 'Hide other keycaps', showLabel: 'Show other keycaps', actors: Object.keys(caps),
   };
   for (const view of Object.values(views)) view.helperActions = [otherKeycaps];
-  return { modules: { keys: { ...views.centre, label: 'Keys' }, ...others }, views };
+  return { modules: { keys: { ...(views.dfr ?? views.centre), label: 'Keys' }, ...others }, views };
 }
 
 export function validateGuide(guide) {

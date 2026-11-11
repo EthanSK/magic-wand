@@ -1,0 +1,325 @@
+{
+  "layout_sha256": "c384498938712306464aa87c1520f12bde49d906753c3f837703e12d081b919e",
+  "generator_sha256": "a68a7309de05c4d5cd13f13996e9aea74176043f55bc363a22935e128ee3ca27",
+  "project19_sha256": "a70beebc3b524bac199d4b7b221157f36051aaf65671d4fabb9625698367aa60",
+  "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
+  "manifest_sha256": "ca8af44099af49a06147f15cb3e7cfd4f4639eb18851e4ae22e6047c9a60db2d",
+  "anchors_sha256": "a9a50083b3eecdd24c4cf619fdfb2be9ff9ea1969fee40edf14e94b0c0438e62",
+  "parts": [
+    "Key_Carrier",
+    "DFRobot_Paddle",
+    "DFRobot_Front_Keeper"
+  ],
+  "plate_origins_mm": {
+    "Key_Carrier": [
+      24,
+      112
+    ],
+    "DFRobot_Paddle": [
+      98,
+      102
+    ],
+    "DFRobot_Front_Keeper": [
+      101,
+      57
+    ]
+  },
+  "plate_extents_mm": {
+    "Key_Carrier": [
+      [
+        24.0,
+        112.0,
+        -2.927722001279002e-16
+      ],
+      [
+        85.0,
+        138.10133171081543,
+        45.900001525878906
+      ]
+    ],
+    "DFRobot_Paddle": [
+      [
+        98.0,
+        102.0,
+        0.0
+      ],
+      [
+        122.97999954223633,
+        111.69999980926514,
+        36.869998931884766
+      ]
+    ],
+    "DFRobot_Front_Keeper": [
+      [
+        101.0,
+        57.0,
+        0.0
+      ],
+      [
+        105.1299991607666,
+        60.35999894142151,
+        9.819999694824219
+      ]
+    ]
+  },
+  "printer": "Bambu Lab A1 mini 0.4 nozzle",
+  "process": "0.20mm Standard @BBL A1M",
+  "filament": [
+    "Generic PETG @BBL A1M"
+  ],
+  "nozzle_c": [
+    "255"
+  ],
+  "bed_c": [
+    "70"
+  ],
+  "process_overrides": {
+    "wall_loops": "3",
+    "sparse_infill_density": "20%",
+    "layer_height": "0.2",
+    "initial_layer_print_height": "0.2",
+    "enable_support": "0",
+    "brim_type": "no_brim",
+    "enable_prime_tower": "1",
+    "print_sequence": "by layer",
+    "bridge_no_support": "1",
+    "max_bridge_length": "12",
+    "initial_layer_speed": [
+      "20"
+    ],
+    "initial_layer_infill_speed": [
+      "30"
+    ],
+    "reduce_crossing_wall": "1",
+    "timelapse_type": "1",
+    "wipe_tower_x": [
+      "120"
+    ],
+    "wipe_tower_y": [
+      "20"
+    ]
+  },
+  "printer_overrides": {
+    "z_hop": [
+      "0.6"
+    ],
+    "z_hop_types": [
+      "Normal Lift"
+    ]
+  },
+  "slow_bands_mm": {
+    "Key_Carrier": [
+      [
+        16.0,
+        16.8
+      ],
+      [
+        33.8,
+        35.2
+      ]
+    ]
+  },
+  "local_recipe": {
+    "Key_Carrier_bands_mm": [
+      [
+        16.0,
+        16.8
+      ],
+      [
+        33.8,
+        35.2
+      ]
+    ],
+    "Battery_Holder_bands_mm": [
+      [
+        31.0,
+        31.8
+      ]
+    ],
+    "speeds_mm_s": {
+      "outer_wall_speed": 15,
+      "inner_wall_speed": 15,
+      "gap_infill_speed": 12,
+      "internal_solid_infill_speed": 20,
+      "sparse_infill_speed": 20,
+      "top_surface_speed": 20,
+      "bridge_speed": 12,
+      "overhang_1_4_speed": 15,
+      "overhang_2_4_speed": 12,
+      "overhang_3_4_speed": 10,
+      "overhang_4_4_speed": 8
+    },
+    "reason": "The bay opening and clip-relief spans (14.1-15.6 mm) and the gate-slot cap print across air; the slow local speeds give each span time to set. Cooling is not part of the local recipe: fan is a filament-profile setting (fan_min_speed 40 %, fan_cooling_layer_time 30 s), so in these long layers the base fan falls to 40 % and only paths the slicer classifies as overhang wall or bridge get the 90 % overhang/bridge fan; gap-fill and inner-wall paths in the bands print at 40 %. Actual F, M106 and per-feature path lengths by fan level are read back from the G-code into slice-clearances.json; digital evidence does not predict PETG droop, inspect and trim the roofs."
+  },
+  "adhesion_policy": "The key carrier uses the verified rear pads and narrow ties. The paddle and keeper use 4 mm outer-only brims. The paddle allows build-plate-only tree support outside its openings.",
+  "physical_print_verified": false,
+  "slice": {
+    "error_string": "Success.",
+    "return_code": 0,
+    "sliced_plates": [
+      {
+        "feature_type_times": {
+          "Bottom surface": 12.225544929504395,
+          "Bridge": 15.743941307067871,
+          "Brim": 34.094722747802734,
+          "Custom": 365.0190734863281,
+          "Flush": 28.0,
+          "Gap infill": 19.146759033203125,
+          "Inner wall": 1082.4150390625,
+          "Internal solid infill": 227.1259307861328,
+          "Outer wall": 1211.2266845703125,
+          "Overhang wall": 18.11203956604004,
+          "Prime tower": 358.70068359375,
+          "Sparse infill": 16.48314094543457,
+          "Support": 7.894257068634033,
+          "Top surface": 25.882991790771484,
+          "Travel": 1315.3240966796875,
+          "Undefined": 1297.197509765625
+        },
+        "filament_change_times": 0,
+        "filaments": [
+          {
+            "filament_id": "GFG99",
+            "id": 1,
+            "main_used_g": 8.514925003051758,
+            "total_used_g": 11.214908599853516
+          }
+        ],
+        "id": 1,
+        "layer_filament_change": 0,
+        "main_predication": 3957.8154296875,
+        "obj_cached_cnt": 0,
+        "objects": [
+          {
+            "bbox": {
+              "depth": 26.10133171081543,
+              "height": 45.900001525878906,
+              "width": 61.0,
+              "x": 24.0,
+              "y": 112.0,
+              "z": -1.3877787807814457e-16
+            },
+            "id": 5,
+            "name": "Key_Carrier",
+            "triangle_count": 128392
+          },
+          {
+            "bbox": {
+              "depth": 9.699999809265137,
+              "height": 36.869998931884766,
+              "width": 24.979999542236328,
+              "x": 98.0,
+              "y": 102.0,
+              "z": 0.0
+            },
+            "id": 9,
+            "name": "DFRobot_Paddle",
+            "triangle_count": 2070
+          },
+          {
+            "bbox": {
+              "depth": 3.359998941421509,
+              "height": 9.819999694824219,
+              "width": 4.129999160766602,
+              "x": 101.0,
+              "y": 57.0,
+              "z": 0.0
+            },
+            "id": 13,
+            "name": "DFRobot_Front_Keeper",
+            "triangle_count": 208
+          }
+        ],
+        "times": {
+          "conflict_check_time": 59,
+          "detect_overhangs_time": 21,
+          "export_gcode_time": 7089,
+          "flush_plan_time": 0,
+          "generate_support_material_time": 109,
+          "infill_generate_time": 35,
+          "infill_time": 148,
+          "ironing_time": 0,
+          "make_perimeters_time": 404,
+          "multifilament_segment_2d_time": 0,
+          "other_slice_time": 3,
+          "prepare_infill_time": 113,
+          "region_split_time": 1,
+          "skirt_brim_time": 8,
+          "slice_layers_time": 92,
+          "sliced_time": 7946,
+          "sliced_time_with_cache": 7097,
+          "support_detect_time": 7,
+          "support_interface_time": 0,
+          "support_normal_generate_time": 0,
+          "support_toolpath_time": 0,
+          "support_tree_generate_time": 18,
+          "toolpath_time": 28,
+          "wall_time": 311,
+          "wipe_tower_time": 74
+        },
+        "total_predication": 4719.40869140625,
+        "triangle_count": 130670,
+        "warning_message": ""
+      }
+    ]
+  },
+  "warnings": [],
+  "delivered_settings_registration": {
+    "cli_dropped_keys": [],
+    "values_unchanged": true
+  },
+  "sliced_project_filename": "R26-DFRobot-A1-mini-PETG.gcode.3mf",
+  "sliced_project_sha256": "2a5f16a58fd304faf314786431a71c995c4efa95c922cb002063cc19036fc169",
+  "executable_commands": {
+    "passed": true,
+    "project_sha256": "2a5f16a58fd304faf314786431a71c995c4efa95c922cb002063cc19036fc169",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "layer_change_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 255.0,
+    "first_object_bed_target_c": 70.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ]
+  },
+  "slice_info_warnings": [],
+  "bambu_studio_version": "02.09.01.70",
+  "project20_sha256": "f38f2c10b9fda22c3e48eb02bdfb0b1f02bd239aa64384592cd571b042bd26de",
+  "object_wall_generators": {
+    "Key_Carrier": "arachne",
+    "DFRobot_Paddle": "arachne"
+  },
+  "key_carrier_solid_fill_bounds_mm": [
+    [
+      [
+        27.299999237060547,
+        8.75,
+        0.39999999999999974
+      ],
+      [
+        33.699999237060545,
+        13.95,
+        1.7999999999999998
+      ]
+    ],
+    [
+      [
+        27.299999237060547,
+        8.75,
+        16.2
+      ],
+      [
+        33.699999237060545,
+        13.95,
+        17.6
+      ]
+    ]
+  ],
+  "trial_generator_sha256": "cdab3ec697055148eaf91c08f715d0e3d10ea2810e03cdb01d2d5d6d6efbb7a3"
+}

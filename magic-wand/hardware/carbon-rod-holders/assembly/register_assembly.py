@@ -20,7 +20,8 @@ def write_json(path: Path, data: dict) -> None:
 
 
 def register_assembly(guide: Path, revision: str, label: str, *,
-                      make_current: bool = False, helper: Path | None = None) -> None:
+                      make_current: bool = False, helper: Path | None = None,
+                      group_keys: bool = False) -> None:
     directory = Path(__file__).resolve().parent
     catalog_file = directory / "catalog.json"
     before = catalog_file.read_text()
@@ -30,6 +31,8 @@ def register_assembly(guide: Path, revision: str, label: str, *,
         version = {"id": revision}
         catalog["versions"].insert(0, version)
     version.update(label=label, guide=os.path.relpath(guide.resolve(strict=True), directory))
+    if group_keys:
+        version["groupKeys"] = True
     if helper is not None:
         version["helper"] = os.path.relpath(helper.resolve(strict=True), directory)
     if make_current:

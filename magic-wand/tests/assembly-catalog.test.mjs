@@ -17,6 +17,7 @@ test('R25 Keys opens seated with the centre paddle and four capped Choc switches
   const { modules, views } = groupKeys(guide.modules);
   assert.equal(Object.keys(modules)[0], 'keys');
   assert.equal(modules.keys.label, 'Keys');
+  assert.ok(modules.cable);
   assert.ok(Object.keys(views).every(id => !Object.hasOwn(modules, id)));
   validateGuide({ ...guide, modules: views });
   for (const view of Object.values(views)) {
@@ -46,6 +47,34 @@ test('R25 Keys opens seated with the centre paddle and four capped Choc switches
     const end = sampledPose(views.key, capStep, 1)[`keycap_${key}`];
     assert.equal(start[11] - end[11], 18);
     assert.deepEqual(end, sampledPose(views.key, capStep, 1)[`switch_${key}`]);
+  }
+});
+
+test('R26 uses the printed DFRobot parts and moves only the lower outer keys', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+  const version = catalog.versions.find(entry => entry.id === 'r26');
+  const guide = JSON.parse(readFileSync(new URL(version.guide, directory)));
+  const { modules, views } = groupKeys(guide.modules);
+  validateGuide({ ...guide, modules: views });
+  assert.ok(modules.cable && modules.battery && modules.xiao);
+  assert.equal(modules.keys.actors.paddle.file, 'DFRobot_Paddle-assembly.stl');
+  assert.equal(modules.keys.actors.keeper.file, 'DFRobot_Front_Keeper-assembly.stl');
+  const animation = views.dfr;
+  const rest = sampledPose(animation, animation.steps.length - 1, 1);
+  assert.deepEqual([0, 2, 3, 4].map(key => rest[`keycap_${key}`][3]), [-21.5, 21.5, -9.35, 9.35]);
+  assert.deepEqual(animation.helperActions[0].actors, ['keycap_0', 'keycap_2', 'keycap_3', 'keycap_4']);
+  const press = animation.steps.findIndex(step => step.title === 'Touch, Click and Release');
+  const down = sampledPose(animation, press, .5);
+  assert.ok(down.plunger[11] < -.45);
+  assert.deepEqual(down.sensor, down.paddle);
+  assert.deepEqual(down.board, rest.board);
+  for (let i = 1; i < animation.steps.length; i++) {
+    const previous = animation.steps[i - 1].samples.at(-1);
+    const next = animation.steps[i].samples[0];
+    for (const actor of Object.keys(animation.actors)) {
+      assert.ok(previous[actor].every((n, j) => Math.abs(n - next[actor][j]) < 1e-8), `${i}/${actor}`);
+    }
   }
 });
 

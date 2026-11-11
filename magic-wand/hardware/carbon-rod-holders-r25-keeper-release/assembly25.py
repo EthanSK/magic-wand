@@ -140,8 +140,11 @@ def build(make_current):
 
     previous = R24_EXPORTS / "assembly-guide.json"
     modules = json.loads(previous.read_text())["modules"]
-    for module in modules.values():
-        module["actors"] = {name: relative_actor(actor, R24_EXPORTS, OUT)
+    cable_source = catch.R23 / "exports" / "assembly-guide.json"
+    modules["cable"] = json.loads(cable_source.read_text())["modules"]["cable"]
+    for key, module in modules.items():
+        source = cable_source.parent if key == "cable" else R24_EXPORTS
+        module["actors"] = {name: relative_actor(actor, source, OUT)
                             for name, actor in module["actors"].items()}
     paths = catch.motions()
     full_view(modules["xiao"], paths)
@@ -151,6 +154,7 @@ def build(make_current):
     guide = {"schema_version": 2, "units": "mm", "revision": catch.REVISION,
              "physical_fit_verified": False,
              "sources": {"r24_guide_sha256": catch.h.sha(previous),
+                         "r23_cable_guide_sha256": catch.h.sha(cable_source),
                          "manifest_sha256": catch.h.sha(OUT / "manifest.json"),
                          "generator_sha256": catch.h.sha(__file__),
                          "meshes_sha256": {file: catch.h.sha(OUT / file) for file in sorted(assets)}},

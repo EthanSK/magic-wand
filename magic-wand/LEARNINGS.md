@@ -2584,6 +2584,15 @@ extrusion and preceding layer to distinguish the two. Reopening R23 kept
 the settings but produced slightly different toolpaths. Audit those paths
 again before assuming the saved layout reproduces the same result.
 
+Self-improved — 2026-11-11: R26's outer-only brim entered the open rod bore
+and rear clip gap even though Studio reported no warnings. Its wider key
+carrier kept the four earlier pad contact sites. Transform the pads into
+the new print frame, check each tie's contact against the new mesh, and
+measure the ties and pad gaps in the new slice. The DFRobot paddle needed
+separate blockers at the snap bores and keeper approach. The final bead
+scan found no support in the working spaces and a 0.879 mm minimum pad
+gap away from the ties. Physical removal remains a trial check.
+
 Self-improved — the first extended CAD investigation did not leave an
 editable candidate. Resuming the same author session with the confirmed
 kit, a bounded fit trial and an explicit first source deliverable produced
