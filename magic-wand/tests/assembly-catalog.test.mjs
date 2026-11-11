@@ -483,6 +483,68 @@ test('R28 carries the DFR0030 on the R27 click behind a flat bottom and services
   }
 });
 
+test('R29 tray arms bend their real vertices and snap their tabs into the fixed supports', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+  const url = new URL(catalog.versions.find(entry => entry.id === 'r29').guide, directory);
+  const guide = JSON.parse(readFileSync(url));
+  const { views } = groupKeys(guide.modules);
+  validateGuide({ ...guide, modules: views });
+  const { checks } = JSON.parse(readFileSync(new URL('geometry-checks.json', url)));
+  assert.equal(checks.passed, true);
+  assert.ok(checks.released_tab_axial_engagement_mm >= .6 && checks.squeezed_tab_clear_of_support_mm > .2);
+  assert.ok(checks.straight_lift_retention_contact_mm3 > .04);
+  assert.equal(Object.keys(checks.guard_runners).length, 6);
+  for (const key of Object.keys(checks).filter(key => key.endsWith('overlap_mm3'))) assert.ok(checks[key] < .035, key);
+  const view = views.dfr;
+  assert.equal(view.actors.carrier.morphFile, undefined);
+  const closeUp = guide.modules.snap_hinge;
+  validateGuide({ ...guide, modules: { snap_hinge: closeUp } });
+  assert.deepEqual(Object.keys(closeUp.actors).sort(), ['cap', 'carrier']);
+  for (const step of closeUp.steps) {
+    const full = view.steps.find(candidate => candidate.title === step.title);
+    assert.equal(step.samples.length, full.samples.length);
+    for (const [i, pose] of step.samples.entries()) {
+      for (const field of ['cap', 'carrier', 'morphs']) assert.deepEqual(pose[field], full.samples[i][field]);
+    }
+  }
+  const read = file => readFileSync(new URL(file, url));
+  const rest = read(view.actors.cap.file), pinched = read(view.actors.cap.morphFile);
+  assert.equal(rest.readUInt32LE(80), pinched.readUInt32LE(80));
+  let moved = 0, most = 0;
+  const movedSides = new Set();
+  for (let triangle = 84; triangle < rest.length; triangle += 50) {
+    for (const offset of [triangle + 12, triangle + 24, triangle + 36]) {
+      const restX = rest.readFloatLE(offset);
+      const pinchedX = pinched.readFloatLE(offset);
+      assert.equal(pinched.readFloatLE(offset + 4), rest.readFloatLE(offset + 4));
+      assert.equal(pinched.readFloatLE(offset + 8), rest.readFloatLE(offset + 8));
+      const dx = Math.abs(pinchedX - restX);
+      if (dx > 1e-6) {
+        assert.ok(Math.abs(pinchedX) < Math.abs(restX));
+        movedSides.add(Math.sign(restX));
+        moved++;
+      }
+      most = Math.max(most, dx);
+    }
+  }
+  assert.equal(movedSides.size, 2);
+  assert.ok(moved > 0 && most > .95 && most < 1.15);
+  const at = title => view.steps.findIndex(step => step.title === title);
+  const lowered = view.steps[at('Lower Between the Supports')].samples;
+  assert.ok(lowered.every(sample => sample.morphs.cap === 1));
+  assert.equal(sampledPose(view, at('Let the Tabs Snap Into the Holes'), 1).morphs.cap, 0);
+  assert.ok(at('Slide Out the Touch Board') < at('Pinch to Release the Tabs'));
+  assert.ok(sampledPose(view, at('Lift Off the Empty Tray'), 1).cap[11] > 7);
+  for (let i = 1; i < view.steps.length; i++) {
+    const before = view.steps[i - 1].samples.at(-1), after = view.steps[i].samples[0];
+    for (const actor of Object.keys(view.actors)) {
+      assert.ok(before[actor].every((n, j) => Math.abs(n - after[actor][j]) < 1e-8), `${view.steps[i].title}/${actor}`);
+    }
+    assert.ok(Math.abs((before.morphs?.cap ?? 0) - (after.morphs?.cap ?? 0)) < 1e-8, `${view.steps[i].title} flex`);
+  }
+});
+
 test('R27 fits the copper keys closer and loads the OP1 behind a flat bottom', () => {
   const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
   const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));

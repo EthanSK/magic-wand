@@ -16,6 +16,19 @@ instance of the existing dwell detector so previously accumulated travel cannot 
 a fresh selection immediately. These checks establish simulated state transitions,
 not physical screenshot acceptance. Verified 25 October 2026.
 
+## Snap hinges: the flexing part owns the bend
+
+Ethan corrected R28's snap hinge (2026-11-11): its animation bent the key
+holder's pins, while he wanted the touch tray's own side arms to bend so
+their end tabs slot into holes in fixed supports on the holder. Decide which
+part flexes and which stays rigid before modelling, and keep that the same in
+the CAD, the checks and the guide. R29 bends only the tray arm vertices, with
+one function used for the squeezed check solid and the viewer's morph mesh.
+Check the pinched insertion, the release into the holes, a straight lift
+without pinching and the full click from that one source. A crossfade between
+unrelated meshes, or a carrier morph, does not show the real joint. These are
+CAD checks; arm flex and fatigue still need a printed trial.
+
 ## Tapered printed prototypes need profile-specific joints
 
 The tapered profile reverses the twist-lock's male/female placement so its long parts
