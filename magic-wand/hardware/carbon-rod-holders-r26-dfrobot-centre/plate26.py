@@ -15,7 +15,7 @@ import holder26 as d
 import project22
 import project23
 
-LABEL = "R26-DFRobot-A1-mini-PETG"
+LABEL = "R26-DFRobot-OP1-Latch-A1-mini-PETG"
 
 
 def carrier_pads():
@@ -50,8 +50,9 @@ def build(scratch):
         base=old.base, sha=old.sha, key_carrier_bands=old.key_carrier_bands,
     )
     project22.LABEL = LABEL
-    project22.PLATE_NAME = "Magic Wand R26 DFRobot centre click · first fit"
-    project22.ORIGINS = {d.CARRIER: (24, 112), d.PADDLE: (98, 102), d.KEEPER: (101, 57)}
+    project22.PLATE_NAME = "Magic Wand R26 DFRobot and OP1 latch · first fit"
+    project22.ORIGINS = {d.CARRIER: (24, 112), d.PADDLE: (98, 102),
+                         d.KEEPER: (101, 57), d.OP1_LATCH: (35, 63)}
     project22.OBJECT_WALL_GENERATORS = {d.CARRIER: "arachne", d.PADDLE: "arachne"}
     project22.FILL_BOUNDS = [tuple(map(tuple, np.asarray(bounds) + pad_transform[:3, 3]))
                              for bounds in project22.FILL_BOUNDS]
@@ -65,10 +66,15 @@ def build(scratch):
         tree = ET.fromstring(members[name][1])
         for obj in tree.findall("object"):
             fields = {entry.get("key"): entry for entry in obj.findall("metadata")}
-            if fields["name"].get("value") == d.CARRIER:
+            part = fields["name"].get("value")
+            if part == d.CARRIER:
                 continue
-            options = {**project23.FLAT_BRIM, "brim_width": "4"}
-            if fields["name"].get("value") == d.PADDLE:
+            if part == d.OP1_LATCH:
+                # Print +Y is the top of the crossbar in the assembly.
+                options = {"seam_position": "back"}
+            else:
+                options = {**project23.FLAT_BRIM, "brim_width": "4"}
+            if part == d.PADDLE:
                 options.update(project23.KEY_SUPPORT)
                 add_paddle_blockers(members, obj, manifest)
             for key, value in options.items():
@@ -88,6 +94,7 @@ def build(scratch):
     report["trial_generator_sha256"] = d.h.sha(__file__)
     report["adhesion_policy"] = ("The key carrier uses the verified rear pads and narrow ties. "
                                  "The paddle and keeper use 4 mm outer-only brims. "
+                                 "The flat OP1 latch prints directly on the bed. "
                                  "The paddle allows build-plate-only tree support outside its openings.")
     receipt.write_text(json.dumps(report, indent=2) + "\n")
 

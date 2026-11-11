@@ -1,10 +1,20 @@
 {
   "passed": true,
   "physical_fit_verified": false,
-  "manifest_sha256": "ca8af44099af49a06147f15cb3e7cfd4f4639eb18851e4ae22e6047c9a60db2d",
+  "manifest_sha256": "6623bdbbf01c407f77beb09bf0f30cd4185b04684909b259545493619933b494",
   "static": {
     "DFR0030_slide": 0.0,
     "OP1_slide": 0.0,
+    "OP1_latch_seated_overlap_mm3": 0.0,
+    "OP1_latch_install_max_overlap_mm3": 0.0,
+    "OP1_PCB_forward_stop_mm3": 3.29888,
+    "OP1_PCB_rear_stop_mm3": 4.16,
+    "OP1_latch_forward_capture_mm3": 1.92449,
+    "OP1_latch_upward_capture_mm3": 0.24427,
+    "OP1_latch_flex_span_mm": 6.19,
+    "OP1_latch_spread_each_mm": 0.56,
+    "OP1_latch_root_radius_mm": 0.6,
+    "OP1_latch_nominal_hook_underlap_each_mm": 0.44,
     "keeper_slide": 0.0,
     "keeper_blocks_board_forward": 4.66745,
     "board_below_rail_lip_clearance_mm": 0.37,
@@ -47,175 +57,175 @@
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -3.4932,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -3.3413,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -3.1895,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -3.0376,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -2.8857,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -2.7338,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -2.5819,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -2.4301,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -2.2782,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -2.1263,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -1.9744,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -1.8226,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -1.6707,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -1.5188,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -1.3669,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -1.215,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -1.0632,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -0.9113,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -0.7594,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -0.6075,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -0.4556,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -0.3038,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": -0.1519,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     },
     {
       "degrees": 0.0,
       "carrier_overlap_mm3": 0.0,
       "Choc_travel_overlap_mm3": 0.0,
       "OP1_body_overlap_mm3": 0.0,
-      "DFRobot_lead_to_carrier_overlap_mm3": 0.0
+      "DFRobot_lead_to_carrier_and_latch_overlap_mm3": 0.0
     }
   ]
 }

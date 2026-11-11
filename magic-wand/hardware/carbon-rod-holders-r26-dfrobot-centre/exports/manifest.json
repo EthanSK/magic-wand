@@ -2,7 +2,7 @@
   "revision": "carbon-rod-holders-r26-dfrobot-centre",
   "physical_fit_verified": false,
   "source_sha256": {
-    "holder26.py": "924d95904c5de272f46468cd01ea724e43f9099489b7138f810a40caf9baa568",
+    "holder26.py": "110fb74bd5d88d8fadb046b7e99101d0ec9f8c8a75fc3ca70bdcf036c552c91c",
     "parameters.json": "ea6e18c173e46e2a33f270f010e051a7a64817eaef3576d9fcb0bad14cf57889"
   },
   "purchased_board": "DFRobot DFR0030 Gravity Digital Capacitive Touch Sensor V2",
@@ -15,12 +15,12 @@
   "upper_key_shift_mm": 0.0,
   "parts": {
     "Key_Carrier": {
-      "volume_mm3": 5658.8,
-      "solid_PETG_g": 7.187,
+      "volume_mm3": 5795.511,
+      "solid_PETG_g": 7.36,
       "assembly_bounds_mm": [
         [
           -30.5,
-          -19.0,
+          -23.04,
           -4.781
         ],
         [
@@ -29,9 +29,9 @@
           19.78
         ]
       ],
-      "print_height_mm": 45.9,
-      "stl_sha256": "56ce2473ed0471eba5e2ddb063e90c200877393421091d4fea79952e0c7897e5",
-      "assembly_stl_sha256": "72d9c49ef785d217651cd58ace2da7a3d9321ea48a6e216834cd1368ca65bf10",
+      "print_height_mm": 49.94,
+      "stl_sha256": "22d79ab0c4adc6e5f0fd5bf0e538f39b67764e4fddd29bbb78df22d28282466e",
+      "assembly_stl_sha256": "8dbd2254345097b46d9abef6237ce6349b2a24d231c12a0322448b4d86a18ce7",
       "print_to_assembly": [
         [
           1.0,
@@ -58,8 +58,8 @@
           1.0
         ]
       ],
-      "assembly_export_drift_mm3": 0.000618,
-      "print_export_drift_mm3": 0.00182
+      "assembly_export_drift_mm3": 0.000647,
+      "print_export_drift_mm3": 0.001949
     },
     "DFRobot_Paddle": {
       "volume_mm3": 1255.554,
@@ -154,11 +154,59 @@
       ],
       "assembly_export_drift_mm3": 0.000105,
       "print_export_drift_mm3": 9.6e-05
+    },
+    "OP1_Board_Latch": {
+      "volume_mm3": 163.688,
+      "solid_PETG_g": 0.208,
+      "assembly_bounds_mm": [
+        [
+          -11.53,
+          -21.73,
+          6.29
+        ],
+        [
+          11.53,
+          -20.19,
+          15.33
+        ]
+      ],
+      "print_height_mm": 1.54,
+      "stl_sha256": "7abc214c22a677fdd5878e66463dc457e9f8aac7c3886693ddb851ce9070d3da",
+      "assembly_stl_sha256": "417f7b39d7f8eda14e44042eadf0826ca33d99f1dc7f19b41e99093de5fd0ea3",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -11.529999732971191
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          -20.190000534057617
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          6.289999961853027
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 5.1e-05,
+      "print_export_drift_mm3": 5.4e-05
     }
   },
   "plate_parts": [
     "Key_Carrier",
     "DFRobot_Paddle",
-    "DFRobot_Front_Keeper"
+    "DFRobot_Front_Keeper",
+    "OP1_Board_Latch"
   ]
 }

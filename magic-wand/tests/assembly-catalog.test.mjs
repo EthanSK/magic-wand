@@ -60,6 +60,7 @@ test('R26 uses the printed DFRobot parts and moves only the lower outer keys', (
   assert.ok(modules.cable && modules.battery && modules.xiao);
   assert.equal(modules.keys.actors.paddle.file, 'DFRobot_Paddle-assembly.stl');
   assert.equal(modules.keys.actors.keeper.file, 'DFRobot_Front_Keeper-assembly.stl');
+  assert.equal(modules.keys.actors.op1_latch.file, 'OP1_Board_Latch-assembly.stl');
   const animation = views.dfr;
   const rest = sampledPose(animation, animation.steps.length - 1, 1);
   assert.deepEqual([0, 2, 3, 4].map(key => rest[`keycap_${key}`][3]), [-21.5, 21.5, -9.35, 9.35]);
@@ -69,6 +70,10 @@ test('R26 uses the printed DFRobot parts and moves only the lower outer keys', (
   assert.ok(down.plunger[11] < -.45);
   assert.deepEqual(down.sensor, down.paddle);
   assert.deepEqual(down.board, rest.board);
+  assert.deepEqual(down.op1_latch, identity());
+  const release = animation.steps.findIndex(step => step.title === 'Release the OP1 Latch');
+  assert.equal(sampledPose(animation, release, 1).op1_latch[11], 7);
+  assert.equal(sampledPose(animation, release + 1, 1).board[7], -33);
   for (let i = 1; i < animation.steps.length; i++) {
     const previous = animation.steps[i - 1].samples.at(-1);
     const next = animation.steps[i].samples[0];

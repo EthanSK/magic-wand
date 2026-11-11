@@ -2593,6 +2593,14 @@ separate blockers at the snap bores and keeper approach. The final bead
 scan found no support in the working spaces and a 0.879 mm minimum pad
 gap away from the ties. Physical removal remains a trial check.
 
+Self-improved — 2026-11-11: The OP1 board's slide rails need a separate
+forward stop. R26 adds a removable latch with flat slot faces for forward
+loads and hooks below the carrier ears for lift loads. Check both locked
+directions and the released motion with the plug attached. The latch lies
+flat with about 104 mm² of first-layer plastic. Its initial brim crossed
+the plug clearance, so the checked plate prints this latch directly on
+the bed.
+
 Self-improved — the first extended CAD investigation did not leave an
 editable candidate. Resuming the same author session with the confirmed
 kit, a bounded fit trial and an explicit first source deliverable produced

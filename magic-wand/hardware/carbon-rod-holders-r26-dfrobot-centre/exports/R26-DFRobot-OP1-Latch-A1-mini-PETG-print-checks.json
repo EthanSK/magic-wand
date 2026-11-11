@@ -1,14 +1,15 @@
 {
-  "layout_sha256": "c384498938712306464aa87c1520f12bde49d906753c3f837703e12d081b919e",
+  "layout_sha256": "69cc7a37b3ae3b00cd5bd55938b424bd46813a689a7bf342816dbac68275973c",
   "generator_sha256": "a68a7309de05c4d5cd13f13996e9aea74176043f55bc363a22935e128ee3ca27",
   "project19_sha256": "a70beebc3b524bac199d4b7b221157f36051aaf65671d4fabb9625698367aa60",
   "builder_sha256": "46a434e66f4c994589ac5a087d815628918316700adde7b46219d8c962a537d1",
-  "manifest_sha256": "ca8af44099af49a06147f15cb3e7cfd4f4639eb18851e4ae22e6047c9a60db2d",
+  "manifest_sha256": "6623bdbbf01c407f77beb09bf0f30cd4185b04684909b259545493619933b494",
   "anchors_sha256": "a9a50083b3eecdd24c4cf619fdfb2be9ff9ea1969fee40edf14e94b0c0438e62",
   "parts": [
     "Key_Carrier",
     "DFRobot_Paddle",
-    "DFRobot_Front_Keeper"
+    "DFRobot_Front_Keeper",
+    "OP1_Board_Latch"
   ],
   "plate_origins_mm": {
     "Key_Carrier": [
@@ -22,6 +23,10 @@
     "DFRobot_Front_Keeper": [
       101,
       57
+    ],
+    "OP1_Board_Latch": [
+      35,
+      63
     ]
   },
   "plate_extents_mm": {
@@ -34,7 +39,7 @@
       [
         85.0,
         138.10133171081543,
-        45.900001525878906
+        49.94000244140625
       ]
     ],
     "DFRobot_Paddle": [
@@ -59,6 +64,18 @@
         105.1299991607666,
         60.35999894142151,
         9.819999694824219
+      ]
+    ],
+    "OP1_Board_Latch": [
+      [
+        35.0,
+        63.0,
+        0.0
+      ],
+      [
+        58.05999946594238,
+        72.03999996185303,
+        1.539999008178711
       ]
     ]
   },
@@ -151,7 +168,7 @@
     },
     "reason": "The bay opening and clip-relief spans (14.1-15.6 mm) and the gate-slot cap print across air; the slow local speeds give each span time to set. Cooling is not part of the local recipe: fan is a filament-profile setting (fan_min_speed 40 %, fan_cooling_layer_time 30 s), so in these long layers the base fan falls to 40 % and only paths the slicer classifies as overhang wall or bridge get the 90 % overhang/bridge fan; gap-fill and inner-wall paths in the bands print at 40 %. Actual F, M106 and per-feature path lengths by fan level are read back from the G-code into slice-clearances.json; digital evidence does not predict PETG droop, inspect and trim the roofs."
   },
-  "adhesion_policy": "The key carrier uses the verified rear pads and narrow ties. The paddle and keeper use 4 mm outer-only brims. The paddle allows build-plate-only tree support outside its openings.",
+  "adhesion_policy": "The key carrier uses the verified rear pads and narrow ties. The paddle and keeper use 4 mm outer-only brims. The flat OP1 latch prints directly on the bed. The paddle allows build-plate-only tree support outside its openings.",
   "physical_print_verified": false,
   "slice": {
     "error_string": "Success.",
@@ -159,41 +176,41 @@
     "sliced_plates": [
       {
         "feature_type_times": {
-          "Bottom surface": 12.225544929504395,
-          "Bridge": 15.743941307067871,
-          "Brim": 34.094722747802734,
-          "Custom": 365.0190734863281,
+          "Bottom surface": 14.727356910705566,
+          "Bridge": 15.744269371032715,
+          "Brim": 33.79471969604492,
+          "Custom": 365.021728515625,
           "Flush": 28.0,
-          "Gap infill": 19.146759033203125,
-          "Inner wall": 1082.4150390625,
-          "Internal solid infill": 227.1259307861328,
-          "Outer wall": 1211.2266845703125,
-          "Overhang wall": 18.11203956604004,
-          "Prime tower": 358.70068359375,
-          "Sparse infill": 16.48314094543457,
+          "Gap infill": 24.5545597076416,
+          "Inner wall": 1136.71875,
+          "Internal solid infill": 249.0340576171875,
+          "Outer wall": 1253.9339599609375,
+          "Overhang wall": 18.794227600097656,
+          "Prime tower": 404.9125061035156,
+          "Sparse infill": 16.444299697875977,
           "Support": 7.894257068634033,
-          "Top surface": 25.882991790771484,
-          "Travel": 1315.3240966796875,
-          "Undefined": 1297.197509765625
+          "Top surface": 31.137413024902344,
+          "Travel": 1363.99951171875,
+          "Undefined": 1345.87158203125
         },
         "filament_change_times": 0,
         "filaments": [
           {
             "filament_id": "GFG99",
             "id": 1,
-            "main_used_g": 8.514925003051758,
-            "total_used_g": 11.214908599853516
+            "main_used_g": 8.875280380249023,
+            "total_used_g": 11.961376190185547
           }
         ],
         "id": 1,
         "layer_filament_change": 0,
-        "main_predication": 3957.8154296875,
+        "main_predication": 4138.81787109375,
         "obj_cached_cnt": 0,
         "objects": [
           {
             "bbox": {
               "depth": 26.10133171081543,
-              "height": 45.900001525878906,
+              "height": 49.94000244140625,
               "width": 61.0,
               "x": 24.0,
               "y": 112.0,
@@ -201,7 +218,7 @@
             },
             "id": 5,
             "name": "Key_Carrier",
-            "triangle_count": 128392
+            "triangle_count": 128464
           },
           {
             "bbox": {
@@ -228,37 +245,50 @@
             "id": 13,
             "name": "DFRobot_Front_Keeper",
             "triangle_count": 208
+          },
+          {
+            "bbox": {
+              "depth": 9.039999961853027,
+              "height": 1.539999008178711,
+              "width": 23.059999465942383,
+              "x": 35.0,
+              "y": 63.0,
+              "z": 0.0
+            },
+            "id": 17,
+            "name": "OP1_Board_Latch",
+            "triangle_count": 212
           }
         ],
         "times": {
-          "conflict_check_time": 59,
-          "detect_overhangs_time": 21,
-          "export_gcode_time": 7089,
+          "conflict_check_time": 53,
+          "detect_overhangs_time": 4,
+          "export_gcode_time": 68061,
           "flush_plan_time": 0,
-          "generate_support_material_time": 109,
-          "infill_generate_time": 35,
-          "infill_time": 148,
+          "generate_support_material_time": 73,
+          "infill_generate_time": 26,
+          "infill_time": 131,
           "ironing_time": 0,
-          "make_perimeters_time": 404,
+          "make_perimeters_time": 245,
           "multifilament_segment_2d_time": 0,
           "other_slice_time": 3,
-          "prepare_infill_time": 113,
+          "prepare_infill_time": 105,
           "region_split_time": 1,
-          "skirt_brim_time": 8,
-          "slice_layers_time": 92,
-          "sliced_time": 7946,
-          "sliced_time_with_cache": 7097,
-          "support_detect_time": 7,
+          "skirt_brim_time": 10,
+          "slice_layers_time": 72,
+          "sliced_time": 68665,
+          "sliced_time_with_cache": 68071,
+          "support_detect_time": 5,
           "support_interface_time": 0,
           "support_normal_generate_time": 0,
           "support_toolpath_time": 0,
-          "support_tree_generate_time": 18,
-          "toolpath_time": 28,
-          "wall_time": 311,
-          "wipe_tower_time": 74
+          "support_tree_generate_time": 12,
+          "toolpath_time": 18,
+          "wall_time": 172,
+          "wipe_tower_time": 65
         },
-        "total_predication": 4719.40869140625,
-        "triangle_count": 130670,
+        "total_predication": 4946.62451171875,
+        "triangle_count": 130954,
         "warning_message": ""
       }
     ]
@@ -268,11 +298,11 @@
     "cli_dropped_keys": [],
     "values_unchanged": true
   },
-  "sliced_project_filename": "R26-DFRobot-A1-mini-PETG.gcode.3mf",
-  "sliced_project_sha256": "2a5f16a58fd304faf314786431a71c995c4efa95c922cb002063cc19036fc169",
+  "sliced_project_filename": "R26-DFRobot-OP1-Latch-A1-mini-PETG.gcode.3mf",
+  "sliced_project_sha256": "22ea5f6d831a67b35527a419e3d4f3480cacc9865bbd6dcda7d5358b5c5336a0",
   "executable_commands": {
     "passed": true,
-    "project_sha256": "2a5f16a58fd304faf314786431a71c995c4efa95c922cb002063cc19036fc169",
+    "project_sha256": "22ea5f6d831a67b35527a419e3d4f3480cacc9865bbd6dcda7d5358b5c5336a0",
     "official_machine_templates_match": [
       "machine_start_gcode",
       "machine_end_gcode",
@@ -321,5 +351,5 @@
       ]
     ]
   ],
-  "trial_generator_sha256": "cdab3ec697055148eaf91c08f715d0e3d10ea2810e03cdb01d2d5d6d6efbb7a3"
+  "trial_generator_sha256": "e9be9938b791f18d0eb16ad7c48b988a40b06ff7eaa5470015e18b5b67ba33db"
 }

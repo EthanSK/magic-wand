@@ -39,16 +39,31 @@ def keeper_motion():
     return sweep_y(d.keeper(), -7.0)
 
 
+def squeezed_op1_latch():
+    return d.op1_latch().warp_batch(lambda points: points + d.spread_latch(points))
+
+
 def working_material(name):
     if name == d.CARRIER:
-        return {f"hinge pin {side}": d.spring_tongues() ^ d.box(lo, hi, 5.8, 7.2, 17.8, 19.2)
+        critical = {f"hinge pin {side}": d.spring_tongues() ^ d.box(lo, hi, 5.8, 7.2, 17.8, 19.2)
                 for side, lo, hi in (("left", -d.PIN_TIP, -d.ARM_INNER),
                                      ("right", d.ARM_INNER, d.PIN_TIP))}
+        for side, lo, hi in (("left", -10.3, -8.8), ("right", 8.8, 10.3)):
+            critical[f"OP1 latch ear root {side}"] = d.box(lo, hi, -18.4, -16.6, 8.1, 10.9)
+        return critical
     if name == d.PADDLE:
         return {"left PCB rail": d.box(-12.2, -10.5, -23., 4., 19.28, 20.18),
                 "right PCB rail": d.box(10.5, 12.2, -23., 4., 19.28, 20.18),
                 "left stop foot": d.box(-7.1, -6., d.STOP_Y0, d.STOP_Y1, d.STOP_Z, d.STOP_Z + .5),
                 "right stop foot": d.box(6., 7.1, d.STOP_Y0, d.STOP_Y1, d.STOP_Z, d.STOP_Z + .5)}
+    if name == d.OP1_LATCH:
+        return {"board stop blade": d.box(-4.8, 4.8, -21.65, -20.26, 9.7, 11.3),
+                "left flex arm root": d.box(-11.35, -10.4, -21.65, -20.26, 12.6, 14.15),
+                "right flex arm root": d.box(10.4, 11.35, -21.65, -20.26, 12.6, 14.15),
+                "left snap hook": d.box(-10.28, -9.69, -21.65, -20.26, 7.1, 7.57),
+                "right snap hook": d.box(9.69, 10.28, -21.65, -20.26, 7.1, 7.57),
+                "left catch shoulder": d.box(-10.04, -9.72, -21.64, -20.28, 7.33, 7.56),
+                "right catch shoulder": d.box(9.72, 10.04, -21.64, -20.28, 7.33, 7.56)}
     return {"keeper lower bridge": d.box(-4.8, 4.8, -27.2, -26.14, 17.2, 17.5)}
 
 
@@ -89,6 +104,30 @@ def classify_overhangs(name, rows):
     return result
 
 
+def latch_seams(gcode, bounds, shift, offset, transform):
+    """Read outer-wall starts from the Studio archive in the latch frame."""
+    starts = []
+    xyz = np.zeros(3)
+    outer_wall = False
+    for line in gcode.splitlines():
+        if line.startswith("; FEATURE: "):
+            outer_wall = line == "; FEATURE: Outer wall"
+        elif line.startswith(("G0 ", "G1 ", "G2 ", "G3 ", "G92 ")):
+            words = {word[0]: float(word[1:]) for word in line.split(";", 1)[0].split()[1:]
+                     if len(word) > 1 and word[0] in "XYZE"}
+            end = np.array([words.get(axis, value) for axis, value in zip("XYZ", xyz)])
+            if outer_wall and words.get("E", 0) > 0 and (end[:2] != xyz[:2]).any():
+                local = xyz + offset - shift
+                if ((local[:2] >= bounds[0, :2]).all() and (local[:2] <= bounds[1, :2]).all()
+                        and 0 < local[2] < bounds[1, 2] + .11):
+                    starts.append(local)
+                outer_wall = False
+            xyz = end
+    if not starts:
+        return []
+    return np.round(trimesh.transform_points(starts, transform), 3).tolist()
+
+
 def spaces():
     h = d.h
     carrier = {name: shape for name, shape in h.h22.carrier_regions().items()
@@ -96,6 +135,9 @@ def spaces():
     hw = [h.board(), *h.barrels().decompose(), *h.switch(), h.plug()]
     carrier["OP1 board, plugged switch and cable"] = d.union(
         [sweep_y(part, -30.) for part in hw] + [h.cable()])
+    carrier["OP1 latch seated"] = d.op1_latch()
+    carrier["OP1 latch squeeze and lift path"] = h.h22.spaces16.Swept(
+        squeezed_op1_latch(), [(0., 0., float(z)) for z in np.linspace(0., 7., 20)])
     front_pin = keeper_pin()
     return {
         d.CARRIER: carrier,
@@ -108,12 +150,15 @@ def spaces():
                                                     d.ARM_INNER, d.ARM_OUTER)),
         },
         d.KEEPER: {"Keeper filament pin": front_pin},
+        d.OP1_LATCH: {"OP1 plug clearance": h.plug(), "Seated PCB clearance": h.board()},
     }
 
 
 def geometry():
     carrier = d.h.h22.read(d.OUT / f"{d.CARRIER}-assembly.stl")
     paddle, keeper = d.paddle(), d.keeper()
+    latch = d.op1_latch()
+    carrier_with_latch = carrier + latch
     # Choc cap travel is the existing sourced-cap envelope at the new seats.
     moving = paddle + keeper + d.sensor() + d.box(*d.CONNECTOR)
     routes = spaces()
@@ -125,13 +170,13 @@ def geometry():
         shape = moving.transform(transform)
         samples.append({
             "degrees": round(float(angle), 4),
-            "carrier_overlap_mm3": round((shape ^ carrier).volume(), 5),
+            "carrier_overlap_mm3": round((shape ^ carrier_with_latch).volume(), 5),
             "Choc_travel_overlap_mm3": round((shape ^ choc).volume(), 5),
             "OP1_body_overlap_mm3": round((shape ^ body).volume(), 5),
-            "DFRobot_lead_to_carrier_overlap_mm3": round((lead().transform(transform) ^ carrier).volume(), 5),
+            "DFRobot_lead_to_carrier_and_latch_overlap_mm3": round((lead().transform(transform) ^ carrier_with_latch).volume(), 5),
         })
     pins = d.spring_tongues()
-    fixed = carrier - pins
+    fixed = (carrier - pins) + latch
     squeezed = fixed + pins.warp_batch(lambda points: points + d.flex(points))
     insertion = []
     for z in np.linspace(0., 8., 25):
@@ -142,9 +187,26 @@ def geometry():
     # any electronics. The real switch travel still needs a fit check.
     overpress = paddle.transform(d.pose(.25).tolist())
     stop_hits = [(overpress ^ post).volume() for post in d.stop_posts().decompose()]
+    op1_fit = routes[d.CARRIER]["OP1 board, plugged switch and cable"]
+    latch_loading = routes[d.CARRIER]["OP1 latch squeeze and lift path"]
+    seated_op1 = d.union([d.h.board(), d.h.plug(), *d.h.switch(), d.h.cable()])
+    locked_fit = carrier + seated_op1
+    forward_contact = (latch.translate((0., -.85, 0.)) ^ carrier).volume()
+    upward_contact = (latch.translate((0., 0., .43)) ^ carrier).volume()
+    rearward_board_contact = (d.h.board().translate((0., .55, 0.)) ^ carrier).volume()
     static = {
         "DFR0030_slide": round((paddle ^ routes[d.PADDLE]["DFR0030 slide"]).volume(), 5),
-        "OP1_slide": round((carrier ^ routes[d.CARRIER]["OP1 board, plugged switch and cable"]).volume(), 5),
+        "OP1_slide": round((carrier ^ op1_fit).volume(), 5),
+        "OP1_latch_seated_overlap_mm3": round((latch ^ locked_fit).volume(), 5),
+        "OP1_latch_install_max_overlap_mm3": round(max((p ^ locked_fit).volume() for p in latch_loading.poses()), 5),
+        "OP1_PCB_forward_stop_mm3": round((latch ^ d.h.board().translate((0., -.45, 0.))).volume(), 5),
+        "OP1_PCB_rear_stop_mm3": round(rearward_board_contact, 5),
+        "OP1_latch_forward_capture_mm3": round(forward_contact, 5),
+        "OP1_latch_upward_capture_mm3": round(upward_contact, 5),
+        "OP1_latch_flex_span_mm": round(d.LATCH_FLEX_ROOT - 7.57, 2),
+        "OP1_latch_spread_each_mm": d.LATCH_SPREAD,
+        "OP1_latch_root_radius_mm": d.LATCH_ROOT_ROUND,
+        "OP1_latch_nominal_hook_underlap_each_mm": .44,
         "keeper_slide": round((paddle ^ keeper_motion()).volume(), 5),
         "keeper_blocks_board_forward": round((keeper ^ d.sensor().translate((0, -.7, 0))).volume(), 5),
         "board_below_rail_lip_clearance_mm": round(22.22 - d.BOARD_BOTTOM - d.BOARD_THICKNESS, 3),
@@ -162,8 +224,10 @@ def geometry():
     }
     ok = (max(max(value for name, value in row.items() if name.endswith("_mm3")) for row in samples) < .03
           and all(static[name] < .03 for name in ("DFR0030_slide", "OP1_slide", "keeper_slide",
-                                                "pinched_install_remove_max_overlap_mm3"))
+                                                "pinched_install_remove_max_overlap_mm3",
+                                                "OP1_latch_seated_overlap_mm3", "OP1_latch_install_max_overlap_mm3"))
           and static["keeper_blocks_board_forward"] > .1
+          and min(static["OP1_PCB_forward_stop_mm3"], rearward_board_contact, forward_contact, upward_contact) > .1
           and len(stop_hits) == 2 and min(stop_hits) > .01)
     d.save_json("geometry-checks.json", {"passed": bool(ok), "physical_fit_verified": False,
                                         "manifest_sha256": d.h.sha(d.OUT / "manifest.json"),
@@ -177,7 +241,7 @@ def geometry():
 def inspect(project, output):
     manifest = json.loads((d.OUT / "manifest.json").read_text())
     anchors = json.loads((d.OUT / "anchors.json").read_text())["parts"]
-    data, features, _, settings, offset, objects, _, _ = s.previous.s16.read_project(project)
+    data, features, _, settings, offset, objects, gcode, _ = s.previous.s16.read_project(project)
     from project22 import studio
     commands = studio.p19.command_audit(project, settings)
     assert set(objects) == set(d.PARTS)
@@ -269,9 +333,24 @@ def inspect(project, output):
         if starts["floating_components"] or starts["missing_printed_components"]:
             failures.append([name, "floating or missing components",
                              len(starts["floating_components"]), len(starts["missing_printed_components"])])
-        if (report["first_layer_mm2"] <= 0 or report["brim_samples"] + report["tear_off_pad_samples"] == 0
-                or report["timelapse_tower_clearance_mm"] <= 0):
-            failures.append([name, "first layer, brim or tower clearance"])
+        if name == d.OP1_LATCH:
+            adhesion = report["first_layer_mm2"] >= 65. and report["brim_samples"] == 0
+            wall = model & np.isin(ids, [features.index("Outer wall"), features.index("Inner wall")])
+            report["flex_arm_wall_coverage"] = {}
+            for side, lo, hi in (("left", -11.23, -10.48), ("right", 10.48, 11.23)):
+                arm = d.box(lo, hi, -21.64, -20.28, 8.6, 12.6).transform(to_print) ^ solid
+                coverage = deposited_material(arm, xyz[wall], widths[wall], tops[wall])
+                report["flex_arm_wall_coverage"][side] = coverage
+                if coverage["deposited_fraction"] < .65:
+                    failures.append([name, side, "insufficient flex-arm wall coverage"])
+            seams = latch_seams(gcode, mesh.bounds, shift, offset, transform)
+            report["outer_wall_starts_assembly_mm"] = seams
+            if len(seams) != starts["checked_layers"] or any(z < 14.8 for _, _, z in seams):
+                failures.append([name, "outer wall seams outside the crossbar crown", seams])
+        else:
+            adhesion = report["first_layer_mm2"] > 0 and report["brim_samples"] + report["tear_off_pad_samples"] > 0
+        if not adhesion or report["timelapse_tower_clearance_mm"] <= 0:
+            failures.append([name, "first layer adhesion or tower clearance"])
         records[name] = report
         print(name, report["first_layer_mm2"], report["brim_samples"], failures, flush=True)
     output.write_text(json.dumps({

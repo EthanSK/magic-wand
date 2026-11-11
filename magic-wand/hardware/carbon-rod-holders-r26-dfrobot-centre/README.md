@@ -14,10 +14,10 @@ clip and the disposable timelapse wipe tower.
 
 ## Print set
 
-[Open the sliced A1 mini PETG plate](exports/R26-DFRobot-A1-mini-PETG.gcode.3mf)
-or [open the editable Studio layout](exports/R26-DFRobot-A1-mini-PETG-layout.3mf).
-Bambu Studio estimates **1 h 19 min and 11.2 g total**, including the wipe
-tower. The plate uses a 0.4 mm nozzle, textured PEI, and external PETG at
+[Open the sliced A1 mini PETG plate](exports/R26-DFRobot-OP1-Latch-A1-mini-PETG.gcode.3mf)
+or [open the editable Studio layout](exports/R26-DFRobot-OP1-Latch-A1-mini-PETG-layout.3mf).
+Bambu Studio estimates **1 h 22 min and 12.0 g** including the wipe tower.
+The plate uses a 0.4 mm nozzle, textured PEI, and external PETG at
 255 °C nozzle and 70 °C bed for the first printed layer. Keep bed levelling
 and timelapse enabled when sending it.
 
@@ -29,6 +29,12 @@ and timelapse enabled when sending it.
   the paddle and keeper holes holds the board in. Remove the pin to swap the
   board. Slide the rod through the two carrier rings before mounting the
   fully wired wand.
+- **OP1 board latch**. The centre blade stops the PCB moving forward. The
+  two arms hook below the carrier ears and sit in guides that take the
+  forward load. The plug and lead pass below the blade.
+
+For an upgrade from the first R26 plate, print the revised key carrier and
+OP1 board latch. The DFRobot paddle and front keeper fit this carrier.
 
 Use the existing [R25 XIAO holder and lift-release keeper](../carbon-rod-holders-r25-keeper-release/),
 the [R22 battery body and the door that fits](../carbon-rod-holders-r22-integrated-guard/),
@@ -41,9 +47,9 @@ the actual clip. The optional patterned battery spacer has its own
 ## Assembly
 
 1. Push the OP1 switch into its socket board. Slide the assembly into the
-   carrier from the tip, with the plug facing forward. A small removable
-   strip of tape across the board edges keeps it seated. Fit the four
-   Choc sockets from underneath along their shown routes.
+   carrier from the tip, with the plug facing forward. Spread the latch
+   arms, lower them into the carrier slots, then release both arms. Solder
+   the four Choc sockets before seating them from underneath.
 2. Slide the DFR0030 into the paddle with gold face up and the connector
    facing the tip. Put the front keeper in and push the filament pin across.
 3. Pinch the two hinge arms, lower the paddle until the pin and hole centres
@@ -54,6 +60,8 @@ the actual clip. The optional patterned battery spacer has its own
    bottoms out. Then clip the lead into the harness. The stops set 0.48 mm
    of travel at the nominal OP1 plunger. Squeeze the same arms to lift the
    paddle off for service.
+5. To remove the OP1 board, lift off the paddle, spread the two latch arms
+   and lift the latch out of its slots. Slide the OP1 board out by the tip.
 
 The Gravity sensor needs 3.3 V, ground and a separate digital input on the
 XIAO. Use the sensor's S, + and − markings. The OP1 switch is a passive
@@ -62,11 +70,14 @@ contact wired separately. This print set makes no firmware changes.
 ## Verification
 
 - [CAD fit](exports/geometry-checks.json) checks the DFR0030 and OP1 board
-  insertion, keeper, snap-in/removal motion, click travel and wire route.
-- [Bead check](exports/slice-clearances.json) checks all three parts, the
+  insertion, both retainers, snap-in/removal motion, click travel and wire
+  route. It checks that the OP1 latch stops the board moving forward and
+  that the latch itself cannot lift out without spreading its arms.
+- [Bead check](exports/slice-clearances.json) checks all four parts, the
   carrier's tear-off ties, four Choc socket roofs, and every opening. Snip
-  off the four carrier pads and peel the two brims. The paddle has a small
-  exterior tree support clear of its slide and pin paths.
+  off the four carrier pads and peel the two brims. The flat OP1 latch
+  prints directly on the plate. The paddle has a small exterior tree
+  support clear of its slide and pin paths.
 - [Reopen check](exports/roundtrip-checks.json) verifies settings and re-runs
   the bead checks on the regenerated toolpaths.
 

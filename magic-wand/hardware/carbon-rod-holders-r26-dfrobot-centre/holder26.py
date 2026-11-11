@@ -29,7 +29,8 @@ REVISION = HERE.name
 CARRIER = "Key_Carrier"
 PADDLE = "DFRobot_Paddle"
 KEEPER = "DFRobot_Front_Keeper"
-PARTS = (CARRIER, PADDLE, KEEPER)
+OP1_LATCH = "OP1_Board_Latch"
+PARTS = (CARRIER, PADDLE, KEEPER, OP1_LATCH)
 box, union, mesh = h.box, h.union, h.mesh
 LEFT_RIGHT = (-1, 1)
 LOWER_SHIFT = 2.8
@@ -52,6 +53,11 @@ PUSH_Z = h.PLUNGER_FREE - DEPRESSION
 # The switch's spring sets the released height when the nominal OP1 is fitted.
 REST = math.degrees(math.asin(DEPRESSION / (HINGE_Y - PUSH_Y)))
 KEEPER_PIN = (-26.67, 18.6)
+LATCH_Y = (-21.73, -20.19)
+LATCH_SPREAD = .56
+LATCH_FLEX_ROOT = 13.76
+LATCH_ROOT_ROUND = .6
+LATCH_BLADE_BOTTOM = 9.58
 # There is room for the estimated Gravity housing and a lead directed forward.
 CONNECTOR = (-4.6, 4.6, -23.65, -16., BOARD_BOTTOM + BOARD_THICKNESS, 28.0)
 
@@ -109,6 +115,49 @@ def stop_posts():
     ]))
 
 
+def op1_latch_seats():
+    """Fork at the front of the carrier, with side-open guide and catch slots."""
+    outline = h.h22.poly([(6.85, -23.04), (10.85, -23.04),
+                          (10.85, -15.1), (8.68, -15.1), (6.85, -17.05)])
+    ear = mf.Manifold.extrude(outline, 3.45).translate((0., 0., 7.79))
+    # A flat front shoulder takes axial load without camming the clip open.
+    # Its short outer edge tapers in the rear-down print direction.
+    slot_outline = h.h22.poly([(10.04, -21.98), (10.62, -21.98), (11.05, -22.41),
+                               (11.05, -19.95), (10.04, -19.95)])
+    slot = mf.Manifold.extrude(slot_outline, 3.63).translate((0., 0., 7.7))
+    return mirrored(ear - slot)
+
+
+def op1_latch():
+    """Vertical clip. Its stop blade clears the plug and catches the PCB edge."""
+    y0, y1 = LATCH_Y
+    crossbar = box(-11.53, 11.53, y0, y1, LATCH_FLEX_ROOT, 15.33)
+    blade = box(-5.53, 5.53, y0, y1, LATCH_BLADE_BOTTOM, 13.94)
+    seats = mirrored(box(7.12, 8.7, y0, y1, 11.38, 13.94))
+    # Longer arms move the root up towards the crossbar. The feet set the
+    # seated depth independently so the stop blade stays above the plug.
+    arm = h.h22.xz(h.h22.poly([
+        (10.32, 14.1), (10.35, 7.57), (9.60, 7.57),
+        (10.36, 6.29), (11.31, 6.29), (11.41, 14.1),
+    ]), y0, y1)
+    # Round the inside corner where the spring meets the crossbar. The
+    # radius is above the guide and does not change the release clearance.
+    x, z = 10.324, LATCH_FLEX_ROOT
+    r = LATCH_ROOT_ROUND
+    arc = [(x - r + r * math.cos(angle), z - r + r * math.sin(angle))
+           for angle in np.linspace(np.pi / 2, 0, 13)]
+    root = h.h22.xz(h.h22.poly([*arc, (x + .12, z - r), (x + .12, z + .12), (x - r, z + .12)]), y0, y1)
+    return h.base.clean(crossbar + blade + seats + mirrored(arm + root), OP1_LATCH)
+
+
+def spread_latch(points, fraction=1.):
+    """Bend the free prongs out for fitting, with the crossbar fixed."""
+    points = np.asarray(points)
+    x, y, z = points.T
+    movement = LATCH_SPREAD * fraction * np.clip((LATCH_FLEX_ROOT - z) / (LATCH_FLEX_ROOT - 7.57), 0., 1.) ** 1.6
+    return np.column_stack((np.sign(x) * movement * (abs(x) > 9.), y * 0., z * 0.))
+
+
 def clear_old_hinge(shape):
     # The OP1 board pocket and its two low side rails are still used. Replace
     # only the tall front cheeks from the pin-through R23 paddle.
@@ -136,7 +185,7 @@ def carrier():
     spaces = r22.carrier_regions()
     restored = r22.spaces16.carve(original, spaces, "carrier26:runners")
     op1_seat = clear_old_hinge(restored + h.additions()) - h.cuts()
-    final = op1_seat + spring_root() + spring_tongues() + stop_posts()
+    final = op1_seat + spring_root() + spring_tongues() + stop_posts() + op1_latch_seats()
     # The surrounding hardware stays in its own assembly space, including
     # the bent solder/socket insertion routes under all four Choc keys.
     working_spaces = {name: shape for name, shape in spaces.items()
@@ -228,8 +277,9 @@ def export():
     # 45-degree roof points up in this orientation. The keeper prints bore-up.
     h.PRINT_ROT[PADDLE] = h.PRINT_ROT[CARRIER]
     h.PRINT_ROT[KEEPER] = trimesh.transformations.rotation_matrix(-np.pi / 2, [0, 1, 0])
+    h.PRINT_ROT[OP1_LATCH] = h.PRINT_ROT[CARRIER]
     parts = {name: h.export_part(name, shape, name) for name, shape in
-             zip(PARTS, (carrier(), paddle(), keeper()))}
+             zip(PARTS, (carrier(), paddle(), keeper(), op1_latch()))}
     save_json("manifest.json", {
         "revision": REVISION, "physical_fit_verified": False,
         "source_sha256": {p.name: h.sha(p) for p in (Path(__file__), R23 / "parameters.json")},

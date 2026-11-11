@@ -15,7 +15,8 @@ from audit26 import keeper_pin, lead
 
 SHARED = d.HERE.parent / "carbon-rod-holders" / "assembly"
 COLORS = {"paddle": "#e19753", "keeper": "#ea825f", "sensor": "#303e39",
-          "electrode": "#ddba59", "connector": "#e9e1d2", "sensor_lead": "#a7777a", "pin": "#ffdd68"}
+          "electrode": "#ddba59", "connector": "#e9e1d2", "sensor_lead": "#a7777a", "pin": "#ffdd68",
+          "op1_latch": "#a493d9"}
 OP1 = ("board", "sockets", "switch", "plunger", "plug", "wire")
 MOVING = ("paddle", "keeper", "sensor", "electrode", "connector", "sensor_lead", "pin")
 
@@ -41,11 +42,10 @@ def mesh_file(name, solid):
     return file
 
 
-def flex_file():
-    path = d.OUT / f"{d.CARRIER}-assembly.stl"
+def flex_file(part, deformation, file):
+    path = d.OUT / f"{part}-assembly.stl"
     model = trimesh.load_mesh(path, process=False)
-    target = trimesh.Trimesh(model.vertices + d.flex(model.vertices), model.faces, process=False)
-    file = "guide/carrier-squeezed.stl"
+    target = trimesh.Trimesh(model.vertices + deformation(model.vertices), model.faces, process=False)
     target.export(d.OUT / file)
     written = trimesh.load_mesh(d.OUT / file, process=False)
     assert np.array_equal(written.faces, model.faces)
@@ -59,7 +59,8 @@ def add_dfr(module, keys):
     for name in actors:
         if name.startswith("switch_"):
             actors[name]["frame"] = True
-    actors["carrier"].update(file=f"{d.CARRIER}-assembly.stl", morphFile=flex_file())
+    actors["carrier"].update(file=f"{d.CARRIER}-assembly.stl",
+                             morphFile=flex_file(d.CARRIER, d.flex, "guide/carrier-squeezed.stl"))
     refs = {
         "paddle": ("DFRobot paddle", f"{d.PADDLE}-assembly.stl"),
         "keeper": ("Removable DFRobot keeper", f"{d.KEEPER}-assembly.stl"),
@@ -69,10 +70,12 @@ def add_dfr(module, keys):
         "connector": ("Gravity socket and plug clearance", mesh_file("dfr0030-connector", d.box(*d.CONNECTOR))),
         "sensor_lead": ("Gravity cable service loop", mesh_file("gravity-lead", lead())),
         "pin": ("1.75 mm filament keeper pin", mesh_file("keeper-pin", keeper_pin())),
+        "op1_latch": ("Removable OP1 board latch", f"{d.OP1_LATCH}-assembly.stl"),
     }
     actors.update({name: {"label": label, "file": file, "color": COLORS[name],
                           "frame": name not in ("wire", "sensor_lead")}
                    for name, (label, file) in refs.items()})
+    actors["op1_latch"]["morphFile"] = flex_file(d.OP1_LATCH, d.spread_latch, "guide/op1-latch-spread.stl")
     state = {name: translation() for name in actors}
     seated_keys = keys["steps"][-1]["samples"][-1]
     state.update({name: seated_keys[name] for name in actors if name.startswith(("switch_", "socket_"))})
@@ -85,6 +88,7 @@ def add_dfr(module, keys):
         state[name] = translation(*(off + [0, -33, 0]))
     state["keeper"] = translation(*(off + [0, -7, 0]))
     state["pin"] = translation(*(off + [18, 0, 0]))
+    state["op1_latch"] = translation(z=10.)
     steps = []
 
     def add(title, caption, frames, duration=3):
@@ -94,8 +98,20 @@ def add_dfr(module, keys):
         state = frames[-1]
 
     add("Slide In the OP1 Board",
-        "Plug the microswitch into its stock board. Slide it in with the white plug facing the tip. A small strip of tape across the board edges holds it in the slot.",
+        "Plug the microswitch into its stock board. Slide it in with the white plug facing the tip.",
         translate_steps(state, OP1, (0, -33, 0), (0, 0, 0)))
+
+    def latch_frames(start, height=7.):
+        return ([{**start, "op1_latch": translation(z=height), "morphs": {"op1_latch": float(t)}}
+                 for t in np.linspace(0, 1, 10)]
+                + [{**start, "op1_latch": translation(z=float(z)), "morphs": {"op1_latch": 1.}}
+                   for z in np.linspace(height, 0, 24)]
+                + [{**start, "op1_latch": translation(), "morphs": {"op1_latch": float(t)}}
+                   for t in np.linspace(1, 0, 10)])
+
+    add("Clip In the OP1 Latch",
+        "Spread the purple latch arms, lower them into the slots and let go. The blade sits in front of the board and above the plug.",
+        latch_frames(state, height=10.), 4)
     add("Slide In the Touch Board",
         "Face the gold surface up. Slide the bare board in under the two rails, gold end first.",
         translate_steps(state, (*sensor_group, "sensor_lead"), off + [0, -33, 0], off))
@@ -133,10 +149,24 @@ def add_dfr(module, keys):
             "morphs": {"carrier": 1.}} for z in np.linspace(0, 8, 25)]
         + [{**state, **{name: assembly_matrix(z=8.) for name in MOVING},
             "morphs": {"carrier": float(t)}} for t in np.linspace(1, 0, 10)], 4)
+    paddle_refit = steps[-1]["samples"]
+    add("Release the OP1 Latch",
+        "With the paddle lifted, spread the two purple arms and lift the latch.",
+        reversed(latch_frames(state)), 4)
+    latch_aside = translation(x=31., z=7.)
+    board_service = [*translate_steps(state, ("op1_latch",), (0, 0, 7), (31, 0, 7)),
+                     *translate_steps({**state, "op1_latch": latch_aside}, OP1, (0, 0, 0), (0, -33, 0))]
+    add("Slide Out the OP1 Board",
+        "Move the latch aside. Slide the OP1 board out towards the tip with its plug attached.", board_service, 4)
+    add("Slide the OP1 Board Back In", "Guide the board all the way back into its two rails.",
+        reversed(board_service), 3)
+    add("Refit the OP1 Latch",
+        "Clip the latch back over the two blue ears.",
+        latch_frames(state), 3)
     # The viewer opens on the final frame. Leave the complete assembly seated.
     add("Assembled",
-        "The sensor stays in the two rails. The keeper locks its front edge, and both hinge pins sit in the paddle ears.",
-        reversed(steps[-1]["samples"]), 3)
+        "Both boards are held in place. The purple latch holds the OP1 board and the front keeper holds the touch board.",
+        reversed(paddle_refit), 3)
     return {"label": "DFRobot centre click", "note": "DFR0030 V2, stock OP1 switch and four Choc V1 keys. Board height and plug shape are fit envelopes.",
             "rotation": [.92, 0, .34], "openSeated": True, "actors": actors, "steps": steps}
 
@@ -173,7 +203,7 @@ def build(current):
     path = d.OUT / "assembly-guide.json"
     write_json(path, guide)
     helper = d.OUT / "timelapse-tower.json"
-    register_assembly(path, "r26", "R26 DFRobot centre click trial", make_current=current,
+    register_assembly(path, "r26", "R26 DFRobot and OP1 latch", make_current=current,
                       helper=helper if helper.is_file() else None, group_keys=True)
 
 
