@@ -436,6 +436,53 @@ test('R25 shows the stopped pull, deliberate lift and board removal', () => {
   assert.ok(modules.battery_spacer && modules.centre);
 });
 
+test('R28 carries the DFR0030 on the R27 click behind a flat bottom and services it in place', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+  const url = new URL(catalog.versions.find(entry => entry.id === 'r28').guide, directory);
+  const guide = JSON.parse(readFileSync(url));
+  const { modules, views } = groupKeys(guide.modules);
+  validateGuide({ ...guide, modules: views });
+  assert.ok(modules.cable && modules.battery && modules.xiao);
+  const sha = file => createHash('sha256').update(readFileSync(new URL(file, url))).digest('hex');
+  for (const module of Object.values(guide.modules)) {
+    for (const { file } of Object.values(module.actors)) if (file) assert.equal(guide.sources.meshes_sha256[file], sha(file), file);
+  }
+  const report = JSON.parse(readFileSync(new URL('geometry-checks.json', url)));
+  const { checks } = report;
+  assert.equal(checks.passed, true);
+  assert.equal(report.print_validated, false);
+  assert.equal(report.physical_fit_verified, false);
+  assert.ok(checks.released_front_alignment_error_mm < .001);
+  assert.ok(checks.min_front_clear_of_bottom_over_stroke_mm > .15);
+  assert.ok(checks.side_clearance_to_choc_caps_mm >= .7);
+  for (const key of Object.keys(checks).filter(key => key.endsWith('overlap_mm3'))) assert.ok(checks[key] < .035, key);
+  const view = views.dfr;
+  const end = sampledPose(view, view.steps.length - 1, 1);
+  assert.deepEqual([0, 2, 3, 4].map(i => [end[`keycap_${i}`][3], end[`keycap_${i}`][7]]), checks.choc_centres_mm);
+  for (const key of [0, 2]) {
+    const front = Math.min(...view.actors[`keycap_${key}`].geometry.vertices.map(([, y]) => y)) + end[`keycap_${key}`][7];
+    assert.ok(Math.abs(checks.released_front_mm - front) < .001);
+  }
+  const at = title => view.steps.findIndex(step => step.title === title);
+  const press = at('Touch, Click and Release');
+  const down = sampledPose(view, press, .5);
+  assert.ok(down.plunger[11] < -.45);
+  for (const id of ['sensor', 'electrode', 'connector', 'touch_pin']) assert.deepEqual(down[id], down.cap);
+  assert.deepEqual(down.board, end.board);
+  assert.ok(at('Unplug the Gravity Lead') < at('Push Out the Keeper Pin'));
+  assert.ok(at('Push Out the Keeper Pin') < at('Slide Out the Touch Board'));
+  const out = sampledPose(view, at('Slide Out the Touch Board'), 1);
+  assert.deepEqual(out.cap, end.cap);
+  assert.ok(out.sensor[7] - out.cap[7] > 40);
+  for (let i = 1; i < view.steps.length; i++) {
+    const before = view.steps[i - 1].samples.at(-1), after = view.steps[i].samples[0];
+    for (const actor of Object.keys(view.actors)) {
+      assert.ok(before[actor].every((n, j) => Math.abs(n - after[actor][j]) < 1e-8), `${view.steps[i].title}/${actor}`);
+    }
+  }
+});
+
 test('R27 fits the copper keys closer and loads the OP1 behind a flat bottom', () => {
   const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
   const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));

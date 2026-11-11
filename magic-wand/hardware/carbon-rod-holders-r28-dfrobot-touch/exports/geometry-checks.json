@@ -1,0 +1,109 @@
+{
+  "revision": "carbon-rod-holders-r28-dfrobot-touch",
+  "physical_fit_verified": false,
+  "print_validated": false,
+  "source_sha256": "4ee2d6a8ec0265cc7cfb35334d9aabff7a96311fed2cf01172d34cff10d3f27e",
+  "carrier_sha256": "460682cf869b72dfa37c455c72a11e56bcebc9152af609819ee9ee580bb52796",
+  "tray_sha256": "d63ee314f7f0fc05b320e2bfcd8da85f23ef73bf86a55bae195f2b9c4e3064f7",
+  "checks": {
+    "choc_centres_mm": [
+      [
+        -21.1,
+        0.0
+      ],
+      [
+        21.1,
+        0.0
+      ],
+      [
+        -21.1,
+        21.35
+      ],
+      [
+        21.1,
+        21.35
+      ]
+    ],
+    "lower_shift_from_r27_each_mm": 2.4,
+    "upper_shift_from_r27_each_mm": 8.05,
+    "upper_row_y_mm": 21.35,
+    "tray_half_width_mm": 12.1,
+    "side_clearance_to_choc_caps_mm": 0.7,
+    "board_y_hard_stop_mm": [
+      -8.0882,
+      21.9118
+    ],
+    "board_z_hard_stop_mm": [
+      20.25,
+      21.85
+    ],
+    "lip_underside_clearance_mm": 0.2,
+    "underside_relief_to_floor_mm": 0.85,
+    "released_front_mm": -8.749999,
+    "outer_cap_front_mm": -8.75,
+    "released_front_alignment_error_mm": 1e-06,
+    "min_front_clear_of_bottom_over_stroke_mm": 0.41179,
+    "tray_top_hard_stop_mm": 23.45,
+    "touch_face_top_released_max_mm": 23.7248,
+    "r27_cap_top_released_mm": 23.395,
+    "connector_envelope_top_max_mm": 28.0,
+    "released_pin_clear_above_choc_tops_mm": 0.4367,
+    "click_stroke_overlap_mm3": 0.0,
+    "lead_stroke_overlap_mm3": 0.0,
+    "snap_on_empty_tray_overlap_mm3": 0.0,
+    "board_slide_tray_overlap_mm3": 0.0,
+    "board_slide_fixed_overlap_mm3": 0.0,
+    "pin_slide_overlap_mm3": 0.0,
+    "seated_pin_to_tray_and_board_overlap_mm3": 0.0,
+    "front_stop_contact_mm3": 17.6,
+    "rear_pin_stop_contact_mm3": 1.71788,
+    "board_lift_lip_contact_mm3": 4.37683,
+    "board_side_rail_contact_mm3": 7.68,
+    "pin_lift_contact_mm3": 0.40812,
+    "overpress_stop_contacts_mm3": [
+      0.09961,
+      0.09961
+    ],
+    "guard_runners": {
+      "R1": {
+        "volume_mm3": 106.51,
+        "root_y_mm": 18.4,
+        "desired_mm3": 107.145,
+        "trimmed_unsupported_mm3": 2.242
+      },
+      "R2": {
+        "volume_mm3": 95.499,
+        "root_y_mm": 16.2,
+        "desired_mm3": 96.484,
+        "trimmed_unsupported_mm3": 3.015
+      },
+      "R3": {
+        "volume_mm3": 91.717,
+        "root_y_mm": 16.2,
+        "desired_mm3": 99.06,
+        "trimmed_unsupported_mm3": 9.402
+      },
+      "L1": {
+        "volume_mm3": 103.715,
+        "root_y_mm": 18.4,
+        "desired_mm3": 104.427,
+        "trimmed_unsupported_mm3": 2.32
+      },
+      "L2": {
+        "volume_mm3": 63.252,
+        "root_y_mm": 12.0,
+        "desired_mm3": 70.851,
+        "trimmed_unsupported_mm3": 9.276
+      },
+      "L3": {
+        "volume_mm3": 78.88,
+        "root_y_mm": 16.0,
+        "desired_mm3": 90.277,
+        "trimmed_unsupported_mm3": 13.538
+      }
+    },
+    "nominal_click_stop_depression_mm": 0.48,
+    "click_rotation_released_deg": 3.6451,
+    "passed": true
+  }
+}
