@@ -70,7 +70,7 @@ Read the frozen [V20 design principles](../../../magic-wand/hardware/printed-loo
 
 ## Before calling it final
 
-User-requested — 2026-11-10: “slicing is super quick, so we should do it regularly at intervals to make sure that the 3D model is going into plan.” Slice at useful checkpoints during design, especially after changing thin members, openings, print orientation or adhesion helpers, so actual layer problems are caught before the final pass. Reuse unchanged checked results; do not wait until a long design pass ends to inspect the first real toolpaths.
+User-corrected — 2026-11-11: “Maybe not regularly, just at the end before committing.” By default, slice and inspect the finished candidate before committing each completed model or print-project revision. This replaces the earlier request to slice regularly during design. Use an earlier targeted slice when it resolves a specific printability uncertainty or verifies a repair, rather than running slices at fixed intervals. Reuse unchanged checked results; after a relevant edit, recheck the affected layers before committing. Keep the final printability audit and checks of the delivered file.
 
 Before finishing every model or print project, use the repository's [printability-audit](../printability-audit/SKILL.md). It owns the recurring independent Opus review of actual holes, support removal and likely snap points, with minimal design changes. Keep implementation and independent review distinct.
 
