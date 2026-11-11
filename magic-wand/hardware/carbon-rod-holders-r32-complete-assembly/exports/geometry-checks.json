@@ -1,0 +1,41 @@
+{
+  "revision": "carbon-rod-holders-r32-complete-assembly",
+  "physical_fit_verified": false,
+  "print_validated": false,
+  "carrier_sha256": "f6714304ba969976e18750a15fb91d24d605441b9b099c0380d205df832398f8",
+  "source_sha256": "6cf5e0309880cf5fec01b98a8ed213db271016e6186e6cb0312c1c5db6238dbe",
+  "checks": {
+    "pcb_drop_overlap_mm3": 0.0,
+    "underside_plug_insertion_overlap_mm3": 0.0,
+    "switch_seat_overlap_mm3": 0.0,
+    "board_eyelet_pitch_overlap_mm3": {
+      "17.30": 0.0,
+      "17.50": -0.0,
+      "17.70": -0.0,
+      "17.90": -0.0,
+      "18.10": -0.0,
+      "18.30": -0.0,
+      "18.50": -0.0
+    },
+    "screw_shank_and_board_overlap_mm3": 0.0,
+    "screw_heads_and_switch_overlap_mm3": 0.0,
+    "pin_socket_fit_overlap_mm3": 0.0,
+    "white_housing_and_wire_to_rod_overlap_mm3": 0.0,
+    "click_stroke_overlap_mm3": 0.0,
+    "lead_stroke_overlap_mm3": 0.0,
+    "bracket_drop_overlap_mm3": 0.0,
+    "bracket_unpinch_overlap_mm3": 0.0,
+    "switch_contact_under_overpress_mm3": 0.102113,
+    "seating_contact_under_board_mm3": 35.613558,
+    "seat_and_stock_profile_mm": {
+      "board_bottom_z": 9.2,
+      "board_top_z": 10.799999999999999,
+      "yaw_degrees": -25.0,
+      "socket_depth": 4.3,
+      "white_plug_depth": 5.9,
+      "actuator_offset_from_middle_pin": 1.95,
+      "stop_travel": 0.48
+    },
+    "passed": true
+  }
+}

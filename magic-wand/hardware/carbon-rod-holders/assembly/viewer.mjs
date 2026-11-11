@@ -4,12 +4,13 @@ import * as THREE from '../../../../docs/lib/three-0.185.1/three.module.min.js';
 import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/preview/free-view-controls.mjs?v=playback-host';
 import { RollingViewInput, bindTwistGestures, routeAssemblyWheel, rollHint, rollSupport } from './view-roll.mjs';
 import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
-import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=r30-keys-label';
+import { sampledPose, validateGuide, identity, assemblyComponents, selectAssemblyComponent } from './assembly-data.mjs';
 import { legacyR20 } from './legacy-r20.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');
 const versions = document.getElementById('version'), modules = document.getElementById('module');
-const keysView = document.getElementById('keys-view');
+const componentView = document.getElementById('component-view');
+const viewOptions = document.getElementById('component-view-options');
 const keyHeights = document.getElementById('key-heights');
 const keyMechanism = document.getElementById('key-mechanism');
 const annotationHost = document.getElementById('annotations');
@@ -28,8 +29,7 @@ const canvas = renderer.domElement; canvas.tabIndex = 0;
 const rollText = rollHint(rollSupport());
 canvas.setAttribute('aria-label', `3D assembly. Drag to rotate; scroll or pinch to zoom. ${rollText}.`);
 view.querySelector('.hint').textContent = `Drag to rotate · Scroll or pinch to zoom · ${rollText}`;
-let guide, guideUrl, group, actors = {}, module, tools, catalog, loadId = 0, versionLoadId = 0;
-let keyViews;
+let components, guideUrl, group, actors = {}, module, tools, catalog, loadId = 0, versionLoadId = 0;
 let showAnnotations = true, annotations = [];
 let manualCutaway = false, effectiveCutaway;
 const geometries = new Map();
@@ -230,12 +230,26 @@ async function geometry(record, sourceUrl) {
   }
   return geometries.get(url);
 }
+function showComponentViews(component, selectedView = component.defaultView) {
+  const potential = document.createElement('optgroup');
+  const comparison = document.createElement('optgroup');
+  potential.label = 'Potential components';
+  comparison.label = 'Comparison only';
+  componentView.replaceChildren();
+  for (const [id, value] of Object.entries(component.views)) {
+    (value.comparisonOnly ? comparison : value.concept ? potential : componentView).append(new Option(value.label, id));
+  }
+  if (potential.childElementCount) componentView.append(potential);
+  if (comparison.childElementCount) componentView.append(comparison);
+  componentView.value = selectedView;
+  viewOptions.hidden = Object.keys(component.views).length < 2;
+}
+
 async function chooseModule() {
   const request = ++loadId; tools?.assembly.pause(); document.body.dataset.ready = 'loading';
-  const isKeys = modules.value === 'keys' && keyViews;
-  document.getElementById('keys-view-options').hidden = !isKeys;
-  keyHeights.hidden = !isKeys || keysView.value === 'key';
-  const next = isKeys ? keyViews[keysView.value] : guide.modules[modules.value];
+  const component = components[modules.value], viewId = componentView.value;
+  const next = component.views[viewId];
+  keyHeights.hidden = !next.compareCapHeights;
   keyMechanism.hidden = !next.concept;
   const sourceUrl = guideUrl, nextActors = {}, nextGroup = new THREE.Group();
   try {
@@ -283,8 +297,9 @@ async function chooseModule() {
     const url = new URL(location.href);
     url.searchParams.set('version', versions.value);
     url.searchParams.set('component', modules.value);
-    if (isKeys && keysView.value !== Object.keys(keyViews)[0]) url.searchParams.set('keyView', keysView.value);
-    else url.searchParams.delete('keyView');
+    url.searchParams.delete('keyView');
+    if (viewId !== component.defaultView) url.searchParams.set('view', viewId);
+    else url.searchParams.delete('view');
     history.replaceState(null, '', url);
     document.body.dataset.ready = 'true'; document.getElementById('error').style.display = 'none';
   } catch (error) {
@@ -301,10 +316,10 @@ function disposeGroup(value) {
   }
 }
 function showError(error) { const box = document.getElementById('error'); box.style.display = 'grid'; box.textContent = error.message; document.body.dataset.ready = 'error'; }
-async function chooseVersion(preferred, preferredKeysView) {
+async function chooseVersion(preferred, preferredView) {
   const versionRequest = ++versionLoadId; ++loadId;
   tools?.assembly.pause();
-  modules.disabled = true;
+  modules.disabled = componentView.disabled = true;
   const version = catalog.versions.find(item => item.id === versions.value);
   const nextGuideUrl = version.guide ? new URL(version.guide, base) : base;
   const nextGuide = validateGuide(version.legacy ? await legacyR20() : await fetch(nextGuideUrl, { cache: 'no-store' }).then(response => { if (!response.ok) throw new Error('Assembly guide could not be loaded'); return response.json(); }));
@@ -316,29 +331,13 @@ async function chooseVersion(preferred, preferredKeysView) {
     nextGuide.modules.wipe_tower = { label: 'Wipe tower · discard', note: 'This upright piece is a print helper, not part of the wand. It catches nozzle ooze between smooth-timelapse photos. The lines show its actual sliced paths.', actors: { tower: actor }, steps: [{ title: 'Remove After Printing', caption: 'Let the plate cool, then remove and discard the tower. It does not attach to any holder.', duration: 2, samples: [{ tower: identity() }] }] };
   }
   if (versionRequest !== versionLoadId) return;
-  keyViews = undefined;
-  if (version.groupKeys) {
-    const grouped = groupKeys(nextGuide.modules);
-    nextGuide.modules = grouped.modules;
-    keyViews = grouped.views;
-    const potential = document.createElement('optgroup');
-    const comparison = document.createElement('optgroup');
-    potential.label = 'Potential components';
-    comparison.label = 'Comparison only';
-    keysView.replaceChildren();
-    for (const [id, value] of Object.entries(keyViews)) {
-      (value.comparisonOnly ? comparison : value.concept ? potential : keysView).append(new Option(value.label, id));
-    }
-    if (potential.childElementCount) keysView.append(potential);
-    if (comparison.childElementCount) keysView.append(comparison);
-    const legacyView = preferred !== 'key' && Object.hasOwn(keyViews, preferred) ? preferred : Object.keys(keyViews)[0];
-    keysView.value = Object.hasOwn(keyViews, preferredKeysView) ? preferredKeysView : legacyView;
-    if (Object.hasOwn(keyViews, preferred)) preferred = 'keys';
-  }
-  guideUrl = nextGuideUrl; guide = nextGuide;
-  modules.replaceChildren(...Object.entries(guide.modules).map(([id, value]) => new Option(value.label, id)));
-  modules.disabled = false;
-  modules.value = guide.modules[preferred] ? preferred : Object.keys(guide.modules)[0];
+  const nextComponents = assemblyComponents(nextGuide, version.groupKeys);
+  const selection = selectAssemblyComponent(nextComponents, preferred, preferredView, version.groupKeys);
+  guideUrl = nextGuideUrl; components = nextComponents;
+  modules.replaceChildren(...Object.entries(components).map(([id, value]) => new Option(value.label, id)));
+  modules.value = selection.component;
+  showComponentViews(components[selection.component], selection.view);
+  modules.disabled = componentView.disabled = false;
   document.getElementById('revision').textContent = version.label + ' · Assembly'; document.body.dataset.version = version.id;
   await chooseModule();
 }
@@ -360,8 +359,11 @@ try {
   document.getElementById('plus').addEventListener('click', () => { input.zoom(.82); render(); });
   document.getElementById('minus').addEventListener('click', () => { input.zoom(1 / .82); render(); });
   document.getElementById('reset').addEventListener('click', reset);
-  modules.addEventListener('change', () => chooseModule());
-  keysView.addEventListener('change', () => chooseModule());
+  modules.addEventListener('change', () => {
+    showComponentViews(components[modules.value]);
+    chooseModule();
+  });
+  componentView.addEventListener('change', () => chooseModule());
   keyHeights.addEventListener('click', () => {
     tools.assembly.pause();
     tools.assembly.timeline.seek(tools.assembly.timeline.duration);
@@ -388,13 +390,13 @@ try {
     const requestedVersion = versions.value;
     chooseVersion(modules.value).catch(error => {
       if (versions.value !== requestedVersion) return;
-      if (guide) {
+      if (components) {
         versions.value = document.body.dataset.version;
-        modules.disabled = false;
+        modules.disabled = componentView.disabled = false;
       }
       showError(error);
     });
   });
   new ResizeObserver(() => { camera.aspect = view.clientWidth / view.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(view.clientWidth, view.clientHeight, false); render(); }).observe(view);
-  await chooseVersion(requested.get('component'), requested.get('keyView'));
+  await chooseVersion(requested.get('component'), requested.get('view') ?? requested.get('keyView'));
 } catch (error) { showError(error); }

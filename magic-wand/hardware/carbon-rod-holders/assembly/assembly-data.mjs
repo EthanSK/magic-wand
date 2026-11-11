@@ -1,6 +1,6 @@
 // Render the same discrete poses used by the owning model's assembly checks.
-// Keep all components in one menu; adding a component to its guide includes it
-// here without maintaining another list of model names in the user interface.
+// Use the selected guide's parts and poses. The component picker groups views
+// of the same hardware without taking any parts from another version.
 import { potentialKeyViews } from './keycap-concepts.mjs?v=cirque-cap-view';
 
 export const identity = () => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
@@ -77,7 +77,8 @@ export function groupKeys(modules) {
     }
     const steps = module.steps.map(step => ({
       ...step,
-      samples: step.samples.map(pose => ({ ...socketPoses, ...pose, ...capPoses })),
+      // The guide can lift individual keycaps to clear a loading path.
+      samples: step.samples.map(pose => ({ ...socketPoses, ...capPoses, ...pose })),
     }));
     const note = 'The Choc caps use a reference shape and estimated seated height. The OP1 board, plug and switch also use estimated dimensions.';
     return { ...module, label, note, actors, steps, openSeated: true, rotation: module.rotation ?? [.92, 0, .34] };
@@ -102,10 +103,80 @@ export function groupKeys(modules) {
   const otherKeycaps = {
     id: 'other-keycaps', hideLabel: 'Hide other keycaps', showLabel: 'Show other keycaps', actors: Object.keys(caps),
   };
-  for (const view of Object.values(views)) view.helperActions = [otherKeycaps];
+  for (const [id, view] of Object.entries(views)) {
+    view.helperActions = [otherKeycaps];
+    view.compareCapHeights = id !== 'key';
+  }
   // A guide may name the Keys entry so a detail module listed after it reads as a pair.
   const main = views.dfr ?? views.copper ?? views.centre;
   return { modules: { keys: { ...main, label: main.keysLabel ?? 'Keys' }, ...others }, views };
+}
+
+const componentFamilies = {
+  key: 'keys',
+  centre: 'keys',
+  centre_shallow: 'keys',
+  centre_deep: 'keys',
+  snap_hinge: 'keys',
+  xiao_latch: 'xiao',
+  battery_easy: 'battery',
+  battery_spacer: 'battery',
+};
+const componentLabels = {
+  keys: 'Keys',
+  xiao: 'XIAO holder',
+  battery: 'Battery holder',
+  cable: 'Cable clip',
+};
+const viewLabels = {
+  snap_hinge: 'Snap hinge detail',
+  xiao: 'Full assembly',
+  xiao_latch: 'Keeper detail',
+  battery: 'Standard door',
+  battery_easy: 'Easier door',
+  battery_spacer: 'Patterned spacer',
+};
+
+export function assemblyComponents(guide, combineKeys = false) {
+  const grouped = combineKeys ? groupKeys(guide.modules) : guide;
+  const components = Object.create(null);
+  for (const [id, module] of Object.entries(grouped.modules)) {
+    const componentId = Object.hasOwn(componentFamilies, id) ? componentFamilies[id] : id;
+    const component = components[componentId] ??= {
+      label: Object.hasOwn(componentLabels, componentId) ? componentLabels[componentId] : module.label,
+      defaultView: id,
+      views: Object.create(null),
+    };
+    if (id === 'keys' && combineKeys) {
+      // Keep the existing composed Choc/centre views and their ordered default.
+      Object.assign(component.views, grouped.views);
+      component.defaultView = Object.keys(grouped.views)[0];
+    } else {
+      component.views[id] = Object.hasOwn(viewLabels, id) ? { ...module, label: viewLabels[id] } : module;
+    }
+  }
+  for (const [componentId, viewId] of Object.entries(guide.defaultViews ?? {})) {
+    const component = components[componentId];
+    if (!component || !Object.hasOwn(component.views, viewId)) {
+      throw new Error(`Missing default assembly view: ${componentId}/${viewId}`);
+    }
+    component.defaultView = viewId;
+  }
+  return components;
+}
+
+export function selectAssemblyComponent(components, requestedComponent, requestedView, combineKeys = false) {
+  // Grouped guides previously used component=key to mean the assembled Keys.
+  const id = combineKeys && requestedComponent === 'key' ? 'keys' : requestedComponent;
+  if (Object.hasOwn(components, id)) {
+    const component = components[id];
+    return { component: id, view: Object.hasOwn(component.views, requestedView) ? requestedView : component.defaultView };
+  }
+  // Older links stored the cutaway or variant directly in component.
+  const legacy = Object.keys(components).find(key => Object.hasOwn(components[key].views, id));
+  if (legacy) return { component: legacy, view: id };
+  const first = Object.keys(components)[0];
+  return { component: first, view: components[first].defaultView };
 }
 
 export function validateGuide(guide) {

@@ -2654,3 +2654,29 @@ editable candidate. Resuming the same author session with the confirmed
 kit, a bounded fit trial and an explicit first source deliverable produced
 a model that could be checked. Get a saved candidate and an early slice
 before investing in detailed mechanical refinement.
+
+Self-improved — 2026-11-11: R32’s OP1 board fits at the prior height with
+the connector yawed away from the rod. The board drops into place with the
+upper keycaps removed. Attach the plug from below after seating and securing
+the board. A fit check on the fully assembled CAD would miss the collision
+between the wired board and the upper keycap during insertion. Include the
+kit screw heads in the switch loading sweep and check both eyelets across
+the photo-derived pitch range. The actual connector and soldered wire
+envelopes still need an assembled fit test.
+
+Self-improved — 2026-11-11: For a Bambu floating-region warning with
+connected raw mesh sections, check the extrudable sections as well. The
+2.9 slicer removes thin paths by eroding each section by half a line
+width, dilating it by a full width and intersecting with the original.
+It then checks new contours against the two lower sections. R32's thin
+strip beside the OP1 opening lost its connection at that step. Extending
+the cut through the full strip cleared the warning. Audit the adjacent
+key clip space against the resulting beads, because it can still be
+intruded by a wall even when Studio has no warnings.
+
+User-requested — 2026-11-11: Keep the version selector as the parent of the
+whole printed assembly. Show the related hinge, keeper and spacer under
+their owning component. For the first R32 fit keep the reinforced touch
+bracket. On a later weight pass, explore openings in the flat crossbar and
+low, crosswise finger guards. Preserve the original load paths, switch and
+wire clearances, and verify the resulting finger contact in the assembly.

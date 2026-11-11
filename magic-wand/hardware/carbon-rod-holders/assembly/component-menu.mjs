@@ -1,6 +1,7 @@
 // Older model pages keep their own geometry, but expose the same current
 // component menu so a guard-only view cannot strand the user away from assembly.
 import { legacyR20 } from './legacy-r20.mjs';
+import { assemblyComponents } from './assembly-data.mjs';
 const base = new URL('./', import.meta.url);
 try {
   const catalog = await fetch(new URL('catalog.json', base), { cache: 'no-store' }).then(response => response.json());
@@ -9,7 +10,8 @@ try {
   const guide = version.legacy ? await legacyR20() : await fetch(new URL(version.guide, base)).then(response => response.json());
   const label = document.createElement('label'); label.textContent = 'All components';
   const select = document.createElement('select'); select.id = 'all-components'; select.style.width = '100%';
-  select.append(new Option('Choose a component', ''), ...Object.entries(guide.modules).map(([id, module]) => new Option(module.label, id)));
+  const components = assemblyComponents(guide, version.groupKeys);
+  select.append(new Option('Choose a component', ''), ...Object.entries(components).map(([id, component]) => new Option(component.label, id)));
   if (version.helper) select.append(new Option('Wipe tower · discard', 'wipe_tower'));
   label.append(select); document.querySelector('aside h1').after(label);
   select.addEventListener('change', () => {

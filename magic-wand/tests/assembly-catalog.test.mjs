@@ -3,10 +3,69 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { validateGuide, sampledPose, identity, groupKeys } from '../hardware/carbon-rod-holders/assembly/assembly-data.mjs';
+import { validateGuide, sampledPose, identity, groupKeys, assemblyComponents, selectAssemblyComponent } from '../hardware/carbon-rod-holders/assembly/assembly-data.mjs';
 import { legacyR20 } from '../hardware/carbon-rod-holders/assembly/legacy-r20.mjs';
 import { GUIDED_CAPTURE, HOLDER_SNAP, UPPER_KEY_SHIFT } from '../hardware/carbon-rod-holders/assembly/keycap-concepts.mjs';
 import { CIRQUE_LAYOUT } from '../hardware/carbon-rod-holders/assembly/cirque-keycap.mjs';
+
+test('the selected assembly lists each component once and retains its original recipes', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+  const r31 = catalog.versions.find(entry => entry.id === 'r31');
+  const guide = JSON.parse(readFileSync(new URL(r31.guide, directory)));
+  const components = assemblyComponents(guide, r31.groupKeys);
+  assert.deepEqual(Object.keys(components), ['keys', 'xiao', 'battery', 'cable']);
+  assert.deepEqual(Object.values(components).map(component => component.label),
+    ['Keys', 'XIAO holder', 'Battery holder', 'Cable clip']);
+  assert.equal(components.keys.defaultView, 'dfr');
+  assert.equal(components.keys.views.snap_hinge.actors, guide.modules.snap_hinge.actors);
+  assert.equal(components.xiao.views.xiao_latch.steps, guide.modules.xiao_latch.steps);
+  assert.equal(components.battery.views.battery_spacer.actors.spacer,
+    guide.modules.battery_spacer.actors.spacer);
+  assert.equal(components.battery.defaultView, 'battery');
+  assert.equal(components.keys.views.dfr.compareCapHeights, true);
+  assert.equal(components.keys.views.key.compareCapHeights, false);
+  assert.ok(!components.keys.views.snap_hinge.compareCapHeights);
+
+  const dfr = guide.modules.dfr, [firstStep] = dfr.steps, [firstPose] = firstStep.samples;
+  const lifted = [...components.keys.views.dfr.steps[0].samples[0].keycap_3];
+  lifted[11] += 18;
+  const liftStep = { ...firstStep, samples: [{ ...firstPose, keycap_3: lifted }, ...firstStep.samples.slice(1)] };
+  const withLift = groupKeys({ ...guide.modules, dfr: { ...dfr, steps: [liftStep, ...dfr.steps.slice(1)] } });
+  assert.deepEqual(withLift.views.dfr.steps[0].samples[0].keycap_3, lifted);
+  assert.deepEqual(withLift.views.dfr.steps[0].samples[1].keycap_3, components.keys.views.dfr.steps[0].samples[1].keycap_3);
+
+  const assemblyWithSpacer = assemblyComponents({ ...guide, defaultViews: { battery: 'battery_spacer' } }, true);
+  assert.deepEqual(selectAssemblyComponent(assemblyWithSpacer, 'battery', null, true),
+    { component: 'battery', view: 'battery_spacer' });
+  assert.throws(() => assemblyComponents({ ...guide, defaultViews: { battery: 'missing' } }, true),
+    /Missing default assembly view/);
+
+  const r24 = catalog.versions.find(entry => entry.id === 'r24');
+  const archive = assemblyComponents(JSON.parse(readFileSync(new URL(r24.guide, directory))), r24.groupKeys);
+  assert.ok(!Object.hasOwn(archive, 'cable'));
+  assert.deepEqual(selectAssemblyComponent(archive, 'key'), { component: 'keys', view: 'key' });
+  assert.deepEqual(selectAssemblyComponent(archive, 'centre_shallow'), { component: 'keys', view: 'centre_shallow' });
+});
+
+test('old component and key-view links resolve inside the new component groups', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+  const r31 = catalog.versions.find(entry => entry.id === 'r31');
+  const components = assemblyComponents(JSON.parse(readFileSync(new URL(r31.guide, directory))), r31.groupKeys);
+  for (const [requestedComponent, requestedView, component, view] of [
+    ['snap_hinge', null, 'keys', 'snap_hinge'],
+    ['xiao_latch', null, 'xiao', 'xiao_latch'],
+    ['battery_easy', null, 'battery', 'battery_easy'],
+    ['battery_spacer', null, 'battery', 'battery_spacer'],
+    ['keys', 'key', 'keys', 'key'],
+    ['key', null, 'keys', 'dfr'],
+    ['battery', 'snap_hinge', 'battery', 'battery'],
+  ]) {
+    assert.deepEqual(selectAssemblyComponent(components, requestedComponent, requestedView, true),
+      { component, view });
+  }
+});
 
 test('R25 Keys opens seated with the centre paddle and four capped Choc switches', () => {
   const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
