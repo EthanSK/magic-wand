@@ -1,7 +1,7 @@
 // Render the same discrete poses used by the owning model's assembly checks.
 // Keep all components in one menu; adding a component to its guide includes it
 // here without maintaining another list of model names in the user interface.
-import { potentialKeyViews } from './keycap-concepts.mjs?v=retained-caps-2';
+import { potentialKeyViews } from './keycap-concepts.mjs?v=snap-hinge';
 
 export const identity = () => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
 export const translated = (x = 0, y = 0, z = 0) => [1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z];

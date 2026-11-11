@@ -5,9 +5,13 @@ const rotateBoard = [-1, 0, 0, 0, 0, -1, 0, -2, 0, 0, 1, 0];
 const holeY = [-3.6, 1.6], holeZ = 13.75, bodyHalfWidth = 2.95;
 const travel = .55, freeGap = .08, plungerY = -4.2;
 const hingeY = 6.9, hingeZ = 18, clipHingeZ = 17.55;
-const holderHingeY = 10.1;
+const holderHingeY = 10.2;
 export const UPPER_KEY_SHIFT = 1.15;
 export const GUIDED_CAPTURE = Object.freeze({ pinZ: 17.2, pinRadius: .5, slotBottom: 16.66, slotTop: 18.37, travel });
+export const HOLDER_SNAP = Object.freeze({
+  axisY: holderHingeY, axisZ: hingeZ, eyeHalfWidth: .64, boreRadius: .77,
+  pinTip: .14, pinRadius: .65, rootY: 4, tipOuter: 1.5, spread: .59,
+});
 const steps = 25;
 
 function joined(parts) {
@@ -105,6 +109,49 @@ function hingeUpStop(axisY, halfWidth, cheekStart) {
     ...sides.map(side => box(...mirrored(side, cheekStart, halfWidth), axisY + 1.27, axisY + 1.58, 18.04, 18.32)),
   ];
 }
+function snapArm(side) {
+  // User's “bend it out, place it, flex out” hinge. The pins are part of
+  // the cap, and the thick root blends into the narrower flexible section.
+  const { axisY, axisZ, pinTip, pinRadius, tipOuter } = HOLDER_SNAP;
+  const profiles = [
+    [3.55, .38, 1.8, 17.38, 19.05],
+    [4, .48, 1.72, 17.43, 18.87],
+    [4.4, .61, 1.61, 17.49, 18.67],
+    [4.8, .71, 1.53, 17.53, 18.56],
+    [5.25, .75, 1.49, 17.53, 18.56],
+    [8.9, .75, 1.49, 17.34, 18.61],
+    [axisY - .75, .75, tipOuter, 17.19, 18.67],
+    [axisY + 1.05, .75, tipOuter, 17.19, 18.67],
+  ];
+  const vertices = profiles.flatMap(([y, near, far, bottom, top]) => {
+    const [lo, hi] = mirrored(side, near, far);
+    return [[lo, y, bottom], [hi, y, bottom], [hi, y, top], [lo, y, top]];
+  });
+  const end = vertices.length - 4;
+  const faces = [[0, 1, 2], [0, 2, 3], [end, end + 2, end + 1], [end, end + 3, end + 2]];
+  for (let start = 0; start < end; start += 4) {
+    for (let i = 0; i < 4; i++) {
+      const j = (i + 1) % 4;
+      faces.push([start + i, start + i + 4, start + j + 4], [start + i, start + j + 4, start + j]);
+    }
+  }
+  const nose = roundPin(...mirrored(side, pinTip, .29), axisY, axisZ, pinRadius);
+  nose.vertices = nose.vertices.map(([x, y, z]) => Math.abs(Math.abs(x) - pinTip) < 1e-8
+    ? [x, axisY + (y - axisY) * .72, axisZ + (z - axisZ) * .72]
+    : [x, y, z]);
+  return joined([
+    { vertices, faces }, nose, roundPin(...mirrored(side, .29, .97), axisY, axisZ, pinRadius),
+    box(...mirrored(side, .94, 1.83), 7.85, 8.47, 17.72, 18.27),
+    box(...mirrored(side, .80, 1.43), axisY + .93, axisY + 1.72, 18.36, 18.66),
+  ]);
+}
+function flexSnapArm(geometry) {
+  const { rootY, axisY, spread } = HOLDER_SNAP;
+  return { ...geometry, vertices: geometry.vertices.map(([x, y, z]) => {
+    const t = Math.max(0, Math.min(1, (y - rootY) / (axisY - rootY)));
+    return [x + Math.sign(x) * spread * t * t * (3 - t) / 2, y, z];
+  }) };
+}
 function clipFrame(kind) {
   const parts = [...sides.map(claw), box(-4, 4, 5.42, 6.25, 17.5, 17.86)];
   if (kind === 'pivot') {
@@ -153,7 +200,7 @@ const variants = {
   flexure: { label: 'Flexible cap', detail: 'Two flexible strips let the cap move. Their stiffness adds to the force your finger feels.' },
   pivot: { label: 'Pivot on four-claw frame', axis: [hingeY, clipHingeZ], detail: 'The pin keeps the cap attached as it rocks. Press near the front edge.' },
   direct: { label: 'Pivot in switch hole', axis: [holeY[1], holeZ], detail: 'Press the near edge. The pusher slides forward as it goes down. The area behind the pivot cannot push the plunger down.' },
-  carrier: { label: 'Pivot on key holder', axis: [holderHingeY, hingeZ], detail: 'The narrow arm passes between the upper keys, shifted out 1.15 mm each. The hinge transfers load to the holder.' },
+  carrier: { label: 'Pivot on key holder', axis: [holderHingeY, hingeZ], detail: 'The cap pivots on its two built-in pins. The feet under the cap land on low ledges in the holder to limit the press.' },
 };
 
 function directArm(side) {
@@ -170,7 +217,7 @@ function callouts(kind, axis = [0, 0]) {
     flexure: { actor: 'flexure', point: [3.7, 0, 18], title: 'Strips are part of the frame' },
     pivot: { actor: 'hinge', point: [3.5, ...axis], title: 'Pin captures the hinge' },
     direct: { actor: 'rightClaws', point: [3, ...axis], title: 'Two pins in one hole' },
-    carrier: { actor: 'hinge', point: [1.8, ...axis], title: 'Pin captures the hinge' },
+    carrier: { actor: 'snapRight', point: [1.05, ...axis], title: 'Built-in pins snap in' },
   };
   return [
     { side: 'left', actor: 'cap', point: [0, -7.5, 19.8], title: 'Press here' },
@@ -218,20 +265,19 @@ export function potentialKeyViews(assembled, capGeometry) {
   return Object.fromEntries(Object.entries(variants).map(([kind, variant]) => {
     const direct = kind === 'direct', carrier = kind === 'carrier';
     const stopX = direct ? 2.65 : 5.85;
-    const stopPads = [-stopX, stopX].map(x => box(x - .45, x + .45, -4.65, -3.75, 18.26, 18.75));
+    const padHalf = carrier ? .63 : .45;
+    const stopPads = [-stopX, stopX].map(x =>
+      box(x - padHalf, x + padHalf, carrier ? -4.92 : -4.65, carrier ? -3.50 : -3.75, carrier ? 14.2 : 18.26, 18.75));
     const down = capMotion(variant.axis, 1);
     const stopTop = Math.min(...stopPads[0].vertices.map(([, y, z]) => down[9] * y + down[10] * z + down[11]));
-    const stops = makeActor('Fixed travel stops', '#e5c456', joined([-stopX, stopX].map(x =>
-      box(x - .45, x + .45, direct ? -5.2 : -4.8, -3.55, direct ? 17.3 : carrier ? 11.04 : 16.8, stopTop))));
+    const stops = makeActor(carrier ? 'Low stop ledges on the holder' : 'Fixed travel stops', carrier ? '#389fa9' : '#e5c456',
+      joined([-stopX, stopX].map(x => carrier
+        ? box(x - 1, x + 1, -5.1, -3.24, 11.04, stopTop)
+        : box(x - .45, x + .45, direct ? -5.2 : -4.8, -3.55, direct ? 17.3 : 16.8, stopTop))));
     const pressPad = makeActor('Moving pusher and stop pads', '#f5b577', joined([pusher, ...stopPads]));
     const pivot = kind === 'pivot', slider = kind === 'slider';
     const movingCapParts = [capGeometry, pressPad.geometry];
     if (pivot) movingCapParts.push(pinSupport(-1.85, 1.85, hingeY, clipHingeZ, .95), hingeHeel(hingeY, 1.75));
-    if (carrier) movingCapParts.push(
-      box(-1.35, 1.35, 6.9, holderHingeY - 1.03, 17.12, 19.08),
-      pinSupport(-1.35, 1.35, holderHingeY, hingeZ, .95),
-      hingeHeel(holderHingeY, 1.25),
-    );
     if (slider) movingCapParts.push(slottedLugs());
     const cap = makeActor('Keycap with integral pusher', '#f3a456', joined(movingCapParts), { cutaway: true });
     const actors = { ...background, body, plunger, wire, stops, cap };
@@ -243,14 +289,18 @@ export function potentialKeyViews(assembled, capGeometry) {
       const frame = clipFrame(kind);
       actors.frame = makeActor('One-piece four-claw frame', '#67b7e7', frame, { morphGeometry: spreadArms(frame) });
     }
-    if (carrier) actors.hingeSupports = makeActor('Hinge supports integral to proposed holder', '#67b7e7', joined([
-      pinSupport(-2.02, -1.48, holderHingeY, hingeZ, .875, 11.04),
-      pinSupport(1.48, 2.02, holderHingeY, hingeZ, .9, 11.04),
-      ...hingeUpStop(holderHingeY, 2.02, 1.5),
-    ]));
-    if (carrier) actors.hinge = makeActor('Headed carrier hinge pin', '#e7c768', joined([
-      roundPin(-2.06, 2.03, holderHingeY, hingeZ, .875), roundPin(2.03, 2.12, holderHingeY, hingeZ, 1.06),
-    ]));
+    if (carrier) {
+      const { eyeHalfWidth, boreRadius } = HOLDER_SNAP;
+      actors.hingeSupports = makeActor('Fixed hinge eye and opening stop', '#67b7e7', joined([
+        pinSupport(-eyeHalfWidth, eyeHalfWidth, holderHingeY, hingeZ, boreRadius, 11.04),
+        box(-1.28, 1.28, holderHingeY + 1.43, holderHingeY + 1.9, 18.04, 18.32),
+        box(-eyeHalfWidth, eyeHalfWidth, holderHingeY + 1.22, holderHingeY + 1.64, 18.04, 18.32),
+      ]));
+      for (const [id, side, label] of [['snapLeft', -1, 'Left'], ['snapRight', 1, 'Right']]) {
+        const arm = snapArm(side);
+        actors[id] = makeActor(`${label} flex arm with integral pin`, '#f3a456', arm, { morphGeometry: flexSnapArm(arm) });
+      }
+    }
     if (pivot) actors.hinge = makeActor('Headed clip-frame hinge pin', '#e7c768', joined([
       roundPin(-4.2, 4.16, hingeY, clipHingeZ, .875), roundPin(4.16, 4.42, hingeY, clipHingeZ, 1.06),
     ]));
@@ -273,29 +323,28 @@ export function potentialKeyViews(assembled, capGeometry) {
       return {
         ...rest, cap: moving,
         ...(direct ? { leftClaws: moving, rightClaws: moving } : {}),
+        ...(carrier ? { snapLeft: moving, snapRight: moving } : {}),
         plunger: translate(0, 0, -Math.max(0, travel * progress - freeGap)),
         ...(kind === 'flexure' ? { morphs: { flexure: progress } } : {}),
       };
     }
     const fits = [];
-    const movingParts = ['cap', 'frame', 'stops', 'flexure', 'hinge', 'keeperLeft', 'keeperRight', 'leftClaws', 'rightClaws']
+    const movingParts = ['cap', 'frame', 'stops', 'flexure', 'hinge', 'keeperLeft', 'keeperRight', 'leftClaws', 'rightClaws', 'snapLeft', 'snapRight']
       .filter(id => actors[id] && !(id === 'stops' && (carrier || direct)));
-    const parkedUpper = ['keycap_3', 'switch_3', 'keycap_4', 'switch_4'];
     const together = (along, lift, spread = 0) => {
       const pose = { ...rest, morphs: {} };
       for (const id of movingParts) pose[id] = shift(rest[id], 0, along, lift);
-      for (const id of ['frame', 'leftClaws', 'rightClaws']) if (actors[id]) pose.morphs[id] = spread;
+      for (const id of ['frame', 'leftClaws', 'rightClaws', 'snapLeft', 'snapRight']) if (actors[id]) pose.morphs[id] = spread;
       return pose;
     };
     const beforeMount = () => {
-      const pose = together(carrier || direct ? 0 : stageY, direct ? approachHeight : 0);
-      if (carrier) for (const id of parkedUpper) pose[id] = shift(rest[id], 0, 0, 12);
-      if (slider || pivot || carrier) pose.cap = shift(pose.cap, 0, 0, 7);
+      const pose = together(carrier || direct ? 0 : stageY, carrier || direct ? approachHeight : 0);
+      if (slider || pivot) pose.cap = shift(pose.cap, 0, 0, 7);
       if (slider) {
         pose.keeperLeft = shift(pose.keeperLeft, -5, 0, 0);
         pose.keeperRight = shift(pose.keeperRight, 5, 0, 0);
       }
-      if (pivot || carrier) pose.hinge = shift(pose.hinge, 10, 0, 0);
+      if (pivot) pose.hinge = shift(pose.hinge, 10, 0, 0);
       if (direct) {
         pose.morphs.leftClaws = 1;
         pose.morphs.rightClaws = 1;
@@ -307,23 +356,23 @@ export function potentialKeyViews(assembled, capGeometry) {
       for (const id of ['body', 'plunger']) pose[id] = shift(rest[id], 0, 0, 7 * (1 - progress));
       return pose;
     }));
-    if (slider || pivot || carrier) {
+    if (slider || pivot) {
       fits.push(sampled(slider ? 'Lower the Cap into the Guides' : 'Align the Hinge Holes',
         slider ? 'Lower the two slotted lugs between the blue guide walls. The keeper pins are still out.'
           : 'Lower the cap until its hinge hole lines up with the two supports.', 2.0, progress => {
           const pose = beforeMount();
-          pose.cap = shift(rest.cap, 0, carrier ? 0 : stageY, 7 * (1 - progress));
+          pose.cap = shift(rest.cap, 0, stageY, 7 * (1 - progress));
           return pose;
         }, true));
       fits.push(sampled(slider ? 'Slide In Both Keeper Pins' : 'Slide In the Hinge Pin',
         slider ? 'Push a headed pin through each closed slot into the snug inner frame hole. The pin stays fixed while the slot moves.'
           : 'Slide the pin through the aligned holes. The pin captures the cap, and the heel behind the hinge limits how far it opens.', 2.2, progress => {
           const pose = beforeMount();
-          pose.cap = shift(rest.cap, 0, carrier ? 0 : stageY, 0);
+          pose.cap = shift(rest.cap, 0, stageY, 0);
           if (slider) {
             pose.keeperLeft = shift(rest.keeperLeft, -5 * (1 - progress), stageY, 0);
             pose.keeperRight = shift(rest.keeperRight, 5 * (1 - progress), stageY, 0);
-          } else pose.hinge = shift(rest.hinge, 10 * (1 - progress), carrier ? 0 : stageY, 0);
+          } else pose.hinge = shift(rest.hinge, 10 * (1 - progress), stageY, 0);
           return pose;
         }, true));
     }
@@ -337,11 +386,16 @@ export function potentialKeyViews(assembled, capGeometry) {
       'The two strips join the cap to the clip frame. They bend during a press and keep the cap attached when released.', 1.4,
       () => together(stageY, 0), true));
     if (carrier) {
-      fits.push(sampled('Fit the Upper Keys', 'With the hinge pin seated, lower the upper switches and caps into place.', 2, progress => {
-        const pose = { ...rest };
-        for (const id of parkedUpper) pose[id] = shift(rest[id], 0, 0, 12 * (1 - progress));
-        return pose;
-      }));
+      fits.push(sampled('Flex Both Arms Out', 'Spread the two arms just enough for the built-in pins to clear the hinge eye.', 1.6,
+        progress => together(0, approachHeight, progress), true));
+      fits.push(sampled('Lower the Cap onto the Hinge', 'Keep the arms spread and lower the cap until the pins line up with the hole.', 2,
+        progress => together(0, approachHeight * (1 - progress), 1), true));
+      fits.push(sampled('Let the Pins Snap In', 'Release both arms. The pins enter from opposite sides and the cap is free to pivot.', 1.6,
+        progress => together(0, 0, 1 - progress), true));
+      fits.push(sampled('Remove and Refit the Cap', 'Pull the arms apart at the small tabs before lifting. Lower the cap again and release the arms to refit it.', 4, progress => {
+        const out = 1 - Math.abs(2 * progress - 1);
+        return together(0, approachHeight * Math.max(0, (out - .35) / .65), Math.min(1, out / .35));
+      }, true));
     } else if (!direct) {
       fits.push(sampled('Bring the Assembly over the Switch', 'Lift the assembled cap and frame, then bring it over the switch.', 2.1, progress => {
         const lift = approachHeight * Math.min(1, progress * 2);

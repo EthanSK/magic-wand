@@ -5,7 +5,7 @@ import { FreeViewInput } from '../../printed-loop-wand/preview/free-view-input.m
 import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/preview/free-view-controls.mjs';
 import { applyViewerWheel } from '../../carbon-rod-holders-r7-spring-clips/preview/wheel-input.mjs';
 import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
-import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=retained-caps-2';
+import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=snap-hinge';
 import { legacyR20 } from './legacy-r20.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');

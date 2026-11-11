@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { validateGuide, sampledPose, identity, groupKeys } from '../hardware/carbon-rod-holders/assembly/assembly-data.mjs';
 import { legacyR20 } from '../hardware/carbon-rod-holders/assembly/legacy-r20.mjs';
-import { GUIDED_CAPTURE, UPPER_KEY_SHIFT } from '../hardware/carbon-rod-holders/assembly/keycap-concepts.mjs';
+import { GUIDED_CAPTURE, HOLDER_SNAP, UPPER_KEY_SHIFT } from '../hardware/carbon-rod-holders/assembly/keycap-concepts.mjs';
 
 test('R25 Keys opens seated with the centre paddle and four capped Choc switches', () => {
   const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
@@ -99,14 +99,29 @@ test('R25 concept views press and return beside the same capped keys', () => {
   assert.equal(pressed.cap[11], -travel);
   assert.equal(views.concept_direct.comparisonOnly, true);
   const holder = views.concept_carrier;
-  const motion = holder.steps.flatMap(step => step.samples).filter(sample => sample.keycap_3[11] < 11);
-  for (const id of ['cap', 'hinge', 'hingeSupports']) {
-    for (const sample of motion) for (const [x, y, z] of holder.actors[id].geometry.vertices) {
+  assert.equal(holder.actors.hinge, undefined);
+  const { eyeHalfWidth, boreRadius, pinTip, pinRadius: snapRadius, spread } = HOLDER_SNAP;
+  assert.ok(eyeHalfWidth - pinTip >= .49 && pinTip + spread > eyeHalfWidth);
+  assert.ok(boreRadius > snapRadius && pinTip > 0);
+  const motion = holder.steps.flatMap(step => step.samples);
+  const flexStep = holder.steps.find(step => step.title === 'Flex Both Arms Out');
+  const snapStep = holder.steps.find(step => step.title === 'Let the Pins Snap In');
+  const removeStep = holder.steps.find(step => step.title === 'Remove and Refit the Cap');
+  assert.equal(flexStep.samples.at(-1).morphs.snapRight, 1);
+  assert.equal(snapStep.samples.at(-1).morphs.snapRight, 0);
+  assert.ok(removeStep.samples.some(sample => sample.cap[11] > 0 && sample.morphs.snapRight === 1));
+  for (const id of ['cap', 'snapLeft', 'snapRight', 'hingeSupports']) {
+    const actor = holder.actors[id];
+    for (const sample of motion) for (const [index, [x, y, z]] of actor.geometry.vertices.entries()) {
       const m = sample[id];
       const along = y * m[5] + z * m[6] + m[7];
-      if (along >= 17.8 - 17.5 / 2) assert.ok(Math.abs(x) <= 9.35 + UPPER_KEY_SHIFT - 16.6 / 2);
+      const openedX = actor.morphGeometry?.vertices[index][0] ?? x;
+      const worldX = x + (openedX - x) * (sample.morphs?.[id] ?? 0) + m[3];
+      if (along >= 17.8 - 17.5 / 2) assert.ok(Math.abs(worldX) <= 9.35 + UPPER_KEY_SHIFT - 16.6 / 2);
     }
   }
+  const stopTop = Math.max(...holder.actors.stops.geometry.vertices.map(([, , z]) => z));
+  assert.ok(stopTop - 11.04 < 3);
 });
 
 test('printed-parts catalog includes every assembly and preserves physical-fit limits', async () => {
