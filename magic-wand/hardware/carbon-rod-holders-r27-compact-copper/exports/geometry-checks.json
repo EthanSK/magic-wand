@@ -1,0 +1,42 @@
+{
+  "revision": "carbon-rod-holders-r27-compact-copper",
+  "physical_fit_verified": false,
+  "print_validated": false,
+  "source_sha256": "934f7041567ddddce7b04b80daa5c0f641174442d5e1ea72aa088da910e2cf19",
+  "carrier_sha256": "14746686a5d9be2feca52cce107fab3b2243d62012f632c290c3a1091c757261",
+  "checks": {
+    "bottom_plane_mm": -9.2,
+    "pcb_clear_of_bottom_mm": 0.75,
+    "click_hardware_clear_of_bottom_mm": 0.75,
+    "choc_centres_mm": [
+      [
+        -18.7,
+        0
+      ],
+      [
+        18.7,
+        0
+      ],
+      [
+        -13.05,
+        21.35
+      ],
+      [
+        13.05,
+        21.35
+      ]
+    ],
+    "board_slide_overlap_mm3": 0.0,
+    "switch_fit_overlap_mm3": 0.0,
+    "keeper_lift_overlap_mm3": 0.0,
+    "keeper_pin_overlap_mm3": 0.0,
+    "snap_install_overlap_mm3": 0.0,
+    "front_stop_contact_mm3": 4.659199999999994,
+    "rear_stop_contact_mm3": 1.4918400000000083,
+    "board_rail_lift_contact_mm3": 36.10233599999994,
+    "pin_holds_keeper_contact_mm3": 2.109776611479976,
+    "minimum_hinge_lock_contact_mm3": 0.2206134802877931,
+    "click_and_lead_overlap_mm3": 0.0,
+    "passed": true
+  }
+}

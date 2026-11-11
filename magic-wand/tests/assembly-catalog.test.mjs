@@ -435,3 +435,36 @@ test('R25 shows the stopped pull, deliberate lift and board removal', () => {
   assert.ok(modules.xiao.steps.some(step => step.title === 'Slide the Holder Off the Rod'));
   assert.ok(modules.battery_spacer && modules.centre);
 });
+
+test('R27 fits the copper keys closer and loads the OP1 behind a flat bottom', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+  const version = catalog.versions.find(entry => entry.id === 'r27');
+  const url = new URL(version.guide, directory);
+  const guide = JSON.parse(readFileSync(url));
+  const { modules, views } = groupKeys(guide.modules);
+  validateGuide({ ...guide, modules: views });
+  assert.ok(modules.cable && modules.battery && modules.xiao);
+  assert.deepEqual(modules.keys.steps, views.copper.steps);
+  const view = views.copper;
+  const end = sampledPose(view, view.steps.length - 1, 1);
+  const report = JSON.parse(readFileSync(new URL('geometry-checks.json', url)));
+  assert.equal(report.checks.passed, true);
+  assert.ok(report.checks.pcb_clear_of_bottom_mm >= .75);
+  assert.equal(report.checks.board_slide_overlap_mm3, 0);
+  assert.equal(report.checks.click_and_lead_overlap_mm3, 0);
+  assert.equal(report.print_validated, false);
+  assert.deepEqual([0, 2, 3, 4].map(i => [end[`keycap_${i}`][3], end[`keycap_${i}`][7]]),
+    report.checks.choc_centres_mm);
+  assert.equal(end.board[5], -1);
+  assert.ok(sampledPose(view, 0, 0).board[7] - end.board[7] >= 42);
+  const press = view.steps.findIndex(step => step.title === 'Press and Release');
+  const down = sampledPose(view, press, .5);
+  assert.deepEqual(down.board, end.board);
+  assert.deepEqual(down.foil, down.cap);
+  assert.ok(down.plunger[11] < -.45);
+  for (let i = 1; i < view.steps.length; i++) {
+    assert.deepEqual(JSON.stringify(view.steps[i - 1].samples.at(-1)), JSON.stringify(view.steps[i].samples[0]),
+      view.steps[i].title);
+  }
+});

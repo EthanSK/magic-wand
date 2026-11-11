@@ -1,11 +1,10 @@
 // All holder components share the existing Three.js controls. Each CAD revision
 // supplies exact actors and sampled assembly transforms, never another drawing.
 import * as THREE from '../../../../docs/lib/three-0.185.1/three.module.min.js';
-import { FreeViewInput } from '../../printed-loop-wand/preview/free-view-input.mjs';
 import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/preview/free-view-controls.mjs';
-import { applyViewerWheel } from '../../carbon-rod-holders-r7-spring-clips/preview/wheel-input.mjs';
+import { RollingViewInput, bindTwistGestures, routeAssemblyWheel, rollHint, rollSupport } from './view-roll.mjs';
 import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
-import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=cirque-cap-view';
+import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=compact-copper';
 import { legacyR20 } from './legacy-r20.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');
@@ -18,7 +17,7 @@ const annotationToggle = document.getElementById('annotation-toggle');
 const conceptStatus = document.getElementById('concept-status');
 const actionHost = document.getElementById('model-actions');
 const hiddenActions = new Set();
-const input = new FreeViewInput({ minDistance: 8, maxDistance: 900 });
+const input = new RollingViewInput({ minDistance: 8, maxDistance: 900 });
 const scene = new THREE.Scene(); scene.background = new THREE.Color(0x12151c);
 scene.add(new THREE.HemisphereLight(0xe8f4ff, 0x424154, 2.5));
 const camera = new THREE.PerspectiveCamera(32, 1, .1, 2000); scene.add(camera);
@@ -26,7 +25,9 @@ const light = new THREE.DirectionalLight(0xffffff, 3); light.position.set(-1, 2,
 const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); view.prepend(renderer.domElement);
 const canvas = renderer.domElement; canvas.tabIndex = 0;
-canvas.setAttribute('aria-label', '3D assembly. Drag to rotate; scroll or pinch to zoom.');
+const rollText = rollHint(rollSupport());
+canvas.setAttribute('aria-label', `3D assembly. Drag to rotate; scroll or pinch to zoom. ${rollText}.`);
+view.querySelector('.hint').textContent = `Drag to rotate · Scroll or pinch to zoom · ${rollText}`;
 let guide, guideUrl, group, actors = {}, module, tools, catalog, loadId = 0, versionLoadId = 0;
 let keyViews;
 let showAnnotations = true, annotations = [];
@@ -302,7 +303,10 @@ try {
   // installViewTools emits the first frame immediately; an inert initial recipe
   // avoids accessing actors before their own source data has finished loading.
   tools = installViewTools({ view, input, fit, render, assembly: { host: document.getElementById('assembly'), steps: [{ title: 'Loading', caption: 'Loading assembly', duration: 1 }], onFrame: state => { if (module) applyPose(state); } } });
-  bindFreeViewControls({ canvas, input, height: () => view.clientHeight, width: () => view.clientWidth, render, chooseMode, fit, wheel: event => applyViewerWheel(input, event, document.getElementById('wand-scroll').checked) });
+  const gestures = bindTwistGestures({ canvas, input, render });
+  const wandScroll = document.getElementById('wand-scroll');
+  bindFreeViewControls({ canvas, input, height: () => view.clientHeight, width: () => view.clientWidth, render, chooseMode, fit,
+    wheel: event => routeAssemblyWheel(input, event, { gestureActive: gestures.active, height: view.clientHeight, pageHeight: innerHeight, wandRotate: wandScroll.checked }) });
   for (const button of document.querySelectorAll('[data-mode]')) button.addEventListener('click', () => chooseMode(button.dataset.mode));
   document.getElementById('plus').addEventListener('click', () => { input.zoom(.82); render(); });
   document.getElementById('minus').addEventListener('click', () => { input.zoom(1 / .82); render(); });

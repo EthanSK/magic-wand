@@ -2607,6 +2607,13 @@ through the full click stroke, then check that the insert slides free
 with the cap off. Model the lead over the same stroke and verify that its
 fixed endpoint stays fixed. Fit and touch sensitivity need a physical trial.
 
+Self-improved — 2026-11-11: Check the bought PCB, plug, lead and retainer
+against the bottom plane of the three-key row, independently of the cap
+outline. In R27 the board slides in from the two-key end with the switch
+removed. Check the board and plug through that whole path, then verify the
+switch can drop in ahead of the fixed hinge. A clear seated view alone
+misses the obstruction from the hinge during insertion.
+
 Self-improved — the first extended CAD investigation did not leave an
 editable candidate. Resuming the same author session with the confirmed
 kit, a bounded fit trial and an explicit first source deliverable produced

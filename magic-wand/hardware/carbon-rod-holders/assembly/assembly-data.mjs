@@ -80,15 +80,15 @@ export function groupKeys(modules) {
       samples: step.samples.map(pose => ({ ...socketPoses, ...pose, ...capPoses })),
     }));
     const note = 'The Choc caps use a reference shape and estimated seated height. The OP1 board, plug and switch also use estimated dimensions.';
-    return { ...module, label, note, actors, steps, openSeated: true, rotation: [.92, 0, .34] };
+    return { ...module, label, note, actors, steps, openSeated: true, rotation: module.rotation ?? [.92, 0, .34] };
   }
 
   const fitChoc = {
     ...key, label: 'Fit Choc switches and caps', note: 'Fit the outer switches and sockets, then press on the four keycaps.',
     actors: { ...key.actors, ...caps }, steps: [...keySteps, capFit],
   };
-  const views = dfr ? {
-    dfr: { ...paddleView(dfr, dfr.label), note: dfr.note }, key: fitChoc,
+  const views = dfr || copper ? {
+    ...(dfr ? { dfr: { ...paddleView(dfr, dfr.label), note: dfr.note } } : {}), key: fitChoc,
     ...(copper ? { copper: { ...paddleView(copper, copper.label), note: copper.note } } : {}),
   } : {
     centre: paddleView(centre, 'Standard paddle'),
@@ -96,14 +96,14 @@ export function groupKeys(modules) {
     centre_deep: paddleView(centre_deep, 'Deep paddle'),
     key: fitChoc,
   };
-  if (!dfr) Object.assign(views, potentialKeyViews(views.centre, chocCapGeometry(18.7, 19.92, .3)));
+  if (!dfr && !copper) Object.assign(views, potentialKeyViews(views.centre, chocCapGeometry(18.7, 19.92, .3)));
   // Model-specific helper actions name the actors they affect. The viewer can
   // add controls from this data without knowing which parts make up a model.
   const otherKeycaps = {
     id: 'other-keycaps', hideLabel: 'Hide other keycaps', showLabel: 'Show other keycaps', actors: Object.keys(caps),
   };
   for (const view of Object.values(views)) view.helperActions = [otherKeycaps];
-  return { modules: { keys: { ...(views.dfr ?? views.centre), label: 'Keys' }, ...others }, views };
+  return { modules: { keys: { ...(views.dfr ?? views.copper ?? views.centre), label: 'Keys' }, ...others }, views };
 }
 
 export function validateGuide(guide) {
