@@ -70,7 +70,7 @@ Read the frozen [V20 design principles](../../../magic-wand/hardware/printed-loo
 
 ## Before calling it final
 
-User-corrected — 2026-11-11: “Maybe not regularly, just at the end before committing.” By default, slice and inspect the finished candidate before committing each completed model or print-project revision. This replaces the earlier request to slice regularly during design. Use an earlier targeted slice when it resolves a specific printability uncertainty or verifies a repair, rather than running slices at fixed intervals. Reuse unchanged checked results; after a relevant edit, recheck the affected layers before committing. Keep the final printability audit and checks of the delivered file.
+User-corrected — 2026-11-11: “not regularly, but just before printing and then iteration.” Slice and inspect the finished candidate before printing each iteration. Use the printed result and Ethan's feedback to revise the design, then slice and check the next finished candidate before its print. Repeat affected checks when a repair changes the checked print file. Reuse unchanged checked results; a commit alone does not require another slice. This supersedes regular interval slicing and the earlier before-committing wording. Keep the final printability audit and checks of the delivered file.
 
 Before finishing every model or print project, use the repository's [printability-audit](../printability-audit/SKILL.md). It owns the recurring independent Opus review of actual holes, support removal and likely snap points, with minimal design changes. Keep implementation and independent review distinct.
 
