@@ -28,10 +28,34 @@ PIN_RADIUS = 1.0
 BACK_STOP = 21.8
 CLIP_Z = 9.36
 BOARD_Y_OFFSET = CLICK_SHIFT + 2 * d.h.YC
+# Matches the 17.5 mm-long Choc cap in the assembly viewer.
+OUTER_CAP_BOTTOM = -17.5 / 2
 
 
 def towards_top(shape):
     return shape.translate((0., CLICK_SHIFT, 0.))
+
+
+def cap_nose():
+    # Solve for the released edge in plan, including its rotation about the
+    # hinge. At rest, the roof's underside is its foremost point in plan.
+    y_axis = d.pose(-d.REST)[1]
+    return (OUTER_CAP_BOTTOM - CLICK_SHIFT - y_axis[2] * c.ROOF_BOTTOM - y_axis[3]) / y_axis[1]
+
+
+@lru_cache(maxsize=1)
+def centre_cap():
+    # Extend just the cover. The foil rails, hinge, pusher and click stops
+    # share the earlier copper cap's geometry and height.
+    roof = d.h.rounded_plate(c.HALF_WIDTH, cap_nose(), c.REAR, c.ROOF_BOTTOM,
+                             c.ROOF_TOP, r_plan=1.55, r_top=.29)
+    # The released cap tilts up at the front. Keep the extension below
+    # the old maximum height above the rod, including that tilt.
+    previous = c.cap()
+    released = d.pose(-d.REST)
+    top = previous.transform(released.tolist()).bounding_box()[5]
+    roof = roof.trim_by_plane(-released[2, :3], released[2, 3] - top)
+    return d.h.base.clean(previous + roof, "Aligned_Copper_Cap")
 
 
 def op1(shape):
@@ -126,15 +150,27 @@ def checks(carrier, working):
     def travel(value):
         return np.linspace(0., value, 49)
 
-    body = c.cap() + c.insert() + c.foil()
+    cover = centre_cap()
+    foil_insert = c.insert() + c.foil() + c.wire_solid(c.wire_centres())
+    body = cover + c.insert() + c.foil()
     parts = [(0., 0., z) for z in travel(8.)]
     rest_pose = d.pose(-d.REST).tolist()
-    loose = towards_top((body + c.wire_solid(c.wire_centres())).transform(rest_pose))
+    loose = towards_top((cover + foil_insert).transform(rest_pose))
+    released_bounds = towards_top(cover.transform(rest_pose)).bounding_box()
+    released_edge = released_bounds[1]
+    previous_height = c.cap().transform(rest_pose).bounding_box()[5]
     hinge = towards_top(d.spring_tongues())
     squeezed = (carrier - hinge) + towards_top(d.spring_tongues().warp_batch(lambda p: p + d.flex(p)))
     cap_fixed = fixed + board + switch + pinned_keeper
     result = {
         "bottom_plane_mm": BOTTOM_EDGE,
+        "centre_cap_bottom_released_mm": round(released_edge, 6),
+        "outer_cap_bottom_mm": OUTER_CAP_BOTTOM,
+        "centre_cap_bottom_alignment_error_mm": round(abs(released_edge - OUTER_CAP_BOTTOM), 6),
+        "centre_cap_nose_extension_mm": round(c.NOSE - cap_nose(), 4),
+        "centre_cap_released_height_change_mm": round(released_bounds[5] - previous_height, 6),
+        "min_cap_clear_of_bottom_over_stroke_mm": float("inf"),
+        "foil_slide_overlap_mm3": sample_overlap(cover, foil_insert, [(0., y, 0.) for y in travel(c.SLIDE)]),
         "pcb_clear_of_bottom_mm": board.bounding_box()[1] - BOTTOM_EDGE,
         "click_hardware_clear_of_bottom_mm": min(
             part.bounding_box()[1] - BOTTOM_EDGE for part in (loose, board_set, switch, pinned_keeper)
@@ -157,9 +193,17 @@ def checks(carrier, working):
         wire = c.wire_solid((1. - t) * c.wire_centres(-d.REST, True) + t * c.wire_centres(0., True))
         moved = towards_top((body + wire).transform(pose))
         result["click_and_lead_overlap_mm3"] = max(result["click_and_lead_overlap_mm3"], (moved ^ cap_fixed).volume())
+        result["min_cap_clear_of_bottom_over_stroke_mm"] = min(
+            result["min_cap_clear_of_bottom_over_stroke_mm"],
+            towards_top(cover.transform(pose)).bounding_box()[1] - BOTTOM_EDGE,
+        )
         overlap = (towards_top(c.tab().translate((0., 1.1, 0.)).transform(pose)) ^ carrier).volume()
         result["minimum_hinge_lock_contact_mm3"] = min(result["minimum_hinge_lock_contact_mm3"], overlap)
-    result["passed"] = (result["click_hardware_clear_of_bottom_mm"] > .5 and abs(carrier.bounding_box()[1] - BOTTOM_EDGE) < .001
+    result["passed"] = (result["pcb_clear_of_bottom_mm"] > .5
+                        and result["centre_cap_bottom_alignment_error_mm"] < .001
+                        and abs(result["centre_cap_released_height_change_mm"]) < .001
+                        and result["min_cap_clear_of_bottom_over_stroke_mm"] > .15
+                        and abs(carrier.bounding_box()[1] - BOTTOM_EDGE) < .001
                         and max(value for key, value in result.items() if key.endswith("overlap_mm3")) < .035
                         and min(value for key, value in result.items() if key.endswith("contact_mm3")) > .04)
     return result

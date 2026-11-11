@@ -5,7 +5,7 @@
   "physical_fit_verified": false,
   "sources": {
     "r26_guide_sha256": "5ea5ebd5fbbe6885e3d7450d425b1bc7882c1c7cbd142553a920c920405a78b9",
-    "generator_sha256": "70911aed505b7538ec5b1209ffd25e175fe59f2638bc6e573f82a1e13de6c3e1",
+    "generator_sha256": "3399b754c03b8698801324eaa3a8df5442e5023e37c1b2ece9e036471f5c2bbe",
     "meshes_sha256": {
       "../../carbon-rod-holders-r22-integrated-guard/exports/Battery_End_Door-assembly.stl": "318c532282ce23c38bef388a2f74999289d0e44b4fba157fd845649d99713f36",
       "../../carbon-rod-holders-r22-integrated-guard/exports/Battery_End_Door_Easy_Trial-assembly.stl": "d43fa86f9d632156034c9fe0a94a7d41d66c1682bf2d7e8a2e2ffef44489f0cf",
@@ -39,10 +39,10 @@
       "../../carbon-rod-holders-r25-keeper-release/exports/guide/keeper25-lifted.stl": "d13122a1aa1c5258c66e984bef45a082526bb18184cae9b958cf26a1d2a15a8b",
       "../../carbon-rod-holders-r25-keeper-release/exports/guide/keeper25_section-lifted.stl": "3d5e065fe1a01b644f57962eec565ed837b30e3d7b5fe8b57282336f0718cc36",
       "../../carbon-rod-holders-r25-keeper-release/exports/guide/keeper25_section.stl": "a69a276c10af1e5d5851dfaba4706eb4aa958862ad18f01c31081a377f344ca2",
-      "../../carbon-rod-holders-r26-dfrobot-centre/exports/guide/copper26-cap.stl": "272847ad93aed4b7e3b3b823b45423cd249f5ad59c0de468279554c53a0f1410",
       "../../carbon-rod-holders-r26-dfrobot-centre/exports/guide/copper26-foil.stl": "0eedd6292d28a47656073f7c0b4d7546e4f22d0cafcbf4124071c6f6e52a7f24",
       "../../carbon-rod-holders-r26-dfrobot-centre/exports/guide/copper26-insert.stl": "9dc6b99925aeb63fb78f1455bcb86c637b555c6ab1b310c376be6ea00dbd03f3",
       "../../carbon-rod-holders-r26-dfrobot-centre/exports/guide/copper26-terminal.stl": "d6cf8a3bb6c3d77d750271bc827f9717b873092fbfe3cf4665ba4dad3c75a907",
+      "Aligned_Copper_Cap.stl": "645b7d0b34daa5e51e476fb32f624db8f65e1e010bff30a0929027969a9e92ed",
       "Compact_Key_Carrier.stl": "14746686a5d9be2feca52cce107fab3b2243d62012f632c290c3a1091c757261",
       "OP1_Keeper_Pin.stl": "39e68306adad66393eb9d6eaec691cc93be32e1b0064eec4c508906f6262ef47",
       "OP1_Lead.stl": "fa1aa4e64f2cca465b79d156ce8b3dbc329ccd623f9b40aecccec983496b486b",
@@ -142323,7 +142323,7 @@
         },
         "cap": {
           "label": "Insulating cap",
-          "file": "../../carbon-rod-holders-r26-dfrobot-centre/exports/guide/copper26-cap.stl",
+          "file": "Aligned_Copper_Cap.stl",
           "color": "#e7dfcc",
           "cutaway": true
         },
@@ -308625,9 +308625,9 @@
         }
       ],
       "status": "Fit and touch response still need testing.",
-      "note": "Two keys at the top. Three at the flat bottom. The OP1 connector faces the upper row.",
+      "note": "The three bottom caps line up when released. The OP1 connector faces the two-key top.",
       "rotation": [
-        0.34,
+        0.0,
         0.0,
         0.0
       ]

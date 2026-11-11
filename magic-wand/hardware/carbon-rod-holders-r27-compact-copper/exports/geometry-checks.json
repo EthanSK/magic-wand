@@ -2,12 +2,19 @@
   "revision": "carbon-rod-holders-r27-compact-copper",
   "physical_fit_verified": false,
   "print_validated": false,
-  "source_sha256": "934f7041567ddddce7b04b80daa5c0f641174442d5e1ea72aa088da910e2cf19",
+  "source_sha256": "e24c47986f838b4f7a8b689bd5246467d7db044136933142f3656921b0f701ab",
   "carrier_sha256": "14746686a5d9be2feca52cce107fab3b2243d62012f632c290c3a1091c757261",
   "checks": {
     "bottom_plane_mm": -9.2,
+    "centre_cap_bottom_released_mm": -8.75,
+    "outer_cap_bottom_mm": -8.75,
+    "centre_cap_bottom_alignment_error_mm": 0.0,
+    "centre_cap_nose_extension_mm": 3.023,
+    "centre_cap_released_height_change_mm": 0.0,
+    "min_cap_clear_of_bottom_over_stroke_mm": 0.2270443499999999,
+    "foil_slide_overlap_mm3": 3.552713678800501e-15,
     "pcb_clear_of_bottom_mm": 0.75,
-    "click_hardware_clear_of_bottom_mm": 0.75,
+    "click_hardware_clear_of_bottom_mm": 0.4499999962408481,
     "choc_centres_mm": [
       [
         -18.7,

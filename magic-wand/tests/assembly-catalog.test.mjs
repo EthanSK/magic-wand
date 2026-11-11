@@ -451,6 +451,15 @@ test('R27 fits the copper keys closer and loads the OP1 behind a flat bottom', (
   const report = JSON.parse(readFileSync(new URL('geometry-checks.json', url)));
   assert.equal(report.checks.passed, true);
   assert.ok(report.checks.pcb_clear_of_bottom_mm >= .75);
+  assert.equal(view.actors.cap.file, "Aligned_Copper_Cap.stl");
+  for (const key of [0, 2]) {
+    const front = Math.min(...view.actors[`keycap_${key}`].geometry.vertices.map(([, y]) => y))
+      + end[`keycap_${key}`][7];
+    assert.ok(Math.abs(report.checks.centre_cap_bottom_released_mm - front) < .001);
+  }
+  assert.ok(report.checks.min_cap_clear_of_bottom_over_stroke_mm > .15);
+  assert.equal(report.checks.centre_cap_released_height_change_mm, 0);
+  assert.ok(report.checks.foil_slide_overlap_mm3 < .001);
   assert.equal(report.checks.board_slide_overlap_mm3, 0);
   assert.equal(report.checks.click_and_lead_overlap_mm3, 0);
   assert.equal(report.print_validated, false);

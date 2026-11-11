@@ -71,6 +71,7 @@ def compact_view(module, carrier_file):
     actors["keeper_pin"] = {"file": asset("OP1_Keeper_Pin", h.pin()),
                             "label": "1.75 mm filament keeper pin", "color": "#ffdd68"}
     actors["op1_wire"]["file"] = asset("OP1_Lead", h.lead())
+    actors["cap"]["file"] = asset("Aligned_Copper_Cap", h.centre_cap())
     board_set = ("board", "sockets", "plug", "op1_wire")
     click = ("switch", "plunger")
     board_transform = np.array([[-1., 0., 0., 0.], [0., -1., 0., h.BOARD_Y_OFFSET], [0., 0., 1., 0.]])
@@ -121,8 +122,8 @@ def compact_view(module, carrier_file):
                        samples=lower, duration=2, reveal=True))
     module["steps"] = prefix + module["steps"]
     module["label"] = "Compact copper insert"
-    module["note"] = "Two keys at the top. Three at the flat bottom. The OP1 connector faces the upper row."
-    module["rotation"] = [.34, 0., 0.]
+    module["note"] = "The three bottom caps line up when released. The OP1 connector faces the two-key top."
+    module["rotation"] = [0., 0., 0.]
     return module
 
 
