@@ -2685,3 +2685,12 @@ their owning component. For the first R32 fit keep the reinforced touch
 bracket. On a later weight pass, explore openings in the flat crossbar and
 low, crosswise finger guards. Preserve the original load paths, switch and
 wire clearances, and verify the resulting finger contact in the assembly.
+
+Self-improved — 2026-11-11: In the rear-down key carrier, a rounded branch
+can be connected in CAD and still start above the upper switch's tape slot.
+In R33, trimming the tip left another unsupported start at the same slot.
+Routing the entire outer branch above the slot until it passes the front
+of the bay cleared the slicer warning. Inspect a fresh slice after a
+change to a branch or its cutouts. Check the bond using connected deposited
+paths across the seam over consecutive layers. A fill percentage measured
+at the edge of a small Boolean overlap does not measure that load path.

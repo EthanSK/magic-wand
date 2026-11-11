@@ -1,0 +1,41 @@
+{
+  "revision": "r33",
+  "groups": {
+    "keys": {
+      "directory": ".",
+      "parts": [
+        "Key_Carrier",
+        "DFRobot_Hole_Bracket",
+        "DFR0030_Post_Clip",
+        "DFR0030_Post_Clip_2"
+      ]
+    },
+    "xiao": {
+      "directory": "../carbon-rod-holders-r25-keeper-release",
+      "parts": [
+        "XIAO_Rod_Holder",
+        "XIAO_Near_Keeper"
+      ]
+    },
+    "battery": {
+      "directory": "../carbon-rod-holders-r22-integrated-guard",
+      "parts": [
+        "Battery_Holder",
+        "Battery_End_Door"
+      ]
+    },
+    "spacer": {
+      "directory": "../carbon-rod-holders-r24-patterned-spacer",
+      "exports": "exports/spacer",
+      "parts": [
+        "Battery_Spacer_0p4mm_Patterned"
+      ]
+    },
+    "cable": {
+      "directory": "../carbon-rod-holders-r22-integrated-guard",
+      "parts": [
+        "Cable_Clip_12_Wire"
+      ]
+    }
+  }
+}

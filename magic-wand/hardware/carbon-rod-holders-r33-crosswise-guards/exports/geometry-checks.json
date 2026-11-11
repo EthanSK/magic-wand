@@ -1,0 +1,218 @@
+{
+  "revision": "carbon-rod-holders-r33-crosswise-guards",
+  "physical_fit_verified": false,
+  "carrier_sha256": "9558b3cdfc975329e05b608c06d9ff1d7e83e78dc1345906997f6f328ab6cadb",
+  "bracket_sha256": "25b582c24836d3b82d9ff9bdcdc76853116edd806db55e2a4989947f97024ab9",
+  "checks": {
+    "ribs": {
+      "R1": {
+        "volume_mm3": 84.8402,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 3.9602,
+        "edge_contact_mm3": 11.4363,
+        "bounds": [
+          2.36,
+          -0.64,
+          0.41,
+          23.14,
+          15.64,
+          7.49
+        ],
+        "piece_bonds_mm3": [
+          15.3965
+        ]
+      },
+      "L1": {
+        "volume_mm3": 98.4711,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 3.7015,
+        "edge_contact_mm3": 12.3339,
+        "bounds": [
+          -30.04,
+          -0.64,
+          0.41,
+          -2.36,
+          15.953,
+          8.49
+        ],
+        "piece_bonds_mm3": [
+          16.0354
+        ]
+      },
+      "R2": {
+        "volume_mm3": 81.755,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 3.6278,
+        "edge_contact_mm3": 13.0608,
+        "bounds": [
+          2.36,
+          2.61,
+          0.41,
+          23.14,
+          16.44,
+          8.64
+        ],
+        "piece_bonds_mm3": [
+          16.6886
+        ]
+      },
+      "L2": {
+        "volume_mm3": 92.2904,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 5.5736,
+        "edge_contact_mm3": 12.3339,
+        "bounds": [
+          -30.04,
+          2.61,
+          0.41,
+          -2.08,
+          17.87,
+          8.49
+        ],
+        "piece_bonds_mm3": [
+          17.9075
+        ]
+      },
+      "R3": {
+        "volume_mm3": 76.1605,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.3054,
+        "edge_contact_mm3": 13.1941,
+        "bounds": [
+          2.08,
+          5.86,
+          0.41,
+          23.127,
+          18.67,
+          8.87
+        ],
+        "piece_bonds_mm3": [
+          17.4995
+        ]
+      },
+      "L3": {
+        "volume_mm3": 85.7422,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.1067,
+        "edge_contact_mm3": 12.3339,
+        "bounds": [
+          -30.04,
+          5.86,
+          0.41,
+          -2.08,
+          18.67,
+          8.49
+        ],
+        "piece_bonds_mm3": [
+          16.4406
+        ]
+      }
+    },
+    "guard_previous_mm3": 539.5734,
+    "crosswise_ribs_mm3": 405.6157,
+    "carrier_removed_mm3": 1.944,
+    "bracket_fit": {
+      "removed_mm3": 21.3771,
+      "arms_removed_mm3": 0.0,
+      "old_stop_contacts_mm3": [
+        0.359168,
+        0.359168
+      ],
+      "stop_contacts_mm3": [
+        0.359168,
+        0.359168
+      ],
+      "old_pusher_contact_mm3": 0.102113,
+      "pusher_contact_mm3": 0.102113
+    },
+    "swept_guard_overlap_mm3": {
+      "unloaded_clip_bore": 0.0,
+      "clip_gap_mid": 0.0,
+      "clip_gap_rear": 0.0,
+      "external_wire_bus": 0.0,
+      "key_0_switch": 0.0,
+      "key_0_socket": 0.0,
+      "key_0_maximum_socket": 0.0,
+      "key_0_socket_tape_zone": 0.0,
+      "key_0_mount_opening": 0.0,
+      "key_0_clip_relief": 0.0,
+      "key_0_cap_travel": 0.0,
+      "key_2_switch": 0.0,
+      "key_2_socket": 0.0,
+      "key_2_maximum_socket": 0.0,
+      "key_2_socket_tape_zone": 0.0,
+      "key_2_mount_opening": 0.0,
+      "key_2_clip_relief": 0.0,
+      "key_2_cap_travel": 0.0,
+      "key_3_switch": 0.0,
+      "key_3_socket": 0.0,
+      "key_3_maximum_socket": 0.0,
+      "key_3_socket_loading": 0.0,
+      "key_3_maximum_socket_loading": 0.0,
+      "key_3_socket_tape_zone": 0.0,
+      "key_3_mount_opening": 0.0,
+      "key_3_clip_relief": 0.0,
+      "key_3_cap_travel": 0.0,
+      "key_4_switch": 0.0,
+      "key_4_socket": 0.0,
+      "key_4_maximum_socket": 0.0,
+      "key_4_socket_loading": 0.0,
+      "key_4_maximum_socket_loading": 0.0,
+      "key_4_socket_tape_zone": 0.0,
+      "key_4_mount_opening": 0.0,
+      "key_4_clip_relief": 0.0,
+      "key_4_cap_travel": 0.0,
+      "key_0_soldered_socket_slide": 0.0,
+      "key_2_soldered_socket_slide": 0.0,
+      "key_3_soldered_socket_dogleg": 0.0,
+      "key_4_soldered_socket_dogleg": 0.0
+    },
+    "fingertip_reaches_before_of_9": {
+      "key_0_terminal_0": 0,
+      "key_0_terminal_1": 0,
+      "key_2_terminal_0": 0,
+      "key_2_terminal_1": 0
+    },
+    "fingertip_reaches_after_of_9": {
+      "key_0_terminal_0": 0,
+      "key_0_terminal_1": 0,
+      "key_2_terminal_0": 0,
+      "key_2_terminal_1": 0
+    },
+    "r32_fit": {
+      "pcb_drop_overlap_mm3": 0.0,
+      "underside_plug_insertion_overlap_mm3": 0.0,
+      "switch_seat_overlap_mm3": 0.0,
+      "board_eyelet_pitch_overlap_mm3": {
+        "17.30": 0.0,
+        "17.50": -0.0,
+        "17.70": -0.0,
+        "17.90": -0.0,
+        "18.10": -0.0,
+        "18.30": -0.0,
+        "18.50": -0.0
+      },
+      "screw_shank_and_board_overlap_mm3": 0.0,
+      "screw_heads_and_switch_overlap_mm3": 0.0,
+      "pin_socket_fit_overlap_mm3": 0.0,
+      "white_housing_and_wire_to_rod_overlap_mm3": 0.0,
+      "click_stroke_overlap_mm3": 0.0,
+      "lead_stroke_overlap_mm3": 0.0,
+      "bracket_drop_overlap_mm3": 0.0,
+      "bracket_unpinch_overlap_mm3": 0.0,
+      "switch_contact_under_overpress_mm3": 0.102113,
+      "seating_contact_under_board_mm3": 35.613558,
+      "seat_and_stock_profile_mm": {
+        "board_bottom_z": 9.2,
+        "board_top_z": 10.799999999999999,
+        "yaw_degrees": -25.0,
+        "socket_depth": 4.3,
+        "white_plug_depth": 5.9,
+        "actuator_offset_from_middle_pin": 1.95,
+        "stop_travel": 0.48
+      },
+      "passed": true
+    },
+    "passed": true
+  }
+}

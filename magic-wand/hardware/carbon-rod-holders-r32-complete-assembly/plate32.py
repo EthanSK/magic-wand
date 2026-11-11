@@ -252,10 +252,11 @@ def build(source, scratch, profile, do_slice, profile_selected=False):
         config.update(FLASHFORGE_SETTINGS)
         diff = config["different_settings_to_system"]
         diff[1] = ";".join(sorted(set(filter(None, diff[1].split(";"))) | set(FLASHFORGE_SETTINGS)))
-    label = f"R32-Complete-A1-mini-{filament['filament_type'][0]}"
+    revision = read_json(source / BOM)["revision"].upper()
+    label = f"{revision}-Complete-A1-mini-{filament['filament_type'][0]}"
     layout = scratch / f"{label}-layout.3mf"
     extents, bands = studio.layout(layout, model, config)
-    configure_layout(layout, f"Magic Wand R32 complete assembly · A1 mini {filament['filament_type'][0]}")
+    configure_layout(layout, f"Magic Wand {revision} complete assembly · A1 mini {filament['filament_type'][0]}")
     report = {
         "build_list": list(selected), "source_parts": provenance, "bom_sha256": digest(source / BOM),
         "generator_sha256": digest(Path(__file__)),
