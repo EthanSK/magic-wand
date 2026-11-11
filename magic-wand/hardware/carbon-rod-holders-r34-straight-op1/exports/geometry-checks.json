@@ -1,0 +1,140 @@
+{
+  "revision": "carbon-rod-holders-r34-straight-op1",
+  "physical_fit_verified": false,
+  "checks": {
+    "board_yaw_degrees": 0.0,
+    "board_offset_mm": 7.45,
+    "board_bottom_mm": 9.2,
+    "overlap_mm3": {
+      "pcb_drop": 0.0,
+      "plug_install": 0.0,
+      "switch_install": 0.0,
+      "hinge_stroke": 0.0,
+      "hinge_insert": 0.0,
+      "hinge_release_arms": 0.0,
+      "touch_cable_stroke": 0.0,
+      "hinge_mount_to_touch_pcb": -0.0,
+      "rod_housing_and_wire": 0.0
+    },
+    "pusher_contact_mm3": 0.080438,
+    "stop_contacts_mm3": [
+      0.160109,
+      0.160109
+    ],
+    "pcb_seat_contacts_mm3": [
+      3.9391588272349405,
+      4.48844912509521
+    ],
+    "finger_contact_probes_reaching_terminals": {
+      "key_0_terminal_0": 0,
+      "key_0_terminal_1": 0,
+      "key_2_terminal_0": 0,
+      "key_2_terminal_1": 0
+    },
+    "ribs": {
+      "R1": {
+        "volume_mm3": 81.2092,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 3.7015,
+        "edge_contact_mm3": 11.4363,
+        "bounds": [
+          2.36,
+          -0.64,
+          0.41,
+          23.14,
+          15.64,
+          7.49
+        ],
+        "piece_bonds_mm3": [
+          15.1378
+        ]
+      },
+      "L1": {
+        "volume_mm3": 98.4711,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 3.7015,
+        "edge_contact_mm3": 12.3339,
+        "bounds": [
+          -30.04,
+          -0.64,
+          0.41,
+          -2.36,
+          15.953,
+          8.49
+        ],
+        "piece_bonds_mm3": [
+          16.0354
+        ]
+      },
+      "R2": {
+        "volume_mm3": 77.9805,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 3.4262,
+        "edge_contact_mm3": 13.0608,
+        "bounds": [
+          2.36,
+          2.61,
+          0.41,
+          23.14,
+          16.44,
+          8.64
+        ],
+        "piece_bonds_mm3": [
+          16.487
+        ]
+      },
+      "L2": {
+        "volume_mm3": 92.2904,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 5.5736,
+        "edge_contact_mm3": 12.3339,
+        "bounds": [
+          -30.04,
+          2.61,
+          0.41,
+          -2.08,
+          17.87,
+          8.49
+        ],
+        "piece_bonds_mm3": [
+          17.9075
+        ]
+      },
+      "R3": {
+        "volume_mm3": 75.4619,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.1381,
+        "edge_contact_mm3": 13.1941,
+        "bounds": [
+          2.08,
+          5.86,
+          0.41,
+          23.127,
+          18.67,
+          8.87
+        ],
+        "piece_bonds_mm3": [
+          17.3322
+        ]
+      },
+      "L3": {
+        "volume_mm3": 85.7422,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.1067,
+        "edge_contact_mm3": 12.3339,
+        "bounds": [
+          -30.04,
+          5.86,
+          0.41,
+          -2.08,
+          18.67,
+          8.49
+        ],
+        "piece_bonds_mm3": [
+          16.4406
+        ]
+      }
+    },
+    "passed": true
+  }
+}

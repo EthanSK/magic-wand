@@ -2694,3 +2694,12 @@ of the bay cleared the slicer warning. Inspect a fresh slice after a
 change to a branch or its cutouts. Check the bond using connected deposited
 paths across the seam over consecutive layers. A fill percentage measured
 at the edge of a small Boolean overlap does not measure that load path.
+
+Self-improved — 2026-11-11: The R34 travel stops passed after checking each
+stop's printed core and its connection to the carrier separately. Two
+early layers of the left taper were partly filled, but the deposited
+paths were continuous into the carrier and overlapped the preceding
+layers. A longer ramp increased the unfilled area and was reverted.
+When a taper fails the core coverage check, locate the missing paths
+before adding material. Keep the full-shape layer and connection
+checks alongside the core measurement.
