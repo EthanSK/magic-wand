@@ -1,6 +1,6 @@
 // Shared immediate mouse/touch bindings and view helpers for the accessory
 // viewers. Keep these controls identical across old and current geometry.
-import { installAssemblyControls } from './assembly-controls.mjs';
+import { installAssemblyControls } from './assembly-controls.mjs?v=playback-host';
 export function bindFreeViewControls({ canvas, input, height, width = height, render, wheel, chooseMode, fit, changed = () => {} }) {
   canvas.addEventListener('pointerdown', event => {
     if (![0, 1, 2].includes(event.button)) return;

@@ -2,7 +2,7 @@
 // only; each model supplies its own verified assembly order and pose function.
 import { AssemblyTimeline } from './assembly-timeline.mjs';
 
-export function installAssemblyControls({ host, steps, onFrame }) {
+export function installAssemblyControls({ host, playbackHost, steps, onFrame }) {
   const doc = host.ownerDocument;
   const section = doc.createElement('section'); section.className = 'assembly-controls';
   const heading = doc.createElement('h2'); heading.textContent = 'Assembly';
@@ -18,7 +18,13 @@ export function installAssemblyControls({ host, steps, onFrame }) {
   const choices = doc.createElement('div'); choices.className = 'assembly-steps';
   const title = doc.createElement('h3'), caption = doc.createElement('p');
   caption.className = 'assembly-caption';
-  section.append(heading, actions, seek, progress, choices, title, caption); host.append(section);
+  if (playbackHost) {
+    playbackHost.append(actions, seek, progress);
+    section.append(heading, choices, title, caption);
+  } else {
+    section.append(heading, actions, seek, progress, choices, title, caption);
+  }
+  host.append(section);
   let raf = 0, disposed = false, lastIndex = -1;
   const timeline = new AssemblyTimeline(steps);
   const frame = now => { raf = 0; if (disposed) return; timeline.tick(now); schedule(); };
@@ -61,6 +67,6 @@ export function installAssemblyControls({ host, steps, onFrame }) {
     setSteps(value) { cancelAnimationFrame(raf); raf = 0; timeline.setSteps(value); rebuild(); },
     play() { timeline.play(); schedule(); },
     pause,
-    dispose() { pause(); disposed = true; doc.removeEventListener('visibilitychange', visibility); section.remove(); },
+    dispose() { pause(); disposed = true; doc.removeEventListener('visibilitychange', visibility); actions.remove(); seek.remove(); progress.remove(); section.remove(); },
   };
 }

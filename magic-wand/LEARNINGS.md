@@ -16,6 +16,16 @@ instance of the existing dwell detector so previously accumulated travel cannot 
 a fresh selection immediately. These checks establish simulated state transitions,
 not physical screenshot acceptance. Verified 25 October 2026.
 
+## DFR0030 V2 board mounts
+
+The Pi Hut receipt identifies DFR0030. The vendor text lists 22 × 30 mm
+but its front and back photos and a distributor sheet support a longer
+V2 board. R30 uses a 22 × 35 mm envelope and a 15–16 mm pitch range
+inferred from the photos. Check the entire through-hole fit across the
+range with the nominal 3 mm holes. Use the same complete bracket mesh
+and flex poses in the full assembly and the hinge detail. Keep both
+entries adjacent when registering the new default revision.
+
 ## Snap hinges: the flexing part owns the bend
 
 Ethan corrected R28's snap hinge (2026-11-11): its animation bent the key

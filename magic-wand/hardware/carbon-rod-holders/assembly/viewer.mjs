@@ -1,10 +1,10 @@
 // All holder components share the existing Three.js controls. Each CAD revision
 // supplies exact actors and sampled assembly transforms, never another drawing.
 import * as THREE from '../../../../docs/lib/three-0.185.1/three.module.min.js';
-import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/preview/free-view-controls.mjs';
+import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/preview/free-view-controls.mjs?v=playback-host';
 import { RollingViewInput, bindTwistGestures, routeAssemblyWheel, rollHint, rollSupport } from './view-roll.mjs';
 import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
-import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=compact-copper';
+import { sampledPose, validateGuide, identity, groupKeys } from './assembly-data.mjs?v=r30-keys-label';
 import { legacyR20 } from './legacy-r20.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');
@@ -33,6 +33,52 @@ let keyViews;
 let showAnnotations = true, annotations = [];
 let manualCutaway = false, effectiveCutaway;
 const geometries = new Map();
+
+function bindViewDivider() {
+  const divider = document.getElementById('view-divider');
+  const stage = view.parentElement;
+  const playback = document.getElementById('assembly-playback');
+  const minimum = 240;
+  const maximum = () => Math.max(minimum, stage.clientWidth <= 760
+    ? window.innerHeight - 100
+    : window.innerHeight - divider.offsetHeight - playback.offsetHeight);
+  let start;
+
+  function updateValue() {
+    divider.setAttribute('aria-valuemin', String(minimum));
+    divider.setAttribute('aria-valuemax', String(maximum()));
+    divider.setAttribute('aria-valuenow', String(view.clientHeight));
+  }
+  function setHeight(height) {
+    stage.style.setProperty('--model-height', `${Math.round(Math.max(minimum, Math.min(maximum(), height)))}px`);
+    updateValue();
+  }
+  divider.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || start) return;
+    start = { id: event.pointerId, y: event.clientY, height: view.clientHeight };
+    divider.setPointerCapture(start.id);
+    divider.dataset.dragging = '';
+  });
+  divider.addEventListener('pointermove', event => {
+    if (start?.id === event.pointerId) setHeight(start.height + event.clientY - start.y);
+  });
+  divider.addEventListener('lostpointercapture', () => {
+    start = undefined;
+    delete divider.dataset.dragging;
+  });
+  divider.addEventListener('keydown', event => {
+    const heights = { ArrowUp: view.clientHeight - 24, ArrowDown: view.clientHeight + 24,
+      Home: minimum, End: maximum() };
+    if (!Object.hasOwn(heights, event.key)) return;
+    event.preventDefault();
+    setHeight(heights[event.key]);
+  });
+  new ResizeObserver(() => {
+    if (view.clientHeight > maximum() && stage.style.getPropertyValue('--model-height')) setHeight(maximum());
+    else updateValue();
+  }).observe(stage);
+  updateValue();
+}
 
 function renderAnnotations() {
   if (annotationHost.hidden) return;
@@ -70,7 +116,9 @@ function setAnnotations(records = []) {
     line.setAttribute('aria-hidden', 'true'); dot.setAttribute('aria-hidden', 'true');
     card.dataset.side = record.side;
     const title = document.createElement('strong');
-    title.textContent = record.title; card.append(title);
+    const index = record.step ? module.steps.findIndex(step => step.title === record.step) : -1;
+    title.textContent = index >= 0 ? `Step ${index + 1} · ${record.title}` : record.title;
+    card.append(title);
     if (record.text) card.append(document.createTextNode(record.text));
     return {
       line, dot, card, columnIndex: sideCount[record.side]++,
@@ -171,7 +219,7 @@ async function geometry(record, sourceUrl) {
   }
   const url = new URL(record.file, record.baseUrl || sourceUrl).href;
   if (!geometries.has(url)) {
-    const pending = fetch(url).then(async response => {
+    const pending = fetch(url, { cache: 'no-cache' }).then(async response => {
       if (!response.ok) throw new Error('Model could not be loaded');
       return parseBinaryStl(await response.arrayBuffer());
     }).catch(error => {
@@ -302,7 +350,8 @@ try {
   versions.value = catalog.versions.some(version => version.id === requested.get('version')) ? requested.get('version') : catalog.current;
   // installViewTools emits the first frame immediately; an inert initial recipe
   // avoids accessing actors before their own source data has finished loading.
-  tools = installViewTools({ view, input, fit, render, assembly: { host: document.getElementById('assembly'), steps: [{ title: 'Loading', caption: 'Loading assembly', duration: 1 }], onFrame: state => { if (module) applyPose(state); } } });
+  tools = installViewTools({ view, input, fit, render, assembly: { host: document.getElementById('assembly'), playbackHost: document.getElementById('assembly-playback'), steps: [{ title: 'Loading', caption: 'Loading assembly', duration: 1 }], onFrame: state => { if (module) applyPose(state); } } });
+  bindViewDivider();
   const gestures = bindTwistGestures({ canvas, input, render });
   const wandScroll = document.getElementById('wand-scroll');
   bindFreeViewControls({ canvas, input, height: () => view.clientHeight, width: () => view.clientWidth, render, chooseMode, fit,

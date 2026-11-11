@@ -1,0 +1,226 @@
+{
+  "revision": "carbon-rod-holders-r30-dfrobot-hole-mount",
+  "physical_fit_verified": false,
+  "print_validated": false,
+  "based_on": "carbon-rod-holders-r29-dfrobot-snap-arms",
+  "change": "R29's tray, edge rails, end stop and filament board keeper replaced by a small hinged bracket with two posts through the DFR0030 V2 holes and two printed clips. The hinge sits 2 mm further towards the two-key end. Removable tape holds the OP1 board.",
+  "purchased_board": "DFRobot DFR0030 Gravity Digital Capacitive Touch Sensor V2",
+  "estimates": [
+    "35 mm board length (distributor sheet)",
+    "15.5 mm hole pitch, 24.1 mm from the pad end (photos)",
+    "3.0 mm holes (published nominal)",
+    "1.6 mm board thickness",
+    "Gravity socket/plug envelope (R26)",
+    "DFR0030 parts near the holes and under the board",
+    "stock OP1 board, switch and plug (R23)"
+  ],
+  "frames": {
+    "DFRobot_Hole_Bracket": "R26 cap frame; place with holder28.world(angle)",
+    "Key_Carrier": "assembly",
+    "DFR0030_Post_Clip": "flat, as printed"
+  },
+  "print_quantities": {
+    "Key_Carrier": 1,
+    "DFRobot_Hole_Bracket": 1,
+    "DFR0030_Post_Clip": 1,
+    "DFR0030_Post_Clip_2": 1
+  },
+  "loose_hardware": [
+    "Removable nonconductive tape for the OP1 board"
+  ],
+  "print_orientation_note": "Carrier and bracket SOURCE files are rear face down, like R26. Clips print flat. Slicing, supports, arm flex and clip snap are not checked.",
+  "source_sha256": {
+    "holder30.py": "51f07b9e4c27f6130a6f432774f0a9e1481adab22353b827db855b1af64289af",
+    "assembly30.py": "5084c65b66637f0c132a8abdd10bdece52d75e308590c44c3989dc5e382a39c8"
+  },
+  "parts": {
+    "Key_Carrier": {
+      "volume_mm3": 7413.439,
+      "solid_PETG_g": 9.415,
+      "assembly_bounds_mm": [
+        [
+          -30.1,
+          -9.2,
+          -4.781
+        ],
+        [
+          30.1,
+          32.65,
+          20.0
+        ]
+      ],
+      "print_height_mm": 41.85,
+      "stl_sha256": "c37fd321ba1a69c3e4a14f8113151d75256e8e9e4f6fa446591b17d38300ec75",
+      "assembly_stl_sha256": "93610054e6eae75e6e53ca135555b8e96772084d63d181f754fb5d5b3ba73104",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -30.100000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          32.650001525878906
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.781332969665528
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.00112,
+      "print_export_drift_mm3": 0.002351
+    },
+    "DFRobot_Hole_Bracket": {
+      "volume_mm3": 576.793,
+      "solid_PETG_g": 0.733,
+      "assembly_bounds_mm": [
+        [
+          -10.6,
+          -11.914,
+          13.05
+        ],
+        [
+          10.6,
+          21.6,
+          23.65
+        ]
+      ],
+      "print_height_mm": 33.514,
+      "stl_sha256": "028191dab579e7b5d3ecf17554795727345b5e49f604ba0c298a853173b6f0f5",
+      "assembly_stl_sha256": "c0525a26865ab26d16e73047047fa9a2dabfe715aa7a40af64ad0a6c6cabe05b",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.600000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          21.600000381469727
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          13.050000190734862
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000183,
+      "print_export_drift_mm3": 0.00018
+    },
+    "DFR0030_Post_Clip": {
+      "volume_mm3": 7.421,
+      "solid_PETG_g": 0.009,
+      "assembly_bounds_mm": [
+        [
+          -1.8,
+          -1.8,
+          21.85
+        ],
+        [
+          1.8,
+          2.2,
+          22.65
+        ]
+      ],
+      "print_height_mm": 0.8,
+      "stl_sha256": "ee422079964bddcd7a9ea460280d049dc09d7e50ad347dfb945012993154fc54",
+      "assembly_stl_sha256": "08f500c9f8e04d46984d8ca9d0f0eb78e5265bdac87bb3dee4d1d51c199f5597",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          21.850000381469727
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 4e-06,
+      "print_export_drift_mm3": 9e-06
+    },
+    "DFR0030_Post_Clip_2": {
+      "volume_mm3": 7.421,
+      "solid_PETG_g": 0.009,
+      "assembly_bounds_mm": [
+        [
+          -1.8,
+          -1.8,
+          21.85
+        ],
+        [
+          1.8,
+          2.2,
+          22.65
+        ]
+      ],
+      "print_height_mm": 0.8,
+      "stl_sha256": "ee422079964bddcd7a9ea460280d049dc09d7e50ad347dfb945012993154fc54",
+      "assembly_stl_sha256": "08f500c9f8e04d46984d8ca9d0f0eb78e5265bdac87bb3dee4d1d51c199f5597",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          21.850000381469727
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 4e-06,
+      "print_export_drift_mm3": 9e-06
+    }
+  }
+}

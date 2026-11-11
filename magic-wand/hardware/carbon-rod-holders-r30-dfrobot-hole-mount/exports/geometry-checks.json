@@ -1,0 +1,145 @@
+{
+  "revision": "carbon-rod-holders-r30-dfrobot-hole-mount",
+  "physical_fit_verified": false,
+  "print_validated": false,
+  "source_sha256": "51f07b9e4c27f6130a6f432774f0a9e1481adab22353b827db855b1af64289af",
+  "carrier_sha256": "93610054e6eae75e6e53ca135555b8e96772084d63d181f754fb5d5b3ba73104",
+  "bracket_sha256": "c0525a26865ab26d16e73047047fa9a2dabfe715aa7a40af64ad0a6c6cabe05b",
+  "pinched_bracket_sha256": "2f9a0ad7926f3ddaafc91ed3e67d9ecd38922591f38db5b2b90f158fe7e1083e",
+  "clip_sha256": "08f500c9f8e04d46984d8ca9d0f0eb78e5265bdac87bb3dee4d1d51c199f5597",
+  "checks": {
+    "hinge_axis_world_y_mm": 12.100000000000001,
+    "hinge_moved_towards_two_key_end_mm": 2.0,
+    "op1_board_insertion_overlap_mm3": 0.0,
+    "board_outline_mm": [
+      22.0,
+      35.0
+    ],
+    "board_thickness_assumed_mm": 1.6,
+    "hole_nominal_diameter_mm": 3.0,
+    "hole_pitch_nominal_mm": 15.5,
+    "pitch_range_checked_mm": [
+      15.0,
+      16.0
+    ],
+    "hole_centre_from_pad_end_mm": 24.1,
+    "post_section_mm": [
+      2.25,
+      2.52
+    ],
+    "board_float_across_pitch_each_way_at_nominal_mm": 0.375,
+    "board_float_along_board_each_way_mm": 0.24,
+    "board_axial_float_under_clip_mm": 0.2,
+    "post_top_above_touch_face_mm": 1.8,
+    "board_y_cap_frame_mm": [
+      -12.41446,
+      22.58554
+    ],
+    "hole_centres_world_at_hard_stop_mm": [
+      [
+        -7.75,
+        15.2355
+      ],
+      [
+        7.75,
+        15.2355
+      ]
+    ],
+    "released_front_mm": -8.750004,
+    "released_front_alignment_error_mm": 4e-06,
+    "bracket_behind_board_front_mm": 0.4114,
+    "min_front_clear_of_bottom_over_stroke_mm": 0.33554,
+    "top_released_max_mm": 23.5341,
+    "released_tab_axial_engagement_mm": 0.7,
+    "squeezed_tab_clear_of_support_mm": 0.2188,
+    "arm": {
+      "arm_thickness_mm": 1.2,
+      "arm_height_mm": 1.4,
+      "root_to_tab_mm": 10.81,
+      "root_to_pinch_pad_mm": 7.11,
+      "tab_squeeze_mm": 0.98,
+      "pad_squeeze_mm": 0.55,
+      "pinch_force_each_N_estimate": 1.85,
+      "root_strain_percent_estimate": 1.96,
+      "assumed_PETG_modulus_MPa": 2000.0,
+      "assumed_PETG_yield_strain_percent": 4.0
+    },
+    "clip": {
+      "jaw_width_mm": 1.05,
+      "jaw_length_mm": 3.1,
+      "snap_per_jaw_mm": 0.1,
+      "jaw_strain_percent_estimate": 1.64,
+      "assumed_PETG_yield_strain_percent": 4.0
+    },
+    "click_stroke_overlap_mm3": 0.0,
+    "lead_stroke_overlap_mm3": 0.0,
+    "squeezed_lowering_overlap_mm3": 0.0,
+    "arm_release_overlap_mm3": 0.0,
+    "board_lift_off_overlap_mm3": 0.0,
+    "clip_seated_overlap_mm3": 0.0,
+    "clip_slide_overlap_excluding_snap_mm3": 0.0,
+    "board_on_posts_overlap_by_pitch_mm3": {
+      "15.00": -0.0,
+      "15.25": 0.0,
+      "15.50": 0.0,
+      "15.75": -0.0,
+      "16.00": 0.0
+    },
+    "straight_lift_contact_by_height_mm3": {
+      "0.10": 0.0,
+      "0.30": 0.085809,
+      "0.50": 0.394407
+    },
+    "straight_lift_retention_contact_mm3": 0.085809,
+    "board_seat_contact_mm3": 13.780436,
+    "board_lateral_capture_contact_mm3": 0.876981,
+    "board_along_capture_contact_mm3": 0.689296,
+    "clip_head_capture_contact_mm3": 0.249756,
+    "board_to_clip_lift_contact_mm3": 1.147514,
+    "overpress_stop_contacts_mm3": [
+      0.123785,
+      0.123785
+    ],
+    "guard_runners": {
+      "R1": {
+        "volume_mm3": 106.51,
+        "root_y_mm": 18.4,
+        "desired_mm3": 107.145,
+        "trimmed_unsupported_mm3": 2.242
+      },
+      "R2": {
+        "volume_mm3": 95.499,
+        "root_y_mm": 16.2,
+        "desired_mm3": 96.484,
+        "trimmed_unsupported_mm3": 3.015
+      },
+      "R3": {
+        "volume_mm3": 91.717,
+        "root_y_mm": 16.2,
+        "desired_mm3": 99.06,
+        "trimmed_unsupported_mm3": 9.402
+      },
+      "L1": {
+        "volume_mm3": 103.715,
+        "root_y_mm": 18.4,
+        "desired_mm3": 104.427,
+        "trimmed_unsupported_mm3": 2.32
+      },
+      "L2": {
+        "volume_mm3": 63.252,
+        "root_y_mm": 12.0,
+        "desired_mm3": 70.851,
+        "trimmed_unsupported_mm3": 9.276
+      },
+      "L3": {
+        "volume_mm3": 78.88,
+        "root_y_mm": 16.0,
+        "desired_mm3": 90.277,
+        "trimmed_unsupported_mm3": 13.538
+      }
+    },
+    "nominal_click_stop_depression_mm": 0.48,
+    "passed": true,
+    "guide_pinched_bracket_moved_vertices": 1874
+  }
+}

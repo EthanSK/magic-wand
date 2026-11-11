@@ -103,7 +103,9 @@ export function groupKeys(modules) {
     id: 'other-keycaps', hideLabel: 'Hide other keycaps', showLabel: 'Show other keycaps', actors: Object.keys(caps),
   };
   for (const view of Object.values(views)) view.helperActions = [otherKeycaps];
-  return { modules: { keys: { ...(views.dfr ?? views.copper ?? views.centre), label: 'Keys' }, ...others }, views };
+  // A guide may name the Keys entry so a detail module listed after it reads as a pair.
+  const main = views.dfr ?? views.copper ?? views.centre;
+  return { modules: { keys: { ...main, label: main.keysLabel ?? 'Keys' }, ...others }, views };
 }
 
 export function validateGuide(guide) {
