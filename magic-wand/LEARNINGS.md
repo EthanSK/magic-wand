@@ -2716,3 +2716,19 @@ that only touches that same perimeter. Under the R34 OP1 connector seat, the
 first loop at 15.8 mm had no prior-layer or earlier same-layer contact. R35
 checks the support under that first loop. Verify the support remains reachable
 for removal, and report the finished connector clearance after cleanup.
+
+### 2026-11-12 — Preserve first-layer links when changing a sensor mount
+
+R36’s lower Seeed Grove seat changed the bracket’s print-space origin
+while leaving the front of the hinge in the same assembled position.
+Remap inherited tear-off pads through both print-to-assembly transforms,
+then check each deposited tie. A saved pad at the old coordinates can
+touch the model on screen and still miss a printable tie.
+
+A screw pilot and the underside solder relief both cut through R35’s
+front crossbar in the first R36 slice. Keep material below both cuts and
+check the actual deposited crossbar as far as the cable opening.
+The rear screw boss grows from a tapered rib rooted in the existing
+floor. The first transverse bridge caused a Bambu cantilever warning.
+The revised original and reopened slices passed the deposited-path
+checks. Connector fit and screw retention still need a physical trial.

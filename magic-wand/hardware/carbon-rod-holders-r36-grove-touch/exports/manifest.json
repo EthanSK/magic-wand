@@ -1,0 +1,149 @@
+{
+  "revision": "carbon-rod-holders-r36-grove-touch",
+  "based_on": "carbon-rod-holders-r35-backed-roots",
+  "parts": {
+    "Key_Carrier": {
+      "volume_mm3": 7681.405,
+      "solid_PETG_g": 9.755,
+      "assembly_bounds_mm": [
+        [
+          -30.1,
+          -9.2,
+          -4.781
+        ],
+        [
+          30.1,
+          32.65,
+          20.0
+        ]
+      ],
+      "print_height_mm": 41.85,
+      "stl_sha256": "e1b934682a1e59eaa3945f679367309e70014aa517d0d65cd57eb33ddffe6b85",
+      "assembly_stl_sha256": "de3d51849682dda6e8e36982924a07709158ac341f73cfee49820ac34b47ce03",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -30.100000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          32.650001525878906
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.781332969665528
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": -0.757979,
+      "print_export_drift_mm3": -0.000404
+    },
+    "Grove_Touch_Bracket": {
+      "volume_mm3": 565.419,
+      "solid_PETG_g": 0.718,
+      "assembly_bounds_mm": [
+        [
+          -10.6,
+          -11.835,
+          13.05
+        ],
+        [
+          10.6,
+          28.4,
+          20.25
+        ]
+      ],
+      "print_height_mm": 40.235,
+      "stl_sha256": "875bd8f3f5e1320398c83d2f9db60d872c8a36a4315f13c65dfb626f57478a49",
+      "assembly_stl_sha256": "da56a3d1577834cf8b62619b1c34e86d526e0c16fbd6f929543a0f8b69040e71",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.600000381469727
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -11.835000038146973
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          20.25
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000212,
+      "print_export_drift_mm3": 0.000225
+    },
+    "Battery_Spacer_0p4mm_Patterned": {
+      "stl_sha256": "f36a69364f13c42c0f88a0a20a9a5204334be641e3361a3c841dd0272f0470f2",
+      "assembly_stl_sha256": "5e6d86cdaf17520945be83d8ca9ad95f8a854cbc84ab680ff3beabee23938ab3",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.300000190734863
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -13.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          5.849999904632568
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "print_height_mm": 0.4,
+      "geometry_checks": {
+        "through_openings": 15,
+        "patterned_volume_mm3": 164.2172,
+        "hole_width_mm": [
+          1.9,
+          1.9
+        ],
+        "minimum_web_mm": 1.2,
+        "continuous_rim_mm": 1.6
+      },
+      "reference_assembly_stl_sha256": "ca66dacb268cf0c3f99f6b143194289b09d9f8a6ccee07a67de2be6a12602dc0",
+      "physical_fit_verified": false
+    }
+  },
+  "change": "Centred Grove sensor screws, forward plug route and lower touch seat.",
+  "source_sha256": {
+    "assembly36.py": "ccfac820e0ba8e3f9736100ab99d69725cef60a5f5c2995f715436467535b57a",
+    "holder36.py": "11c7966add2b9a2f482e942919e489da09fa0acdedaffc553944c06a091c316c",
+    "complete-assembly.json": "0df3d463b0180c30c30f33e15691c291e09653ca137425e0f02862bd18ee6c50"
+  }
+}

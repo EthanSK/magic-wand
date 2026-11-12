@@ -1,0 +1,69 @@
+{
+  "revision": "carbon-rod-holders-r36-grove-touch",
+  "physical_fit_verified": false,
+  "checks": {
+    "pcb_width_mm": 20.0,
+    "screw_x_mm": 0.0,
+    "screw_pitch_mm": 20.0,
+    "paddle_seat_drop_mm": 0.8999999999999986,
+    "key_carrier_seat_drop_mm": 0.0,
+    "pcb_front_y_mm": -7.7302552760606495,
+    "key_assembly_span_mm": 60.762326830149604,
+    "removed_carrier_mm3": 182.0211964265582,
+    "protected_feature_removal_mm3": {
+      "R1": 0.0,
+      "L1": 0.0,
+      "R2": 0.0,
+      "L2": 0.0,
+      "R3": 0.0,
+      "L3": 0.0,
+      "left clip brace": 0.0,
+      "centre clip brace": 0.0,
+      "right clip brace": 0.0,
+      "OP1 mounting shoulders": 0.0,
+      "fixed hinge supports": 0.0,
+      "fixed click stops": 0.0
+    },
+    "guard_overlap_with_rod_by_hypothetical_drop_mm3": {
+      "0.0": 0.0,
+      "0.5": 0.0,
+      "1.0": 0.10800828918143286,
+      "1.5": 1.3227143506838415,
+      "2.0": 3.407955276631693
+    },
+    "clearance_overlap_mm3": {
+      "hinge_stroke": 0.0,
+      "cable_stroke": 0.0,
+      "pinched_bracket_drop": 0.0,
+      "bracket_arm_release": 0.0,
+      "preplugged_board_drop": 0.0,
+      "wired_board_feed": 0.0,
+      "grove_board_on_rod": 0.0
+    },
+    "screw_boss_material_mm3": [
+      48.68674327595132,
+      48.687119581581634
+    ],
+    "measured_nominal_plunger_travel_to_stop_mm": 0.43,
+    "stop_overlap_at_limit_mm3": 0.0,
+    "stop_contacts_just_beyond_limit_mm3": [
+      0.0013012167495534599,
+      0.0013012167495535616
+    ],
+    "screw_pilot_depth_mm": 2.95,
+    "service_lift_mm": 14.0,
+    "hinge_arm_bending_estimate": {
+      "arm_thickness_mm": 1.2,
+      "arm_height_mm": 1.4,
+      "root_to_tab_mm": 10.81,
+      "root_to_pinch_pad_mm": 7.11,
+      "tab_squeeze_mm": 0.98,
+      "pad_squeeze_mm": 0.55,
+      "pinch_force_each_N_estimate": 1.85,
+      "root_strain_percent_estimate": 1.96,
+      "assumed_PETG_modulus_MPa": 2000.0,
+      "assumed_PETG_yield_strain_percent": 4.0
+    },
+    "passed": true
+  }
+}
