@@ -87,3 +87,28 @@ using the same accessible thin ties described above.
 The print-only package opens the checked toolpaths directly. Its G-code
 matches the audited archive byte for byte. Use the editable plate when
 changing geometry or settings, then slice and check it again.
+
+## Two-part perforated-pad test
+
+This diagnostic plate has just the key carrier and DFRobot hinge bracket.
+Their functional meshes, poses and pad tie geometry carry over from the prior
+plate. Each of the six 0.4 mm tear-off pads has two 2.6 mm holes. Net CAD pad
+contact area increases from 227.03 to 382.81 mm² on the carrier and from 55.07
+to 118.43 mm² on the bracket. The bracket pads clear the touchboard space.
+
+Configured speeds and acceleration, 0.20 mm layers, 250 °C nozzle, 60 °C
+textured PEI and Smooth Timelapse carry over. To correct two weak sections
+found in the slice, the key carrier uses four walls instead of three from
+38.8 to 41.85 mm, and the bracket outer wall lines widen from 0.42 to 0.44 mm
+from 39.4 to 40.235 mm. Those changes are local to the upper ends.
+
+The deposited paths preserve all 12 pad holes through both layers, join all
+six pads and pass the critical-section and fit-space checks. The print-only
+file contains the audited toolpaths. The separately re-sliced editable file
+also passed its audit. The estimate is 1 h 17 min and 11.60 g, including the
+timelapse tower. Printed adhesion, fit and strength need a physical trial.
+
+- [Print-only test plate](exports/perforated-pad-test/R34-Perforated-Pad-Test-print-only.3mf)
+- [Editable test plate](exports/perforated-pad-test/R34-Perforated-Pad-Test-editable.3mf)
+- [Pad dimensions](exports/perforated-pad-test/pad-geometry.json) and [hole checks](exports/perforated-pad-test/hole-checks.json)
+- [Exact slice audit](exports/perforated-pad-test/audit.json) and [reopened slice audit](exports/perforated-pad-test/reopened-audit.json)

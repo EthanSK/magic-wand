@@ -1,0 +1,33 @@
+{
+  "sha256": "515d803642b4ce201c1911b2511390e5ebb8cf3cb41e0178f9350b3371c4ee0b",
+  "gcode_sha256": "2330dd24a17abe73fa4327c70b7ab6879bcf00dff22d8fab7a60ec99da76a358",
+  "gcode_matches_audited_slice": true,
+  "parts": [
+    "Key_Carrier",
+    "DFRobot_Hole_Bracket"
+  ],
+  "estimated_seconds": 4597,
+  "filament_g": 11.6,
+  "localized_slicer_changes": {
+    "Key_Carrier": {
+      "wall_loops": [
+        3,
+        4
+      ],
+      "height_range_mm": [
+        38.8,
+        41.85
+      ]
+    },
+    "DFRobot_Hole_Bracket": {
+      "outer_wall_line_width_mm": [
+        0.42,
+        0.44
+      ],
+      "height_range_mm": [
+        39.4,
+        40.235
+      ]
+    }
+  }
+}
