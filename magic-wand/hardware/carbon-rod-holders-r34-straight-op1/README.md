@@ -42,3 +42,38 @@ and matching animation assets. Prepare the plate with
 Run `audit34.py` on the sliced archive through the repository's geometry
 budget runner. Fit of the actual electronics, hinge flex and comfort
 need a printed trial.
+
+## Pad-area retry
+
+The first full R34 print detached during printing. The recording shows a
+rear central part moving before loose extrusion appears. It does not
+establish whether the pad peeled, a tie broke or the nozzle struck it.
+
+The [pad-area retry](exports/retry/R34-Pad-Retry-print-only.3mf)
+keeps the ten functional parts, their orientations and their positions.
+The DFRobot bracket's two removable pads grow from 38.41 to 55.07 mm² of
+combined contact area, a 43.4% increase. Their outer radii increase from
+2.4 to 2.9 mm, with the inner edge and thin breakaway ties preserved.
+The pads stay 0.4 mm thick.
+
+- [Editable retry plate](exports/retry/R34-Pad-Retry-A1-mini-PETG-layout.3mf)
+- [Complete archived project and toolpaths](exports/retry/R34-Pad-Retry-A1-mini-PETG.gcode.3mf)
+- [Retry print checks](exports/retry/print-checks.json)
+- [Original retry slice audit](exports/retry/audit.json)
+- [Reopened retry slice audit](exports/retry/reopened-audit.json)
+
+Both slices passed the working-opening, deposited-joint and first-layer
+checks with no slicer warnings. The closest material envelopes remain
+5.25 mm apart, including the specified brims. The retry uses the same
+250 °C nozzle, 60 °C bed and Smooth Timelapse settings, with an estimate
+of 1 h 43 min 49 s and 17.0 g. Adhesion and removal still need a physical
+trial. A larger pad is a controlled change, and does not prove the cause
+of the previous failure.
+
+`retry34.py <scratch-directory>` regenerates this plate and records the
+source hashes, new pad area and unchanged tie overlap. Remove its pads
+using the same accessible thin ties described above.
+
+The print-only package opens the checked toolpaths directly. Its G-code
+matches the audited archive byte for byte. Use the editable plate when
+changing geometry or settings, then slice and check it again.
