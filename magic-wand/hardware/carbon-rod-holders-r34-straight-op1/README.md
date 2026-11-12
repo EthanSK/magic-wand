@@ -19,7 +19,10 @@ includes the keeper clips, battery door and 12-wire cable clip.
 - [Original and reopened print checks](exports/print-checks.json)
 
 The ten parts slice at 250 °C nozzle and 60 °C textured PEI with Flashforge
-HS PETG Metallic. Studio estimates 1 h 44 min and 17.0 g, including the
+HS PETG Metallic. See the
+[Metallic Red material reference](../carbon-rod-holders/flashforge-hs-petg-metallic-red.md)
+for the exact SKU, published limits and heat tests. Studio estimates
+1 h 44 min and 17.0 g, including the
 wipe tower for Smooth Timelapse. The original and reopened slices passed
 the checks for working openings, guard and stop joins, and all 15 spacer
 vents. Remove the labelled pads and brims before assembly.

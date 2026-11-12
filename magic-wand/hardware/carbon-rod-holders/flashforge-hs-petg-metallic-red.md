@@ -1,0 +1,36 @@
+# Flashforge HS PETG Metallic Red on the A1 mini
+
+The Wand R34 test uses Flashforge HS PETG Metallic Red, SKU `HSPETG-1-METALLICRED`, on a Bambu Lab A1 mini with a standard 0.4 mm nozzle and textured PEI. The verified baseline is **250 °C nozzle and 60 °C bed** at 0.20 mm layer height, with an 8 mm³/s flow cap. A small scraper finished at that temperature pair. The Wand plate later failed at the same pair, so its outcome alone does not isolate a temperature problem.
+
+## Temperature limits
+
+| Evidence | Nozzle | Bed | Scope |
+| --- | ---: | ---: | --- |
+| [Flashforge exact Metallic Red SKU](https://www.flashforge.com/products/hs-petg?variant=43140414636110) and [UK Red variant](https://uk.flashforge.com/products/hs-petg-metallic?variant=45061816713404) | 220–270 °C | Room temperature to 60 °C | Published processing range for the selected product. |
+| [Flashforge HS PETG technical data sheet, p. 2](https://after-support.flashforge.jp/uploads/datasheet/tds/PETG_HS_TDS_EN.pdf#page=2) | 220–260 °C | Room temperature to 60 °C | Older family-level guidance, including PEI. The reported specimens use an Adventurer 5M. |
+| [Bambu A1 mini quick-start guide](https://cdn1.bambulab.com/documentation/quick-start-f507128172bdf/Quick%20start%20guide%20-%20A1%20mini-EN.pdf) and [Bambu textured PEI guidance](https://bambu-lab-uk.myshopify.com/products/bambu-textured-pei-plate) | 300 °C hardware maximum | 80 °C hardware maximum. Bambu lists 60–80 °C for PETG on this plate. | Hardware and general plate guidance. The named filament's bed guidance tops out at 60 °C. |
+
+**270 °C is the exact SKU's published upper nozzle setting.** The two Flashforge sources overlap through 260 °C. Neither specifies a degradation threshold or guarantees that the upper setting gives the best strength, surface quality or dimensional accuracy. The family safety sheet gives no decomposition temperature. The family technical sheet reports 68 °C heat deflection under its stated test load and a 65 °C continuous service temperature. These describe a finished sample and do not set hotend or bed limits. [Safety data sheet, §§9–10](https://after-support.flashforge.jp/uploads/datasheet/sds/HS_PETG_SDS_EN.pdf#page=14), [technical data sheet, p. 1](https://after-support.flashforge.jp/uploads/datasheet/tds/PETG_HS_TDS_EN.pdf#page=1).
+
+## Formulation and moisture
+
+Flashforge describes the high-speed family as modified PETG and reports a melt-flow rate of 8–12 g/10 min at 220 °C and 2.16 kg. That is a material test and does not translate directly into the printer's volumetric flow limit. The family safety sheet lists more than 99.5% PETG (CAS 25038-91-9) and less than 0.5% unspecified other ingredients. No SKU-specific pigment chemistry, particle loading, abrasive-metal content, thermal degradation curve or additive recipe was found. The metallic finish alone does not identify the colorant. [Technical data sheet](https://after-support.flashforge.jp/uploads/datasheet/tds/PETG_HS_TDS_EN.pdf), [safety data sheet, §3](https://after-support.flashforge.jp/uploads/datasheet/sds/HS_PETG_SDS_EN.pdf#page=3).
+
+Flashforge lists drying at 70 °C for five hours for this product and recommends sealed storage with desiccant. Use equipment that can hold the set temperature reliably and follow the spool's drying instructions. Audible pops, bubbles and rough extrusion justify checking moisture or feed before assigning stringing to temperature. The official range and drying instructions are for this product. [Flashforge product specifications](https://www.flashforge.com/products/hs-petg?variant=43140414636110).
+
+## What a change would test
+
+- **Bed adhesion.** A warmer bed can reduce contraction and keep the bottom layers softer. Too much heat can soften or widen the base and make removal harder. With the bed already at Flashforge's upper listed setting, first check for a lifted pad or exposed sheet. Wash the textured plate with dish detergent and water when contaminated, then dry it. Let it cool before flexing it to release the print. [Bambu textured PEI guidance](https://bambu-lab-uk.myshopify.com/products/bambu-textured-pei-plate).
+- **Layer bonding.** A modest nozzle increase can improve melt flow and bonding when the failure leaves a clean split across layers. Hotter extrusion can also increase ooze, strings and nozzle buildup, especially on small features with frequent travel. PETG experiments show that bond strength depends on the material and process. Their temperatures are not an exact-SKU calibration. [Guessasma et al., PETG printability and tensile tests](https://pmc.ncbi.nlm.nih.gov/articles/PMC6680790/), [PETG parameter experiments](https://pmc.ncbi.nlm.nih.gov/articles/PMC9269443/).
+- **Nozzle strike or bed movement.** A curled edge or lump can meet the moving nozzle. A faster collision can impart a larger shove, and stronger bed acceleration increases the inertial load on the print. A tall part puts more leverage on its small base. Scrapes, a blob or movement before loose extrusion would guide a travel or motion test. A whole part coming up points to adhesion. A pad staying attached with a torn tie or base points to a mechanical break. The existing R34 recording does not distinguish these causes. [R34 failure and pad retry](../carbon-rod-holders-r34-straight-op1/README.md#pad-area-retry).
+
+## What owners reported
+
+- An AD5X owner reports consistent results through several kilograms of Flashforge metallic PETG on stock settings, including an enclosure. Their exact color and measured temperatures are unspecified. A separate owner of the metallic red color reported a thin section that would not load after earlier rolls worked, without a comparable temperature test. [Metallic PETG on AD5X](https://www.reddit.com/r/FlashForge/comments/1sh9h0b/at_my_wits_end_with_ad5m/), [Metallic Red feed report](https://www.reddit.com/r/FlashForge/comments/1qqwlhv/flash_forge_petg_too_thin/).
+- A metallic blue owner reported surface issues at 245 °C on an FLSun SR with a 0.6 mm nozzle. An A1 mini PETG thread reports trying a 70 °C bed and 255 °C nozzle, but does not establish the exact Metallic Red SKU. Neither validates a hotter bed for this setup. No reproducible exact-SKU temperature comparison on the A1 mini with textured PEI was found. [Metallic Blue print report](https://www.reddit.com/r/3Dprinting/comments/1owgjnd/), [A1 mini PETG troubleshooting](https://forum.bambulab.com/t/a1-mini-petg-bridging-and-stringing/92673).
+
+## Next controlled test
+
+Keep 250/60 °C and the previous speeds for the two-part larger-pad experiment. Record the first movement and check the feet and pad ties once the plate cools. Larger pads can add net contact even with holes. The holes increase perimeter while taking away some of that contact. A successful print can show that the larger perforated design works, but cannot isolate an effect from the holes by themselves.
+
+If the repeat leaves a clean interlayer fracture, compare otherwise identical small pieces at 250 and 255 °C, then at 260 °C only if it helps. Keep the bed at 60 °C. Check break location and strength, overhangs, strings and nozzle deposits. Treat 265–270 °C as the top of the newer SKU range and a separate experiment, not a routine retry setting. For visible pad lift or nozzle contact, test that failure mode before changing extrusion heat.
