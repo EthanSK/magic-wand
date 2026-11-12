@@ -1,5 +1,7 @@
 # R36 Seeed Grove touch
 
+For the next complete plate, use [R37 with the adjustable OP1 stop](../carbon-rod-holders-r37-adjustable-op1/README.md).
+
 This candidate fits Seeed Grove Touch Sensor **101020037**, sold by Pi Hut
 as **103326**, with the existing OP1 centre click. The two-key end is the
 top in the assembly viewer. Both mounting screws are on the rod centre

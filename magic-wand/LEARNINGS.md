@@ -2732,3 +2732,18 @@ The rear screw boss grows from a tapered rib rooted in the existing
 floor. The first transverse bridge caused a Bambu cantilever warning.
 The revised original and reopened slices passed the deposited-path
 checks. Connector fit and screw retention still need a physical trial.
+
+### 2026-11-12 — Set OP1 travel against the fitted switch
+
+The Universal Switch Set includes seven pairs. The Omron 60M specifies
+a 6.7–7.1 mm operating position relative to its base and at least 0.20 mm
+of overtravel. A fixed stop at 6.92 mm can miss a late switch. A fixed
+low stop that closes the late unit can bottom an early one. R37 uses
+an adjustable stop from 6.54 to 7.29 mm in CAD. Start short and set the
+stop from actual closure and release. The outer feet only limit the
+paddle’s absolute movement.
+
+Adding the adjustment boss filled part of the adjacent forward Grove
+pilot on the first slice. Reapply the pilot cut after joining the
+solids. Verify the full adjustment-screw path from the face to seated
+depth as well as the nearby Grove bore against deposited toolpaths.

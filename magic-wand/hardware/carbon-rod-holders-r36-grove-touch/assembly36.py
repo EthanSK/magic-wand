@@ -36,7 +36,7 @@ def placement(lift=0., angle=None):
     return r.placement(angle, local=(0., 0., lift)).reshape(-1).tolist()
 
 
-def assemble_touch(previous, assets, morph, travel):
+def assemble_touch(previous, assets, morph, travel, stop_angle=0.):
     full = deepcopy(previous)
     for name in DISPLACED:
         full["actors"].pop(name, None)
@@ -76,10 +76,10 @@ def assemble_touch(previous, assets, morph, travel):
           "Fasten the upper and lower tabs with two M2 × 4 mm pan-head screws. Tighten gently against the printed seats.",
           SCREWS, design.SERVICE_LIFT + 4., 0.)
     state = {**state, "sensor_lead": placement()}
-    angles = [*np.linspace(-r.REST, 0., 25), *np.linspace(0., -r.REST, 25)]
+    angles = [*np.linspace(-r.REST, stop_angle, 25), *np.linspace(stop_angle, -r.REST, 25)]
     frames = [
         {**state, **{part: placement(angle=float(angle)) for part in ("cap", *GROVE)},
-         "plunger": a31.move(state["plunger"], (0., 0., -max(0., travel + r.d.DEPRESSION * angle / r.REST)))}
+         "plunger": a31.move(state["plunger"], (0., 0., -max(0., travel + r.d.DEPRESSION * (angle - stop_angle) / r.REST)))}
         for angle in angles
     ]
     steps.append({
@@ -125,7 +125,7 @@ def assemble_touch(previous, assets, morph, travel):
     return full
 
 
-def write_guide(key, travel):
+def write_guide(key, travel, stop_angle=0.):
     guide = old_assembly.prior.read(SOURCE / "assembly-guide.json")
     modules = guide["modules"]
     for module in modules.values():
@@ -155,7 +155,7 @@ def write_guide(key, travel):
     cable_morph = "guide/sensor-lead-fed.stl"
     lead.export(OUT / cable_morph)
     assets["sensor_lead"]["morphFile"] = cable_morph
-    modules["dfr"] = assemble_touch(modules["dfr"], assets, morph, travel)
+    modules["dfr"] = assemble_touch(modules["dfr"], assets, morph, travel, stop_angle)
     hinge = modules["snap_hinge"]
     hinge["actors"]["cap"].update(file=f"{BRACKET}-assembly.stl", morphFile=morph,
                                   label="Grove bracket snap hinge")

@@ -86,8 +86,8 @@ def configure_layout(path, plate_name):
             archive.writestr(filename, content)
 
 
-def build(output):
-    here = Path(__file__).resolve().parent
+def build(output, source=None):
+    here = source or Path(__file__).resolve().parent
     output.mkdir(parents=True, exist_ok=True)
     plate.BRACKET = design.BRACKET
     plate.LOCAL_PADS = (plate.KEY, plate.BRACKET)

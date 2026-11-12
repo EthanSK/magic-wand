@@ -153,10 +153,10 @@ def verify_grove_clearances(archive, exports):
     return result
 
 
-def audit(archive, scratch):
+def audit(archive, scratch, route_builder=routes):
     exports = scratch / "build-source" / "exports"
     plate.BRACKET = design.BRACKET
-    result = inspect(archive, exports, routes, plate.read_json(scratch / "print-checks.json"),
+    result = inspect(archive, exports, route_builder, plate.read_json(scratch / "print-checks.json"),
                      removable_support=connector_support)
     for name, verify in (("travel_stop_bonds", verify_stops), ("rod_mount_bonds", verify_bonds)):
         result[name] = verify(archive, exports)
