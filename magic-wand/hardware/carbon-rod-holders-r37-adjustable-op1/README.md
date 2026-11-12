@@ -6,6 +6,13 @@ surface, key heights, OP1 board and service routes carry forward. The
 bracket adds one adjustable hard stop, and the left cable window has
 a little more clearance for the longer press.
 
+The Grove seat sits 0.9 mm lower than the R35 DFRobot seat. The key
+carrier keeps the R35 height to preserve room for the rod clip to flex
+during installation and for the underside guard ribs under finger
+load. A 0.5 mm drop of the guard geometry clears the rod at rest in CAD.
+That static check leaves clip flex, print tolerances and loaded
+clearance untested. A 1 mm drop already intersects the rod in CAD.
+
 ## Set the switch travel
 
 The purchased Endgame Gear OP1 Universal Switch Set contains seven
@@ -57,6 +64,12 @@ height, print tolerances, retention and cable flex remain bench checks.
 - [Editable Bambu plate](exports/R37-Complete-A1-mini-PETG-layout.3mf)
 - [Original audit](exports/audit.json) and [reopened audit](exports/reopened-audit.json)
 - [Assembly animation](../carbon-rod-holders/assembly/?version=r37&component=keys)
+
+The [print-only receipt](exports/print-only.json) links the download,
+its exact G-code bytes, and the original audited archive. Print-only
+packaging removes the editable mesh data and references, so its outer
+archive checksum differs. The editable plate matches the input
+checksum in the [slice record](exports/print-checks.json).
 
 The eight-part plate estimates 1 h 48 min and 17.87 g of Flashforge HS
 PETG Metallic. The checked profile uses a 250 °C nozzle and 60 °C
