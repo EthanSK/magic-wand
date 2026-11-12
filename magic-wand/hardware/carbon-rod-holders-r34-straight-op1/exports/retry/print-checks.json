@@ -1242,5 +1242,68 @@
     "empty_mesh_resources_and_build": true,
     "dangling_model_references_removed": true,
     "gcode_identical_to_source_archive": true
+  },
+  "bracket_contact_check": {
+    "model_section_at_first_layer_midplane_mm2": 7.125115777118168,
+    "deposited_first_layer_body_footprint_mm2": 6.86548566263722,
+    "first_layer_body_components": 2,
+    "first_layer_body_component_areas_mm2": [
+      3.562557888559084,
+      3.562557888559084
+    ],
+    "sections": [
+      {
+        "z_mm": 0.1,
+        "components": 2,
+        "area_mm2": 7.125115777118168
+      },
+      {
+        "z_mm": 6.4,
+        "components": 4,
+        "area_mm2": 10.976379917864783
+      },
+      {
+        "z_mm": 7.6,
+        "components": 4,
+        "area_mm2": 10.838321148024157
+      },
+      {
+        "z_mm": 7.7,
+        "components": 4,
+        "area_mm2": 10.826816248798966
+      },
+      {
+        "z_mm": 7.8,
+        "components": 1,
+        "area_mm2": 18.97201864528587
+      },
+      {
+        "z_mm": 8.0,
+        "components": 1,
+        "area_mm2": 18.97201864528587
+      }
+    ],
+    "method": "Actual first-layer bead footprint intersected with the functional bracket section; helper pads excluded."
+  },
+  "independent_review": {
+    "model": "claude-fable-5-2",
+    "date": "2026-11-12",
+    "verdict": "GO for the pad-area physical trial",
+    "blocking_findings": [],
+    "evidence_scope": "Reviewer inspected existing source; the final original/reopened audits and release-gap results were supplied by the operator.",
+    "findings": [
+      {
+        "topic": "Early bracket stability",
+        "status": "Verified after review",
+        "detail": "The functional bracket has two small bed contacts totaling7.1251mm2 in the mesh and6.8655mm2 of deposited first-layer material. A continuous cross-section is present at7.8mm, while sections through7.7mm remain separate."
+      },
+      {
+        "topic": "Failure origin",
+        "status": "Unconfirmed",
+        "detail": "Larger pads address pad adhesion. A broken tie with the pad still attached would require a different correction. The recording does not distinguish them."
+      }
+    ],
+    "next_physical_check": "Watch the bracket through layer40; inspect pad adhesion and tie condition if it moves.",
+    "physical_fit_verified": false
   }
 }

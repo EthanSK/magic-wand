@@ -70,6 +70,13 @@ of 1 h 43 min 49 s and 17.0 g. Adhesion and removal still need a physical
 trial. A larger pad is a controlled change, and does not prove the cause
 of the previous failure.
 
+The bracket itself has two small first-layer contacts totalling 7.13 mm²
+in the mesh and 6.87 mm² in the deposited paths. Its sections remain
+separate through 7.7 mm and join across the body at 7.8 mm. Watch this
+early stage on the retry. If it moves, inspect whether the round pads
+lifted too or remain attached with broken ties. Fable 5.2's review
+approved the physical trial with this distinction recorded in the checks.
+
 `retry34.py <scratch-directory>` regenerates this plate and records the
 source hashes, new pad area and unchanged tie overlap. Remove its pads
 using the same accessible thin ties described above.
