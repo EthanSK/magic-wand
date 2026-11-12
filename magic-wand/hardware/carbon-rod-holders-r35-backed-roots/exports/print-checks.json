@@ -1,0 +1,1054 @@
+{
+  "build_list": [
+    "Key_Carrier",
+    "DFRobot_Hole_Bracket",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2",
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Battery_Holder",
+    "Battery_End_Door",
+    "Battery_Spacer_0p4mm_Patterned",
+    "Cable_Clip_12_Wire"
+  ],
+  "source_parts": {
+    "Key_Carrier": {
+      "group": "keys",
+      "directory": ".",
+      "exports": "exports",
+      "source_filename": "Key_Carrier-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "d0afa029ff1e2e436abc1c5eb53f4d6c4d6e54422e183e36b8f33865ddb7647d",
+      "status": "verified",
+      "volume_mm3": 7863.427,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -30.100000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          32.650001525878906
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.781332969665528
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    },
+    "DFRobot_Hole_Bracket": {
+      "group": "keys",
+      "directory": ".",
+      "exports": "exports",
+      "source_filename": "DFRobot_Hole_Bracket-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "4208729e4af49695fefe252272bdb014903c8d7dfda18e7b1cd6785317d10a5d",
+      "status": "verified",
+      "volume_mm3": 621.389,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.600000381469727
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -11.835000038146973
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          23.649999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    },
+    "DFR0030_Post_Clip": {
+      "group": "keys",
+      "directory": ".",
+      "exports": "exports",
+      "source_filename": "DFR0030_Post_Clip-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "ee422079964bddcd7a9ea460280d049dc09d7e50ad347dfb945012993154fc54",
+      "status": "verified",
+      "volume_mm3": 7.421,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          21.850000381469727
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    },
+    "DFR0030_Post_Clip_2": {
+      "group": "keys",
+      "directory": ".",
+      "exports": "exports",
+      "source_filename": "DFR0030_Post_Clip_2-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "ee422079964bddcd7a9ea460280d049dc09d7e50ad347dfb945012993154fc54",
+      "status": "verified",
+      "volume_mm3": 7.421,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          21.850000381469727
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    },
+    "XIAO_Rod_Holder": {
+      "group": "xiao",
+      "directory": "../carbon-rod-holders-r25-keeper-release",
+      "exports": "exports",
+      "source_filename": "XIAO_Rod_Holder-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "3fed2e866012105587bfc353c7bb79edcd3e2b039359f7a18b62655b9bf49ec8",
+      "status": "verified",
+      "volume_mm3": 1635.4247172000196,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.600000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          23.399999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    },
+    "XIAO_Near_Keeper": {
+      "group": "xiao",
+      "directory": "../carbon-rod-holders-r25-keeper-release",
+      "exports": "exports",
+      "source_filename": "XIAO_Near_Keeper-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "5b68a366eb62caa3124429d183cd74c69f7246e1a33624363c095e6f86e237b0",
+      "status": "verified",
+      "volume_mm3": 225.38841717374507,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -13.0
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          3.0
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          11.949999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "outer brim"
+    },
+    "Battery_Holder": {
+      "group": "battery",
+      "directory": "../carbon-rod-holders-r22-integrated-guard",
+      "exports": "exports",
+      "source_filename": "Battery_Holder-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "9cc3092d47c87013ccf8d617dff542264d88e313cf7dc60bbcddf7061fde7326",
+      "status": "verified",
+      "volume_mm3": 1948.4150061867858,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.199999809265137
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          15.199999809265137
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    },
+    "Battery_End_Door": {
+      "group": "battery",
+      "directory": "../carbon-rod-holders-r22-integrated-guard",
+      "exports": "exports",
+      "source_filename": "Battery_End_Door-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "fb7d11bbf99a2cbdd22f962dadb8b147591668362d7ddf452e32087d69c3caec",
+      "status": "verified",
+      "volume_mm3": 268.7652268491739,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.800000190734863
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -15.800000190734865
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          14.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "outer brim"
+    },
+    "Battery_Spacer_0p4mm_Patterned": {
+      "group": "spacer",
+      "directory": ".",
+      "exports": "exports",
+      "source_filename": "Battery_Spacer_0p4mm_Patterned-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "f36a69364f13c42c0f88a0a20a9a5204334be641e3361a3c841dd0272f0470f2",
+      "status": "verified",
+      "volume_mm3": 164.2172,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.300000190734863
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -13.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          5.849999904632568
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "outer brim"
+    },
+    "Cable_Clip_12_Wire": {
+      "group": "cable",
+      "directory": "../carbon-rod-holders-r22-integrated-guard",
+      "exports": "exports",
+      "source_filename": "Cable_Clip_12_Wire-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "4806c7ae867d9fb2b4d2c0d2db31f4be76b0c6020774341253f1108765e2ab8d",
+      "status": "verified",
+      "volume_mm3": 134.53316142837184,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -4.798483848571777
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -5.053805351257324
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    }
+  },
+  "bom_sha256": "b7df9d852fa50028ec98783883383874e2a0c61a291b1363698f3ecaf4d6dbe7",
+  "generator_sha256": "46f0432378d88b906914a7c84d5f0b62c19e33bfaf8c239e5d42b3e9b1fee817",
+  "layout_sha256": "ab137a6339bc09e34a8cb22796d52235108c0899a655205af9d885bcd22a7bd6",
+  "anchors": {
+    "XIAO_Rod_Holder": {
+      "thickness_mm": 0.4,
+      "flange_area_mm2": 294.54,
+      "tie_section_each_mm2": 0.4,
+      "tie_count": 6,
+      "separate_pads": 4,
+      "solid_PETG_g": 0.154,
+      "first_layer_area_mm2": 164.96,
+      "rod_axis_print_xy": [
+        14.6,
+        4.83
+      ],
+      "sites_print_xy_outward": [
+        [
+          2.6000003814697266,
+          12.9,
+          -1,
+          0
+        ],
+        [
+          26.600000381469727,
+          12.9,
+          1,
+          0
+        ],
+        [
+          2.6000003814697266,
+          15.8,
+          -1,
+          0
+        ],
+        [
+          26.600000381469727,
+          15.8,
+          1,
+          0
+        ],
+        [
+          9.600000381469727,
+          20.129629135131836,
+          0,
+          1
+        ],
+        [
+          19.600000381469727,
+          20.129629135131836,
+          0,
+          1
+        ]
+      ],
+      "tie_sites": [
+        {
+          "site_print_xy": [
+            2.6,
+            12.9
+          ],
+          "outward": [
+            -1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.683,
+            4.7,
+            4.7
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.1491
+        },
+        {
+          "site_print_xy": [
+            26.6,
+            12.9
+          ],
+          "outward": [
+            1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.683,
+            4.7,
+            4.7
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.1491
+        },
+        {
+          "site_print_xy": [
+            2.6,
+            15.8
+          ],
+          "outward": [
+            -1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.4,
+            4.4,
+            4.4
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            26.6,
+            15.8
+          ],
+          "outward": [
+            1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.4,
+            4.4,
+            4.4
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            9.6,
+            20.13
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            1.6,
+            1.6,
+            1.6
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            19.6,
+            20.13
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            1.6,
+            1.6,
+            1.6
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        }
+      ],
+      "stl_sha256": "1cd7e8097164200bf9ea14a5be3bd2d951b8b6dafc3739d5680d4a77c9befa03"
+    },
+    "Battery_Holder": {
+      "thickness_mm": 0.4,
+      "flange_area_mm2": 355.01,
+      "tie_section_each_mm2": 0.4,
+      "tie_count": 6,
+      "separate_pads": 6,
+      "solid_PETG_g": 0.1846,
+      "first_layer_area_mm2": 143.06,
+      "rod_axis_print_xy": [
+        14.2,
+        4.83
+      ],
+      "sites_print_xy_outward": [
+        [
+          5.599999809265137,
+          17.18,
+          0,
+          1
+        ],
+        [
+          22.799999809265138,
+          17.18,
+          0,
+          1
+        ],
+        [
+          2.2999998092651364,
+          13.0,
+          -1,
+          0
+        ],
+        [
+          26.099999809265135,
+          13.0,
+          1,
+          0
+        ],
+        [
+          4.599999809265137,
+          9.0,
+          0,
+          -1
+        ],
+        [
+          23.799999809265138,
+          9.0,
+          0,
+          -1
+        ]
+      ],
+      "tie_sites": [
+        {
+          "site_print_xy": [
+            5.6,
+            17.18
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            8.15,
+            2.531,
+            2.49
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            22.8,
+            17.18
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            2.49,
+            2.531,
+            8.15
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            2.3,
+            13.0
+          ],
+          "outward": [
+            -1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            3.1,
+            3.1,
+            3.1
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            26.1,
+            13.0
+          ],
+          "outward": [
+            1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            3.1,
+            3.1,
+            3.1
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            4.6,
+            9.0
+          ],
+          "outward": [
+            0,
+            -1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            8.15,
+            8.15,
+            8.15
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            23.8,
+            9.0
+          ],
+          "outward": [
+            0,
+            -1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            8.15,
+            8.15,
+            8.15
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        }
+      ],
+      "stl_sha256": "054fb0491fb601bce52cffaf89fb3f463744cdfb4d0d6511b43150cec495327f"
+    },
+    "Cable_Clip_12_Wire": {
+      "stl_sha256": "3cd33cd89d37e920f9ee3fea468b409bd11d49d9c8615e82129267dd7c212aa3",
+      "thickness_mm": 0.4,
+      "tie_section_each_mm2": 0.27999999999999997,
+      "tie_count": 2,
+      "overlap_at_root_mm3": [
+        0.466,
+        0.466
+      ]
+    },
+    "Key_Carrier": {
+      "tie_overlap_mm3": 0.70117,
+      "hole_centres_print_xy_mm": [
+        [
+          39.5,
+          7.0
+        ],
+        [
+          43.5,
+          5.0
+        ],
+        [
+          16.5,
+          7.0
+        ],
+        [
+          20.5,
+          5.0
+        ],
+        [
+          39.5,
+          24.0
+        ],
+        [
+          40.5,
+          19.5
+        ],
+        [
+          20.0,
+          19.5
+        ],
+        [
+          20.5,
+          24.0
+        ]
+      ],
+      "hole_diameter_mm": 2.6,
+      "pad_thickness_mm": 0.4,
+      "stl_sha256": "34ae5c215eb3d3f75d13eadb1ef4308a8ae056620c8b907baec0a64a147e709f"
+    },
+    "DFRobot_Hole_Bracket": {
+      "tie_overlap_mm3": 0.112,
+      "hole_centres_print_xy_mm": [
+        [
+          25.5,
+          2.0
+        ],
+        [
+          25.5,
+          6.5
+        ],
+        [
+          -4.5,
+          2.0
+        ],
+        [
+          -4.5,
+          6.5
+        ]
+      ],
+      "hole_diameter_mm": 2.6,
+      "pad_thickness_mm": 0.4,
+      "stl_sha256": "c849071d633babf9dd4ea03be37ca2f7ea9673985d27c94807bb741b81e41fc5"
+    },
+    "DFR0030_Post_Clip": {
+      "tie_overlap_at_first_layer_mm2": [
+        0.11999999731779099
+      ],
+      "stl_sha256": "3dd9f7c1d31130afbe79f04770757b1fc6b3572ef04d20b75b5ad1e9674875d2"
+    },
+    "DFR0030_Post_Clip_2": {
+      "tie_overlap_at_first_layer_mm2": [
+        0.11999999731779099
+      ],
+      "stl_sha256": "3dd9f7c1d31130afbe79f04770757b1fc6b3572ef04d20b75b5ad1e9674875d2"
+    }
+  },
+  "plate_extents_mm": {
+    "Key_Carrier": [
+      [
+        24.0,
+        111.4513326883316,
+        0.0
+      ],
+      [
+        84.20000076293945,
+        140.20133209228516,
+        41.85000228881836
+      ]
+    ],
+    "DFRobot_Hole_Bracket": [
+      [
+        89.10252952575684,
+        101.2775297164917,
+        0.0
+      ],
+      [
+        128.09747123718262,
+        112.59999942779541,
+        40.23500061035156
+      ]
+    ],
+    "DFR0030_Post_Clip": [
+      [
+        106.39999997615814,
+        61.19999980926514,
+        0.0
+      ],
+      [
+        111.19999980926514,
+        71.0,
+        0.7999989986419678
+      ]
+    ],
+    "DFR0030_Post_Clip_2": [
+      [
+        137.39999997615814,
+        61.19999980926514,
+        0.0
+      ],
+      [
+        142.19999980926514,
+        71.0,
+        0.7999989986419678
+      ]
+    ],
+    "XIAO_Rod_Holder": [
+      [
+        117.10000038146973,
+        129.0,
+        0.0
+      ],
+      [
+        162.0999984741211,
+        159.62962913513184,
+        28.399999618530273
+      ]
+    ],
+    "XIAO_Near_Keeper": [
+      [
+        70.0,
+        83.0,
+        0.0
+      ],
+      [
+        96.0,
+        93.0,
+        2.1500000953674316
+      ]
+    ],
+    "Battery_Holder": [
+      [
+        16.800000190734863,
+        64.5,
+        0.0
+      ],
+      [
+        61.599998474121094,
+        93.68000030517578,
+        33.0
+      ]
+    ],
+    "Battery_End_Door": [
+      [
+        53.0,
+        24.0,
+        0.0
+      ],
+      [
+        78.60000038146973,
+        32.35000038146973,
+        2.400001049041748
+      ]
+    ],
+    "Battery_Spacer_0p4mm_Patterned": [
+      [
+        18.0,
+        24.0,
+        0.0
+      ],
+      [
+        38.60000038146973,
+        51.39999961853027,
+        0.4000000059604645
+      ]
+    ],
+    "Cable_Clip_12_Wire": [
+      [
+        73.0,
+        53.85380530357361,
+        0.0
+      ],
+      [
+        91.43351936340332,
+        68.25380516052246,
+        2.4000000953674316
+      ]
+    ]
+  },
+  "material_bounds_xy_mm": {
+    "Key_Carrier": [
+      [
+        24.0,
+        111.4513326883316
+      ],
+      [
+        84.20000076293945,
+        140.20133209228516
+      ]
+    ],
+    "DFRobot_Hole_Bracket": [
+      [
+        89.10252952575684,
+        101.2775297164917
+      ],
+      [
+        128.09747123718262,
+        112.59999942779541
+      ]
+    ],
+    "DFR0030_Post_Clip": [
+      [
+        106.39999997615814,
+        61.19999980926514
+      ],
+      [
+        111.19999980926514,
+        71.0
+      ]
+    ],
+    "DFR0030_Post_Clip_2": [
+      [
+        137.39999997615814,
+        61.19999980926514
+      ],
+      [
+        142.19999980926514,
+        71.0
+      ]
+    ],
+    "XIAO_Rod_Holder": [
+      [
+        117.10000038146973,
+        129.0
+      ],
+      [
+        162.0999984741211,
+        159.62962913513184
+      ]
+    ],
+    "XIAO_Near_Keeper": [
+      [
+        66.85,
+        79.85
+      ],
+      [
+        99.15,
+        96.15
+      ]
+    ],
+    "Battery_Holder": [
+      [
+        16.800000190734863,
+        64.5
+      ],
+      [
+        61.599998474121094,
+        93.68000030517578
+      ]
+    ],
+    "Battery_End_Door": [
+      [
+        49.85,
+        20.85
+      ],
+      [
+        81.75000038146973,
+        35.500000381469725
+      ]
+    ],
+    "Battery_Spacer_0p4mm_Patterned": [
+      [
+        14.85,
+        20.85
+      ],
+      [
+        41.750000381469725,
+        54.54999961853027
+      ]
+    ],
+    "Cable_Clip_12_Wire": [
+      [
+        73.0,
+        53.85380530357361
+      ],
+      [
+        91.43351936340332,
+        68.25380516052246
+      ]
+    ]
+  },
+  "slow_bands_mm": {
+    "Key_Carrier": [
+      [
+        16.0,
+        16.8
+      ],
+      [
+        33.8,
+        35.2
+      ]
+    ],
+    "Battery_Holder": [
+      [
+        31.0,
+        31.8
+      ]
+    ]
+  },
+  "filament_profile": "Flashforge HS PETG Metallic",
+  "profile_explicitly_selected": true,
+  "profile_base": "Generic PETG @BBL A1M",
+  "filament_reference": "https://uk.flashforge.com/products/hs-petg-metallic",
+  "effective_filament_settings": {
+    "nozzle_temperature": [
+      "250"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "250"
+    ],
+    "textured_plate_temp": [
+      "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "60"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ]
+  },
+  "physical_fit_verified": false,
+  "archive_sha256": "f19588ad8c0308d0cf84bf9188c4d13c2c9f56736b22a3f308305ced6ac8d86c",
+  "commands": {
+    "passed": true,
+    "project_sha256": "f19588ad8c0308d0cf84bf9188c4d13c2c9f56736b22a3f308305ced6ac8d86c",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "layer_change_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 250.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ]
+  },
+  "estimate_seconds": 6443,
+  "filament_g": 17.99,
+  "warnings": [],
+  "archive_warnings": []
+}

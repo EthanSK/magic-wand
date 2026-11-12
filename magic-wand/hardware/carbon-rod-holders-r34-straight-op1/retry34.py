@@ -77,6 +77,8 @@ def write_print_only(archive, target):
             for entry in source.infolist():
                 if entry.filename.startswith(('3D/Objects/', '3D/_rels/')):
                     continue
+                if entry.filename == 'Metadata/layer_config_ranges.xml':
+                    continue
                 content = source.read(entry.filename)
                 if entry.filename == '3D/3dmodel.model':
                     content = model.encode()

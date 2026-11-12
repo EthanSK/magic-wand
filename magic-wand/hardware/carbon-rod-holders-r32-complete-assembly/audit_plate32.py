@@ -61,7 +61,7 @@ def route_hits(q, region, xyz, widths, heights, kinds, features, frame, keep):
     return {**worst, "poses_checked": len(print_poses)}
 
 
-def inspect(archive, staged_exports, key_routes, layout_report):
+def inspect(archive, staged_exports, key_routes, layout_report, removable_support=None):
     checks31 = load_checker()
     import holder23
     import slice22
@@ -85,7 +85,12 @@ def inspect(archive, staged_exports, key_routes, layout_report):
     assert (tower_low >= 0).all() and (tower_high <= 180).all()
     support = np.char.startswith(names, "Support")
     brim = np.char.startswith(names, "Brim")
-    assert not support.any(), "Unexpected generated support on the complete plate"
+    support_report = None
+    if removable_support is None:
+        assert not support.any(), "Unexpected generated support on the complete plate"
+    else:
+        support_report = removable_support(data, positions, names, objects, q, starts)
+        assert support_report["passed"], support_report
     routes, critical = key_routes()
     routes = {
         **routes,
@@ -120,10 +125,12 @@ def inspect(archive, staged_exports, key_routes, layout_report):
         near = (local >= low - xy_margin).all(1) & (local <= high + xy_margin).all(1) & ~tower
         xyz = local[near]
         widths, heights, tops, kinds = (data[near, 3], data[near, 4], data[near, 7], feature_ids[near])
-        model = ~brim[near] & ~np.char.startswith(names[near], "Skirt")
+        model = ~brim[near] & ~np.char.startswith(names[near], "Skirt") & ~support[near]
         first = model & (abs(tops - .2) < .001)
         assert first.any(), (name, "no first-layer model paths")
-        row = starts.inspect(q, body, xyz, heights, kinds, features, tops, frame, widths, gap=.24)
+        supported_part = support_report is not None and support_report["part"] == name
+        gap = support_report["top_gap_mm"] if supported_part else .24
+        row = starts.inspect(q, body, xyz, heights, kinds, features, tops, frame, widths, gap=gap)
         row["first_layer_mm2"] = round(starts.bead_footprints(q, xyz[first, :2], widths[first]).area(), 3)
         row["brim_samples"] = int(brim[near].sum())
         if name in OUTER_BRIM and row["brim_samples"] == 0:
@@ -141,12 +148,14 @@ def inspect(archive, staged_exports, key_routes, layout_report):
                 failures.append([name, "pad does not join the object"])
         row["working_spaces"] = {}
         for label, region in routes.get(name, {}).items():
-            keep = np.ones(len(xyz), dtype=bool)
+            # A designated removable helper is checked independently before
+            # assessing the clearances of the finished assembly.
+            keep = ~support[near] if supported_part else np.ones(len(xyz), dtype=bool)
             if label in ("external_wire_bus", "reverse_wire_bus") and pads is not None:
                 # These labelled pads are cut off before wiring. Preserve every
                 # nearby model bead and exclude only the pad-only portions.
                 pad_only = pads.slice(.1).offset(.25) - solid.slice(.1).offset(.25)
-                keep = ~((tops <= .401) & q._inside(pad_only, xyz[:, :2]))
+                keep &= ~((tops <= .401) & q._inside(pad_only, xyz[:, :2]))
             hit = route_hits(q, region, xyz, widths, heights, kinds, features, frame, keep)
             row["working_spaces"][label] = hit
             if hit["violations"]:
@@ -192,6 +201,7 @@ def inspect(archive, staged_exports, key_routes, layout_report):
         "parts": parts, "failures": failures, "passed": not failures,
         "startup": studio.command_audit(archive, settings), "archive_warnings": warnings,
         "physical_fit_verified": False,
+        **({"removable_support": support_report} if support_report is not None else {}),
     }
 
 

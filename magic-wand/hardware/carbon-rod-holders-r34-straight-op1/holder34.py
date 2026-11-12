@@ -82,8 +82,9 @@ def geometry():
     return carrier, working, fixed, guard
 
 
-def checks():
-    carrier, working, fixed, ribs = geometry()
+def checks(carrier_geometry=geometry, bracket_geometry=bracket):
+    carrier, working, fixed, ribs = carrier_geometry()
+    touch_bracket = bracket_geometry()
     parts = hardware()
     board = union(parts[name] for name in ('board', 'sockets', 'housing'))
     plug = parts['plug'] + parts['op1_wire']
@@ -96,22 +97,22 @@ def checks():
     assembly = carrier + keys + rod
     installed = assembly + board + plug + parts['switch'] + parts['terminals'] + parts['fasteners']
     attach = carrier + no_caps + rod
-    moving = bracket() + r.sensor() + r.connector() + r.clips()
+    moving = touch_bracket + r.sensor() + r.connector() + r.clips()
     overlap = {
         'pcb_drop': r._max((board.translate((0., 0., z)), attach) for z in np.linspace(0., h32.BOARD_RISE, 57)),
         'plug_install': r._max((plug.translate((0., 0., z)), attach + board) for z in np.linspace(-PLUG_RISE, 0., 37)),
         'switch_install': r._max((mouse.translate((0., 0., z)), assembly + parts['board'] + parts['sockets'] + parts['fasteners'])
                                  for z in np.linspace(0., 8., 33)),
         'hinge_stroke': r._max((r.world(moving, a), installed) for a in np.linspace(-r.REST, 0., 33)),
-        'hinge_insert': r._max((r.world(r.bent(bracket())).translate((0., 0., z)), installed)
+        'hinge_insert': r._max((r.world(r.bent(touch_bracket)).translate((0., 0., z)), installed)
                                for z in np.linspace(0., 8., 33)),
-        'hinge_release_arms': r._max((r.world(r.bent(bracket(), bend)), installed) for bend in np.linspace(1., 0., 17)),
+        'hinge_release_arms': r._max((r.world(r.bent(touch_bracket, bend)), installed) for bend in np.linspace(1., 0., 17)),
         'touch_cable_stroke': r._max((r.world(r.gravity_lead(), a), installed) for a in np.linspace(-r.REST, 0., 25)),
-        'hinge_mount_to_touch_pcb': r._vol(r.sensor() ^ bracket()),
+        'hinge_mount_to_touch_pcb': r._vol(r.sensor() ^ touch_bracket),
         'rod_housing_and_wire': r._vol(rod ^ (parts['housing'] + plug)),
     }
-    pusher = r._vol(r.world(bracket(), .20) ^ parts['plunger'].translate((0., 0., -r.d.DEPRESSION)))
-    stops = [r._vol(r.world(bracket(), .25) ^ stop) for stop in stop_posts().decompose()]
+    pusher = r._vol(r.world(touch_bracket, .20) ^ parts['plunger'].translate((0., 0., -r.d.DEPRESSION)))
+    stops = [r._vol(r.world(touch_bracket, .25) ^ stop) for stop in stop_posts().decompose()]
     guard = previous.rib_metrics(fixed, ribs)
     support = [(straighten(h32.board()).translate((0., 0., -.2)) ^ carrier
                 ^ box(PCB_X - 3.2, PCB_X + 3.2, eye + h32.ACTUATOR_Y - 2.9,

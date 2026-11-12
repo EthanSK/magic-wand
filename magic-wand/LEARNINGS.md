@@ -2703,3 +2703,16 @@ layers. A longer ramp increased the unfilled area and was reverted.
 When a taper fails the core coverage check, locate the missing paths
 before adding material. Keep the full-shape layer and connection
 checks alongside the core measurement.
+
+Self-improved — 2026-11-12: A first-layer check that totals a part and its
+adhesion pads can miss a separate island in that part. R34's key-carrier clip
+started as a separate C-shape while all four pads held the deck. The failure
+photo showed a tangle at the clip with the deck still visible. R35's first
+layers connect the crown to the deck and the touch-bracket feet to each other.
+Verify those links on the actual deposited layers, not just on the model.
+
+Self-improved — 2026-11-12: An unbacked perimeter can be followed by a bridge
+that only touches that same perimeter. Under the R34 OP1 connector seat, the
+first loop at 15.8 mm had no prior-layer or earlier same-layer contact. R35
+checks the support under that first loop. Verify the support remains reachable
+for removal, and report the finished connector clearance after cleanup.
