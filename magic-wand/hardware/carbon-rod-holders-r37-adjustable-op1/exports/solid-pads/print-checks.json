@@ -1,0 +1,459 @@
+{
+  "build_list": [
+    "Key_Carrier",
+    "Grove_Touch_Bracket",
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Battery_Holder",
+    "Battery_End_Door",
+    "Battery_Spacer_0p4mm_Patterned",
+    "Cable_Clip_12_Wire"
+  ],
+  "source_parts": {
+    "Key_Carrier": {
+      "group": "keys",
+      "directory": ".",
+      "exports": "exports",
+      "source_filename": "Key_Carrier-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "e18c5f4776b513ae65496cd5344d559134e5102817daeeb1bf7b4b2495bb702d",
+      "status": "verified",
+      "volume_mm3": 7675.466,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -30.100000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          32.650001525878906
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.781332969665528
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    },
+    "Grove_Touch_Bracket": {
+      "group": "keys",
+      "directory": ".",
+      "exports": "exports",
+      "source_filename": "Grove_Touch_Bracket-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "6d3c8539a055540434d3fce7a441a1436950c8fc966f53b51f14fcc70b120fe2",
+      "status": "verified",
+      "volume_mm3": 615.369,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.600000381469727
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -11.835000038146973
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          20.25
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    },
+    "XIAO_Rod_Holder": {
+      "group": "xiao",
+      "directory": "../carbon-rod-holders-r25-keeper-release",
+      "exports": "exports",
+      "source_filename": "XIAO_Rod_Holder-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "3fed2e866012105587bfc353c7bb79edcd3e2b039359f7a18b62655b9bf49ec8",
+      "status": "verified",
+      "volume_mm3": 1635.4247172000196,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.600000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          23.399999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    },
+    "XIAO_Near_Keeper": {
+      "group": "xiao",
+      "directory": "../carbon-rod-holders-r25-keeper-release",
+      "exports": "exports",
+      "source_filename": "XIAO_Near_Keeper-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "5b68a366eb62caa3124429d183cd74c69f7246e1a33624363c095e6f86e237b0",
+      "status": "verified",
+      "volume_mm3": 225.38841717374507,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -13.0
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          3.0
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          11.949999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "outer brim"
+    },
+    "Battery_Holder": {
+      "group": "battery",
+      "directory": "../carbon-rod-holders-r22-integrated-guard",
+      "exports": "exports",
+      "source_filename": "Battery_Holder-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "9cc3092d47c87013ccf8d617dff542264d88e313cf7dc60bbcddf7061fde7326",
+      "status": "verified",
+      "volume_mm3": 1948.4150061867858,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.199999809265137
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          15.199999809265137
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    },
+    "Battery_End_Door": {
+      "group": "battery",
+      "directory": "../carbon-rod-holders-r22-integrated-guard",
+      "exports": "exports",
+      "source_filename": "Battery_End_Door-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "fb7d11bbf99a2cbdd22f962dadb8b147591668362d7ddf452e32087d69c3caec",
+      "status": "verified",
+      "volume_mm3": 268.7652268491739,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.800000190734863
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -15.800000190734865
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          14.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "outer brim"
+    },
+    "Battery_Spacer_0p4mm_Patterned": {
+      "group": "spacer",
+      "directory": "../carbon-rod-holders-r36-grove-touch",
+      "exports": "exports",
+      "source_filename": "Battery_Spacer_0p4mm_Patterned-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "f36a69364f13c42c0f88a0a20a9a5204334be641e3361a3c841dd0272f0470f2",
+      "status": "verified",
+      "volume_mm3": 164.2172,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.300000190734863
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -13.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          5.849999904632568
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "outer brim"
+    },
+    "Cable_Clip_12_Wire": {
+      "group": "cable",
+      "directory": "../carbon-rod-holders-r22-integrated-guard",
+      "exports": "exports",
+      "source_filename": "Cable_Clip_12_Wire-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "4806c7ae867d9fb2b4d2c0d2db31f4be76b0c6020774341253f1108765e2ab8d",
+      "status": "verified",
+      "volume_mm3": 134.53316142837184,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -4.798483848571777
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -5.053805351257324
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    }
+  },
+  "effective_filament_settings": {
+    "nozzle_temperature": [
+      "250"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "250"
+    ],
+    "textured_plate_temp": [
+      "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "60"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ]
+  },
+  "bom_sha256": "94d15ea12c306ab1e1e278e57e8272a42c125ebc723d686a03009547fcef2833",
+  "baseline_layout_sha256": "50eb2f8e29eaf47b403275910f6036e312071d3ce8ab1eeb81d38e6fb987b915",
+  "layout_sha256": "3517f240ac316ccb9cecc5281079afed50207e76afa5ba998afeb6eb322829fc",
+  "anchors": {
+    "Key_Carrier": {
+      "hole_centres_print_xy_mm": [],
+      "old_area_mm2": 382.81,
+      "solid_area_mm2": 1092.15,
+      "pad_thickness_mm": 0.4,
+      "bounds_local_mm": [
+        10.880000002682209,
+        -11.168667308986187,
+        0.0,
+        49.31999695301056,
+        38.75491500645876,
+        0.4
+      ],
+      "ties_unchanged": true,
+      "stl_sha256": "d2d9dc639a85dd4adc20ca9436d49e06e8a645595f84ed18763db168f0e01f02"
+    },
+    "Grove_Touch_Bracket": {
+      "hole_centres_print_xy_mm": [],
+      "old_area_mm2": 118.43,
+      "solid_area_mm2": 350.25,
+      "pad_thickness_mm": 0.4,
+      "bounds_local_mm": [
+        -17.157470472157,
+        -4.932469196617603,
+        0.0,
+        38.357471242547035,
+        7.582471318542957,
+        0.4
+      ],
+      "ties_unchanged": true,
+      "stl_sha256": "734f1bb73ea6111adc9d10f24d87c50cc9a61a6003bcd78fabb67e01298c74fc"
+    },
+    "XIAO_Rod_Holder": {
+      "hole_centres_print_xy_mm": [],
+      "old_area_mm2": 303.07,
+      "solid_area_mm2": 631.44,
+      "pad_thickness_mm": 0.4,
+      "bounds_local_mm": [
+        -13.799999617040157,
+        7.99999962002039,
+        0.0,
+        42.99999847263098,
+        36.5296291410923,
+        0.4
+      ],
+      "ties_unchanged": true,
+      "stl_sha256": "17261dd5a3d3ba494695b4d29ab89982e5dfff7cc19be828f1f5a5932a59b7e1"
+    },
+    "Battery_Holder": {
+      "hole_centres_print_xy_mm": [],
+      "old_area_mm2": 363.42,
+      "solid_area_mm2": 886.27,
+      "pad_thickness_mm": 0.4,
+      "bounds_local_mm": [
+        -15.279999807476997,
+        -8.579143859446049,
+        0.0,
+        43.679998472332954,
+        34.76000031083822,
+        0.4
+      ],
+      "ties_unchanged": true,
+      "stl_sha256": "e1d8572b199b1228beb9e8db8c979a00e58bd4c52a7248255cdce48422dad667"
+    },
+    "Cable_Clip_12_Wire": {
+      "hole_centres_print_xy_mm": [],
+      "old_area_mm2": 20.46,
+      "solid_area_mm2": 70.46,
+      "pad_thickness_mm": 0.4,
+      "bounds_local_mm": [
+        6.0,
+        -5.146194696426392,
+        0.0,
+        13.0,
+        15.253805160522461,
+        0.4
+      ],
+      "ties_unchanged": true,
+      "stl_sha256": "a7faf7081f22bb495d27faa6a8aeb9d56ba1e4c6b93bd40ada9858bc47fa0c7c"
+    }
+  },
+  "flat_brim_width_mm": {
+    "XIAO_Near_Keeper": 6,
+    "Battery_End_Door": 6,
+    "Battery_Spacer_0p4mm_Patterned": 5
+  },
+  "material_bounds_xy_mm": {
+    "Key_Carrier": [
+      18.0,
+      101.83133269101381,
+      78.20000076293945,
+      151.75491500645876
+    ],
+    "Grove_Touch_Bracket": [
+      91.842529527843,
+      115.0675308033824,
+      147.35747124254704,
+      127.58247131854296
+    ],
+    "XIAO_Rod_Holder": [
+      99.20000038295984,
+      75.0,
+      155.99999847263098,
+      111.5296291410923
+    ],
+    "XIAO_Near_Keeper": [
+      112.85,
+      44.85,
+      151.15,
+      67.15
+    ],
+    "Battery_Holder": [
+      8.720000192523003,
+      54.42085614055395,
+      67.67999847233295,
+      97.76000031083822
+    ],
+    "Battery_End_Door": [
+      51.85,
+      21.85,
+      89.75000038146973,
+      42.500000381469725
+    ],
+    "Battery_Spacer_0p4mm_Patterned": [
+      12.85,
+      12.85,
+      43.750000381469725,
+      50.54999961853027
+    ],
+    "Cable_Clip_12_Wire": [
+      73.0,
+      50.85380530357361,
+      91.43351936340332,
+      71.25380516052246
+    ]
+  }
+}

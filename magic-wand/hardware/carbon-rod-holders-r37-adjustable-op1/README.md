@@ -82,3 +82,46 @@ Run `assembly37.py`, then `plate37.py <output-directory>`.
 Run `audit37.py <sliced-archive> <output-directory> <report>` on the
 original and the reopened slice. Register the viewer with
 `assembly37.py --register` once both pass.
+
+## Solid-pad retry
+
+This separate A1 mini plate keeps all eight R37 parts and their matching
+keepers. The 0.4 mm solid pads increase bed contact while keeping the
+original narrow cut points. Snip each tie with flush cutters while
+supporting the part. The flat keeper and door use 6 mm outer brims and
+the patterned battery spacer uses a 5 mm outer brim. Peel those from
+the outside after the plate cools. The cutouts in the spacer itself
+remain open.
+
+| Part | Previous pad area | Solid pad area |
+| --- | ---: | ---: |
+| Key carrier | 383 mm² | 1,092 mm² |
+| Grove touch bracket | 118 mm² | 350 mm² |
+| XIAO holder | 303 mm² | 631 mm² |
+| Battery holder | 363 mm² | 886 mm² |
+| Cable clip | 20 mm² | 70 mm² |
+
+Layer 105 at 21.0 mm adds a 45 mm/s and 1,000 mm/s² cap to ordinary
+model paths through Studio's height slowdown. The emitted G-code also
+requests Y-axis limits of 120 mm/s and 1,000 mm/s², including travel to
+the wipe tower and camera position. The G-code restores standard
+limits after final parking. If a run is interrupted above the
+transition, turn the printer off and on before running a standalone
+calibration, since its normal ending may have been skipped. Leave the
+printer in Standard speed mode for this trial.
+
+The first-layer profile and 250/60 °C PETG temperatures carry forward.
+Studio estimates 2 h 26 min and 18.93 g. Actual time may be longer
+because the added Y limit is applied by the printer. The original and
+reopened slices passed the connection, opening and support checks.
+Physical adhesion, pad removal and the firmware's motion response
+remain to be observed.
+
+- [Print-only retry](exports/solid-pads/R37-Solid-Pads-A1-mini-PETG-print-only.3mf)
+- [Editable retry plate](exports/solid-pads/R37-Solid-Pads-A1-mini-PETG-layout.3mf)
+- [Exact print receipt](exports/solid-pads/print-only.json)
+- [Motion audit](exports/solid-pads/motion-audit.json)
+- [Original slice audit](exports/solid-pads/audit.json) and [reopened slice audit](exports/solid-pads/reopened-audit.json)
+
+Run `solid_pad_plate.py <output-directory>` to reproduce the layout
+from the checked R37 plate.

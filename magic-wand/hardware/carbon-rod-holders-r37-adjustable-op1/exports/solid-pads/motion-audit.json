@@ -1,0 +1,113 @@
+{
+  "settings_preserved_on_reopen": true,
+  "start_layer": 105,
+  "start_height_mm": 21.0,
+  "y_speed_limit_mm_s": 120,
+  "y_acceleration_limit_mm_s2": 1000,
+  "original_slice": {
+    "archive_sha256": "00cf1105d51aeb5546422f932c419e161cfaff7f42af762c3786dad15162f25f",
+    "gcode_sha256": "e7f5413e3c4557905b36625e99140c2e929d7bd751579fe90784693eeeded199",
+    "axis_limit_changes": [
+      [
+        0,
+        0.0,
+        "M201",
+        20000
+      ],
+      [
+        0,
+        0.0,
+        "M203",
+        500
+      ],
+      [
+        105,
+        21.0,
+        "M201",
+        1000
+      ],
+      [
+        105,
+        21.0,
+        "M203",
+        120
+      ],
+      [
+        209,
+        41.8,
+        "M201",
+        20000
+      ],
+      [
+        209,
+        41.8,
+        "M203",
+        500
+      ]
+    ],
+    "y_motion_commands_before": 115763,
+    "y_motion_commands_from_layer_105": 102335,
+    "later_commands": {
+      "travel": 32471,
+      "travel_requests_requiring_axis_cap": 12031,
+      "extrusion": 69864,
+      "extrusion_at_or_below_native_limits": 66541
+    },
+    "max_later_xy_feed_request_mm_s": 700.0,
+    "max_later_acceleration_request_mm_s2": 10000,
+    "firmware_effect_physically_verified": false
+  },
+  "reopened_slice": {
+    "archive_sha256": "156f7e51f34bc16ae774d3b2f91db4d3e2f30b3bd10bca9d76ace638df62072a",
+    "gcode_sha256": "70901d42c95eb28d038ea808eaddbf2c20903d985c1796ccab34c9988b481d76",
+    "axis_limit_changes": [
+      [
+        0,
+        0.0,
+        "M201",
+        20000
+      ],
+      [
+        0,
+        0.0,
+        "M203",
+        500
+      ],
+      [
+        105,
+        21.0,
+        "M201",
+        1000
+      ],
+      [
+        105,
+        21.0,
+        "M203",
+        120
+      ],
+      [
+        209,
+        41.8,
+        "M201",
+        20000
+      ],
+      [
+        209,
+        41.8,
+        "M203",
+        500
+      ]
+    ],
+    "y_motion_commands_before": 115938,
+    "y_motion_commands_from_layer_105": 102275,
+    "later_commands": {
+      "travel": 32431,
+      "travel_requests_requiring_axis_cap": 11992,
+      "extrusion": 69844,
+      "extrusion_at_or_below_native_limits": 66521
+    },
+    "max_later_xy_feed_request_mm_s": 700.0,
+    "max_later_acceleration_request_mm_s2": 10000,
+    "firmware_effect_physically_verified": false
+  }
+}

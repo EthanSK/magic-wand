@@ -2747,3 +2747,16 @@ Adding the adjustment boss filled part of the adjacent forward Grove
 pilot on the first slice. Reapply the pilot cut after joining the
 solids. Verify the full adjustment-screw path from the face to seated
 depth as well as the nearby Grove bore against deposited toolpaths.
+
+### 2026-11-13 — Check bed contact and motion in the sliced R37 plate
+
+When enlarging a removable pad, keep its narrow ties and check the deposited
+connection on the next layers as well as the first. The initial square-sided
+cable-clip pad passed the first-layer test but left a detached patch on layer
+two. Extending its ends into the existing pad footprint closed the gap.
+
+Bambu Studio's height slowdown caps ordinary model moves in the R37 slice.
+The G-code still requests fast travel, including moves to the timelapse
+position and wipe tower. Audit the command sequence around the transition
+and final park when adding a bed-axis limit. The slice audit verifies the
+commands sent to the printer. Verify the physical response on the printer.
