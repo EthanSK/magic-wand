@@ -1,0 +1,45 @@
+{
+  "layer_one_to_six": {
+    "1": {
+      "maximum_speed": 30.0,
+      "maximum_acceleration": 500.0
+    },
+    "2": {
+      "maximum_speed": 50.0,
+      "maximum_acceleration": 1000.0
+    },
+    "3": {
+      "maximum_speed": 50.0,
+      "maximum_acceleration": 1000.0
+    },
+    "4": {
+      "maximum_speed": 60.0,
+      "maximum_acceleration": 1000.0
+    },
+    "5": {
+      "maximum_speed": 60.0,
+      "maximum_acceleration": 1000.0
+    },
+    "6": {
+      "maximum_speed": 60.0,
+      "maximum_acceleration": 1000.0
+    }
+  },
+  "first_part_fan_on": [
+    4,
+    127.5
+  ],
+  "fan_settings_percent": [
+    50,
+    60
+  ],
+  "overhang_fan_percent": 60,
+  "requested_filament_retraction_mm": 1,
+  "matched_one_mm_retractions": 334,
+  "bed_axis_limits_start_layer": 1,
+  "bed_axis_speed_mm_s": 120,
+  "bed_axis_acceleration_mm_s2": 1000,
+  "firmware_motion_response_verified": false,
+  "gcode_sha256": "27c02d7e0268d980def1ad73fda028148b169bc2d3cb654d61000cc5a2c645ae",
+  "passed": true
+}

@@ -125,3 +125,47 @@ remain to be observed.
 
 Run `solid_pad_plate.py <output-directory>` to reproduce the layout
 from the checked R37 plate.
+
+## Gentle-start retry
+
+The solid-pad trial was stopped at layer 9 after raised and rough areas
+developed in the first few layers. The recording cannot establish whether
+surface contamination, nozzle snagging, cooling or inconsistent feed
+started the failure. Both temperatures matched their targets at 250/60 °C.
+
+`gentle_start_plate.py` keeps the eight parts, wide solid pads, narrow ties,
+brims, functional openings and removable OP1 support. It limits ordinary
+walls and fill to 40–60 mm/s, travel to 120 mm/s and print acceleration to
+1,000 mm/s² from the early layers. The first-layer extrusion stays at
+20/30 mm/s. The bed-axis limit starts on layer 1, and the 45 mm/s height
+limit remains above 21 mm. This avoids the previous layer-2 jump to about
+106 mm/s walls and 5,000–10,000 mm/s² acceleration.
+
+The part fan stays off for three layers, then uses 50–60% cooling with
+60% overhang cooling. The battery door bridges on layer five, so extending
+the fan-off period through that bridge would introduce a sagging risk.
+Filament-specific retraction is
+1 mm at the existing 30 mm/s. The project uses the Generic PETG A1 mini
+preset with these explicit filament overrides. The 250/60 °C recipe is retained within
+the [filament manufacturer's range](https://www.flashforge.com/products/hs-petg?variant=43140414636110).
+Fine stray threads can come from ooze, moisture, nozzle residue or
+retraction. Their presence alone does not identify the cause of detachment.
+
+Before the next physical trial, verify a clean, dry, correctly seated
+textured plate, a clean nozzle, sufficient filament and free spool/tube
+movement. The drying history and feed condition remain unverified.
+Observe the actual first layer and stop if the lines fail to stick or curl
+upward. Sliced checks cannot prove adhesion or finished-part strength.
+After a cancellation, the added bed-motion limit can remain active. A new
+sliced print restores its startup limits. Power-cycle before a standalone
+calibration or manual movement following an interrupted gentle-start run.
+
+- [Gentle-start print-only file](exports/gentle-start/R37-Gentle-Start-A1-mini-PETG-print-only.3mf)
+- [Gentle-start editable layout](exports/gentle-start/R37-Gentle-Start-A1-mini-PETG-layout.3mf)
+- [Gentle-start slice checks](exports/gentle-start/audit.json)
+- [Reopened slice checks](exports/gentle-start/reopened-audit.json)
+- [Early motion and cooling checks](exports/gentle-start/early-motion.json)
+- [Gentle-start print receipt](exports/gentle-start/print-only.json)
+
+Studio estimates about 3 h 16 min and 18.93 g. Run
+`gentle_start_plate.py <new-output-directory>` to regenerate the layout.

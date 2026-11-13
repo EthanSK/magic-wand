@@ -1,0 +1,21 @@
+{
+  "settings_preserved": true,
+  "executable_commands_identical": false,
+  "checked_settings": [
+    "initial_layer_speed",
+    "initial_layer_infill_speed",
+    "outer_wall_speed",
+    "inner_wall_speed",
+    "travel_speed",
+    "default_acceleration",
+    "close_fan_the_first_x_layers",
+    "fan_min_speed",
+    "fan_max_speed",
+    "overhang_fan_speed",
+    "filament_retraction_length",
+    "layer_change_gcode",
+    "machine_end_gcode"
+  ],
+  "full_reopened_path_audit_passed": true,
+  "note": "Slicer produced minor path subdivision differences on reopen, so the full deposited-path audit was rerun and passed."
+}
