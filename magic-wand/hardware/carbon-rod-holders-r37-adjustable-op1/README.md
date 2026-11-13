@@ -169,3 +169,38 @@ calibration or manual movement following an interrupted gentle-start run.
 
 Studio estimates about 3 h 16 min and 18.93 g. Run
 `gentle_start_plate.py <new-output-directory>` to regenerate the layout.
+
+## Standard-motion PETG retry
+
+`standard_retry_plate.py <new-output-directory>` retains the solid pads,
+narrow ties, local OP1 support and seven functional parts. It omits the
+routine loose battery spacer. The XIAO keeper and battery end door remain
+included. Holder geometry is unchanged.
+
+The first layer uses 20/30 mm/s extrusion and 500 mm/s² acceleration.
+Layers two and three cap printed paths at 60 mm/s and both moving axes
+at 1,000 mm/s². Layer four restores the machine's Standard motion limits.
+The previous 21 mm height slowdown is removed. The finished G-code is
+checked for both transitions, including support and wipe-tower paths.
+
+This trial uses 245 °C nozzle and 60 °C bed, 1.2 mm retraction at 35 mm/s,
+an 8 mm³/s flow limit and 50–90% part cooling after three layers.
+Overhang cooling is 100%. These settings are a stringing trial for
+Flashforge HS PETG Metallic. Moisture, feed resistance and the physical
+cause of the previous upper-layer failure remain unverified.
+
+After slicing and running `audit37.py`, package the checked archive with
+`standard_retry_plate.py <output-directory> --package <sliced-archive>`.
+The print-only package preserves its G-code bytes. Opening an editable
+project in Studio can reset the wipe tower into the key carrier, so any
+editable re-slice needs another placement and toolpath check.
+
+- [Standard-motion print-only file](exports/standard-retry/R37-Standard-PETG-retry-print-only.3mf)
+- [Editable source plate](exports/standard-retry/R37-Standard-PETG-retry-layout.3mf)
+- [Slice checks](exports/standard-retry/audit.json)
+- [First-three-layer motion checks](exports/standard-retry/early-motion.json)
+- [Exact print receipt](exports/standard-retry/print-only.json)
+
+The estimate is 1 h 58 min and 18.62 g. Sliced clearances and connected
+paths are checked. Adhesion, finished strength and component fit still
+depend on the physical trial.

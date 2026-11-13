@@ -2755,8 +2755,30 @@ connection on the next layers as well as the first. The initial square-sided
 cable-clip pad passed the first-layer test but left a detached patch on layer
 two. Extending its ends into the existing pad footprint closed the gap.
 
-Bambu Studio's height slowdown caps ordinary model moves in the R37 slice.
-The G-code still requests fast travel, including moves to the timelapse
-position and wipe tower. Audit the command sequence around the transition
-and final park when adding a bed-axis limit. The slice audit verifies the
-commands sent to the printer. Verify the physical response on the printer.
+Bambu Studio's height slowdown affects ordinary travel as well as extrusion
+in the R37 gentle-start slice. Above 21 mm, many inter-part travels inherit
+45 mm/s, while some timelapse moves still request a faster feed rate. Check
+the actual moves around the transition, including inherited feed rates.
+Removing the global slowdown restores normal travel requests. The slice
+audit verifies commands, while the printer still needs physical observation.
+
+The official A1 mini startup waits for the ordinary nozzle temperature and
+then sets the first-layer temperature. With different values, that final
+target change may have no following unconditional wait. Check executable
+commands when the two temperatures differ. The Standard retry uses 245 °C
+for both, with an unconditional wait verified before the first object.
+
+Opening an editable project in Studio can reset its wipe tower to the
+printer's default location. A CLI slice with clear tower placement then
+reopened with the tower overlapping the key carrier. Catch this in the GUI
+reopen check. A print-only package preserves the audited G-code and its
+clear tower position without another edit or slice. Keep the editable source
+separate and check a new slice after any edit. Neither passing paths nor
+changing temperature establishes the physical cause of stringing.
+
+Per-object height ranges need an explicit layer height in the native
+project. The tested three-layer range uses 0–0.6 mm at 0.2 mm layers.
+Check support and tower moves separately because their acceleration
+can ignore object-height settings. A temporary M201 X/Y cap covers
+those paths and is restored at layer four. Verify both the requested
+feed and effective acceleration in the emitted G-code.
