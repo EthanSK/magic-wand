@@ -204,3 +204,9 @@ editable re-slice needs another placement and toolpath check.
 The estimate is 1 h 58 min and 18.62 g. Sliced clearances and connected
 paths are checked. Adhesion, finished strength and component fit still
 depend on the physical trial.
+
+The 2026-11-14 trial completed all 209 layers after one external-filament
+feed warning was cleared. The visible parts retained their bases through
+completion, with noticeable loose stringing between parts and around the
+wipe tower. Both heater targets switched off normally. Removal, component
+fit and finished strength still require physical checks.
