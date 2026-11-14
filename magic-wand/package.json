@@ -13,6 +13,7 @@
     "test": "node --test --test-concurrency=2 tests/*.test.*",
     "check": "python3 scripts/build.py --check && python3 scripts/vendor.py --check && python3 scripts/check.py && python3 scripts/tutorials_build.py && node --test --test-concurrency=2 tests/*.test.*",
     "serve": "python3 -m http.server 8848 --bind 127.0.0.1 --directory ../docs",
+    "serve:assembly": "python3 scripts/serve_assembly.py",
     "receiver": "zsh scripts/build_receiver.sh",
     "tutorials:check": "python3 scripts/tutorials_build.py"
   },

@@ -8,6 +8,15 @@ cd magic-wand  # From the repository root
 
 The published site stays in `../docs/`; root `npm run check` checks every component.
 
+For the local 3D assembly viewer on macOS, run `python3 scripts/serve_assembly.py --install`
+once and open the URL it prints. The login service restarts a stopped server and survives
+the command or chat ending. It is available while the Mac is awake and logged in.
+Use `npm run serve:assembly` for a temporary foreground server on other systems.
+After an edit, reload the same URL normally. The server rereads the viewer page, scripts,
+styles and JSON on each request, including scripts imported from other folders.
+Run `node --test tests/assembly-refresh.test.mjs` to check the reload response when a script
+changes but keeps its old modification timestamp.
+
 This is a source-only project. There’s no packaged, signed or notarised receiver, and no release.
 These steps describe the parts in this repository; they haven’t been rehearsed end to end on a
 second wand.

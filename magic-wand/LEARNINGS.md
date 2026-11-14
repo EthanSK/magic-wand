@@ -2466,6 +2466,20 @@ when changing views. The old seated-on-open flag jumped past the whole recipe.
 The shared timeline already starts at zero when it loads a recipe. Keep the
 assembled pose available through the explicit Compare cap heights action.
 
+Self-improved — 2026-11-11: Python's standard static server compares file
+modification times at whole-second precision, so different script bytes can
+look unchanged. A version query on the entry script also leaves relative import
+URLs unchanged. Use the local assembly server described in [BUILDING.md](BUILDING.md).
+The refresh regression rewrites a shared module at the same URL and timestamp.
+An ordinary Chrome reload reused the old module on the standard server and
+executed the edited module on the assembly server.
+
+User-requested — 2026-11-14: the assembly server must survive a chat ending.
+Use its macOS login-service installer for continuing review; it reads the working
+tree and recovers after a process exit. The recovery check terminated the owned
+server and verified the same model URL under a new process. This does not keep
+a powered-off or sleeping Mac serving pages.
+
 ### 2026-11-09 — Timelapse compatibility and exported-solid identity
 
 Self-improved — R20's A1 mini slice raised `not_support_traditional_timelapse`
