@@ -1,0 +1,491 @@
+{
+  "revision": "carbon-rod-holders-r38-centred-op1",
+  "units": "mm",
+  "physical_fit_verified": false,
+  "sliced": false,
+  "print_cleared": false,
+  "compared_with_r37": {
+    "Key_Carrier": {
+      "r37_size_xyz_mm": [
+        60.2,
+        41.85,
+        24.781
+      ],
+      "r38_size_xyz_mm": [
+        60.05,
+        41.85,
+        24.781
+      ],
+      "size_change_xyz_mm": [
+        -0.15,
+        0.0,
+        0.0
+      ],
+      "r37_volume_mm3": 7675.466,
+      "r38_volume_mm3": 7565.305,
+      "r37_solid_PETG_g": 9.748,
+      "r38_solid_PETG_g": 9.608,
+      "solid_PETG_change_g": -0.14
+    },
+    "Grove_Touch_Bracket": {
+      "r37_size_xyz_mm": [
+        21.2,
+        40.235,
+        6.66
+      ],
+      "r38_size_xyz_mm": [
+        22.6,
+        40.235,
+        6.66
+      ],
+      "size_change_xyz_mm": [
+        1.4,
+        0.0,
+        0.0
+      ],
+      "r37_volume_mm3": 615.369,
+      "r38_volume_mm3": 830.878,
+      "r37_solid_PETG_g": 0.782,
+      "r38_solid_PETG_g": 1.055,
+      "solid_PETG_change_g": 0.273
+    },
+    "both_parts_solid_PETG_change_g": 0.133,
+    "basis": "Solid mesh volume at 1.27 g/cm3 from both manifests. Sliced mass with pads is not measured."
+  },
+  "checks": {
+    "layout": {
+      "op1_board_centre_x_mm": 0.0,
+      "op1_board_centre_x_r37_mm": 7.45,
+      "op1_board_yaw_degrees": 0.0,
+      "op1_board_underside_z_mm": 10.1,
+      "op1_seat_lift_mm": 0.9,
+      "grove_board_shift_x_mm": -2.0,
+      "grove_seat_lift_mm": 0.9,
+      "grove_electrode_centre_x_mm": -0.4,
+      "grove_housing_to_op1_board_gap_mm": 0.6,
+      "grove_board_side_to_cap_mm": 0.7,
+      "plunger_to_grove_pcb_roof_mm": 1.58,
+      "plunger_to_dfrobot_seat_roof_r37_mm": 1.48,
+      "choc_seat_and_rod_clip_height_change_mm": 0.0,
+      "hinge_axis_height_change_mm": 0.0,
+      "grove_touch_face_top_at_stop_mm": 21.93,
+      "grove_touch_face_top_at_stop_r37_mm": 21.03,
+      "grove_touch_face_top_released_mm": 22.5024,
+      "choc_cap_top_mm": 19.92,
+      "op1_board_edge_to_grove_plug_gap_mm": 0.65,
+      "op1_actuator_y_mm": 2.55,
+      "choc_centres_mm": [
+        [
+          -21.0,
+          0.0
+        ],
+        [
+          21.0,
+          0.0
+        ],
+        [
+          -21.0,
+          21.35
+        ],
+        [
+          21.0,
+          21.35
+        ]
+      ],
+      "choc_seat_x_r37_mm": 21.1,
+      "cap_travel_span_x_mm": 60.3,
+      "bracket_side_to_cap_mm": 0.7,
+      "left_rail_section_beside_socket_mm": [
+        1.1,
+        1.65
+      ],
+      "bracket_side_to_cap_travel_envelope_mm": 1.25,
+      "pivot_world_y_mm": 31.15,
+      "switch_lever_arm_mm": 28.6,
+      "stop_screw_lever_arm_mm": 34.75,
+      "grove_board_front_released_y_mm": -7.7152,
+      "carrier_bottom_plane_y_mm": -9.2
+    },
+    "clearance_overlap_mm3": {
+      "op1_wired_board_drop": 0.0,
+      "op1_prewired_lead_drop": 0.0,
+      "op1_seated_wire": 0.0,
+      "op1_switch_install": 0.0,
+      "op1_pins_in_sockets": 0.0,
+      "op1_screw_heads_to_switch": 0.0,
+      "hinge_stroke": 0.0,
+      "grove_cable_stroke": 0.0,
+      "pinched_bracket_drop": 0.0,
+      "bracket_arm_release": 0.0,
+      "preplugged_grove_board_drop": 0.0,
+      "wired_grove_board_feed": 0.0,
+      "grove_board_on_rod": 0.0,
+      "rod_to_carrier_outside_clip_rings": 0.0,
+      "rod_to_sockets_pins_housing": 0.0,
+      "rod_to_op1_wire": 0.0
+    },
+    "full_stroke_overlap_mm3": {
+      "grove_board_and_cable": 0.0,
+      "bracket": 0.000199,
+      "pinched_install_with_screw": 0.0,
+      "stop_screw_to_grove_parts": 0.0
+    },
+    "stop_settings": [
+      {
+        "turns_out": 0.0,
+        "angle_deg": 0.73937,
+        "nominal_plunger_travel_mm": 0.8047,
+        "stop_height_above_switch_base_mm": 6.5453,
+        "screw_contacts_landing_mm3": 0.00020482213453319972,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 0.25,
+        "angle_deg": 0.58227,
+        "nominal_plunger_travel_mm": 0.725,
+        "stop_height_above_switch_base_mm": 6.625,
+        "screw_contacts_landing_mm3": 0.00021715173091451184,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 0.5,
+        "angle_deg": 0.42503,
+        "nominal_plunger_travel_mm": 0.6453,
+        "stop_height_above_switch_base_mm": 6.7047,
+        "screw_contacts_landing_mm3": 0.00020549338116577343,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 0.75,
+        "angle_deg": 0.26792,
+        "nominal_plunger_travel_mm": 0.5656,
+        "stop_height_above_switch_base_mm": 6.7844,
+        "screw_contacts_landing_mm3": 0.00022525303008825688,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.0,
+        "angle_deg": 0.11054,
+        "nominal_plunger_travel_mm": 0.4859,
+        "stop_height_above_switch_base_mm": 6.8641,
+        "screw_contacts_landing_mm3": 0.0002032069516561222,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.25,
+        "angle_deg": -0.0515,
+        "nominal_plunger_travel_mm": 0.4046,
+        "stop_height_above_switch_base_mm": 6.9454,
+        "screw_contacts_landing_mm3": 0.000257525289669589,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.5,
+        "angle_deg": -0.22468,
+        "nominal_plunger_travel_mm": 0.3194,
+        "stop_height_above_switch_base_mm": 7.0306,
+        "screw_contacts_landing_mm3": 0.0002060007993942654,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.75,
+        "angle_deg": -0.39799,
+        "nominal_plunger_travel_mm": 0.2343,
+        "stop_height_above_switch_base_mm": 7.1157,
+        "screw_contacts_landing_mm3": 0.00021169079960744702,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 2.0,
+        "angle_deg": -0.5713,
+        "nominal_plunger_travel_mm": 0.1491,
+        "stop_height_above_switch_base_mm": 7.2009,
+        "screw_contacts_landing_mm3": 0.0002181522100957616,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 2.25,
+        "angle_deg": -0.74474,
+        "nominal_plunger_travel_mm": 0.0639,
+        "stop_height_above_switch_base_mm": 7.2861,
+        "screw_contacts_landing_mm3": 0.00020091271684096897,
+        "plastic_before_screw_contact_mm3": 0.0
+      }
+    ],
+    "max_plunger_change_per_quarter_turn_mm": 0.0852,
+    "screw_engagement_at_start_mm": 3.1,
+    "backup_angle_deg": 0.79664,
+    "backup_nominal_plunger_travel_mm": 0.8337,
+    "backup_stop_contacts_mm3": [
+      0.0034574619356306357,
+      0.0034574619356306253
+    ],
+    "bonds": {
+      "grove_screw_bosses_mm3": [
+        48.68674327595133,
+        46.128576194278295
+      ],
+      "stop_boss_mm3": 90.28527215249618,
+      "hinge_supports_mm3": 137.4380981061033,
+      "edge_stops_mm3": [
+        18.266079976351246,
+        18.266079976348554
+      ],
+      "saddle_cheek_mm3": 63.98841365634767,
+      "op1_seat_contacts_mm3": [
+        3.745336698396616,
+        4.254167662679491
+      ]
+    },
+    "hinge": {
+      "released_tab_axial_engagement_mm": 0.7,
+      "squeezed_tab_clear_of_support_mm": 0.2188,
+      "straight_lift_retention_contact_mm3": 0.08579,
+      "arm_bending_estimate": {
+        "arm_thickness_mm": 1.2,
+        "arm_height_mm": 1.4,
+        "root_to_tab_mm": 10.81,
+        "root_to_pinch_pad_mm": 7.11,
+        "tab_squeeze_mm": 0.98,
+        "pad_squeeze_mm": 0.55,
+        "pinch_force_each_N_estimate": 1.85,
+        "root_strain_percent_estimate": 1.96,
+        "assumed_PETG_modulus_MPa": 2000.0,
+        "assumed_PETG_yield_strain_percent": 4.0
+      }
+    },
+    "ribs": {
+      "R1": {
+        "volume_mm3": 108.612,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.9041,
+        "edge_contact_mm3": 14.1426,
+        "bounds": [
+          2.25,
+          -0.75,
+          0.3,
+          23.15,
+          15.75,
+          7.6
+        ],
+        "piece_bonds_mm3": [
+          19.0467
+        ]
+      },
+      "L1": {
+        "volume_mm3": 125.4944,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.9041,
+        "edge_contact_mm3": 15.2341,
+        "bounds": [
+          -30.05,
+          -0.75,
+          0.3,
+          -2.25,
+          16.107,
+          8.6
+        ],
+        "piece_bonds_mm3": [
+          20.1382
+        ]
+      },
+      "R2": {
+        "volume_mm3": 104.6444,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.5161,
+        "edge_contact_mm3": 16.3292,
+        "bounds": [
+          2.25,
+          2.5,
+          0.3,
+          23.15,
+          16.55,
+          8.75
+        ],
+        "piece_bonds_mm3": [
+          20.8454
+        ]
+      },
+      "L2": {
+        "volume_mm3": 116.9155,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 6.6495,
+        "edge_contact_mm3": 15.2341,
+        "bounds": [
+          -30.05,
+          2.5,
+          0.3,
+          -2.08,
+          17.87,
+          8.6
+        ],
+        "piece_bonds_mm3": [
+          21.8836
+        ]
+      },
+      "R3": {
+        "volume_mm3": 96.2668,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 6.0348,
+        "edge_contact_mm3": 16.3336,
+        "bounds": [
+          2.08,
+          5.75,
+          0.3,
+          23.137,
+          18.67,
+          8.87
+        ],
+        "piece_bonds_mm3": [
+          22.3684
+        ]
+      },
+      "L3": {
+        "volume_mm3": 108.5735,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 6.0348,
+        "edge_contact_mm3": 15.2341,
+        "bounds": [
+          -30.05,
+          5.75,
+          0.3,
+          -2.08,
+          18.67,
+          8.6
+        ],
+        "piece_bonds_mm3": [
+          21.2689
+        ]
+      }
+    },
+    "finger_contact_probes_reaching_terminals": {
+      "key_0_terminal_0": 0,
+      "key_0_terminal_1": 0,
+      "key_2_terminal_0": 0,
+      "key_2_terminal_1": 0
+    },
+    "rod_grip_interference_in_clip_rings_mm3": 22.0132,
+    "op1_connector_to_rod": {
+      "board_underside_above_rod_centre_mm": 10.1,
+      "board_underside_r37_mm": 9.2,
+      "local_op1_seat_lift_mm": 0.9,
+      "photo_derived_coupled_depth_mm": 5.9,
+      "rod_top_under_plug_mm": 4.0,
+      "depth_available_to_rod_mm": 6.1,
+      "plug_to_rod_clearance_mm": 0.2,
+      "overlap_with_rod_mm3": {
+        "sockets": 0.0,
+        "terminals": 0.0,
+        "housing": 0.0,
+        "plug": 0.0,
+        "op1_wire": 0.0
+      },
+      "further_raise_needed_mm": 0.0,
+      "basis": "The 5.9 mm coupled depth was scaled from product photos. Ethan's hands-on trial suggests the real connector is shallower. Neither has been measured with calipers.",
+      "resolved": true
+    },
+    "reference_guard": {
+      "rod_aabb_mm": [
+        -4.0,
+        -40.0,
+        -4.0,
+        4.0,
+        100.0,
+        4.0
+      ],
+      "carrier_aabb_mm": [
+        -30.05,
+        -9.2,
+        -4.781,
+        30.0,
+        32.65,
+        20.0
+      ],
+      "bought_op1_aabb_mm": {
+        "board": [
+          -5.0,
+          -6.5,
+          10.1,
+          5.0,
+          23.5,
+          11.7
+        ],
+        "sockets": [
+          -1.3,
+          -1.88,
+          5.8,
+          1.3,
+          10.88,
+          10.11
+        ],
+        "housing": [
+          -3.6,
+          17.5,
+          7.3,
+          3.6,
+          23.7,
+          10.1
+        ],
+        "plug": [
+          -3.1,
+          19.55,
+          4.2,
+          3.1,
+          23.2,
+          7.3
+        ],
+        "op1_wire": [
+          -1.3,
+          21.7,
+          -2.35,
+          9.4,
+          26.2,
+          7.05
+        ],
+        "switch": [
+          -2.9,
+          -1.9,
+          11.7,
+          2.9,
+          10.9,
+          18.2
+        ],
+        "terminals": [
+          -0.22,
+          -1.03,
+          8.2,
+          0.22,
+          10.03,
+          11.71
+        ],
+        "plunger": [
+          -1.45,
+          1.95,
+          18.19,
+          1.45,
+          3.15,
+          19.05
+        ],
+        "fasteners": [
+          -2.5,
+          -7.05,
+          7.7,
+          2.5,
+          16.7,
+          12.55
+        ]
+      },
+      "installed_y_span_mm": [
+        -9.2,
+        32.65
+      ],
+      "centred_probe_in_rod_mm3": 1.0,
+      "rod_in_clip_rings_mm3": 22.0132,
+      "passed": true,
+      "misplaced_rod_is_rejected": true
+    },
+    "cad_checks_passed": true,
+    "unresolved": [],
+    "passed": true
+  }
+}

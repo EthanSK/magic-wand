@@ -1,0 +1,101 @@
+{
+  "status": "ready_for_first_fit_trial",
+  "physical_fit_verified": false,
+  "physical_support_removal_verified": false,
+  "thin_light_goal_met": false,
+  "files": {
+    "holder38.py": "b72c6a7a4bededd6a10450b2a029942911b4933ff85954b8cd80ff319629b4e0",
+    "assembly38.py": "43cbae9ffeba23c06239bb651f86e526922d085354b86188ae365753333a27f6",
+    "plate38.py": "4f0f2cb6068c8e0cb760c5d64ad251db4338abcbd5d6a04ffba22add06e0c978",
+    "audit38.py": "5692675eed90a806d53e56f43fa3448802801cf35ba3ca066021088a1d769b5f",
+    "exports/manifest.json": "51969db56d21ef06ad832788f6fd4606b9c9b9e4e6e58f291d626315969a80ae",
+    "exports/assembly-guide.json": "fb091138ecc5fb5a914a675e95ca07ee60075be9f06c0897821ffd1d31c2479a",
+    "exports/standard-retry/R38-Complete-A1-mini-PETG.gcode.3mf": "1ec9f82dc45a0137e9fad241904bf333a729603da0344b218bfa8557a3aae004",
+    "exports/standard-retry/R38-Centred-OP1-print-only.3mf": "a65c36f4780553c877c7f17d11cd0cc3004558f897e57c0f12b027d2467cde03",
+    "exports/standard-retry/slice-audit.json": "fdbf699708e060bbba3377b6e98dce0fb80b3768672c517e717a7bb16f065099"
+  },
+  "slice_passed": true,
+  "slice_failures": [],
+  "all_parts": [
+    "Key_Carrier",
+    "Grove_Touch_Bracket",
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Battery_Holder",
+    "Battery_End_Door",
+    "Cable_Clip_12_Wire"
+  ],
+  "review": {
+    "reviewer": "Claude Opus 5.5",
+    "scope": "Changed R38 geometry, supports and toolpath checks after repairs",
+    "verdict": "Ready for a first physical fit trial with cleanup and small-support caveats",
+    "confirmed_finding_origins": {
+      "Codex": 4,
+      "Opus": 3,
+      "shared": 0
+    },
+    "dispositions": [
+      {
+        "origin": "Codex",
+        "issue": "Floating outer guard start",
+        "resolution": "Tiny tip trimmed and local support added; final slice has no unsupported start."
+      },
+      {
+        "origin": "Codex",
+        "issue": "Permanent bead intrusion in rod bore",
+        "resolution": "Local transition relief; final slice has no permanent bore intrusion."
+      },
+      {
+        "origin": "Codex",
+        "issue": "Sparse material in OP1 mounting shoulders",
+        "resolution": "Local solid infill; minimum coverage exceeds 95%."
+      },
+      {
+        "origin": "Codex",
+        "issue": "Thin guard rib roots",
+        "resolution": "1.9 mm ribs; critical slice coverage passes."
+      },
+      {
+        "origin": "Opus",
+        "issue": "Support occupies functional rod and connector spaces",
+        "resolution": "Explicit occupancy reporting, fragment access check and must-clean assembly instruction."
+      },
+      {
+        "origin": "Opus",
+        "issue": "New bracket left rail lacked critical-material check",
+        "resolution": "Added exact rail check; minimum coverage exceeds 94%."
+      },
+      {
+        "origin": "Opus",
+        "issue": "Cleanup text omitted rear bore exit",
+        "resolution": "Caption names the open rear end and full passage check."
+      }
+    ]
+  },
+  "limits": [
+    "Support-removal grid is a coarse fragment-level check, not physical removability proof.",
+    "Outer guard has a slender support column; watch the first trial.",
+    "Connector depth and lead bend are estimated from manufacturer photos; physical fit remains unverified.",
+    "The exact-centre fit goal is met, but significant weight or width reduction is not."
+  ],
+  "manual_viewer_checks": {
+    "status": "passed after final caption reload",
+    "all_four_component_groups": true,
+    "battery_default": "Standard door",
+    "initial_step": "Remove Print Supports",
+    "initial_playback_position": 0,
+    "handoff_version": "r38",
+    "test_window_closed": true,
+    "rear_bore_cleanup_caption_verified": true
+  },
+  "gui_final_reopen_reslice": {
+    "status": "completed_with_difference",
+    "initial_import_seven_parts": true,
+    "reslice_matches_checked_file": false,
+    "difference": "GUI re-slice relocated wipe tower and omitted approved gentle layer commands; it is not a cleared print file.",
+    "checked_print_only_reopened": true,
+    "slice_button_disabled": true,
+    "preview_seven_parts": true,
+    "current_R37_job_unchanged": true
+  }
+}

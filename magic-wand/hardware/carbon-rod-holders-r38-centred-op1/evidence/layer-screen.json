@@ -1,0 +1,341 @@
+{
+  "source_sha256": "b72c6a7a4bededd6a10450b2a029942911b4933ff85954b8cd80ff319629b4e0",
+  "not_slicer_toolpaths": true,
+  "assumption": "0.2 mm sections with 0.45 mm preceding-layer reach",
+  "parts": {
+    "carrier": {
+      "orientation": "rear face down",
+      "warnings": [
+        {
+          "layer": 48,
+          "z": 9.5,
+          "kind": "overhang beyond one bead",
+          "area": 13.825,
+          "bounds": [
+            4.12,
+            7.26,
+            8.03,
+            11.35
+          ]
+        },
+        {
+          "layer": 68,
+          "z": 13.5,
+          "kind": "overhang beyond one bead",
+          "area": 24.962,
+          "bounds": [
+            -3.23,
+            0.66,
+            4.88,
+            6.95
+          ]
+        },
+        {
+          "layer": 79,
+          "z": 15.7,
+          "kind": "overhang beyond one bead",
+          "area": 19.85,
+          "bounds": [
+            -3.67,
+            7.26,
+            3.67,
+            10.08
+          ]
+        },
+        {
+          "layer": 93,
+          "z": 18.5,
+          "kind": "overhang beyond one bead",
+          "area": 23.826,
+          "bounds": [
+            13.79,
+            9.32,
+            28.21,
+            11.12
+          ]
+        },
+        {
+          "layer": 93,
+          "z": 18.5,
+          "kind": "overhang beyond one bead",
+          "area": 22.886,
+          "bounds": [
+            -28.21,
+            9.27,
+            -13.79,
+            11.12
+          ]
+        },
+        {
+          "layer": 100,
+          "z": 19.9,
+          "kind": "section thinner than 0.4",
+          "area": 0.781,
+          "bounds": [
+            -29.39,
+            4.86,
+            -27.01,
+            5.2
+          ]
+        },
+        {
+          "layer": 126,
+          "z": 25.1,
+          "kind": "overhang beyond one bead",
+          "area": 5.468,
+          "bounds": [
+            -20.51,
+            0.85,
+            -13.52,
+            1.65
+          ]
+        },
+        {
+          "layer": 126,
+          "z": 25.1,
+          "kind": "overhang beyond one bead",
+          "area": 3.037,
+          "bounds": [
+            13.52,
+            0.85,
+            17.46,
+            1.65
+          ]
+        },
+        {
+          "layer": 142,
+          "z": 28.3,
+          "kind": "overhang beyond one bead",
+          "area": 2.273,
+          "bounds": [
+            13.59,
+            0.95,
+            17.47,
+            1.55
+          ]
+        },
+        {
+          "layer": 142,
+          "z": 28.3,
+          "kind": "overhang beyond one bead",
+          "area": 4.106,
+          "bounds": [
+            -20.52,
+            0.95,
+            -13.59,
+            1.55
+          ]
+        },
+        {
+          "layer": 159,
+          "z": 31.7,
+          "kind": "overhang beyond one bead",
+          "area": 4.055,
+          "bounds": [
+            13.74,
+            0.67,
+            17.46,
+            1.83
+          ]
+        },
+        {
+          "layer": 159,
+          "z": 31.7,
+          "kind": "overhang beyond one bead",
+          "area": 7.575,
+          "bounds": [
+            -20.51,
+            0.67,
+            -13.75,
+            1.83
+          ]
+        },
+        {
+          "layer": 169,
+          "z": 33.7,
+          "kind": "overhang beyond one bead",
+          "area": 9.407,
+          "bounds": [
+            -10.55,
+            9.27,
+            -5.65,
+            11.35
+          ]
+        },
+        {
+          "layer": 175,
+          "z": 34.9,
+          "kind": "overhang beyond one bead",
+          "area": 1.972,
+          "bounds": [
+            -0.29,
+            6.7,
+            0.29,
+            10.08
+          ]
+        },
+        {
+          "layer": 199,
+          "z": 39.7,
+          "kind": "overhang beyond one bead",
+          "area": 15.708,
+          "bounds": [
+            14.4,
+            9.93,
+            27.6,
+            11.12
+          ]
+        },
+        {
+          "layer": 199,
+          "z": 39.7,
+          "kind": "overhang beyond one bead",
+          "area": 15.708,
+          "bounds": [
+            -27.6,
+            9.93,
+            -14.4,
+            11.12
+          ]
+        },
+        {
+          "layer": 199,
+          "z": 39.7,
+          "kind": "overhang beyond one bead",
+          "area": 1.925,
+          "bounds": [
+            8.28,
+            11.57,
+            10.52,
+            12.43
+          ]
+        },
+        {
+          "layer": 199,
+          "z": 39.7,
+          "kind": "overhang beyond one bead",
+          "area": 1.925,
+          "bounds": [
+            -10.52,
+            11.57,
+            -8.28,
+            12.43
+          ]
+        },
+        {
+          "layer": 200,
+          "z": 39.9,
+          "kind": "overhang beyond one bead",
+          "area": 2.288,
+          "bounds": [
+            13.85,
+            9.32,
+            28.15,
+            9.48
+          ]
+        },
+        {
+          "layer": 200,
+          "z": 39.9,
+          "kind": "overhang beyond one bead",
+          "area": 2.288,
+          "bounds": [
+            -28.15,
+            9.32,
+            -13.85,
+            9.48
+          ]
+        },
+        {
+          "layer": 200,
+          "z": 39.9,
+          "kind": "overhang beyond one bead",
+          "area": 8.528,
+          "bounds": [
+            -5.2,
+            10.53,
+            5.2,
+            11.35
+          ]
+        }
+      ]
+    },
+    "bracket": {
+      "orientation": "front face down",
+      "warnings": [
+        {
+          "layer": 3,
+          "z": 0.5,
+          "kind": "overhang beyond one bead",
+          "area": 4.061,
+          "bounds": [
+            8.69,
+            -16.45,
+            10.11,
+            -13.59
+          ]
+        },
+        {
+          "layer": 3,
+          "z": 0.5,
+          "kind": "overhang beyond one bead",
+          "area": 4.636,
+          "bounds": [
+            -10.11,
+            -16.86,
+            -8.69,
+            -13.59
+          ]
+        },
+        {
+          "layer": 109,
+          "z": 21.7,
+          "kind": "overhang beyond one bead",
+          "area": 1.679,
+          "bounds": [
+            6.4,
+            -20.25,
+            8.15,
+            -18.5
+          ]
+        },
+        {
+          "layer": 113,
+          "z": 22.5,
+          "kind": "overhang beyond one bead",
+          "area": 3.135,
+          "bounds": [
+            -10.45,
+            -20.25,
+            -7.6,
+            -19.15
+          ]
+        },
+        {
+          "layer": 141,
+          "z": 28.1,
+          "kind": "overhang beyond one bead",
+          "area": 6.652,
+          "bounds": [
+            4.22,
+            -19.0,
+            10.6,
+            -17.6
+          ]
+        },
+        {
+          "layer": 141,
+          "z": 28.1,
+          "kind": "overhang beyond one bead",
+          "area": 6.652,
+          "bounds": [
+            -10.6,
+            -19.0,
+            -4.22,
+            -17.6
+          ]
+        }
+      ]
+    }
+  }
+}

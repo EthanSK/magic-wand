@@ -1,0 +1,527 @@
+{
+  "status": "static packing probe only; no model changes or print approval",
+  "source_sha256": "b72c6a7a4bededd6a10450b2a029942911b4933ff85954b8cd80ff319629b4e0",
+  "rod_aabb_mm": [
+    -4.0,
+    -40.0,
+    -4.0,
+    4.0,
+    100.0,
+    4.0
+  ],
+  "grove_original_aabbs_mm": {
+    "board": [
+      -10.0,
+      -7.75,
+      19.35,
+      10.0,
+      16.45,
+      20.95
+    ],
+    "housing": [
+      -8.6,
+      -0.65,
+      11.65,
+      -3.6,
+      9.35,
+      19.35
+    ],
+    "plug": [
+      -8.55,
+      -0.45,
+      8.95,
+      -3.65,
+      9.15,
+      11.65
+    ],
+    "components": [
+      -8.9,
+      -5.3,
+      18.0,
+      -5.45,
+      14.0,
+      19.35
+    ],
+    "lead": [
+      -10.7,
+      -5.75,
+      4.55,
+      -5.15,
+      5.45,
+      10.65
+    ]
+  },
+  "r37_choc_spacing_x_mm": 21.1,
+  "results": [
+    {
+      "yaw_deg": -90.0,
+      "op1_seat_lift_mm": 0.0,
+      "op1_rigid_aabb_mm": [
+        -9.6,
+        -2.45,
+        3.3,
+        21.15,
+        7.55,
+        18.15
+      ],
+      "overlap_mm3": {
+        "board": {
+          "choc_hardware_and_cap_travel": 94.300623,
+          "rod": 0.0,
+          "grove_original": 42.029647
+        },
+        "sockets": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 0.335087
+        },
+        "housing": {
+          "choc_hardware_and_cap_travel": 30.521686,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "plug": {
+          "choc_hardware_and_cap_travel": 2.563227,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "switch": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 31.7985
+        },
+        "terminals": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "plunger": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "fasteners": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 16.157091
+        }
+      },
+      "minimum_extra_symmetrical_key_shift_mm_for_zero_rigid_overlap": 7.1,
+      "width_increase_for_that_shift_mm": 14.2,
+      "current_fit": false,
+      "wire_route_verified": false
+    },
+    {
+      "yaw_deg": 90.0,
+      "op1_seat_lift_mm": 0.0,
+      "op1_rigid_aabb_mm": [
+        -21.15,
+        -2.45,
+        3.3,
+        9.6,
+        7.55,
+        18.15
+      ],
+      "overlap_mm3": {
+        "board": {
+          "choc_hardware_and_cap_travel": 94.206602,
+          "rod": 0.0,
+          "grove_original": 60.470021
+        },
+        "sockets": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 7.536998
+        },
+        "housing": {
+          "choc_hardware_and_cap_travel": 53.74359,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "plug": {
+          "choc_hardware_and_cap_travel": 9.269607,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "switch": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 178.8285
+        },
+        "terminals": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 0.73656
+        },
+        "plunger": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "fasteners": {
+          "choc_hardware_and_cap_travel": 0.069499,
+          "rod": 0.0,
+          "grove_original": 0.0
+        }
+      },
+      "minimum_extra_symmetrical_key_shift_mm_for_zero_rigid_overlap": 9.331,
+      "width_increase_for_that_shift_mm": 18.662,
+      "current_fit": false,
+      "wire_route_verified": false
+    },
+    {
+      "yaw_deg": -90.0,
+      "op1_seat_lift_mm": 0.9,
+      "op1_rigid_aabb_mm": [
+        -9.6,
+        -2.45,
+        4.2,
+        21.15,
+        7.55,
+        19.05
+      ],
+      "overlap_mm3": {
+        "board": {
+          "choc_hardware_and_cap_travel": 99.316287,
+          "rod": 0.0,
+          "grove_original": 42.1174
+        },
+        "sockets": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 1.495005
+        },
+        "housing": {
+          "choc_hardware_and_cap_travel": 61.322845,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "plug": {
+          "choc_hardware_and_cap_travel": 7.128874,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "switch": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 32.045
+        },
+        "terminals": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "plunger": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "fasteners": {
+          "choc_hardware_and_cap_travel": 3.65483,
+          "rod": 0.0,
+          "grove_original": 17.763283
+        }
+      },
+      "minimum_extra_symmetrical_key_shift_mm_for_zero_rigid_overlap": 7.35,
+      "width_increase_for_that_shift_mm": 14.7,
+      "current_fit": false,
+      "wire_route_verified": false
+    },
+    {
+      "yaw_deg": 90.0,
+      "op1_seat_lift_mm": 0.9,
+      "op1_rigid_aabb_mm": [
+        -21.15,
+        -2.45,
+        4.2,
+        9.6,
+        7.55,
+        19.05
+      ],
+      "overlap_mm3": {
+        "board": {
+          "choc_hardware_and_cap_travel": 99.164744,
+          "rod": 0.0,
+          "grove_original": 60.560021
+        },
+        "sockets": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 9.018065
+        },
+        "housing": {
+          "choc_hardware_and_cap_travel": 69.755596,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "plug": {
+          "choc_hardware_and_cap_travel": 20.992359,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "switch": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 179.075
+        },
+        "terminals": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 1.09296
+        },
+        "plunger": {
+          "choc_hardware_and_cap_travel": 0.0,
+          "rod": 0.0,
+          "grove_original": 0.0
+        },
+        "fasteners": {
+          "choc_hardware_and_cap_travel": 3.65483,
+          "rod": 0.0,
+          "grove_original": 0.0
+        }
+      },
+      "minimum_extra_symmetrical_key_shift_mm_for_zero_rigid_overlap": 9.331,
+      "width_increase_for_that_shift_mm": 18.662,
+      "current_fit": false,
+      "wire_route_verified": false
+    }
+  ],
+  "longitudinal_wire_probe": {
+    "radius_mm": 1.3,
+    "plug_aabb_mm": [
+      -3.1,
+      19.55,
+      4.2,
+      3.1,
+      23.2,
+      7.3
+    ],
+    "path_points_mm": [
+      [
+        0.0,
+        22.999999999999996,
+        5.75
+      ],
+      [
+        0.0,
+        23.999999999999996,
+        5.75
+      ],
+      [
+        0.5,
+        24.599999999999994,
+        5.75
+      ],
+      [
+        1.4,
+        24.899999999999995,
+        5.75
+      ],
+      [
+        3.5,
+        24.899999999999995,
+        5.75
+      ],
+      [
+        5.8,
+        24.899999999999995,
+        5.75
+      ],
+      [
+        7.3,
+        24.899999999999995,
+        4.55
+      ],
+      [
+        8.1,
+        24.899999999999995,
+        2.55
+      ],
+      [
+        8.1,
+        24.899999999999995,
+        -1.0499999999999998
+      ]
+    ],
+    "wire_aabb_mm": [
+      -1.3,
+      21.7,
+      -2.35,
+      9.4,
+      26.2,
+      7.05
+    ],
+    "rod_overlap_mm3": 0.0,
+    "seated_carrier_overlap_mm3": 0.0,
+    "seated_choc_overlap_mm3": 0.0,
+    "insertion_path": [
+      {
+        "lift_mm": 0.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 0.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 1.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 1.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 2.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 2.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 3.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 3.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 4.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 4.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 5.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 5.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 6.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 6.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 7.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 7.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 8.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 8.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 9.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 9.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 10.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 10.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 11.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 11.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 12.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 12.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 13.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 13.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 14.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 14.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 15.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 15.5,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      },
+      {
+        "lift_mm": 16.0,
+        "overlap_mm3": 0.0,
+        "bounds_mm": null
+      }
+    ],
+    "physical_route_verified": false,
+    "direction_basis": "manufacturer kit photo; exact outlet depth and bend stiffness remain unmeasured"
+  }
+}

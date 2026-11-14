@@ -1,0 +1,113 @@
+{
+  "revision": "carbon-rod-holders-r38-centred-op1",
+  "based_on": "carbon-rod-holders-r37-adjustable-op1",
+  "units": "mm",
+  "parts": {
+    "Key_Carrier": {
+      "volume_mm3": 7565.305,
+      "solid_PETG_g": 9.608,
+      "assembly_bounds_mm": [
+        [
+          -30.05,
+          -9.2,
+          -4.781
+        ],
+        [
+          30.0,
+          32.65,
+          20.0
+        ]
+      ],
+      "print_height_mm": 41.85,
+      "stl_sha256": "d6d42c8d8334ea651fed92aaa2386aa3a3510e7e39747b61e47c1a1538050140",
+      "assembly_stl_sha256": "565f25084ae84af08e41c1287cd95e8f567ca96c97e55117b91cb35c51cc3901",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -30.049999237060547
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          32.650001525878906
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.781332969665528
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.001255,
+      "print_export_drift_mm3": 0.002109
+    },
+    "Grove_Touch_Bracket": {
+      "volume_mm3": 830.878,
+      "solid_PETG_g": 1.055,
+      "assembly_bounds_mm": [
+        [
+          -12.0,
+          -11.835,
+          13.59
+        ],
+        [
+          10.6,
+          28.4,
+          20.25
+        ]
+      ],
+      "print_height_mm": 40.235,
+      "stl_sha256": "194330fdfb1bfd77c8278210c2a04993c863287f3ce74350b7b5d0257f53c400",
+      "assembly_stl_sha256": "a7cb9403d91ca829aca279436a874fae293539fc45aaece1052d871f00c213d8",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.0
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -11.835000038146973
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          20.25
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000202,
+      "print_export_drift_mm3": 0.000281
+    }
+  },
+  "frames": {
+    "Key_Carrier": "assembly",
+    "Grove_Touch_Bracket": "bracket frame at the hard stop; place with holder31.world(angle)"
+  },
+  "change": "OP1 board on the rod centre line on a 0.9 mm higher seat. Grove board 2 mm left and 0.9 mm higher. Stop screw beside the board. Choc seats 0.1 mm closer on each side.",
+  "physical_fit_verified": false,
+  "print_cleared": false,
+  "source_sha256": {
+    "assembly38.py": "43cbae9ffeba23c06239bb651f86e526922d085354b86188ae365753333a27f6",
+    "holder38.py": "b72c6a7a4bededd6a10450b2a029942911b4933ff85954b8cd80ff319629b4e0",
+    "complete-assembly.json": "0149d1faf9ff2b61f1f51cc4e91beaa9aa78355e9462e8e292214354329032a2"
+  }
+}
