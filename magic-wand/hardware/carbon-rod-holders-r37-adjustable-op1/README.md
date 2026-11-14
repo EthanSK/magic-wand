@@ -205,8 +205,9 @@ The estimate is 1 h 58 min and 18.62 g. Sliced clearances and connected
 paths are checked. Adhesion, finished strength and component fit still
 depend on the physical trial.
 
-The 2026-11-14 trial completed all 209 layers after one external-filament
-feed warning was cleared. The visible parts retained their bases through
-completion, with noticeable loose stringing between parts and around the
-wipe tower. Both heater targets switched off normally. Removal, component
-fit and finished strength still require physical checks.
+The 2026-11-14 trial reached the controller's 209-layer completion state
+after one external-filament feed warning was cleared. Both heater targets
+switched off normally. Camera views showed retained bases and noticeable
+loose stringing, but the user reported a physical failure and a possible
+obstruction with continued force. The initiating cause is unconfirmed.
+Treat this trial as a physical failure despite the completed layer count.
