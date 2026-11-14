@@ -1,0 +1,34 @@
+{
+  "status": "experimental_fit_trial",
+  "print_started": false,
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "slice_passed": true,
+  "deposited_paths_passed": true,
+  "all_seven_parts_present": true,
+  "files": {
+    "holder39.py": "dafe4bb34b15931155aef50252841794504a66c13d9571159f4388ddbd99e008",
+    "assembly39.py": "25dd85f7b6099f6f6a213c4193acc18f0d35a04c0fd8296f86425075505c80a1",
+    "plate39.py": "09dfa4b96d6e3a654c7ea60fe7021c7ddb70029550f12bd2807b65f9b95a7481",
+    "audit39.py": "4ebff79c6165798e10f5490e6c161d15edfd7684819183fef3254eca2048c81c",
+    "complete-assembly.json": "5d2efab4984ca48b58cc6c0eae03fbe8c662a17cf5ab2a8764c83113887cd056",
+    "exports/manifest.json": "6ae5285acb9437ff26f0311ba3c30559d2c55dd272099f32de299dff15a7fb27",
+    "exports/assembly-guide.json": "0f60d083b8f9872f7fb5758f61786d2007e21cd5b5cbd5380e0ecf56169c625c",
+    "exports/print-trial/R39-Complete-A1-mini-PETG-layout.3mf": "3b1bd50e5aee37f30a9e3cd044a06cde7dce7c8e617d132aeace50f87f79e460",
+    "exports/print-trial/R39-Complete-A1-mini-PETG.gcode.3mf": "32e8db5a85a9c20df4a9949296d1a8a64a04bc8f99ebb79dc77822e8cf111b4f",
+    "exports/print-trial/slice-audit.json": "7c834c88b49ca1ef95e6e4f2db75ecd4f2dcc8fa846a410ad27bc747042d240e",
+    "exports/print-trial/extra-repair-checks.json": "6a7dbbc1b3dfbdd4b5e417f05435ee5137391590a37aa3db6c0918484e7054b9"
+  },
+  "limits": [
+    "Root bending estimate is not a PETG layer-bond or fatigue test.",
+    "Board model is the Grove Touch Sensor. DFRobot DFR0030 remains a different assembly.",
+    "Remove temporary support from the rod bore and board passage before fitting.",
+    "Physical support removal, catch force, finish and finger comfort remain unverified.",
+    "Current replacement battery dimensions are not yet confirmed."
+  ],
+  "review": {
+    "reviewer": "Claude Opus 5.5",
+    "verdict": "candidate only until deposited audit passes; physical strength remains unverified",
+    "disposition": "CAD, export and path issues checked after review; physical limits retained."
+  }
+}

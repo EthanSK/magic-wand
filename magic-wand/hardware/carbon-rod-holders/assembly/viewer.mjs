@@ -141,7 +141,10 @@ function fit() {
   if (!group) return;
   const bounds = new THREE.Box3();
   for (const [id, object] of Object.entries(actors)) if (object.visible && module.actors[id].frame !== false) bounds.expandByObject(object);
-  if (bounds.isEmpty()) bounds.setFromObject(group);
+  if (module.frameBounds) {
+    bounds.min.fromArray(module.frameBounds[0]);
+    bounds.max.fromArray(module.frameBounds[1]);
+  } else if (bounds.isEmpty()) bounds.setFromObject(group);
   bounds.expandByScalar(2); input.fitBounds(bounds.min.toArray(), bounds.max.toArray(), { aspect: camera.aspect }); render();
 }
 function installModelActions(actions = []) {
@@ -186,7 +189,9 @@ function updateCutaway(index, fraction) {
 }
 function chooseMode(mode) { input.setMode(mode); for (const button of document.querySelectorAll('[data-mode]')) button.setAttribute('aria-pressed', String(button.dataset.mode === mode)); render(); }
 function applyPose({ index, fraction }) {
-  const startOfReplay = module.concept && index === 0 && Number(document.body.dataset.step) > 0;
+  const previousStep = Number(document.body.dataset.step);
+  const startOfReplay = module.concept && index === 0 && previousStep > 0;
+  const followStep = module.frameEachStep && index !== previousStep;
   const sample = sampledPose(module, index, fraction);
   for (const [id, object] of Object.entries(actors)) {
     const m = sample[id] || identity();
@@ -201,7 +206,7 @@ function applyPose({ index, fraction }) {
   }
   updateCutaway(index, fraction);
   document.body.dataset.step = String(index); document.body.dataset.fraction = String(fraction);
-  if (startOfReplay) fit();
+  if (startOfReplay || followStep) fit();
   else render();
 }
 async function geometry(record, sourceUrl) {

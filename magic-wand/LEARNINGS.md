@@ -2796,3 +2796,10 @@ Check support and tower moves separately because their acceleration
 can ignore object-height settings. A temporary M201 X/Y cap covers
 those paths and is restored at layer four. Verify both the requested
 feed and effective acceleration in the emitted G-code.
+
+## Holder fit review and live viewer availability — 2026-11-14
+
+- A successful machine completion and attached bases did not establish that the touch holder survived hand assembly. User-reported root failure overrides using nominal PETG yield strain as a strength pass. Root fillets can shorten the flexible length; update the bending model and visual morph as well as the solid. Keep force/fatigue explicitly unverified.
+- The R39 battery door must print with its plain broad face down and tooth upward. Reversing this orientation caused a Bambu floating-cantilever warning; the corrected slice had no warnings. The catch still requires brim cleanup and a physical fit trial.
+- When reusing a deposited-path checker for a changed latch, compose the new spring-slit region. The old slit location reported ordinary new door material as intrusion; do not delete the region or waive the hits.
+- Local assembly availability now follows the existing launchd RunAtLoad/KeepAlive pattern used by the text and video viewers. Keep the service loopback-only, check exact asset URLs, and verify actual process replacement after termination. Availability depends on the Mac being awake with the user's session running.

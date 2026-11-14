@@ -85,7 +85,7 @@ export function groupKeys(modules) {
   }
 
   const fitChoc = {
-    ...key, label: 'Fit Choc switches and caps', note: 'Fit the outer switches and sockets, then press on the four keycaps.',
+    ...key, label: 'Fit Choc switches and caps', note: key.note || 'Fit the outer switches and sockets, then press on the four keycaps.',
     actors: { ...key.actors, ...caps }, steps: [...keySteps, capFit],
   };
   const views = dfr || copper ? {
@@ -108,6 +108,21 @@ export function groupKeys(modules) {
     view.compareCapHeights = id !== 'key';
   }
   // A guide may name the Keys entry so a detail module listed after it reads as a pair.
+  // Compose the whole-rod view with the same bought cap reference as Keys.
+  // Each cap follows its own switch pose throughout assembly and removal.
+  if (others.whole) {
+    const whole = others.whole;
+    const capEntries = Object.fromEntries(Object.entries(caps).map(([id, actor]) => [`keys_${id}`, actor]));
+    others.whole = {
+      ...whole, actors: { ...whole.actors, ...capEntries },
+      steps: whole.steps.map(step => ({ ...step, samples: step.samples.map(sample => ({
+        ...sample, ...Object.fromEntries(Object.keys(caps).map(id => {
+          const switchId = `keys_${id.replace('keycap_', 'switch_')}`;
+          return [`keys_${id}`, sample[switchId] ?? identity()];
+        })),
+      })) })),
+    };
+  }
   const main = views.dfr ?? views.copper ?? views.centre;
   return { modules: { keys: { ...main, label: main.keysLabel ?? 'Keys' }, ...others }, views };
 }
@@ -118,7 +133,9 @@ const componentFamilies = {
   centre_shallow: 'keys',
   centre_deep: 'keys',
   snap_hinge: 'keys',
+  finger_rest: 'keys',
   xiao_latch: 'xiao',
+  battery_latch: 'battery',
   battery_easy: 'battery',
   battery_spacer: 'battery',
 };
@@ -130,9 +147,11 @@ const componentLabels = {
 };
 const viewLabels = {
   snap_hinge: 'Snap hinge detail',
+  finger_rest: 'Finger rest underside',
   xiao: 'Full assembly',
   xiao_latch: 'Keeper detail',
-  battery: 'Standard door',
+  battery: 'Full assembly',
+  battery_latch: 'Door catch detail',
   battery_easy: 'Easier door',
   battery_spacer: 'Patterned spacer',
 };
