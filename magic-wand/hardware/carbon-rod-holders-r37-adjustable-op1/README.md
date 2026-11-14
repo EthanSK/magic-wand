@@ -211,3 +211,11 @@ switched off normally. Camera views showed retained bases and noticeable
 loose stringing, but the user reported a physical failure and a possible
 obstruction with continued force. The initiating cause is unconfirmed.
 Treat this trial as a physical failure despite the completed layer count.
+
+A subsequent same-settings control retry on 2026-11-14 followed the user's
+confirmation that the tangle was cleared and the spool turned freely. It
+completed all 209 layers with both heater targets off. Repeated camera
+checks through completion showed the visible parts still attached to their
+pads, with fine stringing and no growing tangle. This establishes observed
+bed retention for that retry, not physical acceptance: hidden details,
+support removal, fit and strength still need hands-on inspection.
