@@ -1,0 +1,27 @@
+{
+  "job": "battery",
+  "parts": [
+    "Battery_Holder",
+    "Battery_End_Door"
+  ],
+  "digital_checks_passed": true,
+  "physical_ready_for_send": false,
+  "physical_hold_reason": "Clear failed R41 plastic and reseat the plate before any new job.",
+  "physical_success_guaranteed": false,
+  "estimate_seconds": 2679,
+  "filament_g": 4.88,
+  "artifact_sha256": {
+    "R42-battery-A1-mini-PETG-layout.3mf": "792be81955b0712e016c00fc75da4090abb6e6f7ca93ee5ac4be54cfc55db6c0",
+    "R42-battery.gcode.3mf": "b9325ebc1abc869f0d5bdca18066d0ab4417bbfc33eca63db5701db16b2cbb4e",
+    "R42-battery-reopened.gcode.3mf": "853904195d618c690c61ccab730588ab1e44799b2aefea600227b5897219eaca",
+    "R42-battery-print-only.3mf": "46fe71f0fd905de64705828321ec233aaa6290c63258c2d32f059399abd1637f",
+    "job.json": "30627e4a89474f9df8f53aeb440f3dcf9cef01bffd733b968e7f9b7664c9bdd6",
+    "initial-audit.json": "325ea036cbdd1a1ed6d891d11fc84bbe85793aed988e2c8790b82f38ad1f844b",
+    "slice-audit.json": "27dc4aef3de61e12f2d788d1d25bcf29f49b95a8880d59d810870b60f438c964",
+    "reopen-checks.json": "063d7658cd689ac1f924b31ee739303643884bc8266c4a6d208d3a61c338d9a0",
+    "print-checks.json": "b984109f5d6943a7d26ae36bb7623195a5e05bd5adefda36a015b04f7a1a5293",
+    "print-only.json": "58036de94c5c974324878bd9eb09105e7c19cdd9d7f190d9b616a600a89c2eea"
+  },
+  "driver_sha256": "d1e05bfe7bc1ba2444fe04d686b338d87d5fe6378b8453ade3ebe9ccde5f380d",
+  "source_revalidation_sha256": "ab4b32e44663f96165a3987a0c402c9e739c114cbd3816180456f0e4b4468e9d"
+}

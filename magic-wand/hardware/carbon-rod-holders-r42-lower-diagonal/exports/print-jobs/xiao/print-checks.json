@@ -1,0 +1,537 @@
+{
+  "build_list": [
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Cable_Clip_12_Wire"
+  ],
+  "source_parts": {
+    "XIAO_Rod_Holder": {
+      "group": "xiao",
+      "directory": "../carbon-rod-holders-r25-keeper-release",
+      "exports": "exports",
+      "source_filename": "XIAO_Rod_Holder-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "3fed2e866012105587bfc353c7bb79edcd3e2b039359f7a18b62655b9bf49ec8",
+      "status": "verified",
+      "volume_mm3": 1635.4247172000196,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.600000381469727
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          23.399999618530273
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    },
+    "XIAO_Near_Keeper": {
+      "group": "xiao",
+      "directory": "../carbon-rod-holders-r25-keeper-release",
+      "exports": "exports",
+      "source_filename": "XIAO_Near_Keeper-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "5b68a366eb62caa3124429d183cd74c69f7246e1a33624363c095e6f86e237b0",
+      "status": "verified",
+      "volume_mm3": 225.38841717374507,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -13.0
+        ],
+        [
+          -0.0,
+          -1.0,
+          1.2246467991473532e-16,
+          3.0
+        ],
+        [
+          -0.0,
+          -1.2246467991473532e-16,
+          -1.0,
+          11.949999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "outer brim"
+    },
+    "Cable_Clip_12_Wire": {
+      "group": "cable",
+      "directory": "../carbon-rod-holders-r22-integrated-guard",
+      "exports": "exports",
+      "source_filename": "Cable_Clip_12_Wire-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "4806c7ae867d9fb2b4d2c0d2db31f4be76b0c6020774341253f1108765e2ab8d",
+      "status": "verified",
+      "volume_mm3": 134.53316142837184,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -4.798483848571777
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -5.053805351257324
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    }
+  },
+  "bom_sha256": "b87baad2e1561544ef32ff21ed2d292c5c7bbc1712d27e54653d0154ca69af0b",
+  "generator_sha256": "46f0432378d88b906914a7c84d5f0b62c19e33bfaf8c239e5d42b3e9b1fee817",
+  "layout_sha256": "ea16d87457c5a2468c56fbf51776a9c5ef5864fd104749f43e1313a62dfcfa16",
+  "anchors": {
+    "XIAO_Rod_Holder": {
+      "thickness_mm": 0.4,
+      "flange_area_mm2": 294.54,
+      "tie_section_each_mm2": 0.4,
+      "tie_count": 6,
+      "separate_pads": 4,
+      "solid_PETG_g": 0.154,
+      "first_layer_area_mm2": 164.96,
+      "rod_axis_print_xy": [
+        14.6,
+        4.83
+      ],
+      "sites_print_xy_outward": [
+        [
+          2.6000003814697266,
+          12.9,
+          -1,
+          0
+        ],
+        [
+          26.600000381469727,
+          12.9,
+          1,
+          0
+        ],
+        [
+          2.6000003814697266,
+          15.8,
+          -1,
+          0
+        ],
+        [
+          26.600000381469727,
+          15.8,
+          1,
+          0
+        ],
+        [
+          9.600000381469727,
+          20.129629135131836,
+          0,
+          1
+        ],
+        [
+          19.600000381469727,
+          20.129629135131836,
+          0,
+          1
+        ]
+      ],
+      "tie_sites": [
+        {
+          "site_print_xy": [
+            2.6,
+            12.9
+          ],
+          "outward": [
+            -1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.683,
+            4.7,
+            4.7
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.1491
+        },
+        {
+          "site_print_xy": [
+            26.6,
+            12.9
+          ],
+          "outward": [
+            1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.683,
+            4.7,
+            4.7
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.1491
+        },
+        {
+          "site_print_xy": [
+            2.6,
+            15.8
+          ],
+          "outward": [
+            -1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.4,
+            4.4,
+            4.4
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            26.6,
+            15.8
+          ],
+          "outward": [
+            1,
+            0
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            4.4,
+            4.4,
+            4.4
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            9.6,
+            20.13
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            1.6,
+            1.6,
+            1.6
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            19.6,
+            20.13
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            1.6,
+            1.6,
+            1.6
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        }
+      ],
+      "stl_sha256": "17261dd5a3d3ba494695b4d29ab89982e5dfff7cc19be828f1f5a5932a59b7e1",
+      "hole_centres_print_xy_mm": [],
+      "old_area_mm2": 303.065,
+      "solid_area_mm2": 631.442,
+      "pad_thickness_mm": 0.4,
+      "ties_unchanged": true
+    },
+    "Cable_Clip_12_Wire": {
+      "stl_sha256": "a7faf7081f22bb495d27faa6a8aeb9d56ba1e4c6b93bd40ada9858bc47fa0c7c",
+      "thickness_mm": 0.4,
+      "tie_section_each_mm2": 0.27999999999999997,
+      "tie_count": 2,
+      "overlap_at_root_mm3": [
+        0.466,
+        0.466
+      ],
+      "hole_centres_print_xy_mm": [],
+      "old_area_mm2": 20.46,
+      "solid_area_mm2": 70.46,
+      "pad_thickness_mm": 0.4,
+      "ties_unchanged": true
+    }
+  },
+  "plate_extents_mm": {
+    "XIAO_Rod_Holder": [
+      [
+        99.20000076293945,
+        75.0,
+        0.0
+      ],
+      [
+        156.0,
+        111.52962875366211,
+        28.399999618530273
+      ]
+    ],
+    "XIAO_Near_Keeper": [
+      [
+        119.0,
+        51.0,
+        0.0
+      ],
+      [
+        145.0,
+        61.0,
+        2.1500000953674316
+      ]
+    ],
+    "Cable_Clip_12_Wire": [
+      [
+        73.0,
+        50.85380554199219,
+        0.0
+      ],
+      [
+        91.43351936340332,
+        71.25380516052246,
+        2.4000000953674316
+      ]
+    ]
+  },
+  "material_bounds_xy_mm": {
+    "XIAO_Rod_Holder": [
+      [
+        99.20000076293945,
+        75.0
+      ],
+      [
+        156.0,
+        111.52962875366211
+      ]
+    ],
+    "XIAO_Near_Keeper": [
+      [
+        112.85,
+        44.85
+      ],
+      [
+        151.15,
+        67.15
+      ]
+    ],
+    "Cable_Clip_12_Wire": [
+      [
+        73.0,
+        50.85380554199219
+      ],
+      [
+        91.43351936340332,
+        71.25380516052246
+      ]
+    ]
+  },
+  "slow_bands_mm": {},
+  "filament_profile": "Flashforge HS PETG Metallic",
+  "profile_explicitly_selected": true,
+  "profile_base": "Generic PETG @BBL A1M",
+  "filament_reference": "https://uk.flashforge.com/products/hs-petg-metallic",
+  "effective_filament_settings": {
+    "nozzle_temperature": [
+      "245"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "245"
+    ],
+    "textured_plate_temp": [
+      "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "60"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ]
+  },
+  "physical_fit_verified": false,
+  "driver_sha256": "9229db53644a96ddd4a5cc4518374b75eebd631bd6a619e22836e25e9f97335d",
+  "recipe_source_sha256": "2cc69ac25d19c679ed45c0ef0e55f5e9069a01cc490838d5061670f4bbd1a704",
+  "support_enforcers": [
+    [
+      "diagonal OP1 slot",
+      [
+        [
+          19.079999237060548,
+          13.811332969665527,
+          35.953
+        ],
+        [
+          29.439999237060544,
+          16.281332969665527,
+          41.044000000000004
+        ]
+      ]
+    ],
+    [
+      "white connector ledge",
+      [
+        [
+          30.672999237060548,
+          10.681332969665528,
+          14.713
+        ],
+        [
+          38.440999237060545,
+          14.111332969665527,
+          18.595000000000002
+        ]
+      ]
+    ],
+    [
+      "upper left key lip",
+      [
+        [
+          2.0499992370605455,
+          14.561332969665527,
+          18.3
+        ],
+        [
+          16.049999237060547,
+          16.051332969665527,
+          18.700000000000003
+        ]
+      ]
+    ],
+    [
+      "outer finger guard",
+      [
+        [
+          8.899999237060547,
+          5.2313329696655275,
+          24.9
+        ],
+        [
+          17.199999237060545,
+          6.831332969665528,
+          25.650000000000002
+        ]
+      ]
+    ]
+  ],
+  "bracket_support_enforcers": [
+    [
+      "left backup-stop foot",
+      [
+        [
+          0.3,
+          5.35,
+          0.35
+        ],
+        [
+          2.1,
+          9.47,
+          0.76
+        ]
+      ]
+    ],
+    [
+      "right backup-stop foot",
+      [
+        [
+          19.1,
+          5.8,
+          0.35
+        ],
+        [
+          20.9,
+          9.47,
+          0.76
+        ]
+      ]
+    ]
+  ],
+  "physical_success_verified": false,
+  "job": "xiao",
+  "split_driver_sha256": "2097d81678c05a0eb2efc82621218b097665bb2aeb7111465ef2cc06953b9b4f",
+  "complete_bom_sha256": "b87baad2e1561544ef32ff21ed2d292c5c7bbc1712d27e54653d0154ca69af0b",
+  "part_selection_complete_and_disjoint": true,
+  "physical_ready_for_send": false,
+  "physical_hold_reason": "Clear failed R41 plastic and reseat the plate before any new job.",
+  "archive_sha256": "0ca9210b1ca58689819acfc60bc05f8c71ee50eecec68d9a205ba506f9015a67",
+  "commands": {
+    "passed": true,
+    "project_sha256": "0ca9210b1ca58689819acfc60bc05f8c71ee50eecec68d9a205ba506f9015a67",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "estimate_seconds": 2352,
+  "filament_g": 4.12,
+  "warnings": [],
+  "archive_warnings": []
+}

@@ -1,0 +1,28 @@
+{
+  "job": "xiao",
+  "parts": [
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Cable_Clip_12_Wire"
+  ],
+  "digital_checks_passed": true,
+  "physical_ready_for_send": false,
+  "physical_hold_reason": "Clear failed R41 plastic and reseat the plate before any new job.",
+  "physical_success_guaranteed": false,
+  "estimate_seconds": 2352,
+  "filament_g": 4.12,
+  "artifact_sha256": {
+    "R42-xiao-A1-mini-PETG-layout.3mf": "ea16d87457c5a2468c56fbf51776a9c5ef5864fd104749f43e1313a62dfcfa16",
+    "R42-xiao.gcode.3mf": "96c1d582e8e6dc57d45073895316cfcfdf51507864b10973febdf8155ce36353",
+    "R42-xiao-reopened.gcode.3mf": "0ca9210b1ca58689819acfc60bc05f8c71ee50eecec68d9a205ba506f9015a67",
+    "R42-xiao-print-only.3mf": "f1b69f1616f5ce0994d5ff5b28f9ab78fe3157973f998e3e19c6f127b384f961",
+    "job.json": "357137052ecbb24e12e59589fb35496d63d31d0979458eeb8d4e2fdc13556d2f",
+    "initial-audit.json": "edc87fb250237213c3c3a1c472352e7c96911d8e4ed2a164430f28b489130b57",
+    "slice-audit.json": "20fd3a812c4ee8aa45ad6070a285a03e77317033d4b2d93de62ef538dad5ed7f",
+    "reopen-checks.json": "aff7e429d1ca3c2dfa2a8d6c723e3b317ed917f89bd638c140abc324fa42f723",
+    "print-checks.json": "051854961113e97242122b7604bf15ad05aa304cbc816da83da9249dbac0ff88",
+    "print-only.json": "689305ed2cc6c8c7abe7e154c52099119af9fd2bc1125438dc00501623f212b3"
+  },
+  "driver_sha256": "d1e05bfe7bc1ba2444fe04d686b338d87d5fe6378b8453ade3ebe9ccde5f380d",
+  "source_revalidation_sha256": "eb25e4d368413b7fa709967746314ce1abdaed828e514ce4c27cb63e96372495"
+}

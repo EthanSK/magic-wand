@@ -1,0 +1,278 @@
+{
+  "archive_sha256": "853904195d618c690c61ccab730588ab1e44799b2aefea600227b5897219eaca",
+  "manifest_sha256": "d5f9fb91458190f8ad020cafcfd74c9476f7b8ff31dfd21aa138145252cdcbef",
+  "checker_sha256": "e18aed7221a03a65116635070920e9cbbcdb1798b679952cea5e2b1b8d12a971",
+  "bom_sha256": "b87baad2e1561544ef32ff21ed2d292c5c7bbc1712d27e54653d0154ca69af0b",
+  "tower_bounds_mm": [
+    [
+      116.5627212524414,
+      16.549394607543945
+    ],
+    [
+      135.27102661132812,
+      35.26128387451172
+    ]
+  ],
+  "statistics": {
+    "straight_extruding_moves": 17416,
+    "arc_extruding_moves": 4714,
+    "support_extruding_moves": 0,
+    "feature_samples": {
+      "Prime tower": 97725,
+      "Outer wall": 113557,
+      "Inner wall": 58184,
+      "Gap infill": 33819,
+      "Bottom surface": 10644,
+      "Brim": 8334,
+      "Internal solid infill": 4509,
+      "Top surface": 22473,
+      "Sparse infill": 133,
+      "Floating vertical shell": 122,
+      "Bridge": 354,
+      "Overhang wall": 16
+    }
+  },
+  "parts": {
+    "Battery_Holder": {
+      "checked_layers": 165,
+      "floating_components": [],
+      "missing_printed_components": [],
+      "support_backed_islands": [],
+      "partial_overhangs": [],
+      "largest_unbacked_layers": [],
+      "required_empty_layer_gap_mm": 0.24,
+      "section_plane_guard_mm": 0.001,
+      "boundary_witness_grid": 3,
+      "sideways_backing_credit_mm": 0,
+      "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+      "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation.",
+      "first_layer_mm2": 1205.642,
+      "brim_samples": 0,
+      "tower_gap_mm": 43.867,
+      "pad_ties": [
+        {
+          "layer_top_mm": 0.2,
+          "pad": 1,
+          "joined": true
+        },
+        {
+          "layer_top_mm": 0.2,
+          "pad": 2,
+          "joined": true
+        },
+        {
+          "layer_top_mm": 0.2,
+          "pad": 3,
+          "joined": true
+        },
+        {
+          "layer_top_mm": 0.2,
+          "pad": 4,
+          "joined": true
+        },
+        {
+          "layer_top_mm": 0.2,
+          "pad": 5,
+          "joined": true
+        },
+        {
+          "layer_top_mm": 0.2,
+          "pad": 6,
+          "joined": true
+        },
+        {
+          "layer_top_mm": 0.4,
+          "pad": 1,
+          "joined": true
+        },
+        {
+          "layer_top_mm": 0.4,
+          "pad": 2,
+          "joined": true
+        },
+        {
+          "layer_top_mm": 0.4,
+          "pad": 3,
+          "joined": true
+        },
+        {
+          "layer_top_mm": 0.4,
+          "pad": 4,
+          "joined": true
+        },
+        {
+          "layer_top_mm": 0.4,
+          "pad": 5,
+          "joined": true
+        },
+        {
+          "layer_top_mm": 0.4,
+          "pad": 6,
+          "joined": true
+        }
+      ],
+      "working_spaces": {
+        "unloaded_clip_bore": {
+          "checked_samples": 25085,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [],
+          "poses_checked": 1
+        },
+        "clip_gap_near": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": [],
+          "poses_checked": 1
+        },
+        "external_wire_bus": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": [],
+          "poses_checked": 1
+        },
+        "reverse_wire_bus": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": [],
+          "poses_checked": 1
+        },
+        "cell_reserve": {
+          "checked_samples": 15299,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [],
+          "poses_checked": 1
+        },
+        "cell_loading": {
+          "checked_samples": 15813,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [],
+          "poses_checked": 1
+        },
+        "gate_removal_route": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": [],
+          "poses_checked": 61
+        },
+        "gate_slot_+1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": [],
+          "poses_checked": 1
+        },
+        "gate_slot_-1": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": [],
+          "poses_checked": 1
+        },
+        "lead_exit": {
+          "checked_samples": 512,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "external_support_exception": null,
+          "examples": [],
+          "poses_checked": 1
+        },
+        "clip_gap_far": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": [],
+          "poses_checked": 1
+        }
+      },
+      "critical_material": {}
+    },
+    "Battery_End_Door": {
+      "checked_layers": 13,
+      "floating_components": [],
+      "missing_printed_components": [],
+      "support_backed_islands": [],
+      "partial_overhangs": [],
+      "largest_unbacked_layers": [],
+      "required_empty_layer_gap_mm": 0.24,
+      "section_plane_guard_mm": 0.001,
+      "boundary_witness_grid": 3,
+      "sideways_backing_credit_mm": 0,
+      "backing_source": "Actual previous-layer bead footprints clipped to the final mesh; inscribed 12-gons, no credit for unprinted mesh.",
+      "limitation": "Bead-backed geometry audit, not a thermal, bridge-sag, strength or fatigue simulation.",
+      "first_layer_mm2": 114.399,
+      "brim_samples": 8334,
+      "tower_gap_mm": 27.307,
+      "working_spaces": {
+        "tongue_slit": {
+          "checked_samples": 0,
+          "violations": {},
+          "removable_external_support_samples": 0,
+          "examples": [],
+          "poses_checked": 1
+        }
+      },
+      "critical_material": {}
+    }
+  },
+  "failures": [],
+  "passed": true,
+  "startup": {
+    "passed": true,
+    "project_sha256": "853904195d618c690c61ccab730588ab1e44799b2aefea600227b5897219eaca",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "archive_warnings": [],
+  "physical_fit_verified": false,
+  "split_checker_sha256": "d1e05bfe7bc1ba2444fe04d686b338d87d5fe6378b8453ade3ebe9ccde5f380d",
+  "physical_strength_verified": false,
+  "physical_support_removal_verified": false
+}

@@ -1,0 +1,30 @@
+{
+  "job": "keys",
+  "parts": [
+    "Key_Carrier",
+    "DFRobot_Hole_Bracket",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2"
+  ],
+  "digital_checks_passed": true,
+  "physical_ready_for_send": false,
+  "physical_hold_reason": "Clear failed R41 plastic and reseat the plate before any new job.",
+  "physical_success_guaranteed": false,
+  "estimate_seconds": 6515,
+  "filament_g": 15.5,
+  "artifact_sha256": {
+    "R42-keys-A1-mini-PETG-layout.3mf": "9ecdb6c60556397fcabfaf84630aeec755d4c4bad64155b08f079472783803bc",
+    "R42-keys.gcode.3mf": "2c95b1c22975b40ab21671b5e9545901003a1ae5fa57998057f3cfe0f2cdfdfe",
+    "R42-keys-reopened.gcode.3mf": "fc7a7af0ac318858375e4c60dd042abec7e35093418151c23994756677b5d561",
+    "R42-keys-print-only.3mf": "3d51e7d0cc9fedd00f8921f3ee9038dae3a0e3103a59feef4e53b62e31154b1c",
+    "job.json": "7906a59a27d9cdc2266d86e1c9ea38cd1526fdf92cdb3b5557f8ef6a451117c8",
+    "initial-audit.json": "18b3ed300c9a1d7c7326a3e92c6479d4f72482a1cd993a1a66c3ce2a777128be",
+    "slice-audit.json": "d664dc67dc4b686d30dbf47ac92c5b2e81ddcd5c82278e3aa1718fb71909a7df",
+    "reopen-checks.json": "5b65458b9cddab9e6dce9f14366555446e5f84a9f1b36315c9a8b7f8015b57a0",
+    "print-checks.json": "68d99e2c91e79c1cf0229575ae36eaf64eb904508670e3fbaa3caf3e4a9f5ebf",
+    "print-only.json": "cd19a5aed0e54603933764011c6c32bf360986392a6e9a3a3a5b4a9b1fec47e4",
+    "audit38-support-projection.png": "4bd3a54affa9d95ba3fe76005254d19f6690fa1e876e9c11c1f93fbd548aabf9"
+  },
+  "driver_sha256": "158c36c658d5d9832d6116589afe1115ceb2d2fc66611db43afa92dcb548519b",
+  "source_revalidation_sha256": "1caa04e0372e0bdd838fd778e06205ba6cd756885edf56c4981a303e87accb56"
+}
