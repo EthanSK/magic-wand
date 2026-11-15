@@ -1,0 +1,64 @@
+{
+  "revision": "R41",
+  "reviewed_at_utc": "2026-11-15T07:16:11.969326+00:00",
+  "scope": "Initial independent complete-plate review, followed only by checks of repaired support and coverage.",
+  "reviewer_model": "claude-opus-5-5",
+  "primary_assessment": "Accepted the independent evidence and verdict for a complete experimental part trial.",
+  "digital_trial_accepted": true,
+  "physical_print_started_at_recording": false,
+  "physical_fit_strength_cleanup_verified": false,
+  "trial_review_sha256": "190a8ece69208cb116f4b1862c660b4db9f13a47f041d356112215ab5ed1a8c1",
+  "selected_archive_sha256": "c43f523063fffc3a6087c10d3b2e57e5b75d7485071fb4af442cfa99c4ed08a6",
+  "geometry_unchanged_between_final_support_recipes": true,
+  "findings": [
+    {
+      "id": "F1",
+      "origin": [
+        "Codex",
+        "Claude Opus 5.5"
+      ],
+      "status": "fixed",
+      "summary": "The two early bracket feet have measured native backing at a 0.2 mm gap."
+    },
+    {
+      "id": "F2",
+      "origin": [
+        "Claude Opus 5.5"
+      ],
+      "status": "fixed",
+      "summary": "Actual support is absent from the rod bore and both clip mouths."
+    },
+    {
+      "id": "F3",
+      "origin": [
+        "Claude Opus 5.5"
+      ],
+      "status": "fixed",
+      "summary": "Actual support is absent from both hinge operating spaces and full pivot bores."
+    }
+  ],
+  "independent_hinge_placement_witness": {
+    "previous_archive_sha256": "32dbf55fa7f4c627b1443743fa41d5497823457efc5d350efc54e6ce6ac99a98",
+    "selected_archive_sha256": "c43f523063fffc3a6087c10d3b2e57e5b75d7485071fb4af442cfa99c4ed08a6",
+    "source": "One independent batched probe of both G-code archives",
+    "bore_radius_mm": 0.9,
+    "axis_assembly_yz_mm": [
+      31.15,
+      18.5
+    ],
+    "previous_support_samples": 896,
+    "selected_support_samples": 0,
+    "selected_model_samples_inside_bore": 0,
+    "roof_layers_compared_mm": [
+      1.8,
+      3.2
+    ],
+    "roof_model_paths_identical": true,
+    "maximum_roof_bead_growth_from_lower_layer_mm": 0.28
+  },
+  "physical_trial_limits": [
+    "Bought DFR0030 dimensions and pin/hole placement still need fitting.",
+    "OP1 board/socket/lead envelope is photo-derived.",
+    "Support cleanup, hinge sag, arm/clip strength, rod grip and click feel remain unverified."
+  ]
+}

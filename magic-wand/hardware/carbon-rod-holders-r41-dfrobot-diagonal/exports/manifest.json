@@ -1,0 +1,297 @@
+{
+  "revision": "carbon-rod-holders-r41-dfrobot-diagonal",
+  "units": "mm",
+  "parts": {
+    "Key_Carrier": {
+      "volume_mm3": 7782.952,
+      "solid_PETG_g": 9.884,
+      "assembly_bounds_mm": [
+        [
+          -30.05,
+          -9.2,
+          -4.781
+        ],
+        [
+          30.0,
+          32.65,
+          20.8
+        ]
+      ],
+      "print_height_mm": 41.85,
+      "stl_sha256": "1dc2fb3099909dfd56ed64d8d7aeeb8864044873ad394076d007fb47687ed19e",
+      "assembly_stl_sha256": "eac934b782d249aadf373ecfa38a0fe79b6ce2a42f62a27a7ec63d168f455319",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -30.049999237060547
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          32.650001525878906
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.781332969665528
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.001208,
+      "print_export_drift_mm3": 0.002093
+    },
+    "DFRobot_Hole_Bracket": {
+      "volume_mm3": 813.067,
+      "solid_PETG_g": 1.033,
+      "assembly_bounds_mm": [
+        [
+          -10.6,
+          -11.836,
+          13.42
+        ],
+        [
+          10.6,
+          28.4,
+          23.65
+        ]
+      ],
+      "print_height_mm": 40.236,
+      "stl_sha256": "26deeffedc33b567ed73eae08ad597a0450d29047a2161fef8622938c153dd10",
+      "assembly_stl_sha256": "9248b706f9e3e20b70e13d322be02a1312a52aee1c75e8358b1ca942be31efe8",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.600000381469727
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -11.83572006225586
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          23.649999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000153,
+      "print_export_drift_mm3": 0.000326
+    },
+    "DFR0030_Post_Clip": {
+      "volume_mm3": 7.083,
+      "solid_PETG_g": 0.009,
+      "assembly_bounds_mm": [
+        [
+          -1.8,
+          -1.8,
+          21.85
+        ],
+        [
+          1.8,
+          2.2,
+          22.65
+        ]
+      ],
+      "print_height_mm": 0.8,
+      "stl_sha256": "b6e6c350d0c35d958df266387b2e6e6f30bab68e9515411c421b1d60157e038c",
+      "assembly_stl_sha256": "6132e7c30ea9214311b1db5f78d62e7a5a23d87bf65ed3913ae3f04f1eb63c09",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          21.850000381469727
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 5e-06,
+      "print_export_drift_mm3": 9e-06
+    },
+    "DFR0030_Post_Clip_2": {
+      "volume_mm3": 7.083,
+      "solid_PETG_g": 0.009,
+      "assembly_bounds_mm": [
+        [
+          -1.8,
+          -1.8,
+          21.85
+        ],
+        [
+          1.8,
+          2.2,
+          22.65
+        ]
+      ],
+      "print_height_mm": 0.8,
+      "stl_sha256": "b6e6c350d0c35d958df266387b2e6e6f30bab68e9515411c421b1d60157e038c",
+      "assembly_stl_sha256": "6132e7c30ea9214311b1db5f78d62e7a5a23d87bf65ed3913ae3f04f1eb63c09",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          21.850000381469727
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 5e-06,
+      "print_export_drift_mm3": 9e-06
+    },
+    "Battery_End_Door": {
+      "volume_mm3": 222.885,
+      "solid_PETG_g": 0.283,
+      "assembly_bounds_mm": [
+        [
+          -12.8,
+          -15.85,
+          6.35
+        ],
+        [
+          12.8,
+          -13.25,
+          13.4
+        ]
+      ],
+      "print_height_mm": 2.6,
+      "stl_sha256": "e6df91afd846b6dd421b399d8518017e93d89a6d7eb97adcb7e0736d233fed62",
+      "assembly_stl_sha256": "f1ae6ae7ca97501d4ced5900c8382f698709dea88ab6a53938c9fbb864cc5418",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.800000190734863
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -15.850000381469727
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          13.399999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 3.7e-05,
+      "print_export_drift_mm3": 8.4e-05
+    },
+    "Battery_Holder": {
+      "bounds_mm": [
+        [
+          -14.199999809265137,
+          -17.799999237060547,
+          -4.829628944396973
+        ],
+        [
+          14.199999809265137,
+          15.199999809265137,
+          12.350000381469727
+        ]
+      ],
+      "volume_mm3": 1948.4150061867858,
+      "solid_PETG_g": 2.474487057857218,
+      "print_height_mm": 33.0,
+      "body_count": 1,
+      "watertight": true,
+      "export_drift_mm3": 0.00077,
+      "stl_sha256": "9cc3092d47c87013ccf8d617dff542264d88e313cf7dc60bbcddf7061fde7326",
+      "assembly_stl_sha256": "1e37e83b49571ca8d68703b31ea5b0c324925d2e3eb8a891c6eea68568171fd6",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.199999809265137
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          15.199999809265137
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "copied_from": "."
+    }
+  },
+  "physical_fit_verified": false,
+  "print_cleared": false,
+  "source_sha256": {
+    "holder41.py": "2b7209c261828ddd8d4a8671f98319c24ea262b082ffd668e607f37fdecc09f6",
+    "assembly41.py": "9b4c218582de6382b55eaaab07bbfe783fddac9ab90203842e2b77e1f3e0efb9",
+    "complete-assembly.json": "83154397b2b263d4730c71d629bd5c68cbf9482a1329ec4346e65124c7afe282"
+  }
+}
