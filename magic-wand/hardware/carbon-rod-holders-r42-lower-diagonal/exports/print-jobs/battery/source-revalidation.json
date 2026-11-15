@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "current_driver_sha256": "2097d81678c05a0eb2efc82621218b097665bb2aeb7111465ef2cc06953b9b4f",
+  "current_driver_sha256": "0304496433bbbb90ce321216d428a2d062f6f3867b8c826abaffb47fd0902955",
   "selected_archive_sha256": "853904195d618c690c61ccab730588ab1e44799b2aefea600227b5897219eaca",
   "selected_layout_sha256": "792be81955b0712e016c00fc75da4090abb6e6f7ca93ee5ac4be54cfc55db6c0",
   "embedded_mesh_files_compared": 1,
@@ -9,5 +9,5 @@
   "height_ranges_identical": true,
   "global_settings_identical": true,
   "staged_model_and_pad_hashes_identical": true,
-  "reason": "Only selected-part extent metadata and tie-site diagnostics were refreshed. All embedded model resources, placements, native settings and ranges are byte-identical; selected audited G-code remains unchanged."
+  "reason": "The driver gained an optional single-component subset and injected command checker. The default three-job path remains unchanged: all embedded model resources, placements, native settings and ranges are byte-identical; selected audited G-code remains unchanged."
 }

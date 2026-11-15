@@ -3,8 +3,8 @@
 **Print hold after the R41 physical trial:** one part toppled late in the combined print.
 The combined R42 package remains a digital audit artifact; do not restart it unchanged.
 Image/layout comparison points to the battery holder, with the key carrier still standing;
-peeling, fracture and collision remain unconfirmed initiating causes. The next preparation
-separates keys, battery and XIAO/cable and rechecks the battery attachment.
+peeling, fracture and collision remain unconfirmed initiating causes. The next trial isolates the main key carrier. Separate grouped keys, battery
+and XIAO/cable jobs also remain prepared, with a changed battery attachment.
 
 R42 seats the DFRobot DFR0030 touch board **0.95 mm lower** inside the R41
 bracket. Its released touch surface is about **1.72 mm above the Choc caps**.
@@ -47,6 +47,28 @@ The DFRobot board and lead, OP1 kit and screws, M2 × 4 stop screw, Choc
 switches and carbon rod are bought parts. There is no Grove board and no
 loose flat battery spacer in this print. The assembly guide retains all
 five component selections, including the whole assembly.
+
+## Single key-holder diagnostic
+
+Ethan selected the main key holder alone for the next trial, after he gets
+home and clears the failed plate/nozzle. `single42.py` prepares only
+`Key_Carrier`, keeping its removable adhesion pads, required native supports
+and Smooth-timelapse wipe tower. The DFRobot bracket and both post clips are
+excluded by this explicit diagnostic selection. The complete assembly and
+three grouped jobs below remain available; this is not a complete keys kit.
+The selected file is
+`exports/key-holder-only/R42-Key-Holder-Only-print-only.3mf`: about **1 h 41 min**,
+**14.62 g**, at **245°C / 60°C**. Its initial and reopened own-path audits both
+passed without slicer warnings. Nothing has been sent to the printer.
+
+`carrier_checks42.py` checks the single job's own deposited paths for working
+openings, load-path sections, pad joins, support backing and cleanup access.
+The single-object comments produced by Studio are adapted in memory for the
+existing readers; executable commands and delivered G-code are unchanged.
+A path comparison with the group job is diagnostic only, never a substitute
+for checking the changed single-job paths. Preparation does not authorize
+sending or starting the print. Physical fit, strength and success still need
+the real trial.
 
 ## Separate retry jobs
 

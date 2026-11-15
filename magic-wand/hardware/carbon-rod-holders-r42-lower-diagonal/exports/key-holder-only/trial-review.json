@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "parts": [
+    "Key_Carrier"
+  ],
+  "source_sha256": {
+    "single42.py": "54650a470197ea2b57d6da3e5e43e648e7c5868a163fa1373641a6601f1b5284",
+    "carrier_checks42.py": "df25a68d23b268b2aedccad8ab1e1505381cfb5981eee73a85692adb4a847fab",
+    "split42.py": "0304496433bbbb90ce321216d428a2d062f6f3867b8c826abaffb47fd0902955",
+    "plate42.py": "9229db53644a96ddd4a5cc4518374b75eebd631bd6a619e22836e25e9f97335d",
+    "holder42.py": "1e9ff4899676164a44915cb9cd7831733feb9c5f20a1bf361a7491fd77cfbfc2",
+    "audit42.py": "66e53321eeb4be950c5c747a77dd3c0471e1fd8b5816f98d5d0fe876328894a8"
+  },
+  "artifact_sha256": {
+    "R42-keys-A1-mini-PETG-layout.3mf": "f6e078fb056a47b030e0bad79a07e843fe7e2b88e7c9378962c444272d191e4e",
+    "R42-keys.gcode.3mf": "df69204a074926e523fa6f5edc03652eb84cb46250da36dd1276564e40c121e8",
+    "R42-keys-reopened.gcode.3mf": "f42da4629af0f31e3b5d7cc0cc3d260a61c732b0347ad568fcab9ff1a297317c",
+    "R42-Key-Holder-Only-print-only.3mf": "ede5a889ad804f86129b978d3287d4803d5e1a598877114224cd7953f3b28ccb",
+    "job.json": "dea8a33a0b1e0f05325dd5ce4d356d70d3af5e64bc9a8d2c2170bc801f927fa9",
+    "initial-audit.json": "51a8b8425c483e5e1a3935f1530861c37781cdd86d3ef595d03bd91139d274ed",
+    "slice-audit.json": "cfd6c674a079196b630237d9fe464dfee8693f054795a7de2df02479e212bead",
+    "print-checks.json": "c95e34c6ec61cb35f8c5c9999e0e7b15900893e06f602cb9355d388d8323cc58",
+    "reopen-checks.json": "0536c60b7a708d9ed1055385b8ba906cb404d485cf6395766beb9ab9dc2457c0",
+    "print-only.json": "f836daf57a4409169a974704c6f73d0cd3c8984036f7d96a7d0f132b5c35d89a"
+  },
+  "reference_audit_sha256": "d664dc67dc4b686d30dbf47ac92c5b2e81ddcd5c82278e3aa1718fb71909a7df",
+  "selected_file": "R42-Key-Holder-Only-print-only.3mf",
+  "selected_sha256": "ede5a889ad804f86129b978d3287d4803d5e1a598877114224cd7953f3b28ccb",
+  "estimate_seconds": 6047,
+  "filament_g": 14.62,
+  "support_and_adhesion_helpers_included": true,
+  "smooth_timelapse_wipe_tower_included": true,
+  "physical_ready_for_send": false,
+  "physical_hold_reason": "Ethan will confirm he is home and has cleared/reseated the plate and nozzle. Do not start before that confirmation.",
+  "physical_success_verified": false
+}

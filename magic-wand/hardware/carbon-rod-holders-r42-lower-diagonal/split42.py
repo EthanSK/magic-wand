@@ -82,11 +82,17 @@ def battery_stage(selected, exports, holder, anchors20, manifold):
     return manifest, anchors
 
 
-def make(job, output):
+def make(job, output, only=None):
     selected = set(JOBS[job])
     complete = {n for group in p.plate.read_json(HERE/p.plate.BOM)['groups'].values() for n in group['parts']}
     assert set().union(*map(set,JOBS.values())) == complete
     assert sum(map(len,JOBS.values())) == len(complete) == 9
+    if only is not None:
+        # A requested single-component diagnostic is a subset of this job,
+        # not another complete assembly or a change to the canonical BOM.
+        subset = set(only)
+        assert subset and subset <= selected, (job, subset, selected)
+        selected = subset
     stage = battery_stage if job=='battery' else BASE_STAGE
     origins = dict(p.previous.pads.ORIGINS)
     if job=='battery':
@@ -155,7 +161,7 @@ def make(job, output):
     # The final deposited-path audit, including the enlarged pads, is authoritative.
     checks.update(job=job,layout_sha256=p.plate.digest(target),split_driver_sha256=p.plate.digest(Path(__file__)),
                   complete_bom_sha256=p.plate.digest(HERE/'complete-assembly.json'),
-                  part_selection_complete_and_disjoint=True, physical_ready_for_send=False,
+                  part_selection_complete_and_disjoint=only is None, physical_ready_for_send=False,
                   physical_hold_reason='Clear failed R41 plastic and reseat the plate before any new job.')
     save(output/'print-checks.json',checks)
     save(output/'job.json', {'job':job,'parts':order,'source_bom_sha256':checks['complete_bom_sha256'],
@@ -188,7 +194,7 @@ def inspect(job, archive, output):
     return result
 
 
-def slice_archive(job, source, output, suffix=''):
+def slice_archive(job, source, output, suffix='', command_checker=None):
     import project22
     studio = project22.studio.p19
     with ZipFile(source) as archive: config = json.loads(archive.read(p.PROJECT))
@@ -204,9 +210,10 @@ def slice_archive(job, source, output, suffix=''):
     assert raw['return_code']==0,raw
     row, = raw['sliced_plates']
     checks = p.plate.read_json(output/'print-checks.json')
-    assert {item['name'] for item in row['objects']}==set(JOBS[job])
+    assert {item['name'] for item in row['objects']}==set(checks['build_list'])
     studio.restore_registration(target,config)
-    checks.update(archive_sha256=p.plate.digest(target),commands=p.command_audit(target,config),
+    check_commands = p.command_audit if command_checker is None else command_checker
+    checks.update(archive_sha256=p.plate.digest(target),commands=check_commands(target,config),
         estimate_seconds=round(row['total_predication']),filament_g=round(sum(f['total_used_g'] for f in row['filaments']),2),
         warnings=[row['warning_message']] if row.get('warning_message') else [],archive_warnings=studio.slice_info_warnings(target))
     assert not checks['warnings'] and not checks['archive_warnings'],checks

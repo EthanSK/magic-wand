@@ -163,3 +163,46 @@ Source revalidation now explicitly compares embedded mesh bytes as well
 as placements, settings, ranges and staged source/pad hashes. These are
 metadata corrections, not new slices or extra physical trials. Split-review
 finding attribution: Codex 0, Opus 2, shared 0.
+
+## One-carrier diagnostic review
+
+Ethan explicitly selected only the main key holder for the next physical
+trial and will confirm readiness after returning home. The reviewed file is
+`exports/key-holder-only/R42-Key-Holder-Only-print-only.3mf`, SHA-256
+`ede5a889ad804f86129b978d3287d4803d5e1a598877114224cd7953f3b28ccb`.
+The carrier mesh, placement, bought interfaces and effective settings match
+the four-part keys job. The new selection excludes the bracket and both
+clips; helpers and Smooth-timelapse tower remain.
+
+Both actual initial and reopened slices passed `carrier_checks42.py`.
+The exact reopened G-code is copied into the selected print-only file.
+The reopened report checks every model layer, all working routes, critical
+sections, pad joins, native support backing and removal access. First-layer
+contact is 1002.273 mm², all eight pad ties are joined, and no support enters
+the rod grip, clip gaps or complete snap-hinge bores. The weakest reported
+critical section remains above the unchanged 0.9 deposited-material gate.
+These are digital checks, not physical strength or cleanup acceptance.
+
+The single-object native G-code uses `OBJECT_ID`, without multi-object
+start/stop markers. `single42.py` adapts only comments in memory for the
+existing readers and asserts every executable command remains identical.
+Focused negative checks rejected a foreign owner, missing owners and mixed
+marker formats. Changed bead samples are diagnostic, not a reused path pass.
+
+Independent Claude Opus 5.5 review inspected the final retained own-path
+reports and exact selected archive and returned a pass for this physical
+trial. No blocking defect was established. Two coverage/naming observations
+remain explicit: the extra DFRobot lead proximity witness is not repeated
+although its complete route-intrusion scan passes; the unprinted bracket's
+posts are not claimed as deposited anchors in this job. Existing hashed
+assembly evidence covers that unchanged neighbouring geometry. Intermediate
+plate labels still say R42 keys, so only the uniquely named Key-Holder-Only
+package in its dedicated folder is the selected next print.
+
+Default keys/battery/XIAO jobs were re-prepared after the optional selection
+API change. Embedded meshes, placements, settings and height ranges matched
+their retained layouts exactly; their selected audited G-code is unchanged.
+The complete assembly and grouped jobs remain available. No new print has
+started. Wait for Ethan's home/plate/nozzle-clear confirmation.
+
+Single-job confirmed bug attribution: Codex 0, Opus 0, shared 0.
