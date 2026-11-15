@@ -1,0 +1,543 @@
+{
+  "revision": "carbon-rod-holders-r40-crosswise-op1",
+  "physical_fit_verified": false,
+  "sliced": false,
+  "checks": {
+    "layout": {
+      "op1_board_yaw_degrees": 90.0,
+      "op1_plunger_xy_mm": [
+        5.95,
+        15.0
+      ],
+      "op1_plunger_xy_r39_mm": [
+        0.0,
+        2.55
+      ],
+      "op1_board_bounds_mm": [
+        -15.0,
+        10.0,
+        8.8,
+        15.0,
+        20.0,
+        10.4
+      ],
+      "op1_board_underside_z_mm": 8.8,
+      "op1_board_underside_z_r39_mm": 10.1,
+      "upper_key_shift_each_side_mm": 3.2,
+      "lower_key_shift_mm": 0.0,
+      "choc_centres_mm": [
+        [
+          -21.0,
+          0.0
+        ],
+        [
+          21.0,
+          0.0
+        ],
+        [
+          -24.2,
+          21.35
+        ],
+        [
+          24.2,
+          21.35
+        ]
+      ],
+      "upper_slab_half_width_mm": 33.2,
+      "slot_to_upper_key_openings_mm": {
+        "plate_ring_mm": 1.5,
+        "under_plate_wall_mm": 0.75
+      },
+      "cap_travel_span_x_mm": 66.7,
+      "lower_cap_travel_span_x_mm": 60.3,
+      "switch_lever_arm_mm": 16.15,
+      "switch_lever_arm_r39_mm": 28.6,
+      "rest_angle_deg": 1.8806,
+      "rest_angle_r39_deg": 0.9617,
+      "early_lift_angle_deg": -2.2177,
+      "press_travel_rest_to_middle_stop_mm": {
+        "electrode_centre": 0.6916,
+        "board_front_edge": 0.971
+      },
+      "press_travel_rest_to_backup_mm": {
+        "electrode_centre": 1.2505,
+        "board_front_edge": 1.7551
+      },
+      "grove_touch_face_top_released_mm": 23.1248,
+      "grove_touch_face_top_at_backup_mm": 21.6453,
+      "choc_cap_top_mm": 19.92,
+      "grove_plug_to_op1_board_at_backup_mm": 0.7276,
+      "grove_parts_to_op1_at_backup_mm": 0.7026,
+      "rear_grove_screw_to_switch_at_backup_mm": 0.7026,
+      "bracket_to_switch_body_at_backup_mm": 0.3,
+      "op1_sockets_to_rod_mm": 0.5,
+      "op1_plug_to_rod_mm": 3.0,
+      "op1_lead_to_rod_mm": 1.9039,
+      "op1_lead_to_carrier_mm": 1.7715,
+      "op1_lead_to_upper_left_socket_mm": 2.6249,
+      "pusher_contact_y_mm": 15.0,
+      "pusher_bottom_z_mm": 17.22,
+      "free_plunger_top_z_mm": 17.75,
+      "depression_at_modelled_angle_mm": 0.53,
+      "bracket_side_to_cap_travel_envelope_mm": 1.25,
+      "carrier_bottom_plane_y_mm": -9.2,
+      "carrier_width_mm": 66.4,
+      "choc_seat_and_rod_clip_height_change_mm": 0.0,
+      "hinge_axis_height_change_mm": 0.0
+    },
+    "clearance_overlap_mm3": {
+      "choc_switches_and_sockets_to_carrier": 0.0,
+      "op1_board_drop": 0.0,
+      "op1_plug_from_below": 0.0,
+      "op1_seated_lead": 0.0,
+      "op1_switch_install": 0.0,
+      "op1_pins_in_sockets": 0.0,
+      "op1_screw_heads_to_switch": 0.0,
+      "hinge_stroke": 0.0,
+      "grove_cable_stroke": 0.0,
+      "pinched_bracket_drop": 0.0,
+      "bracket_arm_release": 0.0,
+      "preplugged_grove_board_drop": 0.0,
+      "wired_grove_board_feed": 0.0,
+      "grove_board_on_rod": 0.0,
+      "rod_to_carrier_outside_clip_rings": 0.0,
+      "rod_to_sockets_pins_housing": 0.0,
+      "rod_to_op1_wire": 0.0
+    },
+    "full_stroke_overlap_mm3": {
+      "grove_board_and_cable": 0.0,
+      "bracket": 0.000166,
+      "bracket_to_switch_body": 0.0,
+      "pinched_install_with_screw": 0.0,
+      "stop_screw_to_grove_parts": 0.0
+    },
+    "stop_settings": [
+      {
+        "turns_out": 0.0,
+        "angle_deg": 0.73936,
+        "nominal_plunger_travel_mm": 0.7438,
+        "stop_height_above_switch_base_mm": 6.6062,
+        "screw_contacts_landing_mm3": 0.00021141912544992165,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 0.25,
+        "angle_deg": 0.58222,
+        "nominal_plunger_travel_mm": 0.6983,
+        "stop_height_above_switch_base_mm": 6.6517,
+        "screw_contacts_landing_mm3": 0.00022001837568090505,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 0.5,
+        "angle_deg": 0.42509,
+        "nominal_plunger_travel_mm": 0.6528,
+        "stop_height_above_switch_base_mm": 6.6972,
+        "screw_contacts_landing_mm3": 0.00022932553052105843,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 0.75,
+        "angle_deg": 0.26795,
+        "nominal_plunger_travel_mm": 0.6073,
+        "stop_height_above_switch_base_mm": 6.7427,
+        "screw_contacts_landing_mm3": 0.00025004012892609727,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.0,
+        "angle_deg": 0.11061,
+        "nominal_plunger_travel_mm": 0.5618,
+        "stop_height_above_switch_base_mm": 6.7882,
+        "screw_contacts_landing_mm3": 0.00026261179531420956,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.25,
+        "angle_deg": -0.05159,
+        "nominal_plunger_travel_mm": 0.5157,
+        "stop_height_above_switch_base_mm": 6.8343,
+        "screw_contacts_landing_mm3": 0.00024723718402659196,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.5,
+        "angle_deg": -0.22472,
+        "nominal_plunger_travel_mm": 0.4681,
+        "stop_height_above_switch_base_mm": 6.8819,
+        "screw_contacts_landing_mm3": 0.00021196466786949113,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.75,
+        "angle_deg": -0.39805,
+        "nominal_plunger_travel_mm": 0.4206,
+        "stop_height_above_switch_base_mm": 6.9294,
+        "screw_contacts_landing_mm3": 0.00021136643142000518,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 2.0,
+        "angle_deg": -0.57139,
+        "nominal_plunger_travel_mm": 0.373,
+        "stop_height_above_switch_base_mm": 6.977,
+        "screw_contacts_landing_mm3": 0.00021413445234874073,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 2.25,
+        "angle_deg": -0.74472,
+        "nominal_plunger_travel_mm": 0.3255,
+        "stop_height_above_switch_base_mm": 7.0245,
+        "screw_contacts_landing_mm3": 0.0002110499810886683,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 2.5,
+        "angle_deg": -0.91806,
+        "nominal_plunger_travel_mm": 0.278,
+        "stop_height_above_switch_base_mm": 7.072,
+        "screw_contacts_landing_mm3": 0.00020122260648387818,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 2.75,
+        "angle_deg": -1.09119,
+        "nominal_plunger_travel_mm": 0.2305,
+        "stop_height_above_switch_base_mm": 7.1195,
+        "screw_contacts_landing_mm3": 0.00020429111703610452,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 3.0,
+        "angle_deg": -1.26412,
+        "nominal_plunger_travel_mm": 0.1831,
+        "stop_height_above_switch_base_mm": 7.1669,
+        "screw_contacts_landing_mm3": 0.00021597979841685004,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 3.25,
+        "angle_deg": -1.43725,
+        "nominal_plunger_travel_mm": 0.1356,
+        "stop_height_above_switch_base_mm": 7.2144,
+        "screw_contacts_landing_mm3": 0.00020021576856985235,
+        "plastic_before_screw_contact_mm3": 0.0
+      }
+    ],
+    "max_plunger_change_per_step_mm": 0.0476,
+    "screw_engagement_at_start_mm": 2.7,
+    "backup_angle_deg": 0.79646,
+    "backup_nominal_plunger_travel_mm": 0.7603,
+    "backup_stop_contacts_mm3": [
+      0.003393694822029807,
+      0.0033936948220298427
+    ],
+    "bonds": {
+      "grove_screw_bosses_mm3": [
+        48.68674327595133,
+        40.46261009464574
+      ],
+      "stop_boss_mm3": 90.28527215249618,
+      "pusher_to_existing_brace_mm3": 1.3521,
+      "hinge_supports_mm3": 137.43809810610367,
+      "edge_stops_mm3": [
+        18.266079976351254,
+        18.266079976351158
+      ],
+      "op1_seat_contacts_mm3": [
+        3.745336698396584,
+        4.254167662679452
+      ],
+      "root_fan_removed_by_switch_relief_mm3": 2.3782
+    },
+    "hinge": {
+      "released_tab_axial_engagement_mm": 0.7,
+      "squeezed_tab_clear_of_support_mm": 0.209,
+      "straight_lift_retention_contact_mm3": 0.0858,
+      "arm_bending_estimate": {
+        "arm_thickness_mm": 1.2,
+        "arm_height_mm": 2.0,
+        "root_to_tab_mm": 10.81,
+        "root_to_pinch_pad_mm": 7.11,
+        "tab_squeeze_mm": 0.98,
+        "pad_squeeze_mm": 0.55,
+        "pinch_force_each_N_estimate": 2.65,
+        "root_strain_percent_estimate": 2.64,
+        "assumed_PETG_modulus_MPa": 2000.0,
+        "assumed_PETG_yield_strain_percent": 4.0,
+        "nominal_unfilleted_strain_percent_estimate": 1.96,
+        "conservative_free_length_mm": 9.31,
+        "physical_strength_verified": false
+      }
+    },
+    "ribs": {
+      "R1": {
+        "volume_mm3": 104.6413,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.5869,
+        "edge_contact_mm3": 14.1426,
+        "bounds": [
+          2.25,
+          -0.75,
+          0.3,
+          23.15,
+          14.15,
+          7.6
+        ],
+        "piece_bonds_mm3": [
+          18.7295
+        ]
+      },
+      "L1": {
+        "volume_mm3": 133.6287,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.5909,
+        "edge_contact_mm3": 24.8565,
+        "bounds": [
+          -31.0,
+          -0.75,
+          0.3,
+          -2.25,
+          15.884,
+          8.6
+        ],
+        "piece_bonds_mm3": [
+          29.4475
+        ]
+      },
+      "R2": {
+        "volume_mm3": 103.1349,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.1256,
+        "edge_contact_mm3": 16.3292,
+        "bounds": [
+          2.25,
+          2.5,
+          0.3,
+          23.15,
+          15.3,
+          8.75
+        ],
+        "piece_bonds_mm3": [
+          20.4548
+        ]
+      },
+      "L2": {
+        "volume_mm3": 122.7862,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.1152,
+        "edge_contact_mm3": 24.8565,
+        "bounds": [
+          -31.0,
+          2.5,
+          0.3,
+          -2.25,
+          15.884,
+          8.6
+        ],
+        "piece_bonds_mm3": [
+          28.9717
+        ]
+      },
+      "R3": {
+        "volume_mm3": 93.1423,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 3.7084,
+        "edge_contact_mm3": 16.3336,
+        "bounds": [
+          2.25,
+          5.75,
+          0.3,
+          23.137,
+          16.437,
+          8.87
+        ],
+        "piece_bonds_mm3": [
+          20.042
+        ]
+      },
+      "L3": {
+        "volume_mm3": 114.5649,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 3.7154,
+        "edge_contact_mm3": 24.8565,
+        "bounds": [
+          -31.0,
+          5.75,
+          0.3,
+          -2.25,
+          15.884,
+          8.6
+        ],
+        "piece_bonds_mm3": [
+          28.5719
+        ]
+      }
+    },
+    "key_apertures_vs_r39": {
+      "key_0": {
+        "centre_mm": [
+          -21.0,
+          0
+        ],
+        "moved_x_mm": 0.0,
+        "difference_mm3": 0.0,
+        "seat_volume_mm3": 285.887
+      },
+      "key_2": {
+        "centre_mm": [
+          21.0,
+          0
+        ],
+        "moved_x_mm": 0.0,
+        "difference_mm3": 0.0001,
+        "seat_volume_mm3": 285.887
+      },
+      "key_3": {
+        "centre_mm": [
+          -24.2,
+          21.35
+        ],
+        "moved_x_mm": -3.2,
+        "difference_mm3": 0.0154,
+        "seat_volume_mm3": 255.769
+      },
+      "key_4": {
+        "centre_mm": [
+          24.2,
+          21.35
+        ],
+        "moved_x_mm": 3.2,
+        "difference_mm3": 0.0042,
+        "seat_volume_mm3": 262.716
+      }
+    },
+    "op1_group_rigid_turn_error_mm3": 0.0,
+    "finger_contact_probes_reaching_terminals": {
+      "key_0_terminal_0": 0,
+      "key_0_terminal_1": 0,
+      "key_2_terminal_0": 0,
+      "key_2_terminal_1": 0
+    },
+    "rod_grip_interference_in_clip_rings_mm3": 22.3307,
+    "reference_guard": {
+      "rod_aabb_mm": [
+        -4.0,
+        -40.0,
+        -4.0,
+        4.0,
+        100.0,
+        4.0
+      ],
+      "carrier_aabb_mm": [
+        -33.2,
+        -9.2,
+        -4.781,
+        33.2,
+        32.65,
+        20.8
+      ],
+      "bought_op1_aabb_mm": {
+        "board": [
+          -15.0,
+          10.0,
+          8.8,
+          15.0,
+          20.0,
+          10.4
+        ],
+        "sockets": [
+          -2.38,
+          13.7,
+          4.5,
+          10.38,
+          16.3,
+          8.81
+        ],
+        "housing": [
+          -15.2,
+          11.4,
+          6.0,
+          -9.0,
+          18.6,
+          8.8
+        ],
+        "plug": [
+          -14.7,
+          11.9,
+          2.9,
+          -11.05,
+          18.1,
+          6.0
+        ],
+        "switch": [
+          -2.4,
+          12.1,
+          10.4,
+          10.4,
+          17.9,
+          16.9
+        ],
+        "terminals": [
+          -1.53,
+          14.78,
+          6.9,
+          9.53,
+          15.22,
+          10.41
+        ],
+        "plunger": [
+          5.35,
+          13.55,
+          16.89,
+          6.55,
+          16.45,
+          17.75
+        ],
+        "fasteners": [
+          -8.2,
+          12.5,
+          6.4,
+          15.55,
+          17.5,
+          11.25
+        ],
+        "op1_wire": [
+          -17.7,
+          13.7,
+          -1.45,
+          -5.9,
+          42.3,
+          5.75
+        ]
+      },
+      "installed_y_span_mm": [
+        -9.2,
+        42.3
+      ],
+      "centred_probe_in_rod_mm3": 1.0,
+      "rod_in_clip_rings_mm3": 22.3307,
+      "passed": true,
+      "misplaced_rod_is_rejected": true
+    },
+    "basis": "OP1 board, socket, plug and lead envelopes are photo-derived (Endgame Gear EGG-SP-U1); the 7.35 mm free and 6.7-7.1 mm operating heights are the reference switch. Stop and travel values are nominal CAD, not measured force, feel or fatigue.",
+    "cad_checks_passed": true,
+    "passed": true,
+    "battery_door": {
+      "released_slide_max_overlap_mm3": 0.0,
+      "unreleased_lift_contact_mm3": 1.047062,
+      "seated_overlap_mm3": 0.0,
+      "cell_overlap_mm3": 0.0,
+      "whole_height_mm": 7.05,
+      "height_reduction_mm": 1.3,
+      "nominal_tooth_engagement_mm": 0.55,
+      "nominal_slot_clearance_total_mm": 0.2,
+      "release_tip_deflection_mm": 1.65,
+      "tooth_deflection_mm": 0.683,
+      "bending_strain_estimate_percent": 2.9,
+      "physical_force_fatigue_and_fit_verified": false,
+      "passed": true
+    }
+  }
+}

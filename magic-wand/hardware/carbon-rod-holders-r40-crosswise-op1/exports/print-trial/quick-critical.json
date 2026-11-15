@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "parts": {
+    "Key_Carrier": {
+      "left guard reinforcement web": {
+        "layers": 10,
+        "coverage_fraction": 0.9826,
+        "minimum_layer_fraction": 0.9743
+      },
+      "left guard web-to-frame bond": {
+        "layers": 10,
+        "coverage_fraction": 0.9928,
+        "minimum_layer_fraction": 0.9797
+      },
+      "L1 guard-to-web bond": {
+        "layers": 8,
+        "coverage_fraction": 0.9817,
+        "minimum_layer_fraction": 0.9564
+      },
+      "L2 guard-to-web bond": {
+        "layers": 8,
+        "coverage_fraction": 0.9817,
+        "minimum_layer_fraction": 0.9564
+      },
+      "L3 guard-to-web bond": {
+        "layers": 8,
+        "coverage_fraction": 0.9817,
+        "minimum_layer_fraction": 0.9564
+      }
+    },
+    "Grove_Touch_Bracket": {
+      "crosswise switch pusher": {
+        "layers": 9,
+        "coverage_fraction": 0.9641,
+        "minimum_layer_fraction": 0.9379
+      },
+      "pusher brace bond": {
+        "layers": 9,
+        "coverage_fraction": 0.9956,
+        "minimum_layer_fraction": 0.9756
+      }
+    }
+  }
+}
