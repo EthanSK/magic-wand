@@ -1,0 +1,402 @@
+{
+  "build_list": [
+    "Key_Carrier"
+  ],
+  "source_parts": {
+    "Key_Carrier": {
+      "group": "keys",
+      "directory": ".",
+      "exports": "exports",
+      "source_filename": "Key_Carrier-SOURCE-REQUIRES-PREPARATION.stl",
+      "source_sha256": "9a7975596180e44b1a4ab7010745d676c2d40257cf7661dac6f302575c3460b3",
+      "status": "verified",
+      "volume_mm3": 9188.21,
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -30.049999237060547
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          32.650001525878906
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.781332969665528
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion": "tear-off pad"
+    }
+  },
+  "bom_sha256": "95a368a9687f2e6913c9c481a4d51fc6fff66a8d3da8bac5ca99b777cc1196c3",
+  "generator_sha256": "46f0432378d88b906914a7c84d5f0b62c19e33bfaf8c239e5d42b3e9b1fee817",
+  "layout_sha256": "a5c29170e3d1b8890410d08c07ae8e1ef2dd09a49b283b333ee4a4bbe407a2e6",
+  "anchors": {
+    "Key_Carrier": {
+      "thickness_mm": 0.4,
+      "flange_area_mm2": 218.68,
+      "tie_section_each_mm2": 0.4,
+      "tie_count": 4,
+      "separate_pads": 4,
+      "solid_PETG_g": 0.1139,
+      "first_layer_area_mm2": 336.64,
+      "rod_axis_print_xy": [
+        30.05,
+        4.781
+      ],
+      "sites_print_xy_outward": [
+        [
+          21.05,
+          15.601332664489746,
+          0,
+          1
+        ],
+        [
+          39.05,
+          15.601332664489746,
+          0,
+          1
+        ],
+        [
+          18.55,
+          12.0513334274292,
+          0,
+          -1
+        ],
+        [
+          41.55,
+          12.0513334274292,
+          0,
+          -1
+        ]
+      ],
+      "tie_sites": [
+        {
+          "site_print_xy": [
+            21.05,
+            15.601
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            3.55,
+            3.55,
+            3.55
+          ],
+          "part_volume_in_cutter_corridor_mm3": 4.1333
+        },
+        {
+          "site_print_xy": [
+            39.05,
+            15.601
+          ],
+          "outward": [
+            0,
+            1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            3.55,
+            3.55,
+            3.55
+          ],
+          "part_volume_in_cutter_corridor_mm3": 4.1333
+        },
+        {
+          "site_print_xy": [
+            18.55,
+            12.051
+          ],
+          "outward": [
+            0,
+            -1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            3.55,
+            3.55,
+            3.55
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        },
+        {
+          "site_print_xy": [
+            41.55,
+            12.051
+          ],
+          "outward": [
+            0,
+            -1
+          ],
+          "solid_depth_behind_tie_at_three_lines_mm": [
+            3.55,
+            3.55,
+            3.55
+          ],
+          "part_volume_in_cutter_corridor_mm3": 0.0
+        }
+      ],
+      "stl_sha256": "1a2cdccd491206c9b437652c23d5fda8b0b4f44f07d56e4457b3941f72c2a3d3",
+      "hole_centres_print_xy_mm": [],
+      "old_area_mm2": 224.285,
+      "solid_area_mm2": 711.03,
+      "pad_thickness_mm": 0.4,
+      "ties_unchanged": true
+    }
+  },
+  "plate_extents_mm": {
+    "Key_Carrier": [
+      [
+        18.0,
+        103.93133354187012,
+        0.0
+      ],
+      [
+        78.04999923706055,
+        149.62693405151367,
+        41.85000228881836
+      ]
+    ]
+  },
+  "material_bounds_xy_mm": {
+    "Key_Carrier": [
+      [
+        18.0,
+        103.93133354187012
+      ],
+      [
+        78.04999923706055,
+        149.62693405151367
+      ]
+    ]
+  },
+  "slow_bands_mm": {
+    "Key_Carrier": [
+      [
+        16.0,
+        16.8
+      ],
+      [
+        33.8,
+        35.2
+      ]
+    ]
+  },
+  "filament_profile": "Flashforge HS PETG Metallic",
+  "profile_explicitly_selected": true,
+  "profile_base": "Generic PETG @BBL A1M",
+  "filament_reference": "https://uk.flashforge.com/products/hs-petg-metallic",
+  "effective_filament_settings": {
+    "nozzle_temperature": [
+      "245"
+    ],
+    "nozzle_temperature_initial_layer": [
+      "245"
+    ],
+    "textured_plate_temp": [
+      "60"
+    ],
+    "textured_plate_temp_initial_layer": [
+      "60"
+    ],
+    "filament_max_volumetric_speed": [
+      "8"
+    ]
+  },
+  "physical_fit_verified": false,
+  "driver_sha256": "ee0c73a2c198e7930c61b5c7792379af291b44ac35b3fde469ada024f8070689",
+  "recipe_source_sha256": "2cc69ac25d19c679ed45c0ef0e55f5e9069a01cc490838d5061670f4bbd1a704",
+  "support_enforcers": [
+    [
+      "diagonal OP1 slot",
+      [
+        [
+          19.079999237060548,
+          13.811332969665527,
+          35.953
+        ],
+        [
+          29.439999237060544,
+          16.281332969665527,
+          41.044000000000004
+        ]
+      ]
+    ],
+    [
+      "white connector ledge",
+      [
+        [
+          30.672999237060548,
+          10.681332969665528,
+          14.713
+        ],
+        [
+          38.440999237060545,
+          14.111332969665527,
+          18.595000000000002
+        ]
+      ]
+    ],
+    [
+      "upper left key lip",
+      [
+        [
+          2.0499992370605455,
+          15.981332969665528,
+          18.3
+        ],
+        [
+          16.049999237060547,
+          17.471332969665525,
+          18.700000000000003
+        ]
+      ]
+    ],
+    [
+      "outer finger guard",
+      [
+        [
+          8.899999237060547,
+          5.2313329696655275,
+          24.9
+        ],
+        [
+          17.199999237060545,
+          6.831332969665528,
+          25.650000000000002
+        ]
+      ]
+    ],
+    [
+      "R middle finger branch",
+      [
+        [
+          38.40515387623581,
+          4.931332969665527,
+          21.700001525878907
+        ],
+        [
+          51.74999923706054,
+          9.585628502311573,
+          24.400001525878906
+        ]
+      ]
+    ],
+    [
+      "L middle finger branch",
+      [
+        [
+          2.840908327969642,
+          4.931332969665527,
+          21.700001525878907
+        ],
+        [
+          21.694844597885286,
+          9.585628502311573,
+          24.000001525878908
+        ]
+      ]
+    ]
+  ],
+  "bracket_support_enforcers": [
+    [
+      "left backup-stop foot",
+      [
+        [
+          0.3,
+          5.35,
+          0.35
+        ],
+        [
+          2.1,
+          9.47,
+          0.76
+        ]
+      ]
+    ],
+    [
+      "right backup-stop foot",
+      [
+        [
+          19.1,
+          5.8,
+          0.35
+        ],
+        [
+          20.9,
+          9.47,
+          0.76
+        ]
+      ]
+    ]
+  ],
+  "physical_success_verified": false,
+  "job": "keys",
+  "split_driver_sha256": "0304496433bbbb90ce321216d428a2d062f6f3867b8c826abaffb47fd0902955",
+  "complete_bom_sha256": "95a368a9687f2e6913c9c481a4d51fc6fff66a8d3da8bac5ca99b777cc1196c3",
+  "part_selection_complete_and_disjoint": false,
+  "physical_ready_for_send": false,
+  "physical_hold_reason": "Clear failed R41 plastic and reseat the plate before any new job.",
+  "archive_sha256": "7e83028489f30d226001925909b6709d7ccf36a952cc4373b83dbe227d12b817",
+  "commands": {
+    "passed": true,
+    "project_sha256": "7e83028489f30d226001925909b6709d7ccf36a952cc4373b83dbe227d12b817",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ],
+    "single_object_comment_adapter_only": true
+  },
+  "estimate_seconds": 7604,
+  "filament_g": 17.15,
+  "warnings": [],
+  "archive_warnings": []
+}

@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "parts": [
+    "Key_Carrier"
+  ],
+  "source_sha256": {
+    "single44.py": "ee0c73a2c198e7930c61b5c7792379af291b44ac35b3fde469ada024f8070689",
+    "carrier_checks44.py": "30fd8750c7925e3ac3c268c513d0973f591623031a898cec47db620e7bc1fbfa",
+    "plate44.py": "d8ff1be4e839c5a31c03f81dc5eae1e8489bd31540baf968ad23b16cc4b610b9",
+    "holder44.py": "7fc2fcfdc76f5c1d0fd450a41c7606b9d2442f9c0a945b9e7fb0c2bfeb376855",
+    "assembly44.py": "ca6d3c014ae97a83c0c170e7f6ffc97e0df450c4b18532d785ad7215011601b5",
+    "reference44.py": "cbb8944c97d68de15252e56f9f2263859d506b3045526b357af30218e0d42ea4"
+  },
+  "upstream_sha256": {
+    "single42.py": "54650a470197ea2b57d6da3e5e43e648e7c5868a163fa1373641a6601f1b5284",
+    "carrier_checks42.py": "df25a68d23b268b2aedccad8ab1e1505381cfb5981eee73a85692adb4a847fab",
+    "split42.py": "0304496433bbbb90ce321216d428a2d062f6f3867b8c826abaffb47fd0902955",
+    "plate42.py": "9229db53644a96ddd4a5cc4518374b75eebd631bd6a619e22836e25e9f97335d",
+    "audit42.py": "66e53321eeb4be950c5c747a77dd3c0471e1fd8b5816f98d5d0fe876328894a8",
+    "holder43.py": "7c5840a9d106a27d557f873e3f62c22d404c6be3c5d7606b1a625e4b9d191c35"
+  },
+  "artifact_sha256": {
+    "R44-Key-Holder-Only-layout.3mf": "a5c29170e3d1b8890410d08c07ae8e1ef2dd09a49b283b333ee4a4bbe407a2e6",
+    "R44-Key-Holder-Only.gcode.3mf": "dade5e0e667f7591df9c3d4961a22fa9e04bf5be28ff4ddbeb557c5e3aefafd4",
+    "R44-Key-Holder-Only-reopened.gcode.3mf": "7e83028489f30d226001925909b6709d7ccf36a952cc4373b83dbe227d12b817",
+    "R44-Key-Holder-Only-print-only.3mf": "92aa2fbb89d0bd3de18292a2c7c4d28cf0c7234ebfedf4372b8d9ccf97141fa2",
+    "job.json": "1704ddc31c693598684b5d1f4a7055acfb0098290a970e082cfe9132c1171606",
+    "initial-audit.json": "b46b40cd67815b025969a86a37ffb6be7aa5e084311862730d082d91c68d64ac",
+    "slice-audit.json": "27b3e3d638bb136c389a3b484f16ecef4f3b90e4a365ad9cc6ccbdd392b8e413",
+    "print-checks.json": "ef6f82c18d29568de9e13527ede3e1c4ac4e82433b69bec55475ae5e65330c79",
+    "reopen-checks.json": "7695d709d64f7d14396aa24fb94b72509090ee36e823df92cab4942b69e7673f",
+    "print-only.json": "37f9977a8d41f7c8cc37df8584e9653180cb2d41d8f4f803bacf1e32b4b977f1",
+    "preflight.json": "6d810f5defab45ef93efde16b298c4aae33f8af25ec35ebe34ab29b8c2f52fe5"
+  },
+  "selected_file": "R44-Key-Holder-Only-print-only.3mf",
+  "selected_sha256": "92aa2fbb89d0bd3de18292a2c7c4d28cf0c7234ebfedf4372b8d9ccf97141fa2",
+  "estimate_seconds": 7604,
+  "filament_g": 17.15,
+  "support_and_adhesion_helpers_included": true,
+  "smooth_timelapse_wipe_tower_included": true,
+  "physical_ready_for_send": false,
+  "physical_hold_reason": "Ethan will confirm he is home and the failed plate and nozzle are clear and reseated. Do not start before that confirmation.",
+  "physical_success_verified": false
+}
