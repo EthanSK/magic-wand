@@ -1,0 +1,96 @@
+{
+  "revision": "R45",
+  "reviewed_at": "2026-11-16T08:05:47.727701+00:00",
+  "selected_archive_sha256": "d3af4cd23b11c05c2aa076bc9ec5c976c63ac8a3efcf51b2db35b09d7dec097b",
+  "designation": "Prepared first physical trial; on-screen inspection and Studio loading pending Mac unlock",
+  "digital_checks_passed": true,
+  "functional_parts": [
+    "Key_Carrier"
+  ],
+  "geometry_author": "Astra",
+  "primary_assessment": "Codex parent",
+  "independent_opus_verdict": "Incomplete earlier attempt; no Opus pass claimed",
+  "checked_reports_sha256": {
+    "candidate-audit.json": "3d9777d6203176e9e795e45e45f8cdbdfdef39d079458237ae0fb88463dd3ae2",
+    "helper-starts.json": "6af33460c6468cdb9991777231c2fc9caf30bab7a45be6725c6389af3d789df6",
+    "roof-strokes.json": "91dcf9d13110748b36dbbaa1efdce73ca9e3bfa662013d7a67b9aab1d61e127e",
+    "roof-residual-context.json": "bfc273f86553ae08c63fe3050101cc45566946a41a76fc71608287112b5ef3a8",
+    "contact-areas.json": "08898ea9e178ebf9b9b96ef7a9d5284d532d70bd34ba9070536ae1cece79ceb6",
+    "shelf-contact-areas.json": "56657198cf38454715e419e0ff8c58325578fe1334654ddeee57e0db9265f19b",
+    "rear-shelf-contact-areas.json": "4fcac14af69aa2239087e7e6d5d28407158e0c3f2dae76aeb47678827d7289f3",
+    "delivery-checks.json": "d3926401b42cabf64f18416ddc811f27415f425030d08d9c153e8f81dee651a4",
+    "reopen-checks.json": "3339001812731ffd4c65ab1d39a2c18d138ed2ed7d23fc717540598da8d4f889",
+    "final-validation-sources.json": "09c5b79b36ed6d9476832b0de353e10af96ce6616433dea41a54aa3c848b9c05"
+  },
+  "structural_disposition": {
+    "original_references_retained": 33,
+    "unchanged_references": 27,
+    "unchanged_minimum_layer_fraction": 0.9129,
+    "explicitly_replaced_targets": [
+      "L1 guard-to-web bond",
+      "L2 guard-to-web bond",
+      "L3 guard-to-web bond",
+      "R43 complete thicker guard web",
+      "left guard reinforcement web",
+      "left guard web-to-frame bond"
+    ],
+    "replacement_qualified": true,
+    "replacement_comparison": "Larger realised frame/rib overlap and connected sections at specified matching X stations; all designed member slabs pass. Tiny end-cap coverage losses and the nanometre terminal construction fringe remain visible. No physical strength or fatigue claim."
+  },
+  "roof_disposition": {
+    "raw_screen_classifications": {
+      "short straight two-ended bridge": 70,
+      "unsupported bend outside bead corridor": 18,
+      "free end requires backing": 7,
+      "beyond screened anchored span": 9
+    },
+    "straight_bridges": {
+      "count_over_12mm_screen": 9,
+      "maximum_span_mm": 13.564,
+      "assessment": "Straight full-width paths anchored at both ends; acceptable for this controlled first-part trial, with bridge sag still physically unverified. The 12mm screen is not a manufacturer limit."
+    },
+    "short_bends": {
+      "assessment": "Maximum2.745mm arclength,2.701mm chord,0.227mm deviation on0.40mm bead. Remaining local turns at most1.843mm. These short overhangs can leave roughness; they are not classed as long straight bridges."
+    },
+    "genuine_tiny_airborne_strokes": {
+      "count": 5,
+      "length_mm": [
+        0.62,
+        0.407,
+        0.464,
+        0.57,
+        0.523
+      ],
+      "assessment": "No earlier footprint backing. Following layers capture63.4\u201399.9percent of their footprints, which does not support them when first deposited. Possible wisps/local edge roughness accepted for a first physical trial, not a flawless-print claim."
+    }
+  },
+  "working_spaces": {
+    "count": 48,
+    "unacceptable_after_cleanup": 0,
+    "obstructed_until_helpers_removed": 23,
+    "whole_cad_actual_bead_and_individual_front_removal": "passed",
+    "physical_removal_force": "unverified"
+  },
+  "process": {
+    "printer": "Bambu Lab A1 mini",
+    "filament_profile": "Flashforge HS PETG Metallic Red, external spool",
+    "nozzle_celsius": 245,
+    "bed_celsius": 60,
+    "automatic_support": "off on all objects",
+    "timelapse": "Smooth selected, real wipe tower retained; future send still requires Timelapse checked",
+    "native_warnings": [
+      "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    ]
+  },
+  "manual_verification": {
+    "status": "blocked",
+    "reason": "Mac locked; computer-use tool could not unlock it",
+    "remaining": [
+      "Inspect the final assembly and cleanup viewer",
+      "Open sealed print-only file in existing normal Studio window on top-right Samsung",
+      "Verify its preview and retained warnings"
+    ]
+  },
+  "physical_fit_strength_fatigue_adhesion_bridge_sag_and_support_release_verified": false,
+  "printer_actions_performed_by_this_repair": []
+}

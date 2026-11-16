@@ -1,0 +1,51 @@
+{
+  "helper_owner": "Rear_pull_shelf",
+  "archive_sha256": "d3af4cd23b11c05c2aa076bc9ec5c976c63ac8a3efcf51b2db35b09d7dec097b",
+  "peel_pieces": [
+    {
+      "bed_face_area_mm2": 27.677327717060493,
+      "bed_xy_bounds_mm": [
+        6.799999713897705,
+        20.350000381469727,
+        16.399999618530273,
+        23.600000381469727
+      ],
+      "contains_1p2mm_diameter_grip_land": true,
+      "projected_contact_area_sum_mm2": 8.530402609082683,
+      "largest_continuous_contact_patch_mm2": 2.5904298788853377,
+      "finger_guard_contact_sum_mm2": 0.0,
+      "contact_layers": [
+        {
+          "actual_helper_top_mm": 18.2,
+          "actual_carrier_bottom_mm": 18.4,
+          "vertical_gap_mm": 0.2,
+          "projected_guard_area_mm2": 0.0,
+          "largest_projected_guard_patch_mm2": 0.0,
+          "number_of_separate_contact_patches": 24,
+          "area_mm2": 8.530402609082683,
+          "largest_patch_mm2": 2.5904298788853377
+        }
+      ]
+    }
+  ],
+  "actual_first_layer_cradle_islands": [
+    {
+      "index": 1,
+      "actual_bead_area_mm2": 26.6798263230781,
+      "contains_1p2mm_diameter_grip_land": true,
+      "bed_xy_bounds_mm": [
+        6.800004243850708,
+        20.348181515932083,
+        16.39899706840515,
+        23.599993467330933
+      ],
+      "cad_foot_indices": [
+        1
+      ],
+      "continues_on_layer_two": true,
+      "joins_substantial_feet_on_layer_two": []
+    }
+  ],
+  "physical_release_force_measured": false,
+  "measurement": "Conservative inscribed footprints of actually extruded roof and carrier beads, at the intended 0.2-mm vertical gap, clipped to native exposed roof and carrier material. Projected areas are not fused-contact or peel-force measurements."
+}

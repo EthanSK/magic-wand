@@ -1,0 +1,202 @@
+{
+  "generator_file": "standing_web45.py",
+  "generator_sha256": "a4a24f433b6341ba6b39a8408e97a3cf6cff9ffba88396123aa46ba6e95c7048",
+  "old_member_mm3": 12.462761486791493,
+  "new_member_mm3": 59.998205495752494,
+  "added_mm3": 12.224502604287549,
+  "removed_mm3": 1.8440893273245,
+  "disconnected_local_fragments_removed_mm3": 0.07643940987411606,
+  "max_lateral_growth_per_layer_mm": 0.13,
+  "actual_added_intersections_by_route": {
+    "unloaded_clip_bore": 0.0,
+    "clip_gap_mid": 0.0,
+    "clip_gap_rear": 0.0,
+    "external_wire_bus": 0.0,
+    "key_0_switch": 0.0,
+    "key_0_socket": 0.0,
+    "key_0_maximum_socket": 0.0,
+    "key_0_socket_tape_zone": 0.0,
+    "key_0_mount_opening": 0.0,
+    "key_0_clip_relief": 0.0,
+    "key_0_cap_travel": 0.0,
+    "key_2_switch": 0.0,
+    "key_2_socket": 0.0,
+    "key_2_maximum_socket": 0.0,
+    "key_2_socket_tape_zone": 0.0,
+    "key_2_mount_opening": 0.0,
+    "key_2_clip_relief": 0.0,
+    "key_2_cap_travel": 0.0,
+    "key_3_switch": 0.0,
+    "key_3_socket": 0.0,
+    "key_3_maximum_socket": 0.0,
+    "key_3_socket_loading": 0.0,
+    "key_3_maximum_socket_loading": 0.0,
+    "key_3_socket_tape_zone": 0.0,
+    "key_3_mount_opening": 0.0,
+    "key_3_clip_relief": 0.0,
+    "key_3_cap_travel": 0.0,
+    "key_4_switch": 0.0,
+    "key_4_socket": 0.0,
+    "key_4_maximum_socket": 0.0,
+    "key_4_socket_loading": 0.0,
+    "key_4_maximum_socket_loading": 0.0,
+    "key_4_socket_tape_zone": 0.0,
+    "key_4_mount_opening": 0.0,
+    "key_4_clip_relief": 0.0,
+    "key_4_cap_travel": 0.0,
+    "key_0_soldered_socket_slide": 0.0,
+    "key_2_soldered_socket_slide": 0.0,
+    "key_3_soldered_socket_dogleg": 0.0,
+    "key_4_soldered_socket_dogleg": 0.0,
+    "snap hinge bores": 0.0,
+    "OP1 mounting screw pilots": 0.0,
+    "centred OP1 and complete prewired insertion": 0.0,
+    "OP1 prewired plug insertion from below before fitting the rod": 0.0,
+    "OP1 switch insertion": 0.0,
+    "shifted Grove plug operating stroke": 0.0,
+    "shifted Grove lead operating stroke": 0.0,
+    "complete hinge bore surfaces": 0.0
+  },
+  "original_witness_losses_mm3": {
+    "fixed hinge supports": 0.0,
+    "OP1 mounting shoulders": 0.0,
+    "adjustable stop landing": 0.0,
+    "raised hinge roofs": 0.0,
+    "R1 guard root bond": 0.0,
+    "L1 rod-side guard bond": 0.0,
+    "R2 guard root bond": 0.0,
+    "L2 rod-side guard bond": 0.0,
+    "R3 guard root bond": 0.0,
+    "L3 rod-side guard bond": 0.0,
+    "left guard reinforcement web": 1.2310473611806176,
+    "left guard web-to-frame bond": 1.0189985496479188,
+    "L1 guard-to-web bond": 0.8197626820847508,
+    "L2 guard-to-web bond": 0.8197626820847508,
+    "L3 guard-to-web bond": 0.8197626820847508,
+    "raised key 0 platform-to-frame bond": 0.0,
+    "raised key 2 platform-to-frame bond": 0.0,
+    "raised key 3 platform-to-frame bond": 0.0,
+    "raised key 4 platform-to-frame bond": 0.0,
+    "R43 complete thicker guard web": 1.7262266754645916,
+    "R44 R middle finger rest": 0.0,
+    "R44 R middle branch-to-inner leg bond": 0.0,
+    "R44 R middle branch-to-outer guard bond": 0.0,
+    "R44 R spine-to-R1 guard bond": 0.0,
+    "R44 R spine-to-R2 guard bond": 0.0,
+    "R44 R spine-to-R3 guard bond": 0.0,
+    "R44 R riser-to-frame load-path bond": 0.0,
+    "R44 L middle finger rest": 0.0,
+    "R44 L middle branch-to-inner leg bond": 0.0,
+    "R44 L middle branch-to-outer guard bond": 0.0,
+    "R44 L spine-to-L1 guard bond": 0.0,
+    "R44 L spine-to-L2 guard bond": 0.0,
+    "R44 L spine-to-L3 guard bond": 0.0
+  },
+  "witnesses": {
+    "member": {
+      "file": "R45-web-complete-member.stl",
+      "sha256": "43fe30b493aa8c97b8c73d0c403a12eafbda7ddef40afcee913299d45194ed5d",
+      "volume_mm3": 59.998205495752494
+    },
+    "frame": {
+      "file": "R45-web-frame-bond.stl",
+      "sha256": "cd8d608ad76d9c35fe35067b82aeb431c87d4939b97d33e6f550b04ff3a494ab",
+      "volume_mm3": 39.65167631841833
+    },
+    "L1": {
+      "file": "R45-web-L1-bond.stl",
+      "sha256": "b85f65a5530aeafdaf0d9125c37862e85e0f0989ff7039ab91f2eaf62d5c40f6",
+      "volume_mm3": 3.643449650168875
+    },
+    "L2": {
+      "file": "R45-web-L2-bond.stl",
+      "sha256": "183bb24361c372fd2dc25f247c0d030c0665cb86fc9e743fb503275009d3014d",
+      "volume_mm3": 3.643449650168875
+    },
+    "L3": {
+      "file": "R45-web-L3-bond.stl",
+      "sha256": "28a817fe580dce30faa8f4c93561af8651629f9f45740e8cee825b52a504df81",
+      "volume_mm3": 3.643449650168875
+    }
+  },
+  "attachments": {
+    "frame": {
+      "old_volume_mm3": 6.764227614796766,
+      "new_volume_mm3": 39.65167631841833
+    },
+    "L1": {
+      "old_volume_mm3": 2.659655096407814,
+      "new_volume_mm3": 3.643449650168875
+    },
+    "L2": {
+      "old_volume_mm3": 2.659655096407814,
+      "new_volume_mm3": 3.643449650168875
+    },
+    "L3": {
+      "old_volume_mm3": 2.659655096407814,
+      "new_volume_mm3": 3.643449650168875
+    }
+  },
+  "transverse_x_sections": [
+    {
+      "x_mm": 0.5,
+      "original_mm2": 1.6737743114931085,
+      "replacement_mm2": 15.031588196913889
+    },
+    {
+      "x_mm": 0.6,
+      "original_mm2": 1.6737743259666154,
+      "replacement_mm2": 15.031628483929452
+    },
+    {
+      "x_mm": 0.7,
+      "original_mm2": 1.6737743426731484,
+      "replacement_mm2": 15.031668770945092
+    },
+    {
+      "x_mm": 0.7999999999999999,
+      "original_mm2": 1.6737743509342238,
+      "replacement_mm2": 15.031709057960681
+    },
+    {
+      "x_mm": 0.8999999999999999,
+      "original_mm2": 1.6737743633142017,
+      "replacement_mm2": 15.031749343486116
+    },
+    {
+      "x_mm": 0.9999999999999999,
+      "original_mm2": 1.6737743697775507,
+      "replacement_mm2": 15.031789629011623
+    },
+    {
+      "x_mm": 1.0999999999999999,
+      "original_mm2": 1.6737743771895879,
+      "replacement_mm2": 15.031829916027204
+    },
+    {
+      "x_mm": 1.1999999999999997,
+      "original_mm2": 1.6737743827688725,
+      "replacement_mm2": 13.049202968713237
+    },
+    {
+      "x_mm": 1.2999999999999998,
+      "original_mm2": 1.6737743862363672,
+      "replacement_mm2": 12.70372259531841
+    },
+    {
+      "x_mm": 1.4,
+      "original_mm2": 1.673774389846674,
+      "replacement_mm2": 12.666217935937155
+    },
+    {
+      "x_mm": 1.4999999999999998,
+      "original_mm2": 1.6737743914001477,
+      "replacement_mm2": 12.825159577514714
+    },
+    {
+      "x_mm": 1.5999999999999996,
+      "original_mm2": 1.673774394160752,
+      "replacement_mm2": 12.729862791735886
+    }
+  ]
+}
