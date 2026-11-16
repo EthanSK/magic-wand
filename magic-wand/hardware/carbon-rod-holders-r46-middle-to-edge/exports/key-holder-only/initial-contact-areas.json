@@ -1,0 +1,337 @@
+{
+  "helper_owner": "External_cradle",
+  "archive_sha256": "731fe21c8df1f4f2494e8d58328df396e89e1f46f148e23f9e3c328141cb82dd",
+  "peel_pieces": [
+    {
+      "bed_face_area_mm2": 23.54088836475436,
+      "bed_xy_bounds_mm": [
+        53.18699645996094,
+        3.881333589553833,
+        59.36675262451172,
+        8.701333045959473
+      ],
+      "contains_1p2mm_diameter_grip_land": true,
+      "projected_contact_area_sum_mm2": 0.0,
+      "largest_continuous_contact_patch_mm2": 0.0,
+      "finger_guard_contact_sum_mm2": 0.0,
+      "contact_layers": []
+    },
+    {
+      "bed_face_area_mm2": 22.591202997835065,
+      "bed_xy_bounds_mm": [
+        44.68096160888672,
+        5.0500006675720215,
+        53.556365966796875,
+        8.701333045959473
+      ],
+      "contains_1p2mm_diameter_grip_land": true,
+      "projected_contact_area_sum_mm2": 2.560407215714786,
+      "largest_continuous_contact_patch_mm2": 1.9832168544153745,
+      "finger_guard_contact_sum_mm2": 2.560407215714786,
+      "contact_layers": [
+        {
+          "actual_helper_top_mm": 21.6,
+          "actual_carrier_bottom_mm": 21.8,
+          "vertical_gap_mm": 0.2,
+          "projected_guard_area_mm2": 1.9832168544153745,
+          "largest_projected_guard_patch_mm2": 1.9832168544153745,
+          "number_of_separate_contact_patches": 1,
+          "area_mm2": 1.9832168544153745,
+          "largest_patch_mm2": 1.9832168544153745
+        },
+        {
+          "actual_helper_top_mm": 21.8,
+          "actual_carrier_bottom_mm": 22.0,
+          "vertical_gap_mm": 0.2,
+          "projected_guard_area_mm2": 0.5771903612994117,
+          "largest_projected_guard_patch_mm2": 0.5771903612994117,
+          "number_of_separate_contact_patches": 1,
+          "area_mm2": 0.5771903612994117,
+          "largest_patch_mm2": 0.5771903612994117
+        }
+      ]
+    },
+    {
+      "bed_face_area_mm2": 37.59490159929629,
+      "bed_xy_bounds_mm": [
+        8.80610466003418,
+        3.5094940662384033,
+        22.65822410583496,
+        8.701333045959473
+      ],
+      "contains_1p2mm_diameter_grip_land": true,
+      "projected_contact_area_sum_mm2": 5.478032531310862,
+      "largest_continuous_contact_patch_mm2": 3.8878108255736104,
+      "finger_guard_contact_sum_mm2": 5.478032531310862,
+      "contact_layers": [
+        {
+          "actual_helper_top_mm": 21.6,
+          "actual_carrier_bottom_mm": 21.8,
+          "vertical_gap_mm": 0.2,
+          "projected_guard_area_mm2": 5.478032531310862,
+          "largest_projected_guard_patch_mm2": 3.8878108255736104,
+          "number_of_separate_contact_patches": 3,
+          "area_mm2": 5.478032531310862,
+          "largest_patch_mm2": 3.8878108255736104
+        }
+      ]
+    },
+    {
+      "bed_face_area_mm2": 17.130102373367723,
+      "bed_xy_bounds_mm": [
+        0.6499996185302734,
+        5.081333637237549,
+        8.099359512329102,
+        9.16508674621582
+      ],
+      "contains_1p2mm_diameter_grip_land": true,
+      "projected_contact_area_sum_mm2": 1.033641437791541,
+      "largest_continuous_contact_patch_mm2": 0.7741372850413635,
+      "finger_guard_contact_sum_mm2": 1.033641437791541,
+      "contact_layers": [
+        {
+          "actual_helper_top_mm": 21.6,
+          "actual_carrier_bottom_mm": 21.8,
+          "vertical_gap_mm": 0.2,
+          "projected_guard_area_mm2": 1.033641437791541,
+          "largest_projected_guard_patch_mm2": 0.7741372850413635,
+          "number_of_separate_contact_patches": 2,
+          "area_mm2": 1.033641437791541,
+          "largest_patch_mm2": 0.7741372850413635
+        }
+      ]
+    },
+    {
+      "bed_face_area_mm2": 17.102248870488243,
+      "bed_xy_bounds_mm": [
+        36.848968505859375,
+        5.081333637237549,
+        44.68669128417969,
+        10.365351676940918
+      ],
+      "contains_1p2mm_diameter_grip_land": true,
+      "projected_contact_area_sum_mm2": 1.5263103623175265,
+      "largest_continuous_contact_patch_mm2": 0.8171160256051764,
+      "finger_guard_contact_sum_mm2": 1.5263103623175265,
+      "contact_layers": [
+        {
+          "actual_helper_top_mm": 21.6,
+          "actual_carrier_bottom_mm": 21.8,
+          "vertical_gap_mm": 0.2,
+          "projected_guard_area_mm2": 1.5263103623175265,
+          "largest_projected_guard_patch_mm2": 0.8171160256051764,
+          "number_of_separate_contact_patches": 2,
+          "area_mm2": 1.5263103623175265,
+          "largest_patch_mm2": 0.8171160256051764
+        }
+      ]
+    },
+    {
+      "bed_face_area_mm2": 22.90969498441259,
+      "bed_xy_bounds_mm": [
+        -4.0,
+        9.550000190734863,
+        5.399999618530273,
+        12.949999809265137
+      ],
+      "contains_1p2mm_diameter_grip_land": true,
+      "projected_contact_area_sum_mm2": 0.8089468493677575,
+      "largest_continuous_contact_patch_mm2": 0.8089468493677575,
+      "finger_guard_contact_sum_mm2": 0.0,
+      "contact_layers": [
+        {
+          "actual_helper_top_mm": 17.2,
+          "actual_carrier_bottom_mm": 17.4,
+          "vertical_gap_mm": 0.2,
+          "projected_guard_area_mm2": 0.0,
+          "largest_projected_guard_patch_mm2": 0.0,
+          "number_of_separate_contact_patches": 1,
+          "area_mm2": 0.8089468493677575,
+          "largest_patch_mm2": 0.8089468493677575
+        }
+      ]
+    },
+    {
+      "bed_face_area_mm2": 13.280521129097899,
+      "bed_xy_bounds_mm": [
+        36.79999923706055,
+        16.441333770751953,
+        42.099998474121094,
+        19.399999618530273
+      ],
+      "contains_1p2mm_diameter_grip_land": true,
+      "projected_contact_area_sum_mm2": 0.8134092447634328,
+      "largest_continuous_contact_patch_mm2": 0.8134092447634328,
+      "finger_guard_contact_sum_mm2": 0.0,
+      "contact_layers": [
+        {
+          "actual_helper_top_mm": 39.4,
+          "actual_carrier_bottom_mm": 39.6,
+          "vertical_gap_mm": 0.2,
+          "projected_guard_area_mm2": 0.0,
+          "largest_projected_guard_patch_mm2": 0.0,
+          "number_of_separate_contact_patches": 1,
+          "area_mm2": 0.8134092447634328,
+          "largest_patch_mm2": 0.8134092447634328
+        }
+      ]
+    },
+    {
+      "bed_face_area_mm2": 14.420525058238127,
+      "bed_xy_bounds_mm": [
+        18.0,
+        16.441333770751953,
+        23.299999237060547,
+        19.399999618530273
+      ],
+      "contains_1p2mm_diameter_grip_land": true,
+      "projected_contact_area_sum_mm2": 1.6399347025757212,
+      "largest_continuous_contact_patch_mm2": 1.6399347025757212,
+      "finger_guard_contact_sum_mm2": 0.0,
+      "contact_layers": [
+        {
+          "actual_helper_top_mm": 39.4,
+          "actual_carrier_bottom_mm": 39.6,
+          "vertical_gap_mm": 0.2,
+          "projected_guard_area_mm2": 0.0,
+          "largest_projected_guard_patch_mm2": 0.0,
+          "number_of_separate_contact_patches": 1,
+          "area_mm2": 1.6399347025757212,
+          "largest_patch_mm2": 1.6399347025757212
+        }
+      ]
+    }
+  ],
+  "actual_first_layer_cradle_islands": [
+    {
+      "index": 1,
+      "actual_bead_area_mm2": 22.42385663658951,
+      "contains_1p2mm_diameter_grip_land": true,
+      "bed_xy_bounds_mm": [
+        53.220006227493286,
+        3.8810017108917236,
+        59.365992307662964,
+        8.70099139213562
+      ],
+      "cad_foot_indices": [
+        1
+      ],
+      "continues_on_layer_two": true,
+      "joins_substantial_feet_on_layer_two": []
+    },
+    {
+      "index": 2,
+      "actual_bead_area_mm2": 21.6113322856284,
+      "contains_1p2mm_diameter_grip_land": true,
+      "bed_xy_bounds_mm": [
+        44.86400943994522,
+        5.048894166946411,
+        53.381998777389526,
+        8.700993001461029
+      ],
+      "cad_foot_indices": [
+        2
+      ],
+      "continues_on_layer_two": true,
+      "joins_substantial_feet_on_layer_two": []
+    },
+    {
+      "index": 3,
+      "actual_bead_area_mm2": 36.316563256846756,
+      "contains_1p2mm_diameter_grip_land": true,
+      "bed_xy_bounds_mm": [
+        9.000005006790161,
+        3.513005495071411,
+        22.664902687072754,
+        8.74489688873291
+      ],
+      "cad_foot_indices": [
+        3
+      ],
+      "continues_on_layer_two": true,
+      "joins_substantial_feet_on_layer_two": []
+    },
+    {
+      "index": 4,
+      "actual_bead_area_mm2": 16.499317504123788,
+      "contains_1p2mm_diameter_grip_land": true,
+      "bed_xy_bounds_mm": [
+        0.6500065326690674,
+        5.081006288528442,
+        7.924994230270386,
+        9.017992734909058
+      ],
+      "cad_foot_indices": [
+        4
+      ],
+      "continues_on_layer_two": true,
+      "joins_substantial_feet_on_layer_two": []
+    },
+    {
+      "index": 5,
+      "actual_bead_area_mm2": 16.46318719414134,
+      "contains_1p2mm_diameter_grip_land": true,
+      "bed_xy_bounds_mm": [
+        36.962002992630005,
+        5.081006288528442,
+        44.511996030807495,
+        10.347994565963745
+      ],
+      "cad_foot_indices": [
+        5
+      ],
+      "continues_on_layer_two": true,
+      "joins_substantial_feet_on_layer_two": []
+    },
+    {
+      "index": 6,
+      "actual_bead_area_mm2": 22.109257545987262,
+      "contains_1p2mm_diameter_grip_land": true,
+      "bed_xy_bounds_mm": [
+        -3.999994993209839,
+        9.550008058547974,
+        5.399996519088745,
+        12.949991941452026
+      ],
+      "cad_foot_indices": [
+        6
+      ],
+      "continues_on_layer_two": true,
+      "joins_substantial_feet_on_layer_two": []
+    },
+    {
+      "index": 7,
+      "actual_bead_area_mm2": 12.76507504321286,
+      "contains_1p2mm_diameter_grip_land": true,
+      "bed_xy_bounds_mm": [
+        36.800008058547974,
+        16.441006898880005,
+        42.09999346733093,
+        19.399996519088745
+      ],
+      "cad_foot_indices": [
+        7
+      ],
+      "continues_on_layer_two": true,
+      "joins_substantial_feet_on_layer_two": []
+    },
+    {
+      "index": 8,
+      "actual_bead_area_mm2": 13.753769514303732,
+      "contains_1p2mm_diameter_grip_land": true,
+      "bed_xy_bounds_mm": [
+        18.00000500679016,
+        16.441006898880005,
+        23.29999804496765,
+        19.399996519088745
+      ],
+      "cad_foot_indices": [
+        8
+      ],
+      "continues_on_layer_two": true,
+      "joins_substantial_feet_on_layer_two": []
+    }
+  ],
+  "physical_release_force_measured": false,
+  "measurement": "Conservative inscribed footprints of actually extruded roof and carrier beads, at the intended 0.2-mm vertical gap, clipped to native exposed roof and carrier material. Projected areas are not fused-contact or peel-force measurements."
+}

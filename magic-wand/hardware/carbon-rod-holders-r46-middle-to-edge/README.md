@@ -1,0 +1,24 @@
+# R46 middle-to-edge finger rests
+
+The permanent carrier gains two rounded diagonal braces. Each runs from the middle of a finger rest through the next guard row to the outside edge. Two sloping returns join those rests to the deck. The right return thickens the existing landing. The left lands farther inward and forward so the lower-left window and the soldered socket stay usable. All four additions together occupy 103.01 mm³.
+
+In the assembly guide, cyan is the finished carrier. The orange posts and crossbars come away with the print cradle. The cleanup view shows the removal order and the direction each piece can move. Remove the helpers before fitting the switches or rod.
+
+The [underside comparison](exports/R45-R46-underside.png) and [left return detail](exports/R45-R46-left-return.png) use the generated meshes. Pale green shows material added to R45. The rounded finger-contact surfaces, switch locations, rod clips and diagonal OP1 position carry over from R45.
+
+## Reproducing the plate
+
+Use the R45 CAD and slicing environment. Run the following in a fresh working directory under the geometry budget and scratch-disk wrapper. Output directories passed to the generators are build directories, separate from the published package.
+
+1. Run `plate46.py BUILD`. This composes the frozen R45 carrier and records the four new members, ten joint overlaps, and the intersection of new material with every working space.
+2. Slice `BUILD/R45-Key-Carrier-layout.3mf` to `BUILD/R46-first-slice.gcode.3mf` with the inherited `slice45.py`. The internal layout filename follows the inherited plate generator.
+3. Run the inherited `helper_starts45.py` and `roof_strokes45.py` on the first native archive. Run `review46.py BUILD` to check that archive and independently reopen, reslice, and check the resulting archive.
+4. Review the roof, hardware-route, material, machine, and removal reports against the selected archive. After recording the physical-trial risks in `trial-review.json`, run `bundle46.py BUILD`. It seals the native toolpaths and regenerates the matching guide and comparison views.
+
+The strength checks measure each new whole member and each pre-union joint against the deposited bead footprints. They also measure the connected material on transverse cuts at 25%, 50% and 75% of each member’s length. The original R44 references and the R45 replacement-web qualification stay in the audit. These checks do not measure breaking force, PETG adhesion, bridge sag or how easily the cooled supports detach.
+
+## First physical trial
+
+The final reopened slice is 209 layers, about 2 hours 39 minutes and 24.97 g including its removable cradle and timelapse tower. The working openings clear the actual deposited paths after the documented helper removal. The model is a trial, not a guarantee of fit or strength.
+
+Nine straight bridges have backing at both ends and span up to 13.564 mm. Five very short strokes, up to 0.620 mm, lack backing at both ends; a separate one-ended sparse-infill run reaches 1.037 mm. These can sag or leave wisps. Later plastic is not counted as backing when those strokes are first deposited. The generic floating-region warning is retained and the exact residuals are recorded in `exports/key-holder-only/trial-review.json`.

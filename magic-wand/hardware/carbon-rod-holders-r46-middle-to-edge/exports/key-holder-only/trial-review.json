@@ -1,0 +1,144 @@
+{
+  "selected_archive_sha256": "3d0267fb983986b44cd6a90b5eb3083ce77dfe3be016ea58887e7dd864cfa157",
+  "digital_checks_passed": true,
+  "designation": "Digitally checked first physical trial",
+  "physical_acceptance_verified": false,
+  "source_sha256": {
+    "roof_context46.py": "9ebd2ccb74e792edc062fa264b3ab881ea4a0c8db7aeb9f388a4ae62f58e4fbb",
+    "audit46.py": "823f2d7cb5b39438d95c58076d2cdbf4bef79b025c87ad116b56d97fcf950561",
+    "bundle46.py": "a51bf6377b3caf770a9f2a281acc2acef93e0454b929af9c9ed25681a40e8a9c",
+    "plate46.py": "df2212ce474a54c5009aa47493e90686ec4423f5e0393ace9a7fcea2d631146e",
+    "reopen_compare46.py": "52b1815fc13065ccdacde30e2ccf89c8122c8a76c8dda7e19465e2836b52d28b",
+    "compare46.py": "0a994f5cdeeea84ff810da75161fc12089a5538e0733d7d275dd2318d2be1d92",
+    "guide46.py": "1015b5ed84f883c892ec5910d681637f1d9cb8d1f296ff3149fb6c5138c66acc",
+    "holder46.py": "a9125d744708cec70be9b7aae785b5c25a828b32b38baa584c684b68c33c5c58",
+    "review46.py": "3dba1710a06b1bc87ee1d82f860ed34496bd99cf0ae022624ad77f19c99aceb1"
+  },
+  "report_sha256": {
+    "candidate-audit": "ebc166070300d86049e8d37f2d769dc8bf82623ed527b724a32383b399a05268",
+    "helper-starts": "ae8086ed160fbca2d4059087cfa3cf149d301210b759f58fc1610d4a50120cb0",
+    "roof-strokes": "c139dab7af83e552d731ba8b9dffdb98db96f5c881f7d5a6b434ea753d1f9ed9",
+    "roof-residual-context": "a2bf0abcbcd52392ef6222374ed2bfc8dcbd32b02242b0303181c9dd979d2be3",
+    "contact-areas": "188e62656998a113d297d04a96323640532ccd164c53bdd5a1b184f40593d678",
+    "shelf-contact-areas": "31dc27b9ec546804af25f96a705b8274ba3cbf7d84469a542a3a1a53b9f5903b",
+    "rear-shelf-contact-areas": "1733bc1f2f1f6e189b06c7c373ab80913cfb98dde08fe9fa848438010006c8d6",
+    "delivery-checks": "76d40ff7438730aff94a1182ca8dd5813125dca785a8c998e0330ed62bb91e63"
+  },
+  "unbacked_short_strokes": [
+    {
+      "layer": 9.0,
+      "gcode_lines": [
+        161311,
+        161311
+      ],
+      "path_mm": 0.62,
+      "anchored_before": false,
+      "anchored_after": false,
+      "width_range_mm": [
+        0.2829200029373169,
+        0.2829200029373169
+      ],
+      "footprint_mm2": 0.22514391237677478,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.020637361275481658,
+        "following_layer_carrier": 0.14283163721365805
+      }
+    },
+    {
+      "layer": 18.0,
+      "gcode_lines": [
+        351107,
+        351107
+      ],
+      "path_mm": 0.407,
+      "anchored_before": false,
+      "anchored_after": false,
+      "width_range_mm": [
+        0.3126400113105774,
+        0.3126400113105774
+      ],
+      "footprint_mm2": 0.19315408884394902,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.0,
+        "following_layer_carrier": 0.19303139473399467
+      }
+    },
+    {
+      "layer": 30.0,
+      "gcode_lines": [
+        569497,
+        569497
+      ],
+      "path_mm": 0.464,
+      "anchored_before": false,
+      "anchored_after": false,
+      "width_range_mm": [
+        0.2829200029373169,
+        0.2829200029373169
+      ],
+      "footprint_mm2": 0.18409584296630987,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.0,
+        "following_layer_carrier": 0.17976374507310044
+      }
+    },
+    {
+      "layer": 30.4,
+      "gcode_lines": [
+        576830,
+        576830
+      ],
+      "path_mm": 0.57,
+      "anchored_before": false,
+      "anchored_after": false,
+      "width_range_mm": [
+        0.2829200029373169,
+        0.2829200029373169
+      ],
+      "footprint_mm2": 0.21041345018469804,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.010062691717627081,
+        "following_layer_carrier": 0.19817617582514457
+      }
+    },
+    {
+      "layer": 30.8,
+      "gcode_lines": [
+        584056,
+        584056
+      ],
+      "path_mm": 0.523,
+      "anchored_before": false,
+      "anchored_after": false,
+      "width_range_mm": [
+        0.2829200029373169,
+        0.2829200029373169
+      ],
+      "footprint_mm2": 0.1988372289008803,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.0,
+        "following_layer_carrier": 0.18470429574868286
+      }
+    }
+  ],
+  "straight_two_ended_trial_bridge_count": 9,
+  "maximum_straight_trial_bridge_mm": 13.564,
+  "maximum_one_ended_mm": 1.037,
+  "maximum_two_ended_bent_run_mm": 2.731,
+  "interpretation": "Five short unsupported strokes persist at the same layers and lengths as R45. They could leave wisps. Nine longer straight spans have both ends rooted; their sag remains a physical trial risk. The longest bent run has both ends rooted. Later layers are excluded from backing at deposition. The Studio generic floating warning is retained. All new brace and joint coverage gates passed on this archive. Pull-off effort, strength, fit and adhesion need the physical trial."
+}

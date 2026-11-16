@@ -1,0 +1,347 @@
+{
+  "records": {
+    "L cross brace": {
+      "stations": [
+        [
+          -15.3,
+          9.95,
+          1.38
+        ],
+        [
+          -17.0,
+          7.2,
+          1.45
+        ],
+        [
+          -20.85,
+          3.45,
+          1.47
+        ],
+        [
+          -22.1,
+          0.8,
+          1.51
+        ]
+      ],
+      "radii": [
+        1.08,
+        1.13,
+        1.13,
+        1.2
+      ],
+      "raw_mm3": 51.34508903997973,
+      "cut_mm3": 0.0,
+      "components": [
+        [
+          51.34508903997973,
+          [
+            -23.3,
+            -0.3999999999999999,
+            0.2999999999999998,
+            -14.22,
+            11.03,
+            2.71
+          ]
+        ]
+      ],
+      "bonds": {
+        "middle": 8.229688512470933,
+        "edge": 6.230103705702918,
+        "middle row": 6.681705395570198
+      },
+      "new_mm3": 23.176525891451682,
+      "witness": {
+        "file": "R46-L-cross-brace.stl",
+        "sha256": "cc06efcf6d7d1dc0a5366314595042f113d637204996d5591537ba15c607a5cf",
+        "volume_mm3": 51.345089039979726
+      },
+      "joint_witnesses": {
+        "middle": {
+          "file": "R46-L-cross-brace-middle-bond.stl",
+          "sha256": "2af2b6237c9200ecffa79c38cb475f73b8e8302f7abfe48c6a98531ba3f6fdd7",
+          "volume_mm3": 8.229688512470936
+        },
+        "edge": {
+          "file": "R46-L-cross-brace-edge-bond.stl",
+          "sha256": "f28c26b5ebcd0b63b455b917a714af36b98a19a361bce5ffc9ec878680baba20",
+          "volume_mm3": 6.230103705702915
+        },
+        "middle row": {
+          "file": "R46-L-cross-brace-middle-row-bond.stl",
+          "sha256": "dc76b487a2fbd721d275766e4db0c1243a38090c870beca51ea6fd8d156ab688",
+          "volume_mm3": 6.681705395570196
+        }
+      }
+    },
+    "L deck return": {
+      "stations": [
+        [
+          -15.3,
+          9.95,
+          1.4
+        ],
+        [
+          -14.0,
+          12.1,
+          2.85
+        ],
+        [
+          -11.7,
+          16.0,
+          5.62
+        ],
+        [
+          -8.7,
+          19.55,
+          7.95
+        ],
+        [
+          -8.3,
+          20.6,
+          8.52
+        ]
+      ],
+      "radii": [
+        1.1,
+        1.2,
+        1.25,
+        1.38,
+        1.45
+      ],
+      "raw_mm3": 80.48259192879729,
+      "cut_mm3": 0.0,
+      "components": [
+        [
+          80.48259192879729,
+          [
+            -16.400000000000002,
+            8.85,
+            0.2999999999999998,
+            -6.8500000000000005,
+            22.05,
+            9.969999999999999
+          ]
+        ]
+      ],
+      "bonds": {
+        "middle": 5.4040388488896305,
+        "base": 22.13569448153295
+      },
+      "new_mm3": 52.94285991943004,
+      "witness": {
+        "file": "R46-L-deck-return.stl",
+        "sha256": "7b52f3d3222490196fe9c09aa72647a76c998c20f6b839858b77aaca3b8f8962",
+        "volume_mm3": 80.4825919287973
+      },
+      "joint_witnesses": {
+        "middle": {
+          "file": "R46-L-deck-return-middle-bond.stl",
+          "sha256": "3dbdd8dfe9ed9efc4e7153781ee10069003723986b6654920b534e93f7c5371a",
+          "volume_mm3": 5.404038848889632
+        },
+        "base": {
+          "file": "R46-L-deck-return-base-bond.stl",
+          "sha256": "b36118b3b58df8d50f1c2da9d8d46b2f674d2b05071697ae2e338007cbab1190",
+          "volume_mm3": 22.13569448153294
+        }
+      }
+    },
+    "R cross brace": {
+      "stations": [
+        [
+          15.5,
+          9.95,
+          1.38
+        ],
+        [
+          17.2,
+          7.2,
+          1.45
+        ],
+        [
+          18.85,
+          3.45,
+          1.47
+        ],
+        [
+          20.1,
+          0.8,
+          1.51
+        ]
+      ],
+      "radii": [
+        1.08,
+        1.13,
+        1.13,
+        1.2
+      ],
+      "raw_mm3": 46.45023651097189,
+      "cut_mm3": 0.0,
+      "components": [
+        [
+          46.45023651097189,
+          [
+            14.42,
+            -0.3999999999999999,
+            0.2999999999999998,
+            21.3,
+            11.03,
+            2.71
+          ]
+        ]
+      ],
+      "bonds": {
+        "middle": 8.699558129726116,
+        "edge": 7.683957304559871,
+        "middle row": 6.142716104667899
+      },
+      "new_mm3": 19.272286561929356,
+      "witness": {
+        "file": "R46-R-cross-brace.stl",
+        "sha256": "00149d12ff246547e497a4fbfa1908c702bfa3f4f28be81ab60de4468f8524dc",
+        "volume_mm3": 46.450236510971855
+      },
+      "joint_witnesses": {
+        "middle": {
+          "file": "R46-R-cross-brace-middle-bond.stl",
+          "sha256": "1b9c9b883b415786283c0286397fd66b52de613cb4600fad8a96b749253f403b",
+          "volume_mm3": 8.699558129726103
+        },
+        "edge": {
+          "file": "R46-R-cross-brace-edge-bond.stl",
+          "sha256": "c6dfdb5722fff4a82145be8f074456db095929390f55bb54bb43db487e53d55b",
+          "volume_mm3": 7.683957304559863
+        },
+        "middle row": {
+          "file": "R46-R-cross-brace-middle-row-bond.stl",
+          "sha256": "e43b1e60c4469d7188c993c6e97f021aedf9657b945f032dcefe72d3ce9e2b1e",
+          "volume_mm3": 6.1427161046678975
+        }
+      }
+    },
+    "R deck return": {
+      "stations": [
+        [
+          15.5,
+          9.95,
+          1.4
+        ],
+        [
+          14.9,
+          11.75,
+          3.05
+        ],
+        [
+          13.7,
+          14.0,
+          5.45
+        ],
+        [
+          12.3,
+          16.7,
+          8.12
+        ],
+        [
+          12.05,
+          17.25,
+          8.65
+        ]
+      ],
+      "radii": [
+        1.1,
+        1.2,
+        1.25,
+        1.38,
+        1.45
+      ],
+      "raw_mm3": 61.69646768821912,
+      "cut_mm3": 0.0,
+      "components": [
+        [
+          61.69646768821912,
+          [
+            10.600000000000001,
+            8.85,
+            0.2999999999999998,
+            16.6,
+            18.7,
+            10.1
+          ]
+        ]
+      ],
+      "bonds": {
+        "middle": 46.66468076410147,
+        "base": 14.900031871852287
+      },
+      "new_mm3": 8.130088943191984,
+      "witness": {
+        "file": "R46-R-deck-return.stl",
+        "sha256": "b1bdb021c522376f038ad1186187f37243a25fc85c7c1e40e8713da6f7f2ec73",
+        "volume_mm3": 61.6964676882191
+      },
+      "joint_witnesses": {
+        "middle": {
+          "file": "R46-R-deck-return-middle-bond.stl",
+          "sha256": "d05f6507864e5d153243ac8b9f6ea19ce67aee9ad0acb9db5fbfd4a2ff277621",
+          "volume_mm3": 46.664680764101526
+        },
+        "base": {
+          "file": "R46-R-deck-return-base-bond.stl",
+          "sha256": "a45bdd9dca029796ac284add459cee9520e8499c3ab081ed9fdf9a93ba3e65e4",
+          "volume_mm3": 14.90003187185228
+        }
+      }
+    }
+  },
+  "added_mm3": 103.01096141502036,
+  "route_max_added_intrusion_mm3": {
+    "unloaded_clip_bore": 0.0,
+    "clip_gap_mid": 0.0,
+    "clip_gap_rear": 0.0,
+    "external_wire_bus": 0.0,
+    "key_0_switch": 0.0,
+    "key_0_socket": 0.0,
+    "key_0_maximum_socket": 0.0,
+    "key_0_socket_tape_zone": 0.0,
+    "key_0_mount_opening": 0.0,
+    "key_0_clip_relief": 0.0,
+    "key_0_cap_travel": 0.0,
+    "key_2_switch": 0.0,
+    "key_2_socket": 0.0,
+    "key_2_maximum_socket": 0.0,
+    "key_2_socket_tape_zone": 0.0,
+    "key_2_mount_opening": 0.0,
+    "key_2_clip_relief": 0.0,
+    "key_2_cap_travel": 0.0,
+    "key_3_switch": 0.0,
+    "key_3_socket": 0.0,
+    "key_3_maximum_socket": 0.0,
+    "key_3_socket_loading": 0.0,
+    "key_3_maximum_socket_loading": 0.0,
+    "key_3_socket_tape_zone": 0.0,
+    "key_3_mount_opening": 0.0,
+    "key_3_clip_relief": 0.0,
+    "key_3_cap_travel": 0.0,
+    "key_4_switch": 0.0,
+    "key_4_socket": 0.0,
+    "key_4_maximum_socket": 0.0,
+    "key_4_socket_loading": 0.0,
+    "key_4_maximum_socket_loading": 0.0,
+    "key_4_socket_tape_zone": 0.0,
+    "key_4_mount_opening": 0.0,
+    "key_4_clip_relief": 0.0,
+    "key_4_cap_travel": 0.0,
+    "key_0_soldered_socket_slide": 0.0,
+    "key_2_soldered_socket_slide": 0.0,
+    "key_3_soldered_socket_dogleg": 0.0,
+    "key_4_soldered_socket_dogleg": 0.0,
+    "snap hinge bores": 0.0,
+    "OP1 mounting screw pilots": 0.0,
+    "centred OP1 and complete prewired insertion": 0.0,
+    "OP1 prewired plug insertion from below before fitting the rod": 0.0,
+    "OP1 switch insertion": 0.0,
+    "shifted Grove plug operating stroke": 0.0,
+    "shifted Grove lead operating stroke": 0.0,
+    "complete hinge bore surfaces": 0.0
+  }
+}
