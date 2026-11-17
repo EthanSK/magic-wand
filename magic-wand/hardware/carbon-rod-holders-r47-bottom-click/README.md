@@ -2,7 +2,7 @@
 
 R47 moves the OP1 click from near the hinge to the bottom of the DFRobot touch board, where the finger presses. The OP1 group moves 2 mm right, and the hinge moves 0.4 mm closer to the board. Everything else carries over from R46: the four Choc seats, the rod clips, the rounded finger rests and all four R46 middle-to-edge braces.
 
-The complete nine-part R47 plate finished successfully on 17 November 2026, as reported by the owner. Assembly fit, click feel, hinge operation and strength still need a hands-on check. [Physical trial record](PHYSICAL-TRIAL.md)
+The complete nine-part R47 plate finished successfully on 17 November 2026, as reported by the owner. The owner reported damage during support removal on one half of the key holder. Assembly fit, click feel and hinge strength still need a hands-on check. [Physical trial record](PHYSICAL-TRIAL.md)
 
 ## What changed from R46
 
