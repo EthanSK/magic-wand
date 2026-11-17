@@ -9,14 +9,14 @@ def inspect(path,helper_name='External_cradle'):
     c=prior.common.load_checker().audit;q=c.q
     d,features,stats,config,offset,objects,_,_=c.read_project(path)
     names=np.asarray(features)[d[:,5].astype(int)];owners=single44.previous.owners(path)
-    shift=np.array([50.,70.,0.]);xyz=d[:,:3]+offset-shift
+    frame=json.loads((path.parent/'frame.json').read_text())
+    shift=np.asarray(frame['bed_translation']);xyz=d[:,:3]+offset-shift
     part=(d[:,6]==owners['Key_Carrier'])&prior.common.model_mask(names)
     rib=(d[:,6]==owners[helper_name])&prior.common.model_mask(names)
     def solid(n):
         obj=objects[n];return q.solid(obj['vertices']-shift,obj['faces'])
     body,cradle=solid('Key_Carrier'),solid(helper_name)
-    frame=json.loads((path.parent/'frame.json').read_text())['print_to_assembly']
-    inverse=np.linalg.inv(frame)[:3]
+    inverse=np.linalg.inv(frame['print_to_assembly'])[:3]
     guards=prior.d.union(prior.d.geometry()[3].values()).transform(inverse)
     feet=cradle.slice(.1).decompose(); records=[]
     # Side teeth reach beyond their bed feet. Attribute their entire roof
@@ -24,8 +24,9 @@ def inspect(path,helper_name='External_cradle'):
     actor_feet=feet if helper_name=='External_cradle' else [cradle.slice(.1)]
     regions=feet if helper_name=='External_cradle' else [cradle.project()]
     piece_shapes=[];piece_names=[]
-    if helper_name=='Front_pull_shelf':
-        cad=json.loads((path.parent/'shelf-cad.json').read_text())
+    if helper_name in ('Front_pull_shelf','Rear_pull_shelf'):
+        source='shelf-cad.json' if helper_name=='Front_pull_shelf' else 'rear-shelf-cad.json'
+        cad=json.loads((path.parent/source).read_text())
         if cad.get('removable_pieces'):
             import trimesh
             for item in cad['removable_pieces']:

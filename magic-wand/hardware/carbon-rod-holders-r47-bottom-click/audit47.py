@@ -121,8 +121,13 @@ def check(archive, scratch, resume_material=False):
             braces[name] = rows
         result['r46_braces'] = braces
         landing = h.rib_landing().transform(inverse) ^ intended_print
-        landing_sections = audit46.transverse_sections(landing, h.LANDING_RUN, matrix, *fields, checker)
+        folded_landing = receipt.get('revision') == 'r48' and len(h.LANDING_RUN) > 2
+        landing_sections = audit46.transverse_sections(
+            landing, h.LANDING_RUN, matrix, *fields, checker, follow_fold=folded_landing)
         result['r47_landing_sections'] = landing_sections
+        if folded_landing:
+            result['folded_landing_checker_sha256'] = {
+                path.name: digest(path) for path in (Path(audit46.__file__), Path(__file__))}
         witness_directory = scratch / 'parent-audit-targets/r45-standing'
         web = json.loads((witness_directory / 'standing-web.json').read_text())
         original_load = web_qualification45.trimesh.load_mesh
@@ -167,12 +172,20 @@ def check(archive, scratch, resume_material=False):
         starts = result['layer_starts']
         chamfer_ok = chamfer_gate(chamfer)
         landing_ok = all(row['coverage'] >= .9
-            and row['native_largest_connected_mm2'] >= .9 * row['cad_area_mm2']
+            and (row['folded_landing']['passed'] if folded_landing else
+                 row['native_largest_connected_mm2'] >= .9 * row['cad_area_mm2'])
             for row in landing_sections)
+        missing = starts['missing_printed_components']
+        if receipt.get('revision') == 'r48':
+            import pocket_corner48
+            corner = pocket_corner48.inspect(missing, matrix, actual, checker, fields)
+            corner['checker_sha256'] = digest(Path(pocket_corner48.__file__))
+            result['op1_pocket_terminal_corner'] = corner
+            missing = corner['unqualified']
         result['screen_passed'] = bool(material_ok and brace_ok and sections_ok and removable
             and replacement['qualified'] and chamfer_ok and landing_ok
             and not hard and not interference and not starts['floating_components']
-            and not starts['missing_printed_components'])
+            and not missing)
 
     # A combined plate keeps the identical key/helper meshes at its own bed
     # translation. Use exactly their deposited beads, with the actual tower;

@@ -61,7 +61,7 @@ def route_hits(q, region, xyz, widths, heights, kinds, features, frame, keep):
     return {**worst, "poses_checked": len(print_poses)}
 
 
-def inspect(archive, staged_exports, key_routes, layout_report, removable_support=None):
+def inspect(archive, staged_exports, key_routes, layout_report, removable_support=None, *, alternative_routes=None):
     checks31 = load_checker()
     import holder23
     import slice22
@@ -97,6 +97,12 @@ def inspect(archive, staged_exports, key_routes, layout_report, removable_suppor
         **{name: old.h20.part_regions(name) for name in ("XIAO_Rod_Holder", "Battery_Holder")},
         **{name: old.h18.regions(name) for name in ("XIAO_Near_Keeper", "Battery_End_Door")},
     }
+    if alternative_routes:
+        # A replacement physical part supplies its own checked hardware paths.
+        # All inherited hardware, bead, bed and adhesion guards are preserved.
+        assert set(alternative_routes) <= set(manifest["parts"])
+        assert all(regions for regions in alternative_routes.values())
+        routes.update(alternative_routes)
     failures, parts = [], {}
     for name, record in manifest["parts"].items():
         path = staged_exports / f"{name}{SOURCE_SUFFIX}"

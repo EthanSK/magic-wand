@@ -1,0 +1,121 @@
+{
+  "schema": 1,
+  "state": "composed_not_slice_checked",
+  "functional_parts": [
+    "Battery_End_Door",
+    "Battery_Holder",
+    "Cable_Clip_12_Wire",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2",
+    "DFRobot_Hole_Bracket",
+    "Key_Carrier",
+    "XIAO_Near_Keeper",
+    "XIAO_Rod_Holder"
+  ],
+  "build_order": [
+    "Key_Carrier",
+    "External_cradle",
+    "Release_tabs",
+    "Front_pull_shelf",
+    "Rear_pull_shelf",
+    "DFRobot_Hole_Bracket",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2",
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Battery_Holder",
+    "Battery_End_Door",
+    "Cable_Clip_12_Wire"
+  ],
+  "local_config_differences": {
+    "key": {
+      "wall_generator": "arachne",
+      "min_bead_width": "60%",
+      "wall_distribution_count": "2",
+      "bridge_angle": "90",
+      "is_infill_first": "1"
+    },
+    "bracket": {},
+    "battery": {}
+  },
+  "source_sha256": {
+    "complete_template": "52709c53e5491d54176dd75ffc9ccd83b89218ba330dd6ab4e2bdba6adb2f8ad",
+    "key": "4b93c1d7581b051b23948cd35b47109f86f79946357ed17864de45c02a078432",
+    "bracket": "b443be2a8019143671a4cbe0b0ad399e29339503d434938b722be40fd0ae0f48",
+    "battery": "1eacdcf7a1a94583a66a8fbc56199a3b391781019bac3481d231e6853bc0b368"
+  },
+  "layout_sha256": "087774d1eef0a7b09ab6c4220b88b12ab114d9a279109d74b7cea2d825d3e50d",
+  "physical_ready_for_send": false,
+  "local_strength_settings": {
+    "Battery_End_Door": {
+      "wall_generator": "arachne",
+      "wall_loops": "6",
+      "sparse_infill_density": "100%",
+      "infill_wall_overlap": "27%",
+      "outer_wall_line_width": "0.32",
+      "inner_wall_line_width": "0.32",
+      "internal_solid_infill_line_width": "0.32",
+      "top_surface_line_width": "0.32",
+      "print_z_mm": "full part"
+    },
+    "Battery_Holder": {
+      "wall_generator": "arachne",
+      "wall_loops": "6",
+      "sparse_infill_density": "100%",
+      "infill_wall_overlap": "27%",
+      "outer_wall_line_width": "0.32",
+      "inner_wall_line_width": "0.32",
+      "internal_solid_infill_line_width": "0.32",
+      "top_surface_line_width": "0.32",
+      "print_z_mm": [
+        0.0,
+        3.6
+      ]
+    },
+    "DFR0030_Post_Clip": {
+      "wall_generator": "arachne",
+      "wall_loops": "6",
+      "sparse_infill_density": "100%",
+      "infill_wall_overlap": "27%",
+      "outer_wall_line_width": "0.32",
+      "inner_wall_line_width": "0.32",
+      "internal_solid_infill_line_width": "0.32",
+      "top_surface_line_width": "0.32",
+      "print_z_mm": "full part"
+    },
+    "DFR0030_Post_Clip_2": {
+      "wall_generator": "arachne",
+      "wall_loops": "6",
+      "sparse_infill_density": "100%",
+      "infill_wall_overlap": "27%",
+      "outer_wall_line_width": "0.32",
+      "inner_wall_line_width": "0.32",
+      "internal_solid_infill_line_width": "0.32",
+      "top_surface_line_width": "0.32",
+      "print_z_mm": "full part"
+    },
+    "XIAO_Rod_Holder": {
+      "wall_generator": "arachne",
+      "wall_loops": "6",
+      "sparse_infill_density": "100%",
+      "infill_wall_overlap": "27%",
+      "outer_wall_line_width": "0.32",
+      "inner_wall_line_width": "0.32",
+      "internal_solid_infill_line_width": "0.32",
+      "top_surface_line_width": "0.32",
+      "print_z_mm": [
+        0.0,
+        3.6
+      ]
+    }
+  },
+  "colour_change": {
+    "fields": [
+      "filament_colour",
+      "extruder_colour"
+    ],
+    "swatch": "#A72D32",
+    "reason": "Illustrative red swatch for the external Flashforge HS PETG Metallic spool.",
+    "print_process_settings_changed": false
+  }
+}

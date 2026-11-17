@@ -1,0 +1,59 @@
+{
+  "parts": {
+    "Battery_Holder": {
+      "pad_count": 6,
+      "sites_print_xy_outward": [
+        [
+          0.05000000000000071,
+          11.829628944396973,
+          -1,
+          0
+        ],
+        [
+          0.05000000000000071,
+          15.829628944396973,
+          -1,
+          0
+        ],
+        [
+          4.35,
+          17.629628944396973,
+          0,
+          1
+        ],
+        [
+          16.95,
+          11.829628944396973,
+          1,
+          0
+        ],
+        [
+          16.95,
+          15.829628944396973,
+          1,
+          0
+        ],
+        [
+          12.65,
+          17.629628944396973,
+          0,
+          1
+        ]
+      ],
+      "tie_width_mm": 2.0,
+      "pad_thickness_mm": 0.4,
+      "root_overlap_mm3": [
+        0.416,
+        0.416,
+        0.416,
+        0.416,
+        0.416,
+        0.416
+      ],
+      "combined_first_layer_area_mm2": 498.44,
+      "file": "Battery_Holder-ANCHOR-REMOVE-AFTER-PRINT.stl",
+      "stl_sha256": "3d97558d029821265aee28611b348da41f062493746f178bd68bdb5835d732c2",
+      "source": "Removable anchors from the Micron cassette on this plate."
+    }
+  }
+}

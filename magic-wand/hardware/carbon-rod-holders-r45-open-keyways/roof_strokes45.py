@@ -9,29 +9,42 @@ import single44
 def intervals(flags):
     return np.flatnonzero(np.diff(np.r_[False,flags,False].astype(int))).reshape(-1,2)
 
-def inspect(path):
+def inspect(path, *, owner_name='Key_Carrier', support_owners=None, report_path=None, focus_layers=None):
     checker=inherited.common.load_checker().audit;q=checker.q
     d,features,_,_,offset,_,gcode,_=checker.read_project(path)
     from native_order45 import map_moves
     line,sequence,feed,fan=map_moves(q,gcode,len(d))
     own=single44.previous.owners(path);normal=inherited.common.model_mask(np.array(features)[d[:,5].astype(int)])
-    carrier=normal&(d[:,6]==own['Key_Carrier'])
-    helpers=normal&np.isin(d[:,6],[n for k,n in own.items() if k not in ('Key_Carrier','Release_tabs')])
+    carrier=normal&(d[:,6]==own[owner_name])
+    if support_owners is None:
+        assert owner_name == 'Key_Carrier'
+        support_owners = [k for k in own if k not in ('Key_Carrier','Release_tabs')]
+    assert owner_name not in support_owners
+    helpers=normal&np.isin(d[:,6],[own[k] for k in support_owners])
     p=path.parent;info=json.loads((p/'frame.json').read_text())
     xy=(d[:,:3]+offset-info['bed_translation'])[:,:2]
     F=np.asarray(features)[d[:,5].astype(int)]
     checks=[];previous=q.CrossSection();older=q.CrossSection();layers=[];continuous=[]
     def region(m):
         return checker.start_audit.bead_footprints(q,xy[m],d[m,3]) if m.any() else q.CrossSection()
+    wanted = None if focus_layers is None else {round(float(z),3) for z in focus_layers}
+    if wanted is not None:
+        assert report_path is not None and report_path.name != 'roof-strokes.json' and wanted
     for top in np.unique(d[carrier,7]):
         z=round(float(top),3);sel=carrier&(abs(d[:,7]-z)<.001);idx=np.flatnonzero(sel);pts=xy[idx]
+        if wanted is not None and z not in wanted:
+            # A focused diagnostic sees exactly the same true predecessors
+            # as the full run. Unrelated layers do not enter its statistics.
+            if round(z+.2,3) in wanted or round(z+.4,3) in wanted:
+                older,previous=previous,region(sel)
+            continue
         under=region(helpers&(abs(d[:,7]-(z-.4))<.001))
         direct=q._inside(previous.offset(.25)+under,pts) if z>.201 else np.ones(len(pts),bool)
         # Only the four intentionally double-decked outer keys have the
         # established 0.22-mm legacy seam. Report its backing separately.
         seam=np.zeros(len(idx),bool)
         frame=np.array(info['print_to_assembly'])
-        if frame[2,2]>.999 and z in (14.,14.2):
+        if owner_name=='Key_Carrier' and frame[2,2]>.999 and z in (14.,14.2):
             w=np.c_[pts,np.full(len(pts),z-.1),np.ones(len(pts))]@frame.T
             key_zone=(np.abs(np.abs(w[:,0])-21)<8.1)&((np.abs(w[:,1])<8.1)|(np.abs(w[:,1]-21.35)<8.1))
             seam=key_zone&q._inside(older,pts)
@@ -108,7 +121,15 @@ def inspect(path):
         longest_unanchored_or_one_ended_sequence=longest([g for g in continuous if not(g['before'] and g['after'])]),
         longest_two_ended_sequence=longest([g for g in continuous if g['before'] and g['after']]),
         scope='Every native move on every carrier layer with incomplete backing, including unlabelled roof paths. Record direct interior samples, lower carrier with one empty layer only within confirmed outer-key seam, actual width overlaps against all earlier anchored samples, with no same-strand tail credit and no inheritance through an unsupported bend, and contiguous leftover arclengths across move boundaries. 12 mm limits inheritance through an already bridged stroke; physical PETG sag remains unmeasured.')
-    (p/'roof-strokes.json').write_text(json.dumps(result,separators=(',',':'))+'\n')
+    if owner_name != 'Key_Carrier':
+        assert report_path is not None, 'A separate report is required for another native owner'
+        result['owner'] = owner_name
+        result['scope'] = ('All actual '+owner_name+' moves in deposition order. Only its immediately lower layer and '
+                           +', '.join(support_owners)+' across one empty layer can supply external backing.')
+    if wanted is not None:
+        assert {r['z'] for r in layers}==wanted
+        result['focus_layers_mm']=sorted(wanted)
+    (report_path if report_path is not None else p/'roof-strokes.json').write_text(json.dumps(result,separators=(',',':'))+'\n')
     print('Native roof stroke pieces:',len(checks),result['longest_unsupported_move_piece'],result['longest_unanchored_or_one_ended_sequence'],flush=True)
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('archive',type=Path);inspect(parser.parse_args().archive)

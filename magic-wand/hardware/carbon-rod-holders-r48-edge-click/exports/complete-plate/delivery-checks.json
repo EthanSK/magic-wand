@@ -1,0 +1,1605 @@
+{
+  "archive_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+  "gcode_sha256": "f117b0ae55ceb5074d34c0537f1ad5484b2d4cc92143ce73ac772419bc2ffc26",
+  "checker_sha256": "42d32429e619cef321aff5d1d42c4e7bb871aca6985ddb7b9784370ec23327fd",
+  "functional_parts": [
+    "Battery_End_Door",
+    "Battery_Holder",
+    "Cable_Clip_12_Wire",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2",
+    "DFRobot_Hole_Bracket",
+    "Key_Carrier",
+    "XIAO_Near_Keeper",
+    "XIAO_Rod_Holder"
+  ],
+  "disposable_parts": [
+    "External_cradle",
+    "Front_pull_shelf",
+    "Rear_pull_shelf",
+    "Release_tabs"
+  ],
+  "effective_object_recipes": {
+    "Release_tabs": {
+      "settings": {
+        "name": "Release_tabs",
+        "bottom_shell_layers": "2",
+        "bottom_shell_thickness": "0",
+        "bridge_angle": "90",
+        "brim_type": "no_brim",
+        "enable_support": "0",
+        "extruder": "1",
+        "is_infill_first": "1",
+        "min_bead_width": "60%",
+        "sparse_infill_density": "12%",
+        "top_shell_layers": "2",
+        "top_shell_thickness": "0",
+        "wall_distribution_count": "2",
+        "wall_generator": "arachne",
+        "wall_loops": "1",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "34",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "Release_tabs",
+            "matrix": "1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "2",
+            "source_volume_id": "0",
+            "source_offset_x": "30.049999445676804",
+            "source_offset_y": "12.813433289527893",
+            "source_offset_z": "0.10000000149011612"
+          }
+        }
+      ]
+    },
+    "Key_Carrier": {
+      "settings": {
+        "name": "Key_Carrier",
+        "bridge_angle": "90",
+        "bridge_no_support": "1",
+        "brim_type": "no_brim",
+        "enable_support": "0",
+        "extruder": "1",
+        "initial_layer_print_height": "0.2",
+        "inner_wall_acceleration": "1500",
+        "inner_wall_speed": "65",
+        "is_infill_first": "1",
+        "layer_height": "0.2",
+        "max_bridge_length": "12",
+        "min_bead_width": "60%",
+        "outer_wall_acceleration": "1000",
+        "outer_wall_speed": "40",
+        "sparse_infill_density": "20%",
+        "support_bottom_z_distance": "0.2",
+        "support_interface_spacing": "0.2",
+        "support_interface_top_layers": "2",
+        "support_object_xy_distance": "0.35",
+        "support_on_build_plate_only": "0",
+        "support_style": "snug",
+        "support_threshold_angle": "45",
+        "support_top_z_distance": "0.2",
+        "support_type": "normal(manual)",
+        "timelapse_type": "1",
+        "top_surface_speed": "30",
+        "wall_distribution_count": "2",
+        "wall_generator": "arachne",
+        "wall_loops": "3",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "1",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "Key_Carrier",
+            "matrix": "1 0 0 59.32999900817871 0 1 0 25.581331226525879 0 0 1 51.49629596447754 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "0",
+            "source_volume_id": "0",
+            "source_offset_x": "29.664999961853027",
+            "source_offset_y": "12.790665626525879",
+            "source_offset_z": "25.748147964477539"
+          }
+        },
+        {
+          "id": "2",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "SLOW BAND 16-16.8 mm - modifier, not printed",
+            "matrix": "1 0 0 60.049999218530274 0 1 0 25.581331226525879 0 0 1 32.80000067220459 0 0 0 1",
+            "bridge_speed": "12",
+            "gap_infill_speed": "12",
+            "inner_wall_speed": "15",
+            "internal_solid_infill_speed": "20",
+            "outer_wall_speed": "15",
+            "overhang_1_4_speed": "15",
+            "overhang_2_4_speed": "12",
+            "overhang_3_4_speed": "10",
+            "overhang_4_4_speed": "8",
+            "sparse_infill_speed": "20",
+            "top_surface_speed": "20"
+          }
+        },
+        {
+          "id": "3",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "SLOW BAND 33.8-35.2 mm - modifier, not printed",
+            "matrix": "1 0 0 60.049999218530274 0 1 0 25.581331226525879 0 0 1 69 0 0 0 1",
+            "bridge_speed": "12",
+            "gap_infill_speed": "12",
+            "inner_wall_speed": "15",
+            "internal_solid_infill_speed": "20",
+            "outer_wall_speed": "15",
+            "overhang_1_4_speed": "15",
+            "overhang_2_4_speed": "12",
+            "overhang_3_4_speed": "10",
+            "overhang_4_4_speed": "8",
+            "sparse_infill_speed": "20",
+            "top_surface_speed": "20"
+          }
+        },
+        {
+          "id": "4",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "OP1 mounting seat 1 solid infill",
+            "matrix": "1 0 0 56.522404658520507 0 1 0 25.102666427429199 0 0 1 91.08588214711915 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%"
+          }
+        },
+        {
+          "id": "5",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "OP1 mounting seat 2 solid infill",
+            "matrix": "1 0 0 69.059832563305662 0 1 0 25.102666427429199 0 0 1 57.553019538647462 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%"
+          }
+        },
+        {
+          "id": "6",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - raised key 0 platform-to-frame bond",
+            "matrix": "1 0 0 17.399997715590821 0 1 0 29.37266540263672 0 0 1 65.300003025878908 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "7",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - raised key 2 platform-to-frame bond",
+            "matrix": "1 0 0 102.79999731118164 0 1 0 29.37266540263672 0 0 1 65.300003025878908 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "8",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - raised key 3 platform-to-frame bond",
+            "matrix": "1 0 0 17.399997715590821 0 1 0 29.37266540263672 0 0 1 22.600003282827757 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "9",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - raised key 4 platform-to-frame bond",
+            "matrix": "1 0 0 102.79999731118164 0 1 0 29.37266540263672 0 0 1 22.600003282827757 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "10",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - left guard reinforcement web",
+            "matrix": "1 0 0 4.0499985803093725 0 1 0 22.82266473043213 0 0 1 36.400004370288087 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "11",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - left guard web-to-frame bond",
+            "matrix": "1 0 0 4.0999984770605469 0 1 0 22.874665706994627 0 0 1 36.400004370288087 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "12",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - L1 guard-to-web bond",
+            "matrix": "1 0 0 2.184413855153732 0 1 0 23.383116284216307 0 0 1 36.400004370288087 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "13",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - L2 guard-to-web bond",
+            "matrix": "1 0 0 2.184413855153732 0 1 0 23.383116284216307 0 0 1 36.400004370288087 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "14",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - L3 guard-to-web bond",
+            "matrix": "1 0 0 2.184413855153732 0 1 0 23.383116284216307 0 0 1 36.400004370288087 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "15",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - R43 complete thicker guard web",
+            "matrix": "1 0 0 4.0499985803093725 0 1 0 22.822666184106446 0 0 1 36.400004370288087 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "16",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - R44 L middle finger rest",
+            "matrix": "1 0 0 24.535753225061036 0 1 0 14.516961098858642 0 0 1 55.150001562939451 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "17",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - R44 L middle branch-to-inner leg bond",
+            "matrix": "1 0 0 40.163622904907228 0 1 0 15.745706559113771 0 0 1 45.400004370288087 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "18",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - R44 L middle branch-to-outer guard bond",
+            "matrix": "1 0 0 11.302880882003784 0 1 0 14.471953156014404 0 0 1 45.400004370288087 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "19",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - R44 L spine-to-L1 guard bond",
+            "matrix": "1 0 0 29.499998046325686 0 1 0 12.062665939665528 0 0 1 64.900004370288087 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "20",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - R44 L spine-to-L2 guard bond",
+            "matrix": "1 0 0 29.499998046325686 0 1 0 12.062665939665528 0 0 1 58.400004370288087 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "21",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "R44 solid join - R44 L spine-to-L3 guard bond",
+            "matrix": "1 0 0 29.499998046325686 0 1 0 12.062665939665528 0 0 1 51.900004370288087 0 0 0 1",
+            "inner_wall_line_width": "0.4",
+            "internal_solid_infill_line_width": "0.4",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.4",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "22",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Solid R2 guard root",
+            "matrix": "1 0 0 104.5 0 1 0 26.562665969665527 0 0 1 36.600002244409183 0 0 0 1",
+            "inner_wall_line_width": "0.34",
+            "internal_solid_infill_line_width": "0.34",
+            "outer_wall_line_width": "0.34",
+            "sparse_infill_density": "100%",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "23",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Transverse rear saddle bridges",
+            "matrix": "1 0 0 60.099998437060549 0 1 0 24.66266636040039 0 0 1 15.300003055878907 0 0 0 1",
+            "bridge_angle": "180"
+          }
+        },
+        {
+          "id": "24",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Standing left key floor perimeter",
+            "matrix": "1 0 0 11.499999803142451 0 1 0 25.940000567028811 0 0 1 58.950000781469726 0 0 0 1",
+            "bridge_angle": "90",
+            "inner_wall_line_width": "0.34",
+            "internal_solid_infill_line_width": "0.34",
+            "outer_wall_line_width": "0.34",
+            "sparse_infill_density": "100%",
+            "wall_loops": "4",
+            "wall_sequence": "outer wall/inner wall"
+          }
+        },
+        {
+          "id": "25",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Solid backing under raised key floors",
+            "matrix": "1 0 0 57.599999194688415 0 1 0 28.650000109265136 0 0 1 24.110000082824037 0 0 0 1",
+            "internal_solid_infill_line_width": "0.34",
+            "sparse_infill_density": "100%",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "26",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Solid left deck landing",
+            "matrix": "1 0 0 41.74999709265137 0 1 0 26.802667108898923 0 0 1 27.065355750451658 0 0 0 1",
+            "inner_wall_line_width": "0.34",
+            "internal_solid_infill_line_width": "0.34",
+            "outer_wall_line_width": "0.34",
+            "sparse_infill_density": "100%",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "27",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Solid L1 rod-side guard joint",
+            "matrix": "1 0 0 54.049999218530274 0 1 0 20.152395724206542 0 0 1 37.621996916625974 0 0 0 1",
+            "inner_wall_line_width": "0.34",
+            "internal_solid_infill_line_width": "0.34",
+            "outer_wall_line_width": "0.34",
+            "sparse_infill_density": "100%",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "28",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Solid L2 rod-side guard joint",
+            "matrix": "1 0 0 54.219998403002933 0 1 0 19.642665144681395 0 0 1 34.313756471374511 0 0 0 1",
+            "inner_wall_line_width": "0.34",
+            "internal_solid_infill_line_width": "0.34",
+            "outer_wall_line_width": "0.34",
+            "sparse_infill_density": "100%",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "29",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Solid L3 rod-side guard joint",
+            "matrix": "1 0 0 54.219998403002933 0 1 0 19.642665144681395 0 0 1 32.325512866186529 0 0 0 1",
+            "inner_wall_line_width": "0.34",
+            "internal_solid_infill_line_width": "0.34",
+            "outer_wall_line_width": "0.34",
+            "sparse_infill_density": "100%",
+            "wall_loops": "4"
+          }
+        },
+        {
+          "id": "30",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Continuous right finger rest, brace and landing",
+            "matrix": "1 0 0 84.152483946899423 0 1 0 19.212665558930667 0 0 1 47.900002916613772 0 0 0 1",
+            "inner_wall_line_width": "0.34",
+            "internal_solid_infill_line_width": "0.34",
+            "min_bead_width": "60%",
+            "outer_wall_line_width": "0.34",
+            "sparse_infill_density": "100%",
+            "wall_distribution_count": "2",
+            "wall_generator": "arachne",
+            "wall_loops": "4"
+          }
+        }
+      ]
+    },
+    "Front_pull_shelf": {
+      "settings": {
+        "name": "Front_pull_shelf",
+        "bottom_shell_layers": "5",
+        "bottom_shell_thickness": "0",
+        "bridge_angle": "90",
+        "brim_type": "no_brim",
+        "enable_support": "0",
+        "extruder": "1",
+        "gap_infill_speed": "30",
+        "inner_wall_speed": "45",
+        "internal_solid_infill_speed": "45",
+        "is_infill_first": "0",
+        "min_bead_width": "60%",
+        "outer_wall_speed": "40",
+        "sparse_infill_density": "20%",
+        "sparse_infill_speed": "45",
+        "top_shell_layers": "2",
+        "top_shell_thickness": "0",
+        "top_surface_speed": "35",
+        "wall_distribution_count": "2",
+        "wall_generator": "arachne",
+        "wall_loops": "2",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "36",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "Front_pull_shelf",
+            "matrix": "1 0 0 41.599998437060549 0 1 0 10.050000195367431 0 0 1 33.599998437060549 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "3",
+            "source_volume_id": "0",
+            "source_offset_x": "20.799999237060547",
+            "source_offset_y": "5.0250000953674316",
+            "source_offset_z": "16.799999237060547"
+          }
+        },
+        {
+          "id": "37",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Solid spine beneath left comb skins",
+            "matrix": "1 0 0 3.0099992776037601 0 1 0 0.15000009538371584 0 0 1 33.640000609376898 0 0 0 1",
+            "infill_wall_overlap": "25%",
+            "sparse_infill_density": "100%",
+            "wall_loops": "3"
+          }
+        },
+        {
+          "id": "38",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Backing below left comb frame corner",
+            "matrix": "1 0 0 -10.199999804632569 0 1 0 32.400000109265136 0 0 1 6.5900000216373318 0 0 0 1",
+            "infill_wall_overlap": "25%",
+            "sparse_infill_density": "100%",
+            "wall_loops": "3"
+          }
+        },
+        {
+          "id": "39",
+          "subtype": "modifier_part",
+          "metadata": {
+            "name": "Backing below middle comb skin",
+            "matrix": "1 0 0 31.25 0 1 0 -5.0999999023162843 0 0 1 31.990000953786073 0 0 0 1",
+            "infill_wall_overlap": "25%",
+            "sparse_infill_density": "100%",
+            "wall_loops": "3"
+          }
+        }
+      ]
+    },
+    "External_cradle": {
+      "settings": {
+        "name": "External_cradle",
+        "bottom_shell_layers": "2",
+        "bottom_shell_thickness": "0",
+        "bridge_angle": "90",
+        "brim_type": "no_brim",
+        "enable_support": "0",
+        "extruder": "1",
+        "is_infill_first": "1",
+        "min_bead_width": "60%",
+        "sparse_infill_density": "12%",
+        "top_shell_layers": "2",
+        "top_shell_thickness": "0",
+        "wall_distribution_count": "2",
+        "wall_generator": "arachne",
+        "wall_loops": "1",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "32",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "External_cradle",
+            "matrix": "1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "1",
+            "source_volume_id": "0",
+            "source_offset_x": "27.683374404907227",
+            "source_offset_y": "11.454746603965759",
+            "source_offset_z": "19.700000762939453"
+          }
+        }
+      ]
+    },
+    "Rear_pull_shelf": {
+      "settings": {
+        "name": "Rear_pull_shelf",
+        "bottom_shell_layers": "2",
+        "bottom_shell_thickness": "0",
+        "bridge_angle": "90",
+        "brim_type": "no_brim",
+        "enable_support": "0",
+        "extruder": "1",
+        "is_infill_first": "1",
+        "min_bead_width": "60%",
+        "sparse_infill_density": "12%",
+        "top_shell_layers": "2",
+        "top_shell_thickness": "0",
+        "wall_distribution_count": "2",
+        "wall_generator": "arachne",
+        "wall_loops": "1",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "41",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "Rear_pull_shelf",
+            "matrix": "1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "4",
+            "source_volume_id": "0",
+            "source_offset_x": "10.899999856948853",
+            "source_offset_y": "20.589831352233887",
+            "source_offset_z": "9.1000003814697266"
+          }
+        }
+      ]
+    },
+    "DFRobot_Hole_Bracket": {
+      "settings": {
+        "name": "DFRobot_Hole_Bracket",
+        "bridge_no_support": "0",
+        "brim_type": "no_brim",
+        "enable_support": "1",
+        "extruder": "1",
+        "initial_layer_print_height": "0.2",
+        "inner_wall_acceleration": "1500",
+        "inner_wall_speed": "65",
+        "layer_height": "0.2",
+        "max_bridge_length": "12",
+        "min_bead_width": "60%",
+        "outer_wall_acceleration": "1000",
+        "outer_wall_speed": "40",
+        "sparse_infill_density": "100%",
+        "support_bottom_z_distance": "0.2",
+        "support_interface_spacing": "0.2",
+        "support_interface_top_layers": "2",
+        "support_object_xy_distance": "0.35",
+        "support_on_build_plate_only": "1",
+        "support_top_z_distance": "0.2",
+        "support_type": "normal(manual)",
+        "timelapse_type": "1",
+        "top_surface_speed": "30",
+        "wall_distribution_count": "2",
+        "wall_generator": "arachne",
+        "wall_loops": "4",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "43",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "DFRobot_Hole_Bracket",
+            "matrix": "1 0 0 21.200000781469726 0 1 0 9.3700008396166989 0 0 1 42.034999823706059 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "5",
+            "source_volume_id": "0",
+            "source_offset_x": "10.600000381469727",
+            "source_offset_y": "4.6850004196166992",
+            "source_offset_z": "21.017499923706055"
+          }
+        },
+        {
+          "id": "44",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "REMOVE AFTER PRINT - DFRobot_Hole_Bracket tear-off pads",
+            "matrix": "1 0 0 21.200002711981199 0 1 0 9.9311629566883859 0 0 1 0.40000000598023222 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "5",
+            "source_volume_id": "1",
+            "source_offset_x": "10.600000858306885",
+            "source_offset_y": "4.965581476688385",
+            "source_offset_z": "0.20000000298023224"
+          }
+        },
+        {
+          "id": "45",
+          "subtype": "support_enforcer",
+          "metadata": {
+            "name": "REMOVE AFTER PRINT - left backup-stop foot support",
+            "matrix": "1 0 0 2.399999948079071 0 1 0 14.820000414249268 0 0 1 1.1099999693502349 0 0 0 1"
+          }
+        },
+        {
+          "id": "46",
+          "subtype": "support_enforcer",
+          "metadata": {
+            "name": "REMOVE AFTER PRINT - right backup-stop foot support",
+            "matrix": "1 0 0 40 0 1 0 15.270000458881835 0 0 1 1.1099999693502349 0 0 0 1"
+          }
+        }
+      ]
+    },
+    "DFR0030_Post_Clip": {
+      "settings": {
+        "name": "DFR0030_Post_Clip",
+        "bridge_no_support": "1",
+        "brim_type": "no_brim",
+        "enable_support": "0",
+        "extruder": "1",
+        "infill_wall_overlap": "27%",
+        "initial_layer_line_width": "0.4",
+        "initial_layer_print_height": "0.2",
+        "inner_wall_line_width": "0.32",
+        "internal_solid_infill_line_width": "0.32",
+        "layer_height": "0.2",
+        "max_bridge_length": "12",
+        "outer_wall_line_width": "0.32",
+        "sparse_infill_density": "100%",
+        "timelapse_type": "1",
+        "top_surface_line_width": "0.32",
+        "wall_generator": "arachne",
+        "wall_loops": "6",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "48",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "DFR0030_Post_Clip",
+            "matrix": "1 0 0 3.5999999023162843 0 1 0 4 0 0 1 0.80000102559994501 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "6",
+            "source_volume_id": "0",
+            "source_offset_x": "1.7999999523162842",
+            "source_offset_y": "2",
+            "source_offset_z": "0.40000051259994507"
+          }
+        },
+        {
+          "id": "49",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "REMOVE AFTER PRINT - DFR0030_Post_Clip tear-off pads",
+            "matrix": "1 0 0 3.5999996635023499 0 1 0 -5.6800001967085363 0 0 1 0.40000000598023222 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "6",
+            "source_volume_id": "1",
+            "source_offset_x": "1.7999998927116394",
+            "source_offset_y": "-2.8400000967085361",
+            "source_offset_z": "0.20000000298023224"
+          }
+        }
+      ]
+    },
+    "DFR0030_Post_Clip_2": {
+      "settings": {
+        "name": "DFR0030_Post_Clip_2",
+        "bridge_no_support": "1",
+        "brim_type": "no_brim",
+        "enable_support": "0",
+        "extruder": "1",
+        "infill_wall_overlap": "27%",
+        "initial_layer_line_width": "0.4",
+        "initial_layer_print_height": "0.2",
+        "inner_wall_line_width": "0.32",
+        "internal_solid_infill_line_width": "0.32",
+        "layer_height": "0.2",
+        "max_bridge_length": "12",
+        "outer_wall_line_width": "0.32",
+        "sparse_infill_density": "100%",
+        "timelapse_type": "1",
+        "top_surface_line_width": "0.32",
+        "wall_generator": "arachne",
+        "wall_loops": "6",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "51",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "DFR0030_Post_Clip_2",
+            "matrix": "1 0 0 3.5999999023162843 0 1 0 4 0 0 1 0.80000102559994501 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "7",
+            "source_volume_id": "0",
+            "source_offset_x": "1.7999999523162842",
+            "source_offset_y": "2",
+            "source_offset_z": "0.40000051259994507"
+          }
+        },
+        {
+          "id": "52",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "REMOVE AFTER PRINT - DFR0030_Post_Clip_2 tear-off pads",
+            "matrix": "1 0 0 3.5999996635023499 0 1 0 -5.6800001967085363 0 0 1 0.40000000598023222 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "7",
+            "source_volume_id": "1",
+            "source_offset_x": "1.7999998927116394",
+            "source_offset_y": "-2.8400000967085361",
+            "source_offset_z": "0.20000000298023224"
+          }
+        }
+      ]
+    },
+    "XIAO_Rod_Holder": {
+      "settings": {
+        "name": "XIAO_Rod_Holder",
+        "bridge_no_support": "1",
+        "brim_type": "no_brim",
+        "enable_support": "0",
+        "extruder": "1",
+        "initial_layer_print_height": "0.2",
+        "layer_height": "0.2",
+        "max_bridge_length": "12",
+        "sparse_infill_density": "20%",
+        "timelapse_type": "1",
+        "wall_generator": "arachne",
+        "wall_loops": "3",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "54",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "XIAO_Rod_Holder",
+            "matrix": "1 0 0 29.200000781469726 0 1 0 20.129629167565916 0 0 1 28.399999609265137 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "8",
+            "source_volume_id": "0",
+            "source_offset_x": "14.600000381469727",
+            "source_offset_y": "10.064814567565918",
+            "source_offset_z": "14.199999809265137"
+          }
+        },
+        {
+          "id": "55",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "REMOVE AFTER PRINT - XIAO_Rod_Holder tear-off pads",
+            "matrix": "1 0 0 29.200000781469726 0 1 0 44.529628238412471 0 0 1 0.40000000598023222 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "8",
+            "source_volume_id": "1",
+            "source_offset_x": "14.600000381469727",
+            "source_offset_y": "22.264814138412476",
+            "source_offset_z": "0.20000000298023224"
+          }
+        }
+      ]
+    },
+    "XIAO_Near_Keeper": {
+      "settings": {
+        "name": "XIAO_Near_Keeper",
+        "bridge_no_support": "1",
+        "brim_object_gap": "0.15",
+        "brim_type": "outer_only",
+        "brim_width": "6",
+        "enable_support": "0",
+        "extruder": "1",
+        "initial_layer_print_height": "0.2",
+        "layer_height": "0.2",
+        "max_bridge_length": "12",
+        "sparse_infill_density": "20%",
+        "timelapse_type": "1",
+        "wall_loops": "3",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "57",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "XIAO_Near_Keeper",
+            "matrix": "1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "9",
+            "source_volume_id": "0",
+            "source_offset_x": "13",
+            "source_offset_y": "5",
+            "source_offset_z": "1.0750000476837158"
+          }
+        }
+      ]
+    },
+    "Battery_Holder": {
+      "settings": {
+        "name": "Battery_Holder",
+        "bridge_no_support": "1",
+        "brim_type": "no_brim",
+        "enable_support": "0",
+        "extruder": "1",
+        "initial_layer_print_height": "0.2",
+        "layer_height": "0.2",
+        "max_bridge_length": "12",
+        "sparse_infill_density": "20%",
+        "timelapse_type": "1",
+        "wall_generator": "arachne",
+        "wall_loops": "3",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "59",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "Battery_Holder",
+            "matrix": "1 0 0 17 0 1 0 17.629629137565917 0 0 1 33 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "10",
+            "source_volume_id": "0",
+            "source_offset_x": "8.5",
+            "source_offset_y": "8.814814567565918",
+            "source_offset_z": "16.5"
+          }
+        },
+        {
+          "id": "60",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "REMOVE AFTER PRINT - Battery_Holder tear-off pads",
+            "matrix": "1 0 0 17 0 1 0 39.779255856665038 0 0 1 0.40000000598023222 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "10",
+            "source_volume_id": "1",
+            "source_offset_x": "8.5",
+            "source_offset_y": "19.889628410339355",
+            "source_offset_z": "0.20000000298023224"
+          }
+        }
+      ]
+    },
+    "Battery_End_Door": {
+      "settings": {
+        "name": "Battery_End_Door",
+        "bridge_no_support": "1",
+        "brim_object_gap": "0.15",
+        "brim_type": "outer_only",
+        "brim_width": "6",
+        "enable_support": "0",
+        "extruder": "1",
+        "infill_wall_overlap": "27%",
+        "initial_layer_print_height": "0.2",
+        "inner_wall_line_width": "0.32",
+        "internal_solid_infill_line_width": "0.32",
+        "layer_height": "0.2",
+        "max_bridge_length": "12",
+        "outer_wall_line_width": "0.32",
+        "sparse_infill_density": "100%",
+        "timelapse_type": "1",
+        "top_surface_line_width": "0.32",
+        "wall_generator": "arachne",
+        "wall_loops": "6",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "62",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "Battery_End_Door",
+            "matrix": "1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "11",
+            "source_volume_id": "0",
+            "source_offset_x": "7.6500000953674316",
+            "source_offset_y": "14.864999771118164",
+            "source_offset_z": "2.309999942779541"
+          }
+        }
+      ]
+    },
+    "Cable_Clip_12_Wire": {
+      "settings": {
+        "name": "Cable_Clip_12_Wire",
+        "bridge_no_support": "1",
+        "brim_type": "no_brim",
+        "enable_support": "0",
+        "extruder": "1",
+        "initial_layer_print_height": "0.2",
+        "layer_height": "0.2",
+        "max_bridge_length": "12",
+        "sparse_infill_density": "20%",
+        "timelapse_type": "1",
+        "wall_loops": "3",
+        "null": null
+      },
+      "parts": [
+        {
+          "id": "64",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "Cable_Clip_12_Wire",
+            "matrix": "1 0 0 18.433519361701659 0 1 0 10.107610701257325 0 0 1 2.4000000976837157 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "12",
+            "source_volume_id": "0",
+            "source_offset_x": "9.2167596817016602",
+            "source_offset_y": "5.0538053512573242",
+            "source_offset_z": "1.2000000476837158"
+          }
+        },
+        {
+          "id": "65",
+          "subtype": "normal_part",
+          "metadata": {
+            "name": "REMOVE AFTER PRINT - Cable_Clip_12_Wire tear-off pads",
+            "matrix": "1 0 0 19 0 1 0 10.107610701257325 0 0 1 0.40000000598023222 0 0 0 1",
+            "source_file": "R48-Complete-A1-mini-PETG-layout.3mf",
+            "source_object_id": "12",
+            "source_volume_id": "1",
+            "source_offset_x": "9.5",
+            "source_offset_y": "5.0538053512573242",
+            "source_offset_z": "0.20000000298023224"
+          }
+        }
+      ]
+    }
+  },
+  "startup": {
+    "passed": true,
+    "project_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "statistics": {
+    "straight_extruding_moves": 448003,
+    "arc_extruding_moves": 39340,
+    "support_extruding_moves": 43,
+    "feature_samples": {
+      "Prime tower": 194197,
+      "Inner wall": 1148288,
+      "Outer wall": 1499030,
+      "Bottom surface": 17551,
+      "Support interface": 367,
+      "Support": 317,
+      "Brim": 19068,
+      "Gap infill": 7204,
+      "Top surface": 49114,
+      "Internal solid infill": 360781,
+      "Overhang wall": 6108,
+      "Sparse infill": 246157,
+      "Floating vertical shell": 25547,
+      "Bridge": 1003
+    }
+  },
+  "actual_deposition_inside_180mm_bed": true,
+  "complete_plate_layout": {
+    "bounds_xy_mm": {
+      "DFRobot_Hole_Bracket": [
+        [
+          94.98990276455879,
+          119.99881409108639
+        ],
+        [
+          144.22199511528015,
+          130.81899352371693
+        ]
+      ],
+      "DFR0030_Post_Clip": [
+        [
+          17.420004919171333,
+          18.200999334454536
+        ],
+        [
+          22.19899456202984,
+          27.99099437892437
+        ]
+      ],
+      "DFR0030_Post_Clip_2": [
+        [
+          34.420003175735474,
+          18.200999334454536
+        ],
+        [
+          39.19899646937847,
+          27.99099437892437
+        ]
+      ],
+      "XIAO_Rod_Holder": [
+        [
+          99.20000195503235,
+          75.02704757452011
+        ],
+        [
+          155.99999499320984,
+          111.52999775111675
+        ]
+      ],
+      "XIAO_Near_Keeper": [
+        [
+          113.34400177001953,
+          45.34400177001953
+        ],
+        [
+          150.656005859375,
+          66.65599822998047
+        ]
+      ],
+      "Battery_Holder": [
+        [
+          17.847949102520943,
+          63.0278959274292
+        ],
+        [
+          59.15204136073589,
+          92.82999682426453
+        ]
+      ],
+      "Battery_End_Door": [
+        [
+          52.34400177001953,
+          15.343999862670898
+        ],
+        [
+          78.9520034790039,
+          56.38600158691406
+        ]
+      ],
+      "Cable_Clip_12_Wire": [
+        [
+          90.0067138671875,
+          50.8539991825819
+        ],
+        [
+          108.43893523514271,
+          71.25399871170521
+        ]
+      ],
+      "Key carrier and temporary helpers": [
+        [
+          9.978809624910355,
+          105.05000713467598
+        ],
+        [
+          78.81699633598328,
+          141.5809886455536
+        ]
+      ],
+      "Smooth timelapse tower": [
+        [
+          116.55851745605469,
+          16.54576873779297
+        ],
+        [
+          138.91278076171875,
+          38.90248107910156
+        ]
+      ]
+    },
+    "group_gaps": [
+      {
+        "groups": [
+          "Battery_End_Door",
+          "Battery_Holder"
+        ],
+        "conservative_xy_gap_mm": 6.641894340515137
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "Cable_Clip_12_Wire"
+        ],
+        "conservative_xy_gap_mm": 11.054710388183594
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "DFR0030_Post_Clip"
+        ],
+        "conservative_xy_gap_mm": 30.145007207989693
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "DFR0030_Post_Clip_2"
+        ],
+        "conservative_xy_gap_mm": 13.14500530064106
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "DFRobot_Hole_Bracket"
+        ],
+        "conservative_xy_gap_mm": 65.60338503602222
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 48.66400554776192
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 37.60651397705078
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 34.391998291015625
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 27.522173566004806
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "Cable_Clip_12_Wire"
+        ],
+        "conservative_xy_gap_mm": 30.854672506451607
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "DFR0030_Post_Clip"
+        ],
+        "conservative_xy_gap_mm": 35.03690154850483
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "DFR0030_Post_Clip_2"
+        ],
+        "conservative_xy_gap_mm": 35.03690154850483
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "DFRobot_Hole_Bracket"
+        ],
+        "conservative_xy_gap_mm": 44.972179641169014
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 12.220010310411453
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 62.26988950758076
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 54.19196040928364
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 40.047960594296455
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "DFR0030_Post_Clip"
+        ],
+        "conservative_xy_gap_mm": 71.55839423868537
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "DFR0030_Post_Clip_2"
+        ],
+        "conservative_xy_gap_mm": 55.71481971457588
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "DFRobot_Hole_Bracket"
+        ],
+        "conservative_xy_gap_mm": 48.74481537938118
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 35.60028038869428
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 14.448750825589325
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 4.905066534876823
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 3.7730488628149033
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "DFR0030_Post_Clip_2"
+        ],
+        "conservative_xy_gap_mm": 12.221008613705635
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "DFRobot_Hole_Bracket"
+        ],
+        "conservative_xy_gap_mm": 117.3198840995622
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 77.05901275575161
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 94.35952289402485
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 92.78221383681193
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 90.23051279781212
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip_2",
+          "DFRobot_Hole_Bracket"
+        ],
+        "conservative_xy_gap_mm": 107.60141315718535
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip_2",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 77.05901275575161
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip_2",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 77.35952098667622
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip_2",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 76.14859602479545
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip_2",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 76.23982528513808
+      },
+      {
+        "groups": [
+          "DFRobot_Hole_Bracket",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 16.172906428575516
+      },
+      {
+        "groups": [
+          "DFRobot_Hole_Bracket",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 81.09633301198483
+      },
+      {
+        "groups": [
+          "DFRobot_Hole_Bracket",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 53.34281586110592
+      },
+      {
+        "groups": [
+          "DFRobot_Hole_Bracket",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 8.468816339969635
+      },
+      {
+        "groups": [
+          "Key carrier and temporary helpers",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 76.15719020374696
+      },
+      {
+        "groups": [
+          "Key carrier and temporary helpers",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 51.63539506981434
+      },
+      {
+        "groups": [
+          "Key carrier and temporary helpers",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 20.383005619049072
+      },
+      {
+        "groups": [
+          "Smooth timelapse tower",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 6.441520690917969
+      },
+      {
+        "groups": [
+          "Smooth timelapse tower",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 36.12456649541855
+      },
+      {
+        "groups": [
+          "XIAO_Near_Keeper",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 8.371049344539642
+      }
+    ],
+    "inside_bed": true,
+    "unassigned_bead_features": {},
+    "passed": true,
+    "scope": "All deposited part, support, adhesion and tower bead widths; intentional key/helper group checked separately"
+  },
+  "smooth_timelapse_selected": true,
+  "actual_tower_present": true,
+  "automatic_support_owners": [
+    "DFRobot_Hole_Bracket"
+  ],
+  "archive_slice_warnings": [],
+  "native_slice_warning_messages": [
+    "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+  ],
+  "native_slice_receipt_sha256": "156d9753057b15cdd897029bb6e9a33ebd7d72a3f59534a162bfe2396a1061d5",
+  "report_sha256": {
+    "candidate-audit.json": "51b9029ccd1cca381797888fa5ce94a24ac25c5add7b7c855e9a7d16d4c2ed07",
+    "helper-starts.json": "7be538fda1cce54db09dd0074c136e27c2567f524ff0cac37113e2233921991b",
+    "roof-strokes.json": "4ca466e60923b43dbdd01aa02adc12f2ddcfb5bbea61ac5638dd1b1d50b7f71b",
+    "other-audit/other-parts-audit.json": "23d4d1f1498b4e5847efd0b22f960d2204b63984bdca26e7a21d6a20815ea387"
+  },
+  "native_reopen": {
+    "initial_archive_sha256": "c4e693760ba63673b7d5a9165301a060446fbc5fa7545f56cd526ca509d57875",
+    "selected_archive_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+    "global_settings_identical": true,
+    "object_process_settings_identical": true,
+    "actual_modifier_placements_equivalent": true
+  },
+  "gui_warning_inspection_verified": false,
+  "physical_fit_strength_and_cleanup_verified": false
+}

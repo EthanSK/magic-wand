@@ -38,7 +38,11 @@ def inspect(archive):
                         other=carrier+grounded['External_cradle'].get(i-2,q.CrossSection())
                     overlap=(p^other).area()
                     if overlap>.0001:
-                        reports[n]['starts_backed_across_one_empty_layer'].append(dict(top_mm=z,overlap_mm2=overlap,print_bounds_mm=p.bounds()))
+                        backing = {'Key_Carrier': (p ^ carrier).area(),
+                                   'External_cradle': (p ^ grounded['External_cradle'].get(i-2, q.CrossSection())).area()}
+                        reports[n]['starts_backed_across_one_empty_layer'].append(dict(
+                            top_mm=z, overlap_mm2=overlap, print_bounds_mm=list(p.bounds()),
+                            lower_owner_areas_mm2={name:area for name,area in backing.items() if area > .0001}))
                         kept.append(p);continue
                 failed+=1;reports[n]['unrooted_actual_components'].append(dict(top_mm=z,area_mm2=p.area(),print_bounds_mm=p.bounds()))
             grounded[n][i]=q.CrossSection.batch_boolean(kept,OpType.Add) if kept else q.CrossSection()

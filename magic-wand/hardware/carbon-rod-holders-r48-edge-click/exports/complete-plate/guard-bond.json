@@ -1,0 +1,393 @@
+{
+  "archive_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+  "checker_sha256": "de3c4aea994d5f9db0904b1467a49c9c267e42c9b12a265e4f6e53c3e65f0d92",
+  "geometry_receipt_sha256": "170f6fea351ea1572793f159d1adcfc80bdb8b774b0491964365a52ab5ceec2b",
+  "native_seam_check_sha256": "5b2078c1215c19ddbe56887c5a0b1a09b398ea277bc5c7c175f6a1aab13f2d61",
+  "selected_raw_audit_sha256": "08e0630cf93cbd02389fd647704cb095b916e9262f2e5814f98d77cfc2bca14f",
+  "R47_raw_audit_sha256": "78232ac21ec5afc8ad8853ff159509a9b50420f334257e702019574a17f1a190",
+  "source_sha256": {
+    "carbon-rod-holders-r48-edge-click/guard_bond48.py": "de3c4aea994d5f9db0904b1467a49c9c267e42c9b12a265e4f6e53c3e65f0d92",
+    "carbon-rod-holders-r48-edge-click/build48.py": "94c49994210ebf4461efce034f87a5b3cdb6568f0f3de86481d86c3c47540367",
+    "carbon-rod-holders-r47-bottom-click/holder47.py": "0dcda84dba7fe75810d0c21e09dee244496211207478b226a17210502f92e234",
+    "carbon-rod-holders-r44-middle-finger-rest/holder44.py": "7fc2fcfdc76f5c1d0fd450a41c7606b9d2442f9c0a945b9e7fb0c2bfeb376855",
+    "carbon-rod-holders-r38-centred-op1/holder38.py": "b72c6a7a4bededd6a10450b2a029942911b4933ff85954b8cd80ff319629b4e0",
+    "carbon-rod-holders-r33-crosswise-guards/holder33.py": "d87c46b2e548e3f12e69c64aad6fa6eaf54c85f530c78889b459ab4e9115d61b",
+    "carbon-rod-holders-r38-centred-op1/audit38.py": "5692675eed90a806d53e56f43fa3448802801cf35ba3ca066021088a1d769b5f",
+    "printed-loop-wand/shard-tube-r2/check_sliced_paths.py": "8a1cc5b7d4d900ac50f1206d3876240e4f90353b426794427d6e50c520f12b1b",
+    "carbon-rod-holders-r15-tight-pyramid/start_audit.py": "5e95e3edd3962d7e85fe4762ec3d9ed2762e25ee3fdd4c739ae37202c840d2dd",
+    "carbon-rod-holders-r42-lower-diagonal/single42.py": "54650a470197ea2b57d6da3e5e43e648e7c5868a163fa1373641a6601f1b5284",
+    "carbon-rod-holders-r45-open-keyways/native_order45.py": "904407cfced4a89f358fd7da6e9ebaa8ad0834980a49572a74bc7f4e50dd4f2d"
+  },
+  "sample_pitch_mm": 0.03,
+  "eroded_bead_edge_mm": 0.075,
+  "current_joint": {
+    "archive_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+    "layout_frame_sha256": "b90cb443b0457a73f85268a429be9130b994422c6d826a27f66f95d1cb86f644",
+    "print_carrier_sha256": "aa217cc1b4cf5d16cb711c3e3ffb5c8f1babac81a0d9ccc0c9f8fa9d6f6b9f60",
+    "inherited_stated_coverage": {
+      "layers": 8,
+      "coverage_fraction": 0.9454,
+      "minimum_layer_fraction": 0.7066
+    },
+    "intended_witness_mm3": 1.9934557675055113,
+    "exact_reconstructed_witness_mm3": 1.9934557394403882,
+    "native_overlap_mm3": 1.9020426909561705,
+    "joint_layers": [
+      {
+        "top_mm": 22.2,
+        "cad_mm2": 0.12424708741484303,
+        "native_mm2": 0.09112657786969669,
+        "native_fraction": 0.7334302941479686,
+        "prior_contact_inside_witness_mm2": 0.034740198440678494,
+        "touching_bead_islands_mm2": [
+          14.571779576923783
+        ],
+        "each_islands_prior_contact_mm2": [
+          11.537447152572183
+        ]
+      },
+      {
+        "top_mm": 22.4,
+        "cad_mm2": 0.4233495269419263,
+        "native_mm2": 0.37249787238997434,
+        "native_fraction": 0.8798825761793573,
+        "prior_contact_inside_witness_mm2": 0.31058789610630044,
+        "touching_bead_islands_mm2": [
+          15.824078304727054
+        ],
+        "each_islands_prior_contact_mm2": [
+          13.943801269805986
+        ]
+      },
+      {
+        "top_mm": 22.6,
+        "cad_mm2": 0.8073040399383152,
+        "native_mm2": 0.7401343594728946,
+        "native_fraction": 0.9167975420133498,
+        "prior_contact_inside_witness_mm2": 0.6875234065518684,
+        "touching_bead_islands_mm2": [
+          16.324323368685068
+        ],
+        "each_islands_prior_contact_mm2": [
+          15.257758754823367
+        ]
+      },
+      {
+        "top_mm": 22.8,
+        "cad_mm2": 1.2428346954310476,
+        "native_mm2": 1.1808386295609978,
+        "native_fraction": 0.9501172069801704,
+        "prior_contact_inside_witness_mm2": 1.095899048404239,
+        "touching_bead_islands_mm2": [
+          16.505067091018386
+        ],
+        "each_islands_prior_contact_mm2": [
+          15.821319939785896
+        ]
+      },
+      {
+        "top_mm": 23.0,
+        "cad_mm2": 1.6684250483897918,
+        "native_mm2": 1.6119393234740338,
+        "native_fraction": 0.966144283814084,
+        "prior_contact_inside_witness_mm2": 1.5433945534748856,
+        "touching_bead_islands_mm2": [
+          15.840769470107084
+        ],
+        "each_islands_prior_contact_mm2": [
+          15.625609928941488
+        ]
+      },
+      {
+        "top_mm": 23.2,
+        "cad_mm2": 1.9919361403910054,
+        "native_mm2": 1.9244550564463156,
+        "native_fraction": 0.9661228678086821,
+        "prior_contact_inside_witness_mm2": 1.8561315813098325,
+        "touching_bead_islands_mm2": [
+          14.904472430304018
+        ],
+        "each_islands_prior_contact_mm2": [
+          14.619348344320167
+        ]
+      },
+      {
+        "top_mm": 23.4,
+        "cad_mm2": 2.0598050022307266,
+        "native_mm2": 1.9660987550742146,
+        "native_fraction": 0.9545072242008199,
+        "prior_contact_inside_witness_mm2": 1.9122113077306755,
+        "touching_bead_islands_mm2": [
+          13.335419723968585
+        ],
+        "each_islands_prior_contact_mm2": [
+          12.994386117757319
+        ]
+      },
+      {
+        "top_mm": 23.6,
+        "cad_mm2": 1.667325307996391,
+        "native_mm2": 1.661021026716222,
+        "native_fraction": 0.9962189254550782,
+        "prior_contact_inside_witness_mm2": 1.5873960088750179,
+        "touching_bead_islands_mm2": [
+          11.644087720804402
+        ],
+        "each_islands_prior_contact_mm2": [
+          11.115816959041995
+        ]
+      }
+    ],
+    "bisecting_face": {
+      "cad_mm2": 3.1278986750448627,
+      "native_mm2": 2.9860241692431764,
+      "native_largest_mm2": 2.9860241692431764,
+      "largest_fraction": 0.9546422309221217,
+      "common_eroded_core_mm2": 2.4563827966179783,
+      "common_eroded_core_fraction": 0.7853140564352671
+    },
+    "guard_shaft_full_area_mm2": 2.8352873698647882,
+    "common_eroded_stock_mm3": 68.39806129583164,
+    "source_shaft_planes": {
+      "branch shaft": {
+        "cad_mm2": 2.738890151395988,
+        "native_mm2": 2.679698062585218,
+        "native_largest_mm2": 2.679698062585218,
+        "largest_fraction": 0.9783882939662256,
+        "common_eroded_core_mm2": 2.4637744584573062,
+        "common_eroded_core_fraction": 0.8995521259593205
+      },
+      "finger rest past the junction": {
+        "cad_mm2": 2.788859342068817,
+        "native_mm2": 2.694051212092134,
+        "native_largest_mm2": 2.694051212092134,
+        "largest_fraction": 0.9660046928338979,
+        "common_eroded_core_mm2": 2.4824709724457463,
+        "common_eroded_core_fraction": 0.8901384644964607
+      },
+      "third guard shaft": {
+        "cad_mm2": 2.7429837267027666,
+        "native_mm2": 2.7131557578672783,
+        "native_largest_mm2": 2.7131557578672783,
+        "largest_fraction": 0.9891257215472644,
+        "common_eroded_core_mm2": 2.5266457320374545,
+        "common_eroded_core_fraction": 0.9211304126381517
+      },
+      "replacement landing": {
+        "cad_mm2": 2.6530266643536042,
+        "native_mm2": 2.506765427078057,
+        "native_largest_mm2": 2.506765427078057,
+        "largest_fraction": 0.9448700462604724,
+        "common_eroded_core_mm2": 2.3443180430573642,
+        "common_eroded_core_fraction": 0.8836390808113287
+      },
+      "landing at fixed deck": {
+        "cad_mm2": 1.6723828645220846,
+        "native_mm2": 1.6420393733487446,
+        "native_largest_mm2": 1.6420393733487446,
+        "largest_fraction": 0.9818561336539339,
+        "common_eroded_core_mm2": 1.430799047453606,
+        "common_eroded_core_fraction": 0.855545149263703
+      }
+    }
+  },
+  "R47_control": {
+    "archive_sha256": "b13dee0f49cacfa5c93c9931cb47cbacffa6ae367463c7ae32d435e550bb35fb",
+    "layout_frame_sha256": "8d9e65ec1bf391494801c1a035359c8759084975b7fd116a02a47149bd4b3909",
+    "print_carrier_sha256": "47d57999a5a313b94ad8fdb463bda33c044eed60d8549e451ad65cbe03be5728",
+    "inherited_stated_coverage": {
+      "layers": 9,
+      "coverage_fraction": 0.9727,
+      "minimum_layer_fraction": 0.961
+    },
+    "intended_witness_mm3": 5.274587300141574,
+    "exact_reconstructed_witness_mm3": 5.274587440798047,
+    "native_overlap_mm3": 5.157332370756929,
+    "joint_layers": [
+      {
+        "top_mm": 22.0,
+        "cad_mm2": 0.7625813858701753,
+        "native_mm2": 0.7616929209333482,
+        "native_fraction": 0.9988349244378509,
+        "prior_contact_inside_witness_mm2": 0.5740087443064309,
+        "touching_bead_islands_mm2": [
+          21.643543672685556
+        ],
+        "each_islands_prior_contact_mm2": [
+          19.92518973837049
+        ]
+      },
+      {
+        "top_mm": 22.2,
+        "cad_mm2": 1.6553392697896248,
+        "native_mm2": 1.6529139633090977,
+        "native_fraction": 0.9985348583672304,
+        "prior_contact_inside_witness_mm2": 1.5492819732648515,
+        "touching_bead_islands_mm2": [
+          22.293519447341136
+        ],
+        "each_islands_prior_contact_mm2": [
+          21.506574834348836
+        ]
+      },
+      {
+        "top_mm": 22.4,
+        "cad_mm2": 2.4483154048280955,
+        "native_mm2": 2.3895055967008587,
+        "native_fraction": 0.9759794804169171,
+        "prior_contact_inside_witness_mm2": 2.2997503199911953,
+        "touching_bead_islands_mm2": [
+          6.730174447100424,
+          25.310757138784737
+        ],
+        "each_islands_prior_contact_mm2": [
+          5.58285046039674,
+          24.723830909369198
+        ]
+      },
+      {
+        "top_mm": 22.6,
+        "cad_mm2": 3.1509472943146166,
+        "native_mm2": 3.084627039155756,
+        "native_fraction": 0.9789522803892897,
+        "prior_contact_inside_witness_mm2": 2.978013742274208,
+        "touching_bead_islands_mm2": [
+          7.339824845685423,
+          24.85391122029255
+        ],
+        "each_islands_prior_contact_mm2": [
+          6.699349892169026,
+          24.36941925350384
+        ]
+      },
+      {
+        "top_mm": 22.8,
+        "cad_mm2": 3.761511666359416,
+        "native_mm2": 3.65605527582877,
+        "native_fraction": 0.9719643590437904,
+        "prior_contact_inside_witness_mm2": 3.6049304302425753,
+        "touching_bead_islands_mm2": [
+          7.633719778224861,
+          23.92684676219882
+        ],
+        "each_islands_prior_contact_mm2": [
+          7.317719377149717,
+          23.638278247461397
+        ]
+      },
+      {
+        "top_mm": 23.0,
+        "cad_mm2": 4.05655608630946,
+        "native_mm2": 3.983932358096075,
+        "native_fraction": 0.9820971960776078,
+        "prior_contact_inside_witness_mm2": 3.9343013591496443,
+        "touching_bead_islands_mm2": [
+          7.487813365065023,
+          22.856250010921023
+        ],
+        "each_islands_prior_contact_mm2": [
+          7.357017189057449,
+          22.503697350731496
+        ]
+      },
+      {
+        "top_mm": 23.2,
+        "cad_mm2": 4.120656824401838,
+        "native_mm2": 4.0002151066342515,
+        "native_fraction": 0.9707712331067342,
+        "prior_contact_inside_witness_mm2": 3.975259156374035,
+        "touching_bead_islands_mm2": [
+          7.04433213520428,
+          21.446057288894444
+        ],
+        "each_islands_prior_contact_mm2": [
+          6.907252774688828,
+          21.087302119498602
+        ]
+      },
+      {
+        "top_mm": 23.4,
+        "cad_mm2": 3.762976166011642,
+        "native_mm2": 3.704110744289425,
+        "native_fraction": 0.9843566849415877,
+        "prior_contact_inside_witness_mm2": 3.6022732596959712,
+        "touching_bead_islands_mm2": [
+          6.438961580683571,
+          11.581941817082324
+        ],
+        "each_islands_prior_contact_mm2": [
+          6.146680335086106,
+          11.153244233563399
+        ]
+      },
+      {
+        "top_mm": 23.6,
+        "cad_mm2": 2.7154189124177073,
+        "native_mm2": 2.665228737196138,
+        "native_fraction": 0.9815165995228037,
+        "prior_contact_inside_witness_mm2": 2.6259931712817064,
+        "touching_bead_islands_mm2": [
+          5.255719017471024,
+          10.939107400118012
+        ],
+        "each_islands_prior_contact_mm2": [
+          4.999728873075581,
+          10.523492094924922
+        ]
+      }
+    ],
+    "bisecting_face": {
+      "cad_mm2": 5.613965287861095,
+      "native_mm2": 5.410216974934289,
+      "native_largest_mm2": 3.4710288383462515,
+      "largest_fraction": 0.6182846990257582,
+      "common_eroded_core_mm2": 4.65935408049428,
+      "common_eroded_core_fraction": 0.8299577645357121
+    },
+    "guard_shaft_full_area_mm2": 2.8352873698647882,
+    "common_eroded_stock_mm3": 35.51477489879333,
+    "source_shaft_planes": {
+      "branch shaft": {
+        "cad_mm2": 2.738889823097467,
+        "native_mm2": 2.671778539062514,
+        "native_largest_mm2": 2.671778539062514,
+        "largest_fraction": 0.9754969026249273,
+        "common_eroded_core_mm2": 2.3833543166368365,
+        "common_eroded_core_fraction": 0.8701899202142611
+      },
+      "finger rest past the junction": {
+        "cad_mm2": 2.788859342469785,
+        "native_mm2": 2.691925407031123,
+        "native_largest_mm2": 2.691925407031123,
+        "largest_fraction": 0.9652424437609614,
+        "common_eroded_core_mm2": 2.4824150700071623,
+        "common_eroded_core_fraction": 0.8901184194570247
+      },
+      "third guard shaft": {
+        "cad_mm2": 2.7429837038309435,
+        "native_mm2": 2.5537180108595727,
+        "native_largest_mm2": 2.5537180108595727,
+        "largest_fraction": 0.9310000665672801,
+        "common_eroded_core_mm2": 2.167539400226101,
+        "common_eroded_core_fraction": 0.7902122776737034
+      },
+      "original inboard guard shaft": {
+        "cad_mm2": 2.742984178376005,
+        "native_mm2": 2.6970588935945066,
+        "native_largest_mm2": 2.6970588935945066,
+        "largest_fraction": 0.983257182034244,
+        "common_eroded_core_mm2": 2.4473812810521056,
+        "common_eroded_core_fraction": 0.8922331015781096
+      }
+    }
+  },
+  "gates": {
+    "continuous_shaft_through_both_former_process_boundaries": true,
+    "published_R47_control_at_least_one_full_guard_shaft": true,
+    "retained_join_has_one_full_guard_shaft_of_connected_plastic": true,
+    "same_eroded_body_crosses_join_and_both_shafts_into_fixed_landing": true,
+    "every_local_printed_island_is_bonded_to_previous_layer": true
+  },
+  "passed": true,
+  "physical_strength_verified": false
+}

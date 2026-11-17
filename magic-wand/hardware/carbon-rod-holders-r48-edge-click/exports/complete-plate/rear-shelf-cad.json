@@ -1,0 +1,106 @@
+{
+  "owner": "Rear_pull_shelf",
+  "direction_print": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "translation_mm": 72.0,
+  "bounds": [
+    6.799999997019768,
+    14.679662458598614,
+    0.0,
+    16.399999998509884,
+    23.600000001490116,
+    18.2
+  ],
+  "volume_mm3": 893.5308918388675,
+  "whole_cad_conflicts": [],
+  "whole_front_path_against_rear_cad_conflicts": [],
+  "roof_tops_mm": [
+    18.2
+  ],
+  "contact_target_area_by_top": {
+    "18.2": 5.13993779892609
+  },
+  "design_lateral_clearance_mm": 0.49,
+  "generator_file": "standing_aperture45.py",
+  "outer_tine_foot": {
+    "before_mm2": 5.583677040954164,
+    "after_mm2": 15.292942531275635,
+    "bed_layers": 2
+  },
+  "removable_pieces": [
+    {
+      "name": "Outer switch-aperture tine",
+      "file": "R48-rear-outer-tine.stl",
+      "sha256": "9a0f5fe7c6160ce4f654ff27166ee246703c84f870f31c76a1d30737f2992743",
+      "direction_print": [
+        0,
+        1,
+        0
+      ],
+      "translation_mm": 72.0,
+      "bounds": [
+        5.399999998509884,
+        14.679662458598614,
+        0.0,
+        8.75,
+        25.5,
+        18.2
+      ],
+      "volume_mm3": 225.94990418527382,
+      "bed_face_area_mm2": 15.292942531275635,
+      "has_1p2mm_grip_land": true,
+      "removal_order": 1,
+      "other_pieces_remaining": [
+        "Inner switch-aperture tines"
+      ],
+      "whole_cad_conflicts_with_remaining_pieces": []
+    },
+    {
+      "name": "Inner switch-aperture tines",
+      "file": "R48-rear-aperture-tines.stl",
+      "sha256": "da221b8f6c35d466de4699242db7894e0bb9690e8403307d7c13b039f8f4fe86",
+      "direction_print": [
+        0,
+        1,
+        0
+      ],
+      "translation_mm": 72.0,
+      "bounds": [
+        9.65,
+        14.690908581018448,
+        0.0,
+        16.399999998509884,
+        26.5,
+        18.2
+      ],
+      "volume_mm3": 667.5809876535936,
+      "bed_face_area_mm2": 29.68670449880907,
+      "has_1p2mm_grip_land": true,
+      "removal_order": 2,
+      "other_pieces_remaining": [],
+      "whole_cad_conflicts_with_remaining_pieces": []
+    }
+  ],
+  "piece_checker_sha256": "6ca4169b9de9dbe3dd9d26a5a993c3181091ee05e42c2371581574ce3e13d329",
+  "r48_splitter_sha256": "72a9075abd01c99f51c06d7d0c2c27fb4eb7ec62fd9c9f9d2fc45e46ec7e19b7",
+  "peel_slots_print_x_mm": [
+    [
+      9.2,
+      0.9
+    ]
+  ],
+  "stl_sha256": {
+    "R45-rear-pull-shelf.stl": "aaa1bc14dd3745228d00a4cbfbfabc9bcaca74eec6939c581c6c020f6c65c955",
+    "R45-Key-Carrier.stl": "aa217cc1b4cf5d16cb711c3e3ffb5c8f1babac81a0d9ccc0c9f8fa9d6f6b9f60",
+    "R45-release-tabs.stl": "bbbc9fb240a892cfc4c7d98c50182f11f9383e3b620396d762f5b49c54fd0e16",
+    "R45-front-pull-shelf.stl": "5c97f5a5d87b232823ef4e5f1085096e890d556d9010fb4af43afa2a7d7dda82"
+  },
+  "opposite_direction_shelf_y_separation_mm": -3.3203375414013863,
+  "generator_sha256": "d60efff892916d2a9cdfb2af03caa4b48faf8c96f62973e858500a4492b6a2b9",
+  "generator_dependencies_sha256": {
+    "shelf45.py": "24e170d840ee6bfc7b042e7f136f3a2a733173ce496c097f836472ba990b1a46"
+  }
+}

@@ -8,6 +8,8 @@ The centred straight alternative leaves the bare white housing 2.4 mm above the 
 
 The adjustable stop sits to the left of the switch opening. The three right finger-rest ribs connect to the deck around the connector. A rounded shoulder backs the rod clip beside the plug, and two runners under the OP1 eyelet carry its load into the deck. Both sides of the triangular bracket window widen into their rigid roots before the flexible hinge arms begin. The internal slope under the OP1 connector pocket continues until each layer has material beneath it. The original fixed-length slope ended early after the switch moved towards the edge.
 
+The right middle finger rest uses one continuous solid-fill region. An earlier R48 slice ended the strand on both sides of a 2.02 mm piece of the rib. In the revised file, 23 strands cross one former boundary and 25 cross the other, across nine layers at each boundary. This changes the print paths while preserving the shape you feel.
+
 The nominal lever arm is 37.87 mm on a 39.52 mm paddle. In an ideal hinge, pressing at the board edge needs about 13% less fingertip travel and about 15% more force than R47 for the same switch. The new position places the mechanical click directly under the fingertip. The force a person feels also depends on switch tolerances, hinge friction and preload.
 
 ## Assembly and fit trial
@@ -17,6 +19,10 @@ Use the DFRobot view for the OP1 board, touch-board clips, hinge and stop screw.
 With the real switch installed, press near the three-key edge. If the stop prevents a click, turn its screw in a little and try again. Check that the switch releases when you lift your finger. The screw head and the plastic backup feet both show in the DFRobot assembly animation.
 
 The complete print includes the key carrier, DFRobot bracket, two post clips, XIAO holder and keeper, Micron 100 mAh battery holder and sliding panel, and twelve-wire cable clip. The coloured cradle, separate front and rear supports, and bed tabs in the cleanup view are disposable. Support the rigid carrier as you withdraw each grip along the direction shown. Levering against a finger-rest rib can break it. The rod and electronics are hardware references in the viewer.
+
+The support-removal view shows four front pieces and two rear pieces. The largest measured contact on a front piece fell from 9.41 mm² on R47 to 2.11 mm² on this slice. The largest rear contact fell from 8.53 to 4.00 mm². One front support has a solid spine to carry its own upper layers. Bambu estimates 18.76 g of disposable supports and tabs versus 12.09 g on R47, an extra 6.68 g. The complete plate uses 40.06 g. Pull-off force still needs to be tested on the printed part.
+
+With the OP1 and its plug fitted, press and release the free end by hand before installing the other modules. Check that both hinge tabs stay seated, the white plug clears the rod-side shoulder, and the switch clicks and returns before the plastic stops meet.
 
 ## Micron battery cassette
 
@@ -30,5 +36,6 @@ Run the scripts in a fresh Python process with the same geometry dependencies as
 
 1. Run `build48.py SCRATCH`. The carrier, cap and full CAD checks go in `SCRATCH/stage`. Their R47 internal filenames are retained for compatibility with the standing-carrier generators. The receipt separately identifies R48 and checks the forward switch.
 2. Run `battery48.py SCRATCH/battery48` to build the Micron cassette and its matching slider.
-3. Run `native48.py ACTION SCRATCH` for `layout`, `slice`, `reopen`, `carrier`, `others` and `finish` in that order. Use isolated native scratch for slicing and reopening. Consult the native driver for the per-part manifest required by the other-parts audit.
-4. Generate the assembly guide from the final CAD and complete-plate audit with `guide48.py`, then run `native48.py seal SCRATCH`. The print-only package preserves the reviewed machine paths. Physical fit, click feel and ease of cleanup require a printed assembly.
+3. Run `verify_contact_frame48.py r46 SCRATCH` and then `verify_contact_frame48.py r47 SCRATCH` in separate processes. These compare support contact on the previous key-only and complete plates in their respective bed positions.
+4. Run `native48.py ACTION SCRATCH` for `layout`, `slice`, `reopen`, `carrier`, `others` and `finish` in that order. Use isolated native scratch for slicing and reopening. Consult the native driver for the per-part manifest required by the other-parts audit.
+5. Generate the assembly guide with `guide48.py SCRATCH SCRATCH/complete-plate`, run `native48.py seal SCRATCH`, then register it in the assembly viewer with `guide48.py --register`. The print-only package preserves the reviewed machine paths. Physical fit, click feel and ease of cleanup require a printed assembly.

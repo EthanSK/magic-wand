@@ -1,0 +1,570 @@
+{
+  "archive_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+  "front_shelf_warning_text": "It seems object Front_pull_shelf has floating regions. Please re-orient the object or enable support generation.",
+  "omission_checker_sha256": "9a6c20f5dacf18f1efe85835a756290e695f5cded3e964c33b6ecbfca87589fe",
+  "front_shelf_warning_reported_in_this_slice": false,
+  "native_warning_messages": [
+    "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+  ],
+  "native_warning_position_available": false,
+  "r47_archive_sha256": "b13dee0f49cacfa5c93c9931cb47cbacffa6ae367463c7ae32d435e550bb35fb",
+  "r48_reconstructed_moves_sha256": "e4eff1ea80a821caf076b63ed33fb2e676ec1ee53c84e122a1543fae75b90ce1",
+  "r47_reconstructed_moves_sha256": "c7c7f23111c3a2c5972b88ee50edb70cc90e1b1bfe6015204e216159a1b162aa",
+  "checked_layers": 168,
+  "unrooted_islands": [],
+  "islands_backed_across_one_empty_layer": [
+    {
+      "top_mm": 4.0,
+      "overlap_mm2": 1.4088079800924986,
+      "print_bounds_mm": [
+        27.609870702028275,
+        0.05687311291694641,
+        29.37349598109722,
+        1.3121988475322723
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 1.4088079800924986
+      }
+    },
+    {
+      "top_mm": 4.0,
+      "overlap_mm2": 6.224149510222938,
+      "print_bounds_mm": [
+        24.973426282405853,
+        1.1626432836055756,
+        27.15035644173622,
+        7.497997015714645
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 6.224149510222938
+      }
+    },
+    {
+      "top_mm": 5.4,
+      "overlap_mm2": 3.817592371501925,
+      "print_bounds_mm": [
+        3.3400042355060577,
+        12.45100811123848,
+        6.759994238615036,
+        13.650996893644333
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 3.817592371501925
+      }
+    },
+    {
+      "top_mm": 5.4,
+      "overlap_mm2": 2.725117458044273,
+      "print_bounds_mm": [
+        3.8490050137043,
+        13.88277843594551,
+        6.75199481844902,
+        15.070995062589645
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 2.725117458044273
+      }
+    },
+    {
+      "top_mm": 10.0,
+      "overlap_mm2": 0.6271401878701953,
+      "print_bounds_mm": [
+        8.724250450730324,
+        12.46924938261509,
+        9.375749930739403,
+        13.623906835913658
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 0.6271401878701953
+      }
+    },
+    {
+      "top_mm": 10.0,
+      "overlap_mm2": 0.6384689123751327,
+      "print_bounds_mm": [
+        8.724250450730324,
+        13.889247551560402,
+        9.375749930739403,
+        15.04390999674797
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 0.6384689123751327
+      }
+    },
+    {
+      "top_mm": 13.0,
+      "overlap_mm2": 1.06196215091168,
+      "print_bounds_mm": [
+        2.3607358634471893,
+        12.11173340678215,
+        3.3263922035694122,
+        13.357291251420975
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 1.06196215091168
+      }
+    },
+    {
+      "top_mm": 13.0,
+      "overlap_mm2": 2.3338968579840453,
+      "print_bounds_mm": [
+        3.7540057003498077,
+        12.106006890535355,
+        5.756995886564255,
+        13.372997015714645
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 2.3338968579840453
+      }
+    },
+    {
+      "top_mm": 13.6,
+      "overlap_mm2": 1.1579923957649352,
+      "print_bounds_mm": [
+        0.06984499096870422,
+        12.053260862827301,
+        1.5667399764060974,
+        13.023742616176605
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 1.1579923957649352
+      }
+    },
+    {
+      "top_mm": 15.2,
+      "overlap_mm2": 2.3256347505907105,
+      "print_bounds_mm": [
+        7.6170046627521515,
+        12.056270867586136,
+        9.62899562716484,
+        13.372630804777145
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 2.3256347505907105
+      }
+    },
+    {
+      "top_mm": 24.0,
+      "overlap_mm2": 1.5050260421468566,
+      "print_bounds_mm": [
+        27.602724596858025,
+        0.055330365896224976,
+        29.373768836259842,
+        1.3852781802415848
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 1.5050260421468566
+      }
+    },
+    {
+      "top_mm": 24.0,
+      "overlap_mm2": 0.47928663927771764,
+      "print_bounds_mm": [
+        11.555564895272255,
+        5.545568481087685,
+        12.14743421971798,
+        6.511193290352821
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 0.47928663927771764
+      }
+    },
+    {
+      "top_mm": 24.0,
+      "overlap_mm2": 1.3656089180529485,
+      "print_bounds_mm": [
+        16.171121418476105,
+        5.53711873292923,
+        17.740881145000458,
+        6.5218793749809265
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 1.3656089180529485
+      }
+    },
+    {
+      "top_mm": 24.0,
+      "overlap_mm2": 1.4287584553439325,
+      "print_bounds_mm": [
+        9.104385882616043,
+        5.528082400560379,
+        10.669635653495789,
+        6.523614376783371
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 1.4287584553439325
+      }
+    },
+    {
+      "top_mm": 24.0,
+      "overlap_mm2": 1.40326035943183,
+      "print_bounds_mm": [
+        42.39613564312458,
+        5.525607690215111,
+        44.15239371359348,
+        6.524395361542702
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 1.40326035943183
+      }
+    },
+    {
+      "top_mm": 24.0,
+      "overlap_mm2": 10.273134721230981,
+      "print_bounds_mm": [
+        24.99800518155098,
+        1.1631293296813965,
+        27.16178533434868,
+        11.257697075605392
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 10.273134721230981
+      }
+    },
+    {
+      "top_mm": 24.0,
+      "overlap_mm2": 5.391331469508847,
+      "print_bounds_mm": [
+        27.595733910799026,
+        8.202007561922073,
+        29.39918491244316,
+        11.552234381437302
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 5.391331469508847
+      }
+    },
+    {
+      "top_mm": 30.6,
+      "overlap_mm2": 0.08593113825114068,
+      "print_bounds_mm": [
+        10.354319736361504,
+        5.872319385409355,
+        10.700680568814278,
+        6.210680797696114
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 0.08593113825114068
+      }
+    },
+    {
+      "top_mm": 30.6,
+      "overlap_mm2": 0.3064638267694487,
+      "print_bounds_mm": [
+        47.00312042236328,
+        5.743727743625641,
+        47.69626706838608,
+        6.309273660182953
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 0.3064638267694487
+      }
+    },
+    {
+      "top_mm": 30.6,
+      "overlap_mm2": 0.3517038804834052,
+      "print_bounds_mm": [
+        16.197756737470627,
+        5.742316648364067,
+        16.962681367993355,
+        6.3162470161914825
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 0.3517038804834052
+      }
+    },
+    {
+      "top_mm": 30.6,
+      "overlap_mm2": 0.4552375661138889,
+      "print_bounds_mm": [
+        43.14016316831112,
+        5.738162621855736,
+        44.131840124726295,
+        6.3168376833200455
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 0.4552375661138889
+      }
+    },
+    {
+      "top_mm": 30.6,
+      "overlap_mm2": 0.9619060996147881,
+      "print_bounds_mm": [
+        11.570445895195007,
+        5.730646297335625,
+        13.32493956387043,
+        6.331937626004219
+      ],
+      "lower_owner_areas_mm2": {
+        "Key_Carrier": 0.9619060996147881
+      }
+    }
+  ],
+  "r47_gap_classification": {
+    "short straight two-ended bridge": 115,
+    "free end requires backing": 12
+  },
+  "r48_gap_classification": {
+    "short straight two-ended bridge": 2,
+    "free end requires backing": 1
+  },
+  "ordinary_two_ended_count": 2,
+  "raw_unmatched_strokes": [
+    {
+      "z": 31.0,
+      "mm": 0.396,
+      "before": false,
+      "after": false,
+      "start_xy": [
+        10.454,
+        6.119
+      ],
+      "end_xy": [
+        10.463,
+        6.515
+      ],
+      "chord_mm": 0.396,
+      "deviation_from_chord_mm": 0.001,
+      "minimum_bead_width_mm": 0.415,
+      "median_bead_width_mm": 0.423,
+      "actual_length_at_width_below_0p2_mm": 0.0,
+      "anchored_span_mm": null,
+      "first_gcode_line": 978944,
+      "last_gcode_line": 978972,
+      "commanded_feed_range_mm_s": [
+        40.0,
+        40.0
+      ],
+      "last_commanded_part_fan_fraction_range": [
+        1.0,
+        1.0
+      ],
+      "classification": "free end requires backing",
+      "features": [
+        "Outer wall"
+      ],
+      "sampled_path_xy": [
+        [
+          10.454,
+          6.119
+        ],
+        [
+          10.455,
+          6.167
+        ],
+        [
+          10.455,
+          6.167
+        ],
+        [
+          10.457,
+          6.225
+        ],
+        [
+          10.458,
+          6.283
+        ],
+        [
+          10.458,
+          6.283
+        ],
+        [
+          10.459,
+          6.341
+        ],
+        [
+          10.459,
+          6.341
+        ],
+        [
+          10.46,
+          6.399
+        ],
+        [
+          10.462,
+          6.457
+        ],
+        [
+          10.462,
+          6.457
+        ],
+        [
+          10.463,
+          6.514
+        ],
+        [
+          10.463,
+          6.515
+        ]
+      ]
+    }
+  ],
+  "qualified_disposable_strokes": [
+    {
+      "native_stroke": {
+        "z": 31.0,
+        "mm": 0.396,
+        "before": false,
+        "after": false,
+        "start_xy": [
+          10.454,
+          6.119
+        ],
+        "end_xy": [
+          10.463,
+          6.515
+        ],
+        "chord_mm": 0.396,
+        "deviation_from_chord_mm": 0.001,
+        "minimum_bead_width_mm": 0.415,
+        "median_bead_width_mm": 0.423,
+        "actual_length_at_width_below_0p2_mm": 0.0,
+        "anchored_span_mm": null,
+        "first_gcode_line": 978944,
+        "last_gcode_line": 978972,
+        "commanded_feed_range_mm_s": [
+          40.0,
+          40.0
+        ],
+        "last_commanded_part_fan_fraction_range": [
+          1.0,
+          1.0
+        ],
+        "classification": "free end requires backing",
+        "features": [
+          "Outer wall"
+        ],
+        "sampled_path_xy": [
+          [
+            10.454,
+            6.119
+          ],
+          [
+            10.455,
+            6.167
+          ],
+          [
+            10.455,
+            6.167
+          ],
+          [
+            10.457,
+            6.225
+          ],
+          [
+            10.458,
+            6.283
+          ],
+          [
+            10.458,
+            6.283
+          ],
+          [
+            10.459,
+            6.341
+          ],
+          [
+            10.459,
+            6.341
+          ],
+          [
+            10.46,
+            6.399
+          ],
+          [
+            10.462,
+            6.457
+          ],
+          [
+            10.462,
+            6.457
+          ],
+          [
+            10.463,
+            6.514
+          ],
+          [
+            10.463,
+            6.515
+          ]
+        ]
+      },
+      "removed_shelf_footprint_mm2": 0.3000227669195191,
+      "actual_carrier_overlap_by_layer_mm2": {
+        "31.0": {
+          "31.0": {
+            "direct_mm2": 0.0,
+            "within_lateral_0p25_band_mm2": 0.0
+          },
+          "31.2": {
+            "direct_mm2": 0.0,
+            "within_lateral_0p25_band_mm2": 0.0
+          },
+          "31.4": {
+            "direct_mm2": 0.0,
+            "within_lateral_0p25_band_mm2": 0.0
+          }
+        },
+        "31.2": {
+          "31.2": {
+            "direct_mm2": 0.0,
+            "within_lateral_0p25_band_mm2": 0.0
+          },
+          "31.4": {
+            "direct_mm2": 0.0,
+            "within_lateral_0p25_band_mm2": 0.0
+          },
+          "31.6": {
+            "direct_mm2": 0.0,
+            "within_lateral_0p25_band_mm2": 0.0
+          }
+        },
+        "31.4": {
+          "31.4": {
+            "direct_mm2": 0.0,
+            "within_lateral_0p25_band_mm2": 0.0
+          },
+          "31.6": {
+            "direct_mm2": 0.0,
+            "within_lateral_0p25_band_mm2": 0.0
+          },
+          "31.8": {
+            "direct_mm2": 0.0,
+            "within_lateral_0p25_band_mm2": 0.033647001021117395
+          }
+        }
+      },
+      "other_shelf_paths_without_stroke": {
+        "31.0": {
+          "retained_samples": 5432,
+          "newly_unanchored_samples": 0,
+          "omitted_area_mm2": 0.3000227669195191,
+          "previously_unanchored_retained_samples": 4
+        },
+        "31.2": {
+          "retained_samples": 5431,
+          "newly_unanchored_samples": 32,
+          "omitted_area_mm2": 0.2123480136479417,
+          "previously_unanchored_retained_samples": 0
+        },
+        "31.4": {
+          "retained_samples": 5451,
+          "newly_unanchored_samples": 13,
+          "omitted_area_mm2": 0.1938193180478609,
+          "previously_unanchored_retained_samples": 0
+        },
+        "31.6": {
+          "retained_samples": 2986,
+          "newly_unanchored_samples": 0,
+          "omitted_area_mm2": 0.0,
+          "previously_unanchored_retained_samples": 0
+        }
+      },
+      "omission_stops_propagating": true,
+      "passed": true,
+      "scope": "Entire travel-separated stroke omitted in the test. Subsequent shelf paths traced in actual print order; physical sag and adhesion untested."
+    }
+  ],
+  "new_unqualified_strokes": [],
+  "passed": true
+}

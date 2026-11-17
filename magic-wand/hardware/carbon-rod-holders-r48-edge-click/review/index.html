@@ -1,0 +1,14 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>R48 Magic Wand assembly</title>
+<a id="assembly" href="../../carbon-rod-holders/assembly/?version=r48-review&amp;component=keys">Open the R48 assembly</a>
+<script type="module">
+const link = document.getElementById('assembly');
+const route = new URL(link.href);
+try {
+  const catalogue = await (await fetch(new URL('catalog.json', route), { cache: 'no-store' })).json();
+  if (catalogue.versions.some(version => version.id === 'r48')) route.searchParams.set('version', 'r48');
+} finally {
+  location.replace(route.href);
+}
+</script>

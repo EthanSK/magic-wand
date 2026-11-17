@@ -13,7 +13,7 @@ import manifold3d as mf
 
 parent_material=audit45.evaluate_material
 
-def transverse_sections(shape,stations,frame,xyz,width,height,top,checker):
+def transverse_sections(shape,stations,frame,xyz,width,height,top,checker, *, follow_fold=False):
     matrix=np.linalg.inv(frame)
     line=trimesh.transform_points(np.asarray(stations),matrix)
     length=np.linalg.norm(np.diff(line,axis=0),axis=1)
@@ -28,6 +28,7 @@ def transverse_sections(shape,stations,frame,xyz,width,height,top,checker):
         queries.append((fraction,pose,target,[]))
     x,y,z,X,Y,Z=shape.bounding_box()
     near=(xyz[:,0]>x-.7)&(xyz[:,0]<X+.7)&(xyz[:,1]>y-.7)&(xyz[:,1]<Y+.7)
+    core_slabs = []
     for level in np.unique(top[near]):
         if level<=z or level-.22>=Z:continue
         m=near&(abs(top-level)<.001)
@@ -35,13 +36,44 @@ def transverse_sections(shape,stations,frame,xyz,width,height,top,checker):
         assert h==.2 and abs(upper/.2-round(upper/.2))<1e-6
         film=checker.start_audit.bead_footprints(checker.q,xyz[m,:2],width[m])
         deposited=film.extrude(h).translate((0,0,upper-h))^shape
+        if follow_fold:
+            # Reconstruct the deposited load path inside the intended member only.
+            # Removing 0.075 mm from exposed bead footprints excludes point contacts.
+            # One nanometre beyond each face registers mathematically coincident layers.
+            core = film.offset(-.075).extrude(h + .000002).translate((0, 0, upper-h-.000001))
+            core_slabs.append(core ^ shape)
         for _,pose,_,pieces in queries:pieces.append(deposited.transform(pose[:3]).slice(0.))
+    if follow_fold:
+        full_core = mf.Manifold.batch_boolean(core_slabs, mf.OpType.Add)
+        largest_core = max(full_core.decompose(), key=lambda component: component.volume(), default=mf.Manifold())
+        # Manifold decomposes internal void surfaces separately. Intersecting
+        # with the original solid excludes those voids from the connected core.
+        connected_core = largest_core ^ full_core
     rows=[]
     for fraction,pose,target,parts in queries:
         deposited=mf.CrossSection.batch_boolean(parts,mf.OpType.Add)
         largest=max((v.area() for v in deposited.decompose()),default=0.)
-        rows.append({'fraction_of_path':fraction,'cad_area_mm2':target.area(),'native_largest_connected_mm2':largest,
-                     'native_total_mm2':deposited.area(),'coverage':deposited.area()/target.area()})
+        row = {'fraction_of_path': fraction, 'cad_area_mm2': target.area(), 'native_largest_connected_mm2': largest,
+               'native_total_mm2': deposited.area(), 'coverage': deposited.area()/target.area()}
+        if follow_fold:
+            # An infinite plane through a returning member can intersect two
+            # distinct legs. Retain the ordinary aggregate readings and demand
+            # 90% contiguous native coverage in every *nominal* planar lobe.
+            # Every lobe at all stations must also contain the same eroded 3D
+            # backbone across at least half its area, ruling out a thin smear.
+            core_section = connected_core.transform(pose[:3]).slice(0.) ^ deposited
+            lobes = []
+            for lobe in sorted(target.decompose(), key=lambda item: -item.area()):
+                actual = max((part.area() for part in (deposited ^ lobe).decompose()), default=0.)
+                core_area = (core_section ^ lobe).area()
+                lobes.append({'cad_mm2': lobe.area(), 'native_largest_connected_mm2': actual,
+                              'native_fraction': actual / lobe.area(), 'common_eroded_core_mm2': core_area,
+                              'common_eroded_core_fraction': core_area / lobe.area()})
+            row['folded_landing'] = {
+                'footprint_erosion_mm': .075, 'common_native_core_mm3': connected_core.volume(),
+                'lobes': lobes, 'passed': bool(lobes) and all(
+                    v['native_fraction'] >= .90 and v['common_eroded_core_fraction'] >= .50 for v in lobes)}
+        rows.append(row)
     return rows
 
 def evaluate(result,out,frame,old44,actual,legacy_targets,xyz,carrier,data,engine,checker,hard,interference,removable):

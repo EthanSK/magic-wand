@@ -1,0 +1,275 @@
+{
+  "archive": "R48-Complete-A1-mini-PETG.gcode.3mf",
+  "cad_unsupported_starts": 0,
+  "unrooted_helper_islands": {
+    "External_cradle": 0,
+    "Front_pull_shelf": 0,
+    "Rear_pull_shelf": 0
+  },
+  "roof_sequence_classifications": {
+    "short straight two-ended bridge": 119,
+    "unsupported bend outside bead corridor": 27,
+    "free end requires backing": 10,
+    "beyond screened anchored span": 9
+  },
+  "unresolved_continuous_intervals": 46,
+  "longest_unanchored_or_one_ended_sequence": {
+    "z": 9.4,
+    "mm": 1.037,
+    "before": true,
+    "after": false,
+    "start_xy": [
+      21.96,
+      13.999
+    ],
+    "end_xy": [
+      21.071,
+      13.999
+    ],
+    "chord_mm": 1.037,
+    "deviation_from_chord_mm": 0.0,
+    "minimum_bead_width_mm": 0.45,
+    "median_bead_width_mm": 0.45,
+    "actual_length_at_width_below_0p2_mm": 0.0,
+    "anchored_span_mm": null,
+    "first_gcode_line": 319666,
+    "last_gcode_line": 319666,
+    "commanded_feed_range_mm_s": [
+      98.261,
+      98.261
+    ],
+    "last_commanded_part_fan_fraction_range": [
+      0.5,
+      0.5
+    ],
+    "classification": "free end requires backing",
+    "features": [
+      "Sparse infill"
+    ],
+    "sampled_path_xy": [
+      [
+        22.108,
+        13.999
+      ],
+      [
+        21.96,
+        13.999
+      ],
+      [
+        21.811,
+        13.999
+      ],
+      [
+        21.663,
+        13.999
+      ],
+      [
+        21.515,
+        13.999
+      ],
+      [
+        21.367,
+        13.999
+      ],
+      [
+        21.219,
+        13.999
+      ],
+      [
+        21.071,
+        13.999
+      ]
+    ]
+  },
+  "longest_two_ended_sequence": {
+    "z": 18.6,
+    "mm": 13.564,
+    "before": true,
+    "after": true,
+    "start_xy": [
+      44.417,
+      16.361
+    ],
+    "end_xy": [
+      57.683,
+      16.361
+    ],
+    "chord_mm": 13.564,
+    "deviation_from_chord_mm": 0.0,
+    "minimum_bead_width_mm": 0.42,
+    "median_bead_width_mm": 0.42,
+    "actual_length_at_width_below_0p2_mm": 0.0,
+    "anchored_span_mm": 13.564,
+    "first_gcode_line": 600903,
+    "last_gcode_line": 600903,
+    "commanded_feed_range_mm_s": [
+      50.0,
+      50.0
+    ],
+    "last_commanded_part_fan_fraction_range": [
+      1.0,
+      1.0
+    ],
+    "classification": "beyond screened anchored span",
+    "features": [
+      "Overhang wall"
+    ],
+    "sampled_path_xy": [
+      [
+        44.268,
+        16.361
+      ],
+      [
+        45.311,
+        16.361
+      ],
+      [
+        46.504,
+        16.361
+      ],
+      [
+        47.547,
+        16.361
+      ],
+      [
+        48.74,
+        16.361
+      ],
+      [
+        49.783,
+        16.361
+      ],
+      [
+        50.975,
+        16.361
+      ],
+      [
+        52.168,
+        16.361
+      ],
+      [
+        53.211,
+        16.361
+      ],
+      [
+        54.404,
+        16.361
+      ],
+      [
+        55.447,
+        16.361
+      ],
+      [
+        56.64,
+        16.361
+      ],
+      [
+        57.832,
+        16.361
+      ]
+    ]
+  },
+  "helper_contacts": {
+    "External_cradle": {
+      "r48": {
+        "pieces": 8,
+        "projected_contact_mm2": 15.479,
+        "largest_continuous_patch_mm2": 3.888,
+        "contact_patches": 14,
+        "finger_guard_contact_mm2": 12.394,
+        "contact_layers": 10,
+        "bed_feet": 8,
+        "bed_feet_without_1.2mm_grip_land": 0
+      },
+      "r46_selected": {
+        "pieces": 8,
+        "projected_contact_mm2": 13.861,
+        "largest_continuous_patch_mm2": 3.888,
+        "contact_patches": 12,
+        "finger_guard_contact_mm2": 10.598,
+        "contact_layers": 8,
+        "bed_feet": 8,
+        "bed_feet_without_1.2mm_grip_land": 0
+      }
+    },
+    "Front_pull_shelf": {
+      "r48": {
+        "pieces": 4,
+        "projected_contact_mm2": 5.001,
+        "largest_continuous_patch_mm2": 1.994,
+        "contact_patches": 10,
+        "finger_guard_contact_mm2": 4.396,
+        "contact_layers": 8,
+        "bed_feet": 8,
+        "bed_feet_without_1.2mm_grip_land": 2
+      },
+      "r46_selected": {
+        "pieces": 2,
+        "projected_contact_mm2": 12.171,
+        "largest_continuous_patch_mm2": 4.164,
+        "contact_patches": 53,
+        "finger_guard_contact_mm2": 10.017,
+        "contact_layers": 12,
+        "bed_feet": 3,
+        "bed_feet_without_1.2mm_grip_land": 1
+      }
+    },
+    "Rear_pull_shelf": {
+      "r48": {
+        "pieces": 2,
+        "projected_contact_mm2": 6.252,
+        "largest_continuous_patch_mm2": 0.767,
+        "contact_patches": 28,
+        "finger_guard_contact_mm2": 0.0,
+        "contact_layers": 2,
+        "bed_feet": 2,
+        "bed_feet_without_1.2mm_grip_land": 0
+      },
+      "r46_selected": {
+        "pieces": 1,
+        "projected_contact_mm2": 8.53,
+        "largest_continuous_patch_mm2": 2.59,
+        "contact_patches": 24,
+        "finger_guard_contact_mm2": 0.0,
+        "contact_layers": 1,
+        "bed_feet": 1,
+        "bed_feet_without_1.2mm_grip_land": 0
+      }
+    }
+  },
+  "material_estimated_g": {
+    "Battery_End_Door": 0.601,
+    "Battery_Holder": 2.545,
+    "Cable_Clip_12_Wire": 0.187,
+    "DFR0030_Post_Clip": 0.017,
+    "DFR0030_Post_Clip_2": 0.017,
+    "DFRobot_Hole_Bracket": 1.161,
+    "External_cradle": 4.136,
+    "Front_pull_shelf": 13.629,
+    "Key_Carrier": 10.864,
+    "Rear_pull_shelf": 0.902,
+    "Release_tabs": 0.095,
+    "XIAO_Near_Keeper": 0.386,
+    "XIAO_Rod_Holder": 2.223,
+    "unowned_tower_or_machine": 3.299
+  },
+  "material_difference_from_r46_g": {
+    "Battery_End_Door": 0.601,
+    "Battery_Holder": 2.545,
+    "Cable_Clip_12_Wire": 0.187,
+    "DFR0030_Post_Clip": 0.017,
+    "DFR0030_Post_Clip_2": 0.017,
+    "DFRobot_Hole_Bracket": 1.161,
+    "External_cradle": 0.024,
+    "Front_pull_shelf": 6.499,
+    "Key_Carrier": 0.358,
+    "Rear_pull_shelf": 0.165,
+    "Release_tabs": -0.001,
+    "XIAO_Near_Keeper": 0.386,
+    "XIAO_Rod_Holder": 2.223,
+    "unowned_tower_or_machine": 0.91
+  },
+  "helper_difference_from_r46_g": 6.687,
+  "release_force_or_strength_measured": false,
+  "revision": "r48"
+}

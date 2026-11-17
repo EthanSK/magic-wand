@@ -1,0 +1,342 @@
+{
+  "archive_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+  "older_fixtures": {
+    "r46": {
+      "revision": "r46",
+      "archive_sha256": "3d0267fb983986b44cd6a90b5eb3083ce77dfe3be016ea58887e7dd864cfa157",
+      "recorded_report_sha256": "31dc27b9ec546804af25f96a705b8274ba3cbf7d84469a542a3a1a53b9f5903b",
+      "rechecked_report_sha256": "31dc27b9ec546804af25f96a705b8274ba3cbf7d84469a542a3a1a53b9f5903b",
+      "checker_sha256": "04f8715e196c9ddab515d14040b56fce9a59aacd32771021c5be2fc436778264",
+      "bed_translation_mm": [
+        50,
+        70,
+        0
+      ],
+      "front_pieces": [
+        {
+          "piece": "Finger-side comb",
+          "recorded_mm2": 10.668110421619987,
+          "corrected_mm2": 10.668110421619987
+        },
+        {
+          "piece": "Left guard web prop",
+          "recorded_mm2": 1.5032274467474904,
+          "corrected_mm2": 1.5032274467474904
+        }
+      ],
+      "passed": true,
+      "all_peel_pieces": {
+        "Front_pull_shelf": [
+          {
+            "removable_piece": "Finger-side comb",
+            "bed_xy_bounds_mm": [
+              -8.0,
+              -4.900000095367432,
+              49.599998474121094,
+              17.992599487304688
+            ],
+            "projected_contact_area_sum_mm2": 10.668110421619987,
+            "largest_continuous_contact_patch_mm2": 4.163653932392316,
+            "finger_guard_contact_sum_mm2": 9.408042883379014
+          },
+          {
+            "removable_piece": "Left guard web prop",
+            "bed_xy_bounds_mm": [
+              5.623491287231445,
+              5.813769817352295,
+              15.16554069519043,
+              11.611333847045898
+            ],
+            "projected_contact_area_sum_mm2": 1.5032274467474904,
+            "largest_continuous_contact_patch_mm2": 1.222901295485478,
+            "finger_guard_contact_sum_mm2": 0.6090492201480229
+          }
+        ],
+        "Rear_pull_shelf": [
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              6.799999713897705,
+              20.350000381469727,
+              16.399999618530273,
+              23.600000381469727
+            ],
+            "projected_contact_area_sum_mm2": 8.52985634970951,
+            "largest_continuous_contact_patch_mm2": 2.5904024176418683,
+            "finger_guard_contact_sum_mm2": 0.0
+          }
+        ],
+        "External_cradle": [
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              53.18699645996094,
+              3.881333827972412,
+              59.36675262451172,
+              8.701333045959473
+            ],
+            "projected_contact_area_sum_mm2": 0.0,
+            "largest_continuous_contact_patch_mm2": 0.0,
+            "finger_guard_contact_sum_mm2": 0.0
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              44.68096160888672,
+              5.0500006675720215,
+              53.556365966796875,
+              8.701333045959473
+            ],
+            "projected_contact_area_sum_mm2": 2.560405197054537,
+            "largest_continuous_contact_patch_mm2": 1.9832168544153745,
+            "finger_guard_contact_sum_mm2": 2.560405197054537
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              8.80610466003418,
+              3.5094943046569824,
+              22.65822410583496,
+              8.701333045959473
+            ],
+            "projected_contact_area_sum_mm2": 5.478032531310862,
+            "largest_continuous_contact_patch_mm2": 3.8878108255736104,
+            "finger_guard_contact_sum_mm2": 5.478032531310862
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              0.6499996185302734,
+              5.081333637237549,
+              8.099359512329102,
+              9.16508674621582
+            ],
+            "projected_contact_area_sum_mm2": 1.0336414377300542,
+            "largest_continuous_contact_patch_mm2": 0.7741372849798767,
+            "finger_guard_contact_sum_mm2": 1.0336414377300542
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              36.848968505859375,
+              5.081333637237549,
+              44.68669128417969,
+              10.365351676940918
+            ],
+            "projected_contact_area_sum_mm2": 1.5263103623175265,
+            "largest_continuous_contact_patch_mm2": 0.8171160256051764,
+            "finger_guard_contact_sum_mm2": 1.5263103623175265
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              -4.0,
+              9.550000190734863,
+              5.399999618530273,
+              12.949999809265137
+            ],
+            "projected_contact_area_sum_mm2": 0.8089468579618162,
+            "largest_continuous_contact_patch_mm2": 0.8089468579618162,
+            "finger_guard_contact_sum_mm2": 0.0
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              36.79999923706055,
+              16.441333770751953,
+              42.099998474121094,
+              19.399999618530273
+            ],
+            "projected_contact_area_sum_mm2": 0.8134092447634328,
+            "largest_continuous_contact_patch_mm2": 0.8134092447634328,
+            "finger_guard_contact_sum_mm2": 0.0
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              18.0,
+              16.441333770751953,
+              23.299999237060547,
+              19.399999618530273
+            ],
+            "projected_contact_area_sum_mm2": 1.6399347025757212,
+            "largest_continuous_contact_patch_mm2": 1.6399347025757212,
+            "finger_guard_contact_sum_mm2": 0.0
+          }
+        ]
+      }
+    },
+    "r47": {
+      "revision": "r47",
+      "archive_sha256": "b13dee0f49cacfa5c93c9931cb47cbacffa6ae367463c7ae32d435e550bb35fb",
+      "recorded_report_sha256": "fe2e4ef0898ae614555dc5d9a27fe7db4c3ba2d615975d8a3c2fe5927526f9eb",
+      "rechecked_report_sha256": "dae7d3246ad260e30423e69b2c273bbdb2210d41d41828c115b34c8a76ed0592",
+      "checker_sha256": "04f8715e196c9ddab515d14040b56fce9a59aacd32771021c5be2fc436778264",
+      "bed_translation_mm": [
+        18.0,
+        113.0,
+        0.0
+      ],
+      "front_pieces": [
+        {
+          "piece": "Finger-side comb",
+          "recorded_mm2": 0.0,
+          "corrected_mm2": 9.412514846737773
+        },
+        {
+          "piece": "Left guard web prop",
+          "recorded_mm2": 0.0,
+          "corrected_mm2": 1.486665556126318
+        }
+      ],
+      "passed": true,
+      "all_peel_pieces": {
+        "Front_pull_shelf": [
+          {
+            "removable_piece": "Finger-side comb",
+            "bed_xy_bounds_mm": [
+              -8.0,
+              -4.900000095367432,
+              49.599998474121094,
+              17.992603302001953
+            ],
+            "projected_contact_area_sum_mm2": 9.412514846737773,
+            "largest_continuous_contact_patch_mm2": 4.163654635535208,
+            "finger_guard_contact_sum_mm2": 9.412514160344704
+          },
+          {
+            "removable_piece": "Left guard web prop",
+            "bed_xy_bounds_mm": [
+              5.623491287231445,
+              5.814306259155273,
+              15.16554069519043,
+              11.611332893371582
+            ],
+            "projected_contact_area_sum_mm2": 1.486665556126318,
+            "largest_continuous_contact_patch_mm2": 1.2075783573163996,
+            "finger_guard_contact_sum_mm2": 0.5776104207825674
+          }
+        ],
+        "Rear_pull_shelf": [
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              6.799999713897705,
+              20.350000381469727,
+              16.399999618530273,
+              23.600000381469727
+            ],
+            "projected_contact_area_sum_mm2": 8.52989651138586,
+            "largest_continuous_contact_patch_mm2": 2.590423886377019,
+            "finger_guard_contact_sum_mm2": 0.0
+          }
+        ],
+        "External_cradle": [
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              53.18699645996094,
+              3.881333112716675,
+              59.36674880981445,
+              8.701333045959473
+            ],
+            "projected_contact_area_sum_mm2": 0.0,
+            "largest_continuous_contact_patch_mm2": 0.0,
+            "finger_guard_contact_sum_mm2": 0.0
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              44.68096160888672,
+              5.0500006675720215,
+              53.556365966796875,
+              8.701333045959473
+            ],
+            "projected_contact_area_sum_mm2": 2.5604109961670423,
+            "largest_continuous_contact_patch_mm2": 1.9832168876458987,
+            "finger_guard_contact_sum_mm2": 2.5604109961670423
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              8.80610466003418,
+              3.5094940662384033,
+              22.65822410583496,
+              8.701333045959473
+            ],
+            "projected_contact_area_sum_mm2": 5.477825784172381,
+            "largest_continuous_contact_patch_mm2": 3.8876042404956808,
+            "finger_guard_contact_sum_mm2": 5.477825784172381
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              0.6499996185302734,
+              5.081333637237549,
+              8.099359512329102,
+              9.165085792541504
+            ],
+            "projected_contact_area_sum_mm2": 1.0332935021258538,
+            "largest_continuous_contact_patch_mm2": 0.7743333193423436,
+            "finger_guard_contact_sum_mm2": 1.0332935021258538
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              36.70330810546875,
+              5.081333637237549,
+              44.68669128417969,
+              10.376199722290039
+            ],
+            "projected_contact_area_sum_mm2": 2.041254205080243,
+            "largest_continuous_contact_patch_mm2": 0.8092481496199257,
+            "finger_guard_contact_sum_mm2": 1.842546575087084
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              -4.0,
+              9.550000190734863,
+              5.399999618530273,
+              12.949999809265137
+            ],
+            "projected_contact_area_sum_mm2": 0.8089467748483599,
+            "largest_continuous_contact_patch_mm2": 0.8089467748483599,
+            "finger_guard_contact_sum_mm2": 0.0
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              36.79999923706055,
+              16.441333770751953,
+              42.099998474121094,
+              19.399999618530273
+            ],
+            "projected_contact_area_sum_mm2": 0.7015380545666843,
+            "largest_continuous_contact_patch_mm2": 0.7015380545666843,
+            "finger_guard_contact_sum_mm2": 0.0
+          },
+          {
+            "removable_piece": null,
+            "bed_xy_bounds_mm": [
+              18.0,
+              16.441333770751953,
+              23.299999237060547,
+              19.399999618530273
+            ],
+            "projected_contact_area_sum_mm2": 1.6399487244033695,
+            "largest_continuous_contact_patch_mm2": 1.6399487244033695,
+            "finger_guard_contact_sum_mm2": 0.0
+          }
+        ]
+      }
+    }
+  },
+  "r48_front_pieces_mm2": {
+    "Left finger-rest comb": 1.5351635098670147,
+    "Middle finger-rest comb": 2.1133735374945126,
+    "Right finger-rest comb": 0.23036688746288708,
+    "Left guard web prop": 1.1223833850612732
+  },
+  "shared_checker_sha256": "04f8715e196c9ddab515d14040b56fce9a59aacd32771021c5be2fc436778264"
+}

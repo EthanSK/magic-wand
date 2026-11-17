@@ -13,6 +13,10 @@ def run(archive,scratch,resume_material=False):
     with key_group(archive):
         audit47.check(archive,scratch,resume_material)
         review47.review(archive)
+    finalize(archive)
+
+
+def finalize(archive):
     p=archive.parent
     core=json.loads((p/'candidate-audit.json').read_text())
     helpers=json.loads((p/'helper-starts.json').read_text())

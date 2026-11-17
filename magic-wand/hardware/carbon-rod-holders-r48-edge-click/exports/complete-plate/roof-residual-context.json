@@ -1,0 +1,402 @@
+{
+  "archive_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+  "rows": [
+    {
+      "layer": 9.0,
+      "gcode_lines": [
+        309662,
+        309662
+      ],
+      "path_mm": 0.62,
+      "anchored_before": false,
+      "anchored_after": false,
+      "width_range_mm": [
+        0.2829200029373169,
+        0.2829200029373169
+      ],
+      "footprint_mm2": 0.22514391237677478,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.020637361275481658,
+        "following_layer_carrier": 0.14283563877226824
+      }
+    },
+    {
+      "layer": 9.4,
+      "gcode_lines": [
+        319666,
+        319666
+      ],
+      "path_mm": 1.037,
+      "anchored_before": true,
+      "anchored_after": false,
+      "width_range_mm": [
+        0.44999998807907104,
+        0.44999998807907104
+      ],
+      "footprint_mm2": 0.5977940379908375,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.002230628282704261,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.027555027138427945,
+        "following_layer_carrier": 0.5977940378552091
+      }
+    },
+    {
+      "layer": 18.0,
+      "gcode_lines": [
+        583111,
+        583111
+      ],
+      "path_mm": 0.407,
+      "anchored_before": false,
+      "anchored_after": false,
+      "width_range_mm": [
+        0.3126400113105774,
+        0.3126400113105774
+      ],
+      "footprint_mm2": 0.19315408884394902,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.0,
+        "following_layer_carrier": 0.19303180383550045
+      }
+    },
+    {
+      "layer": 20.2,
+      "gcode_lines": [
+        648822,
+        648828
+      ],
+      "path_mm": 1.219,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.3399899899959564,
+        0.3399899899959564
+      ],
+      "footprint_mm2": 0.4701796980350348,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.09210467225409169,
+        "later_same_layer_carrier": 0.10193969360677199,
+        "following_layer_carrier": 0.4692295097076409
+      }
+    },
+    {
+      "layer": 20.2,
+      "gcode_lines": [
+        648952,
+        648958
+      ],
+      "path_mm": 2.32,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.3399899899959564,
+        0.3399899899959564
+      ],
+      "footprint_mm2": 0.8238954756948909,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.12221813959104674,
+        "later_same_layer_carrier": 0.007718649667364685,
+        "following_layer_carrier": 0.8203902391899063
+      }
+    },
+    {
+      "layer": 22.0,
+      "gcode_lines": [
+        710089,
+        710105
+      ],
+      "path_mm": 2.731,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.3999899923801422,
+        0.4914500117301941
+      ],
+      "footprint_mm2": 1.3551056035559745,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.24914326625858418,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.06707035946950268,
+        "following_layer_carrier": 1.3551056035559745
+      }
+    },
+    {
+      "layer": 22.0,
+      "gcode_lines": [
+        710367,
+        710378
+      ],
+      "path_mm": 2.246,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.3999899923801422,
+        0.4914500117301941
+      ],
+      "footprint_mm2": 1.1599481858413867,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.07656009076067138,
+        "earlier_same_layer_carrier": 0.03590681939704121,
+        "later_same_layer_carrier": 0.023770431685017412,
+        "following_layer_carrier": 1.1599481858413885
+      }
+    },
+    {
+      "layer": 22.0,
+      "gcode_lines": [
+        712022,
+        712024
+      ],
+      "path_mm": 2.699,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.3399899899959564,
+        0.3399899899959564
+      ],
+      "footprint_mm2": 0.9206959019349714,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.16626771359473458,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.02983297464146356,
+        "following_layer_carrier": 0.8808317526678149
+      }
+    },
+    {
+      "layer": 25.2,
+      "gcode_lines": [
+        817674,
+        817676
+      ],
+      "path_mm": 1.071,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.4200200140476227,
+        0.4200200140476227
+      ],
+      "footprint_mm2": 0.5439275120970222,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.04359092680805632,
+        "earlier_same_layer_carrier": 0.13353222281401333,
+        "later_same_layer_carrier": 0.1335322206117988,
+        "following_layer_carrier": 0.5391999022673579
+      }
+    },
+    {
+      "layer": 25.2,
+      "gcode_lines": [
+        819103,
+        819105
+      ],
+      "path_mm": 1.422,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.42006999254226685,
+        0.42006999254226685
+      ],
+      "footprint_mm2": 0.6801354293331019,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 5.6359373037773164e-05,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.13304969111142417,
+        "later_same_layer_carrier": 0.1329150138388617,
+        "following_layer_carrier": 0.6770015113418688
+      }
+    },
+    {
+      "layer": 26.0,
+      "gcode_lines": [
+        842568,
+        842574
+      ],
+      "path_mm": 1.448,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.3999899923801422,
+        0.3999899923801422
+      ],
+      "footprint_mm2": 0.6602189911782217,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.12289136608009155,
+        "later_same_layer_carrier": 0.01572173243684538,
+        "following_layer_carrier": 0.6554032840375812
+      }
+    },
+    {
+      "layer": 26.0,
+      "gcode_lines": [
+        842789,
+        842808
+      ],
+      "path_mm": 2.198,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.3201749920845032,
+        0.4214499890804291
+      ],
+      "footprint_mm2": 0.8675991992999188,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.06566066323135777,
+        "later_same_layer_carrier": 0.15831018572372513,
+        "following_layer_carrier": 0.8523229330503936
+      }
+    },
+    {
+      "layer": 28.4,
+      "gcode_lines": [
+        912061,
+        912063
+      ],
+      "path_mm": 1.055,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.3218899965286255,
+        0.3218899965286255
+      ],
+      "footprint_mm2": 0.3835671306805932,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.008178164103861907,
+        "earlier_same_layer_carrier": 0.07914858913822309,
+        "later_same_layer_carrier": 0.07864878844548628,
+        "following_layer_carrier": 0.37937203904867767
+      }
+    },
+    {
+      "layer": 28.4,
+      "gcode_lines": [
+        913171,
+        913183
+      ],
+      "path_mm": 1.216,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.3219200074672699,
+        0.38378000259399414
+      ],
+      "footprint_mm2": 0.45599204281496525,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.07843682470391186,
+        "later_same_layer_carrier": 0.07685084776036138,
+        "following_layer_carrier": 0.44492690682568564
+      }
+    },
+    {
+      "layer": 30.0,
+      "gcode_lines": [
+        953677,
+        953677
+      ],
+      "path_mm": 0.467,
+      "anchored_before": false,
+      "anchored_after": false,
+      "width_range_mm": [
+        0.2829200029373169,
+        0.2829200029373169
+      ],
+      "footprint_mm2": 0.18485251916990342,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.0,
+        "following_layer_carrier": 0.1799818561136417
+      }
+    },
+    {
+      "layer": 30.4,
+      "gcode_lines": [
+        961959,
+        961959
+      ],
+      "path_mm": 0.57,
+      "anchored_before": false,
+      "anchored_after": false,
+      "width_range_mm": [
+        0.2829200029373169,
+        0.2829200029373169
+      ],
+      "footprint_mm2": 0.21041345018469804,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.010062691717627081,
+        "following_layer_carrier": 0.19817572934474148
+      }
+    },
+    {
+      "layer": 30.8,
+      "gcode_lines": [
+        971817,
+        971817
+      ],
+      "path_mm": 0.523,
+      "anchored_before": false,
+      "anchored_after": false,
+      "width_range_mm": [
+        0.2829200029373169,
+        0.2829200029373169
+      ],
+      "footprint_mm2": 0.1988372289008803,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.0,
+        "later_same_layer_carrier": 0.0,
+        "following_layer_carrier": 0.18470457253875683
+      }
+    },
+    {
+      "layer": 31.8,
+      "gcode_lines": [
+        994824,
+        994826
+      ],
+      "path_mm": 1.32,
+      "anchored_before": true,
+      "anchored_after": true,
+      "width_range_mm": [
+        0.41999000310897827,
+        0.41999000310897827
+      ],
+      "footprint_mm2": 0.6408613254137201,
+      "overlap_mm2": {
+        "immediately_previous_carrier": 0.0,
+        "earlier_helper_across_gap": 0.0,
+        "earlier_same_layer_carrier": 0.1322937014530693,
+        "later_same_layer_carrier": 0.13773401833411444,
+        "following_layer_carrier": 0.6370154991332668
+      }
+    }
+  ],
+  "note": "Overlap is measured against inscribed actual native bead footprints. Later material can capture a short stroke but does not back it when printed. Earlier same-layer contact area does not establish ancestry."
+}

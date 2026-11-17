@@ -292,7 +292,7 @@ def make_support_check(record, solid, layout, owners):
     return check
 
 
-def support_removal_grid(solid, checker, data, local, model, support, record, *, outward=False):
+def support_removal_grid(solid, checker, data, local, model, support, record, *, outward=False, step=.5):
     """R38's fragment flood, with R42's actual open exterior as the entry.
 
     The diagonal connector and guard have several removal approaches. Use
@@ -303,7 +303,8 @@ def support_removal_grid(solid, checker, data, local, model, support, record, *,
     """
     low, high = np.asarray(solid.bounding_box()).reshape(2, 3)
     pts = local[support]
-    step, radius = .5, .4
+    assert 0. < step <= .5
+    radius = .4
     xs = np.arange(pts[:, 0].min()-2., pts[:, 0].max()+2.+step, step)
     ys = np.arange(low[1]-.5, high[1]+2.+step, step)
     zs = np.arange(.1, data[support, 7].max()+.4, .2)

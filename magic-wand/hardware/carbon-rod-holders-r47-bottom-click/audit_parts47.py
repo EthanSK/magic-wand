@@ -54,7 +54,9 @@ def identity(saved, mesh, shift):
     return float(distance.max())
 
 
-def check(archive, scratch, output):
+def check(archive, scratch, output, *, replacement_sources=None, replacement_routes=None):
+    replacement_sources = replacement_sources or {}
+    replacement_routes = replacement_routes or {}
     hardware = h.HERE.parent
     r42 = hardware / 'carbon-rod-holders-r42-lower-diagonal/exports'
     base = r42 / 'print-trial/R42-Complete-A1-mini-PETG-layout.3mf'
@@ -66,7 +68,23 @@ def check(archive, scratch, output):
     references = {}
     for name, record in records.items():
         target = exports / (name + common.SOURCE_SUFFIX)
-        if name == h.BRACKET:
+        if name in replacement_sources:
+            source = replacement_sources[name]
+            # Later parts are hash-bound, supplied in the native print frame.
+            # None of the old cell's size, window or pad witnesses may leak in.
+            record.clear()
+            shutil.copyfile(source['print_stl'], target)
+            mesh = trimesh.load_mesh(target)
+            transform = np.asarray(source['print_to_assembly'])
+            physical = mesh.copy()
+            physical.apply_transform(transform)
+            reference_assembly = trimesh.load_mesh(source['assembly_stl'])
+            identity({'vertices':physical.vertices,'faces':physical.faces}, reference_assembly, np.zeros(3))
+            record.update(stl_sha256=digest(target), assembly_stl_sha256=digest(source['assembly_stl']),
+                          print_to_assembly=transform.tolist(), print_height_mm=float(mesh.extents[2]),
+                          volume_mm3=float(mesh.volume), bounds_mm=mesh.bounds.tolist(),
+                          assembly_bounds_mm=reference_assembly.bounds.tolist(), geometry_checks={})
+        elif name == h.BRACKET:
             cap = scratch / 'stage/R47-DFRobot_Hole_Bracket-cap.stl'
             raw = trimesh.load_mesh(cap)
             record['assembly_stl_sha256'] = digest(cap)
@@ -146,7 +164,19 @@ def check(archive, scratch, output):
     anchors.pop(h.CARRIER, None)
     later = json.loads((r42 / 'print-jobs/battery/print-anchors.json').read_text())['parts']
     anchors['Battery_Holder'] = later['Battery_Holder']
+    for name, alternative in replacement_sources.items():
+        if alternative.get('pad_stl'):
+            anchors[name] = {}
+        else:
+            anchors.pop(name, None)
     for name, record in anchors.items():
+        if name in replacement_sources:
+            source = replacement_sources[name]['pad_stl']
+            path = exports / (name + common.PAD_SUFFIX)
+            shutil.copyfile(source, path)
+            record['stl_sha256'] = digest(path)
+            references[name]['anchor_reference_mesh_sha256'] = digest(path)
+            continue
         source = battery if name == 'Battery_Holder' else base
         with ZipFile(source) as z:
             config = ET.fromstring(z.read('Metadata/model_settings.config'))
@@ -196,7 +226,8 @@ def check(archive, scratch, output):
          patch.object(engine.audit, 'read_project', return_value=tuple(actual)), \
          patch.object(engine.project22.studio.p19, 'command_audit', full.plate42.command_audit), \
          patch.object(h.p.BATTERY.h18, 'regions', side_effect=regions):
-        result = common.inspect(archive, exports, lambda: (gaps, material), layout, supports)
+        result = common.inspect(archive, exports, lambda: (gaps, material), layout, supports,
+                                alternative_routes=replacement_routes)
     result['scope'] = 'Eight non-carrier functional pieces; all actual complete-plate beads retained'
     result['complete_plate_layout'] = plate_layout
     result['passed'] = bool(result['passed'] and plate_layout['passed'])

@@ -3,7 +3,7 @@ import manifold3d as mf
 import numpy as np
 from shelf45 import box,band,grow,span,union,layer_solid
 
-def make(body,tabs,cradle,front):
+def make(body,tabs,cradle,front,*,lateral_clearance=.31):
     # The hard switch-clip/latch envelope blocks an integral buttress.
     # Guide only the first, unbacked native turn and the thin centre bead.
     cap=(box(7.30,14.94,3.75,1.40)+box(12.1,16.29,1.15,1.02)
@@ -15,7 +15,7 @@ def make(body,tabs,cradle,front):
     for k in range(1,92):
         z=k*.2
         sections=band(permanent,z-.215,z+.015)+permanent.slice(z-.30)+permanent.slice(z-.10)+permanent.slice(z+.10)
-        blocked=span(grow(sections,.31),0,-72.)
+        blocked=span(grow(sections,lateral_clearance),0,-72.)
         blocked+=grow(permanent.slice(z-.30)+permanent.slice(z+.10),.08)
         blocked+=grow(cradle.trim_by_plane((0,0,1),z-.205).project(),.68)
         blocked+=span(grow(band(front,z-.41,z+.21),.6),0,-72.)
@@ -44,5 +44,5 @@ def make(body,tabs,cradle,front):
     return rear,dict(owner='Rear_pull_shelf',direction_print=(0.,1.,0.),translation_mm=72.,
         bounds=rear.bounding_box(),volume_mm3=rear.volume(),whole_cad_conflicts=conflicts,
         whole_front_path_against_rear_cad_conflicts=cross_conflicts,roof_tops_mm=[18.2],
-        contact_target_area_by_top={18.2:contact},design_lateral_clearance_mm=.31,
+        contact_target_area_by_top={18.2:contact},design_lateral_clearance_mm=lateral_clearance,
         generator_file='standing_aperture45.py')

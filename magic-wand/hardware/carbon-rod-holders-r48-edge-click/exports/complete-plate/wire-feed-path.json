@@ -1,0 +1,134 @@
+{
+  "archive_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+  "slot_end_centres_assembly_xy_mm": [
+    [
+      7.771865375511789,
+      12.597459583678766
+    ],
+    [
+      8.489790507093698,
+      14.517637571637984
+    ]
+  ],
+  "permanent_carrier_clear_radii_at_ends_and_middle_mm": {
+    "0.0": 1.916861403705054,
+    "0.5": 1.9476553853243384,
+    "1.0": 1.7841802458607816
+  },
+  "continuous_slot_sampling_bound_mm": 0.0,
+  "continuous_distance_method": "Exact segment-to-rectangle distance against conservative bead envelopes",
+  "assumed_wire_count": 3,
+  "wire_outside_diameter_mm": 1.5,
+  "bundle_diameter_mm": 3.232050807568877,
+  "additional_radial_clearance_mm": 0.15,
+  "guard_diameter_mm": 3.532050807568877,
+  "sampling_pitch_mm": 0.15,
+  "print_axis_first_and_last_station_mm": [
+    [
+      [
+        37.821864612572334,
+        -1.2186670303344735,
+        20.052541942200147
+      ],
+      [
+        37.821864612572334,
+        26.781332969665527,
+        20.052541942200143
+      ]
+    ],
+    [
+      [
+        38.53978974415425,
+        -1.2186670303344735,
+        18.13236395424093
+      ],
+      [
+        38.53978974415425,
+        26.781332969665527,
+        18.132363954240926
+      ]
+    ]
+  ],
+  "all_native_owners": {
+    "Unassigned owner -1": {
+      "minimum_guaranteed_clear_radius_mm": null,
+      "total_owner_samples": 194197,
+      "features_inside_guard": []
+    },
+    "XIAO_Rod_Holder": {
+      "minimum_guaranteed_clear_radius_mm": null,
+      "total_owner_samples": 223113,
+      "features_inside_guard": []
+    },
+    "XIAO_Near_Keeper": {
+      "minimum_guaranteed_clear_radius_mm": null,
+      "total_owner_samples": 31037,
+      "features_inside_guard": []
+    },
+    "Cable_Clip_12_Wire": {
+      "minimum_guaranteed_clear_radius_mm": null,
+      "total_owner_samples": 15365,
+      "features_inside_guard": []
+    },
+    "Key_Carrier": {
+      "minimum_guaranteed_clear_radius_mm": 1.7841802458607816,
+      "total_owner_samples": 1104739,
+      "features_inside_guard": []
+    },
+    "External_cradle": {
+      "minimum_guaranteed_clear_radius_mm": 0.0,
+      "total_owner_samples": 372730,
+      "features_inside_guard": [
+        "Gap infill",
+        "Internal solid infill",
+        "Outer wall",
+        "Top surface"
+      ]
+    },
+    "Release_tabs": {
+      "minimum_guaranteed_clear_radius_mm": 17.857363951260698,
+      "total_owner_samples": 6587,
+      "features_inside_guard": []
+    },
+    "Front_pull_shelf": {
+      "minimum_guaranteed_clear_radius_mm": 3.0778938751065397,
+      "total_owner_samples": 1126377,
+      "features_inside_guard": []
+    },
+    "Rear_pull_shelf": {
+      "minimum_guaranteed_clear_radius_mm": 21.423638886991043,
+      "total_owner_samples": 85532,
+      "features_inside_guard": []
+    },
+    "DFRobot_Hole_Bracket": {
+      "minimum_guaranteed_clear_radius_mm": 42.24244459734308,
+      "total_owner_samples": 112949,
+      "features_inside_guard": []
+    },
+    "DFR0030_Post_Clip": {
+      "minimum_guaranteed_clear_radius_mm": null,
+      "total_owner_samples": 2096,
+      "features_inside_guard": []
+    },
+    "DFR0030_Post_Clip_2": {
+      "minimum_guaranteed_clear_radius_mm": null,
+      "total_owner_samples": 2096,
+      "features_inside_guard": []
+    },
+    "Battery_Holder": {
+      "minimum_guaranteed_clear_radius_mm": null,
+      "total_owner_samples": 239172,
+      "features_inside_guard": []
+    },
+    "Battery_End_Door": {
+      "minimum_guaranteed_clear_radius_mm": null,
+      "total_owner_samples": 58742,
+      "features_inside_guard": []
+    }
+  },
+  "helpers_that_must_be_removed": [
+    "External_cradle"
+  ],
+  "physically_tested": false,
+  "passed": true
+}

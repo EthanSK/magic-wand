@@ -3,7 +3,7 @@ import manifold3d as mf
 import numpy as np
 from shelf45 import band,box,grow,span,union,layer_solid
 
-def make(body,tabs,cradle):
+def make(body,tabs,cradle,*,lateral_clearance=.30):
     # The standing carrier's original round resting faces remain exposed
     # after the comb pulls in -printY. Do not displace the bed-side cradle.
     # This comb serves the rounded rests only. Socket-floor ledges are
@@ -35,7 +35,7 @@ def make(body,tabs,cradle):
     for k in range(1,87):
         z=k*.2
         native=obstacles.slice(z-.30)+obstacles.slice(z-.10)+obstacles.slice(z+.10)
-        blocked=span(grow(band(obstacles,z-.215,z+.015)+native,.30),0,72.)
+        blocked=span(grow(band(obstacles,z-.215,z+.015)+native,lateral_clearance),0,72.)
         blocked+=grow(obstacles.slice(z-.30)+obstacles.slice(z+.10),.08)
         blocked+=grow(cradle.trim_by_plane((0,0,1),z-.205).project(),.68)
         legal=box(-8.,-6.,19.,24.)-blocked
@@ -59,7 +59,7 @@ def make(body,tabs,cradle):
         # including the adjacent lower and upper extrusion levels. Use
         # their actual slicing planes in the construction shadow too.
         native_planes=obstacles.slice(z-.30)+obstacles.slice(z-.10)+obstacles.slice(z+.10)
-        front=span(grow(band(obstacles,z-.215,z+.015)+native_planes,.30),0,72.)
+        front=span(grow(band(obstacles,z-.215,z+.015)+native_planes,lateral_clearance),0,72.)
         # Actual material levels are selected on layer midplanes. Reserve
         # the empty layer beneath/above each tooth; complete prism and
         # native-bead withdrawal checks independently cover the full solids.
@@ -137,6 +137,6 @@ def make(body,tabs,cradle):
     report['required_separate_pieces']=[dict(name=name,volume_mm3=p.volume(),bounds=p.bounding_box(),
         first_layer_cad_area_mm2=p.slice(.1).area(),has_1p2mm_grip_land=not p.slice(.1).offset(-.6).is_empty())
         for name,p in zip(('finger-side comb','left guard web prop'),kept)]
-    report['design_lateral_clearance_mm']=.30
+    report['design_lateral_clearance_mm']=lateral_clearance
     report['generator_file']='standing_comb45.py'
     return shelf,report

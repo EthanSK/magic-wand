@@ -1,0 +1,3251 @@
+{
+  "revision": "carbon-rod-holders-r48-edge-click",
+  "physical_fit_verified": false,
+  "sliced": true,
+  "checks": {
+    "layout": {
+      "touch_board": "DFRobot DFR0030 V2 on two posts with two printed clips",
+      "op1_board_yaw_degrees": -20.5,
+      "op1_plunger_xy_mm": [
+        0.3999999999999999,
+        -7.11949
+      ],
+      "op1_plunger_xy_r32_mm": [
+        0.0,
+        2.55
+      ],
+      "op1_board_bounds_mm": [
+        -7.453,
+        -17.347,
+        9.2,
+        12.42,
+        14.255,
+        10.8
+      ],
+      "op1_board_underside_z_mm": 9.2,
+      "choc_centres_mm": [
+        [
+          -21.0,
+          0.0
+        ],
+        [
+          21.0,
+          0.0
+        ],
+        [
+          -21.0,
+          21.35
+        ],
+        [
+          21.0,
+          21.35
+        ]
+      ],
+      "hinge_axis_world_y_mm": 30.75,
+      "switch_lever_arm_mm": 37.8695,
+      "switch_lever_arm_r40_mm": 16.15,
+      "electrode_centre_lever_arm_mm": 32.3795,
+      "electrode_world_y_span_released_mm": [
+        -8.156,
+        4.964
+      ],
+      "rest_angle_deg": 0.7262,
+      "early_lift_angle_deg": -0.87,
+      "press_travel_rest_to_middle_stop_mm": {
+        "electrode_centre": 0.3181,
+        "board_front_edge": 0.3882
+      },
+      "press_travel_rest_to_backup_mm": {
+        "electrode_centre": 0.6463,
+        "board_front_edge": 0.7889
+      },
+      "dfr_touch_face_top_released_mm": 21.4634,
+      "dfr_released_front_y_mm": -8.7562,
+      "outer_cap_front_y_mm": -8.75,
+      "choc_cap_top_mm": 21.340000000000003,
+      "slot_to_upper_right_choc_mm": {
+        "plate_ring_mm": 8.76,
+        "under_plate_wall_mm": 8.01
+      },
+      "slot_front_wall_mm": -15.798,
+      "op1_sockets_to_rod_mm": 0.9,
+      "op1_plug_to_rod_mm": 0.7759,
+      "op1_housing_to_rod_mm": 2.7893,
+      "op1_lead_to_rod_mm": 1.5167,
+      "op1_lead_to_carrier_mm": 0.785,
+      "op1_lead_to_upper_right_socket_mm": 4.0,
+      "op1_board_to_upper_right_choc_envelope_mm": 3.2601,
+      "pusher_contact_xy_world_mm": [
+        0.3999999999999999,
+        -7.11949
+      ],
+      "pusher_bottom_z_mm": 17.67,
+      "pusher_pad_mm": [
+        1.1,
+        0.6
+      ],
+      "pusher_pad_axes": "Carrier X/Y",
+      "pusher_face_inside_plunger_margin_mm": 0.1187,
+      "plunger_top_mm": [
+        2.9,
+        1.2
+      ],
+      "free_plunger_top_z_mm": 18.15,
+      "depression_at_modelled_angle_mm": 0.48,
+      "bracket_to_switch_body_at_backup_mm": 0.3896,
+      "pusher_pad_to_switch_body_at_backup_mm": 0.0918,
+      "bracket_side_to_cap_travel_envelope_mm": 1.25,
+      "stop_screw_xy_bracket_mm": [
+        -8.3,
+        -7.15
+      ],
+      "stop_screw_to_electrode_vertical_mm": 3.08,
+      "dfr_gravity_pins": {
+        "from_board_end_mm": 9.0,
+        "position_tolerance_xy_mm": [
+          0.5,
+          0.6
+        ],
+        "tails_checked_mm": [
+          1.5,
+          2.0
+        ],
+        "tail_length_measured": false,
+        "min_gap_to_bracket_by_tail_mm": {
+          "1.5": 0.2017,
+          "2.0": 0.2017
+        },
+        "bracket_relief_removed_mm3": 2.9998,
+        "bracket_relief_bounds_mm": [
+          -3.79,
+          13.39,
+          17.0,
+          3.79,
+          15.79,
+          19.19
+        ],
+        "arm_section_changed": false
+      },
+      "dfr_underside_to_arm_tops_mm": 0.3,
+      "carrier_bottom_plane_y_mm": -18.8463,
+      "carrier_width_mm": 60.77,
+      "carrier_height_mm": 25.5813,
+      "choc_seat_height_change_mm": 1.42,
+      "rod_clip_height_change_mm": 0.0
+    },
+    "clearance_overlap_mm3": {
+      "choc_switches_and_sockets_to_carrier": 0.0,
+      "op1_board_drop_with_keys_fitted": 0.0,
+      "op1_screw_heads_drop_with_keys_fitted": 0.0,
+      "op1_board_eyelet_pitch_range": 0.0,
+      "op1_screw_shank_in_eyelets": 0.0,
+      "op1_plug_and_lead_from_below_off_rod": 17.860726,
+      "op1_seated_lead": 0.0,
+      "op1_switch_install": 0.0,
+      "op1_pins_in_sockets": 0.0,
+      "op1_screw_heads_to_switch": 0.0,
+      "rod_slide_past_fitted_op1": 0.0,
+      "rod_snap_up_past_fitted_op1": 0.0,
+      "hinge_stroke": 0.0,
+      "gravity_lead_stroke": 0.0,
+      "gravity_lead_to_bracket_and_board": 0.0,
+      "pinched_bracket_drop": 0.0,
+      "bracket_arm_release": 0.0,
+      "dfr_board_and_pins_lift_off_posts": 0.0,
+      "dfr_pins_seated_all_positions_and_tails": 0.0,
+      "dfr_pins_click_stroke_all_positions": 0.0,
+      "dfr_board_on_posts_by_pitch": -0.0,
+      "dfr_clip_seated": 0.0,
+      "dfr_clip_slide_excluding_snap": 0.0,
+      "dfr_group_on_rod": 0.0,
+      "rod_to_carrier_outside_clip_rings": 0.0,
+      "rod_to_sockets_pins_housing_plug": 0.0,
+      "rod_to_op1_wire": 0.0
+    },
+    "full_stroke_overlap_mm3": {
+      "dfr_board_clips_and_lead": 0.0,
+      "bracket": 0.000177,
+      "bracket_to_switch_body": 0.0,
+      "pinched_install_with_screw": 0.0,
+      "stop_screw_to_dfr_parts": 0.0
+    },
+    "stop_settings": [
+      {
+        "turns_out": 0.0,
+        "angle_deg": 0.38206,
+        "nominal_plunger_travel_mm": 0.734,
+        "stop_height_above_switch_base_mm": 6.616,
+        "screw_contacts_landing_mm3": 0.0002012338541729376,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 0.1667,
+        "angle_deg": 0.27613,
+        "nominal_plunger_travel_mm": 0.6635,
+        "stop_height_above_switch_base_mm": 6.6865,
+        "screw_contacts_landing_mm3": 0.00020505665047872965,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 0.3333,
+        "angle_deg": 0.1702,
+        "nominal_plunger_travel_mm": 0.593,
+        "stop_height_above_switch_base_mm": 6.757,
+        "screw_contacts_landing_mm3": 0.0002255052569188157,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 0.5,
+        "angle_deg": 0.06403,
+        "nominal_plunger_travel_mm": 0.5224,
+        "stop_height_above_switch_base_mm": 6.8276,
+        "screw_contacts_landing_mm3": 0.0002158475208622786,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 0.6667,
+        "angle_deg": -0.04635,
+        "nominal_plunger_travel_mm": 0.4494,
+        "stop_height_above_switch_base_mm": 6.9006,
+        "screw_contacts_landing_mm3": 0.00021962692863056386,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 0.8333,
+        "angle_deg": -0.1631,
+        "nominal_plunger_travel_mm": 0.3727,
+        "stop_height_above_switch_base_mm": 6.9773,
+        "screw_contacts_landing_mm3": 0.00020738770275723154,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.0,
+        "angle_deg": -0.27997,
+        "nominal_plunger_travel_mm": 0.296,
+        "stop_height_above_switch_base_mm": 7.054,
+        "screw_contacts_landing_mm3": 0.00022153324457404282,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.1667,
+        "angle_deg": -0.39697,
+        "nominal_plunger_travel_mm": 0.2192,
+        "stop_height_above_switch_base_mm": 7.1308,
+        "screw_contacts_landing_mm3": 0.00021831493063081319,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.3333,
+        "angle_deg": -0.51396,
+        "nominal_plunger_travel_mm": 0.1424,
+        "stop_height_above_switch_base_mm": 7.2076,
+        "screw_contacts_landing_mm3": 0.00021773901515345702,
+        "plastic_before_screw_contact_mm3": 0.0
+      },
+      {
+        "turns_out": 1.5,
+        "angle_deg": -0.63095,
+        "nominal_plunger_travel_mm": 0.0656,
+        "stop_height_above_switch_base_mm": 7.2844,
+        "screw_contacts_landing_mm3": 0.00021587863811790085,
+        "plastic_before_screw_contact_mm3": 0.0
+      }
+    ],
+    "max_plunger_change_per_step_mm": 0.0768,
+    "screw_engagement_at_start_mm": 3.4,
+    "backup_angle_deg": 0.41765,
+    "backup_nominal_plunger_travel_mm": 0.7577,
+    "backup_stop_contacts_mm3": [
+      0.0049333062221692875,
+      0.00493330622216921
+    ],
+    "capture_contacts_mm3": {
+      "board_seat_contact_mm3": 25.59386,
+      "board_lateral_capture_contact_mm3": 0.876981,
+      "board_along_capture_contact_mm3": 0.15132,
+      "clip_head_capture_contact_mm3": 0.084865,
+      "board_to_clip_lift_contact_mm3": 1.147514,
+      "pusher_contact_at_angle_0_mm3": 0.63278
+    },
+    "bonds": {
+      "stop_boss_mm3": 90.2853,
+      "pusher_to_floor_mm3": 1.8898,
+      "pusher_to_root_mm3": 2.255,
+      "pusher_root_to_floor_mm3": 3.0195,
+      "hinge_supports_mm3": 155.7832,
+      "edge_stops_mm3": [
+        18.2661,
+        18.2661
+      ],
+      "op1_seat_contacts_mm3": [
+        3.7693,
+        4.2238
+      ],
+      "dfr_posts_mm3": [
+        11.6455,
+        11.6455
+      ]
+    },
+    "left_guard_web_interfaces_mm3": {
+      "left guard reinforcement web": 12.9934,
+      "left guard web-to-frame bond": 6.4619,
+      "L1 guard-to-web bond": 2.9647,
+      "L2 guard-to-web bond": 2.9647,
+      "L3 guard-to-web bond": 2.9647,
+      "R43 complete thicker guard web": 18.0228,
+      "R44 R middle finger rest": 103.0855,
+      "R44 R middle branch-to-inner leg bond": 1.9935,
+      "R44 R middle branch-to-outer guard bond": 4.6315,
+      "R44 R spine-to-R1 guard bond": 3.9257,
+      "R44 R spine-to-R2 guard bond": 4.4608,
+      "R44 R spine-to-R3 guard bond": 4.4608,
+      "R44 R riser-to-frame load-path bond": 7.9983,
+      "R44 L middle finger rest": 79.7738,
+      "R44 L middle branch-to-inner leg bond": 5.2746,
+      "R44 L middle branch-to-outer guard bond": 8.0891,
+      "R44 L spine-to-L1 guard bond": 3.9257,
+      "R44 L spine-to-L2 guard bond": 4.4608,
+      "R44 L spine-to-L3 guard bond": 4.4608
+    },
+    "hinge": {
+      "released_tab_axial_engagement_mm": 1.12,
+      "squeezed_tab_clear_of_support_mm": 0.28,
+      "straight_lift_contact_by_height_mm3": {
+        "0.10": 0.0,
+        "0.30": 0.164715,
+        "0.50": 0.709342
+      },
+      "straight_lift_retention_contact_mm3": 0.164715,
+      "arm_bending_estimate": {
+        "arm_thickness_mm": 1.2,
+        "arm_height_mm": 2.0,
+        "root_to_tab_mm": 10.81,
+        "root_to_pinch_pad_mm": 12.96,
+        "tab_squeeze_mm": 1.67,
+        "pad_squeeze_mm": 2.216,
+        "pinch_force_each_N_estimate": 1.76,
+        "root_strain_percent_estimate": 3.21,
+        "assumed_PETG_modulus_MPa": 2000.0,
+        "assumed_PETG_yield_strain_percent": 4.0,
+        "nominal_unfilleted_strain_percent_estimate": 2.38,
+        "conservative_free_length_mm": 9.31,
+        "physical_strength_verified": false
+      },
+      "clip": {
+        "jaw_width_mm": 1.05,
+        "jaw_length_mm": 3.2,
+        "snap_per_jaw_mm": 0.1,
+        "jaw_strain_percent_estimate": 1.54,
+        "assumed_PETG_yield_strain_percent": 4.0
+      }
+    },
+    "ribs": {
+      "R1": {
+        "volume_mm3": 123.131,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 19.9205,
+        "edge_contact_mm3": 14.1426,
+        "bounds": [
+          2.25,
+          -0.75,
+          0.3,
+          23.15,
+          16.85,
+          7.6
+        ],
+        "piece_bonds_mm3": [
+          34.0631
+        ]
+      },
+      "L1": {
+        "volume_mm3": 129.2828,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 4.9041,
+        "edge_contact_mm3": 19.709,
+        "bounds": [
+          -30.05,
+          -0.75,
+          0.3,
+          -2.25,
+          15.971,
+          8.6
+        ],
+        "piece_bonds_mm3": [
+          24.6132
+        ]
+      },
+      "R2": {
+        "volume_mm3": 116.0045,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 18.9117,
+        "edge_contact_mm3": 16.3292,
+        "bounds": [
+          2.25,
+          2.5,
+          0.3,
+          23.15,
+          16.85,
+          8.75
+        ],
+        "piece_bonds_mm3": [
+          35.241
+        ]
+      },
+      "L2": {
+        "volume_mm3": 120.7039,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 6.6495,
+        "edge_contact_mm3": 19.709,
+        "bounds": [
+          -30.05,
+          2.5,
+          0.3,
+          -2.08,
+          17.87,
+          8.6
+        ],
+        "piece_bonds_mm3": [
+          26.3585
+        ]
+      },
+      "R3": {
+        "volume_mm3": 205.4745,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 21.4186,
+        "edge_contact_mm3": 16.3336,
+        "bounds": [
+          2.08,
+          -0.75,
+          0.1,
+          23.137,
+          18.67,
+          9.65
+        ],
+        "piece_bonds_mm3": [
+          45.7505
+        ]
+      },
+      "L3": {
+        "volume_mm3": 174.3129,
+        "pieces": 1,
+        "rod_mount_contact_mm3": 6.0348,
+        "edge_contact_mm3": 19.709,
+        "bounds": [
+          -30.05,
+          -0.75,
+          0.3,
+          -2.08,
+          18.67,
+          8.6
+        ],
+        "piece_bonds_mm3": [
+          25.7438
+        ]
+      }
+    },
+    "key_apertures_vs_r39": {
+      "key_0": {
+        "centre_mm": [
+          -21.0,
+          0
+        ],
+        "difference_mm3": 1.2768763119891104e-06,
+        "seat_volume_mm3": 45.84796482571615,
+        "baseline_translated_mm": 1.42,
+        "checked_z_mm": [
+          11.34,
+          12.54
+        ]
+      },
+      "key_2": {
+        "centre_mm": [
+          21.0,
+          0
+        ],
+        "difference_mm3": 1.2052963075859739e-05,
+        "seat_volume_mm3": 45.84796492267585,
+        "baseline_translated_mm": 1.42,
+        "checked_z_mm": [
+          11.34,
+          12.54
+        ]
+      },
+      "key_3": {
+        "centre_mm": [
+          -21.0,
+          21.35
+        ],
+        "difference_mm3": 9.463528953945414e-05,
+        "seat_volume_mm3": 45.84798035186203,
+        "baseline_translated_mm": 1.42,
+        "checked_z_mm": [
+          11.34,
+          12.54
+        ]
+      },
+      "key_4": {
+        "centre_mm": [
+          21.0,
+          21.35
+        ],
+        "difference_mm3": 1.1488331101556766e-05,
+        "seat_volume_mm3": 45.8479804153514,
+        "baseline_translated_mm": 1.42,
+        "checked_z_mm": [
+          11.34,
+          12.54
+        ]
+      }
+    },
+    "finger_contact_probes_reaching_terminals": {
+      "key_0_terminal_0": 0,
+      "key_0_terminal_1": 0,
+      "key_2_terminal_0": 0,
+      "key_2_terminal_1": 0
+    },
+    "rod_grip_interference_in_clip_rings_mm3": 22.3307,
+    "reference_guard": {
+      "rod_aabb_mm": [
+        -4.0,
+        -40.0,
+        -4.0,
+        4.0,
+        100.0,
+        4.0
+      ],
+      "carrier_aabb_mm": [
+        -30.77,
+        -18.846,
+        -4.781,
+        30.0,
+        32.65,
+        20.8
+      ],
+      "bought_op1_aabb_mm": {
+        "board": [
+          -7.453,
+          -17.347,
+          9.2,
+          12.42,
+          14.255,
+          10.8
+        ],
+        "sockets": [
+          -1.995,
+          -11.35,
+          4.9,
+          4.161,
+          0.765,
+          9.21
+        ],
+        "housing": [
+          2.264,
+          5.623,
+          6.4,
+          11.179,
+          13.952,
+          9.2
+        ],
+        "plug": [
+          3.45,
+          7.718,
+          3.3,
+          10.535,
+          13.308,
+          6.4
+        ],
+        "switch": [
+          -3.875,
+          -12.303,
+          10.8,
+          6.041,
+          1.717,
+          17.3
+        ],
+        "terminals": [
+          -1.06,
+          -10.55,
+          7.3,
+          3.226,
+          -0.036,
+          10.81
+        ],
+        "plunger": [
+          -1.168,
+          -8.189,
+          17.29,
+          1.968,
+          -6.05,
+          18.15
+        ],
+        "fasteners": [
+          -4.585,
+          -16.268,
+          6.8,
+          6.978,
+          6.291,
+          11.65
+        ],
+        "op1_wire": [
+          5.497,
+          10.735,
+          -0.85,
+          10.297,
+          41.8,
+          6.15
+        ]
+      },
+      "installed_y_span_mm": [
+        -18.846,
+        41.8
+      ],
+      "centred_probe_in_rod_mm3": 1.0,
+      "rod_in_clip_rings_mm3": 22.3307,
+      "passed": true,
+      "misplaced_rod_is_rejected": true
+    },
+    "basis": "OP1 board, socket, plug and lead envelopes are photo-derived (Endgame Gear EGG-SP-U1); the 7.35 mm free and 6.7-7.1 mm operating heights are the Omron reference switch. DFR0030 length 35 mm (distributor sheet; maker says 30), hole pitch/position and 1.6 mm thickness are photo-derived or assumed. Its Gravity pin tails are checked at 1.5 and 2.0 mm, at +/-0.5 x +/-0.6 mm positions from the maker photo; tail length is not measured. Stop and travel values are nominal CAD, not measured force, feel or fatigue. R42 lowers only the DFR0030 seat within the same bracket; the OP1 envelopes, plug clearance and switch heights are R41's. R44 places the four outer key platforms 1.42 mm above R42 (0.30 mm below R43) and joins rounded middle finger rests to the existing guards; complete CAD checks rerun against translated bought-key envelopes and loading routes. Finger comfort is a CAD probe only.",
+    "cad_checks_passed": false,
+    "passed": true,
+    "lowering": {
+      "seat_drop_in_bracket_mm": 0.95,
+      "board_z_bracket_frame_mm": [
+        19.3,
+        20.900000000000002
+      ],
+      "r41_board_z_bracket_frame_mm": [
+        20.25,
+        21.85
+      ],
+      "touch_top_released_mm": 21.4634,
+      "r41_touch_top_released_mm": 22.5918,
+      "touch_top_lowering_mm": 1.1284,
+      "electrode_top_at_click_angle_0_mm": 20.97,
+      "touch_top_above_choc_cap_top_released_mm": 0.1234,
+      "op1_shift_mm": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "carrier_changed_from_r41": true,
+      "op1_lowering_limit": [
+        {
+          "op1_drop_mm": 0.0,
+          "plug_to_rod_mm": 0.776,
+          "sockets_to_rod_mm": 0.9,
+          "housing_to_rod_mm": 2.789,
+          "op1_wire_to_rod_mm": 1.517
+        },
+        {
+          "op1_drop_mm": -0.15,
+          "plug_to_rod_mm": 0.673,
+          "sockets_to_rod_mm": 0.75,
+          "housing_to_rod_mm": 2.649,
+          "op1_wire_to_rod_mm": 1.506
+        },
+        {
+          "op1_drop_mm": -0.3,
+          "plug_to_rod_mm": 0.572,
+          "sockets_to_rod_mm": 0.6,
+          "housing_to_rod_mm": 2.509,
+          "op1_wire_to_rod_mm": 1.501
+        }
+      ],
+      "limiting_geometry": "Touch board: the bracket floor top (19.2), set by the fixed switch plunger. OP1 stack: the harness plug beside the rod (0.31 mm, closing about 0.75 mm per mm).",
+      "seat_plane_area_mm2": 269.79,
+      "board_underside_to_arm_root_and_fan_tops_mm": 0.11,
+      "board_underside_to_floor_top_mm": 0.1,
+      "highest_fixed_floor_or_root_surface_mm": 19.2
+    },
+    "r41_gates_passed": false,
+    "finger_rest": {
+      "centre_lines_mm": {
+        "R": {
+          "middle branch": [
+            [
+              9.455,
+              9.95,
+              3.704
+            ],
+            [
+              12.2,
+              9.95,
+              1.25
+            ],
+            [
+              15.5,
+              9.95,
+              1.25
+            ],
+            [
+              18.25,
+              9.95,
+              1.25
+            ],
+            [
+              20.6,
+              9.55,
+              1.35
+            ]
+          ],
+          "spine": [
+            [
+              15.5,
+              9.95,
+              1.25
+            ],
+            [
+              15.5,
+              0.2,
+              1.25
+            ]
+          ],
+          "riser": [
+            [
+              15.5,
+              9.95,
+              1.25
+            ],
+            [
+              12.1,
+              17.0,
+              8.5
+            ]
+          ]
+        },
+        "L": {
+          "middle branch": [
+            [
+              -9.455,
+              9.95,
+              3.704
+            ],
+            [
+              -12.2,
+              9.95,
+              1.25
+            ],
+            [
+              -15.3,
+              9.95,
+              1.25
+            ],
+            [
+              -21.3,
+              9.95,
+              1.25
+            ],
+            [
+              -26.109,
+              9.95,
+              3.195
+            ]
+          ],
+          "spine": [
+            [
+              -15.3,
+              9.95,
+              1.25
+            ],
+            [
+              -15.3,
+              0.2,
+              1.25
+            ]
+          ]
+        }
+      },
+      "radius_mm": 0.95,
+      "sides": {
+        "R": {
+          "merged_into_guard": "R3",
+          "volume_mm3": 103.0855,
+          "raw_volume_mm3": 106.6492,
+          "discarded_mm3": 0.0,
+          "pieces": 1,
+          "bounds_mm": [
+            8.684,
+            -0.75,
+            0.1,
+            21.55,
+            18.15,
+            9.65
+          ]
+        },
+        "L": {
+          "merged_into_guard": "L3",
+          "volume_mm3": 79.7738,
+          "raw_volume_mm3": 79.7738,
+          "discarded_mm3": 0.0,
+          "pieces": 1,
+          "bounds_mm": [
+            -27.059,
+            -0.75,
+            0.3,
+            -8.505,
+            10.9,
+            4.654
+          ]
+        }
+      },
+      "interfaces_mm3": {
+        "R44 R middle finger rest": 103.0855,
+        "R44 R middle branch-to-inner leg bond": 1.9935,
+        "R44 R middle branch-to-outer guard bond": 4.6315,
+        "R44 R spine-to-R1 guard bond": 3.9257,
+        "R44 R spine-to-R2 guard bond": 4.4608,
+        "R44 R spine-to-R3 guard bond": 4.4608,
+        "R44 R riser-to-frame load-path bond": 7.9983,
+        "R44 L middle finger rest": 79.7738,
+        "R44 L middle branch-to-inner leg bond": 5.2746,
+        "R44 L middle branch-to-outer guard bond": 8.0891,
+        "R44 L spine-to-L1 guard bond": 3.9257,
+        "R44 L spine-to-L2 guard bond": 4.4608,
+        "R44 L spine-to-L3 guard bond": 4.4608
+      },
+      "fingertip_probe": {
+        "radius_mm": 5.0,
+        "rise_past_rib_underside_mm": 1.0,
+        "grid_x_mm": {
+          "R": [
+            12.5,
+            19.0
+          ],
+          "L": [
+            -12.5,
+            -22.0
+          ]
+        },
+        "grid_y_mm": [
+          -0.5,
+          11.5
+        ],
+        "points_per_side": 28,
+        "free_points_r44": [],
+        "free_points_r42": [
+          [
+            "R",
+            12.5,
+            11.5
+          ],
+          [
+            "R",
+            14.667,
+            11.5
+          ],
+          [
+            "R",
+            16.833,
+            11.5
+          ],
+          [
+            "L",
+            -12.5,
+            11.5
+          ],
+          [
+            "L",
+            -15.667,
+            11.5
+          ],
+          [
+            "L",
+            -18.833,
+            11.5
+          ]
+        ]
+      },
+      "passed": true,
+      "physical_comfort_strength_and_print_verified": false
+    },
+    "raised_keys": {
+      "raise_mm": 1.42,
+      "lowered_from_r43_mm": 0.3,
+      "keys": [
+        0,
+        2,
+        3,
+        4
+      ],
+      "underside_socket_print_clearance_mm": 0.12,
+      "socket_body_edge_clearance_mm": 0.25,
+      "keycap_top_mm": 21.340000000000003,
+      "released_touch_top_mm": 21.4634,
+      "touch_above_keycap_tops_mm": 0.1234,
+      "released_touch_top_change_from_r43_reference_mm": -0.1782,
+      "fixed_mount_hinge_stop_and_rod_clip_geometry_change_mm3": 47.54943883299891,
+      "platform_bond_volumes_mm3": {
+        "raised key 0 platform-to-frame bond": 181.23490465162004,
+        "raised key 2 platform-to-frame bond": 182.03352131292587,
+        "raised key 3 platform-to-frame bond": 184.96038361007888,
+        "raised key 4 platform-to-frame bond": 186.11309607267643
+      },
+      "rod_op1_touch_hinge_and_stop_positions_changed": false,
+      "physical_fit_strength_and_comfort_verified": false
+    },
+    "r47": {
+      "inherited_gates": {
+        "clearances_below_0.035": true,
+        "op1_plug_from_below_route (R32-R46 entry, replaced by pre-fitting)": false,
+        "full_stroke_below_0.035": true,
+        "carrier_one_piece": true,
+        "bracket_one_piece": true,
+        "stop_boss": true,
+        "pusher_to_floor": true,
+        "pusher_root_to_floor": true,
+        "pusher_to_root": true,
+        "edge_stops": true,
+        "op1_seat_contacts": true,
+        "dfr_posts": true,
+        "backup_stops_both_sides": true,
+        "stop_range_low_below_6.65": true,
+        "stop_range_high_above_7.15": true,
+        "stop_steps_0_to_0.11": 1.0,
+        "screw_lands_before_plastic": true,
+        "tab_engagement_0.6": true,
+        "squeezed_tab_clear_0.2": true,
+        "straight_lift_retention": true,
+        "capture_contacts": true,
+        "fingertip_terminals": true,
+        "guard_ribs_one_piece": true,
+        "guard_web_bonds": true,
+        "slot_to_upper_right_choc_0.6": true,
+        "slot_front_wall_1.0 (R41-R46 closed slot)": false,
+        "sockets_to_rod_0.45": true,
+        "plug_to_rod_0.3135 (R42: not below R41)": true,
+        "bracket_to_switch_body_at_backup_0.2": true,
+        "pusher_pad_to_switch_body_at_backup_0.08": true,
+        "pusher_face_inside_plunger_0.05": true,
+        "pin_gaps_0.2": true,
+        "pin_relief_ahead_of_arm_root": true,
+        "reference_guard": true,
+        "carrier_bottom_plane_at_r46_edge (superseded by the chin)": false,
+        "dfr_front_on_cap_fronts": true,
+        "r44_finger_rests": true
+      },
+      "inherited_failures": [
+        "carrier_bottom_plane_at_r46_edge (superseded by the chin)",
+        "op1_plug_from_below_route (R32-R46 entry, replaced by pre-fitting)",
+        "slot_front_wall_1.0 (R41-R46 closed slot)"
+      ],
+      "intended_inherited_exceptions": [
+        "carrier_bottom_plane_at_r46_edge (superseded by the chin)",
+        "op1_plug_from_below_route (R32-R46 entry, replaced by pre-fitting)",
+        "slot_front_wall_1.0 (R41-R46 closed slot)"
+      ],
+      "unexpected_inherited_failures": [],
+      "checks": {
+        "op1_prefitted_board_and_plug_drop_mm3": 0.0,
+        "long_board_drop_overlap_mm3": {
+          "1.0": 0.0,
+          "2.0": 0.0,
+          "4.0": 0.0
+        },
+        "switch_height_above_base_at_backup_mm": 6.5923,
+        "omron_operating_height_mm": [
+          6.7,
+          7.1
+        ],
+        "clicks_before_backup_feet": true,
+        "press_contacts_through_stroke": [
+          {
+            "angle_deg": -0.87,
+            "plunger_travel_mm": 0.0,
+            "bracket_to_depressed_plunger_mm3": 0.0,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.824,
+            "plunger_travel_mm": 0.0,
+            "bracket_to_depressed_plunger_mm3": 0.0,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.778,
+            "plunger_travel_mm": 0.0,
+            "bracket_to_depressed_plunger_mm3": 0.0,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.732,
+            "plunger_travel_mm": 0.0,
+            "bracket_to_depressed_plunger_mm3": 0.0,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.686,
+            "plunger_travel_mm": 0.0294,
+            "bracket_to_depressed_plunger_mm3": 2e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.64,
+            "plunger_travel_mm": 0.0596,
+            "bracket_to_depressed_plunger_mm3": 2e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.5941,
+            "plunger_travel_mm": 0.0898,
+            "bracket_to_depressed_plunger_mm3": 2e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.5481,
+            "plunger_travel_mm": 0.12,
+            "bracket_to_depressed_plunger_mm3": 2e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.5021,
+            "plunger_travel_mm": 0.1502,
+            "bracket_to_depressed_plunger_mm3": 2.1e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.4561,
+            "plunger_travel_mm": 0.1804,
+            "bracket_to_depressed_plunger_mm3": 2.1e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.4101,
+            "plunger_travel_mm": 0.2105,
+            "bracket_to_depressed_plunger_mm3": 2.1e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.3641,
+            "plunger_travel_mm": 0.2407,
+            "bracket_to_depressed_plunger_mm3": 2.2e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.3181,
+            "plunger_travel_mm": 0.2709,
+            "bracket_to_depressed_plunger_mm3": 2.3e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.2722,
+            "plunger_travel_mm": 0.3011,
+            "bracket_to_depressed_plunger_mm3": 2.1e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.2262,
+            "plunger_travel_mm": 0.3313,
+            "bracket_to_depressed_plunger_mm3": 2.2e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.1802,
+            "plunger_travel_mm": 0.3615,
+            "bracket_to_depressed_plunger_mm3": 2e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.1342,
+            "plunger_travel_mm": 0.3917,
+            "bracket_to_depressed_plunger_mm3": 2.3e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.0882,
+            "plunger_travel_mm": 0.4219,
+            "bracket_to_depressed_plunger_mm3": 2.3e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": -0.0422,
+            "plunger_travel_mm": 0.4521,
+            "bracket_to_depressed_plunger_mm3": 2.1e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": 0.0038,
+            "plunger_travel_mm": 0.4825,
+            "bracket_to_depressed_plunger_mm3": 2.5e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": 0.0498,
+            "plunger_travel_mm": 0.5129,
+            "bracket_to_depressed_plunger_mm3": 2.7e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": 0.0957,
+            "plunger_travel_mm": 0.5435,
+            "bracket_to_depressed_plunger_mm3": 2.3e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": 0.1417,
+            "plunger_travel_mm": 0.5741,
+            "bracket_to_depressed_plunger_mm3": 2.3e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": 0.1877,
+            "plunger_travel_mm": 0.6047,
+            "bracket_to_depressed_plunger_mm3": 2.3e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": 0.2337,
+            "plunger_travel_mm": 0.6353,
+            "bracket_to_depressed_plunger_mm3": 2.1e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": 0.2797,
+            "plunger_travel_mm": 0.6659,
+            "bracket_to_depressed_plunger_mm3": 2.3e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": 0.3257,
+            "plunger_travel_mm": 0.6965,
+            "bracket_to_depressed_plunger_mm3": 2.2e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": 0.3717,
+            "plunger_travel_mm": 0.7271,
+            "bracket_to_depressed_plunger_mm3": 2.1e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          },
+          {
+            "angle_deg": 0.4177,
+            "plunger_travel_mm": 0.7577,
+            "bracket_to_depressed_plunger_mm3": 2e-05,
+            "bracket_to_other_op1_parts_mm3": 0.0
+          }
+        ],
+        "stop_landing_trimmed_by_op1_reliefs": {
+          "mm3": 0.0,
+          "bounds_mm": null
+        },
+        "stop_screw_head_footprint_r2.05_cut_by_op1_reliefs_mm3": 0.0,
+        "r46_brace_and_joint_witness_fraction_kept": {
+          "R46-L-cross-brace": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 51.3451,
+            "lost_outside_op1_openings_mm3": 1e-05
+          },
+          "R46-L-cross-brace-edge-bond": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 6.2301,
+            "lost_outside_op1_openings_mm3": 0.0
+          },
+          "R46-L-cross-brace-middle-row-bond": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 6.6817,
+            "lost_outside_op1_openings_mm3": 0.0
+          },
+          "R46-L-cross-brace-middle-bond": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 8.2297,
+            "lost_outside_op1_openings_mm3": 0.0
+          },
+          "R46-L-deck-return": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 80.4826,
+            "lost_outside_op1_openings_mm3": 1e-05
+          },
+          "R46-L-deck-return-middle-bond": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 5.404,
+            "lost_outside_op1_openings_mm3": 0.0
+          },
+          "R46-L-deck-return-base-bond": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 22.1357,
+            "lost_outside_op1_openings_mm3": 0.0
+          },
+          "R46-R-cross-brace": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 46.4502,
+            "lost_outside_op1_openings_mm3": 1e-05
+          },
+          "R46-R-cross-brace-edge-bond": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 7.684,
+            "lost_outside_op1_openings_mm3": 0.0
+          },
+          "R46-R-cross-brace-middle-row-bond": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 6.1427,
+            "lost_outside_op1_openings_mm3": 0.0
+          },
+          "R46-R-cross-brace-middle-bond": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 8.6996,
+            "lost_outside_op1_openings_mm3": 0.0
+          },
+          "R46-R-deck-return": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 61.6965,
+            "lost_outside_op1_openings_mm3": 1e-05
+          },
+          "R46-R-deck-return-middle-bond": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 46.6647,
+            "lost_outside_op1_openings_mm3": 0.0
+          },
+          "R46-R-deck-return-base-bond": {
+            "fraction_kept": 1.0,
+            "kept_mm3": 14.9,
+            "lost_outside_op1_openings_mm3": 0.0
+          }
+        },
+        "harness_free_end_through_opening": {
+          "through_opening_area_mm2": 32.588,
+          "through_opening_bounds_mm": [
+            5.04,
+            7.615,
+            11.859,
+            16.598
+          ],
+          "largest_round_free_end_mm": 4.2,
+          "three_1.5mm_wire_bundle_mm": 3.232
+        },
+        "largest_bracket_to_carrier_contact_to_backup": {
+          "mm3": 0.000177,
+          "angle_deg": 0.4177,
+          "is_backup_angle": true,
+          "bounds_mm": [
+            -10.11,
+            -7.774,
+            13.049,
+            10.11,
+            -7.643,
+            13.05
+          ]
+        },
+        "clip_rings_vs_r46": {
+          "mid_band": {
+            "r46": {
+              "material_mm3": 113.984,
+              "rod_grip_interference_mm3": 7.3217
+            },
+            "r47": {
+              "material_mm3": 114.197,
+              "rod_grip_interference_mm3": 7.3217
+            }
+          },
+          "skirt": {
+            "r46": {
+              "material_mm3": 137.952,
+              "rod_grip_interference_mm3": 7.4441
+            },
+            "r47": {
+              "material_mm3": 144.496,
+              "rod_grip_interference_mm3": 7.6874
+            }
+          },
+          "rear_band": {
+            "r46": {
+              "material_mm3": 0.0,
+              "rod_grip_interference_mm3": 0.0
+            },
+            "r47": {
+              "material_mm3": 0.0,
+              "rod_grip_interference_mm3": 0.0
+            }
+          }
+        },
+        "guard_rib_pieces": {
+          "R1": [
+            {
+              "volume_mm3": 123.131,
+              "rod_mount_contact_mm3": 19.921,
+              "edge_contact_mm3": 14.143,
+              "bounds": [
+                2.25,
+                -0.75,
+                0.3,
+                23.15,
+                16.85,
+                7.6
+              ]
+            }
+          ],
+          "L1": [
+            {
+              "volume_mm3": 129.283,
+              "rod_mount_contact_mm3": 4.904,
+              "edge_contact_mm3": 19.709,
+              "bounds": [
+                -30.05,
+                -0.75,
+                0.3,
+                -2.25,
+                15.971,
+                8.6
+              ]
+            }
+          ],
+          "R2": [
+            {
+              "volume_mm3": 116.004,
+              "rod_mount_contact_mm3": 18.912,
+              "edge_contact_mm3": 16.329,
+              "bounds": [
+                2.25,
+                2.5,
+                0.3,
+                23.15,
+                16.85,
+                8.75
+              ]
+            }
+          ],
+          "L2": [
+            {
+              "volume_mm3": 120.704,
+              "rod_mount_contact_mm3": 6.65,
+              "edge_contact_mm3": 19.709,
+              "bounds": [
+                -30.05,
+                2.5,
+                0.3,
+                -2.08,
+                17.87,
+                8.6
+              ]
+            }
+          ],
+          "R3": [
+            {
+              "volume_mm3": 205.474,
+              "rod_mount_contact_mm3": 21.419,
+              "edge_contact_mm3": 16.334,
+              "bounds": [
+                2.08,
+                -0.75,
+                0.1,
+                23.137,
+                18.67,
+                9.65
+              ]
+            }
+          ],
+          "L3": [
+            {
+              "volume_mm3": 174.313,
+              "rod_mount_contact_mm3": 6.035,
+              "edge_contact_mm3": 19.709,
+              "bounds": [
+                -30.05,
+                -0.75,
+                0.3,
+                -2.08,
+                18.67,
+                8.6
+              ]
+            }
+          ]
+        },
+        "route_intrusion_mm3": {
+          "unloaded_clip_bore": 0.0,
+          "clip_gap_mid": 0.0,
+          "clip_gap_rear": 0.0,
+          "external_wire_bus": 0.0,
+          "key_0_switch": 0.0,
+          "key_0_socket": 0.0,
+          "key_0_maximum_socket": 0.0,
+          "key_0_socket_tape_zone": 0.0,
+          "key_0_mount_opening": 1.3e-05,
+          "key_0_clip_relief": 1.1e-05,
+          "key_0_cap_travel": 0.0,
+          "key_2_switch": 0.0,
+          "key_2_socket": 0.0,
+          "key_2_maximum_socket": 0.0,
+          "key_2_socket_tape_zone": 0.0,
+          "key_2_mount_opening": 1.3e-05,
+          "key_2_clip_relief": 1.1e-05,
+          "key_2_cap_travel": 0.0,
+          "key_3_switch": 0.0,
+          "key_3_socket": 0.0,
+          "key_3_maximum_socket": 0.0,
+          "key_3_socket_loading": 0.0,
+          "key_3_maximum_socket_loading": 0.0,
+          "key_3_socket_tape_zone": 0.0,
+          "key_3_mount_opening": 2.2e-05,
+          "key_3_clip_relief": 1.1e-05,
+          "key_3_cap_travel": 0.0,
+          "key_4_switch": 0.0,
+          "key_4_socket": 0.0,
+          "key_4_maximum_socket": 0.0,
+          "key_4_socket_loading": 0.0,
+          "key_4_maximum_socket_loading": 0.0,
+          "key_4_socket_tape_zone": 0.0,
+          "key_4_mount_opening": 2.2e-05,
+          "key_4_clip_relief": 1.1e-05,
+          "key_4_cap_travel": 0.0,
+          "key_0_soldered_socket_slide": 0.0,
+          "key_2_soldered_socket_slide": 0.0,
+          "key_3_soldered_socket_dogleg": 0.0,
+          "key_4_soldered_socket_dogleg": 0.0,
+          "snap hinge bores": 0.0,
+          "OP1 mounting screw pilots": 0.0,
+          "OP1 board insertion": 0.0,
+          "OP1 pre-fitted board and plug drop": 0.0,
+          "OP1 switch insertion": 0.0,
+          "DFRobot board through stroke": 0.0,
+          "DFRobot lead through stroke": 0.0,
+          "bracket through stroke to backup": 0.000177
+        },
+        "summary": {
+          "plunger_xy_world_mm": {
+            "r46": [
+              -1.6,
+              3.05
+            ],
+            "r47": [
+              0.4,
+              -7.1195
+            ]
+          },
+          "op1_yaw_deg": {
+            "r46": -25.0,
+            "r47": -20.5
+          },
+          "hinge_axis_world_y_mm": {
+            "r46": 31.15,
+            "r47": 30.75
+          },
+          "hinge_to_plunger_lever_mm": {
+            "r46": 28.1,
+            "r47": 37.8695
+          },
+          "hinge_to_board_front_edge_mm": {
+            "r46": 39.9195,
+            "r47": 39.5195
+          },
+          "plunger_fraction_of_board_lever": {
+            "r46": 0.7039,
+            "r47": 0.9582
+          },
+          "board_rear_edge_to_support_front_mm": {
+            "r46": 2.9695,
+            "r47": 2.5695
+          },
+          "board_rear_edge_to_hinge_axis_mm": {
+            "r46": 4.9195,
+            "r47": 4.5195
+          },
+          "rest_angle_deg": 0.7262,
+          "stop_screw_xy_bracket_mm": {
+            "r46": [
+              8.3,
+              -7.15
+            ],
+            "r47": [
+              -8.3,
+              -7.15
+            ]
+          },
+          "stop_screw_lever_mm": 34.35
+        },
+        "stop_parameters": {
+          "HEEL_TOP": 13.33,
+          "LANDING_RAISE": 0.23,
+          "START_TURNS": 1.5,
+          "screw_engagement_at_start_mm": 3.4
+        },
+        "gates": {
+          "prefitted_drop": true,
+          "long_board_drop": true,
+          "clicks_before_backup_feet": true,
+          "only_pusher_meets_plunger": true,
+          "stop_screw_head_footprint_whole": true,
+          "r46_braces_and_joints_kept": true,
+          "stl_export_prints_as_checked_solid": true,
+          "only_r45_relief_specks_and_voids": true,
+          "r45_standing_repairs_reproduced": true,
+          "harness_free_end_passes_beside_rod": true,
+          "right_leg_landing_bonds": true,
+          "clip_material_not_below_r46": true,
+          "rod_grip_not_below_r46": true,
+          "main_rib_pieces_keep_both_contacts": true,
+          "no_route_intrusion": true
+        },
+        "passed": true
+      },
+      "passed": true,
+      "physical_fit_click_strength_and_print_verified": false,
+      "composition": {
+        "construction": "procedural: R44 at R47 + R45 standing45/standing_web45 + R46 brace stations + R47 chin/landing",
+        "r44_procedural_mm3": 9516.7841,
+        "r45_standing_repairs": {
+          "chamfer_added_mm3": 6.192,
+          "lip_relief_removed_mm3": 75.4314,
+          "lip_relief_protected_intrusion_mm3": 1.0950441942103595e-16,
+          "chamfer_max_route_intrusion_mm3": 1.052240599611332e-08,
+          "web_added_mm3": 12.2245,
+          "web_removed_mm3": 1.7677,
+          "web_max_route_intrusion_mm3": 0.0,
+          "web_attachments_mm3": {
+            "frame": 39.711,
+            "L1": 3.6618,
+            "L2": 3.6618,
+            "L3": 3.6618
+          },
+          "web_original_witness_losses_mm3": {
+            "left guard reinforcement web": 1.1861947328232243,
+            "left guard web-to-frame bond": 0.9858602992202611,
+            "L1 guard-to-web bond": 0.8085632332681529,
+            "L2 guard-to-web bond": 0.8085632332681529,
+            "L3 guard-to-web bond": 0.8085632332681529,
+            "R43 complete thicker guard web": 1.6544630469267798
+          },
+          "receipts": [
+            "r45-standing/standing-repair.json",
+            "r45-standing/standing-web.json"
+          ]
+        },
+        "r47_local_print_repairs": {
+          "socket_relief": {
+            "original_removed_mm3": 0.6390086064546365,
+            "protected_intersections_mm3": {
+              "OP1 mounting shoulders": 0.0,
+              "R1 guard root bond": 0.0,
+              "R2 guard root bond": 0.0,
+              "R3 guard root bond": 0.0,
+              "left guard reinforcement web": 1.0352436681342059e-17,
+              "left guard web-to-frame bond": 1.4607930208347664e-17,
+              "L1 guard-to-web bond": 0.0,
+              "L2 guard-to-web bond": 0.0,
+              "L3 guard-to-web bond": 0.0,
+              "raised key 0 platform-to-frame bond": 0.0,
+              "raised key 2 platform-to-frame bond": 0.0,
+              "raised key 3 platform-to-frame bond": 0.0,
+              "raised key 4 platform-to-frame bond": 0.0,
+              "R43 complete thicker guard web": 1.9459734930220296e-17,
+              "R44 R middle finger rest": 0.0,
+              "R44 R riser-to-frame load-path bond": 0.0
+            },
+            "maximum_mating_or_witness_intrusion_mm3": 1.7345117177399935e-18,
+            "preserved_raised_platform_intersection_mm3": 0.0,
+            "purchased_solid_neighbourhood_mm": 0.04,
+            "lower_floor_only_assembly_z_bounds": [
+              6.9986670303344765,
+              8.818667030334478
+            ]
+          },
+          "central_pocket_removed_mm3": 6.667278370226002,
+          "complete_removed_mm3": 7.30628700547078,
+          "structural_witness_losses_mm3": {
+            "fixed hinge supports": 0.0,
+            "OP1 mounting shoulders": 2.7538735181131813e-17,
+            "adjustable stop landing": 0.0,
+            "raised hinge roofs": 0.0,
+            "R1 guard root bond": 0.0,
+            "L1 rod-side guard bond": 0.0,
+            "R2 guard root bond": 0.0,
+            "L2 rod-side guard bond": 0.0,
+            "R3 guard root bond": 0.0,
+            "L3 rod-side guard bond": 0.0,
+            "left guard reinforcement web": 1.2301035976500577e-17,
+            "left guard web-to-frame bond": 0.0,
+            "L1 guard-to-web bond": 0.0,
+            "L2 guard-to-web bond": 0.0,
+            "L3 guard-to-web bond": 0.0,
+            "raised key 0 platform-to-frame bond": 0.0,
+            "raised key 2 platform-to-frame bond": 0.0,
+            "raised key 3 platform-to-frame bond": 0.0,
+            "raised key 4 platform-to-frame bond": 0.0,
+            "R43 complete thicker guard web": 1.4914979651727348e-17,
+            "R44 R middle finger rest": 0.0,
+            "R44 R middle branch-to-inner leg bond": 0.0,
+            "R44 R middle branch-to-outer guard bond": 0.0,
+            "R44 R spine-to-R1 guard bond": 0.0,
+            "R44 R spine-to-R2 guard bond": 0.0,
+            "R44 R spine-to-R3 guard bond": 0.0,
+            "R44 R riser-to-frame load-path bond": 0.0,
+            "R44 L middle finger rest": 0.0,
+            "R44 L middle branch-to-inner leg bond": 0.0,
+            "R44 L middle branch-to-outer guard bond": 0.0,
+            "R44 L spine-to-L1 guard bond": 0.0,
+            "R44 L spine-to-L2 guard bond": 0.0,
+            "R44 L spine-to-L3 guard bond": 0.0
+          },
+          "central_lateral_growth_per_0p2mm_layer_mm": 0.1,
+          "central_print_bounds_mm": [
+            36.0,
+            11.7,
+            20.4,
+            42.5,
+            14.0,
+            30.4
+          ],
+          "continuation_to_backed_section": [
+            {
+              "top_mm": 27.6,
+              "bevel_section_mm2": 3.525151
+            },
+            {
+              "top_mm": 27.8,
+              "bevel_section_mm2": 4.17524
+            },
+            {
+              "top_mm": 28.0,
+              "bevel_section_mm2": 3.803723
+            },
+            {
+              "top_mm": 28.2,
+              "bevel_section_mm2": 3.344879
+            },
+            {
+              "top_mm": 28.4,
+              "bevel_section_mm2": 2.656909
+            },
+            {
+              "top_mm": 28.6,
+              "bevel_section_mm2": 2.298511
+            },
+            {
+              "top_mm": 28.8,
+              "bevel_section_mm2": 1.95793
+            },
+            {
+              "top_mm": 29.0,
+              "bevel_section_mm2": 1.684728
+            },
+            {
+              "top_mm": 29.2,
+              "bevel_section_mm2": 1.302985
+            },
+            {
+              "top_mm": 29.4,
+              "bevel_section_mm2": 0.981235
+            },
+            {
+              "top_mm": 29.6,
+              "bevel_section_mm2": 0.659618
+            },
+            {
+              "top_mm": 29.8,
+              "bevel_section_mm2": 0.360184
+            },
+            {
+              "top_mm": 30.0,
+              "bevel_section_mm2": 0.199702
+            },
+            {
+              "top_mm": 30.2,
+              "bevel_section_mm2": 0.025141
+            },
+            {
+              "top_mm": 30.4,
+              "bevel_section_mm2": 0.0
+            }
+          ],
+          "export_cleanup": {
+            "dropped_floor_fragments_mm3": 0.14011044992876165,
+            "filled_floor_void_shells_mm3": 0.0,
+            "substantial_final_export_bodies": 1,
+            "structural_witness_losses_mm3": {
+              "fixed hinge supports": 0.0,
+              "OP1 mounting shoulders": 0.0,
+              "adjustable stop landing": 0.0,
+              "raised hinge roofs": 0.0,
+              "R1 guard root bond": 0.0,
+              "L1 rod-side guard bond": 0.0,
+              "R2 guard root bond": 0.0,
+              "L2 rod-side guard bond": 0.0,
+              "R3 guard root bond": 0.0,
+              "L3 rod-side guard bond": 0.0,
+              "left guard reinforcement web": 0.0,
+              "left guard web-to-frame bond": 0.0,
+              "L1 guard-to-web bond": 0.0,
+              "L2 guard-to-web bond": 0.0,
+              "L3 guard-to-web bond": 0.0,
+              "raised key 0 platform-to-frame bond": 0.0,
+              "raised key 2 platform-to-frame bond": 0.0,
+              "raised key 3 platform-to-frame bond": 0.0,
+              "raised key 4 platform-to-frame bond": 0.0,
+              "R43 complete thicker guard web": 0.0,
+              "R44 R middle finger rest": 0.0,
+              "R44 R middle branch-to-inner leg bond": 0.0,
+              "R44 R middle branch-to-outer guard bond": 0.0,
+              "R44 R spine-to-R1 guard bond": 0.0,
+              "R44 R spine-to-R2 guard bond": 0.0,
+              "R44 R spine-to-R3 guard bond": 0.0,
+              "R44 R riser-to-frame load-path bond": 0.0,
+              "R44 L middle finger rest": 0.0,
+              "R44 L middle branch-to-inner leg bond": 0.0,
+              "R44 L middle branch-to-outer guard bond": 0.0,
+              "R44 L spine-to-L1 guard bond": 0.0,
+              "R44 L spine-to-L2 guard bond": 0.0,
+              "R44 L spine-to-L3 guard bond": 0.0
+            },
+            "discarded": [
+              {
+                "volume_mm3": 0.025671324029795536,
+                "assembly_bounds_mm": [
+                  6.705322742462158,
+                  5.850011348724365,
+                  7.260000228881836,
+                  6.972758769989014,
+                  5.9500017166137695,
+                  9.180000305175781
+                ]
+              },
+              {
+                "volume_mm3": 0.025537517591347737,
+                "assembly_bounds_mm": [
+                  7.775171756744385,
+                  5.450011730194092,
+                  7.269999980926514,
+                  8.042607307434082,
+                  5.550001621246338,
+                  9.180000305175781
+                ]
+              },
+              {
+                "volume_mm3": 0.0255374720579949,
+                "assembly_bounds_mm": [
+                  8.31009578704834,
+                  5.250011444091797,
+                  7.269999980926514,
+                  8.577530860900879,
+                  5.350001335144043,
+                  9.180000305175781
+                ]
+              },
+              {
+                "volume_mm3": 0.02553747205799487,
+                "assembly_bounds_mm": [
+                  8.845020294189453,
+                  5.05001163482666,
+                  7.269999980926514,
+                  9.112455368041992,
+                  5.150001525878906,
+                  9.180000305175781
+                ]
+              },
+              {
+                "volume_mm3": 0.02516198854638747,
+                "assembly_bounds_mm": [
+                  7.2402472496032715,
+                  5.550001621246338,
+                  7.269999980926514,
+                  7.507682800292969,
+                  5.750001430511475,
+                  9.180000305175781
+                ]
+              },
+              {
+                "volume_mm3": 0.001715368450392072,
+                "assembly_bounds_mm": [
+                  -28.445463180541992,
+                  15.65001106262207,
+                  7.269999980926514,
+                  -28.394824981689453,
+                  15.750001907348633,
+                  7.989999771118164
+                ]
+              },
+              {
+                "volume_mm3": 0.0012981977799263076,
+                "assembly_bounds_mm": [
+                  22.145587921142578,
+                  19.950000762939453,
+                  7.670008182525635,
+                  22.31040382385254,
+                  20.050010681152344,
+                  8.747031211853027
+                ]
+              },
+              {
+                "volume_mm3": 0.0009571419119114299,
+                "assembly_bounds_mm": [
+                  -14.19999885559082,
+                  15.750001907348633,
+                  7.670000076293945,
+                  -14.100000381469727,
+                  15.850000381469727,
+                  8.8186674118042
+                ]
+              },
+              {
+                "volume_mm3": 0.0009559347615584385,
+                "assembly_bounds_mm": [
+                  -14.861878395080566,
+                  -0.8499984741210938,
+                  8.227690696716309,
+                  -14.797958374023438,
+                  -0.7499884963035583,
+                  8.785491943359375
+                ]
+              },
+              {
+                "volume_mm3": 0.000870482591367655,
+                "assembly_bounds_mm": [
+                  -22.386568069458008,
+                  -1.350008487701416,
+                  7.6700005531311035,
+                  -22.2934513092041,
+                  -1.2499984502792358,
+                  8.791682243347168
+                ]
+              },
+              {
+                "volume_mm3": 0.000870482591367655,
+                "assembly_bounds_mm": [
+                  19.613431930541992,
+                  -1.350008487701416,
+                  7.6700005531311035,
+                  19.7065486907959,
+                  -1.2499984502792358,
+                  8.791682243347168
+                ]
+              },
+              {
+                "volume_mm3": 0.0008266248811234962,
+                "assembly_bounds_mm": [
+                  16.118122100830078,
+                  -0.8499984741210938,
+                  8.227690696716309,
+                  16.18204116821289,
+                  -0.7499884963035583,
+                  8.785491943359375
+                ]
+              },
+              {
+                "volume_mm3": 0.0008266248811234893,
+                "assembly_bounds_mm": [
+                  -25.881877899169922,
+                  -0.8499984741210938,
+                  8.227690696716309,
+                  -25.81795883178711,
+                  -0.7499884963035583,
+                  8.785491943359375
+                ]
+              },
+              {
+                "volume_mm3": 0.0008266204480497717,
+                "assembly_bounds_mm": [
+                  27.13812255859375,
+                  -0.8499984741210938,
+                  8.227690696716309,
+                  27.202041625976562,
+                  -0.7499884963035583,
+                  8.785491943359375
+                ]
+              },
+              {
+                "volume_mm3": 0.0007510553877698375,
+                "assembly_bounds_mm": [
+                  19.589595794677734,
+                  20.049991607666016,
+                  7.670000076293945,
+                  19.661231994628906,
+                  20.150001525878906,
+                  8.804924964904785
+                ]
+              },
+              {
+                "volume_mm3": 0.0007174121232246325,
+                "assembly_bounds_mm": [
+                  16.15494728088379,
+                  20.55000114440918,
+                  8.23569107055664,
+                  16.205690383911133,
+                  20.65001106262207,
+                  8.801496505737305
+                ]
+              },
+              {
+                "volume_mm3": 0.0003339740060344432,
+                "assembly_bounds_mm": [
+                  7.48116397857666,
+                  4.350001335144043,
+                  7.385286808013916,
+                  7.632494926452637,
+                  4.449991703033447,
+                  7.437305927276611
+                ]
+              },
+              {
+                "volume_mm3": 0.0002976419139156824,
+                "assembly_bounds_mm": [
+                  7.48116397857666,
+                  4.250011444091797,
+                  7.272785186767578,
+                  7.632494926452637,
+                  4.350001335144043,
+                  7.300000190734863
+                ]
+              },
+              {
+                "volume_mm3": 0.0002848248011118881,
+                "assembly_bounds_mm": [
+                  22.187604904174805,
+                  1.350001573562622,
+                  7.269999980926514,
+                  22.26706886291504,
+                  1.4499915838241577,
+                  7.639999866485596
+                ]
+              },
+              {
+                "volume_mm3": 0.00019517415690037572,
+                "assembly_bounds_mm": [
+                  -22.549999237060547,
+                  11.049991607666016,
+                  7.269999980926514,
+                  -22.450000762939453,
+                  11.150001525878906,
+                  7.369999885559082
+                ]
+              },
+              {
+                "volume_mm3": 0.00016167363393261927,
+                "assembly_bounds_mm": [
+                  23.63418960571289,
+                  1.4499915838241577,
+                  7.269999980926514,
+                  23.650634765625,
+                  1.5500015020370483,
+                  7.989999771118164
+                ]
+              },
+              {
+                "volume_mm3": 0.00016167363393260453,
+                "assembly_bounds_mm": [
+                  -18.36581039428711,
+                  1.4499915838241577,
+                  7.269999980926514,
+                  -18.349365234375,
+                  1.5500015020370483,
+                  7.989999771118164
+                ]
+              },
+              {
+                "volume_mm3": 0.00012554987472195727,
+                "assembly_bounds_mm": [
+                  -19.365949630737305,
+                  0.649991512298584,
+                  7.269999980926514,
+                  -19.31654930114746,
+                  0.7500015497207642,
+                  7.570000171661377
+                ]
+              },
+              {
+                "volume_mm3": 0.00011207439900782188,
+                "assembly_bounds_mm": [
+                  7.401871681213379,
+                  5.350001335144043,
+                  7.269999980926514,
+                  7.420192241668701,
+                  5.449991703033447,
+                  7.411475658416748
+                ]
+              },
+              {
+                "volume_mm3": 9.50326077627146e-05,
+                "assembly_bounds_mm": [
+                  -23.503034591674805,
+                  14.649991989135742,
+                  7.269999980926514,
+                  -23.468881607055664,
+                  14.819883346557617,
+                  7.739945411682129
+                ]
+              },
+              {
+                "volume_mm3": 9.066736771052675e-05,
+                "assembly_bounds_mm": [
+                  23.175981521606445,
+                  2.649991512298584,
+                  7.464963912963867,
+                  23.192934036254883,
+                  2.7500014305114746,
+                  7.989999771118164
+                ]
+              },
+              {
+                "volume_mm3": 5.554289366338505e-05,
+                "assembly_bounds_mm": [
+                  -25.734420776367188,
+                  -0.6499984860420227,
+                  7.670000076293945,
+                  -25.717958450317383,
+                  -0.6087323427200317,
+                  8.8186674118042
+                ]
+              },
+              {
+                "volume_mm3": 5.554289366338505e-05,
+                "assembly_bounds_mm": [
+                  27.285579681396484,
+                  -0.6499984860420227,
+                  7.670000076293945,
+                  27.30204200744629,
+                  -0.6087323427200317,
+                  8.8186674118042
+                ]
+              },
+              {
+                "volume_mm3": 5.554289366337464e-05,
+                "assembly_bounds_mm": [
+                  16.265579223632812,
+                  -0.6499984860420227,
+                  7.670000076293945,
+                  16.282041549682617,
+                  -0.6087323427200317,
+                  8.8186674118042
+                ]
+              },
+              {
+                "volume_mm3": 1.7503813544422894e-05,
+                "assembly_bounds_mm": [
+                  -23.52120590209961,
+                  14.7081937789917,
+                  7.739945411682129,
+                  -23.503034591674805,
+                  14.750001907348633,
+                  7.989999771118164
+                ]
+              },
+              {
+                "volume_mm3": 2.8920563796960494e-06,
+                "assembly_bounds_mm": [
+                  -23.04372787475586,
+                  13.55000114440918,
+                  7.269999980926514,
+                  -22.945350646972656,
+                  13.648565292358398,
+                  7.2736053466796875
+                ]
+              },
+              {
+                "volume_mm3": 1.954046475616338e-06,
+                "assembly_bounds_mm": [
+                  28.548856735229492,
+                  22.65001106262207,
+                  7.553830146789551,
+                  28.607404708862305,
+                  22.75019645690918,
+                  7.555355548858643
+                ]
+              },
+              {
+                "volume_mm3": 3.459866181890138e-07,
+                "assembly_bounds_mm": [
+                  -11.780098915100098,
+                  3.7500014305114746,
+                  8.790189743041992,
+                  -11.768836975097656,
+                  3.763943910598755,
+                  8.8186674118042
+                ]
+              },
+              {
+                "volume_mm3": 1.9725587600182899e-07,
+                "assembly_bounds_mm": [
+                  27.507543563842773,
+                  -0.09999844431877136,
+                  7.670000076293945,
+                  27.52579116821289,
+                  -0.04999841749668121,
+                  7.689507007598877
+                ]
+              },
+              {
+                "volume_mm3": 1.9723672331060096e-07,
+                "assembly_bounds_mm": [
+                  -14.492456436157227,
+                  -0.09999951720237732,
+                  7.670000076293945,
+                  -14.474207878112793,
+                  -0.04999841749668121,
+                  7.689507007598877
+                ]
+              },
+              {
+                "volume_mm3": 1.775264831064382e-07,
+                "assembly_bounds_mm": [
+                  27.507543563842773,
+                  -0.04999848082661629,
+                  7.670000076293945,
+                  27.52579116821289,
+                  0.04999152570962906,
+                  7.689507007598877
+                ]
+              },
+              {
+                "volume_mm3": 1.7736325736759896e-07,
+                "assembly_bounds_mm": [
+                  -14.492448806762695,
+                  -0.04999847710132599,
+                  7.670007705688477,
+                  -14.474207878112793,
+                  0.049952663481235504,
+                  7.689507007598877
+                ]
+              },
+              {
+                "volume_mm3": 1.2155320838642015e-07,
+                "assembly_bounds_mm": [
+                  -18.451326370239258,
+                  11.949991226196289,
+                  7.825356960296631,
+                  -17.685623168945312,
+                  12.049991607666016,
+                  7.825361728668213
+                ]
+              },
+              {
+                "volume_mm3": 1.0251185187000467e-07,
+                "assembly_bounds_mm": [
+                  -18.451940536499023,
+                  11.149991035461426,
+                  7.425357341766357,
+                  -17.7714786529541,
+                  11.249991416931152,
+                  7.4253621101379395
+                ]
+              },
+              {
+                "volume_mm3": 8.895904934537463e-08,
+                "assembly_bounds_mm": [
+                  -18.45163345336914,
+                  11.349990844726562,
+                  7.525357246398926,
+                  -17.750770568847656,
+                  11.449991226196289,
+                  7.525361061096191
+                ]
+              },
+              {
+                "volume_mm3": 5.64519382698081e-08,
+                "assembly_bounds_mm": [
+                  17.199386596679688,
+                  1.9499915838241577,
+                  7.525357246398926,
+                  18.381776809692383,
+                  2.0499916076660156,
+                  7.525364875793457
+                ]
+              }
+            ]
+          },
+          "native_validation_required": true
+        },
+        "r45_published_mm3": {
+          "chamfer_added": 6.19,
+          "lip_relief_removed": 75.39,
+          "web_added": 12.22,
+          "old_op1_ledge_relief_not_applied": 4.91
+        },
+        "r46_braces": {
+          "L cross brace": {
+            "raw_mm3": 51.3451,
+            "route_cut_mm3": 0.0,
+            "new_mm3": 23.1765,
+            "bonds_mm3": {
+              "middle": 8.2297,
+              "edge": 6.2301,
+              "middle row": 6.6817
+            },
+            "r46_new_mm3": 23.1765,
+            "r46_bonds_mm3": {
+              "middle": 8.2297,
+              "edge": 6.2301,
+              "middle row": 6.6817
+            }
+          },
+          "L deck return": {
+            "raw_mm3": 80.4826,
+            "route_cut_mm3": 0.0,
+            "new_mm3": 52.9429,
+            "bonds_mm3": {
+              "middle": 5.404,
+              "base": 22.1357
+            },
+            "r46_new_mm3": 52.9429,
+            "r46_bonds_mm3": {
+              "middle": 5.404,
+              "base": 22.1357
+            }
+          },
+          "R cross brace": {
+            "raw_mm3": 46.4502,
+            "route_cut_mm3": 0.0,
+            "new_mm3": 19.2723,
+            "bonds_mm3": {
+              "middle": 8.6996,
+              "edge": 7.684,
+              "middle row": 6.1427
+            },
+            "r46_new_mm3": 19.2723,
+            "r46_bonds_mm3": {
+              "middle": 8.6996,
+              "edge": 7.684,
+              "middle row": 6.1427
+            }
+          },
+          "R deck return": {
+            "raw_mm3": 61.6965,
+            "route_cut_mm3": 0.0,
+            "new_mm3": 7.9857,
+            "bonds_mm3": {
+              "middle": 46.6647,
+              "base": 15.0444
+            },
+            "r46_new_mm3": 8.1301,
+            "r46_bonds_mm3": {
+              "middle": 46.6647,
+              "base": 14.9
+            }
+          }
+        },
+        "r46_braces_new_mm3": {
+          "r47": 102.8666,
+          "r46": 103.011
+        },
+        "additions_cut_by_reliefs_and_routes_mm3": 236.0566,
+        "braces_cut_by_op1_reliefs_mm3": 0.0,
+        "chin_raw_mm3": 503.0414,
+        "chin_new_material_mm3": 200.0175,
+        "chin_bounds_mm": [
+          -9.637,
+          -18.846,
+          7.3,
+          7.069,
+          -7.999,
+          11.35
+        ],
+        "right_leg_landing": {
+          "run_world_mm": [
+            [
+              10.15,
+              8.1,
+              2.15
+            ],
+            [
+              9.35,
+              7.05,
+              3.25
+            ],
+            [
+              8.15,
+              6.45,
+              4.45
+            ],
+            [
+              3.9,
+              7.7,
+              4.9
+            ],
+            [
+              3.5,
+              11.1,
+              4.7
+            ],
+            [
+              3.5,
+              15.8,
+              4.95
+            ]
+          ],
+          "radius_mm": 1.05,
+          "kept_mm3": 41.943,
+          "pieces": 1,
+          "new_material_mm3": 11.058,
+          "bond_to_centre_deck_mm3": 17.5706,
+          "bond_to_leg_mm3": {
+            "R1": 5.295,
+            "R2": 3.854,
+            "R3": 2.7737
+          },
+          "gap_to_op1_reliefs_mm": 0.0,
+          "cut_by_routes_mm3": 0.0,
+          "old_deck_ends_inside_deck_dropped_mm3": {
+            "R2": [],
+            "R3": []
+          },
+          "bounds_mm": [
+            2.502,
+            5.66,
+            1.1,
+            11.2,
+            16.85,
+            6.0
+          ]
+        },
+        "loose_specks_dropped": [
+          [
+            0.00164,
+            [
+              -24.445,
+              2.05,
+              7.27,
+              -24.261,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00164,
+            [
+              -21.945,
+              2.05,
+              7.27,
+              -21.805,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00164,
+            [
+              -22.945,
+              2.05,
+              7.27,
+              -22.761,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00164,
+            [
+              -23.445,
+              2.05,
+              7.27,
+              -23.261,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00164,
+            [
+              -22.445,
+              2.05,
+              7.27,
+              -22.261,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00164,
+            [
+              -23.945,
+              2.05,
+              7.27,
+              -23.805,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00164,
+            [
+              -25.445,
+              2.05,
+              7.27,
+              -25.305,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00164,
+            [
+              -24.945,
+              2.05,
+              7.27,
+              -24.805,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00137,
+            [
+              -19.445,
+              2.05,
+              7.27,
+              -19.305,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00137,
+            [
+              -20.945,
+              2.05,
+              7.27,
+              -20.805,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00137,
+            [
+              -21.445,
+              2.05,
+              7.27,
+              -21.305,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00137,
+            [
+              -20.445,
+              2.05,
+              7.27,
+              -20.305,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.00137,
+            [
+              -19.945,
+              2.05,
+              7.27,
+              -19.805,
+              2.241,
+              7.389
+            ]
+          ],
+          [
+            0.0,
+            [
+              -19.172,
+              3.25,
+              8.231,
+              -18.62,
+              3.25,
+              8.289
+            ]
+          ],
+          [
+            0.0,
+            [
+              -30.04,
+              2.05,
+              7.27,
+              -25.8,
+              2.25,
+              7.389
+            ]
+          ],
+          [
+            0.0,
+            [
+              -22.305,
+              2.05,
+              7.27,
+              -22.116,
+              2.169,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -21.305,
+              2.05,
+              7.27,
+              -21.116,
+              2.169,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -19.305,
+              2.05,
+              7.27,
+              -19.116,
+              2.169,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -23.305,
+              2.05,
+              7.27,
+              -23.115,
+              2.169,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -25.305,
+              2.05,
+              7.27,
+              -24.945,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -24.305,
+              2.05,
+              7.27,
+              -23.945,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -21.805,
+              2.05,
+              7.27,
+              -21.445,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -20.805,
+              2.05,
+              7.27,
+              -20.445,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -23.805,
+              2.05,
+              7.27,
+              -23.445,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -22.805,
+              2.05,
+              7.27,
+              -22.445,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -20.305,
+              2.05,
+              7.27,
+              -19.945,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -24.805,
+              2.05,
+              7.27,
+              -24.445,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -23.305,
+              2.05,
+              7.27,
+              -22.945,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -22.305,
+              2.05,
+              7.27,
+              -21.945,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -21.305,
+              2.05,
+              7.27,
+              -20.945,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -19.805,
+              2.05,
+              7.27,
+              -19.445,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -25.8,
+              2.05,
+              7.27,
+              -25.445,
+              2.164,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              28.666,
+              22.65,
+              7.527,
+              28.819,
+              22.814,
+              7.527
+            ]
+          ],
+          [
+            0.0,
+            [
+              -13.177,
+              1.65,
+              7.472,
+              -13.172,
+              1.85,
+              7.472
+            ]
+          ],
+          [
+            0.0,
+            [
+              28.823,
+              1.65,
+              7.472,
+              28.828,
+              1.85,
+              7.472
+            ]
+          ],
+          [
+            0.0,
+            [
+              -18.62,
+              2.25,
+              8.108,
+              -18.62,
+              2.392,
+              8.831
+            ]
+          ],
+          [
+            0.0,
+            [
+              -28.587,
+              18.379,
+              9.019,
+              -28.481,
+              18.391,
+              9.032
+            ]
+          ],
+          [
+            0.0,
+            [
+              -28.481,
+              16.923,
+              8.936,
+              -28.426,
+              16.942,
+              8.948
+            ]
+          ],
+          [
+            0.0,
+            [
+              -25.654,
+              12.654,
+              7.27,
+              -25.65,
+              12.677,
+              7.27
+            ]
+          ],
+          [
+            0.0,
+            [
+              -18.62,
+              2.25,
+              7.99,
+              -18.62,
+              2.25,
+              8.017
+            ]
+          ]
+        ],
+        "loose_specks_total_mm3": 0.01998,
+        "internal_voids_filled": [
+          [
+            -0.0,
+            [
+              -28.593,
+              18.46,
+              8.868,
+              -28.481,
+              18.462,
+              8.879
+            ]
+          ],
+          [
+            -0.0,
+            [
+              -26.0,
+              13.405,
+              7.27,
+              -25.792,
+              13.527,
+              7.27
+            ]
+          ],
+          [
+            -0.0,
+            [
+              -26.0,
+              13.405,
+              7.27,
+              -25.796,
+              13.557,
+              7.27
+            ]
+          ],
+          [
+            -0.0,
+            [
+              -26.0,
+              13.405,
+              7.27,
+              -25.791,
+              13.524,
+              7.27
+            ]
+          ],
+          [
+            -0.0,
+            [
+              -26.0,
+              13.405,
+              7.27,
+              -25.799,
+              13.576,
+              7.27
+            ]
+          ],
+          [
+            -0.0,
+            [
+              -26.0,
+              13.405,
+              7.27,
+              -25.769,
+              13.557,
+              7.27
+            ]
+          ],
+          [
+            -0.0,
+            [
+              -26.755,
+              12.65,
+              7.27,
+              -25.65,
+              12.967,
+              7.27
+            ]
+          ],
+          [
+            -0.00079,
+            [
+              -26.25,
+              2.35,
+              9.09,
+              -26.15,
+              2.45,
+              9.249
+            ]
+          ],
+          [
+            -0.00951,
+            [
+              -30.0,
+              2.35,
+              8.522,
+              -26.55,
+              2.45,
+              8.87
+            ]
+          ],
+          [
+            -0.01929,
+            [
+              -26.25,
+              2.35,
+              8.522,
+              -18.819,
+              2.45,
+              8.87
+            ]
+          ]
+        ],
+        "internal_voids_total_mm3": 0.02959,
+        "all_dropped_or_filled_inside_r45_stepped_regions": true,
+        "carrier_mm3": 9764.8176,
+        "carrier_bounds_mm": [
+          -30.77,
+          -18.846,
+          -4.781,
+          30.0,
+          32.65,
+          20.8
+        ],
+        "stl_round_trip": {
+          "volume_change_mm3": 0.02508,
+          "pieces": 41,
+          "pieces_over_0.001mm3": 1,
+          "print_layers_compared": 258,
+          "slice_closing_radius_mm": 0.049,
+          "boundary_noise_ignored_mm": 0.005,
+          "largest_layer_change_mm2": 0.04378,
+          "at_print_z_mm": 10.3,
+          "layers_changed_over_0.01mm2": 5,
+          "largest_change_wider_than_0.2mm_mm2": 0,
+          "wider_change_at_print_z_mm": 0.1,
+          "largest_change_outside_r45_floor_band_mm2": 0.0,
+          "outside_change_at_print_z_mm": 0.1,
+          "r45_floor_band_print_y_mm": [
+            11.479999999999999,
+            13.9
+          ]
+        }
+      }
+    },
+    "revision": "r48",
+    "r48": {
+      "plunger_inset_from_free_edge_mm": 1.65,
+      "hinge_to_plunger_mm": 37.8695,
+      "hinge_to_free_edge_mm": 39.5195,
+      "op1_board_yaw_deg": -20.5,
+      "board_screw_hole_centres_world_xy_mm": [
+        [
+          -1.788796132871671,
+          -12.973691182802483
+        ],
+        [
+          4.4799159916727955,
+          3.7927410047438306
+        ]
+      ],
+      "web_path_after_0.25mm_edge_erosion": [
+        {
+          "z_mm": 18.7,
+          "contact_connected_to_both_rails": true
+        },
+        {
+          "z_mm": 18.85,
+          "contact_connected_to_both_rails": true
+        },
+        {
+          "z_mm": 19.0,
+          "contact_connected_to_both_rails": true
+        }
+      ],
+      "electronics_to_rod_mm": {
+        "plug": 0.7759,
+        "sockets": 0.9,
+        "terminals": 3.3091,
+        "op1_wire": 1.5167
+      },
+      "forward_clip_shoulder": {
+        "missing_original_material_mm3": 1.5793,
+        "missing_outside_connector_window_mm3": 0.0,
+        "connected_arc_pieces_above_0.001mm3": 1,
+        "upper_right_arc_sectors": [
+          {
+            "arc_start_deg": 0,
+            "original_mm3": 1.6835,
+            "reinforced_mm3": 2.3397
+          },
+          {
+            "arc_start_deg": 5,
+            "original_mm3": 1.5765,
+            "reinforced_mm3": 3.6142
+          },
+          {
+            "arc_start_deg": 10,
+            "original_mm3": 1.5727,
+            "reinforced_mm3": 4.7364
+          },
+          {
+            "arc_start_deg": 15,
+            "original_mm3": 1.651,
+            "reinforced_mm3": 5.4191
+          },
+          {
+            "arc_start_deg": 20,
+            "original_mm3": 1.7983,
+            "reinforced_mm3": 6.2692
+          },
+          {
+            "arc_start_deg": 25,
+            "original_mm3": 1.993,
+            "reinforced_mm3": 6.9287
+          },
+          {
+            "arc_start_deg": 30,
+            "original_mm3": 2.1575,
+            "reinforced_mm3": 6.7501
+          },
+          {
+            "arc_start_deg": 35,
+            "original_mm3": 2.1398,
+            "reinforced_mm3": 5.9609
+          },
+          {
+            "arc_start_deg": 40,
+            "original_mm3": 2.0899,
+            "reinforced_mm3": 5.0935
+          },
+          {
+            "arc_start_deg": 45,
+            "original_mm3": 2.037,
+            "reinforced_mm3": 4.5968
+          },
+          {
+            "arc_start_deg": 50,
+            "original_mm3": 1.9821,
+            "reinforced_mm3": 4.7728
+          },
+          {
+            "arc_start_deg": 55,
+            "original_mm3": 1.9263,
+            "reinforced_mm3": 5.4636
+          },
+          {
+            "arc_start_deg": 60,
+            "original_mm3": 1.8704,
+            "reinforced_mm3": 5.9363
+          },
+          {
+            "arc_start_deg": 65,
+            "original_mm3": 1.8153,
+            "reinforced_mm3": 4.9912
+          },
+          {
+            "arc_start_deg": 70,
+            "original_mm3": 1.7617,
+            "reinforced_mm3": 3.4589
+          },
+          {
+            "arc_start_deg": 75,
+            "original_mm3": 1.7104,
+            "reinforced_mm3": 1.7186
+          },
+          {
+            "arc_start_deg": 80,
+            "original_mm3": 1.662,
+            "reinforced_mm3": 1.662
+          }
+        ]
+      },
+      "nominal_finger_force_ratio_to_r47_at_free_edge": 1.1469,
+      "nominal_finger_travel_ratio_to_r47_at_free_edge": 0.8719,
+      "gates": {
+        "switch_centred_at_requested_free_edge": true,
+        "free_edge_within_two_mm": true,
+        "contact_face_is_single_patch": true,
+        "contact_load_path_to_both_fitted_rails": true,
+        "electronics_clear_the_rod": true,
+        "rod_clip_shoulders_and_tips_continuous": true,
+        "connector_shoulder_supported_across_arc": true,
+        "bracket_contacts_no_other_switch_parts_through_motion": true,
+        "harness_outlet_faces_fitted_plug": true,
+        "spring_arms_fit_from_either_side": true,
+        "triangle_and_chin_reinforced": true
+      },
+      "physical_fit_verified": false,
+      "harness_outlet": {
+        "centreline_mm": [
+          [
+            7.771865375511789,
+            12.597459583678766
+          ],
+          [
+            8.489790507093698,
+            14.517637571637984
+          ]
+        ],
+        "width_mm": 4.16,
+        "usable_straight_travel_mm": 2.0500000000000025,
+        "wire_bundle_mm": 3.232050807568877,
+        "max_bundle_intersection_mm3": 0.0,
+        "passes": true
+      },
+      "hinge_fit": {
+        "physical_fit_verified": false,
+        "journal_and_bore_diameters_mm": [
+          1.4,
+          1.8
+        ],
+        "free_shoulder_span_mm": 7.34,
+        "old_free_shoulder_span_mm": 6.1,
+        "ear_to_ear_mm": 6.8,
+        "spring_preload_each_mm": 0.27,
+        "minimum_preload_each_for_surface_tolerance_mm": 0.07,
+        "toleranced_surface_error_mm": 0.1,
+        "guide_clearance_each_mm": [
+          0.28,
+          0.28
+        ],
+        "min_guide_clearance_at_tolerance_mm": 0.08,
+        "worn_or_eccentric_offset_challenge_mm": 0.48,
+        "min_far_tip_engagement_at_tolerance_mm": 0.71,
+        "min_full_diameter_engagement_at_tolerance_mm": 0.49,
+        "nominal_engagement_each_mm": 1.12,
+        "pin_tip_measurements": [
+          {
+            "side": -1,
+            "free_tip_x_mm": 4.79,
+            "seated_tip_x_mm": 4.52,
+            "pinched_tip_x_mm": 3.12,
+            "seated_depth_mm": 1.12
+          },
+          {
+            "side": 1,
+            "free_tip_x_mm": 4.79,
+            "seated_tip_x_mm": 4.52,
+            "pinched_tip_x_mm": 3.12,
+            "seated_depth_mm": 1.12
+          }
+        ],
+        "either_order_release_checks": [
+          {
+            "assembly_offset_mm": -0.28,
+            "first_tab": "left",
+            "worst_collision_mm3": 2e-05
+          },
+          {
+            "assembly_offset_mm": -0.28,
+            "first_tab": "right",
+            "worst_collision_mm3": 2e-05
+          },
+          {
+            "assembly_offset_mm": 0.0,
+            "first_tab": "left",
+            "worst_collision_mm3": 0.0
+          },
+          {
+            "assembly_offset_mm": 0.0,
+            "first_tab": "right",
+            "worst_collision_mm3": 0.0
+          },
+          {
+            "assembly_offset_mm": 0.28,
+            "first_tab": "left",
+            "worst_collision_mm3": 2e-05
+          },
+          {
+            "assembly_offset_mm": 0.28,
+            "first_tab": "right",
+            "worst_collision_mm3": 2e-05
+          }
+        ],
+        "arm_contact_area_mm2": [
+          2.4,
+          2.4
+        ],
+        "centre_stop_clearance_at_full_pinch_mm": 0.15,
+        "effective_span_for_strain_mm": 9.91,
+        "estimated_peak_pinch_strain_percent": 2.81,
+        "estimated_pinch_force_per_arm_N": 2.237,
+        "pad_surface_beyond_board_mm": 6.669,
+        "bracket_to_bought_board_and_lead_mm3": 0.0,
+        "gates": {
+          "both_printed_tabs_match_free_and_seated_dimensions": true,
+          "positive_preload_after_printed_tolerance": true,
+          "both_fixed_guides_limit_one_sided_seating": true,
+          "either_arm_can_seat_first_at_both_guide_limits": true,
+          "squeeze_stop_and_roots_clear": true,
+          "conservative_elastic_estimate_and_finger_access": true,
+          "seated_free_and_pinched_each_single_solid": true
+        }
+      },
+      "structural_sections": {
+        "triangle_sections": {
+          "forward rail transition": {
+            "left_min_mm2": 7.132,
+            "right_min_mm2": 7.132,
+            "minimum_mm2": 4.9,
+            "passed": true
+          },
+          "broad triangle end": {
+            "left_min_mm2": 10.003,
+            "right_min_mm2": 10.003,
+            "minimum_mm2": 9.5,
+            "passed": true
+          },
+          "triangle sides to hinge fans": {
+            "left_min_mm2": 11.679,
+            "right_min_mm2": 11.679,
+            "minimum_mm2": 9.4,
+            "passed": true
+          }
+        },
+        "chin_transfer_core_fractions": {
+          "left OP1 chin runner to eyelet": 1.0,
+          "left OP1 chin runner to deck": 1.0,
+          "right OP1 chin runner to eyelet": 1.0,
+          "right OP1 chin runner to deck": 1.0
+        },
+        "passed": true,
+        "physical_strength_verified": false
+      },
+      "passed": true,
+      "source_sha256": {
+        "build48.py": "94c49994210ebf4461efce034f87a5b3cdb6568f0f3de86481d86c3c47540367",
+        "mechanics48.py": "afc8f16d16d87b8b4367aa6014eb96521909dd91a1208918b238f5c4b3688708",
+        "shoulder48.py": "c56d394d46e4d557e2725a531506f3471836b28f48a460c17357c7522cf836e9",
+        "strength48.py": "47f24b64532df250ff8655ee69be197b9dc9ab63095b643e3044fbc1cc11064c",
+        "hinge48.py": "42efd8a582b4ada21508608d544f360976a56fa4f7699f9fa43bac20caf421a7",
+        "cable48.py": "f25064ef04a741d9776d77508c4f34b08224834d3664cf693e430c7cd19511ab",
+        "R47-DFRobot_Hole_Bracket-cap.stl": "3b4ac7b7b19835e273b47609fa676cab9c5b59c182d274717adae7ad17115e43",
+        "R48-DFRobot_Hole_Bracket-seated.stl": "095fb8c9ef9cd41de347e524f55425896cf164a59ed75e1ee4e47934790d8325",
+        "R47-Key-Carrier-assembly.stl": "739c12c8e998941a64c3bb750adbcf5ac0b90d79eaf4eb9c63f921424ea0d7a8",
+        "../carbon-rod-holders-r47-bottom-click/relief47.py": "d87f1214574edff5dc22f98a367a8e34200734299c2b697b677133bc5e4f5751"
+      }
+    },
+    "inherited_r44_gates_passed": false,
+    "battery_door": {
+      "passed": true,
+      "layout": {
+        "cell_dimensions_LWH_mm": [
+          27.0,
+          11.8,
+          3.9
+        ],
+        "cell_mass_g": 2.05,
+        "wire_length_mm": 35.0,
+        "wire_diameter_assumption_mm": 0.88,
+        "open_wire_exit_width_mm": 6.76,
+        "connector": "Molex 2 mm, pin 1 negative; remains outside the cradle",
+        "cell_center_xyz_mm": [
+          0.0,
+          0.0,
+          8.299999999999999
+        ],
+        "side_free_mm": 0.55,
+        "end_free_mm": 0.55,
+        "cell_to_panel_underside_mm": 0.65,
+        "pouch_to_front_panel_lips_y_mm": 0.71,
+        "center_panel_thickness_mm": 0.8,
+        "sliding_edge_thickness_mm": 1.1,
+        "groove_height_mm": 1.52,
+        "straight_edge_clearance_mm": 0.2400000000000002,
+        "detent_interference_mm": 0.2,
+        "modelled_spring_displacement_mm": 0.30000000000000004,
+        "cantilever_strain_proxy_percent": 0.7096,
+        "load_displacement_mm": [
+          0.0,
+          0.0,
+          12.0
+        ],
+        "open_panel_displacement_mm": [
+          0.0,
+          -33.0,
+          0.0
+        ]
+      },
+      "measurements": {
+        "single_piece_holder": true,
+        "single_piece_lid": true,
+        "fitted_slide_overlap_mm3": 0.0,
+        "cell_loading_overlap_mm3": 0.0,
+        "cell_at_resting_lid_overlap_mm3": 0.0,
+        "cell_throughout_lid_slide_overlap_mm3": 0.0,
+        "released_lid_through_grooves_overlap_mm3": 0.0,
+        "free_detent_resists_opening_overlap_mm3": 0.20978598897111353,
+        "overtravel_stop_overlap_at_0.4_mm3": 2.653706120019489,
+        "lead_to_body_mm3": 0.0,
+        "lead_throughout_lid_slide_overlap_mm3": 0.0,
+        "new_rod_interference_mm3": 0.0,
+        "lost_original_rod_grip_mm3": 0.0,
+        "spring_root_core_fraction": 1.0,
+        "original_rod_and_wire_routes_overlap_mm3": {
+          "unloaded_clip_bore": 2e-06,
+          "clip_gap_near": 0.0,
+          "clip_gap_far": 0.0,
+          "external_wire_bus": 0.0,
+          "reverse_wire_bus": 0.0
+        },
+        "separate_pattern_openings": 13,
+        "cell_stop_contacts_after_free_play_mm3": {
+          "left": 31.59,
+          "right": 31.59,
+          "wire_end": 4.47848,
+          "far_end": 20.709,
+          "up": 71.91002,
+          "down": 95.58
+        },
+        "lid_guide_capture_after_free_play_mm3": {
+          "left": 7.637,
+          "right": 7.3026,
+          "up": 10.54096,
+          "down": 10.89451
+        }
+      },
+      "sample_count": 133,
+      "physical_fit_friction_fatigue_verified": false,
+      "clearance_basis": "Nominal manufacturer cell dimensions."
+    }
+  },
+  "selected_native_archive_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+  "native_trial_review": "complete-plate/trial-review.json"
+}

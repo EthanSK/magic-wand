@@ -1,0 +1,91 @@
+{
+  "print_to_assembly": [
+    [
+      1.0,
+      0.0,
+      -0.0,
+      -30.049999237060547
+    ],
+    [
+      0.0,
+      -1.8369701987210297e-16,
+      -1.0,
+      32.65000152587891
+    ],
+    [
+      -0.0,
+      1.0,
+      -1.8369701987210297e-16,
+      -4.781332969665523
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "bed_translation": [
+    18.0,
+    113.0,
+    0.0
+  ],
+  "cradle_volume_mm3": 3557.01253221351,
+  "print_height_mm": 51.49629402160645,
+  "helper_configuration": "standing finger-side comb and switch aperture prop",
+  "tilt_degrees": [
+    270.0,
+    0.0
+  ],
+  "source_sha256": "a5c29170e3d1b8890410d08c07ae8e1ef2dd09a49b283b333ee4a4bbe407a2e6",
+  "layout_sha256": "4b93c1d7581b051b23948cd35b47109f86f79946357ed17864de45c02a078432",
+  "saddle_bridge_angle_deg": 180,
+  "bridge_angle_deg": 90,
+  "carrier_infill_first": true,
+  "op1_seat_selectors_print_bounds_mm": {
+    "OP1 mounting seat 1 solid infill": [
+      25.311,
+      10.431,
+      42.514,
+      31.211,
+      14.671,
+      48.572
+    ],
+    "OP1 mounting seat 2 solid infill": [
+      31.58,
+      10.431,
+      25.747,
+      37.48,
+      14.671,
+      31.806
+    ]
+  },
+  "layout_body_vs_checked_carrier": {
+    "print_layers_compared": 258,
+    "slice_closing_radius_mm": 0.049,
+    "boundary_noise_ignored_mm": 0.005,
+    "largest_layer_change_mm2": 0.02753,
+    "at_print_z_mm": 17.3,
+    "layers_changed_over_0.01mm2": 1,
+    "largest_change_wider_than_0.2mm_mm2": 0,
+    "wider_change_at_print_z_mm": 0.1,
+    "largest_change_outside_r45_floor_band_mm2": 0.00017,
+    "outside_change_at_print_z_mm": 18.3,
+    "r45_floor_band_print_y_mm": [
+      11.479999999999999,
+      13.9
+    ]
+  },
+  "carrier_assembly_sha256": "739c12c8e998941a64c3bb750adbcf5ac0b90d79eaf4eb9c63f921424ea0d7a8",
+  "checks_sha256": "170f6fea351ea1572793f159d1adcfc80bdb8b774b0491964365a52ab5ceec2b",
+  "battery_manifest_sha256": "8383ab917476e817f4443f480f25e853b7c2b41ee051531d70defb5f7d9ae1eb",
+  "key_subproject_bed_translation": [
+    50,
+    70,
+    0
+  ],
+  "combined_layout_sha256": "087774d1eef0a7b09ab6c4220b88b12ab114d9a279109d74b7cea2d825d3e50d",
+  "geometry_receipt_sha256": "170f6fea351ea1572793f159d1adcfc80bdb8b774b0491964365a52ab5ceec2b",
+  "bracket_assembly_sha256": "3b4ac7b7b19835e273b47609fa676cab9c5b59c182d274717adae7ad17115e43",
+  "scope": "R48 complete plate. R45-prefixed files are local inputs to the standing-support checker."
+}
