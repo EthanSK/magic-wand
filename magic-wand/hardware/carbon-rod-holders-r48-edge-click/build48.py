@@ -3,11 +3,12 @@
 Assembly axes are the R47 axes: +Y is towards the top pair of Choc keys.
 Import this module before using the inherited CAD, plate or audit generators.
 """
-from functools import lru_cache
+from functools import lru_cache, partial
 import hashlib
 import json
 import math
 from pathlib import Path
+from unittest.mock import patch
 import sys
 
 HERE = Path(__file__).resolve().parent
@@ -95,7 +96,11 @@ compose_previous = b.compose
 
 
 def compose(stage):
-    carrier, working, fixed, ribs, gaps, record = compose_previous(stage)
+    import relief47
+    # The native layer after R47's fixed pocket bevel began two unsupported
+    # loops at the new switch position. Only this R48 build continues the cut.
+    with patch.object(relief47, 'prepare', partial(relief47.prepare, finish_pocket=True)):
+        carrier, working, fixed, ribs, gaps, record = compose_previous(stage)
     # R47 combined its two split right guards with the replacement landing.
     # The forward switch also divides R1; credit only the joined guard body
     # after checking that every other fragment is buried inside the frame.
@@ -136,6 +141,8 @@ def finish(scratch):
     inputs = [HERE / name for name in ('build48.py', 'mechanics48.py', 'shoulder48.py', 'strength48.py', 'hinge48.py', 'cable48.py')]
     inputs += [stage / name for name in ('R47-DFRobot_Hole_Bracket-cap.stl', 'R48-DFRobot_Hole_Bracket-seated.stl', 'R47-Key-Carrier-assembly.stl')]
     mechanism['source_sha256'] = {src.name: hashlib.sha256(src.read_bytes()).hexdigest() for src in inputs}
+    inherited_relief = Path('..') / PREVIOUS.name / 'relief47.py'
+    mechanism['source_sha256'][str(inherited_relief)] = hashlib.sha256((HERE / inherited_relief).read_bytes()).hexdigest()
     result['revision'] = 'r48'
     result['r48'] = mechanism
     path.write_text(json.dumps(result, indent=1) + '\n')

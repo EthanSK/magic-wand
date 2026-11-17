@@ -11,7 +11,8 @@ import manifold3d as mf
 from standing_relief45 import make as socket_relief
 
 
-def prepare(carrier, frame, routes, structural, platforms, stage, load, save, inside_existing_steps):
+def prepare(carrier, frame, routes, structural, platforms, stage, load, save, inside_existing_steps,
+            *, finish_pocket=False):
     inverse = np.linalg.inv(frame)[:3]
     stage.mkdir(parents=True, exist_ok=True)
     reference = stage / 'R47-before-local-relief-assembly.stl'
@@ -20,22 +21,38 @@ def prepare(carrier, frame, routes, structural, platforms, stage, load, save, in
     first, sockets = socket_relief(body, body, [], frame, routes, structural)
     relieved = body - first
     mask = mf.CrossSection.square((6.5, 2.3)).translate((36., 11.7))
-    allowed = mask.extrude(7.).translate((0., 0., 20.4))
+    # R47 stops at 27.4 mm. Moving the plug forward for R48 leaves the
+    # underside growing there. Protect every potential stock witness before
+    # continuing this same bevel until a complete section can print on its own.
+    protection_top = relieved.bounding_box()[5] if finish_pocket else 27.4
+    allowed = mask.extrude(protection_top - 20.4).translate((0., 0., 20.4))
     targets = [target.transform(inverse) ^ allowed for target in structural.values()]
     targets.append(platforms.transform(inverse) ^ allowed)
     keep = mf.Manifold.batch_boolean(targets, mf.OpType.Add)
     previous = None
     cuts = []
+    extended_layers = []
+    recovered_top = None
     for k in range(1, round(relieved.bounding_box()[5] / .2) + 1):
         top = k * .2
         middle = top - .1
         current = relieved.slice(middle)
-        if previous is not None and 20.4 < middle < 27.4:
+        continuing = finish_pocket and middle >= 27.4
+        if previous is not None and middle > 20.4 and (middle < 27.4 or continuing):
             unsupported = ((current ^ mask) - previous.offset(.10)) - keep.slice(middle).offset(.05)
+            if continuing:
+                area = unsupported.area()
+                extended_layers.append({'top_mm': round(top, 3), 'bevel_section_mm2': round(area, 6)})
+                if area < 1e-7:
+                    recovered_top = top
+                    break
             if not unsupported.is_empty():
                 cuts.append(unsupported.extrude(.20002).translate((0., 0., top - .20001)))
                 current -= unsupported
         previous = current
+    if finish_pocket and recovered_top is None:
+        raise ValueError('The OP1 pocket bevel did not regain a backed section')
+    cut_top = round(recovered_top or 27.4, 3)
     cut = mf.Manifold.batch_boolean(cuts, mf.OpType.Add) - keep
     removed = body ^ (first + cut)
     losses = {name: max(0., (target.transform(inverse) ^ removed).volume())
@@ -52,7 +69,7 @@ def prepare(carrier, frame, routes, structural, platforms, stage, load, save, in
     exported = load(raw_export)
     pieces = sorted(exported.decompose(), key=lambda item: -item.volume())
     discarded = [item for item in pieces[1:] if abs(item.volume()) > 1e-8]
-    central = allowed.transform(frame[:3])
+    central = mask.extrude(cut_top - 20.4).translate((0., 0., 20.4)).transform(frame[:3])
     central_bounds = central.bounding_box()
     def inside_central(item):
         bounds = item.bounding_box()
@@ -77,7 +94,8 @@ def prepare(carrier, frame, routes, structural, platforms, stage, load, save, in
         'complete_removed_mm3': max(0., removed.volume()),
         'structural_witness_losses_mm3': losses,
         'central_lateral_growth_per_0p2mm_layer_mm': .10,
-        'central_print_bounds_mm': [36., 11.7, 20.4, 42.5, 14., 27.4],
+        'central_print_bounds_mm': [36., 11.7, 20.4, 42.5, 14., cut_top],
+        **({'continuation_to_backed_section': extended_layers} if finish_pocket else {}),
         'export_cleanup': {
             'dropped_floor_fragments_mm3': positive,
             'filled_floor_void_shells_mm3': negative,
