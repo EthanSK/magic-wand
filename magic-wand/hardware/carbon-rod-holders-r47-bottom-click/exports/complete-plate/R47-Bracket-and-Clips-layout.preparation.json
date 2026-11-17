@@ -1,0 +1,53 @@
+{
+  "state": "prepared_geometry_only_not_sliced",
+  "parts": [
+    "DFRobot_Hole_Bracket",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2"
+  ],
+  "cap_sha256": "edf9875c5452cf643755b003e14cd7867c8a9e183ac8c6a9f3d91626443bf8e7",
+  "complete_geometry_check_passed": true,
+  "remaining_geometry_check_scope": "The carrier is independently checked before any combined job is sent.",
+  "source_layout_sha256": "52709c53e5491d54176dd75ffc9ccd83b89218ba330dd6ab4e2bdba6adb2f8ad",
+  "geometry_checks_sha256": "8198bc958e3fd92998784cf0ba258fcba404deaadd4383dab3e8396552ecb45f",
+  "layout_sha256": "1bbd69ccee436f7c3ba2470e5b6afa969fffae40f0ab99be28d09f0e3704090c",
+  "cap_assembly_bounds_mm": [
+    [
+      -10.600000381469727,
+      -11.835000038146973,
+      13.364999771118164
+    ],
+    [
+      10.600000381469727,
+      28.0,
+      22.700000762939453
+    ]
+  ],
+  "print_to_assembly": [
+    [
+      1,
+      0,
+      0,
+      -10.600000381469727
+    ],
+    [
+      0,
+      0,
+      1,
+      -11.835000038146973
+    ],
+    [
+      0,
+      -1,
+      0,
+      22.700000762939453
+    ],
+    [
+      0,
+      0,
+      0,
+      1
+    ]
+  ],
+  "anchor_and_manual_foot_selectors": "R42 normalized frame unchanged; final deposited attachment/backing/removal audit pending"
+}

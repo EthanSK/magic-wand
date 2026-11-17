@@ -1,0 +1,39 @@
+{
+  "owner": "Rear_pull_shelf",
+  "direction_print": [
+    0.0,
+    1.0,
+    0.0
+  ],
+  "translation_mm": 72.0,
+  "bounds": [
+    6.799999997019768,
+    14.675869926810265,
+    0.0,
+    16.399999998509884,
+    23.600000001490116,
+    18.2
+  ],
+  "volume_mm3": 1015.1226187494989,
+  "whole_cad_conflicts": [],
+  "whole_front_path_against_rear_cad_conflicts": [],
+  "roof_tops_mm": [
+    18.2
+  ],
+  "contact_target_area_by_top": {
+    "18.2": 5.840387596031581
+  },
+  "design_lateral_clearance_mm": 0.31,
+  "generator_file": "standing_aperture45.py",
+  "stl_sha256": {
+    "R45-rear-pull-shelf.stl": "5295dbb5622d8f9fffe1b932413dfb7534c6072a4100a90d1eac156c23e4d809",
+    "R45-Key-Carrier.stl": "47d57999a5a313b94ad8fdb463bda33c044eed60d8549e451ad65cbe03be5728",
+    "R45-release-tabs.stl": "e64eae05fe1b3945ab93f3c24000d4e9ce38fe533af34fe8185008a137940596",
+    "R45-front-pull-shelf.stl": "47439d3b515016a7646aa511d03134313e54626598e9636c6d1590c3c8e5a97b"
+  },
+  "opposite_direction_shelf_y_separation_mm": -3.3241300731897354,
+  "generator_sha256": "b79b38ae2f4474416a532964438fb4369bc8f92dec14fb8818f748562e29809d",
+  "generator_dependencies_sha256": {
+    "shelf45.py": "24e170d840ee6bfc7b042e7f136f3a2a733173ce496c097f836472ba990b1a46"
+  }
+}

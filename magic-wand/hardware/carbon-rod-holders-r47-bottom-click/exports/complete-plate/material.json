@@ -1,0 +1,119 @@
+{
+ "r47": {
+  "archive": "R47-Complete-A1-mini-PETG.gcode.3mf",
+  "filament_diameter_mm": 1.75,
+  "density_g_cm3": 1.27,
+  "objects": {
+   "Battery_End_Door": {
+    "commanded_xy_filament_mm": 126.612,
+    "estimated_g": 0.387
+   },
+   "Battery_Holder": {
+    "commanded_xy_filament_mm": 919.397,
+    "estimated_g": 2.808
+   },
+   "Cable_Clip_12_Wire": {
+    "commanded_xy_filament_mm": 61.18,
+    "estimated_g": 0.187
+   },
+   "DFR0030_Post_Clip": {
+    "commanded_xy_filament_mm": 5.578,
+    "estimated_g": 0.017
+   },
+   "DFR0030_Post_Clip_2": {
+    "commanded_xy_filament_mm": 5.578,
+    "estimated_g": 0.017
+   },
+   "DFRobot_Hole_Bracket": {
+    "commanded_xy_filament_mm": 274.913,
+    "estimated_g": 0.84
+   },
+   "External_cradle": {
+    "commanded_xy_filament_mm": 1342.778,
+    "estimated_g": 4.102
+   },
+   "Front_pull_shelf": {
+    "commanded_xy_filament_mm": 2340.519,
+    "estimated_g": 7.15
+   },
+   "Key_Carrier": {
+    "commanded_xy_filament_mm": 3469.599,
+    "estimated_g": 10.599
+   },
+   "Rear_pull_shelf": {
+    "commanded_xy_filament_mm": 241.374,
+    "estimated_g": 0.737
+   },
+   "Release_tabs": {
+    "commanded_xy_filament_mm": 31.269,
+    "estimated_g": 0.096
+   },
+   "XIAO_Near_Keeper": {
+    "commanded_xy_filament_mm": 126.228,
+    "estimated_g": 0.386
+   },
+   "XIAO_Rod_Holder": {
+    "commanded_xy_filament_mm": 714.536,
+    "estimated_g": 2.183
+   },
+   "unowned_tower_or_machine": {
+    "commanded_xy_filament_mm": 926.121,
+    "estimated_g": 2.829
+   }
+  },
+  "helper_estimated_g": 12.085,
+  "total_xy_estimated_g": 32.338,
+  "slicer_declared_total_g": 32.34
+ },
+ "r46_selected": {
+  "archive": "R46-Key-Carrier.gcode.3mf",
+  "filament_diameter_mm": 1.75,
+  "density_g_cm3": 1.27,
+  "objects": {
+   "External_cradle": {
+    "commanded_xy_filament_mm": 1345.979,
+    "estimated_g": 4.112
+   },
+   "Front_pull_shelf": {
+    "commanded_xy_filament_mm": 2334.191,
+    "estimated_g": 7.13
+   },
+   "Key_Carrier": {
+    "commanded_xy_filament_mm": 3439.29,
+    "estimated_g": 10.506
+   },
+   "Rear_pull_shelf": {
+    "commanded_xy_filament_mm": 241.374,
+    "estimated_g": 0.737
+   },
+   "Release_tabs": {
+    "commanded_xy_filament_mm": 31.284,
+    "estimated_g": 0.096
+   },
+   "unowned_tower_or_machine": {
+    "commanded_xy_filament_mm": 781.985,
+    "estimated_g": 2.389
+   }
+  },
+  "helper_estimated_g": 12.075,
+  "total_xy_estimated_g": 24.97,
+  "slicer_declared_total_g": 24.97
+ },
+ "difference_g": {
+  "Battery_End_Door": 0.387,
+  "Battery_Holder": 2.808,
+  "Cable_Clip_12_Wire": 0.187,
+  "DFR0030_Post_Clip": 0.017,
+  "DFR0030_Post_Clip_2": 0.017,
+  "DFRobot_Hole_Bracket": 0.84,
+  "External_cradle": -0.01,
+  "Front_pull_shelf": 0.02,
+  "Key_Carrier": 0.093,
+  "Rear_pull_shelf": 0.0,
+  "Release_tabs": 0.0,
+  "XIAO_Near_Keeper": 0.386,
+  "XIAO_Rod_Holder": 2.183,
+  "unowned_tower_or_machine": 0.44
+ },
+ "helper_difference_g": 0.01
+}

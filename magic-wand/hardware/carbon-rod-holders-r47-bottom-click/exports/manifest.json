@@ -1,0 +1,338 @@
+{
+  "revision": "carbon-rod-holders-r47-bottom-click",
+  "units": "mm",
+  "parts": {
+    "DFRobot_Hole_Bracket": {
+      "volume_mm3": 661.072,
+      "solid_PETG_g": 0.84,
+      "assembly_bounds_mm": [
+        [
+          -10.6,
+          -11.835,
+          13.365
+        ],
+        [
+          10.6,
+          28.0,
+          22.7
+        ]
+      ],
+      "print_height_mm": 39.835,
+      "stl_sha256": "7b0ae7d5132a8fd02678dd2a24e309c05d8bed4f0984f7aba977ec6e14560c8d",
+      "assembly_stl_sha256": "d2975a5b2c56dfdea0b07eb6fbce28ce55180a150bfc2bfcce3d431e43c7bb7b",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -10.600000381469727
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -11.835000038146973
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          22.700000762939453
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 0.000126,
+      "print_export_drift_mm3": 0.000285
+    },
+    "DFR0030_Post_Clip": {
+      "volume_mm3": 7.083,
+      "solid_PETG_g": 0.009,
+      "assembly_bounds_mm": [
+        [
+          -1.8,
+          -1.8,
+          20.9
+        ],
+        [
+          1.8,
+          2.2,
+          21.7
+        ]
+      ],
+      "print_height_mm": 0.8,
+      "stl_sha256": "f4edd942466652331156d8f5a87b157fd01f370d0235d47fd11f6c995363073a",
+      "assembly_stl_sha256": "ccef82e9f01e43fddcf15c3093d4894f54353fa3b0042ac65bbbfb34d7092f89",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 3e-06,
+      "print_export_drift_mm3": 8e-06
+    },
+    "DFR0030_Post_Clip_2": {
+      "volume_mm3": 7.083,
+      "solid_PETG_g": 0.009,
+      "assembly_bounds_mm": [
+        [
+          -1.8,
+          -1.8,
+          20.9
+        ],
+        [
+          1.8,
+          2.2,
+          21.7
+        ]
+      ],
+      "print_height_mm": 0.8,
+      "stl_sha256": "f4edd942466652331156d8f5a87b157fd01f370d0235d47fd11f6c995363073a",
+      "assembly_stl_sha256": "ccef82e9f01e43fddcf15c3093d4894f54353fa3b0042ac65bbbfb34d7092f89",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -1.7999999523162842
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 3e-06,
+      "print_export_drift_mm3": 8e-06
+    },
+    "Battery_End_Door": {
+      "volume_mm3": 222.885,
+      "solid_PETG_g": 0.283,
+      "assembly_bounds_mm": [
+        [
+          -12.8,
+          -15.85,
+          6.35
+        ],
+        [
+          12.8,
+          -13.25,
+          13.4
+        ]
+      ],
+      "print_height_mm": 2.6,
+      "stl_sha256": "e6df91afd846b6dd421b399d8518017e93d89a6d7eb97adcb7e0736d233fed62",
+      "assembly_stl_sha256": "f1ae6ae7ca97501d4ced5900c8382f698709dea88ab6a53938c9fbb864cc5418",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -12.800000190734863
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          -15.850000381469727
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          13.399999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "assembly_export_drift_mm3": 3.7e-05,
+      "print_export_drift_mm3": 8.4e-05
+    },
+    "Key_Carrier": {
+      "volume_mm3": 9407.877,
+      "solid_PETG_g": 11.948,
+      "assembly_bounds_mm": [
+        [
+          -30.77,
+          -13.932,
+          -4.781
+        ],
+        [
+          30.0,
+          32.65,
+          20.8
+        ]
+      ],
+      "print_height_mm": 46.582,
+      "stl_sha256": "47d57999a5a313b94ad8fdb463bda33c044eed60d8549e451ad65cbe03be5728",
+      "assembly_stl_sha256": "0634e71594545d45f3bf17e4e084ca1a8387e5083014f4e29aa028b54ed285da",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          -0.0,
+          -30.049999237060547
+        ],
+        [
+          0.0,
+          -1.8369701987210297e-16,
+          -1.0,
+          32.65000152587891
+        ],
+        [
+          -0.0,
+          1.0,
+          -1.8369701987210297e-16,
+          -4.781332969665523
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "source": "Exact checked R47 key-layout mesh; no additional simplify or coordinate rounding.",
+      "layout_body_vs_checked_carrier": {
+        "print_layers_compared": 233,
+        "slice_closing_radius_mm": 0.049,
+        "boundary_noise_ignored_mm": 0.005,
+        "largest_layer_change_mm2": 0.02753,
+        "at_print_z_mm": 17.3,
+        "layers_changed_over_0.01mm2": 1,
+        "largest_change_wider_than_0.2mm_mm2": 0,
+        "wider_change_at_print_z_mm": 0.1,
+        "largest_change_outside_r45_floor_band_mm2": 0.00017,
+        "outside_change_at_print_z_mm": 18.3,
+        "r45_floor_band_print_y_mm": [
+          11.479999999999999,
+          13.9
+        ]
+      }
+    },
+    "Battery_Holder": {
+      "bounds_mm": [
+        [
+          -14.199999809265137,
+          -17.799999237060547,
+          -4.829628944396973
+        ],
+        [
+          14.199999809265137,
+          15.199999809265137,
+          12.350000381469727
+        ]
+      ],
+      "volume_mm3": 1948.4150061867858,
+      "solid_PETG_g": 2.474487057857218,
+      "print_height_mm": 33.0,
+      "body_count": 1,
+      "watertight": true,
+      "export_drift_mm3": 0.00077,
+      "stl_sha256": "9cc3092d47c87013ccf8d617dff542264d88e313cf7dc60bbcddf7061fde7326",
+      "assembly_stl_sha256": "1e37e83b49571ca8d68703b31ea5b0c324925d2e3eb8a891c6eea68568171fd6",
+      "print_to_assembly": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -14.199999809265137
+        ],
+        [
+          -0.0,
+          6.123233995736766e-17,
+          -1.0,
+          15.199999809265137
+        ],
+        [
+          0.0,
+          1.0,
+          6.123233995736766e-17,
+          -4.829628944396974
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "copied_from": "."
+    }
+  },
+  "physical_fit_verified": false,
+  "print_cleared": false,
+  "source_sha256": {
+    "audit47.py": "dd2f0c5139282ae78efd545a1920d12aa5ee1c8e9fcaa5b784ad2f73a02ebe78",
+    "audit_parts47.py": "f4302912e08b1877af61a90073e8e535192fdda8241d51b61fb077cb8cd0c0ca",
+    "bracket47.py": "aeab8739479cc6bf6c101fcc1faebbb12e43bf192d85a0a73b3f6934498cf670",
+    "build47.py": "5e5a668d90e1bcb35a30505f4110173d1ba44ec86ecf38865f926d0144e2f40f",
+    "bundle47.py": "285b780b46773b8f1dd758af5b6a00338102bcba3ba84379489e57e967f0b545",
+    "check46.py": "92ba10aa0886aa5156caa4a86738170fe329906101bb18254762dc62c30b66bf",
+    "compose47.py": "cd2f2970c661deda2d51400f80baed8ab21496ecb2662b79672400d55facb661",
+    "delivery47.py": "42d32429e619cef321aff5d1d42c4e7bb871aca6985ddb7b9784370ec23327fd",
+    "guide47.py": "e7c14d895f43c2ea52ed5d47a17944e2225a860a2c48f6e08eb7003c8b4d1310",
+    "holder47.py": "0dcda84dba7fe75810d0c21e09dee244496211207478b226a17210502f92e234",
+    "layers47.py": "19d225614e95ba27626c3d2e2f65ea90cde94939f1c863c4c2360596ec971d92",
+    "material47.py": "609344f5cc88053174064e2476cf95ecda5b3146695e49cc01c121cd21724a94",
+    "plate47.py": "f4cadfb2c01d4a81b63c63f11c537d1d7286c4726ece92de3c9038b39c0e2720",
+    "project47.py": "1496691660ff8035f22c7edab47dad7932c2b9f522f791497363017c76d7e53e",
+    "relief47.py": "cef899fdc7e3873a559fd6433953c475661a8de7b0c856dd386ec0c54afac9b3",
+    "reopen47.py": "fc1e2fec7f36211f1a688c85946de736aa9197e250e7b745dd0725660e278c80",
+    "review47.py": "679f3ea81349cf06ae51bbe845c73c04d59a29854144d06121cfc4c3a72d476a",
+    "scope47.py": "6442a292c7943c41324a5ea1898bedb182d2e7ec60aa562a01d51448af29ee65",
+    "screen47.py": "5124882fb4a7d889e0d60f7d6fe487689b2d807f141be50935c0e9bfdb0a86d2",
+    "spaces47.py": "bdce10dd9964afbb1391f2152ad70aaf7a6146f999e01c074451bd5ca1a91586",
+    "complete-assembly.json": "95a368a9687f2e6913c9c481a4d51fc6fff66a8d3da8bac5ca99b777cc1196c3"
+  },
+  "upstream_sha256": {
+    "holder44.py": "7fc2fcfdc76f5c1d0fd450a41c7606b9d2442f9c0a945b9e7fb0c2bfeb376855",
+    "assembly44.py": "ca6d3c014ae97a83c0c170e7f6ffc97e0df450c4b18532d785ad7215011601b5",
+    "assembly42.py": "ac9d08fff5b4b30f024d580cf9a97c3b0adbfd33bb980c5ee6ed53b42bc858b6",
+    "holder46.py": "a9125d744708cec70be9b7aae785b5c25a828b32b38baa584c684b68c33c5c58"
+  },
+  "digital_complete_plate_checks_passed": true,
+  "selected_archive_sha256": "b13dee0f49cacfa5c93c9931cb47cbacffa6ae367463c7ae32d435e550bb35fb"
+}

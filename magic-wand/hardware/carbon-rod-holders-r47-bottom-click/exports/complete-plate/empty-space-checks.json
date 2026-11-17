@@ -1,0 +1,420 @@
+{
+  "archive_sha256": "b13dee0f49cacfa5c93c9931cb47cbacffa6ae367463c7ae32d435e550bb35fb",
+  "checker_sha256": "bdce10dd9964afbb1391f2152ad70aaf7a6146f999e01c074451bd5ca1a91586",
+  "r46_reference_archive_sha256": "3d0267fb983986b44cd6a90b5eb3083ce77dfe3be016ea58887e7dd864cfa157",
+  "nonempty_routes": {
+    "key_0_socket_tape_zone": [
+      {
+        "target_volume_mm3": 48.76028439441953,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      }
+    ],
+    "key_0_mount_opening": [
+      {
+        "target_volume_mm3": 278.2856467154701,
+        "candidate_samples": 50,
+        "contacts": [
+          {
+            "top_mm": 25.8,
+            "height_mm": 0.2,
+            "volume_mm3": 0.0018708420513691446,
+            "bounds_mm": [
+              1.9999993120221702,
+              16.260245254784113,
+              25.70008390216621,
+              16.099999162098925,
+              17.211739608497137,
+              25.8
+            ]
+          },
+          {
+            "top_mm": 39.8,
+            "height_mm": 0.2,
+            "volume_mm3": 0.02345343494671028,
+            "bounds_mm": [
+              2.0270428968491574,
+              16.160923105813357,
+              39.599999999999994,
+              16.072955577271937,
+              17.311061757467893,
+              39.700001306557596
+            ]
+          }
+        ],
+        "nominal_end_boundary_mm": 0.20069282032302757,
+        "r46_nominal_overlap_mm3": 0.025324906575228474,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.025324276998079424
+      }
+    ],
+    "key_2_socket_tape_zone": [
+      {
+        "target_volume_mm3": 48.76028439441953,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      }
+    ],
+    "key_2_mount_opening": [
+      {
+        "target_volume_mm3": 278.28564671547,
+        "candidate_samples": 50,
+        "contacts": [
+          {
+            "top_mm": 25.8,
+            "height_mm": 0.2,
+            "volume_mm3": 0.001871272565439848,
+            "bounds_mm": [
+              43.999999312022176,
+              16.260238136462196,
+              25.70008071994727,
+              58.09999916209892,
+              17.211746726819054,
+              25.8
+            ]
+          },
+          {
+            "top_mm": 39.8,
+            "height_mm": 0.2,
+            "volume_mm3": 0.02345364546687987,
+            "bounds_mm": [
+              44.02704289684916,
+              16.160922594740825,
+              39.599999999999994,
+              58.072955577271934,
+              17.31106226854043,
+              39.70000140025963
+            ]
+          }
+        ],
+        "nominal_end_boundary_mm": 0.20069282032302757,
+        "r46_nominal_overlap_mm3": 0.02532448553542192,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.025324918032319718
+      }
+    ],
+    "key_4_socket_tape_zone": [
+      {
+        "target_volume_mm3": 48.76028439441957,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      }
+    ],
+    "key_4_mount_opening": [
+      {
+        "target_volume_mm3": 278.2856467154702,
+        "candidate_samples": 36,
+        "contacts": [
+          {
+            "top_mm": 4.4,
+            "height_mm": 0.2,
+            "volume_mm3": 0.005543892837188399,
+            "bounds_mm": [
+              44.00659339485732,
+              16.22272561101285,
+              4.300043439993368,
+              58.093405079263775,
+              17.2492592522684,
+              4.4
+            ]
+          },
+          {
+            "top_mm": 18.4,
+            "height_mm": 0.2,
+            "volume_mm3": 0.005544201982160178,
+            "bounds_mm": [
+              44.00659263043178,
+              16.22272484658731,
+              18.2,
+              58.09340584368931,
+              17.24926001669394,
+              18.299959611764454
+            ]
+          }
+        ],
+        "nominal_end_boundary_mm": 0.20069282032302757,
+        "r46_nominal_overlap_mm3": 0.011088067045334363,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.011088094819348578
+      }
+    ],
+    "DFRobot board and connector operating stroke": [
+      {
+        "target_volume_mm3": 1680.8389541061183,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061174,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061172,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.838954106119,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061183,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061172,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061194,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061194,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061183,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061194,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061167,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.838954106118,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061197,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061197,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061185,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061185,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061176,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061158,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061204,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061192,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.838954106119,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061183,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061201,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.838954106118,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061176,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.838954106118,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061194,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061194,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      },
+      {
+        "target_volume_mm3": 1680.8389541061208,
+        "candidate_samples": 0,
+        "contacts": [],
+        "nominal_end_boundary_mm": 0.0,
+        "r46_nominal_overlap_mm3": null,
+        "interior_bead_overlap_mm3": 0.0,
+        "whole_native_bead_overlap_mm3": 0.0
+      }
+    ]
+  },
+  "maximum_overlap_mm3": 0.025324918032319718,
+  "maximum_interior_overlap_mm3": 0.0,
+  "scope": "Every zero-sample route from the point scanner, in the verified carrier frame; complete deposited slabs, including disposable helpers and boundary heights."
+}

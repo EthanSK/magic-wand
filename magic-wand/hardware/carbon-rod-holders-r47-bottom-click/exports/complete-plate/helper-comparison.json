@@ -1,0 +1,278 @@
+{
+ "archive": "R47-Complete-A1-mini-PETG.gcode.3mf",
+ "cad_unsupported_starts": 0,
+ "unrooted_helper_islands": {
+  "External_cradle": 0,
+  "Front_pull_shelf": 0,
+  "Rear_pull_shelf": 0
+ },
+ "roof_sequence_classifications": {
+  "short straight two-ended bridge": 93,
+  "unsupported bend outside bead corridor": 20,
+  "free end requires backing": 9,
+  "beyond screened anchored span": 9
+ },
+ "unresolved_continuous_intervals": 38,
+ "longest_unanchored_or_one_ended_sequence": {
+  "z": 38.0,
+  "mm": 1.055,
+  "before": true,
+  "after": false,
+  "start_xy": [
+   27.58,
+   11.709
+  ],
+  "end_xy": [
+   27.58,
+   10.786
+  ],
+  "chord_mm": 1.055,
+  "deviation_from_chord_mm": 0.0,
+  "minimum_bead_width_mm": 0.41,
+  "median_bead_width_mm": 0.41,
+  "actual_length_at_width_below_0p2_mm": 0.0,
+  "anchored_span_mm": null,
+  "first_gcode_line": 826712,
+  "last_gcode_line": 826712,
+  "commanded_feed_range_mm_s": [
+   50.0,
+   50.0
+  ],
+  "last_commanded_part_fan_fraction_range": [
+   1.0,
+   1.0
+  ],
+  "classification": "free end requires backing",
+  "features": [
+   "Overhang wall"
+  ],
+  "sampled_path_xy": [
+   [
+    27.58,
+    11.841
+   ],
+   [
+    27.58,
+    11.709
+   ],
+   [
+    27.58,
+    11.577
+   ],
+   [
+    27.58,
+    11.445
+   ],
+   [
+    27.58,
+    11.313
+   ],
+   [
+    27.58,
+    11.182
+   ],
+   [
+    27.58,
+    11.05
+   ],
+   [
+    27.58,
+    10.918
+   ],
+   [
+    27.58,
+    10.786
+   ]
+  ]
+ },
+ "longest_two_ended_sequence": {
+  "z": 18.6,
+  "mm": 13.564,
+  "before": true,
+  "after": true,
+  "start_xy": [
+   44.417,
+   16.361
+  ],
+  "end_xy": [
+   57.683,
+   16.361
+  ],
+  "chord_mm": 13.564,
+  "deviation_from_chord_mm": 0.0,
+  "minimum_bead_width_mm": 0.42,
+  "median_bead_width_mm": 0.42,
+  "actual_length_at_width_below_0p2_mm": 0.0,
+  "anchored_span_mm": 13.564,
+  "first_gcode_line": 448017,
+  "last_gcode_line": 448017,
+  "commanded_feed_range_mm_s": [
+   50.0,
+   50.0
+  ],
+  "last_commanded_part_fan_fraction_range": [
+   1.0,
+   1.0
+  ],
+  "classification": "beyond screened anchored span",
+  "features": [
+   "Overhang wall"
+  ],
+  "sampled_path_xy": [
+   [
+    44.268,
+    16.361
+   ],
+   [
+    45.311,
+    16.361
+   ],
+   [
+    46.504,
+    16.361
+   ],
+   [
+    47.547,
+    16.361
+   ],
+   [
+    48.74,
+    16.361
+   ],
+   [
+    49.783,
+    16.361
+   ],
+   [
+    50.975,
+    16.361
+   ],
+   [
+    52.168,
+    16.361
+   ],
+   [
+    53.211,
+    16.361
+   ],
+   [
+    54.404,
+    16.361
+   ],
+   [
+    55.447,
+    16.361
+   ],
+   [
+    56.64,
+    16.361
+   ],
+   [
+    57.832,
+    16.361
+   ]
+  ]
+ },
+ "helper_contacts": {
+  "External_cradle": {
+   "r47": {
+    "pieces": 8,
+    "projected_contact_mm2": 14.263,
+    "largest_continuous_patch_mm2": 3.888,
+    "contact_patches": 15,
+    "finger_guard_contact_mm2": 0.0,
+    "contact_layers": 11,
+    "bed_feet": 8,
+    "bed_feet_without_1.2mm_grip_land": 0
+   },
+   "r46_selected": {
+    "pieces": 8,
+    "projected_contact_mm2": 13.861,
+    "largest_continuous_patch_mm2": 3.888,
+    "contact_patches": 12,
+    "finger_guard_contact_mm2": 10.598,
+    "contact_layers": 8,
+    "bed_feet": 8,
+    "bed_feet_without_1.2mm_grip_land": 0
+   }
+  },
+  "Front_pull_shelf": {
+   "r47": {
+    "pieces": 2,
+    "projected_contact_mm2": 0.0,
+    "largest_continuous_patch_mm2": 0.0,
+    "contact_patches": 0,
+    "finger_guard_contact_mm2": 0.0,
+    "contact_layers": 0,
+    "bed_feet": 3,
+    "bed_feet_without_1.2mm_grip_land": 1
+   },
+   "r46_selected": {
+    "pieces": 2,
+    "projected_contact_mm2": 12.171,
+    "largest_continuous_patch_mm2": 4.164,
+    "contact_patches": 53,
+    "finger_guard_contact_mm2": 10.017,
+    "contact_layers": 12,
+    "bed_feet": 3,
+    "bed_feet_without_1.2mm_grip_land": 1
+   }
+  },
+  "Rear_pull_shelf": {
+   "r47": {
+    "pieces": 1,
+    "projected_contact_mm2": 8.53,
+    "largest_continuous_patch_mm2": 2.59,
+    "contact_patches": 24,
+    "finger_guard_contact_mm2": 0.0,
+    "contact_layers": 1,
+    "bed_feet": 1,
+    "bed_feet_without_1.2mm_grip_land": 0
+   },
+   "r46_selected": {
+    "pieces": 1,
+    "projected_contact_mm2": 8.53,
+    "largest_continuous_patch_mm2": 2.59,
+    "contact_patches": 24,
+    "finger_guard_contact_mm2": 0.0,
+    "contact_layers": 1,
+    "bed_feet": 1,
+    "bed_feet_without_1.2mm_grip_land": 0
+   }
+  }
+ },
+ "material_estimated_g": {
+  "Battery_End_Door": 0.387,
+  "Battery_Holder": 2.808,
+  "Cable_Clip_12_Wire": 0.187,
+  "DFR0030_Post_Clip": 0.017,
+  "DFR0030_Post_Clip_2": 0.017,
+  "DFRobot_Hole_Bracket": 0.84,
+  "External_cradle": 4.102,
+  "Front_pull_shelf": 7.15,
+  "Key_Carrier": 10.599,
+  "Rear_pull_shelf": 0.737,
+  "Release_tabs": 0.096,
+  "XIAO_Near_Keeper": 0.386,
+  "XIAO_Rod_Holder": 2.183,
+  "unowned_tower_or_machine": 2.829
+ },
+ "material_difference_from_r46_g": {
+  "Battery_End_Door": 0.387,
+  "Battery_Holder": 2.808,
+  "Cable_Clip_12_Wire": 0.187,
+  "DFR0030_Post_Clip": 0.017,
+  "DFR0030_Post_Clip_2": 0.017,
+  "DFRobot_Hole_Bracket": 0.84,
+  "External_cradle": -0.01,
+  "Front_pull_shelf": 0.02,
+  "Key_Carrier": 0.093,
+  "Rear_pull_shelf": 0.0,
+  "Release_tabs": 0.0,
+  "XIAO_Near_Keeper": 0.386,
+  "XIAO_Rod_Holder": 2.183,
+  "unowned_tower_or_machine": 0.44
+ },
+ "helper_difference_from_r46_g": 0.01,
+ "release_force_or_strength_measured": false
+}

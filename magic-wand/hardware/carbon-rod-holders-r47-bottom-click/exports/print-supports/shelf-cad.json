@@ -1,0 +1,116 @@
+{
+  "owner": "Front_pull_shelf",
+  "direction_print": [
+    0.0,
+    -1.0,
+    0.0
+  ],
+  "translation_mm": 72.0,
+  "bounds": [
+    -8.0,
+    -4.899999998509884,
+    0.0,
+    49.600000001490116,
+    18.0,
+    33.6
+  ],
+  "volume_mm3": 13278.133545827399,
+  "whole_cad_conflicts": [],
+  "actual_shoulder_notches": [],
+  "shoulder_notch_removed_mm3": 0.0,
+  "roof_tops_mm": [
+    21.6,
+    24.8,
+    28.0,
+    31.4,
+    17.0,
+    17.2,
+    32.2,
+    33.6
+  ],
+  "contact_target_area_by_top": {
+    "21.6": 0.0,
+    "24.8": 2.995357797412413,
+    "28.0": 1.155831948577237,
+    "31.4": 5.751261889213799,
+    "17.0": 0.0,
+    "17.2": 1.4835252945412831,
+    "32.2": 0.0,
+    "33.6": 0.0
+  },
+  "design_lateral_clearance_mm": 0.3,
+  "generator_file": "standing_comb45.py",
+  "prop_foot_flare": {
+    "original_prop_cad_foot_mm2": 3.2238424506323504,
+    "flared_cad_foot_mm2": 31.062543026544247,
+    "removed_tab_mm3": 5.58571130668966,
+    "full_pad_sweep_intersection_mm2": 0.0,
+    "base_layers": 2
+  },
+  "removable_pieces": [
+    {
+      "name": "Finger-side comb",
+      "file": "R45-finger-side-comb.stl",
+      "sha256": "eabf0bad206cc83a80412463a721893ee7c5546174041a2f431b5059e315e8a1",
+      "direction_print": [
+        0,
+        -1,
+        0
+      ],
+      "translation_mm": 72.0,
+      "bounds": [
+        -8.0,
+        -4.899999998509884,
+        0.0,
+        49.600000001490116,
+        18.0,
+        33.6
+      ],
+      "volume_mm3": 12900.170489381171,
+      "bed_face_area_mm2": 460.7800206747042,
+      "has_1p2mm_grip_land": true,
+      "removal_order": 1,
+      "other_front_pieces_remaining": [
+        "Left guard web prop"
+      ],
+      "whole_cad_conflicts_with_remaining_front_pieces": []
+    },
+    {
+      "name": "Left guard web prop",
+      "file": "R45-left-guard-web-prop.stl",
+      "sha256": "9f4f9729f26032469464601ec1dac04360551dcc2deb4adc417842b8b9e76975",
+      "direction_print": [
+        0,
+        -1,
+        0
+      ],
+      "translation_mm": 72.0,
+      "bounds": [
+        -0.2874772176146507,
+        5.8143061846494675,
+        0.0,
+        15.165540419518948,
+        15.741116099059582,
+        17.2
+      ],
+      "volume_mm3": 377.96305644622794,
+      "bed_face_area_mm2": 31.062543016997125,
+      "has_1p2mm_grip_land": true,
+      "removal_order": 2,
+      "other_front_pieces_remaining": [],
+      "whole_cad_conflicts_with_remaining_front_pieces": []
+    }
+  ],
+  "piece_checker_sha256": "6ca4169b9de9dbe3dd9d26a5a993c3181091ee05e42c2371581574ce3e13d329",
+  "stl_sha256": {
+    "R45-front-pull-shelf.stl": "47439d3b515016a7646aa511d03134313e54626598e9636c6d1590c3c8e5a97b",
+    "R45-Key-Carrier.stl": "47d57999a5a313b94ad8fdb463bda33c044eed60d8549e451ad65cbe03be5728",
+    "R45-release-tabs.stl": "e64eae05fe1b3945ab93f3c24000d4e9ce38fe533af34fe8185008a137940596",
+    "R45-rear-pull-shelf.stl": "5295dbb5622d8f9fffe1b932413dfb7534c6072a4100a90d1eac156c23e4d809"
+  },
+  "opposite_direction_shelf_y_separation_mm": -3.3241300731897354,
+  "generator_sha256": "540ec31682344c86b26ad8d99f7d098110dc446b35d649af723eba676497a4d0",
+  "generator_dependencies_sha256": {
+    "shelf45.py": "24e170d840ee6bfc7b042e7f136f3a2a733173ce496c097f836472ba990b1a46"
+  }
+}

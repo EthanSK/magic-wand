@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "state": "composed_not_slice_checked",
+  "functional_parts": [
+    "Battery_End_Door",
+    "Battery_Holder",
+    "Cable_Clip_12_Wire",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2",
+    "DFRobot_Hole_Bracket",
+    "Key_Carrier",
+    "XIAO_Near_Keeper",
+    "XIAO_Rod_Holder"
+  ],
+  "build_order": [
+    "Key_Carrier",
+    "External_cradle",
+    "Release_tabs",
+    "Front_pull_shelf",
+    "Rear_pull_shelf",
+    "DFRobot_Hole_Bracket",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2",
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Battery_Holder",
+    "Battery_End_Door",
+    "Cable_Clip_12_Wire"
+  ],
+  "local_config_differences": {
+    "key": {
+      "wall_generator": "arachne",
+      "min_bead_width": "60%",
+      "wall_distribution_count": "2",
+      "bridge_angle": "90",
+      "is_infill_first": "1"
+    },
+    "bracket": {},
+    "battery": {}
+  },
+  "source_sha256": {
+    "complete_template": "52709c53e5491d54176dd75ffc9ccd83b89218ba330dd6ab4e2bdba6adb2f8ad",
+    "key": "93c207e201527eb6e0b4aa275b1430563e860063801fb0368fba5fdeb7f423ec",
+    "bracket": "1bbd69ccee436f7c3ba2470e5b6afa969fffae40f0ab99be28d09f0e3704090c",
+    "battery": "792be81955b0712e016c00fc75da4090abb6e6f7ca93ee5ac4be54cfc55db6c0"
+  },
+  "layout_sha256": "48d567ba814ca5a296a1126497d61c7ce7e5fd55afe904b025cf92a56944b5c2",
+  "physical_ready_for_send": false
+}

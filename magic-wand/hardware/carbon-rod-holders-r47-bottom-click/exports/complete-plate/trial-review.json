@@ -1,0 +1,318 @@
+{
+  "selected_archive_sha256": "b13dee0f49cacfa5c93c9931cb47cbacffa6ae367463c7ae32d435e550bb35fb",
+  "digital_checks_passed": true,
+  "designation": "Digitally checked complete first-fit trial; not physically accepted",
+  "functional_parts": [
+    "Battery_End_Door",
+    "Battery_Holder",
+    "Cable_Clip_12_Wire",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2",
+    "DFRobot_Hole_Bracket",
+    "Key_Carrier",
+    "XIAO_Near_Keeper",
+    "XIAO_Rod_Holder"
+  ],
+  "report_sha256": {
+    "candidate-audit.json": "78232ac21ec5afc8ad8853ff159509a9b50420f334257e702019574a17f1a190",
+    "helper-starts.json": "501c841b154578b83fa68381b1039698e938469fe295abd3d6e25642f238498d",
+    "roof-strokes.json": "6c3275fb0768caf844bd834ea8868b82d9627a4e776aa408e1fd5d1774d742c6",
+    "roof-residual-context.json": "cdaacde36f3aa1e8971a74d074f19f548ccea40e2d927047f4a5914b89da2345",
+    "contact-areas.json": "d4a45d3fc994b6a230dd7fa162e172d9fbd86685110b75ed95224265ba85fb0f",
+    "shelf-contact-areas.json": "fe2e4ef0898ae614555dc5d9a27fe7db4c3ba2d615975d8a3c2fe5927526f9eb",
+    "rear-shelf-contact-areas.json": "52d9dc2aa90a5adc89cdabbbebcb1f61085a46e390b9258c2c63633a2c45a720",
+    "delivery-checks.json": "01ba872e1d3556463a9595c63fa9376f1b9152fe1f81f65c0398021237fb98e0",
+    "empty-space-checks.json": "b8b31c48ac17cd3d2dc319f0a5ca288b22a0a777cfd030dbf2ac7f62f0f0e722",
+    "other-audit/other-parts-audit.json": "6ad564954332bfc06c05338eca1fcae5d335043ba7c99f56ea6bc3b89b9b383b"
+  },
+  "unbacked_short_strokes": [
+    {
+      "z": 9.0,
+      "mm": 0.62,
+      "before": false,
+      "after": false,
+      "start_xy": [
+        45.925,
+        13.146
+      ],
+      "end_xy": [
+        45.925,
+        12.526
+      ],
+      "chord_mm": 0.62,
+      "deviation_from_chord_mm": 0.0,
+      "minimum_bead_width_mm": 0.283,
+      "median_bead_width_mm": 0.283,
+      "actual_length_at_width_below_0p2_mm": 0.0,
+      "anchored_span_mm": null,
+      "first_gcode_line": 224975,
+      "last_gcode_line": 224975,
+      "commanded_feed_range_mm_s": [
+        50.0,
+        50.0
+      ],
+      "last_commanded_part_fan_fraction_range": [
+        1.0,
+        1.0
+      ],
+      "classification": "free end requires backing",
+      "features": [
+        "Overhang wall"
+      ],
+      "sampled_path_xy": [
+        [
+          45.925,
+          13.146
+        ],
+        [
+          45.925,
+          13.022
+        ],
+        [
+          45.925,
+          12.898
+        ],
+        [
+          45.925,
+          12.774
+        ],
+        [
+          45.925,
+          12.65
+        ],
+        [
+          45.925,
+          12.526
+        ]
+      ]
+    },
+    {
+      "z": 18.0,
+      "mm": 0.407,
+      "before": false,
+      "after": false,
+      "start_xy": [
+        6.465,
+        12.208
+      ],
+      "end_xy": [
+        6.465,
+        12.615
+      ],
+      "chord_mm": 0.407,
+      "deviation_from_chord_mm": 0.0,
+      "minimum_bead_width_mm": 0.313,
+      "median_bead_width_mm": 0.313,
+      "actual_length_at_width_below_0p2_mm": 0.0,
+      "anchored_span_mm": null,
+      "first_gcode_line": 432107,
+      "last_gcode_line": 432107,
+      "commanded_feed_range_mm_s": [
+        20.0,
+        20.0
+      ],
+      "last_commanded_part_fan_fraction_range": [
+        1.0,
+        1.0
+      ],
+      "classification": "free end requires backing",
+      "features": [
+        "Outer wall"
+      ],
+      "sampled_path_xy": [
+        [
+          6.465,
+          12.208
+        ],
+        [
+          6.465,
+          12.344
+        ],
+        [
+          6.465,
+          12.479
+        ],
+        [
+          6.465,
+          12.615
+        ]
+      ]
+    },
+    {
+      "z": 30.0,
+      "mm": 0.464,
+      "before": false,
+      "after": false,
+      "start_xy": [
+        53.145,
+        12.179
+      ],
+      "end_xy": [
+        53.145,
+        12.643
+      ],
+      "chord_mm": 0.464,
+      "deviation_from_chord_mm": 0.0,
+      "minimum_bead_width_mm": 0.283,
+      "median_bead_width_mm": 0.283,
+      "actual_length_at_width_below_0p2_mm": 0.0,
+      "anchored_span_mm": null,
+      "first_gcode_line": 719774,
+      "last_gcode_line": 719774,
+      "commanded_feed_range_mm_s": [
+        25.0,
+        25.0
+      ],
+      "last_commanded_part_fan_fraction_range": [
+        1.0,
+        1.0
+      ],
+      "classification": "free end requires backing",
+      "features": [
+        "Outer wall"
+      ],
+      "sampled_path_xy": [
+        [
+          53.145,
+          12.179
+        ],
+        [
+          53.145,
+          12.295
+        ],
+        [
+          53.145,
+          12.411
+        ],
+        [
+          53.145,
+          12.527
+        ],
+        [
+          53.145,
+          12.643
+        ]
+      ]
+    },
+    {
+      "z": 30.4,
+      "mm": 0.57,
+      "before": false,
+      "after": false,
+      "start_xy": [
+        45.9,
+        13.121
+      ],
+      "end_xy": [
+        45.9,
+        12.551
+      ],
+      "chord_mm": 0.57,
+      "deviation_from_chord_mm": 0.0,
+      "minimum_bead_width_mm": 0.283,
+      "median_bead_width_mm": 0.283,
+      "actual_length_at_width_below_0p2_mm": 0.0,
+      "anchored_span_mm": null,
+      "first_gcode_line": 727949,
+      "last_gcode_line": 727949,
+      "commanded_feed_range_mm_s": [
+        50.0,
+        50.0
+      ],
+      "last_commanded_part_fan_fraction_range": [
+        1.0,
+        1.0
+      ],
+      "classification": "free end requires backing",
+      "features": [
+        "Overhang wall"
+      ],
+      "sampled_path_xy": [
+        [
+          45.9,
+          13.121
+        ],
+        [
+          45.9,
+          12.979
+        ],
+        [
+          45.9,
+          12.836
+        ],
+        [
+          45.9,
+          12.693
+        ],
+        [
+          45.9,
+          12.551
+        ]
+      ]
+    },
+    {
+      "z": 30.8,
+      "mm": 0.523,
+      "before": false,
+      "after": false,
+      "start_xy": [
+        11.432,
+        12.673
+      ],
+      "end_xy": [
+        11.432,
+        12.15
+      ],
+      "chord_mm": 0.523,
+      "deviation_from_chord_mm": 0.0,
+      "minimum_bead_width_mm": 0.283,
+      "median_bead_width_mm": 0.283,
+      "actual_length_at_width_below_0p2_mm": 0.0,
+      "anchored_span_mm": null,
+      "first_gcode_line": 736202,
+      "last_gcode_line": 736202,
+      "commanded_feed_range_mm_s": [
+        30.0,
+        30.0
+      ],
+      "last_commanded_part_fan_fraction_range": [
+        1.0,
+        1.0
+      ],
+      "classification": "free end requires backing",
+      "features": [
+        "Outer wall"
+      ],
+      "sampled_path_xy": [
+        [
+          11.432,
+          12.673
+        ],
+        [
+          11.432,
+          12.542
+        ],
+        [
+          11.432,
+          12.411
+        ],
+        [
+          11.432,
+          12.281
+        ],
+        [
+          11.432,
+          12.15
+        ]
+      ]
+    }
+  ],
+  "longer_two_ended_bridge_count": 9,
+  "maximum_straight_trial_bridge_mm": 13.564,
+  "maximum_two_ended_bent_run_mm": 2.731,
+  "maximum_one_ended_mm": 1.055,
+  "residual_disposition": "Five short unanchored strokes retain R46 layer/length signatures. The longer straight bridges retain two rooted ends and the R46 span limit; bent runs retain the R46 maximum. The longest one-ended edge differs by 0.018 mm. Actual contexts are retained; following-layer capture is not prior backing. R46 printed successfully but left wisps and support nubs. Sag, wisps, release effort, bought-part fit, click force and strength remain physical-trial limits.",
+  "independent_review_disposition": "Opus reviewed the preceding same-geometry archive and required explicit left-joint solid fill. The selected re-slice has the recommended selectors and passed fresh full-path audits. Missing eight-part and roof coverage was completed. The construction-overlap fringe stays reported, with all designed chamfer slabs tested. Nominal mounting end contacts are reported separately from strictly clear interiors. Physical switch-stop margins remain unverified.",
+  "physical_acceptance_verified": false,
+  "gui_send_ready_verified": false
+}
