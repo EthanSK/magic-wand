@@ -10,7 +10,13 @@ export function installAssemblyControls({ host, playbackHost, steps, onFrame }) 
   const button = label => { const b = doc.createElement('button'); b.type = 'button'; b.textContent = label; return b; };
   const previous = button('Previous'), play = button('Play'), next = button('Next');
   const speed = doc.createElement('select'); speed.setAttribute('aria-label', 'Playback speed');
-  for (const value of [.5, 1, 2]) { const option = doc.createElement('option'); option.value = value; option.textContent = value + '×'; option.selected = value === 1; speed.append(option); }
+  for (const value of [.5, 1, 2, 5, 10]) {
+    const option = doc.createElement('option');
+    option.value = value;
+    option.textContent = value + '×';
+    option.selected = value === 1;
+    speed.append(option);
+  }
   actions.append(previous, play, next, speed);
   const seek = doc.createElement('input'); seek.type = 'range'; seek.min = 0; seek.max = 1000; seek.step = 1; seek.value = 0;
   seek.setAttribute('aria-label', 'Assembly progress'); seek.className = 'assembly-progress';
