@@ -1,0 +1,109 @@
+{
+  "op1_world_translation_from_r48_mm": [
+    0.0,
+    3.3,
+    0.2
+  ],
+  "axis_paddle_xyz_mm": [
+    0.0,
+    26.55,
+    18.5
+  ],
+  "axis_world_xyz_mm": [
+    0.0,
+    30.1,
+    18.5
+  ],
+  "paddle_local_to_world_at_zero": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      -0.0,
+      3.55
+    ],
+    [
+      0.0,
+      0.0,
+      1.0,
+      0.0
+    ]
+  ],
+  "axle_insertion_unit_vector": [
+    1.0,
+    0.0,
+    0.0
+  ],
+  "plunger_inset_from_board_free_edge_mm": 4.949999999999999,
+  "plunger_inset_from_copper_free_edge_mm": 4.369999999999999,
+  "copper_length_mm": 13.12,
+  "op1_pcb_hole_spacing_mm": 17.9,
+  "meshes": {
+    "Key_Carrier-assembly": {
+      "sha256": "94361c6c6a6c81445278db2472bcb8bb003740fbcf0917eb65b5d4d219423af7",
+      "volume_mm3": 9585.561,
+      "bounds_mm": [
+        -30.77,
+        -18.84629,
+        -4.78133,
+        30.0,
+        32.65,
+        21.05
+      ]
+    },
+    "DFRobot_Hole_Bracket-assembly": {
+      "sha256": "9b8e551bc96ae4611fb02f0809b33e141b639283849a92c9499be10e8161818c",
+      "volume_mm3": 1173.968,
+      "bounds_mm": [
+        -10.6,
+        -11.835,
+        13.33,
+        10.6,
+        29.33,
+        22.7
+      ]
+    },
+    "pivot-screw": {
+      "sha256": "6ccd156cf828ee678e6f6e90c4f1f0e0d089c54d42d75c8abecebf328ae1c925",
+      "volume_mm3": 85.426,
+      "bounds_mm": [
+        -10.35,
+        28.2,
+        16.6,
+        11.65,
+        32.0,
+        20.4
+      ]
+    },
+    "pivot-sleeve": {
+      "sha256": "5f57308e47e40a9b099d6c6024393ef34868db175134e78f62654a2f4b7e5290",
+      "volume_mm3": 43.215,
+      "bounds_mm": [
+        -6.0,
+        28.6,
+        17.0,
+        6.0,
+        31.6,
+        20.0
+      ]
+    },
+    "pivot-locknut": {
+      "sha256": "3a27a6a968f0f17598767b84c01830546914a16660789ec4e42efcd859fee846",
+      "volume_mm3": 26.795,
+      "bounds_mm": [
+        8.35,
+        28.1,
+        16.1906,
+        10.85,
+        32.1,
+        20.8094
+      ]
+    }
+  },
+  "rest_angle_deg": -0.81082858708442
+}

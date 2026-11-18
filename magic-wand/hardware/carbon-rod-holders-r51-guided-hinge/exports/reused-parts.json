@@ -1,0 +1,139 @@
+{
+  "eroded_edge_mm": 0.28,
+  "slice_spacing_mm": 0.2,
+  "method": "Whole reference mesh erosion screen, R48 native slice at named joints, and comparison against wide-pad retry movements. Separate islands below 0.01 cubic mm are omitted. Physical fatigue life is unmeasured.",
+  "source_slice_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+  "retry_sha256": "150eabc147bcf0a38c6f6f395e01e997d69d1480a3235fd45f505038689f5539",
+  "parts": {
+    "XIAO_Rod_Holder": {
+      "assembly_mesh_sha256": "24cf0b4639c0963936af27d730aed54b8829489130458068c6db7b242c1c9225",
+      "raw_mesh_watertight": true,
+      "raw_zero_area_faces": 0,
+      "resolved_solid_count": 1,
+      "eroded_connected_volumes_mm3": [
+        839.261
+      ],
+      "printed_joint_checks": {
+        "near rod clip crown to body": true,
+        "far rod clip crown to body": true
+      },
+      "working_spaces_checked": 67,
+      "floating_components": [],
+      "checked_layers": 142,
+      "retry_move_comparison": {
+        "original_moves": 38883,
+        "retry_moves": 38883,
+        "moves_identical_after_bracket_translation": 38883,
+        "layers_with_changed_moves": []
+      }
+    },
+    "XIAO_Near_Keeper": {
+      "assembly_mesh_sha256": "e2011d0460def13d454df6219e4410851127471df108780e0c79bd5267e19d60",
+      "raw_mesh_watertight": true,
+      "raw_zero_area_faces": 0,
+      "resolved_solid_count": 1,
+      "eroded_connected_volumes_mm3": [
+        110.831
+      ],
+      "printed_joint_checks": {
+        "tongue to fixed keeper": true
+      },
+      "working_spaces_checked": 1,
+      "floating_components": [],
+      "checked_layers": 11,
+      "retry_move_comparison": {
+        "original_moves": 3499,
+        "retry_moves": 3499,
+        "moves_identical_after_bracket_translation": 3499,
+        "layers_with_changed_moves": []
+      }
+    },
+    "Cable_Clip_12_Wire": {
+      "assembly_mesh_sha256": "aa5c140054e25616aded0fd2101d4a207fa4d69f3bc86a93150326cdd65f7881",
+      "raw_mesh_watertight": false,
+      "raw_zero_area_faces": 58,
+      "resolved_solid_count": 1,
+      "eroded_connected_volumes_mm3": [
+        55.639
+      ],
+      "printed_joint_checks": {
+        "bridge joining the two clip rings": true
+      },
+      "working_spaces_checked": 0,
+      "floating_components": [],
+      "checked_layers": 12,
+      "retry_move_comparison": {
+        "original_moves": 1086,
+        "retry_moves": 1086,
+        "moves_identical_after_bracket_translation": 1086,
+        "layers_with_changed_moves": []
+      },
+      "clean_reference_sha256": "77b460e2ac4624481dbb06f5df428cb61c2275ddd0369632a004cc2d35f838fc",
+      "volume_change_mm3": 0.0
+    },
+    "Battery_Holder": {
+      "assembly_mesh_sha256": "9c2c7cba24730f771af0bca69db40429aa342bc05b961e4cb1d040dd6a6e3bcf",
+      "raw_mesh_watertight": true,
+      "raw_zero_area_faces": 0,
+      "resolved_solid_count": 1,
+      "eroded_connected_volumes_mm3": [
+        1157.271
+      ],
+      "printed_joint_checks": {
+        "near rod clip crown to body": true,
+        "far rod clip crown to body": true
+      },
+      "working_spaces_checked": 7,
+      "floating_components": [],
+      "checked_layers": 165,
+      "retry_move_comparison": {
+        "original_moves": 36689,
+        "retry_moves": 36689,
+        "moves_identical_after_bracket_translation": 36689,
+        "layers_with_changed_moves": []
+      }
+    },
+    "DFR0030_Post_Clip": {
+      "assembly_mesh_sha256": "b56764157c241fe11ed068b5f3f62c1065912722afc38edd235656c5ae4d366d",
+      "raw_mesh_watertight": true,
+      "raw_zero_area_faces": 0,
+      "resolved_solid_count": 1,
+      "eroded_connected_volumes_mm3": [
+        1.411
+      ],
+      "printed_joint_checks": {
+        "heel connecting the retaining jaws": true
+      },
+      "working_spaces_checked": 1,
+      "floating_components": [],
+      "checked_layers": 4,
+      "retry_move_comparison": {
+        "original_moves": 469,
+        "retry_moves": 469,
+        "moves_identical_after_bracket_translation": 469,
+        "layers_with_changed_moves": []
+      }
+    },
+    "DFR0030_Post_Clip_2": {
+      "assembly_mesh_sha256": "ac3d0a1dc2e4dcfc2645fa82dfd58aee9842fe4431b4dced537231563413a00d",
+      "raw_mesh_watertight": true,
+      "raw_zero_area_faces": 0,
+      "resolved_solid_count": 1,
+      "eroded_connected_volumes_mm3": [
+        1.411
+      ],
+      "printed_joint_checks": {
+        "heel connecting the retaining jaws": true
+      },
+      "working_spaces_checked": 1,
+      "floating_components": [],
+      "checked_layers": 4,
+      "retry_move_comparison": {
+        "original_moves": 469,
+        "retry_moves": 469,
+        "moves_identical_after_bracket_translation": 469,
+        "layers_with_changed_moves": []
+      }
+    }
+  }
+}

@@ -1,0 +1,343 @@
+{
+  "model": "R51",
+  "physical_fit_tested": false,
+  "printed": false,
+  "units": "mm",
+  "dimensions": {
+    "op1_world_translation_from_r48_mm": [
+      0.0,
+      3.3,
+      0.2
+    ],
+    "axis_paddle_xyz_mm": [
+      0.0,
+      26.55,
+      18.5
+    ],
+    "axis_world_xyz_mm": [
+      0.0,
+      30.1,
+      18.5
+    ],
+    "paddle_local_to_world_at_zero": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        -0.0,
+        3.55
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ]
+    ],
+    "axle_insertion_unit_vector": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "plunger_inset_from_board_free_edge_mm": 4.949999999999999,
+    "plunger_inset_from_copper_free_edge_mm": 4.369999999999999,
+    "copper_length_mm": 13.12,
+    "op1_pcb_hole_spacing_mm": 17.9
+  },
+  "files": {
+    "Key_Carrier-assembly.stl": "94361c6c6a6c81445278db2472bcb8bb003740fbcf0917eb65b5d4d219423af7",
+    "DFRobot_Hole_Bracket-assembly.stl": "9b8e551bc96ae4611fb02f0809b33e141b639283849a92c9499be10e8161818c",
+    "op1_wire.stl": "a09331878f9e86ed85fb14a0d67c83638116ddaf37892d1b965c4fe770b74c6a",
+    "op1-wire-hanging.stl": "7ba29e2dc70857eec62d974e0c87624d44caf33cb76846cc021f3a8a24319a43",
+    "pivot-screw.stl": "6ccd156cf828ee678e6f6e90c4f1f0e0d089c54d42d75c8abecebf328ae1c925",
+    "pivot-sleeve.stl": "5f57308e47e40a9b099d6c6024393ef34868db175134e78f62654a2f4b7e5290",
+    "pivot-locknut.stl": "3a27a6a968f0f17598767b84c01830546914a16660789ec4e42efcd859fee846"
+  },
+  "hardware": [
+    "M2 \u00d7 20 mm socket-head screw (3.8 mm head diameter)",
+    "3 mm OD \u00d7 2.1 mm ID \u00d7 12.0 mm smooth metal spacer",
+    "M2 nylon-insert locknut, 4 mm across flats \u00d7 2.5 mm"
+  ],
+  "bearing": {
+    "bore_mm": 3.2,
+    "effective_span_mm": 11.6,
+    "radial_clearance_mm": 0.10000000000000009,
+    "max_roll_deg": 0.987760399639811,
+    "roll_only_edge_excursion_mm_at_copper_edge": 0.16807846819573682,
+    "opposite_edges_vertical_difference_from_roll_mm": 0.33615693639147365,
+    "unclamped_total_axial_slack_mm": 0.5999999999999996,
+    "total_axial_slack_with_cheeks_on_spacer_mm": 0.40000000000000036,
+    "spacer_entry_clearance_per_side_mm": 0.09999999999999964,
+    "assumptions": "Rigid parts at CAD dimensions with spacer fixed to cheeks; print tolerance, component flex and wear are unmeasured."
+  },
+  "contact": {
+    "first_contact_deg": -0.8179262787103654,
+    "fixed_heel_contact_deg": 0.4233850449323654,
+    "plunger_model_at_zero_deg_mm": 0.48,
+    "lever_mm": 33.91949,
+    "press_cases": {
+      "centre": {
+        "roll_deg": 0.0,
+        "lateral_shift_mm": 0.0,
+        "vertical_offset_mm": 0.0,
+        "fixed_limit_deg": 0.4233850449323654,
+        "plunger_travel_at_first_heel_mm": 0.732831832766533,
+        "bracket_to_other_op1_mm3": 0.0
+      },
+      "copper_left": {
+        "roll_deg": 0.987760399639811,
+        "lateral_shift_mm": -0.2999999999999998,
+        "vertical_offset_mm": 0.0,
+        "fixed_limit_deg": 0.1611968785524368,
+        "plunger_travel_at_first_heel_mm": 0.5923964649438859,
+        "bracket_to_other_op1_mm3": 0.0
+      },
+      "copper_right": {
+        "roll_deg": -0.987760399639811,
+        "lateral_shift_mm": 0.2999999999999998,
+        "vertical_offset_mm": 0.0,
+        "fixed_limit_deg": 0.1611968785524368,
+        "plunger_travel_at_first_heel_mm": 0.5786055117845537,
+        "bracket_to_other_op1_mm3": 0.0
+      },
+      "vertical_float_high": {
+        "roll_deg": 0.0,
+        "lateral_shift_mm": 0.0,
+        "vertical_offset_mm": 0.10000000000000009,
+        "fixed_limit_deg": 0.5747000783681869,
+        "plunger_travel_at_first_heel_mm": 0.7231837660074235,
+        "bracket_to_other_op1_mm3": 0.0
+      },
+      "vertical_float_low": {
+        "roll_deg": 0.0,
+        "lateral_shift_mm": 0.0,
+        "vertical_offset_mm": -0.10000000000000009,
+        "fixed_limit_deg": 0.27212723195552824,
+        "plunger_travel_at_first_heel_mm": 0.7425082236528397,
+        "bracket_to_other_op1_mm3": 0.0
+      }
+    },
+    "trigger_note": "0.48 mm is the project design target. The actual fitted microswitch electrical actuation and endurance are unmeasured."
+  },
+  "intersections_mm3": {
+    "seated_op1": {
+      "board": 0.0,
+      "sockets": 0.0,
+      "housing": 0.0,
+      "plug": 0.0,
+      "switch": 0.0,
+      "terminals": 0.0,
+      "plunger": 0.0,
+      "op1_wire": 0.0,
+      "fastener_heads": 0.0
+    },
+    "paddle_to_dfr_parts": {
+      "pcb": 0.0,
+      "copper": 0.0,
+      "plug": 0.0,
+      "wire": 0.0,
+      "pin_tolerance": 0.0,
+      "two_clips": 0.0
+    },
+    "moving": {
+      "paddle_to_carrier": 0.0,
+      "paddle_to_other_op1": 0.0,
+      "board_and_gravity_lead_to_carrier_axle_and_op1": 0.0,
+      "paddle_to_axle_stack": 0.0
+    },
+    "assembly": {
+      "outer_keys_to_carrier": 2.8278724556168616e-05,
+      "outer_keys_to_mechanism": 0.0,
+      "op1_drop_with_plug_before_outer_keys": 0.0,
+      "mouse_drop": 0.0,
+      "axle_to_carrier": 0.0,
+      "paddle_and_sleeve_drop": 0.0,
+      "dfr_board_to_paddle_drop": 0.0,
+      "changing_dfr_hole_pitch": 0.0,
+      "pivot-screw_insertion_without_outer_keys": 0.0,
+      "pivot-locknut_insertion_without_outer_keys": 0.0
+    }
+  },
+  "op1_harness_outlet": {
+    "centreline_mm": [
+      [
+        7.771865375511789,
+        15.897459583678765
+      ],
+      [
+        8.489790507093698,
+        17.81763757163798
+      ]
+    ],
+    "width_mm": 4.16,
+    "usable_straight_travel_mm": 2.0500000000000007,
+    "wire_bundle_mm": 3.232050807568877,
+    "max_bundle_intersection_mm3": 0.0,
+    "passes": true
+  },
+  "trimmed_chin": {
+    "old_protrusions_mm3": 143.3325002792817,
+    "R51_reference_skin_mm3": 0.011823125609614453,
+    "depth_0.06mm_core_remaining_mm3": 6.8838363444406614e-15
+  },
+  "op1_rod_gaps_mm": {
+    "op1_wire": 1.5363524489223246,
+    "plug": 0.9149511302593861,
+    "sockets": 1.0999999999999996,
+    "terminals": 3.5090047553092214
+  },
+  "fan_sections_mm2": {
+    "-1": {
+      "13.9": 16.473196762180248,
+      "16.5": 17.274915476801738,
+      "19.0": 15.935319656152238,
+      "21.1": 14.524031280121358,
+      "23.3": 17.24182543471381
+    },
+    "1": {
+      "13.9": 16.473196729307652,
+      "16.5": 17.274915476773216,
+      "19.0": 15.93531964198477,
+      "21.1": 14.52403127995814,
+      "23.3": 17.24182523321354
+    }
+  },
+  "viewer": {
+    "click_path": [
+      {
+        "angle_deg": -0.8179262787103654,
+        "plunger_drop_mm": 8.046627044677735e-08
+      },
+      {
+        "angle_deg": -0.6937951463460923,
+        "plunger_drop_mm": 0.07284941375255585
+      },
+      {
+        "angle_deg": -0.5696640139818192,
+        "plunger_drop_mm": 0.14569794237613679
+      },
+      {
+        "angle_deg": -0.4455328816175461,
+        "plunger_drop_mm": 0.2185451835393906
+      },
+      {
+        "angle_deg": -0.32140174925327303,
+        "plunger_drop_mm": 0.2913909763097764
+      },
+      {
+        "angle_deg": -0.19727061688899994,
+        "plunger_drop_mm": 0.36423515975475307
+      },
+      {
+        "angle_deg": -0.07313948452472685,
+        "plunger_drop_mm": 0.43707773387432103
+      },
+      {
+        "angle_deg": 0.05099164783954624,
+        "plunger_drop_mm": 0.510449293255806
+      },
+      {
+        "angle_deg": 0.17512278020381933,
+        "plunger_drop_mm": 0.5845794886350633
+      },
+      {
+        "angle_deg": 0.2992539125680924,
+        "plunger_drop_mm": 0.658707270026207
+      },
+      {
+        "angle_deg": 0.4233850449323654,
+        "plunger_drop_mm": 0.732831832766533
+      },
+      {
+        "angle_deg": 0.2992539125680924,
+        "plunger_drop_mm": 0.658707270026207
+      },
+      {
+        "angle_deg": 0.17512278020381933,
+        "plunger_drop_mm": 0.5845794886350633
+      },
+      {
+        "angle_deg": 0.05099164783954624,
+        "plunger_drop_mm": 0.510449293255806
+      },
+      {
+        "angle_deg": -0.07313948452472685,
+        "plunger_drop_mm": 0.43707773387432103
+      },
+      {
+        "angle_deg": -0.19727061688899994,
+        "plunger_drop_mm": 0.36423515975475307
+      },
+      {
+        "angle_deg": -0.32140174925327303,
+        "plunger_drop_mm": 0.2913909763097764
+      },
+      {
+        "angle_deg": -0.4455328816175461,
+        "plunger_drop_mm": 0.2185451835393906
+      },
+      {
+        "angle_deg": -0.5696640139818192,
+        "plunger_drop_mm": 0.14569794237613679
+      },
+      {
+        "angle_deg": -0.6937951463460923,
+        "plunger_drop_mm": 0.07284941375255585
+      },
+      {
+        "angle_deg": -0.8179262787103654,
+        "plunger_drop_mm": 8.046627044677735e-08
+      }
+    ],
+    "paddle_rest_matrix": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.9998981066860486,
+        0.014275021739228325,
+        3.288617365309686
+      ],
+      [
+        0.0,
+        -0.014275021739228325,
+        0.9998981066860486,
+        0.3808868534846148
+      ]
+    ],
+    "assembly_order": [
+      "OP1 and its lead",
+      "spacer into loose paddle",
+      "paddle and spacer between cheeks",
+      "axle screw from negative X",
+      "locknut from positive X",
+      "DFRobot board and two clips",
+      "outer Choc switches"
+    ]
+  },
+  "gates": {
+    "no_early_stop_before_design_depression_including_corner_press": true,
+    "nominal_heel_catches_before_plunger_fully_retracted": true,
+    "even_corner_press_clears_switch_housing": true,
+    "installed_op1_and_pad_clear": true,
+    "pad_clears_other_parts_through_stroke": true,
+    "printed_boards_wire_and_axle_clear_insertion_paths": true,
+    "old_chin_runners_and_saddle_projections_removed": true,
+    "electronics_clear_rod": true,
+    "both_fans_have_broad_continuous_sections": true,
+    "op1_wire_morph_matches_triangle_order": true
+  },
+  "generator_sha256": {
+    "mechanical_checks51.py": "89c38d0d66bda4e2adc9f1f8fcd15e5de0088871bb1f5fc021d684453f86e6c7",
+    "build51.py": "549778eab348b4700a588bcc415dd447aa718dd50b8e35205caa9a03fa6fee5d"
+  }
+}

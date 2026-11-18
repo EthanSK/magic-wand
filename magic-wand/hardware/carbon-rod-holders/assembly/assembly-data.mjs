@@ -69,6 +69,7 @@ export function groupKeys(modules) {
   }));
 
   function paddleView(module, label) {
+    if (module.fitOuterKeysSeparately) return { ...module, label };
     const actors = { ...sockets, ...module.actors, ...caps };
     // The centre installation guide already carries the four seated switches.
     // Include them in the camera bounds when the keys are shown together.
@@ -104,8 +105,10 @@ export function groupKeys(modules) {
     id: 'other-keycaps', hideLabel: 'Hide other keycaps', showLabel: 'Show other keycaps', actors: Object.keys(caps),
   };
   for (const [id, view] of Object.entries(views)) {
-    view.helperActions = [otherKeycaps];
-    view.compareCapHeights = id !== 'key';
+    if (!view.fitOuterKeysSeparately) {
+      view.helperActions = [otherKeycaps];
+      view.compareCapHeights = id !== 'key';
+    }
   }
   // A guide may name the Keys entry so a detail module listed after it reads as a pair.
   // Compose the whole-rod view with the same bought cap reference as Keys.
@@ -133,6 +136,7 @@ const componentFamilies = {
   centre_shallow: 'keys',
   centre_deep: 'keys',
   snap_hinge: 'keys',
+  pin_hinge: 'keys',
   finger_rest: 'keys',
   xiao_latch: 'xiao',
   battery_latch: 'battery',
@@ -147,6 +151,7 @@ const componentLabels = {
 };
 const viewLabels = {
   snap_hinge: 'Snap hinge detail',
+  pin_hinge: 'Axle assembly',
   finger_rest: 'Finger rest underside',
   xiao: 'Full assembly',
   xiao_latch: 'Keeper detail',
