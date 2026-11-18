@@ -1,5 +1,26 @@
 # R48 edge click
 
+## Wide-pad print retry
+
+The first plate was stopped at layer 128 after the upright DFRobot bracket
+tipped. This print-only retry keeps the nine functional parts and changes the
+bracket placement and its two removable pads. Both pads are 0.4 mm thick.
+They extend outward from the original feet and share their two existing
+tear-off ties. Pull the pads away from the bracket before inserting the PCB.
+
+A 20 mm native brim was tested first. Its actual first-layer paths entered
+the PCB loading route. The two wide pads leave that route clear and increase
+the bracket's deposited first-layer footprint from 215 to 2,849 mm². Measured
+clearance is at least 4.3 mm to another first-layer footprint and 8.0 mm to the
+bed edge. Both ties join at both pad layers in the reopened slice. The
+bracket's loading and support-removal checks passed. Physical adhesion and
+tear-off effort are trial results.
+
+Generate the editable retry with `adhesion_retry48.py` from the original
+R48 layout. Slice, reopen and use the print-only package that preserves
+those checked machine instructions. The original assembly animation
+describes the same functional parts. [Retry verification](exports/wide-pad-retry/verification.json)
+
 The bottom row has three controls. Its centre control is a DFRobot DFR0030 touch board that pivots on the snap hinge at the opposite end. Pressing the free end operates the plunger on the separate OP1 mouse-switch board underneath it. The key carrier, touch-board hinge, removable print supports and battery mount were revised after the [R47 physical trial](../carbon-rod-holders-r47-bottom-click/PHYSICAL-TRIAL.md).
 
 The plunger centre moves from 6.5 mm to 1.65 mm behind the free edge. The OP1 board turns from 19° to 20.5° under the touch board. Its screw centres remain 17.9 mm apart. The four Choc switches retain their R47 height and spacing.

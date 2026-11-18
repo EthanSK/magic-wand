@@ -1,0 +1,904 @@
+{
+  "source_r48_archive_sha256": "a4d28b7ca3c4aa348c0836061708721e8927f9f0f1ee738d9cffcdd063fa471d",
+  "retry_archive_sha256": "150eabc147bcf0a38c6f6f395e01e997d69d1480a3235fd45f505038689f5539",
+  "gcode_sha256": "950333b830de2771e551da4467eb449cfe383b156df9492800bb1df33fce0efc",
+  "plate_objects": [
+    "Key_Carrier",
+    "External_cradle",
+    "Release_tabs",
+    "Front_pull_shelf",
+    "Rear_pull_shelf",
+    "DFRobot_Hole_Bracket",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2",
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Battery_Holder",
+    "Battery_End_Door",
+    "Cable_Clip_12_Wire"
+  ],
+  "estimated_time_material": [
+    "; model printing time: 4h 27m 8s; total estimated time: 4h 33m 23s",
+    "; total filament weight [g] : 41.34"
+  ],
+  "nozzle_bed_c": [
+    245,
+    60
+  ],
+  "timelapse_mode": "Smooth",
+  "bracket_move_xy_mm": [
+    7,
+    23
+  ],
+  "bracket_first_layer": {
+    "original_bed_contact_mm2": 215.04234585492128,
+    "retry_bed_contact_mm2": 2848.9072927639622,
+    "area_multiple": 13.248122277674476,
+    "native_brim": false,
+    "wide_pad_bounds_mm": [
+      83.000005,
+      127.000005,
+      170.199995,
+      171.999995
+    ],
+    "min_clearance_to_other_printed_first_layer_mm": 4.345016267791186,
+    "min_clearance_to_bed_limit_mm": 8.000004999999987
+  },
+  "non_brim_deposition_comparison": {
+    "Battery_Holder": {
+      "original_moves": 36689,
+      "retry_moves": 36689,
+      "moves_identical_after_bracket_translation": 36689,
+      "layers_with_changed_moves": []
+    },
+    "Release_tabs": {
+      "original_moves": 652,
+      "retry_moves": 652,
+      "moves_identical_after_bracket_translation": 652,
+      "layers_with_changed_moves": []
+    },
+    "Key_Carrier": {
+      "original_moves": 187380,
+      "retry_moves": 187374,
+      "moves_identical_after_bracket_translation": 187188,
+      "layers_with_changed_moves": [
+        32,
+        55,
+        56,
+        57,
+        58,
+        65,
+        66,
+        69,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        80,
+        85,
+        87,
+        88,
+        89,
+        90,
+        122,
+        123,
+        131,
+        132,
+        137,
+        139,
+        140,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        156,
+        157,
+        159,
+        160,
+        161,
+        162,
+        163,
+        164,
+        222,
+        224
+      ]
+    },
+    "External_cradle": {
+      "original_moves": 52132,
+      "retry_moves": 52132,
+      "moves_identical_after_bracket_translation": 52122,
+      "layers_with_changed_moves": [
+        37,
+        49,
+        53,
+        69,
+        93
+      ]
+    },
+    "Front_pull_shelf": {
+      "original_moves": 118307,
+      "retry_moves": 118307,
+      "moves_identical_after_bracket_translation": 118307,
+      "layers_with_changed_moves": []
+    },
+    "Rear_pull_shelf": {
+      "original_moves": 15782,
+      "retry_moves": 15782,
+      "moves_identical_after_bracket_translation": 15782,
+      "layers_with_changed_moves": []
+    },
+    "DFRobot_Hole_Bracket": {
+      "original_moves": 19697,
+      "retry_moves": 20143,
+      "moves_identical_after_bracket_translation": 16553,
+      "layers_with_changed_moves": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        210
+      ]
+    },
+    "XIAO_Rod_Holder": {
+      "original_moves": 38883,
+      "retry_moves": 38883,
+      "moves_identical_after_bracket_translation": 38883,
+      "layers_with_changed_moves": []
+    },
+    "XIAO_Near_Keeper": {
+      "original_moves": 3499,
+      "retry_moves": 3499,
+      "moves_identical_after_bracket_translation": 3499,
+      "layers_with_changed_moves": []
+    },
+    "Cable_Clip_12_Wire": {
+      "original_moves": 1086,
+      "retry_moves": 1086,
+      "moves_identical_after_bracket_translation": 1086,
+      "layers_with_changed_moves": []
+    },
+    "Battery_End_Door": {
+      "original_moves": 6270,
+      "retry_moves": 6270,
+      "moves_identical_after_bracket_translation": 6270,
+      "layers_with_changed_moves": []
+    },
+    "DFR0030_Post_Clip_2": {
+      "original_moves": 469,
+      "retry_moves": 469,
+      "moves_identical_after_bracket_translation": 469,
+      "layers_with_changed_moves": []
+    },
+    "DFR0030_Post_Clip": {
+      "original_moves": 469,
+      "retry_moves": 469,
+      "moves_identical_after_bracket_translation": 469,
+      "layers_with_changed_moves": []
+    }
+  },
+  "bracket_ties": [
+    {
+      "layer_top_mm": 0.2,
+      "pad": 1,
+      "joined": true
+    },
+    {
+      "layer_top_mm": 0.2,
+      "pad": 2,
+      "joined": true
+    },
+    {
+      "layer_top_mm": 0.4,
+      "pad": 1,
+      "joined": true
+    },
+    {
+      "layer_top_mm": 0.4,
+      "pad": 2,
+      "joined": true
+    }
+  ],
+  "bracket_working_spaces": {
+    "DFRobot PCB and connector-pin loading": {
+      "checked_samples": 88335,
+      "violations": {},
+      "removable_external_support_samples": 0,
+      "external_support_exception": null,
+      "examples": [],
+      "poses_checked": 25
+    },
+    "DFRobot Gravity lead": {
+      "checked_samples": 8999,
+      "violations": {},
+      "removable_external_support_samples": 0,
+      "external_support_exception": null,
+      "examples": [],
+      "poses_checked": 1
+    },
+    "DFRobot clip approach excluding intended post snap": {
+      "checked_samples": 1296,
+      "violations": {},
+      "removable_external_support_samples": 0,
+      "external_support_exception": null,
+      "examples": [],
+      "poses_checked": 1
+    },
+    "arm squeeze clearance": {
+      "checked_samples": 9398,
+      "violations": {},
+      "removable_external_support_samples": 0,
+      "external_support_exception": null,
+      "examples": [],
+      "poses_checked": 4
+    },
+    "arm flex gaps": {
+      "checked_samples": 1806,
+      "violations": {},
+      "removable_external_support_samples": 0,
+      "external_support_exception": null,
+      "examples": [],
+      "poses_checked": 1
+    },
+    "adjustable stop pilot": {
+      "checked_samples": 0,
+      "violations": {},
+      "removable_external_support_samples": 0,
+      "examples": [],
+      "poses_checked": 1
+    }
+  },
+  "other_parts_passed": true,
+  "click_load_path_passed": true,
+  "whole_plate_deposition_layout": {
+    "bounds_xy_mm": {
+      "DFRobot_Hole_Bracket": [
+        [
+          83.00000408291817,
+          127.00000408291817
+        ],
+        [
+          170.20000049471855,
+          171.99999499320984
+        ]
+      ],
+      "DFR0030_Post_Clip": [
+        [
+          17.420004919171333,
+          18.200999334454536
+        ],
+        [
+          22.19899456202984,
+          27.99099437892437
+        ]
+      ],
+      "DFR0030_Post_Clip_2": [
+        [
+          34.420003175735474,
+          18.200999334454536
+        ],
+        [
+          39.19899646937847,
+          27.99099437892437
+        ]
+      ],
+      "XIAO_Rod_Holder": [
+        [
+          99.20000195503235,
+          75.02704757452011
+        ],
+        [
+          155.99999499320984,
+          111.52999775111675
+        ]
+      ],
+      "XIAO_Near_Keeper": [
+        [
+          113.34400177001953,
+          45.34400177001953
+        ],
+        [
+          150.656005859375,
+          66.65599822998047
+        ]
+      ],
+      "Battery_Holder": [
+        [
+          17.847949102520943,
+          63.0278959274292
+        ],
+        [
+          59.15204136073589,
+          92.82999682426453
+        ]
+      ],
+      "Battery_End_Door": [
+        [
+          52.34400177001953,
+          15.343999862670898
+        ],
+        [
+          78.9520034790039,
+          56.38600158691406
+        ]
+      ],
+      "Cable_Clip_12_Wire": [
+        [
+          90.0067138671875,
+          50.8539991825819
+        ],
+        [
+          108.43893523514271,
+          71.25399871170521
+        ]
+      ],
+      "Key carrier and temporary helpers": [
+        [
+          9.978809624910355,
+          105.05000713467598
+        ],
+        [
+          78.81699633598328,
+          141.5809886455536
+        ]
+      ],
+      "Smooth timelapse tower": [
+        [
+          116.55851745605469,
+          16.54576873779297
+        ],
+        [
+          138.91278076171875,
+          38.90248107910156
+        ]
+      ]
+    },
+    "group_gaps": [
+      {
+        "groups": [
+          "Battery_End_Door",
+          "Battery_Holder"
+        ],
+        "conservative_xy_gap_mm": 6.641894340515137
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "Cable_Clip_12_Wire"
+        ],
+        "conservative_xy_gap_mm": 11.054710388183594
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "DFR0030_Post_Clip"
+        ],
+        "conservative_xy_gap_mm": 30.145007207989693
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "DFR0030_Post_Clip_2"
+        ],
+        "conservative_xy_gap_mm": 13.14500530064106
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "DFRobot_Hole_Bracket"
+        ],
+        "conservative_xy_gap_mm": 70.72993466273643
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 48.66400554776192
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 37.60651397705078
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 34.391998291015625
+      },
+      {
+        "groups": [
+          "Battery_End_Door",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 27.522173566004806
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "Cable_Clip_12_Wire"
+        ],
+        "conservative_xy_gap_mm": 30.854672506451607
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "DFR0030_Post_Clip"
+        ],
+        "conservative_xy_gap_mm": 35.03690154850483
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "DFR0030_Post_Clip_2"
+        ],
+        "conservative_xy_gap_mm": 35.03690154850483
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "DFRobot_Hole_Bracket"
+        ],
+        "conservative_xy_gap_mm": 41.66910992635957
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 12.220010310411453
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 62.26988950758076
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 54.19196040928364
+      },
+      {
+        "groups": [
+          "Battery_Holder",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 40.047960594296455
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "DFR0030_Post_Clip"
+        ],
+        "conservative_xy_gap_mm": 71.55839423868537
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "DFR0030_Post_Clip_2"
+        ],
+        "conservative_xy_gap_mm": 55.71481971457588
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "DFRobot_Hole_Bracket"
+        ],
+        "conservative_xy_gap_mm": 55.74600537121296
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 35.60028038869428
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 14.448750825589325
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 4.905066534876823
+      },
+      {
+        "groups": [
+          "Cable_Clip_12_Wire",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 3.7730488628149033
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "DFR0030_Post_Clip_2"
+        ],
+        "conservative_xy_gap_mm": 12.221008613705635
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "DFRobot_Hole_Bracket"
+        ],
+        "conservative_xy_gap_mm": 116.1875499411391
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 77.05901275575161
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 94.35952289402485
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 92.78221383681193
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 90.23051279781212
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip_2",
+          "DFRobot_Hole_Bracket"
+        ],
+        "conservative_xy_gap_mm": 108.26500944685176
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip_2",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 77.05901275575161
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip_2",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 77.35952098667622
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip_2",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 76.14859602479545
+      },
+      {
+        "groups": [
+          "DFR0030_Post_Clip_2",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 76.23982528513808
+      },
+      {
+        "groups": [
+          "DFRobot_Hole_Bracket",
+          "Key carrier and temporary helpers"
+        ],
+        "conservative_xy_gap_mm": 4.183007746934891
+      },
+      {
+        "groups": [
+          "DFRobot_Hole_Bracket",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 88.0975230038166
+      },
+      {
+        "groups": [
+          "DFRobot_Hole_Bracket",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 60.3440058529377
+      },
+      {
+        "groups": [
+          "DFRobot_Hole_Bracket",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 15.470006331801414
+      },
+      {
+        "groups": [
+          "Key carrier and temporary helpers",
+          "Smooth timelapse tower"
+        ],
+        "conservative_xy_gap_mm": 76.15719020374696
+      },
+      {
+        "groups": [
+          "Key carrier and temporary helpers",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 51.63539506981434
+      },
+      {
+        "groups": [
+          "Key carrier and temporary helpers",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 20.383005619049072
+      },
+      {
+        "groups": [
+          "Smooth timelapse tower",
+          "XIAO_Near_Keeper"
+        ],
+        "conservative_xy_gap_mm": 6.441520690917969
+      },
+      {
+        "groups": [
+          "Smooth timelapse tower",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 36.12456649541855
+      },
+      {
+        "groups": [
+          "XIAO_Near_Keeper",
+          "XIAO_Rod_Holder"
+        ],
+        "conservative_xy_gap_mm": 8.371049344539642
+      }
+    ],
+    "inside_bed": true,
+    "unassigned_bead_features": {},
+    "passed": true,
+    "scope": "All deposited part, support, adhesion and tower bead widths; intentional key/helper group checked separately"
+  },
+  "review": {
+    "verdict": "PASS FOR ADHESION TRIAL",
+    "model": "claude-opus-5-5",
+    "scope": "Source and measured footprint reviewed. Codex verified the reopened slice.",
+    "conditions_verified": [
+      "original tear-off ties contact at both layers",
+      "no new attachment between extension and bracket body",
+      "actual loading and support checks pass"
+    ]
+  },
+  "physical_acceptance_verified": false
+}
