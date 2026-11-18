@@ -1,0 +1,308 @@
+{
+  "sliced_sha256": "bb02f32c8112d713084ea9523127f205b8042722eb03a5e88531553e4d198da9",
+  "individual_prop_footprints_mm2": [
+    21.14,
+    21.11,
+    21.14,
+    21.26,
+    21.09,
+    21.2,
+    21.22,
+    21.17,
+    21.17
+  ],
+  "unrooted_prop_islands": [],
+  "peel_steps_after_the_brim_is_off": [
+    {
+      "prop": 0,
+      "tip_machine_xy": [
+        29.5,
+        82.2
+      ],
+      "pull_xy": [
+        -0.981,
+        0.195
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 1,
+      "tip_machine_xy": [
+        32.2,
+        82.0
+      ],
+      "pull_xy": [
+        -0.383,
+        -0.924
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 2,
+      "tip_machine_xy": [
+        35.6,
+        82.8
+      ],
+      "pull_xy": [
+        -0.0,
+        -1.0
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 3,
+      "tip_machine_xy": [
+        40.7,
+        82.2
+      ],
+      "pull_xy": [
+        0.195,
+        -0.981
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 4,
+      "tip_machine_xy": [
+        42.6,
+        83.25
+      ],
+      "pull_xy": [
+        0.556,
+        -0.831
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 5,
+      "tip_machine_xy": [
+        64.0,
+        83.6
+      ],
+      "pull_xy": [
+        0.216,
+        -0.976
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 6,
+      "tip_machine_xy": [
+        65.7,
+        82.5
+      ],
+      "pull_xy": [
+        0.342,
+        -0.94
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 7,
+      "tip_machine_xy": [
+        71.6,
+        82.1
+      ],
+      "pull_xy": [
+        0.707,
+        -0.707
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 8,
+      "tip_machine_xy": [
+        62.6,
+        92.75
+      ],
+      "pull_xy": [
+        0.383,
+        0.924
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    }
+  ],
+  "props_requiring_nipping": [],
+  "normal_support_fragment_access": {
+    "unreachable_regions": [
+      {
+        "layer_top_mm": 0.2,
+        "count": 18,
+        "xy_bounds": [
+          25.054,
+          88.177,
+          25.168,
+          89.885
+        ]
+      },
+      {
+        "layer_top_mm": 4.0,
+        "count": 5,
+        "xy_bounds": [
+          70.234,
+          88.952,
+          70.402,
+          88.952
+        ]
+      },
+      {
+        "layer_top_mm": 4.8,
+        "count": 8,
+        "xy_bounds": [
+          69.864,
+          90.085,
+          69.947,
+          90.834
+        ]
+      },
+      {
+        "layer_top_mm": 14.4,
+        "count": 5,
+        "xy_bounds": [
+          29.843,
+          89.357,
+          38.838,
+          90.862
+        ]
+      },
+      {
+        "layer_top_mm": 17.4,
+        "count": 1,
+        "xy_bounds": [
+          25.059,
+          87.741,
+          25.059,
+          87.741
+        ]
+      },
+      {
+        "layer_top_mm": 18.2,
+        "count": 2,
+        "xy_bounds": [
+          26.529,
+          91.624,
+          67.804,
+          92.105
+        ]
+      },
+      {
+        "layer_top_mm": 26.0,
+        "count": 7,
+        "xy_bounds": [
+          27.843,
+          89.478,
+          34.251,
+          91.624
+        ]
+      },
+      {
+        "layer_top_mm": 26.8,
+        "count": 34,
+        "xy_bounds": [
+          35.154,
+          89.285,
+          38.822,
+          89.478
+        ]
+      },
+      {
+        "layer_top_mm": 27.2,
+        "count": 1,
+        "xy_bounds": [
+          39.477,
+          89.355,
+          39.477,
+          89.355
+        ]
+      },
+      {
+        "layer_top_mm": 28.0,
+        "count": 1,
+        "xy_bounds": [
+          80.277,
+          90.541,
+          80.277,
+          90.541
+        ]
+      },
+      {
+        "layer_top_mm": 29.8,
+        "count": 11,
+        "xy_bounds": [
+          39.838,
+          89.72,
+          82.989,
+          89.997
+        ]
+      },
+      {
+        "layer_top_mm": 30.0,
+        "count": 8,
+        "xy_bounds": [
+          39.838,
+          89.749,
+          82.945,
+          89.997
+        ]
+      }
+    ],
+    "unreachable_sensitive_zone_samples": {
+      "wire_core_bead_samples": 0,
+      "underside_lead_bead_samples": 0,
+      "finger_contact_bead_samples": 0,
+      "finger_underside_bead_samples": 0,
+      "axle_core_bead_samples": 0
+    },
+    "samples": 140957,
+    "reachable_by_0p8_mm_fragment_after_one_cell_release": 140856,
+    "unreachable_sample_count": 101,
+    "grid_mm": 0.4,
+    "note": "A fragment can move one opening cell away from the peel face; the test then follows a six-connected route outside the empty holder. It does not prove intact support release."
+  },
+  "fine_fragment_access": {
+    "unreachable_regions": [
+      {
+        "layer_top_mm": 0.2,
+        "count": 18,
+        "xy_bounds": [
+          25.168,
+          88.063,
+          25.168,
+          89.885
+        ]
+      },
+      {
+        "layer_top_mm": 26.0,
+        "count": 2,
+        "xy_bounds": [
+          25.831,
+          92.84,
+          25.911,
+          92.92
+        ]
+      }
+    ],
+    "unreachable_sensitive_zone_samples": {
+      "wire_core_bead_samples": 0,
+      "underside_lead_bead_samples": 0,
+      "finger_contact_bead_samples": 0,
+      "finger_underside_bead_samples": 0,
+      "axle_core_bead_samples": 0
+    },
+    "samples": 140957,
+    "reachable_by_0p8_mm_fragment_after_one_cell_release": 140937,
+    "unreachable_sample_count": 20,
+    "grid_mm": 0.2,
+    "note": "A fragment can move one opening cell away from the peel face; the test then follows a six-connected route outside the empty holder. It does not prove intact support release."
+  },
+  "physical_cleanup_tested": false
+}

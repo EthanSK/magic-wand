@@ -1,0 +1,561 @@
+{
+  "archive_sha256": "bb02f32c8112d713084ea9523127f205b8042722eb03a5e88531553e4d198da9",
+  "frame_sha256": "fa5ca3cf5e0b84407d911c5063114980ce4e961b77cc72def206670ec14a5f8c",
+  "parts": {
+    "Key_Carrier": {
+      "owner": 2,
+      "source_sha256": "94361c6c6a6c81445278db2472bcb8bb003740fbcf0917eb65b5d4d219423af7",
+      "orientation": "rear_down",
+      "model_bed_area_mm2": 330.47,
+      "support_occupancy_volume_mm3": 2144.36,
+      "support_occupancy_mass_estimate_g": 2.723,
+      "supported_area_summed_across_layers_mm2": 107.71,
+      "supported_layers": [
+        [
+          2,
+          0.59
+        ],
+        [
+          3,
+          0.6
+        ],
+        [
+          4,
+          0.2
+        ],
+        [
+          38,
+          0.3
+        ],
+        [
+          39,
+          0.3
+        ],
+        [
+          40,
+          0.3
+        ],
+        [
+          41,
+          0.51
+        ],
+        [
+          42,
+          0.45
+        ],
+        [
+          43,
+          0.51
+        ],
+        [
+          44,
+          0.64
+        ],
+        [
+          45,
+          0.99
+        ],
+        [
+          46,
+          0.11
+        ],
+        [
+          60,
+          0.05
+        ],
+        [
+          61,
+          0.03
+        ],
+        [
+          62,
+          0.52
+        ],
+        [
+          63,
+          0.5
+        ],
+        [
+          82,
+          0.17
+        ],
+        [
+          83,
+          0.24
+        ],
+        [
+          84,
+          0.24
+        ],
+        [
+          85,
+          0.24
+        ],
+        [
+          86,
+          0.24
+        ],
+        [
+          87,
+          0.11
+        ],
+        [
+          88,
+          2.23
+        ],
+        [
+          89,
+          0.23
+        ],
+        [
+          90,
+          0.29
+        ],
+        [
+          91,
+          0.1
+        ],
+        [
+          92,
+          0.01
+        ],
+        [
+          93,
+          40.73
+        ],
+        [
+          94,
+          0.6
+        ],
+        [
+          95,
+          0.16
+        ],
+        [
+          110,
+          6.73
+        ],
+        [
+          142,
+          0.02
+        ],
+        [
+          147,
+          0.02
+        ],
+        [
+          148,
+          0.03
+        ],
+        [
+          150,
+          0.17
+        ],
+        [
+          151,
+          0.24
+        ],
+        [
+          152,
+          1.57
+        ],
+        [
+          153,
+          0.92
+        ],
+        [
+          154,
+          0.63
+        ],
+        [
+          155,
+          0.48
+        ],
+        [
+          156,
+          0.11
+        ],
+        [
+          158,
+          0.15
+        ],
+        [
+          162,
+          0.18
+        ],
+        [
+          163,
+          0.1
+        ],
+        [
+          199,
+          2.96
+        ],
+        [
+          200,
+          41.21
+        ]
+      ],
+      "completely_unrooted_model_islands": [],
+      "longer_unsupported_strokes": [
+        {
+          "layer": 6,
+          "mm": 1.047,
+          "two_anchors": false,
+          "bend_mm": 0.0,
+          "midpoint_machine_xy": [
+            27.971,
+            90.264
+          ],
+          "extent_machine_xy": [
+            27.506,
+            90.264,
+            28.553,
+            90.264
+          ],
+          "gcode_lines": [
+            37340,
+            37340
+          ]
+        },
+        {
+          "layer": 17,
+          "mm": 1.047,
+          "two_anchors": false,
+          "bend_mm": 0.0,
+          "midpoint_machine_xy": [
+            26.827,
+            90.875
+          ],
+          "extent_machine_xy": [
+            26.245,
+            90.875,
+            27.292,
+            90.875
+          ],
+          "gcode_lines": [
+            62766,
+            62766
+          ]
+        },
+        {
+          "layer": 101,
+          "mm": 1.07,
+          "two_anchors": true,
+          "bend_mm": 0.351,
+          "midpoint_machine_xy": [
+            24.219,
+            85.693
+          ],
+          "extent_machine_xy": [
+            24.15,
+            85.693,
+            24.699,
+            86.276
+          ],
+          "gcode_lines": [
+            307564,
+            307565
+          ]
+        },
+        {
+          "layer": 101,
+          "mm": 1.144,
+          "two_anchors": true,
+          "bend_mm": 0.303,
+          "midpoint_machine_xy": [
+            58.611,
+            83.266
+          ],
+          "extent_machine_xy": [
+            58.307,
+            82.983,
+            58.611,
+            83.549
+          ],
+          "gcode_lines": [
+            308620,
+            308626
+          ]
+        },
+        {
+          "layer": 101,
+          "mm": 2.262,
+          "two_anchors": true,
+          "bend_mm": 0.596,
+          "midpoint_machine_xy": [
+            58.908,
+            83.266
+          ],
+          "extent_machine_xy": [
+            58.31,
+            82.686,
+            58.908,
+            83.846
+          ],
+          "gcode_lines": [
+            309506,
+            309516
+          ]
+        },
+        {
+          "layer": 118,
+          "mm": 3.749,
+          "two_anchors": true,
+          "bend_mm": 0.416,
+          "midpoint_machine_xy": [
+            33.319,
+            91.468
+          ],
+          "extent_machine_xy": [
+            31.42,
+            90.828,
+            34.977,
+            91.469
+          ],
+          "gcode_lines": [
+            370838,
+            370839
+          ]
+        },
+        {
+          "layer": 122,
+          "mm": 1.162,
+          "two_anchors": false,
+          "bend_mm": 0.044,
+          "midpoint_machine_xy": [
+            69.446,
+            91.298
+          ],
+          "extent_machine_xy": [
+            68.881,
+            91.164,
+            70.025,
+            91.345
+          ],
+          "gcode_lines": [
+            382108,
+            382108
+          ]
+        },
+        {
+          "layer": 122,
+          "mm": 2.26,
+          "two_anchors": true,
+          "bend_mm": 0.201,
+          "midpoint_machine_xy": [
+            27.58,
+            90.965
+          ],
+          "extent_machine_xy": [
+            26.746,
+            90.634,
+            28.927,
+            90.967
+          ],
+          "gcode_lines": [
+            383119,
+            383122
+          ]
+        },
+        {
+          "layer": 122,
+          "mm": 1.287,
+          "two_anchors": false,
+          "bend_mm": 0.133,
+          "midpoint_machine_xy": [
+            26.737,
+            91.104
+          ],
+          "extent_machine_xy": [
+            26.288,
+            90.736,
+            27.409,
+            91.286
+          ],
+          "gcode_lines": [
+            383172,
+            383172
+          ]
+        },
+        {
+          "layer": 142,
+          "mm": 1.366,
+          "two_anchors": false,
+          "bend_mm": 0.0,
+          "midpoint_machine_xy": [
+            32.497,
+            90.009
+          ],
+          "extent_machine_xy": [
+            31.713,
+            90.009,
+            33.079,
+            90.009
+          ],
+          "gcode_lines": [
+            444449,
+            444454
+          ]
+        }
+      ],
+      "external_props": {
+        "CAD_mm3": 811.897,
+        "nominal_solid_mass_g": 1.0311,
+        "native_bead_samples": 179856,
+        "native_continuous_sequences": 3452,
+        "mixed_model_prop_sequences": 0
+      },
+      "bearing_space": {
+        "nominal_CAD_radius_mm": 1.14,
+        "hardware_radius_mm": 1.0,
+        "conservative_native_radius_mm": 1.048,
+        "layer_top_mm": 1.6,
+        "candidate_square_bead_radius_shortfall_mm": 0.0
+      },
+      "protected_support": {
+        "wire_core_bead_samples": 0,
+        "underside_lead_bead_samples": 0,
+        "finger_contact_bead_samples": 0,
+        "finger_underside_bead_samples": 0,
+        "axle_core_bead_samples": 0
+      },
+      "commanded_support_mass_g": 1.4093
+    },
+    "DFRobot_Hole_Bracket": {
+      "owner": 4,
+      "source_sha256": "9b8e551bc96ae4611fb02f0809b33e141b639283849a92c9499be10e8161818c",
+      "orientation": "front_down",
+      "model_bed_area_mm2": 19.05,
+      "support_occupancy_volume_mm3": 147.08,
+      "support_occupancy_mass_estimate_g": 0.187,
+      "supported_area_summed_across_layers_mm2": 9.57,
+      "supported_layers": [
+        [
+          3,
+          6.42
+        ],
+        [
+          113,
+          0.69
+        ],
+        [
+          114,
+          0.22
+        ],
+        [
+          115,
+          2.0
+        ],
+        [
+          116,
+          0.24
+        ]
+      ],
+      "completely_unrooted_model_islands": [],
+      "longer_unsupported_strokes": [
+        {
+          "layer": 2,
+          "mm": 1.036,
+          "two_anchors": true,
+          "bend_mm": 0.365,
+          "midpoint_machine_xy": [
+            123.698,
+            91.196
+          ],
+          "extent_machine_xy": [
+            123.404,
+            90.815,
+            123.796,
+            91.196
+          ],
+          "gcode_lines": [
+            14818,
+            14829
+          ]
+        },
+        {
+          "layer": 2,
+          "mm": 1.037,
+          "two_anchors": true,
+          "bend_mm": 0.365,
+          "midpoint_machine_xy": [
+            142.498,
+            91.196
+          ],
+          "extent_machine_xy": [
+            142.202,
+            90.815,
+            142.596,
+            91.196
+          ],
+          "gcode_lines": [
+            14945,
+            14956
+          ]
+        },
+        {
+          "layer": 2,
+          "mm": 2.35,
+          "two_anchors": true,
+          "bend_mm": 0.701,
+          "midpoint_machine_xy": [
+            142.46,
+            91.54
+          ],
+          "extent_machine_xy": [
+            141.857,
+            90.833,
+            142.94,
+            91.54
+          ],
+          "gcode_lines": [
+            15071,
+            15073
+          ]
+        },
+        {
+          "layer": 2,
+          "mm": 2.344,
+          "two_anchors": true,
+          "bend_mm": 0.673,
+          "midpoint_machine_xy": [
+            123.66,
+            91.54
+          ],
+          "extent_machine_xy": [
+            123.06,
+            90.865,
+            124.14,
+            91.54
+          ],
+          "gcode_lines": [
+            15152,
+            15154
+          ]
+        }
+      ],
+      "external_props": {},
+      "bearing_space": {
+        "nominal_CAD_radius_mm": 1.6,
+        "hardware_radius_mm": 1.5,
+        "conservative_native_radius_mm": 1.505,
+        "layer_top_mm": 40.0,
+        "candidate_square_bead_radius_shortfall_mm": 0.0
+      },
+      "protected_support": {
+        "wire_core_bead_samples": 0,
+        "underside_lead_bead_samples": 0,
+        "finger_contact_bead_samples": 0,
+        "finger_underside_bead_samples": 0,
+        "axle_core_bead_samples": 0
+      },
+      "commanded_support_mass_g": 0.153
+    }
+  },
+  "total_native_filament_g": 18.93,
+  "native_seconds": 8745,
+  "native_support_used": "true",
+  "warning": "",
+  "method": "Positive native extrusion with 0.12 mm line/arc sampling, a 0.10 mm radial-width footprint raster and prior true layer/contact check. Model area calculated without brim. Support mass is a deposited occupancy estimate; native full-plate weight includes brim and tower. A connected overhang may still need backing."
+}

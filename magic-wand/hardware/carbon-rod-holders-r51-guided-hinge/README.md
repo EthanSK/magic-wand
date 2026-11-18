@@ -21,3 +21,15 @@ The metal hardware is additional to the printed parts. The triangular roots, fix
 - [Assembly guide](exports/assembly-guide.json) uses the same print meshes and checked click poses. Select **Axle assembly** under **Keys** to see how the parts go together. Choose **Battery holder** to see the new lid.
 
 The generators in this directory use the existing Wand CAD dependencies. Generate the parts with `build51.py` and `lid51.py`, check them with `mechanical_checks51.py` and `audit_reuse51.py`, then run `guide51.py --register`. Use the repository's guarded geometry runner for CAD generation and mechanical checks. Verify the guide over the running viewer with `node verify_viewer51.mjs`.
+
+## Three-part A1 mini trial
+
+The [editable plate](exports/print/trial.3mf) contains the key holder, DFRobot bracket and battery lid. The [sliced print file](exports/print/Magic-Wand-R51-Changed-Parts-print-only.3mf) is for the 0.4 mm nozzle and red PETG. Bambu estimates 18.93 g and 2 hours 26 minutes. The [heater check](exports/print/machine-check.json) confirms 245 °C nozzle and 60 °C bed when printing the first part. The [packaging check](exports/print/print-only.json) verifies that the file preserves the checked toolpaths.
+
+Nine disposable supports sit outside the key holder and reach underneath the finger rest. The [toolpath check](exports/print/joined-audit.json) found no support beads in the OP1 lead exit, finger-contact surfaces or axle opening. The [battery lid check](exports/print/combined-lid-paths.json) found all twelve feather-shaped windows open through all four layers of the centre panel.
+
+Use the [two-sided removal picture](exports/print-trial/printed-supports.png) to distinguish the printed part (red), removable support (teal) and bed brim (tan). Remove the brim first. Each outside prop has a clear outward pull in the model. Two small areas by the left outer switch may still need trimming.
+
+The thinnest sliced opening for the 3 mm sleeve is close to its diameter. Try the smooth sleeve by hand before assembling the hinge. Its printed fit, support removal and the side-to-side feel of an actual click need a physical trial.
+
+The [removal checks](exports/print-trial/support-removal-checks.json) cover the nine feet and their pull directions. The [support comparison](exports/print-trial/support-comparison.json) records the unsupported control and the selected slice. Run `reproduce51.py <build-directory> --compare exports/print/trial.3mf` to recreate and compare the editable layout. Run `release51.py exports/print/paths.gcode.3mf exports/print/trial.3mf exports/print/joined-audit.json <output-directory>` to package the checked slice.

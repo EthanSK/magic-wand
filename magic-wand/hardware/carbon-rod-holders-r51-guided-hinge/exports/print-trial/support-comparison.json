@@ -1,0 +1,173 @@
+[
+  {
+    "description": "Rear edge, zero support",
+    "archive_sha256": "5da050692d1470cc5a7489a3af54a6103519e9caec007c42dec9c4b36170d257",
+    "warning": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+    "parts": {
+      "Key_Carrier": {
+        "source_sha256": "94361c6c6a6c81445278db2472bcb8bb003740fbcf0917eb65b5d4d219423af7",
+        "orientation": "rear_down",
+        "model_bed_area_mm2": 330.42,
+        "stranded_native_island_count": 10,
+        "longest_unbacked_stroke_mm": 14.535,
+        "sensitive_support_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        }
+      },
+      "DFRobot_Hole_Bracket": {
+        "source_sha256": "9b8e551bc96ae4611fb02f0809b33e141b639283849a92c9499be10e8161818c",
+        "orientation": "front_down",
+        "model_bed_area_mm2": 19.05,
+        "stranded_native_island_count": 2,
+        "longest_unbacked_stroke_mm": 8.29,
+        "sensitive_support_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        }
+      }
+    }
+  },
+  {
+    "description": "On side, zero support",
+    "archive_sha256": "2d516374b831811cd441e5edfbc66f8e3f1e6868bb6eeffb69209341f1913ddd",
+    "warning": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+    "parts": {
+      "Key_Carrier": {
+        "source_sha256": "94361c6c6a6c81445278db2472bcb8bb003740fbcf0917eb65b5d4d219423af7",
+        "orientation": "right_down",
+        "model_bed_area_mm2": 160.02,
+        "stranded_native_island_count": 20,
+        "longest_unbacked_stroke_mm": 46.663,
+        "sensitive_support_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "finger_underside_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        }
+      },
+      "DFRobot_Hole_Bracket": {
+        "source_sha256": "9b8e551bc96ae4611fb02f0809b33e141b639283849a92c9499be10e8161818c",
+        "orientation": "front_down",
+        "model_bed_area_mm2": 19.05,
+        "stranded_native_island_count": 2,
+        "longest_unbacked_stroke_mm": 8.29,
+        "sensitive_support_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "finger_underside_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        }
+      }
+    }
+  },
+  {
+    "description": "On side, targeted native support",
+    "archive_sha256": "271fd9eaa0e04991ad4d8bc76334f3f492d9dcaf97b2c6b356318560701452bf",
+    "warning": "",
+    "parts": {
+      "Key_Carrier": {
+        "source_sha256": "94361c6c6a6c81445278db2472bcb8bb003740fbcf0917eb65b5d4d219423af7",
+        "orientation": "right_down",
+        "model_bed_area_mm2": 160.02,
+        "stranded_native_island_count": 11,
+        "longest_unbacked_stroke_mm": 17.557,
+        "sensitive_support_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "finger_underside_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        }
+      },
+      "DFRobot_Hole_Bracket": {
+        "source_sha256": "9b8e551bc96ae4611fb02f0809b33e141b639283849a92c9499be10e8161818c",
+        "orientation": "front_down",
+        "model_bed_area_mm2": 19.05,
+        "stranded_native_island_count": 0,
+        "longest_unbacked_stroke_mm": 2.35,
+        "sensitive_support_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "finger_underside_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        }
+      }
+    }
+  },
+  {
+    "description": "Rear edge, targeted native support",
+    "archive_sha256": "92e66a7a6427210f95497eaa7969cffcd9bcfa22cfd40ea7c636bfc55a394cda",
+    "warning": "",
+    "parts": {
+      "Key_Carrier": {
+        "source_sha256": "94361c6c6a6c81445278db2472bcb8bb003740fbcf0917eb65b5d4d219423af7",
+        "orientation": "rear_down",
+        "model_bed_area_mm2": 330.51,
+        "stranded_native_island_count": 1,
+        "longest_unbacked_stroke_mm": 10.403,
+        "sensitive_support_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        }
+      },
+      "DFRobot_Hole_Bracket": {
+        "source_sha256": "9b8e551bc96ae4611fb02f0809b33e141b639283849a92c9499be10e8161818c",
+        "orientation": "front_down",
+        "model_bed_area_mm2": 19.05,
+        "stranded_native_island_count": 0,
+        "longest_unbacked_stroke_mm": 2.35,
+        "sensitive_support_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        }
+      }
+    }
+  },
+  {
+    "description": "Selected rear edge, targeted native support and nine external props",
+    "archive_sha256": "bb02f32c8112d713084ea9523127f205b8042722eb03a5e88531553e4d198da9",
+    "warning": "",
+    "parts": {
+      "Key_Carrier": {
+        "source_sha256": "94361c6c6a6c81445278db2472bcb8bb003740fbcf0917eb65b5d4d219423af7",
+        "orientation": "rear_down",
+        "model_bed_area_mm2": 330.47,
+        "stranded_native_island_count": 0,
+        "longest_unbacked_stroke_mm": 3.749,
+        "sensitive_support_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "finger_underside_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        }
+      },
+      "DFRobot_Hole_Bracket": {
+        "source_sha256": "9b8e551bc96ae4611fb02f0809b33e141b639283849a92c9499be10e8161818c",
+        "orientation": "front_down",
+        "model_bed_area_mm2": 19.05,
+        "stranded_native_island_count": 0,
+        "longest_unbacked_stroke_mm": 2.35,
+        "sensitive_support_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "finger_underside_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        }
+      }
+    }
+  }
+]

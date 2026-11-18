@@ -1,0 +1,202 @@
+{
+  "parts": {
+    "Key_Carrier": {
+      "assembly_stl": "Key_Carrier-assembly.stl",
+      "source_sha256": "94361c6c6a6c81445278db2472bcb8bb003740fbcf0917eb65b5d4d219423af7",
+      "orientation": "rear_down",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          53.38499927520752
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          80.86566686630249
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          32.650001525878906
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "height_mm": 51.4963,
+      "model_volume_mm3": 9586.095,
+      "owner": 2,
+      "settings": {
+        "wall_loops": 5,
+        "wall_generator": "arachne",
+        "inner_wall_line_width": 0.34,
+        "outer_wall_line_width": 0.34,
+        "internal_solid_infill_line_width": 0.34,
+        "inner_wall_speed": 55,
+        "outer_wall_speed": 35,
+        "is_infill_first": 0,
+        "enable_support": 1,
+        "support_type": "normal(manual)",
+        "support_style": "snug",
+        "support_threshold_angle": 28,
+        "support_critical_regions_only": 0,
+        "support_on_build_plate_only": 1,
+        "support_top_z_distance": 0.24,
+        "support_bottom_z_distance": 0.24,
+        "support_object_xy_distance": 0.45,
+        "support_interface_top_layers": 2,
+        "support_interface_spacing": 0.38,
+        "tree_support_wall_count": 1,
+        "brim_type": "outer_only",
+        "brim_width": 5,
+        "brim_object_gap": 0.05,
+        "bridge_no_support": 1,
+        "max_bridge_length": 10,
+        "support_base_pattern_spacing": 3.0
+      },
+      "peel_support": {
+        "part_id": 97,
+        "name": "External_peel_support",
+        "pieces": 9,
+        "source_sha256": "c152bbe666c20ebf4ba2f8f40fe94ba93659c3ee18036de35c5b7819a5556707",
+        "parts_sha256": {
+          "prop-0.stl": "a1d92b63f287f3a343f107470c407905a791a59ed695587211e39c142813daee",
+          "prop-1.stl": "c546e5356de5bffcb3be436cda65fd01117bd19455fd92d567b3a39cfd0eb035",
+          "prop-2.stl": "3859ec7631bebdbc355a32fdd2c59a3f008f08a420ee82146511786eba9d1b1f",
+          "prop-3.stl": "3fdc8207897db8137e92cb43ae1d017ac9da59502e57b7c260460bfabf02b1fd",
+          "prop-4.stl": "f0821f7c8696e7bc1bd22b3706982947556a126e0d7e0369d3e6accae7e8dff3",
+          "prop-5.stl": "93390c317b2cf475fddb99c53f17108f6bd821f861bc448402d800a228169ed8",
+          "prop-6.stl": "9aff6ea958c8aac1ef1285b9c0d4b0f875538af61666a2cb34abf0dae6adba7e",
+          "prop-7.stl": "9672d2277bcfc5fa7a5cf2ed8693dd8d9f178b5ec8f53fb126c8e2c62d112c87",
+          "prop-8.stl": "a4bcb80f46b338dd3d956d2da0fe0d94cf58be906359f4717d432c95f2a4ca06"
+        }
+      }
+    },
+    "DFRobot_Hole_Bracket": {
+      "assembly_stl": "DFRobot_Hole_Bracket-assembly.stl",
+      "source_sha256": "9b8e551bc96ae4611fb02f0809b33e141b639283849a92c9499be10e8161818c",
+      "orientation": "front_down",
+      "assembly_to_machine": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          133.0
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          -1.0,
+          109.01500034332275
+        ],
+        [
+          -0.0,
+          1.0,
+          6.123233995736766e-17,
+          11.835000038146973
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "height_mm": 41.165,
+      "model_volume_mm3": 1173.968,
+      "owner": 4,
+      "settings": {
+        "wall_loops": 5,
+        "wall_generator": "arachne",
+        "inner_wall_line_width": 0.34,
+        "outer_wall_line_width": 0.34,
+        "internal_solid_infill_line_width": 0.34,
+        "inner_wall_speed": 55,
+        "outer_wall_speed": 35,
+        "is_infill_first": 0,
+        "enable_support": 1,
+        "support_type": "normal(manual)",
+        "support_style": "snug",
+        "support_threshold_angle": 28,
+        "support_critical_regions_only": 0,
+        "support_on_build_plate_only": 1,
+        "support_top_z_distance": 0.24,
+        "support_bottom_z_distance": 0.24,
+        "support_object_xy_distance": 0.45,
+        "support_interface_top_layers": 2,
+        "support_interface_spacing": 0.38,
+        "tree_support_wall_count": 1,
+        "brim_type": "outer_only",
+        "brim_width": 10,
+        "brim_object_gap": 0.05,
+        "bridge_no_support": 1,
+        "max_bridge_length": 10,
+        "support_base_pattern_spacing": 3.0
+      }
+    },
+    "Battery_End_Door": {
+      "assembly_stl": "Battery_End_Door-print.stl",
+      "source_sha256": "2bdbe95caac434282a6f48afce768ba7cb77482bcfed8a6b63cacbaa5c3e9cdb",
+      "orientation": "bottom_down",
+      "assembly_to_machine": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          56.34999990463257
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          27.135000228881836
+        ],
+        [
+          -0.0,
+          0.0,
+          1.0,
+          -0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "height_mm": 4.62,
+      "model_volume_mm3": 323.315,
+      "owner": 6,
+      "settings": {
+        "name": "Battery_End_Door",
+        "extruder": "1",
+        "enable_support": "0",
+        "wall_loops": "6",
+        "sparse_infill_density": "100%",
+        "layer_height": "0.2",
+        "initial_layer_print_height": "0.2",
+        "brim_type": "outer_only",
+        "bridge_no_support": "1",
+        "max_bridge_length": "12",
+        "timelapse_type": "1",
+        "brim_width": "6",
+        "brim_object_gap": "0.15",
+        "wall_generator": "arachne",
+        "infill_wall_overlap": "27%",
+        "outer_wall_line_width": "0.32",
+        "inner_wall_line_width": "0.32",
+        "internal_solid_infill_line_width": "0.32",
+        "top_surface_line_width": "0.32"
+      }
+    }
+  },
+  "mode": "clear",
+  "layout_sha256": "3b0193423a324c9b2ccb22cf454f260c80582a0364a79e3669ac9889db9c5da0"
+}
