@@ -11,6 +11,8 @@ The two-key row is at the top. The gold pad clicks at the three-key end. Fit the
 3. Connect the DFRobot lead. Seat the board over the two posts and fit the two existing printed clips. Fit the four outer Choc switches and caps.
 4. Press the middle and both lower corners of the copper pad. Each should click, return freely and feel steady. If it binds, check bore roundness and clearance before tightening anything further.
 
+The bought OP1 button has a rounded top. The viewer shows an illustrative crown at the modelled peak height. The printed bracket has a small 1.1 × 0.6 mm flat contact face that presses the button. Its real contact point and click travel still need a physical check.
+
 The metal hardware is additional to the printed parts. The triangular roots, fixed hinge cheeks and central bearing are permanent. The previous revision's thin outside guides and adjustable stop screw have been removed. The integral travel limits are part of the bracket.
 
 ## What was checked
@@ -18,7 +20,7 @@ The metal hardware is additional to the printed parts. The triangular roots, fix
 - [Mechanical fit and click travel](exports/mechanical-fit.json) covers the bought-part envelopes and reference travel. Real click feel, finished bore dimensions and repeated-use durability need a physical test.
 - [Unchanged parts](exports/reused-parts.json) compares the R48 native toolpaths with the successful wide-pad retry, checks the joints on those paths, and checks each retained solid for narrow necks. The cable clip reference mesh was cleaned of zero-area triangles. Its volume and real faces are identical.
 - [Lid geometry](exports/lid-checks.json) and [native print paths](exports/lid-slice-checks.json) cover the new feather pattern, rails, latch, and twelve open windows across all four layers of the central sheet. The standalone lid slice is a window check.
-- [Assembly guide](exports/assembly-guide.json) uses the same print meshes and checked click poses. Select **Axle assembly** under **Keys** to see how the parts go together. Choose **Battery holder** to see the new lid.
+- [Assembly guide](exports/assembly-guide.json) uses the same print meshes and checked click poses. The default **Keys** view fits the OP1, hinge, DFRobot board, four Choc switches and their caps. **Axle assembly** shows the sleeve, screw and locknut up close. **Complete rod assembly** starts with the bare rod, builds the holders and slides them into place. Double-click the orientation gizmo to restore the default view at the current step.
 
 The generators in this directory use the existing Wand CAD dependencies. Generate the parts with `build51.py` and `lid51.py`, check them with `mechanical_checks51.py` and `audit_reuse51.py`, then run `guide51.py --register`. Use the repository's guarded geometry runner for CAD generation and mechanical checks. Verify the guide over the running viewer with `node verify_viewer51.mjs`.
 

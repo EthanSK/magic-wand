@@ -3,6 +3,8 @@
 // of the same hardware without taking any parts from another version.
 import { potentialKeyViews } from './keycap-concepts.mjs?v=cirque-cap-view';
 
+import { completeKeys, completeRod } from './rod-build.mjs';
+
 export const identity = () => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
 export const translated = (x = 0, y = 0, z = 0) => [1, 0, 0, x, 0, 1, 0, y, 0, 0, 1, z];
 
@@ -113,7 +115,11 @@ export function groupKeys(modules) {
   // A guide may name the Keys entry so a detail module listed after it reads as a pair.
   // Compose the whole-rod view with the same bought cap reference as Keys.
   // Each cap follows its own switch pose throughout assembly and removal.
-  if (others.whole) {
+  if (others.whole?.rodMounts) {
+    views.dfr = completeKeys(views.dfr, fitChoc);
+    views.dfr.helperActions = [otherKeycaps];
+    others.whole = completeRod(others.whole, { ...others, keys: views.dfr });
+  } else if (others.whole) {
     const whole = others.whole;
     const capEntries = Object.fromEntries(Object.entries(caps).map(([id, actor]) => [`keys_${id}`, actor]));
     others.whole = {
@@ -216,6 +222,7 @@ export function validateGuide(guide) {
       if (!step.title || !step.caption || !(step.duration > 0) || !step.samples?.length) throw new Error(`Missing assembly steps: ${name}`);
       for (const sample of step.samples) {
         for (const actor of Object.keys(module.actors)) {
+          if (module.stagedActors && !Object.hasOwn(sample, actor)) continue;
           const matrix = sample[actor];
           if (!Array.isArray(matrix) || matrix.length !== 12 || !matrix.every(Number.isFinite)) throw new Error(`Missing part pose: ${name}/${actor}`);
         }

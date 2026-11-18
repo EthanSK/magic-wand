@@ -95,6 +95,12 @@ export function installViewTools({ view, input, fit, render, assembly }) {
       svg.append(axis.group);
     }
   } };
+  const orientation = view.querySelector('[aria-label="View orientation"]');
+  orientation.style.pointerEvents = 'auto';
+  orientation.addEventListener('dblclick', event => {
+    event.preventDefault();
+    reset.click();
+  });
   controls.update();
   // Animation is opt-in: old revisions keep their camera/input behaviour and
   // never inherit a newer model's assembly directions by accident.

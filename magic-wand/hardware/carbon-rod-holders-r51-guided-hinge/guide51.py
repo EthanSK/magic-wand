@@ -5,7 +5,9 @@ import os
 from pathlib import Path
 import sys
 
+import manifold3d as mf
 import numpy as np
+import trimesh
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / 'exports'
@@ -76,6 +78,31 @@ def trim_legacy(modules):
                     p['rod'] = IDENTITY
 
 
+def rounded_button_reference():
+    """Round the visible crown inside the existing OP1 fit envelope.
+
+    The real radius is unmeasured. Keep the checked footprint, yaw, bottom
+    and peak height, and use the actual box for mechanical checks as before.
+    """
+    envelope = trimesh.load_mesh(OLD / 'guide/op1-plunger.stl')
+    lo, hi = envelope.bounds[:, 2]
+    corners = envelope.vertices[np.isclose(envelope.vertices[:, 2], hi), :2]
+    centre = corners.mean(axis=0)
+    _, _, axes = np.linalg.svd(corners - centre, full_matrices=False)
+    half_length, half_width = np.max(np.abs((corners - centre) @ axes.T), axis=0)
+    rise = min(half_width, hi - lo)
+    profile = [(-half_width, lo), (half_width, lo)]
+    for angle in np.linspace(0, np.pi, 17):
+        profile.append((half_width*np.cos(angle), hi-rise+rise*np.sin(angle)))
+    points = [[*(centre + x*axes[0] + y*axes[1]), z]
+              for x in (-half_length, half_length) for y, z in profile]
+    mesh = mf.Manifold.hull_points(np.asarray(points)).to_mesh()
+    visual = trimesh.Trimesh(vertices=mesh.vert_properties[:, :3], faces=mesh.tri_verts)
+    assert visual.is_watertight and 0 < visual.volume < envelope.volume
+    assert np.allclose(visual.bounds, envelope.bounds)
+    visual.export(OUT/'op1-button-reference.stl')
+
+
 def hinge_module(module, spec):
     actors = module['actors']
     board_notes = [a for a in module.get('annotations', []) if a.get('step') in ('Plug In and Fit the Board','Clip the Posts') and a['actor'] in ('cap','gravity_pins','clip_right')]
@@ -88,6 +115,9 @@ def hinge_module(module, spec):
     for k in list(actors):
         if k.startswith('switch_'):
             del actors[k]
+    rounded_button_reference()
+    actors['plunger'].update(file='op1-button-reference.stl',
+                             label='Rounded OP1 button (illustrative profile)')
     actors['op1_wire'].update(file='op1_wire.stl',morphFile='op1-wire-hanging.stl')
     actors['cap'] = dict(label='DFRobot bracket with reinforced centre bearing', file='DFRobot_Hole_Bracket-assembly.stl', color='#d9822b')
     actors['carrier'].update(label='Key holder with two fixed hinge cheeks')
@@ -145,10 +175,9 @@ def hinge_module(module, spec):
             p[k] = item['pose']
         p['plunger'] = offset(seated['plunger'], z=-item['plunger_drop'])
         frames.append(p)
-    steps.append(step('Press the lower half of the pad', 'Press toward the three-key end. The touch board and bracket pivot together above the OP1 button. Check click and return on the assembled parts.',frames,3.))
+    steps.append(step('Press the lower half of the pad', 'Press toward the three-key end. The small flat face under the bracket presses the rounded OP1 button. Check for a click and free return at the centre and both lower corners.',frames,3.))
     module.update(steps=steps, label='Fit the DFRobot touchpad', keysLabel='Keys', note=spec['note'],
                   openSeated=False, fitOuterKeysSeparately=True, status='Design review · physical fit pending',annotations=board_notes)
-    return seated
 
 
 def pivot_detail(module):
@@ -171,20 +200,29 @@ def generate(spec):
     guide = json.loads((OLD/'assembly-guide.json').read_text())
     modules = guide['modules']
     trim_legacy(modules)
-    seated = hinge_module(modules['dfr'], spec)
+    hinge_module(modules['dfr'], spec)
     modules['pin_hinge'] = pivot_detail(modules['dfr'])
     whole = modules['whole']
     old_pose = next(s for s in whole['steps'] if s['title']=='Check the Complete Arrangement')['samples'][-1]
-    old_pose.pop('keys_adjustment_screw',None)
-    del whole['actors']['keys_adjustment_screw']
-    for key, actor in modules['dfr']['actors'].items():
-        if key == 'rod':
-            continue
-        whole['actors']['keys_'+key] = actor
-        old_pose['keys_'+key] = seated[key]
-    if 'morphs' in old_pose:
-        old_pose['morphs'] = {k:v for k,v in old_pose['morphs'].items() if k!='keys_cap'}
-    whole['steps'] = [step('Inspect the assembled wand', 'Choose a component to see how its parts fit together.',[old_pose])]
+    # Mount points come from the CAD arrangement. The viewer composes the actual
+    # component steps in these frames, so detail and whole-rod playback agree.
+    mounts = [
+        ('keys', 'carrier', 'Press the lower half of the pad', 'Slide the keys onto the rod',
+         'Slide the assembled keys down the free end to the farthest position.'),
+        ('battery', 'holder', 'Slide the patterned lid into place', 'Slide the battery holder onto the rod',
+         'Guide both rings onto the free end. Leave room for the cable clip.'),
+        ('cable', 'clip', 'All Twelve Wires Seated', 'Slide the empty cable clip onto the rod',
+         'Fit the empty clip between the battery and XIAO positions before feeding the wires.'),
+        ('xiao', 'holder', 'Pull Gently to Check the Stop', 'Slide the XIAO holder onto the rod',
+         'Guide the rings onto the free end and slide the holder beside the cable clip.'),
+    ]
+    whole.update(actors={'rod':whole['actors']['rod']},
+                 steps=[step('Start with the bare rod', 'Keep one end clear to slide the holders on in order.',
+                             [{'rod':IDENTITY}], 1.2)],
+                 rodMounts=[dict(id=k,root=root,lastStep=last,title=title,caption=caption,
+                                 placement=old_pose[k+'_'+root],mountEmpty=k=='cable')
+                            for k,root,last,title,caption in mounts],
+                 note='Build each holder and slide it onto the rod. Wire colours show positions in the clip.')
 
     guide.update(revision='R51',physical_fit_verified=False,
                  print_components={'keys':['Key_Carrier','DFRobot_Hole_Bracket'], 'battery':['Battery_End_Door']})

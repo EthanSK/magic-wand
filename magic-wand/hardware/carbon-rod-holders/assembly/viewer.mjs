@@ -141,9 +141,10 @@ function fit() {
   if (!group) return;
   const bounds = new THREE.Box3();
   for (const [id, object] of Object.entries(actors)) if (object.visible && module.actors[id].frame !== false) bounds.expandByObject(object);
-  if (module.frameBounds) {
-    bounds.min.fromArray(module.frameBounds[0]);
-    bounds.max.fromArray(module.frameBounds[1]);
+  const frameBounds = module.steps[Number(document.body.dataset.step)]?.frameBounds ?? module.frameBounds;
+  if (frameBounds) {
+    bounds.min.fromArray(frameBounds[0]);
+    bounds.max.fromArray(frameBounds[1]);
   } else if (bounds.isEmpty()) bounds.setFromObject(group);
   bounds.expandByScalar(2); input.fitBounds(bounds.min.toArray(), bounds.max.toArray(), { aspect: camera.aspect }); render();
 }
@@ -191,9 +192,11 @@ function chooseMode(mode) { input.setMode(mode); for (const button of document.q
 function applyPose({ index, fraction }) {
   const previousStep = Number(document.body.dataset.step);
   const startOfReplay = module.concept && index === 0 && previousStep > 0;
-  const followStep = module.frameEachStep && index !== previousStep;
+  const followStep = module.frameEachStep && index !== previousStep
+    && (!module.stagedActors || module.steps[index].frameBounds !== module.steps[previousStep]?.frameBounds);
   const sample = sampledPose(module, index, fraction);
   for (const [id, object] of Object.entries(actors)) {
+    if (module.stagedActors) object.visible = Object.hasOwn(sample, id);
     const m = sample[id] || identity();
     object.matrix.set(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11], 0, 0, 0, 1);
     object.matrixWorldNeedsUpdate = true;

@@ -16,10 +16,45 @@ const components = assemblyComponents(data, version.groupKeys);
 assert.deepEqual(Object.values(data.print_components).flat().sort(),['Battery_End_Door','DFRobot_Hole_Bracket','Key_Carrier']);
 assert.ok(components.keys.views.pin_hinge);
 assert.ok(components.xiao.views.xiao_latch && components.battery.views.battery_latch && components.cable);
-for (const module of Object.values(data.modules)) {
+for (const [id, module] of Object.entries(data.modules)) {
+  if (id === 'whole') continue;
   assert.ok(module.steps.every(s => !/slide.*rod|fit.*onto the rod|adjust the stop screw|pinch the bracket/i.test(s.title)));
   assert.ok(!Object.keys(module.actors).some(k=>k.includes('adjustment_screw')));
 }
+const keys = components.keys.views[components.keys.defaultView];
+const whole = components.whole.views.whole;
+validateGuide({ ...data, modules: { keys, whole } });
+const finalKeys = keys.steps.at(-1).samples.at(-1);
+for (const index of [0, 2, 3, 4]) {
+  for (const type of ['switch', 'socket', 'keycap']) {
+    const id = type + '_' + index;
+    assert.deepEqual(finalKeys[id], components.keys.views.key.steps.at(-1).samples.at(-1)[id]);
+  }
+}
+assert.equal(keys.steps.at(-1).title, 'Press the lower half of the pad');
+assert.ok(keys.steps.findIndex(step => step.title === 'Fit the locknut')
+  < keys.steps.findIndex(step => step.title === 'Fit the Keycaps'));
+assert.deepEqual(Object.keys(whole.steps[0].samples[0]), ['rod']);
+const finalRod = whole.steps.at(-1).samples.at(-1);
+for (const id of Object.keys(whole.actors)) assert.ok(finalRod[id], id);
+let lastMount = -1;
+for (const mount of whole.rodMounts) {
+  const index = whole.steps.findIndex(step => step.title === mount.title);
+  assert.ok(index > lastMount);
+  lastMount = index;
+  const slide = whole.steps[index];
+  const rootId = mount.id + '_' + mount.root;
+  assert.ok(slide.samples[0][rootId][7] > 175, 'holder starts beyond the free end');
+  assert.deepEqual(slide.samples.at(-1)[rootId], mount.placement);
+  assert.deepEqual(finalRod[rootId], mount.placement);
+  assert.ok(whole.steps.slice(index+1).every(step => step.samples.every(pose =>
+    pose[rootId].every((value,i) => value === mount.placement[i]))));
+}
+const emptyClip = whole.steps.find(step => step.title === 'Slide the empty cable clip onto the rod');
+assert.ok(emptyClip.samples.every(frame => !Object.hasOwn(frame,'cable_wire_0')));
+assert.equal(whole.steps.filter(step => /^Feed Wire /.test(step.title)).length,12);
+assert.deepEqual(finalRod.keys_keycap_0,finalKeys.keycap_0);
+assert.ok(!whole.steps.some(step => /withdraw|lift out|slide the lid out|remove wire/i.test(step.title)));
 for (const [name,sha] of Object.entries(data.sources.meshes_sha256)) {
   const b = await (await get(new URL(name,url))).arrayBuffer();
   assert.equal(createHash('sha256').update(new Uint8Array(b)).digest('hex'),sha,name);
