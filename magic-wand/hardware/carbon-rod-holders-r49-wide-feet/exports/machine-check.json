@@ -1,0 +1,44 @@
+{
+  "passed": true,
+  "project_sha256": "3b5dfa957b0825bece856a0b25773e7d9fb73d322f5424ebfeb2daddd7dd0988",
+  "official_machine_templates_match": [
+    "machine_start_gcode",
+    "machine_end_gcode",
+    "time_lapse_gcode",
+    "change_filament_gcode"
+  ],
+  "first_object_nozzle_target_c": 245.0,
+  "first_object_bed_target_c": 60.0,
+  "printing_temperature_wait_present": true,
+  "ending_heater_targets_c": [
+    0,
+    0
+  ],
+  "approved_layer_change_extension": "R37 early_acceleration_commands",
+  "machine_limits_unchanged": true,
+  "early_acceleration_events": [
+    {
+      "layer": 0,
+      "axes": {
+        "X": 20000.0,
+        "Y": 20000.0,
+        "Z": 1500.0,
+        "E": 5000.0
+      }
+    },
+    {
+      "layer": 1,
+      "axes": {
+        "X": 1000.0,
+        "Y": 1000.0
+      }
+    },
+    {
+      "layer": 4,
+      "axes": {
+        "X": 20000.0,
+        "Y": 20000.0
+      }
+    }
+  ]
+}

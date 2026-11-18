@@ -70,6 +70,13 @@ Read the frozen [V20 design principles](../../../magic-wand/hardware/printed-loo
 
 ## Before calling it final
 
+User-requested — 2026-11-18: For Wand component plates, give all parts as
+much usable removable bed contact as possible. Irregular feet can fit around
+one another. Keep each foot independently removable and leave clear space for
+neighboring parts, the wipe tower, and hardware openings. For the key holder,
+favor open, local supports backed by large feet. Verify that the actual slice
+still carries the needed overhangs and lets each support come out.
+
 User-corrected — 2026-11-11: “not regularly, but just before printing and then iteration.” Slice and inspect the finished candidate before printing each iteration. Use the printed result and Ethan's feedback to revise the design, then slice and check the next finished candidate before its print. Repeat affected checks when a repair changes the checked print file. Reuse unchanged checked results; a commit alone does not require another slice. This supersedes regular interval slicing and the earlier before-committing wording. Keep the final printability audit and checks of the delivered file.
 
 Before finishing every model or print project, use the repository's [printability-audit](../printability-audit/SKILL.md). It owns the recurring independent Opus review of actual holes, support removal and likely snap points, with minimal design changes. Keep implementation and independent review distinct.

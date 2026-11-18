@@ -1,0 +1,78 @@
+{
+  "archive_sha256": "3b5dfa957b0825bece856a0b25773e7d9fb73d322f5424ebfeb2daddd7dd0988",
+  "removal": {
+    "cradle": {
+      "clear": true,
+      "collisions": [],
+      "first_layer_accessible_faces": [
+        {
+          "foot_area_mm2": 212.48238622093965,
+          "width_mm": 19.63291820883751,
+          "length_mm": 18.759917110204697,
+          "has_1p2mm_grip_land": true
+        },
+        {
+          "foot_area_mm2": 24.305021841997913,
+          "width_mm": 8.691341616213322,
+          "length_mm": 3.8254587426781654,
+          "has_1p2mm_grip_land": true
+        },
+        {
+          "foot_area_mm2": 40.47741308472387,
+          "width_mm": 13.834503710269928,
+          "length_mm": 5.4015012383461,
+          "has_1p2mm_grip_land": true
+        },
+        {
+          "foot_area_mm2": 18.689630761806043,
+          "width_mm": 7.447918742895126,
+          "length_mm": 4.10991558432579,
+          "has_1p2mm_grip_land": true
+        },
+        {
+          "foot_area_mm2": 19.29445639967263,
+          "width_mm": 7.409918636083603,
+          "length_mm": 5.386916011571884,
+          "has_1p2mm_grip_land": true
+        },
+        {
+          "foot_area_mm2": 24.384751265853478,
+          "width_mm": 9.572918742895126,
+          "length_mm": 3.572913020849228,
+          "has_1p2mm_grip_land": true
+        },
+        {
+          "foot_area_mm2": 14.135235000194669,
+          "width_mm": 5.4729183614254,
+          "length_mm": 3.1799229085445404,
+          "has_1p2mm_grip_land": true
+        },
+        {
+          "foot_area_mm2": 16.93715938107841,
+          "width_mm": 5.4729183614254,
+          "length_mm": 4.092917293310165,
+          "has_1p2mm_grip_land": true
+        }
+      ],
+      "direction": "whole cradle straight down in print frame after lifting from bed",
+      "method": "Every actual cradle bead swept past the cumulative XY envelope of every carrier bead in the same or any lower layer. Conservative outward-rounded AABB rejection; exact clipped polygon intersection on every possible conflict tile, 0.15 mm centre-step guard, circumscribed bead widths. No thermal or force inference."
+    },
+    "front_shelf": {
+      "clear": true,
+      "axis_in_print_frame": "-y",
+      "checked_shelf_layers": 168,
+      "collisions": [],
+      "method": "Every shelf bead against complete infinite horizontal obstacle shadows on all overlapping native height intervals. Circumscribed footprints include the 0.15-mm sample-step guard; outward-rounded AABBs reject only impossible conflicts, exact clipped convex sweeps confirm all candidate tiles.",
+      "physical_release_force_verified": false
+    },
+    "rear_shelf": {
+      "clear": true,
+      "axis_in_print_frame": "+y",
+      "checked_shelf_layers": 91,
+      "collisions": [],
+      "method": "Every shelf bead against complete infinite horizontal obstacle shadows on all overlapping native height intervals. Circumscribed footprints include the 0.15-mm sample-step guard; outward-rounded AABBs reject only impossible conflicts, exact clipped convex sweeps confirm all candidate tiles.",
+      "physical_release_force_verified": false
+    }
+  },
+  "passed": true
+}
