@@ -1,0 +1,110 @@
+{
+  "archive_sha256": "e4bb65c534a5a9355c9d25e26be64b71387e927045d1b8ee7744fdefa22260af",
+  "checker_sha256": "de3c4aea994d5f9db0904b1467a49c9c267e42c9b12a265e4f6e53c3e65f0d92",
+  "frame_sha256": "b90cb443b0457a73f85268a429be9130b994422c6d826a27f66f95d1cb86f644",
+  "carrier_sha256": "aa217cc1b4cf5d16cb711c3e3ffb5c8f1babac81a0d9ccc0c9f8fa9d6f6b9f60",
+  "sample_pitch_mm": 0.03,
+  "required_centreline_reach_each_side_mm": 0.2,
+  "footprint_erosion_mm": 0.075,
+  "crossing_layers_at_assembly_x": {
+    "11.8": [
+      {
+        "top_mm": 22.0,
+        "uninterrupted_sequences": 2
+      },
+      {
+        "top_mm": 22.2,
+        "uninterrupted_sequences": 2
+      },
+      {
+        "top_mm": 22.4,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 22.6,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 22.8,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 23.0,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 23.2,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 23.4,
+        "uninterrupted_sequences": 2
+      },
+      {
+        "top_mm": 23.6,
+        "uninterrupted_sequences": 2
+      }
+    ],
+    "13.82": [
+      {
+        "top_mm": 22.0,
+        "uninterrupted_sequences": 2
+      },
+      {
+        "top_mm": 22.2,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 22.4,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 22.6,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 22.8,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 23.0,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 23.2,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 23.4,
+        "uninterrupted_sequences": 3
+      },
+      {
+        "top_mm": 23.6,
+        "uninterrupted_sequences": 2
+      }
+    ]
+  },
+  "one_eroded_body_at_assembly_x": {
+    "11.45": {
+      "cad_mm2": 3.674096009332525,
+      "connected_eroded_mm2": 3.2664087949712326,
+      "fraction": 0.889037408569147
+    },
+    "12.15": {
+      "cad_mm2": 3.293356486343507,
+      "connected_eroded_mm2": 2.8136809427366773,
+      "fraction": 0.8543505552478481
+    },
+    "13.47": {
+      "cad_mm2": 2.788876807058794,
+      "connected_eroded_mm2": 2.482469057065797,
+      "fraction": 0.8901322033237671
+    },
+    "14.17": {
+      "cad_mm2": 2.7888774939257015,
+      "connected_eroded_mm2": 2.532580725812479,
+      "fraction": 0.9081003849500566
+    }
+  },
+  "passed": true
+}

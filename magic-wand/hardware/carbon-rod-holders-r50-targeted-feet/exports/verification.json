@@ -1,0 +1,69 @@
+{
+  "editable_sha256": "9f97c146f1b982ef1b303b28eb53d18965676781cd48afa48aaa62d6335a16cb",
+  "selected_sha256": "e4bb65c534a5a9355c9d25e26be64b71387e927045d1b8ee7744fdefa22260af",
+  "print_only_sha256": "dcf6c2b69029e6aadeceb8a3bef734734d0968813320e7a49bd01d8eae0f0cef",
+  "functional_parts": [
+    "Battery_End_Door",
+    "Battery_Holder",
+    "Cable_Clip_12_Wire",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2",
+    "DFRobot_Hole_Bracket",
+    "Key_Carrier",
+    "XIAO_Near_Keeper",
+    "XIAO_Rod_Holder"
+  ],
+  "source_editable_sha256": {
+    "R48": "4d46ed1364d2617069837546a01a9be87084115dfa12aaf52e6baf2125ab7fb7",
+    "R49": "d9a4e718399a33f568b79173ea7d61efc0ea5bf6cd63959b56579c28be86cb93"
+  },
+  "estimates": {
+    "R48_wide_bracket": {
+      "seconds": 16403,
+      "grams": 41.34
+    },
+    "R49_all_wide": {
+      "seconds": 18983,
+      "grams": 48.29
+    },
+    "R50_targeted_slower_carrier": {
+      "seconds": 16772,
+      "grams": 42.14
+    },
+    "R50_targeted_standard_carrier_first_slice": {
+      "seconds": 16102,
+      "grams": 42.14
+    },
+    "R50_targeted_standard_carrier": {
+      "seconds": 16107,
+      "grams": 42.14
+    }
+  },
+  "key_supports_with_larger_feet": [
+    "External_cradle",
+    "Front_pull_shelf",
+    "Rear_pull_shelf",
+    "Release_tabs"
+  ],
+  "native_warning": "Key_Carrier floating regions; explicit support, roof and removal checks recorded.",
+  "physical_trial_verified": false,
+  "verification_files": {
+    "machine-check.json": "0364ce4d73760064285337425e7c2f6720ea80b17396c46e43d1ac297d151c7b",
+    "plate-clearance.json": "45da04ea6567095155bb35fca2a75d60976916cb68b453e99c437c2e0d9d9815",
+    "helper-starts.json": "2d88f90083d07de29e55aa284985b04fe00165d27b334f881574a5bb8ba01ee3",
+    "key-tab-feet.json": "c82dacde5e46978c5561ed1f6045c15e5c8e8fd4168fed1ad8dcc44bcccaf287",
+    "roof-comparison.json": "8d54954dad8be13979c84afa9ef412ed4d3e3c94f9f13b92cb4ad6dfbeb84a43",
+    "key-release.json": "b60229965f21fe18bdd46c0fa1b90ea31fc0eedc8757cbe0dcc857f05977e1d4",
+    "key-working-spaces.json": "14048e86d39be0e411f15c34e5d1761c208dc1290f99086a62acf73047e9787d",
+    "swing-tab-removal.json": "0ce319a40e1ed70c06f9647fd46decd810829ded511361a148e9d07373f103b6",
+    "lead-tab-removal.json": "4aafdcbb6516ec28578a5a0ca1015f4dd5f58f115538c253ea088fb6e34e093b",
+    "other-parts-audit.json": "393af63d9b89e8c5496ee55fd51b573e56f7d3da2c0f0b4515b3848b5cbedeeb",
+    "edge-click-load-path.json": "b906d9b3e0ffa7c7a52755e0837cb7dd879ca6a9b00cd106a01b9c7105d965de",
+    "guard-seams.json": "4caadf3030c5ea3e569e6a1a2707a6a1a7797195b9459ee065b853f9234ffe07",
+    "strength-paths.json": "c731b516e52ae1ede0823116f13b82ce305b4bd65b865046b4215ed81e08e18f",
+    "wire-feed-path.json": "9e37c99e4fdde233d6a55b01a4408c066e1233e5bf3193c8cc8bd92485944060",
+    "rod-clip-shoulder.json": "16f77e8c500a0e35aa2bbd4a16b0298138e7c59bba1bf738d72f59ae4479347a",
+    "reopen-checks.json": "a7a9cdcf05753434cbd798eb93e4805a2a8f4d41a1d0da4773500218cfd9616f",
+    "R50.gcode.native.json": "3e4c7a1ea367f8f97ad6332d72a368a5725b1425542b158518f07f71c4fd6414"
+  }
+}

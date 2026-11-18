@@ -1,0 +1,2692 @@
+{
+  "archive_sha256": "e4bb65c534a5a9355c9d25e26be64b71387e927045d1b8ee7744fdefa22260af",
+  "source_mesh_sha256": "739c12c8e998941a64c3bb750adbcf5ac0b90d79eaf4eb9c63f921424ea0d7a8",
+  "checker_sha256": "91a7e64bf2923613f04e625fd3b8c7ab66c552197b018be0204c0f756bfa579a",
+  "source_shape_sha256": "c56d394d46e4d557e2725a531506f3471836b28f48a460c17357c7522cf836e9",
+  "eroded_common_component_mm3": 80.19030915373536,
+  "native_lobe_erosion_mm": 0.075,
+  "common_component_after_discarding_curved_edges_mm3": 79.94589087141856,
+  "printed_comparison_archive_sha256": "b13dee0f49cacfa5c93c9931cb47cbacffa6ae367463c7ae32d435e550bb35fb",
+  "printed_comparison_turn": {
+    "z": 22.0,
+    "mm": 2.183,
+    "before": true,
+    "after": true,
+    "start_xy": [
+      39.671,
+      7.906
+    ],
+    "end_xy": [
+      40.271,
+      8.233
+    ],
+    "chord_mm": 0.675,
+    "deviation_from_chord_mm": 0.868,
+    "minimum_bead_width_mm": 0.34,
+    "median_bead_width_mm": 0.34,
+    "actual_length_at_width_below_0p2_mm": 0.0,
+    "anchored_span_mm": 2.512,
+    "first_gcode_line": 535359,
+    "last_gcode_line": 535364,
+    "commanded_feed_range_mm_s": [
+      10.0,
+      50.0
+    ],
+    "last_commanded_part_fan_fraction_range": [
+      1.0,
+      1.0
+    ],
+    "classification": "unsupported bend outside bead corridor",
+    "features": [
+      "Overhang wall"
+    ],
+    "sampled_path_xy": [
+      [
+        39.584,
+        7.983
+      ],
+      [
+        39.671,
+        7.906
+      ],
+      [
+        39.843,
+        7.751
+      ],
+      [
+        39.843,
+        7.751
+      ],
+      [
+        40.119,
+        7.751
+      ],
+      [
+        40.257,
+        7.751
+      ],
+      [
+        40.534,
+        7.751
+      ],
+      [
+        40.672,
+        7.751
+      ],
+      [
+        40.81,
+        7.751
+      ],
+      [
+        40.702,
+        7.848
+      ],
+      [
+        40.486,
+        8.04
+      ],
+      [
+        40.379,
+        8.137
+      ],
+      [
+        40.163,
+        8.33
+      ]
+    ]
+  },
+  "prior_clip_overlap_mm3": 32.10562562066625,
+  "additional_stock_mm3": 34.498704313199966,
+  "layers": [
+    {
+      "layer_top_mm": 20.2,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 11.740449669530026,
+          "deposited_area_mm2": 11.573621021458177,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9857902675989644,
+          "single_piece_nominal_fraction": 0.7366985149424489,
+          "single_piece_deposited_fraction": 0.747317699470482,
+          "passed": false
+        },
+        "joint": {
+          "nominal_area_mm2": 9.992898525755395,
+          "deposited_area_mm2": 9.877596950436331,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9884616485375199,
+          "single_piece_nominal_fraction": 0.6958089033676228,
+          "single_piece_deposited_fraction": 0.7039311078958986,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 1.7475511391698135,
+          "deposited_area_mm2": 1.6960240641853495,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9705146969210054,
+          "single_piece_nominal_fraction": 0.9705146969210054,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": false,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 8.649171836299336,
+          "prior_overlap_mm2": 6.881430547968306
+        },
+        {
+          "area_mm2": 2.9244491851588412,
+          "prior_overlap_mm2": 2.8457277461017254
+        }
+      ],
+      "two_ended_return_assessment": [
+        {
+          "comparison": {
+            "two_anchored_ends": true,
+            "same_overhang_feature": true,
+            "full_width": true,
+            "span_within_one_nozzle_of_control": true,
+            "length_within_one_bead_of_control": true,
+            "lateral_bow_within_control": true,
+            "feed_no_higher_than_control": true,
+            "full_fan": true
+          },
+          "sag_test_downwards_mm": 1.0905,
+          "hardware_gaps_from_sag_envelope_mm": {
+            "rod": 1.1414345481107138,
+            "board": 3.0,
+            "sockets": 3.0,
+            "housing": 3.0,
+            "plug": 0.37233297079801364,
+            "switch": 3.0,
+            "terminals": 3.0,
+            "plunger": 3.0,
+            "fasteners": 3.0,
+            "op1_wire": 1.689150609114826
+          },
+          "passed": true
+        },
+        {
+          "comparison": {
+            "two_anchored_ends": true,
+            "same_overhang_feature": true,
+            "full_width": true,
+            "span_within_one_nozzle_of_control": true,
+            "length_within_one_bead_of_control": true,
+            "lateral_bow_within_control": true,
+            "feed_no_higher_than_control": true,
+            "full_fan": true
+          },
+          "sag_test_downwards_mm": 1.7895,
+          "hardware_gaps_from_sag_envelope_mm": {
+            "rod": 1.1208326457392919,
+            "board": 3.0,
+            "sockets": 3.0,
+            "housing": 3.0,
+            "plug": 0.07533297240733905,
+            "switch": 3.0,
+            "terminals": 3.0,
+            "plunger": 3.0,
+            "fasteners": 3.0,
+            "op1_wire": 1.275987933674869
+          },
+          "passed": true
+        }
+      ],
+      "unsupported_intervals_on_this_shoulder": [
+        {
+          "z": 20.2,
+          "mm": 1.219,
+          "before": true,
+          "after": true,
+          "start_xy": [
+            35.139,
+            6.898
+          ],
+          "end_xy": [
+            35.023,
+            7.464
+          ],
+          "chord_mm": 0.576,
+          "deviation_from_chord_mm": 0.373,
+          "minimum_bead_width_mm": 0.34,
+          "median_bead_width_mm": 0.34,
+          "actual_length_at_width_below_0p2_mm": 0.0,
+          "anchored_span_mm": 1.501,
+          "first_gcode_line": 693774,
+          "last_gcode_line": 693780,
+          "commanded_feed_range_mm_s": [
+            10.0,
+            10.0
+          ],
+          "last_commanded_part_fan_fraction_range": [
+            1.0,
+            1.0
+          ],
+          "classification": "unsupported bend outside bead corridor",
+          "features": [
+            "Overhang wall"
+          ],
+          "sampled_path_xy": [
+            [
+              35.002,
+              6.898
+            ],
+            [
+              35.139,
+              6.898
+            ],
+            [
+              35.276,
+              6.898
+            ],
+            [
+              35.276,
+              6.898
+            ],
+            [
+              35.276,
+              7.039
+            ],
+            [
+              35.276,
+              7.181
+            ],
+            [
+              35.276,
+              7.181
+            ],
+            [
+              35.276,
+              7.323
+            ],
+            [
+              35.276,
+              7.464
+            ],
+            [
+              35.276,
+              7.464
+            ],
+            [
+              35.15,
+              7.464
+            ],
+            [
+              35.023,
+              7.464
+            ],
+            [
+              34.896,
+              7.464
+            ]
+          ]
+        },
+        {
+          "z": 20.2,
+          "mm": 2.32,
+          "before": true,
+          "after": true,
+          "start_xy": [
+            35.215,
+            6.601
+          ],
+          "end_xy": [
+            35.027,
+            7.761
+          ],
+          "chord_mm": 1.178,
+          "deviation_from_chord_mm": 0.672,
+          "minimum_bead_width_mm": 0.34,
+          "median_bead_width_mm": 0.34,
+          "actual_length_at_width_below_0p2_mm": 0.0,
+          "anchored_span_mm": 2.899,
+          "first_gcode_line": 693911,
+          "last_gcode_line": 693917,
+          "commanded_feed_range_mm_s": [
+            10.0,
+            10.0
+          ],
+          "last_commanded_part_fan_fraction_range": [
+            1.0,
+            1.0
+          ],
+          "classification": "unsupported bend outside bead corridor",
+          "features": [
+            "Overhang wall"
+          ],
+          "sampled_path_xy": [
+            [
+              35.096,
+              6.601
+            ],
+            [
+              35.215,
+              6.601
+            ],
+            [
+              35.454,
+              6.601
+            ],
+            [
+              35.573,
+              6.601
+            ],
+            [
+              35.573,
+              6.746
+            ],
+            [
+              35.573,
+              7.036
+            ],
+            [
+              35.573,
+              7.181
+            ],
+            [
+              35.573,
+              7.326
+            ],
+            [
+              35.573,
+              7.616
+            ],
+            [
+              35.573,
+              7.761
+            ],
+            [
+              35.436,
+              7.761
+            ],
+            [
+              35.163,
+              7.761
+            ],
+            [
+              34.89,
+              7.761
+            ]
+          ]
+        }
+      ],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 20.100000761449337,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8712272016268899,
+          "joint": 0.8961064624169808,
+          "added": 0.7289618800389599
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 8.649171836299336,
+            "common_eroded_core_mm2": 7.670618561305386,
+            "fraction": 0.8868616217234693,
+            "available_eroded_lobe_mm2": 7.275684324150426,
+            "connected_fraction_of_available_core": 0.9999999991804961
+          },
+          {
+            "deposited_lobe_mm2": 2.9244491851588412,
+            "common_eroded_core_mm2": 2.5579805493139784,
+            "fraction": 0.8746879796357419,
+            "available_eroded_lobe_mm2": 2.3025331839115046,
+            "connected_fraction_of_available_core": 0.9999999964603773
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.007504336492607,
+          "joint": 8.888654474417839,
+          "added": 0.1188498614169104
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 20.4,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 11.604864566381346,
+          "deposited_area_mm2": 11.393793212146164,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9818118209800876,
+          "single_piece_nominal_fraction": 0.728176126017443,
+          "single_piece_deposited_fraction": 0.7416656740703587,
+          "passed": false
+        },
+        "joint": {
+          "nominal_area_mm2": 9.890034976983392,
+          "deposited_area_mm2": 9.734518607375339,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9842754479665664,
+          "single_piece_nominal_fraction": 0.6866619513669315,
+          "single_piece_deposited_fraction": 0.6976319004863116,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 1.7148295926104988,
+          "deposited_area_mm2": 1.6592746053369507,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9676032023747757,
+          "single_piece_nominal_fraction": 0.9676032023747757,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": false,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 8.450385322904657,
+          "prior_overlap_mm2": 8.397555939915177
+        },
+        {
+          "area_mm2": 2.9434078892415023,
+          "prior_overlap_mm2": 2.9062075101597533
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 20.299999617040157,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8592490325164489,
+          "joint": 0.8837497356106038,
+          "added": 0.7179447232433088
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 8.450385322904657,
+            "common_eroded_core_mm2": 7.395928563160896,
+            "fraction": 0.8752179078880972,
+            "available_eroded_lobe_mm2": 6.9941441541712965,
+            "connected_fraction_of_available_core": 0.9999999981033292
+          },
+          {
+            "deposited_lobe_mm2": 2.9434078892415023,
+            "common_eroded_core_mm2": 2.575540087227521,
+            "fraction": 0.875019767610673,
+            "available_eroded_lobe_mm2": 2.3140546977769922,
+            "connected_fraction_of_available_core": 0.9999999970152238
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.971468650944761,
+          "joint": 8.740315795997498,
+          "added": 1.231152857164544
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 20.6,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 11.495765176215295,
+          "deposited_area_mm2": 11.317567106043425,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9844988073920854,
+          "single_piece_nominal_fraction": 0.7292505935072223,
+          "single_piece_deposited_fraction": 0.7407328358670034,
+          "passed": false
+        },
+        "joint": {
+          "nominal_area_mm2": 9.78706351943427,
+          "deposited_area_mm2": 9.665827663223414,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9876126423446505,
+          "single_piece_nominal_fraction": 0.6878012104223417,
+          "single_piece_deposited_fraction": 0.69642811455862,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 1.7087016636714862,
+          "deposited_area_mm2": 1.6517394435786232,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.96666344903623,
+          "single_piece_nominal_fraction": 0.96666344903623,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": false,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 8.383293577574662,
+          "prior_overlap_mm2": 8.263208869419278
+        },
+        {
+          "area_mm2": 2.9342735284687635,
+          "prior_overlap_mm2": 2.9278632124284094
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 20.50000037997961,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.867106967615025,
+          "joint": 0.8882616630483435,
+          "added": 0.7459375690827933
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 8.383293577574662,
+            "common_eroded_core_mm2": 7.40070162368661,
+            "fraction": 0.8827916564300589,
+            "available_eroded_lobe_mm2": 7.000474347587322,
+            "connected_fraction_of_available_core": 0.9999999989064458
+          },
+          {
+            "deposited_lobe_mm2": 2.9342735284687635,
+            "common_eroded_core_mm2": 2.5673564586758255,
+            "fraction": 0.874954714946288,
+            "available_eroded_lobe_mm2": 2.304551356248954,
+            "connected_fraction_of_available_core": 0.9999999962393596
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.968058082362449,
+          "joint": 8.693473318132458,
+          "added": 1.2745847652868332
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 20.8,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 11.41011217524083,
+          "deposited_area_mm2": 11.23691033487099,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9848203209828492,
+          "single_piece_nominal_fraction": 0.7276532938714969,
+          "single_piece_deposited_fraction": 0.7388690894855825,
+          "passed": false
+        },
+        "joint": {
+          "nominal_area_mm2": 9.636532718898163,
+          "deposited_area_mm2": 9.507167919075147,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9865755865105591,
+          "single_piece_nominal_fraction": 0.6820776187709636,
+          "single_piece_deposited_fraction": 0.6913587038813913,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 1.7735794699414493,
+          "deposited_area_mm2": 1.7297424196446585,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9752832895059176,
+          "single_piece_nominal_fraction": 0.9752832895059176,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": false,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 8.302605707757255,
+          "prior_overlap_mm2": 8.186284761251894
+        },
+        {
+          "area_mm2": 2.9343046271137285,
+          "prior_overlap_mm2": 2.9306730906608207
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 20.69999923557043,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8651397477322275,
+          "joint": 0.8841039687365707,
+          "added": 0.7620999074096662
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 8.302605707757255,
+            "common_eroded_core_mm2": 7.301833189332978,
+            "fraction": 0.8794628393000478,
+            "available_eroded_lobe_mm2": 6.895305730645024,
+            "connected_fraction_of_available_core": 0.999999997466509
+          },
+          {
+            "deposited_lobe_mm2": 2.9343046271137285,
+            "common_eroded_core_mm2": 2.569508378896414,
+            "fraction": 0.8756788082442077,
+            "available_eroded_lobe_mm2": 2.309528177654492,
+            "connected_fraction_of_available_core": 0.9999999974911662
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.871341568884269,
+          "joint": 8.519696821637682,
+          "added": 1.3516447498260633
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 21.0,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 11.34446544958584,
+          "deposited_area_mm2": 11.172954389057377,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9848815211884026,
+          "single_piece_nominal_fraction": 0.726298922488363,
+          "single_piece_deposited_fraction": 0.737448014672849,
+          "passed": false
+        },
+        "joint": {
+          "nominal_area_mm2": 9.468173932136413,
+          "deposited_area_mm2": 9.342298027264574,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9867053662328069,
+          "single_piece_nominal_fraction": 0.6768799047184055,
+          "single_piece_deposited_fraction": 0.6860000237991004,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 1.8762915323152236,
+          "deposited_area_mm2": 1.8306563629216457,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9756779964053522,
+          "single_piece_nominal_fraction": 0.9756779964053522,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": false,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 8.239473032240639,
+          "prior_overlap_mm2": 8.107664324572136
+        },
+        {
+          "area_mm2": 2.9334813568167197,
+          "prior_overlap_mm2": 2.932233240327264
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 20.899999998509884,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.863290132048446,
+          "joint": 0.8807188594538359,
+          "added": 0.7753409875694142
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 8.239473032240639,
+            "common_eroded_core_mm2": 7.228664542556727,
+            "fraction": 0.8773212211838464,
+            "available_eroded_lobe_mm2": 6.841254947370768,
+            "connected_fraction_of_available_core": 0.9999999996996181
+          },
+          {
+            "deposited_lobe_mm2": 2.9334813568167197,
+            "common_eroded_core_mm2": 2.56490053343529,
+            "fraction": 0.8743537870029633,
+            "available_eroded_lobe_mm2": 2.305242268435285,
+            "connected_fraction_of_available_core": 0.9999999946789849
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.793565075991992,
+          "joint": 8.338799346621721,
+          "added": 1.4547657296334149
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 21.2,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 11.28815858298465,
+          "deposited_area_mm2": 11.10906384679327,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9841342824097686,
+          "single_piece_nominal_fraction": 0.7241415984889137,
+          "single_piece_deposited_fraction": 0.7358158448822326,
+          "passed": false
+        },
+        "joint": {
+          "nominal_area_mm2": 9.295961531890454,
+          "deposited_area_mm2": 9.161423374042018,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9855272467095638,
+          "single_piece_nominal_fraction": 0.6698161029981231,
+          "single_piece_deposited_fraction": 0.6796525466286969,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 1.9921970710598569,
+          "deposited_area_mm2": 1.947640477499226,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9776344448007211,
+          "single_piece_nominal_fraction": 0.9776344448007211,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": false,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 8.17422520027886,
+          "prior_overlap_mm2": 8.036238160640535
+        },
+        {
+          "area_mm2": 2.934838646514415,
+          "prior_overlap_mm2": 2.9319429036160085
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 21.100000761449337,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.848505493701791,
+          "joint": 0.8603534528814901,
+          "added": 0.7932207087713634
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 8.17422520027886,
+            "common_eroded_core_mm2": 7.007410089083362,
+            "fraction": 0.8572567940560664,
+            "available_eroded_lobe_mm2": 6.651973274481506,
+            "connected_fraction_of_available_core": 0.9999990490516916
+          },
+          {
+            "deposited_lobe_mm2": 2.934838646514415,
+            "common_eroded_core_mm2": 2.570654482356111,
+            "fraction": 0.8759099875589991,
+            "available_eroded_lobe_mm2": 2.3078828511710747,
+            "connected_fraction_of_available_core": 0.9999999952318896
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.5780645714395,
+          "joint": 7.9978126018154585,
+          "added": 1.580251972718334
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 21.4,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 11.228739297512908,
+          "deposited_area_mm2": 11.037175913669701,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9829399028005186,
+          "single_piece_nominal_fraction": 0.7216895143531874,
+          "single_piece_deposited_fraction": 0.7342152987146048,
+          "passed": false
+        },
+        "joint": {
+          "nominal_area_mm2": 9.120185942061177,
+          "deposited_area_mm2": 8.978299336921932,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9844425753991614,
+          "single_piece_nominal_fraction": 0.6627920606273968,
+          "single_piece_deposited_fraction": 0.6732663511212473,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 2.1085533782529065,
+          "deposited_area_mm2": 2.0588765808203844,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9764403415418001,
+          "single_piece_nominal_fraction": 0.9764403415418001,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": false,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 8.103663410420646,
+          "prior_overlap_mm2": 7.9500456206546675
+        },
+        {
+          "area_mm2": 2.93351250324906,
+          "prior_overlap_mm2": 2.931946261279109
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 21.299999617040157,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8504832845913736,
+          "joint": 0.8616583304653479,
+          "added": 0.8021475321088746
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 8.103663410420646,
+            "common_eroded_core_mm2": 6.98439902851772,
+            "fraction": 0.8618816792830212,
+            "available_eroded_lobe_mm2": 6.654724308077864,
+            "connected_fraction_of_available_core": 0.9999999991833907
+          },
+          {
+            "deposited_lobe_mm2": 2.93351250324906,
+            "common_eroded_core_mm2": 2.5654560510512696,
+            "fraction": 0.8745338730310017,
+            "available_eroded_lobe_mm2": 2.305364301482533,
+            "connected_fraction_of_available_core": 0.9999999954052834
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.54985507956901,
+          "joint": 7.8584841923699695,
+          "added": 1.6913708886853993
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 21.6,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 11.119770520442861,
+          "deposited_area_mm2": 10.932389657358677,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9831488552088643,
+          "single_piece_nominal_fraction": 0.7193266797088572,
+          "single_piece_deposited_fraction": 0.7316559195464256,
+          "passed": false
+        },
+        "joint": {
+          "nominal_area_mm2": 8.940867821979815,
+          "deposited_area_mm2": 8.807839693023789,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9851213403883462,
+          "single_piece_nominal_fraction": 0.6570053112413528,
+          "single_piece_deposited_fraction": 0.6669283105595435,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 2.178902720295683,
+          "deposited_area_mm2": 2.124549972795039,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9750549912144458,
+          "single_piece_nominal_fraction": 0.9750549912144458,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": false,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 7.998747607594545,
+          "prior_overlap_mm2": 7.89482260244872
+        },
+        {
+          "area_mm2": 2.9336420497640807,
+          "prior_overlap_mm2": 2.930567988666815
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 21.50000037997961,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8489067220628203,
+          "joint": 0.8616984091977776,
+          "added": 0.796417547144023
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 7.998747607594545,
+            "common_eroded_core_mm2": 6.870465480001317,
+            "fraction": 0.8589426516568717,
+            "available_eroded_lobe_mm2": 6.495889591715527,
+            "connected_fraction_of_available_core": 0.9999999992186739
+          },
+          {
+            "deposited_lobe_mm2": 2.9336420497640807,
+            "common_eroded_core_mm2": 2.5691824626280493,
+            "fraction": 0.8757654884428246,
+            "available_eroded_lobe_mm2": 2.3023071644360837,
+            "connected_fraction_of_available_core": 0.9999999961428643
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.43964794259993,
+          "joint": 7.704331579047605,
+          "added": 1.7353163599633272
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 21.8,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 10.953309490586332,
+          "deposited_area_mm2": 10.750034927171544,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9814417219207137,
+          "single_piece_nominal_fraction": 0.7136138848092625,
+          "single_piece_deposited_fraction": 0.7271077526770481,
+          "passed": false
+        },
+        "joint": {
+          "nominal_area_mm2": 8.75801066611863,
+          "deposited_area_mm2": 8.62305049087151,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9845900878187751,
+          "single_piece_nominal_fraction": 0.6496280395831902,
+          "single_piece_deposited_fraction": 0.6597954292048098,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 2.1952988517722707,
+          "deposited_area_mm2": 2.1269844380613407,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9688814970882987,
+          "single_piece_nominal_fraction": 0.9688814970882987,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": false,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 7.81643373709546,
+          "prior_overlap_mm2": 7.771746902657313
+        },
+        {
+          "area_mm2": 2.9336011900760686,
+          "prior_overlap_mm2": 2.928485784331826
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 21.69999923557043,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8435242269355583,
+          "joint": 0.8570888210556293,
+          "added": 0.7894090970432451
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 7.81643373709546,
+            "common_eroded_core_mm2": 6.670256079193238,
+            "fraction": 0.8533630941611314,
+            "available_eroded_lobe_mm2": 6.3312463728754595,
+            "connected_fraction_of_available_core": 0.9999999985032578
+          },
+          {
+            "deposited_lobe_mm2": 2.9336011900760686,
+            "common_eroded_core_mm2": 2.5691258406005626,
+            "fraction": 0.8757583850495864,
+            "available_eroded_lobe_mm2": 2.304660202448424,
+            "connected_fraction_of_available_core": 0.999999997469723
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.239381920432749,
+          "joint": 7.506393036616243,
+          "added": 1.732988884317621
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 22.0,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 10.767103667217539,
+          "deposited_area_mm2": 10.559507633169837,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9807194171743914,
+          "single_piece_nominal_fraction": 0.9807194171743914,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "joint": {
+          "nominal_area_mm2": 8.571804856520552,
+          "deposited_area_mm2": 8.434560315683948,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9839888397911668,
+          "single_piece_nominal_fraction": 0.9839888397911668,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 2.195298855477465,
+          "deposited_area_mm2": 2.1249473174366376,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9679535486180871,
+          "single_piece_nominal_fraction": 0.9679535486180871,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": true,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 10.55950763316984,
+          "prior_overlap_mm2": 10.511028981684953
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 21.899999998509884,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8440012786697543,
+          "joint": 0.8580810381566414,
+          "added": 0.7890251699766334
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 10.55950763316984,
+            "common_eroded_core_mm2": 9.087449262701417,
+            "fraction": 0.8605940332062123,
+            "available_eroded_lobe_mm2": 8.503005248270687,
+            "connected_fraction_of_available_core": 0.9999999977741525
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.087449262701403,
+          "joint": 7.355303210159296,
+          "added": 1.7321460525926156
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 22.2,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 10.577730218532807,
+          "deposited_area_mm2": 10.357304448029346,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9791613355654257,
+          "single_piece_nominal_fraction": 0.7017030230836924,
+          "single_piece_deposited_fraction": 0.7166367763883237,
+          "passed": false
+        },
+        "joint": {
+          "nominal_area_mm2": 8.382431434216432,
+          "deposited_area_mm2": 8.233212232425533,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9821985777083964,
+          "single_piece_nominal_fraction": 0.6320759196136684,
+          "single_piece_deposited_fraction": 0.6435316991482395,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 2.19529885932437,
+          "deposited_area_mm2": 2.1240922186634434,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9675640333167024,
+          "single_piece_nominal_fraction": 0.9675640333167024,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": false,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 7.422425271708197,
+          "prior_overlap_mm2": 7.392114523612975
+        },
+        {
+          "area_mm2": 2.9348791763211493,
+          "prior_overlap_mm2": 2.9319984944183313
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 22.100000761449337,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8368730187099227,
+          "joint": 0.8494927686659034,
+          "added": 0.788686298648758
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 7.422425271708197,
+            "common_eroded_core_mm2": 6.279054633969985,
+            "fraction": 0.8459572719315399,
+            "available_eroded_lobe_mm2": 5.968854179913722,
+            "connected_fraction_of_available_core": 0.9999999977742924
+          },
+          {
+            "deposited_lobe_mm2": 2.9348791763211493,
+            "common_eroded_core_mm2": 2.573162384712813,
+            "fraction": 0.8767524078923938,
+            "available_eroded_lobe_mm2": 2.3080423442017417,
+            "connected_fraction_of_available_core": 0.9999999947704499
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 8.85221701908272,
+          "joint": 7.120814887204617,
+          "added": 1.731402131788378
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 22.4,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 10.38519099499218,
+          "deposited_area_mm2": 10.177648892271844,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9800155719022967,
+          "single_piece_nominal_fraction": 0.9800155719022967,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "joint": {
+          "nominal_area_mm2": 8.18989224282251,
+          "deposited_area_mm2": 8.052422144328354,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9832146633413117,
+          "single_piece_nominal_fraction": 0.9832146633413117,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 2.195298861302341,
+          "deposited_area_mm2": 2.12522678162431,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9680808472535435,
+          "single_piece_nominal_fraction": 0.9680808472535435,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": true,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 7.241991297896032,
+          "prior_overlap_mm2": 7.202340745784769
+        },
+        {
+          "area_mm2": 2.935657594375815,
+          "prior_overlap_mm2": 2.9288286158879435
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 22.299999617040157,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8333030803209088,
+          "joint": 0.8451147063985363,
+          "added": 0.7892379934820214
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 7.241991297896032,
+            "common_eroded_core_mm2": 6.0810188036131585,
+            "fraction": 0.8396887752930381,
+            "available_eroded_lobe_mm2": 5.790761484229103,
+            "connected_fraction_of_available_core": 0.9999688882488766
+          },
+          {
+            "deposited_lobe_mm2": 2.935657594375815,
+            "common_eroded_core_mm2": 2.5729928422347683,
+            "fraction": 0.8764621756856636,
+            "available_eroded_lobe_mm2": 2.307235361174442,
+            "connected_fraction_of_available_core": 0.9999999967446396
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 8.654011645847948,
+          "joint": 6.921398378228594,
+          "added": 1.732613268387626
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 22.6,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 10.188975146611252,
+          "deposited_area_mm2": 9.984288627090244,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9799109805867879,
+          "single_piece_nominal_fraction": 0.9799109805867879,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "joint": {
+          "nominal_area_mm2": 7.99367643575028,
+          "deposited_area_mm2": 7.8591893596185525,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.983175816883173,
+          "single_piece_nominal_fraction": 0.983175816883173,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 2.1952988629442745,
+          "deposited_area_mm2": 2.1250992842674474,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9680227690808908,
+          "single_piece_nominal_fraction": 0.9680227690808908,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": true,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 9.984288627090233,
+          "prior_overlap_mm2": 9.945512530064967
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 22.50000037997961,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8404820883603422,
+          "joint": 0.8545715748955279,
+          "added": 0.7891784029745533
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 9.984288627090233,
+            "common_eroded_core_mm2": 8.563651109100299,
+            "fraction": 0.8577126953105764,
+            "available_eroded_lobe_mm2": 7.933199545392105,
+            "connected_fraction_of_available_core": 0.9999999963607407
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 8.56365110947545,
+          "joint": 6.831168660904387,
+          "added": 1.7324824507102152
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 22.8,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 9.987797807689898,
+          "deposited_area_mm2": 9.814167254440786,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9826157320570278,
+          "single_piece_nominal_fraction": 0.9826157320570278,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "joint": {
+          "nominal_area_mm2": 7.792499121585554,
+          "deposited_area_mm2": 7.688042531218188,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9865952387369519,
+          "single_piece_nominal_fraction": 0.9865952387369519,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 2.1952988625936976,
+          "deposited_area_mm2": 2.1261247739418123,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9684898991064216,
+          "single_piece_nominal_fraction": 0.9684898991064216,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": true,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 9.814167254440754,
+          "prior_overlap_mm2": 9.764028644208924
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 22.69999923557043,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8326146323218434,
+          "joint": 0.8447958128410871,
+          "added": 0.7893758789371352
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 9.814167254440754,
+            "common_eroded_core_mm2": 8.315986599498633,
+            "fraction": 0.8473451067115023,
+            "available_eroded_lobe_mm2": 7.668321322003806,
+            "connected_fraction_of_available_core": 0.9999999970499878
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 8.315986599354638,
+          "joint": 6.583070629483325,
+          "added": 1.7329159691895932
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 23.0,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 9.781647066938497,
+          "deposited_area_mm2": 9.58604440548789,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9800030955817518,
+          "single_piece_nominal_fraction": 0.9800030955817518,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "joint": {
+          "nominal_area_mm2": 7.586348391534304,
+          "deposited_area_mm2": 7.4603753402917174,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9833947711413885,
+          "single_piece_nominal_fraction": 0.9833947711413885,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 2.1952988628973835,
+          "deposited_area_mm2": 2.125669103218898,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9682823323715537,
+          "single_piece_nominal_fraction": 0.9682823323715537,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": true,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 9.586044405487879,
+          "prior_overlap_mm2": 9.564452282030347
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 22.899999998509884,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8179900120400563,
+          "joint": 0.8262930073729267,
+          "added": 0.7892970767931039
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 9.586044405487879,
+            "common_eroded_core_mm2": 8.001289602404073,
+            "fraction": 0.8346810492368932,
+            "available_eroded_lobe_mm2": 7.383873542690668,
+            "connected_fraction_of_available_core": 0.9999979349541304
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 8.001289602056602,
+          "joint": 6.268546627419645,
+          "added": 1.7327429751721297
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 23.2,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 10.561903037568385,
+          "deposited_area_mm2": 10.34709168839632,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9796616813837443,
+          "single_piece_nominal_fraction": 0.9796616813837443,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "joint": {
+          "nominal_area_mm2": 8.366604211262008,
+          "deposited_area_mm2": 8.222938687466796,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9828286936769606,
+          "single_piece_nominal_fraction": 0.9828286936769606,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 2.1952988615047886,
+          "deposited_area_mm2": 2.124153000700529,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9675917197189763,
+          "single_piece_nominal_fraction": 0.9675917197189763,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": true,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 10.347091688396297,
+          "prior_overlap_mm2": 9.516709095145634
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 23.100000761449337,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8414903201844712,
+          "joint": 0.8553247859774274,
+          "added": 0.7887651392867489
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 10.347091688396297,
+            "common_eroded_core_mm2": 8.887739168840751,
+            "fraction": 0.8589601248830016,
+            "available_eroded_lobe_mm2": 8.275649072386884,
+            "connected_fraction_of_available_core": 0.9999999968559194
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 8.88773916884076,
+          "joint": 7.1561639563555195,
+          "added": 1.7315752122708656
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 23.4,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 11.755902216178297,
+          "deposited_area_mm2": 11.595388464589064,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9863461137531123,
+          "single_piece_nominal_fraction": 0.9863461137531123,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "joint": {
+          "nominal_area_mm2": 9.560603361282942,
+          "deposited_area_mm2": 9.47003753725821,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9905271853038595,
+          "single_piece_nominal_fraction": 0.9905271853038595,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 2.1952988583303137,
+          "deposited_area_mm2": 2.125350921531124,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9681373966310945,
+          "single_piece_nominal_fraction": 0.9681373966310945,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": true,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 11.59538846458908,
+          "prior_overlap_mm2": 10.237230145788207
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [
+        {
+          "z": 23.4,
+          "mm": 0.463,
+          "before": true,
+          "after": true,
+          "start_xy": [
+            33.631,
+            10.512
+          ],
+          "end_xy": [
+            33.549,
+            10.661
+          ],
+          "chord_mm": 0.34,
+          "deviation_from_chord_mm": 0.144,
+          "minimum_bead_width_mm": 0.34,
+          "median_bead_width_mm": 0.34,
+          "actual_length_at_width_below_0p2_mm": 0.0,
+          "anchored_span_mm": 0.76,
+          "first_gcode_line": 810268,
+          "last_gcode_line": 810269,
+          "commanded_feed_range_mm_s": [
+            10.0,
+            10.0
+          ],
+          "last_commanded_part_fan_fraction_range": [
+            1.0,
+            1.0
+          ],
+          "classification": "short straight two-ended bridge",
+          "features": [
+            "Overhang wall"
+          ],
+          "sampled_path_xy": [
+            [
+              33.631,
+              10.363
+            ],
+            [
+              33.631,
+              10.512
+            ],
+            [
+              33.631,
+              10.661
+            ],
+            [
+              33.631,
+              10.661
+            ],
+            [
+              33.549,
+              10.661
+            ],
+            [
+              33.466,
+              10.661
+            ]
+          ]
+        }
+      ],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 23.299999617040157,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8620993641688189,
+          "joint": 0.8788476993901377,
+          "added": 0.7891597758190259
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 11.59538846458908,
+            "common_eroded_core_mm2": 10.134755825387263,
+            "fraction": 0.874033315601076,
+            "available_eroded_lobe_mm2": 9.429756757751566,
+            "connected_fraction_of_available_core": 0.9999937559361344
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 10.13475582579812,
+          "joint": 8.402314268845132,
+          "added": 1.7324415548957137
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 23.6,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 12.516461955337451,
+          "deposited_area_mm2": 12.33516802588995,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.985515561019207,
+          "single_piece_nominal_fraction": 0.985515561019207,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "joint": {
+          "nominal_area_mm2": 9.487307461594202,
+          "deposited_area_mm2": 9.391776032048076,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9899306067677421,
+          "single_piece_nominal_fraction": 0.9899306067677421,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 3.029154479569845,
+          "deposited_area_mm2": 2.9433919806130184,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9716876443458885,
+          "single_piece_nominal_fraction": 0.9716876443458885,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": true,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 12.335168025889915,
+          "prior_overlap_mm2": 11.1945067817388
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 23.50000037997961,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8713151727048658,
+          "joint": 0.8955220224605372,
+          "added": 0.7954993551050877
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 12.335168025889915,
+            "common_eroded_core_mm2": 10.905783210268734,
+            "fraction": 0.8841211718704529,
+            "available_eroded_lobe_mm2": 10.136824555738041,
+            "connected_fraction_of_available_core": 0.999986654706039
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 10.905783210268734,
+          "joint": 8.496092765711786,
+          "added": 2.409690435011499
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 23.8,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 12.828955617837549,
+          "deposited_area_mm2": 12.497768987204454,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9741844433406093,
+          "single_piece_nominal_fraction": 0.805014499003788,
+          "single_piece_deposited_fraction": 0.8263471096328383,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 12.828955618650818,
+          "deposited_area_mm2": 12.497768987157597,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9741844432752,
+          "single_piece_nominal_fraction": 0.805014498949103,
+          "single_piece_deposited_fraction": 0.8263471096321873,
+          "passed": false
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 10.327495279435325,
+          "prior_overlap_mm2": 9.420062982693697
+        },
+        {
+          "area_mm2": 2.1702737077691285,
+          "prior_overlap_mm2": 2.149627392463693
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 23.69999923557043,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8182450558100005,
+          "added": 0.8182450556924494
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 10.327495279435325,
+            "common_eroded_core_mm2": 8.79397083287605,
+            "fraction": 0.851510515854419,
+            "available_eroded_lobe_mm2": 8.65666499936455,
+            "connected_fraction_of_available_core": 0.9999834952108334
+          },
+          {
+            "deposited_lobe_mm2": 2.1702737077691285,
+            "common_eroded_core_mm2": 1.7032586722089627,
+            "fraction": 0.7848128400172065,
+            "available_eroded_lobe_mm2": 1.7026369054412558,
+            "connected_fraction_of_available_core": 0.9999999974649764
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 10.497229505501505,
+          "added": 10.4972295046589
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 24.0,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 12.757648780775863,
+          "deposited_area_mm2": 12.470474381493496,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9774900215378948,
+          "single_piece_nominal_fraction": 0.9774900215378948,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 12.757648803577506,
+          "deposited_area_mm2": 12.47047438351894,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9774900199495979,
+          "single_piece_nominal_fraction": 0.9774900199495979,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 12.470474381493485,
+          "prior_overlap_mm2": 11.864004240941313
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 23.899999998509884,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8355715663683543,
+          "added": 0.8355715649373228
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 12.470474381493485,
+            "common_eroded_core_mm2": 10.659928574930213,
+            "fraction": 0.8548133975360095,
+            "available_eroded_lobe_mm2": 10.46891441305229,
+            "connected_fraction_of_available_core": 0.9999993810019572
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 10.659928574930213,
+          "added": 10.65992857572602
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 24.2,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 12.288355514879225,
+          "deposited_area_mm2": 11.993707292901934,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.976022160034309,
+          "single_piece_nominal_fraction": 0.976022160034309,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 12.288355553702846,
+          "deposited_area_mm2": 11.993707291640485,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9760221568480272,
+          "single_piece_nominal_fraction": 0.9760221568480272,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 11.993707292901934,
+          "prior_overlap_mm2": 11.81523343268625
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 24.100000761449337,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8389730225783104,
+          "added": 0.8389730199429888
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 11.993707292901934,
+            "common_eroded_core_mm2": 10.309598768835073,
+            "fraction": 0.859583989925822,
+            "available_eroded_lobe_mm2": 10.11202118702187,
+            "connected_fraction_of_available_core": 0.9999980546553775
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 10.309598768835073,
+          "added": 10.309598769023275
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 24.4,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 11.689018045484108,
+          "deposited_area_mm2": 11.376151376544165,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9732341358596144,
+          "single_piece_nominal_fraction": 0.9732341358596144,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 11.68901809070432,
+          "deposited_area_mm2": 11.376151382444696,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9732341325993472,
+          "single_piece_nominal_fraction": 0.9732341325993472,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 11.376151376544165,
+          "prior_overlap_mm2": 11.312534397895467
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 24.299999617040157,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8269093976473852,
+          "added": 0.82690939446745
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 11.376151376544165,
+            "common_eroded_core_mm2": 9.66575887108068,
+            "fraction": 0.8496510420044123,
+            "available_eroded_lobe_mm2": 9.45071736446612,
+            "connected_fraction_of_available_core": 0.9999999977388002
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.66575887108068,
+          "added": 9.665758871303378
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 24.6,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 11.083635372542334,
+          "deposited_area_mm2": 10.789207192193858,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.973435775316295,
+          "single_piece_nominal_fraction": 0.973435775316295,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 11.083635413351578,
+          "deposited_area_mm2": 10.789207197446347,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9734357722060618,
+          "single_piece_nominal_fraction": 0.9734357722060618,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 10.789207192193851,
+          "prior_overlap_mm2": 10.721687781889992
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 24.50000037997961,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8236387928354785,
+          "added": 0.823638789814737
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 10.789207192193851,
+            "common_eroded_core_mm2": 9.128912058469377,
+            "fraction": 0.8461151867649995,
+            "available_eroded_lobe_mm2": 8.887014798160239,
+            "connected_fraction_of_available_core": 0.9999999985083187
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 9.128912058469377,
+          "added": 9.128912058600656
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 24.8,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 10.47092923234079,
+          "deposited_area_mm2": 10.205633505571738,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9746635928022842,
+          "single_piece_nominal_fraction": 0.9187679870888932,
+          "single_piece_deposited_fraction": 0.9426513864617803,
+          "passed": false
+        },
+        "added": {
+          "nominal_area_mm2": 10.470929259388082,
+          "deposited_area_mm2": 10.20563350463769,
+          "bead_components_meeting_witness": 2,
+          "coverage_fraction": 0.9746635901954421,
+          "single_piece_nominal_fraction": 0.9187679846402621,
+          "single_piece_deposited_fraction": 0.9426513864707189,
+          "passed": false
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 9.620354573747997,
+          "prior_overlap_mm2": 9.546003771727882
+        },
+        {
+          "area_mm2": 0.5852789318237401,
+          "prior_overlap_mm2": 0.5606787561714093
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 24.69999923557043,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8220959851371826,
+          "added": 0.8220959830263249
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 9.620354573747997,
+            "common_eroded_core_mm2": 8.35840507498415,
+            "fraction": 0.8688250532670123,
+            "available_eroded_lobe_mm2": 8.162727314666753,
+            "connected_fraction_of_available_core": 0.9999999973925666
+          },
+          {
+            "deposited_lobe_mm2": 0.5852789318237401,
+            "common_eroded_core_mm2": 0.24970380757877508,
+            "fraction": 0.42664069044941244,
+            "available_eroded_lobe_mm2": 0.2497034605807995,
+            "connected_fraction_of_available_core": 0.9999999609871787
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": false,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 8.608108882562926,
+          "added": 8.608108882695754
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 25.0,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 9.936519774713835,
+          "deposited_area_mm2": 9.743674236094465,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9805922452738315,
+          "single_piece_nominal_fraction": 0.9805922452738315,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 9.93651978133416,
+          "deposited_area_mm2": 9.743674235141702,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9805922445246151,
+          "single_piece_nominal_fraction": 0.9805922445246151,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 9.743674236094465,
+          "prior_overlap_mm2": 9.620846474241086
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 24.899999998509884,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8599467534540955,
+          "added": 0.8599467528630084
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 9.743674236094465,
+            "common_eroded_core_mm2": 8.544877920897584,
+            "fraction": 0.8769667082304475,
+            "available_eroded_lobe_mm2": 8.205014853497156,
+            "connected_fraction_of_available_core": 0.9999999983036706
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 8.544877920897584,
+          "added": 8.544877920717362
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 25.2,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 9.397928014078504,
+          "deposited_area_mm2": 9.16301582103548,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9750038314093153,
+          "single_piece_nominal_fraction": 0.9750038314093153,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 9.397928012076026,
+          "deposited_area_mm2": 9.163015819315046,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9750038314340006,
+          "single_piece_nominal_fraction": 0.9750038314340006,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 9.16301582103548,
+          "prior_overlap_mm2": 9.039128971173298
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 25.100000761449337,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8451765704928461,
+          "added": 0.8451765705586076
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 9.16301582103548,
+            "common_eroded_core_mm2": 7.942908568677514,
+            "fraction": 0.8668443582126124,
+            "available_eroded_lobe_mm2": 7.757256965219944,
+            "connected_fraction_of_available_core": 0.9999999741211402
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 7.942908568677514,
+          "added": 7.942908567603088
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 25.4,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 8.782631450316332,
+          "deposited_area_mm2": 8.6031080776247,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9795592729004738,
+          "single_piece_nominal_fraction": 0.9795592729004738,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 8.78263145073734,
+          "deposited_area_mm2": 8.60310807803198,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9795592728998906,
+          "single_piece_nominal_fraction": 0.9795592728998906,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 8.6031080776247,
+          "prior_overlap_mm2": 8.53573528787612
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 25.299999617040157,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8410306609954652,
+          "added": 0.841030661013249
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 8.6031080776247,
+            "common_eroded_core_mm2": 7.386462333939106,
+            "fraction": 0.8585806742507519,
+            "available_eroded_lobe_mm2": 7.19670801553818,
+            "connected_fraction_of_available_core": 0.9999999982673129
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 7.386462333939106,
+          "added": 7.386462334449375
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 25.6,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 8.157817656053908,
+          "deposited_area_mm2": 8.009348428828497,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9818003743788963,
+          "single_piece_nominal_fraction": 0.9818003743788963,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 8.157817655457247,
+          "deposited_area_mm2": 8.009348428904188,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9818003744599832,
+          "single_piece_nominal_fraction": 0.9818003744599832,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 8.009348428828497,
+          "prior_overlap_mm2": 7.935133928424515
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 25.50000037997961,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8504808144021833,
+          "added": 0.8504808145100571
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 8.009348428828497,
+            "common_eroded_core_mm2": 6.9380674038652375,
+            "fraction": 0.8662461703991629,
+            "available_eroded_lobe_mm2": 6.734952550413765,
+            "connected_fraction_of_available_core": 0.9999999978041477
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 6.9380674038652375,
+          "added": 6.938067404237803
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 25.8,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 7.524274105195348,
+          "deposited_area_mm2": 7.33715009202282,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9751306224950892,
+          "single_piece_nominal_fraction": 0.9751306224950892,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 7.52427410498092,
+          "deposited_area_mm2": 7.337150092099672,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9751306225330926,
+          "single_piece_nominal_fraction": 0.9751306225330926,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 7.33715009202282,
+          "prior_overlap_mm2": 7.285675174337134
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 25.69999923557043,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8360989794659981,
+          "added": 0.8360989794849271
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 7.33715009202282,
+            "common_eroded_core_mm2": 6.291037900489999,
+            "fraction": 0.8574225443922447,
+            "available_eroded_lobe_mm2": 6.108819104917198,
+            "connected_fraction_of_available_core": 0.9999999973399554
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 6.291037900576266,
+          "added": 6.29103790053941
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 26.0,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 6.882105923197054,
+          "deposited_area_mm2": 6.736984426513586,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9789132137309429,
+          "single_piece_nominal_fraction": 0.9789132137309429,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 6.882105923328071,
+          "deposited_area_mm2": 6.73698442650512,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9789132137110769,
+          "single_piece_nominal_fraction": 0.9789132137110769,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 6.736984426513586,
+          "prior_overlap_mm2": 6.644982318830159
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 25.899999998509884,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.8463191476316214,
+          "added": 0.8463191476155097
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 6.736984426513586,
+            "common_eroded_core_mm2": 5.824458018742493,
+            "fraction": 0.8645497228433807,
+            "available_eroded_lobe_mm2": 5.691643630906752,
+            "connected_fraction_of_available_core": 0.9999999975690774
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 5.824458018830664,
+          "added": 5.824458018830664
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 26.2,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 6.23029311865501,
+          "deposited_area_mm2": 6.056810498337537,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9721549825965613,
+          "single_piece_nominal_fraction": 0.9721549825965613,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 6.230293118720174,
+          "deposited_area_mm2": 6.056810498386991,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.972154982594331,
+          "single_piece_nominal_fraction": 0.972154982594331,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 6.056810498337537,
+          "prior_overlap_mm2": 6.01548829459613
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 26.100000761449337,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.812978309538297,
+          "added": 0.8129783095297939
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 6.056810498337537,
+            "common_eroded_core_mm2": 5.065093167532234,
+            "fraction": 0.8362640978981417,
+            "available_eroded_lobe_mm2": 4.959419977235316,
+            "connected_fraction_of_available_core": 0.9999999974109354
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 5.065093167532234,
+          "added": 5.065093167532234
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 26.4,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 5.568153886003665,
+          "deposited_area_mm2": 5.379240800321686,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9660725817659532,
+          "single_piece_nominal_fraction": 0.9660725817659532,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 5.568153886047733,
+          "deposited_area_mm2": 5.379240800321686,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9660725817583075,
+          "single_piece_nominal_fraction": 0.9660725817583075,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 5.379240800321692,
+          "prior_overlap_mm2": 5.306180302302267
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 26.299999617040157,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.7649721382019818,
+          "added": 0.7649721381959277
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 5.379240800321692,
+            "common_eroded_core_mm2": 4.259482584013898,
+            "fraction": 0.7918371276034288,
+            "available_eroded_lobe_mm2": 4.257771767713939,
+            "connected_fraction_of_available_core": 0.9999999964726242
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 4.259482584013898,
+          "added": 4.259482584013898
+        },
+        "passed": true
+      }
+    },
+    {
+      "layer_top_mm": 26.6,
+      "regions": {
+        "shoulder": {
+          "nominal_area_mm2": 4.8976532961070705,
+          "deposited_area_mm2": 4.709126673155373,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9615067438314694,
+          "single_piece_nominal_fraction": 0.9615067438314694,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "joint": {
+          "nominal_area_mm2": 0.007064891638680626,
+          "deposited_area_mm2": 0.007016515529096656,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9931526041646402,
+          "single_piece_nominal_fraction": 0.9931526041646402,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        },
+        "added": {
+          "nominal_area_mm2": 4.89058840389836,
+          "deposited_area_mm2": 4.70211015751944,
+          "bead_components_meeting_witness": 1,
+          "coverage_fraction": 0.9614610286507282,
+          "single_piece_nominal_fraction": 0.9614610286507282,
+          "single_piece_deposited_fraction": 1.0,
+          "passed": true
+        }
+      },
+      "added_and_old_stock_share_native_piece": null,
+      "native_previous_layer_ancestry": [
+        {
+          "area_mm2": 4.709126673155373,
+          "prior_overlap_mm2": 4.6490510039413255
+        }
+      ],
+      "two_ended_return_assessment": [],
+      "unsupported_intervals_on_this_shoulder": [],
+      "passed": true,
+      "three_dimensional_load_path": {
+        "probe_z_mm": 26.50000037997961,
+        "common_eroded_core_volume_mm3": 80.19030915373536,
+        "same_component_fraction_by_region": {
+          "shoulder": 0.7540212420075436,
+          "added": 0.7544688050559327
+        },
+        "individual_native_lobes": [
+          {
+            "deposited_lobe_mm2": 4.709126673155373,
+            "common_eroded_core_mm2": 3.692934621238738,
+            "fraction": 0.7842079598942429,
+            "available_eroded_lobe_mm2": 3.6767857485671023,
+            "connected_fraction_of_available_core": 0.999999998047838
+          }
+        ],
+        "passed": true
+      },
+      "same_plane_strict_gate": true,
+      "load_path_with_bowed_edges_removed": {
+        "common_core_area_by_region_mm2": {
+          "shoulder": 3.692934621252993,
+          "added": 3.6897963891095973
+        },
+        "passed": true
+      }
+    }
+  ],
+  "passed": true,
+  "physical_strength_verified": false
+}

@@ -120,7 +120,7 @@ def actual_plate_clearance(archive):
             "passed":min_low > .65 and min(gaps) > .65, "actual_deposition_inside_bed":True}
 
 
-def check_hardware(archive, scratch, layout):
+def check_hardware(archive, scratch, layout, *, retained_outer_brims=()):
     ordinary = audit_parts47.common.inspect
 
     def inspect(path, exports, *args, **kwargs):
@@ -208,7 +208,8 @@ def check_hardware(archive, scratch, layout):
          patch.object(audit_parts47.common, "inspect", inspect), \
          patch.object(audit_parts47, "check", evaluate), \
          patch.object(audit_parts47.common, "OUTER_BRIM",
-                      set(audit_parts47.common.OUTER_BRIM) - {"Battery_End_Door", "XIAO_Near_Keeper"}):
+                      (set(audit_parts47.common.OUTER_BRIM) - {"Battery_End_Door", "XIAO_Near_Keeper"})
+                      | set(retained_outer_brims)):
         bracket_paths48.check(archive, scratch, output)
 
 

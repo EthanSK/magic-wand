@@ -68,7 +68,7 @@ def turn_envelope(row, control, mid, forward):
                  'passed': all(comparison.values()) and min(clearances.values()) > .05}
 
 
-def check_feed(archive, inverse, xyz, data, labels, owner_ids, pitch):
+def check_feed(archive, inverse, xyz, data, labels, owner_ids, pitch, *, cradle_release_report=None):
     """Enclose every printed move in boxes, then bound the open wire radius.
 
     Print Y is assembly Z, so the wire cylinder runs parallel to print Y.
@@ -118,16 +118,25 @@ def check_feed(archive, inverse, xyz, data, labels, owner_ids, pitch):
     cable = 1.5 * (1. + 2. / np.sqrt(3.))
     tolerance = .15
     target = cable / 2 + tolerance
-    core = read(archive.parent / 'candidate-audit.json')
-    # This digital wire-path evidence depends only on this archive and its
-    # verified helper removal. Sealing independently needs all carrier gates.
-    assert core['archive_sha256'] == digest(archive)
-    assert core['whole_rib_downward_release']['mechanical_release_geometry_clear']
-    removable = {
-        'External_cradle': core['whole_bead_release']['clear'],
-        'Front_pull_shelf': core['whole_shelf_bead_release']['clear'] and core['individual_front_piece_release']['clear'],
-        'Rear_pull_shelf': core['whole_rear_shelf_bead_release']['clear'],
-    }
+    if cradle_release_report is None:
+        core = read(archive.parent / 'candidate-audit.json')
+        # This digital wire-path evidence depends only on this archive and its
+        # verified helper removal. Sealing independently needs all carrier gates.
+        assert core['archive_sha256'] == digest(archive)
+        assert core['whole_rib_downward_release']['mechanical_release_geometry_clear']
+        removable = {
+            'External_cradle': core['whole_bead_release']['clear'],
+            'Front_pull_shelf': core['whole_shelf_bead_release']['clear'] and core['individual_front_piece_release']['clear'],
+            'Rear_pull_shelf': core['whole_rear_shelf_bead_release']['clear'],
+        }
+    else:
+        # Later plates measure the full native cradle withdrawal directly.
+        # Only that object can be discounted from this wire-path check.
+        release = read(cradle_release_report)
+        assert release['archive_sha256'] == digest(archive) and release['passed']
+        cradle = release['removal']['cradle']
+        assert cradle['clear'] and not cradle['collisions']
+        removable = {'External_cradle': True}
     owners = {v: k for k, v in owner_ids.items()}
     rows, required = {}, []
     passed = True
@@ -154,7 +163,7 @@ def check_feed(archive, inverse, xyz, data, labels, owner_ids, pitch):
             'helpers_that_must_be_removed': required, 'physically_tested': False, 'passed': passed}
 
 
-def check(archive, scratch):
+def check(archive, scratch, *, cradle_release_report=None):
     out = archive.parent
     frame = read(out / 'frame.json')
     inverse = np.linalg.inv(np.asarray(frame['print_to_assembly']))[:3]
@@ -175,7 +184,8 @@ def check(archive, scratch):
     owners = single44.previous.owners(archive)
     normal = (data[:, 6] == owners['Key_Carrier']) & audit42.common.model_mask(labels)
     xyz = data[:, :3] + offset - frame['bed_translation']
-    feed = check_feed(archive, inverse, xyz, data, labels, owners, engine.STEP)
+    feed = check_feed(archive, inverse, xyz, data, labels, owners, engine.STEP,
+                      cradle_release_report=cradle_release_report)
     write(out / 'wire-feed-path.json', feed)
     if not feed['passed']:
         raise ValueError('Native model or unqualified paths intrude on the wire bundle')
