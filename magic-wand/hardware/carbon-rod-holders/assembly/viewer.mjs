@@ -5,6 +5,7 @@ import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/
 import { RollingViewInput, bindTwistGestures, routeAssemblyWheel, rollHint, rollSupport } from './view-roll.mjs';
 import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
 import { sampledPose, validateGuide, identity, assemblyComponents, selectAssemblyComponent } from './assembly-data.mjs';
+import { rodFrame } from './rod-transitions.mjs';
 import { legacyR20 } from './legacy-r20.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');
@@ -32,6 +33,7 @@ view.querySelector('.hint').textContent = `Drag to rotate · Scroll or pinch to 
 let components, guideUrl, group, actors = {}, module, tools, catalog, loadId = 0, versionLoadId = 0;
 let showAnnotations = true, annotations = [];
 let manualCutaway = false, effectiveCutaway;
+let rodBounds;
 const geometries = new Map();
 
 function bindViewDivider() {
@@ -141,7 +143,7 @@ function fit() {
   if (!group) return;
   const bounds = new THREE.Box3();
   for (const [id, object] of Object.entries(actors)) if (object.visible && module.actors[id].frame !== false) bounds.expandByObject(object);
-  const frameBounds = module.steps[Number(document.body.dataset.step)]?.frameBounds ?? module.frameBounds;
+  const frameBounds = rodBounds ?? module.steps[Number(document.body.dataset.step)]?.frameBounds ?? module.frameBounds;
   if (frameBounds) {
     bounds.min.fromArray(frameBounds[0]);
     bounds.max.fromArray(frameBounds[1]);
@@ -180,6 +182,7 @@ function updateCutaway(index, fraction) {
   const active = Boolean(manualCutaway || automatic);
   if (effectiveCutaway === active) return;
   effectiveCutaway = active;
+  if (module.stagedActors) return; // The rod composes the cutaway and arrival opacity in applyPose.
   for (const [id, object] of Object.entries(actors)) {
     if (!module?.actors[id].cutaway) continue;
     object.material.opacity = active ? .22 : 1;
@@ -189,14 +192,37 @@ function updateCutaway(index, fraction) {
   }
 }
 function chooseMode(mode) { input.setMode(mode); for (const button of document.querySelectorAll('[data-mode]')) button.setAttribute('aria-pressed', String(button.dataset.mode === mode)); render(); }
+function followRodBounds(next) {
+  if (rodBounds && rodBounds !== next) {
+    const fitted = box => input.boundsPose(box[0].map(v => v - 2), box[1].map(v => v + 2), { aspect: camera.aspect });
+    const before = fitted(rodBounds), after = fitted(next);
+    // Keep any manual pan, orbit and zoom while the animation reframes.
+    input.target = input.target.map((v, i) => v + after.target[i] - before.target[i]);
+    input.distance = THREE.MathUtils.clamp(input.distance * after.distance / before.distance, input.minDistance, input.maxDistance);
+  }
+  rodBounds = next;
+}
 function applyPose({ index, fraction }) {
   const previousStep = Number(document.body.dataset.step);
   const startOfReplay = module.concept && index === 0 && previousStep > 0;
-  const followStep = module.frameEachStep && index !== previousStep
-    && (!module.stagedActors || module.steps[index].frameBounds !== module.steps[previousStep]?.frameBounds);
-  const sample = sampledPose(module, index, fraction);
+  const followStep = module.frameEachStep && !module.stagedActors && index !== previousStep;
+  const frame = module.stagedActors ? rodFrame(module.steps[index], fraction, module.frameBounds) : null;
+  if (frame) followRodBounds(frame.bounds);
+  updateCutaway(index, fraction);
+  const sample = frame?.pose ?? sampledPose(module, index, fraction);
   for (const [id, object] of Object.entries(actors)) {
-    if (module.stagedActors) object.visible = Object.hasOwn(sample, id);
+    if (frame) {
+      object.visible = Object.hasOwn(sample, id);
+      if (!object.visible) continue;
+      const actor = module.actors[id];
+      const opacity = (frame.opacity[id] ?? 1) * (actor.cutaway && effectiveCutaway ? 0.22 : actor.opacity ?? 1);
+      if (object.material.opacity !== opacity) {
+        if (object.material.transparent !== (opacity < 1)) object.material.needsUpdate = true;
+        object.material.opacity = opacity;
+        object.material.transparent = opacity < 1;
+        object.material.depthWrite = opacity === 1;
+      }
+    }
     const m = sample[id] || identity();
     object.matrix.set(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11], 0, 0, 0, 1);
     object.matrixWorldNeedsUpdate = true;
@@ -207,7 +233,6 @@ function applyPose({ index, fraction }) {
       }
     }
   }
-  updateCutaway(index, fraction);
   document.body.dataset.step = String(index); document.body.dataset.fraction = String(fraction);
   if (startOfReplay || followStep) fit();
   else render();
@@ -286,6 +311,7 @@ async function chooseModule() {
     }
     if (request !== loadId) { disposeGroup(nextGroup); return; }
     if (group) { scene.remove(group); disposeGroup(group); }
+    rodBounds = undefined;
     group = nextGroup; actors = nextActors; module = next; scene.add(group);
     setAnnotations(module.annotations);
     installModelActions(module.helperActions);
@@ -382,7 +408,7 @@ try {
   keyMechanism.addEventListener('click', () => {
     manualCutaway = !manualCutaway;
     keyMechanism.setAttribute('aria-pressed', String(manualCutaway));
-    updateCutaway(Number(document.body.dataset.step), Number(document.body.dataset.fraction));
+    applyPose({ index: Number(document.body.dataset.step), fraction: Number(document.body.dataset.fraction) });
     if (manualCutaway) {
       input.rotation.setFromEuler(new THREE.Euler(1.23, 0, .64, 'ZXY'));
       input.syncAngles();

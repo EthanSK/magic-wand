@@ -1,5 +1,7 @@
 // Each assembly step reuses the component guide's CAD poses, including wire
 // and latch deformation. The whole rod adds only rigid placement and travel.
+import { joinRodSteps } from './rod-transitions.mjs';
+
 function shiftY(matrix, distance) {
   const moved = [...matrix];
   moved[7] += distance;
@@ -99,5 +101,5 @@ export function completeRod(whole, components) {
   steps.push({ title: 'Check the assembled wand',
     caption: 'All four holders are seated. Check the pad click, both keepers and the wire route.',
     duration: 2, samples: [assembled], frameBounds: whole.frameBounds });
-  return { ...whole, actors, steps, stagedActors: true };
+  return { ...whole, actors, steps: joinRodSteps(steps, whole.frameBounds), stagedActors: true };
 }

@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {assemblyComponents, validateGuide} from '../carbon-rod-holders/assembly/assembly-data.mjs';
 
+import { rodFrame } from '../carbon-rod-holders/assembly/rod-transitions.mjs';
+
 const base = new URL(process.argv[2] || 'http://127.0.0.1:8849/magic-wand/hardware/carbon-rod-holders/assembly/');
 const get = async url => {
   const response = await fetch(url);
@@ -35,6 +37,30 @@ assert.equal(keys.steps.at(-1).title, 'Press the lower half of the pad');
 assert.ok(keys.steps.findIndex(step => step.title === 'Fit the locknut')
   < keys.steps.findIndex(step => step.title === 'Fit the Keycaps'));
 assert.deepEqual(Object.keys(whole.steps[0].samples[0]), ['rod']);
+// Scrubbing in either direction must give the same camera, parts and shapes
+// on both sides of each cut, including newly introduced wires and keys.
+const at = (step, t) => rodFrame(step, t, whole.frameBounds);
+function effectiveFrame(step, t) {
+  const { pose, opacity, bounds } = at(step, t);
+  const result = {};
+  for (const id of Object.keys(whole.actors)) {
+    if (pose[id]) result[id] = [pose[id], opacity[id] ?? 1, pose.morphs?.[id] ?? 0];
+  }
+  return { result, bounds };
+}
+for (let i = 1; i < whole.steps.length; ++i) {
+  assert.deepEqual(effectiveFrame(whole.steps[i-1], 1), effectiveFrame(whole.steps[i], 0),
+    'Discontinuous boundary before ' + whole.steps[i].title);
+}
+const intro = whole.steps[0];
+const looseKey = 'keys_keycap_0';
+const middle = at(intro, 0.5);
+assert.equal(middle.opacity[looseKey], 0.5);
+assert.ok(middle.pose[looseKey][11] > at(intro, 1).pose[looseKey][11]);
+assert.deepEqual(middle.bounds, at(intro, 0).bounds.map((corner,i) =>
+  corner.map((n,j) => (n + at(intro, 1).bounds[i][j]) / 2)));
+assert.ok(at(intro, 0.95).opacity[looseKey] > middle.opacity[looseKey]);
+assert.deepEqual(at(intro, 0.5), middle);
 const finalRod = whole.steps.at(-1).samples.at(-1);
 for (const id of Object.keys(whole.actors)) assert.ok(finalRod[id], id);
 let lastMount = -1;

@@ -66,7 +66,7 @@ export class FreeViewInput extends ViewInput {
     return true;
   }
 
-  fitBounds(min, max, { aspect = 1, padding = 1.18 } = {}) {
+  boundsPose(min, max, { aspect = 1, padding = 1.18 } = {}) {
     const target = min.map((v, i) => (v + max[i]) / 2);
     const right = axis(1, 0, 0, this.rotation), up = axis(0, 1, 0, this.rotation), back = axis(0, 0, 1, this.rotation);
     const tanY = Math.tan(this.fov * Math.PI / 360), tanX = tanY * Math.max(aspect, 0.01);
@@ -75,8 +75,11 @@ export class FreeViewInput extends ViewInput {
       const point = new Vector3(...target.map((v, i) => ((bits & (1 << i)) ? max[i] : min[i]) - v));
       distance = Math.max(distance, point.dot(back) + padding * Math.max(Math.abs(point.dot(right)) / tanX, Math.abs(point.dot(up)) / tanY));
     }
-    this.target = target;
-    this.distance = Math.min(this.maxDistance, distance);
+    return { target, distance: Math.min(this.maxDistance, distance) };
+  }
+
+  fitBounds(min, max, options) {
+    Object.assign(this, this.boundsPose(min, max, options));
     this.cancel();
   }
 
