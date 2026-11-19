@@ -1,25 +1,25 @@
 {
-  "archive_sha256": "b529b63d0d87302255f1e6ec74a1ffce26f7abdd61804801c3a5fa1fff12913d",
-  "frame_sha256": "22a9e8c9cc2eaadec88159791070eed33110e4247f7335ca83493803d67d907c",
+  "archive_sha256": "6731acef5fd84da65316bd578b7587b5b8fa8c26f03e94ab074f29238e7f6e37",
+  "frame_sha256": "a13d1caf69802ec1f706c250727f125708f5f3f5727df1a26e1e60a4f8d5f077",
   "mode": "complete insertion and removal",
   "routes": {
     "key_0_switch": {
       "poses": 1,
-      "nearby_samples": 120950,
+      "nearby_samples": 120949,
       "checked": 72694,
       "worst_per_feature": {},
       "obstructed_poses": []
     },
     "key_0_socket": {
       "poses": 1,
-      "nearby_samples": 43264,
-      "checked": 22666,
+      "nearby_samples": 43262,
+      "checked": 22665,
       "worst_per_feature": {},
       "obstructed_poses": []
     },
     "key_0_maximum_socket": {
       "poses": 1,
-      "nearby_samples": 47403,
+      "nearby_samples": 47401,
       "checked": 25507,
       "worst_per_feature": {},
       "obstructed_poses": []
@@ -33,14 +33,14 @@
     },
     "key_0_mount_opening": {
       "poses": 1,
-      "nearby_samples": 18810,
+      "nearby_samples": 18812,
       "checked": 1518,
       "worst_per_feature": {},
       "obstructed_poses": []
     },
     "key_0_clip_relief": {
       "poses": 1,
-      "nearby_samples": 64658,
+      "nearby_samples": 64655,
       "checked": 11617,
       "worst_per_feature": {},
       "obstructed_poses": []
@@ -54,22 +54,22 @@
     },
     "key_2_switch": {
       "poses": 1,
-      "nearby_samples": 119459,
-      "checked": 71703,
+      "nearby_samples": 119456,
+      "checked": 71704,
       "worst_per_feature": {},
       "obstructed_poses": []
     },
     "key_2_socket": {
       "poses": 1,
-      "nearby_samples": 36679,
-      "checked": 20621,
+      "nearby_samples": 36676,
+      "checked": 20620,
       "worst_per_feature": {},
       "obstructed_poses": []
     },
     "key_2_maximum_socket": {
       "poses": 1,
-      "nearby_samples": 39451,
-      "checked": 22813,
+      "nearby_samples": 39448,
+      "checked": 22811,
       "worst_per_feature": {},
       "obstructed_poses": []
     },
@@ -82,14 +82,14 @@
     },
     "key_2_mount_opening": {
       "poses": 1,
-      "nearby_samples": 16759,
+      "nearby_samples": 16757,
       "checked": 1142,
       "worst_per_feature": {},
       "obstructed_poses": []
     },
     "key_2_clip_relief": {
       "poses": 1,
-      "nearby_samples": 61388,
+      "nearby_samples": 61381,
       "checked": 10983,
       "worst_per_feature": {},
       "obstructed_poses": []
@@ -132,11 +132,11 @@
     },
     "key_3_socket_loading": {
       "poses": 31,
-      "nearby_samples": 56734,
+      "nearby_samples": 56732,
       "checked": 24421,
       "worst_per_feature": {
         "Exterior cradle / Inner wall": 980,
-        "Exterior cradle / Outer wall": 1162,
+        "Exterior cradle / Outer wall": 1160,
         "Support": 402
       },
       "obstructed_poses": [
@@ -166,11 +166,11 @@
     },
     "key_3_maximum_socket_loading": {
       "poses": 31,
-      "nearby_samples": 58829,
+      "nearby_samples": 58827,
       "checked": 26426,
       "worst_per_feature": {
         "Exterior cradle / Inner wall": 974,
-        "Exterior cradle / Outer wall": 1232,
+        "Exterior cradle / Outer wall": 1230,
         "Support": 437,
         "Support transition": 1
       },
@@ -295,25 +295,25 @@
     },
     "key_0_soldered_socket_slide": {
       "poses": 51,
-      "nearby_samples": 61948,
-      "checked": 27128,
+      "nearby_samples": 61949,
+      "checked": 27129,
       "worst_per_feature": {},
       "obstructed_poses": []
     },
     "key_2_soldered_socket_slide": {
       "poses": 51,
-      "nearby_samples": 40050,
-      "checked": 23434,
+      "nearby_samples": 40047,
+      "checked": 23432,
       "worst_per_feature": {},
       "obstructed_poses": []
     },
     "key_3_soldered_socket_dogleg": {
       "poses": 41,
-      "nearby_samples": 62957,
+      "nearby_samples": 62955,
       "checked": 28511,
       "worst_per_feature": {
         "Exterior cradle / Inner wall": 1309,
-        "Exterior cradle / Outer wall": 1672,
+        "Exterior cradle / Outer wall": 1670,
         "Support": 741,
         "Support transition": 13
       },

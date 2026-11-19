@@ -1,10 +1,10 @@
 # Key carrier and paddle
 
-The two-object A1 mini plate uses the frozen assembly STLs, PETG and a 0.4 mm nozzle. Bambu Studio estimates 2 h 57 min and 22.72 g. Keep the carrier, including its two narrow OP1 spring arms, and the paddle, including its posts and rounded underside. All four square key wells are open.
+The two-object A1 mini plate uses the frozen assembly STLs, PETG and a 0.4 mm nozzle. Bambu Studio estimates 3 h 3 min and 23.53 g. Keep the carrier, including its two narrow OP1 spring arms, and the paddle, including its posts and rounded underside. All four square key wells are open.
 
 ## After the plate cools
 
-The four wide plates are disposable. Each is 0.4 mm thick. Lift the cooled pieces off the flexible sheet by their wide plates. At bed level, snip the narrow strips linking the plates to the paddle sides, the carrier ears and the prop feet. Remove the two plates from each mechanism before pulling any support sideways. Three low crossbars run beneath the paddle edge. After freeing the panels, trim their short ends flush while holding the rigid paddle body. Leave the paddle posts and the two upper carrier springs intact.
+The four functional-part panels and the separate timelapse tower with its broad brim are disposable. Each is 0.4 mm thick. Lift the cooled pieces off the flexible sheet by their wide plates. At bed level, snip the narrow strips linking the plates to the paddle sides, the carrier ears and the prop feet. Remove the two plates from each mechanism before pulling any support sideways. Three low crossbars run beneath the paddle edge. After freeing the panels, trim their short ends flush while holding the rigid paddle body. Leave the paddle posts and the two upper carrier springs intact.
 
 ![Printed first layer showing each base plate and its attached roots](exports/print-mechanisms/wide-bases.png)
 

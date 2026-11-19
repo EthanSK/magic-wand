@@ -10,6 +10,8 @@ from wide_accessories52 import POSITIONS
 def release(selected, reopened):
     checks=[]
     for folder in (selected,reopened):
+        tower=json.loads((folder/'tower-base.json').read_text())['selected']
+        assert tower['archive_sha256']==digest(folder/'Wide-accessories.gcode.3mf') and tower['connected_bed_area_mm2']>=2849
         result=json.loads((folder/'wide-bases.json').read_text())
         assert result['native_sha256']==digest(folder/'Wide-accessories.gcode.3mf')
         assert result['layout_sha256']==digest(folder/'layout.3mf')
@@ -26,8 +28,8 @@ def release(selected, reopened):
             assert len(source['tie_widths_mm'])==len(repeat['tie_widths_mm'])==2
     assert max(abs(x-y) for x,y in zip(a['lid_window_minimum_clear_radii_mm'],b['lid_window_minimum_clear_radii_mm'])) < .15
     (selected/'reopened.json').write_text(json.dumps(b,indent=2)+'\n')
-    package(selected/'Wide-accessories.gcode.3mf',selected/'Magic-Wand-R52-Six-Wide-Base-Accessories-print-only.3mf',
-            set(POSITIONS),[selected/f for f in ('base-cuts.json','wide-bases.json','reopened.json','separation-and-machine.json')])
+    package(selected/'Wide-accessories.gcode.3mf',selected/'R52-Six-Accessories-Wide-Tower-print-only.3mf',
+            set(POSITIONS),[selected/f for f in ('base-cuts.json','wide-bases.json','reopened.json','separation-and-machine.json','tower-base.json','reopened-tower-base.json')])
 
 
 if __name__=='__main__':release(*map(Path,sys.argv[1:3]))

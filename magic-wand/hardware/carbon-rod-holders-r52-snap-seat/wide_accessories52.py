@@ -1,6 +1,7 @@
 """Give the six separate accessory parts the twin, two-layer base geometry of the R48 retry."""
 import json
 from pathlib import Path
+from tower52 import add_tower_base
 import sys
 from xml.etree import ElementTree as ET
 from zipfile import ZipFile, ZIP_DEFLATED
@@ -14,12 +15,12 @@ HERE = Path(__file__).resolve().parent
 ORIGINAL = HERE/'exports/print-accessories/Clips-and-holders.3mf'
 # Bed centres, outside plate dimensions and axis of the two cut ties.
 POSITIONS = {
-    'DFR0030_Post_Clip': ((43,33), (76,48), 0),
-    'DFR0030_Post_Clip_2': ((133,33), (76,48), 0),
-    'Battery_End_Door': ((43,90), (78,52), 1),
-    'XIAO_Near_Keeper': ((133,90), (78,52), 0),
-    'XIAO_Rod_Holder': ((44,148), (80,53), 0),
-    'Cable_Clip_12_Wire': ((133,148), (77,51), 1),
+    'DFR0030_Post_Clip': ((29,38), (50,66), 0),
+    'DFR0030_Post_Clip_2': ((151,38), (50,66), 0),
+    'Battery_End_Door': ((46,100), (84,48), 1),
+    'XIAO_Near_Keeper': ((134,100), (84,48), 0),
+    'XIAO_Rod_Holder': ((46,152), (84,48), 0),
+    'Cable_Clip_12_Wire': ((134,152), (84,48), 1),
 }
 
 
@@ -102,9 +103,6 @@ def build(directory):
         bounds=np.array(original.bounding_box()).reshape(2,3)
         centre=bounds[:,:2].mean(0); tr=bed-centre
         outer=rectangle(centre-size/2,centre+size/2).offset(-1.8).offset(1.8)
-        if bed[1]<50:
-            # Clear the actual timelapse tower at the front of the bed.
-            outer-=rectangle(np.array([76.,3])-tr,np.array([104.,32])-tr)
         hull=original.project().hull().offset(1.45)
         split_lo,split_hi=centre-size/2-1,centre+size/2+1
         split_lo[axis],split_hi[axis]=centre[axis]-.8,centre[axis]+.8
@@ -131,8 +129,7 @@ def build(directory):
         old_idx=int(row.get('id'))
         if old_idx in input_indices:row.set('id',str(input_indices[old_idx]))
         else:ranges.remove(row)
-    settings=json.loads(files[PROJECT]);settings['wipe_tower_x']=['84'];settings['wipe_tower_y']=['12']
-    files[PROJECT]=json.dumps(settings,indent=2).encode()
+    add_tower_base(files, (85, 31))
     value(plate,'plater_name','Six accessories with separate wide bases')
     for key,root in ((MODEL,model),(SETTINGS,cfg),('Metadata/layer_config_ranges.xml',ranges)):
         files[key]=ET.tostring(root,encoding='utf-8',xml_declaration=True)

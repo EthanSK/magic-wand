@@ -25,8 +25,11 @@ def check(control,candidate,output):
             diagonals=[float(np.linalg.norm(np.subtract(q['extent_machine_xy'][2:],q['extent_machine_xy'][:2]))) for q in roof]
             return {'max_footprint_diagonal_mm':round(max(diagonals,default=0.),4),'one_end_count':sum(not q['two_anchors'] for q in roof),'max_flagged_mm':longest['mm'] if longest else 0.0,'longest_flagged':longest,
                     'flagged_count':len(roof),'window_layer_centre':top}
-        records[f'key_{key}']={'earlier':tally(before),'selected':tally(after)}
-    result={'earlier_native_archive_sha256':before['archive_sha256'],'selected_native_archive_sha256':after['archive_sha256'],
+        # A previous comparison retains the exact original control measurements.
+        key_name=f'key_{key}'
+        earlier=before['keys'][key_name]['earlier'] if 'keys' in before else tally(before)
+        records[key_name]={'earlier':earlier,'selected':tally(after)}
+    result={'earlier_native_archive_sha256':before.get('earlier_native_archive_sha256') or before['archive_sha256'],'selected_native_archive_sha256':after['archive_sha256'],
             'keys':records,'method':'Counts unresolved paths after accounting for prior-layer support and earlier adjacent anchored lines. Straight bridges supported at both ends within the 12 mm reach rule are omitted. A zero is not a prediction of physically zero sag.'}
     output.write_text(json.dumps(result,indent=2)+'\n')
     print({k:(r['earlier']['max_flagged_mm'],r['selected']['max_flagged_mm']) for k,r in records.items()},flush=True)

@@ -25,6 +25,10 @@ def release(directory):
 
     frame = report('layout.frame')
     assert frame['layout_sha256'] == digest(layout)
+    towers = [report('tower-base'), report('reopened-tower-base')]
+    assert towers[0]['selected']['archive_sha256'] == archive_hash
+    assert towers[1]['selected']['archive_sha256'] == report('reopened')['reopened_archive']
+    assert min(t['selected']['connected_bed_area_mm2'] for t in towers) >= 2849
     native = report('Mechanisms.gcode.native')
     assert native['return_code'] == 0 and not native['plates'][0]['warning_message']
     walls = report('roofs')
@@ -99,7 +103,7 @@ def release(directory):
     assert not removal['blocked'] and removal['long_props'] == len(removal['pull_order'])
     assert all(pull['model_collision_mm3'] < 0.001 for pull in removal['pull_order'])
     assert all(area['fine']['unreachable_sample_count'] == 0 for area in removal['native_support_openings'].values())
-    return package(archive, directory / 'Magic-Wand-R52-Wide-Base-Key-Carrier-and-Paddle-print-only.3mf',
+    return package(archive, directory / 'R52-Key-Carrier-and-Paddle-Wide-Tower-print-only.3mf',
                    PARTS, paths.values())
 
 

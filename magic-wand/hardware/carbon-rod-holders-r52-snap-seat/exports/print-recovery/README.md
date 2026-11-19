@@ -4,7 +4,7 @@ The original seven-piece print lost the upright cradle. On the printer recording
 
 The current plate puts both long tray walls on the bed and joins them to two 0.4 mm thick outside panels through six cut ties. The area connected to the cradle is 3,103 mm², up from 346 mm² on the failed short retry. The pull-out fork has its own 3,116 mm² base. The two sets stay separate. The longest unsupported stretch across the tray floor is 2.4 mm. The earlier retry had already moved before that floor printed.
 
-The permanent geometry comes from the R48 Micron cradle and takes the same lid. Bambu Studio estimates 44 min and 7.28 g of PETG for the 17.6 mm tall print. The two independent slices give the same fitted passages and positive connections on both base layers. The six outside ties measure 2.1–2.3 mm wide and the two fork ties measure 1.8 mm. Physical adhesion and fit still need a trial. [Print-only file](Magic-Wand-R52-Battery-Wide-Base-print-only.3mf) · [Editable layout](layout.3mf) · [Measurements](checks.json)
+The permanent geometry comes from the R48 Micron cradle and takes the same lid. Bambu Studio estimates 50 min and 8.05 g of PETG for the 17.6 mm tall print. The two independent slices give the same fitted passages and positive connections on both base layers. The six outside ties measure 2.1–2.3 mm wide and the two fork ties measure 1.8 mm. Physical adhesion and fit still need a trial. [Print-only file](R52-Battery-Cradle-Wide-Tower-print-only.3mf) · [Editable layout](layout.3mf) · [Measurements](checks.json)
 
 ## Removal and fit
 

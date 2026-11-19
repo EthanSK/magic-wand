@@ -1,6 +1,6 @@
 {
-  "archive_sha256": "b6ec8e9a46f7d9e9fa6938736705751ad028e78eefc6637c1df0affe4006bd88",
-  "layout_sha256": "f30f4419311027976607b346b0701eaf2d47a28fe4eb699e558fe2458bb02a8d",
+  "archive_sha256": "80c0f77b2814d7ca48ab8d4a5b6a94bfd955ee8bb52ce50d88f8a87b21b09e2c",
+  "layout_sha256": "cdf801354fdbd9bb3760d67b5b525338c856f0407e84670df3ede87dc6e4731a",
   "parts": [
     "Battery_End_Door",
     "DFR0030_Post_Clip",
@@ -9,27 +9,27 @@
     "XIAO_Near_Keeper",
     "Cable_Clip_12_Wire"
   ],
-  "minimum_separation_mm": 5.3,
+  "minimum_separation_mm": 3.8,
   "projected_part_separation_lower_bounds_mm": {
-    "Battery_End_Door / DFR0030_Post_Clip": 6.8,
-    "Battery_End_Door / DFR0030_Post_Clip_2": 14.494,
-    "Battery_End_Door / XIAO_Rod_Holder": 5.3,
-    "Battery_End_Door / XIAO_Near_Keeper": 11.8,
-    "Battery_End_Door / Cable_Clip_12_Wire": 13.82,
-    "DFR0030_Post_Clip / DFR0030_Post_Clip_2": 13.8,
-    "DFR0030_Post_Clip / XIAO_Rod_Holder": 64.3,
-    "DFR0030_Post_Clip / XIAO_Near_Keeper": 14.494,
-    "DFR0030_Post_Clip / Cable_Clip_12_Wire": 66.641,
-    "DFR0030_Post_Clip_2 / XIAO_Rod_Holder": 65.201,
-    "DFR0030_Post_Clip_2 / XIAO_Near_Keeper": 6.8,
-    "DFR0030_Post_Clip_2 / Cable_Clip_12_Wire": 65.3,
-    "XIAO_Rod_Holder / XIAO_Near_Keeper": 11.141,
-    "XIAO_Rod_Holder / Cable_Clip_12_Wire": 10.3,
-    "XIAO_Near_Keeper / Cable_Clip_12_Wire": 6.3
+    "Battery_End_Door / DFR0030_Post_Clip": 4.8,
+    "Battery_End_Door / DFR0030_Post_Clip_2": 38.104,
+    "Battery_End_Door / XIAO_Rod_Holder": 3.8,
+    "Battery_End_Door / XIAO_Near_Keeper": 3.8,
+    "Battery_End_Door / Cable_Clip_12_Wire": 5.374,
+    "DFR0030_Post_Clip / DFR0030_Post_Clip_2": 71.8,
+    "DFR0030_Post_Clip / XIAO_Rod_Holder": 56.8,
+    "DFR0030_Post_Clip / XIAO_Near_Keeper": 38.104,
+    "DFR0030_Post_Clip / Cable_Clip_12_Wire": 68.228,
+    "DFR0030_Post_Clip_2 / XIAO_Rod_Holder": 68.228,
+    "DFR0030_Post_Clip_2 / XIAO_Near_Keeper": 4.8,
+    "DFR0030_Post_Clip_2 / Cable_Clip_12_Wire": 56.8,
+    "XIAO_Rod_Holder / XIAO_Near_Keeper": 5.374,
+    "XIAO_Rod_Holder / Cable_Clip_12_Wire": 3.8,
+    "XIAO_Near_Keeper / Cable_Clip_12_Wire": 3.8
   },
   "machine": {
     "passed": true,
-    "project_sha256": "b6ec8e9a46f7d9e9fa6938736705751ad028e78eefc6637c1df0affe4006bd88",
+    "project_sha256": "80c0f77b2814d7ca48ab8d4a5b6a94bfd955ee8bb52ce50d88f8a87b21b09e2c",
     "official_machine_templates_match": [
       "machine_start_gcode",
       "machine_end_gcode",

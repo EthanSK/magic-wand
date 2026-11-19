@@ -5,6 +5,7 @@ import sys
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile, ZIP_DEFLATED
 
+from tower52 import add_tower_base
 from plate52 import MODEL, SETTINGS, decode, tag, value, resource
 import manifold3d as mf
 
@@ -83,6 +84,7 @@ def build(out):
     value(plate,'plater_name','Battery cradle recovery')
     for key,el in [(MODEL,model),(SETTINGS,cfg),('Metadata/layer_config_ranges.xml',ET.Element('objects'))]:
         files[key]=ET.tostring(el,encoding='utf-8',xml_declaration=True)
+    add_tower_base(files, (118, 140), brim_mm=27)
     out.parent.mkdir(parents=True,exist_ok=True)
     with ZipFile(out,'w',ZIP_DEFLATED) as z:
         for k,v in files.items():z.writestr(k,v)
