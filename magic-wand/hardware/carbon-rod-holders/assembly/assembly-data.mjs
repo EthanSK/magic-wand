@@ -3,6 +3,7 @@
 // of the same hardware without taking any parts from another version.
 import { potentialKeyViews } from './keycap-concepts.mjs?v=cirque-cap-view';
 
+import { withStockRods } from './stock-rod.mjs';
 import { completeKeys, completeRod } from './rod-build.mjs';
 
 export const identity = () => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
@@ -143,6 +144,7 @@ const componentFamilies = {
   centre_deep: 'keys',
   snap_hinge: 'keys',
   pin_hinge: 'keys',
+  op1_clips: 'keys',
   finger_rest: 'keys',
   xiao_latch: 'xiao',
   battery_latch: 'battery',
@@ -168,7 +170,8 @@ const viewLabels = {
 };
 
 export function assemblyComponents(guide, combineKeys = false) {
-  const grouped = combineKeys ? groupKeys(guide.modules) : guide;
+  const fullLength = withStockRods(guide);
+  const grouped = combineKeys ? groupKeys(fullLength.modules) : fullLength;
   const components = Object.create(null);
   for (const [id, module] of Object.entries(grouped.modules)) {
     const componentId = Object.hasOwn(componentFamilies, id) ? componentFamilies[id] : id;

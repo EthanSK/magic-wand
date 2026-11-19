@@ -1,0 +1,88 @@
+{
+  "archive_sha256": "922dc4ce5b0ebc647ed17f621ce238b18fbe93eba2e2d69d18fc3832a9dfae95",
+  "layout_sha256": "34b01f15088f21d125c2ffe0b9a5324ea74d2c2c1634d97bb0590b44cfaa8f44",
+  "parts": [
+    "Battery_End_Door",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2",
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Battery_Holder",
+    "Cable_Clip_12_Wire"
+  ],
+  "minimum_separation_mm": 10.363,
+  "projected_part_separation_lower_bounds_mm": {
+    "Battery_End_Door / DFR0030_Post_Clip": 33.951,
+    "Battery_End_Door / DFR0030_Post_Clip_2": 16.951,
+    "Battery_End_Door / XIAO_Rod_Holder": 83.567,
+    "Battery_End_Door / XIAO_Near_Keeper": 47.159,
+    "Battery_End_Door / Battery_Holder": 72.963,
+    "Battery_End_Door / Cable_Clip_12_Wire": 18.166,
+    "DFR0030_Post_Clip / DFR0030_Post_Clip_2": 12.021,
+    "DFR0030_Post_Clip / XIAO_Rod_Holder": 132.39,
+    "DFR0030_Post_Clip / XIAO_Near_Keeper": 99.257,
+    "DFR0030_Post_Clip / Battery_Holder": 101.837,
+    "DFR0030_Post_Clip / Cable_Clip_12_Wire": 71.305,
+    "DFR0030_Post_Clip_2 / XIAO_Rod_Holder": 123.308,
+    "DFR0030_Post_Clip_2 / XIAO_Near_Keeper": 82.804,
+    "DFR0030_Post_Clip_2 / Battery_Holder": 101.837,
+    "DFR0030_Post_Clip_2 / Cable_Clip_12_Wire": 55.45,
+    "XIAO_Rod_Holder / XIAO_Near_Keeper": 74.827,
+    "XIAO_Rod_Holder / Battery_Holder": 39.848,
+    "XIAO_Rod_Holder / Cable_Clip_12_Wire": 64.573,
+    "XIAO_Near_Keeper / Battery_Holder": 91.078,
+    "XIAO_Near_Keeper / Cable_Clip_12_Wire": 10.363,
+    "Battery_Holder / Cable_Clip_12_Wire": 66.111
+  },
+  "machine": {
+    "passed": true,
+    "project_sha256": "922dc4ce5b0ebc647ed17f621ce238b18fbe93eba2e2d69d18fc3832a9dfae95",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "filament_retraction_mm": [
+    "1.2"
+  ],
+  "filament_retraction_speed_mm_s": [
+    "35"
+  ],
+  "timelapse_type": "1"
+}

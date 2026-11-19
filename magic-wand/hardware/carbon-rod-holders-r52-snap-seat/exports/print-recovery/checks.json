@@ -1,0 +1,535 @@
+{
+  "archive_sha256": "c870fc9e39469ecd2d260809bc08b7d4408c00280b943a122ead647c8864d37d",
+  "seconds": "2034",
+  "grams": "4.57",
+  "original_height_mm": 33.0,
+  "height_mm": 17.600000381469727,
+  "layers": 88,
+  "bed_area_mm2": {
+    "all": 795.93,
+    "pull_rail": 246.73,
+    "outside_feet": 415.12,
+    "permanent_rims": 137.19
+  },
+  "first_layer_connected_groups": [
+    {
+      "area_mm2": 549.2,
+      "bed_ears": 6,
+      "includes_outer_rim": true,
+      "xy_bounds": [
+        -17.4,
+        -15.0,
+        17.4,
+        15.1
+      ]
+    },
+    {
+      "area_mm2": 246.73,
+      "bed_ears": 0,
+      "includes_outer_rim": false,
+      "xy_bounds": [
+        -6.1,
+        -22.4,
+        6.1,
+        13.8
+      ]
+    }
+  ],
+  "native_object_count": 1,
+  "heater_commands": [
+    "M104 S170",
+    "M140 S60",
+    "M109 S100 H170",
+    "M104 S170",
+    "M104 S170",
+    "M104 S170 ; set temp down to heatbed acceptable",
+    "M109 S170",
+    "M104 S140",
+    "M104 S0",
+    "M190 S60;set bed temp",
+    "M109 S140",
+    "M109 S245",
+    "M104 S245",
+    "M140 S0 ; turn off bed",
+    "M104 S0 ; turn off hotend"
+  ],
+  "profile_nozzle": [
+    "245"
+  ],
+  "profile_bed": [
+    "60"
+  ],
+  "completely_floating_islands": [],
+  "flagged_strokes": [
+    {
+      "layer": 33,
+      "mm": 1.317,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        84.853,
+        98.1
+      ],
+      "extent_machine_xy": [
+        84.135,
+        98.1,
+        85.452,
+        98.1
+      ],
+      "gcode_lines": [
+        20769,
+        20769
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.436,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        88.085,
+        98.1
+      ],
+      "extent_machine_xy": [
+        87.367,
+        98.1,
+        88.803,
+        98.1
+      ],
+      "gcode_lines": [
+        20769,
+        20769
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.436,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        92.035,
+        98.1
+      ],
+      "extent_machine_xy": [
+        91.317,
+        98.1,
+        92.753,
+        98.1
+      ],
+      "gcode_lines": [
+        20769,
+        20769
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.317,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        95.267,
+        98.1
+      ],
+      "extent_machine_xy": [
+        94.548,
+        98.1,
+        95.865,
+        98.1
+      ],
+      "gcode_lines": [
+        20769,
+        20769
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        84.853,
+        91.986
+      ],
+      "extent_machine_xy": [
+        84.255,
+        91.986,
+        85.452,
+        91.986
+      ],
+      "gcode_lines": [
+        20801,
+        20801
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        87.845,
+        91.986
+      ],
+      "extent_machine_xy": [
+        87.247,
+        91.986,
+        88.444,
+        91.986
+      ],
+      "gcode_lines": [
+        20801,
+        20801
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        92.155,
+        91.986
+      ],
+      "extent_machine_xy": [
+        91.556,
+        91.986,
+        92.753,
+        91.986
+      ],
+      "gcode_lines": [
+        20801,
+        20801
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.556,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        95.386,
+        91.986
+      ],
+      "extent_machine_xy": [
+        94.548,
+        91.986,
+        96.105,
+        91.986
+      ],
+      "gcode_lines": [
+        20801,
+        20801
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        84.853,
+        85.871
+      ],
+      "extent_machine_xy": [
+        84.255,
+        85.871,
+        85.452,
+        85.871
+      ],
+      "gcode_lines": [
+        20833,
+        20833
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        87.845,
+        85.871
+      ],
+      "extent_machine_xy": [
+        87.247,
+        85.871,
+        88.444,
+        85.871
+      ],
+      "gcode_lines": [
+        20833,
+        20833
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        92.155,
+        85.871
+      ],
+      "extent_machine_xy": [
+        91.556,
+        85.871,
+        92.753,
+        85.871
+      ],
+      "gcode_lines": [
+        20833,
+        20833
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.556,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        95.386,
+        85.871
+      ],
+      "extent_machine_xy": [
+        94.548,
+        85.871,
+        96.105,
+        85.871
+      ],
+      "gcode_lines": [
+        20833,
+        20833
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        84.853,
+        79.757
+      ],
+      "extent_machine_xy": [
+        84.255,
+        79.757,
+        85.452,
+        79.757
+      ],
+      "gcode_lines": [
+        20866,
+        20866
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        87.845,
+        79.757
+      ],
+      "extent_machine_xy": [
+        87.247,
+        79.757,
+        88.444,
+        79.757
+      ],
+      "gcode_lines": [
+        20866,
+        20866
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        92.155,
+        79.757
+      ],
+      "extent_machine_xy": [
+        91.556,
+        79.757,
+        92.753,
+        79.757
+      ],
+      "gcode_lines": [
+        20866,
+        20866
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.556,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        95.386,
+        79.757
+      ],
+      "extent_machine_xy": [
+        94.548,
+        79.757,
+        96.105,
+        79.757
+      ],
+      "gcode_lines": [
+        20866,
+        20866
+      ]
+    },
+    {
+      "layer": 39,
+      "mm": 4.187,
+      "two_anchors": true,
+      "bend_mm": 1.929,
+      "midpoint_machine_xy": [
+        91.103,
+        84.157
+      ],
+      "extent_machine_xy": [
+        89.535,
+        84.079,
+        91.164,
+        85.686
+      ],
+      "gcode_lines": [
+        24960,
+        24964
+      ]
+    },
+    {
+      "layer": 39,
+      "mm": 3.922,
+      "two_anchors": true,
+      "bend_mm": 1.739,
+      "midpoint_machine_xy": [
+        90.157,
+        83.551
+      ],
+      "extent_machine_xy": [
+        88.818,
+        83.382,
+        90.344,
+        84.986
+      ],
+      "gcode_lines": [
+        24966,
+        24969
+      ]
+    }
+  ],
+  "floor_bridge_sequence_xy_extents": [
+    [
+      12.687999725341797,
+      23.694000244140625
+    ]
+  ],
+  "floor_backing": {
+    "long_straight_moves": 71,
+    "maximum_move_mm": 13.696,
+    "maximum_unbacked_run_mm": 2.395,
+    "maximum_long_move_angle_from_cross_tray_degrees": 0.0
+  },
+  "automatic_support_samples": 0,
+  "cell_core_positive_samples_after_rail_removal": 0,
+  "lid_guide_core_samples": 0,
+  "between_rings_minimum_native_radius_mm": 3.836,
+  "pull_direction": "Towards the open end, along assembly negative Y. Separate the short outside feet at the six necks.",
+  "shared_pull_rail_and_body_extrusion_sequences": [],
+  "minimum_same_layer_pull_rail_to_body_bead_edge_mm": 0.23,
+  "full_rod_min_conservative_radius_mm": 3.828,
+  "CAD_pullout_continuously_checked_mm": 40,
+  "CAD_pullout_interference_mm3": 0,
+  "removable_native_bead_samples_in_8mm_rod_bore": 0,
+  "radius_minimum_assembly_xyz_mm": [
+    3.673,
+    -14.543,
+    1.9
+  ],
+  "canonical_hardware": {
+    "passed": true,
+    "layout": {
+      "cell_dimensions_LWH_mm": [
+        27.0,
+        11.8,
+        3.9
+      ],
+      "cell_mass_g": 2.05,
+      "wire_length_mm": 35.0,
+      "wire_diameter_assumption_mm": 0.88,
+      "open_wire_exit_width_mm": 6.76,
+      "connector": "Molex 2 mm, pin 1 negative; remains outside the cradle",
+      "cell_center_xyz_mm": [
+        0.0,
+        0.0,
+        8.299999999999999
+      ],
+      "side_free_mm": 0.55,
+      "end_free_mm": 0.55,
+      "cell_to_panel_underside_mm": 0.65,
+      "pouch_to_front_panel_lips_y_mm": 0.71,
+      "center_panel_thickness_mm": 0.8,
+      "sliding_edge_thickness_mm": 1.1,
+      "groove_height_mm": 1.52,
+      "straight_edge_clearance_mm": 0.2400000000000002,
+      "detent_interference_mm": 0.2,
+      "modelled_spring_displacement_mm": 0.30000000000000004,
+      "cantilever_strain_proxy_percent": 0.7096,
+      "load_displacement_mm": [
+        0.0,
+        0.0,
+        12.0
+      ],
+      "open_panel_displacement_mm": [
+        0.0,
+        -33.0,
+        0.0
+      ]
+    },
+    "measurements": {
+      "single_piece_holder": true,
+      "single_piece_lid": true,
+      "fitted_slide_overlap_mm3": 0.0,
+      "cell_loading_overlap_mm3": 0.0,
+      "cell_at_resting_lid_overlap_mm3": 0.0,
+      "cell_throughout_lid_slide_overlap_mm3": 0.0,
+      "released_lid_through_grooves_overlap_mm3": 0.0,
+      "free_detent_resists_opening_overlap_mm3": 0.20978598897111356,
+      "overtravel_stop_overlap_at_0.4_mm3": 2.653706120019489,
+      "lead_to_body_mm3": 0.0,
+      "lead_throughout_lid_slide_overlap_mm3": 0.0,
+      "new_rod_interference_mm3": 0.0,
+      "lost_original_rod_grip_mm3": 0.0,
+      "spring_root_core_fraction": 1.0,
+      "original_rod_and_wire_routes_overlap_mm3": {
+        "unloaded_clip_bore": 2e-06,
+        "clip_gap_near": 0.0,
+        "clip_gap_far": 0.0,
+        "external_wire_bus": 0.0,
+        "reverse_wire_bus": 0.0
+      },
+      "separate_pattern_openings": 13,
+      "cell_stop_contacts_after_free_play_mm3": {
+        "left": 31.59,
+        "right": 31.59,
+        "wire_end": 4.47848,
+        "far_end": 20.709,
+        "up": 71.91002,
+        "down": 95.58
+      },
+      "lid_guide_capture_after_free_play_mm3": {
+        "left": 7.637,
+        "right": 7.3026,
+        "up": 10.54096,
+        "down": 10.89451
+      }
+    },
+    "sample_count": 133,
+    "physical_fit_friction_fatigue_verified": false,
+    "clearance_basis": "Nominal manufacturer cell dimensions."
+  }
+}

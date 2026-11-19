@@ -1,0 +1,51 @@
+{
+  "rounded_profile": "Illustrative 0.6 mm radius, 2.9 \u00d7 1.2 mm envelope; exact bought crown unknown.",
+  "theoretical_eyelet_only_slack_radius_mm": 1.21,
+  "actual_slot_and_barrel_limits_mm": [
+    0.3495040398836136,
+    0.3495020204782487,
+    0.3494998568296433,
+    0.34949798166751866,
+    0.3503855103254318,
+    0.40587126910686494,
+    0.6760255879163741,
+    0.6540306574106218,
+    0.6980766290426255,
+    0.4366901355981827,
+    0.3673936635255814,
+    0.3819224196672439,
+    0.4271214717626572,
+    0.380938680768013,
+    0.35078722774982457,
+    0.3496523219347
+  ],
+  "largest_achievable_board_translation_in_test_mm": 0.6980766290426255,
+  "angle_count": 16,
+  "case_count": 128,
+  "least_travel": {
+    "corner": "right",
+    "roll_deg": -0.7177726030349731,
+    "axial_offset_mm": -0.014093,
+    "offset_world_xy_mm": [
+      0.1337470872291973,
+      0.3228940319166254
+    ],
+    "travel_mm": 0.5721403568983078,
+    "switch_case_intersection_mm3": 0.0
+  },
+  "most_travel": {
+    "corner": "centre",
+    "roll_deg": 0.0,
+    "axial_offset_mm": 0.07,
+    "offset_world_xy_mm": [
+      -0.6042455380165749,
+      0.25028669684989296
+    ],
+    "travel_mm": 0.7035513728857041,
+    "switch_case_intersection_mm3": 0.0
+  },
+  "max_case_collision_mm3": 0.000460812382301075,
+  "carrier_hash": "22b0665cb676f7cddcc40849310e109fa9228608d88257f42cc943e9937bffd0",
+  "paddle_hash": "35bdeef699974194b532eb1f0024b28f4dd99548a1b195bd9ad37f0b1d6dfc2a",
+  "passes": true
+}

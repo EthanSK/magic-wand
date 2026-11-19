@@ -1,0 +1,340 @@
+{
+  "archive_sha256": "bb02f32c8112d713084ea9523127f205b8042722eb03a5e88531553e4d198da9",
+  "frame_sha256": "fa5ca3cf5e0b84407d911c5063114980ce4e961b77cc72def206670ec14a5f8c",
+  "mode": "seated diagnostic",
+  "routes": {
+    "key_0_switch": {
+      "poses": 1,
+      "nearby_samples": 149327,
+      "checked": 101969,
+      "worst_per_feature": {
+        "Support interface": 1493,
+        "Support": 20398,
+        "Support transition": 232
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_0_socket": {
+      "poses": 1,
+      "nearby_samples": 50615,
+      "checked": 26322,
+      "worst_per_feature": {
+        "Support interface": 1122,
+        "Support": 1685,
+        "Support transition": 20
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_0_maximum_socket": {
+      "poses": 1,
+      "nearby_samples": 55146,
+      "checked": 29103,
+      "worst_per_feature": {
+        "Support interface": 1203,
+        "Support": 1772,
+        "Support transition": 17
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_0_socket_tape_zone": {
+      "poses": 1,
+      "nearby_samples": 7674,
+      "checked": 22,
+      "worst_per_feature": {
+        "Support interface": 6
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_0_mount_opening": {
+      "poses": 1,
+      "nearby_samples": 43364,
+      "checked": 16998,
+      "worst_per_feature": {
+        "Support interface": 1333,
+        "Support": 15104,
+        "Support transition": 243
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_0_clip_relief": {
+      "poses": 1,
+      "nearby_samples": 88686,
+      "checked": 27369,
+      "worst_per_feature": {
+        "Support interface": 1374,
+        "Support": 14910,
+        "Support transition": 160
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_0_cap_travel": {
+      "poses": 1,
+      "nearby_samples": 134,
+      "checked": 0,
+      "worst_per_feature": {},
+      "obstructed_poses": []
+    },
+    "key_2_switch": {
+      "poses": 1,
+      "nearby_samples": 151196,
+      "checked": 103411,
+      "worst_per_feature": {
+        "Support interface": 1526,
+        "Support": 20375,
+        "Support transition": 215
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_2_socket": {
+      "poses": 1,
+      "nearby_samples": 45661,
+      "checked": 25342,
+      "worst_per_feature": {
+        "Support interface": 1298,
+        "Support": 1859,
+        "Support transition": 52
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_2_maximum_socket": {
+      "poses": 1,
+      "nearby_samples": 48797,
+      "checked": 27675,
+      "worst_per_feature": {
+        "Support interface": 1379,
+        "Support": 1963,
+        "Support transition": 53
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_2_socket_tape_zone": {
+      "poses": 1,
+      "nearby_samples": 6585,
+      "checked": 30,
+      "worst_per_feature": {
+        "Support interface": 17
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_2_mount_opening": {
+      "poses": 1,
+      "nearby_samples": 43074,
+      "checked": 17008,
+      "worst_per_feature": {
+        "Support interface": 1358,
+        "Support": 15106,
+        "Support transition": 236
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_2_clip_relief": {
+      "poses": 1,
+      "nearby_samples": 88267,
+      "checked": 27590,
+      "worst_per_feature": {
+        "Support interface": 1451,
+        "Support": 14874,
+        "Support transition": 154
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_2_cap_travel": {
+      "poses": 1,
+      "nearby_samples": 6168,
+      "checked": 2112,
+      "worst_per_feature": {
+        "Outer wall": 906,
+        "Inner wall": 682
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_3_switch": {
+      "poses": 1,
+      "nearby_samples": 153595,
+      "checked": 102838,
+      "worst_per_feature": {
+        "Support interface": 2727,
+        "Support": 19862,
+        "Support transition": 357
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_3_socket": {
+      "poses": 1,
+      "nearby_samples": 57595,
+      "checked": 29962,
+      "worst_per_feature": {
+        "Support interface": 1674,
+        "Support": 1488,
+        "Support transition": 113
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_3_maximum_socket": {
+      "poses": 1,
+      "nearby_samples": 59952,
+      "checked": 32151,
+      "worst_per_feature": {
+        "Support interface": 1757,
+        "Support": 1503,
+        "Support transition": 120,
+        "Inner wall": 8
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_3_socket_tape_zone": {
+      "poses": 1,
+      "nearby_samples": 13387,
+      "checked": 896,
+      "worst_per_feature": {
+        "Support": 456,
+        "Support interface": 230,
+        "Support transition": 24
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_3_mount_opening": {
+      "poses": 1,
+      "nearby_samples": 44012,
+      "checked": 17296,
+      "worst_per_feature": {
+        "Support interface": 1570,
+        "Support": 15060,
+        "Support transition": 240
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_3_clip_relief": {
+      "poses": 1,
+      "nearby_samples": 89356,
+      "checked": 27612,
+      "worst_per_feature": {
+        "Support interface": 2713,
+        "Support": 13646,
+        "Support transition": 171
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_3_cap_travel": {
+      "poses": 1,
+      "nearby_samples": 134,
+      "checked": 0,
+      "worst_per_feature": {},
+      "obstructed_poses": []
+    },
+    "key_4_switch": {
+      "poses": 1,
+      "nearby_samples": 147495,
+      "checked": 99115,
+      "worst_per_feature": {
+        "Support interface": 1039,
+        "Support": 20435,
+        "Support transition": 191
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_4_socket": {
+      "poses": 1,
+      "nearby_samples": 42579,
+      "checked": 22873,
+      "worst_per_feature": {
+        "Support interface": 1
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_4_maximum_socket": {
+      "poses": 1,
+      "nearby_samples": 44813,
+      "checked": 24209,
+      "worst_per_feature": {
+        "Support interface": 4
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_4_socket_tape_zone": {
+      "poses": 1,
+      "nearby_samples": 5264,
+      "checked": 0,
+      "worst_per_feature": {},
+      "obstructed_poses": []
+    },
+    "key_4_mount_opening": {
+      "poses": 1,
+      "nearby_samples": 42267,
+      "checked": 16350,
+      "worst_per_feature": {
+        "Support interface": 1249,
+        "Support": 14672,
+        "Support transition": 216
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_4_clip_relief": {
+      "poses": 1,
+      "nearby_samples": 84745,
+      "checked": 27512,
+      "worst_per_feature": {
+        "Support interface": 911,
+        "Support": 15203,
+        "Support transition": 149
+      },
+      "obstructed_poses": [
+        0
+      ]
+    },
+    "key_4_cap_travel": {
+      "poses": 1,
+      "nearby_samples": 216,
+      "checked": 0,
+      "worst_per_feature": {},
+      "obstructed_poses": []
+    }
+  },
+  "clear": false
+}

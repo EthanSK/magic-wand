@@ -1,0 +1,44 @@
+{
+  "meshes": {
+    "DFRobot_Hole_Bracket": {
+      "sha256": "35bdeef699974194b532eb1f0024b28f4dd99548a1b195bd9ad37f0b1d6dfc2a",
+      "volume_mm3": 1203.835191187337
+    },
+    "Key_Carrier": {
+      "sha256": "22b0665cb676f7cddcc40849310e109fa9228608d88257f42cc943e9937bffd0",
+      "volume_mm3": 9140.853510818768
+    }
+  },
+  "lower_floor_relief": {
+    "removed_mm3": 21.003844,
+    "protected_overlap_mm3": 3.0396459554907934e-13,
+    "discarded_skin_mm3": 0.450576,
+    "fixed_start_backing_mm3": 0.8327401084234787
+  },
+  "key_entry_bevel": {
+    "removed_mm3": 13.446971433507063,
+    "real_hardware_overlap_mm3": 0.0,
+    "complete_top_flange_and_three_clip_lands_preserved": true,
+    "detached_skin_mm3": 0
+  },
+  "eyelet_pitch_mm": 17.9,
+  "peg_diameter_mm": 2.08,
+  "release_travel_mm": 1.08,
+  "crown_diameter_mm": 4.8,
+  "plunger_reference_mm": [
+    2.9,
+    1.2
+  ],
+  "bearing_span_mm": 11.84,
+  "bearing_band_mm": 1.4,
+  "running_diameter_mm": 3.25,
+  "sleeve_mm": [
+    3,
+    2.1,
+    12
+  ],
+  "axle_mm": [
+    2,
+    20
+  ]
+}

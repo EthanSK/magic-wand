@@ -129,7 +129,7 @@ def support_mass(text, settings, centres):
     return {k:round(v*np.pi*(diameter/2)**2*density/1000,4) for k,v in length.items()}
 
 
-def inspect(archive, frame, output, trace_roofs=False):
+def inspect(archive, frame, output, trace_roofs=False, *, other_objects=()):
     with ZipFile(archive) as z:
         assert not z.testzip()
         gcode=z.read('Metadata/plate_1.gcode').decode()
@@ -145,10 +145,10 @@ def inspect(archive, frame, output, trace_roofs=False):
     support_ids=np.where(np.char.startswith(labels,'Support'))[0]
     fm=json.loads(frame.read_text())
     owners={x.get('name'):int(x.get('identify_id')) for x in plate.findall('object')}
-    assert owners.keys()==fm['parts'].keys()
+    assert set(owners)==set(fm['parts']) | set(other_objects)
     results={}
     for name, owner in owners.items():
-        if name in ('Battery_End_Door','External_peel_support'):continue  # The lid has its own four-layer through-window test.
+        if name in other_objects or name in ('Battery_End_Door','External_peel_support'):continue  # The lid has its own four-layer through-window test.
         model=(data[:,6]==owner) & np.isin(data[:,5],model_ids)
         peels=np.zeros(len(data),bool);prop_evidence={}
         if name=='Key_Carrier':

@@ -1,0 +1,45 @@
+{
+  "archive_sha256": "d00f133354463afa3363f4c87948ae9920bd0e70ebcd75a7c8714c1ac8a90996",
+  "frame_sha256": "be090b62c2b82cf5ec5373c5db35a4408474b90b4e76024358d696e2357e7cb1",
+  "carrier_sha256": "22b0665cb676f7cddcc40849310e109fa9228608d88257f42cc943e9937bffd0",
+  "centreline_xy_mm": [
+    [
+      7.771865375511789,
+      15.897459583678765
+    ],
+    [
+      8.489790507093698,
+      17.81763757163798
+    ]
+  ],
+  "bundle_radius_mm": 1.616,
+  "collar_outer_radius_mm": 4.08,
+  "carrier_collar_z_mm": [
+    -3.2318690912221073,
+    11.350000381469727
+  ],
+  "projected_support_samples": 7236,
+  "samples_on_removable_fixture": 7236,
+  "projected_features": {
+    "Inner wall": 3238,
+    "Outer wall": 2183,
+    "Internal solid infill": 757,
+    "Top surface": 8,
+    "Sparse infill": 848,
+    "Floating vertical shell": 189,
+    "Bridge": 13
+  },
+  "projected_assembly_min_xyz_mm": [
+    6.437499046325684,
+    14.150001525878906,
+    16.502329349517822
+  ],
+  "projected_assembly_max_xyz_mm": [
+    10.31006908416748,
+    19.550002098083496,
+    22.222330570220947
+  ],
+  "minimum_fixture_surface_z_mm": 16.185102850198746,
+  "finite_passage_support_samples": 0,
+  "finite_passage_permanent_samples": 0
+}

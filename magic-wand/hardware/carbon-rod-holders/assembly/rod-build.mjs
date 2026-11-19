@@ -46,7 +46,7 @@ export function completeKeys(hinge, outer) {
 }
 
 // Row-major CAD transforms, with translation in the fourth column.
-function placed(parent, local) {
+export function placed(parent, local) {
   const result = [];
   for (let row = 0; row < 12; row += 4) {
     for (let col = 0; col < 4; col++) {

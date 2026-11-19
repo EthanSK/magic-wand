@@ -1,0 +1,511 @@
+{
+  "adhesion": {
+    "external_ear_area_mm2": 208.3900316634212,
+    "first_layer_samples_on_ear": 4406,
+    "carrier_CAD_footprint_mm2": 329.78159816418827,
+    "native_ear_min_radius_to_rod_mm": 5.477214912370357
+  },
+  "archive_sha256": "d00f133354463afa3363f4c87948ae9920bd0e70ebcd75a7c8714c1ac8a90996",
+  "long_props": 8,
+  "pull_order": [
+    {
+      "prop": 0,
+      "tip_machine_xy": [
+        29.5,
+        82.2
+      ],
+      "pull_xy": [
+        -0.981,
+        0.195
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 1,
+      "tip_machine_xy": [
+        32.2,
+        82.0
+      ],
+      "pull_xy": [
+        -0.383,
+        -0.924
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 2,
+      "tip_machine_xy": [
+        35.6,
+        82.8
+      ],
+      "pull_xy": [
+        -0.0,
+        -1.0
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 3,
+      "tip_machine_xy": [
+        40.7,
+        82.2
+      ],
+      "pull_xy": [
+        0.195,
+        -0.981
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 4,
+      "tip_machine_xy": [
+        42.6,
+        83.25
+      ],
+      "pull_xy": [
+        0.556,
+        -0.831
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 5,
+      "tip_machine_xy": [
+        64.0,
+        83.6
+      ],
+      "pull_xy": [
+        0.216,
+        -0.976
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 6,
+      "tip_machine_xy": [
+        65.7,
+        82.5
+      ],
+      "pull_xy": [
+        0.342,
+        -0.94
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    },
+    {
+      "prop": 7,
+      "tip_machine_xy": [
+        71.6,
+        82.1
+      ],
+      "pull_xy": [
+        0.707,
+        -0.707
+      ],
+      "sweep_mm": 90.0,
+      "model_collision_mm3": 0.0
+    }
+  ],
+  "blocked": [],
+  "fixed_shoulder_tab": {
+    "root_tie_mm3": 1.36203487307824,
+    "pull_sweep_total_mm3": 1.3896308369679058,
+    "pull_xy": [
+      -0.7071067811865475,
+      0.7071067811865475
+    ],
+    "collision_with_other_props_mm3": 0.0
+  },
+  "native_support_openings": {
+    "Key_Carrier": {
+      "coarse": {
+        "unreachable_regions": [
+          {
+            "layer_top_mm": 19.8,
+            "count": 2,
+            "xy_bounds": [
+              51.328,
+              91.647,
+              51.384,
+              91.649
+            ]
+          },
+          {
+            "layer_top_mm": 20.0,
+            "count": 2,
+            "xy_bounds": [
+              51.328,
+              91.647,
+              51.384,
+              91.649
+            ]
+          },
+          {
+            "layer_top_mm": 21.0,
+            "count": 1,
+            "xy_bounds": [
+              50.987,
+              91.678,
+              50.987,
+              91.678
+            ]
+          },
+          {
+            "layer_top_mm": 21.2,
+            "count": 2,
+            "xy_bounds": [
+              50.902,
+              91.602,
+              50.998,
+              91.656
+            ]
+          }
+        ],
+        "unreachable_sensitive_zone_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "finger_underside_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        },
+        "samples": 30500,
+        "reachable_by_0p8_mm_fragment_after_one_cell_release": 30493,
+        "unreachable_sample_count": 7,
+        "grid_mm": 0.4,
+        "note": "A fragment can move one opening cell away from the peel face; the test then follows a six-connected route outside the empty holder. It does not prove intact support release."
+      },
+      "fine": {
+        "unreachable_regions": [],
+        "unreachable_sensitive_zone_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "finger_underside_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        },
+        "samples": 30500,
+        "reachable_by_0p8_mm_fragment_after_one_cell_release": 30500,
+        "unreachable_sample_count": 0,
+        "grid_mm": 0.2,
+        "note": "A fragment can move one opening cell away from the peel face; the test then follows a six-connected route outside the empty holder. It does not prove intact support release."
+      }
+    },
+    "DFRobot_Hole_Bracket": {
+      "coarse": {
+        "unreachable_regions": [
+          {
+            "layer_top_mm": 0.6,
+            "count": 1,
+            "xy_bounds": [
+              127.568,
+              112.707,
+              127.568,
+              112.707
+            ]
+          },
+          {
+            "layer_top_mm": 1.0,
+            "count": 1,
+            "xy_bounds": [
+              126.807,
+              113.469,
+              126.807,
+              113.469
+            ]
+          },
+          {
+            "layer_top_mm": 2.2,
+            "count": 3,
+            "xy_bounds": [
+              125.66,
+              111.332,
+              126.918,
+              115.499
+            ]
+          },
+          {
+            "layer_top_mm": 2.4,
+            "count": 8,
+            "xy_bounds": [
+              127.588,
+              87.189,
+              127.588,
+              87.903
+            ]
+          },
+          {
+            "layer_top_mm": 3.6,
+            "count": 1,
+            "xy_bounds": [
+              125.619,
+              108.774,
+              125.619,
+              108.774
+            ]
+          },
+          {
+            "layer_top_mm": 3.8,
+            "count": 1,
+            "xy_bounds": [
+              127.419,
+              93.585,
+              127.419,
+              93.585
+            ]
+          },
+          {
+            "layer_top_mm": 4.0,
+            "count": 3,
+            "xy_bounds": [
+              125.659,
+              93.585,
+              127.561,
+              108.886
+            ]
+          },
+          {
+            "layer_top_mm": 4.2,
+            "count": 6,
+            "xy_bounds": [
+              126.7,
+              94.504,
+              127.571,
+              117.858
+            ]
+          },
+          {
+            "layer_top_mm": 4.4,
+            "count": 30,
+            "xy_bounds": [
+              125.662,
+              94.661,
+              127.574,
+              110.601
+            ]
+          },
+          {
+            "layer_top_mm": 5.4,
+            "count": 1,
+            "xy_bounds": [
+              127.594,
+              101.975,
+              127.594,
+              101.975
+            ]
+          },
+          {
+            "layer_top_mm": 5.6,
+            "count": 5,
+            "xy_bounds": [
+              127.269,
+              101.859,
+              127.578,
+              102.168
+            ]
+          },
+          {
+            "layer_top_mm": 6.0,
+            "count": 5,
+            "xy_bounds": [
+              126.482,
+              103.408,
+              126.761,
+              103.492
+            ]
+          },
+          {
+            "layer_top_mm": 7.0,
+            "count": 1,
+            "xy_bounds": [
+              127.182,
+              99.175,
+              127.182,
+              99.175
+            ]
+          },
+          {
+            "layer_top_mm": 8.0,
+            "count": 10,
+            "xy_bounds": [
+              127.081,
+              112.377,
+              127.998,
+              112.462
+            ]
+          },
+          {
+            "layer_top_mm": 13.4,
+            "count": 6,
+            "xy_bounds": [
+              126.834,
+              112.323,
+              127.953,
+              112.632
+            ]
+          },
+          {
+            "layer_top_mm": 14.2,
+            "count": 1,
+            "xy_bounds": [
+              126.046,
+              111.018,
+              126.046,
+              111.018
+            ]
+          },
+          {
+            "layer_top_mm": 15.4,
+            "count": 1,
+            "xy_bounds": [
+              127.147,
+              103.493,
+              127.147,
+              103.493
+            ]
+          },
+          {
+            "layer_top_mm": 15.8,
+            "count": 5,
+            "xy_bounds": [
+              127.269,
+              101.979,
+              127.591,
+              102.301
+            ]
+          },
+          {
+            "layer_top_mm": 16.2,
+            "count": 4,
+            "xy_bounds": [
+              127.312,
+              100.932,
+              127.566,
+              101.186
+            ]
+          },
+          {
+            "layer_top_mm": 17.0,
+            "count": 27,
+            "xy_bounds": [
+              125.662,
+              94.496,
+              127.589,
+              110.331
+            ]
+          },
+          {
+            "layer_top_mm": 17.2,
+            "count": 3,
+            "xy_bounds": [
+              127.419,
+              94.514,
+              127.586,
+              94.681
+            ]
+          },
+          {
+            "layer_top_mm": 17.6,
+            "count": 2,
+            "xy_bounds": [
+              125.65,
+              108.805,
+              125.731,
+              108.886
+            ]
+          },
+          {
+            "layer_top_mm": 17.8,
+            "count": 3,
+            "xy_bounds": [
+              125.078,
+              108.774,
+              125.714,
+              111.424
+            ]
+          },
+          {
+            "layer_top_mm": 19.0,
+            "count": 3,
+            "xy_bounds": [
+              127.419,
+              87.019,
+              127.588,
+              87.189
+            ]
+          }
+        ],
+        "unreachable_sensitive_zone_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "finger_underside_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        },
+        "samples": 61925,
+        "reachable_by_0p8_mm_fragment_after_one_cell_release": 61794,
+        "unreachable_sample_count": 131,
+        "grid_mm": 0.4,
+        "note": "A fragment can move one opening cell away from the peel face; the test then follows a six-connected route outside the empty holder. It does not prove intact support release."
+      },
+      "fine": {
+        "unreachable_regions": [],
+        "unreachable_sensitive_zone_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "finger_underside_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        },
+        "samples": 61925,
+        "reachable_by_0p8_mm_fragment_after_one_cell_release": 61925,
+        "unreachable_sample_count": 0,
+        "grid_mm": 0.1,
+        "note": "A fragment can move one opening cell away from the peel face; the test then follows a six-connected route outside the empty holder. It does not prove intact support release."
+      },
+      "intermediate": {
+        "unreachable_regions": [
+          {
+            "layer_top_mm": 4.2,
+            "count": 1,
+            "xy_bounds": [
+              127.249,
+              94.826,
+              127.249,
+              94.826
+            ]
+          }
+        ],
+        "unreachable_sensitive_zone_samples": {
+          "wire_core_bead_samples": 0,
+          "underside_lead_bead_samples": 0,
+          "finger_contact_bead_samples": 0,
+          "finger_underside_bead_samples": 0,
+          "axle_core_bead_samples": 0
+        },
+        "samples": 61925,
+        "reachable_by_0p8_mm_fragment_after_one_cell_release": 61924,
+        "unreachable_sample_count": 1,
+        "grid_mm": 0.2,
+        "note": "A fragment can move one opening cell away from the peel face; the test then follows a six-connected route outside the empty holder. It does not prove intact support release."
+      }
+    }
+  },
+  "physical_cleanup_tested": false,
+  "spring_fixture": {
+    "snip_locations": 10,
+    "withdrawal_machine_xyz_mm": [
+      0,
+      60,
+      0
+    ],
+    "carrier_overlap_after_cut_mm3": 0.0,
+    "other_prop_overlap_during_pull_mm3": 0.0
+  }
+}

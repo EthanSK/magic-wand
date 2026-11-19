@@ -57,3 +57,8 @@ The editable dimensions live in `parameters.json`; the Choc seat dimensions rema
 - [Choc sockets](https://www.adafruit.com/product/5118) and [manufacturer drawing](https://www.kailhswitch.com/Content/upload/pdf/202115927/CPG135001S30-data-sheet.pdf)
 - [Milky-white slim caps](https://www.adafruit.com/product/5737)
 - [Original 8 mm carbon-fibre tube](https://www.align-trex.co.uk/carbon-fibre-tube-8mm-x-0-5metre-7mm-id.html)
+
+
+## Carbon rod in 3D models
+
+Use the full 50 cm purchased carbon tube in every new rod assembly and component model. The [stock mesh](exports/carbon-stock-tube.stl) is generated from the [stock length](../assembly-blueprint/manifest.json) and the [8 mm outside and 7 mm inside diameters](../carbon-rod-holders-r4/parameters.json). Close-up views can frame the component locally. Their rod has the same physical length. The complete assembly view includes both ends. The tube is bought hardware and stays off the printer plates.

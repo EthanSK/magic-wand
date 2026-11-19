@@ -1,0 +1,131 @@
+{
+  "physical_acceptance": false,
+  "first_contact_deg": -0.8114908516407013,
+  "presses": {
+    "centre": {
+      "stop_deg": 0.3780161738395691,
+      "plunger_drop_mm": 0.7036705255508422,
+      "paddle_case_interference_mm3": 0.0
+    },
+    "left": {
+      "stop_deg": 0.1872901797294617,
+      "plunger_drop_mm": 0.5960434198379516,
+      "paddle_case_interference_mm3": 0.0
+    },
+    "right": {
+      "stop_deg": 0.17502020597457887,
+      "plunger_drop_mm": 0.5787584066390992,
+      "paddle_case_interference_mm3": 0.0
+    },
+    "high": {
+      "stop_deg": 0.571690833568573,
+      "plunger_drop_mm": 0.6903483152389529,
+      "paddle_case_interference_mm3": 0.0
+    },
+    "low": {
+      "stop_deg": 0.08788903951644897,
+      "plunger_drop_mm": 0.6599108934402464,
+      "paddle_case_interference_mm3": 0.0
+    }
+  },
+  "max_nominal_bearing_roll_deg": 0.7177726030349731,
+  "thrust_face_further_roll_overlap_against_both_actual_cheeks_mm3": {
+    "-1": [
+      0.016562090862499452,
+      0.01656209086249935
+    ],
+    "1": [
+      0.016562090862499216,
+      0.016562090862499945
+    ]
+  },
+  "checked_mesh_sha256": {
+    "Key_Carrier": "22b0665cb676f7cddcc40849310e109fa9228608d88257f42cc943e9937bffd0",
+    "DFRobot_Hole_Bracket": "35bdeef699974194b532eb1f0024b28f4dd99548a1b195bd9ad37f0b1d6dfc2a"
+  },
+  "unconstrained_bearing_roll_deg": 1.2332887111291726,
+  "thrust_face_limit_deg": 0.7177726030349731,
+  "clamped_axial_end_play_mm": 0.14000000000000057,
+  "static_interferences_mm3": {
+    "board": 8.595442542721847e-06,
+    "sockets": 0.0,
+    "housing": 0.0,
+    "plug": 0.0,
+    "switch": 0.0,
+    "terminals": 0.0,
+    "plunger": 0.0,
+    "op1_wire": 0.0,
+    "four_keys": 0.0009369438387764313,
+    "axle": 1.5736692368578008e-05,
+    "paddle_and_sleeve_fitting": 0.0,
+    "pivot-screw_insertion": 1.0849750195823867e-05,
+    "pivot-locknut_insertion": 4.88694217388001e-06,
+    "dfr_board_insertion": 0.0
+  },
+  "moving_interferences_mm3": {
+    "carrier": 0.0,
+    "axle": 0.0,
+    "OP1": 0.0,
+    "outer_keys": 0.0
+  },
+  "snaps": [
+    {
+      "peg_on_pcb_mm3": 0.0,
+      "upward_capture_mm3": 4.370678593975149,
+      "open_board_sweep_mm3": 8.595442542662807e-06,
+      "root_at_seat_mm3": 1.5557680966329102,
+      "working_leaf_to_carrier_during_release_mm3": 5.985330825157668e-07,
+      "working_leaf_to_board_during_release_mm3": 0.0,
+      "eyelet_world_xy": [
+        -1.788796132871671,
+        -9.673691182802484
+      ]
+    },
+    {
+      "peg_on_pcb_mm3": 0.0,
+      "upward_capture_mm3": 4.5295094666627005,
+      "open_board_sweep_mm3": 8.595442542662807e-06,
+      "root_at_seat_mm3": 0.35866742415920866,
+      "working_leaf_to_carrier_during_release_mm3": 5.661703107443764e-07,
+      "working_leaf_to_board_during_release_mm3": 0.0,
+      "eyelet_world_xy": [
+        4.4799159916727955,
+        7.09274100474383
+      ]
+    }
+  ],
+  "wire_outlet": {
+    "centreline_mm": [
+      [
+        7.771865375511789,
+        15.897459583678765
+      ],
+      [
+        8.489790507093698,
+        17.81763757163798
+      ]
+    ],
+    "width_mm": 4.16,
+    "usable_straight_travel_mm": 2.0500000000000007,
+    "wire_bundle_mm": 3.232050807568877,
+    "max_bundle_intersection_mm3": 0.0,
+    "passes": true
+  },
+  "carrier_material_removed_within_0_75mm_of_each_switch_mm3": {
+    "0": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0
+  },
+  "switch_insertion_interference_mm3": 0.0,
+  "nominal_seat_support_area_mm2": 127.69503053673839,
+  "lift_mm": 1.08,
+  "printed_flexure_life_measured": false,
+  "tapered_beam_peak_outer_fibre_strain": 0.008460012365889323,
+  "board_feed_to_rod_mm3": 0.0,
+  "board_feed_to_rod_gap_mm": 0.14893730177657918,
+  "pitch_17_3_to_18_5_at_3_6_mm_eyelet_interference_mm3": 1.706300349973739e-05,
+  "estimated_outer_fibre_strain_uniform_cantilever": 0.009223738590817715,
+  "bore_minimum_in_slice_checked_separately": true,
+  "passes": true
+}

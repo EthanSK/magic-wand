@@ -1,0 +1,1929 @@
+{
+  "archive_sha256": "d00f133354463afa3363f4c87948ae9920bd0e70ebcd75a7c8714c1ac8a90996",
+  "frame_sha256": "be090b62c2b82cf5ec5373c5db35a4408474b90b4e76024358d696e2357e7cb1",
+  "parts": {
+    "Key_Carrier": {
+      "owner": 2,
+      "source_sha256": "22b0665cb676f7cddcc40849310e109fa9228608d88257f42cc943e9937bffd0",
+      "orientation": "rear_down",
+      "model_bed_area_mm2": 328.23,
+      "support_occupancy_volume_mm3": 3343.05,
+      "support_occupancy_mass_estimate_g": 4.246,
+      "supported_area_summed_across_layers_mm2": 34.39,
+      "supported_layers": [
+        [
+          2,
+          6.73
+        ],
+        [
+          3,
+          3.72
+        ],
+        [
+          4,
+          2.3
+        ],
+        [
+          5,
+          0.02
+        ],
+        [
+          7,
+          5.54
+        ],
+        [
+          8,
+          0.94
+        ],
+        [
+          9,
+          0.32
+        ],
+        [
+          92,
+          0.46
+        ],
+        [
+          99,
+          0.02
+        ],
+        [
+          110,
+          6.69
+        ],
+        [
+          124,
+          1.86
+        ],
+        [
+          125,
+          0.49
+        ],
+        [
+          126,
+          0.21
+        ],
+        [
+          133,
+          0.04
+        ],
+        [
+          145,
+          0.09
+        ],
+        [
+          146,
+          0.47
+        ],
+        [
+          150,
+          1.84
+        ],
+        [
+          158,
+          0.03
+        ],
+        [
+          165,
+          0.05
+        ],
+        [
+          178,
+          0.03
+        ],
+        [
+          185,
+          0.07
+        ],
+        [
+          198,
+          0.06
+        ],
+        [
+          205,
+          0.07
+        ],
+        [
+          207,
+          0.55
+        ],
+        [
+          208,
+          1.48
+        ],
+        [
+          209,
+          0.27
+        ],
+        [
+          217,
+          0.04
+        ]
+      ],
+      "completely_unrooted_model_islands": [],
+      "longer_unsupported_strokes": [
+        {
+          "layer": 6,
+          "mm": 1.063,
+          "two_anchors": false,
+          "bend_mm": 0.0,
+          "midpoint_machine_xy": [
+            79.636,
+            90.264
+          ],
+          "extent_machine_xy": [
+            79.163,
+            90.264,
+            80.227,
+            90.264
+          ],
+          "gcode_lines": [
+            22251,
+            22251
+          ]
+        },
+        {
+          "layer": 11,
+          "mm": 2.604,
+          "two_anchors": true,
+          "bend_mm": 0.462,
+          "midpoint_machine_xy": [
+            72.174,
+            91.008
+          ],
+          "extent_machine_xy": [
+            71.42,
+            90.191,
+            73.625,
+            91.115
+          ],
+          "gcode_lines": [
+            38045,
+            38049
+          ]
+        },
+        {
+          "layer": 17,
+          "mm": 1.047,
+          "two_anchors": false,
+          "bend_mm": 0.0,
+          "midpoint_machine_xy": [
+            27.204,
+            90.875
+          ],
+          "extent_machine_xy": [
+            26.739,
+            90.875,
+            27.786,
+            90.875
+          ],
+          "gcode_lines": [
+            55697,
+            55697
+          ]
+        },
+        {
+          "layer": 92,
+          "mm": 1.289,
+          "two_anchors": false,
+          "bend_mm": 0.0,
+          "midpoint_machine_xy": [
+            26.595,
+            86.453
+          ],
+          "extent_machine_xy": [
+            26.009,
+            86.453,
+            27.298,
+            86.453
+          ],
+          "gcode_lines": [
+            325752,
+            325752
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 3.546,
+          "two_anchors": true,
+          "bend_mm": 1.44,
+          "midpoint_machine_xy": [
+            28.285,
+            92.939
+          ],
+          "extent_machine_xy": [
+            27.952,
+            91.499,
+            28.618,
+            92.939
+          ],
+          "gcode_lines": [
+            331157,
+            331159
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 3.666,
+          "two_anchors": false,
+          "bend_mm": 1.527,
+          "midpoint_machine_xy": [
+            31.607,
+            92.934
+          ],
+          "extent_machine_xy": [
+            31.607,
+            92.627,
+            33.163,
+            92.934
+          ],
+          "gcode_lines": [
+            331373,
+            331376
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 6.346,
+          "two_anchors": false,
+          "bend_mm": 2.311,
+          "midpoint_machine_xy": [
+            31.305,
+            92.781
+          ],
+          "extent_machine_xy": [
+            31.305,
+            92.207,
+            33.465,
+            93.236
+          ],
+          "gcode_lines": [
+            331384,
+            331429
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 3.546,
+          "two_anchors": true,
+          "bend_mm": 1.44,
+          "midpoint_machine_xy": [
+            36.485,
+            92.939
+          ],
+          "extent_machine_xy": [
+            36.152,
+            91.499,
+            36.818,
+            92.939
+          ],
+          "gcode_lines": [
+            332656,
+            332658
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 1.378,
+          "two_anchors": true,
+          "bend_mm": 0.527,
+          "midpoint_machine_xy": [
+            38.369,
+            93.236
+          ],
+          "extent_machine_xy": [
+            38.369,
+            92.551,
+            39.052,
+            93.236
+          ],
+          "gcode_lines": [
+            333006,
+            333007
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 4.734,
+          "two_anchors": true,
+          "bend_mm": 1.737,
+          "midpoint_machine_xy": [
+            36.428,
+            93.236
+          ],
+          "extent_machine_xy": [
+            35.855,
+            91.499,
+            37.115,
+            93.236
+          ],
+          "gcode_lines": [
+            333020,
+            333022
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 3.852,
+          "two_anchors": true,
+          "bend_mm": 0.606,
+          "midpoint_machine_xy": [
+            32.191,
+            91.825
+          ],
+          "extent_machine_xy": [
+            31.219,
+            91.356,
+            33.788,
+            91.964
+          ],
+          "gcode_lines": [
+            333029,
+            333108
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 4.734,
+          "two_anchors": true,
+          "bend_mm": 1.737,
+          "midpoint_machine_xy": [
+            28.228,
+            93.236
+          ],
+          "extent_machine_xy": [
+            27.655,
+            91.499,
+            28.915,
+            93.236
+          ],
+          "gcode_lines": [
+            333130,
+            333132
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 1.378,
+          "two_anchors": true,
+          "bend_mm": 0.527,
+          "midpoint_machine_xy": [
+            26.401,
+            93.236
+          ],
+          "extent_machine_xy": [
+            25.718,
+            92.551,
+            26.401,
+            93.236
+          ],
+          "gcode_lines": [
+            333145,
+            333146
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 2.376,
+          "two_anchors": true,
+          "bend_mm": 0.536,
+          "midpoint_machine_xy": [
+            32.613,
+            91.546
+          ],
+          "extent_machine_xy": [
+            31.523,
+            90.989,
+            33.431,
+            91.55
+          ],
+          "gcode_lines": [
+            333366,
+            333435
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 2.326,
+          "two_anchors": true,
+          "bend_mm": 0.988,
+          "midpoint_machine_xy": [
+            74.329,
+            92.324
+          ],
+          "extent_machine_xy": [
+            74.171,
+            91.336,
+            74.599,
+            92.324
+          ],
+          "gcode_lines": [
+            334797,
+            334813
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 3.405,
+          "two_anchors": true,
+          "bend_mm": 1.215,
+          "midpoint_machine_xy": [
+            74.331,
+            92.642
+          ],
+          "extent_machine_xy": [
+            73.882,
+            91.427,
+            74.887,
+            92.642
+          ],
+          "gcode_lines": [
+            335171,
+            335175
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 3.546,
+          "two_anchors": true,
+          "bend_mm": 1.44,
+          "midpoint_machine_xy": [
+            78.485,
+            92.939
+          ],
+          "extent_machine_xy": [
+            78.152,
+            91.499,
+            78.818,
+            92.939
+          ],
+          "gcode_lines": [
+            335854,
+            335856
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 4.446,
+          "two_anchors": true,
+          "bend_mm": 1.44,
+          "midpoint_machine_xy": [
+            74.385,
+            92.939
+          ],
+          "extent_machine_xy": [
+            73.602,
+            91.499,
+            75.168,
+            92.939
+          ],
+          "gcode_lines": [
+            335983,
+            335985
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 3.546,
+          "two_anchors": true,
+          "bend_mm": 1.44,
+          "midpoint_machine_xy": [
+            70.285,
+            92.939
+          ],
+          "extent_machine_xy": [
+            69.952,
+            91.499,
+            70.618,
+            92.939
+          ],
+          "gcode_lines": [
+            336112,
+            336114
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 1.378,
+          "two_anchors": true,
+          "bend_mm": 0.527,
+          "midpoint_machine_xy": [
+            80.369,
+            93.236
+          ],
+          "extent_machine_xy": [
+            80.369,
+            92.551,
+            81.052,
+            93.236
+          ],
+          "gcode_lines": [
+            336482,
+            336483
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 4.734,
+          "two_anchors": true,
+          "bend_mm": 1.737,
+          "midpoint_machine_xy": [
+            78.428,
+            93.236
+          ],
+          "extent_machine_xy": [
+            77.855,
+            91.499,
+            79.115,
+            93.236
+          ],
+          "gcode_lines": [
+            336496,
+            336498
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 5.7,
+          "two_anchors": true,
+          "bend_mm": 1.802,
+          "midpoint_machine_xy": [
+            74.265,
+            93.236
+          ],
+          "extent_machine_xy": [
+            73.29,
+            91.433,
+            75.465,
+            93.236
+          ],
+          "gcode_lines": [
+            336511,
+            336513
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 4.734,
+          "two_anchors": true,
+          "bend_mm": 1.737,
+          "midpoint_machine_xy": [
+            70.228,
+            93.236
+          ],
+          "extent_machine_xy": [
+            69.655,
+            91.499,
+            70.915,
+            93.236
+          ],
+          "gcode_lines": [
+            336526,
+            336528
+          ]
+        },
+        {
+          "layer": 93,
+          "mm": 1.148,
+          "two_anchors": true,
+          "bend_mm": 0.439,
+          "midpoint_machine_xy": [
+            68.401,
+            93.236
+          ],
+          "extent_machine_xy": [
+            67.832,
+            92.665,
+            68.401,
+            93.236
+          ],
+          "gcode_lines": [
+            336540,
+            336541
+          ]
+        },
+        {
+          "layer": 101,
+          "mm": 1.143,
+          "two_anchors": true,
+          "bend_mm": 0.303,
+          "midpoint_machine_xy": [
+            58.611,
+            83.266
+          ],
+          "extent_machine_xy": [
+            58.307,
+            82.983,
+            58.611,
+            83.549
+          ],
+          "gcode_lines": [
+            374649,
+            374655
+          ]
+        },
+        {
+          "layer": 101,
+          "mm": 2.262,
+          "two_anchors": true,
+          "bend_mm": 0.596,
+          "midpoint_machine_xy": [
+            58.908,
+            83.266
+          ],
+          "extent_machine_xy": [
+            58.311,
+            82.686,
+            58.908,
+            83.846
+          ],
+          "gcode_lines": [
+            375668,
+            375678
+          ]
+        },
+        {
+          "layer": 101,
+          "mm": 1.07,
+          "two_anchors": true,
+          "bend_mm": 0.351,
+          "midpoint_machine_xy": [
+            24.219,
+            85.693
+          ],
+          "extent_machine_xy": [
+            24.15,
+            85.693,
+            24.699,
+            86.276
+          ],
+          "gcode_lines": [
+            377224,
+            377225
+          ]
+        },
+        {
+          "layer": 118,
+          "mm": 2.711,
+          "two_anchors": true,
+          "bend_mm": 0.479,
+          "midpoint_machine_xy": [
+            72.226,
+            91.031
+          ],
+          "extent_machine_xy": [
+            71.376,
+            90.199,
+            73.687,
+            91.115
+          ],
+          "gcode_lines": [
+            441661,
+            441665
+          ]
+        },
+        {
+          "layer": 118,
+          "mm": 2.232,
+          "two_anchors": true,
+          "bend_mm": 0.352,
+          "midpoint_machine_xy": [
+            72.4,
+            90.762
+          ],
+          "extent_machine_xy": [
+            71.673,
+            90.165,
+            73.649,
+            90.818
+          ],
+          "gcode_lines": [
+            441682,
+            441686
+          ]
+        },
+        {
+          "layer": 122,
+          "mm": 1.609,
+          "two_anchors": true,
+          "bend_mm": 0.236,
+          "midpoint_machine_xy": [
+            26.912,
+            90.771
+          ],
+          "extent_machine_xy": [
+            26.402,
+            90.191,
+            27.697,
+            90.965
+          ],
+          "gcode_lines": [
+            456227,
+            456231
+          ]
+        },
+        {
+          "layer": 127,
+          "mm": 1.688,
+          "two_anchors": true,
+          "bend_mm": 0.444,
+          "midpoint_machine_xy": [
+            60.127,
+            93.116
+          ],
+          "extent_machine_xy": [
+            59.683,
+            92.716,
+            60.127,
+            93.516
+          ],
+          "gcode_lines": [
+            475526,
+            475532
+          ]
+        },
+        {
+          "layer": 142,
+          "mm": 1.366,
+          "two_anchors": false,
+          "bend_mm": 0.0,
+          "midpoint_machine_xy": [
+            32.497,
+            90.009
+          ],
+          "extent_machine_xy": [
+            31.713,
+            90.009,
+            33.079,
+            90.009
+          ],
+          "gcode_lines": [
+            525384,
+            525389
+          ]
+        },
+        {
+          "layer": 145,
+          "mm": 1.984,
+          "two_anchors": false,
+          "bend_mm": 0.021,
+          "midpoint_machine_xy": [
+            63.018,
+            91.504
+          ],
+          "extent_machine_xy": [
+            63.014,
+            91.488,
+            63.037,
+            93.469
+          ],
+          "gcode_lines": [
+            534283,
+            534327
+          ]
+        },
+        {
+          "layer": 152,
+          "mm": 1.326,
+          "two_anchors": true,
+          "bend_mm": 0.296,
+          "midpoint_machine_xy": [
+            82.568,
+            90.058
+          ],
+          "extent_machine_xy": [
+            82.008,
+            90.058,
+            82.917,
+            90.356
+          ],
+          "gcode_lines": [
+            559180,
+            559207
+          ]
+        },
+        {
+          "layer": 152,
+          "mm": 2.028,
+          "two_anchors": true,
+          "bend_mm": 0.5,
+          "midpoint_machine_xy": [
+            82.543,
+            89.761
+          ],
+          "extent_machine_xy": [
+            81.894,
+            89.761,
+            83.215,
+            90.266
+          ],
+          "gcode_lines": [
+            559493,
+            559498
+          ]
+        },
+        {
+          "layer": 199,
+          "mm": 1.316,
+          "two_anchors": true,
+          "bend_mm": 0.522,
+          "midpoint_machine_xy": [
+            68.029,
+            92.764
+          ],
+          "extent_machine_xy": [
+            67.5,
+            92.672,
+            68.061,
+            92.949
+          ],
+          "gcode_lines": [
+            680802,
+            680810
+          ]
+        },
+        {
+          "layer": 199,
+          "mm": 1.102,
+          "two_anchors": false,
+          "bend_mm": 0.0,
+          "midpoint_machine_xy": [
+            63.827,
+            92.415
+          ],
+          "extent_machine_xy": [
+            63.827,
+            92.115,
+            63.827,
+            93.217
+          ],
+          "gcode_lines": [
+            680949,
+            680960
+          ]
+        },
+        {
+          "layer": 199,
+          "mm": 1.277,
+          "two_anchors": true,
+          "bend_mm": 0.522,
+          "midpoint_machine_xy": [
+            80.725,
+            92.857
+          ],
+          "extent_machine_xy": [
+            80.709,
+            92.672,
+            81.231,
+            92.949
+          ],
+          "gcode_lines": [
+            681096,
+            681098
+          ]
+        },
+        {
+          "layer": 199,
+          "mm": 2.44,
+          "two_anchors": true,
+          "bend_mm": 0.862,
+          "midpoint_machine_xy": [
+            80.424,
+            92.917
+          ],
+          "extent_machine_xy": [
+            80.369,
+            92.386,
+            81.231,
+            93.236
+          ],
+          "gcode_lines": [
+            681220,
+            681222
+          ]
+        },
+        {
+          "layer": 199,
+          "mm": 2.44,
+          "two_anchors": true,
+          "bend_mm": 0.862,
+          "midpoint_machine_xy": [
+            68.346,
+            92.917
+          ],
+          "extent_machine_xy": [
+            67.539,
+            92.386,
+            68.401,
+            93.236
+          ],
+          "gcode_lines": [
+            681341,
+            681343
+          ]
+        },
+        {
+          "layer": 199,
+          "mm": 1.316,
+          "two_anchors": true,
+          "bend_mm": 0.522,
+          "midpoint_machine_xy": [
+            26.029,
+            92.764
+          ],
+          "extent_machine_xy": [
+            25.5,
+            92.672,
+            26.061,
+            92.949
+          ],
+          "gcode_lines": [
+            681822,
+            681829
+          ]
+        },
+        {
+          "layer": 199,
+          "mm": 1.277,
+          "two_anchors": true,
+          "bend_mm": 0.522,
+          "midpoint_machine_xy": [
+            38.725,
+            92.857
+          ],
+          "extent_machine_xy": [
+            38.709,
+            92.672,
+            39.231,
+            92.949
+          ],
+          "gcode_lines": [
+            682097,
+            682102
+          ]
+        },
+        {
+          "layer": 199,
+          "mm": 2.44,
+          "two_anchors": true,
+          "bend_mm": 0.862,
+          "midpoint_machine_xy": [
+            26.346,
+            92.917
+          ],
+          "extent_machine_xy": [
+            25.539,
+            92.386,
+            26.401,
+            93.236
+          ],
+          "gcode_lines": [
+            682268,
+            682270
+          ]
+        },
+        {
+          "layer": 199,
+          "mm": 2.44,
+          "two_anchors": true,
+          "bend_mm": 0.862,
+          "midpoint_machine_xy": [
+            38.424,
+            92.917
+          ],
+          "extent_machine_xy": [
+            38.369,
+            92.386,
+            39.231,
+            93.236
+          ],
+          "gcode_lines": [
+            682447,
+            682449
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 1.12,
+          "two_anchors": true,
+          "bend_mm": 0.492,
+          "midpoint_machine_xy": [
+            32.385,
+            91.823
+          ],
+          "extent_machine_xy": [
+            32.143,
+            91.331,
+            32.627,
+            91.823
+          ],
+          "gcode_lines": [
+            682944,
+            682957
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 2.089,
+          "two_anchors": true,
+          "bend_mm": 0.797,
+          "midpoint_machine_xy": [
+            32.385,
+            92.344
+          ],
+          "extent_machine_xy": [
+            31.944,
+            91.547,
+            32.826,
+            92.344
+          ],
+          "gcode_lines": [
+            683489,
+            683495
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 1.234,
+          "two_anchors": true,
+          "bend_mm": 0.55,
+          "midpoint_machine_xy": [
+            36.485,
+            92.207
+          ],
+          "extent_machine_xy": [
+            36.205,
+            91.657,
+            36.765,
+            92.207
+          ],
+          "gcode_lines": [
+            683785,
+            683796
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 2.707,
+          "two_anchors": true,
+          "bend_mm": 0.848,
+          "midpoint_machine_xy": [
+            32.331,
+            92.642
+          ],
+          "extent_machine_xy": [
+            31.773,
+            91.794,
+            32.997,
+            92.642
+          ],
+          "gcode_lines": [
+            683806,
+            683810
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 1.234,
+          "two_anchors": true,
+          "bend_mm": 0.55,
+          "midpoint_machine_xy": [
+            28.285,
+            92.207
+          ],
+          "extent_machine_xy": [
+            28.005,
+            91.657,
+            28.565,
+            92.207
+          ],
+          "gcode_lines": [
+            683819,
+            683830
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 2.852,
+          "two_anchors": true,
+          "bend_mm": 1.062,
+          "midpoint_machine_xy": [
+            36.485,
+            92.939
+          ],
+          "extent_machine_xy": [
+            36.006,
+            91.877,
+            36.964,
+            92.939
+          ],
+          "gcode_lines": [
+            683955,
+            683959
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 3.548,
+          "two_anchors": true,
+          "bend_mm": 0.98,
+          "midpoint_machine_xy": [
+            32.385,
+            92.939
+          ],
+          "extent_machine_xy": [
+            31.527,
+            91.959,
+            33.243,
+            92.939
+          ],
+          "gcode_lines": [
+            683964,
+            683968
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 2.852,
+          "two_anchors": true,
+          "bend_mm": 1.062,
+          "midpoint_machine_xy": [
+            28.285,
+            92.939
+          ],
+          "extent_machine_xy": [
+            27.806,
+            91.877,
+            28.764,
+            92.939
+          ],
+          "gcode_lines": [
+            683973,
+            683977
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 3.599,
+          "two_anchors": true,
+          "bend_mm": 1.162,
+          "midpoint_machine_xy": [
+            36.428,
+            93.236
+          ],
+          "extent_machine_xy": [
+            35.806,
+            92.072,
+            37.202,
+            93.236
+          ],
+          "gcode_lines": [
+            684167,
+            684210
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 4.369,
+          "two_anchors": true,
+          "bend_mm": 1.111,
+          "midpoint_machine_xy": [
+            32.328,
+            93.236
+          ],
+          "extent_machine_xy": [
+            31.28,
+            92.125,
+            33.494,
+            93.236
+          ],
+          "gcode_lines": [
+            684214,
+            684257
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 3.599,
+          "two_anchors": true,
+          "bend_mm": 1.162,
+          "midpoint_machine_xy": [
+            28.228,
+            93.236
+          ],
+          "extent_machine_xy": [
+            27.606,
+            92.072,
+            29.002,
+            93.236
+          ],
+          "gcode_lines": [
+            684261,
+            684304
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 1.12,
+          "two_anchors": true,
+          "bend_mm": 0.492,
+          "midpoint_machine_xy": [
+            74.385,
+            91.823
+          ],
+          "extent_machine_xy": [
+            74.143,
+            91.331,
+            74.627,
+            91.823
+          ],
+          "gcode_lines": [
+            684999,
+            685012
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 2.089,
+          "two_anchors": true,
+          "bend_mm": 0.797,
+          "midpoint_machine_xy": [
+            74.385,
+            92.344
+          ],
+          "extent_machine_xy": [
+            73.944,
+            91.547,
+            74.826,
+            92.344
+          ],
+          "gcode_lines": [
+            685357,
+            685363
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 1.234,
+          "two_anchors": true,
+          "bend_mm": 0.55,
+          "midpoint_machine_xy": [
+            78.485,
+            92.207
+          ],
+          "extent_machine_xy": [
+            78.205,
+            91.657,
+            78.765,
+            92.207
+          ],
+          "gcode_lines": [
+            685836,
+            685847
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 2.707,
+          "two_anchors": true,
+          "bend_mm": 0.848,
+          "midpoint_machine_xy": [
+            74.331,
+            92.642
+          ],
+          "extent_machine_xy": [
+            73.773,
+            91.794,
+            74.997,
+            92.642
+          ],
+          "gcode_lines": [
+            685857,
+            685861
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 1.234,
+          "two_anchors": true,
+          "bend_mm": 0.55,
+          "midpoint_machine_xy": [
+            70.285,
+            92.207
+          ],
+          "extent_machine_xy": [
+            70.005,
+            91.657,
+            70.565,
+            92.207
+          ],
+          "gcode_lines": [
+            685870,
+            685881
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 2.852,
+          "two_anchors": true,
+          "bend_mm": 1.062,
+          "midpoint_machine_xy": [
+            78.485,
+            92.939
+          ],
+          "extent_machine_xy": [
+            78.006,
+            91.877,
+            78.964,
+            92.939
+          ],
+          "gcode_lines": [
+            686046,
+            686050
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 3.548,
+          "two_anchors": true,
+          "bend_mm": 0.98,
+          "midpoint_machine_xy": [
+            74.385,
+            92.939
+          ],
+          "extent_machine_xy": [
+            73.527,
+            91.959,
+            75.243,
+            92.939
+          ],
+          "gcode_lines": [
+            686055,
+            686059
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 2.852,
+          "two_anchors": true,
+          "bend_mm": 1.062,
+          "midpoint_machine_xy": [
+            70.285,
+            92.939
+          ],
+          "extent_machine_xy": [
+            69.806,
+            91.877,
+            70.764,
+            92.939
+          ],
+          "gcode_lines": [
+            686064,
+            686068
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 3.599,
+          "two_anchors": true,
+          "bend_mm": 1.162,
+          "midpoint_machine_xy": [
+            78.428,
+            93.236
+          ],
+          "extent_machine_xy": [
+            77.806,
+            92.072,
+            79.202,
+            93.236
+          ],
+          "gcode_lines": [
+            686186,
+            686229
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 4.369,
+          "two_anchors": true,
+          "bend_mm": 1.111,
+          "midpoint_machine_xy": [
+            74.385,
+            93.236
+          ],
+          "extent_machine_xy": [
+            73.28,
+            92.125,
+            75.494,
+            93.236
+          ],
+          "gcode_lines": [
+            686233,
+            686276
+          ]
+        },
+        {
+          "layer": 200,
+          "mm": 3.599,
+          "two_anchors": true,
+          "bend_mm": 1.162,
+          "midpoint_machine_xy": [
+            70.228,
+            93.236
+          ],
+          "extent_machine_xy": [
+            69.606,
+            92.072,
+            71.002,
+            93.236
+          ],
+          "gcode_lines": [
+            686280,
+            686323
+          ]
+        },
+        {
+          "layer": 210,
+          "mm": 1.688,
+          "two_anchors": true,
+          "bend_mm": 0.444,
+          "midpoint_machine_xy": [
+            53.18,
+            93.116
+          ],
+          "extent_machine_xy": [
+            52.736,
+            92.716,
+            53.18,
+            93.516
+          ],
+          "gcode_lines": [
+            701347,
+            701353
+          ]
+        },
+        {
+          "layer": 211,
+          "mm": 1.688,
+          "two_anchors": true,
+          "bend_mm": 0.444,
+          "midpoint_machine_xy": [
+            53.995,
+            93.116
+          ],
+          "extent_machine_xy": [
+            53.551,
+            92.716,
+            53.995,
+            93.516
+          ],
+          "gcode_lines": [
+            702287,
+            702293
+          ]
+        },
+        {
+          "layer": 212,
+          "mm": 1.693,
+          "two_anchors": true,
+          "bend_mm": 0.453,
+          "midpoint_machine_xy": [
+            54.718,
+            93.116
+          ],
+          "extent_machine_xy": [
+            54.265,
+            92.716,
+            54.718,
+            93.516
+          ],
+          "gcode_lines": [
+            703242,
+            703258
+          ]
+        }
+      ],
+      "external_props": {
+        "CAD_mm3": 3245.423,
+        "nominal_solid_mass_g": 4.1217,
+        "native_bead_samples": 551445,
+        "native_continuous_sequences": 6684,
+        "mixed_model_prop_sequences": 30
+      },
+      "bearing_space": {
+        "nominal_CAD_radius_mm": 1.14,
+        "hardware_radius_mm": 1.0,
+        "conservative_native_radius_mm": 1.048,
+        "layer_top_mm": 1.6,
+        "candidate_square_bead_radius_shortfall_mm": 0.0
+      },
+      "protected_support": {
+        "wire_core_bead_samples": 7236,
+        "underside_lead_bead_samples": 0,
+        "finger_contact_bead_samples": 0,
+        "finger_underside_bead_samples": 0,
+        "axle_core_bead_samples": 0
+      },
+      "commanded_support_mass_g": 0.2851
+    },
+    "DFRobot_Hole_Bracket": {
+      "owner": 4,
+      "source_sha256": "35bdeef699974194b532eb1f0024b28f4dd99548a1b195bd9ad37f0b1d6dfc2a",
+      "orientation": "left_down",
+      "model_bed_area_mm2": 25.06,
+      "support_occupancy_volume_mm3": 575.62,
+      "support_occupancy_mass_estimate_g": 0.731,
+      "supported_area_summed_across_layers_mm2": 97.14,
+      "supported_layers": [
+        [
+          3,
+          10.51
+        ],
+        [
+          4,
+          4.43
+        ],
+        [
+          5,
+          0.39
+        ],
+        [
+          6,
+          0.4
+        ],
+        [
+          7,
+          0.55
+        ],
+        [
+          8,
+          0.89
+        ],
+        [
+          9,
+          0.7
+        ],
+        [
+          10,
+          2.35
+        ],
+        [
+          11,
+          1.29
+        ],
+        [
+          12,
+          0.41
+        ],
+        [
+          13,
+          0.17
+        ],
+        [
+          14,
+          0.56
+        ],
+        [
+          15,
+          0.22
+        ],
+        [
+          16,
+          0.19
+        ],
+        [
+          17,
+          0.32
+        ],
+        [
+          18,
+          0.22
+        ],
+        [
+          19,
+          0.42
+        ],
+        [
+          20,
+          0.22
+        ],
+        [
+          21,
+          0.25
+        ],
+        [
+          22,
+          0.41
+        ],
+        [
+          23,
+          0.22
+        ],
+        [
+          24,
+          20.13
+        ],
+        [
+          25,
+          2.74
+        ],
+        [
+          26,
+          1.38
+        ],
+        [
+          27,
+          1.15
+        ],
+        [
+          28,
+          1.58
+        ],
+        [
+          29,
+          1.54
+        ],
+        [
+          32,
+          0.06
+        ],
+        [
+          33,
+          0.06
+        ],
+        [
+          34,
+          0.04
+        ],
+        [
+          35,
+          0.01
+        ],
+        [
+          36,
+          0.02
+        ],
+        [
+          37,
+          0.05
+        ],
+        [
+          38,
+          1.55
+        ],
+        [
+          56,
+          0.47
+        ],
+        [
+          57,
+          0.73
+        ],
+        [
+          58,
+          0.44
+        ],
+        [
+          59,
+          0.79
+        ],
+        [
+          60,
+          0.52
+        ],
+        [
+          61,
+          0.54
+        ],
+        [
+          62,
+          0.5
+        ],
+        [
+          63,
+          0.67
+        ],
+        [
+          64,
+          0.43
+        ],
+        [
+          65,
+          0.7
+        ],
+        [
+          66,
+          0.5
+        ],
+        [
+          67,
+          0.57
+        ],
+        [
+          68,
+          0.48
+        ],
+        [
+          69,
+          2.53
+        ],
+        [
+          70,
+          1.5
+        ],
+        [
+          71,
+          1.15
+        ],
+        [
+          72,
+          1.12
+        ],
+        [
+          73,
+          0.88
+        ],
+        [
+          74,
+          1.02
+        ],
+        [
+          75,
+          1.0
+        ],
+        [
+          76,
+          1.2
+        ],
+        [
+          77,
+          4.88
+        ],
+        [
+          78,
+          1.14
+        ],
+        [
+          79,
+          1.04
+        ],
+        [
+          80,
+          0.68
+        ],
+        [
+          81,
+          0.56
+        ],
+        [
+          82,
+          0.37
+        ],
+        [
+          83,
+          0.66
+        ],
+        [
+          84,
+          0.82
+        ],
+        [
+          85,
+          1.37
+        ],
+        [
+          86,
+          2.12
+        ],
+        [
+          87,
+          3.37
+        ],
+        [
+          88,
+          1.19
+        ],
+        [
+          89,
+          0.79
+        ],
+        [
+          90,
+          0.03
+        ],
+        [
+          91,
+          0.08
+        ],
+        [
+          97,
+          4.87
+        ]
+      ],
+      "completely_unrooted_model_islands": [],
+      "longer_unsupported_strokes": [
+        {
+          "layer": 4,
+          "mm": 1.041,
+          "two_anchors": true,
+          "bend_mm": 0.411,
+          "midpoint_machine_xy": [
+            127.347,
+            111.309
+          ],
+          "extent_machine_xy": [
+            127.146,
+            110.882,
+            127.446,
+            111.309
+          ],
+          "gcode_lines": [
+            13674,
+            13676
+          ]
+        },
+        {
+          "layer": 77,
+          "mm": 1.601,
+          "two_anchors": true,
+          "bend_mm": 0.705,
+          "midpoint_machine_xy": [
+            123.222,
+            124.686
+          ],
+          "extent_machine_xy": [
+            123.222,
+            124.507,
+            123.927,
+            124.892
+          ],
+          "gcode_lines": [
+            256844,
+            256861
+          ]
+        },
+        {
+          "layer": 77,
+          "mm": 2.523,
+          "two_anchors": true,
+          "bend_mm": 0.965,
+          "midpoint_machine_xy": [
+            122.896,
+            124.716
+          ],
+          "extent_machine_xy": [
+            122.896,
+            124.167,
+            123.863,
+            125.223
+          ],
+          "gcode_lines": [
+            257224,
+            257228
+          ]
+        },
+        {
+          "layer": 77,
+          "mm": 3.535,
+          "two_anchors": true,
+          "bend_mm": 1.296,
+          "midpoint_machine_xy": [
+            122.575,
+            124.635
+          ],
+          "extent_machine_xy": [
+            122.575,
+            123.87,
+            123.923,
+            125.529
+          ],
+          "gcode_lines": [
+            257520,
+            257529
+          ]
+        }
+      ],
+      "external_props": {},
+      "bearing_space": {
+        "nominal_CAD_radius_mm": 1.625,
+        "hardware_radius_mm": 1.5,
+        "conservative_native_radius_mm": 1.534,
+        "layer_top_mm": 6.2,
+        "candidate_square_bead_radius_shortfall_mm": 0.0
+      },
+      "protected_support": {
+        "wire_core_bead_samples": 0,
+        "underside_lead_bead_samples": 0,
+        "finger_contact_bead_samples": 0,
+        "finger_underside_bead_samples": 0,
+        "axle_core_bead_samples": 0
+      },
+      "commanded_support_mass_g": 0.6091
+    }
+  },
+  "total_native_filament_g": 19.72,
+  "native_seconds": 9472,
+  "native_support_used": "true",
+  "warning": "",
+  "method": "Positive native extrusion with 0.12 mm line/arc sampling, a 0.10 mm radial-width footprint raster and prior true layer/contact check. Model area calculated without brim. Support mass is a deposited occupancy estimate; native full-plate weight includes brim and tower. A connected overhang may still need backing."
+}

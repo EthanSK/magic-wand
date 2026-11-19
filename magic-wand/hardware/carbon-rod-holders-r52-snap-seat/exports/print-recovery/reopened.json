@@ -1,0 +1,108 @@
+{
+  "native_sha256": "c870fc9e39469ecd2d260809bc08b7d4408c00280b943a122ead647c8864d37d",
+  "repeat_sha256": "8fe13374ae3323615e6dacddea8bf0ac3918855d3e03c56f67dad3cb92e9edad",
+  "original_commands": 25295,
+  "repeat_commands": 25295,
+  "gcode_command_differences": [
+    {
+      "kind": "replace",
+      "original": [
+        16245,
+        16315
+      ],
+      "repeat": [
+        16245,
+        16333
+      ]
+    },
+    {
+      "kind": "replace",
+      "original": [
+        16393,
+        16436
+      ],
+      "repeat": [
+        16411,
+        16481
+      ]
+    },
+    {
+      "kind": "delete",
+      "original": [
+        16437,
+        16482
+      ],
+      "repeat": [
+        16482,
+        16482
+      ]
+    },
+    {
+      "kind": "replace",
+      "original": [
+        16512,
+        16513
+      ],
+      "repeat": [
+        16512,
+        16513
+      ]
+    },
+    {
+      "kind": "replace",
+      "original": [
+        16519,
+        16520
+      ],
+      "repeat": [
+        16519,
+        16520
+      ]
+    },
+    {
+      "kind": "insert",
+      "original": [
+        17020,
+        17020
+      ],
+      "repeat": [
+        17020,
+        17184
+      ]
+    },
+    {
+      "kind": "delete",
+      "original": [
+        17109,
+        17273
+      ],
+      "repeat": [
+        17273,
+        17273
+      ]
+    },
+    {
+      "kind": "replace",
+      "original": [
+        17302,
+        17303
+      ],
+      "repeat": [
+        17302,
+        17303
+      ]
+    },
+    {
+      "kind": "replace",
+      "original": [
+        17309,
+        17310
+      ],
+      "repeat": [
+        17309,
+        17310
+      ]
+    }
+  ],
+  "same_hardware_and_slice_checks": true
+}

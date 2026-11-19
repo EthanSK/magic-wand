@@ -1,0 +1,141 @@
+{
+  "archive_sha256": "d00f133354463afa3363f4c87948ae9920bd0e70ebcd75a7c8714c1ac8a90996",
+  "carrier_sha256": "22b0665cb676f7cddcc40849310e109fa9228608d88257f42cc943e9937bffd0",
+  "working_arm_slits": [
+    {
+      "eyelet_y_mm": -6.249999999999999,
+      "min_gap_mm_z": [
+        0.68,
+        33.6,
+        62.141,
+        92.716,
+        62.149,
+        91.696
+      ],
+      "root_excluded_mm": 2.4
+    },
+    {
+      "eyelet_y_mm": 11.649999999999999,
+      "min_gap_mm_z": [
+        0.631,
+        40.6,
+        62.184,
+        93.438,
+        63.155,
+        93.44
+      ],
+      "root_excluded_mm": 2.4
+    }
+  ],
+  "positive_fixture_contacts": [
+    {
+      "center_mm": [
+        57.86,
+        92.51,
+        24.53
+      ],
+      "positive_neck_samples": 150,
+      "leaf_samples": 234,
+      "minimum_xy_bead_gap_same_or_adjacent_layer_mm": -0.3
+    },
+    {
+      "center_mm": [
+        51.6,
+        92.51,
+        41.29
+      ],
+      "positive_neck_samples": 179,
+      "leaf_samples": 226,
+      "minimum_xy_bead_gap_same_or_adjacent_layer_mm": -0.341
+    },
+    {
+      "center_mm": [
+        53.4,
+        93.66,
+        42.96
+      ],
+      "positive_neck_samples": 102,
+      "leaf_samples": 226,
+      "minimum_xy_bead_gap_same_or_adjacent_layer_mm": -0.315
+    },
+    {
+      "center_mm": [
+        59.77,
+        93.66,
+        26.2
+      ],
+      "positive_neck_samples": 101,
+      "leaf_samples": 254,
+      "minimum_xy_bead_gap_same_or_adjacent_layer_mm": -0.306
+    },
+    {
+      "center_mm": [
+        62.17,
+        93.71,
+        32.52
+      ],
+      "positive_neck_samples": 83,
+      "leaf_samples": 163,
+      "minimum_xy_bead_gap_same_or_adjacent_layer_mm": -0.324
+    },
+    {
+      "center_mm": [
+        65.21,
+        93.66,
+        31.18
+      ],
+      "positive_neck_samples": 116,
+      "leaf_samples": 169,
+      "minimum_xy_bead_gap_same_or_adjacent_layer_mm": -0.292
+    },
+    {
+      "center_mm": [
+        60.65,
+        93.66,
+        36.52
+      ],
+      "positive_neck_samples": 103,
+      "leaf_samples": 164,
+      "minimum_xy_bead_gap_same_or_adjacent_layer_mm": -0.317
+    },
+    {
+      "center_mm": [
+        59.16,
+        93.66,
+        40.52
+      ],
+      "positive_neck_samples": 104,
+      "leaf_samples": 164,
+      "minimum_xy_bead_gap_same_or_adjacent_layer_mm": -0.317
+    },
+    {
+      "center_mm": [
+        62.22,
+        93.66,
+        39.18
+      ],
+      "positive_neck_samples": 123,
+      "leaf_samples": 163,
+      "minimum_xy_bead_gap_same_or_adjacent_layer_mm": -0.334
+    },
+    {
+      "center_mm": [
+        63.72,
+        93.66,
+        35.18
+      ],
+      "positive_neck_samples": 116,
+      "leaf_samples": 169,
+      "minimum_xy_bead_gap_same_or_adjacent_layer_mm": -0.292
+    }
+  ],
+  "fixture_contact_volume_mm3": 0.3947730842800712,
+  "fixture_pull_volume_mm3": 0.0,
+  "fixture_pull_extra_interference_mm3": 0.0,
+  "fixture_pull_machine_mm": [
+    0,
+    60,
+    0
+  ],
+  "bay_islands_without_positive_material_below": []
+}
