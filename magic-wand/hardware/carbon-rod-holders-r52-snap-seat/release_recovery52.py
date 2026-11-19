@@ -5,6 +5,7 @@ import json
 import sys
 from zipfile import ZipFile
 from release_accessories52 import package
+from tower_check52 import verify_report
 
 def release(final, repeat):
     name='Battery-recovery.gcode.3mf'
@@ -46,8 +47,7 @@ def release(final, repeat):
     for folder,expected in zip((final,repeat),hashes):
         arch=folder/name
         assert sha256(arch.read_bytes()).hexdigest()==expected
-        tower=json.loads((folder/'tower-base.json').read_text())['selected']
-        assert tower['archive_sha256']==expected and tower['connected_bed_area_mm2']>=2849
+        verify_report(json.loads((folder/'tower-base.json').read_text()), expected)
         with ZipFile(arch) as z:
             lines=z.read('Metadata/plate_1.gcode').splitlines()
         commands.append([s.split(b';')[0].strip() for s in lines if s.startswith((b'G0 ',b'G1 ',b'G2 ',b'G3 ')) and b' E' in s.split(b';')[0]])
@@ -55,6 +55,6 @@ def release(final, repeat):
     edits=[dict(kind=k,original=[i,j],repeat=[a,b]) for k,i,j,a,b in SequenceMatcher(None,*commands,autojunk=False).get_opcodes() if k!='equal']
     report=final/'reopened.json'
     report.write_text(json.dumps(dict(native_sha256=hashes[0],repeat_sha256=hashes[1],estimated_seconds=seconds,original_commands=len(commands[0]),repeat_commands=len(commands[1]),gcode_command_differences=edits,same_hardware_and_slice_checks=True),indent=2)+'\n')
-    package(final/name,final/'R52-Battery-Cradle-Wide-Tower-print-only.3mf',{'Battery_Holder'},[final/'checks.json',report,final/'tower-base.json',final/'reopened-tower-base.json'])
+    package(final/name,final/'R52-Battery-Cradle-Reinforced-Tower-print-only.3mf',{'Battery_Holder'},[final/'checks.json',report,final/'tower-base.json',final/'reopened-tower-base.json'])
 
 if __name__=='__main__':release(*map(Path,sys.argv[1:3]))

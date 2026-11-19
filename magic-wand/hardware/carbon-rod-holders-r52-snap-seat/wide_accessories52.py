@@ -129,7 +129,7 @@ def build(directory):
         old_idx=int(row.get('id'))
         if old_idx in input_indices:row.set('id',str(input_indices[old_idx]))
         else:ranges.remove(row)
-    add_tower_base(files, (85, 31))
+    add_tower_base(files, (76.5, 23), brim_mm=18.5, extra_rib_mm=20)
     value(plate,'plater_name','Six accessories with separate wide bases')
     for key,root in ((MODEL,model),(SETTINGS,cfg),('Metadata/layer_config_ranges.xml',ranges)):
         files[key]=ET.tostring(root,encoding='utf-8',xml_declaration=True)

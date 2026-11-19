@@ -268,7 +268,7 @@ def compose(output, models):
     value(cfg.find('plate'),'plater_name','R52 key carrier and paddle')
     for key,node in [(MODEL,m),(SETTINGS,cfg),('Metadata/layer_config_ranges.xml',ranges)]:
         files[key] = ET.tostring(node,encoding='utf-8',xml_declaration=True)
-    add_tower_base(files, (121, 31))
+    add_tower_base(files, (112, 20), brim_mm=16, extra_rib_mm=30)
     with ZipFile(output,'w',ZIP_DEFLATED) as dest:
         for name,value_ in files.items():
             dest.writestr(name,value_)
