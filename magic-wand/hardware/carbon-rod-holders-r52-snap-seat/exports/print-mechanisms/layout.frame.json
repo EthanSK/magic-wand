@@ -121,7 +121,7 @@
         "sparse_infill_density": "100%",
         "layer_height": "0.2",
         "initial_layer_print_height": "0.2",
-        "brim_type": "outer_only",
+        "brim_type": "no_brim",
         "bridge_no_support": "1",
         "max_bridge_length": "10",
         "timelapse_type": "1",
@@ -155,6 +155,6 @@
     }
   },
   "mode": "clear four key sockets",
-  "layout_sha256": "4b5fcd9628ccd271e8851c7637c5e2f1cbd41f178904af34b4623149cdc60fea",
+  "layout_sha256": "3f3a9bd886605004343e5bedf878bbc5f7a8a876f5f05e397f3dbceae8cb7d91",
   "extra_objects": []
 }

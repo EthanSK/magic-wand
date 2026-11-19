@@ -52,14 +52,19 @@ def build(out):
             b.box(5.3,7.15,-15.25,13.82,10.68,10.82)])
         handle=b.box(-.5,6.17,-19.5,-18.4,12.20,12.8)
         pieces.extend(s if sign==1 else s.mirror((1,0,0)) for s in (stem,shelf,handle))
+    # A separate wide base steadies the pull-out fork. It travels out with
+    # the fork, entirely beyond the open end of the tray.
+    pieces.append(b.box(-46,46,-56,-25,12.4,12.8))
+    for x in (-1.75,1.75):
+        pieces.append(b.box(x-.9,x+.9,-25.8,-21,12.4,12.8))
     rail=b.union(pieces)
     # Brim only on the outside of the two long rigid rails, with six short cut ties.
     pads=[]
     for sign in [-1,1]:
-        for y in [-10,0,10]:
-            pad=b.box(9.0,17.5,y-4.1,y+4.1,12.6,12.8)
-            tie=b.box(8.35,9.2,y-1.1,y+1.1,12.6,12.8)
-            pads.append((pad+tie) if sign==1 else (pad+tie).mirror((1,0,0)))
+        wing=b.box(9.0,50.0,-18,18,12.4,12.8)
+        ties=[b.box(8.25,10.0,y-1.1,y+1.1,12.4,12.8) for y in (-10,0,10)]
+        side=b.union([wing,*ties])
+        pads.append(side if sign==1 else side.mirror((1,0,0)))
     bodies=[('Battery_Holder',solid),('REMOVE - centre pull rail',rail),('REMOVE - outside feet',b.union(pads))]
     owner=ET.Element('object',id='4')
     cfg.insert(0,owner)

@@ -1,6 +1,6 @@
 {
-  "archive_sha256": "d00f133354463afa3363f4c87948ae9920bd0e70ebcd75a7c8714c1ac8a90996",
-  "frame_sha256": "be090b62c2b82cf5ec5373c5db35a4408474b90b4e76024358d696e2357e7cb1",
+  "archive_sha256": "b529b63d0d87302255f1e6ec74a1ffce26f7abdd61804801c3a5fa1fff12913d",
+  "frame_sha256": "22a9e8c9cc2eaadec88159791070eed33110e4247f7335ca83493803d67d907c",
   "carrier_sha256": "22b0665cb676f7cddcc40849310e109fa9228608d88257f42cc943e9937bffd0",
   "centreline_xy_mm": [
     [
@@ -18,15 +18,15 @@
     -3.2318690912221073,
     11.350000381469727
   ],
-  "projected_support_samples": 7236,
-  "samples_on_removable_fixture": 7236,
+  "projected_support_samples": 7504,
+  "samples_on_removable_fixture": 7504,
   "projected_features": {
-    "Inner wall": 3238,
-    "Outer wall": 2183,
+    "Inner wall": 3259,
+    "Outer wall": 2191,
+    "Top surface": 7,
     "Internal solid infill": 757,
-    "Top surface": 8,
-    "Sparse infill": 848,
-    "Floating vertical shell": 189,
+    "Sparse infill": 1087,
+    "Floating vertical shell": 190,
     "Bridge": 13
   },
   "projected_assembly_min_xyz_mm": [
@@ -35,7 +35,7 @@
     16.502329349517822
   ],
   "projected_assembly_max_xyz_mm": [
-    10.31006908416748,
+    10.324797630310059,
     19.550002098083496,
     22.222330570220947
   ],

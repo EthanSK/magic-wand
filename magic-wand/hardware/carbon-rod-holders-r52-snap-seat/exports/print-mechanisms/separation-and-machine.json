@@ -1,17 +1,17 @@
 {
-  "archive_sha256": "d00f133354463afa3363f4c87948ae9920bd0e70ebcd75a7c8714c1ac8a90996",
-  "layout_sha256": "4b5fcd9628ccd271e8851c7637c5e2f1cbd41f178904af34b4623149cdc60fea",
+  "archive_sha256": "b529b63d0d87302255f1e6ec74a1ffce26f7abdd61804801c3a5fa1fff12913d",
+  "layout_sha256": "3f3a9bd886605004343e5bedf878bbc5f7a8a876f5f05e397f3dbceae8cb7d91",
   "parts": [
     "Key_Carrier",
     "DFRobot_Hole_Bracket"
   ],
-  "minimum_separation_mm": 35.209,
+  "minimum_separation_mm": 4.8,
   "projected_part_separation_lower_bounds_mm": {
-    "Key_Carrier / DFRobot_Hole_Bracket": 35.209
+    "Key_Carrier / DFRobot_Hole_Bracket": 4.8
   },
   "machine": {
     "passed": true,
-    "project_sha256": "d00f133354463afa3363f4c87948ae9920bd0e70ebcd75a7c8714c1ac8a90996",
+    "project_sha256": "b529b63d0d87302255f1e6ec74a1ffce26f7abdd61804801c3a5fa1fff12913d",
     "official_machine_templates_match": [
       "machine_start_gcode",
       "machine_end_gcode",

@@ -1,0 +1,81 @@
+{
+  "archive_sha256": "b6ec8e9a46f7d9e9fa6938736705751ad028e78eefc6637c1df0affe4006bd88",
+  "layout_sha256": "f30f4419311027976607b346b0701eaf2d47a28fe4eb699e558fe2458bb02a8d",
+  "parts": [
+    "Battery_End_Door",
+    "DFR0030_Post_Clip",
+    "DFR0030_Post_Clip_2",
+    "XIAO_Rod_Holder",
+    "XIAO_Near_Keeper",
+    "Cable_Clip_12_Wire"
+  ],
+  "minimum_separation_mm": 5.3,
+  "projected_part_separation_lower_bounds_mm": {
+    "Battery_End_Door / DFR0030_Post_Clip": 6.8,
+    "Battery_End_Door / DFR0030_Post_Clip_2": 14.494,
+    "Battery_End_Door / XIAO_Rod_Holder": 5.3,
+    "Battery_End_Door / XIAO_Near_Keeper": 11.8,
+    "Battery_End_Door / Cable_Clip_12_Wire": 13.82,
+    "DFR0030_Post_Clip / DFR0030_Post_Clip_2": 13.8,
+    "DFR0030_Post_Clip / XIAO_Rod_Holder": 64.3,
+    "DFR0030_Post_Clip / XIAO_Near_Keeper": 14.494,
+    "DFR0030_Post_Clip / Cable_Clip_12_Wire": 66.641,
+    "DFR0030_Post_Clip_2 / XIAO_Rod_Holder": 65.201,
+    "DFR0030_Post_Clip_2 / XIAO_Near_Keeper": 6.8,
+    "DFR0030_Post_Clip_2 / Cable_Clip_12_Wire": 65.3,
+    "XIAO_Rod_Holder / XIAO_Near_Keeper": 11.141,
+    "XIAO_Rod_Holder / Cable_Clip_12_Wire": 10.3,
+    "XIAO_Near_Keeper / Cable_Clip_12_Wire": 6.3
+  },
+  "machine": {
+    "passed": true,
+    "project_sha256": "b6ec8e9a46f7d9e9fa6938736705751ad028e78eefc6637c1df0affe4006bd88",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "filament_retraction_mm": [
+    "1.2"
+  ],
+  "filament_retraction_speed_mm_s": [
+    "35"
+  ],
+  "timelapse_type": "1"
+}

@@ -177,7 +177,10 @@ def compose(output, models):
             ref=res.find(tag('object')+"[@id='97']")
             from arm_fixture52 import carrier_fixture
             fixture,_=carrier_fixture(np.array(frame['assembly_to_machine']))
-            replaced=decode(ref)+(short+fixture).translate(-tr)
+            from wide_bases52 import build as wide_bases
+            helpers=decode(ref).translate(tr)+short+fixture
+            sheets,_,_=wide_bases(name,body.translate(tr),helpers)
+            replaced=(helpers+sheets).translate(-tr)
             res.remove(ref)
             resource(res,tag,97,'External_peel_support',replaced)
             corner=mf.Manifold.cube((2.0,2.2,1.4)).translate((35.7,88.75,17.05)).translate(-tr)
@@ -241,6 +244,11 @@ def compose(output, models):
         if name=='DFRobot_Hole_Bracket':
             from paddle_plate52 import lay_on_side
             lay_on_side(m,cfg,frame,source_body)
+            from wide_bases52 import build as wide_bases
+            placed=source_body.transform(np.array(frame['assembly_to_machine'])[:3])
+            sheets,_,_=wide_bases(name,placed)
+            add_modifiers(res,native,owner,{'Paddle tear-off base plates':sheets.translate(-tr)},605,'normal_part')
+            value(owner,'brim_type','no_brim')
     build=m.find(tag('build'))
     keep={str(info['parts'][n]['owner']) for n in ('Key_Carrier','DFRobot_Hole_Bracket')}
     plate=cfg.find('plate')

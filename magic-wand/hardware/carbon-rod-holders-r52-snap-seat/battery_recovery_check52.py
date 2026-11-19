@@ -30,7 +30,7 @@ def first_layer_groups(mask, origin):
         ears=sorted(set((int(np.sign(x)),centre) for x,y in xy if abs(x)>10
                         for centre in (-10,0,10) if abs(y-centre)<3.5))
         groups.append(dict(area_mm2=round(len(group)*.01,2),bed_ears=len(ears),
-                           includes_outer_rim=bool(np.any((np.abs(xy[:,0])>7.6)&(np.abs(xy[:,0])<8.4))),
+                           includes_outer_rim=bool(np.any((np.abs(xy[:,0])>7.6)&(np.abs(xy[:,0])<8.4)&(np.abs(xy[:,1])<13))),
                            xy_bounds=np.concatenate((xy.min(0),xy.max(0))).round(2).tolist()))
     return sorted(groups,key=lambda group: -group["area_mm2"])
 
@@ -45,13 +45,19 @@ def check(archive):
     rows[:,:2]+=np.fromstring(cfg['extruder_offset'][0],sep='x')
     obj=plate.find('object')
     assert obj.get('name')=='Battery_Holder' and len(plate.findall('object'))==1
-    keep=(rows[:,0]>71)&(rows[:,0]<109)&(rows[:,1]>66)&(rows[:,1]<109)&(rows[:,7]>.05)
+    # Single-object native files can omit object labels. Use Studio's named
+    # object bounds and exclude its separately labelled prime tower and skirt.
+    with ZipFile(archive) as z:
+        boxes=json.loads(z.read('Metadata/plate_1.json'))['bbox_objects']
+    x0,y0,x1,y1=next(o['bbox'] for o in boxes if o['name']=='Battery_Holder')
+    keep=(rows[:,0]>=x0-.6)&(rows[:,0]<=x1+.6)&(rows[:,1]>=y0-.6)&(rows[:,1]<=y1+.6)&(rows[:,7]>.05)
+    keep&=~np.isin(rows[:,5],[i for i,f in enumerate(features) if f in ('Prime tower','Skirt','Brim')])
     d,lines,seq=rows[keep],lines[keep],seq[keep]
     layers=np.rint(d[:,7]*5).astype(int)
-    origin=np.array([70,60])
-    shape=(560,400)
+    origin=np.floor(d[:,:2].min(0))-1
+    shape=tuple((np.ceil((d[:,:2].max(0)-origin+1)/.1)[::-1]).astype(int))
     zero=np.zeros(shape,bool);prev=zero
-    issues=[];lost=[];bed={}
+    issues=[];lost=[];bed={};base_layers=[]
     x,y=d[:,0]-90,d[:,1]-90
     with ZipFile(archive.parent/'layout.3mf') as z:
         resources=ET.fromstring(z.read(MODEL)).find(tag('resources'))
@@ -79,9 +85,22 @@ def check(archive):
     for n in range(1,layers.max()+1):
         mask=layers==n
         curr=footprint(d[mask],origin,shape)
+        if n<=2:
+            connected=first_layer_groups(curr,origin)
+            widths=[]
+            for side in (-1,1):
+                for station in (-10,0,10):
+                    xg,yg=np.rint((np.array([90+side*8.72,90+station])-origin)/.1).astype(int)
+                    widths.append(round(float(curr[yg-16:yg+17,xg].sum())*.1,2))
+            fork_widths=[]
+            for pos in (-1.75,1.75):
+                xg,yg=np.rint((np.array([90+pos,66.5])-origin)/.1).astype(int)
+                fork_widths.append(round(float(curr[yg,xg-13:xg+14].sum())*.1,2))
+            base_layers.append(dict(layer=n,connected_groups=connected,six_body_necks_mm=widths,
+                                    two_fork_necks_mm=fork_widths))
         if n==1:
             groups=first_layer_groups(curr,origin)
-            for key,region in [('all',mask),('pull_rail',mask&rail),('outside_feet',mask&(abs(x)>8.65)),('permanent_rims',mask&~rail&(abs(x)<=8.65))]:
+            for key,region in [('all',mask),('pull_rail',mask&rail),('outside_feet',mask&~rail&(abs(x)>8.65)),('permanent_rims',mask&~rail&(abs(x)<=8.65))]:
                 bed[key]=round(footprint(d[region],origin,shape).sum()*.01,2)
         else:
             backing=dilation(prev,1)
@@ -137,7 +156,7 @@ def check(archive):
     commands=[s for s in text.splitlines() if re.match(r'^M(?:104|109|140|190)\s',s)]
     report=dict(archive_sha256=hashlib.sha256(archive.read_bytes()).hexdigest(),seconds=meta['prediction'],grams=meta['weight'],
         original_height_mm=33.0,height_mm=float(d[:,7].max()),layers=int(layers.max()),bed_area_mm2=bed,
-        first_layer_connected_groups=groups,native_object_count=1,heater_commands=commands,profile_nozzle=cfg['nozzle_temperature'],profile_bed=cfg['textured_plate_temp'],
+        first_layer_connected_groups=groups,large_base_layers=base_layers,native_object_count=1,heater_commands=commands,profile_nozzle=cfg['nozzle_temperature'],profile_bed=cfg['textured_plate_temp'],
         completely_floating_islands=lost,flagged_strokes=issues, floor_bridge_sequence_xy_extents=spans[:30],floor_backing=floor_backing,
         automatic_support_samples=int(np.isin(d[:,5],[i for i,f in enumerate(features) if f.startswith('Support')]).sum()),
         cell_core_positive_samples_after_rail_removal=int(inside.sum()),lid_guide_core_samples=int(lid.sum()),

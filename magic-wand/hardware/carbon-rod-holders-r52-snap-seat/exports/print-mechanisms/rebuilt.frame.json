@@ -1,0 +1,160 @@
+{
+  "parts": {
+    "Key_Carrier": {
+      "assembly_stl": "Key_Carrier-assembly.stl",
+      "source_sha256": "22b0665cb676f7cddcc40849310e109fa9228608d88257f42cc943e9937bffd0",
+      "orientation": "rear_down",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          53.38499927520752
+        ],
+        [
+          0.0,
+          6.123233995736766e-17,
+          1.0,
+          80.86566686630249
+        ],
+        [
+          -0.0,
+          -1.0,
+          6.123233995736766e-17,
+          32.650001525878906
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "height_mm": 51.4963,
+      "model_volume_mm3": 9140.842,
+      "owner": 2,
+      "settings": {
+        "extruder": "1",
+        "enable_support": "1",
+        "wall_loops": "5",
+        "sparse_infill_density": "20%",
+        "layer_height": "0.2",
+        "initial_layer_print_height": "0.2",
+        "brim_type": "no_brim",
+        "bridge_no_support": "1",
+        "max_bridge_length": "10",
+        "timelapse_type": "1",
+        "wall_generator": "arachne",
+        "support_type": "normal(manual)",
+        "support_style": "snug",
+        "support_threshold_angle": "28",
+        "support_on_build_plate_only": "0",
+        "support_top_z_distance": "0.24",
+        "support_bottom_z_distance": "0.24",
+        "support_object_xy_distance": "0.2",
+        "support_interface_top_layers": "2",
+        "support_interface_spacing": "0.38",
+        "outer_wall_acceleration": "1000",
+        "inner_wall_acceleration": "1500",
+        "top_surface_speed": "30",
+        "bridge_angle": "90",
+        "is_infill_first": "0",
+        "min_bead_width": "60%",
+        "wall_distribution_count": "2",
+        "inner_wall_line_width": "0.34",
+        "outer_wall_line_width": "0.34",
+        "internal_solid_infill_line_width": "0.34",
+        "inner_wall_speed": "55",
+        "outer_wall_speed": "35",
+        "support_critical_regions_only": "0",
+        "tree_support_wall_count": "1",
+        "brim_width": "0",
+        "brim_object_gap": "0.05",
+        "support_base_pattern_spacing": "3.0"
+      },
+      "peel_support": {
+        "part_id": 97,
+        "name": "External_peel_support",
+        "straight_pull_props": 8,
+        "fixed_shoulder_tabs": 1,
+        "external_bed_ears": 4,
+        "source": "plate52.py / adhesion_ears and shoulder_tab; original eight routes in R51 external-prop-paths.json"
+      }
+    },
+    "DFRobot_Hole_Bracket": {
+      "assembly_stl": "DFRobot_Hole_Bracket-assembly.stl",
+      "source_sha256": "35bdeef699974194b532eb1f0024b28f4dd99548a1b195bd9ad37f0b1d6dfc2a",
+      "orientation": "left_down",
+      "assembly_to_machine": [
+        [
+          6.123233995736766e-17,
+          -0.0,
+          -1.0,
+          145.4
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          98.14999963814697
+        ],
+        [
+          1.0,
+          0.0,
+          6.123233995736766e-17,
+          10.600000381469727
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "height_mm": 21.2,
+      "model_volume_mm3": 1203.835,
+      "owner": 4,
+      "settings": {
+        "extruder": "1",
+        "enable_support": "1",
+        "wall_loops": "5",
+        "sparse_infill_density": "100%",
+        "layer_height": "0.2",
+        "initial_layer_print_height": "0.2",
+        "brim_type": "no_brim",
+        "bridge_no_support": "1",
+        "max_bridge_length": "10",
+        "timelapse_type": "1",
+        "wall_generator": "arachne",
+        "support_type": "normal(manual)",
+        "support_on_build_plate_only": "0",
+        "support_top_z_distance": "0.24",
+        "support_bottom_z_distance": "0.24",
+        "support_object_xy_distance": "0.35",
+        "support_interface_top_layers": "2",
+        "support_interface_spacing": "0.38",
+        "outer_wall_speed": "35",
+        "inner_wall_speed": "55",
+        "outer_wall_acceleration": "600",
+        "inner_wall_acceleration": "900",
+        "top_surface_speed": "30",
+        "min_bead_width": "60%",
+        "wall_distribution_count": "2",
+        "inner_wall_line_width": "0.34",
+        "outer_wall_line_width": "0.34",
+        "internal_solid_infill_line_width": "0.34",
+        "is_infill_first": "0",
+        "support_style": "snug",
+        "support_threshold_angle": "40",
+        "support_critical_regions_only": "0",
+        "tree_support_wall_count": "1",
+        "brim_width": "10",
+        "brim_object_gap": "0.05",
+        "support_base_pattern_spacing": "3.0"
+      }
+    }
+  },
+  "mode": "clear four key sockets",
+  "layout_sha256": "8bb05b048895dd4095621ab5f86285f0bcb255963b2887e26e7f2f3e1578b8ee",
+  "extra_objects": []
+}

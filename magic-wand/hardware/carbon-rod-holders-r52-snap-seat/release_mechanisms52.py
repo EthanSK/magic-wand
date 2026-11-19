@@ -35,7 +35,8 @@ def release(directory):
     springs = report('spring-paths')
     fixture = report('op1-spring-fixture')
     wire = report('op1-wire-passage')
-    for data in (native, walls, sockets, removal, separation, rod, springs, fixture, wire):
+    bases = report('wide-bases')
+    for data in (native, walls, sockets, removal, separation, rod, springs, fixture, wire, bases):
         assert data['archive_sha256'] == archive_hash
     for data in (walls, sockets, rod, wire):
         assert data['frame_sha256'] == frame_hash
@@ -49,6 +50,11 @@ def release(directory):
         mesh_hash = digest(directory.parent / (part + '-assembly.stl'))
         assert features['source_sha256'] == frame['parts'][part]['source_sha256'] == mesh_hash
         assert mechanics['checked_mesh_sha256'][part] == mesh_hash
+        base = bases['parts'][part]
+        assert base['all_roots_connected']
+        assert len(base['root_component_ids']) >= (13 if part == 'Key_Carrier' else 3)
+        assert base['native_area_inside_removable_plate_outlines_mm2'] >= 2849
+        assert base['same_component_area_mm2'] >= base['native_area_inside_removable_plate_outlines_mm2']
         assert not features['completely_unrooted_model_islands']
         protected = dict(features['protected_support'])
         if part == 'Key_Carrier':
@@ -93,7 +99,7 @@ def release(directory):
     assert not removal['blocked'] and removal['long_props'] == len(removal['pull_order'])
     assert all(pull['model_collision_mm3'] < 0.001 for pull in removal['pull_order'])
     assert all(area['fine']['unreachable_sample_count'] == 0 for area in removal['native_support_openings'].values())
-    return package(archive, directory / 'Magic-Wand-R52-Key-Carrier-and-Paddle-print-only.3mf',
+    return package(archive, directory / 'Magic-Wand-R52-Wide-Base-Key-Carrier-and-Paddle-print-only.3mf',
                    PARTS, paths.values())
 
 

@@ -2,20 +2,19 @@
 
 R52 is a full nine-piece set for the carbon-rod Magic Wand mouse. The key carrier has two lifting tabs to hold the OP1 board. The DFRobot paddle has a wider rounded contact underneath and a closer-fitting hinge.
 
-## Parts on the two plates
+## Current printer files
 
-| Plate | Pieces to keep |
-| --- | --- |
-| Clips and holders | Two DFRobot post clips, XIAO holder and keeper, battery cradle and sliding lid, and the wire clip |
-| Key carrier and paddle | Key carrier with integral OP1 retaining arms, and the hinged DFRobot paddle |
+| Plate | Parts to keep | Connected first-layer area per part |
+| --- | --- | --- |
+| [Key carrier and paddle](exports/print-mechanisms/Magic-Wand-R52-Wide-Base-Key-Carrier-and-Paddle-print-only.3mf) | Key carrier with integral OP1 arms, plus the hinged DFRobot paddle | 4,311 and 3,087 mm² |
+| [Six separate accessories](exports/print-wide-accessories/Magic-Wand-R52-Six-Wide-Base-Accessories-print-only.3mf) | Two DFRobot post clips, XIAO holder, XIAO keeper, sliding battery lid and cable clip | 3,338–3,793 mm² |
+| [Battery cradle](exports/print-recovery/Magic-Wand-R52-Battery-Wide-Base-print-only.3mf) | Battery cradle for the existing sliding lid | 3,103 mm² plus a separate 3,116 mm² base for its removable support |
 
-On the first plate, the two small matching clips sit next to each other at the front left. Each is about 10 mm long and 5 mm wide. The two loose post clips hold the gold DFRobot touch board on its paddle. Keep both. The hinge takes a smooth metal sleeve (3 mm OD × 2.1 mm ID × 12 mm), an M2 × 20 mm socket screw and an M2 nylon-insert locknut. The four outer Choc switches and their keycaps are bought parts.
+Each functional part has its own pair of removable 0.4 mm panels. The earlier R48 bracket used 2,849 mm². Both layers of the new bases have been checked in the selected and reopened printer files. The hardware, four key openings, two lifting arms and hinge remain on the same design. [Carrier and paddle cleanup](mechanisms-print.md) · [Accessory cutting map](exports/print-wide-accessories/wide-base-cuts.png) · [Battery removal](exports/print-recovery/README.md)
 
-The printer recording shows the battery cradle coming off the sheet on both the seven-piece run and its shorter first retry. The seven-piece run stopped at layer 156 of 165. Its two clips, cable clip, XIAO holder and keeper, and battery lid reached their planned heights. Their fit still needs checking on the cooled parts. The [revised battery-only plate](exports/print-recovery/README.md) widens the six outside pads and supports the tray floor across its width. It takes the same sliding lid.
+After cooling, cut the six accessories free at the red marks in the map. Remove any original gold tear-off feet before fitting a part. The two matching DFRobot clips are each about 10 mm long with their original feet and 4 mm long after trimming. Keep both, one for each touch-board post. The hinge takes a smooth metal sleeve (3 mm OD × 2.1 mm ID × 12 mm), an M2 × 20 mm socket screw and an M2 nylon-insert locknut. The outer Choc switches and keycaps are bought parts.
 
-The original [editable seven-piece plate](exports/print-accessories/Clips-and-holders.3mf) and [file sent to the printer](exports/print-accessories/Magic-Wand-R52-Clips-and-Holders-print-only.3mf) preserve that run for comparison. The A1 mini slice uses a 0.4 mm nozzle and PETG. The seven functional pieces have at least 10.36 mm between their print paths. [Toolpath and heater checks](exports/print-accessories/separation-and-machine.json) · [Sliding lid openings](exports/print-accessories/lid-openings.json)
-
-The [editable key-carrier and paddle plate](exports/print-mechanisms/layout.3mf) and its [checked printer file](exports/print-mechanisms/Magic-Wand-R52-Key-Carrier-and-Paddle-print-only.3mf) use the same printer and filament. The [cleanup guide](mechanisms-print.md) identifies the outside supports and the two OP1 arms to keep. [Carrier cleanup map](exports/print-mechanisms/carrier-cleanup.png) · [Paddle cleanup map](exports/print-mechanisms/paddle-cleanup.png)
+The upright battery cradle came off the bed in the original [seven-piece run](exports/print-accessories/Clips-and-holders.3mf). A shorter retry also moved by frame 17 of its recording. Loose strands accumulated after both detachments. Physical adhesion of the latest larger bases is a separate trial. [Accessory first-layer measurements](exports/print-wide-accessories/wide-bases.json) · [Mechanism bases and supports](exports/print-mechanisms/wide-bases.json)
 
 ## Assembly
 

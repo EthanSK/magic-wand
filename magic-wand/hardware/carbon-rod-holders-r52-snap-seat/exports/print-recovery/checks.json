@@ -1,37 +1,117 @@
 {
-  "archive_sha256": "c870fc9e39469ecd2d260809bc08b7d4408c00280b943a122ead647c8864d37d",
-  "seconds": "2034",
-  "grams": "4.57",
+  "archive_sha256": "77555696b53f56822938853d3dab12a2bac77c4d9f14268cb04edda1c0125eef",
+  "seconds": "2661",
+  "grams": "7.28",
   "original_height_mm": 33.0,
   "height_mm": 17.600000381469727,
   "layers": 88,
   "bed_area_mm2": {
-    "all": 795.93,
-    "pull_rail": 246.73,
-    "outside_feet": 415.12,
-    "permanent_rims": 137.19
+    "all": 6218.87,
+    "pull_rail": 3116.35,
+    "outside_feet": 2968.43,
+    "permanent_rims": 137.4
   },
   "first_layer_connected_groups": [
     {
-      "area_mm2": 549.2,
-      "bed_ears": 6,
-      "includes_outer_rim": true,
-      "xy_bounds": [
-        -17.4,
-        -15.0,
-        17.4,
-        15.1
-      ]
-    },
-    {
-      "area_mm2": 246.73,
+      "area_mm2": 3116.35,
       "bed_ears": 0,
       "includes_outer_rim": false,
       "xy_bounds": [
-        -6.1,
-        -22.4,
-        6.1,
+        -46.0,
+        -56.0,
+        46.0,
         13.8
+      ]
+    },
+    {
+      "area_mm2": 3102.52,
+      "bed_ears": 6,
+      "includes_outer_rim": true,
+      "xy_bounds": [
+        -50.0,
+        -18.0,
+        50.0,
+        18.0
+      ]
+    }
+  ],
+  "large_base_layers": [
+    {
+      "layer": 1,
+      "connected_groups": [
+        {
+          "area_mm2": 3116.35,
+          "bed_ears": 0,
+          "includes_outer_rim": false,
+          "xy_bounds": [
+            -46.0,
+            -56.0,
+            46.0,
+            13.8
+          ]
+        },
+        {
+          "area_mm2": 3102.52,
+          "bed_ears": 6,
+          "includes_outer_rim": true,
+          "xy_bounds": [
+            -50.0,
+            -18.0,
+            50.0,
+            18.0
+          ]
+        }
+      ],
+      "six_body_necks_mm": [
+        2.2,
+        2.2,
+        2.2,
+        2.2,
+        2.1,
+        2.1
+      ],
+      "two_fork_necks_mm": [
+        1.8,
+        1.8
+      ]
+    },
+    {
+      "layer": 2,
+      "connected_groups": [
+        {
+          "area_mm2": 3096.89,
+          "bed_ears": 0,
+          "includes_outer_rim": false,
+          "xy_bounds": [
+            -46.0,
+            -56.0,
+            46.0,
+            13.8
+          ]
+        },
+        {
+          "area_mm2": 3079.95,
+          "bed_ears": 6,
+          "includes_outer_rim": true,
+          "xy_bounds": [
+            -50.0,
+            -18.0,
+            50.0,
+            18.0
+          ]
+        }
+      ],
+      "six_body_necks_mm": [
+        2.3,
+        2.3,
+        2.3,
+        2.3,
+        2.3,
+        2.3
+      ],
+      "two_fork_necks_mm": [
+        1.8,
+        1.8
       ]
     }
   ],
@@ -63,122 +143,102 @@
   "flagged_strokes": [
     {
       "layer": 33,
-      "mm": 1.317,
-      "two_anchors": true,
-      "bend_mm": 0.0,
-      "midpoint_machine_xy": [
-        84.853,
-        98.1
-      ],
-      "extent_machine_xy": [
-        84.135,
-        98.1,
-        85.452,
-        98.1
-      ],
-      "gcode_lines": [
-        20769,
-        20769
-      ]
-    },
-    {
-      "layer": 33,
-      "mm": 1.436,
-      "two_anchors": true,
-      "bend_mm": 0.0,
-      "midpoint_machine_xy": [
-        88.085,
-        98.1
-      ],
-      "extent_machine_xy": [
-        87.367,
-        98.1,
-        88.803,
-        98.1
-      ],
-      "gcode_lines": [
-        20769,
-        20769
-      ]
-    },
-    {
-      "layer": 33,
-      "mm": 1.436,
-      "two_anchors": true,
-      "bend_mm": 0.0,
-      "midpoint_machine_xy": [
-        92.035,
-        98.1
-      ],
-      "extent_machine_xy": [
-        91.317,
-        98.1,
-        92.753,
-        98.1
-      ],
-      "gcode_lines": [
-        20769,
-        20769
-      ]
-    },
-    {
-      "layer": 33,
-      "mm": 1.317,
+      "mm": 1.077,
       "two_anchors": true,
       "bend_mm": 0.0,
       "midpoint_machine_xy": [
         95.267,
-        98.1
+        82.05
       ],
       "extent_machine_xy": [
-        94.548,
-        98.1,
+        94.788,
+        82.05,
         95.865,
-        98.1
+        82.05
       ],
       "gcode_lines": [
-        20769,
-        20769
+        22541,
+        22541
       ]
     },
     {
       "layer": 33,
-      "mm": 1.197,
+      "mm": 1.077,
       "two_anchors": true,
       "bend_mm": 0.0,
       "midpoint_machine_xy": [
-        84.853,
-        91.986
+        91.915,
+        82.05
       ],
       "extent_machine_xy": [
-        84.255,
-        91.986,
-        85.452,
-        91.986
+        91.436,
+        82.05,
+        92.514,
+        82.05
       ],
       "gcode_lines": [
-        20801,
-        20801
+        22541,
+        22541
       ]
     },
     {
       "layer": 33,
-      "mm": 1.197,
+      "mm": 1.077,
       "two_anchors": true,
       "bend_mm": 0.0,
       "midpoint_machine_xy": [
         87.845,
-        91.986
+        82.05
       ],
       "extent_machine_xy": [
-        87.247,
-        91.986,
+        87.367,
+        82.05,
         88.444,
-        91.986
+        82.05
       ],
       "gcode_lines": [
-        20801,
-        20801
+        22541,
+        22541
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.077,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        84.614,
+        82.05
+      ],
+      "extent_machine_xy": [
+        84.135,
+        82.05,
+        85.212,
+        82.05
+      ],
+      "gcode_lines": [
+        22541,
+        22541
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        95.147,
+        88.164
+      ],
+      "extent_machine_xy": [
+        94.548,
+        88.164,
+        95.745,
+        88.164
+      ],
+      "gcode_lines": [
+        22573,
+        22573
       ]
     },
     {
@@ -188,57 +248,17 @@
       "bend_mm": 0.0,
       "midpoint_machine_xy": [
         92.155,
-        91.986
+        88.164
       ],
       "extent_machine_xy": [
         91.556,
-        91.986,
+        88.164,
         92.753,
-        91.986
+        88.164
       ],
       "gcode_lines": [
-        20801,
-        20801
-      ]
-    },
-    {
-      "layer": 33,
-      "mm": 1.556,
-      "two_anchors": true,
-      "bend_mm": 0.0,
-      "midpoint_machine_xy": [
-        95.386,
-        91.986
-      ],
-      "extent_machine_xy": [
-        94.548,
-        91.986,
-        96.105,
-        91.986
-      ],
-      "gcode_lines": [
-        20801,
-        20801
-      ]
-    },
-    {
-      "layer": 33,
-      "mm": 1.197,
-      "two_anchors": true,
-      "bend_mm": 0.0,
-      "midpoint_machine_xy": [
-        84.853,
-        85.871
-      ],
-      "extent_machine_xy": [
-        84.255,
-        85.871,
-        85.452,
-        85.871
-      ],
-      "gcode_lines": [
-        20833,
-        20833
+        22573,
+        22573
       ]
     },
     {
@@ -248,17 +268,57 @@
       "bend_mm": 0.0,
       "midpoint_machine_xy": [
         87.845,
-        85.871
+        88.164
       ],
       "extent_machine_xy": [
         87.247,
-        85.871,
+        88.164,
         88.444,
-        85.871
+        88.164
       ],
       "gcode_lines": [
-        20833,
-        20833
+        22573,
+        22573
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.556,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        84.614,
+        88.164
+      ],
+      "extent_machine_xy": [
+        83.895,
+        88.164,
+        85.452,
+        88.164
+      ],
+      "gcode_lines": [
+        22573,
+        22573
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.556,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        95.267,
+        94.279
+      ],
+      "extent_machine_xy": [
+        94.548,
+        94.279,
+        96.105,
+        94.279
+      ],
+      "gcode_lines": [
+        22605,
+        22605
       ]
     },
     {
@@ -268,57 +328,17 @@
       "bend_mm": 0.0,
       "midpoint_machine_xy": [
         92.155,
-        85.871
+        94.279
       ],
       "extent_machine_xy": [
         91.556,
-        85.871,
+        94.279,
         92.753,
-        85.871
+        94.279
       ],
       "gcode_lines": [
-        20833,
-        20833
-      ]
-    },
-    {
-      "layer": 33,
-      "mm": 1.556,
-      "two_anchors": true,
-      "bend_mm": 0.0,
-      "midpoint_machine_xy": [
-        95.386,
-        85.871
-      ],
-      "extent_machine_xy": [
-        94.548,
-        85.871,
-        96.105,
-        85.871
-      ],
-      "gcode_lines": [
-        20833,
-        20833
-      ]
-    },
-    {
-      "layer": 33,
-      "mm": 1.197,
-      "two_anchors": true,
-      "bend_mm": 0.0,
-      "midpoint_machine_xy": [
-        84.853,
-        79.757
-      ],
-      "extent_machine_xy": [
-        84.255,
-        79.757,
-        85.452,
-        79.757
-      ],
-      "gcode_lines": [
-        20866,
-        20866
+        22605,
+        22605
       ]
     },
     {
@@ -328,37 +348,17 @@
       "bend_mm": 0.0,
       "midpoint_machine_xy": [
         87.845,
-        79.757
+        94.279
       ],
       "extent_machine_xy": [
         87.247,
-        79.757,
+        94.279,
         88.444,
-        79.757
+        94.279
       ],
       "gcode_lines": [
-        20866,
-        20866
-      ]
-    },
-    {
-      "layer": 33,
-      "mm": 1.197,
-      "two_anchors": true,
-      "bend_mm": 0.0,
-      "midpoint_machine_xy": [
-        92.155,
-        79.757
-      ],
-      "extent_machine_xy": [
-        91.556,
-        79.757,
-        92.753,
-        79.757
-      ],
-      "gcode_lines": [
-        20866,
-        20866
+        22605,
+        22605
       ]
     },
     {
@@ -367,58 +367,158 @@
       "two_anchors": true,
       "bend_mm": 0.0,
       "midpoint_machine_xy": [
-        95.386,
-        79.757
+        84.614,
+        94.279
+      ],
+      "extent_machine_xy": [
+        83.895,
+        94.279,
+        85.452,
+        94.279
+      ],
+      "gcode_lines": [
+        22605,
+        22605
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        84.853,
+        100.011
+      ],
+      "extent_machine_xy": [
+        84.255,
+        100.011,
+        85.452,
+        100.011
+      ],
+      "gcode_lines": [
+        22635,
+        22635
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.556,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        95.267,
+        100.393
       ],
       "extent_machine_xy": [
         94.548,
-        79.757,
+        100.393,
         96.105,
-        79.757
+        100.393
       ],
       "gcode_lines": [
-        20866,
-        20866
+        22637,
+        22637
+      ]
+    },
+    {
+      "layer": 33,
+      "mm": 1.197,
+      "two_anchors": true,
+      "bend_mm": 0.0,
+      "midpoint_machine_xy": [
+        87.845,
+        100.393
+      ],
+      "extent_machine_xy": [
+        87.247,
+        100.393,
+        88.444,
+        100.393
+      ],
+      "gcode_lines": [
+        22637,
+        22637
+      ]
+    },
+    {
+      "layer": 38,
+      "mm": 1.021,
+      "two_anchors": true,
+      "bend_mm": 0.364,
+      "midpoint_machine_xy": [
+        90.006,
+        87.016
+      ],
+      "extent_machine_xy": [
+        89.643,
+        86.66,
+        90.357,
+        87.024
+      ],
+      "gcode_lines": [
+        25690,
+        25692
       ]
     },
     {
       "layer": 39,
-      "mm": 4.187,
+      "mm": 2.326,
       "two_anchors": true,
-      "bend_mm": 1.929,
+      "bend_mm": 0.287,
       "midpoint_machine_xy": [
-        91.103,
-        84.157
+        89.416,
+        85.022
       ],
       "extent_machine_xy": [
-        89.535,
-        84.079,
-        91.164,
-        85.686
+        88.529,
+        84.442,
+        90.245,
+        85.851
       ],
       "gcode_lines": [
-        24960,
-        24964
+        26730,
+        26731
       ]
     },
     {
       "layer": 39,
-      "mm": 3.922,
+      "mm": 4.241,
       "two_anchors": true,
-      "bend_mm": 1.739,
+      "bend_mm": 1.907,
       "midpoint_machine_xy": [
-        90.157,
-        83.551
+        89.404,
+        84.027
       ],
       "extent_machine_xy": [
-        88.818,
-        83.382,
-        90.344,
-        84.986
+        89.212,
+        83.811,
+        90.914,
+        85.432
       ],
       "gcode_lines": [
-        24966,
-        24969
+        26733,
+        26737
+      ]
+    },
+    {
+      "layer": 39,
+      "mm": 1.029,
+      "two_anchors": false,
+      "bend_mm": 0.016,
+      "midpoint_machine_xy": [
+        89.71,
+        80.18
+      ],
+      "extent_machine_xy": [
+        89.338,
+        79.726,
+        89.967,
+        80.539
+      ],
+      "gcode_lines": [
+        26834,
+        26851
       ]
     }
   ],
@@ -431,7 +531,7 @@
   "floor_backing": {
     "long_straight_moves": 71,
     "maximum_move_mm": 13.696,
-    "maximum_unbacked_run_mm": 2.395,
+    "maximum_unbacked_run_mm": 2.384,
     "maximum_long_move_angle_from_cross_tray_degrees": 0.0
   },
   "automatic_support_samples": 0,
@@ -498,7 +598,7 @@
       "cell_at_resting_lid_overlap_mm3": 0.0,
       "cell_throughout_lid_slide_overlap_mm3": 0.0,
       "released_lid_through_grooves_overlap_mm3": 0.0,
-      "free_detent_resists_opening_overlap_mm3": 0.20978598897111356,
+      "free_detent_resists_opening_overlap_mm3": 0.20978598897111353,
       "overtravel_stop_overlap_at_0.4_mm3": 2.653706120019489,
       "lead_to_body_mm3": 0.0,
       "lead_throughout_lid_slide_overlap_mm3": 0.0,

@@ -1,22 +1,22 @@
 {
-  "archive_sha256": "d00f133354463afa3363f4c87948ae9920bd0e70ebcd75a7c8714c1ac8a90996",
-  "frame_sha256": "be090b62c2b82cf5ec5373c5db35a4408474b90b4e76024358d696e2357e7cb1",
+  "archive_sha256": "b529b63d0d87302255f1e6ec74a1ffce26f7abdd61804801c3a5fa1fff12913d",
+  "frame_sha256": "22a9e8c9cc2eaadec88159791070eed33110e4247f7335ca83493803d67d907c",
   "axis_on_bed_mm": [
     53.38499927520752,
     80.86566686630249
   ],
   "rod_radius_mm": 4,
-  "nearby_samples": 393144,
+  "nearby_samples": 392851,
   "sampled_layer_count": 257,
   "min_radius_to_plastic_mm": {
     "Inner wall": 4.1002,
     "Outer wall": 3.8124,
     "Bottom surface": 6.7261,
+    "Top surface": 4.6157,
+    "Gap infill": 5.3692,
     "Internal solid infill": 5.3038,
-    "Gap infill": 5.4016,
-    "Top surface": 4.4432,
     "Overhang wall": 4.0343,
-    "Sparse infill": 5.3686,
+    "Sparse infill": 5.3765,
     "Floating vertical shell": 5.6093
   },
   "rigid_8_mm_cylinder_passes_unflexed": false,

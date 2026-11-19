@@ -1,0 +1,106 @@
+{
+  "archive_sha256": "ba737b165d4f612f4f2994a6beb09b221b2b7cdeaa2486958ee7c3939971a1a8",
+  "grid_mm": 0.1,
+  "parts": {
+    "Key_Carrier": {
+      "native_positive_bed_area_mm2": 4311.1,
+      "native_area_inside_removable_plate_outlines_mm2": 3446.66,
+      "same_component_area_mm2": 4311.1,
+      "root_component_ids": {
+        "Outside prop 1": 2,
+        "Outside prop 2": 2,
+        "Outside prop 3": 2,
+        "Outside prop 4": 2,
+        "Outside prop 5": 2,
+        "Outside prop 6": 2,
+        "Outside prop 7": 2,
+        "Outside prop 8": 2,
+        "Spring frame left": 2,
+        "Spring frame right": 2,
+        "Front base": 2,
+        "Rear base": 2,
+        "Body": 2
+      },
+      "root_machine_xy_mm": {
+        "Outside prop 1": [
+          20.672932476370924,
+          83.95581289814515
+        ],
+        "Outside prop 2": [
+          28.755849108714187,
+          73.68508420739842
+        ],
+        "Outside prop 3": [
+          35.6,
+          73.8
+        ],
+        "Outside prop 4": [
+          42.455812898145155,
+          73.37293247637093
+        ],
+        "Outside prop 5": [
+          48.71127256321562,
+          74.103834264672
+        ],
+        "Outside prop 6": [
+          68.209517756016,
+          73.43732514237584
+        ],
+        "Outside prop 7": [
+          74.89238815542512,
+          73.30761184457488
+        ],
+        "Outside prop 8": [
+          80.7923881554251,
+          72.90761184457487
+        ],
+        "Spring frame left": [
+          53,
+          104.5
+        ],
+        "Spring frame right": [
+          65,
+          104.5
+        ],
+        "Front base": [
+          50,
+          55
+        ],
+        "Rear base": [
+          50,
+          125
+        ],
+        "Body": [
+          73.3140640258789,
+          89.29801940917969
+        ]
+      },
+      "all_roots_connected": true
+    },
+    "DFRobot_Hole_Bracket": {
+      "native_positive_bed_area_mm2": 3087.2,
+      "native_area_inside_removable_plate_outlines_mm2": 2986.01,
+      "same_component_area_mm2": 3087.2,
+      "root_component_ids": {
+        "Left base": 2,
+        "Right base": 2,
+        "Body": 2
+      },
+      "root_machine_xy_mm": {
+        "Left base": [
+          103,
+          100
+        ],
+        "Right base": [
+          150,
+          100
+        ],
+        "Body": [
+          127.67262268066406,
+          106.15399932861328
+        ]
+      },
+      "all_roots_connected": true
+    }
+  }
+}
