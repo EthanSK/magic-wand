@@ -1,0 +1,713 @@
+{
+  "schema": "r53-assembly-transforms/1",
+  "units": "mm",
+  "revision": "R53",
+  "physical_fit_verified": false,
+  "frame": "Assembly frame of R48 to R52: rod along Y through X = Z = 0, +Y toward the two-key row, +Z up.",
+  "matrix_format": "3 x 4 row-major. World pose of an actor = pose matrix x base matrix.",
+  "hinge": {
+    "axis_point": [
+      0.0,
+      29.3,
+      18.3
+    ],
+    "axis_direction": [
+      1.0,
+      0.0,
+      0.0
+    ],
+    "positive_angle": "front edge down",
+    "angles_deg": {
+      "rest": 0.0,
+      "typical_operating_point": 0.7785,
+      "switch_case_stop": 1.4319,
+      "lid_lift_stop": -0.75
+    },
+    "pose_matrices": {
+      "rest": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        -0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "typical_operating_point": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.999907693,
+        -0.01358697,
+        0.251346153,
+        0.0,
+        0.01358697,
+        0.999907693,
+        -0.396409005
+      ],
+      "switch_case_stop": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.999687732,
+        -0.024988768,
+        0.466443911,
+        0.0,
+        0.024988768,
+        0.999687732,
+        -0.726456403
+      ],
+      "lid_lift_stop": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.999914328,
+        0.013089596,
+        -0.237029397,
+        0.0,
+        -0.013089596,
+        0.999914328,
+        0.385092956
+      ]
+    },
+    "rule": "Actors with rides = paddle use hinge(angle) x base. All other actors stay on their base matrix."
+  },
+  "lid_slide_direction_into_place": [
+    0.350207381,
+    0.936672189,
+    0.0
+  ],
+  "actors": {
+    "carrier": {
+      "file": "Key_Carrier-assembly.stl",
+      "label": "Key holder with open hinge yoke and lid rails",
+      "printed": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "paddle": {
+      "file": "Touch_Paddle-assembly.stl",
+      "label": "Touch paddle with switch sleeve and axle bar",
+      "printed": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "rides": "paddle"
+    },
+    "post_bar": {
+      "file": "DFR_Post_Bar-assembly.stl",
+      "label": "Post bar fitted from below",
+      "printed": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "rides": "paddle"
+    },
+    "hinge_cap": {
+      "file": "Hinge_Cap-assembly.stl",
+      "label": "Hinge cap pushed in from the rear",
+      "printed": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "lid": {
+      "file": "OP1_Lid-assembly.stl",
+      "label": "OP1 lid pushed in from the front",
+      "printed": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "lid_close": {
+      "file": "OP1_Lid_Close-assembly.stl",
+      "label": "Optional closer lid (two ribs)",
+      "printed": true,
+      "optional": true,
+      "replaces": "lid",
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "clip_left": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/dfr-clip-left.stl",
+      "label": "Left post clip (existing print)",
+      "reused": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.55,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "rides": "paddle"
+    },
+    "clip_right": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/dfr-clip-right.stl",
+      "label": "Right post clip (existing print)",
+      "reused": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.55,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "rides": "paddle"
+    },
+    "rod": {
+      "file": "../../carbon-rod-holders/exports/carbon-stock-tube.stl",
+      "label": "Carbon tube, 500 mm",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        -30.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ]
+    },
+    "board": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/op1-board.stl",
+      "label": "OP1 board at 20.5 degrees",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.3,
+        0.0,
+        0.0,
+        1.0,
+        0.2
+      ],
+      "group": "op1_board"
+    },
+    "sockets": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/op1-sockets.stl",
+      "label": "Three socket barrels",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.3,
+        0.0,
+        0.0,
+        1.0,
+        0.2
+      ],
+      "group": "op1_board"
+    },
+    "housing": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/op1-housing.stl",
+      "label": "Connector under the board",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.3,
+        0.0,
+        0.0,
+        1.0,
+        0.2
+      ],
+      "group": "op1_board"
+    },
+    "plug": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/op1-plug.stl",
+      "label": "Lead plug, fitted first",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.3,
+        0.0,
+        0.0,
+        1.0,
+        0.2
+      ],
+      "group": "op1_board"
+    },
+    "op1_wire": {
+      "file": "../../carbon-rod-holders-r51-guided-hinge/exports/op1_wire.stl",
+      "morphFile": "../../carbon-rod-holders-r51-guided-hinge/exports/op1-wire-hanging.stl",
+      "label": "OP1 lead",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "group": "op1_board"
+    },
+    "switch": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/op1-switch.stl",
+      "label": "Switch body reference",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.3,
+        0.0,
+        0.0,
+        1.0,
+        0.2
+      ],
+      "group": "switch"
+    },
+    "terminals": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/op1-terminals.stl",
+      "label": "Switch terminals",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.3,
+        0.0,
+        0.0,
+        1.0,
+        0.2
+      ],
+      "group": "switch"
+    },
+    "plunger": {
+      "file": "../../carbon-rod-holders-r51-guided-hinge/exports/op1-button-reference.stl",
+      "label": "Click button reference",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.3,
+        0.0,
+        0.0,
+        1.0,
+        0.2
+      ],
+      "group": "switch"
+    },
+    "sensor": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/dfr-sensor.stl",
+      "label": "DFRobot DFR0030 V2 board",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.55,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "rides": "paddle"
+    },
+    "electrode": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/dfr-electrode.stl",
+      "label": "Gold touch pad",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.55,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "rides": "paddle"
+    },
+    "connector": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/dfr-connector.stl",
+      "label": "Gravity socket and plug (estimate)",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.55,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "rides": "paddle"
+    },
+    "gravity_pins": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/dfr-gravity-pins.stl",
+      "label": "Gravity pin tails",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.55,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "rides": "paddle"
+    },
+    "sensor_lead": {
+      "file": "../../carbon-rod-holders-r48-edge-click/exports/guide/dfr-sensor-lead.stl",
+      "label": "Gravity lead slack",
+      "bought": true,
+      "base": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        3.55,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "rides": "paddle",
+      "frame": false
+    }
+  },
+  "steps": [
+    {
+      "id": "board",
+      "title": "Lower the OP1 board",
+      "caption": "Plug the lead into the board, feed the lead through the holder and lower the board straight into its pocket.",
+      "moves": [
+        {
+          "group": "op1_board",
+          "start_offset": [
+            0,
+            0,
+            16
+          ],
+          "path": "straight"
+        }
+      ]
+    },
+    {
+      "id": "switch",
+      "title": "Plug in the switch",
+      "caption": "Push the switch straight down into the three sockets. Either way round fits.",
+      "moves": [
+        {
+          "group": "switch",
+          "start_offset": [
+            0,
+            0,
+            10
+          ],
+          "path": "straight"
+        }
+      ]
+    },
+    {
+      "id": "posts",
+      "title": "Fit the post bar",
+      "caption": "Away from the holder, push the post bar up through the two holes in the paddle.",
+      "moves": [
+        {
+          "actor": "post_bar",
+          "start_offset": [
+            0,
+            0,
+            -8
+          ],
+          "path": "straight",
+          "relative_to": "paddle"
+        }
+      ]
+    },
+    {
+      "id": "touch",
+      "title": "Fit the touch board",
+      "caption": "Lower the touch board over the two posts and slide a clip onto each post neck.",
+      "moves": [
+        {
+          "actors": [
+            "sensor",
+            "electrode",
+            "connector",
+            "gravity_pins"
+          ],
+          "start_offset": [
+            0,
+            0,
+            12
+          ],
+          "path": "straight",
+          "relative_to": "paddle"
+        },
+        {
+          "actors": [
+            "clip_left",
+            "clip_right"
+          ],
+          "start_offset": [
+            0,
+            -5,
+            0
+          ],
+          "path": "straight",
+          "relative_to": "paddle",
+          "after_previous": true
+        }
+      ]
+    },
+    {
+      "id": "paddle",
+      "title": "Lower the paddle",
+      "caption": "Lower the paddle straight down. Its sleeve goes over the switch and the axle bar drops into the two V seats.",
+      "moves": [
+        {
+          "rides": "paddle",
+          "start_offset": [
+            0,
+            0,
+            14
+          ],
+          "path": "straight"
+        }
+      ]
+    },
+    {
+      "id": "cap",
+      "title": "Push in the hinge cap",
+      "caption": "Push the cap forward along the top of the yoke until it clicks over the ridge and sits flush with the rear face.",
+      "moves": [
+        {
+          "actor": "hinge_cap",
+          "start_offset": [
+            0,
+            9,
+            0
+          ],
+          "path": "straight"
+        }
+      ]
+    },
+    {
+      "id": "lid",
+      "title": "Slide in the lid",
+      "caption": "With the paddle resting on the switch, slide the lid in from the front along the board until its latch clicks.",
+      "moves": [
+        {
+          "actor": "lid",
+          "start_offset": [
+            -11.907051,
+            -31.846854,
+            -0.0
+          ],
+          "path": "straight"
+        }
+      ]
+    },
+    {
+      "id": "press",
+      "title": "Press the pad",
+      "caption": "Press the centre and both lower corners. Each press should click once and spring back.",
+      "moves": [
+        {
+          "rides": "paddle",
+          "hinge_angles_deg": [
+            0.0,
+            1.4319,
+            0.0
+          ]
+        }
+      ]
+    }
+  ],
+  "removal": "Reverse order: lid, cap, paddle, switch, board.",
+  "print_set": {
+    "new": [
+      "Key_Carrier",
+      "Touch_Paddle",
+      "Hinge_Cap",
+      "OP1_Lid",
+      "DFR_Post_Bar"
+    ],
+    "optional": [
+      "OP1_Lid_Close"
+    ],
+    "unchanged_clip_designs_included_on_plate": [
+      "DFR0030_Post_Clip",
+      "DFR0030_Post_Clip_2"
+    ],
+    "no_longer_used": [
+      "M2 x 20 screw",
+      "M2 locknut",
+      "3 mm metal sleeve",
+      "two M1.6 kit screws"
+    ],
+    "print_poses": "print-spec.json"
+  },
+  "checked_mesh_sha256": {
+    "Key_Carrier": "27a4f64bcd82b8b7d2fbabdc764478408591f04ed4c0dea8728ca1c1be3835e6",
+    "Touch_Paddle": "31d486076378bfdbd410e8698a6b38ff21470e177d8b70b6b0869260e44ab003",
+    "Hinge_Cap": "2db8ba8bdbde1bb7c6f972221ed50dfc1b401f2239df85aa898aa3179f31fcee",
+    "OP1_Lid": "88a701edde5a4ea977bcff79664de1dea29156c09f1106eac5f00ab29e22cb00",
+    "DFR_Post_Bar": "ad7a87c8baacc16c62de29ebf1d864f3abde878c98966bb603fc0874789875d9"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "archive_sha256": "b12cc3524fe36d877469c32de5212b68202d164d63c471f7a2438f58faa83ccf",
+  "decision": "pass for monitored fit trial",
+  "reviewer": "Claude Opus 5.5",
+  "notes": "# PASS for a monitored fit trial: `b12cc3524fe36d877469c32de5212b68202d164d63c471f7a2438f58faa83ccf`\n\nNothing differs materially from the `d34da11b` signoff. This is still not proof of physical fit.\n\n- **File identity:** `sealed-plate/OP1-hinge.gcode.3mf` and its `native/sliced.3mf` both hash to `b12cc352\u2026`. Its `keys.json`, `fit.json` and `layers.json` all record that same hash.\n- **Layout frame:** compared with gusset, every part's placement transform is identical. Only `Key_Carrier`'s source STL hash (`7c95a608\u2026` \u2192 `27a4f64b\u2026`) and therefore the layout hash changed, which fits the sealed carrier export.\n- **Key routes:** all 36 names (336 poses) have zero obstructions, including `key_2_switch`.\n- **Hinge, lid, board and paddle routes:** `fit.json` shows the 9 carrier routes (111 poses) and 3 paddle routes (10 poses) with zero obstructions.\n- **Bead data:** zero native support moves. All seven objects have zero completely unsupported starts. The 67 carrier review runs match gusset exactly in layer, length and anchoring. The other six objects have none.\n- **Slicer result and log:** return code 0 and an empty `warning_message`. The log has no floating, tower, collision or error lines, only the usual command-line, preset-path, nozzle-list and organic-support default messages.\n- **Minor deltas, which fit the 0.00018 mm vertex sealing:** 146,474 triangles instead of 146,472, and predicted print time is 5 s shorter (10,676 s instead of 10,681 s).\n\nThe same things to watch still apply: the inherited 6.346 mm and 3.67 mm single-ended runs at key 0's flange (layers 90\u201396) and key 0's switch latching. Click feel, the latches, the board locators and the tower bond are still physically untested.",
+  "physical_checks": [
+    "Watch key 0 flange at layers 90\u201396",
+    "Check all four key latches, board eyelet fit, paddle guidance and click return"
+  ]
+}

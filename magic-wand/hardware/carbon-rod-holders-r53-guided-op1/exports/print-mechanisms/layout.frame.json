@@ -1,0 +1,334 @@
+{
+  "parts": {
+    "Key_Carrier": {
+      "source": "Key_Carrier-assembly.stl",
+      "source_sha256": "27a4f64bcd82b8b7d2fbabdc764478408591f04ed4c0dea8728ca1c1be3835e6",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          50.884928703308105
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          147.44066667556763
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          32.650001525878906
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          96,
+          44
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.1
+      }
+    },
+    "Touch_Paddle": {
+      "source": "Touch_Paddle-assembly.stl",
+      "source_sha256": "31d486076378bfdbd410e8698a6b38ff21470e177d8b70b6b0869260e44ab003",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          128.27507123947143
+        ],
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          155.5
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          19.300092697143555
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          75,
+          44
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.1
+      }
+    },
+    "Hinge_Cap": {
+      "source": "Hinge_Cap-assembly.stl",
+      "source_sha256": "2db8ba8bdbde1bb7c6f972221ed50dfc1b401f2239df85aa898aa3179f31fcee",
+      "assembly_to_machine": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          97.5
+        ],
+        [
+          0.0,
+          -1.0,
+          -0.0,
+          64.95000076293945
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          48,
+          63.5
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.1
+      }
+    },
+    "DFR_Post_Bar": {
+      "source": "DFR_Post_Bar-assembly.stl",
+      "source_sha256": "ad7a87c8baacc16c62de29ebf1d864f3abde878c98966bb603fc0874789875d9",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          150.5
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          19.669490337371826
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -15.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          51.5,
+          63.5
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.1
+      }
+    },
+    "OP1_Lid": {
+      "source": "OP1_Lid-assembly.stl",
+      "source_sha256": "88a701edde5a4ea977bcff79664de1dea29156c09f1106eac5f00ab29e22cb00",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          30.58248996734619
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          101.44474849700927
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.149999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          56.5,
+          56.5
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.1
+      }
+    },
+    "DFR_Clip_Left": {
+      "source": "../../carbon-rod-holders-r48-edge-click/exports/guide/dfr-clip-left.stl",
+      "source_sha256": "b56764157c241fe11ed068b5f3f62c1065912722afc38edd235656c5ae4d366d",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          98.25
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          89.11949024200439
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          55,
+          56.5
+        ],
+        "ties": [
+          [
+            0,
+            -1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          1
+        ]
+      }
+    },
+    "DFR_Clip_Right": {
+      "source": "../../carbon-rod-holders-r48-edge-click/exports/guide/dfr-clip-right.stl",
+      "source_sha256": "ac3d0a1dc2e4dcfc2645fa82dfd58aee9842fe4431b4dced537231563413a00d",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          142.25
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          89.11949024200439
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          55.5,
+          56.5
+        ],
+        "ties": [
+          [
+            0,
+            -1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          1
+        ]
+      }
+    }
+  },
+  "layout_sha256": "776d0d3de4ec594184b80c5c8bac07fa19efa077a32ed1bbdc57944c76c85146"
+}

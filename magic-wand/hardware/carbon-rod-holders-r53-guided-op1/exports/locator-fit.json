@@ -1,0 +1,141 @@
+{
+  "carrier_sha256": "27a4f64bcd82b8b7d2fbabdc764478408591f04ed4c0dea8728ca1c1be3835e6",
+  "eyelet_diameter_mm": 3.6,
+  "fit_cases": [
+    {
+      "pitch_mm": 17.45,
+      "radial_offset_mm": 0.0,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 17.45,
+      "radial_offset_mm": 0.12,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 17.45,
+      "radial_offset_mm": 0.22,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 17.45,
+      "radial_offset_mm": 0.3,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 17.45,
+      "radial_offset_mm": 0.4,
+      "worst_interference_mm3": 0.012497,
+      "where": [
+        0,
+        0.4,
+        0.0,
+        "board"
+      ]
+    },
+    {
+      "pitch_mm": 17.9,
+      "radial_offset_mm": 0.0,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 17.9,
+      "radial_offset_mm": 0.12,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 17.9,
+      "radial_offset_mm": 0.22,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 17.9,
+      "radial_offset_mm": 0.3,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 17.9,
+      "radial_offset_mm": 0.4,
+      "worst_interference_mm3": 0.012497,
+      "where": [
+        0,
+        0.4,
+        0.0,
+        "board"
+      ]
+    },
+    {
+      "pitch_mm": 18.35,
+      "radial_offset_mm": 0.0,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 18.35,
+      "radial_offset_mm": 0.12,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 18.35,
+      "radial_offset_mm": 0.22,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 18.35,
+      "radial_offset_mm": 0.3,
+      "worst_interference_mm3": 0.0,
+      "where": null
+    },
+    {
+      "pitch_mm": 18.35,
+      "radial_offset_mm": 0.4,
+      "worst_interference_mm3": 0.012497,
+      "where": [
+        0,
+        0.4,
+        0.0,
+        "board"
+      ]
+    }
+  ],
+  "fingers": [
+    {
+      "station_mm": -6.25,
+      "engaged_plastic_mm3": 1.5802,
+      "downward_deflection": [
+        {
+          "travel_mm": 0.35,
+          "interference_mm3": 2e-06
+        },
+        {
+          "travel_mm": 0.7,
+          "interference_mm3": 2e-06
+        }
+      ]
+    },
+    {
+      "station_mm": 11.65,
+      "engaged_plastic_mm3": 1.2524,
+      "downward_deflection": [
+        {
+          "travel_mm": 0.35,
+          "interference_mm3": 2e-06
+        },
+        {
+          "travel_mm": 0.7,
+          "interference_mm3": 2e-06
+        }
+      ]
+    }
+  ]
+}

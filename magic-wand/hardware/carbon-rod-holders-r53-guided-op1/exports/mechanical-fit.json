@@ -1,0 +1,101 @@
+{
+  "physical_acceptance": false,
+  "checked_mesh_sha256": {
+    "Key_Carrier": "27a4f64bcd82b8b7d2fbabdc764478408591f04ed4c0dea8728ca1c1be3835e6",
+    "Touch_Paddle": "31d486076378bfdbd410e8698a6b38ff21470e177d8b70b6b0869260e44ab003",
+    "Hinge_Cap": "2db8ba8bdbde1bb7c6f972221ed50dfc1b401f2239df85aa898aa3179f31fcee",
+    "OP1_Lid": "88a701edde5a4ea977bcff79664de1dea29156c09f1106eac5f00ab29e22cb00",
+    "DFR_Post_Bar": "ad7a87c8baacc16c62de29ebf1d864f3abde878c98966bb603fc0874789875d9"
+  },
+  "key_zone_difference_from_r52_mm3": {
+    "added": 11.77605386004213,
+    "removed": 193.59866412674268
+  },
+  "unplanned_outer_shape_change_mm3": {
+    "added": -0.027086877672318776,
+    "removed": 0.04246919619790087
+  },
+  "key_flange_bearing_fraction_of_r52": {
+    "0": 0.8687216507751182,
+    "2": 0.9355273912949026,
+    "3": 1.0,
+    "4": 0.9989531183393525
+  },
+  "key_spaces_checked": {
+    "names": 36,
+    "poses": 336
+  },
+  "key_spaces_entered_by_new_material_mm3": {},
+  "static_interference_mm3": {
+    "board": 0.0,
+    "sockets": 0.0,
+    "housing": 0.0,
+    "plug": 0.0,
+    "switch": 0.0,
+    "terminals": 0.0,
+    "plunger": 0.0,
+    "op1_wire": 0.0,
+    "seated_key_0": 0.0008762551300972594,
+    "seated_key_2": 4.802273396183373e-06,
+    "seated_key_3": 0.0003191659907801589,
+    "seated_key_4": 1.6545684923674904e-06,
+    "rod": 1.3628407872534792e-05,
+    "lid_to_carrier": -1.7763568394002505e-15,
+    "lid_to_op1": 0.0,
+    "cap_to_carrier": 0.0,
+    "lid_and_cap_to_keys": 0.0,
+    "cap_to_paddle": 0.0,
+    "paddle_to_carrier": 0.0,
+    "paddle_to_lid": 0.0,
+    "paddle_to_op1_board_and_wire": 0.0,
+    "paddle_to_switch_case": 0.0,
+    "paddle_to_keys": 0.0,
+    "touch_board_to_paddle": 0.0,
+    "clips_to_paddle_and_board": -2.9422536455825377e-16,
+    "touch_parts_to_carrier_lid_cap": 0.0
+  },
+  "clip_on_post_neck_mm3": 0.0,
+  "route_interference_mm3": {
+    "op1_board_straight_down": 0.0,
+    "op1_board_at_pocket_float_extremes": 6.115739841865769e-10,
+    "switch_straight_down": 0.0,
+    "paddle_straight_down": 0.0,
+    "cap_from_rear": 0.0,
+    "cap_over_latch_ridge_peak_mm3": 0.8013656677631904,
+    "lid_from_front": 2.253058850598677e-14,
+    "lid_latch_bump_peak_mm3": 0.04759999821949005,
+    "lid_latch_bump_seated_mm3": 0.0,
+    "post_bar_from_below": 6.661338147750939e-16,
+    "touch_board_onto_posts": 0.0
+  },
+  "click": {
+    "crown_meets_free_plunger_deg": 5.990278259559999e-05,
+    "lever_mm": 33.11949,
+    "travel_mm_per_degree": 0.5780224157177258,
+    "paddle_meets_switch_case_deg": 1.4319201619873638,
+    "plunger_travel_at_case_mm": 0.8276425222375501,
+    "first_contact_with_anything_else_deg": 1.976322920370876,
+    "plunger_travel_at_that_contact_mm": 1.142205115641321,
+    "travel_needed_for_lowest_operating_point_mm": 0.7500000000000036,
+    "fixed_part_interference_over_sweep_mm3": 1.2574349523142278e-10,
+    "rest_angle_for_free_position_6_80_deg": 0.9371194229257527,
+    "reversed_switch_crown_meets_plunger_deg": -0.18312061805663693,
+    "reversed_switch_travel_at_case_mm": 0.830532846943548
+  },
+  "lift": {
+    "lid_stops_paddle_deg": 0.7499698907136918,
+    "front_rise_at_plunger_mm": 0.4334990433461172,
+    "without_lid_next_stop_deg": 9.099737567630655,
+    "without_lid_front_rise_mm": 5.237335465155802,
+    "sleeve_overlap_on_case_at_rest_mm": 2.9000000000000004
+  },
+  "hinge_play": {
+    "end_float_each_way_mm": 0.1200000000000001,
+    "cases": 81,
+    "worst_case": "dx-0.12_yaw-0.35_roll-0.50_a-0.67",
+    "worst_interference_mm3": 0.0,
+    "sideways_gap_to_lid_towers_mm": 0.3202849149703979,
+    "note": "Shift, yaw and roll are test inputs at or beyond the nominal hinge clearances."
+  },
+  "passes": true
+}

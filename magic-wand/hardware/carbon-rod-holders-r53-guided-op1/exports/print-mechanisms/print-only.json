@@ -1,0 +1,30 @@
+{
+  "source": "OP1-hinge.gcode.3mf",
+  "source_sha256": "b12cc3524fe36d877469c32de5212b68202d164d63c471f7a2438f58faa83ccf",
+  "file": "R53-Guided-OP1-and-Hinge-print-only.3mf",
+  "sha256": "5ea11920396240659202a7ad8c6e8387293d1c37775b9acb2b50bb7aaa386aa2",
+  "gcode_sha256": "023e30c4a74d3bd4b284a6d999a7ad608ddc13fbfb8ed537d91010eb855ebd77",
+  "gcode_bytes_unchanged": true,
+  "parts": [
+    "DFR_Clip_Left",
+    "DFR_Clip_Right",
+    "DFR_Post_Bar",
+    "Hinge_Cap",
+    "Key_Carrier",
+    "OP1_Lid",
+    "Touch_Paddle"
+  ],
+  "reviewed_reports_sha256": {
+    "OP1-hinge.gcode.native.json": "a8b82ae9415e6e5fa48043e30e7ec33f83c272f6e6d11f5f5e1458fe5ada09da",
+    "keys.json": "38d3955be0e5726b6b1a36cf6709ab961dc7ba3e2f2552fca94e52879a7125c3",
+    "fit.json": "bb216f978d0ae7c90c231d399c5c09a07f781d3c4d4c2fabe59b0b96c2e9d7c6",
+    "contacts.json": "34f7023e988b56145cad990bd6c60b801525e19e710bf419028701ef6aa66631",
+    "layers.json": "d200a4774f681cd8d12bd2532cb5076d129f0e7faaee60f5ea19190e718ad8eb",
+    "spans.json": "d3ca01dc60d6cfcab017a6b3f248803ced7ac856e76358befb1b0bd726d390a2",
+    "wide-bases.json": "aada4d686a97b81d75f1e8f113680ae94fc89433e8e8457307ee30d9eff8b605",
+    "rod.json": "cc86c902dfa8f095c6869a24d3e50f7c86ffa331114fcc976d5dab5a380bf463",
+    "separation-and-machine.json": "a922a24e2bda4587f72c257fecace5ec5bb541e71dc1c971e9d30ae1c43f1ba6",
+    "reopened.json": "1ba1c6bbaea1f5b93c802a37207ec8b8b3f79904b2f2de2b8dd131b859b2f54e",
+    "fit-trial-review.json": "7fb363a6efdc06aad697540692bc3ff40d5993ca9d5d5152274350cb7235ea6e"
+  }
+}

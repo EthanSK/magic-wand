@@ -1,0 +1,808 @@
+{
+  "units": "mm",
+  "layer_height_mm": 0.2,
+  "physical_print_verified": false,
+  "parts": {
+    "Key_Carrier": {
+      "file": "print/Key_Carrier-print.stl",
+      "sha256": "d08aa130bd07046c971c5a88e019eee272f3e5704b4f14b0ceb4640544bbeb80",
+      "assembly_to_print": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          30.76999855
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          4.78133297
+        ],
+        [
+          -0.0,
+          -1.0,
+          0.0,
+          32.650001526
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "size_mm": [
+        60.77,
+        25.681,
+        51.496
+      ],
+      "bed_face": "rear face, as R52",
+      "top_face": "front edge under the three-key row",
+      "first_layer_contact_mm2": 440.94,
+      "volume_mm3": 9496.77,
+      "support": "Support disabled. Every finished component has its own removable external base.",
+      "sections_starting_in_air": [],
+      "sections_steeper_than_45_degrees": [
+        {
+          "assembly_bounds_mm": [
+            5.77,
+            4.65,
+            7.27,
+            11.31,
+            7.25,
+            9.4
+          ],
+          "layers": [
+            128,
+            140
+          ],
+          "peak_area_mm2": 1.743
+        },
+        {
+          "assembly_bounds_mm": [
+            -3.68,
+            -11.75,
+            7.3,
+            -0.81,
+            -9.15,
+            10.4
+          ],
+          "layers": [
+            210,
+            222
+          ],
+          "peak_area_mm2": 1.298
+        },
+        {
+          "assembly_bounds_mm": [
+            3.46,
+            4.85,
+            7.3,
+            5.62,
+            5.45,
+            9.4
+          ],
+          "layers": [
+            137,
+            139
+          ],
+          "peak_area_mm2": 1.288
+        },
+        {
+          "assembly_bounds_mm": [
+            4.48,
+            12.45,
+            1.65,
+            5.69,
+            12.65,
+            3.15
+          ],
+          "layers": [
+            101,
+            101
+          ],
+          "peak_area_mm2": 1.284
+        },
+        {
+          "assembly_bounds_mm": [
+            1.79,
+            7.25,
+            2.86,
+            9.16,
+            11.05,
+            9.4
+          ],
+          "layers": [
+            109,
+            127
+          ],
+          "peak_area_mm2": 0.939
+        },
+        {
+          "assembly_bounds_mm": [
+            13.42,
+            0.85,
+            0.67,
+            14.5,
+            1.05,
+            1.83
+          ],
+          "layers": [
+            159,
+            159
+          ],
+          "peak_area_mm2": 0.921
+        },
+        {
+          "assembly_bounds_mm": [
+            13.03,
+            7.25,
+            0.57,
+            14.56,
+            7.65,
+            1.93
+          ],
+          "layers": [
+            126,
+            127
+          ],
+          "peak_area_mm2": 0.825
+        },
+        {
+          "assembly_bounds_mm": [
+            3.16,
+            12.45,
+            3.56,
+            3.88,
+            12.85,
+            6.25
+          ],
+          "layers": [
+            100,
+            101
+          ],
+          "peak_area_mm2": 0.775
+        },
+        {
+          "assembly_bounds_mm": [
+            13.32,
+            4.05,
+            0.62,
+            14.53,
+            4.45,
+            1.88
+          ],
+          "layers": [
+            142,
+            143
+          ],
+          "peak_area_mm2": 0.581
+        },
+        {
+          "assembly_bounds_mm": [
+            -3.11,
+            -8.35,
+            8.28,
+            -2.21,
+            -7.95,
+            9.16
+          ],
+          "layers": [
+            204,
+            205
+          ],
+          "peak_area_mm2": 0.456
+        },
+        {
+          "assembly_bounds_mm": [
+            -1.22,
+            12.45,
+            -4.75,
+            -0.64,
+            12.65,
+            -3.97
+          ],
+          "layers": [
+            101,
+            101
+          ],
+          "peak_area_mm2": 0.289
+        },
+        {
+          "assembly_bounds_mm": [
+            0.64,
+            12.45,
+            -4.75,
+            1.22,
+            12.65,
+            -3.97
+          ],
+          "layers": [
+            101,
+            101
+          ],
+          "peak_area_mm2": 0.289
+        },
+        {
+          "assembly_bounds_mm": [
+            13.44,
+            10.65,
+            1.28,
+            14.05,
+            10.85,
+            2.23
+          ],
+          "layers": [
+            110,
+            110
+          ],
+          "peak_area_mm2": 0.252
+        },
+        {
+          "assembly_bounds_mm": [
+            -4.57,
+            -10.75,
+            7.3,
+            -3.89,
+            -10.15,
+            9.4
+          ],
+          "layers": [
+            215,
+            217
+          ],
+          "peak_area_mm2": 0.187
+        },
+        {
+          "assembly_bounds_mm": [
+            1.82,
+            1.05,
+            7.26,
+            2.14,
+            1.45,
+            9.38
+          ],
+          "layers": [
+            157,
+            158
+          ],
+          "peak_area_mm2": 0.171
+        },
+        {
+          "assembly_bounds_mm": [
+            3.59,
+            1.05,
+            7.26,
+            3.91,
+            1.45,
+            9.38
+          ],
+          "layers": [
+            157,
+            158
+          ],
+          "peak_area_mm2": 0.156
+        },
+        {
+          "assembly_bounds_mm": [
+            -0.05,
+            -8.55,
+            7.26,
+            0.26,
+            -8.15,
+            9.4
+          ],
+          "layers": [
+            205,
+            206
+          ],
+          "peak_area_mm2": 0.133
+        },
+        {
+          "assembly_bounds_mm": [
+            1.77,
+            -3.75,
+            7.26,
+            2.08,
+            -3.35,
+            9.38
+          ],
+          "layers": [
+            181,
+            182
+          ],
+          "peak_area_mm2": 0.12
+        },
+        {
+          "assembly_bounds_mm": [
+            0.08,
+            -3.75,
+            7.26,
+            0.4,
+            -3.35,
+            9.38
+          ],
+          "layers": [
+            181,
+            182
+          ],
+          "peak_area_mm2": 0.115
+        },
+        {
+          "assembly_bounds_mm": [
+            12.62,
+            9.45,
+            1.09,
+            13.29,
+            9.65,
+            1.52
+          ],
+          "layers": [
+            116,
+            116
+          ],
+          "peak_area_mm2": 0.094
+        },
+        {
+          "assembly_bounds_mm": [
+            9.06,
+            3.25,
+            10.6,
+            9.55,
+            3.45,
+            10.8
+          ],
+          "layers": [
+            147,
+            147
+          ],
+          "peak_area_mm2": 0.093
+        },
+        {
+          "assembly_bounds_mm": [
+            4.01,
+            16.65,
+            4.91,
+            4.15,
+            16.85,
+            5.72
+          ],
+          "layers": [
+            80,
+            80
+          ],
+          "peak_area_mm2": 0.074
+        },
+        {
+          "assembly_bounds_mm": [
+            -4.15,
+            16.65,
+            4.91,
+            -4.01,
+            16.85,
+            5.72
+          ],
+          "layers": [
+            80,
+            80
+          ],
+          "peak_area_mm2": 0.074
+        },
+        {
+          "assembly_bounds_mm": [
+            4.01,
+            31.85,
+            18.91,
+            6.59,
+            32.45,
+            19.42
+          ],
+          "layers": [
+            2,
+            4
+          ],
+          "peak_area_mm2": 0.071
+        },
+        {
+          "assembly_bounds_mm": [
+            -6.59,
+            31.85,
+            18.91,
+            -4.01,
+            32.45,
+            19.42
+          ],
+          "layers": [
+            2,
+            4
+          ],
+          "peak_area_mm2": 0.071
+        },
+        {
+          "assembly_bounds_mm": [
+            10.34,
+            10.85,
+            6.84,
+            10.77,
+            11.05,
+            7.05
+          ],
+          "layers": [
+            109,
+            109
+          ],
+          "peak_area_mm2": 0.064
+        },
+        {
+          "assembly_bounds_mm": [
+            -10.35,
+            -1.75,
+            11.33,
+            -7.31,
+            -1.55,
+            11.35
+          ],
+          "layers": [
+            172,
+            172
+          ],
+          "peak_area_mm2": 0.055
+        },
+        {
+          "assembly_bounds_mm": [
+            10.1,
+            5.25,
+            3.3,
+            10.38,
+            5.45,
+            3.57
+          ],
+          "layers": [
+            137,
+            137
+          ],
+          "peak_area_mm2": 0.054
+        },
+        {
+          "assembly_bounds_mm": [
+            -9.83,
+            10.85,
+            3.42,
+            -9.13,
+            11.05,
+            3.99
+          ],
+          "layers": [
+            109,
+            109
+          ],
+          "peak_area_mm2": 0.049
+        },
+        {
+          "assembly_bounds_mm": [
+            13.44,
+            13.45,
+            7.32,
+            13.76,
+            13.65,
+            7.46
+          ],
+          "layers": [
+            96,
+            96
+          ],
+          "peak_area_mm2": 0.045
+        },
+        {
+          "assembly_bounds_mm": [
+            11.84,
+            14.05,
+            7.32,
+            12.16,
+            14.25,
+            7.46
+          ],
+          "layers": [
+            93,
+            93
+          ],
+          "peak_area_mm2": 0.042
+        }
+      ],
+      "scope": "Findings are listed for the revised centre only. The four key zones are the R52 carrier with print-facing clearance at the leading lips. See the full native path audit.",
+      "inherited_key_zone_sections_starting_in_air": [
+        {
+          "assembly_bounds_mm": [
+            -28.61,
+            11.45,
+            6.76,
+            -27.88,
+            11.65,
+            6.86
+          ],
+          "layers": [
+            106,
+            106
+          ],
+          "peak_area_mm2": 0.045
+        }
+      ],
+      "r52_centre_for_comparison": {
+        "sections_starting_in_air": 4,
+        "sections_steeper_than_45_degrees": 28
+      }
+    },
+    "Touch_Paddle": {
+      "file": "print/Touch_Paddle-print.stl",
+      "sha256": "868d670d9264c3ddc0be4567e027192ac83e67e120243e7be2135d51c40c072b",
+      "assembly_to_print": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          8.650141716
+        ],
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          10.600000381
+        ],
+        [
+          -0.0,
+          0.0,
+          -1.0,
+          19.300092697
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "size_mm": [
+        39.95,
+        21.2,
+        5.0
+      ],
+      "bed_face": "flat top that carries the touch board",
+      "top_face": "sleeve rim, crowns and axle",
+      "first_layer_contact_mm2": 678.89,
+      "volume_mm3": 1408.15,
+      "support": "None.",
+      "sections_starting_in_air": [],
+      "sections_steeper_than_45_degrees": []
+    },
+    "Hinge_Cap": {
+      "file": "print/Hinge_Cap-print.stl",
+      "sha256": "ab09d894c36b6aaafc6bb40fa69d55443bebe296ca0e13f75630f8486359419c",
+      "assembly_to_print": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          10.050000191
+        ],
+        [
+          0.0,
+          -1.0,
+          -0.0,
+          32.650001526
+        ],
+        [
+          -0.0,
+          0.0,
+          -1.0,
+          20.899999619
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "size_mm": [
+        20.1,
+        5.4,
+        1.4
+      ],
+      "bed_face": "flat top",
+      "top_face": "flat journal retainer and latch groove",
+      "first_layer_contact_mm2": 104.22,
+      "volume_mm3": 142.07,
+      "support": "None.",
+      "sections_starting_in_air": [],
+      "sections_steeper_than_45_degrees": []
+    },
+    "OP1_Lid": {
+      "file": "print/OP1_Lid-print.stl",
+      "sha256": "a856b41dd6736eb95e5f568cdf7c33ad235866d02169b0969af65682ab8e0875",
+      "assembly_to_print": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          9.005616188
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          14.280742645
+        ],
+        [
+          -0.0,
+          0.0,
+          1.0,
+          -11.149999619
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "size_mm": [
+        18.846,
+        28.872,
+        5.25
+      ],
+      "bed_face": "flat underside",
+      "top_face": "two towers and one grip rib",
+      "first_layer_contact_mm2": 174.5,
+      "volume_mm3": 258.95,
+      "support": "None.",
+      "sections_starting_in_air": [],
+      "sections_steeper_than_45_degrees": []
+    },
+    "OP1_Lid_Close": {
+      "file": "print/OP1_Lid_Close-print.stl",
+      "sha256": "07df44bac52e8c499809043ae6892f03284af0e6e2d7073578cd37e365dc86fa",
+      "assembly_to_print": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          9.005616188
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          14.280742645
+        ],
+        [
+          -0.0,
+          0.0,
+          1.0,
+          -11.149999619
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "size_mm": [
+        18.846,
+        28.872,
+        5.25
+      ],
+      "bed_face": "flat underside",
+      "top_face": "two towers and two grip ribs",
+      "first_layer_contact_mm2": 174.5,
+      "volume_mm3": 265.63,
+      "support": "None.",
+      "sections_starting_in_air": [],
+      "sections_steeper_than_45_degrees": []
+    },
+    "DFR_Post_Bar": {
+      "file": "print/DFR_Post_Bar-print.stl",
+      "sha256": "a9a75aca4ba05e7b76fd149a84c4fed194e0f9684ccedeefbe7ea563e84bc216",
+      "assembly_to_print": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          9.050000191
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -14.070509911
+        ],
+        [
+          -0.0,
+          0.0,
+          1.0,
+          -15.899999619
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "size_mm": [
+        18.1,
+        2.52,
+        6.8
+      ],
+      "bed_face": "underside of the bar",
+      "top_face": "two posts",
+      "first_layer_contact_mm2": 45.61,
+      "volume_mm3": 118.13,
+      "support": "None. The two post necks keep the R48 shape so the existing clips fit.",
+      "sections_starting_in_air": [],
+      "sections_steeper_than_45_degrees": [
+        {
+          "assembly_bounds_mm": [
+            -8.88,
+            14.89,
+            21.9,
+            -8.12,
+            16.53,
+            22.1
+          ],
+          "layers": [
+            31,
+            31
+          ],
+          "peak_area_mm2": 0.166
+        },
+        {
+          "assembly_bounds_mm": [
+            8.12,
+            14.89,
+            21.9,
+            8.88,
+            16.53,
+            22.1
+          ],
+          "layers": [
+            31,
+            31
+          ],
+          "peak_area_mm2": 0.166
+        },
+        {
+          "assembly_bounds_mm": [
+            6.62,
+            14.89,
+            21.9,
+            7.38,
+            16.53,
+            22.1
+          ],
+          "layers": [
+            31,
+            31
+          ],
+          "peak_area_mm2": 0.166
+        },
+        {
+          "assembly_bounds_mm": [
+            -7.38,
+            14.89,
+            21.9,
+            -6.62,
+            16.53,
+            22.1
+          ],
+          "layers": [
+            31,
+            31
+          ],
+          "peak_area_mm2": 0.166
+        }
+      ]
+    }
+  }
+}
