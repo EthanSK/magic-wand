@@ -45,7 +45,15 @@ def command_audit(path: Path, expected: dict) -> dict:
     keys = ('machine_start_gcode', 'machine_end_gcode', 'layer_change_gcode', 'time_lapse_gcode', 'change_filament_gcode')
     assert all(config.get(key) == machine[key] for key in keys), 'Machine command templates differ from the resolved A1 mini profile'
     executable = text.split('; EXECUTABLE_BLOCK_START', 1)[1]
-    before, objects = executable.split('; start printing object,', 1)
+    if '; start printing object,' in executable:
+        before, objects = executable.split('; start printing object,', 1)
+    else:
+        # For one-object plates Studio omits object labels. Start the body at
+        # the first model extrusion feature, leaving the purge tower in startup.
+        onset = re.search(r'^; FEATURE: (?:Outer wall|Inner wall|Bottom surface|Top surface|Sparse infill|Internal solid infill|Bridge)$',
+                          executable, flags=re.M)
+        assert onset is not None, 'First printed object feature missing'
+        before, objects = executable[:onset.start()], executable[onset.start():]
     assert 'machine: A1 mini' in before, 'Executable startup is not labelled for the A1 mini'
     commands = '\n'.join(line.split(';', 1)[0].strip() for line in executable.splitlines())
     assert not re.search(r'[{}\[\]]', commands), 'Unresolved placeholder in executable commands'

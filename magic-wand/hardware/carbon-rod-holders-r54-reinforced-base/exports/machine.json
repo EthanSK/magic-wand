@@ -1,0 +1,60 @@
+{
+  "archive_sha256": "1b66f135ec7dd20449a23be81756478818ebc2301ad675086809fdf45e611b6c",
+  "layout_sha256": "7cb751eb1d9359c615c5256ccf24219de70b7277f13fdc4704a7c58d9da77935",
+  "parts": [
+    "Key_Carrier"
+  ],
+  "minimum_separation_mm": null,
+  "projected_part_separation_lower_bounds_mm": {},
+  "machine": {
+    "passed": true,
+    "project_sha256": "1b66f135ec7dd20449a23be81756478818ebc2301ad675086809fdf45e611b6c",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "filament_retraction_mm": [
+    "1.2"
+  ],
+  "filament_retraction_speed_mm_s": [
+    "35"
+  ],
+  "timelapse_type": "1"
+}

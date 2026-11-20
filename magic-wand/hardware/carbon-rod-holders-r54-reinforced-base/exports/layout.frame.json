@@ -1,0 +1,81 @@
+{
+  "parts": {
+    "Key_Carrier": {
+      "source": "../../carbon-rod-holders-r53-guided-op1/exports/Key_Carrier-assembly.stl",
+      "source_sha256": "27a4f64bcd82b8b7d2fbabdc764478408591f04ed4c0dea8728ca1c1be3835e6",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          96.3849287033081
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          126.94066667556763
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          32.650001525878906
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          100,
+          50
+        ],
+        "keep_clear": [
+          [
+            3.9,
+            -2.5,
+            12.0,
+            7.3
+          ]
+        ],
+        "ties": [
+          {
+            "face": "+y",
+            "at": 21.5,
+            "height": 2.4
+          },
+          {
+            "face": "+y",
+            "at": -21.5,
+            "height": 2.4
+          },
+          {
+            "face": "-y",
+            "at": 14.2,
+            "height": 3.0
+          },
+          {
+            "face": "-y",
+            "at": -14.2,
+            "height": 3.0
+          },
+          {
+            "face": "+x",
+            "at": 16.2,
+            "height": 2.4
+          },
+          {
+            "face": "-x",
+            "at": 16.2,
+            "height": 2.4
+          }
+        ]
+      }
+    }
+  },
+  "layout_sha256": "7cb751eb1d9359c615c5256ccf24219de70b7277f13fdc4704a7c58d9da77935"
+}

@@ -61,7 +61,7 @@ def preserve_key_corner(resources, compound, owner, pose):
         value(target, meta.get('key'), meta.get('value'))
 
 
-def write_layout(parts, out, tower, title):
+def write_layout(parts, out, tower, title, *, panel_builder=backed_panel):
     """Parts supply one STL, its rigid print pose and the outer brim for that object."""
     with ZipFile(TEMPLATE) as archive:
         files = {name: archive.read(name) for name in archive.namelist()}
@@ -101,7 +101,7 @@ def write_layout(parts, out, tower, title):
         xy = np.asarray(entry['bed_center'], dtype=float)
         shift = xy - (lo[:2] + hi[:2]) / 2
         panel = entry.get('panel')
-        print_body = backed_panel(body,panel) if panel else body
+        print_body = panel_builder(body, panel) if panel else body
         resource(resources, tag, part_id, name, print_body)
         owner = ET.Element('object', id=str(object_id))
         cfg.insert(index - 1, owner)

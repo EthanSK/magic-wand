@@ -1,0 +1,130 @@
+{
+  "archive_sha256": "1b66f135ec7dd20449a23be81756478818ebc2301ad675086809fdf45e611b6c",
+  "grid_mm": 0.1,
+  "parts": {
+    "Key_Carrier": {
+      "connected_base_mm2": 4517.12,
+      "first_layer_total_mm2": 4517.12,
+      "second_layer_on_connected_base_mm2": 4474.13,
+      "second_layer_total_mm2": 4492.59,
+      "bed_edge_mm": 19.93
+    },
+    "wipe_tower": {
+      "connected_base_mm2": 3093.94,
+      "first_layer_total_mm2": 3093.94,
+      "second_layer_on_connected_base_mm2": 443.92,
+      "second_layer_total_mm2": 445.21,
+      "bed_edge_mm": 2.63
+    }
+  },
+  "minimum_base_gap_mm": 44.27,
+  "convex_hull_gap_lower_bounds_mm": {
+    "Key_Carrier / wipe_tower": 44.27
+  },
+  "tower": {
+    "root_joints": [
+      {
+        "upper_layer_top_mm": 0.4,
+        "contact_mm2": 443.92,
+        "continuous_to_bed_mm2": 443.92,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 0.6,
+        "contact_mm2": 371.59,
+        "continuous_to_bed_mm2": 370.5,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 0.8,
+        "contact_mm2": 300.34,
+        "continuous_to_bed_mm2": 298.27,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 1.0,
+        "contact_mm2": 230.91,
+        "continuous_to_bed_mm2": 227.84,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 1.2,
+        "contact_mm2": 163.37,
+        "continuous_to_bed_mm2": 159.35,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 1.4,
+        "contact_mm2": 96.95,
+        "continuous_to_bed_mm2": 91.77,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 1.6,
+        "contact_mm2": 96.61,
+        "continuous_to_bed_mm2": 90.44,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 1.8,
+        "contact_mm2": 96.54,
+        "continuous_to_bed_mm2": 89.25,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 2.0,
+        "contact_mm2": 96.0,
+        "continuous_to_bed_mm2": 87.58,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 2.2,
+        "contact_mm2": 96.06,
+        "continuous_to_bed_mm2": 86.55,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 2.4,
+        "contact_mm2": 96.05,
+        "continuous_to_bed_mm2": 85.41,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 2.6,
+        "contact_mm2": 95.64,
+        "continuous_to_bed_mm2": 84.06,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 2.8,
+        "contact_mm2": 95.52,
+        "continuous_to_bed_mm2": 83.01,
+        "unbacked_islands": []
+      },
+      {
+        "upper_layer_top_mm": 3.0,
+        "contact_mm2": 95.56,
+        "continuous_to_bed_mm2": 82.62,
+        "unbacked_islands": []
+      }
+    ],
+    "archive_sha256": "1b66f135ec7dd20449a23be81756478818ebc2301ad675086809fdf45e611b6c",
+    "width_setting_mm": 16.1,
+    "tower_and_brim_bounds_mm": [
+      [
+        2.8903000000000003,
+        2.8841300000000003
+      ],
+      [
+        65.43295,
+        65.42678000000001
+      ]
+    ],
+    "connected_bed_area_mm2": 3093.94,
+    "total_deposited_bed_area_mm2": 3093.94,
+    "second_layer_area_mm2": 445.21,
+    "second_layer_overlap_with_connected_base_mm2": 443.92,
+    "minimum_bed_edge_mm": 2.65,
+    "minimum_other_part_gap_first_two_layers_mm": 44.52
+  }
+}

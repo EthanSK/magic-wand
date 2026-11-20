@@ -1,0 +1,79 @@
+{
+  "archive_sha256": "1b66f135ec7dd20449a23be81756478818ebc2301ad675086809fdf45e611b6c",
+  "holder_first_layer_mm2": 440.9,
+  "panel_sheet_mm2": 4048.0,
+  "combined_first_layer_mm2": 4505.1,
+  "first_layer_pieces": 1,
+  "moat_mm": 1.5,
+  "yoke_top_y": 20.9,
+  "fins": [
+    {
+      "face": "+y",
+      "cut_at_xy": [
+        21.5,
+        12.54
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 2.4,
+      "section_mm2": 4.03,
+      "rooted_volume_mm3": 3.46
+    },
+    {
+      "face": "+y",
+      "cut_at_xy": [
+        -21.5,
+        12.54
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 2.4,
+      "section_mm2": 4.03,
+      "rooted_volume_mm3": 3.46
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        14.2,
+        7.27
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 3.0,
+      "section_mm2": 5.04,
+      "rooted_volume_mm3": 4.23
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -14.2,
+        7.27
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 3.0,
+      "section_mm2": 5.04,
+      "rooted_volume_mm3": 4.23
+    },
+    {
+      "face": "+x",
+      "cut_at_xy": [
+        11.5,
+        16.2
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 2.4,
+      "section_mm2": 4.03,
+      "rooted_volume_mm3": 2.42
+    },
+    {
+      "face": "-x",
+      "cut_at_xy": [
+        -11.5,
+        16.2
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 2.4,
+      "section_mm2": 4.03,
+      "rooted_volume_mm3": 2.42
+    }
+  ],
+  "total_fin_section_mm2": 26.2,
+  "base_volume_mm3": 2096.7
+}
