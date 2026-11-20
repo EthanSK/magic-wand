@@ -40,10 +40,12 @@ function bindViewDivider() {
   const divider = document.getElementById('view-divider');
   const stage = view.parentElement;
   const playback = document.getElementById('assembly-playback');
+  const toolbar = stage.querySelector('.viewer-toolbar');
   const minimum = 240;
-  const maximum = () => Math.max(minimum, stage.clientWidth <= 760
-    ? window.innerHeight - 100
-    : window.innerHeight - divider.offsetHeight - playback.offsetHeight);
+  const maximum = () => Math.max(minimum,
+    document.body.dataset.layout === 'landscape'
+      ? window.innerHeight - toolbar.offsetHeight - divider.offsetHeight - playback.offsetHeight
+      : window.innerHeight - toolbar.offsetHeight - 100);
   let start;
 
   function updateValue() {
@@ -75,10 +77,12 @@ function bindViewDivider() {
     event.preventDefault();
     setHeight(heights[event.key]);
   });
-  new ResizeObserver(() => {
+  const resize = new ResizeObserver(() => {
     if (view.clientHeight > maximum() && stage.style.getPropertyValue('--model-height')) setHeight(maximum());
     else updateValue();
-  }).observe(stage);
+  });
+  resize.observe(stage);
+  resize.observe(view);
   updateValue();
 }
 
