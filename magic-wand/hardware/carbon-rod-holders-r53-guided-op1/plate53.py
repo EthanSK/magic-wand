@@ -38,7 +38,8 @@ def pose_for(source, rx, rz):
     return pose
 
 
-def prepare(meshes, layout):
+def placement_parts(meshes):
+    """Return the seven independent pieces and their packed bed poses."""
     parts=[]
     for name,(centre,size,rx,rz) in PLACEMENTS.items():
         is_clip = name in ('DFR_Clip_Left','DFR_Clip_Right')
@@ -53,7 +54,11 @@ def prepare(meshes, layout):
         parts.append(dict(name=name,source=source,assembly_to_print=pose_for(source,rx,rz),
                           mesh_reference=os.path.relpath(source,HERE/"exports") if is_clip else source.name,
                           bed_center=centre,panel=panel))
-    write_layout(parts,layout,TOWER,'OP1 holder and open hinge')
+    return parts
+
+
+def prepare(meshes, layout):
+    write_layout(placement_parts(meshes),layout,TOWER,'OP1 holder and open hinge')
 
 
 if __name__=='__main__':

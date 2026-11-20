@@ -31,7 +31,7 @@ def seam_samples(section):
     return np.asarray(points), np.asarray(normals), np.asarray(weights)
 
 
-def measure(archive, frame, body):
+def measure(archive, frame, body, *, regions=None):
     with ZipFile(archive) as src:
         text = src.read('Metadata/plate_1.gcode').decode()
         settings = json.loads(src.read('Metadata/project_settings.config'))
@@ -46,6 +46,7 @@ def measure(archive, frame, body):
     size = tuple(np.ceil((data[:, :2].max(axis=0) - origin + 1) / GRID).astype(int)[::-1])
 
     rows = []
+    regional_area = dict.fromkeys(regions or {}, 0.0)
     for layer in range(1, 13):
         z = layer * HEIGHT
         deposited = data[np.isclose(data[:, 7], z)]
@@ -60,9 +61,15 @@ def measure(archive, frame, body):
             ij = np.rint((samples + normals * offset - origin) / GRID).astype(int)
             joined &= occupied[ij[:, 1], ij[:, 0]]
         if joined.any():
-            x = samples[:, 0] - position[0, 3]
+            x, y = (samples - position[:2, 3]).T
+            for name, (x0, y0, x1, y1) in (regions or {}).items():
+                in_region = (x >= x0) & (x <= x1) & (y >= y0) & (y <= y1)
+                regional_area[name] += weights[joined & in_region].sum() * HEIGHT
             rows.append(dict(layer=layer, fused_length_mm=round(weights[joined].sum(), 2),
                              left_mm=round(weights[joined & (x < -4)].sum(), 2),
                              right_mm=round(weights[joined & (x > 4)].sum(), 2)))
-    return dict(archive_sha256=digest(archive), layers=rows,
-                vertical_joint_area_mm2=round(sum(row['fused_length_mm'] for row in rows) * HEIGHT, 2))
+    result = dict(archive_sha256=digest(archive), layers=rows,
+                  vertical_joint_area_mm2=round(sum(row['fused_length_mm'] for row in rows) * HEIGHT, 2))
+    if regions:
+        result['regional_joint_area_mm2'] = {name: round(value, 2) for name, value in regional_area.items()}
+    return result

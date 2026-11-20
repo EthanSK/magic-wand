@@ -1,0 +1,88 @@
+{
+  "archive_sha256": "6fa85077d1ec5562e9e62e2e4fc1ac79509a41b221bc2226e8055d36d5249f6d",
+  "layout_sha256": "91a4deb84e8467eb48c929a07fb6567fa8576b8408db6e0605a1db2d615e4537",
+  "parts": [
+    "Key_Carrier",
+    "Touch_Paddle",
+    "Hinge_Cap",
+    "DFR_Post_Bar",
+    "OP1_Lid",
+    "DFR_Clip_Left",
+    "DFR_Clip_Right"
+  ],
+  "minimum_separation_mm": 3.05,
+  "projected_part_separation_lower_bounds_mm": {
+    "Key_Carrier / Touch_Paddle": 3.4,
+    "Key_Carrier / Hinge_Cap": 66.549,
+    "Key_Carrier / DFR_Post_Bar": 71.466,
+    "Key_Carrier / OP1_Lid": 3.449,
+    "Key_Carrier / DFR_Clip_Left": 3.949,
+    "Key_Carrier / DFR_Clip_Right": 23.878,
+    "Touch_Paddle / Hinge_Cap": 66.548,
+    "Touch_Paddle / DFR_Post_Bar": 66.548,
+    "Touch_Paddle / OP1_Lid": 42.789,
+    "Touch_Paddle / DFR_Clip_Left": 3.948,
+    "Touch_Paddle / DFR_Clip_Right": 3.948,
+    "Hinge_Cap / DFR_Post_Bar": 3.05,
+    "Hinge_Cap / OP1_Lid": 15.437,
+    "Hinge_Cap / DFR_Clip_Left": 5.899,
+    "Hinge_Cap / DFR_Clip_Right": 5.924,
+    "DFR_Post_Bar / OP1_Lid": 65.612,
+    "DFR_Post_Bar / DFR_Clip_Left": 8.814,
+    "DFR_Post_Bar / DFR_Clip_Right": 5.899,
+    "OP1_Lid / DFR_Clip_Left": 3.549,
+    "OP1_Lid / DFR_Clip_Right": 62.799,
+    "DFR_Clip_Left / DFR_Clip_Right": 4.049
+  },
+  "machine": {
+    "passed": true,
+    "project_sha256": "6fa85077d1ec5562e9e62e2e4fc1ac79509a41b221bc2226e8055d36d5249f6d",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "filament_retraction_mm": [
+    "1.2"
+  ],
+  "filament_retraction_speed_mm_s": [
+    "35"
+  ],
+  "timelapse_type": "1"
+}
