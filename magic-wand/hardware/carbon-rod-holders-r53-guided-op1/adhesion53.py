@@ -75,9 +75,11 @@ def bases(archive):
                 minimum_base_gap_mm=min(gaps.values()), convex_hull_gap_lower_bounds_mm=gaps, tower=tower)
 
 
-def verify(data):
+def verify(data, *, minimum_base_mm2=None):
+    minimum = minimum_base_mm2 or {}
+    assert minimum.keys() <= data['parts'].keys()
     for name, row in data['parts'].items():
-        assert row['connected_base_mm2'] >= 2849, (name, row)
+        assert row['connected_base_mm2'] >= minimum.get(name, 2849), (name, row)
         assert row['bed_edge_mm'] >= 2, (name, row)
         assert row['second_layer_on_connected_base_mm2'] >= .90 * row['second_layer_total_mm2'], (name, row)
     assert data['minimum_base_gap_mm'] >= 3, data['convex_hull_gap_lower_bounds_mm']

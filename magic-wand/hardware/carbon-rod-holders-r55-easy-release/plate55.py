@@ -22,12 +22,17 @@ def panel_builder(body, panel):
     return backed_panel(body, panel)
 
 
-def prepare(layout):
+def placement_parts55():
     entries = placement_parts(MODEL)
     for entry in entries:
         if entry['name'] == 'Key_Carrier':
             assert tuple(CARRIER_BASE['size']) == tuple(entry['panel']['size'])
             entry['panel'] = dict(CARRIER_BASE, holder_release='R55')
+    return entries
+
+
+def prepare(layout):
+    entries = placement_parts55()
     write_layout(entries, layout, TOWER, 'R55 complete hinge and OP1 kit',
                  panel_builder=panel_builder)
 

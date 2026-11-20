@@ -6,7 +6,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 import numpy as np
 
-from plate55 import LABELS, MODEL, R53, R54
+from plate55 import HERE, LABELS, MODEL, R53, R54
 from adhesion53 import bases, verify
 from bridge53 import compare
 from contacts53 import measure as switch_contacts
@@ -61,7 +61,8 @@ def draw_map(archive, frame_file, design, position, out):
     image.save(out)
 
 
-def check(plate):
+def check(plate, *, compact_pads=None):
+    compact_pads = compact_pads or {}
     archive = plate / 'OP1-hinge.gcode.3mf'
     layout = plate / 'layout.3mf'
     frame_file = plate / 'layout.frame.json'
@@ -81,11 +82,24 @@ def check(plate):
         assert entry['source_sha256'] == previous_entry['source_sha256']
         assert entry['assembly_to_machine'] == previous_entry['assembly_to_machine']
         if part != 'Key_Carrier':
-            assert entry['adhesion_panel'] == previous_entry['adhesion_panel']
+            expected_panel = previous_entry['adhesion_panel'].copy()
+            if part in compact_pads:
+                size, _ = compact_pads[part]
+                expected_panel['size'] = list(size)
+            assert entry['adhesion_panel'] == expected_panel
 
     audit(archive, layout, plate / 'separation-and-machine.json', set(LABELS))
     adhesion = bases(archive)
-    verify(adhesion)
+    minimum = {part: area for part, (_, area) in compact_pads.items()}
+    verify(adhesion, minimum_base_mm2=minimum)
+    if compact_pads:
+        baseline = read(HERE / 'exports/wide-bases.json')
+        for name, row in adhesion['parts'].items():
+            previous_area = baseline['parts'][name]['connected_base_mm2']
+            if name in compact_pads:
+                assert row['connected_base_mm2'] <= .45 * previous_area, (name, row, previous_area)
+            else:
+                assert abs(row['connected_base_mm2'] - previous_area) <= 10, (name, row, previous_area)
     write(plate / 'wide-bases.json', adhesion)
     for label, run in [('keys', lambda path: keys(archive, frame_file, ['Key_Carrier'], path)),
                        ('fit', lambda path: mating(archive, frame_file, path))]:

@@ -9,12 +9,13 @@ from release53 import check_paths, digest, read
 from release_accessories52 import package
 
 ARCHIVE = 'OP1-hinge.gcode.3mf'
+PRINT_NAME = 'R55-Easy-Release-Complete-Hinge-print-only.3mf'
 REPORTS = ('OP1-hinge.gcode.native.json', 'keys.json', 'fit.json', 'contacts.json',
            'layers.json', 'spans.json', 'wide-bases.json', 'rod.json',
            'separation-and-machine.json', 'joint.json', 'fin-design.json')
 
 
-def release(plate, out):
+def release(plate, out, *, print_name=PRINT_NAME):
     reopened = plate / 'reopened'
     sha = digest(plate / ARCHIVE)
     reopened_sha = digest(reopened / ARCHIVE)
@@ -35,7 +36,7 @@ def release(plate, out):
     round_trip = out / 'reopened.json'
     round_trip.write_text(json.dumps(dict(checked_archive=sha, reopened_archive=reopened_sha,
                                           layout_sha256=digest(plate / 'layout.3mf')), indent=2) + '\n')
-    return package(out / ARCHIVE, out / 'R55-Easy-Release-Complete-Hinge-print-only.3mf',
+    return package(out / ARCHIVE, out / print_name,
                    set(LABELS), [out / name for name in (*REPORTS, 'review.json', 'reopened.json')])
 
 
