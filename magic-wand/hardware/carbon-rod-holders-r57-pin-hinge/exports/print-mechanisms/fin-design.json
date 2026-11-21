@@ -1,0 +1,97 @@
+{
+  "archive_sha256": "9a9f5e8f81b7501cd77a118e141682664233164ed6da8c46f1ce14cc849c559e",
+  "holder_first_layer_mm2": 368.6,
+  "panel_sheet_mm2": 3058.1,
+  "combined_first_layer_mm2": 3442.9,
+  "first_layer_pieces": 1,
+  "moat_mm": 1.5,
+  "yoke_top_y": 20.0,
+  "fins": [
+    {
+      "face": "+y",
+      "cut_at_xy": [
+        21.5,
+        12.54
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 2.4,
+      "section_mm2": 4.03,
+      "rooted_volume_mm3": 3.46
+    },
+    {
+      "face": "+y",
+      "cut_at_xy": [
+        -21.5,
+        12.54
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 2.4,
+      "section_mm2": 4.03,
+      "rooted_volume_mm3": 3.46
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        14.2,
+        7.27
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 3.0,
+      "section_mm2": 5.04,
+      "rooted_volume_mm3": 4.23
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -14.2,
+        7.27
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 3.0,
+      "section_mm2": 5.04,
+      "rooted_volume_mm3": 4.23
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        24.5,
+        7.27
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 2.4,
+      "section_mm2": 4.03,
+      "rooted_volume_mm3": 3.83
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -24.5,
+        7.27
+      ],
+      "fin_thickness": 1.68,
+      "fin_height": 2.4,
+      "section_mm2": 4.03,
+      "rooted_volume_mm3": 3.63
+    }
+  ],
+  "total_fin_section_mm2": 26.2,
+  "base_volume_mm3": 1820.7,
+  "revision": "R55",
+  "hinge_bay_xy": [
+    -14.5,
+    11.0,
+    14.5,
+    29.86
+  ],
+  "hinge_bay_open_to_panel_edge": true,
+  "base_volume_in_hinge_bay_mm3": 0.0,
+  "nearest_base_to_hinge_mm": 3.0,
+  "fins_on_hinge": 0,
+  "panel_pieces": 1,
+  "removal": [
+    "Nip the two fins on the rim underside nearest the ends (X +/-24.5).",
+    "Nip the two fins on the rim underside nearer the rod (X +/-14.2).",
+    "Nip the two fins on top of the rim (X +/-21.5).",
+    "Fold the two wings of the panel away from the hinge bay. Nothing is attached at the hinge."
+  ]
+}

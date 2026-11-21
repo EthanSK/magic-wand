@@ -1,0 +1,177 @@
+{
+  "physical_acceptance": false,
+  "checked_mesh_sha256": {
+    "Key_Carrier": "b459c67a67b9afcdefe2374bc4318ac0d198571b5a8707e630cf2c8c26846024",
+    "Touch_Paddle": "8a8bc9868cafdd21459bf64871edc3ec77e4643a631b346bf7672933dd9cc292",
+    "Hinge_Pin": "83aa477db2be8f8812ced1731bebcd7937bcc68370fe32f57ec0f90fe13ac9f8",
+    "Pin_Clip": "03af0281c4fd3870f4c0908a9fdae0e410b99168b540cf811205c22fd11047ef",
+    "DFR_Post_Bar": "81bb4d85be4299a5010d55ee1bccfaef9263b9c0b369de3cef2640c057abad08",
+    "DFR_Tall_Clip": "b56216f64122e164f6967c2b23e50bfbe60e4743f00a81ca8a8fb319232986c2"
+  },
+  "reused_op1_lid_sha256": "88a701edde5a4ea977bcff79664de1dea29156c09f1106eac5f00ab29e22cb00",
+  "carrier_difference_from_r53_outside_the_yoke_mm3": {
+    "added": -0.040799216432154006,
+    "removed": -0.044197931725124345
+  },
+  "key_spaces_checked": 336,
+  "key_spaces_entered_by_new_material_mm3": {},
+  "carrier_to_key_envelopes_mm3": {
+    "r53": 0.0012018779890528735,
+    "r57": 0.0012018779890517275
+  },
+  "static_interference_mm3": {
+    "board": 0.0,
+    "sockets": 0.0,
+    "housing": 0.0,
+    "plug": 0.0,
+    "switch": 0.0,
+    "terminals": 0.0,
+    "plunger": 0.0,
+    "op1_wire": 0.0,
+    "carrier_added_overlap_to_keys": 0.0,
+    "lid_to_carrier": -1.7763568394002505e-15,
+    "paddle_to_carrier": 0.0,
+    "paddle_to_lid": 0.0,
+    "paddle_to_op1_board_and_wire": 0.0,
+    "paddle_to_switch_case": 0.0,
+    "paddle_to_keys": 0.0,
+    "pin_to_carrier": 0.0,
+    "pin_to_paddle": 0.0,
+    "pin_to_keys": 0.0,
+    "clip_to_paddle_and_carrier": 0.0,
+    "clip_to_pin": 0.0,
+    "clip_to_touch_board": 0.0,
+    "touch_board_to_paddle": 3.4103166160365888e-06,
+    "standard_clips_to_paddle_board_and_posts": -2.525920011348104e-16,
+    "touch_parts_to_carrier_and_lid": 0.0
+  },
+  "board_support": {
+    "seat_area_under_a_35_mm_board_mm2": 413.0,
+    "paddle_material_within_2_mm_under_the_open_zone_mm3": 1.58691248182666e-06,
+    "open_zone_xy": [
+      -8.5,
+      7.6,
+      8.5,
+      25.6
+    ],
+    "pin_tail_envelope_to_paddle_mm3": 0.0,
+    "pin_tail_envelope_if_board_is_30_mm_long_mm3": 0.0
+  },
+  "post_reach": {
+    "neck_mm": 2.2,
+    "r53_neck_mm": 1.0,
+    "standard_clip_mm": 0.8,
+    "tall_clip_mm": 2.0,
+    "head_top_above_board_mm": 3.0,
+    "cases": {
+      "board_raised_0.0_mm": {
+        "free_neck_mm": 2.2,
+        "standard_clip_fits": true,
+        "tall_clip_fits": true,
+        "r53_free_neck_mm": 1.0,
+        "r53_clip_fitted": true
+      },
+      "board_raised_0.4_mm": {
+        "free_neck_mm": 1.8,
+        "standard_clip_fits": true,
+        "tall_clip_fits": false,
+        "r53_free_neck_mm": 0.6,
+        "r53_clip_fitted": false
+      },
+      "board_raised_0.8_mm": {
+        "free_neck_mm": 1.4,
+        "standard_clip_fits": true,
+        "tall_clip_fits": false,
+        "r53_free_neck_mm": 0.2,
+        "r53_clip_fitted": false
+      },
+      "board_raised_1.2_mm": {
+        "free_neck_mm": 1.0,
+        "standard_clip_fits": true,
+        "tall_clip_fits": false,
+        "r53_free_neck_mm": -0.2,
+        "r53_clip_fitted": false
+      },
+      "board_raised_1.4_mm": {
+        "free_neck_mm": 0.8,
+        "standard_clip_fits": false,
+        "tall_clip_fits": false,
+        "r53_free_neck_mm": -0.4,
+        "r53_clip_fitted": false
+      }
+    },
+    "tall_clip_on_post_mm3": -3.469446951953614e-18,
+    "tall_clip_to_board_mm3": 2.417507056043817e-07
+  },
+  "route_interference_mm3": {
+    "op1_board_straight_down": 0.0,
+    "switch_straight_down": 0.0,
+    "paddle_straight_down": 0.0,
+    "pin_from_the_right": 0.0,
+    "pin_from_the_right_through_fitted_upper_key_mm3": 91.1965722809427,
+    "pin_from_the_left": 0.0,
+    "pin_from_the_left_through_fitted_upper_key_mm3": 91.19657228094269,
+    "pin_clip_from_above": 0.0,
+    "pin_clip_legs_past_the_waist_peak_mm3": 0.1250140719609805,
+    "pin_clip_legs_to_paddle_and_carrier": 0.0,
+    "lid_from_front": 2.253058850598677e-14,
+    "post_bar_from_below": 0.0,
+    "touch_board_onto_posts": 3.4103166160365888e-06,
+    "standard_clip_slide_peak_on_neck_mm3": 0.1694813380669519,
+    "standard_clip_slide_to_board_and_paddle": 3.449497631979881e-15
+  },
+  "click": {
+    "crown_meets_free_plunger_deg": 5.990278041281271e-05,
+    "lever_mm": 33.11949,
+    "travel_mm_per_degree": 0.578331594550253,
+    "paddle_meets_switch_case_deg": 1.4307390026151552,
+    "plunger_travel_at_case_mm": 0.8275928238701553,
+    "first_contact_with_anything_else_deg": 1.9781605650678102,
+    "plunger_travel_at_that_contact_mm": 1.1444765424534147,
+    "barrel_meets_cheek_or_deck_deg": null,
+    "travel_needed_for_lowest_operating_point_mm": 0.7500000000000036,
+    "fixed_part_interference_over_sweep_mm3": 0.0,
+    "lid_stops_paddle_deg": 0.7640144497156143,
+    "front_rise_at_plunger_mm": 0.441436072799938
+  },
+  "hinge_slack": {
+    "bracket": {
+      "cheek": {
+        "nominal_across_mm": 3.5,
+        "nominal_along_print_height_mm": 3.8,
+        "nominal_radial_gap_mm": 0.25,
+        "pessimistic_across_mm": 3.25,
+        "pessimistic_along_print_height_mm": 3.25,
+        "pessimistic_pin_mm": 3.15,
+        "pessimistic_spare_mm": 0.10000000000000009
+      },
+      "barrel": {
+        "nominal_across_mm": 3.6,
+        "nominal_along_print_height_mm": 3.9,
+        "nominal_radial_gap_mm": 0.30000000000000004,
+        "pessimistic_across_mm": 3.35,
+        "pessimistic_along_print_height_mm": 3.35,
+        "pessimistic_pin_mm": 3.15,
+        "pessimistic_spare_mm": 0.19999999999999973
+      },
+      "pin_end_float_each_way_mm": 0.55,
+      "pin_end_stays_inside_cheek_mm": 0.049999999999998934,
+      "shortest_pin_bearing_in_a_cheek_mm": 2.4499999999999993,
+      "paddle_side_float_each_way_mm": 0.3000000000000007
+    },
+    "fore_aft_float_mm": [
+      0.55,
+      0.8500000000000001
+    ],
+    "cases": 18,
+    "worst_case": "dx-0.30_dy-0.55_a0.00",
+    "worst_interference_mm3": 0.0,
+    "sideways_gap_to_lid_towers_mm": 0.32028460651636126,
+    "note": "Slack cases move the paddle as far as the pin holes allow and test it against everything except the pin, cheeks, lid towers, sleeve and switch, which are what limit it."
+  },
+  "failed": {
+    "static": [],
+    "routes": []
+  },
+  "passes": true
+}

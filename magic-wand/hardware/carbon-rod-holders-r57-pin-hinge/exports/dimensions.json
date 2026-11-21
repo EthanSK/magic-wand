@@ -1,0 +1,92 @@
+{
+  "meshes": {
+    "Key_Carrier": {
+      "sha256": "b459c67a67b9afcdefe2374bc4318ac0d198571b5a8707e630cf2c8c26846024",
+      "volume_mm3": 9523.229,
+      "bounds_mm": [
+        -30.77,
+        -18.846,
+        -4.781,
+        30.0,
+        32.65,
+        20.5
+      ]
+    },
+    "Touch_Paddle": {
+      "sha256": "8a8bc9868cafdd21459bf64871edc3ec77e4643a631b346bf7672933dd9cc292",
+      "volume_mm3": 1317.175,
+      "bounds_mm": [
+        -10.6,
+        -8.65,
+        12.69,
+        10.6,
+        32.6,
+        19.3
+      ]
+    },
+    "Hinge_Pin": {
+      "sha256": "83aa477db2be8f8812ced1731bebcd7937bcc68370fe32f57ec0f90fe13ac9f8",
+      "volume_mm3": 138.277,
+      "bounds_mm": [
+        -10.9,
+        27.8,
+        15.07,
+        10.9,
+        30.8,
+        17.77
+      ]
+    },
+    "Pin_Clip": {
+      "sha256": "03af0281c4fd3870f4c0908a9fdae0e410b99168b540cf811205c22fd11047ef",
+      "volume_mm3": 27.351,
+      "bounds_mm": [
+        -0.6,
+        26.9,
+        13.62,
+        0.6,
+        32.6,
+        20.9
+      ]
+    },
+    "DFR_Post_Bar": {
+      "sha256": "81bb4d85be4299a5010d55ee1bccfaef9263b9c0b369de3cef2640c057abad08",
+      "volume_mm3": 124.071,
+      "bounds_mm": [
+        -9.05,
+        14.071,
+        15.9,
+        9.05,
+        16.591,
+        23.9
+      ]
+    },
+    "DFR_Tall_Clip": {
+      "sha256": "b56216f64122e164f6967c2b23e50bfbe60e4743f00a81ca8a8fb319232986c2",
+      "volume_mm3": 17.707,
+      "bounds_mm": [
+        -9.55,
+        13.531,
+        20.9,
+        -5.95,
+        17.531,
+        22.9
+      ]
+    }
+  },
+  "hinge_axis_world_yz_mm": [
+    29.3,
+    16.27
+  ],
+  "pin_diameter_mm": 3.0,
+  "pin_length_mm": 21.8,
+  "cheek_hole_diameter_mm": 3.5,
+  "barrel_hole_diameter_mm": 3.6,
+  "cheek_width_mm": 4.1,
+  "barrel_to_cheek_gap_mm": 0.3000000000000007,
+  "post_neck_mm": 2.2,
+  "post_head_top_above_board_mm": 3.0,
+  "tall_clip_mm": 2.0,
+  "reused_from_r53": {
+    "OP1_Lid": "88a701edde5a4ea977bcff79664de1dea29156c09f1106eac5f00ab29e22cb00"
+  }
+}

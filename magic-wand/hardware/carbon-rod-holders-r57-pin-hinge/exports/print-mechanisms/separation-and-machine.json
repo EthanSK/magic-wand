@@ -1,0 +1,96 @@
+{
+  "archive_sha256": "9a9f5e8f81b7501cd77a118e141682664233164ed6da8c46f1ce14cc849c559e",
+  "layout_sha256": "8db24da383d7a91dc203dcfbcd8ea1e7a611be4dfe0f7617b58b7526f6260401",
+  "parts": [
+    "Key_Carrier",
+    "Touch_Paddle",
+    "DFR_Post_Bar",
+    "Hinge_Pin",
+    "Pin_Clip",
+    "Pin_Clip_Spare",
+    "DFR_Tall_Clip_A",
+    "DFR_Tall_Clip_B"
+  ],
+  "minimum_separation_mm": 3.399,
+  "projected_part_separation_lower_bounds_mm": {
+    "Key_Carrier / Touch_Paddle": 3.399,
+    "Key_Carrier / DFR_Post_Bar": 96.207,
+    "Key_Carrier / Hinge_Pin": 92.299,
+    "Key_Carrier / Pin_Clip": 24.199,
+    "Key_Carrier / Pin_Clip_Spare": 24.199,
+    "Key_Carrier / DFR_Tall_Clip_A": 26.2,
+    "Key_Carrier / DFR_Tall_Clip_B": 32.541,
+    "Touch_Paddle / DFR_Post_Bar": 89.049,
+    "Touch_Paddle / Hinge_Pin": 92.049,
+    "Touch_Paddle / Pin_Clip": 67.771,
+    "Touch_Paddle / Pin_Clip_Spare": 40.289,
+    "Touch_Paddle / DFR_Tall_Clip_A": 26.111,
+    "Touch_Paddle / DFR_Tall_Clip_B": 25.95,
+    "DFR_Post_Bar / Hinge_Pin": 20.799,
+    "DFR_Post_Bar / Pin_Clip": 108.015,
+    "DFR_Post_Bar / Pin_Clip_Spare": 81.784,
+    "DFR_Post_Bar / DFR_Tall_Clip_A": 61.941,
+    "DFR_Post_Bar / DFR_Tall_Clip_B": 51.08,
+    "Hinge_Pin / Pin_Clip": 68.044,
+    "Hinge_Pin / Pin_Clip_Spare": 54.198,
+    "Hinge_Pin / DFR_Tall_Clip_A": 53.899,
+    "Hinge_Pin / DFR_Tall_Clip_B": 54.07,
+    "Pin_Clip / Pin_Clip_Spare": 15.8,
+    "Pin_Clip / DFR_Tall_Clip_A": 48.299,
+    "Pin_Clip / DFR_Tall_Clip_B": 79.299,
+    "Pin_Clip_Spare / DFR_Tall_Clip_A": 17.299,
+    "Pin_Clip_Spare / DFR_Tall_Clip_B": 48.299,
+    "DFR_Tall_Clip_A / DFR_Tall_Clip_B": 18.799
+  },
+  "machine": {
+    "passed": true,
+    "project_sha256": "9a9f5e8f81b7501cd77a118e141682664233164ed6da8c46f1ce14cc849c559e",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "filament_retraction_mm": [
+    "1.2"
+  ],
+  "filament_retraction_speed_mm_s": [
+    "35"
+  ],
+  "timelapse_type": "1"
+}

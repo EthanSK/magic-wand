@@ -1,0 +1,19 @@
+{
+  "archive_sha256": "9a9f5e8f81b7501cd77a118e141682664233164ed6da8c46f1ce14cc849c559e",
+  "reviewer": "Claude Opus 5.5",
+  "trial_approved": true,
+  "decision": "pass for a monitored fit trial",
+  "evidence": {
+    "reviewed_slice_reports": true,
+    "reopened_slice_checks_run_by_packager": true,
+    "physical_fit_verified": false,
+    "scope": "Eight separate PETG parts and a disposable timelapse tower on the A1 mini."
+  },
+  "review": [
+    "The 3.2 mm sliced gauge passes through both 3.5 mm carrier holes and the 3.6 mm paddle hole. The clip well and key, OP1 and board routes are open. The pin and clips have no unsupported starts or runs flagged for review.",
+    "The new paddle strut bridges are two-ended, 5.3 to 7.5 mm, outside the open connector pin-tail zone. The post necks have two-ended U-shaped runs in layers 2\u20133. Surface roughness at the clip necks and printed roof sag need a physical check.",
+    "Each part has its own pad. Tabs avoid clip legs and mouths. Pin tabs attach at the tapered ends. Minimum normal path separation is 3.399 mm.",
+    "The holder has six accessible perimeter ties, about 24.79 mm\u00b2 over 12 layers. Its hinge bay has 0.01 mm\u00b2 of deposited joint and no pad volume inside. Its own first layer measures 368.6 mm\u00b2. The tower has a 3093.94 mm\u00b2 base and about 444 mm\u00b2 of connected second layer.",
+    "The fit trial needs to confirm side insertion with one upper key removed, positive retainer snap and axle retention, actual post reach and click/return. The installed pin waist is 1.9 mm across and the retainer legs are about 0.98 mm wide. Fit, strength and fatigue have not been measured."
+  ]
+}
