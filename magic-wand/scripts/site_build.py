@@ -238,6 +238,7 @@ def html_hardware(manifest: dict) -> str:
         f'  <dl class="parts">\n{parts}\n  </dl>\n'
         f'  <p>{escape(hardware["wiring"])}</p>\n'
         f'  <p><a href="{escape(hardware["boardUrl"])}">{escape(hardware["board"])} <span aria-hidden="true">↗</span></a></p>\n'
+        '  <p><a class="button-link" href="assembly/">3D assembly guide <span aria-hidden="true">↗</span></a></p>\n'
         "</div>"
     )
 

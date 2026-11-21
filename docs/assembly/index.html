@@ -1,0 +1,34 @@
+<!doctype html>
+<!-- One assembly viewer reads each revision's own meshes and motion recipe. -->
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Assembly | Magic Wand</title><link rel="icon" href="./assets/3d-viewer-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./assets/carbon-rod-holders/assembly/assembly.css"><script type="module" src="./assets/carbon-rod-holders/assembly/viewer-layout.mjs"></script></head><body>
+<div class="assembly-stage">
+<div class="viewer-toolbar">
+<span id="revision" class="tag">Magic Wand · Assembly</span>
+<div class="viewer-layout" role="group" aria-label="Viewer layout">
+<button type="button" data-layout-choice="auto" aria-pressed="true">Auto</button>
+<button type="button" data-layout-choice="portrait" aria-pressed="false">Portrait</button>
+<button type="button" data-layout-choice="landscape" aria-pressed="false">Landscape</button>
+</div></div>
+<main id="view"><p id="concept-status" hidden></p><div id="error" role="alert"></div><div id="annotations" hidden></div><p class="hint">Drag to rotate · Scroll or pinch to zoom · Option-scroll to roll</p></main>
+<div id="view-divider" role="separator" tabindex="0" aria-label="Model view height" aria-controls="view" aria-orientation="horizontal"></div>
+<div id="assembly-playback"></div></div>
+<aside><header class="component-picker"><h1>Wand Assembly</h1>
+<label>Version<select id="version"></select></label>
+<label>Component<select id="module"></select></label>
+<label id="component-view-options" hidden>Assembly view<select id="component-view"></select></label>
+<div class="model-view-actions">
+<button id="key-heights" hidden>Compare cap heights</button>
+<button id="key-mechanism" aria-pressed="false" hidden>Show mechanism</button>
+<button id="annotation-toggle" aria-controls="annotations" aria-expanded="true" hidden>Hide annotations</button>
+<span id="model-actions" hidden></span></div></header>
+<div class="assembly-details">
+<details><summary>Click without moving the pointer</summary><p>On a touch-enabled OP1 paddle, press the upper part of the paddle for a precise click. Keep your finger above the touch pad so the pointer stays still. Press on the lower touch area when you want to move the pointer as you click.</p></details>
+<p id="part-note" class="note"></p><div id="assembly"></div>
+<details><summary>Parts and colours</summary><ul id="parts"></ul></details>
+<h2>View</h2><div class="row" id="modes"><button data-mode="turn" aria-pressed="true">Rotate</button><button data-mode="move" aria-pressed="false">Pan</button><button data-mode="zoom" aria-pressed="false">Zoom</button></div>
+<div class="row"><button id="plus" aria-label="Zoom in">+</button><button id="minus" aria-label="Zoom out">−</button><button id="reset">Reset view</button></div>
+<label><input type="checkbox" id="wand-scroll"> Scroll rotates (wand override)</label>
+<p class="note">Dimensions are in millimetres. Actual solder, wires and printed fit still need checking. Keep wires free and do not force a binding part.</p>
+</div></aside><script type="module" src="./assets/carbon-rod-holders/assembly/viewer.mjs"></script></body></html>

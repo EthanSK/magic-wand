@@ -82,7 +82,7 @@ def build(fit):
     add(steps, 'Lower the paddle', 'Lower it so the sleeve surrounds the switch and the barrel sits between the cheeks.', state, TOUCH, [0, 0, -19])
     add(steps, 'Slide in the hinge pin', 'Push the pin through one cheek, the barrel and the other cheek. Do this before the upper key on that side is fitted.', state, ('hinge_pin',), [-28, 0, 0])
     add(steps, 'Press in the pin clip', 'Press the clip down into the slot in the middle of the barrel until its legs snap over the waist of the pin.', state, ('pin_clip',), [0, 0, -11])
-    add(steps, 'Fit the OP1 retainer', 'Slide the retainer into the two rails above the board and seat the latch.', state, ('lid',), axis * 34)
+    add(steps, 'Fit the OP1 retainer', 'Hold the paddle down. Slide the retainer in from the front, along both rails and over the OP1 board, until the latch seats.', state, ('lid',), axis * 34)
     stop = fit['click']['paddle_meets_switch_case_deg']
     angle = .90 * stop
     pressed = []
@@ -113,9 +113,9 @@ def build(fit):
                     reverse(steps[4], 'Remove the two clips', 'Slide both clips away from the post necks. Keep both clips.'),
                     reverse(steps[3], 'Lift the touch board', 'Lift the board clear of the two posts.'),
                     reverse(steps[2], 'Withdraw the post bar', 'Pull the loose two-post bar out from the underside of the paddle.')]
-    modules['pin_hinge'] = subset(mod, ('carrier', 'cap', 'hinge_pin', 'pin_clip', 'lid', 'post_bar', 'switch', 'plunger', *SENSOR, *CLIPS),
-                                  steps[2:] + remove_hinge + remove_touch, 'Pin hinge and guide',
-                                  'One loose pin passes through both cheeks and the barrel. The clip in the middle stops it sliding out.')
+    modules['pin_hinge'] = subset(mod, ('carrier', 'cap', 'hinge_pin', 'pin_clip', 'lid', 'post_bar', *BOARD, *SWITCH, *SENSOR, *CLIPS),
+                                  steps + remove_hinge + remove_touch + remove_keys, 'Pin hinge and guide',
+                                  'The centre clip locks the loose pin. Reuse the sliding OP1 retainer from the earlier holder kit to hold the board down.')
     modules['op1_clips'] = subset(mod, ('carrier', 'lid', *BOARD, *SWITCH), steps[:2] + [steps[9], remove_hinge[0]] + remove_keys,
                                   'OP1 board retainer', 'Install the touch paddle before sliding its retainer into place.')
     guide.update(revision='R57', physical_fit_verified=False)

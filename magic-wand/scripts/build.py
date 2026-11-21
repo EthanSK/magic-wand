@@ -4,8 +4,8 @@
     python3 scripts/build.py          # write generated files
     python3 scripts/build.py --check  # fail if any generated file is stale
 
-Generated files: device/generated/* (including the receiver's wand-guide.json), docs/device/*, docs/data/*, the marked sections of
-docs/index.html and README.md, and the ?v= cache keys in the website's HTML.
+Generated files include device/generated/*, docs/device/*, docs/data/*, docs/assembly/*,
+the marked sections of docs/index.html and README.md, and the website's asset cache keys.
 """
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import assembly_publish  # noqa: E402
 import device_build  # noqa: E402
 import guide_build  # noqa: E402
 import site_build  # noqa: E402
@@ -23,12 +24,12 @@ import tutorials_build  # noqa: E402
 from paths import ROOT, REPOSITORY, DOCS
 
 
-def outputs() -> dict[Path, str]:
+def outputs() -> dict[Path, str | bytes]:
     files = device_build.artifacts()
     files.update(guide_build.artifacts())
     files.update(site_build.artifacts(device_build.identifiers()))
     files.update(tutorials_build.artifacts(files))
-    return files
+    return {**files, **assembly_publish.artifacts()}
 
 
 def main() -> int:
@@ -37,13 +38,13 @@ def main() -> int:
     args = parser.parse_args()
     stale = []
     for path, content in outputs().items():
-        current = path.read_text() if path.exists() else None
-        if current == content:
+        data = content.encode() if isinstance(content, str) else content
+        if path.exists() and path.read_bytes() == data:
             continue
         stale.append(path.relative_to(REPOSITORY).as_posix())
         if not args.check:
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(content)
+            path.write_bytes(data)
     if args.check:
         if stale:
             print("Stale generated files; from the repository root run npm run build --workspace magic-wand:\n  " + "\n  ".join(stale), file=sys.stderr)

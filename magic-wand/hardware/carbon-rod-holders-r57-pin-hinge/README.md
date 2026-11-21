@@ -37,6 +37,10 @@ R57 changes the paddle hinge and the two touch-board posts of the carbon-rod Mag
 
 To take the hinge apart, pull the clip up by its top, pull the upper key on one side, and push the pin out.
 
+## Click without moving the pointer
+
+On a touch-enabled OP1 paddle, press the upper part of the paddle for a precise click. Keep your finger above the touch pad so the pointer stays still. Press on the lower touch area when you want to move the pointer as you click.
+
 ## Touch board height
 
 The manufacturer's [DFRobot DFR0030 V2 photo](https://dfimg.dfrobot.com/enshop/image/data/DFR0030/20140710/_DSC0731_800x800.jpg.webp) shows the connector and surface-mount parts on the gold-pad side. Potential solder and connector pin projections below the board were checked against the earlier 1.5–2.0 mm estimate. The actual board-to-paddle gap has not been measured. The paddle now leaves everything open under the board except the pad end, a 2 mm strip along each long edge and a land round each post hole. The open zone leaves the connector pin tails clear in the two modelled board outlines. The two rear struts are 2 mm below the nominal board seat. If something still holds the board up, the necks accept a board raised by up to 1.3 mm with the existing clips.

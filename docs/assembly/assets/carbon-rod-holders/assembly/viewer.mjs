@@ -1,0 +1,440 @@
+// All holder components share the existing Three.js controls. Each CAD revision
+// supplies exact actors and sampled assembly transforms, never another drawing.
+import * as THREE from '../../../../lib/three-0.185.1/three.module.min.js';
+import { bindFreeViewControls, installViewTools } from '../../printed-loop-wand/preview/free-view-controls.mjs?v=playback-host';
+import { RollingViewInput, bindTwistGestures, routeAssemblyWheel, rollHint, rollSupport } from './view-roll.mjs';
+import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
+import { sampledPose, validateGuide, identity, assemblyComponents, selectAssemblyComponent } from './assembly-data.mjs';
+import { rodFrame } from './rod-transitions.mjs';
+import { legacyR20 } from './legacy-r20.mjs';
+
+const base = new URL('./', import.meta.url), view = document.getElementById('view');
+const versions = document.getElementById('version'), modules = document.getElementById('module');
+const componentView = document.getElementById('component-view');
+const viewOptions = document.getElementById('component-view-options');
+const keyHeights = document.getElementById('key-heights');
+const keyMechanism = document.getElementById('key-mechanism');
+const annotationHost = document.getElementById('annotations');
+const annotationToggle = document.getElementById('annotation-toggle');
+const conceptStatus = document.getElementById('concept-status');
+const actionHost = document.getElementById('model-actions');
+const hiddenActions = new Set();
+const input = new RollingViewInput({ minDistance: 8, maxDistance: 900 });
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x12151c);
+scene.add(new THREE.HemisphereLight(0xe8f4ff, 0x424154, 2.5));
+const camera = new THREE.PerspectiveCamera(32, 1, .1, 2000); scene.add(camera);
+const light = new THREE.DirectionalLight(0xffffff, 3); light.position.set(-1, 2, 3); camera.add(light);
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); view.prepend(renderer.domElement);
+const canvas = renderer.domElement; canvas.tabIndex = 0;
+const rollText = rollHint(rollSupport());
+canvas.setAttribute('aria-label', `3D assembly. Drag to rotate; scroll or pinch to zoom. ${rollText}.`);
+view.querySelector('.hint').textContent = `Drag to rotate · Scroll or pinch to zoom · ${rollText}`;
+let components, guideUrl, group, actors = {}, module, tools, catalog, loadId = 0, versionLoadId = 0;
+let showAnnotations = true, annotations = [];
+let manualCutaway = false, effectiveCutaway;
+let rodBounds;
+const geometries = new Map();
+
+function bindViewDivider() {
+  const divider = document.getElementById('view-divider');
+  const stage = view.parentElement;
+  const playback = document.getElementById('assembly-playback');
+  const toolbar = stage.querySelector('.viewer-toolbar');
+  const minimum = 240;
+  const maximum = () => Math.max(minimum,
+    document.body.dataset.layout === 'landscape'
+      ? window.innerHeight - toolbar.offsetHeight - divider.offsetHeight - playback.offsetHeight
+      : window.innerHeight - toolbar.offsetHeight - 100);
+  let start;
+
+  function updateValue() {
+    divider.setAttribute('aria-valuemin', String(minimum));
+    divider.setAttribute('aria-valuemax', String(maximum()));
+    divider.setAttribute('aria-valuenow', String(view.clientHeight));
+  }
+  function setHeight(height) {
+    stage.style.setProperty('--model-height', `${Math.round(Math.max(minimum, Math.min(maximum(), height)))}px`);
+    updateValue();
+  }
+  divider.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || start) return;
+    start = { id: event.pointerId, y: event.clientY, height: view.clientHeight };
+    divider.setPointerCapture(start.id);
+    divider.dataset.dragging = '';
+  });
+  divider.addEventListener('pointermove', event => {
+    if (start?.id === event.pointerId) setHeight(start.height + event.clientY - start.y);
+  });
+  divider.addEventListener('lostpointercapture', () => {
+    start = undefined;
+    delete divider.dataset.dragging;
+  });
+  divider.addEventListener('keydown', event => {
+    const heights = { ArrowUp: view.clientHeight - 24, ArrowDown: view.clientHeight + 24,
+      Home: minimum, End: maximum() };
+    if (!Object.hasOwn(heights, event.key)) return;
+    event.preventDefault();
+    setHeight(heights[event.key]);
+  });
+  const resize = new ResizeObserver(() => {
+    if (view.clientHeight > maximum() && stage.style.getPropertyValue('--model-height')) setHeight(maximum());
+    else updateValue();
+  });
+  resize.observe(stage);
+  resize.observe(view);
+  updateValue();
+}
+
+function renderAnnotations() {
+  if (annotationHost.hidden) return;
+  const width = view.clientWidth, height = view.clientHeight;
+  for (const { point, actor, line, dot, card, columnIndex } of annotations) {
+    const projected = point.copy(actor.anchor).applyMatrix4(actors[actor.id].matrixWorld).project(camera);
+    const x = (projected.x + 1) * width / 2, y = (1 - projected.y) * height / 2;
+    const visible = projected.z >= -1 && projected.z <= 1 && x >= 0 && x <= width && y >= 0 && y <= height;
+    line.hidden = dot.hidden = !visible;
+    const rowY = height * (.24 + columnIndex * .27);
+    const cardTop = Math.max(42, Math.min(height - card.offsetHeight - 32, rowY - card.offsetHeight / 2));
+    card.style.top = `${cardTop}px`;
+    if (!visible) continue;
+    const startX = card.dataset.side === 'left' ? card.offsetLeft + card.offsetWidth : card.offsetLeft;
+    const startY = cardTop + card.offsetHeight / 2;
+    line.style.width = `${Math.hypot(x - startX, y - startY)}px`;
+    line.style.transform = `translate(${startX}px,${startY}px) rotate(${Math.atan2(y - startY, x - startX)}rad)`;
+    dot.style.transform = `translate(${x - 3}px,${y - 3}px)`;
+  }
+}
+
+function showAnnotationControls() {
+  annotationToggle.hidden = annotations.length === 0;
+  annotationHost.hidden = annotations.length === 0 || !showAnnotations;
+  annotationToggle.textContent = showAnnotations ? 'Hide annotations' : 'Show annotations';
+  annotationToggle.setAttribute('aria-expanded', String(showAnnotations));
+}
+
+function setAnnotations(records = []) {
+  const sideCount = { left: 0, right: 0 };
+  annotationHost.replaceChildren();
+  annotations = records.map(record => {
+    const line = document.createElement('span'), dot = document.createElement('span'), card = document.createElement('div');
+    line.className = 'annotation-leader'; dot.className = 'annotation-anchor'; card.className = 'assembly-annotation';
+    line.setAttribute('aria-hidden', 'true'); dot.setAttribute('aria-hidden', 'true');
+    card.dataset.side = record.side;
+    const title = document.createElement('strong');
+    const index = record.step ? module.steps.findIndex(step => step.title === record.step) : -1;
+    title.textContent = index >= 0 ? `Step ${index + 1} · ${record.title}` : record.title;
+    card.append(title);
+    if (record.text) card.append(document.createTextNode(record.text));
+    return {
+      line, dot, card, columnIndex: sideCount[record.side]++,
+      point: new THREE.Vector3(), actor: { id: record.actor, anchor: new THREE.Vector3(...record.point) },
+    };
+  });
+  annotationHost.append(...annotations.flatMap(({ line, dot }) => [line, dot]), ...annotations.map(({ card }) => card));
+  showAnnotationControls();
+}
+
+function render() {
+  camera.position.set(...input.camera());
+  camera.up.set(...input.cameraUp());
+  camera.lookAt(...input.target);
+  renderer.render(scene, camera);
+  renderAnnotations();
+  tools?.update();
+}
+function fit() {
+  if (!group) return;
+  const bounds = new THREE.Box3();
+  for (const [id, object] of Object.entries(actors)) if (object.visible && module.actors[id].frame !== false) bounds.expandByObject(object);
+  const frameBounds = rodBounds ?? module.steps[Number(document.body.dataset.step)]?.frameBounds ?? module.frameBounds;
+  if (frameBounds) {
+    bounds.min.fromArray(frameBounds[0]);
+    bounds.max.fromArray(frameBounds[1]);
+  } else if (bounds.isEmpty()) bounds.setFromObject(group);
+  bounds.expandByScalar(2); input.fitBounds(bounds.min.toArray(), bounds.max.toArray(), { aspect: camera.aspect }); render();
+}
+function installModelActions(actions = []) {
+  function applyVisibility() {
+    const hiddenActors = new Set(actions.filter(action => hiddenActions.has(action.id)).flatMap(action => action.actors));
+    for (const [id, object] of Object.entries(actors)) object.visible = !hiddenActors.has(id);
+  }
+  actionHost.hidden = actions.length === 0;
+  actionHost.replaceChildren(...actions.map(action => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    const update = () => { button.textContent = hiddenActions.has(action.id) ? action.showLabel : action.hideLabel; };
+    update();
+    button.addEventListener('click', () => {
+      if (hiddenActions.has(action.id)) hiddenActions.delete(action.id);
+      else hiddenActions.add(action.id);
+      applyVisibility();
+      update();
+      render();
+    });
+    return button;
+  }));
+  applyVisibility();
+}
+function reset() {
+  input.rotation.setFromEuler(new THREE.Euler(...(module?.rotation ?? [.95, 0, .65]), 'ZXY'));
+  input.syncAngles();
+  fit();
+}
+function updateCutaway(index, fraction) {
+  const automatic = module.steps[index]?.reveal && (index !== module.steps.length - 1 || fraction < 1);
+  const active = Boolean(manualCutaway || automatic);
+  if (effectiveCutaway === active) return;
+  effectiveCutaway = active;
+  if (module.stagedActors) return; // The rod composes the cutaway and arrival opacity in applyPose.
+  for (const [id, object] of Object.entries(actors)) {
+    if (!module?.actors[id].cutaway) continue;
+    object.material.opacity = active ? .22 : 1;
+    object.material.transparent = active;
+    object.material.depthWrite = !active;
+    object.material.needsUpdate = true;
+  }
+}
+function chooseMode(mode) { input.setMode(mode); for (const button of document.querySelectorAll('[data-mode]')) button.setAttribute('aria-pressed', String(button.dataset.mode === mode)); render(); }
+function followRodBounds(next) {
+  if (rodBounds && rodBounds !== next) {
+    const fitted = box => input.boundsPose(box[0].map(v => v - 2), box[1].map(v => v + 2), { aspect: camera.aspect });
+    const before = fitted(rodBounds), after = fitted(next);
+    // Keep any manual pan, orbit and zoom while the animation reframes.
+    input.target = input.target.map((v, i) => v + after.target[i] - before.target[i]);
+    input.distance = THREE.MathUtils.clamp(input.distance * after.distance / before.distance, input.minDistance, input.maxDistance);
+  }
+  rodBounds = next;
+}
+function applyPose({ index, fraction }) {
+  const previousStep = Number(document.body.dataset.step);
+  const startOfReplay = module.concept && index === 0 && previousStep > 0;
+  const followStep = module.frameEachStep && !module.stagedActors && index !== previousStep;
+  const frame = module.stagedActors ? rodFrame(module.steps[index], fraction, module.frameBounds) : null;
+  if (frame) followRodBounds(frame.bounds);
+  updateCutaway(index, fraction);
+  const sample = frame?.pose ?? sampledPose(module, index, fraction);
+  for (const [id, object] of Object.entries(actors)) {
+    if (frame) {
+      object.visible = Object.hasOwn(sample, id);
+      if (!object.visible) continue;
+      const actor = module.actors[id];
+      const opacity = (frame.opacity[id] ?? 1) * (actor.cutaway && effectiveCutaway ? 0.22 : actor.opacity ?? 1);
+      if (object.material.opacity !== opacity) {
+        if (object.material.transparent !== (opacity < 1)) object.material.needsUpdate = true;
+        object.material.opacity = opacity;
+        object.material.transparent = opacity < 1;
+        object.material.depthWrite = opacity === 1;
+      }
+    }
+    const m = sample[id] || identity();
+    object.matrix.set(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11], 0, 0, 0, 1);
+    object.matrixWorldNeedsUpdate = true;
+    if (object.morphTargetInfluences) {
+      const weights = sample.morphs?.[id];
+      for (let i = 0; i < object.morphTargetInfluences.length; i++) {
+        object.morphTargetInfluences[i] = Array.isArray(weights) ? weights[i] ?? 0 : i === 0 ? weights ?? 0 : 0;
+      }
+    }
+  }
+  document.body.dataset.step = String(index); document.body.dataset.fraction = String(fraction);
+  if (startOfReplay || followStep) fit();
+  else render();
+}
+async function geometry(record, sourceUrl) {
+  if (record.geometry) {
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(record.geometry.vertices.flat(), 3));
+    if (record.geometry.faces) { g.setIndex(record.geometry.faces.flat()); g.computeVertexNormals(); }
+    return g;
+  }
+  if (record.primitive) {
+    const p = record.primitive;
+    if (p.type !== 'cylinder') throw new Error('Unsupported reference shape');
+    const g = new THREE.CylinderGeometry(p.radius, p.radius, p.length, 48);
+    if (p.axis === 'z') g.rotateX(Math.PI / 2);
+    return g;
+  }
+  const url = new URL(record.file, record.baseUrl || sourceUrl).href;
+  if (!geometries.has(url)) {
+    const pending = fetch(url, { cache: 'no-cache' }).then(async response => {
+      if (!response.ok) throw new Error('Model could not be loaded');
+      return parseBinaryStl(await response.arrayBuffer());
+    }).catch(error => {
+      geometries.delete(url);
+      throw error;
+    });
+    geometries.set(url, pending);
+  }
+  return geometries.get(url);
+}
+function showComponentViews(component, selectedView = component.defaultView) {
+  const potential = document.createElement('optgroup');
+  const comparison = document.createElement('optgroup');
+  potential.label = 'Potential components';
+  comparison.label = 'Comparison only';
+  componentView.replaceChildren();
+  for (const [id, value] of Object.entries(component.views)) {
+    (value.comparisonOnly ? comparison : value.concept ? potential : componentView).append(new Option(value.label, id));
+  }
+  if (potential.childElementCount) componentView.append(potential);
+  if (comparison.childElementCount) componentView.append(comparison);
+  componentView.value = selectedView;
+  viewOptions.hidden = Object.keys(component.views).length < 2;
+}
+
+async function chooseModule() {
+  const request = ++loadId; tools?.assembly.pause(); document.body.dataset.ready = 'loading';
+  const component = components[modules.value], viewId = componentView.value;
+  const next = component.views[viewId];
+  keyHeights.hidden = !next.compareCapHeights;
+  keyMechanism.hidden = !next.concept;
+  const sourceUrl = guideUrl, nextActors = {}, nextGroup = new THREE.Group();
+  try {
+    for (const [id, record] of Object.entries(next.actors)) {
+      const rest = await geometry(record, sourceUrl);
+      const color = record.color || '#29a5b7', opacity = record.opacity ?? 1;
+      let g = rest;
+      const morphSources = record.morphGeometries?.map(geometry => ({ geometry }))
+        ?? (record.morphFile || record.morphGeometry
+          ? [{ file: record.morphFile, geometry: record.morphGeometry, baseUrl: record.baseUrl }] : []);
+      if (morphSources.length) {
+        const targets = await Promise.all(morphSources.map(source => geometry(source, sourceUrl)));
+        const positions = targets.map(target => target.getAttribute('position'));
+        if (positions.some(position => position.count !== rest.getAttribute('position').count)) throw new Error('Assembly spring shapes do not match');
+        // Each target shares the exact vertex order. Only this component owns
+        // the morph binding, so an ordinary view can still reuse the cached STL.
+        g = rest.clone();
+        g.morphAttributes.position = positions;
+        if (record.geometry) rest.dispose();
+        targets.forEach((target, index) => { if (morphSources[index].geometry) target.dispose(); });
+      }
+      const material = record.lines ? new THREE.LineBasicMaterial({ color, transparent: opacity < 1, opacity }) : new THREE.MeshStandardMaterial({ color, roughness: .5, metalness: .08, flatShading: true, transparent: opacity < 1, opacity, depthWrite: opacity === 1 });
+      const object = record.lines ? new THREE.LineSegments(g, material) : new THREE.Mesh(g, material);
+      object.userData.ownedGeometry = !record.file || morphSources.length > 0;
+      object.matrixAutoUpdate = false; nextGroup.add(object); nextActors[id] = object;
+    }
+    if (request !== loadId) { disposeGroup(nextGroup); return; }
+    if (group) { scene.remove(group); disposeGroup(group); }
+    rodBounds = undefined;
+    group = nextGroup; actors = nextActors; module = next; scene.add(group);
+    setAnnotations(module.annotations);
+    installModelActions(module.helperActions);
+    manualCutaway = false; effectiveCutaway = undefined;
+    keyMechanism.setAttribute('aria-pressed', 'false');
+    conceptStatus.hidden = !module.status;
+    conceptStatus.textContent = module.status ?? '';
+    conceptStatus.dataset.limited = String(Boolean(module.comparisonOnly));
+    document.getElementById('part-note').textContent = module.note;
+    document.getElementById('parts').replaceChildren(...Object.entries(module.actors).map(([id, actor]) => {
+      const item = document.createElement('li'); item.textContent = actor.label || id.replaceAll('_', ' '); item.style.setProperty('--part-color', actor.color || '#29a5b7'); return item;
+    }));
+    document.body.dataset.module = modules.value;
+    // Start each assembly at step one. Compare cap heights explicitly seats the parts.
+    tools.assembly.setSteps(module.steps);
+    reset();
+    const url = new URL(location.href);
+    url.searchParams.set('version', versions.value);
+    url.searchParams.set('component', modules.value);
+    url.searchParams.delete('keyView');
+    if (viewId !== component.defaultView) url.searchParams.set('view', viewId);
+    else url.searchParams.delete('view');
+    history.replaceState(null, '', url);
+    document.body.dataset.ready = 'true'; document.getElementById('error').style.display = 'none';
+  } catch (error) {
+    disposeGroup(nextGroup);
+    if (request === loadId) showError(error);
+  }
+}
+function disposeGroup(value) {
+  // Fetched STL geometries are cached for reuse; transient references belong to
+  // their component and can be released as soon as the user switches away.
+  for (const object of value.children) {
+    object.material.dispose();
+    if (object.userData.ownedGeometry) object.geometry.dispose();
+  }
+}
+function showError(error) { const box = document.getElementById('error'); box.style.display = 'grid'; box.textContent = error.message; document.body.dataset.ready = 'error'; }
+async function chooseVersion(preferred, preferredView) {
+  const versionRequest = ++versionLoadId; ++loadId;
+  tools?.assembly.pause();
+  modules.disabled = componentView.disabled = true;
+  const version = catalog.versions.find(item => item.id === versions.value);
+  const nextGuideUrl = version.guide ? new URL(version.guide, base) : base;
+  const nextGuide = validateGuide(version.legacy ? await legacyR20() : await fetch(nextGuideUrl, { cache: 'no-store' }).then(response => { if (!response.ok) throw new Error('Assembly guide could not be loaded'); return response.json(); }));
+  if (version.helper) {
+    const helperUrl = new URL(version.helper, base), response = await fetch(helperUrl);
+    if (!response.ok) throw new Error('Print-helper view could not be loaded');
+    const helper = await response.json();
+    const actor = { label: 'Disposable timelapse wipe tower', geometry: { vertices: helper.segments.flatMap(segment => [segment.slice(0, 3), segment.slice(3)]) }, lines: true, color: '#cb9f76' };
+    nextGuide.modules.wipe_tower = { label: 'Wipe tower · discard', note: 'This upright piece is a print helper, not part of the wand. It catches nozzle ooze between smooth-timelapse photos. The lines show its actual sliced paths.', actors: { tower: actor }, steps: [{ title: 'Remove After Printing', caption: 'Let the plate cool, then remove and discard the tower. It does not attach to any holder.', duration: 2, samples: [{ tower: identity() }] }] };
+  }
+  if (versionRequest !== versionLoadId) return;
+  const nextComponents = assemblyComponents(nextGuide, version.groupKeys);
+  const selection = selectAssemblyComponent(nextComponents, preferred, preferredView, version.groupKeys);
+  guideUrl = nextGuideUrl; components = nextComponents;
+  modules.replaceChildren(...Object.entries(components).map(([id, value]) => new Option(value.label, id)));
+  modules.value = selection.component;
+  showComponentViews(components[selection.component], selection.view);
+  modules.disabled = componentView.disabled = false;
+  document.getElementById('revision').textContent = version.label + ' · Assembly'; document.body.dataset.version = version.id;
+  await chooseModule();
+}
+
+try {
+  catalog = await fetch(new URL('catalog.json', base), { cache: 'no-store' }).then(response => response.json());
+  const requested = new URLSearchParams(location.search);
+  versions.replaceChildren(...catalog.versions.map(version => new Option(version.label, version.id)));
+  versions.value = catalog.versions.some(version => version.id === requested.get('version')) ? requested.get('version') : catalog.current;
+  // installViewTools emits the first frame immediately; an inert initial recipe
+  // avoids accessing actors before their own source data has finished loading.
+  tools = installViewTools({ view, input, fit, render, assembly: { host: document.getElementById('assembly'), playbackHost: document.getElementById('assembly-playback'), steps: [{ title: 'Loading', caption: 'Loading assembly', duration: 1 }], onFrame: state => { if (module) applyPose(state); } } });
+  bindViewDivider();
+  const gestures = bindTwistGestures({ canvas, input, render });
+  const wandScroll = document.getElementById('wand-scroll');
+  bindFreeViewControls({ canvas, input, height: () => view.clientHeight, width: () => view.clientWidth, render, chooseMode, fit,
+    wheel: event => routeAssemblyWheel(input, event, { gestureActive: gestures.active, height: view.clientHeight, pageHeight: innerHeight, wandRotate: wandScroll.checked }) });
+  for (const button of document.querySelectorAll('[data-mode]')) button.addEventListener('click', () => chooseMode(button.dataset.mode));
+  document.getElementById('plus').addEventListener('click', () => { input.zoom(.82); render(); });
+  document.getElementById('minus').addEventListener('click', () => { input.zoom(1 / .82); render(); });
+  document.getElementById('reset').addEventListener('click', reset);
+  modules.addEventListener('change', () => {
+    showComponentViews(components[modules.value]);
+    chooseModule();
+  });
+  componentView.addEventListener('change', () => chooseModule());
+  keyHeights.addEventListener('click', () => {
+    tools.assembly.pause();
+    tools.assembly.timeline.seek(tools.assembly.timeline.duration);
+    input.rotation.setFromEuler(new THREE.Euler(1.47, 0, 0, 'ZXY'));
+    input.syncAngles();
+    fit();
+  });
+  keyMechanism.addEventListener('click', () => {
+    manualCutaway = !manualCutaway;
+    keyMechanism.setAttribute('aria-pressed', String(manualCutaway));
+    applyPose({ index: Number(document.body.dataset.step), fraction: Number(document.body.dataset.fraction) });
+    if (manualCutaway) {
+      input.rotation.setFromEuler(new THREE.Euler(1.23, 0, .64, 'ZXY'));
+      input.syncAngles();
+      fit();
+    } else render();
+  });
+  annotationToggle.addEventListener('click', () => {
+    showAnnotations = !showAnnotations;
+    showAnnotationControls();
+    renderAnnotations();
+  });
+  versions.addEventListener('change', () => {
+    const requestedVersion = versions.value;
+    chooseVersion(modules.value).catch(error => {
+      if (versions.value !== requestedVersion) return;
+      if (components) {
+        versions.value = document.body.dataset.version;
+        modules.disabled = componentView.disabled = false;
+      }
+      showError(error);
+    });
+  });
+  new ResizeObserver(() => { camera.aspect = view.clientWidth / view.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(view.clientWidth, view.clientHeight, false); render(); }).observe(view);
+  await chooseVersion(requested.get('component'), requested.get('view') ?? requested.get('keyView'));
+} catch (error) { showError(error); }
