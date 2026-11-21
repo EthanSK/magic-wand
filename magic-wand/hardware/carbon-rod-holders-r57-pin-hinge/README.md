@@ -1,6 +1,6 @@
 # R57 pin hinge and longer touch-board posts
 
-The CAD fit and native slice were checked for the Bambu A1 mini with PETG. The printed pin fit, clip retention and click feel still need a physical trial.
+The CAD and native slice were checked for Bambu A1 mini PETG. R57 is the pin-hinge baseline after a hands-on fit trial on 21 November 2026. The printed pin went in, its centre clip held during handling, and the sliding retainer held the OP1 board. The paddle still has some front-to-back play and can catch when pressed and pulled with the OP1 retainer in place.
 
 [Hinge assembly](../carbon-rod-holders/assembly/?version=r57&component=keys&view=pin_hinge) · [Full 500 mm rod assembly](../carbon-rod-holders/assembly/?version=r57&component=whole)
 
@@ -33,7 +33,7 @@ R57 changes the paddle hinge and the two touch-board posts of the carbon-rod Mag
 3. Lower the paddle so the sleeve goes over the switch and the barrel sits between the two cheeks.
 4. Push the pin through one cheek, the barrel and the other cheek. Fit the pin before installing the upper key on the insertion side. The switch on that side crosses the pin's path.
 5. Press the pin clip down into the slot in the middle of the barrel until it snaps.
-6. Slide the OP1 lid in from the front.
+6. Hold the paddle down. Slide the OP1 lid in from the front, along both rails and over the board, until the latch seats.
 
 To take the hinge apart, pull the clip up by its top, pull the upper key on one side, and push the pin out.
 
