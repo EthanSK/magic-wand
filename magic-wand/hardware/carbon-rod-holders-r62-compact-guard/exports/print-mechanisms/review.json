@@ -1,0 +1,21 @@
+{
+  "reviewer": "Claude Opus 5.5",
+  "archive_sha256": "0faba3d8bd46850b53d2f112bbd0bb3966c17bd7488c3e51d8bc335a5def6f24",
+  "reopened_sha256": "3c54fbd7774f80935c8e8a7fa0263655942999de68e7b759dcbd9b84cdb5969e",
+  "trial_approved": true,
+  "physical_acceptance": false,
+  "verdict": "APPROVE ONE MONITORED FIT TRIAL",
+  "review_scope": "Opus independently confirmed the final native archive hash, actual guard and latch extrusion, open hardware paths, limited shoulder depth and six ties. Both independently sliced outputs passed all 62 route gauges. The other eleven printed pieces match R61.",
+  "native_warning": {
+    "reviewed_archive_warnings": {
+      "0faba3d8bd46850b53d2f112bbd0bb3966c17bd7488c3e51d8bc335a5def6f24": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+      "3c54fbd7774f80935c8e8a7fa0263655942999de68e7b759dcbd9b84cdb5969e": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    },
+    "evidence": "Bambu Studio flags floating regions on the carrier. The inspector found no completely unsupported starts. The three single-ended holder spans are inherited at the same locations as R61. The latch roof and the junctions in the guards have anchors at both ends. The rear shoulder ledges step out by up to 1.08 mm a layer and can curl. The base ties are asymmetric and the right side needs observation during a test."
+  },
+  "physical_checks": [
+    "Watch the right side for rocking or lifting and both shoulder ledges for curl or nozzle contact.",
+    "Check finger comfort, guard stiffness and upper-right key latch engagement, and remove the six outer fins after cooling.",
+    "Check the real plug and wire bend near the central hinge, battery friction and the click and return of the hinged paddle."
+  ]
+}

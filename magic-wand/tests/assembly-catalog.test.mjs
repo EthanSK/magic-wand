@@ -755,7 +755,7 @@ test('R58 assembles its battery inside the key carrier before the keys mount on 
 test('the integrated battery waits at the mouth, slides in once, and has its own removal view', () => {
   const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
   const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
-  for (const id of ['r60', 'r61']) {
+  for (const id of ['r60', 'r61', 'r62']) {
     const entry = catalog.versions.find(version => version.id === id);
     const guide = validateGuide(JSON.parse(readFileSync(new URL(entry.guide, directory))));
     const { keys, battery, whole } = assemblyComponents(guide, entry.groupKeys);
@@ -786,7 +786,7 @@ test('the integrated battery waits at the mouth, slides in once, and has its own
     assert.ok(a < sampledPose(detail, 0, .1233).battery[7]);
     assert.ok(a > sampledPose(detail, 0, .1235).battery[7]);
     assert.equal(sampledPose(detail, 0, .1234).battery[7], a);
-    if (id === 'r61') {
+    if (id !== 'r60') {
       const dfr = keys.views.pin_hinge;
       assert.ok(dfr.actors.flat_electrode && dfr.actors.gravity_plug);
       assert.equal(dfr.actors.gravity_pins, undefined);
@@ -826,5 +826,25 @@ test('all R61 assembly views have continuous step boundaries and repeatable scru
         assert.deepEqual(at(.371), mid);
       }
     }
+  }
+});
+
+test('R62 shows the checked compact carrier and its shallow bottom finger supports in every applicable view', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const entry = JSON.parse(readFileSync(new URL('catalog.json', directory))).versions.find(v => v.id === 'r62');
+  const guideURL = new URL(entry.guide, directory);
+  const guide = validateGuide(JSON.parse(readFileSync(guideURL)));
+  const carrier = JSON.parse(readFileSync(new URL('carrier.json', guideURL)));
+  const profile = JSON.parse(readFileSync(new URL('profile.json', guideURL)));
+  assert.equal(profile.carrier_sha256, carrier.source_sha256);
+  const expected = new URL('Key_Carrier-assembly.stl', guideURL);
+  assert.equal(createHash('sha256').update(readFileSync(expected)).digest('hex'), carrier.source_sha256);
+  assert.ok(profile.bottom_root_angle_deg < profile.top_root_angle_deg);
+  assert.ok(carrier.bottom_run_mm > carrier.top_run_mm);
+  assert.ok(Math.max(...Object.values(profile.rear_extension_at_key_centres_mm)) <= 5);
+  assert.ok(carrier.carrier_volume_mm3 < carrier.previous_carrier_volume_mm3);
+  assert.ok(Math.max(...Object.values(profile.missing_guard_core_mm3)) < .01);
+  for (const module of Object.values(guide.modules)) {
+    if (module.actors.carrier) assert.equal(new URL(module.actors.carrier.file, guideURL).href, expected.href);
   }
 });

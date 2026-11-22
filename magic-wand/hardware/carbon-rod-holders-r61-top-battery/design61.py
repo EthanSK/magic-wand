@@ -114,10 +114,10 @@ def posed(s, degrees):
 
 
 @lru_cache(maxsize=1)
-def holder():
+def holder(guard_shape=finger_guard, tail_shape=tail):
     _, bare, _, working, routes=prior.geometry()
-    base=tail(bare)
-    guards=b.mirrored(finger_guard())
+    base=tail_shape(bare)
+    guards=b.mirrored(guard_shape())
     cradle=prior.cradle().translate(Y_SHIFT)
     # The inboard shoulder of the outboard rail is carried directly by the
     # tapered rear rim. Carve the bought key routes after joining everything.

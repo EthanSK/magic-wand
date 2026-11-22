@@ -45,7 +45,7 @@ def spring_opening(points, position):
     return rows
 
 
-def audit(folder):
+def audit(folder, part_rows=parts, carrier_directory=OUT):
     archive=folder/v.ARCHIVE
     frame=v.read(folder/'layout.frame.json')
     sha=v.digest(archive)
@@ -53,7 +53,7 @@ def audit(folder):
     assert native['return_code']==0 and native['archive_sha256']==sha and len(native['plates'])==1
     assert 'got warnings:' not in (folder/'native/slice.log').read_text()
     assert frame['layout_sha256']==v.digest(folder/'layout.3mf') and set(frame['parts'])==set(LABELS)
-    for row in parts():
+    for row in part_rows():
         assert v.digest(row['source'])==frame['parts'][row['name']]['source_sha256']
     v.audit(archive,folder/'layout.3mf',folder/'separation-and-machine.json',set(LABELS))
     adhesion=v.bases(archive)
@@ -78,7 +78,7 @@ def audit(folder):
     v.write(folder/'layers.json',layers)
     starts={p:r['completely_unsupported_starts'] for p,r in layers['parts'].items() if r['completely_unsupported_starts']}
     carrier=frame['parts']['Key_Carrier']
-    body=v.load_solid(OUT/carrier['source'])
+    body=v.load_solid(carrier_directory/carrier['source'])
     position=np.asarray(carrier['assembly_to_machine'])
     oriented=position[:3].copy()
     oriented[:2,3]=0

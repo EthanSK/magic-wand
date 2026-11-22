@@ -3,12 +3,13 @@ import json
 import numpy as np
 from design61 import OUT,BED,REAR,FLIP,b,k,prior,plug,housing,lead,posed
 
-def main():
+def main(carrier_directory=OUT):
     k.old.configure_new_op1()
     shapes=k.q.hardware()
     get=lambda n:b.load(OUT/(n+'-assembly.stl'))
     old=lambda n:b.load(prior.PREVIOUS/'exports'/(n+'-assembly.stl'))
-    C,P,pin,clip=map(get,['Key_Carrier','Touch_Paddle','Hinge_Pin','Pin_Clip'])
+    C=b.load(carrier_directory/'Key_Carrier-assembly.stl')
+    P,pin,clip=map(get,['Touch_Paddle','Hinge_Pin','Pin_Clip'])
     bar=b.load(prior.old.n.R57/'exports/DFR_Post_Bar-assembly.stl')
     lid=old('OP1_Lid_Stop')
     board=k.r.sensor().translate((0,k.r.CLICK_SHIFT,0)).transform(FLIP)
@@ -55,7 +56,7 @@ def main():
     diagnostic=dict(overlap_mm3=fit,button_contact_deg=trigger,case_stop_deg=stop,lift_stop_deg=lift,
                     via='Pre-connect the lead, lower the board over both posts, route the wires through the open right edge before fitting the hinge pin.',
                     assumptions='The OEM photos show gold on both faces. Socket height, plug outline, cable diameter and bend are nominal; electrical sensitivity is unmeasured.')
-    (OUT/'click-fit.json').write_text(json.dumps(diagnostic,indent=2)+'\n')
+    (carrier_directory/'click-fit.json').write_text(json.dumps(diagnostic,indent=2)+'\n')
     print(json.dumps(diagnostic,indent=1),flush=True)
     assert 0<trigger<stop<4 and 0<lift<6
     assert max(fit.values())<.013,fit
