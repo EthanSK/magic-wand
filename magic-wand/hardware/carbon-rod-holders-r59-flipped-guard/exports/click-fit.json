@@ -1,0 +1,88 @@
+{
+  "physical_acceptance": false,
+  "gravity_plug": {
+    "basis": "nominal PH 2.0 mm 3-way housing and R41 photo-estimated socket position; not measured",
+    "gap_under_plug_and_wires_to_pin_clip_mm": {
+      "r57_clip": 0.3,
+      "r59_clip": 1.25
+    },
+    "plug_in_and_pull_out_9_mm_mm3": {
+      "r57_clip": 0.0,
+      "r59_clip": 0.0
+    },
+    "press_and_6_deg_lift_sweep_to_holder_pin_and_keys_mm3": 0.0,
+    "pin_clip_still_clears": {
+      "to_paddle_mm3": 0.0,
+      "to_pin_mm3": 0.0,
+      "to_touch_board_mm3": 0.0,
+      "to_holder_mm3": 0.0
+    },
+    "grip_left_above_paddle_top_mm": 0.6,
+    "rear_grip_unchanged_mm": 1.55
+  },
+  "left_against_right": {
+    "paddle_post_holes_differ_mm3": 0.0003,
+    "holder_hinge_holes_differ_mm3": 0.0,
+    "post_bar_differs_mm3": 0.0,
+    "note": "zero means the CAD holes are mirror images; any difference on the print comes from slicing or printing"
+  },
+  "post_clips": {
+    "thickness_mm": 1.4,
+    "r31_thickness_mm": 0.8,
+    "arm_section_gain": 1.75,
+    "free_neck_left_over_mm": 0.8,
+    "snap_overlap_with_post_necks_mm3": -0.0,
+    "r31_snap_overlap_mm3": 0.0,
+    "to_touch_board_mm3": 3.275215326806254e-07,
+    "to_paddle_mm3": 0.0,
+    "left_is_mirror_of_right_mm3": 0.0
+  },
+  "stop_retainer": {
+    "board_lift_before_it_stops_mm": 0.15,
+    "to_holder_mm3": -1.7763568394002505e-15,
+    "to_op1_and_switch_mm3": 0.0,
+    "to_keys_mm3": 0.0,
+    "paddle_at_rest_mm3": 0.0,
+    "whole_press_stroke_with_0_6_mm_side_shift_mm3": 0.0,
+    "lift_stops_at_plunger_mm": 0.884,
+    "sideways_gap_to_towers_mm": {
+      "r58": 0.9608510047197343,
+      "r59": 1.0676102191209798
+    },
+    "slide_in_from_front_mm3": {
+      "paddle_at_rest": 2.253058850598677e-14,
+      "paddle_pressed": 2.253058850598677e-14
+    },
+    "hinge_play_study": {
+      "poses_tried": 81,
+      "poses_the_sleeve_can_reach": 30,
+      "poses_touching_the_retainer": 0,
+      "worst_overlap_mm3": 0.0,
+      "smallest_gap_in_clear_poses_mm": 0.202,
+      "examples": []
+    },
+    "stem_root_section_mm2": {
+      "r58": 2.17,
+      "r59": 4.2
+    },
+    "stem_root_section_modulus_mm3": {
+      "r58": 0.253,
+      "r59": 0.49
+    },
+    "needs_paddle_down_while_sliding_in": true,
+    "lower_ledge": "the step under the retainer track is the OP1 board's own slot, open at the front because the board's true length is unknown; the retainer rides on the ledge above it, under the two rail lips"
+  },
+  "optional_backing_strips": {
+    "Socket_Backer_Left": {
+      "slide_in_with_guard_off_mm3": 0.0,
+      "slide_in_with_guard_on_mm3": 0.0
+    },
+    "Socket_Backer_Right": {
+      "slide_in_with_guard_off_mm3": 0.0,
+      "slide_in_with_guard_on_mm3": 0.0
+    },
+    "when": "with a guard off, hold the socket up with a fingertip; use a strip only to back a socket with the guard left on"
+  },
+  "failed": [],
+  "passes": true
+}

@@ -1,0 +1,24 @@
+{
+  "reviewer": "Claude Opus 5.5",
+  "archive_sha256": "5d11b39841a2bfba76859b2d04634359c35015d977567ba06c6d90d1772380f6",
+  "reopened_sha256": "1e426e27decf08049ee0a30b2f016d0971f9357f72860d33a4658052627bffd2",
+  "trial_approved": true,
+  "physical_acceptance": false,
+  "review_scope": "The reviewer independently inspected the primary archive and its native preview. Reopening and re-slicing the same layout was verified separately by the deposited-path checks. Send only the packaged primary archive for a monitored trial.",
+  "native_warning": {
+    "reviewed_archive_warnings": {
+      "5d11b39841a2bfba76859b2d04634359c35015d977567ba06c6d90d1772380f6": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+      "1e426e27decf08049ee0a30b2f016d0971f9357f72860d33a4658052627bffd2": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    },
+    "evidence": "Both native audits record zero completely unsupported starts and zero support moves. The independent reviewer found 12 candidate starts in the holder cross-sections. Eight thin candidates carry no bead, and all 17 sampled points across the four printed candidates have backing from the prior layer. Two low-speed, partly overhanging loops are inherited from R58. The new right loop extends 0.63 mm beyond its backing. The source of the generic Studio notice is undocumented."
+  },
+  "trial_observations": [
+    "Confirm first-layer adhesion at all 15 individual pads, the broad holder pad and the timelapse tower.",
+    "After removing the tray, trim and file the rear inboard tie under the battery sleeve floor below 0.1 mm before fitting the battery and its cap. Check force at the right holder ties.",
+    "Try the guards with the socket insertion order in the guide and check play and retention. The nominal wedge is about 0.025 mm per side. Check fit with a fingertip load.",
+    "Check the OP1 retainer for cracks and debris and verify smooth clicks across the paddle travel. The stem is still 0.7 mm thick, with two walls and gap fill.",
+    "Check both post clips when pushing on and removing. The thicker arms resist twisting but require more in-plane snap-on force.",
+    "Check both hinge holes and both board-post holes separately. Both hinge cheek openings have matching widths. Their starts sit near opposite insertion faces. The cause of the earlier rough left hole remains unknown.",
+    "Dry-fit the actual Gravity plug and battery with their wires. The bought housing and lead exit remain physically unverified."
+  ]
+}

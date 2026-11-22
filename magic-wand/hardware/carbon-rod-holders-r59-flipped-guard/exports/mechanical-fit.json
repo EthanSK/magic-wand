@@ -1,0 +1,348 @@
+{
+  "physical_acceptance": false,
+  "checked_mesh_sha256": {
+    "Touch_Paddle": "22a259898650085ace921e78302814fd3d0ff948124dcea8e450b5675e41676e",
+    "OP1_Lid_Plain": "863611ab7a1522979e295ac1efb2cf8aff60c0a00f5375106e88ad419f6dd49e",
+    "OP1_Lid_Stop": "11afb9650bece75ef64b60b45b91154a117fc8b9053e4ac3b5ede7c1eef9b2f6",
+    "Hinge_Pin_Snug": "4c8853175af9f6a7efb8d7590e13128eb3f6d1511ebf7d0a1079f2a58ac0cbf5"
+  },
+  "reused_r57_mesh_sha256": {
+    "Key_Carrier": "b459c67a67b9afcdefe2374bc4318ac0d198571b5a8707e630cf2c8c26846024",
+    "Hinge_Pin": "83aa477db2be8f8812ced1731bebcd7937bcc68370fe32f57ec0f90fe13ac9f8",
+    "Pin_Clip": "03af0281c4fd3870f4c0908a9fdae0e410b99168b540cf811205c22fd11047ef",
+    "DFR_Post_Bar": "81bb4d85be4299a5010d55ee1bccfaef9263b9c0b369de3cef2640c057abad08"
+  },
+  "baseline_retainer_sha256": "88a701edde5a4ea977bcff79664de1dea29156c09f1106eac5f00ab29e22cb00",
+  "contact_bar": {
+    "meets_free_plunger_deg": {
+      "r57": 5.990278041281271e-05,
+      "r58": 5.9855823201360176e-05
+    },
+    "reversed_switch_meets_free_plunger_deg": {
+      "r57": -0.18314097748116182,
+      "r58": -0.18314096717404027
+    },
+    "upward_step_between_stations_mm": {
+      "0.00_mm_off_centre": {
+        "r57": 0.047,
+        "r58": 0.001
+      },
+      "1.00_mm_off_centre": {
+        "r57": 0.11,
+        "r58": 0.002
+      },
+      "1.45_mm_off_centre": {
+        "r57": 0.389,
+        "r58": 0.011
+      }
+    },
+    "underside_along_centre_mm": {
+      "along_board_mm": [
+        -1.5,
+        -0.64,
+        0.23,
+        1.09,
+        1.95,
+        2.81,
+        3.68,
+        4.54,
+        5.4
+      ],
+      "r57": [
+        18.369284653927924,
+        18.352083917530496,
+        18.350209492838292,
+        18.35711982428256,
+        18.3493752589643,
+        18.263366011120816,
+        18.256457085963344,
+        18.258330521424973,
+        18.2755308602517
+      ],
+      "r58": [
+        18.369284653927924,
+        18.352083917530496,
+        18.350209492838292,
+        18.328416707044436,
+        18.293126435828693,
+        18.263366011120816,
+        18.256457085963344,
+        18.258330521424973,
+        18.27550795754329
+      ]
+    }
+  },
+  "hinge_play": {
+    "r57_paddle_standard_pin": {
+      "pin_in_holder_cheeks": {
+        "at_rest_toward_front_mm": 0.019,
+        "at_rest_toward_rear_mm": 0.019,
+        "most_toward_front_mm": 0.344,
+        "most_toward_rear_mm": 0.25
+      },
+      "paddle_on_pin": {
+        "at_rest_toward_front_mm": 0.002,
+        "at_rest_toward_rear_mm": 0.002,
+        "most_toward_front_mm": 0.3,
+        "most_toward_rear_mm": 0.3
+      },
+      "paddle_to_holder_fore_aft": {
+        "at_rest_toward_front_mm": 0.021,
+        "at_rest_toward_rear_mm": 0.021,
+        "most_toward_front_mm": 0.644,
+        "most_toward_rear_mm": 0.55,
+        "most_total_mm": 1.194,
+        "at_rest_total_mm": 0.042
+      }
+    },
+    "r58_paddle_standard_pin": {
+      "pin_in_holder_cheeks": {
+        "at_rest_toward_front_mm": 0.019,
+        "at_rest_toward_rear_mm": 0.019,
+        "most_toward_front_mm": 0.344,
+        "most_toward_rear_mm": 0.25
+      },
+      "paddle_on_pin": {
+        "at_rest_toward_front_mm": 0.002,
+        "at_rest_toward_rear_mm": 0.002,
+        "most_toward_front_mm": 0.2,
+        "most_toward_rear_mm": 0.2
+      },
+      "paddle_to_holder_fore_aft": {
+        "at_rest_toward_front_mm": 0.021,
+        "at_rest_toward_rear_mm": 0.021,
+        "most_toward_front_mm": 0.544,
+        "most_toward_rear_mm": 0.45,
+        "most_total_mm": 0.994,
+        "at_rest_total_mm": 0.042
+      }
+    },
+    "r58_paddle_snug_pin": {
+      "pin_in_holder_cheeks": {
+        "at_rest_toward_front_mm": 0.006,
+        "at_rest_toward_rear_mm": 0.006,
+        "most_toward_front_mm": 0.203,
+        "most_toward_rear_mm": 0.149
+      },
+      "paddle_on_pin": {
+        "at_rest_toward_front_mm": 0.002,
+        "at_rest_toward_rear_mm": 0.002,
+        "most_toward_front_mm": 0.1,
+        "most_toward_rear_mm": 0.1
+      },
+      "paddle_to_holder_fore_aft": {
+        "at_rest_toward_front_mm": 0.008,
+        "at_rest_toward_rear_mm": 0.008,
+        "most_toward_front_mm": 0.303,
+        "most_toward_rear_mm": 0.249,
+        "most_total_mm": 0.552,
+        "at_rest_total_mm": 0.016
+      }
+    },
+    "sideways_along_the_pin_each_way_mm": {
+      "r57": 0.25,
+      "r58": 0.25
+    },
+    "yaw_at_rest_deg": {
+      "pin_in_cheeks": 0.62,
+      "r57_paddle_on_pin": 0.95,
+      "r58_paddle_on_pin": 0.95
+    },
+    "nominal_gap_mm": {
+      "cheek_hole_radial": 0.25,
+      "r57_bore_radial": 0.30000000000000004,
+      "r58_bore_fore_aft_each_side": 0.19999999999999996,
+      "r58_bore_up_down": 0.30000000000000004,
+      "snug_pin_in_cheek_radial": 0.1499999999999999,
+      "snug_pin_in_bore_fore_aft_each_side": 0.09999999999999987
+    },
+    "pin_fit": {
+      "standard_pin_to_r58_paddle_mm3": 0.0,
+      "snug_pin_to_holder_mm3": 0.0,
+      "snug_pin_to_clip_mm3": 0.0,
+      "go_gauge_mm": {
+        "fore_aft": 3.12,
+        "up_down": 3.2
+      }
+    }
+  },
+  "retainers": {
+    "r53": {
+      "board_lift_before_it_stops_mm": 0.15,
+      "board_area_under_it_mm2": 76.76,
+      "highest_point_mm": 16.4,
+      "to_holder_mm3": -1.7763568394002505e-15,
+      "to_op1_and_switch_mm3": 0.0,
+      "to_keys_mm3": 0.0
+    },
+    "plain": {
+      "board_lift_before_it_stops_mm": 0.15,
+      "board_area_under_it_mm2": 76.76,
+      "highest_point_mm": 12.95,
+      "to_holder_mm3": -1.7763568394002505e-15,
+      "to_op1_and_switch_mm3": 0.0,
+      "to_keys_mm3": 0.0
+    },
+    "stop": {
+      "board_lift_before_it_stops_mm": 0.15,
+      "board_area_under_it_mm2": 76.76,
+      "highest_point_mm": 16.5,
+      "to_holder_mm3": -1.7763568394002505e-15,
+      "to_op1_and_switch_mm3": 0.0,
+      "to_keys_mm3": 0.0
+    },
+    "plain_differs_from_r53_outside_the_towers_mm3": 0.004834871854962163,
+    "stop_differs_from_plain_outside_the_towers_mm3": 0.00031658262835875894
+  },
+  "click": {
+    "lever_mm": 33.11949,
+    "travel_mm_per_degree": 0.578331594550253,
+    "paddle_meets_switch_case_deg": 1.4307390026806388,
+    "plunger_travel_at_case_mm": 0.8275582245986541,
+    "reversed_switch_travel_at_case_mm": 0.8305585274619034,
+    "first_contact_with_anything_else_deg": 3.4037132514040422,
+    "travel_needed_for_lowest_operating_point_mm": 0.7500000000000036,
+    "fixed_part_interference_from_6_deg_lift_to_stop_mm3": 0.0,
+    "r57_values": {
+      "crown_meets_free_plunger_deg": 5.990278041281271e-05,
+      "lever_mm": 33.11949,
+      "travel_mm_per_degree": 0.578331594550253,
+      "paddle_meets_switch_case_deg": 1.4307390026151552,
+      "plunger_travel_at_case_mm": 0.8275928238701553,
+      "first_contact_with_anything_else_deg": 1.9781605650678102,
+      "plunger_travel_at_that_contact_mm": 1.1444765424534147,
+      "barrel_meets_cheek_or_deck_deg": null,
+      "travel_needed_for_lowest_operating_point_mm": 0.7500000000000036,
+      "fixed_part_interference_over_sweep_mm3": 0.0,
+      "lid_stops_paddle_deg": 0.7640144497156143,
+      "front_rise_at_plunger_mm": 0.441436072799938
+    }
+  },
+  "static_interference_mm3": {
+    "paddle_to_holder": 0.0,
+    "paddle_to_plain_retainer": 0.0,
+    "paddle_to_stop_retainer": 0.0,
+    "paddle_to_op1": 0.0,
+    "paddle_to_switch_case": 0.0,
+    "paddle_to_keys": 0.0,
+    "paddle_to_pin": 0.0,
+    "paddle_to_pin_clip": 0.0,
+    "touch_board_to_paddle": 0.0005199065757542382
+  },
+  "paddle_lift": {
+    "plain_retainer": {
+      "first_contact_deg": 18.787245735526085,
+      "front_rise_at_plunger_mm": 10.555475634503559,
+      "note": "first contact is the touch board against the hinge cheeks; nothing is designed to stop it"
+    },
+    "sleeve_leaves_the_switch_body_deg": 7.504503260970523,
+    "stop_retainer": {
+      "lift_stops_at_deg": 1.5297026813030241,
+      "front_rise_at_plunger_mm": 0.8833893681360792,
+      "front_rise_with_the_paddle_pushed_sideways_mm": {
+        "-0.8_mm_sideways": 0.25,
+        "-0.4_mm_sideways": 0.63,
+        "+0.0_mm_sideways": 0.883,
+        "+0.4_mm_sideways": 0.55,
+        "+0.8_mm_sideways": 0.219
+      },
+      "sideways_gap_to_towers_mm": 0.9608510047197343,
+      "r53_retainer_sideways_gap_to_r57_paddle_mm": 0.32028460651636126
+    },
+    "r53_retainer_stopped_r57_paddle_at_mm": 0.441436072799938
+  },
+  "route_interference_mm3": {
+    "plain_retainer_from_front_with_paddle_at_rest": 2.253058850598677e-14,
+    "plain_retainer_from_front_with_paddle_pressed": 2.253058850598677e-14,
+    "plain_retainer_from_front_with_paddle_lifted_3_deg": 2.253058850598677e-14,
+    "stop_retainer_from_front_with_paddle_at_rest": 2.253058850598677e-14,
+    "stop_retainer_from_front_with_paddle_pressed": 2.253058850598677e-14,
+    "stop_retainer_from_front_with_paddle_lifted_3_deg": 0.2390687865754073
+  },
+  "jam_study": {
+    "hinge_play_used": {
+      "sideways_each_way_mm": 0.250006309111086,
+      "toward_rear_mm": 0.55,
+      "toward_front_mm": 0.644,
+      "yaw_deg": 1.5,
+      "source": "R57 paddle and standard pin, measured above"
+    },
+    "r57_paddle_with_r53_retainer": {
+      "poses_tried": 81,
+      "poses_the_sleeve_can_reach": 30,
+      "poses_touching_the_retainer": 15,
+      "worst_overlap_mm3": 1.2672,
+      "smallest_gap_in_clear_poses_mm": 0.048,
+      "examples": [
+        {
+          "angle_deg": 0.0,
+          "dx_mm": -0.250006309111086,
+          "forward_mm": -0.55,
+          "yaw_deg": 0.0,
+          "overlap_mm3": 0.2849
+        },
+        {
+          "angle_deg": 0.0,
+          "dx_mm": -0.250006309111086,
+          "forward_mm": -0.55,
+          "yaw_deg": 1.5,
+          "overlap_mm3": 0.2774
+        },
+        {
+          "angle_deg": 0.0,
+          "dx_mm": -0.250006309111086,
+          "forward_mm": 0.0,
+          "yaw_deg": 1.5,
+          "overlap_mm3": 0.9829
+        },
+        {
+          "angle_deg": 0.0,
+          "dx_mm": 0.0,
+          "forward_mm": -0.55,
+          "yaw_deg": 1.5,
+          "overlap_mm3": 1.2672
+        }
+      ]
+    },
+    "r58_paddle_with_plain_retainer": {
+      "poses_tried": 81,
+      "poses_the_sleeve_can_reach": 30,
+      "poses_touching_the_retainer": 0,
+      "worst_overlap_mm3": 0.0,
+      "smallest_gap_in_clear_poses_mm": 0.867,
+      "examples": []
+    },
+    "r58_paddle_with_stop_retainer": {
+      "poses_tried": 81,
+      "poses_the_sleeve_can_reach": 30,
+      "poses_touching_the_retainer": 3,
+      "worst_overlap_mm3": 0.0036,
+      "smallest_gap_in_clear_poses_mm": 0.037,
+      "examples": [
+        {
+          "angle_deg": 1.411,
+          "dx_mm": -0.250006309111086,
+          "forward_mm": -0.55,
+          "yaw_deg": 1.5,
+          "overlap_mm3": 0.0006
+        },
+        {
+          "angle_deg": 1.411,
+          "dx_mm": -0.250006309111086,
+          "forward_mm": 0.0,
+          "yaw_deg": 1.5,
+          "overlap_mm3": 0.0005
+        },
+        {
+          "angle_deg": 1.411,
+          "dx_mm": 0.0,
+          "forward_mm": -0.55,
+          "yaw_deg": 1.5,
+          "overlap_mm3": 0.0036
+        }
+      ]
+    }
+  },
+  "failed": [],
+  "passes": true
+}

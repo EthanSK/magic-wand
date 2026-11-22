@@ -1,0 +1,271 @@
+{
+  "physical_acceptance": false,
+  "revision": "R59",
+  "source_r57_sha256": "b459c67a67b9afcdefe2374bc4318ac0d198571b5a8707e630cf2c8c26846024",
+  "bounds_mm": [
+    -30.77,
+    -18.846,
+    -4.781,
+    30.0,
+    32.65,
+    20.5
+  ],
+  "change": {
+    "moved_down_mm": 1.42,
+    "upper_row_nearer_mm": 1.4,
+    "slab_cut_and_web": {
+      "right": {
+        "cut_y_mm": 10.3,
+        "web_section_now_mm2": 65.89,
+        "web_section_kept_mm2": 60.63,
+        "web_kept_share": 0.92,
+        "kept_web_thickness_at_least_mm": 0.8
+      },
+      "left": {
+        "cut_y_mm": 10.3,
+        "web_section_now_mm2": 66.5,
+        "web_section_kept_mm2": 61.66,
+        "web_kept_share": 0.927,
+        "kept_web_thickness_at_least_mm": 0.8
+      }
+    }
+  },
+  "key_spaces": {
+    "poses_checked": 336,
+    "entered_by_the_holder_mm3": {}
+  },
+  "removal": {
+    "old_guard_removed_mm3": 589.7,
+    "cut_from_new_rails_and_sleeve_for_key_spaces_mm3": 0.21,
+    "op1_plug_pocket_region_changed_from_r58_mm3": 0.044,
+    "middle_changed_from_r57_mm3": -0.0,
+    "below_the_slab_left_in_the_banks_mm3": 0.0
+  },
+  "static_interference_mm3": {
+    "holder_to_op1_and_switch": 0.0,
+    "holder_to_paddle": 0.0,
+    "holder_to_pin": 0.0,
+    "holder_to_pin_clip": 0.0,
+    "holder_to_retainers": 1.2906342661267445e-14,
+    "paddle_to_keys": 0.0,
+    "paddle_sweep_from_6_deg_lift_to_full_press": 0.0,
+    "holder_in_rod_and_wire_lane_more_than_r57": 0.0
+  },
+  "guards": {
+    "Finger_Guard_Right": {
+      "volume_mm3": 905.2,
+      "seated_wedge_overlap_with_rails_mm3": 0.0159,
+      "one_mm_short_of_seated_to_holder_mm3": 0.0,
+      "slide_on_from_the_front_14_mm_mm3": 0.0,
+      "to_fitted_switches_sockets_and_tape_mm3": 0.0,
+      "to_keycap_travel_mm3": 0.0,
+      "to_every_socket_loading_pose_mm3": 0.0,
+      "to_rod_wire_lane_and_op1_mm3": 0.0,
+      "socket_plan_area_over_the_shelf_mm2": 50.7,
+      "socket_plan_area_mm2": 51.1,
+      "gap_shelf_to_socket_loading_path_mm": 1.27,
+      "open_toward_the_upper_row": true
+    },
+    "Finger_Guard_Left": {
+      "volume_mm3": 905.2,
+      "seated_wedge_overlap_with_rails_mm3": 0.0159,
+      "one_mm_short_of_seated_to_holder_mm3": 0.0,
+      "slide_on_from_the_front_14_mm_mm3": 0.0,
+      "to_fitted_switches_sockets_and_tape_mm3": 0.0,
+      "to_keycap_travel_mm3": 0.0,
+      "to_every_socket_loading_pose_mm3": 0.0,
+      "to_rod_wire_lane_and_op1_mm3": 0.0,
+      "socket_plan_area_over_the_shelf_mm2": 50.0,
+      "socket_plan_area_mm2": 51.1,
+      "gap_shelf_to_socket_loading_path_mm": 1.27,
+      "open_toward_the_upper_row": true
+    }
+  },
+  "finger_rest": {
+    "r58_beam_section_modulus_mm3": 1.6,
+    "r59_shelf_section_modulus_per_3_25_mm_of_width_mm3": 1.76,
+    "shelf_thickness_mm": 1.8,
+    "unsupported_length_behind_the_arms_mm": 12.75,
+    "calculated_for_10_n_at_the_rear_edge": {
+      "deflection_mm": 0.4,
+      "bending_stress_mpa": 13.4,
+      "modulus_assumed_mpa": 2000
+    },
+    "rail_neck_section_per_side_mm2": 10.8,
+    "left_and_right_are_mirror_images": true,
+    "strength_measured": false
+  },
+  "battery": {
+    "pack_mm": [
+      27.0,
+      11.8,
+      3.9
+    ],
+    "fitting_space_x_mm": [
+      -22.3,
+      -9.4
+    ],
+    "fitting_space_y_mm": [
+      10.6,
+      38.7
+    ],
+    "fitting_space_z_mm": [
+      0.65,
+      5.2
+    ],
+    "fitting_space_to_holder_mm3": 4.2526566811982006e-05,
+    "fitting_space_to_fitted_switches_sockets_and_tape_mm3": 0.0,
+    "fitting_space_to_rod_wire_lane_op1_and_guards_mm3": 0.0,
+    "slide_in_from_the_rear_29_mm_mm3": 4.2526566811982006e-05,
+    "pouch_end_past_the_rear_face_mm": 5.45,
+    "cap_end_past_the_rear_face_mm": 7.55,
+    "holder_left_edge_x_mm": {
+      "r58_with_tray": -38.85,
+      "r59": -30.77,
+      "bank_edge": -30.77
+    },
+    "sleeve_outer_x_mm": [
+      -23.1,
+      -8.6
+    ],
+    "socket_loading_paths_that_need_the_battery_out_mm3": {
+      "key_3_maximum_socket_loading": 33.48,
+      "key_3_socket_loading": 29.72,
+      "key_3_soldered_socket_dogleg": 44.44
+    },
+    "cap": {
+      "to_holder_mm3": 0.0,
+      "to_pouch_mm3": 0.0,
+      "to_rod_and_wire_lane_mm3": 0.0,
+      "detent_height_mm": 0.25,
+      "tongue_strain_at_full_bend": 0.0099,
+      "slides_off_rearward_mm3": 0.0,
+      "open_side": "inboard, for the leads; the plug stays outside"
+    },
+    "rod_can_stay_in": true,
+    "lead_exit_end": "not confirmed on the bought pack"
+  },
+  "seam": {
+    "r58_trim_removed_mm3": 0.1558,
+    "deposited_starts_beside_the_seams": []
+  },
+  "upper_left_socket_end_relief": {
+    "wall_set_back_mm": 0.25,
+    "pocket_x_mm": [
+      -16.751,
+      -16.481
+    ],
+    "pocket_y_mm": [
+      12.951,
+      14.151
+    ],
+    "pocket_z_mm": [
+      7.05,
+      8.25
+    ],
+    "removed_mm3": 0.1587,
+    "native_witness_xyz_mm": [
+      -16.694,
+      13.6502,
+      7.6473
+    ]
+  },
+  "print_overhang_proxy": {
+    "r57": {
+      "total_mm2": 97.5,
+      "largest_patch_mm2": 14.78
+    },
+    "r58": {
+      "total_mm2": 120.3,
+      "largest_patch_mm2": 19.61
+    },
+    "r59": {
+      "total_mm2": 96.3,
+      "largest_patch_mm2": 19.61
+    },
+    "note": "counts bridges too; the native slice is the real test"
+  },
+  "mass": {
+    "solid_petg_g_per_cm3": 1.27,
+    "note": "solid CAD volume, not sliced weight",
+    "r57_holder_g": 12.09,
+    "r58_holder_with_tray_g": 12.29,
+    "r59_holder_with_rails_and_sleeve_g": 10.95,
+    "r59_rails_and_sleeve_g": 0.81,
+    "r59_two_guards_g": 2.3,
+    "r59_cap_g": 0.58,
+    "r58_guard_and_legs_removed_g": 0.75
+  },
+  "key_layout": {
+    "row_centres_y_mm": [
+      0.0,
+      19.95
+    ],
+    "column_centres_x_mm": [
+      -21.0,
+      21.0
+    ],
+    "row_pitch_mm": 19.95,
+    "keycap_envelope_gap_between_rows_mm": 2.55,
+    "socket_turn_deg": {
+      "bottom_left": 0,
+      "bottom_right": 0,
+      "top_left": 180,
+      "top_right": 0
+    },
+    "changed_from_r58": false
+  },
+  "key_poses": {
+    "key_0": {
+      "centre_xy_mm": [
+        -21.0,
+        0.0
+      ],
+      "moved_mm": [
+        0.0,
+        0.0,
+        -1.42
+      ],
+      "socket_turn_deg": 0
+    },
+    "key_2": {
+      "centre_xy_mm": [
+        21.0,
+        0.0
+      ],
+      "moved_mm": [
+        0.0,
+        0.0,
+        -1.42
+      ],
+      "socket_turn_deg": 0
+    },
+    "key_3": {
+      "centre_xy_mm": [
+        -21.0,
+        19.95
+      ],
+      "moved_mm": [
+        0.0,
+        -1.4,
+        -1.42
+      ],
+      "socket_turn_deg": 180
+    },
+    "key_4": {
+      "centre_xy_mm": [
+        21.0,
+        19.95
+      ],
+      "moved_mm": [
+        0.0,
+        -1.4,
+        -1.42
+      ],
+      "socket_turn_deg": 0
+    }
+  },
+  "failed": [],
+  "passes": true,
+  "sha256": "3c83ba94b0220082ae421e9f54e6177ca5709bcef36be740d17002bcfdb5259b"
+}

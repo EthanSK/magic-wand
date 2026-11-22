@@ -1,0 +1,40 @@
+{
+  "meshes": {
+    "Pin_Clip": {
+      "sha256": "ebad0fc4abd1ec73e0c30f5973ba0250c423c80e08f97c9698fe4eb079c48603",
+      "volume_mm3": 22.824
+    },
+    "DFR_Clip_Left": {
+      "sha256": "5673825587a7da76de3c89abe0f0296aecd7edd5699cd576df5137b86413aee9",
+      "volume_mm3": 12.395
+    },
+    "DFR_Clip_Right": {
+      "sha256": "50dbdcc8ec0c1f1acf55225e654ff0d0ede25a448bd0b8abe786c8892cc94e5c",
+      "volume_mm3": 12.395
+    },
+    "OP1_Lid_Stop": {
+      "sha256": "bf8e2f94bfc7ae55122ee13df62b55f6038e10fb4d4c05f0bd28f5b1f91d6b04",
+      "volume_mm3": 270.029
+    }
+  },
+  "pin_clip": {
+    "grip_front_lowered_mm": 0.95,
+    "over_y_mm": [
+      26.8,
+      28.95
+    ]
+  },
+  "post_clip": {
+    "thickness_mm": 1.4,
+    "r31_thickness_mm": 0.8,
+    "post_neck_mm": 2.2
+  },
+  "stop_retainer": {
+    "stem_thickness_mm": 0.7,
+    "stem_length_mm": {
+      "r58": 3.1,
+      "r59": 6.0
+    },
+    "root_fillet_mm": 0.3
+  }
+}
