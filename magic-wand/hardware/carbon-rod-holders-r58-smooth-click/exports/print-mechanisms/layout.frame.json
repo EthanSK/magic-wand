@@ -1,0 +1,324 @@
+{
+  "parts": {
+    "Key_Carrier": {
+      "source": "Key_Carrier-assembly.stl",
+      "source_sha256": "6d91a15e7b6a297319d4ddd948369713e89aa3b9329e54f154ced51843a84c1d",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          54.92498207092285
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          147.64066648483276
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          32.6501579284668
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          96,
+          44
+        ],
+        "keep_clear": [
+          [
+            3.9,
+            -2.5,
+            12.0,
+            7.3
+          ],
+          [
+            -15.0,
+            10.5,
+            15.0,
+            60.0
+          ]
+        ],
+        "ties": [
+          {
+            "face": "+y",
+            "at": 21.5,
+            "height": 2.4
+          },
+          {
+            "face": "+y",
+            "at": -21.5,
+            "height": 2.4
+          },
+          {
+            "face": "-y",
+            "at": 14.2,
+            "height": 3.0
+          },
+          {
+            "face": "-y",
+            "at": -14.2,
+            "height": 3.0
+          },
+          {
+            "face": "-y",
+            "at": 24.5,
+            "height": 2.4
+          },
+          {
+            "face": "-y",
+            "at": -24.5,
+            "height": 2.4
+          }
+        ],
+        "fin_thickness": 1.47,
+        "holder_release": "R55"
+      }
+    },
+    "Touch_Paddle": {
+      "source": "Touch_Paddle-assembly.stl",
+      "source_sha256": "22a259898650085ace921e78302814fd3d0ff948124dcea8e450b5675e41676e",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          127.62507162094116
+        ],
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          155.49998998641968
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          19.300151824951172
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          75,
+          44.5
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "OP1_Lid_Stop": {
+      "source": "OP1_Lid_Stop-assembly.stl",
+      "source_sha256": "11afb9650bece75ef64b60b45b91154a117fc8b9053e4ac3b5ede7c1eef9b2f6",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          30.58248996734619
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          101.44474849700927
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.149999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          28,
+          39
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.1
+      }
+    },
+    "Hinge_Pin_Snug": {
+      "source": "Hinge_Pin_Snug-assembly.stl",
+      "source_sha256": "4c8853175af9f6a7efb8d7590e13128eb3f6d1511ebf7d0a1079f2a58ac0cbf5",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          97.5
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          5.699999809265137
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -15.170000076293945
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "Socket_Backer_Left": {
+      "source": "Socket_Backer_Left-assembly.stl",
+      "source_sha256": "d8118930de7fe43dd013a4116e66c04f56404718efd3234d3c72c706959d1bf4",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          92.74383687973022
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          96.7760554909706
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -3.9000000953674316
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 1.4
+      }
+    },
+    "Socket_Backer_Right": {
+      "source": "Socket_Backer_Right-assembly.stl",
+      "source_sha256": "f8d8e6d95dda3a2c3f90da2f9be1bf61bb49dca64a11b99faa3124316efe9f39",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          77.24383735656738
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          96.7760554909706
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -3.9000000953674316
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 1.4
+      }
+    }
+  },
+  "layout_sha256": "58b40887486f6db98cb3b7798e8d7c52f20b55679df294b034984671e1e62472"
+}

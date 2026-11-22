@@ -2695,6 +2695,15 @@ the cut through the full strip cleared the warning. Audit the adjacent
 key clip space against the resulting beads, because it can still be
 intruded by a wall even when Studio has no warnings.
 
+Self-improved — 2026-11-21: In R58, the exact G-code separated a real
+unsupported start from other contours flagged by the support check.
+The loose seam bead disappeared after a local trim and ramp. The other
+witnesses either received no extrusion or were part of a path connected
+to the preceding layer. Match the warning to the actual layer and
+connected bead footprints before changing a support-free design. R58
+also needed 0.25 mm of local socket clearance for the largest fitting
+envelope after slicing. [R58 geometry and print checks](hardware/carbon-rod-holders-r58-smooth-click/README.md)
+
 User-requested — 2026-11-11: Keep the version selector as the parent of the
 whole printed assembly. Show the related hinge, keeper and spacer under
 their owning component. For the first R32 fit keep the reinforced touch
@@ -2862,3 +2871,5 @@ feed and effective acceleration in the emitted G-code.
 - Self-improved — 2026-11-20. The oversized R55 pads under the tiny hinge pieces used about 3,000 mm² each. R56 keeps small parts on separate pads sized to their footprint and print orientation. The 12 × 12 mm pads for the 3.6 × 4 mm clips retain their open mouths and one removable rear tab, with 106–109 mm² of connected first layer. Keep separate thresholds for small pads and tall holders, and verify the contact on both layers. Keep tower-root and holder attachment checks independent of compact accessory bases. [R56 plate](hardware/carbon-rod-holders-r56-small-pads/README.md)
 
 - Self-improved — 2026-11-21. R56's slide-in cap and flush board seat were too sensitive to the actual print. The board sat high enough to hide the clip necks. R57 uses a separate pin in three support-free bores, lifts the necks by 1.2 mm and opens the deck below the connector pin tails. Check a real sliced passage, the full sideways opening with the relevant upper key removed, and the retainer's axial capture separately. For unchanged outer keys, compare any tiny solid overlap against the previous carrier and check every loading envelope for added material. The exact inherited socket-envelope overlap was 0.0012 mm³ in both revisions. [R57 mechanical checks](hardware/carbon-rod-holders-r57-pin-hinge/exports/mechanical-fit.json)
+
+- Self-improved — 2026-11-21. The six-point bead grid used for base release can cross two nearby walls of the permanent holder. In R58 it measured 0.37 mm² in the open hinge bay, but no witness in that area could reach the actual disposable base. Retain the raw grid measurement and confirm that the outside of each regional witness is near the generated base at that exact layer. [Regional base seam check](hardware/carbon-rod-holders-r54-reinforced-base/joint54.py)

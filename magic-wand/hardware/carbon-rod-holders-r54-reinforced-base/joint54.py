@@ -4,7 +4,7 @@ from zipfile import ZipFile
 
 import numpy as np
 
-from openings53 import digest
+from openings53 import digest, paths
 from support51 import footprint, q
 
 
@@ -31,7 +31,7 @@ def seam_samples(section):
     return np.asarray(points), np.asarray(normals), np.asarray(weights)
 
 
-def measure(archive, frame, body, *, regions=None):
+def measure(archive, frame, body, *, regions=None, regional_base=None):
     with ZipFile(archive) as src:
         text = src.read('Metadata/plate_1.gcode').decode()
         settings = json.loads(src.read('Metadata/project_settings.config'))
@@ -47,6 +47,7 @@ def measure(archive, frame, body, *, regions=None):
 
     rows = []
     regional_area = dict.fromkeys(regions or {}, 0.0)
+    regional_grid_area = dict.fromkeys(regions or {}, 0.0)
     for layer in range(1, 13):
         z = layer * HEIGHT
         deposited = data[np.isclose(data[:, 7], z)]
@@ -62,9 +63,17 @@ def measure(archive, frame, body, *, regions=None):
             joined &= occupied[ij[:, 1], ij[:, 0]]
         if joined.any():
             x, y = (samples - position[:2, 3]).T
+            near_base = joined
+            if regional_base is not None:
+                # A narrow fold in the permanent holder can also fill all six
+                # probe positions. A removable-base joint needs a base bead
+                # nearby. Allow 0.6 mm for path width and raster rounding.
+                base_section = regional_base.slice(z - HEIGHT / 2).offset(.6)
+                near_base = joined & paths._inside(base_section, samples + normals * .52)
             for name, (x0, y0, x1, y1) in (regions or {}).items():
                 in_region = (x >= x0) & (x <= x1) & (y >= y0) & (y <= y1)
-                regional_area[name] += weights[joined & in_region].sum() * HEIGHT
+                regional_area[name] += weights[near_base & in_region].sum() * HEIGHT
+                regional_grid_area[name] += weights[joined & in_region].sum() * HEIGHT
             rows.append(dict(layer=layer, fused_length_mm=round(weights[joined].sum(), 2),
                              left_mm=round(weights[joined & (x < -4)].sum(), 2),
                              right_mm=round(weights[joined & (x > 4)].sum(), 2)))
@@ -72,4 +81,8 @@ def measure(archive, frame, body, *, regions=None):
                   vertical_joint_area_mm2=round(sum(row['fused_length_mm'] for row in rows) * HEIGHT, 2))
     if regions:
         result['regional_joint_area_mm2'] = {name: round(value, 2) for name, value in regional_area.items()}
+        if regional_base is not None:
+            result['regional_unclassified_grid_area_mm2'] = {
+                name: round(value, 2) for name, value in regional_grid_area.items()
+            }
     return result

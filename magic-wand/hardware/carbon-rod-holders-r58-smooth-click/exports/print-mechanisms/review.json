@@ -1,0 +1,21 @@
+{
+  "reviewer": "claude-opus-5-5",
+  "trial_approved": true,
+  "physical_acceptance": false,
+  "archive_sha256": "a4449cbb0d0dc45324fd96a66f6c0a51b52437c794c2dde4309aea0637fdf2c6",
+  "reopened_sha256": "e477a63ddb016f67e1da666e73e0a59248e449a808112704c16df28cff65d1d5",
+  "native_warning": {
+    "reviewed_archive_warnings": {
+      "a4449cbb0d0dc45324fd96a66f6c0a51b52437c794c2dde4309aea0637fdf2c6": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+      "e477a63ddb016f67e1da666e73e0a59248e449a808112704c16df28cff65d1d5": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    },
+    "evidence": "Studio evaluates model cross-sections for potential supports before path emission. Both deposited-path audits have zero unsupported starts and zero support moves. In the reconstructed warning regions, layers 98 and 112 have no native extrusion. Layers 82 and 167 have backing from the previous layer. The 0.090 mm² tip on layer 90 is in a connected footprint with 7.484 mm² of backing. The two longest one-ended spans follow the checked R57 paths after the seat relocation.",
+    "detector_source": "https://github.com/bambulab/BambuStudio/blob/v02.09.01.70/src/libslic3r/Support/TreeSupport.cpp#L1199-L1223"
+  },
+  "trial_observations": [
+    "Expect a possible small surface whisker at the anchored layer-107 ledge by the OP1 pocket.",
+    "The right-side rim tabs have more contact at layers 10–12 and may take a firmer nip.",
+    "Brace the 6.25 × 1.6 mm printed backing strip close to the socket while pressing. The actual press-in force remains to be measured.",
+    "Try the pin and clip, skewed click and release, loaded socket paths, battery exit and slack, finger rest strength and base removal on the physical trial."
+  ]
+}

@@ -146,6 +146,7 @@ const componentFamilies = {
   pin_hinge: 'keys',
   op1_clips: 'keys',
   finger_rest: 'keys',
+  socket_backers: 'keys',
   xiao_latch: 'xiao',
   battery_latch: 'battery',
   battery_easy: 'battery',

@@ -723,3 +723,30 @@ test('R27 fits the copper keys closer and loads the OP1 behind a flat bottom', (
       view.steps[i].title);
   }
 });
+
+test('R58 assembles its battery inside the key carrier before the keys mount on the rod', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+  const version = catalog.versions.find(entry => entry.id === 'r58');
+  const guide = validateGuide(JSON.parse(readFileSync(new URL(version.guide, directory))));
+  const components = assemblyComponents(guide, version.groupKeys);
+  const whole = components.whole.views.whole;
+  const titles = whole.steps.map(step => step.title);
+  const installed = titles.indexOf('Slide in the battery');
+
+  assert.ok(installed > titles.indexOf('Push Up the Upper Sockets'));
+  assert.ok(installed < titles.indexOf('Slide the keys onto the rod'));
+  assert.ok(!titles.includes('Slide the battery holder onto the rod'));
+  assert.ok(Object.hasOwn(whole.actors, 'keys_battery'));
+  assert.ok(Object.hasOwn(whole.steps.at(-1).samples.at(-1), 'keys_battery'));
+  assert.match(whole.steps.at(-1).caption, /battery latch/);
+  assert.deepEqual(selectAssemblyComponent(components, 'battery', 'battery', true),
+    { component: 'battery', view: 'battery' });
+  assert.deepEqual(selectAssemblyComponent(components, 'keys', 'socket_backers', true),
+    { component: 'keys', view: 'socket_backers' });
+  const backers = components.keys.views.socket_backers;
+  assert.ok(Object.hasOwn(backers.actors, 'left_backer'));
+  assert.ok(Object.hasOwn(backers.actors, 'right_backer'));
+  assert.ok(backers.steps.findIndex(step => step.title === 'Seat both lower switches') <
+    backers.steps.findIndex(step => step.title === 'Remove the left strip'));
+});

@@ -99,7 +99,7 @@ export function completeRod(whole, components) {
     assembled = frame(localEnd, placement);
   }
   steps.push({ title: 'Check the assembled wand',
-    caption: 'All four holders are seated. Check the pad click, both keepers and the wire route.',
+    caption: whole.finalCaption ?? 'All four holders are seated. Check the pad click, both keepers and the wire route.',
     duration: 2, samples: [assembled], frameBounds: whole.frameBounds });
   return { ...whole, actors, steps: joinRodSteps(steps, whole.frameBounds), stagedActors: true };
 }

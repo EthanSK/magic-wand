@@ -1,0 +1,83 @@
+{
+  "meshes": {
+    "Touch_Paddle": {
+      "sha256": "22a259898650085ace921e78302814fd3d0ff948124dcea8e450b5675e41676e",
+      "volume_mm3": 1313.194,
+      "bounds_mm": [
+        -10.6,
+        -8.65,
+        12.69,
+        10.6,
+        32.6,
+        19.3
+      ]
+    },
+    "OP1_Lid_Plain": {
+      "sha256": "863611ab7a1522979e295ac1efb2cf8aff60c0a00f5375106e88ad419f6dd49e",
+      "volume_mm3": 215.995,
+      "bounds_mm": [
+        -9.006,
+        -14.281,
+        11.15,
+        9.841,
+        14.591,
+        12.95
+      ]
+    },
+    "OP1_Lid_Stop": {
+      "sha256": "11afb9650bece75ef64b60b45b91154a117fc8b9053e4ac3b5ede7c1eef9b2f6",
+      "volume_mm3": 249.487,
+      "bounds_mm": [
+        -9.006,
+        -14.281,
+        11.15,
+        9.841,
+        14.591,
+        16.5
+      ]
+    },
+    "Hinge_Pin_Snug": {
+      "sha256": "4c8853175af9f6a7efb8d7590e13128eb3f6d1511ebf7d0a1079f2a58ac0cbf5",
+      "volume_mm3": 153.678,
+      "bounds_mm": [
+        -10.9,
+        27.7,
+        15.17,
+        10.9,
+        30.9,
+        17.97
+      ]
+    }
+  },
+  "contact_bar_stations_along_board_mm": [
+    0.0,
+    3.8999999999999995
+  ],
+  "hinge": {
+    "pin_diameter_mm": 3.0,
+    "optional_snug_pin_diameter_mm": 3.2,
+    "cheek_hole_diameter_mm": 3.5,
+    "paddle_bore_fore_aft_mm": 3.4,
+    "paddle_bore_up_down_mm": 3.6,
+    "r57_paddle_bore_mm": 3.6
+  },
+  "lift_stop": {
+    "sleeve_wall_beside_towers_mm": 0.7,
+    "sleeve_flange_mm": 1.4,
+    "tower_to_sleeve_wall_mm": 0.9,
+    "tower_to_flange_tip_mm": 1.0,
+    "lip_over_flange_mm": 0.5,
+    "lift_gap_mm": 1.0,
+    "tower_top_mm": 16.5,
+    "tower_stem_board_x_mm": [
+      6.5,
+      7.2
+    ]
+  },
+  "reused_from_r57": {
+    "Hinge_Pin": "83aa477db2be8f8812ced1731bebcd7937bcc68370fe32f57ec0f90fe13ac9f8",
+    "Pin_Clip": "03af0281c4fd3870f4c0908a9fdae0e410b99168b540cf811205c22fd11047ef",
+    "DFR_Post_Bar": "81bb4d85be4299a5010d55ee1bccfaef9263b9c0b369de3cef2640c057abad08"
+  },
+  "baseline_retainer_sha256": "88a701edde5a4ea977bcff79664de1dea29156c09f1106eac5f00ab29e22cb00"
+}
