@@ -1,0 +1,56 @@
+{
+  "revision": "R61",
+  "physical_fit_verified": false,
+  "rear_extension_mm": 11.0,
+  "pouch_end_beyond_original_rim_mm": 14.950000000000003,
+  "guard_to_original_deck_mm3": 53.124939573659084,
+  "cradle_to_rear_rim_mm3": 37.2369590494888,
+  "key_poses_checked": 336,
+  "key_obstructions": [],
+  "backer_sweep_mm3": {
+    "Left": 0.0,
+    "Right": 0.0
+  },
+  "battery_slide_mm3": 5.091073440370472e-06,
+  "wire_rod_obstruction_mm3": 0.0020261057014885216,
+  "source_sha256": "40ace3d9cf24416f9960d9f41004fc53bb3b4f7f7bfb25814477d56202b6f62d",
+  "key_layout": {
+    "row_centres_y_mm": [
+      0.0,
+      19.95
+    ],
+    "column_centres_x_mm": [
+      -21.0,
+      21.0
+    ],
+    "row_pitch_mm": 19.95,
+    "keycap_envelope_gap_between_rows_mm": 2.55,
+    "socket_turn_deg": {
+      "bottom_left": 0,
+      "bottom_right": 0,
+      "top_left": 180,
+      "top_right": 0
+    },
+    "changed_from_r58": false
+  },
+  "change": {
+    "moved_down_mm": 1.42,
+    "upper_row_nearer_mm": 1.4,
+    "slab_cut_and_web": {
+      "right": {
+        "cut_y_mm": 10.3,
+        "web_section_now_mm2": 65.89,
+        "web_section_kept_mm2": 60.63,
+        "web_kept_share": 0.92,
+        "kept_web_thickness_at_least_mm": 0.8
+      },
+      "left": {
+        "cut_y_mm": 10.3,
+        "web_section_now_mm2": 66.5,
+        "web_section_kept_mm2": 61.66,
+        "web_kept_share": 0.927,
+        "kept_web_thickness_at_least_mm": 0.8
+      }
+    }
+  }
+}

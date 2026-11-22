@@ -1,0 +1,27 @@
+{
+  "reviewer": "Claude Opus 5.5",
+  "archive_sha256": "b0995e7dc8068644f694a75c681df8de8a1e284be6a335142ab4ae3c632b08ce",
+  "reopened_sha256": "77ddbf2c6ad8738fe86e4032bf063314832d0aef7c91ff32522c0cc27b491224",
+  "trial_approved": true,
+  "physical_acceptance": false,
+  "review_scope": "Independent review of the 12-part primary native plate. The reopened slice was separately checked by the same kernel and toolpath audits.",
+  "native_warning": {
+    "reviewed_archive_warnings": {
+      "b0995e7dc8068644f694a75c681df8de8a1e284be6a335142ab4ae3c632b08ce": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+      "77ddbf2c6ad8738fe86e4032bf063314832d0aef7c91ff32522c0cc27b491224": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    },
+    "evidence": "The native carrier floating-region notice remains. No disconnected first extrusion on any layer, no support extrusion, no flagged paddle spans. Longer single-ended runs are in the inherited key deck."
+  },
+  "closed_findings": [
+    "The native upper-left clip route is open after local relief at the guard root.",
+    "The thin disposable paddle pad is relieved along the cable exit. The white housing, plug and wires clear every sampled lowering position.",
+    "Six rim fins sit outside the hinge bay. Opus requested reconciliation of a raw 34.82 mm2 outline scan. It included contacts within permanent walls. The hash-matched rerun masks the contacts with the actual removable base geometry: 19.96 mm2, inside the original 19.83–24.79 interval. The separately classified original R57 is 24.53 mm2."
+  ],
+  "physical_checks": [
+    "Upper-left switch latch and both guard roots under finger pressure",
+    "Wired board mounting flat face up, click and return with slack",
+    "Touch response on the upward face in the powered assembly",
+    "Grip, wire exit and removal of the wrapped battery",
+    "Release of the six outside fins after cooling"
+  ]
+}

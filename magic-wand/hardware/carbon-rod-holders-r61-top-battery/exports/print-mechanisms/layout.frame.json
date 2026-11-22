@@ -1,0 +1,599 @@
+{
+  "parts": {
+    "Key_Carrier": {
+      "source": "Key_Carrier-assembly.stl",
+      "source_sha256": "40ace3d9cf24416f9960d9f41004fc53bb3b4f7f7bfb25814477d56202b6f62d",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          50.884931564331055
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          148.09999990463257
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          43.650142669677734
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          96,
+          44
+        ],
+        "keep_clear": [
+          [
+            3.9,
+            -2.5,
+            12.0,
+            7.3
+          ],
+          [
+            -15.0,
+            10.5,
+            15.0,
+            60.0
+          ]
+        ],
+        "ties": [
+          {
+            "face": "+y",
+            "at": 18.7,
+            "height": 2.0
+          },
+          {
+            "face": "+y",
+            "at": -21.5,
+            "height": 2.0
+          },
+          {
+            "face": "-y",
+            "at": 14.2,
+            "height": 3.0
+          },
+          {
+            "face": "-y",
+            "at": -22.45,
+            "height": 3.0
+          },
+          {
+            "face": "-y",
+            "at": 20.2,
+            "height": 2.4
+          },
+          {
+            "face": "-y",
+            "at": -24.0,
+            "height": 2.4
+          }
+        ],
+        "fin_thickness": 1.45,
+        "holder_release": "R55"
+      }
+    },
+    "Touch_Paddle": {
+      "source": "Touch_Paddle-assembly.stl",
+      "source_sha256": "e96b1fc55c4408fbb20feff4cdd9deed4845b56f1bd52ba0d63328e4c0121714",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          122.12500057220458
+        ],
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          145.99996948242188
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          19.300065994262695
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          75,
+          60
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.0,
+        "wire_exit": true
+      }
+    },
+    "OP1_Lid_Stop": {
+      "source": "OP1_Lid_Stop-assembly.stl",
+      "source_sha256": "bf8e2f94bfc7ae55122ee13df62b55f6038e10fb4d4c05f0bd28f5b1f91d6b04",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          30.58248996734619
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          101.44474849700927
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.149999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          28,
+          39
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.1
+      }
+    },
+    "Hinge_Pin_Snug": {
+      "source": "Hinge_Pin_Snug-assembly.stl",
+      "source_sha256": "3cfaebf87213c57d08cad6373e9e708051c1f549ea10225006272070edfd2d13",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          97.5
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          11.69999885559082
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -15.170000076293945
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "Pin_Clip": {
+      "source": "Pin_Clip-assembly.stl",
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          85.25
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          38.99000024795532
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.6000000238418579
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          15,
+          15
+        ],
+        "ties": [
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "Pin_Clip_Spare": {
+      "source": "Pin_Clip-assembly.stl",
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          105.25
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          38.99000024795532
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.6000000238418579
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          15,
+          15
+        ],
+        "ties": [
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "DFR_Clip_Left": {
+      "source": "DFR_Clip_Left-assembly.stl",
+      "source_sha256": "5673825587a7da76de3c89abe0f0296aecd7edd5699cd576df5137b86413aee9",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          163.75
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          78.46949005126953
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          12,
+          12
+        ],
+        "ties": [
+          [
+            0,
+            -1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          1
+        ]
+      }
+    },
+    "DFR_Clip_Right": {
+      "source": "DFR_Clip_Right-assembly.stl",
+      "source_sha256": "50dbdcc8ec0c1f1acf55225e654ff0d0ede25a448bd0b8abe786c8892cc94e5c",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          92.25
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          86.06949005126953
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          12,
+          12
+        ],
+        "ties": [
+          [
+            0,
+            -1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          1
+        ]
+      }
+    },
+    "Socket_Backer_Left": {
+      "source": "Socket_Backer_Left-assembly.stl",
+      "source_sha256": "d8118930de7fe43dd013a4116e66c04f56404718efd3234d3c72c706959d1bf4",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          122.24383687973022
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          65.17605549097061
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -3.9000000953674316
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 1.4
+      }
+    },
+    "Socket_Backer_Right": {
+      "source": "Socket_Backer_Right-assembly.stl",
+      "source_sha256": "f8d8e6d95dda3a2c3f90da2f9be1bf61bb49dca64a11b99faa3124316efe9f39",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          110.24383735656738
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          69.17605549097061
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -3.9000000953674316
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 1.4
+      }
+    },
+    "Hinge_Pin": {
+      "source": "Hinge_Pin-assembly.stl",
+      "source_sha256": "6f51c4e92b4560519ad5e7ce9b5dc08624ee227c7aecbc15d5d8ca896aaedc2f",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          97.5
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          -5.299999237060547
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -15.069999694824219
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "DFR_Post_Bar": {
+      "source": "DFR_Post_Bar-assembly.stl",
+      "source_sha256": "81bb4d85be4299a5010d55ee1bccfaef9263b9c0b369de3cef2640c057abad08",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          150.5
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          54.89999961853027
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -14.070337295532227
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          18
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    }
+  },
+  "layout_sha256": "865323b797602ab9e6c235458be8e9b5488c6c2eaa2a8f5a61366402e59b6a3d"
+}

@@ -18,8 +18,10 @@ function sequence(fn) {
 
 export function completeKeys(hinge, outer) {
   const outerIds = Object.keys(outer.actors).filter(id => !Object.hasOwn(hinge.actors, id));
+  // Only loose sockets, switches and caps approach together. The battery waits at its own opening.
   const outerPose = (pose, offset = 0) =>
-    Object.fromEntries(outerIds.map(id => [id, shiftY(pose[id], offset)]));
+    Object.fromEntries(outerIds.map(id => [id,
+      /^(socket|switch|keycap)_\d+$/.test(id) ? shiftY(pose[id], offset) : pose[id]]));
   const ready = outer.steps[0].samples[0];
   const parked = outerPose(ready, -44);
   const press = hinge.steps.at(-1);

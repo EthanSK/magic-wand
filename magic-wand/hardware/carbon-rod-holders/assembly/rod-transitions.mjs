@@ -53,12 +53,16 @@ function blendMatrix(a, b, t) {
 export function rodFrame(step, fraction, defaultBounds) {
   const f = Math.max(0, Math.min(1, fraction));
   const u = step.transitionTo ? f * f * (3 - 2 * f) : f;
-  const x = u * (step.samples.length - 1);
-  const i = Math.floor(x), t = x - i, a = step.samples[i], b = step.samples[Math.ceil(x)];
   const from = step.frameBounds ?? defaultBounds, to = step.transitionTo ?? from;
   const bounds = from === to || u === 0 ? from : u === 1 ? to
     : from.map((corner, j) => corner.map((value, k) => lerp(value, to[j][k], u)));
-  if (t === 0) return { pose: a, opacity: {}, bounds };
+  return { ...interpolatedPose(step.samples, u), bounds };
+}
+
+export function interpolatedPose(samples, fraction) {
+  const x = fraction * (samples.length - 1);
+  const i = Math.floor(x), t = x - i, a = samples[i], b = samples[Math.ceil(x)];
+  if (t === 0) return { pose: a, opacity: {} };
   const pose = {}, opacity = {};
   for (const id of new Set([...Object.keys(a), ...Object.keys(b)])) {
     if (id === 'morphs') continue;
@@ -80,5 +84,5 @@ export function rodFrame(step, fraction, defaultBounds) {
       lerp(arrA[j] ?? 0, arrB[j] ?? 0, t));
     pose.morphs[id] = Array.isArray(wa) || Array.isArray(wb) ? weights : weights[0];
   }
-  return { pose, opacity, bounds };
+  return { pose, opacity };
 }

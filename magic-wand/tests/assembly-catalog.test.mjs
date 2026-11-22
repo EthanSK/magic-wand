@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { validateGuide, sampledPose, identity, groupKeys, assemblyComponents, selectAssemblyComponent } from '../hardware/carbon-rod-holders/assembly/assembly-data.mjs';
+import { rodFrame } from '../hardware/carbon-rod-holders/assembly/rod-transitions.mjs';
 import { legacyR20 } from '../hardware/carbon-rod-holders/assembly/legacy-r20.mjs';
 import { GUIDED_CAPTURE, HOLDER_SNAP, UPPER_KEY_SHIFT } from '../hardware/carbon-rod-holders/assembly/keycap-concepts.mjs';
 import { CIRQUE_LAYOUT } from '../hardware/carbon-rod-holders/assembly/cirque-keycap.mjs';
@@ -749,4 +750,81 @@ test('R58 assembles its battery inside the key carrier before the keys mount on 
   assert.ok(Object.hasOwn(backers.actors, 'right_backer'));
   assert.ok(backers.steps.findIndex(step => step.title === 'Seat both lower switches') <
     backers.steps.findIndex(step => step.title === 'Remove the left strip'));
+});
+
+test('the integrated battery waits at the mouth, slides in once, and has its own removal view', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const catalog = JSON.parse(readFileSync(new URL('catalog.json', directory)));
+  for (const id of ['r60', 'r61']) {
+    const entry = catalog.versions.find(version => version.id === id);
+    const guide = validateGuide(JSON.parse(readFileSync(new URL(entry.guide, directory))));
+    const { keys, battery, whole } = assemblyComponents(guide, entry.groupKeys);
+    assert.equal(battery.defaultView, 'battery');
+    assert.deepEqual(battery.views.battery.steps.map(step => step.title), ['Slide in the battery']);
+    assert.deepEqual(battery.views.battery_removal.steps.map(step => step.title), ['Remove the battery']);
+    const authored = battery.views.battery.steps[0].samples;
+    const staged = authored[0].battery[7], installed = authored.at(-1).battery[7];
+    assert.ok(staged > installed);
+    for (const [view, prefix] of [[keys.views.dfr, ''], [keys.views.key, ''], [whole.views.whole, 'keys_']]) {
+      const install = view.steps.findIndex(step => step.title === 'Slide in the battery');
+      assert.ok(install > 0);
+      for (const [index, step] of view.steps.entries()) {
+        let previous = Infinity;
+        for (const frame of step.samples) {
+          const pack = frame[prefix + 'battery'], carrier = frame[prefix + 'carrier'];
+          if (!pack || !carrier) continue;
+          const dy = pack[7] - carrier[7];
+          if (index === install) {
+            assert.ok(dy <= previous + 1e-7 && dy >= installed - 1e-7);
+            previous = dy;
+          } else assert.ok(Math.abs(dy - (index < install ? staged : installed)) < 1e-7, step.title);
+        }
+      }
+    }
+    const detail = battery.views.battery;
+    const a = sampledPose(detail, 0, .1234).battery[7];
+    assert.ok(a < sampledPose(detail, 0, .1233).battery[7]);
+    assert.ok(a > sampledPose(detail, 0, .1235).battery[7]);
+    assert.equal(sampledPose(detail, 0, .1234).battery[7], a);
+    if (id === 'r61') {
+      const dfr = keys.views.pin_hinge;
+      assert.ok(dfr.actors.flat_electrode && dfr.actors.gravity_plug);
+      assert.equal(dfr.actors.gravity_pins, undefined);
+      const join = dfr.steps.findIndex(step => step.title === 'Connect the Gravity lead');
+      assert.equal(dfr.steps[join + 1].title, 'Seat the touch board');
+      assert.equal(dfr.steps[join].samples[0].gravity_plug[7] - dfr.steps[join].samples.at(-1).gravity_plug[7], 9);
+      for (const step of dfr.steps.slice(join + 1)) {
+        for (const frame of step.samples) assert.deepEqual(frame.gravity_plug, frame.sensor);
+      }
+    }
+  }
+});
+
+test('all R61 assembly views have continuous step boundaries and repeatable scrubbing', () => {
+  const directory = new URL('../hardware/carbon-rod-holders/assembly/', import.meta.url);
+  const entry = JSON.parse(readFileSync(new URL('catalog.json', directory))).versions.find(v => v.id === 'r61');
+  const guide = validateGuide(JSON.parse(readFileSync(new URL(entry.guide, directory))));
+  for (const component of Object.values(assemblyComponents(guide, entry.groupKeys))) {
+    for (const view of Object.values(component.views)) {
+      let previous;
+      for (const [index, step] of view.steps.entries()) {
+        const at = t => view.stagedActors ? rodFrame(step, t, view.frameBounds).pose : sampledPose(view, index, t);
+        const first = at(0);
+        if (previous) {
+          for (const [name, m] of Object.entries(first)) {
+            if (name === 'morphs' || !previous[name]) continue;
+            assert.ok(m.every((entry, i) => Math.abs(entry - previous[name][i]) < .001), view.label + '/' + step.title + '/' + name);
+          }
+        }
+        const mid = at(.371);
+        for (const [name, m] of Object.entries(mid)) {
+          if (name === 'morphs') continue;
+          assert.equal(m.length, 12);
+          assert.ok(m.every(Number.isFinite));
+        }
+        previous = at(1);
+        assert.deepEqual(at(.371), mid);
+      }
+    }
+  }
 });

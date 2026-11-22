@@ -4,6 +4,7 @@
 import { potentialKeyViews } from './keycap-concepts.mjs?v=cirque-cap-view';
 
 import { withStockRods } from './stock-rod.mjs';
+import { interpolatedPose } from './rod-transitions.mjs';
 import { completeKeys, completeRod } from './rod-build.mjs';
 
 export const identity = () => [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0];
@@ -12,7 +13,7 @@ export const translated = (x = 0, y = 0, z = 0) => [1, 0, 0, x, 0, 1, 0, y, 0, 0
 export function sampledPose(module, index, fraction) {
   if (!Number.isInteger(index) || !module.steps[index] || !Number.isFinite(fraction)) throw new TypeError('Invalid assembly step');
   const samples = module.steps[index].samples;
-  return samples[Math.round(Math.max(0, Math.min(1, fraction)) * (samples.length - 1))];
+  return interpolatedPose(samples, Math.max(0, Math.min(1, fraction))).pose;
 }
 
 // Milky-white Choc slim keycap (Adafruit 5737). Use the project’s 16.6 × 17.5 mm
@@ -116,6 +117,14 @@ export function groupKeys(modules) {
   // A guide may name the Keys entry so a detail module listed after it reads as a pair.
   // Compose the whole-rod view with the same bought cap reference as Keys.
   // Each cap follows its own switch pose throughout assembly and removal.
+  if (key.actors.battery && others.battery) {
+    const battery = others.battery;
+    const firstRemoval = battery.steps.findIndex(step => ['Pull off the cap', 'Remove the battery'].includes(step.title));
+    if (firstRemoval > 0) {
+      others.battery = { ...battery, steps: battery.steps.slice(0, firstRemoval) };
+      others.battery_removal = { ...battery, label: 'Remove the battery', steps: battery.steps.slice(firstRemoval) };
+    }
+  }
   if (others.whole?.rodMounts) {
     views.dfr = completeKeys(views.dfr, fitChoc);
     views.dfr.helperActions = [otherKeycaps];
@@ -149,6 +158,7 @@ const componentFamilies = {
   socket_backers: 'keys',
   xiao_latch: 'xiao',
   battery_latch: 'battery',
+  battery_removal: 'battery',
   battery_easy: 'battery',
   battery_spacer: 'battery',
 };
