@@ -6,6 +6,7 @@ import { RollingViewInput, bindTwistGestures, routeAssemblyWheel, rollHint, roll
 import { parseBinaryStl } from '../../printed-loop-wand/preview/stl-geometry.mjs';
 import { sampledPose, validateGuide, identity, assemblyComponents, selectAssemblyComponent } from './assembly-data.mjs';
 import { rodFrame } from './rod-transitions.mjs';
+import { readCatalog, watchAssemblyVersions } from './assembly-versions.mjs';
 import { legacyR20 } from './legacy-r20.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');
@@ -31,6 +32,7 @@ const rollText = rollHint(rollSupport());
 canvas.setAttribute('aria-label', `3D assembly. Drag to rotate; scroll or pinch to zoom. ${rollText}.`);
 view.querySelector('.hint').textContent = `Drag to rotate · Scroll or pinch to zoom · ${rollText}`;
 let components, guideUrl, group, actors = {}, module, tools, catalog, loadId = 0, versionLoadId = 0;
+let showVersionUpdate;
 let showAnnotations = true, annotations = [];
 let manualCutaway = false, effectiveCutaway;
 let rodBounds;
@@ -377,11 +379,13 @@ async function chooseVersion(preferred, preferredView) {
   showComponentViews(components[selection.component], selection.view);
   modules.disabled = componentView.disabled = false;
   document.getElementById('revision').textContent = version.label + ' · Assembly'; document.body.dataset.version = version.id;
+  showVersionUpdate(version.id);
   await chooseModule();
 }
 
 try {
-  catalog = await fetch(new URL('catalog.json', base), { cache: 'no-store' }).then(response => response.json());
+  catalog = await readCatalog();
+  showVersionUpdate = watchAssemblyVersions(catalog, document.getElementById('reload-version'));
   const requested = new URLSearchParams(location.search);
   versions.replaceChildren(...catalog.versions.map(version => new Option(version.label, version.id)));
   versions.value = catalog.versions.some(version => version.id === requested.get('version')) ? requested.get('version') : catalog.current;

@@ -1,3 +1,6 @@
+import { watchCurrent } from './watch-current.mjs';
+export { watchCurrent };
+
 // Keep one viewer address while archived revisions retain their exact models.
 // Watch the generated pointer while the page is visible, including when it
 // stays open beside the chat. Unchanged geometry never resets the camera.
@@ -46,28 +49,6 @@ export function followCurrent({ frame, status, base, fetchCurrent, reload }) {
     return pending;
   }
   return refresh;
-}
-
-export function watchCurrent(refresh, browserWindow, browserDocument) {
-  let timer = null;
-  function stop() {
-    if (timer !== null) browserWindow.clearInterval(timer);
-    timer = null;
-  }
-  function start() {
-    if (browserDocument.hidden) return;
-    refresh();
-    // This observes completed file updates; it never delays model controls.
-    // Focus alone misses an already-open viewer or focus inside its iframe.
-    if (timer === null) timer = browserWindow.setInterval(refresh, 1000);
-  }
-  browserWindow.addEventListener('pageshow', start);
-  browserWindow.addEventListener('pagehide', stop);
-  browserWindow.addEventListener('focus', start);
-  browserDocument.addEventListener('visibilitychange', () => {
-    if (browserDocument.hidden) stop(); else start();
-  });
-  start();
 }
 
 if (typeof document !== 'undefined') {

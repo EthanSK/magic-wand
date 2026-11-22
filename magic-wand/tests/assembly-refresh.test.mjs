@@ -52,3 +52,43 @@ test('a normal reload gets current viewer scripts even when their timestamp is u
   assert.equal(refreshed.headers.get('cache-control'), 'no-store');
   assert.equal(await refreshed.text(), 'document.title = "new";');
 });
+
+test('an open assembly offers a newer revision without interrupting the selected view', async t => {
+  const { watchAssemblyVersions } = await import('../hardware/carbon-rod-holders/assembly/assembly-versions.mjs');
+  const page = new EventTarget();
+  const tab = new EventTarget();
+  const button = new EventTarget();
+  let tick;
+  page.clearInterval = () => { tick = undefined; };
+  let requests = 0;
+  let available = ['r9', 'r10'];
+  const catalog = () => ({ current: 'r9', versions: available.map(id => ({ id })) });
+  const navigations = [];
+  page.location = { href: 'https://example.test/assembly/?version=r10&component=keys&view=finger_rest#assembly',
+    assign: url => navigations.push(new URL(url)) };
+  page.setInterval = fn => { tick = fn; };
+  t.after(() => { delete globalThis.window; delete globalThis.document; });
+  globalThis.window = page;
+  globalThis.document = tab;
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    requests++;
+    assert.equal(url.pathname.split('/').pop(), 'catalog.json');
+    assert.equal(options.cache, 'no-store');
+    return { ok: true, json: catalog };
+  });
+  const show = watchAssemblyVersions(catalog(), button);
+  await new Promise(resolve => setImmediate(resolve));
+  show('r9'); assert.equal(button.hidden, false);
+  show('r10'); assert.equal(button.hidden, true);
+  available = ['r11', 'r9', 'r10'];
+  tab.hidden = true;
+  await tick();
+  assert.equal(requests, 1);
+  tab.hidden = false;
+  await tick();
+  assert.equal(button.hidden, false);
+  assert.equal(navigations.length, 0);
+  button.dispatchEvent(new Event('click'));
+  assert.deepEqual(navigations.map(url => url.search + url.hash),
+    ['?version=r11&component=keys&view=finger_rest#assembly']);
+});
