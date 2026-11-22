@@ -1,0 +1,138 @@
+{
+  "archive_sha256": "89a58877d4effd96ec0b2ccd1a48a23b5656b7389806562894d7518c1d9035d1",
+  "layout_sha256": "328d61466d27be77ffb3aefa190a2919d76b122a64a1a4e433af4c269d3ffa17",
+  "parts": [
+    "Key_Carrier",
+    "Touch_Paddle",
+    "OP1_Lid_Stop",
+    "Hinge_Pin_Snug",
+    "Pin_Clip",
+    "Pin_Clip_Spare",
+    "DFR_Clip_Left",
+    "DFR_Clip_Right",
+    "Socket_Backer_Left",
+    "Socket_Backer_Right",
+    "Hinge_Pin",
+    "DFR_Post_Bar"
+  ],
+  "minimum_separation_mm": 3.399,
+  "projected_part_separation_lower_bounds_mm": {
+    "Key_Carrier / Touch_Paddle": 3.399,
+    "Key_Carrier / OP1_Lid_Stop": 12.199,
+    "Key_Carrier / Hinge_Pin_Snug": 75.299,
+    "Key_Carrier / Pin_Clip": 72.553,
+    "Key_Carrier / Pin_Clip_Spare": 80.349,
+    "Key_Carrier / DFR_Clip_Left": 61.16,
+    "Key_Carrier / DFR_Clip_Right": 54.138,
+    "Key_Carrier / Socket_Backer_Left": 57.299,
+    "Key_Carrier / Socket_Backer_Right": 58.999,
+    "Key_Carrier / Hinge_Pin": 92.299,
+    "Key_Carrier / DFR_Post_Bar": 96.207,
+    "Touch_Paddle / OP1_Lid_Stop": 58.14,
+    "Touch_Paddle / Hinge_Pin_Snug": 75.048,
+    "Touch_Paddle / Pin_Clip": 69.548,
+    "Touch_Paddle / Pin_Clip_Spare": 69.548,
+    "Touch_Paddle / DFR_Clip_Left": 33.049,
+    "Touch_Paddle / DFR_Clip_Right": 17.049,
+    "Touch_Paddle / Socket_Backer_Left": 57.048,
+    "Touch_Paddle / Socket_Backer_Right": 53.048,
+    "Touch_Paddle / Hinge_Pin": 92.048,
+    "Touch_Paddle / DFR_Post_Bar": 89.048,
+    "OP1_Lid_Stop / Hinge_Pin_Snug": 43.459,
+    "OP1_Lid_Stop / Pin_Clip": 75.573,
+    "OP1_Lid_Stop / Pin_Clip_Spare": 95.096,
+    "OP1_Lid_Stop / DFR_Clip_Left": 104.799,
+    "OP1_Lid_Stop / DFR_Clip_Right": 104.799,
+    "OP1_Lid_Stop / Socket_Backer_Left": 36.775,
+    "OP1_Lid_Stop / Socket_Backer_Right": 78.821,
+    "OP1_Lid_Stop / Hinge_Pin": 54.683,
+    "OP1_Lid_Stop / DFR_Post_Bar": 97.008,
+    "Hinge_Pin_Snug / Pin_Clip": 4.8,
+    "Hinge_Pin_Snug / Pin_Clip_Spare": 24.8,
+    "Hinge_Pin_Snug / DFR_Clip_Left": 46.964,
+    "Hinge_Pin_Snug / DFR_Clip_Right": 58.439,
+    "Hinge_Pin_Snug / Socket_Backer_Left": 5.799,
+    "Hinge_Pin_Snug / Socket_Backer_Right": 14.216,
+    "Hinge_Pin_Snug / Hinge_Pin": 4.798,
+    "Hinge_Pin_Snug / DFR_Post_Bar": 20.876,
+    "Pin_Clip / Pin_Clip_Spare": 4.8,
+    "Pin_Clip / DFR_Clip_Left": 29.259,
+    "Pin_Clip / DFR_Clip_Right": 43.47,
+    "Pin_Clip / Socket_Backer_Left": 4.809,
+    "Pin_Clip / Socket_Backer_Right": 4.299,
+    "Pin_Clip / Hinge_Pin": 8.735,
+    "Pin_Clip / DFR_Post_Bar": 4.372,
+    "Pin_Clip_Spare / DFR_Clip_Left": 24.299,
+    "Pin_Clip_Spare / DFR_Clip_Right": 40.299,
+    "Pin_Clip_Spare / Socket_Backer_Left": 24.801,
+    "Pin_Clip_Spare / Socket_Backer_Right": 4.299,
+    "Pin_Clip_Spare / Hinge_Pin": 25.851,
+    "Pin_Clip_Spare / DFR_Post_Bar": 4.298,
+    "DFR_Clip_Left / DFR_Clip_Right": 3.8,
+    "DFR_Clip_Left / Socket_Backer_Left": 38.168,
+    "DFR_Clip_Left / Socket_Backer_Right": 7.799,
+    "DFR_Clip_Left / Hinge_Pin": 59.226,
+    "DFR_Clip_Left / DFR_Post_Bar": 43.799,
+    "DFR_Clip_Right / Socket_Backer_Left": 45.721,
+    "DFR_Clip_Right / Socket_Backer_Right": 23.799,
+    "DFR_Clip_Right / Hinge_Pin": 72.535,
+    "DFR_Clip_Right / DFR_Post_Bar": 59.799,
+    "Socket_Backer_Left / Socket_Backer_Right": 10.299,
+    "Socket_Backer_Left / Hinge_Pin": 22.799,
+    "Socket_Backer_Left / DFR_Post_Bar": 28.716,
+    "Socket_Backer_Right / Hinge_Pin": 28.71,
+    "Socket_Backer_Right / DFR_Post_Bar": 23.799,
+    "Hinge_Pin / DFR_Post_Bar": 20.799
+  },
+  "machine": {
+    "passed": true,
+    "project_sha256": "89a58877d4effd96ec0b2ccd1a48a23b5656b7389806562894d7518c1d9035d1",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "filament_retraction_mm": [
+    "1.2"
+  ],
+  "filament_retraction_speed_mm_s": [
+    "35"
+  ],
+  "timelapse_type": "1"
+}

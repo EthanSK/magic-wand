@@ -1,0 +1,76 @@
+{
+  "revision": "R60",
+  "key_layout": {
+    "row_centres_y_mm": [
+      0.0,
+      19.95
+    ],
+    "column_centres_x_mm": [
+      -21.0,
+      21.0
+    ],
+    "row_pitch_mm": 19.95,
+    "keycap_envelope_gap_between_rows_mm": 2.55,
+    "socket_turn_deg": {
+      "bottom_left": 0,
+      "bottom_right": 0,
+      "top_left": 180,
+      "top_right": 0
+    },
+    "changed_from_r58": false
+  },
+  "change": {
+    "moved_down_mm": 1.42,
+    "upper_row_nearer_mm": 1.4,
+    "slab_cut_and_web": {
+      "right": {
+        "cut_y_mm": 10.3,
+        "web_section_now_mm2": 65.89,
+        "web_section_kept_mm2": 60.63,
+        "web_kept_share": 0.92,
+        "kept_web_thickness_at_least_mm": 0.8
+      },
+      "left": {
+        "cut_y_mm": 10.3,
+        "web_section_now_mm2": 66.5,
+        "web_section_kept_mm2": 61.66,
+        "web_kept_share": 0.927,
+        "kept_web_thickness_at_least_mm": 0.8
+      }
+    }
+  },
+  "source_sha256": "8565019c470a50491e3e5f423216120205664644669f311bc23ddfcd7e039a8f",
+  "physical_fit_verified": false,
+  "key_poses_checked": 336,
+  "obstructed_key_poses": [],
+  "battery_rigid_sweep_mm3": 1.330532906074211e-15,
+  "spring_contact_volume_mm3": 2.510487173433144,
+  "nominal_side_leaf_deflection_mm": 0.14,
+  "shoe_projection_mm": 0.21,
+  "rigid_opposite_clearance_mm": 0.07,
+  "leaf_back_gap_mm": 0.68,
+  "new_material_inside_rod_or_wire_route_mm3": 8.743994764359719e-11,
+  "direct_root_overlap_mm3": [
+    29.321,
+    32.482
+  ],
+  "backer_route_overlap_mm3": {
+    "Left": 0.0,
+    "Right": 0.0
+  },
+  "exposed_battery_end_mm": 3.95,
+  "old_to_new_inboard_pouch_edge_mm": [
+    -9.950000000000001,
+    -5.95
+  ],
+  "finger_beam_diameter_mm": 2.52,
+  "holder_bounds_mm": [
+    -30.76999855041504,
+    -18.84629249572754,
+    -5.699999999999999,
+    30.00012768374074,
+    32.650081634521484,
+    20.5
+  ],
+  "holder_solid_petg_g": 12.46
+}

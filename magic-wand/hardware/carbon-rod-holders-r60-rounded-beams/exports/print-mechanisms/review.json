@@ -1,0 +1,21 @@
+{
+  "reviewer": "Claude Opus 5.5",
+  "archive_sha256": "89a58877d4effd96ec0b2ccd1a48a23b5656b7389806562894d7518c1d9035d1",
+  "reopened_sha256": "ad419f3ba1e81c9ff1d5cffa654f68b6d7bef7ee3f7efeaec1cff24d807abc34",
+  "trial_approved": true,
+  "physical_acceptance": false,
+  "review_scope": "Independent inspection of the primary native archive and its preview. The same layout was separately reopened, sliced and checked against the deposited paths. The monitored trial uses the reviewed primary.",
+  "native_warning": {
+    "reviewed_archive_warnings": {
+      "89a58877d4effd96ec0b2ccd1a48a23b5656b7389806562894d7518c1d9035d1": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+      "ad419f3ba1e81c9ff1d5cffa654f68b6d7bef7ee3f7efeaec1cff24d807abc34": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    },
+    "evidence": "Both sets of deposited paths show zero completely unsupported starts across the twelve parts and zero support moves. The remaining one-ended overhangs in the holder are inherited deck paths. The tapered battery stop has two flagged short runs, both anchored at both ends (1.38 and 1.18 mm)."
+  },
+  "observations": [
+    "The six fins give 19.91 mm² of joined area over the first 12 layers, inside the 19.83–24.79 mm² reference range. Monitor the broad base and all individual pads. The hinge bay has no fused base contact.",
+    "Both guard backers and 336 key/socket poses clear. Confirm the integral guards shield the contacts and are comfortable under repeated fingertip pressure, and the paddle still clicks freely.",
+    "The printed path width across the spring contact is 11.66–11.67 mm against 11.8 mm nominal. Use an inert dimension-matched dummy first. Check light insertion, retention, hand removal and whether the spring remains free and the cell seats without climbing the stop.",
+    "Check actual lead exit and plug slack beside the rod, hinge pin fit through both cheeks, both board clips and OP1 retainer after removing the base."
+  ]
+}
