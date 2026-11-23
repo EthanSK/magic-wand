@@ -1,5 +1,5 @@
 // Render raw wand telemetry and controls; display precision never filters pointer input.
-import {BUTTONS, WandState, LineFramer, motionPlotLimit, MOTION_WINDOW_MS, hasSensorAxis, firmwareNumber, buttonPin, labelFirmware, R58_INPUTS, R58_TRACE_ORDER, PinReports, PIN_REPORT_STALE_MS, TIMELINE_MS, clickState, traceSegments} from './model.mjs';
+import {BUTTONS, WandState, LineFramer, motionPlotLimit, MOTION_WINDOW_MS, hasSensorAxis, firmwareNumber, buttonPin, labelFirmware, R58_INPUTS, R58_TRACE_ORDER, PinReports, PIN_REPORT_STALE_MS, TIMELINE_MS, clickState, traceSegments, batteryLive, batteryHeader, batteryCard, packLine} from './model.mjs';
 import {openSerial, openBluetooth, UART_SERVICE} from './transports.mjs';
 const $=id=>document.getElementById(id), state=new WandState(), pins=new PinReports();
 let owner=null, generation=0, busy=false, demoTimer=null, demoPaused=false, demoSeq=0;
@@ -175,7 +175,7 @@ if(localMode){notice('Looking for the connected Sense through the local readerâ€
 // Ethan's debug pause: Wand Receiver owns the state. The page shows only what
 // the receiver reports and never assumes a request worked. Every tab polls the
 // same state; closing a tab never resumes actions.
-let actions=null,actionsBusy=false,actionsProblem='',actionsProblemUntil=0;
+let actions=null,actionsBusy=false,actionsProblem='',actionsProblemUntil=0,r58Profile=null;
 const PAUSED_TEXT='WAND ACTIONS PAUSED Â· Readings continue, but the wand doesn\u2019t move the pointer, click, scroll, or send HUD, review, screenshot or dictation commands. A recording already in progress keeps going.';
 function renderActions(){
   const button=$('actions'),banner=$('actions-notice'),available=actions?.available===true,paused=available&&actions.paused===true;
@@ -189,11 +189,15 @@ function renderActions(){
   if(banner.textContent!==text)banner.textContent=text;
   // The receiver's actual pointer conversion, so readings are compared knowingly.
   $('pointer-row').hidden=!localMode;
-  // Ethan's battery readout: the receiver's voltage estimate and its age only.
-  const battery=available?actions.battery:null,live=battery&&actions.connected&&battery.ageSeconds<=300;
-  const age=battery?(battery.ageSeconds<60?'just now':`${Math.round(battery.ageSeconds/60)} min ago`):'';
-  $('battery').hidden=!localMode;$('battery').classList.toggle('stale',!live);
-  $('battery').textContent=!battery?'Battery unknown':live?`Battery \u2248${battery.percent}% \u00b7 ${battery.volts.toFixed(2)} V`:`Battery \u2248${battery.percent}% \u00b7 ${age}`;
+  // Ethan's battery readout: the receiver's voltage estimate, its age and the
+  // charger flag only (model.mjs batteryHeader/batteryCard).
+  const battery=available?actions.battery:null,connected=available&&actions.connected===true;
+  $('battery').hidden=!localMode;$('battery').classList.toggle('stale',!batteryLive(battery,connected));
+  $('battery').textContent=batteryHeader(battery,connected);
+  // R58 battery card: the bought pack from the published record, then the same estimate.
+  const card=batteryCard(battery,connected);
+  for(const [key,text] of Object.entries(card)){const cell=document.querySelector(`[data-battery="${key}"]`);if(cell.textContent!==text)cell.textContent=text;cell.classList.toggle('unknown',text==='Unknown');}
+  const pack=packLine(r58Profile?.battery);$('battery-pack').hidden=!pack;$('battery-pack').textContent=pack;
   $('pointer-path').textContent=!available?'Unknown':actions.pointerPath==='direct'?'Sense':actions.pointerPath==='tuned'?'Puck tuning':'Unknown';
 }
 async function pollActions(){
@@ -212,6 +216,8 @@ $('actions').addEventListener('click',async()=>{
   }catch{actionsProblem='Wand Receiver didn\u2019t confirm the change. Showing its current state.';actionsProblemUntil=Date.now()+4000;}
   finally{actionsBusy=false;renderActions();}
 });
-if(localMode)pollActions();
+// The R58 record (pack ratings) changes only when the repository does; fetch it once.
+async function loadR58Profile(){try{const response=await fetch('/api/r58',{cache:'no-store'});r58Profile=response.ok?await response.json():null;}catch{r58Profile=null;}renderActions();}
+if(localMode){pollActions();loadR58Profile();}
 
 window.addEventListener('pagehide',()=>{++generation;closeCurrent();});

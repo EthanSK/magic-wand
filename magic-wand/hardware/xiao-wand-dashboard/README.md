@@ -46,6 +46,14 @@ D8 come from the board's `Ein` pin reports; D9 and D10 come from the existing wi
 Firmware 13 keeps the original three-switch page. `prototypes/sense-r58.json` is the wiring
 record; a test keeps the panel's pins and fitted keys in step with it.
 
+The panel's **Battery** card names the pack from that record's `battery` entry (served at
+`/api/r58`, read on each request) and shows the receiver's voltage estimate, the charger flag
+and **Runtime: Not measured**. The estimate is Wand Receiver's generic single-cell one, not
+calibrated for this pack. A reading over five minutes old, or from a disconnected wand, shows its
+age and an unknown charger state. Nothing on the page turns capacity into a runtime; the
+[Sense profile](../../device/sense/README.md#r58-battery) describes the unplugged run that would
+measure one.
+
 Wand Receiver build 197 logs pin reports but doesn't forward them to the dashboard socket, so
 `--receiver` also reads complete `SENSE_EVENT in` lines from the receiver's own log (a same-user
 regular file, polled every 20 ms; no other log line reaches the page). `/api/wand` returns them

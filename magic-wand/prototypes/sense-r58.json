@@ -77,7 +77,7 @@
     "physicalChecks": {
       "$comment": "Observed on firmware 14 over USB on 2026-11-23 from the board's Ein event lines and the receiver's wire channels. Bluetooth was not used for these checks. Ein lines are at most one per 25 ms, so contact order is known but not the exact spacing.",
       "D6": "closed (0) on every one of 89 centre-click presses (178 level changes); drives the mouse button wire channel",
-      "D8": "closed (0) at rest; opened before D6 closed on every press (178 level changes). On release D6 opened first, or both changed within one report",
+      "D8": "closed (0) at rest; opened on every press (178 level changes). Pressing: D8 opened in an earlier report than D6 closed on 78 of 89 presses; on the other 11 both changed within one report. Releasing: D6 opened first on 57; on the other 32 both changed within one report. No press or release showed the reverse order. The delay between the two contacts was not measured",
       "D4": "1 while touched, 0 at rest, over 40 touches (80 level changes)",
       "D1": "0 while the fitted key was pressed, 1 at rest, over 26 presses (52 level changes)",
       "D0": "no change seen (not fitted)",
@@ -94,6 +94,32 @@
     "wirelessUpdate": {
       "firmware13": "refused as busy before any transfer: the resting contact on its mouse-button pin (D8) read as a held button",
       "firmware14": "eligible at rest by code and resting readings (D6, D9 and D10 released); not yet exercised by a real wireless update"
+    },
+    "battery": {
+      "$comment": "The pack bought for R58, checked against the supplier's order confirmation and product page on 2026-11-23. Capacity, voltage and ratings are the supplier's; none were measured on the wand.",
+      "pack": "Micron Radio Control 72217",
+      "label": "Micron 72217",
+      "description": "100 mAh lithium polymer cell with a built-in protection circuit, 35 mm wires and a Molex 2 mm plug (pin 1 negative)",
+      "cells": 1,
+      "chemistry": "LiPo",
+      "nominalVolts": 3.7,
+      "capacityMah": 100,
+      "protectionCircuit": true,
+      "supplierRatings": {
+        "continuousDischargeAmps": 1,
+        "sizeMm": [
+          27,
+          11.8,
+          3.9
+        ],
+        "massGrams": 2.05
+      },
+      "notStatedBySupplier": "charge voltage, charge current and the protection circuit's cutoff voltages",
+      "boardCharging": "The board core sets the charge-current pin (P0.13) as an input, which Seeed documents as the 50 mA setting, about 0.5C for this pack. Firmware 14 doesn't change it. Not measured.",
+      "voltageReading": "Firmware 14 averages eight readings of the board's battery divider every 10 seconds, using the nominal 1 MOhm / 510 kOhm divider and 3.0 V reference. Not checked against a meter.",
+      "chargeEstimate": "Wand Receiver's generic single-cell estimate from voltage: 3.30 V reads 0% and 4.15 V reads 100%, in a straight line. Not calibrated for this pack. Charging raises the measured voltage, so it reads high while charging. The charging flag is the charger's status pin, which reads not charging once a charge finishes.",
+      "runtime": "Not measured. Needs one representative unplugged run: charge until the charging flag clears, unplug, use the wand normally over Bluetooth with Wand Receiver logging battery readings, and note the time from unplugging until it reads 3.30 V or disconnects. That gives the runtime for that use and a voltage curve for calibrating this pack's estimate.",
+      "safetyLimits": "Unchanged by this record: the board and Wand Receiver refuse a wireless update below 3600 mV unless charging."
     }
   }
 }

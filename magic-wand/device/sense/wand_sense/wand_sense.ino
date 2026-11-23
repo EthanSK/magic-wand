@@ -17,14 +17,14 @@
 // presses observed in that day's bench test are physically checked):
 //   D0 upper-left key, D9 upper-right key, D10 lower-left key, D1 lower-right
 //   key, all to shared GND; DFRobot DFR0030 digital touch output on D4 (sensor
-//   powered from 3V3/GND); OP1 board's Omron D2FC-F-7N(60M) centre click on D6,
-//   other contact to GND. The 60M's third leg is a dummy, so there is no NC
-//   contact. D2 is blocked; D3 and D5 are used by other parts.
+//   powered from 3V3/GND); the OP1 board's centre click, press contact on D6 and
+//   resting contact on D8, both to GND. The 2026-11-23 bench test showed D8
+//   closed at rest and opening on every press; which switch model is fitted is
+//   not established. D2 is blocked; D3 and D5 are used by other parts.
 //   D6 is the mouse button: wire channel 0 (legacy name "D8", key thumb) now
 //   reads D6, so the R58 centre click drives the normal mouse-button behaviour.
-//   D8 is no longer a control. On 2026-11-23 the R58 board read D8 as closed to
-//   GND continuously with nothing pressed (wiring not yet identified); keeping it
-//   in the mouse button would hold the button down, block sleep and refuse every
+//   D8 is no longer a control. It is closed to GND at rest, so keeping it as the
+//   mouse button would hold the button down, block sleep and refuse every
 //   wireless update as busy. Earlier Sense wiring with the mouse button on D8 is
 //   firmware 13 (source at commit ade6f38); set MOUSE_BUTTON_PIN back to D8 for it.
 //   D9 and D10 keep their speech and HUD meanings. D0, D1, D4, D6 and D8 are also

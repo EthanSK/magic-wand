@@ -373,6 +373,19 @@ class ReceiverInputs:
             time.sleep(self.poll)
 
 RECEIVER_SUPPORT=RECEIVER_SOCKET.parent
+
+# The R58 key holder's published record (prototypes/sense-r58.json) is the one
+# source for the battery pack shown on the page. It is read on each request, so an
+# edit to the record shows after a page reload; nothing is copied here.
+R58_PROFILE=Path(__file__).resolve().parents[2]/'prototypes'/'sense-r58.json'
+R58_BATTERY_FIELDS=('label','pack','capacityMah','nominalVolts','cells','chemistry','protectionCircuit')
+def r58_battery(path=R58_PROFILE):
+    """The pack's supplier ratings for display, or None. Only plain display fields are served."""
+    try:value=json.loads(Path(path).read_text(encoding='utf-8'))['r58']['battery']
+    except (OSError,ValueError,KeyError,TypeError):return None
+    if not isinstance(value,dict):return None
+    out={k:value[k] for k in R58_BATTERY_FIELDS if type(value.get(k)) in (str,int,float,bool)}
+    return out or None
 ACTION_REQUEST='actions-pause.request'
 
 def receiver_running(pid):
@@ -420,7 +433,11 @@ class ActionControl:
         if not isinstance(value,dict):return None
         percent,volts,measured=value.get('percent'),value.get('volts'),value.get('measuredAt')
         if type(percent) is not int or not 0<=percent<=100 or type(volts) not in (int,float) or not 1<=volts<=5 or type(measured) not in (int,float):return None
-        return {'percent':percent,'volts':round(volts,2),'ageSeconds':max(0,round(self.wall()-measured))}
+        # The Sense charger's status pin, sent with each voltage reading (low while
+        # charging, so a finished charge reads False even with USB attached). None for
+        # a Puck or before the first Sense reading; never guessed from the voltage.
+        update=status.get('senseFirmwareUpdate');charging=update.get('charging') if isinstance(update,dict) else None
+        return {'percent':percent,'volts':round(volts,2),'ageSeconds':max(0,round(self.wall()-measured)),'charging':charging if type(charging) is bool else None}
     def request(self,paused,timeout=2.0):
         with self.lock:
             if not self.state()['available']:return 503,{'available':False,'paused':None,'confirmed':False}
@@ -468,6 +485,8 @@ def make_handler(store,assets,port,actions=None):
             uri=urlparse(self.path)
             if uri.path=='/api/actions':
                 data=json.dumps(actions.state() if actions else {'available':False,'paused':None},allow_nan=False).encode();mime='application/json'
+            elif uri.path=='/api/r58':
+                data=json.dumps({'battery':r58_battery()},allow_nan=False).encode();mime='application/json'
             elif uri.path=='/api/wand':
                 try:query=parse_qs(uri.query);after=int(query.get('after',['-1'])[0]);inputs_after=int(query.get('inputs_after',['-1'])[0])
                 except ValueError:self.send_error(400);return

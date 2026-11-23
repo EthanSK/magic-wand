@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {WandState,validatePacket,LineFramer,BUTTONS,motionPlotLimit,MOTION_WINDOW_MS,hasSensorAxis,firmwareNumber,buttonPin,labelFirmware,R58_INPUTS,R58_TRACE_ORDER,PinReports,PIN_REPORT_STALE_MS,TIMELINE_MS,clickState,traceSegments,validatePinReport} from '../hardware/xiao-wand-dashboard/model.mjs';
+import {WandState,validatePacket,LineFramer,BUTTONS,motionPlotLimit,MOTION_WINDOW_MS,hasSensorAxis,firmwareNumber,buttonPin,labelFirmware,R58_INPUTS,R58_TRACE_ORDER,PinReports,PIN_REPORT_STALE_MS,TIMELINE_MS,clickState,traceSegments,validatePinReport,batteryLive,batteryHeader,batteryCard,packLine} from '../hardware/xiao-wand-dashboard/model.mjs';
 import {openSerial,openBluetooth,UART_SERVICE,UART_TX} from '../hardware/xiao-wand-dashboard/transports.mjs';
 const packet=(seq=1,ms=20)=>({schema:1,sensor:'wand',seq,ms,buttons:{thumb:false,index:false,middle:false},imu:{ax:0,ay:0,az:1,gx:2,gy:3,gz:4}});
 const setup=()=>{const s=new WandState();s.connect('USB');return s;};
@@ -92,10 +92,37 @@ test('debug page names the receiver-reported pointer path only',()=>{
 test('battery at the top shows only the receiver estimate, its age or unknown',()=>{
  const html=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/index.html',import.meta.url),'utf8');
  const app=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/app.mjs',import.meta.url),'utf8');
+ const model=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/model.mjs',import.meta.url),'utf8');
  assert.match(html,/<header>.*<p id="battery" class="battery" title="Estimated from battery voltage\. Runtime isn\u2019t measured\." hidden>Battery unknown<\/p>/s);
- assert.match(app,/!battery\?'Battery unknown'/);
- assert.match(app,/battery\.ageSeconds<=300/,'older or disconnected readings are shown as their age, not live');
- assert(!/hours|remaining/i.test(app),'no runtime is invented');
+ assert.match(app,/\$\('battery'\)\.textContent=batteryHeader\(battery,connected\)/);
+ const live={percent:94,volts:4.099,ageSeconds:20,charging:true};
+ assert.equal(batteryHeader(null,true),'Battery unknown');
+ assert.equal(batteryHeader(live,true),'Battery \u224894% \u00b7 4.10 V \u00b7 charging');
+ assert.equal(batteryHeader({...live,charging:false},true),'Battery \u224894% \u00b7 4.10 V');
+ assert.equal(batteryHeader({...live,charging:null},true),'Battery \u224894% \u00b7 4.10 V');
+ // Older or disconnected readings show their age, never live and never charging.
+ assert.equal(batteryHeader({...live,ageSeconds:301},true),'Battery \u224894% \u00b7 5 min ago');
+ assert.equal(batteryHeader({...live,ageSeconds:20},false),'Battery \u224894% \u00b7 just now');
+ assert(batteryLive(live,true)&&!batteryLive(live,false)&&!batteryLive({...live,ageSeconds:301},true)&&!batteryLive(null,true));
+ assert(!/hours|remaining/i.test(app+model+html),'no runtime is invented');
+});
+
+// Ethan's 100 mAh pack (prototypes/sense-r58.json → battery). The page shows the
+// supplier's ratings and the receiver's estimate; runtime stays unmeasured.
+test('R58 battery card shows the bought pack, estimated charge, charger and unmeasured runtime',()=>{
+ const html=fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/index.html',import.meta.url),'utf8');
+ const r58=JSON.parse(fs.readFileSync(new URL('../prototypes/sense-r58.json',import.meta.url))).r58;
+ assert.equal(r58.battery.capacityMah,100);assert.equal(r58.battery.nominalVolts,3.7);assert.equal(r58.battery.cells,1);
+ assert.match(r58.battery.runtime,/^Not measured\./);
+ assert.equal(packLine(r58.battery),'Micron 72217 \u00b7 100 mAh, 3.7 V nominal, single-cell LiPo with protection circuit');
+ assert.equal(packLine(null),'');assert.equal(packLine({}),'');
+ for(const text of ['<h3>Battery</h3>','<p id="battery-pack" class="battery-pack" hidden></p>','<span>Estimated charge</span>','<span>Charger</span>','<span>Runtime</span><b data-battery="runtime">Not measured</b>','Pack ratings are the supplier’s. Charge is estimated from voltage, not calibrated for this pack, and reads high while charging.'])assert(html.includes(text),text);
+ const live={percent:68,volts:3.881,ageSeconds:30,charging:false};
+ assert.deepEqual(batteryCard(live,true),{charge:'\u224868% \u00b7 3.88 V',charger:'Not charging',runtime:'Not measured'});
+ assert.equal(batteryCard({...live,charging:true},true).charger,'Charging');
+ assert.deepEqual(batteryCard({...live,ageSeconds:720,charging:true},true),{charge:'\u224868% \u00b7 12 min ago',charger:'Unknown',runtime:'Not measured'},'a stale charger flag is unknown');
+ assert.deepEqual(batteryCard({...live,charging:null},true).charger,'Unknown','a Puck or missing flag is never shown as not charging');
+ assert.deepEqual(batteryCard(null,true),{charge:'Unknown',charger:'Unknown',runtime:'Not measured'});
 });
 
 // Raw sub-degree motion must survive the display path even below pointer thresholds.

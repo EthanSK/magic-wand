@@ -1,6 +1,6 @@
 import unittest,json
 from types import SimpleNamespace
-from bridge import Store,Framer,validate,matching_port,ReceiverObserver,ActionControl,parse_action_post,ACTION_REQUEST,parse_input_report,ReceiverInputs
+from bridge import Store,Framer,validate,matching_port,ReceiverObserver,ActionControl,parse_action_post,ACTION_REQUEST,parse_input_report,ReceiverInputs,r58_battery
 import calendar
 import os,tempfile
 from pathlib import Path
@@ -63,7 +63,10 @@ class BridgeTests(unittest.TestCase):
  def test_battery_is_the_receivers_voltage_estimate_with_its_age_only(self):
   root,a=self.actions({'pid':4242,'actionsPaused':False,'connected':True,'battery':{'percent':81,'volts':3.987,'measuredAt':1000}})
   a.wall=lambda:1090
-  self.assertEqual(a.state()['battery'],{'percent':81,'volts':3.99,'ageSeconds':90});self.assertTrue(a.state()['connected'])
+  self.assertEqual(a.state()['battery'],{'percent':81,'volts':3.99,'ageSeconds':90,'charging':None},'no charger reading is never shown as charging');self.assertTrue(a.state()['connected'])
+  for flag in (True,False):
+   _,c=self.actions({'pid':4242,'actionsPaused':False,'battery':{'percent':94,'volts':4.099,'measuredAt':1},'senseFirmwareUpdate':{'charging':flag,'batteryMillivolts':4099}});self.assertIs(c.state()['battery']['charging'],flag)
+  _,c=self.actions({'pid':4242,'actionsPaused':False,'battery':{'percent':94,'volts':4.099,'measuredAt':1},'senseFirmwareUpdate':{'charging':None}});self.assertIsNone(c.state()['battery']['charging'])
   for bad in [{'percent':81.5,'volts':3.9,'measuredAt':1},{'percent':120,'volts':3.9,'measuredAt':1},{'percent':50,'volts':9,'measuredAt':1},'81%',None]:
    _,b=self.actions({'pid':4242,'actionsPaused':False,'battery':bad});self.assertIsNone(b.state()['battery'],bad)
   self.assertNotIn('hours',json.dumps(a.state()),'no runtime is invented')
@@ -95,6 +98,13 @@ class BridgeTests(unittest.TestCase):
      ({**ok,'Content-Type':'text/plain'},b'{"paused":true}',415),(ok,None,413),(ok,b'x'*65,413),(ok,b'nope',400),
      (ok,b'{"paused":1}',400),(ok,b'{"paused":true,"code":"x"}',400),(ok,b'[true]',400)]:
    self.assertEqual(parse_action_post(headers,body,8872)[0],code,(headers,body))
+ def test_r58_battery_comes_from_the_published_record(self):
+  b=r58_battery()
+  self.assertEqual(b,{'label':'Micron 72217','pack':'Micron Radio Control 72217','capacityMah':100,'nominalVolts':3.7,'cells':1,'chemistry':'LiPo','protectionCircuit':True})
+  with tempfile.TemporaryDirectory() as d:
+   bad=Path(d)/'r.json'
+   for text in ['nope','{}','{"r58":{"battery":[1]}}','{"r58":{"battery":{"capacityMah":{"x":1}}}}']:bad.write_text(text);self.assertIsNone(r58_battery(bad),text)
+   self.assertIsNone(r58_battery(Path(d)/'missing.json'))
  # Firmware 14 pin reports, read from Wand Receiver's log (no hardware, no socket).
  def test_pin_report_lines_parse_only_when_complete(self):
   levels,at=parse_input_report('2026-11-23T03:00:44Z SENSE_EVENT in D0=1:0 D1=1:52 D4=0:80 D6=1:178 D8=0:178\n')

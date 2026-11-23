@@ -58,12 +58,49 @@ export function validatePinReport(levels) {
   }
   return report;
 }
-// The two OP1 contacts together. Break-before-make means a press opens D8 before
-// D6 closes, so "Between contacts" is a normal brief state, and both closed is not.
+// The two centre-click contacts together. The switch breaks one contact before
+// making the other, so "Between contacts" is a normal brief state and both closed is
+// not. On the bench (23 November 2026) D8 opened in an earlier report than D6 closed
+// on 78 of 89 presses; on the other 11 both changed within one 25 ms report.
 export function clickState(press, rest) {
   if (press===null || press===undefined || rest===null || rest===undefined) return null;
   const pressed=press===0, resting=rest===0;
   return pressed && !resting ? 'Pressed' : !pressed && resting ? 'Released' : !pressed ? 'Between contacts' : 'Both closed · check wiring';
+}
+// Battery readout (header and R58 card). Ethan asked for battery wording that fits
+// the 100 mAh pack he bought (prototypes/sense-r58.json → battery). Charge is
+// Wand Receiver's generic estimate from voltage; nothing here turns capacity into a
+// runtime, because runtime hasn't been measured on this wand.
+// A reading counts as live only while the wand is connected and it is at most
+// 5 minutes old (the board sends one every 10 s); otherwise show its age instead.
+export const BATTERY_LIVE_SECONDS = 300;
+export const batteryLive = (battery, connected) => !!battery && connected===true && battery.ageSeconds<=BATTERY_LIVE_SECONDS;
+const batteryAge = seconds => seconds<60 ? 'just now' : `${Math.round(seconds/60)} min ago`;
+export function batteryHeader(battery, connected) {
+  if (!battery) return 'Battery unknown';
+  if (!batteryLive(battery, connected)) return `Battery \u2248${battery.percent}% \u00b7 ${batteryAge(battery.ageSeconds)}`;
+  // The charger's status pin, only while live; a stale "charging" could be long over.
+  return `Battery \u2248${battery.percent}% \u00b7 ${battery.volts.toFixed(2)} V${battery.charging===true?' \u00b7 charging':''}`;
+}
+export function batteryCard(battery, connected) {
+  const live=batteryLive(battery, connected);
+  return {
+    charge: !battery ? 'Unknown' : live ? `\u2248${battery.percent}% \u00b7 ${battery.volts.toFixed(2)} V` : `\u2248${battery.percent}% \u00b7 ${batteryAge(battery.ageSeconds)}`,
+    // The status pin reads not charging once a charge finishes, even on USB.
+    charger: live && typeof battery.charging==='boolean' ? (battery.charging ? 'Charging' : 'Not charging') : 'Unknown',
+    runtime: 'Not measured',
+  };
+}
+// The pack line, built only from the record's own fields (served by bridge.py at
+// /api/r58). Empty when the record is unavailable, so the card hides the line.
+export function packLine(pack) {
+  if (!pack || typeof pack.label!=='string' || !pack.label) return '';
+  const parts=[];
+  if (Number.isFinite(pack.capacityMah)) parts.push(`${pack.capacityMah} mAh`);
+  if (Number.isFinite(pack.nominalVolts)) parts.push(`${pack.nominalVolts} V nominal`);
+  const cell=[pack.cells===1?'single-cell':'', typeof pack.chemistry==='string'?pack.chemistry:''].filter(Boolean).join(' ');
+  if (cell) parts.push(cell+(pack.protectionCircuit===true?' with protection circuit':''));
+  return parts.length ? `${pack.label} \u00b7 ${parts.join(', ')}` : pack.label;
 }
 function pinEventText(input, level) {
   if (input.group==='click') return `${input.name} ${level===input.active?'closed':'opened'} · ${input.pin}`;
