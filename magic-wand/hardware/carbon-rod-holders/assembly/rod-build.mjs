@@ -20,7 +20,7 @@ export function completeKeys(hinge, outer) {
   const outerIds = Object.keys(outer.actors).filter(id => !Object.hasOwn(hinge.actors, id));
   // Only loose sockets, switches and caps approach together. The battery waits at its own opening.
   const outerPose = (pose, offset = 0) =>
-    Object.fromEntries(outerIds.map(id => [id,
+    Object.fromEntries(outerIds.filter(id => Object.hasOwn(pose, id)).map(id => [id,
       /^(socket|switch|keycap)_\d+$/.test(id) ? shiftY(pose[id], offset) : pose[id]]));
   const ready = outer.steps[0].samples[0];
   const parked = outerPose(ready, -44);
@@ -29,6 +29,7 @@ export function completeKeys(hinge, outer) {
   const fittedKeys = outerPose(outer.steps.at(-1).samples.at(-1));
   return {
     ...hinge, label: 'Full key assembly',
+    ...(outer.stagedActors ? {stagedActors:true, frameBounds:outer.frameBounds} : {}),
     actors: { ...outer.actors, ...hinge.actors },
     steps: [
       ...hinge.steps.slice(0, -1).map(step => ({
@@ -75,18 +76,22 @@ export function completeRod(whole, components) {
       : [[-30, y-48, -12], [30, y+50, 45]];
     const end = component.steps.findIndex(step => step.title === lastStep);
     if (end < 0) throw new Error('Missing assembly step for ' + id + ': ' + lastStep);
-    const build = component.steps.slice(0, end + 1);
+    const afterSlide = mount.afterSlide;
+    const build = component.steps.slice(0, end + 1).filter(step => !afterSlide?.steps.includes(step.title));
 
     function frame(local, position, include = ids) {
       const group = { morphs: {} };
       for (const key of include) {
+        // Temporary assembly tools disappear after they are withdrawn.
+        if (!Object.hasOwn(local, key)) continue;
         const actor = id + '_' + key;
         group[actor] = placed(position, local[key]);
         if (local.morphs?.[key] !== undefined) group.morphs[actor] = local.morphs[key];
       }
       return combine(assembled, group);
     }
-    const localEnd = build.at(-1).samples.at(-1);
+    const localEnd = { ...build.at(-1).samples.at(-1) };
+    if (afterSlide) delete localEnd[afterSlide.actor];
     const slide = {
       title, caption, duration: 3, frameBounds: mountingBounds,
       samples: sequence(t => frame(mountEmpty ? build[0].samples[0] : localEnd,
@@ -94,11 +99,21 @@ export function completeRod(whole, components) {
     };
     const details = build.map(step => ({
       ...step, frameBounds: detailBounds,
-      samples: step.samples.map(sample => frame(sample, mountEmpty ? placement : bench)),
+      samples: step.samples.map(sample => frame(sample, mountEmpty ? placement : bench,
+        afterSlide ? ids.filter(key => key !== afterSlide.actor) : ids)),
     }));
     if (mountEmpty) steps.push(slide, ...details);
     else steps.push(...details, slide);
     assembled = frame(localEnd, placement);
+    if (afterSlide) {
+      for (const title of afterSlide.steps) {
+        const step = component.steps.find(s => s.title === title);
+        if (!step) throw new Error('Missing rod grip step: ' + title);
+        steps.push({ ...step, frameBounds: mountingBounds,
+          samples: step.samples.map(sample => frame(sample, placement, [afterSlide.actor])) });
+        assembled = steps.at(-1).samples.at(-1);
+      }
+    }
   }
   steps.push({ title: 'Check the assembled wand',
     caption: whole.finalCaption ?? 'All four holders are seated. Check the pad click, both keepers and the wire route.',

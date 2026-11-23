@@ -1,0 +1,173 @@
+{
+  "revision": "R63",
+  "physical_fit_verified": false,
+  "rod_keeper": {
+    "part": "Rod_Collet",
+    "file": "Rod_Collet-assembly.stl",
+    "installed_flange_face_y_mm": 45.15,
+    "push_in_travel_mm": 1.5,
+    "path": "snap sideways onto the rod behind the holder with the opening toward the wire lane, then push along -Y into the rear socket; pull the flange to release",
+    "socket_radius_at_bed_face_mm": 5.0,
+    "socket_depth_mm": 6.0,
+    "taper_half_angle_deg": 6.89,
+    "radial_squeeze_available_mm": 0.181,
+    "collet_bore_on_8mm_rod_radial_gap_mm": 0.03,
+    "wall_at_tip_mm": 0.535,
+    "wrap_deg": 250.0,
+    "snap_on_spread_mm": 1.4,
+    "installed_to_holder_mm3": 0.0,
+    "pushed_home_overlap_with_holder_mm3": 13.847,
+    "installed_to_rod_mm3": 0.0,
+    "installed_to_pack_and_wire_lane_mm3": 0.0,
+    "holder_wall_within_6mm_of_the_axis_at_the_mouth_mm3": 11.02,
+    "a_full_1mm_wall_ring_there_would_be_mm3": 34.6,
+    "socket_opens_into_the_wire_lane_mm3": 0.0,
+    "holding_torque_and_slide_force": "not measured; friction of a printed wedge on carbon needs the physical test"
+  },
+  "carrier_sha256": "f88e95360c0c4a25082e5369e46e960dd84cff735221da8b89c8d152233d4652",
+  "paddle_sha256": "9352eff490bde522dfde2ff93f81146383881a9e200ebd8a90ce4280b74113d2",
+  "carrier_volume_mm3": 11112.2,
+  "key_poses_checked": 336,
+  "key_obstructions": [],
+  "key_0": {
+    "centre_xy_mm": [
+      -21.0,
+      0.0
+    ],
+    "turned_deg": 90.0,
+    "socket_bounds_mm": [
+      -29.3,
+      -4.27,
+      5.6,
+      -22.35,
+      9.28,
+      8.85
+    ],
+    "slide_poses": 51,
+    "soldered_socket_to_upper_left_key_parts_mm3": 0.0,
+    "left_guard_core_missing_mm3": {
+      "top": 0.0001,
+      "inner_bottom": 0.0,
+      "second_bottom": 0.0,
+      "outer_arm": 0.0
+    },
+    "new_left_backer_sweep_mm3": 0.0,
+    "new_left_backer_under_socket_mm2": 32.1,
+    "r58_backers_sweep_mm3": {
+      "Left": 0.0,
+      "Right": 0.0
+    }
+  },
+  "battery": {
+    "pack_bounds_mm": [
+      -21.25,
+      21.9,
+      3.32,
+      -9.45,
+      48.9,
+      7.22
+    ],
+    "moved_from_r62_mm": [
+      -3.5,
+      1.3,
+      7.92
+    ],
+    "gap_pack_face_to_deck_mm": {
+      "r62": 7.97,
+      "r63": 0.05
+    },
+    "lowest_seat_material_below_the_deck_mm": {
+      "r62": 12.97,
+      "r63": 4.9
+    },
+    "deck_or_land_directly_over_the_pack_face_mm2": 230.6,
+    "pack_face_mm2": 318.6,
+    "seated_to_holder_with_the_leaf_mm3": 2.5576,
+    "seated_to_holder_without_the_leaf_mm3": 0.0,
+    "slide_in_from_the_free_end_without_the_leaf_mm3": 0.0,
+    "pack_and_seat_in_rod_or_wire_lane_mm3": 0.0,
+    "pack_to_fitted_switches_and_sockets_mm3": 0.0,
+    "key_routes_that_cross_the_seated_pack_mm3": {},
+    "pack_to_both_guards_mm3": 0.0,
+    "end_past_the_bed_face_mm": 5.25,
+    "leaf_shoe_into_nominal_pack_mm": 0.21,
+    "rigid_side_clearance_mm": 0.07
+  },
+  "rod": {
+    "bore_diameter_mm": 8.55,
+    "material_inside_the_bore_mm3": 0.0,
+    "funnel_mm": [
+      0.5,
+      1.0
+    ],
+    "front_face_y_mm": 6.1,
+    "grip": "Rod_Collet wedged into the rear socket; nothing fixed stands in the bore"
+  },
+  "hinge": {
+    "common_line_yz_mm": [
+      40.3,
+      15.989999999999998
+    ],
+    "cheeks_alone": [
+      1.893,
+      [
+        40.277,
+        15.99
+      ]
+    ],
+    "barrel_alone": [
+      1.78,
+      [
+        40.3,
+        15.99
+      ]
+    ],
+    "both_at_rest": [
+      1.78,
+      [
+        40.3,
+        15.99
+      ]
+    ],
+    "paddle_to_holder_at_rest_mm3": 0.0,
+    "paddle_swing_to_hinge_end_of_holder_mm3": 0.0,
+    "saddle_gap_mm": 0.03,
+    "cheek_void_z_mm": [
+      14.09,
+      17.89
+    ],
+    "wall_in_front_of_the_roof_mm": 1.675,
+    "wall_under_the_floor_to_the_bed_mm": 1.48,
+    "clip_to_paddle_seated_mm3": 0.0,
+    "pin_to_paddle_and_holder_mm3": 0.0,
+    "clip_lowers_into_the_well_mm3": 0.0,
+    "clip_grip_on_the_pin_waist_mm3": 0.0,
+    "clip_recess_cut_mm": [
+      -1.15,
+      42.7,
+      18.6,
+      1.15,
+      44.3,
+      20.3
+    ]
+  },
+  "paddle": {
+    "cut_from_the_slot_walls_mm3": 2.774,
+    "change_inside_the_barrel_zone_mm3": 2.774,
+    "change_outside_the_barrel_zone_mm3": 0.0,
+    "section_area_change_away_from_the_cut_mm2": {
+      "x_-9.5": 0.0,
+      "x_-8": 0.0,
+      "x_8": 0.0,
+      "x_9.5": 0.0
+    },
+    "barrel_land_half_width_mm": 1.78,
+    "lands_x_mm": [
+      5.2,
+      6.4
+    ]
+  },
+  "bay_cut_under_the_deck_mm3": 0.0,
+  "failed": [],
+  "passes": true
+}

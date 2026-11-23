@@ -1,0 +1,70 @@
+{
+  "archive_sha256": "3bc0f2d025e6dada7d0cb17ec7a1b3831f91900d4dab2b091444abf72d0d7981",
+  "layout_sha256": "6c02137991972b028d9ed3e69fc947f20922b864a8c8a318fc320b5a22ce74a5",
+  "parts": [
+    "Key_Carrier",
+    "Touch_Paddle",
+    "Socket_Backer_Left",
+    "Rod_Collet"
+  ],
+  "minimum_separation_mm": 3.399,
+  "projected_part_separation_lower_bounds_mm": {
+    "Key_Carrier / Touch_Paddle": 3.399,
+    "Key_Carrier / Socket_Backer_Left": 53.299,
+    "Key_Carrier / Rod_Collet": 88.799,
+    "Touch_Paddle / Socket_Backer_Left": 35.798,
+    "Touch_Paddle / Rod_Collet": 71.298,
+    "Socket_Backer_Left / Rod_Collet": 15.298
+  },
+  "machine": {
+    "passed": true,
+    "project_sha256": "3bc0f2d025e6dada7d0cb17ec7a1b3831f91900d4dab2b091444abf72d0d7981",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "filament_retraction_mm": [
+    "1.2"
+  ],
+  "filament_retraction_speed_mm_s": [
+    "35"
+  ],
+  "timelapse_type": "1"
+}

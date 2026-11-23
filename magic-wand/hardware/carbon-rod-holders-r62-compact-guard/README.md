@@ -23,4 +23,4 @@ The 12-piece layout uses a 0.20 mm PETG profile. On the original and reopened na
 
 Opus approved one monitored fit trial. Watch both rear shoulder ledges for curl and the right side of the holder for lifting, especially as the holder grows taller. The rear ledges step out up to 1.08 mm per layer and five of the six ties are on the left. Check the upper-right key latch and the real wire bend when assembling the kit.
 
-Finger comfort, guard strength, base release and fit with bought hardware require a physical trial.
+The physical R62 trial finished printing. The hinge pin could not pass through the hinge, and the holder could not slide onto the purchased 8 mm carbon rod. The carrier then broke during an attempt to free the joint. The extent of any printed sag is unknown. The independent checks of each hinge hole above missed the clearance needed along one straight line through the assembled hinge.

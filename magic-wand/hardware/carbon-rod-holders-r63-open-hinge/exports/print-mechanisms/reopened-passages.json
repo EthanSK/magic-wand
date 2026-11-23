@@ -1,0 +1,192 @@
+{
+  "archive_sha256": "3bc0f2d025e6dada7d0cb17ec7a1b3831f91900d4dab2b091444abf72d0d7981",
+  "paddle_archive_sha256": "3bc0f2d025e6dada7d0cb17ec7a1b3831f91900d4dab2b091444abf72d0d7981",
+  "collet": {
+    "layers": [
+      {
+        "z": 1.6,
+        "inside_diameter": 8.05,
+        "outside_diameter": 10.299
+      },
+      {
+        "z": 1.8,
+        "inside_diameter": 8.05,
+        "outside_diameter": 10.25
+      },
+      {
+        "z": 2.0,
+        "inside_diameter": 8.05,
+        "outside_diameter": 10.202
+      },
+      {
+        "z": 2.2,
+        "inside_diameter": 8.056,
+        "outside_diameter": 10.153
+      },
+      {
+        "z": 2.4,
+        "inside_diameter": 8.05,
+        "outside_diameter": 10.105
+      },
+      {
+        "z": 2.6,
+        "inside_diameter": 8.05,
+        "outside_diameter": 10.056
+      },
+      {
+        "z": 2.8,
+        "inside_diameter": 8.05,
+        "outside_diameter": 10.007
+      },
+      {
+        "z": 3.0,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.959
+      },
+      {
+        "z": 3.2,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.91
+      },
+      {
+        "z": 3.4,
+        "inside_diameter": 8.059,
+        "outside_diameter": 9.862
+      },
+      {
+        "z": 3.6,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.814
+      },
+      {
+        "z": 3.8,
+        "inside_diameter": 8.053,
+        "outside_diameter": 9.765
+      },
+      {
+        "z": 4.0,
+        "inside_diameter": 8.053,
+        "outside_diameter": 9.718
+      },
+      {
+        "z": 4.2,
+        "inside_diameter": 8.047,
+        "outside_diameter": 9.668
+      },
+      {
+        "z": 4.4,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.62
+      },
+      {
+        "z": 4.6,
+        "inside_diameter": 8.047,
+        "outside_diameter": 9.572
+      },
+      {
+        "z": 4.8,
+        "inside_diameter": 8.047,
+        "outside_diameter": 9.523
+      },
+      {
+        "z": 5.0,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.477
+      },
+      {
+        "z": 5.2,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.429
+      },
+      {
+        "z": 5.4,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.381
+      },
+      {
+        "z": 5.6,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.333
+      },
+      {
+        "z": 5.8,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.283
+      },
+      {
+        "z": 6.0,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.235
+      },
+      {
+        "z": 6.2,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.187
+      },
+      {
+        "z": 6.4,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.139
+      },
+      {
+        "z": 6.6,
+        "inside_diameter": 8.05,
+        "outside_diameter": 9.09
+      }
+    ],
+    "grip_is_split": true,
+    "physical_grip_unmeasured": true
+  },
+  "rod_min_clear_diameter_mm": 8.297,
+  "rod_limiting_feature": "Outer wall",
+  "rod_limiting_layer_top_mm": 33.4,
+  "rod_layers_under_8mm": 0,
+  "rod_layers_sampled": 188,
+  "cheek_unloaded_max_diameter_mm": 3.457,
+  "paddle_unloaded_max_diameter_mm": 3.37,
+  "assembled_clear_diameter_mm": 3.309,
+  "cheek_at_shared_line_mm": 3.368,
+  "paddle_at_shared_line_mm": 3.309,
+  "shared_insertion_yz_mm": [
+    40.26,
+    15.985
+  ],
+  "limiting_beads": [
+    {
+      "part": "Key_Carrier",
+      "layer_top_mm": 1.8,
+      "layer_height_mm": 0.2,
+      "bead_width_mm": 0.34,
+      "assembly_bead_centre_at_layer_top_mm": [
+        -15.22,
+        41.85,
+        15.2
+      ],
+      "feature": "Outer wall"
+    },
+    {
+      "part": "Touch_Paddle",
+      "layer_top_mm": 4.6,
+      "layer_height_mm": 0.2,
+      "bead_width_mm": 0.42,
+      "assembly_bead_centre_at_layer_top_mm": [
+        1.612,
+        38.741,
+        14.7
+      ],
+      "feature": "Outer wall"
+    }
+  ],
+  "standard_pin_mm": 3.0,
+  "optional_snug_pin_mm": 3.2,
+  "method": "Finite sampled common insertion axes, all toolpath bead types, full layer heights and 0.06 mm XY sampling allowance. Sag and print variation unmeasured.",
+  "reused_pins": {
+    "archive_sha256": "0faba3d8bd46850b53d2f112bbd0bb3966c17bd7488c3e51d8bc335a5def6f24",
+    "straight_shaft_envelope_diameter_mm": {
+      "Hinge_Pin": 3.172,
+      "Hinge_Pin_Snug": 3.574
+    }
+  },
+  "clearance_over_standard_shaft_envelope_mm": 0.137,
+  "clearance_over_snug_shaft_envelope_mm": -0.265
+}
