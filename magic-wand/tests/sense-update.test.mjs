@@ -43,6 +43,7 @@ test('malformed and disconnected command input cannot turn its suffix into sleep
  enum Transport:uint8_t{NONE,USB_LINK,BLE_LINK};Transport session=NONE;
  uint32_t hostAt=0,bleGeneration=0,commandBleGeneration=0,lastBatteryAt=0;
  bool stateDirty=false,sleepRequested=false,localDark=false,loadingBlink=false,verifyBlink=false;
+ bool probesDirty=false; // Firmware 14: a new host session also owes an R58 input report.
  uint8_t chordPhase=0,usbLength=0,bleLength=0;char usbLine[112],bleLine[112];
  bool usbDiscardLine=false,bleDiscardLine=false;int identities=0;
  struct Port{bool online=true;std::string input;size_t offset=0;explicit operator bool()const{return online;}
@@ -95,6 +96,7 @@ test('offline standby flashes twice, and a button cancels its pending sleep',()=
  uint32_t offlineSince=0,chordAt=0,loadingSince=0,verifySince=0,notReadySince=0;
  constexpr uint32_t OFFLINE_DARK_MS=60000,OFFLINE_SLEEP_MS=300000;
  bool stateDirty=false,localDark=false,loadingBlink=false,verifyBlink=false,sleepRequested=false;
+ bool probesDirty=false; // Firmware 14: a new host session also owes an R58 input report.
  uint8_t chordPhase=0,mask=0;int sleeps=0;WandRgb shown={0,0,0};
  uint8_t buttonMask(){return mask;}bool anyPhysical(){return mask!=0;}
  void setLight(uint8_t r,uint8_t g,uint8_t b){shown={r,g,b};}void powerOff(){sleeps++;}
@@ -211,7 +213,7 @@ test('firmware lights stay in their own colour families and stop like every boar
 
 test('the firmware exposes no open updater and keeps the key off Bluetooth',()=>{
  assert.doesNotMatch(firmware,/^\s*BLEDfu\s+\w+\s*;|\.begin\(\);?\s*\/\/\s*dfu|bledfu\.begin|addService\(bledfu\)/m,'no open DFU control point is declared or started');
- assert.match(firmware,/static const char FIRMWARE\[\] = "wand-sense-13";\nstatic const uint32_t FIRMWARE_NUMBER = 13;/);
+ assert.match(firmware,/static const char FIRMWARE\[\] = "wand-sense-14";\nstatic const uint32_t FIRMWARE_NUMBER = 14;/);
  const number=firmware.match(/static const uint32_t FIRMWARE_NUMBER = (\d+);/)[1];
  assert.equal(firmware.match(/static const char FIRMWARE\[\] = "wand-sense-(\d+)";/)[1],number,'the name and number agree');
  assert.match(firmware,new RegExp(`static const char WAND_IMAGE_MARKER\\[\\] = "WANDIMG1;xiao-nrf52840-sense;${number}";`),'the image marker carries the same number');

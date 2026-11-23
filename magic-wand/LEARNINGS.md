@@ -4,6 +4,33 @@ Ethan renamed the three grip buttons on 30 October 2026: Bottom is now the mouse
 Middle the HUD button and Top the speech button. Lessons below keep the names used when they
 were recorded.
 
+## A resting switch contact on a button pin blocks wireless updates
+
+Firmware 13 refused the R58 wireless update as busy before any transfer started. Its mouse
+button was D8, and the R58 centre click's resting contact connects D8 to GND whenever the click
+is not pressed, so the firmware saw the mouse button held down continuously. The update checks
+run in a fixed order: key, transport, challenge, signature, version, layout, size, battery and
+held buttons last. The receiver log showed the challenge succeeded and the refusal came at
+authorization, so the held-button check failed and every earlier check passed. The same held
+state stopped the wand sleeping. The dashboard's action pause does not affect this: it only
+stops the Mac acting on presses, while the firmware reads its own pins. Firmware 14 reads the
+click's press contact (D6) as the mouse button and only reports D8, so a resting contact no longer
+counts as held. Pressing D6, D9 or D10 still blocks an update, as intended. A loose, unfitted key
+lead can cause the same refusal: the D9 speech channel briefly followed the resting contact.
+Before a wireless update, check that every control pin reads released at rest; firmware 14's
+input event lines show each pin. There is no dry run of the held-button check, because the
+version check comes first and only a real signed higher-version update reaches it. Verified on
+23 November 2026 over USB; a wireless update from firmware 14 has not been tried yet.
+
+## Sense builds need a sketch path without spaces
+
+arduino-cli reported a misleading "No such file or directory" for the part of the sketch path
+after a space. Keep the sketch source in a path without spaces; build output can go elsewhere.
+An unchanged firmware 13 source rebuilt from a different toolchain location differed from the
+installed image by 40 bytes, all in the embedded LittleFS assert path string. Compare the two
+images' strings before treating a size or hash mismatch as a source change. Verified on
+23 November 2026.
+
 ## Temporary gestures must preserve newer recording choices
 
 A triple-click starts by remembering mouse follow before its first tap. If recording

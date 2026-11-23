@@ -13,9 +13,32 @@
 // switch goes to GND; internal pull-ups, pressed = LOW. Wire channel order is
 // D8, D9, D10 (the dashboard's legacy keys thumb, index, middle; not fingers).
 //
+// R58 key holder (firmware 14, wiring as Ethan reported it 2026-11-23; only the
+// presses observed in that day's bench test are physically checked):
+//   D0 upper-left key, D9 upper-right key, D10 lower-left key, D1 lower-right
+//   key, all to shared GND; DFRobot DFR0030 digital touch output on D4 (sensor
+//   powered from 3V3/GND); OP1 board's Omron D2FC-F-7N(60M) centre click on D6,
+//   other contact to GND. The 60M's third leg is a dummy, so there is no NC
+//   contact. D2 is blocked; D3 and D5 are used by other parts.
+//   D6 is the mouse button: wire channel 0 (legacy name "D8", key thumb) now
+//   reads D6, so the R58 centre click drives the normal mouse-button behaviour.
+//   D8 is no longer a control. On 2026-11-23 the R58 board read D8 as closed to
+//   GND continuously with nothing pressed (wiring not yet identified); keeping it
+//   in the mouse button would hold the button down, block sleep and refuse every
+//   wireless update as busy. Earlier Sense wiring with the mouse button on D8 is
+//   firmware 13 (source at commit ade6f38); set MOUSE_BUTTON_PIN back to D8 for it.
+//   D9 and D10 keep their speech and HUD meanings. D0, D1, D4, D6 and D8 are also
+//   reported on "Ein" event lines (below), so each soldered input can be checked
+//   over Bluetooth without changing the receiver.
+//
 // Protocol "wand-sense-1" over USB serial and Nordic UART, newline framed:
 //   board: I{identity}  S seq,us,buttons,pD8,pD9,pD10,imuFlags,ax,ay,az,gx,gy,gz,count,firstUs
 //          V millivolts,charging   E event
+//          Ein D0=l:n D1=l:n D4=l:n D6=l:n D8=l:n   (firmware 14) raw debounced pin level
+//            l (1 = HIGH, 0 = LOW) and n level changes since boot, per pin. Sent on
+//            a change and with the 10 s link report. The installed receiver logs E
+//            lines as SENSE_EVENT and needs no change. The S frame is unchanged:
+//            receivers before firmware 14 reject a mask above 7 or extra fields.
 //   host:  ? identity  H heartbeat  Lrrggbb light  M0/M1/M2 sensor  Z sleep  X end
 //          XU end because the receiver is restarting: cycle the loading colours until the next host
 //          UC update challenge  UA<version>,<size>,<crc16>,<hmac> authorized handoff  UV confirm update
@@ -50,12 +73,13 @@ using namespace Adafruit_LittleFS_Namespace;
 
 // Numeric firmware versions from 6 on; earlier images used dated letters
 // (the previous one was wand-sense-20261029e). Wireless updates only move up.
-static const char FIRMWARE[] = "wand-sense-13";
-static const uint32_t FIRMWARE_NUMBER = 13;
+// 14: R58 inputs (D6 mouse button; D0, D1, D4, D6, D8 reported on Ein lines).
+static const char FIRMWARE[] = "wand-sense-14";
+static const uint32_t FIRMWARE_NUMBER = 14;
 // The image's own statement of its board and number. The receiver refuses a
 // package without exactly one, or for another board or number. Change the
 // number with FIRMWARE_NUMBER.
-static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;13";
+static const char WAND_IMAGE_MARKER[] = "WANDIMG1;xiao-nrf52840-sense;14";
 static const uint32_t DEBOUNCE_MS = 10;            // Same as the checked diagnostic sketch.
 static const uint32_t HOST_TIMEOUT_MS = 2000;      // Host heartbeat is every 500 ms.
 static const uint32_t HEARTBEAT_FRAME_MS = 250;    // Liveness while the sensor is quiet.
@@ -136,7 +160,46 @@ struct Button {
   }
   bool down() const { return pressed && !masked; }
 };
-static Button buttons[3] = {{D8}, {D9}, {D10}};
+// Wire channel order (mouse, speech, HUD; legacy names D8, D9, D10) is unchanged.
+// R58: the mouse button is the D6 centre click (see the header).
+static const uint8_t MOUSE_BUTTON_PIN = D6; // Earlier Sense wiring: D8 (firmware 13).
+static Button buttons[3] = {{MOUSE_BUTTON_PIN}, {D9}, {D10}};
+
+// ---------- R58 input report (firmware 14, diagnostic only) ----------
+// Each soldered R58 input, read on its own pin so a bench test can tell them
+// apart: D0 and D1 (keys with no control action yet), D4 (touch module output),
+// D6 (also the mouse button above) and D8 (the former mouse-button pad, read
+// for diagnosis only). Reports the raw
+// debounced level, never "pressed": the touch module drives D4 itself and its
+// active level is checked at the bench, not assumed. Deliberately outside
+// buttons[]: these never wake the board, hold off sleep, refuse an update as
+// busy, clear queued motion or show the light acknowledgement, so an
+// unverified or stuck lead cannot change the existing controls. (D6 does all
+// of those through the mouse button, as the ordinary click must.) In standby
+// the report-only pins are disconnected, so a lead stuck to GND (as D8 was)
+// draws no pull-up current while the board is off.
+struct InputProbe {
+  uint8_t pin; char label; bool level, raw; uint32_t changedAt, changes;
+  void begin(uint32_t now) { raw = level = digitalRead(pin) == HIGH; changedAt = now; changes = 0; }
+  bool update(uint32_t now) {
+    const bool v = digitalRead(pin) == HIGH;
+    if (v != raw) { raw = v; changedAt = now; }
+    if (raw == level || wandElapsed(now, changedAt) < DEBOUNCE_MS) return false;
+    level = raw; ++changes; return true;
+  }
+};
+static InputProbe probes[5] = {{D0, '0'}, {D1, '1'}, {D4, '4'}, {D6, '6'}, {D8, '8'}};
+static bool probesDirty = false;        // A report is owed: a level changed or a session or 10 s tick began.
+static uint32_t lastProbeReportAt = 0;
+static const uint32_t PROBE_REPORT_MIN_MS = 25; // Bounds event traffic; counts keep every change.
+static void beginProbes(uint32_t now) {
+  pinMode(D0, INPUT_PULLUP); pinMode(D1, INPUT_PULLUP); pinMode(D8, INPUT_PULLUP);
+  // DFR0030: the module drives its output. The pull-down only keeps the pin
+  // defined if the module is unplugged or unpowered (it then reads LOW).
+  pinMode(D4, INPUT_PULLDOWN);
+  // D6 is already INPUT_PULLUP as the mouse button (configured first in setup()).
+  for (auto &p : probes) p.begin(now);
+}
 
 static uint8_t buttonMask() { uint8_t m = 0; for (int i = 0; i < 3; ++i) if (buttons[i].down()) m |= 1 << i; return m; }
 static bool anyPhysical() { for (auto &b : buttons) if (b.pressed || b.raw) return true; return false; }
@@ -381,6 +444,26 @@ static void sendLink() {
   writeTo(session, text, snprintf(text, sizeof(text), "\nElink interval=%u latency=%u mtu=%u phy=%u merged=%lu/%lu\n",
     c->getConnectionInterval(), c->getSlaveLatency(), c->getMtu(), c->getPHY(), (unsigned long)mergedFrames, (unsigned long)mergedReadings));
 }
+// R58 input report (firmware 14). Called from the loop on every pass; it sends
+// at most one line per PROBE_REPORT_MIN_MS and only while a session exists.
+// Over Bluetooth it shares the four-slot status queue with identity, battery,
+// link and U update replies, so it waits while fewer than two slots are free
+// rather than crowd out an update reply. A deferred or lost line costs
+// nothing durable: the next line carries the current levels and the change
+// counts, and the 10 s tick repeats it, so a missing line is not evidence of a
+// bad joint. The "in" prefix keeps it away from the receiver's "rate" replies.
+static void sendProbes(uint32_t now) {
+  if (!probesDirty || session == NONE || wandElapsed(now, lastProbeReportAt) < PROBE_REPORT_MIN_MS) return;
+  if (session == BLE_LINK && (!outbound || uxQueueSpacesAvailable(outbound) < 2)) return;
+  char text[112];
+  int n = snprintf(text, sizeof(text), "\nEin");
+  for (const auto &p : probes) {
+    if (n <= 0 || n >= int(sizeof(text))) return;
+    n += snprintf(text + n, sizeof(text) - n, " D%c=%u:%lu", p.label, unsigned(p.level), (unsigned long)p.changes);
+  }
+  if (n > 0 && n < int(sizeof(text)) - 1) { text[n++] = '\n'; text[n] = 0; } else return;
+  if (n > 0 && n < int(sizeof(text)) && writeTo(session, text, n)) { probesDirty = false; lastProbeReportAt = now; }
+}
 
 // ---------- Power ----------
 static void powerOff() {
@@ -395,6 +478,8 @@ static void powerOff() {
   if (session != NONE) { const char bye[] = "\nE off\n"; writeTo(session, bye, sizeof(bye) - 1); delay(20); }
   if (senderTask) vTaskSuspend(senderTask);
   Bluefruit.Advertising.stop();
+  // Report-only R58 pins first, so the mouse button's D6 wake configuration below wins.
+  for (const auto &p : probes) nrf_gpio_cfg_default(g_ADigitalPinMap[p.pin]);
   for (auto &b : buttons) nrf_gpio_cfg_sense_input(g_ADigitalPinMap[b.pin], NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_SENSE_LOW);
   delay(5);
   sd_power_system_off();
@@ -590,6 +675,7 @@ static void command(const char *line, uint8_t length, Transport from) {
     // A new host session: current state only, never queued edges or old motion.
     session = from; clearMerged(); stateDirty = true; chordPhase = 0; localDark = false; loadingBlink = false; verifyBlink = false;
     lastBatteryAt = millis() - 10000; // Report the battery at once.
+    probesDirty = true;               // And the R58 input levels (firmware 14).
 
   }
   hostAt = millis();
@@ -643,6 +729,7 @@ void setup() {
   Serial.begin(115200);
   const uint32_t now = millis();
   for (auto &b : buttons) b.begin(now);
+  beginProbes(now); // After buttons: D6 keeps the mouse button's pull-up.
   pinMode(VBAT_ENABLE, OUTPUT);
   digitalWrite(VBAT_ENABLE, LOW); // Keep P0.14 low whenever a battery may be fitted.
   pinMode(CHARGE_STATUS, INPUT_PULLUP);
@@ -707,6 +794,8 @@ void loop() {
   uint32_t now = millis();
   bool buttonChanged = false;
   for (auto &b : buttons) if (b.update(now)) buttonChanged = true;
+  // R58 report only: never sets stateDirty or clears queued motion.
+  for (auto &p : probes) if (p.update(now)) probesDirty = true;
   // Independent of the transport and of wake-press action suppression. No wait
   // for Bluetooth or host processing, and no extra motion/input timers.
   if (buttonLightFeedback.observe(physicalButtonMask(), now)) refreshLight(now);
@@ -756,7 +845,8 @@ void loop() {
     if (c && c->getConnectionInterval() > 12) c->requestConnectionParameter(12);
     ++intervalRequests;
   }
-  if (wandElapsed(now, lastBatteryAt) >= 10000) { lastBatteryAt = now; readBattery(); if (session != NONE) { sendBattery(); sendLink(); } }
+  if (wandElapsed(now, lastBatteryAt) >= 10000) { lastBatteryAt = now; readBattery(); if (session != NONE) { sendBattery(); sendLink(); probesDirty = true; } }
+  sendProbes(now); // Firmware 14: deferred while the status queue is busy.
 
   if (session == NONE) {
     // The Puck power policy's offline behaviour, kept on the board itself.

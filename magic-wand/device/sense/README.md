@@ -44,6 +44,30 @@ core 1.1.13, Seeed Arduino LSM6DS3 2.0.7). Nothing is uploaded on connection.
 
 The wire channel names are the dashboard's legacy `wand-v1` keys, kept as compatibility aliases; they do not name fingers or buttons. The buttons were formerly called Middle, Bottom and Top.
 
+### R58 key holder inputs (firmware 14)
+
+These are the R58 connections as Ethan reported them on 23 November 2026, with the bench results from that night. An input counts as physically checked only after a recorded press or touch.
+
+| R58 part | Sense pin | Firmware 14 | Bench check, 23 November 2026 (USB) |
+| --- | --- | --- | --- |
+| Upper-left key | D0 | Reported only, no control action yet | Not fitted |
+| Upper-right key | D9 | Speech button, unchanged | Not fitted; see the note below |
+| Lower-left key | D10 | HUD button, unchanged | Not fitted |
+| Lower-right key | D1 | Reported only, no control action yet | Reads 0 when pressed |
+| Centre click, press contact | D6 | Mouse button (wire channel 0) | Closes on every press |
+| Centre click, resting contact | D8 | Reported only; no longer a control | Closed at rest, opens on every press |
+| DFRobot DFR0030 digital touch output | D4 | Reported only; powered from 3V3 and GND | Reads 1 while touched |
+
+Each key and click contact is a switch to shared GND, read through an internal pull-up. The fitted centre-click switch has a working resting contact: on every press D8 opened before D6 closed. On release D6 opened first, or both changed within one report. Which switch model is fitted, and which wire colour goes to which contact, is not yet established. D2 is blocked, and D3 and D5 are used by other parts.
+
+Wire channel 0 (legacy key `thumb`, historically D8) now reads D6, so the R58 centre click gives the normal mouse-button behaviour. Firmware 13 read D8 as its mouse button, so the resting contact looked like a button held down continuously. Firmware 13 therefore held the mouse button down, could not sleep, and refused the wireless update as busy: the held-button check is the last of the update checks, after the key, signature, version, size and battery checks. D8 is now reported only, so it cannot hold a control, block sleep or block an update. For earlier Sense wiring with the mouse button on D8, use firmware 13 (source at commit `ade6f38`), or set `MOUSE_BUTTON_PIN` back to `D8`. The `S` frame, its three wire channels and the identity line are unchanged: receivers released before firmware 14 reject a frame with a button mask above 7 or extra fields.
+
+D6, D9 and D10 are still controls, so pressing any of them still blocks a wireless update, as intended. An unfitted key lead can still matter: for about a minute on 23 November the speech channel (D9) followed the resting contact, reading pressed at rest and released while the click was pressed, then stopped. That is consistent with the loose D9 lead touching the resting-contact circuit; it is not confirmed. While D9 reads pressed, wireless updates are refused as busy and the wand cannot sleep. Insulate or fit loose key leads before relying on wireless updates.
+
+To check each soldered input separately, firmware 14 also sends `Ein D0=l:n D1=l:n D4=l:n D6=l:n D8=l:n` event lines. `l` is the debounced pin level (1 = high, 0 = low) and `n` counts that pin's level changes since the board started. A line is sent when a level changes (at most every 25 ms), when a host session starts and every 10 seconds. The installed receiver logs these lines as `SENSE_EVENT`, so no receiver update is needed. Several changes inside 25 ms share one line, so these lines give the order of contact changes but not their exact spacing.
+
+The levels are raw, not "pressed". A closed key or click contact reads 0. The DFR0030 drives D4 itself and reads 1 while touched; D4 has a pull-down, so it reads 0 when the module is unplugged or unpowered. D0, D1, D4 and D8 never wake the board, delay sleep or block an update, so a stuck or miswired lead on those pins cannot change the existing controls. They are disconnected in standby, so a lead stuck to GND draws no pull-up current while the board is off. D6 is the mouse button, so it does all three, like any grip button.
+
 - Streams each 104 Hz LSM6DS3TR-C reading (gyro 500 deg/s range, accelerometer 4 g with the
   Puck's 50 Hz anti-alias filter) plus button edges and press counters. 10 ms switch debounce.
   A free link sends each reading at once. While the radio is busy, newer readings merge into

@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "sense-r58",
+  "name": "Sense wand with the R58 key holder",
+  "hardware": "Original Seeed XIAO nRF52840 Sense in the R58 smooth-click key holder: Choc key positions, an OP1 centre click with two contacts, and a DFRobot DFR0030 touch sensor",
+  "settingsManifest": "wand.json",
+  "firmwareSource": "device/sense/wand_sense/wand_sense.ino",
+  "baselineBeforeR58": {
+    "$comment": "What the wand ran before firmware 14, recorded on 2026-11-23 for reference and rollback. Its firmware source is unchanged at commit ade6f38. Wireless updates only move up: returning to this behaviour needs that source rebuilt with a higher number, or the firmware 13 package installed through the USB bootloader. The private snapshot also keeps the receiver bundle hash, calibration and device settings; those are not published.",
+    "senseFirmware": 13,
+    "sourceCommit": "ade6f38",
+    "bootloader": "0.6.1",
+    "receiver": "1.2.192",
+    "receiverBuild": "197",
+    "pins": {
+      "D8": "mouse button (wire channel 0, legacy key thumb)",
+      "D9": "speech button (wire channel 1, legacy key index)",
+      "D10": "HUD button (wire channel 2, legacy key middle)"
+    },
+    "localFeatureFlags": {
+      "controlVersion": 3,
+      "flickScroll": true,
+      "orientationCompensation": true,
+      "reviewAxisGestures": false
+    },
+    "localExperiment": {
+      "label": "Tap to click",
+      "visible": false,
+      "manualClick": false,
+      "sensorHz": 416
+    },
+    "sensePointerGain": 1.1725
+  },
+  "r58": {
+    "$comment": "Wiring as Ethan reported it on 2026-11-23. An input counts as physically checked only after a recorded bench press or touch; see physicalChecks.",
+    "senseFirmware": 14,
+    "pins": {
+      "D0": {
+        "part": "upper-left key",
+        "action": "reported only"
+      },
+      "D9": {
+        "part": "upper-right key",
+        "action": "speech button (unchanged)"
+      },
+      "D10": {
+        "part": "lower-left key",
+        "action": "HUD button (unchanged)"
+      },
+      "D1": {
+        "part": "lower-right key",
+        "action": "reported only"
+      },
+      "D6": {
+        "part": "OP1 centre click, press contact",
+        "action": "mouse button (wire channel 0)"
+      },
+      "D4": {
+        "part": "DFRobot DFR0030 digital touch output",
+        "action": "reported only",
+        "power": "3V3 and GND"
+      },
+      "D8": {
+        "part": "OP1 centre click, resting contact (closed at rest)",
+        "action": "reported only"
+      }
+    },
+    "switchCommon": "GND",
+    "switchInput": "INPUT_PULLUP, closed reads LOW",
+    "touchInput": "INPUT_PULLDOWN; module-driven level, checked at the bench",
+    "unavailable": {
+      "D2": "blocked",
+      "D3": "used by another part",
+      "D5": "used by another part"
+    },
+    "telemetry": "Ein D0=l:n D1=l:n D4=l:n D6=l:n D8=l:n event lines (level, change count), logged by the receiver as SENSE_EVENT",
+    "physicalChecks": {
+      "$comment": "Observed on firmware 14 over USB on 2026-11-23 from the board's Ein event lines and the receiver's wire channels. Bluetooth was not used for these checks. Ein lines are at most one per 25 ms, so contact order is known but not the exact spacing.",
+      "D6": "closed (0) on every one of 89 centre-click presses (178 level changes); drives the mouse button wire channel",
+      "D8": "closed (0) at rest; opened before D6 closed on every press (178 level changes). On release D6 opened first, or both changed within one report",
+      "D4": "1 while touched, 0 at rest, over 40 touches (80 level changes)",
+      "D1": "0 while the fitted key was pressed, 1 at rest, over 26 presses (52 level changes)",
+      "D0": "no change seen (not fitted)",
+      "D9": "not fitted. For about a minute it read pressed at rest and released while the click was pressed, following D8, then stopped; consistent with a loose lead touching the resting-contact circuit, unconfirmed",
+      "D10": "not fitted; no change seen"
+    },
+    "switchModel": "Not established. The fitted switch has a working resting contact, so it is not a switch with only a normally open contact. Wire colours per contact are unverified.",
+    "fittedKeys": {
+      "D1": "lower-right key fitted",
+      "D0": "not fitted",
+      "D9": "not fitted",
+      "D10": "not fitted"
+    },
+    "wirelessUpdate": {
+      "firmware13": "refused as busy before any transfer: the resting contact on its mouse-button pin (D8) read as a held button",
+      "firmware14": "eligible at rest by code and resting readings (D6, D9 and D10 released); not yet exercised by a real wireless update"
+    }
+  }
+}
