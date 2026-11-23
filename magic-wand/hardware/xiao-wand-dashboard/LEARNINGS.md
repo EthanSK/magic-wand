@@ -18,3 +18,7 @@ A single hardware-counter increment must create an activity entry even when both
 ## Keep physical fingers separate from legacy wire names
 
 The first label-only mapping assumed left D8, centre D9, right D10; the later physical check disproved that pin order. On 29 October, Ethan pressed left then centre: the retained dashboard events showed D10 then D8. The physical order is left Middle finger/D10 (HUD), centre Thumb/D8 (mouse), right Index/D9 (speech). He explicitly chose to preserve those working actions. The already-flashed wand-v1 keys still say thumb/index/middle for D8/D9/D10. Preserve wire compatibility and map by pin; changing only a heading or assuming a key names its finger can swap mouse, speech and HUD inputs. The dashboard mapping regression checks the physical order and retained channel keys; actual control acceptance remains a separate hardware check.
+
+## Compare the two OP1 contacts from one source
+
+On firmware 14 the mouse button (D6) arrives twice: in wand-v1 packets (several hundred a second through the dashboard socket) and in pin reports (read from Wand Receiver's log). Their receive times are not comparable, so the R58 panel draws both OP1 contacts from pin reports only. Pin reports merge changes under 25 ms apart and the log has one-second timestamps, so neither gives a precise delay between the contacts; the order is reliable (23 November 2026: D8 opened before D6 closed on every press). Measuring the delay needs a per-edge board timestamp in firmware.

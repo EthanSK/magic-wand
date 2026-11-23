@@ -36,6 +36,25 @@ a private request file for the receiver and shows only the state the receiver re
 resume actions; **Resume wand actions** or a receiver restart does. The Data check panel's
 **Pointer filtering** row shows the receiver's actual pointer path, so readings are compared knowingly.
 
+### R58 key holder (firmware 14)
+
+When packets report firmware 14 or later, the page labels the mouse button D6 and adds an
+**R58 key holder** panel: the OP1 centre click's press contact (D6) and resting contact (D8)
+shown separately with their combined state, the DFRobot touch output on D4 (high while
+touched), the four key positions, and step traces for the last 10 seconds. D0, D1, D4, D6 and
+D8 come from the board's `Ein` pin reports; D9 and D10 come from the existing wire channels.
+Firmware 13 keeps the original three-switch page. `prototypes/sense-r58.json` is the wiring
+record; a test keeps the panel's pins and fitted keys in step with it.
+
+Wand Receiver build 197 logs pin reports but doesn't forward them to the dashboard socket, so
+`--receiver` also reads complete `SENSE_EVENT in` lines from the receiver's own log (a same-user
+regular file, polled every 20 ms; no other log line reaches the page). `/api/wand` returns them
+under `inputs` with their own cursor (`inputs_after`). Times are when this reader saw each
+report: they show order, not the switch's own timing. Reports are at least 25 ms apart, so
+quicker changes can be merged; the per-pin change counts still record them. The board sends a
+report every 10 seconds at rest, so after 12.5 seconds without one the pins show Unknown, never
+released. Replace the log reader with a socket message the next time Wand Receiver changes.
+
 Receiver mode saves a ten-minute temporary capture in private `WandReceiver/DebugReadings`
 storage (eight rotating files, up to 8 MiB each), then deletes it two hours after capture ends.
 The absolute deadlines survive reconnects and restarts; reading the dashboard does not renew them.

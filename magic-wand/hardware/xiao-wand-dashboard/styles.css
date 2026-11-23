@@ -2,3 +2,12 @@
 
 .toolbar button.managed:disabled{opacity:1;cursor:default;background:#1e3039;color:#b5d4cd;border-color:#3f655e}
 .connection .battery{font-size:13px;font-weight:650;color:#e9f0f3;margin:8px 0 2px}.connection .battery.stale{color:var(--muted);font-weight:500}
+
+/* R58 key holder (firmware 14 pin reports). "on" = closed, pressed or touched. */
+.r58{margin-top:14px}.r58 h3{font-size:14px;font-weight:650;margin:0 0 10px;color:#cad6dc}.r58-freshness{font-size:12px;color:var(--muted)}.r58-freshness.problem{color:#f3c0ca}
+.r58-grid{display:grid;grid-template-columns:1fr .8fr 1.4fr;gap:12px;margin-top:12px}.r58-card{background:#151e25;border:1px solid #2d3a43;border-radius:10px;padding:13px}
+.r58-state{display:block;font-size:22px;font-weight:600;margin:0 0 8px}.r58-row{--input-colour:#78b9fa;display:flex;align-items:center;gap:9px;font-size:13px;padding:6px 0}.r58-row>span:not(.led){flex:1}.r58-row b{font-weight:600}.r58-row small{display:block;font-size:11px;color:var(--muted)}
+.r58-row.big{padding:4px 0 2px}.r58-row.big .r58-state{margin:0}.key-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}
+.r58-row.on .led{background:var(--input-colour);border-color:var(--input-colour);box-shadow:0 0 12px color-mix(in srgb,var(--input-colour) 45%,transparent)}.r58-row.on b,.r58-row.on .r58-state{color:var(--input-colour)}.r58-row.unknown b,.r58-row.unknown .r58-state,.r58-state.unknown{color:var(--muted)}
+.timeline-head{margin-top:16px}#r58-timeline{height:236px}
+@media(max-width:900px){.r58-grid{grid-template-columns:1fr 1fr}.r58-card[data-group="key"]{grid-column:1/-1}}@media(max-width:600px){.r58-grid,.key-grid{grid-template-columns:1fr}}

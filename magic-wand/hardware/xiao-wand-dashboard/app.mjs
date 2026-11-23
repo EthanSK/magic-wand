@@ -1,12 +1,12 @@
 // Render raw wand telemetry and controls; display precision never filters pointer input.
-import {BUTTONS, WandState, LineFramer, motionPlotLimit, MOTION_WINDOW_MS, hasSensorAxis} from './model.mjs';
+import {BUTTONS, WandState, LineFramer, motionPlotLimit, MOTION_WINDOW_MS, hasSensorAxis, firmwareNumber, buttonPin, R58_INPUTS, R58_TRACE_ORDER, PinReports, PIN_REPORT_STALE_MS, TIMELINE_MS, clickState, traceSegments} from './model.mjs';
 import {openSerial, openBluetooth, UART_SERVICE} from './transports.mjs';
-const $=id=>document.getElementById(id), state=new WandState();
+const $=id=>document.getElementById(id), state=new WandState(), pins=new PinReports();
 let owner=null, generation=0, busy=false, demoTimer=null, demoPaused=false, demoSeq=0;
 const demoHeld={thumb:false,index:false,middle:false}, demoCounts={thumb:0,index:0,middle:0};
 let eventKey='';
 const localMode=document.documentElement.dataset.localBridge==='1';
-let localCursor=-1,localSession=null,localMeta=null;
+let localCursor=-1,localSession=null,localMeta=null,inputCursor=-1;
 function notice(text,kind=''){if($('notice').textContent!==text)$('notice').textContent=text;$('notice').className=`notice ${kind}`;}
 function support() {
   const missing=[];if(!navigator.serial)missing.push('USB');if(!navigator.bluetooth)missing.push('Bluetooth');
@@ -70,8 +70,63 @@ function plot(id,keys,now,fresh){
   ['#ef9296','#9bd7b8','#8bbdf1'].forEach((colour,i)=>{c.strokeStyle=colour;c.lineWidth=3;c.beginPath();let previous=null;for(const row of rows){const x=right-(now-row.now)/MOTION_WINDOW_MS*(right-left),y=(top+bottom)/2-row.imu[keys[i]]/max*(bottom-top)/2;if(previous===null||row.now-previous>300)c.moveTo(x,y);else c.lineTo(x,y);previous=row.now;}c.stroke();});
   if(!fresh){c.fillStyle='#cad6dc';c.font='19px system-ui';c.textAlign='center';c.fillText(state.latest?'Last readings · no fresh data':'Waiting for motion readings',(left+right)/2,h/2-14);c.textAlign='left';}
 }
+// R58 key holder view (firmware 14). Each input is on, off or unknown (null):
+// pin reports go unknown after PIN_REPORT_STALE_MS, wire channels after 1.5 s.
+// Unknown is never shown as released or open.
+const R58_TEXT={click:['Closed','Open'],touch:['Touched','Not touched'],key:['Pressed','Released']};
+const WIRING_THREE='Wiring, left to right: 1 \u2192 D10 (10), 2 \u2192 D8 (8), 3 \u2192 D9 (9). Each switch\u2019s other contact \u2192 GND. No 3V3 connection.';
+const WIRING_R58='R58 wiring: keys D0, D1, D9, D10 and press contact D6 \u2192 GND. Resting contact D8 is closed at rest. Touch output \u2192 D4; sensor powered from 3V3.';
+function r58Active(input,now){
+  if(input.source==='wire')return state.fresh(now)?state.latest.buttons[input.key]:null;
+  const level=pins.level(input.pin,now);return level===null?null:level===input.active;
+}
+function drawTimeline(now){
+  // Size the canvas to its displayed size so labels aren't stretched.
+  const canvas=$('r58-timeline'),box=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+  if(!box.width||!box.height)return;
+  const W=Math.round(box.width*dpr),H=Math.round(box.height*dpr);if(canvas.width!==W||canvas.height!==H){canvas.width=W;canvas.height=H;}
+  const c=canvas.getContext('2d'),w=box.width,h=box.height;c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+  const left=86,right=w-8,top=6,bottom=h-22,rowH=(bottom-top)/R58_TRACE_ORDER.length,x=t=>right-(now-t)/TIMELINE_MS*(right-left);
+  c.font='12px system-ui';c.textBaseline='middle';c.lineWidth=1;
+  for(let s=0;s<=TIMELINE_MS/1000;s++){const gx=right-s*1000/TIMELINE_MS*(right-left);c.strokeStyle=s%5?'#1f2a31':'#2e3c45';c.beginPath();c.moveTo(gx,top);c.lineTo(gx,bottom);c.stroke();if(s%5===0){c.fillStyle='#9baeb9';c.textAlign=s?(s===10?'left':'center'):'right';c.fillText(s?`\u2212${s} s`:'now',gx,h-10);}}
+  R58_TRACE_ORDER.forEach((pin,i)=>{
+    const input=R58_INPUTS.find(v=>v.pin===pin),y0=top+i*rowH,hi=y0+5,lo=y0+rowH-5,mid=(hi+lo)/2;
+    c.textAlign='left';c.fillStyle='#cad6dc';c.fillText(input.trace,4,mid);
+    // A dashed line marks unknown time; known levels are drawn over it.
+    c.setLineDash([3,4]);c.strokeStyle='#3a4852';c.beginPath();c.moveTo(left,mid);c.lineTo(right,mid);c.stroke();c.setLineDash([]);
+    const segments=input.source==='wire'?traceSegments(state.buttonTrace,r=>r.buttons[input.key],now,1500):traceSegments(pins.rows,r=>r.report[pin]?r.report[pin].level===input.active:null,now,PIN_REPORT_STALE_MS);
+    c.strokeStyle=input.colour;c.fillStyle=input.colour;c.lineWidth=2;c.beginPath();let previous=null;
+    for(const s of segments){
+      const x0=x(s.start),x1=x(s.end),y=s.active?hi:lo;c.clearRect(x0,mid-2,x1-x0,4);
+      if(s.active){c.globalAlpha=.2;c.fillRect(x0,hi,x1-x0,lo-hi);c.globalAlpha=1;}
+      if(previous&&previous.end===s.start)c.lineTo(x0,y);else c.moveTo(x0,y);c.lineTo(x1,y);previous=s;
+    }
+    c.stroke();
+  });
+}
+function renderR58(now,firmware){
+  // Firmware 13 and the three-switch layout keep their original page.
+  const show=firmware!==null?firmware>=14:pins.latest!==null;$('r58').hidden=!show;
+  $('wiring-note').textContent=firmware!==null&&firmware>=14?WIRING_R58:WIRING_THREE;
+  if(!show)return;
+  const fresh=pins.fresh(now);
+  $('r58-freshness').textContent=fresh?`${Math.round((now-pins.received)/1000)} s since last pin report`:pins.latest?'No pin report for over 12 seconds':'Waiting for firmware 14 pin reports';
+  $('r58-freshness').classList.toggle('problem',!fresh&&pins.latest!==null);
+  for(const input of R58_INPUTS){
+    const row=document.querySelector(`.r58-row[data-input="${input.pin}"]`),on=r58Active(input,now);
+    row.style.setProperty('--input-colour',input.colour);row.classList.toggle('on',on===true);row.classList.toggle('unknown',on===null);
+    row.querySelector('[data-state]').textContent=on===null?'Unknown':R58_TEXT[input.group][on?0:1];
+    const fitted=row.querySelector('[data-fitted]');if(fitted)fitted.textContent=input.fitted===false?'Not fitted':'';
+  }
+  const click=clickState(pins.level('D6',now),pins.level('D8',now));$('click-state').textContent=click??'Unknown';$('click-state').classList.toggle('unknown',click===null);
+  drawTimeline(now);
+}
 function render(){
-  const now=performance.now(),fresh=state.fresh(now);
+  const now=performance.now(),fresh=state.fresh(now),firmware=state.latest?firmwareNumber(state.latest):null;
+  // Firmware 14 moved the mouse button to D6; label pins from the packet's firmware.
+  $('pin-summary').textContent=`XIAO nRF52840 Sense \u00b7 left to right: ${BUTTONS.map(b=>`${b.name} ${buttonPin(b,firmware)}`).join(' \u00b7 ')}`;
+  for(const b of BUTTONS)document.querySelector(`[data-key="${b.key}"] .pin`).textContent=`${buttonPin(b,firmware)} \u00b7 ${b.role}`;
+  renderR58(now,firmware);
 
   document.body.classList.toggle('stale',!fresh);
   $('source').textContent=state.connected?`${state.source}${state.source==='Demo'?' · simulated':fresh?' · live':' · waiting'}`:'Not connected';$('source').className=`pill ${state.connected?(state.source==='Demo'?'demo':fresh?'live':''):''}`;
@@ -89,7 +144,7 @@ support();render();setInterval(render,100);
 // Local bridge mode is enabled only by the opt-in local hardware server.
 async function pollLocal(){
   try{
-    const response=await fetch(`/api/wand?after=${localCursor}`,{cache:'no-store'});
+    const response=await fetch(`/api/wand?after=${localCursor}&inputs_after=${inputCursor}`,{cache:'no-store'});
     if(!response.ok)throw Error('Reader unavailable');
     const meta=await response.json();if(meta.bridge!=='wand-local-v1')throw Error('Unexpected reader');
     localMeta=meta;const now=performance.now();
@@ -98,6 +153,16 @@ async function pollLocal(){
     if(meta.transport && (meta.session!==localSession || state.source!==meta.transport)){state.connect(meta.transport);localSession=meta.session;}
     for(const row of meta.packets){if(row.session===meta.session)state.accept(row.packet,now-row.age_ms);}
     localCursor=meta.cursor;
+    // Firmware 14 pin reports have their own cursor. A restarted bridge starts
+    // again from 0; ask for its latest report instead of waiting for new ids.
+    const inputs=meta.inputs;
+    if(inputs&&Number.isInteger(inputs.cursor)){
+      if(inputs.cursor<inputCursor)inputCursor=-1;
+      else{
+        for(const row of inputs.rows??[]){if(!(row.id>inputCursor))continue;try{for(const text of pins.accept(row.levels,now-row.age_ms))state.event(text,now-row.age_ms);}catch{++state.invalid;}inputCursor=row.id;}
+        if(inputCursor<0)inputCursor=inputs.cursor;
+      }
+    }
     if(['searching','usb_error','bluetooth_error','bootloader','ambiguous','disabled'].includes(meta.status))state.disconnect();
     else if(meta.transport)state.connected=true;
     notice(meta.message+(meta.status==='live'?' · USB is primary; Bluetooth takes over when USB is unplugged.':''),meta.status.endsWith('error')?'problem':'');

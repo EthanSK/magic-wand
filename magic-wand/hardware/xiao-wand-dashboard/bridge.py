@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Local Sense dashboard. --hardware reads the diagnostic sketch; --receiver observes Wand Receiver. Importing opens nothing."""
-import argparse, asyncio, collections, ctypes, json, math, threading, time, os, socket, stat, uuid, queue, logging, logging.handlers
+import argparse, asyncio, calendar, collections, ctypes, json, math, re, threading, time, os, socket, stat, uuid, queue, logging, logging.handlers
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
@@ -135,6 +135,9 @@ class Store:
         self.recorder=recorder
         self.clock=clock;self.lock=threading.Lock();self.rows=collections.deque(maxlen=512);self.cursor=0;self.session=0
         self.status='starting';self.message='Starting local reader';self.usb_present=False;self.bluetooth='Standby';self.transport=None;self.observer=None
+        # Firmware 14 pin reports (R58 key holder), kept apart from wand-v1 packets:
+        # they come from a different source and have their own cursor.
+        self.inputs=collections.deque(maxlen=1024);self.input_cursor=0;self.inputs_reader=None
     def set(self,status,message,**values):
         with self.lock:
             self.status=status;self.message=message
@@ -152,13 +155,25 @@ class Store:
             self.status='live';self.message=f'Real {transport} readings'
         if self.recorder:self.recorder.record(row)
         return True
-    def snapshot(self,after=-1):
+    def record_inputs(self,levels,received=None):
+        """Store one firmware 14 pin report. `received` is when the Mac saw it (monotonic)."""
+        with self.lock:
+            self.input_cursor+=1
+            self.inputs.append({'id':self.input_cursor,'levels':levels,'received':self.clock() if received is None else received})
+    def input_snapshot(self,now,after):
+        # Called with the lock held. Only new reports after the page's cursor, bounded;
+        # `age_ms` lets the page place each report on its own clock.
+        rows=[r for r in self.inputs if r['id']>after][-256:] if after>=0 else list(self.inputs)[-1:]
+        latest=self.inputs[-1] if self.inputs else None
+        return {'cursor':self.input_cursor,'age_ms':None if latest is None else max(0,(now-latest['received'])*1000),
+                'rows':[{'id':r['id'],'levels':r['levels'],'age_ms':max(0,(now-r['received'])*1000)} for r in rows]}
+    def snapshot(self,after=-1,inputs_after=-1):
         with self.lock:
             now=self.clock();rows=list(self.rows)
             selected=rows[-1:] if after<0 else [r for r in rows if r['id']>after]
             age=(now-rows[-1]['received'])*1000 if rows and rows[-1]['session']==self.session else None
             live=self.status=='live' and age is not None and age<1500
-            return {'bridge':'wand-local-v1','status':'live' if live else 'stale' if self.status=='live' else self.status,'message':self.message if live or self.status!='live' else 'No recent wand readings','transport':self.transport,'usb_present':self.usb_present,'bluetooth':self.bluetooth,'session':self.session,'cursor':self.cursor,'age_ms':age,'capture':self.recorder.status if self.recorder else {'enabled':False,'dropped':0,'error':False},'packets':[{k:v for k,v in r.items() if k!='received'}|{'age_ms':max(0,(now-r['received'])*1000)} for r in selected]}
+            return {'bridge':'wand-local-v1','status':'live' if live else 'stale' if self.status=='live' else self.status,'message':self.message if live or self.status!='live' else 'No recent wand readings','transport':self.transport,'usb_present':self.usb_present,'bluetooth':self.bluetooth,'session':self.session,'cursor':self.cursor,'age_ms':age,'capture':self.recorder.status if self.recorder else {'enabled':False,'dropped':0,'error':False},'packets':[{k:v for k,v in r.items() if k!='received'}|{'age_ms':max(0,(now-r['received'])*1000)} for r in selected],'inputs':self.input_snapshot(now,inputs_after)}
 
 class Framer:
     def __init__(self,receive):self.buffer=bytearray();self.receive=receive;self.dropping=False
@@ -279,6 +294,84 @@ class ReceiverObserver:
     def close(self):
         self.sock.close();self.path.unlink(missing_ok=True)
 
+
+# Firmware 14 sends `Ein D0=l:n ...` lines; Wand Receiver (build 197) writes each one
+# to its log as `<UTC time> SENSE_EVENT in D0=l:n ...`. l is the debounced pin level
+# (1 high, 0 low) and n counts that pin's level changes since the board started.
+INPUT_LINE=re.compile(r'(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ) SENSE_EVENT in ((?:D(?:10|[0-9])=[01]:\d{1,10})(?: D(?:10|[0-9])=[01]:\d{1,10}){0,10})')
+def parse_input_report(line):
+    """Return ({pin:{'level','changes'}}, log time) for one receiver log line, or None.
+
+    Only a complete, well-formed pin report is accepted; anything else in the log
+    (which can hold private details) is ignored and never forwarded.
+    """
+    m=INPUT_LINE.fullmatch(line.rstrip('\n'))
+    if not m:return None
+    levels={}
+    for item in m.group(2).split():
+        pin,value=item.split('=');level,changes=value.split(':')
+        if pin in levels:return None
+        levels[pin]={'level':int(level),'changes':int(changes)}
+    try:at=calendar.timegm(time.strptime(m.group(1),'%Y-%m-%dT%H:%M:%SZ'))
+    except (ValueError,OverflowError):return None
+    return levels,at
+
+RECEIVER_LOG_TAIL=65536
+
+class ReceiverInputs:
+    """Stopgap reader for firmware 14 pin reports, from Wand Receiver's own log.
+
+    Receiver 197 logs each report but does not forward it to this dashboard's
+    socket. Reading only matching lines from the same-user log avoids a receiver
+    rebuild and opens no hardware. Times are when this reader saw each line
+    (polled every 20 ms), so they show order, not the switch's own timing.
+    Replace this with a socket message the next time the receiver changes.
+    """
+    def __init__(self,path,store,halt,clock=time.monotonic,wall=time.time,poll=.02):
+        self.path=path;self.store=store;self.halt=halt;self.clock=clock;self.wall=wall;self.poll=poll
+        self.file=None;self.inode=None;self.partial=''
+        threading.Thread(target=self.run,daemon=True).start()
+    def open(self,start_at_tail):
+        # Same-user regular file only; never follow a link the user didn't make.
+        fd=os.open(self.path,os.O_RDONLY|os.O_NOFOLLOW);info=os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode) or info.st_uid!=os.geteuid():os.close(fd);raise OSError('Receiver log must be a private regular file')
+        self.file=os.fdopen(fd,'r',encoding='utf-8',errors='replace');self.inode=info.st_ino;self.partial=''
+        if start_at_tail:
+            # Show the latest report right away, placed at its own log time; older
+            # history isn't replayed.
+            self.file.seek(max(0,info.st_size-RECEIVER_LOG_TAIL));latest=None
+            for line in self.file:
+                parsed=parse_input_report(line)
+                if parsed:latest=parsed
+            if latest:self.store.record_inputs(latest[0],self.clock()-max(0,self.wall()-latest[1]))
+    def step(self):
+        """Read newly appended lines once. Reopens after the log is replaced or truncated."""
+        if self.file is None:self.open(True);return
+        try:info=os.stat(self.path)
+        except OSError:return
+        if info.st_ino!=self.inode or info.st_size<self.file.tell():self.file.close();self.file=None;self.open(False);return
+        while True:
+            chunk=self.file.readline(4096)
+            if not chunk:return
+            self.partial+=chunk
+            if not self.partial.endswith('\n'):
+                if len(self.partial)>4096:self.partial=''
+                continue
+            line,self.partial=self.partial,''
+            parsed=parse_input_report(line)
+            if parsed:self.store.record_inputs(parsed[0])
+    def run(self):
+        # Any failure (missing log, permissions, an unexpected line) reopens after a
+        # second instead of ending the thread; the page then shows the pins as stale.
+        while not self.halt.is_set():
+            try:self.step()
+            except Exception:
+                try:
+                    if self.file:self.file.close()
+                except Exception:pass
+                self.file=None;time.sleep(1)
+            time.sleep(self.poll)
+
 RECEIVER_SUPPORT=RECEIVER_SOCKET.parent
 ACTION_REQUEST='actions-pause.request'
 
@@ -376,9 +469,9 @@ def make_handler(store,assets,port,actions=None):
             if uri.path=='/api/actions':
                 data=json.dumps(actions.state() if actions else {'available':False,'paused':None},allow_nan=False).encode();mime='application/json'
             elif uri.path=='/api/wand':
-                try:after=int(parse_qs(uri.query).get('after',['-1'])[0])
+                try:query=parse_qs(uri.query);after=int(query.get('after',['-1'])[0]);inputs_after=int(query.get('inputs_after',['-1'])[0])
                 except ValueError:self.send_error(400);return
-                data=json.dumps(store.snapshot(after),allow_nan=False).encode();mime='application/json'
+                data=json.dumps(store.snapshot(after,inputs_after),allow_nan=False).encode();mime='application/json'
             elif uri.path in files:
                 filename,mime=files[uri.path]
                 try:data=(assets/filename).read_bytes()
@@ -412,13 +505,14 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--port',type=int,default=8872);parser.add_argument('--assets',type=Path,default=Path(__file__).parent);parser.add_argument('--hardware',action='store_true',help='Explicitly own the Sense USB/Bluetooth connections in a private installation')
     parser.add_argument('--receiver',action='store_true',help='Observe Wand Receiver, the control firmware board owner; opens no hardware')
     parser.add_argument('--receiver-socket',type=Path,default=RECEIVER_SOCKET,help=argparse.SUPPRESS)
+    parser.add_argument('--receiver-log',type=Path,default=RECEIVER_SUPPORT/'receiver.log',help=argparse.SUPPRESS)
     parser.add_argument('--record-dir',type=Path,default=RECEIVER_SUPPORT/'DebugReadings',help='Private rolling sensor recordings in receiver mode')
     parser.add_argument('--no-record',action='store_true',help='Disable automatic receiver-mode readings history')
     args=parser.parse_args()
     if args.hardware and args.receiver:parser.error('choose --hardware (diagnostic sketch) or --receiver (control firmware), not both')
     recorder=RollingReadings(args.record_dir) if args.receiver and not args.no_record else None
     store=Store(recorder=recorder);halt=threading.Event();server=ThreadingHTTPServer(('127.0.0.1',args.port),make_handler(store,args.assets,args.port,ActionControl(args.receiver_socket.parent) if args.receiver else None));server.daemon_threads=True
-    if args.receiver:store.observer=ReceiverObserver(args.receiver_socket,store,halt)
+    if args.receiver:store.observer=ReceiverObserver(args.receiver_socket,store,halt);store.inputs_reader=ReceiverInputs(args.receiver_log,store,halt)
     threading.Thread(target=server.serve_forever,daemon=True).start();print(f'Magic Wand live dashboard: http://127.0.0.1:{args.port}/',flush=True)
     try:
         if args.receiver:

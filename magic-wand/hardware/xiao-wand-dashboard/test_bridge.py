@@ -1,6 +1,7 @@
 import unittest,json
 from types import SimpleNamespace
-from bridge import Store,Framer,validate,matching_port,ReceiverObserver,ActionControl,parse_action_post,ACTION_REQUEST
+from bridge import Store,Framer,validate,matching_port,ReceiverObserver,ActionControl,parse_action_post,ACTION_REQUEST,parse_input_report,ReceiverInputs
+import calendar
 import os,tempfile
 from pathlib import Path
 
@@ -94,4 +95,35 @@ class BridgeTests(unittest.TestCase):
      ({**ok,'Content-Type':'text/plain'},b'{"paused":true}',415),(ok,None,413),(ok,b'x'*65,413),(ok,b'nope',400),
      (ok,b'{"paused":1}',400),(ok,b'{"paused":true,"code":"x"}',400),(ok,b'[true]',400)]:
    self.assertEqual(parse_action_post(headers,body,8872)[0],code,(headers,body))
+ # Firmware 14 pin reports, read from Wand Receiver's log (no hardware, no socket).
+ def test_pin_report_lines_parse_only_when_complete(self):
+  levels,at=parse_input_report('2026-11-23T03:00:44Z SENSE_EVENT in D0=1:0 D1=1:52 D4=0:80 D6=1:178 D8=0:178\n')
+  self.assertEqual(levels,{'D0':{'level':1,'changes':0},'D1':{'level':1,'changes':52},'D4':{'level':0,'changes':80},'D6':{'level':1,'changes':178},'D8':{'level':0,'changes':178}})
+  self.assertEqual(at,calendar.timegm((2026,11,23,3,0,44,0,0,0)),'log times are UTC')
+  for bad in ['2026-11-23T03:00:44Z SENSE_EVENT in D6=2:1','2026-11-23T03:00:44Z SENSE_EVENT in D6=1:1 D6=0:2','x 2026-11-23T03:00:44Z SENSE_EVENT in D6=1:1',
+              '2026-11-23T03:00:44Z SENSE_EVENT in D6=1:1 other','2026-11-23T03:00:44Z SENSE_EVENT in ','2026-11-23T03:00:44Z SENSE_UPDATE busy','2026-13-45T03:00:44Z SENSE_EVENT in D6=1:1']:
+   self.assertIsNone(parse_input_report(bad),bad)
+ def test_pin_reports_have_their_own_bounded_cursor(self):
+  now=[10.0];s=Store(lambda:now[0])
+  self.assertEqual(s.snapshot()['inputs'],{'cursor':0,'age_ms':None,'rows':[]})
+  for i in range(300):s.record_inputs({'D6':{'level':i%2,'changes':i}})
+  now[0]=10.5;snap=s.snapshot(-1,-1)['inputs']
+  self.assertEqual(snap['cursor'],300);self.assertEqual([r['id'] for r in snap['rows']],[300],'a new page gets only the latest report');self.assertEqual(snap['age_ms'],500)
+  self.assertEqual(len(s.snapshot(-1,0)['inputs']['rows']),256);self.assertEqual([r['id'] for r in s.snapshot(-1,298)['inputs']['rows']],[299,300])
+  self.assertEqual(s.snapshot(-1,-1)['cursor'],0,'pin reports never move the packet cursor')
+ def test_receiver_log_reader_follows_appends_and_replacement(self):
+  with tempfile.TemporaryDirectory() as d:
+   log=Path(d)/'receiver.log';logged=calendar.timegm((2026,11,23,3,0,44,0,0,0))
+   log.write_text('2026-11-23T03:00:43Z SENSE_EVENT in D6=0:0 D8=1:0\n2026-11-23T03:00:44Z SENSE_EVENT in D6=1:1 D8=0:1\nother line\n')
+   s=Store();r=object.__new__(ReceiverInputs);r.path=log;r.store=s;r.clock=lambda:100.0;r.wall=lambda:logged+2;r.file=None;r.inode=None;r.partial=''
+   r.step();self.assertEqual(s.input_cursor,1,'only the latest earlier report is shown');self.assertEqual(s.inputs[-1]['received'],98.0,'placed at its log time')
+   with log.open('a') as f:f.write('2026-11-23T03:00:45Z SENSE_EVENT in D6=0:2 D8=1:2\n2026-11-23T03:00:45Z SENSE_EVENT in D6=1:3')
+   r.step();self.assertEqual(s.input_cursor,2,'a line still being written waits')
+   with log.open('a') as f:f.write(' D8=0:3\n')
+   r.step();self.assertEqual(s.input_cursor,3);self.assertEqual(s.inputs[-1]['levels'],{'D6':{'level':1,'changes':3},'D8':{'level':0,'changes':3}})
+   new=Path(d)/'new.log';new.write_text('2026-11-23T03:01:00Z SENSE_EVENT in D6=1:0\n');os.replace(new,log)
+   r.step();r.step();self.assertEqual(s.input_cursor,4,'a replaced log is read from its start')
+   log.write_text('');r.step();log.write_text('2026-11-23T03:01:01Z SENSE_EVENT in D6=0:1\n');r.step();r.step();self.assertEqual(s.input_cursor,5,'a truncated log is reopened')
+   link=Path(d)/'link.log';link.symlink_to(log);q=object.__new__(ReceiverInputs);q.path=link;q.store=s;q.clock=lambda:0;q.wall=lambda:0;q.file=None;q.inode=None;q.partial=''
+   self.assertRaises(OSError,q.step);r.file.close()
 if __name__=='__main__':unittest.main()
