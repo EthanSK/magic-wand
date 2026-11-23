@@ -433,9 +433,12 @@ class ActionControl:
         if not isinstance(value,dict):return None
         percent,volts,measured=value.get('percent'),value.get('volts'),value.get('measuredAt')
         if type(percent) is not int or not 0<=percent<=100 or type(volts) not in (int,float) or not 1<=volts<=5 or type(measured) not in (int,float):return None
-        # The Sense charger's status pin, sent with each voltage reading (low while
-        # charging, so a finished charge reads False even with USB attached). None for
-        # a Puck or before the first Sense reading; never guessed from the voltage.
+        # The Sense charger's status pin from the board's latest `V` line (every 10 s).
+        # Wand Receiver samples the voltage above from the same lines at most once a
+        # minute, so the flag can be up to a minute newer than the voltage shown.
+        # Seeed documents the pin as low only while charging, so a finished charge
+        # should read False even on USB (not yet observed on this wand). None for a
+        # Puck or before the first Sense reading; never guessed from the voltage.
         update=status.get('senseFirmwareUpdate');charging=update.get('charging') if isinstance(update,dict) else None
         return {'percent':percent,'volts':round(volts,2),'ageSeconds':max(0,round(self.wall()-measured)),'charging':charging if type(charging) is bool else None}
     def request(self,paused,timeout=2.0):

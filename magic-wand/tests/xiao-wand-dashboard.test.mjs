@@ -116,6 +116,8 @@ test('R58 battery card shows the bought pack, estimated charge, charger and unme
  assert.match(r58.battery.runtime,/^Not measured\./);
  assert.equal(packLine(r58.battery),'Micron 72217 \u00b7 100 mAh, 3.7 V nominal, single-cell LiPo with protection circuit');
  assert.equal(packLine(null),'');assert.equal(packLine({}),'');
+ assert(html.includes('<article id="battery-card" class="r58-card" data-group="battery" hidden>'),'hidden outside the local reader');
+ assert.match(fs.readFileSync(new URL('../hardware/xiao-wand-dashboard/app.mjs',import.meta.url),'utf8'),/\$\('battery-card'\)\.hidden=!localMode;/);
  for(const text of ['<h3>Battery</h3>','<p id="battery-pack" class="battery-pack" hidden></p>','<span>Estimated charge</span>','<span>Charger</span>','<span>Runtime</span><b data-battery="runtime">Not measured</b>','Pack ratings are the supplier’s. Charge is estimated from voltage, not calibrated for this pack, and reads high while charging.'])assert(html.includes(text),text);
  const live={percent:68,volts:3.881,ageSeconds:30,charging:false};
  assert.deepEqual(batteryCard(live,true),{charge:'\u224868% \u00b7 3.88 V',charger:'Not charging',runtime:'Not measured'});

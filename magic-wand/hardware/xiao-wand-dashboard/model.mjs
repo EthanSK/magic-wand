@@ -86,7 +86,8 @@ export function batteryCard(battery, connected) {
   const live=batteryLive(battery, connected);
   return {
     charge: !battery ? 'Unknown' : live ? `\u2248${battery.percent}% \u00b7 ${battery.volts.toFixed(2)} V` : `\u2248${battery.percent}% \u00b7 ${batteryAge(battery.ageSeconds)}`,
-    // The status pin reads not charging once a charge finishes, even on USB.
+    // Seeed documents the status pin as not charging once a charge finishes, even on
+    // USB; not yet observed on this wand.
     charger: live && typeof battery.charging==='boolean' ? (battery.charging ? 'Charging' : 'Not charging') : 'Unknown',
     runtime: 'Not measured',
   };

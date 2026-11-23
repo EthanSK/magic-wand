@@ -195,6 +195,9 @@ function renderActions(){
   $('battery').hidden=!localMode;$('battery').classList.toggle('stale',!batteryLive(battery,connected));
   $('battery').textContent=batteryHeader(battery,connected);
   // R58 battery card: the bought pack from the published record, then the same estimate.
+  // Only the local reader has the receiver's estimate, so the card stays hidden in the
+  // browser's own USB or Bluetooth mode (renderActions runs only in local mode).
+  $('battery-card').hidden=!localMode;
   const card=batteryCard(battery,connected);
   for(const [key,text] of Object.entries(card)){const cell=document.querySelector(`[data-battery="${key}"]`);if(cell.textContent!==text)cell.textContent=text;cell.classList.toggle('unknown',text==='Unknown');}
   const pack=packLine(r58Profile?.battery);$('battery-pack').hidden=!pack;$('battery-pack').textContent=pack;
