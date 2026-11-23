@@ -20,6 +20,7 @@ const annotationToggle = document.getElementById('annotation-toggle');
 const conceptStatus = document.getElementById('concept-status');
 const actionHost = document.getElementById('model-actions');
 const hiddenActions = new Set();
+let hiddenModelActors = new Set();
 const input = new RollingViewInput({ minDistance: 8, maxDistance: 900 });
 const scene = new THREE.Scene(); scene.background = new THREE.Color(0x12151c);
 scene.add(new THREE.HemisphereLight(0xe8f4ff, 0x424154, 2.5));
@@ -158,8 +159,10 @@ function fit() {
 }
 function installModelActions(actions = []) {
   function applyVisibility() {
-    const hiddenActors = new Set(actions.filter(action => hiddenActions.has(action.id)).flatMap(action => action.actors));
-    for (const [id, object] of Object.entries(actors)) object.visible = !hiddenActors.has(id);
+    hiddenModelActors = new Set(actions.filter(action => hiddenActions.has(action.id)).flatMap(action => action.actors));
+    for (const [id, object] of Object.entries(actors)) {
+      object.visible = object.userData.inCurrentPose !== false && !hiddenModelActors.has(id);
+    }
   }
   actionHost.hidden = actions.length === 0;
   actionHost.replaceChildren(...actions.map(action => {
@@ -218,7 +221,8 @@ function applyPose({ index, fraction }) {
   const sample = frame?.pose ?? sampledPose(module, index, fraction);
   for (const [id, object] of Object.entries(actors)) {
     if (frame) {
-      object.visible = Object.hasOwn(sample, id);
+      object.userData.inCurrentPose = Object.hasOwn(sample, id);
+      object.visible = object.userData.inCurrentPose && !hiddenModelActors.has(id);
       if (!object.visible) continue;
       const actor = module.actors[id];
       const opacity = (frame.opacity[id] ?? 1) * (actor.cutaway && effectiveCutaway ? 0.22 : actor.opacity ?? 1);

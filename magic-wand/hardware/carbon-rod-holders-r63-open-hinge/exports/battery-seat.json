@@ -1,0 +1,39 @@
+{
+  "previous": {
+    "pack_bounds_mm": [
+      [
+        -17.75,
+        20.6,
+        -4.6
+      ],
+      [
+        -5.949999999999999,
+        47.6,
+        -0.6999999999999997
+      ]
+    ],
+    "grid_mm": 0.5,
+    "median_gap_to_keypad_underface_mm": 7.97,
+    "broad_face_supported_at_keypad_mm2": 0.0,
+    "deepest_material_under_pack_from_deck_mm": 13.37
+  },
+  "replacement": {
+    "pack_bounds_mm": [
+      [
+        -21.25,
+        21.899999618530273,
+        3.319999933242798
+      ],
+      [
+        -9.449999809265137,
+        48.900001525878906,
+        7.21999979019165
+      ]
+    ],
+    "grid_mm": 0.5,
+    "median_gap_to_keypad_underface_mm": 0.05,
+    "broad_face_supported_at_keypad_mm2": 188.0,
+    "deepest_material_under_pack_from_deck_mm": 4.9
+  },
+  "method": "0.5 mm grid over the nominal pack face, in assembly coordinates; bearing measured at the structural underside shared with the original keypad."
+}

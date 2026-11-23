@@ -1,0 +1,29 @@
+{
+  "overlap_mm3": {
+    "socket_below_sensor_to_paddle": 0.0,
+    "plug_and_lead_to_paddle_and_posts": 0.0,
+    "fixed_socket_to_post_bar": 0.0,
+    "complete_touch_board_to_holder_at_rest": 0.0,
+    "paddle_to_key_holder_at_rest": 0.0,
+    "rod_in_new_tail": 0.0,
+    "wire_bus_in_new_tail": 0.0,
+    "click_sweep_to_fixed_parts": 0.0,
+    "wired_paddle_to_fitted_keys": 0.0,
+    "loaded_side_press_to_op1_retainer": 0.0,
+    "hinge_clip_to_paddle": 0.0,
+    "board_and_prewired_plug_lower_over_posts": 0.0008,
+    "plug_mates_with_board_off_paddle": 0.0,
+    "paddle_with_wire_lowers_between_cheeks": 0.0
+  },
+  "button_contact_deg": 0.0027108086219982397,
+  "case_stop_deg": 1.057375192642212,
+  "lift_stop_deg": 1.1970996975898742,
+  "via": "Pre-connect the lead, lower the board over both posts, route the wires through the open right edge before fitting the hinge pin.",
+  "assumptions": "The OEM photos show gold on both faces. Socket height, plug outline, cable diameter and bend are nominal; electrical sensitivity is unmeasured.",
+  "geometry_sha256": {
+    "Key_Carrier": "f88e95360c0c4a25082e5369e46e960dd84cff735221da8b89c8d152233d4652",
+    "Touch_Paddle": "9352eff490bde522dfde2ff93f81146383881a9e200ebd8a90ce4280b74113d2",
+    "Socket_Backer_Left": "ebc19f67166f7b6017d509e52d9927dc74b169f8a889d406e79482e0634fd47e",
+    "Rod_Collet": "7ac8baafa2cf39e6166c60b67a81130b07d01198b33946e672244724d449fd6d"
+  }
+}

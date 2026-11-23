@@ -3,13 +3,21 @@ import json
 import numpy as np
 from design61 import OUT,BED,REAR,FLIP,b,k,prior,plug,housing,lead,posed
 
-def main(carrier_directory=OUT):
+def main(carrier_directory=OUT, *, paddle_file=None, key_pose=None, pin_height_shift=0):
     k.old.configure_new_op1()
     shapes=k.q.hardware()
     get=lambda n:b.load(OUT/(n+'-assembly.stl'))
     old=lambda n:b.load(prior.PREVIOUS/'exports'/(n+'-assembly.stl'))
     C=b.load(carrier_directory/'Key_Carrier-assembly.stl')
-    P,pin,clip=map(get,['Touch_Paddle','Hinge_Pin','Pin_Clip'])
+    P=b.load(paddle_file) if paddle_file is not None else get('Touch_Paddle')
+    pin,clip=map(get,['Hinge_Pin','Pin_Clip'])
+    if pin_height_shift:
+        pin=pin.translate((0,0,pin_height_shift))
+        clip=clip.translate((0,0,pin_height_shift))
+    def at_angle(body, angle):
+        if not pin_height_shift:
+            return posed(body, angle)
+        return posed(body.translate((0,0,-pin_height_shift)), angle).translate((0,0,pin_height_shift))
     bar=b.load(prior.old.n.R57/'exports/DFR_Post_Bar-assembly.stl')
     lid=old('OP1_Lid_Stop')
     board=k.r.sensor().translate((0,k.r.CLICK_SHIFT,0)).transform(FLIP)
@@ -34,18 +42,22 @@ def main(carrier_directory=OUT):
     assert not cross.is_empty()
     lane=cross.extrude(REAR+.12).rotate((90,0,0)).translate((0,BED+.05,0))
     check('wire_bus_in_new_tail',C ^ tail_box,lane)
-    keyspaces=[prior.c.placed(working[f'key_{i}_{name}'],f'key_{i}_{name}',k.h.d.KEY_RAISE_MM,prior.old.NEARER)
-               for i in (0,2,3,4) for name in ('switch','maximum_socket','cap_travel')]
+    keyspaces=[]
+    for i in (0,2,3,4):
+        for name in ('switch','maximum_socket','cap_travel'):
+            key=f'key_{i}_{name}'
+            space=prior.c.placed(working[key],key,k.h.d.KEY_RAISE_MM,prior.old.NEARER)
+            keyspaces.append(key_pose(i,space) if key_pose else space)
     full=P+joints+touch+clip
     # Only the dome touches the plunger. The case is the mechanical end of travel.
-    stop=k.onset(lambda a:k.vol(posed(P,a),shapes['switch'])>.001,0,4,24)
-    trigger=k.onset(lambda a:k.vol(posed(P,a),shapes['plunger'])>.001,0,stop,24)
-    lift=k.first_true(lambda a:k.vol(posed(P,-a),lid)>.00001,list(np.linspace(0,6,61)))
+    stop=k.onset(lambda a:k.vol(at_angle(P,a),shapes['switch'])>.001,0,4,24)
+    trigger=k.onset(lambda a:k.vol(at_angle(P,a),shapes['plunger'])>.001,0,stop,24)
+    lift=k.first_true(lambda a:k.vol(at_angle(P,-a),lid)>.00001,list(np.linspace(0,6,61)))
     during=np.linspace(-max(0,lift-.025),max(0,stop-.035),17)
-    fit['click_sweep_to_fixed_parts']=max(round(k.vol(posed(full,float(a)),fixed),4) for a in during)
+    fit['click_sweep_to_fixed_parts']=max(round(k.vol(at_angle(full,float(a)),fixed),4) for a in during)
     keys=b.union(keyspaces)
-    fit['wired_paddle_to_fitted_keys']=max(round(k.vol(posed(full,float(a)),keys),4) for a in during)
-    fit['loaded_side_press_to_op1_retainer']=max(round(k.vol(posed(P,float(a)).translate((dx,0,0)),lid),4)
+    fit['wired_paddle_to_fitted_keys']=max(round(k.vol(at_angle(full,float(a)),keys),4) for a in during)
+    fit['loaded_side_press_to_op1_retainer']=max(round(k.vol(at_angle(P,float(a)).translate((dx,0,0)),lid),4)
                                                   for dx in (-.6,0,.6) for a in np.linspace(0,stop,9))
     fit['hinge_clip_to_paddle']=round(k.vol(clip,P),4)
     # Pre-connect off the holder. The THREADED cable is allowed to exit laterally

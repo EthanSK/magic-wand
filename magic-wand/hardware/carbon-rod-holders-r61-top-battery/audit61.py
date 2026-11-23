@@ -45,32 +45,34 @@ def spring_opening(points, position):
     return rows
 
 
-def audit(folder, part_rows=parts, carrier_directory=OUT):
+def audit(folder, part_rows=parts, carrier_directory=OUT, *, expected_names=LABELS,
+          route_builder=gauges, spring_probe=spring_opening, backer_rows=None, base_minima=MINIMA):
     archive=folder/v.ARCHIVE
     frame=v.read(folder/'layout.frame.json')
     sha=v.digest(archive)
     native=v.read(folder/'OP1-hinge.gcode.native.json')
     assert native['return_code']==0 and native['archive_sha256']==sha and len(native['plates'])==1
     assert 'got warnings:' not in (folder/'native/slice.log').read_text()
-    assert frame['layout_sha256']==v.digest(folder/'layout.3mf') and set(frame['parts'])==set(LABELS)
+    assert frame['layout_sha256']==v.digest(folder/'layout.3mf') and set(frame['parts'])==set(expected_names)
     for row in part_rows():
         assert v.digest(row['source'])==frame['parts'][row['name']]['source_sha256']
-    v.audit(archive,folder/'layout.3mf',folder/'separation-and-machine.json',set(LABELS))
+    v.audit(archive,folder/'layout.3mf',folder/'separation-and-machine.json',set(expected_names))
     adhesion=v.bases(archive)
     v.write(folder/'wide-bases.json',adhesion)
     points,labels=v.read_native(archive)
     fit={part:v.check_routes(routes,np.asarray(frame['parts'][part]['assembly_to_machine']),points,labels)
-         for part,routes in gauges().items()}
+         for part,routes in route_builder().items()}
     # A successful insertion route can be entirely empty, even in the 1 mm
     # search envelope. Prove placement by lowering the same fitted strip
     # into the printed fingertip beams and requiring actual interference.
-    controls = {side:[b.load(old.R58/'exports'/f'Socket_Backer_{side}-assembly.stl').translate((0,0,-3.5))]
-                for side in ('Left','Right')}
+    backers = backer_rows or {side: old.R58/'exports'/f'Socket_Backer_{side}-assembly.stl'
+                               for side in ('Left','Right')}
+    controls = {side:[b.load(source).translate((0,0,-3.5))] for side,source in backers.items()}
     witnesses = v.check_routes(controls,np.asarray(frame['parts']['Key_Carrier']['assembly_to_machine']),points,labels)
     assert all(row['obstructed_poses'] for row in witnesses.values()),witnesses
     v.write(folder/'fit.json',dict(archive_sha256=sha,frame_sha256=v.digest(folder/'layout.frame.json'),
                                    parts=fit,lowered_backer_positive_controls=witnesses,
-                                   side_spring_midheight=spring_opening(points,np.asarray(frame['parts']['Key_Carrier']['assembly_to_machine']))))
+                                   side_spring_midheight=spring_probe(points,np.asarray(frame['parts']['Key_Carrier']['assembly_to_machine']))))
     blocked=[(part,name,row['obstructed_poses']) for part,rows in fit.items() for name,row in rows.items() if row['obstructed_poses']]
     near=[fit['Key_Carrier'][k]['nearby_samples'] for k in ('battery_seated','side_leaf_can_flex','leaf_is_free_of_floor','pin_go_gauge_through_left_cheek','pin_go_gauge_through_right_cheek')]
     assert min(near)>25,near
@@ -100,7 +102,7 @@ def audit(folder, part_rows=parts, carrier_directory=OUT):
     print(json.dumps(dict(blocked=blocked, unsupported_starts=starts, seam=area,
          hinge_bay=joint['regional_joint_area_mm2'], warnings=native['plates'][0]['warning_message'])),flush=True)
     ref=v.read(v.R57_LAYOUT/'joint.json')['current']['vertical_joint_area_mm2']
-    v.verify(adhesion,minimum_base_mm2=MINIMA)
+    v.verify(adhesion,minimum_base_mm2={k:a for k,a in base_minima.items() if k in expected_names})
     assert not blocked and not starts and not layers['native_support_moves']
     assert .80*ref<=area<=ref and joint['regional_joint_area_mm2']['hinge_bay']<.25
     assert fin['hinge_bay_open_to_panel_edge'] and fin['fins_on_hinge']==0 and fin['nearest_base_to_hinge_mm']>=3

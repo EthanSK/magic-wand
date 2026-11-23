@@ -1,0 +1,22 @@
+{
+  "reviewer": "Claude Opus 5.5",
+  "archive_sha256": "d289ce7776cb5647544ef15f3d3cd15c44179ed6211d1be73c1d0001e259f771",
+  "reopened_sha256": "3bc0f2d025e6dada7d0cb17ec7a1b3831f91900d4dab2b091444abf72d0d7981",
+  "trial_approved": true,
+  "physical_acceptance": false,
+  "verdict": "APPROVE ONE MONITORED TRIAL for",
+  "review_scope": "Independently reviewed both exact native archives, shared hinge pin path, rod sleeve and split grip, switch and battery loading, clip approach and seat, first-layer paddle face, support and release fins.",
+  "native_warning": {
+    "reviewed_archive_warnings": {
+      "d289ce7776cb5647544ef15f3d3cd15c44179ed6211d1be73c1d0001e259f771": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+      "3bc0f2d025e6dada7d0cb17ec7a1b3831f91900d4dab2b091444abf72d0d7981": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    },
+    "evidence": "Both slices show the same carrier floating-regions notice. The barrel face adheres to the bed and joins the paddle on layer two. All four objects have zero unsupported starts. Six one-ended runs are confined to short rod-socket lip sections and the deck. The 8 mm rod and the standard hinge-pin paths remain open."
+  },
+  "physical_checks": [
+    "Cut the two small ties at the battery entrance flush before peeling the surrounding base.",
+    "Use the standard pin from the right and support the paddle during insertion.",
+    "Test collet grip on the real carbon tube, switch latch and socket loading from the outer edge.",
+    "Test the pack thickness and retention, the left finger guard and click under load."
+  ]
+}
