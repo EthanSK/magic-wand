@@ -21,6 +21,11 @@ export function firmwareNumber(packet) {
 // so only the visible pin label depends on the firmware. BUTTONS keeps the original
 // three-switch pins because pin-plan.json and firmware 13 still use them.
 export const buttonPin = (button, firmware) => button.key==='thumb' && firmware!==null && firmware>=14 ? 'D6' : button.pin;
+// The firmware to label pins for. Packets say it directly. With no packet (wand
+// asleep, or the page opened before the first one), a received pin report is
+// evidence of firmware 14 or later, which introduced them; without this a reload
+// during sleep showed the stale D8 mouse label next to the R58 panel.
+export const labelFirmware = (packetFirmware, hasPinReports) => packetFirmware ?? (hasPinReports ? 14 : null);
 
 // R58 key holder inputs on firmware 14 (prototypes/sense-r58.json is the wiring record).
 // source 'report': the board's `Ein` pin reports, read from Wand Receiver's log by

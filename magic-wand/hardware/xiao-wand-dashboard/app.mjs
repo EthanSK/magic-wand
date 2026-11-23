@@ -1,5 +1,5 @@
 // Render raw wand telemetry and controls; display precision never filters pointer input.
-import {BUTTONS, WandState, LineFramer, motionPlotLimit, MOTION_WINDOW_MS, hasSensorAxis, firmwareNumber, buttonPin, R58_INPUTS, R58_TRACE_ORDER, PinReports, PIN_REPORT_STALE_MS, TIMELINE_MS, clickState, traceSegments} from './model.mjs';
+import {BUTTONS, WandState, LineFramer, motionPlotLimit, MOTION_WINDOW_MS, hasSensorAxis, firmwareNumber, buttonPin, labelFirmware, R58_INPUTS, R58_TRACE_ORDER, PinReports, PIN_REPORT_STALE_MS, TIMELINE_MS, clickState, traceSegments} from './model.mjs';
 import {openSerial, openBluetooth, UART_SERVICE} from './transports.mjs';
 const $=id=>document.getElementById(id), state=new WandState(), pins=new PinReports();
 let owner=null, generation=0, busy=false, demoTimer=null, demoPaused=false, demoSeq=0;
@@ -106,8 +106,8 @@ function drawTimeline(now){
 }
 function renderR58(now,firmware){
   // Firmware 13 and the three-switch layout keep their original page.
-  const show=firmware!==null?firmware>=14:pins.latest!==null;$('r58').hidden=!show;
-  $('wiring-note').textContent=firmware!==null&&firmware>=14?WIRING_R58:WIRING_THREE;
+  const show=firmware!==null&&firmware>=14;$('r58').hidden=!show;
+  $('wiring-note').textContent=show?WIRING_R58:WIRING_THREE;
   if(!show)return;
   const fresh=pins.fresh(now);
   $('r58-freshness').textContent=fresh?`${Math.round((now-pins.received)/1000)} s since last pin report`:pins.latest?'No pin report for over 12 seconds':'Waiting for firmware 14 pin reports';
@@ -122,7 +122,7 @@ function renderR58(now,firmware){
   drawTimeline(now);
 }
 function render(){
-  const now=performance.now(),fresh=state.fresh(now),firmware=state.latest?firmwareNumber(state.latest):null;
+  const now=performance.now(),fresh=state.fresh(now),firmware=labelFirmware(state.latest?firmwareNumber(state.latest):null,pins.latest!==null);
   // Firmware 14 moved the mouse button to D6; label pins from the packet's firmware.
   $('pin-summary').textContent=`XIAO nRF52840 Sense \u00b7 left to right: ${BUTTONS.map(b=>`${b.name} ${buttonPin(b,firmware)}`).join(' \u00b7 ')}`;
   for(const b of BUTTONS)document.querySelector(`[data-key="${b.key}"] .pin`).textContent=`${buttonPin(b,firmware)} \u00b7 ${b.role}`;

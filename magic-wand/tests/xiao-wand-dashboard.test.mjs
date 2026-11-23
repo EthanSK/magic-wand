@@ -2,7 +2,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {WandState,validatePacket,LineFramer,BUTTONS,motionPlotLimit,MOTION_WINDOW_MS,hasSensorAxis,firmwareNumber,buttonPin,R58_INPUTS,R58_TRACE_ORDER,PinReports,PIN_REPORT_STALE_MS,TIMELINE_MS,clickState,traceSegments,validatePinReport} from '../hardware/xiao-wand-dashboard/model.mjs';
+import {WandState,validatePacket,LineFramer,BUTTONS,motionPlotLimit,MOTION_WINDOW_MS,hasSensorAxis,firmwareNumber,buttonPin,labelFirmware,R58_INPUTS,R58_TRACE_ORDER,PinReports,PIN_REPORT_STALE_MS,TIMELINE_MS,clickState,traceSegments,validatePinReport} from '../hardware/xiao-wand-dashboard/model.mjs';
 import {openSerial,openBluetooth,UART_SERVICE,UART_TX} from '../hardware/xiao-wand-dashboard/transports.mjs';
 const packet=(seq=1,ms=20)=>({schema:1,sensor:'wand',seq,ms,buttons:{thumb:false,index:false,middle:false},imu:{ax:0,ay:0,az:1,gx:2,gy:3,gz:4}});
 const setup=()=>{const s=new WandState();s.connect('USB');return s;};
@@ -150,6 +150,8 @@ test('firmware 14 labels the mouse button D6; firmware 13 and unknown keep D8',(
  assert.equal(firmwareNumber(validatePacket(packet())),null);
  const mouse=BUTTONS.find(b=>b.key==='thumb');assert.deepEqual([14,15,13,null].map(f=>buttonPin(mouse,f)),['D6','D6','D8','D8']);
  for(const b of BUTTONS.filter(b=>b.key!=='thumb'))assert.equal(buttonPin(b,14),b.pin);
+ assert.deepEqual([[14,false],[13,true],[null,true],[null,false]].map(([f,r])=>labelFirmware(f,r)),[14,13,14,null],'packets win; pin reports alone mean firmware 14 (wand asleep after a reload)');
+ assert.equal(buttonPin(mouse,labelFirmware(null,true)),'D6');
  const s=setup();s.accept({...packet(1,20),firmware:'wandsense14'},0);s.accept({...packet(2,40),firmware:'wandsense14',buttons:{thumb:true,index:false,middle:false}},20);
  assert.equal(s.events[0].text,'2 pressed · D6');
 });
@@ -188,7 +190,8 @@ test('R58 page text matches the reviewed wording and keeps the three-switch page
  assert.match(html,/<section id="r58" class="panel r58" aria-label="R58 key holder" hidden>/);
  for(const text of ['Press contact · D6','Resting contact · D8','Touch sensor · D4','DFRobot output, high while touched','Upper left · D0','Upper right · D9 · Speech','Lower left · D10 · HUD','Lower right · D1','Last 10 seconds','Times are when the Mac received each report, not when the input changed.'])assert(html.includes(text),text);
  for(const text of ['No pin report for over 12 seconds','Waiting for firmware 14 pin reports',"click:['Closed','Open']","touch:['Touched','Not touched']","key:['Pressed','Released']"])assert(app.includes(text),text);
- assert.match(app,/const show=firmware!==null\?firmware>=14:pins\.latest!==null/);
+ assert.match(app,/const show=firmware!==null&&firmware>=14;/);
+ assert.match(app,/firmware=labelFirmware\(state\.latest\?firmwareNumber\(state\.latest\):null,pins\.latest!==null\)/,'labels use pin reports when no packet arrived');
  assert(!/Resting[^.·]*D9|D9[^.·,]*resting/i.test(html+app),'D9 is never the resting contact');
  assert(!/whether/i.test(html+app));
 });
