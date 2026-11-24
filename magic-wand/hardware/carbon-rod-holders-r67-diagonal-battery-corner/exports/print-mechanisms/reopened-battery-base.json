@@ -1,0 +1,48 @@
+{
+  "archive_sha256": "1344a1faee62608645c89b6d5bd82c63bc8cdcd565a39e092864aab9494ae6a9",
+  "regions": {
+    "outer_free_lip": [
+      -21.55,
+      2.27,
+      -18.7,
+      3.2199999999999998
+    ],
+    "inner_free_lip": [
+      -11.95,
+      2.27,
+      -9.55,
+      3.2199999999999998
+    ],
+    "spring_root_below": [
+      -23.349999999999998,
+      2.17,
+      -21.55,
+      4.27
+    ],
+    "root_above": [
+      -22.95,
+      6.92,
+      -21.05,
+      9.77
+    ]
+  },
+  "contacts_mm2": {
+    "outer_free_lip": 0.0,
+    "inner_free_lip": 0.0,
+    "spring_root_below": 2.96,
+    "root_above": 3.56
+  },
+  "moved_ties": [
+    {
+      "face": "-y",
+      "at": -22.4,
+      "height": 2.4
+    },
+    {
+      "face": "+y",
+      "at": -22.0,
+      "height": 2.2
+    }
+  ],
+  "passes": true
+}

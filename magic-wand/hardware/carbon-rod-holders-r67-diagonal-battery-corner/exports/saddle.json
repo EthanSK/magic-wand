@@ -1,0 +1,146 @@
+{
+  "revision": "R67",
+  "physical_fit_verified": false,
+  "origin": "R33 ran three rounded crosswise guard ribs on each side from the outer rails to the front rod saddle. R60 rebuilt the guards and removed the old ribs only outboard of |X| 9.3 (design60.py: bare -= mirrored(box(9.3, bank, -3, 14.5, -8, 3.4)) ^ ribs). On the left the inboard rib roots stayed as three diagonal strips hanging from the saddle side wall, ending in air. R61-R66 copied them unchanged.",
+  "search_box_mm": [
+    -11.5,
+    -3.85,
+    2.5,
+    17.5,
+    2.0,
+    6.5
+  ],
+  "ring_keep_radius_mm": 5.2,
+  "stub_in_r66": [
+    {
+      "volume_mm3": 67.681,
+      "lo": [
+        -10.81,
+        3.17,
+        2.24
+      ],
+      "hi": [
+        -3.85,
+        16.8,
+        6.19
+      ],
+      "touches_only_saddle_face": true
+    }
+  ],
+  "history": {
+    "R59": [],
+    "R60": [
+      {
+        "volume_mm3": 67.68,
+        "x_mm": [
+          -10.81,
+          -3.85
+        ],
+        "y_mm": [
+          3.17,
+          16.8
+        ]
+      }
+    ],
+    "R63": [
+      {
+        "volume_mm3": 67.68,
+        "x_mm": [
+          -10.81,
+          -3.85
+        ],
+        "y_mm": [
+          3.17,
+          16.8
+        ]
+      }
+    ],
+    "R64": [
+      {
+        "volume_mm3": 67.68,
+        "x_mm": [
+          -10.81,
+          -3.85
+        ],
+        "y_mm": [
+          3.17,
+          16.8
+        ]
+      }
+    ],
+    "R66": [
+      {
+        "volume_mm3": 67.68,
+        "x_mm": [
+          -10.81,
+          -3.85
+        ],
+        "y_mm": [
+          3.17,
+          16.8
+        ]
+      }
+    ]
+  },
+  "removed_mm3": 67.68125,
+  "pieces_in_box": {
+    "r66": [
+      [
+        67.681,
+        true
+      ],
+      [
+        7.577,
+        false
+      ],
+      [
+        0.497,
+        true
+      ]
+    ],
+    "r67": [
+      [
+        7.577,
+        false
+      ],
+      [
+        0.497,
+        true
+      ]
+    ]
+  },
+  "unchanged_mm3": {
+    "rod_ring": [
+      218.1941,
+      218.1941
+    ],
+    "saddle_and_stem": [
+      485.8098,
+      485.8098
+    ],
+    "left_guard": [
+      77.5911,
+      77.5911
+    ],
+    "right_side_material": [
+      56.009,
+      56.009
+    ]
+  },
+  "right_side_mirror_overlap_mm3": 4.78408,
+  "full_rod_overlap_mm3": {
+    "r66": 0.0,
+    "r67": 0.0
+  },
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "carrier_sha256": "a83ac4df043a069a42a432b8852d35d8d75d680009db710aa09efd06a580e9ea",
+  "generator_sha256": "86068d97b0a9f1567106910801ae9eef8f269c54103c8b16a2e199930d3a19cc"
+}

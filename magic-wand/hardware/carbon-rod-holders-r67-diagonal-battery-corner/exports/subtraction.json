@@ -1,0 +1,44 @@
+{
+  "revision": "R67",
+  "physical_fit_verified": false,
+  "r66_carrier_sha256": "0112b7da1e8704eb93e148d889c8f362ae3892bdccc9a2f58bd798de825e8542",
+  "removed_from_r66_mm3": {
+    "battery_corner": 9.01143,
+    "saddle_stubs": 67.68125,
+    "plug_lead_in": 1.42721
+  },
+  "cutters_overlap_in_r66_mm3": {
+    "battery_corner+saddle_stubs": 0.0,
+    "battery_corner+plug_lead_in": 0.0,
+    "saddle_stubs+plug_lead_in": 0.0
+  },
+  "left_inside_cutters_mm3": {
+    "battery_corner": 0.00026,
+    "saddle_stubs": 0.0,
+    "plug_lead_in": 1e-05
+  },
+  "volume_mm3": {
+    "r66": 10362.8134,
+    "r67": 10284.694,
+    "difference": 78.1194
+  },
+  "sections_against_r66_minus_cutters": {
+    "sections": 313,
+    "spacing_mm": 0.2,
+    "max_area_mm2": 0.000735,
+    "worst_y_mm": 43.184,
+    "sum_area_times_step_mm3": 0.000917
+  },
+  "components": 1,
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "carrier_sha256": "a83ac4df043a069a42a432b8852d35d8d75d680009db710aa09efd06a580e9ea",
+  "generator_sha256": "86068d97b0a9f1567106910801ae9eef8f269c54103c8b16a2e199930d3a19cc"
+}
