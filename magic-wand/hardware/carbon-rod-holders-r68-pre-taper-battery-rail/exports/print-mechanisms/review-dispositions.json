@@ -1,0 +1,28 @@
+{
+  "revision": "R68",
+  "physical_fit_verified": false,
+  "reviewed_carrier_sha256": "4e914a59acfc5f32038d4ee3d21b8b2231f9ba9498f49ffd9f6449d64c31771f",
+  "reviewed_native_sha256": "73cd331cfced2410c6edd336518e53886f5168f33a5a1316a616d96eb8cd650d",
+  "dispositions": [
+    {
+      "id": "report-revision-labels",
+      "origin": "Claude Opus 5.5",
+      "status": "fixed",
+      "change": "Renamed the inherited current-body r66 keys to r68 only in the top-level three_holes and seat_support_mm2 blocks. Kept the real R66 reference labels inside lead_in.",
+      "verification": "Regenerated checks and guide; all measurements and gates unchanged. Added a regression assertion for the current-revision labels.",
+      "checks_sha256": "9c44c5892f6d6c25c68129d776559fb3b53dcff224408247647b96bc80cdd194",
+      "route_report_sha256": "f74a91d9536e18f85bc7ae573067178ab740d2fc319323fe752d2f5ebc6746cd"
+    },
+    {
+      "id": "prior-print-history",
+      "status": "clarified",
+      "correction": "The R64 corner-tie placement was physically printed in the prior completed R64 kit; easy removal was not verified. The raw reviewer statement that the placement had never been printed is superseded by this correction.",
+      "evidence": "Prior R64 print-only archive 054b3766090abfb2bd9db9257addeb19de8d1c642ad48ec9b0ece2a945585ff7 binds carrier 6aa0c8652b248957621869b3d1e9164456f412a281ea0eaed4051a533cd71a92; the private owner record observed FINISH for that exact named job."
+    },
+    {
+      "id": "floating-warning-trigger",
+      "status": "unknown",
+      "conclusion": "The prior layer-49 battery lip start disappeared in R68, but the native floating-regions notice persists. No specific feature is established as its trigger. Actual deposited checks pass; follow reviewer trial watch points."
+    }
+  ]
+}

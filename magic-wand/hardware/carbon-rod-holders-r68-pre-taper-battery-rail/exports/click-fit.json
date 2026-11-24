@@ -1,0 +1,110 @@
+{
+  "assembled_sha256": {
+    "Key_Carrier-assembly.stl": "4e914a59acfc5f32038d4ee3d21b8b2231f9ba9498f49ffd9f6449d64c31771f",
+    "Touch_Paddle-assembly.stl": "cc86492036ef4f1e2d1932e6916b0e4874ed967d8e708310c6e545b98d78b528",
+    "Gravity_Wires-assembly.stl": "458627d6fde2db5f05687117b534d049857ea1a178959bae575a1298ca370ff8",
+    "OP1_Lid_Stop-assembly.stl": "bf8e2f94bfc7ae55122ee13df62b55f6038e10fb4d4c05f0bd28f5b1f91d6b04"
+  },
+  "carrier_sha256": "4e914a59acfc5f32038d4ee3d21b8b2231f9ba9498f49ffd9f6449d64c31771f",
+  "physical_fit_verified": false,
+  "button_contact_deg": 0.0031960518794420523,
+  "case_stop_deg": 1.2592079639434814,
+  "lift_stop_deg": 1.4984146416187287,
+  "plunger_travel_at_case_mm": 0.8216,
+  "reversed_plunger_travel_mm": 0.8353,
+  "reversed_button_first_contact_deg": -0.1559289645372072,
+  "lowest_operating_point_travel_mm": 0.7500000000000036,
+  "face_travel_to_stop_mm": {
+    "centre": 0.549,
+    "left_front": 0.911,
+    "right_front": 0.911
+  },
+  "board_rear_y_mm": 26.231,
+  "outer_paddle_y_mm": 37.58,
+  "pcb_rear_to_paddle_end_mm": 11.349,
+  "wire_rear_y_mm": 35.431,
+  "full_height_cheek_rear_y_mm": 36.65,
+  "rear_rod_and_battery_bed_y_mm": 43.65,
+  "centreline_yz_mm": [
+    33.6,
+    12.7
+  ],
+  "common_round_straight_line_diameter_mm": 3.596,
+  "common_round_straight_line_yz_mm": [
+    33.6,
+    12.7
+  ],
+  "journal_travel_each_direction_mm": {
+    "z_0.00": {
+      "forward": 0.126,
+      "rearward": 0.126,
+      "left": 0.16,
+      "right": 0.16
+    },
+    "z_0.20": {
+      "forward": 0.15,
+      "rearward": 0.15,
+      "left": 0.16,
+      "right": 0.16
+    },
+    "z_0.40": {
+      "forward": 0.15,
+      "rearward": 0.15,
+      "left": 0.16,
+      "right": 0.16
+    }
+  },
+  "bought_harness_clearances_mm": {
+    "seated_bundle_to_cheeks": 1.95,
+    "seated_bundle_to_paddle": 0.373,
+    "seated_bundle_to_clip": 1.907,
+    "bundle_to_holder_during_press": 1.906
+  },
+  "paddle_layer_backing": {
+    "layer_step_mm": 0.18,
+    "unsupported_new_sections": [],
+    "largest_region_beyond_previous_section_by_0_35_mm2": 5.035
+  },
+  "nominal_wire_centreline_lengths_to_open_side_mm": [
+    21.51,
+    18.6,
+    15.69
+  ],
+  "edge_press": {
+    "left": {
+      "roll_deg": -0.45,
+      "lateral_offset_mm": -0.1,
+      "button_contact_deg": 0.08858,
+      "case_stop_deg": 1.36292,
+      "plunger_travel_at_case_mm": 0.8338
+    },
+    "right": {
+      "roll_deg": 0.45,
+      "lateral_offset_mm": 0.1,
+      "button_contact_deg": 0.07876,
+      "case_stop_deg": 1.32392,
+      "plunger_travel_at_case_mm": 0.8146
+    }
+  },
+  "overlap_mm3": {
+    "wired_board_drop_over_posts": 0.00075,
+    "cable_post_bar_to_paddle": 0.0,
+    "prewired_paddle_lowered_into_bearings": 0.0,
+    "clip_from_rear": 0.0,
+    "wired_click_sweep_to_carrier_and_op1": 0.0,
+    "side_press_to_retainer": 0.0,
+    "socket_below_sensor_to_paddle": 0.0,
+    "fixed_socket_to_post_bar": 0.0,
+    "plug_mates_with_board_off_paddle": 0.0,
+    "all_outer_switches_caps_and_sockets_to_wired_paddle": 0.0,
+    "clip_to_paddle": 0.0,
+    "Hinge_Pin_insertion_both_sides": 0.0,
+    "Hinge_Pin_clip_seated": 0.0,
+    "Hinge_Pin_Snug_insertion_both_sides": 0.0,
+    "Hinge_Pin_Snug_clip_seated": 0.0,
+    "left_edge_press_to_fixed_parts": 0.0,
+    "right_edge_press_to_fixed_parts": 0.0
+  },
+  "assumptions": "PCB below-face housing, plug dimensions, 1.3 mm insulated wires and bend are nominal. Physical printed bearing friction, click force and cable flexibility remain unmeasured.",
+  "revision": "R68"
+}
