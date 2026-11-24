@@ -1,0 +1,25 @@
+{
+  "revision": "R67",
+  "physical_fit_verified": false,
+  "carrier_sha256": "a83ac4df043a069a42a432b8852d35d8d75d680009db710aa09efd06a580e9ea",
+  "r66_carrier_sha256": "0112b7da1e8704eb93e148d889c8f362ae3892bdccc9a2f58bd798de825e8542",
+  "generator_sha256": "86068d97b0a9f1567106910801ae9eef8f269c54103c8b16a2e199930d3a19cc",
+  "checks_sha256": "74b9b8e94b622ff6f0f4e26df0a9053973ba1519cc4dc54ca31c2de8073e5c6d",
+  "carrier_components": 1,
+  "key_poses_checked": 336,
+  "key_obstructions": [],
+  "socket_backer_sweeps_mm3": {
+    "left": 0.0,
+    "right": 0.0
+  },
+  "removed_from_r66_mm3": {
+    "battery_corner": 9.01143,
+    "saddle_stubs": 67.68125,
+    "plug_lead_in": 1.42721
+  },
+  "subtraction_passes": true,
+  "battery_passes": true,
+  "saddle_passes": true,
+  "op1_route_passes": true,
+  "passes": true
+}

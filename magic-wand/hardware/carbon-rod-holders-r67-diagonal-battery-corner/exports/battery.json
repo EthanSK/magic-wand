@@ -1,0 +1,475 @@
+{
+  "revision": "R67",
+  "physical_fit_verified": false,
+  "taper_y_mm": [
+    32.0,
+    41.0
+  ],
+  "edge_radius_mm": 0.38,
+  "inboard_full_depth_y_mm": [
+    20.5,
+    43.5
+  ],
+  "inboard_lip_y_mm": [
+    20.5,
+    43.5
+  ],
+  "outboard_full_depth_y_mm": [
+    21.5,
+    32.5
+  ],
+  "outboard_lip_under_pack_y_mm": [
+    21.0,
+    34.0
+  ],
+  "outboard_wall_any_y_mm": [
+    21.0,
+    40.5
+  ],
+  "r64": {
+    "outboard_full_depth_y_mm": [
+      21.5,
+      43.5
+    ],
+    "outboard_lip_under_pack_y_mm": [
+      21.0,
+      43.5
+    ]
+  },
+  "shoe_preload_overlap_mm3": {
+    "r64": 2.55762,
+    "r66": 2.55762
+  },
+  "pack_seated_to_carrier_outside_spring_mm3": 0.0,
+  "pack_slide_from_rear_to_carrier_outside_spring_mm3": 0.0,
+  "pack_to_deck_gap_mm": 0.05,
+  "retention_pack_dropped_0_3mm_mm3": {
+    "inboard": 7.83,
+    "outboard": 4.44993
+  },
+  "spring_leaf_and_shoe_unchanged_xor_mm3": 0.0,
+  "shoe_into_nominal_pack_mm": 0.21,
+  "spring_root": {
+    "y_mm": [
+      38.15,
+      43.65
+    ],
+    "bottom_z_mm": 3.16,
+    "volume_r64_mm3": 47.921,
+    "volume_r66_mm3": 41.687,
+    "joined_to_deck_mm2": 10.009
+  },
+  "profile_every_0_5mm": [
+    {
+      "y": 20.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": null,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 21.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.67,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 21.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 22.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 22.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 23.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 23.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 24.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 24.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 25.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 25.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 26.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 26.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 27.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 27.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 28.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 28.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 29.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 29.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 30.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 30.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 31.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 31.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 32.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.37,
+      "outboard_lip_bottom": 2.37
+    },
+    {
+      "y": 32.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.403,
+      "outboard_lip_bottom": 2.4
+    },
+    {
+      "y": 33.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.503,
+      "outboard_lip_bottom": 2.504
+    },
+    {
+      "y": 33.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.657,
+      "outboard_lip_bottom": 2.677
+    },
+    {
+      "y": 34.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 2.876,
+      "outboard_lip_bottom": 2.916
+    },
+    {
+      "y": 34.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 3.156,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 35.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 3.483,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 35.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 3.847,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 36.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 4.243,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 36.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 4.66,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 37.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 5.086,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 37.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 5.506,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 38.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 5.91,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 38.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 6.283,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 39.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 6.608,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 39.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 6.875,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 40.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 7.081,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 40.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": 7.219,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 41.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": null,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 41.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": null,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 42.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": null,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 42.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": null,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 43.0,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": null,
+      "outboard_lip_bottom": null
+    },
+    {
+      "y": 43.5,
+      "inboard_rail_bottom": 2.37,
+      "inboard_lip_bottom": 2.37,
+      "outboard_wall_bottom": null,
+      "outboard_lip_bottom": null
+    }
+  ],
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "diagonal_corner": {
+    "line_xy_mm": [
+      [
+        -24.55,
+        40.0
+      ],
+      [
+        -22.6,
+        43.65
+      ]
+    ],
+    "angle_from_rod_axis_deg": 28.1,
+    "print_overhang_from_vertical_deg": 28.1,
+    "edge_radius_mm": 0.4,
+    "removed_mm3": 9.01143,
+    "outboard_edge_x_mm": {
+      "y38": {
+        "r66": -24.55,
+        "r67": -24.55
+      },
+      "y39": {
+        "r66": -24.55,
+        "r67": -24.55
+      },
+      "y40": {
+        "r66": -24.55,
+        "r67": -24.55
+      },
+      "y41": {
+        "r66": -24.55,
+        "r67": -24.027
+      },
+      "y42": {
+        "r66": -24.55,
+        "r67": -23.492
+      },
+      "y43": {
+        "r66": -24.55,
+        "r67": -22.958
+      },
+      "y43.6": {
+        "r66": -24.435,
+        "r67": -22.637
+      }
+    },
+    "root_post_mm3": {
+      "r66": 46.5892,
+      "r67": 41.6874
+    },
+    "root_post_front_to_y40_mm3": {
+      "r66": 15.3719,
+      "r67": 15.3719
+    },
+    "pouch_side_of_post_mm3": {
+      "r66": 10.1771,
+      "r67": 10.1771
+    },
+    "bed_face_area_in_corner_mm2": {
+      "r66": 14.143,
+      "r67": 8.208
+    }
+  },
+  "carrier_sha256": "a83ac4df043a069a42a432b8852d35d8d75d680009db710aa09efd06a580e9ea",
+  "generator_sha256": "86068d97b0a9f1567106910801ae9eef8f269c54103c8b16a2e199930d3a19cc"
+}
