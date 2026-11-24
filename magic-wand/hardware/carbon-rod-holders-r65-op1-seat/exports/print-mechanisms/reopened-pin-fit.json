@@ -1,0 +1,123 @@
+{
+  "archive_sha256": "fecb8c3602550e7acbcd12afaa17b34ac27808e3c0551dd9c102eb52c380d82f",
+  "layout_sha256": "3495b8f5df40533990334417dcceaccff8199a62fdaa83bae032b084e292c0a2",
+  "source_sha256": {
+    "Hinge_Pin": "6f51c4e92b4560519ad5e7ce9b5dc08624ee227c7aecbc15d5d8ca896aaedc2f",
+    "Hinge_Pin_Snug": "3cfaebf87213c57d08cad6373e9e708051c1f549ea10225006272070edfd2d13",
+    "Touch_Paddle": "cc86492036ef4f1e2d1932e6916b0e4874ed967d8e708310c6e545b98d78b528",
+    "Key_Carrier": "24d0eb24f213de54d226b8905a2c54364bdbab348009b38a940ef75d4fcd5bd3"
+  },
+  "tab_width_mm": {
+    "Hinge_Pin": 1.6,
+    "Hinge_Pin_Snug": 1.6
+  },
+  "pose": "Flat on the pin faces down in the assembled carrier; the same straight line passes through both cheeks and the barrel.",
+  "nominal_axis_yz_mm": [
+    33.6,
+    12.7
+  ],
+  "arc_chord_error_bound_mm": 0.002,
+  "axis_grid_step_mm": 0.01,
+  "removal": "Cut both disposable pad ties flush with the nominal pin ends. Through-nominal-tips includes all first-layer stubs within those ends.",
+  "method": "All positive model extrusion widths and full layer slabs for the four named parts. Project the complete selected shaft and bore-owner material across the insertion direction. Positive distances are conservative one-sided gaps. Each circular G-code chord is expanded by its sag bound.",
+  "physical_fit_verified": false,
+  "parts": {
+    "Hinge_Pin": {
+      "stations": {
+        "bearing_portions": {
+          "axial_range_mm": [
+            -9.0,
+            9.0
+          ],
+          "clearance_at_nominal_line_mm": 0.2001,
+          "owner_clearances_at_nominal_line_mm": {
+            "Touch_Paddle": 0.2001,
+            "Key_Carrier": 0.2828
+          }
+        },
+        "through_start_of_taper": {
+          "axial_range_mm": [
+            -10.4,
+            10.4
+          ],
+          "clearance_at_nominal_line_mm": 0.2001,
+          "owner_clearances_at_nominal_line_mm": {
+            "Touch_Paddle": 0.2001,
+            "Key_Carrier": 0.2824
+          }
+        },
+        "through_nominal_tips": {
+          "axial_range_mm": [
+            -10.9,
+            10.9
+          ],
+          "clearance_at_nominal_line_mm": 0.2001,
+          "owner_clearances_at_nominal_line_mm": {
+            "Touch_Paddle": 0.2001,
+            "Key_Carrier": 0.2824
+          }
+        }
+      },
+      "best_tested_whole_pin_clearance_mm": 0.2001,
+      "best_tested_whole_pin_axis_yz_mm": [
+        33.58,
+        12.7
+      ],
+      "shaft_bounds_yz_mm": [
+        -1.495,
+        1.495,
+        -1.2,
+        1.4
+      ]
+    },
+    "Hinge_Pin_Snug": {
+      "stations": {
+        "bearing_portions": {
+          "axial_range_mm": [
+            -9.0,
+            9.0
+          ],
+          "clearance_at_nominal_line_mm": 0.035,
+          "owner_clearances_at_nominal_line_mm": {
+            "Touch_Paddle": 0.035,
+            "Key_Carrier": 0.1963
+          }
+        },
+        "through_start_of_taper": {
+          "axial_range_mm": [
+            -10.4,
+            10.4
+          ],
+          "clearance_at_nominal_line_mm": 0.033,
+          "owner_clearances_at_nominal_line_mm": {
+            "Touch_Paddle": 0.033,
+            "Key_Carrier": 0.1943
+          }
+        },
+        "through_nominal_tips": {
+          "axial_range_mm": [
+            -10.9,
+            10.9
+          ],
+          "clearance_at_nominal_line_mm": 0.033,
+          "owner_clearances_at_nominal_line_mm": {
+            "Touch_Paddle": 0.033,
+            "Key_Carrier": 0.1943
+          }
+        }
+      },
+      "best_tested_whole_pin_clearance_mm": 0.084,
+      "best_tested_whole_pin_axis_yz_mm": [
+        33.6,
+        12.59
+      ],
+      "shaft_bounds_yz_mm": [
+        -1.595,
+        1.595,
+        -1.2,
+        1.6
+      ]
+    }
+  },
+  "passes": true
+}
