@@ -33,5 +33,10 @@
     "id": "viewer-assembly",
     "status": "active",
     "text": "Provide the revision-specific model viewer link. Show the actual PCB, wired connector, retainers and their insertion order in an assembly guide for users. Animation must follow the real assembly path without jumping back and forth."
+  },
+  {
+    "id": "viewer-version-reload",
+    "status": "active",
+    "text": "When a newer model is available, highlight the “Reload to see new version” button beside the assembly heading. Reload into that version and keep the selected component and view when available."
   }
 ]
