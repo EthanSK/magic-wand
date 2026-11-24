@@ -20,6 +20,8 @@ Both finger guards curve into their lower roots 2.7 mm sooner. All four rail end
 
 The plate contains 13 separate pieces: the key holder, paddle, rod grip, two alternative hinge pins, two centre clips, OP1 retainer, two-post bar, two board clips and both socket backing strips. Fit on printed hardware, force needed to release the base, finger comfort and real-wire flexibility require a bench trial.
 
+The A1 mini completed the red PETG trial on 24 November 2026. It reported all 303 layers complete with no printer errors and both heater targets at zero. The final wide camera view showed all 13 pieces and the separate timelapse tower still on their bases, with a few fine strands between pieces.
+
 ## Requirements checked
 
 | Requirements | Evidence |
