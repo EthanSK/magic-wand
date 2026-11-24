@@ -1,0 +1,137 @@
+{
+  "revision": "R65",
+  "physical_fit_verified": false,
+  "entry_offsets_mm": [
+    [
+      17.0,
+      -66.0,
+      -26.0
+    ],
+    [
+      17.0,
+      -66.0,
+      1.15
+    ],
+    [
+      0.0,
+      -66.0,
+      1.15
+    ],
+    [
+      0.0,
+      0.0,
+      1.15
+    ],
+    [
+      0.0,
+      0.0,
+      0.0
+    ]
+  ],
+  "entry_side_gap_mm": 0.57,
+  "entry_vertical_gap_mm": 0.38,
+  "sled_receiver_side_gap_mm": 0.44,
+  "pcb_socket_to_sled_radial_gap_mm": 0.5,
+  "pcb_bearing_mm2": {
+    "total": 180.957,
+    "left": 89.18,
+    "right": 91.777,
+    "switch": 45.359,
+    "plunger": 2.749
+  },
+  "receiver_bearing_mm2": {
+    "total": 133.462,
+    "left": 113.268,
+    "right": 20.194,
+    "switch": 17.027,
+    "plunger": 0.223
+  },
+  "receiver_added_mm3": 326.654,
+  "receiver_cut_mm3": 336.575,
+  "sled_volume_mm3": 741.343,
+  "carrier_components": [
+    9711.28246
+  ],
+  "sled_components": [
+    741.34349
+  ],
+  "hardware_to_sled_mm3": {
+    "board": 0.0,
+    "sockets": 0.0,
+    "housing": 0.0,
+    "plug": 0.0,
+    "op1_wire": 0.0
+  },
+  "sled_and_board_path_to_installed_mm3": {
+    "rod": 0.0,
+    "switch_0": 0.0,
+    "socket_0": 0.0,
+    "switch_2": 0.0,
+    "socket_2": 0.0,
+    "switch_3": 0.0,
+    "socket_3": 0.0,
+    "switch_4": 0.0,
+    "socket_4": 0.0
+  },
+  "path_to_full_rod_gap_mm": 0.915,
+  "path_to_carrier_mm3": {
+    "board": 0.0,
+    "sockets": 0.0,
+    "housing": 0.0,
+    "plug": 0.0,
+    "op1_wire": 0.0,
+    "op1_seat": 0.0
+  },
+  "seat_board_on_loose_sled_mm3": {
+    "board": 0.0,
+    "sockets": 0.0,
+    "housing": 0.0,
+    "plug": 0.0,
+    "op1_wire": 0.0
+  },
+  "loose_board_loading_to_fixture_min_gap_bounds_mm": {
+    "rod": 19.493,
+    "switch_0": 43.399,
+    "socket_0": 52.139,
+    "switch_2": 24.242,
+    "socket_2": 30.869,
+    "switch_3": 54.294,
+    "socket_3": 56.045,
+    "switch_4": 40.645,
+    "socket_4": 48.706,
+    "carrier": 10.052,
+    "full_rod": 6.307
+  },
+  "assembled_lid_capture": {
+    "board_shift_1mm_into_stops_at_0_2mm_lift_mm3": {
+      "left": 6.20474,
+      "right": 2.13393,
+      "front": 4.368,
+      "back": 0.8609
+    },
+    "board_lifted_0_35mm_into_lid_mm3": 15.3525,
+    "lid_guide_complete_insertion_overlap_mm3": 0.0476,
+    "inherited_lid_guide_complete_insertion_overlap_mm3": 0.0476,
+    "additional_lid_interference_per_pose_mm3": 0
+  },
+  "receiver_capture": {
+    "sled_stopped_at_1mm_with_0_25mm_lift_min_mm3": 0.77706,
+    "tested_in_plane_directions": 24,
+    "lifted_sled_to_loaded_board_0_25mm_mm3": 45.23912,
+    "r64_raised_lid_to_original_guide_mm3": 13.72608,
+    "r65_raised_lid_to_current_guide_mm3": 13.72608
+  },
+  "receiver_load_path": {
+    "right_front_tab_mm2": 6.252,
+    "right_rear_tab_mm2": 9.709,
+    "right_bearing_backed_1mm_down_mm2": 20.087,
+    "plunger_inside_bearing_hull_margin_mm": 6.311
+  },
+  "material_trimmed_by_choc_service_routes_mm3": 0.0,
+  "original_guard_rail_removed_mm3": 0.0,
+  "mesh_sha256": {
+    "Key_Carrier-assembly.stl": "24d0eb24f213de54d226b8905a2c54364bdbab348009b38a940ef75d4fcd5bd3",
+    "OP1_Seat_Sled-assembly.stl": "56aa83fb9a95bcd61c07e90b17bffba8c21816ffad719b6329d15e1e5cf53293"
+  },
+  "passes": true
+}

@@ -1,0 +1,681 @@
+{
+  "parts": {
+    "Key_Carrier": {
+      "source": "Key_Carrier-assembly.stl",
+      "source_sha256": "24d0eb24f213de54d226b8905a2c54364bdbab348009b38a940ef75d4fcd5bd3",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          50.884910583496094
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          149.9156665802002
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          43.650081634521484
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          96,
+          44
+        ],
+        "keep_clear": [
+          [
+            3.9,
+            -2.5,
+            12.0,
+            7.3
+          ],
+          [
+            -15.0,
+            10.5,
+            15.0,
+            60.0
+          ],
+          [
+            -23.49,
+            3.17,
+            -9.299999999999999,
+            7.359999999999999
+          ]
+        ],
+        "ties": [
+          {
+            "face": "+y",
+            "at": -19.7,
+            "height": 2.2
+          },
+          {
+            "face": "+y",
+            "at": -15.9,
+            "height": 2.2
+          },
+          {
+            "face": "-y",
+            "at": -24.0,
+            "height": 2.4
+          },
+          {
+            "face": "+y",
+            "at": -23.8,
+            "height": 2.2
+          },
+          {
+            "face": "-y",
+            "at": -7.4,
+            "height": 3
+          },
+          {
+            "face": "-y",
+            "at": 13.0,
+            "height": 3
+          }
+        ],
+        "fin_thickness": 1.7,
+        "holder_release": "R55"
+      }
+    },
+    "Touch_Paddle": {
+      "source": "../../carbon-rod-holders-r64-under-entry/exports/Touch_Paddle-assembly.stl",
+      "source_sha256": "cc86492036ef4f1e2d1932e6916b0e4874ed967d8e708310c6e545b98d78b528",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          125.13499889373779
+        ],
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          145.99996900558472
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          19.300065994262695
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          75,
+          60
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0,
+        "wire_exit": true
+      }
+    },
+    "OP1_Lid_Stop": {
+      "source": "../../carbon-rod-holders-r59-flipped-guard/exports/OP1_Lid_Stop-assembly.stl",
+      "source_sha256": "bf8e2f94bfc7ae55122ee13df62b55f6038e10fb4d4c05f0bd28f5b1f91d6b04",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          30.58248996734619
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          101.44474849700927
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.149999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          28,
+          39
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.1
+      }
+    },
+    "Hinge_Pin_Snug": {
+      "source": "../../carbon-rod-holders-r61-top-battery/exports/Hinge_Pin_Snug-assembly.stl",
+      "source_sha256": "3cfaebf87213c57d08cad6373e9e708051c1f549ea10225006272070edfd2d13",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          97.5
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          10.69999885559082
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -15.170000076293945
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 1.6
+      }
+    },
+    "Pin_Clip": {
+      "source": "../../carbon-rod-holders-r61-top-battery/exports/Pin_Clip-assembly.stl",
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          85.25
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          38.99000024795532
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.6000000238418579
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          15,
+          15
+        ],
+        "ties": [
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "Pin_Clip_Spare": {
+      "source": "../../carbon-rod-holders-r61-top-battery/exports/Pin_Clip-assembly.stl",
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          105.25
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          38.99000024795532
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.6000000238418579
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          15,
+          15
+        ],
+        "ties": [
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "DFR_Clip_Left": {
+      "source": "../../carbon-rod-holders-r59-flipped-guard/exports/DFR_Clip_Left-assembly.stl",
+      "source_sha256": "5673825587a7da76de3c89abe0f0296aecd7edd5699cd576df5137b86413aee9",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          163.75
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          78.46949005126953
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          12,
+          12
+        ],
+        "ties": [
+          [
+            0,
+            -1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          1
+        ]
+      }
+    },
+    "DFR_Clip_Right": {
+      "source": "../../carbon-rod-holders-r59-flipped-guard/exports/DFR_Clip_Right-assembly.stl",
+      "source_sha256": "50dbdcc8ec0c1f1acf55225e654ff0d0ede25a448bd0b8abe786c8892cc94e5c",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          92.25
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          86.06949005126953
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          12,
+          12
+        ],
+        "ties": [
+          [
+            0,
+            -1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          1
+        ]
+      }
+    },
+    "Socket_Backer_Left": {
+      "source": "../../carbon-rod-holders-r63-open-hinge/exports/Socket_Backer_Left-assembly.stl",
+      "source_sha256": "ebc19f67166f7b6017d509e52d9927dc74b169f8a889d406e79482e0634fd47e",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          129.5739450454712
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          68.49383664131165
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -3.9000000953674316
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          20
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 1.4
+      }
+    },
+    "Socket_Backer_Right": {
+      "source": "../../carbon-rod-holders-r58-smooth-click/exports/Socket_Backer_Right-assembly.stl",
+      "source_sha256": "f8d8e6d95dda3a2c3f90da2f9be1bf61bb49dca64a11b99faa3124316efe9f39",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          110.24383735656738
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          69.17605549097061
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -3.9000000953674316
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 1.4
+      }
+    },
+    "Hinge_Pin": {
+      "source": "../../carbon-rod-holders-r61-top-battery/exports/Hinge_Pin-assembly.stl",
+      "source_sha256": "6f51c4e92b4560519ad5e7ce9b5dc08624ee227c7aecbc15d5d8ca896aaedc2f",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          97.5
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          -5.299999237060547
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -15.069999694824219
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 1.6
+      }
+    },
+    "DFR_Post_Bar": {
+      "source": "../../carbon-rod-holders-r57-pin-hinge/exports/DFR_Post_Bar-assembly.stl",
+      "source_sha256": "81bb4d85be4299a5010d55ee1bccfaef9263b9c0b369de3cef2640c057abad08",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          150.5
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          54.89999961853027
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          -14.070337295532227
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          18
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "Rod_Collet": {
+      "source": "../../carbon-rod-holders-r64-under-entry/exports/Rod_Collet-assembly.stl",
+      "source_sha256": "686d4b8b7c401f7da86de142596e0b196d06be7d95ff16e1e7c7b33929397450",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          64.74208962917328
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          99.0
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          46.550045013427734
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          19,
+          19
+        ],
+        "ties": [
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 1.6
+      }
+    },
+    "OP1_Seat_Sled": {
+      "source": "OP1_Seat_Sled-assembly.stl",
+      "source_sha256": "56aa83fb9a95bcd61c07e90b17bffba8c21816ffad719b6329d15e1e5cf53293",
+      "assembly_to_machine": [
+        [
+          0.2756373558,
+          0.9612616959,
+          -0.0,
+          111.10565536157334
+        ],
+        [
+          -0.9612616959,
+          0.2756373558,
+          -0.0,
+          19.20666691432381
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -7.349939346313477
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "front_pad": true
+      }
+    }
+  },
+  "layout_sha256": "e8452264a10f2bb5c2c951c747c475d836a6f7c6aa81557806c7cd59603f98c5"
+}
