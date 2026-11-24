@@ -21,7 +21,7 @@
   },
   {
     "id": "battery-outer-taper",
-    "status": "active",
+    "status": "superseded",
     "text": "Taper the projecting outer edge of the integrated battery slot so that it does not extend as far as the rod-side edge. Replace the projecting outer right-angle corner with a diagonal taper. Keep the rod-side edge full length to retain the pack at the top."
   },
   {
@@ -46,5 +46,13 @@
     "id": "separate-battery",
     "status": "superseded",
     "text": "The earlier assembly used an independently sliding rod-mounted battery above the keys, leaving the grip free. A later family revision integrated a different pouch in the key carrier."
+  },
+  {
+    "id": "battery-rail-pre-taper",
+    "status": "active",
+    "text": "Restore the integrated battery outer rail to its full pre-taper shape, retaining the lower battery support and the established removable fit. Keep unrelated current holder improvements.",
+    "supersedes": [
+      "battery-outer-taper"
+    ]
   }
 ]

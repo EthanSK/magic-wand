@@ -1,0 +1,48 @@
+{
+  "archive_sha256": "ef9e03fc18cc7bf264e1c36f63bf3fdb5cdfc3c91c360c90d56fa43c16b45c0d",
+  "regions": {
+    "outer_free_lip": [
+      -21.55,
+      2.27,
+      -18.7,
+      3.2199999999999998
+    ],
+    "inner_free_lip": [
+      -11.95,
+      2.27,
+      -9.55,
+      3.2199999999999998
+    ],
+    "root_below": [
+      -25.5,
+      1.37,
+      -22.4,
+      3.47
+    ],
+    "root_above": [
+      -25.5,
+      6.92,
+      -22.4,
+      9.77
+    ]
+  },
+  "contacts_mm2": {
+    "outer_free_lip": 0.0,
+    "inner_free_lip": 0.0,
+    "root_below": 4.42,
+    "root_above": 3.22
+  },
+  "corner_ties": [
+    {
+      "face": "-y",
+      "at": -24.0,
+      "height": 2.4
+    },
+    {
+      "face": "+y",
+      "at": -23.8,
+      "height": 2.2
+    }
+  ],
+  "passes": true
+}
