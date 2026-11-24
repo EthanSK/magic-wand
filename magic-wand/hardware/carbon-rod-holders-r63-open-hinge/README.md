@@ -20,3 +20,5 @@ The R62 physical assembly blocked both the hinge pin and the carbon rod. R63 ali
 The tests check the complete pin insertion line, the full rod passage, the swept socket and backing-strip paths, the battery seat, the spring and the paddle travel. Rod gripping force, hinge effort, switch retention and battery removal force require a fitted physical assembly.
 
 Both the original and reopened slices clear all 62 tested paths, with 3.309 mm through the assembled hinge and 8.297 mm along the sleeve. The six detachable ties contact 21.45 mm² of the carrier and leave the hinge bay clear. Opus approved one monitored trial. Studio flags possible floating regions on the carrier. The short one-ended extrusions are at the rod socket mouth and keypad deck. Every printed region starts on the bed or on material from a preceding layer.
+
+The A1 mini finished the R63 replacement on 24 November 2026. The camera showed all four parts still attached to the plate after 312 layers. The hinge pin, installed paddle click, carbon rod and grip, battery retention, and outside socket insertion still need a hands-on fit check.
