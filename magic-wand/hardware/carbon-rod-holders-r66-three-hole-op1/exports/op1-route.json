@@ -1,0 +1,378 @@
+{
+  "revision": "R66",
+  "physical_fit_verified": false,
+  "sequence": [
+    "Unplug the white plug from the bare board (switch and retainer off).",
+    "Tip the plug so its lead hangs down and raise it beside the rod, inside the right finger guard, up through the deck opening.",
+    "Above the holder, turn the plug upright and push the board housing onto it.",
+    "Lower the board straight down: three sockets into the three holes, housing and plug into the opening.",
+    "Press the lead up into the open channel under the deck."
+  ],
+  "thread": {
+    "path_xy": [
+      8.2,
+      14.6
+    ],
+    "yaw_deg": 10.0,
+    "exit_height_mm": [
+      -17.0,
+      15.0
+    ],
+    "tipped_section_mm": [
+      3.1,
+      6.2
+    ],
+    "deck_clearance_mm": 0.75,
+    "above_deck_clearance_mm": 0.45,
+    "to_carrier_mm3": 0.0,
+    "with_clearance_in_deck_to_carrier_mm3": 0.0,
+    "through_deck_min_gap_mm": 0.75,
+    "past_end_stop_min_gap_mm": 0.45,
+    "below_and_above_deck_min_gap_mm": 0.784,
+    "full_rod_min_gap_mm": 2.135,
+    "to_fitted_keys_mm3": {
+      "switch_0": 0.0,
+      "socket_0": 0.0,
+      "switch_2": 0.0,
+      "socket_2": 0.0,
+      "switch_3": 0.0,
+      "socket_3": 0.0,
+      "switch_4": 0.0,
+      "socket_4": 0.0
+    },
+    "r63_deck_min_gap_mm": 0.026
+  },
+  "turn_above_holder": {
+    "poses": 51,
+    "plug_to_carrier_mm3": 0.0,
+    "plug_to_keys_mm3": 0.0,
+    "wire_max_overlap_mm3": {
+      "carrier": 0.0,
+      "rod": 0.0,
+      "keys": 0.0
+    },
+    "wire_samples": 51
+  },
+  "drop": {
+    "lift_mm": 16.0,
+    "lead_bend_radius_mm": 2.0,
+    "to_carrier_mm3": {
+      "board": 0.0,
+      "sockets": 0.0,
+      "housing": 0.0,
+      "plug": 0.0,
+      "lead": 0.0
+    },
+    "to_full_rod_mm3": {
+      "board": 0.0,
+      "sockets": 0.0,
+      "housing": 0.0,
+      "plug": 0.0,
+      "lead": 0.0
+    },
+    "to_fitted_keys_mm3": 0.0,
+    "housing_and_plug_with_0_2_gap_to_carrier_mm3": 0.0,
+    "board_bearing_skin_mm": 0.2
+  },
+  "seated": {
+    "route_lead_to_carrier_mm3": 0.0,
+    "route_lead_to_rod_mm3": 0.0,
+    "r51_lead_to_carrier_mm3": 0.0,
+    "hardware_to_carrier_mm3": {
+      "board": 0.0,
+      "sockets": 0.0,
+      "housing": 0.0,
+      "plug": 0.0
+    }
+  },
+  "deck_opening_is_closed_hole": {
+    "7.4": {
+      "open_to_outside": true,
+      "area_mm2": 4059.21
+    },
+    "7.7": {
+      "open_to_outside": false,
+      "area_mm2": 105.89
+    },
+    "8.0": {
+      "open_to_outside": false,
+      "area_mm2": 106.53
+    },
+    "8.3": {
+      "open_to_outside": false,
+      "area_mm2": 97.66
+    },
+    "8.6": {
+      "open_to_outside": false,
+      "area_mm2": 97.66
+    },
+    "8.9": {
+      "open_to_outside": false,
+      "area_mm2": 97.66
+    },
+    "9.2": {
+      "open_to_outside": false,
+      "area_mm2": 110.6
+    }
+  },
+  "not_feasible": {
+    "plug_pushed_up_into_seated_housing": {
+      "note": "The mated plug is 6.2 mm across beside the rod; pushing it straight up into the seated housing overlaps the rod and leaves no finger access.",
+      "straight_up_overlap_with_full_rod_mm3": 1.01405,
+      "straight_up_overlap_with_carrier_mm3": 12.82164
+    },
+    "mated_board_from_above": {
+      "note": "With the plug already mated, the attached harness would have to thread through the closed deck opening.",
+      "closed_ring_heights_mm": [
+        7.7,
+        8.0,
+        8.3,
+        8.6,
+        8.9,
+        9.2
+      ]
+    }
+  },
+  "three_holes": {
+    "r63": [
+      {
+        "board_y": -3.13,
+        "world_xy": [
+          -0.696,
+          -6.751
+        ],
+        "hardware_radius": 1.3,
+        "z9.05": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.779
+        },
+        "z8.3": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.779
+        },
+        "z7.6": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.734
+        }
+      },
+      {
+        "board_y": 1.95,
+        "world_xy": [
+          1.083,
+          -1.993
+        ],
+        "hardware_radius": 1.3,
+        "z9.05": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.97
+        },
+        "z8.3": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.97
+        },
+        "z7.6": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.97
+        }
+      },
+      {
+        "board_y": 7.03,
+        "world_xy": [
+          2.862,
+          2.765
+        ],
+        "hardware_radius": 1.3,
+        "z9.05": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.966
+        },
+        "z8.3": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.966
+        },
+        "z7.6": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.966
+        }
+      }
+    ],
+    "r66": [
+      {
+        "board_y": -3.13,
+        "world_xy": [
+          -0.696,
+          -6.751
+        ],
+        "hardware_radius": 1.3,
+        "z9.05": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.779
+        },
+        "z8.3": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.779
+        },
+        "z7.6": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.734
+        }
+      },
+      {
+        "board_y": 1.95,
+        "world_xy": [
+          1.083,
+          -1.993
+        ],
+        "hardware_radius": 1.3,
+        "z9.05": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.97
+        },
+        "z8.3": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.97
+        },
+        "z7.6": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.97
+        }
+      },
+      {
+        "board_y": 7.03,
+        "world_xy": [
+          2.862,
+          2.765
+        ],
+        "hardware_radius": 1.3,
+        "z9.05": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.966
+        },
+        "z8.3": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.966
+        },
+        "z7.6": {
+          "clear_radius": 1.739,
+          "plastic_in_1mm_ring_fraction": 0.966
+        }
+      }
+    ]
+  },
+  "seat_support_mm2": {
+    "z9.3": {
+      "r63": {
+        "whole": 160.25,
+        "left": 84.28,
+        "right": 82.88,
+        "switch_left": 23.03,
+        "switch_right": 22.61,
+        "plunger": 2.47
+      },
+      "r66": {
+        "whole": 159.95,
+        "left": 84.05,
+        "right": 82.46,
+        "switch_left": 23.03,
+        "switch_right": 22.61,
+        "plunger": 2.47
+      }
+    },
+    "z9.05": {
+      "r63": {
+        "whole": 178.21,
+        "left": 101.01,
+        "right": 95.38,
+        "switch_left": 23.03,
+        "switch_right": 22.61,
+        "plunger": 2.47
+      },
+      "r66": {
+        "whole": 177.64,
+        "left": 100.79,
+        "right": 94.7,
+        "switch_left": 23.03,
+        "switch_right": 22.61,
+        "plunger": 2.47
+      }
+    },
+    "z8.8": {
+      "r63": {
+        "whole": 178.21,
+        "left": 101.01,
+        "right": 95.38,
+        "switch_left": 23.03,
+        "switch_right": 22.61,
+        "plunger": 2.47
+      },
+      "r66": {
+        "whole": 177.65,
+        "left": 100.79,
+        "right": 94.7,
+        "switch_left": 23.03,
+        "switch_right": 22.61,
+        "plunger": 2.47
+      }
+    }
+  },
+  "deck_change_from_r63_in_op1_zone_mm3": {
+    "removed": 3.91164,
+    "added": 0.0,
+    "plug_passage_volume_in_r63_mm3": 3.91199
+  },
+  "lid": {
+    "board_shift_1mm_into_stops_at_0_2mm_lift_mm3": {
+      "left": 16.24721,
+      "right": 3.34734,
+      "front": 0.0,
+      "back": 2.47934
+    },
+    "board_lifted_0_35mm_into_lid_mm3": 15.3525,
+    "lid_guide_complete_insertion_overlap_mm3": 0.0476,
+    "inherited_lid_guide_complete_insertion_overlap_mm3": 0.0476,
+    "additional_lid_interference_per_pose_mm3": 0
+  },
+  "lid_r63_baseline": {
+    "board_shift_1mm_into_stops_at_0_2mm_lift_mm3": {
+      "left": 16.24721,
+      "right": 3.34734,
+      "front": 0.0,
+      "back": 2.6627
+    },
+    "board_lifted_0_35mm_into_lid_mm3": 15.3525,
+    "lid_guide_complete_insertion_overlap_mm3": 0.0476,
+    "inherited_lid_guide_complete_insertion_overlap_mm3": 0.0476,
+    "additional_lid_interference_per_pose_mm3": 0
+  },
+  "back_stop_kept_fraction_of_r63": 0.931,
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "carrier_sha256": "0112b7da1e8704eb93e148d889c8f362ae3892bdccc9a2f58bd798de825e8542",
+  "generator_sha256": "7b2dc129bc04a3bbd0e812e9a8956d22f7127ce3b2e8f88b97a28424f7bea630"
+}

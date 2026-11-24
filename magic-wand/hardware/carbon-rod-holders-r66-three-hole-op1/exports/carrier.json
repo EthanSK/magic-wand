@@ -1,0 +1,25 @@
+{
+  "revision": "R66",
+  "physical_fit_verified": false,
+  "carrier_sha256": "0112b7da1e8704eb93e148d889c8f362ae3892bdccc9a2f58bd798de825e8542",
+  "generator_sha256": "7b2dc129bc04a3bbd0e812e9a8956d22f7127ce3b2e8f88b97a28424f7bea630",
+  "checks_sha256": "9e3f636cc58b0d76d356a71fb434a323ae62118937635f9f7d52d801942da0b8",
+  "carrier_components": 1,
+  "key_poses_checked": 336,
+  "key_obstructions": [],
+  "socket_backer_sweeps_mm3": {
+    "left": 0.0,
+    "right": 0.0
+  },
+  "outside_op1_battery_and_backing_vs_r64": {
+    "r66_minus_r64_net_mm3": 14.1384,
+    "note": "R63 material that R64 cut for its under-entry lead lane: under the deck at X 7.1-12, Y 24-42.6 and a 0.2 mm skin beside the rod at X 4.86-5.06, Y 29-43.65."
+  },
+  "op1_route_passes": true,
+  "battery_passes": true,
+  "socket_backing_passes": true,
+  "socket_backing_added_mm3": 21.83956,
+  "socket_backing_outside_box_surface_max_mm": 0.139849,
+  "socket_backing_export_is_natively_proven_solid": true,
+  "passes": true
+}
