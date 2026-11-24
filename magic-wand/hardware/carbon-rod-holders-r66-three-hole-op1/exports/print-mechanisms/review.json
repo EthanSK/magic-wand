@@ -1,0 +1,54 @@
+{
+  "reviewer": "Claude Opus 5.5 (claude-opus-5-5), independent printability review",
+  "archive_sha256": "d2cda2a5b0d509c49e231e24afda1deb7101047ca24faf9744ea2f6ad91a6a09",
+  "reopened_sha256": "51eb5f1ccc44b4b1312fa75be393892e29614d7fcbf529d4aa162570b7ce8938",
+  "carrier_sha256": "0112b7da1e8704eb93e148d889c8f362ae3892bdccc9a2f58bd798de825e8542",
+  "trial_approved": true,
+  "physical_acceptance": false,
+  "verdict": "APPROVE ONE MONITORED FIT TRIAL",
+  "blockers": [],
+  "native_warning": {
+    "reviewed_archive_warnings": {
+      "d2cda2a5b0d509c49e231e24afda1deb7101047ca24faf9744ea2f6ad91a6a09": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+      "51eb5f1ccc44b4b1312fa75be393892e29614d7fcbf529d4aa162570b7ce8938": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    },
+    "evidence": "Both archives show the same Key_Carrier floating-regions notice. Every R58-R65 slice had it, including the approved R63 pair. Each archive has its own layers.json: completely_unsupported_starts is [] for all 13 parts and native_support_moves is 0. Each verify.log shows blocked [] and unsupported_starts {}, and both receipts exited 0. The earlier 0.15 mm2 rear-socket fragment at layer 9 is gone. Each archive has six one-anchored runs. Two at layer 155 are identical to R63. Three at layers 10-11 sit at the same rear-socket stations as R63, but their lengths changed (1.05/1.02/2.16 here against R63's 1.55/2.58/1.90). The sixth is new: a straight 4.626 mm, 0.283 mm-wide outer-wall line at layer 49 (G-code line 131577). It starts at the free inboard end of the tapered outboard battery lip and runs to the wall: assembly X -18.98 to -23.60, Z ~3.04, Y ~33.95. It stops ~0.12 mm short of the outboard wall's inner face (-23.72). Evaluating taper_floor by hand gives only ~0.14 mm of lip at layer 48, below a bead width, so no plastic is expected under its free span. The leaf underside is at Z 3.74, ~0.56 mm above the line's top edge. The slicer does not say where its notice comes from. This line is the only new candidate; it is accepted as a monitored watch point, not as a reason for supports."
+  },
+  "observations": [
+    "Freeze: rehashed at the end of the review. The carrier STL, both archives, design66.py (7b2dc129), kit66.py (ee63bd56), audit66.py (b5103c7d) and guide66.py (e0054880) are unchanged. checks66.py was edited twice after the audit receipts (5dbe76db -> 6c7e463d -> 9e3f636c), and the CAD reports were regenerated. carrier.json now has passes true, checks_sha256 9e3f636c. The receipts come from audit_deposited_plastic(), so the CAD-report gate was confirmed by reading the regenerated reports, not by the receipt. README.md appeared afterwards and was not reviewed.",
+    "Fixed seat: printed-seat.json passes in both archives. versions.R66.area_mm2.whole is 158.39 against R63's 158.67 (r66_fraction_of_r63.whole 0.998). direct_plunger_contact_mm2 is 2.41 (= R63) and plunger_inside_support_polygon is true. socket_rings plastic_fraction is 0.711/0.946/0.939 (= R63), and known_bad_r64_rejected is true. In op1-independent-section.json, deposited clear_radius is 1.647/1.649/1.666 mm around 1.3 mm sockets, with bearing in 76/90/90 of 90 directions. That matches R63 (R64 was 35/35/29). In op1-route.json, three_holes clear_radius is 1.739 at z 9.05/8.3/7.6, identical to R63. seat_support_mm2.z9.05.r66 is left 100.79, right 94.7 and plunger 2.47. deck_change_from_r63_in_op1_zone_mm3 is removed 3.91 and added 0.0, and deck_opening_is_closed_hole is closed at z 7.7-9.2. There is no sled and no bay.",
+    "Over-board keeper: in op1-route.json, lid.board_lifted_0_35mm_into_lid_mm3 is 15.3525 (= R63) and additional_lid_interference_per_pose_mm3 is 0. back_stop_kept_fraction_of_r63 is 0.931. fit.json lid_from_front: 33 poses, none obstructed. click-fit.json is bound to 0112b7da: button_contact_deg 0.0032 < case_stop_deg 1.259, plunger_travel_at_case_mm 0.822, and max overlap_mm3 0.00075.",
+    "Installed-rod connector approach (op1-route.json): thread.full_rod_min_gap_mm is 2.135 and thread.to_carrier_mm3 is 0.0. below_and_above_deck_min_gap_mm is 0.784, through_deck_min_gap_mm 0.75 and past_end_stop_min_gap_mm 0.45. turn_above_holder.wire_max_overlap_mm3 is 0 for carrier, rod and keys over 51 samples. drop.to_carrier_mm3 and drop.to_full_rod_mm3 are 0 for all five actors. In fit.json for each archive, op1_plug_threads_up_from_below (4754 nearby samples), op1_lead_while_plug_turns (4484) and every op1_*_lowered_onto_seat route have obstructed_poses [].",
+    "Assembly sequence matches the model and guide. Only the white plug, with its lead hanging down, approaches from underneath: it rises beside the full-length rod inside the right guard and up through the deck opening. It turns upright above the holder. The bare board (switch, paddle and retainer off) is pushed down onto the plug from above, then lowered from above onto the three holes. Finally the lead is pressed up into the channel from below. assembly-guide.json now binds carrier 0112b7da and route report efdb113f, and the lead meshes match.",
+    "Rear socket: intended preload versus fresh material. socket-backing.json backing_to_seat_taper_min_gap_mm is 0.1886, and seat_taper_faces are identical (496). collet_insertion.to_backing_max_mm3 is 0 over 57 poses. collet_push_in_stroke.first_contact_with_backing_dy_mm is null and added_by_backing_max_mm3 is 0.0 to -1.5 mm. full_push_overlap_before_after_mm3 is 13.847/13.847, which is the designed wedge preload on the original taper, not the new exterior. split_probe is 0/0 and backing_to_split_min_gap_mm is 1.85.",
+    "Backing provenance: the surface-mismatch gate failed at 11.38 mm2 and was replaced by outline-section gates. outside_box.sections covers 630 sections, with max_area_mm2 0.0006048 (gate 0.0025) and sum_area_times_step_mm3 0.0001273 (gate 0.001). after_to_before_surface_max_mm is 7.7e-05, so no new surface appears outside the patch. before_to_after_surface_max_mm 0.139849 is reported but ungated and unlocated. I accept the replacement because export_is_natively_proven_solid is true and both archives slice this exact mesh.",
+    "Battery taper (battery.json, rail-sections.json): outboard_full_depth_y_mm is [21.5, 32.5] against inboard [20.5, 43.5], and outboard_lip_under_pack_y_mm is [21.0, 34.0]. The R66 outer wall falls from 4.9 to 0.0 between y 31 and y 41.5, while the inner wall stays 4.9 throughout. pack_to_deck_gap_mm is 0.05, and both pack_seated and pack_slide_from_rear are 0.0. spring_leaf_and_shoe_unchanged_xor_mm3 is 0.0 and shoe_preload_overlap is unchanged at 2.558. retention_pack_dropped_0_3mm_mm3 is outboard 4.45 and inboard 7.83.",
+    "Outer spring and bed-end anchoring: battery.json spring_root.volume_r66_mm3 is 46.589 (R64 47.921), with joined_to_deck_mm2 11.15. battery-base.json passes in both archives, with contacts_mm2 spring_root_below 3.68, root_above 3.14, and outer/inner free lips 0.0. moved_tie is -y at X -22.68, height 2.4, and fin-design.json gives that fin a section_mm2 of 4.08. The fin sits under the solid root post (Y >= 41.25), not under the free leaf. In fit.json, side_leaf_can_flex, leaf_is_free_of_floor and battery_slides_in_from_the_rear are unobstructed.",
+    "Inherited kit: all 13 parts are present, including Hinge_Pin, Hinge_Pin_Snug, Pin_Clip and Pin_Clip_Spare. Minimum separation is 3.399 mm and the machine check passed. passages.json rod_min_clear_diameter_mm is 8.297 with rod_layers_under_8mm 0, and clearance_over_Hinge_Pin_mm is 0.192. pin-fit.json passes (standard 0.2001, snug best 0.084). Key routes: 336 poses with 0 obstructions, and the backer sweeps are 0. The two-anchored bridges at layers 74/75/109 are largely inherited (R64 has 18; R66 has 20).",
+    "Minor documentation: the removal text in fin-design.json says four fins underneath and two on top, but the file lists three -y and three +y fins. Check the wording before quoting it."
+  ],
+  "inadequate_proof": [
+    "The collet seat was not bead-scanned against deposited plastic, including the new backing beads. The evidence is the CAD rigid sweep plus unchanged seat faces.",
+    "The step-5 drop-to-channel lead morph has no check on the current carrier; only the end states are covered. The earlier pre-backing probe found 0 overlap, and the backing at X <= 6.0 is away from the lead at X ~8.",
+    "The op1_plug_turns_above_holder scan is vacuous (0 nearby samples), so that motion has CAD evidence only.",
+    "Deposited socket-bore evidence covers only z 8.8-9.3. The deeper bore relies on the CAD clear radius and the socket drop sweep.",
+    "The 0.139849 mm before_to_after surface deviation is not located.",
+    "Python could not be run here, so I made no independent bead probes. I read the G-code directly once, for the layer-49 line. Layer 48 was not read; its lip thickness comes from a hand calculation.",
+    "The battery's own lead and plug path, on the unchanged inboard side, was not separately re-audited."
+  ],
+  "residual_unknowns": [
+    "Physical threading of the 3.1 x 6.2 mm tipped plug from below, through 0.75-0.78 mm deck clearance inside the 6-7 mm guard gap: finger or tweezer access and lead stiffness.",
+    "Whether the keeper holds the board down, and whether clicks repeat reliably over many presses.",
+    "Pouch retention on the outboard side beyond Y 34, where the lip deliberately ends, and pouch insertion past the lip start.",
+    "Collet grip on the real carbon tube with the 0.19 mm relief.",
+    "PETG stringing and wipe blobs in the plug opening, socket teardrops and rod bore, and sag of the inherited bridges.",
+    "Cutting the moved -y tie and peeling the base sheet."
+  ],
+  "physical_checks": [
+    "Watch the outboard battery lip start at print height 9.6-10.2 mm.",
+    "After printing, confirm the lip start at Y ~34 is clean and the spring leaf flexes freely. Trim any strand before inserting the pouch, working from the mouth or underside; the outer wall is still 3.75-4.76 mm tall there, and trim access is unverified.",
+    "Thread the plug from below with the rod and guards installed. Then seat the board on its three holes, slide the keeper in and check repeated clicks.",
+    "Test collet grip on the real tube, and pouch insertion, retention and removal.",
+    "Use the standard pin and the clip; keep the spare."
+  ]
+}

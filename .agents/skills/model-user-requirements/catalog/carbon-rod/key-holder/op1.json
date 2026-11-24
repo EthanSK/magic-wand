@@ -25,7 +25,10 @@
   {
     "id": "op1-board-bearing",
     "status": "active",
-    "text": "Support the OP1 board on both sides and directly beneath the point where the paddle presses the switch. Keep the board supported after the wired board has been inserted from below."
+    "text": "Keep the three existing socket holes in the key carrier itself. Support the OP1 board on both sides and directly under the pressed switch. With the switch removed, leave a local opening for the white connector to pass from below beside the installed rod and inside the finger guard. Secure the board with the existing top retainer.",
+    "supersedes": [
+      "op1-entry-below"
+    ]
   },
   {
     "id": "op1-clearances",
@@ -34,7 +37,7 @@
   },
   {
     "id": "op1-entry-below",
-    "status": "active",
+    "status": "superseded",
     "text": "With the switch module removed, allow the OP1 PCB and attached white connector to slide in easily from below, past the rod and finger guard, without forcing or breaking the guard."
   },
   {
