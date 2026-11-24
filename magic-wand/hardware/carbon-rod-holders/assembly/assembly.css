@@ -49,3 +49,8 @@ body[data-layout="landscape"] .assembly-caption{min-height:4.5em}
   #assembly-playback .assembly-actions{grid-template-columns:repeat(3,minmax(0,1fr))}
   #assembly-playback .assembly-actions select{grid-column:1/-1}
 }
+
+#startup-status{position:absolute;inset:0;display:grid;place-items:center;margin:0;color:#b5c4d5;pointer-events:none}
+#startup-status[hidden]{display:none}
+#error p{margin:0;color:inherit}
+#error.startup-error{flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#12151cf2}

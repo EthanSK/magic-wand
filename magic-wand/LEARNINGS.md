@@ -2503,6 +2503,17 @@ The refresh regression rewrites a shared module at the same URL and timestamp.
 An ordinary Chrome reload reused the old module on the standard server and
 executed the edited module on the assembly server.
 
+Self-improved — 2026-11-24: A module's own catch cannot report a failed static
+import or an exception earlier in its top-level initialization. In that case the
+assembly shell can show empty Version and Component menus with no explanation.
+Keep the startup error boundary in a small classic script outside the module
+graph. Show loading feedback until initialization completes, retain the viewer's
+specific errors, and offer a deliberate Reload using the current URL. Tests inject
+a missing dependency and an early execution error, then restore the module and
+verify recovery with the selected version and component. This fixes the silent
+failure and recovery path; it does not establish the underlying reason an
+intermittent browser request failed.
+
 User-requested — 2026-11-14: the assembly server must survive a chat ending.
 Use its macOS login-service installer for continuing review; it reads the working
 tree and recovers after a process exit. The recovery check terminated the owned
