@@ -23,7 +23,7 @@ export function completeKeys(hinge, outer) {
     Object.fromEntries(outerIds.filter(id => Object.hasOwn(pose, id)).map(id => [id,
       /^(socket|switch|keycap)_\d+$/.test(id) ? shiftY(pose[id], offset) : pose[id]]));
   const ready = outer.steps[0].samples[0];
-  const parked = outerPose(ready, -44);
+  const parked = hinge.stagedActors ? {} : outerPose(ready, -44);
   const press = hinge.steps.at(-1);
   const fittedHinge = press.samples[0];
   const fittedKeys = outerPose(outer.steps.at(-1).samples.at(-1));

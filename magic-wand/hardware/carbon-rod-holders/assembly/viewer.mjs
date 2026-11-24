@@ -92,12 +92,21 @@ function bindViewDivider() {
 function renderAnnotations() {
   if (annotationHost.hidden) return;
   const width = view.clientWidth, height = view.clientHeight;
-  for (const { point, actor, line, dot, card, columnIndex } of annotations) {
+  const currentTitle = module.steps[Number(document.body.dataset.step)]?.title;
+  const stepRows = { left: 0, right: 0 };
+  for (const { point, actor, line, dot, card, columnIndex, step } of annotations) {
+    const hide = module.annotationsByStep && ((!actors[actor.id].visible) || (step && step !== currentTitle));
+    card.hidden = Boolean(hide);
+    if (hide) {
+      line.hidden = dot.hidden = true;
+      continue;
+    }
     const projected = point.copy(actor.anchor).applyMatrix4(actors[actor.id].matrixWorld).project(camera);
     const x = (projected.x + 1) * width / 2, y = (1 - projected.y) * height / 2;
     const visible = projected.z >= -1 && projected.z <= 1 && x >= 0 && x <= width && y >= 0 && y <= height;
     line.hidden = dot.hidden = !visible;
-    const rowY = height * (.24 + columnIndex * .27);
+    const row = module.annotationsByStep ? stepRows[card.dataset.side]++ : columnIndex;
+    const rowY = height * (.24 + row * .27);
     const cardTop = Math.max(42, Math.min(height - card.offsetHeight - 32, rowY - card.offsetHeight / 2));
     card.style.top = `${cardTop}px`;
     if (!visible) continue;
@@ -130,7 +139,7 @@ function setAnnotations(records = []) {
     card.append(title);
     if (record.text) card.append(document.createTextNode(record.text));
     return {
-      line, dot, card, columnIndex: sideCount[record.side]++,
+      line, dot, card, step: record.step, columnIndex: sideCount[record.side]++,
       point: new THREE.Vector3(), actor: { id: record.actor, anchor: new THREE.Vector3(...record.point) },
     };
   });

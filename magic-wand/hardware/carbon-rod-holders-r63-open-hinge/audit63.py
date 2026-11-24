@@ -18,9 +18,10 @@ def turn_key(index, solid):
     return solid
 
 
-def key_routes():
+def key_routes(routes=None):
     """Rotate the installed socket while retaining the outside approach and vertical lift."""
-    routes = audit61.gauges()
+    if routes is None:
+        routes = audit61.gauges()
     holder = routes["Key_Carrier"]
     for key, poses in holder.items():
         if not key.startswith("key_0_"):

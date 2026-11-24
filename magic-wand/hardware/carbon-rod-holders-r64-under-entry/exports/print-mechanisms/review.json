@@ -1,0 +1,22 @@
+{
+  "reviewer": "GPT-6.2 Astra (independent Codex reviewer)",
+  "archive_sha256": "290d3d434998a2deea56cac2e7effa1084462a28c3da7355a1ec5843c9e32798",
+  "reopened_sha256": "e855069e7a91a9fed02a164609010216c80ded356edd30fbc37093c6c7656a84",
+  "trial_approved": true,
+  "physical_acceptance": false,
+  "verdict": "APPROVE ONE MONITORED TRIAL",
+  "review_scope": "Exact native and reopened A1 mini PETG slices. Confirmed 13 identified kit pieces and separate tower, both pin paths, rod, four keys and backing strips, under-entry of the wired OP1 and its guides, paddle movement, rear clip, wire relief, battery service and base removal. All four finger guard roots have zero remaining front projection, with measured setbacks 0.631\u20131.118 mm, sections 4.71\u20134.97 mm\u00b2 and positive core overlap.",
+  "native_warning": {
+    "reviewed_archive_warnings": {
+      "290d3d434998a2deea56cac2e7effa1084462a28c3da7355a1ec5843c9e32798": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+      "e855069e7a91a9fed02a164609010216c80ded356edd30fbc37093c6c7656a84": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    },
+    "evidence": "No fully unsupported starts on any of the 13 parts. No native support blocks removal. The single-anchor carrier runs correspond to the known short rod-mouth lips and the two 3.666 and 6.346 mm deck paths also present in R63. Tower is rooted. Native first-object commands match the verified reference at 245 \u00b0C nozzle and 60 \u00b0C bed."
+  },
+  "physical_checks": [
+    "Monitor first-layer attachment, including the paddle and separate fittings. Cut the sacrificial ties at their solid roots before removing the carrier.",
+    "Slide the real carbon rod through the carrier. Try the standard pin first, support the paddle, then fit the rear clip and check click travel with the lead installed. The snug alternative has only 0.033 mm modelled path clearance.",
+    "Fit the wired OP1 from below with the removable switch out, install the lid, and check all four prewired sockets by hand. Check battery retention and removal without squeezing the pouch.",
+    "Check guard feel, root strength, collet grip and service access on the real assembly."
+  ]
+}

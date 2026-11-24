@@ -1,0 +1,95 @@
+{
+  "archive_sha256": "e855069e7a91a9fed02a164609010216c80ded356edd30fbc37093c6c7656a84",
+  "holder_first_layer_mm2": 140.9,
+  "panel_sheet_mm2": 3245.9,
+  "combined_first_layer_mm2": 3404.3,
+  "first_layer_pieces": 1,
+  "moat_mm": 1.5,
+  "yoke_top_y": 10.95,
+  "fins": [
+    {
+      "face": "+y",
+      "cut_at_xy": [
+        -19.7,
+        8.47
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 2.2,
+      "section_mm2": 3.74,
+      "rooted_volume_mm3": 2.71
+    },
+    {
+      "face": "+y",
+      "cut_at_xy": [
+        -15.9,
+        8.47
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 2.2,
+      "section_mm2": 3.74,
+      "rooted_volume_mm3": 2.71
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -24.0,
+        2.37
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 2.4,
+      "section_mm2": 4.08,
+      "rooted_volume_mm3": 1.89
+    },
+    {
+      "face": "+y",
+      "cut_at_xy": [
+        -23.8,
+        8.47
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 2.2,
+      "section_mm2": 3.74,
+      "rooted_volume_mm3": 2.46
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -7.4,
+        7.26
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 3.0,
+      "section_mm2": 5.1,
+      "rooted_volume_mm3": 3.03
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        13.0,
+        7.27
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 3.0,
+      "section_mm2": 5.1,
+      "rooted_volume_mm3": 1.83
+    }
+  ],
+  "total_fin_section_mm2": 25.5,
+  "base_volume_mm3": 1697.3,
+  "revision": "R55",
+  "hinge_bay_xy": [
+    -14.5,
+    11.0,
+    14.5,
+    27.58
+  ],
+  "hinge_bay_open_to_panel_edge": true,
+  "base_volume_in_hinge_bay_mm3": 0.0,
+  "nearest_base_to_hinge_mm": 3.83,
+  "fins_on_hinge": 0,
+  "panel_pieces": 1,
+  "removal": [
+    "Cut the four fins on the underside of the exposed rim, then the two on top.",
+    "Peel the two sides of the base away from the open hinge bay."
+  ]
+}
