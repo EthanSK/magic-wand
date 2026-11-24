@@ -1,0 +1,68 @@
+[
+  {
+    "id": "adj-stop",
+    "status": "active",
+    "text": "Avoid a separate adjustable hard-stop component for the click mechanism."
+  },
+  {
+    "id": "centre-click-feel",
+    "status": "active",
+    "text": "Use four outer keys and a centre paddle that operates the mouse switch. Aim for a light mouse click, with a keycap-like shape and a height close to the surrounding keycaps.",
+    "supersedes": [
+      "historical-five-key-layout"
+    ]
+  },
+  {
+    "id": "lower-click",
+    "status": "active",
+    "text": "Place the click near the flat lower edge so pressing near the lower row operates it. Keep the PCB within the usable grip outline."
+  },
+  {
+    "id": "old-straight",
+    "status": "superseded",
+    "text": "An earlier request for a straight board orientation was superseded by restoring the diagonal arrangement to serve the lower-row click."
+  },
+  {
+    "id": "op1-clearances",
+    "status": "active",
+    "text": "Keep the OP1 low over the rod while allowing the three metal leads, white connector and emerging wire to fit in their actual positions."
+  },
+  {
+    "id": "op1-entry-below",
+    "status": "active",
+    "text": "With the switch module removed, allow the OP1 PCB and attached white connector to slide in easily from below, past the rod and finger guard, without forcing or breaking the guard."
+  },
+  {
+    "id": "op1-pigtail-strain",
+    "status": "active",
+    "text": "Position the wire exit close enough to the OP1 connector to avoid bending or pulling the pigtail."
+  },
+  {
+    "id": "op1-retainer-strength",
+    "status": "active",
+    "text": "Check the complete OP1 retainer for weak sections. Reinforce the transition where the earlier triangular support snapped during handling."
+  },
+  {
+    "id": "op1-slide-retainer",
+    "status": "active",
+    "text": "Secure the actual OP1 PCB with a readily fitted slide-in keeper over the board. Keep the installed keeper clear of the paddle throughout a complete click and release.",
+    "supersedes": [
+      "op1-snap-arms"
+    ]
+  },
+  {
+    "id": "op1-snap-arms",
+    "status": "superseded",
+    "text": "Use flexible arms locating in the OP1 PCB holes to avoid tiny mounting screws."
+  },
+  {
+    "id": "op1-switch-orientation",
+    "status": "active",
+    "text": "Place the mouse-switch plunger at the end of the OP1 board farthest from the white connector. Give the connector and its lead a usable route."
+  },
+  {
+    "id": "switch-outline-guide",
+    "status": "candidate",
+    "text": "Consider guiding the paddle around the outline of the OP1 switch with a snug sleeve, allowing for its actual position and angle."
+  }
+]

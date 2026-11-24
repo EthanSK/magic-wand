@@ -1,0 +1,85 @@
+[
+  {
+    "id": "captured-through-pin",
+    "status": "active",
+    "text": "Use a separate printed hinge pin through the aligned bores, with an axial retainer and enough plastic surrounding the bores to resist tearing.",
+    "supersedes": [
+      "old-flex-arms"
+    ]
+  },
+  {
+    "id": "compact-centre",
+    "status": "active",
+    "text": "Keep the hinge extension local to the middle that needs it and preserve a strong, supported pivot."
+  },
+  {
+    "id": "contact-bar",
+    "status": "active",
+    "text": "Align a single smooth, continuous, convex contact with the actual OP1 switch at its working angle. Make it wide enough for reliable clicks without precise hand alignment or a dip that can catch."
+  },
+  {
+    "id": "guided-paddle",
+    "status": "active",
+    "text": "Keep the DFRobot paddle snug in the hinge with minimal side, angular and fore-and-aft play. It must click and return with its keeper installed, including when pressed near the middle at an angle."
+  },
+  {
+    "id": "hinge-board-seat",
+    "status": "active",
+    "text": "Seat the DFRobot touch board with its white connector facing down and its flat touch face exposed. Keep both mounting holes aligned, clips strong enough for fitting, and plugged wiring clear below the board."
+  },
+  {
+    "id": "hinge-leverage",
+    "status": "active",
+    "text": "Place the pivot toward the upper end of the paddle to give the lower-row click adequate leverage. Preserve the fitted hardware and assembly clearances."
+  },
+  {
+    "id": "hinge-stability",
+    "status": "active",
+    "text": "Keep the paddle centred on the mouse click, prevent side-to-side tipping or loss of the pivot and reinforce the hinge-arm roots against breakage."
+  },
+  {
+    "id": "no-random-stops",
+    "status": "active",
+    "text": "Avoid exposed protrusions at the paddle end that merely limit travel or get in the way of the click."
+  },
+  {
+    "id": "old-flex-arms",
+    "status": "superseded",
+    "text": "An earlier hinge used flexible paddle arms that snapped into holes in the carrier. The later pin hinge replaced that attachment."
+  },
+  {
+    "id": "old-hinge-span",
+    "status": "evidence",
+    "text": "The former snap-in hinge arms were too narrowly spaced to reach both pivot seats. The complaint concerned span, not pin diameter."
+  },
+  {
+    "id": "pin-clip-friction",
+    "status": "candidate",
+    "text": "Increase the spring friction of the centre clip only if testing shows that it works loose. The fitted reference clip held in handling."
+  },
+  {
+    "id": "r57-pin-result",
+    "status": "evidence",
+    "text": "R57’s pin and centre clip held during handling, and the sliding retainer held down the board. The paddle could catch under a downward pull with the retainer in place."
+  },
+  {
+    "id": "r58-click-result",
+    "status": "evidence",
+    "text": "The assembled R58 clicked better and wobbled less. Broken loose material could jam the click. Once fully seated, the board posts and their clips fitted correctly."
+  },
+  {
+    "id": "r63-hinge-result",
+    "status": "evidence",
+    "text": "R63 initially felt improved. Later handling found renewed wobble where the DFRobot holder enters the hinge. A previous fitted revision was snug."
+  },
+  {
+    "id": "snap-failed",
+    "status": "evidence",
+    "text": "The early snap-hinge trial had weak outer arms, debris around the hinge and lateral tipping during the click."
+  },
+  {
+    "id": "wire-clearance",
+    "status": "active",
+    "text": "Shorten the board-to-hinge empty space toward approximately 10 mm while keeping the real mated DFRobot connector and three-wire bend clear throughout the hinge travel."
+  }
+]

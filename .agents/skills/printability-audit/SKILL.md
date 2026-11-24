@@ -7,6 +7,8 @@ description: Before finishing any 3D model, coupon or print project in this repo
 
 Make sure the model can be printed, cleaned and assembled, while changing the design as little as possible. This is a project skill shared by the components, not a global copy or a licence to apply Wand geometry to Control Stones.
 
+For a Magic Wand model, invoke [model-user-requirements](../model-user-requirements/SKILL.md) before proposing a change. Match the actual slice and fitted feedback to the applicable requirement IDs.
+
 ## Continuous improvement
 
 Preserve explicit user requirements during the same task. Keep verified reusable checks and failure prevention here or in the owning component's LEARNINGS.md; distinguish measured causes from hypotheses and physical acceptance from CAD or slicing results. Refine existing guidance instead of accumulating incident recaps, and keep conditional detail in the linked checklist. Preserve unrelated edits; exclude private prompts, paths, logs and credentials. Mark agent-discovered material additions Self-improved with date, reason and evidence; do not label user-requested rules that way. Validate changed skills and exercise affected checks before finishing.

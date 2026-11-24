@@ -1,0 +1,55 @@
+[
+  {
+    "id": "adhesion",
+    "status": "active",
+    "text": "Size each part’s sacrificial base for its observed adhesion. Increase the footprint of a part that detaches during printing."
+  },
+  {
+    "id": "base-release",
+    "status": "active",
+    "text": "Keep the holder attached throughout printing and make the ties easy to remove at the hinge and battery entrance without heavy twisting or stressing the lips."
+  },
+  {
+    "id": "base-removal",
+    "status": "active",
+    "text": "Make base and support connections easy to identify and remove without snapping useful features or leaving material in functional holes, hinge seats and wire routes."
+  },
+  {
+    "id": "large-bases-all",
+    "status": "superseded",
+    "text": "Use large adhesion bases on all parts, including tiny loose fittings."
+  },
+  {
+    "id": "only-changes",
+    "status": "active",
+    "text": "For ordinary iteration plates, print changed or explicitly requested parts. Include requested keepers and fittings even when their geometry is unchanged."
+  },
+  {
+    "id": "proportionate-bases",
+    "status": "active",
+    "text": "Keep the tall or heavy holder on a broad, well-attached disposable base. Scale each small loose fitting’s own pad to its mass and orientation so it is easy to handle and remove.",
+    "supersedes": [
+      "large-bases-all"
+    ]
+  },
+  {
+    "id": "r63-base-fit",
+    "status": "evidence",
+    "text": "R63 printed to completion. Its base grip still took substantial twisting to free at the battery entrance."
+  },
+  {
+    "id": "removable-socket-support",
+    "status": "active",
+    "text": "Provide access to remove support material on both sides of the key carrier without breaking permanent plastic."
+  },
+  {
+    "id": "sacrificial-pipe",
+    "status": "active",
+    "text": "If a disposable monitoring pipe or tower is included, fasten it firmly to its base through the print. Its base can remain permanently attached to the disposable piece."
+  },
+  {
+    "id": "spacers-by-request",
+    "status": "active",
+    "text": "Leave loose flat battery spacers off routine plates. Include them for a particular fit trial and reprint a matching door when its interface changes."
+  }
+]
