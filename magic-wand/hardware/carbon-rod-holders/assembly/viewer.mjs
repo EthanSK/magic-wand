@@ -8,6 +8,7 @@ import { sampledPose, validateGuide, identity, assemblyComponents, selectAssembl
 import { rodFrame } from './rod-transitions.mjs';
 import { readCatalog, watchAssemblyVersions } from './assembly-versions.mjs';
 import { legacyR20 } from './legacy-r20.mjs';
+import { installDrawingMode } from './viewer-drawing.mjs';
 
 const base = new URL('./', import.meta.url), view = document.getElementById('view');
 const versions = document.getElementById('version'), modules = document.getElementById('module');
@@ -34,6 +35,7 @@ canvas.setAttribute('aria-label', `3D assembly. Drag to rotate; scroll or pinch 
 view.querySelector('.hint').textContent = `Drag to rotate · Scroll or pinch to zoom · ${rollText}`;
 let components, guideUrl, group, actors = {}, module, tools, catalog, loadId = 0, versionLoadId = 0;
 let showVersionUpdate;
+let drawing;
 let showAnnotations = true, annotations = [];
 let manualCutaway = false, effectiveCutaway;
 let rodBounds;
@@ -148,6 +150,7 @@ function setAnnotations(records = []) {
 }
 
 function render() {
+  drawing?.clear();
   camera.position.set(...input.camera());
   camera.up.set(...input.cameraUp());
   camera.lookAt(...input.target);
@@ -454,4 +457,10 @@ try {
   });
   new ResizeObserver(() => { camera.aspect = view.clientWidth / view.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(view.clientWidth, view.clientHeight, false); render(); }).observe(view);
   await chooseVersion(requested.get('component'), requested.get('view') ?? requested.get('keyView'));
+  drawing = installDrawingMode({
+    view,
+    onStart: () => { tools.assembly.pause(); input.cancel(); },
+    freezeTargets: [canvas, document.querySelector('aside'), document.getElementById('assembly-playback'),
+      document.getElementById('view-divider'), document.querySelector('.viewer-layout')],
+  });
 } catch (error) { showError(error); }
