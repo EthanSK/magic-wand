@@ -1,0 +1,2 @@
+#!/bin/sh
+exec python3 .agents/skills/model-user-requirements/scripts/requirements.py check-message "$1"

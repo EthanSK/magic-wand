@@ -1,0 +1,45 @@
+[
+  {
+    "id": "battery-against-deck",
+    "status": "active",
+    "text": "Seat the integrated battery directly against the key carrier base to minimise tray height."
+  },
+  {
+    "id": "battery-compact",
+    "status": "active",
+    "text": "Keep the battery holder strong and narrow. Locate the pack lengthwise close to the rod seat and away from the fingers. Necessary projection can extend beyond the top of the key holder."
+  },
+  {
+    "id": "battery-fit",
+    "status": "active",
+    "text": "Hold the fitted pack against vertical movement when the wand is waved. Allow easy insertion and replacement without squeezing the pouch or loading its protection electronics."
+  },
+  {
+    "id": "battery-friction",
+    "status": "active",
+    "text": "On the integrated carrier, use a comfortable rounded slide-in friction fit for the fitted pack. Keep the pouch replaceable and secure when waved without squeezing it."
+  },
+  {
+    "id": "battery-rod-removed",
+    "status": "candidate",
+    "text": "Consider loading the battery with the rod out if necessary for compactness. Confirm actual removal access before adopting that dependency."
+  },
+  {
+    "id": "fitted-pouch",
+    "status": "evidence",
+    "text": "The bench assembly used a 100 mAh pouch. Use the fitted pack and its connector envelope when checking fit."
+  },
+  {
+    "id": "integrated-battery",
+    "status": "active",
+    "text": "Integrate the pouch battery holder into the key carrier. Keep the separate rod-mounted battery holder available only for assemblies that use it.",
+    "supersedes": [
+      "separate-battery"
+    ]
+  },
+  {
+    "id": "separate-battery",
+    "status": "superseded",
+    "text": "The earlier assembly used an independently sliding rod-mounted battery above the keys, leaving the grip free. A later family revision integrated a different pouch in the key carrier."
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "battery-door",
+    "status": "active",
+    "text": "Remove unused projecting ledges and use a light patterned sliding end piece on the separate rod-mounted battery holder."
+  },
+  {
+    "id": "friction-only-battery",
+    "status": "candidate",
+    "text": "A friction-only battery holder was considered and parked after the battery came out under heavy shaking."
+  },
+  {
+    "id": "legacy-battery-wire-opening",
+    "status": "active",
+    "text": "For the separate battery holder, route the leads through the opening without the extra wire clip."
+  },
+  {
+    "id": "legacy-cell",
+    "status": "superseded",
+    "text": "The separate rod-mounted holder was sized for a PKCELL LP402025 pouch. This size applies to that holder only."
+  },
+  {
+    "id": "standalone-micron-fit",
+    "status": "active",
+    "text": "Size the standalone tray to the thinner Micron pack and retain it snugly.",
+    "supersedes": [
+      "legacy-cell"
+    ]
+  }
+]

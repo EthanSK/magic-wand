@@ -1,0 +1,75 @@
+[
+  {
+    "id": "flush-key-deck",
+    "status": "active",
+    "text": "Remove the raised key platforms. Keep the four keycaps close in height to the touch surface; a tiny difference is acceptable. Preserve the actual cap, socket and contact assembly paths."
+  },
+  {
+    "id": "historical-five-key-layout",
+    "status": "superseded",
+    "text": "The earlier five-key layout was replaced by four outer keys and one centre mouse switch."
+  },
+  {
+    "id": "holder-height",
+    "status": "active",
+    "text": "Keep the key holder as low as possible while preserving its stability."
+  },
+  {
+    "id": "key-access",
+    "status": "active",
+    "text": "Leave hand access to insert the bottom-row prewired black sockets and press the switch contacts home beneath the guard. Route the guard supports down first. Preserve the individually accessible switch orientations.",
+    "supersedes": [
+      "key-flip"
+    ]
+  },
+  {
+    "id": "key-flip",
+    "status": "superseded",
+    "text": "Rotate the bottom key mounting holes 180 degrees to clear the backing socket’s insertion path."
+  },
+  {
+    "id": "key-layout",
+    "status": "active",
+    "text": "Orient the two-key row at the top and the three control positions at the bottom. Align the centre click with its neighbouring lower keys."
+  },
+  {
+    "id": "key-spacing",
+    "status": "active",
+    "text": "Keep adjacent keycaps as close as practical in both directions without touching or causing neighbouring presses. Using the keys should avoid unwanted rotation of the rod."
+  },
+  {
+    "id": "old-key-ramp",
+    "status": "candidate",
+    "text": "A gentle curve between the key rows was suggested as a visual treatment, subject to printability."
+  },
+  {
+    "id": "open-print-passages",
+    "status": "active",
+    "text": "Deliver all four key openings, OP1 mounting passages and the hinge insertion line open in the actual slice and usable after printing. Keep internal supports out of these assembly paths."
+  },
+  {
+    "id": "outward-key-terminals",
+    "status": "active",
+    "text": "On the obstructed side, orient the key contacts toward the outer edge so the prewired black socket can be fitted by hand. Preserve the accessible orientation beside the OP1."
+  },
+  {
+    "id": "replaceable-switches",
+    "status": "active",
+    "text": "Use the actual low-profile Choc V1 switches and keycaps. Retain them locally while allowing removal, swapping and fitting after soldering outside the carrier."
+  },
+  {
+    "id": "row-spacing",
+    "status": "active",
+    "text": "Bring the upper and lower rows as close together as real caps, sockets and prewired assembly access allow. Reduce finger travel without adjacent presses."
+  },
+  {
+    "id": "socket-clean",
+    "status": "evidence",
+    "text": "One printed holder had its functional openings filled. A successfully exported solid or slicer view alone cannot establish that the physical openings are usable."
+  },
+  {
+    "id": "warped-upper-key",
+    "status": "evidence",
+    "text": "An earlier printed carrier curled down toward the hinge end and an upper key opening appeared to narrow. The cause was not established."
+  }
+]
