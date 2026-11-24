@@ -16,12 +16,12 @@ from verify59 import ARCHIVE, digest
 MARGIN = .06
 
 
-def pin_cross_section(paths, frame, axis_y, name):
+def pin_cross_section(paths, frame, axis_y, name, axis_z=None):
     # The part's hinge runs along assembly X. Each print pose maps it onto bed X or Y.
     along = int(np.argmax(abs(frame[:2, 0])))
     cross = 1 - along
     assert abs(frame[along, 0]) > .9999
-    anchor = frame @ [0, axis_y, r61.m.CHEEK_HOLE_Z, 1]
+    anchor = frame @ [0, axis_y, r61.m.CHEEK_HOLE_Z if axis_z is None else axis_z, 1]
     # Check the pin while it approaches both external cheek faces, including
     # its far end when its leading end first enters the stationary assembly.
     reach = r61.m.CHEEK_X[1] + 2*r61.m.PIN_HALF
@@ -89,7 +89,7 @@ def collet_profile(paths, pose):
     return dict(layers=layers, grip_is_split=True, physical_grip_unmeasured=True)
 
 
-def inspect(folder, axis_y, reused_paddle=None):
+def inspect(folder, axis_y, reused_paddle=None, *, axis_z=None):
     archive = folder / ARCHIVE
     paths, names = read_native(archive)
     layout = json.loads((folder/'layout.frame.json').read_text())['parts']
@@ -103,17 +103,17 @@ def inspect(folder, axis_y, reused_paddle=None):
     for top in sorted(set(scan[:,2])):
         ring = min_r[scan[:,2]==top]
         rings[float(top)] = float(ring.min())
-    cheek = pin_cross_section(paths, frame, axis_y, 'Key_Carrier')
+    cheek = pin_cross_section(paths, frame, axis_y, 'Key_Carrier', axis_z)
     if 'Touch_Paddle' in layout:
-        barrel=pin_cross_section(paths, np.asarray(layout['Touch_Paddle']['assembly_to_machine']), axis_y, 'Touch_Paddle')
+        barrel=pin_cross_section(paths, np.asarray(layout['Touch_Paddle']['assembly_to_machine']), axis_y, 'Touch_Paddle', axis_z)
         paddle_sha=digest(archive)
     else:
         assert reused_paddle is not None
         other, paddle_names=read_native(reused_paddle/ARCHIVE)
         pose=json.loads((reused_paddle/'layout.frame.json').read_text())['parts']['Touch_Paddle']
-        barrel=pin_cross_section(other, np.asarray(pose['assembly_to_machine']), axis_y, 'Touch_Paddle')
+        barrel=pin_cross_section(other, np.asarray(pose['assembly_to_machine']), axis_y, 'Touch_Paddle', axis_z)
         paddle_sha=digest(reused_paddle/ARCHIVE)
-    height = (r61.m.BARREL_HOLE_Z + r61.m.CHEEK_HOLE_Z)/2
+    height = (r61.m.BARREL_HOLE_Z + r61.m.CHEEK_HOLE_Z)/2 if axis_z is None else axis_z
     candidates = []
     # Seek one unloaded insertion line usable by the carrier AND the resting paddle.
     # Check each individual throat too, so one component cannot mask the other's problem.

@@ -1,0 +1,151 @@
+{
+  "archive_sha256": "e855069e7a91a9fed02a164609010216c80ded356edd30fbc37093c6c7656a84",
+  "layout_sha256": "4bb523ba7ac1fe23bee854122911430092c40a65a8cdb1b773fc9b0ec6408a29",
+  "parts": [
+    "Key_Carrier",
+    "Touch_Paddle",
+    "OP1_Lid_Stop",
+    "Hinge_Pin_Snug",
+    "Pin_Clip",
+    "Pin_Clip_Spare",
+    "DFR_Clip_Left",
+    "DFR_Clip_Right",
+    "Socket_Backer_Left",
+    "Socket_Backer_Right",
+    "Hinge_Pin",
+    "DFR_Post_Bar",
+    "Rod_Collet"
+  ],
+  "minimum_separation_mm": 3.399,
+  "projected_part_separation_lower_bounds_mm": {
+    "Key_Carrier / Touch_Paddle": 3.399,
+    "Key_Carrier / OP1_Lid_Stop": 12.199,
+    "Key_Carrier / Hinge_Pin_Snug": 76.299,
+    "Key_Carrier / Pin_Clip": 72.553,
+    "Key_Carrier / Pin_Clip_Spare": 80.349,
+    "Key_Carrier / DFR_Clip_Left": 61.16,
+    "Key_Carrier / DFR_Clip_Right": 25.7,
+    "Key_Carrier / Socket_Backer_Left": 52.299,
+    "Key_Carrier / Socket_Backer_Right": 58.999,
+    "Key_Carrier / Hinge_Pin": 92.299,
+    "Key_Carrier / DFR_Post_Bar": 96.207,
+    "Key_Carrier / Rod_Collet": 24.799,
+    "Touch_Paddle / OP1_Lid_Stop": 56.899,
+    "Touch_Paddle / Hinge_Pin_Snug": 58.799,
+    "Touch_Paddle / Pin_Clip": 52.299,
+    "Touch_Paddle / Pin_Clip_Spare": 52.299,
+    "Touch_Paddle / DFR_Clip_Left": 15.8,
+    "Touch_Paddle / DFR_Clip_Right": 8.2,
+    "Touch_Paddle / Socket_Backer_Left": 34.799,
+    "Touch_Paddle / Socket_Backer_Right": 35.799,
+    "Touch_Paddle / Hinge_Pin": 74.799,
+    "Touch_Paddle / DFR_Post_Bar": 71.799,
+    "Touch_Paddle / Rod_Collet": 27.389,
+    "OP1_Lid_Stop / Hinge_Pin_Snug": 44.017,
+    "OP1_Lid_Stop / Pin_Clip": 75.573,
+    "OP1_Lid_Stop / Pin_Clip_Spare": 95.096,
+    "OP1_Lid_Stop / DFR_Clip_Left": 104.799,
+    "OP1_Lid_Stop / DFR_Clip_Right": 48.799,
+    "OP1_Lid_Stop / Socket_Backer_Left": 36.31,
+    "OP1_Lid_Stop / Socket_Backer_Right": 78.821,
+    "OP1_Lid_Stop / Hinge_Pin": 54.683,
+    "OP1_Lid_Stop / DFR_Post_Bar": 97.008,
+    "OP1_Lid_Stop / Rod_Collet": 11.3,
+    "Hinge_Pin_Snug / Pin_Clip": 4.799,
+    "Hinge_Pin_Snug / Pin_Clip_Spare": 24.799,
+    "Hinge_Pin_Snug / DFR_Clip_Left": 47.605,
+    "Hinge_Pin_Snug / DFR_Clip_Right": 38.399,
+    "Hinge_Pin_Snug / Socket_Backer_Left": 3.798,
+    "Hinge_Pin_Snug / Socket_Backer_Right": 14.922,
+    "Hinge_Pin_Snug / Hinge_Pin": 3.799,
+    "Hinge_Pin_Snug / DFR_Post_Bar": 20.814,
+    "Hinge_Pin_Snug / Rod_Collet": 32.815,
+    "Pin_Clip / Pin_Clip_Spare": 4.799,
+    "Pin_Clip / DFR_Clip_Left": 29.259,
+    "Pin_Clip / DFR_Clip_Right": 34.188,
+    "Pin_Clip / Socket_Backer_Left": 4.799,
+    "Pin_Clip / Socket_Backer_Right": 4.299,
+    "Pin_Clip / Hinge_Pin": 8.735,
+    "Pin_Clip / DFR_Post_Bar": 4.373,
+    "Pin_Clip / Rod_Collet": 49.973,
+    "Pin_Clip_Spare / DFR_Clip_Left": 24.299,
+    "Pin_Clip_Spare / DFR_Clip_Right": 45.396,
+    "Pin_Clip_Spare / Socket_Backer_Left": 24.799,
+    "Pin_Clip_Spare / Socket_Backer_Right": 4.299,
+    "Pin_Clip_Spare / Hinge_Pin": 25.851,
+    "Pin_Clip_Spare / DFR_Post_Bar": 4.299,
+    "Pin_Clip_Spare / Rod_Collet": 67.892,
+    "DFR_Clip_Left / DFR_Clip_Right": 43.799,
+    "DFR_Clip_Left / Socket_Backer_Left": 36.93,
+    "DFR_Clip_Left / Socket_Backer_Right": 7.799,
+    "DFR_Clip_Left / Hinge_Pin": 59.226,
+    "DFR_Clip_Left / DFR_Post_Bar": 43.799,
+    "DFR_Clip_Left / Rod_Collet": 74.299,
+    "DFR_Clip_Right / Socket_Backer_Left": 14.399,
+    "DFR_Clip_Right / Socket_Backer_Right": 23.535,
+    "DFR_Clip_Right / Hinge_Pin": 54.399,
+    "DFR_Clip_Right / DFR_Post_Bar": 58.674,
+    "DFR_Clip_Right / Rod_Collet": 18.299,
+    "Socket_Backer_Left / Socket_Backer_Right": 10.299,
+    "Socket_Backer_Left / Hinge_Pin": 19.798,
+    "Socket_Backer_Left / DFR_Post_Bar": 26.735,
+    "Socket_Backer_Left / Rod_Collet": 10.124,
+    "Socket_Backer_Right / Hinge_Pin": 28.71,
+    "Socket_Backer_Right / DFR_Post_Bar": 23.799,
+    "Socket_Backer_Right / Rod_Collet": 49.186,
+    "Hinge_Pin / DFR_Post_Bar": 20.799,
+    "Hinge_Pin / Rod_Collet": 48.646,
+    "DFR_Post_Bar / Rod_Collet": 74.224
+  },
+  "machine": {
+    "passed": true,
+    "project_sha256": "e855069e7a91a9fed02a164609010216c80ded356edd30fbc37093c6c7656a84",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "filament_retraction_mm": [
+    "1.2"
+  ],
+  "filament_retraction_speed_mm_s": [
+    "35"
+  ],
+  "timelapse_type": "1"
+}
