@@ -80,6 +80,21 @@
   {
     "id": "wire-clearance",
     "status": "active",
-    "text": "Shorten the board-to-hinge empty space toward approximately 10 mm while keeping the real mated DFRobot connector and three-wire bend clear throughout the hinge travel."
+    "text": "Keep less than 10 mm between the top edge of the DFRobot board and the hinge, returning toward the compact earlier design with only the extra clearance needed for the actual mated connector and right-side wire exit throughout click travel. Avoid pinching the conductors."
+  },
+  {
+    "id": "hinge-low-keeper",
+    "status": "active",
+    "text": "Lower the slide-in keeper arm so it retains the OP1 board without blocking paddle travel at the centre or far end. Check balanced retention on both sides, full click and return, and easy keeper insertion. Adjust the downward actuator only as needed for clearance."
+  },
+  {
+    "id": "hinge-no-wire-perch",
+    "status": "active",
+    "text": "Remove the exposed flat pointed or triangular projection behind the hinge. Keep the connector-down touch board and compact right-side wire exit without an unnecessary projecting platform."
+  },
+  {
+    "id": "r68-click-result",
+    "status": "evidence",
+    "text": "The printed R68 click was less reliable with the final keeper installed, especially with force near the paddle end. The underside-view right-hand retention appeared weaker; the precise contact causing interference remains to be established."
   }
 ]

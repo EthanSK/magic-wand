@@ -1,0 +1,139 @@
+{
+  "revision": "R69",
+  "physical_fit_verified": false,
+  "r68_carrier_sha256": "4e914a59acfc5f32038d4ee3d21b8b2231f9ba9498f49ffd9f6449d64c31771f",
+  "key_deck": {
+    "strips": {
+      "left": {
+        "r68_open_mm3": 14.922,
+        "r69_open_mm3": -0.0
+      },
+      "right": {
+        "r68_open_mm3": 11.911,
+        "r69_open_mm3": -0.0
+      }
+    },
+    "origin": "carrier58.move_upper_row left a through-window in the strip between the rows on each side"
+  },
+  "key_poses_checked": 336,
+  "key_obstructions": [],
+  "socket_backer_sweeps_mm3": {
+    "left": 0.0,
+    "right": 0.0
+  },
+  "battery_box_sections_against_r68": {
+    "sections": 114,
+    "spacing_mm": 0.2,
+    "max_area_mm2": 0.0,
+    "worst_y_mm": 20.93,
+    "sum_area_times_step_mm3": 0.0
+  },
+  "outside_changed_zones_sections_against_r68": {
+    "sections": 313,
+    "spacing_mm": 0.2,
+    "max_area_mm2": 0.000609,
+    "worst_y_mm": 32.784,
+    "sum_area_times_step_mm3": 0.00167
+  },
+  "changed_zones_mm": {
+    "op1_seat": [
+      -12.0,
+      14.5,
+      -14.0,
+      27.5,
+      4.5,
+      12.7
+    ],
+    "guard_arm": [
+      8.5,
+      23.0,
+      8.0,
+      23.0,
+      -1.0,
+      8.4
+    ],
+    "strip_left": [
+      -23.0,
+      -19.0,
+      8.4,
+      11.1,
+      7.2,
+      11.2
+    ],
+    "strip_right": [
+      19.0,
+      23.0,
+      8.4,
+      11.1,
+      7.2,
+      11.2
+    ],
+    "right_stub": [
+      3.8,
+      11.6,
+      2.4,
+      17.6,
+      0.9,
+      6.6
+    ],
+    "rod_bore": [
+      -4.4,
+      4.4,
+      -20.0,
+      32.75,
+      -4.4,
+      4.4
+    ],
+    "hinge": [
+      -36.0,
+      36.0,
+      27.6,
+      43.66,
+      8.6,
+      33.0
+    ]
+  },
+  "components": 1,
+  "mass": {
+    "carrier": {
+      "r68_g": 13.16,
+      "r69_g": 13.172
+    },
+    "paddle": {
+      "r68_g": 1.936,
+      "r69_g": 1.876
+    },
+    "lid": {
+      "r68_g": 0.343,
+      "r69_g": 0.286
+    },
+    "rod_collet": {
+      "r68_g": 0.183,
+      "r69_g": 0.0
+    }
+  },
+  "mass_total_g": {
+    "r68": 15.622,
+    "r69": 15.334
+  },
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "meshes_sha256": {
+    "Key_Carrier-assembly.stl": "1363f07f6ea16b3bcf4b362e98b150e2af38128fc1312846442d57c3df3b2ee7",
+    "Touch_Paddle-assembly.stl": "bf04554e3ea2704c3dd376d577601adeb2cf87ed2e87846b867874ccd7248ed5",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752"
+  },
+  "carrier_sha256": "1363f07f6ea16b3bcf4b362e98b150e2af38128fc1312846442d57c3df3b2ee7",
+  "generator_sha256": {
+    "design69.py": "9c7767647cebcaa3f51738f10bb883b607e83bf0f4eb9216dab9d69f308a346c",
+    "hinge69.py": "bf1fc6b1888855a0f484141b38be546dd7545d582e5c2ace74f75017b72eda5f"
+  }
+}

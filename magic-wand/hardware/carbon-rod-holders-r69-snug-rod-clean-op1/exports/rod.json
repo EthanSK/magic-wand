@@ -1,0 +1,265 @@
+{
+  "revision": "R69",
+  "physical_fit_verified": false,
+  "reference": "R58, R60, R61 and R62 share one bore from the front face to Y 32.65: a 7.8 mm split ring, a saddle and an 8.0 mm ring. R58 is the fitted reference that gripped. R62 has the same nominal bore and did not pass the rod when printed; its extra 11 mm tail at 8.36 mm ended on the bed face. R63 bored everything to 8.55 mm and added the collet.",
+  "zones": {
+    "front_ring": {
+      "r62": {
+        "y_mm": [
+          9.25,
+          19.75
+        ],
+        "bore_diameter_mm": [
+          7.798,
+          7.798
+        ],
+        "wrap_deg": [
+          66,
+          340
+        ]
+      },
+      "r68": {
+        "y_mm": [
+          9.25,
+          19.75
+        ],
+        "bore_diameter_mm": [
+          8.548,
+          8.548
+        ],
+        "wrap_deg": [
+          146,
+          344
+        ]
+      },
+      "r69": {
+        "y_mm": [
+          9.25,
+          19.75
+        ],
+        "bore_diameter_mm": [
+          7.796,
+          7.798
+        ],
+        "wrap_deg": [
+          66,
+          340
+        ]
+      }
+    },
+    "saddle": {
+      "r62": {
+        "y_mm": [
+          20.25,
+          28.75
+        ],
+        "bore_diameter_mm": [
+          7.996,
+          8.39
+        ],
+        "wrap_deg": [
+          2,
+          134
+        ]
+      },
+      "r68": {
+        "y_mm": [
+          20.25,
+          28.75
+        ],
+        "bore_diameter_mm": [
+          8.548,
+          8.548
+        ],
+        "wrap_deg": [
+          94,
+          134
+        ]
+      },
+      "r69": {
+        "y_mm": [
+          20.25,
+          28.75
+        ],
+        "bore_diameter_mm": [
+          7.994,
+          8.39
+        ],
+        "wrap_deg": [
+          2,
+          134
+        ]
+      }
+    },
+    "rear_ring": {
+      "r62": {
+        "y_mm": [
+          29.25,
+          31.75
+        ],
+        "bore_diameter_mm": [
+          7.996,
+          7.996
+        ],
+        "wrap_deg": [
+          342,
+          342
+        ]
+      },
+      "r68": {
+        "y_mm": [
+          29.25,
+          31.75
+        ],
+        "bore_diameter_mm": [
+          8.548,
+          8.548
+        ],
+        "wrap_deg": [
+          344,
+          344
+        ]
+      },
+      "r69": {
+        "y_mm": [
+          29.25,
+          31.75
+        ],
+        "bore_diameter_mm": [
+          7.994,
+          7.996
+        ],
+        "wrap_deg": [
+          342,
+          342
+        ]
+      }
+    },
+    "behind": {
+      "r62": {
+        "y_mm": [
+          33.25,
+          37.25
+        ],
+        "bore_diameter_mm": [
+          8.358,
+          8.358
+        ],
+        "wrap_deg": [
+          344,
+          344
+        ]
+      },
+      "r68": {
+        "y_mm": [
+          33.25,
+          37.25
+        ],
+        "bore_diameter_mm": [
+          8.548,
+          8.548
+        ],
+        "wrap_deg": [
+          344,
+          344
+        ]
+      },
+      "r69": {
+        "y_mm": [
+          33.25,
+          37.25
+        ],
+        "bore_diameter_mm": [
+          8.548,
+          8.548
+        ],
+        "wrap_deg": [
+          344,
+          344
+        ]
+      }
+    },
+    "rear_funnel": {
+      "r62": {
+        "y_mm": [
+          37.75,
+          43.25
+        ],
+        "bore_diameter_mm": [
+          8.358,
+          8.358
+        ],
+        "wrap_deg": [
+          344,
+          344
+        ]
+      },
+      "r68": {
+        "y_mm": [
+          37.75,
+          43.25
+        ],
+        "bore_diameter_mm": [
+          8.572,
+          9.9
+        ],
+        "wrap_deg": [
+          230,
+          344
+        ]
+      },
+      "r69": {
+        "y_mm": [
+          37.75,
+          43.25
+        ],
+        "bore_diameter_mm": [
+          8.572,
+          9.9
+        ],
+        "wrap_deg": [
+          230,
+          344
+        ]
+      }
+    }
+  },
+  "r58_to_r62_radius_difference_mm": 0.0,
+  "r69_to_r62_radius_difference_to_y31_75_mm": 0.001,
+  "rear_ring_lead_in": [
+    32.15,
+    4.0,
+    4.28
+  ],
+  "restored_mm3": 101.52,
+  "nominal_8mm_rod_overlap_mm3": {
+    "r62": 15.20502,
+    "r68": 0.0,
+    "r69": 15.21631
+  },
+  "smallest_bore_mm": 7.796,
+  "bed_face_bore_mm": 9.9,
+  "collet": "Rod_Collet is no longer part of the kit. The rear socket it seated in is kept as the rear funnel.",
+  "not_measured": "grip torque and slide force of the printed ring on the bought rod",
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "meshes_sha256": {
+    "Key_Carrier-assembly.stl": "1363f07f6ea16b3bcf4b362e98b150e2af38128fc1312846442d57c3df3b2ee7",
+    "Touch_Paddle-assembly.stl": "bf04554e3ea2704c3dd376d577601adeb2cf87ed2e87846b867874ccd7248ed5",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752"
+  },
+  "carrier_sha256": "1363f07f6ea16b3bcf4b362e98b150e2af38128fc1312846442d57c3df3b2ee7",
+  "generator_sha256": {
+    "design69.py": "9c7767647cebcaa3f51738f10bb883b607e83bf0f4eb9216dab9d69f308a346c",
+    "hinge69.py": "bf1fc6b1888855a0f484141b38be546dd7545d582e5c2ace74f75017b72eda5f"
+  }
+}
