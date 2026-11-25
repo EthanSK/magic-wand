@@ -1,0 +1,209 @@
+{
+  "reviewer": "Claude Opus 5.5 independent printability review, scoped repair follow-up and final OP1 review; final evidence binding and disposition by GPT-6.1 Sol",
+  "archive_sha256": "fca1607aadaf84b8b6c5176cc064fe9f77db89d0d3053b8aad8926fda40d78ef",
+  "reopened_sha256": "d940ca5edece23e9d80227a244c91824b01d685aa65abcbc0d07a055303a2b58",
+  "carrier_sha256": "1363f07f6ea16b3bcf4b362e98b150e2af38128fc1312846442d57c3df3b2ee7",
+  "guide_sha256": "c593b7a4c40252343d1281b53e3c0c06da153436b2352c0a96b810b88d867049",
+  "source_sha256": {
+    "audit69.py": "d202ccf73c2f859d17fc65a6459587a384cb845144c820dd4a117b7ae7a1c1ce",
+    "evidence69.py": "90832d0106c4d43cdd3c98b85b725d5bb0e43b8e2cb3b650189eeb2324f19aea",
+    "guide69.py": "7c4fcb1bf19e951854dd619545dfd2daac2f0d5a30be9f72e75725ae71ee1bfb",
+    "design69.py": "9c7767647cebcaa3f51738f10bb883b607e83bf0f4eb9216dab9d69f308a346c",
+    "kit69.py": "d1bb4c36a8206ba678bc34c0481b011083f19ceaf8f05a74767e05cc5ff01990",
+    "hinge69.py": "bf1fc6b1888855a0f484141b38be546dd7545d582e5c2ace74f75017b72eda5f",
+    "checks69.py": "2f5ee4bddd128fc0080d98092db00df250cfd23736d2bfec30759fdd5fd55500",
+    "sections69.py": "cdcfc61f8f1d57e1e5e0327dd511d98c1fa8e8eb5261fda9d2d6f8ca8095aaa5",
+    "Key_Carrier-assembly.stl": "1363f07f6ea16b3bcf4b362e98b150e2af38128fc1312846442d57c3df3b2ee7",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+    "Touch_Paddle-assembly.stl": "bf04554e3ea2704c3dd376d577601adeb2cf87ed2e87846b867874ccd7248ed5",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422"
+  },
+  "trial_approved": true,
+  "physical_acceptance": false,
+  "verdict": "APPROVE ONE MONITORED COMPLETE-KIT FIT TRIAL",
+  "blockers": [],
+  "native_warning": {
+    "reviewed_archive_warnings": {
+      "fca1607aadaf84b8b6c5176cc064fe9f77db89d0d3053b8aad8926fda40d78ef": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+      "d940ca5edece23e9d80227a244c91824b01d685aa65abcbc0d07a055303a2b58": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    },
+    "evidence": "Both exact final archives have zero fully unsupported starts in every part and zero generated support moves. Five one-anchor carrier runs remain: four at inherited layer-11/layer-155 locations and one 3.012 mm inner perimeter near the right rail end at layer 155. Its four neighbouring loops retain two anchors. The final OP1 reviewer accepted this for a monitored trial. The former pocket-wall unsupported start and cheek-floor bridges/upper-ramp loops are absent. The general floating-regions notice does not identify a location; its trigger remains unproved."
+  },
+  "finding_dispositions": [
+    {
+      "id": 1,
+      "origin": "GPT-6.1 Sol",
+      "status": "fixed",
+      "issue": "Unsupported thin corner at the OP1 window",
+      "evidence": "The complete corner is cut away to board u 5.85; neither final native archive has an isolated start."
+    },
+    {
+      "id": 2,
+      "origin": "Claude Opus 5.5",
+      "status": "fixed",
+      "issue": "Thin necks beside the retainer posts",
+      "evidence": "Full-height stems span the complete notch. CAD minimum 4.266 mm2; deposited minima 3.760/3.774 mm2. Retained floor prints as one 0.2 mm layer. Exact retainer clears the published loading and far-end press poses; sideways force and fatigue remain unmeasured."
+    },
+    {
+      "id": 3,
+      "origin": "Claude Opus 5.5",
+      "status": "fixed",
+      "issue": "One-layer gap at the rear of the cheek buttresses",
+      "evidence": "Positive floor overlap remains; mechanical-sections.json and adjacent layer images bind both final archives."
+    },
+    {
+      "id": 4,
+      "origin": "Claude Opus 5.5",
+      "status": "fixed",
+      "issue": "Old ramp flake introduced while repairing the cheek gap",
+      "evidence": "Both cuts share Y 40.05, away from slicing planes. Both exact slices pass the cheek-layer gate, with no former low bridges or high ramp loops."
+    }
+  ],
+  "coverage": {
+    "native_loading_and_working_routes": 69,
+    "published_plug_poses": 282,
+    "retainer_loading_and_removal_poses": 50,
+    "all_parts_layer_check": true,
+    "manual_browser_playback": "Unavailable: browser debugger attachment failed. Source and automated guide continuity checks passed.",
+    "retained_review": "Unchanged pins, clips, post bar, socket backers and battery geometry retain earlier exact-source coverage; all twelve parts were re-sliced and their deposited routes, layers, bases and spacing checked again."
+  },
+  "per_part": {
+    "Key_Carrier": {
+      "source_sha256": "1363f07f6ea16b3bcf4b362e98b150e2af38128fc1312846442d57c3df3b2ee7",
+      "layers": 312,
+      "samples": 1901703,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    },
+    "Touch_Paddle": {
+      "source_sha256": "bf04554e3ea2704c3dd376d577601adeb2cf87ed2e87846b867874ccd7248ed5",
+      "layers": 49,
+      "samples": 310047,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    },
+    "OP1_Lid_Stop": {
+      "source_sha256": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+      "layers": 20,
+      "samples": 55930,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    },
+    "Hinge_Pin_Snug": {
+      "source_sha256": "3cfaebf87213c57d08cad6373e9e708051c1f549ea10225006272070edfd2d13",
+      "layers": 14,
+      "samples": 27778,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    },
+    "Pin_Clip": {
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "layers": 6,
+      "samples": 9882,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    },
+    "Pin_Clip_Spare": {
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "layers": 6,
+      "samples": 9877,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    },
+    "DFR_Clip_Left": {
+      "source_sha256": "5673825587a7da76de3c89abe0f0296aecd7edd5699cd576df5137b86413aee9",
+      "layers": 7,
+      "samples": 6328,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    },
+    "DFR_Clip_Right": {
+      "source_sha256": "50dbdcc8ec0c1f1acf55225e654ff0d0ede25a448bd0b8abe786c8892cc94e5c",
+      "layers": 7,
+      "samples": 6440,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    },
+    "Socket_Backer_Left": {
+      "source_sha256": "ebc19f67166f7b6017d509e52d9927dc74b169f8a889d406e79482e0634fd47e",
+      "layers": 8,
+      "samples": 55139,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    },
+    "Socket_Backer_Right": {
+      "source_sha256": "f8d8e6d95dda3a2c3f90da2f9be1bf61bb49dca64a11b99faa3124316efe9f39",
+      "layers": 8,
+      "samples": 33466,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    },
+    "Hinge_Pin": {
+      "source_sha256": "6f51c4e92b4560519ad5e7ce9b5dc08624ee227c7aecbc15d5d8ca896aaedc2f",
+      "layers": 13,
+      "samples": 26040,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    },
+    "DFR_Post_Bar": {
+      "source_sha256": "81bb4d85be4299a5010d55ee1bccfaef9263b9c0b369de3cef2640c057abad08",
+      "layers": 13,
+      "samples": 30992,
+      "fully_unsupported_starts": 0,
+      "layer_report": "layers.json",
+      "loading_and_working_routes": "fit.json",
+      "base_and_spacing_report": "separation-and-machine.json"
+    }
+  },
+  "selected_views": [
+    "tray.png",
+    "op1-seat-comparison.png",
+    "bridge-and-keeper-layers.png",
+    "reopened-bridge-and-keeper-layers.png"
+  ],
+  "accepted_limits": [
+    "The wider notch retains about 1.5 mm of each board end stop; back-stop overlap drops from 2.48 to 1.46 mm3 at the measured shift. Three sockets and pocket walls still locate the board.",
+    "The guard root sits near a far corner of the wire notch below the seat, outside checked plug/lead poses. The window/notch shoulders and end walls are functional geometry, not a proof of perfect cosmetic smoothness.",
+    "The rod bore matches the fitted R58 shape within 0.042 mm at 55 deposited stations; force and spring compliance cannot be inferred from the bore alone.",
+    "The hinge is closer to the board and its paddle end is 9.37 mm from the board edge, but the entire carrier stays the same length to retain the battery rail/platform.",
+    "The standard pin has 0.192 mm measured diametral clearance. The optional snug pin has negative conservative envelope clearance and must not be forced."
+  ],
+  "physical_checks": [
+    "Watch holder layers 11, 155 and the window roof near 168-186, plus the paddle barrel bridge. Inspect all twelve final part positions.",
+    "Cut the two battery-corner base ties before peeling without twisting against the spring root. Inspect retainer notch ends, paddle leg roots and the hinge bridge for damage.",
+    "Thread the real white plug from below beside the installed rod on the published route without force. Seat the board flat and check both end stops and the lead exit.",
+    "Fit the standard pin and clip, then fully seat the retainer with the paddle down. Test central, end and angled clicks and balanced hook retention.",
+    "Check rod sliding/rotational grip, battery insertion/removal and lead exit. Stop rather than force a jammed passage."
+  ],
+  "residual_unknowns": [
+    "Real white-plug dimensions and hand access",
+    "Printed rod grip and compliance",
+    "Printed strength, fatigue and comfort",
+    "Retainer seating and repeated click feel",
+    "Bridge sag and base removal",
+    "Saved timelapse playback",
+    "Exact trigger of the floating-regions notice"
+  ]
+}
