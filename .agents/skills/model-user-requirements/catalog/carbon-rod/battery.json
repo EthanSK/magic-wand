@@ -49,10 +49,23 @@
   },
   {
     "id": "battery-rail-pre-taper",
-    "status": "active",
+    "status": "superseded",
     "text": "Restore the integrated battery outer rail to its full pre-taper shape, retaining the lower battery support and the established removable fit. Keep unrelated current holder improvements.",
     "supersedes": [
       "battery-outer-taper"
     ]
+  },
+  {
+    "id": "battery-short-rail",
+    "status": "active",
+    "text": "Shorten the key holder above the hinge by lowering or shortening the battery rail to the portion needed for secure removable retention. The battery may protrude beyond the carrier. Preserve central insertion paths, pouch support and the already successful fitted battery friction without adding a separate cover.",
+    "supersedes": [
+      "battery-rail-pre-taper"
+    ]
+  },
+  {
+    "id": "r69-battery-result",
+    "status": "evidence",
+    "text": "The actual R69 battery slides into its integral holder well. The user does not need an additional battery cover."
   }
 ]
