@@ -1,8 +1,20 @@
 # R69 snug rod grip, short hinge, low retainer and a clean OP1 seat
 
-R69 answers the first fitted R68 print. Three parts change: the key holder, the touch paddle and the OP1 retainer. The battery rail, key positions, hinge pins, centre clip, post bar, board clips and backing strips are R68's. R69 passes the two native-slice checks described below. Physical fit is not yet verified.
+R69 answers the first fitted R68 print. Three parts change: the key holder, the touch paddle and the OP1 retainer. The battery rail, key positions, hinge pins, centre clip, post bar, board clips and backing strips are R68's. R69 passes the two native-slice checks described below. The assembled print is now a good fitted reference overall, with the limitations below.
 
 [View the assembly](../carbon-rod-holders/assembly/?version=r69&component=keys&view=pin_hinge) · [Holder](design69.py) · [Paddle and retainer](hinge69.py) · [CAD checks](checks69.py) · [Slice audit](audit69.py) · [Kit plate](kit69.py) · [Guide](guide69.py)
+
+## Fitted reference — 25 November 2026
+
+Preserve R69 as the good physically assembled baseline. The hinge and click feel much better, the battery slides in well, and the overall design was accepted. This is qualified user feedback, not a measurement of every clearance or proof of strength.
+
+Remaining observations: the touch board has some play on its locating posts; removing the sacrificial base beside the battery rail can tear a small hole from the carrier; and fitting the black key sockets is fiddly but was achieved. The thin-looking paddle-arm/barrel junction should be assessed for reinforcement. A shorter battery rail and closer key rows are requested for the next iteration, preserving the improved click.
+
+The manufacturer specifies **two nominal 3 mm mounting holes** on the [DFR0030 board](https://www.dfrobot.com/product-78.html/); no finished-hole tolerance is stated. R69 retains the earlier shaped posts (2.25 × 2.52 mm), deliberately narrower to accommodate uncertain hole spacing. Their fit is distinct from the hinge pin fit. A closer future fit must account for board pitch and printed PETG tolerances without forcing the board.
+
+The two hinge rods are alternative fits, not two required axles. The flat socket backing strips are optional temporary tools for supporting the black sockets while pressing the switches; they are not battery covers. The OP1 sliding retainer and touch-board two-post bar remain functional parts.
+
+For key assembly, the current guide seats and secures the prewired black sockets first, then presses in the switches from above while backing each socket from below. Keep pressure off the finger-guard beams. Remove temporary backing strips afterward.
 
 ## What changed and why
 

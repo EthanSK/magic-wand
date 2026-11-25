@@ -8,5 +8,15 @@
     "id": "touch-click-face",
     "status": "active",
     "text": "Use a flat thumb contact area on the centre mouse paddle so the same thumb can touch it and click the mouse switch."
+  },
+  {
+    "id": "dfrobot-post-fit",
+    "status": "active",
+    "text": "Size the touch-board locating posts for a snug removable fit in the purchased DFR0030 V2 mounting holes, with enough friction to prevent board wobble. Preserve successful post height and clip engagement; account for actual hole pitch, board tolerance and printed PETG fit without stressing the PCB."
+  },
+  {
+    "id": "dfrobot-hole-nominal",
+    "status": "evidence",
+    "text": "The DFRobot DFR0030 manufacturer product page specifies two nominal 3 mm mounting holes. No finished-hole tolerance is stated. R69 retains the earlier shaped locating posts, nominally 2.25 by 2.52 mm; the user reports board play in the fitted print. These posts are separate from the hinge pin and bore."
   }
 ]
