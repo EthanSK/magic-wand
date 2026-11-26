@@ -11,6 +11,7 @@
 
 ## Shared working rules
 
+- Always reuse the same relevant model chat/session as before by default, to save tokens and use cached input. Follow the installed `invoke-claude` skill's session-continuity guidance for Claude work; preserve an explicit model change and verify the actual session and model rather than starting a fresh design chat. User-requested — 2026-11-26.
 - Work directly on `main` for this project. Do not create worktrees unless Ethan explicitly asks for one. User-requested — 2026-10-24.
 - Commit and push completed, checked work after every natural step. Preserve unrelated staged and unstaged work; never force-push. A commit is not a claim of physical acceptance. User-requested — 2026-10-24.
 - Always commit all the wand 3D models and the code without Ethan having to ask, so they can be modified later. Keep the editable CAD sources and their regenerated print/viewer files together in each completed, checked commit, then push them to the shared repository. User-requested — 2026-10-24.

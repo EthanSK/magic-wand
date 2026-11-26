@@ -18,5 +18,15 @@
     "id": "dfrobot-hole-nominal",
     "status": "evidence",
     "text": "The DFRobot DFR0030 manufacturer product page specifies two nominal 3 mm mounting holes. No finished-hole tolerance is stated. R69 retains the earlier shaped locating posts, nominally 2.25 by 2.52 mm; the user reports board play in the fitted print. These posts are separate from the hinge pin and bore."
+  },
+  {
+    "id": "dfrobot-clip-preload",
+    "status": "active",
+    "text": "Revise the retaining clips together with the touch-board posts so the fitted board is held snugly without wobble, while remaining removable and avoiding PCB stress. Retain the current successful post height."
+  },
+  {
+    "id": "r70-touch-board-play",
+    "status": "evidence",
+    "text": "The fitted R70 touch board still wobbles around its locating posts and clips. The post height is satisfactory. The exact real finished-hole diameter, tolerance and contribution of clip play have not been measured."
   }
 ]
