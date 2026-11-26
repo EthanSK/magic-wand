@@ -1,0 +1,211 @@
+{
+  "revision": "R70",
+  "physical_fit_verified": false,
+  "rear_face_y_mm": {
+    "r69": 43.65,
+    "r70": 36.45
+  },
+  "behind_the_pin_line_mm": {
+    "r69": 11.35,
+    "r70": 4.15
+  },
+  "holder_length_and_print_height_mm": {
+    "r69": 62.5,
+    "r70": 55.3
+  },
+  "behind_the_touch_board_edge_mm": {
+    "r69": 17.42,
+    "r70": 10.22
+  },
+  "bearing_blocks": {
+    "r69": {
+      "left": {
+        "volume_mm3": 259.6,
+        "on_the_rear_face_mm2": 9.2,
+        "top_z_mm": 15.95
+      },
+      "right": {
+        "volume_mm3": 259.6,
+        "on_the_rear_face_mm2": 9.2,
+        "top_z_mm": 15.95
+      }
+    },
+    "r70": {
+      "left": {
+        "volume_mm3": 164.1,
+        "on_the_rear_face_mm2": 30.3,
+        "top_z_mm": 15.95
+      },
+      "right": {
+        "volume_mm3": 164.1,
+        "on_the_rear_face_mm2": 30.3,
+        "top_z_mm": 15.95
+      }
+    },
+    "wall_behind_each_open_bearing_mm": 1.0,
+    "wall_behind_the_pin_bore_mm": 2.28,
+    "shape": "plain prism on the rear face; R69 grew each block from a 45 degree buttress"
+  },
+  "rod": {
+    "zones": {
+      "front_ring": {
+        "r69": {
+          "y_mm": [
+            9.25,
+            19.75
+          ],
+          "bore_diameter_mm": [
+            7.796,
+            7.798
+          ],
+          "wrap_deg": [
+            66,
+            340
+          ]
+        },
+        "r70": {
+          "y_mm": [
+            9.25,
+            19.75
+          ],
+          "bore_diameter_mm": [
+            7.796,
+            7.798
+          ],
+          "wrap_deg": [
+            66,
+            340
+          ]
+        }
+      },
+      "saddle": {
+        "r69": {
+          "y_mm": [
+            20.25,
+            28.75
+          ],
+          "bore_diameter_mm": [
+            7.994,
+            8.39
+          ],
+          "wrap_deg": [
+            2,
+            134
+          ]
+        },
+        "r70": {
+          "y_mm": [
+            20.25,
+            28.75
+          ],
+          "bore_diameter_mm": [
+            7.994,
+            8.39
+          ],
+          "wrap_deg": [
+            2,
+            134
+          ]
+        }
+      },
+      "rear_ring": {
+        "r69": {
+          "y_mm": [
+            29.25,
+            31.75
+          ],
+          "bore_diameter_mm": [
+            7.994,
+            7.996
+          ],
+          "wrap_deg": [
+            342,
+            342
+          ]
+        },
+        "r70": {
+          "y_mm": [
+            29.25,
+            31.75
+          ],
+          "bore_diameter_mm": [
+            7.994,
+            7.996
+          ],
+          "wrap_deg": [
+            342,
+            342
+          ]
+        }
+      },
+      "behind": {
+        "r69": {
+          "y_mm": [
+            33.25,
+            35.25
+          ],
+          "bore_diameter_mm": [
+            8.548,
+            8.548
+          ],
+          "wrap_deg": [
+            344,
+            344
+          ]
+        },
+        "r70": {
+          "y_mm": [
+            33.25,
+            35.25
+          ],
+          "bore_diameter_mm": [
+            8.548,
+            8.548
+          ],
+          "wrap_deg": [
+            344,
+            344
+          ]
+        }
+      }
+    },
+    "largest_radius_change_in_front_of_the_mouth_mm": 0.0,
+    "mouth_mm": [
+      0.9,
+      0.33
+    ],
+    "rear_face_bore_mm": {
+      "r69": 9.9,
+      "r70": 9.178
+    },
+    "wall_round_the_mouth_at_the_rear_face_mm": 0.59,
+    "nominal_8mm_rod_overlap_mm3": {
+      "r69": 15.21631,
+      "r70": 15.21631
+    },
+    "removed": "R63 tapered rear socket and 7.35 mm of plain 8.55 mm bore; neither gripped the rod"
+  },
+  "not_measured": "grip of the printed rings on the bought rod; R69 printed and held with the same two rings",
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "meshes_sha256": {
+    "Key_Carrier-assembly.stl": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+    "Touch_Paddle-assembly.stl": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+    "DFR_Post_Bar-assembly.stl": "e544866c3fd064c5886ae45db7c2eb67309cc0a8dbdd7bf120e6ad896f21c269"
+  },
+  "carrier_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+  "generator_sha256": {
+    "design70.py": "1e582ec32abe51209b9a9bad08ea5354857db7512f27a7aebe6351984c884184",
+    "hinge70.py": "7b5a294e15bb9c0f1c36469591ad26e2e5e8d2c94c6f5cd9d8b59ced8ca5ad58",
+    "kit70.py": "c5b1a7b228aa1ddf015a64fc042a205af05594debbdf83751dbf1f93df847336"
+  }
+}

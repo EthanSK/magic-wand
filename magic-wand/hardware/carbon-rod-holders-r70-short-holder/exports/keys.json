@@ -1,0 +1,425 @@
+{
+  "revision": "R70",
+  "physical_fit_verified": false,
+  "right_key_shift_mm": 2.0,
+  "row_distance_centre_to_centre_mm": {
+    "right": {
+      "r69": 19.95,
+      "r70": 17.95
+    },
+    "left": {
+      "r69": 19.95,
+      "r70": 19.95
+    }
+  },
+  "gap_between_cap_travel_envelopes_mm": {
+    "right": {
+      "r69": 2.55,
+      "r70": 0.55
+    },
+    "left": {
+      "r69": 2.1,
+      "r70": 2.1
+    }
+  },
+  "key_poses_checked": 336,
+  "key_obstructions": [],
+  "fitted_switches_and_sockets_to_holder_mm3": {
+    "switch_0": 4e-05,
+    "socket_0": 0.0,
+    "switch_2": 1e-05,
+    "socket_2": 0.0,
+    "switch_3": 0.0,
+    "socket_3": 0.0,
+    "switch_4": 0.0,
+    "socket_4": 2e-05
+  },
+  "socket_backer_sweeps_mm3": {
+    "left": 0.0,
+    "right": 0.0
+  },
+  "left_key": {
+    "rows": [
+      {
+        "shift_mm": 0.1,
+        "into_fixed_plastic_mm3": 0.00113,
+        "into_lower_key_spaces_mm3": 0.0,
+        "route": "key_3_soldered_socket_dogleg",
+        "where_mm": [
+          -17.66,
+          12.28,
+          0.42,
+          -17.33,
+          12.29,
+          1.47
+        ]
+      },
+      {
+        "shift_mm": 0.2,
+        "into_fixed_plastic_mm3": 0.10538,
+        "into_lower_key_spaces_mm3": 0.0,
+        "route": "key_3_maximum_socket_loading",
+        "where_mm": [
+          -20.8,
+          11.45,
+          0.05,
+          -19.03,
+          11.82,
+          1.61
+        ]
+      },
+      {
+        "shift_mm": 0.3,
+        "into_fixed_plastic_mm3": 0.33915,
+        "into_lower_key_spaces_mm3": 0.0,
+        "route": "key_3_maximum_socket_loading",
+        "where_mm": [
+          -21.26,
+          11.35,
+          0.02,
+          -18.9,
+          11.85,
+          1.75
+        ]
+      },
+      {
+        "shift_mm": 0.5,
+        "into_fixed_plastic_mm3": 1.15542,
+        "into_lower_key_spaces_mm3": 0.0,
+        "route": "key_3_maximum_socket_loading",
+        "where_mm": [
+          -22.29,
+          11.15,
+          -0.0,
+          -16.73,
+          12.74,
+          1.81
+        ]
+      },
+      {
+        "shift_mm": 1.0,
+        "into_fixed_plastic_mm3": 5.20387,
+        "into_lower_key_spaces_mm3": 0.0,
+        "route": "key_3_soldered_socket_dogleg",
+        "where_mm": [
+          -23.65,
+          10.65,
+          -0.35,
+          -17.33,
+          12.29,
+          1.89
+        ]
+      },
+      {
+        "shift_mm": 1.5,
+        "into_fixed_plastic_mm3": 11.36577,
+        "into_lower_key_spaces_mm3": 1.22338,
+        "route": "key_3_soldered_socket_dogleg",
+        "where_mm": [
+          -24.07,
+          10.15,
+          -0.48,
+          -17.33,
+          12.29,
+          2.12
+        ],
+        "pair_route": "key_3_socket_tape_zone"
+      },
+      {
+        "shift_mm": 2.0,
+        "into_fixed_plastic_mm3": 17.37263,
+        "into_lower_key_spaces_mm3": 3.01193,
+        "pair_route": "key_3_socket_tape_zone",
+        "route": "key_3_soldered_socket_dogleg",
+        "where_mm": [
+          -24.18,
+          9.65,
+          -0.51,
+          -17.33,
+          12.29,
+          2.13
+        ]
+      }
+    ],
+    "largest_free_shift_tested_mm": 0.1
+  },
+  "left_key_reading": "The left upper socket is loaded prewired from the outer edge, under the deck. Moved toward the lower row, that path enters the left guard, which is rooted there. Following the right key would need the left guard reshaped.",
+  "kept_in_place": {
+    "right_guard_arm_root_on_the_deck_mm2": {
+      "r69": 6.52,
+      "r70": 6.52,
+      "arm_section_mm2": 6.53
+    },
+    "deck_floor_under_the_moved_latch_pass_mm": 1.08,
+    "latch_pass_y_mm": {
+      "r69": [
+        22,
+        25.15
+      ],
+      "r70": [
+        20.0,
+        23.15
+      ]
+    },
+    "plastic_inside_the_op1_connector_window_mm3": {
+      "r69": 0.04674,
+      "r70": 0.04678
+    },
+    "plug_margin_on_the_r69_route_mm": {
+      "route": {
+        "margin_mm": 0.996,
+        "centre_world_xy_mm": [
+          8.0,
+          12.5
+        ],
+        "wide_side_yaw_deg": 0.0
+      },
+      "r69": 0.996,
+      "r70": 0.996
+    },
+    "room_outboard_of_the_plug_path_mm": {
+      "r69": {
+        "z-3.5": 25.0,
+        "z-2.5": 25.0,
+        "z-1.5": 25.0,
+        "z-0.5": 25.0,
+        "z0.5": 8.4,
+        "z1.5": 7.19,
+        "z2.5": 6.5,
+        "z3.5": 6.67,
+        "z4.5": 25.0,
+        "z5.5": 4.23,
+        "z6.5": 25.0
+      },
+      "r70": {
+        "z-3.5": 25.0,
+        "z-2.5": 25.0,
+        "z-1.5": 25.0,
+        "z-0.5": 25.0,
+        "z0.5": 8.4,
+        "z1.5": 7.19,
+        "z2.5": 6.5,
+        "z3.5": 6.67,
+        "z4.5": 25.0,
+        "z5.5": 4.23,
+        "z6.5": 25.0
+      }
+    },
+    "op1_seat_support_mm2": {
+      "z8.8": {
+        "r69": {
+          "whole": 173.42,
+          "left": 106.64,
+          "right": 100.15,
+          "switch_left": 23.43,
+          "switch_right": 22.61,
+          "plunger": 2.47
+        },
+        "r70": {
+          "whole": 173.42,
+          "left": 106.64,
+          "right": 100.15,
+          "switch_left": 23.43,
+          "switch_right": 22.61,
+          "plunger": 2.47
+        }
+      },
+      "z9.05": {
+        "r69": {
+          "whole": 173.42,
+          "left": 106.64,
+          "right": 100.15,
+          "switch_left": 23.43,
+          "switch_right": 22.61,
+          "plunger": 2.47
+        },
+        "r70": {
+          "whole": 173.42,
+          "left": 106.64,
+          "right": 100.15,
+          "switch_left": 23.43,
+          "switch_right": 22.61,
+          "plunger": 2.47
+        }
+      },
+      "z9.3": {
+        "r69": {
+          "whole": 173.39,
+          "left": 102.37,
+          "right": 95.36,
+          "switch_left": 23.43,
+          "switch_right": 22.61,
+          "plunger": 2.47
+        },
+        "r70": {
+          "whole": 173.39,
+          "left": 102.37,
+          "right": 95.36,
+          "switch_left": 23.43,
+          "switch_right": 22.61,
+          "plunger": 2.47
+        }
+      }
+    },
+    "three_socket_holes": {
+      "r69": [
+        {
+          "board_y": -3.13,
+          "world_xy": [
+            -0.696,
+            -6.751
+          ],
+          "hardware_radius": 1.3,
+          "z9.05": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.954
+          },
+          "z8.3": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.954
+          },
+          "z7.6": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.954
+          }
+        },
+        {
+          "board_y": 1.95,
+          "world_xy": [
+            1.083,
+            -1.993
+          ],
+          "hardware_radius": 1.3,
+          "z9.05": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          },
+          "z8.3": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          },
+          "z7.6": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          }
+        },
+        {
+          "board_y": 7.03,
+          "world_xy": [
+            2.862,
+            2.765
+          ],
+          "hardware_radius": 1.3,
+          "z9.05": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          },
+          "z8.3": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          },
+          "z7.6": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          }
+        }
+      ],
+      "r70": [
+        {
+          "board_y": -3.13,
+          "world_xy": [
+            -0.696,
+            -6.751
+          ],
+          "hardware_radius": 1.3,
+          "z9.05": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.954
+          },
+          "z8.3": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.954
+          },
+          "z7.6": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.954
+          }
+        },
+        {
+          "board_y": 1.95,
+          "world_xy": [
+            1.083,
+            -1.993
+          ],
+          "hardware_radius": 1.3,
+          "z9.05": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          },
+          "z8.3": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          },
+          "z7.6": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          }
+        },
+        {
+          "board_y": 7.03,
+          "world_xy": [
+            2.862,
+            2.765
+          ],
+          "hardware_radius": 1.3,
+          "z9.05": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          },
+          "z8.3": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          },
+          "z7.6": {
+            "clear_radius": 1.739,
+            "plastic_in_1mm_ring_fraction": 0.97
+          }
+        }
+      ]
+    },
+    "seated_op1_hardware_to_holder_mm3": {
+      "board": 0.0,
+      "sockets": 0.0,
+      "housing": 0.0,
+      "plug": 0.0,
+      "op1_wire": 0.0
+    }
+  },
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "meshes_sha256": {
+    "Key_Carrier-assembly.stl": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+    "Touch_Paddle-assembly.stl": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+    "DFR_Post_Bar-assembly.stl": "e544866c3fd064c5886ae45db7c2eb67309cc0a8dbdd7bf120e6ad896f21c269"
+  },
+  "carrier_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+  "generator_sha256": {
+    "design70.py": "1e582ec32abe51209b9a9bad08ea5354857db7512f27a7aebe6351984c884184",
+    "hinge70.py": "7b5a294e15bb9c0f1c36469591ad26e2e5e8d2c94c6f5cd9d8b59ced8ca5ad58",
+    "kit70.py": "c5b1a7b228aa1ddf015a64fc042a205af05594debbdf83751dbf1f93df847336"
+  }
+}

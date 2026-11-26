@@ -1,0 +1,617 @@
+{
+  "archive_sha256": "c48c969ec84d18c7d9840b0a95dc8131d8b39a678f4103219399eefaeb8980ba",
+  "paddle_archive_sha256": "c48c969ec84d18c7d9840b0a95dc8131d8b39a678f4103219399eefaeb8980ba",
+  "collet": null,
+  "rod_min_clear_diameter_mm": 7.576,
+  "rod_limiting_feature": "Outer wall",
+  "rod_limiting_layer_top_mm": 26.6,
+  "rod_layers_under_8mm": 78,
+  "rod_layers_sampled": 152,
+  "cheek_unloaded_max_diameter_mm": 3.679,
+  "paddle_unloaded_max_diameter_mm": 3.364,
+  "assembled_clear_diameter_mm": 3.364,
+  "cheek_at_shared_line_mm": 3.592,
+  "paddle_at_shared_line_mm": 3.364,
+  "shared_insertion_yz_mm": [
+    32.3,
+    12.7
+  ],
+  "limiting_beads": [
+    {
+      "part": "Key_Carrier",
+      "layer_top_mm": 5.6,
+      "layer_height_mm": 0.2,
+      "bead_width_mm": 0.34,
+      "assembly_bead_centre_at_layer_top_mm": [
+        10.802,
+        30.85,
+        11.18
+      ],
+      "feature": "Outer wall"
+    },
+    {
+      "part": "Touch_Paddle",
+      "layer_top_mm": 5.2,
+      "layer_height_mm": 0.2,
+      "bead_width_mm": 0.42,
+      "assembly_bead_centre_at_layer_top_mm": [
+        1.21,
+        31.098,
+        14.1
+      ],
+      "feature": "Outer wall"
+    }
+  ],
+  "standard_pin_mm": 3.0,
+  "optional_snug_pin_mm": 3.2,
+  "method": "Finite sampled common insertion axes, all toolpath bead types, full layer heights and 0.06 mm XY sampling allowance. Sag and print variation unmeasured.",
+  "fresh_pins": {
+    "archive_sha256": "c48c969ec84d18c7d9840b0a95dc8131d8b39a678f4103219399eefaeb8980ba",
+    "straight_shaft_envelope_diameter_mm": {
+      "Hinge_Pin": 3.172
+    }
+  },
+  "clearance_over_Hinge_Pin_mm": 0.192,
+  "rod_grip_rings": {
+    "expected_tightest_print_height_mm": [
+      16.699999999999996,
+      27.199999999999996
+    ],
+    "profile": {
+      "reference": "R58 fitted grip, including its short saddle contact",
+      "all_bead_types": true,
+      "bead_sampling_allowance_mm": 0.06,
+      "max_diameter_deficit_mm": 0.3,
+      "layers": [
+        {
+          "layer_top_mm": 4.2,
+          "assembly_y_mm": 32.35,
+          "printed_diameter_mm": 7.998,
+          "r58_nominal_diameter_mm": 7.996,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 4.4,
+          "assembly_y_mm": 32.15,
+          "printed_diameter_mm": 7.849,
+          "r58_nominal_diameter_mm": 7.996,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 4.6,
+          "assembly_y_mm": 31.95,
+          "printed_diameter_mm": 7.838,
+          "r58_nominal_diameter_mm": 7.996,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 4.8,
+          "assembly_y_mm": 31.75,
+          "printed_diameter_mm": 7.837,
+          "r58_nominal_diameter_mm": 7.996,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 5.0,
+          "assembly_y_mm": 31.55,
+          "printed_diameter_mm": 7.835,
+          "r58_nominal_diameter_mm": 7.996,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 5.2,
+          "assembly_y_mm": 31.35,
+          "printed_diameter_mm": 7.838,
+          "r58_nominal_diameter_mm": 7.996,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 5.4,
+          "assembly_y_mm": 31.15,
+          "printed_diameter_mm": 7.834,
+          "r58_nominal_diameter_mm": 7.995,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 5.6,
+          "assembly_y_mm": 30.95,
+          "printed_diameter_mm": 7.833,
+          "r58_nominal_diameter_mm": 7.995,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 5.8,
+          "assembly_y_mm": 30.75,
+          "printed_diameter_mm": 7.833,
+          "r58_nominal_diameter_mm": 7.995,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 6.0,
+          "assembly_y_mm": 30.55,
+          "printed_diameter_mm": 7.834,
+          "r58_nominal_diameter_mm": 7.995,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 6.2,
+          "assembly_y_mm": 30.35,
+          "printed_diameter_mm": 7.833,
+          "r58_nominal_diameter_mm": 7.995,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 6.4,
+          "assembly_y_mm": 30.15,
+          "printed_diameter_mm": 7.826,
+          "r58_nominal_diameter_mm": 7.995,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 6.6,
+          "assembly_y_mm": 29.95,
+          "printed_diameter_mm": 7.863,
+          "r58_nominal_diameter_mm": 7.995,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 6.8,
+          "assembly_y_mm": 29.75,
+          "printed_diameter_mm": 7.857,
+          "r58_nominal_diameter_mm": 7.995,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 7.0,
+          "assembly_y_mm": 29.55,
+          "printed_diameter_mm": 7.861,
+          "r58_nominal_diameter_mm": 7.995,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 7.2,
+          "assembly_y_mm": 29.35,
+          "printed_diameter_mm": 7.831,
+          "r58_nominal_diameter_mm": 7.995,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 7.4,
+          "assembly_y_mm": 29.15,
+          "printed_diameter_mm": 7.9,
+          "r58_nominal_diameter_mm": 7.995,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 14.6,
+          "assembly_y_mm": 21.95,
+          "printed_diameter_mm": 7.874,
+          "r58_nominal_diameter_mm": 7.996,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 14.8,
+          "assembly_y_mm": 21.75,
+          "printed_diameter_mm": 7.825,
+          "r58_nominal_diameter_mm": 7.996,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 15.0,
+          "assembly_y_mm": 21.55,
+          "printed_diameter_mm": 7.855,
+          "r58_nominal_diameter_mm": 7.996,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 15.2,
+          "assembly_y_mm": 21.35,
+          "printed_diameter_mm": 7.854,
+          "r58_nominal_diameter_mm": 7.996,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 15.4,
+          "assembly_y_mm": 21.15,
+          "printed_diameter_mm": 7.838,
+          "r58_nominal_diameter_mm": 7.996,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 15.6,
+          "assembly_y_mm": 20.95,
+          "printed_diameter_mm": 7.842,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 16.6,
+          "assembly_y_mm": 19.95,
+          "printed_diameter_mm": 7.649,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 16.8,
+          "assembly_y_mm": 19.75,
+          "printed_diameter_mm": 7.623,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 17.0,
+          "assembly_y_mm": 19.55,
+          "printed_diameter_mm": 7.649,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 17.2,
+          "assembly_y_mm": 19.35,
+          "printed_diameter_mm": 7.647,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 17.4,
+          "assembly_y_mm": 19.15,
+          "printed_diameter_mm": 7.634,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 17.6,
+          "assembly_y_mm": 18.95,
+          "printed_diameter_mm": 7.63,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 17.8,
+          "assembly_y_mm": 18.75,
+          "printed_diameter_mm": 7.654,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 18.0,
+          "assembly_y_mm": 18.55,
+          "printed_diameter_mm": 7.629,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 18.2,
+          "assembly_y_mm": 18.35,
+          "printed_diameter_mm": 7.655,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 18.4,
+          "assembly_y_mm": 18.15,
+          "printed_diameter_mm": 7.647,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 18.6,
+          "assembly_y_mm": 17.95,
+          "printed_diameter_mm": 7.632,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 18.8,
+          "assembly_y_mm": 17.75,
+          "printed_diameter_mm": 7.637,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 19.0,
+          "assembly_y_mm": 17.55,
+          "printed_diameter_mm": 7.634,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 19.2,
+          "assembly_y_mm": 17.35,
+          "printed_diameter_mm": 7.637,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 19.4,
+          "assembly_y_mm": 17.15,
+          "printed_diameter_mm": 7.632,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 19.6,
+          "assembly_y_mm": 16.95,
+          "printed_diameter_mm": 7.631,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 19.8,
+          "assembly_y_mm": 16.75,
+          "printed_diameter_mm": 7.641,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 20.0,
+          "assembly_y_mm": 16.55,
+          "printed_diameter_mm": 7.637,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 20.2,
+          "assembly_y_mm": 16.35,
+          "printed_diameter_mm": 7.627,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 20.4,
+          "assembly_y_mm": 16.15,
+          "printed_diameter_mm": 7.635,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 20.6,
+          "assembly_y_mm": 15.95,
+          "printed_diameter_mm": 7.645,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 20.8,
+          "assembly_y_mm": 15.75,
+          "printed_diameter_mm": 7.634,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 21.0,
+          "assembly_y_mm": 15.55,
+          "printed_diameter_mm": 7.638,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 21.2,
+          "assembly_y_mm": 15.35,
+          "printed_diameter_mm": 7.633,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 21.4,
+          "assembly_y_mm": 15.15,
+          "printed_diameter_mm": 7.641,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 21.6,
+          "assembly_y_mm": 14.95,
+          "printed_diameter_mm": 7.641,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 21.8,
+          "assembly_y_mm": 14.75,
+          "printed_diameter_mm": 7.624,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 22.0,
+          "assembly_y_mm": 14.55,
+          "printed_diameter_mm": 7.633,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 22.2,
+          "assembly_y_mm": 14.35,
+          "printed_diameter_mm": 7.645,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 22.4,
+          "assembly_y_mm": 14.15,
+          "printed_diameter_mm": 7.628,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 22.6,
+          "assembly_y_mm": 13.95,
+          "printed_diameter_mm": 7.634,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 22.8,
+          "assembly_y_mm": 13.75,
+          "printed_diameter_mm": 7.624,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 23.0,
+          "assembly_y_mm": 13.55,
+          "printed_diameter_mm": 7.64,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 23.2,
+          "assembly_y_mm": 13.35,
+          "printed_diameter_mm": 7.638,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 23.4,
+          "assembly_y_mm": 13.15,
+          "printed_diameter_mm": 7.641,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 23.6,
+          "assembly_y_mm": 12.95,
+          "printed_diameter_mm": 7.636,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 23.8,
+          "assembly_y_mm": 12.75,
+          "printed_diameter_mm": 7.639,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 24.0,
+          "assembly_y_mm": 12.55,
+          "printed_diameter_mm": 7.993,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 24.2,
+          "assembly_y_mm": 12.35,
+          "printed_diameter_mm": 7.641,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 24.4,
+          "assembly_y_mm": 12.15,
+          "printed_diameter_mm": 7.645,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 24.6,
+          "assembly_y_mm": 11.95,
+          "printed_diameter_mm": 7.632,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 24.8,
+          "assembly_y_mm": 11.75,
+          "printed_diameter_mm": 7.641,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 25.0,
+          "assembly_y_mm": 11.55,
+          "printed_diameter_mm": 7.633,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 25.2,
+          "assembly_y_mm": 11.35,
+          "printed_diameter_mm": 7.597,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 25.4,
+          "assembly_y_mm": 11.15,
+          "printed_diameter_mm": 7.616,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 25.6,
+          "assembly_y_mm": 10.95,
+          "printed_diameter_mm": 7.63,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 25.8,
+          "assembly_y_mm": 10.75,
+          "printed_diameter_mm": 7.631,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 26.0,
+          "assembly_y_mm": 10.55,
+          "printed_diameter_mm": 7.637,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 26.2,
+          "assembly_y_mm": 10.35,
+          "printed_diameter_mm": 7.632,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 26.4,
+          "assembly_y_mm": 10.15,
+          "printed_diameter_mm": 7.62,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 26.6,
+          "assembly_y_mm": 9.95,
+          "printed_diameter_mm": 7.576,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 26.8,
+          "assembly_y_mm": 9.75,
+          "printed_diameter_mm": 7.584,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 27.0,
+          "assembly_y_mm": 9.55,
+          "printed_diameter_mm": 7.641,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 27.2,
+          "assembly_y_mm": 9.35,
+          "printed_diameter_mm": 7.64,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        },
+        {
+          "layer_top_mm": 27.4,
+          "assembly_y_mm": 9.15,
+          "printed_diameter_mm": 7.814,
+          "r58_nominal_diameter_mm": 7.799,
+          "passes": true
+        }
+      ],
+      "passes": true
+    },
+    "tightest_in_front_ring": true
+  }
+}

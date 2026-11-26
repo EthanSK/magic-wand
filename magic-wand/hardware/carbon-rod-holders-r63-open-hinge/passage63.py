@@ -51,7 +51,11 @@ def shaft_envelopes(folder):
     paths, _ = read_native(folder / ARCHIVE)
     layout = json.loads((folder / 'layout.frame.json').read_text())['parts']
     measured = {}
-    for name in ('Hinge_Pin', 'Hinge_Pin_Snug'):
+    # R70 deliberately omits the alternative-fit pin. Measure only actual pins,
+    # retaining the standard-pin witness rather than inventing a missing part.
+    # Found and fixed by GPT-6.1 Sol.
+    assert 'Hinge_Pin' in layout
+    for name in (n for n in ('Hinge_Pin', 'Hinge_Pin_Snug') if n in layout):
         pose = np.asarray(layout[name]['assembly_to_machine'])
         assert np.allclose(pose[:3,:3], np.eye(3))
         x, y, z, _ = pose @ [0, r61.AXIS, r61.m.PIN_Z, 1]

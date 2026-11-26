@@ -1,0 +1,98 @@
+{
+  "revision": "R70",
+  "archive_sha256": "4976f9b8142ad68d809bfc0810e6486007f9e89bd5b6a2898e534ea99c70cd3c",
+  "reopened_sha256": "c48c969ec84d18c7d9840b0a95dc8131d8b39a678f4103219399eefaeb8980ba",
+  "layout_sha256": "4b00e2e75cc4a4ac1ced9290c1c9dc34f5cc9e1df8dd273665b01724e15873ef",
+  "trial_approved": true,
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "author_models": [
+    "Claude Fable 5.2",
+    "GPT-6.1 Sol"
+  ],
+  "independent_reviewer": "Claude Opus 5.5",
+  "verdict": "No printability blocker; monitored full-part fit trial. Production fit, force, strength and release remain unverified.",
+  "per_part": {
+    "Key_Carrier": {
+      "source_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+      "disposition": "Monitored fit trial"
+    },
+    "Touch_Paddle": {
+      "source_sha256": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798",
+      "disposition": "Monitored fit trial"
+    },
+    "OP1_Lid_Stop": {
+      "source_sha256": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+      "disposition": "Unchanged fitting; include fresh part on this complete plate"
+    },
+    "Pin_Clip": {
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "disposition": "Unchanged fitting; include fresh part on this complete plate"
+    },
+    "Pin_Clip_Spare": {
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "disposition": "Unchanged fitting; include fresh part on this complete plate"
+    },
+    "DFR_Clip_Left": {
+      "source_sha256": "5673825587a7da76de3c89abe0f0296aecd7edd5699cd576df5137b86413aee9",
+      "disposition": "Unchanged fitting; include fresh part on this complete plate"
+    },
+    "DFR_Clip_Right": {
+      "source_sha256": "50dbdcc8ec0c1f1acf55225e654ff0d0ede25a448bd0b8abe786c8892cc94e5c",
+      "disposition": "Unchanged fitting; include fresh part on this complete plate"
+    },
+    "Hinge_Pin": {
+      "source_sha256": "6f51c4e92b4560519ad5e7ce9b5dc08624ee227c7aecbc15d5d8ca896aaedc2f",
+      "disposition": "Unchanged fitting; include fresh part on this complete plate"
+    },
+    "DFR_Post_Bar": {
+      "source_sha256": "e544866c3fd064c5886ae45db7c2eb67309cc0a8dbdd7bf120e6ad896f21c269",
+      "disposition": "Monitored fit trial"
+    }
+  },
+  "native_warning": {
+    "reviewed_archive_warnings": {
+      "4976f9b8142ad68d809bfc0810e6486007f9e89bd5b6a2898e534ea99c70cd3c": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+      "c48c969ec84d18c7d9840b0a95dc8131d8b39a678f4103219399eefaeb8980ba": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    },
+    "evidence": "Same coarse floating-regions notice as the fitted R69 archive. Both final native audits contain zero unsupported starts or support moves; all openings and loading paths checked against deposited beads. Warning trigger is not proved."
+  },
+  "findings": {
+    "F1": {
+      "status": "closed",
+      "evidence": "Upright flat-crest posts: native enclosing diameter 3.049 mm at seat, 2.728 at entry. Nominal 3 mm friction target only; 3.2 mm leaves 0.151 mm clearance."
+    },
+    "F2": {
+      "status": "closed",
+      "evidence": "All nine frame hashes match their sources; all five changed/reused exports reproduce byte for byte."
+    },
+    "F3": {
+      "status": "closed",
+      "evidence": "Primary and reopened reports, mechanical layers, seat and supplemental paths are complete and hash-bound."
+    },
+    "F4": {
+      "status": "physical trial",
+      "evidence": "Aligned latch-pass minimum section ratio 0.9481; fixed guard-root window 0.8921. Beam path and CAD attachment retained, moved key leaves 1.08 mm deck. Printed strength unmeasured."
+    },
+    "F5": {
+      "status": "physical trial",
+      "evidence": "Upright post root about 3.77 mm2 vs 4.06; neck 2.43 vs 2.46. Loads cross layer lines. Actual board-hole diameter/pitch and insertion force unknown."
+    },
+    "F6": {
+      "status": "closed; comfort trial",
+      "evidence": "Exposed rear bank rims have a 0.6 mm round. No new unsupported starts; full base bond 23.96 mm2 vs fitted R69 24.34. Guard/battery/rib roots preserved."
+    }
+  },
+  "physical_trials": [
+    "Adhesion and battery-corner base release",
+    "Right guard deck strength and lower-edge comfort",
+    "Battery retention with 14.55 mm of rail",
+    "Actual board-hole pitch/diameter, straight seating force and upright post/clip strength"
+  ],
+  "selected_views": [
+    "critical-native-layers.png",
+    "op1-seat-comparison.png",
+    "tray.png"
+  ],
+  "viewer_check": "Standalone Chrome: R70 detail render, Play reaching end, complete 500 mm rod bare and final assembled poses; no visible error. Obsolete whole-rod collet metadata removed; 12 R70 guide tests pass."
+}

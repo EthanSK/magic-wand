@@ -1,0 +1,97 @@
+{
+  "archive_sha256": "c48c969ec84d18c7d9840b0a95dc8131d8b39a678f4103219399eefaeb8980ba",
+  "plane_below_board_mm": 0.1,
+  "versions": {
+    "R63": {
+      "area_mm2": {
+        "whole": 158.67,
+        "left": 79.32,
+        "right": 79.35,
+        "switch_left": 22.76,
+        "switch_right": 22.3
+      },
+      "plunger_inside_support_polygon": true,
+      "nearest_support_to_plunger_mm": 0.0,
+      "socket_rings": [
+        {
+          "board_y": -3.13,
+          "plastic_fraction": 0.711
+        },
+        {
+          "board_y": 1.95,
+          "plastic_fraction": 0.946
+        },
+        {
+          "board_y": 7.03,
+          "plastic_fraction": 0.939
+        }
+      ],
+      "direct_plunger_contact_mm2": 2.41
+    },
+    "R64": {
+      "area_mm2": {
+        "whole": 72.85,
+        "left": 72.64,
+        "right": 0.21,
+        "switch_left": 16.8,
+        "switch_right": 0.0
+      },
+      "plunger_inside_support_polygon": true,
+      "nearest_support_to_plunger_mm": 1.201,
+      "socket_rings": [
+        {
+          "board_y": -3.13,
+          "plastic_fraction": 0.257
+        },
+        {
+          "board_y": 1.95,
+          "plastic_fraction": 0.272
+        },
+        {
+          "board_y": 7.03,
+          "plastic_fraction": 0.192
+        }
+      ],
+      "direct_plunger_contact_mm2": 0.21
+    },
+    "R70": {
+      "area_mm2": {
+        "whole": 172.4,
+        "left": 88.93,
+        "right": 83.46,
+        "switch_left": 23.23,
+        "switch_right": 22.34
+      },
+      "plunger_inside_support_polygon": true,
+      "nearest_support_to_plunger_mm": 0.0,
+      "socket_rings": [
+        {
+          "board_y": -3.13,
+          "plastic_fraction": 0.76
+        },
+        {
+          "board_y": 1.95,
+          "plastic_fraction": 0.948
+        },
+        {
+          "board_y": 7.03,
+          "plastic_fraction": 0.941
+        }
+      ],
+      "direct_plunger_contact_mm2": 2.41
+    }
+  },
+  "known_bad_r64_rejected": true,
+  "passes": true,
+  "audited_revision": "R70",
+  "r70_fraction_of_r63": {
+    "whole": 1.087,
+    "left": 1.121,
+    "right": 1.052,
+    "switch_left": 1.021,
+    "switch_right": 1.002
+  },
+  "plot_label_aliases": {
+    "R69": "R70 (the current audited archive)"
+  }
+}

@@ -1,0 +1,461 @@
+{
+  "parts": {
+    "Key_Carrier": {
+      "source": "Key_Carrier-assembly.stl",
+      "source_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          50.88486576080322
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          149.9156665802002
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          36.45013427734375
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          96,
+          44
+        ],
+        "keep_clear": [
+          [
+            3.9,
+            -2.5,
+            12.0,
+            7.3
+          ],
+          [
+            -15.0,
+            9.0,
+            16.0,
+            60.0
+          ],
+          [
+            -23.49,
+            3.17,
+            -9.299999999999999,
+            7.359999999999999
+          ]
+        ],
+        "ties": [
+          {
+            "face": "+y",
+            "at": -16.4,
+            "height": 2.0
+          },
+          {
+            "face": "+y",
+            "at": -23.1,
+            "height": 1.8,
+            "neck": 0.84
+          },
+          {
+            "face": "-y",
+            "at": -23.1,
+            "height": 1.8,
+            "neck": 0.84
+          },
+          {
+            "face": "-y",
+            "at": -7.4,
+            "height": 4.8
+          },
+          {
+            "face": "-y",
+            "at": 13.0,
+            "height": 4.8
+          }
+        ],
+        "fin_thickness": 1.7,
+        "holder_release": "R55"
+      }
+    },
+    "Touch_Paddle": {
+      "source": "Touch_Paddle-assembly.stl",
+      "source_sha256": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          126.12500057220458
+        ],
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          145.99996900558472
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          19.30017852783203
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          75,
+          60
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0,
+        "wire_exit": true
+      }
+    },
+    "OP1_Lid_Stop": {
+      "source": "OP1_Lid_Stop-assembly.stl",
+      "source_sha256": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          30.58248996734619
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          101.44474849700927
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.149999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          29,
+          39
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.1
+      }
+    },
+    "Pin_Clip": {
+      "source": "../../carbon-rod-holders-r61-top-battery/exports/Pin_Clip-assembly.stl",
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          85.25
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          38.99000024795532
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.6000000238418579
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          15,
+          15
+        ],
+        "ties": [
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "Pin_Clip_Spare": {
+      "source": "../../carbon-rod-holders-r61-top-battery/exports/Pin_Clip-assembly.stl",
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          105.25
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          38.99000024795532
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.6000000238418579
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          15,
+          15
+        ],
+        "ties": [
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "DFR_Clip_Left": {
+      "source": "../../carbon-rod-holders-r59-flipped-guard/exports/DFR_Clip_Left-assembly.stl",
+      "source_sha256": "5673825587a7da76de3c89abe0f0296aecd7edd5699cd576df5137b86413aee9",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          163.75
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          78.46949005126953
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          12,
+          12
+        ],
+        "ties": [
+          [
+            0,
+            -1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          1
+        ]
+      }
+    },
+    "DFR_Clip_Right": {
+      "source": "../../carbon-rod-holders-r59-flipped-guard/exports/DFR_Clip_Right-assembly.stl",
+      "source_sha256": "50dbdcc8ec0c1f1acf55225e654ff0d0ede25a448bd0b8abe786c8892cc94e5c",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          92.25
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          86.06949005126953
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          12,
+          12
+        ],
+        "ties": [
+          [
+            0,
+            -1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          1
+        ]
+      }
+    },
+    "Hinge_Pin": {
+      "source": "../../carbon-rod-holders-r61-top-battery/exports/Hinge_Pin-assembly.stl",
+      "source_sha256": "6f51c4e92b4560519ad5e7ce9b5dc08624ee227c7aecbc15d5d8ca896aaedc2f",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          97.5
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          -5.299999237060547
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -15.069999694824219
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 1.6
+      }
+    },
+    "DFR_Post_Bar": {
+      "source": "DFR_Post_Bar-assembly.stl",
+      "source_sha256": "e544866c3fd064c5886ae45db7c2eb67309cc0a8dbdd7bf120e6ad896f21c269",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          150.5
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          19.60957622528076
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -15.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          18
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    }
+  },
+  "layout_sha256": "4b00e2e75cc4a4ac1ced9290c1c9dc34f5cc9e1df8dd273665b01724e15873ef"
+}
