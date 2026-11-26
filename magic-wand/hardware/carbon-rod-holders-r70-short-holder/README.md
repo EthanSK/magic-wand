@@ -128,3 +128,9 @@ python3 audit70.py audit DEST            # deposited-bead checks on a native sli
 | `dfrobot-post-fit` | Ribs target snug nominal 3.0 mm holes; native 3.2 mm holes remain clear; post height, neck and clips unchanged |
 | `complete-key-kit`, `separate-loose-parts`, `spare-parts` | Nine pieces with the spare clip; the snug pin and both strips stay available from R69 |
 | `rod-grip`, `op1-hand-entry`, `op1-clean-seat`, `hinge-low-keeper` | Unchanged from R69 and checked again |
+
+## First print
+
+The first monitored R70 plate finished on 26 November 2026. Final-layer camera images showed all nine kit positions occupied, with the main parts and small clips still attached to their bases. The printer reported completion without errors and both heater targets at zero. Thin travel strings remained over the paddle recess and between some pads.
+
+Base removal, assembled fit, click feel, battery retention, touch-board insertion force, comfort and strength have not yet been physically checked. The camera establishes that the parts were present; it does not establish those fits.
