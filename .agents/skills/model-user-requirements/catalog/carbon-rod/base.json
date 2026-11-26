@@ -7,12 +7,12 @@
   {
     "id": "base-release",
     "status": "active",
-    "text": "Keep the holder attached throughout printing and make the ties easy to remove at the hinge and battery entrance without heavy twisting or stressing the lips."
+    "text": "Keep the holder attached throughout printing and make the ties easy to remove at the hinge and battery entrance without heavy twisting or stressing the lips. Make the connectors a little thinner where they attach to the sacrificial base plate so that end also breaks away easily."
   },
   {
     "id": "base-removal",
     "status": "active",
-    "text": "Make base and support connections easy to identify and remove without snapping useful features or leaving material in functional holes, hinge seats and wire routes."
+    "text": "Make base and support connections easy to identify and remove without snapping useful features, leaving unwanted protruding stubs, or leaving material in functional holes, hinge seats and wire routes."
   },
   {
     "id": "large-bases-all",
@@ -56,5 +56,10 @@
     "id": "r69-base-release-result",
     "status": "evidence",
     "text": "On the printed R69, freeing the carrier near the battery slot required force and tore a small hole from useful material. Improve that local sacrificial connection while preserving proven overall bed adhesion."
+  },
+  {
+    "id": "r70-base-release-result",
+    "status": "evidence",
+    "text": "After removing the printed R70, the user reported that the base connectors were still hard to rip from the base plate and little bits protruded after removal. Exact affected connectors and residual stub sizes were not measured."
   }
 ]

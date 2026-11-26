@@ -133,4 +133,6 @@ python3 audit70.py audit DEST            # deposited-bead checks on a native sli
 
 The first monitored R70 plate finished on 26 November 2026. Final-layer camera images showed all nine kit positions occupied, with the main parts and small clips still attached to their bases. The printer reported completion without errors and both heater targets at zero. Thin travel strings remained over the paddle recess and between some pads.
 
-Base removal, assembled fit, click feel, battery retention, touch-board insertion force, comfort and strength have not yet been physically checked. The camera establishes that the parts were present; it does not establish those fits.
+Assembled fit, click feel, battery retention, touch-board insertion force, comfort and strength have not yet been physically checked. The camera establishes that the parts were present; it does not establish those fits.
+
+After removal, the user reported that the connectors were still hard to rip from the base plate and small bits protruded where they had broken away. The next plate needs thinner attachment points at the base and a cleaner break. The affected connectors and remaining stub sizes have not been measured. R70's printed geometry remains preserved as the comparison source.
