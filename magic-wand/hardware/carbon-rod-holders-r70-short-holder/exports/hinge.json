@@ -1,0 +1,227 @@
+{
+  "revision": "R70",
+  "physical_fit_verified": false,
+  "pin_line_yz_mm": [
+    32.3,
+    12.7
+  ],
+  "click_values": {
+    "r69": {
+      "button_contact_deg": 0.0033110757462537777,
+      "case_stop_deg": 1.307781457901001,
+      "lift_stop_deg": 1.1305585086345675,
+      "plunger_travel_at_case_mm": 0.8237,
+      "reversed_plunger_travel_mm": 0.8343
+    },
+    "r70": {
+      "button_contact_deg": 0.0033110757462537777,
+      "case_stop_deg": 1.307781457901001,
+      "lift_stop_deg": 1.1305585086345675,
+      "plunger_travel_at_case_mm": 0.8237,
+      "reversed_plunger_travel_mm": 0.8343
+    }
+  },
+  "common_straight_pin_diameter_mm": {
+    "r69": 3.596,
+    "r70": 3.596
+  },
+  "joints": {
+    "throat_mm2": {
+      "r69": {
+        "left": 17.3,
+        "right": 11.11
+      },
+      "r70": {
+        "left": 30.17,
+        "right": 15.91
+      }
+    },
+    "paddle_volume_mm3": {
+      "r69": 1477.27,
+      "r70": 1502.22
+    },
+    "added_in_the_joint_zone_mm3": 24.94,
+    "change_outside_the_joint_zone_mm3": -0.0,
+    "gusset_width_mm": [
+      4.65,
+      6.8
+    ],
+    "left_post_width_mm": [
+      -6.8,
+      -3.0
+    ],
+    "gaps_to_fitted_parts_mm": {
+      "r69": {
+        "plug": 0.585,
+        "housing": 1.3,
+        "leads": 0.234
+      },
+      "r70": {
+        "plug": 0.585,
+        "housing": 1.3,
+        "leads": 0.234
+      }
+    },
+    "paddle_to_carrier_at_rest_gap_mm": {
+      "r69": 0.035,
+      "r70": 0.035
+    },
+    "barrel_print_bridge": {
+      "span_mm": 7.65,
+      "first_layer_width_mm": 2.741,
+      "height_above_bed_mm": 3.55,
+      "posts_on_bed_mm2": 13.429,
+      "posts_on_bed": 2,
+      "rear_web_volume_mm3": 0.0
+    }
+  },
+  "far_end_press": {
+    "poses": 18,
+    "worst_pose": {
+      "lift": 0.35,
+      "roll": 0.8,
+      "shift": -0.2,
+      "to_retainer_mm3": 0.0,
+      "to_fixed_mm3": 0.0,
+      "gap_to_retainer_mm": 0.245
+    },
+    "max_overlap_with_retainer_mm3": 0.0,
+    "max_overlap_with_carrier_and_board_mm3": 0.0,
+    "least_gap_to_retainer_mm": 0.245
+  },
+  "click": {
+    "assembled_sha256": {
+      "Key_Carrier-assembly.stl": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+      "Touch_Paddle-assembly.stl": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798",
+      "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+      "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422"
+    },
+    "carrier_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+    "physical_fit_verified": false,
+    "button_contact_deg": 0.0033110757462537777,
+    "case_stop_deg": 1.307781457901001,
+    "lift_stop_deg": 1.1305585086345675,
+    "plunger_travel_at_case_mm": 0.8237,
+    "reversed_plunger_travel_mm": 0.8343,
+    "reversed_button_first_contact_deg": -0.16220831895872878,
+    "lowest_operating_point_travel_mm": 0.7500000000000036,
+    "face_travel_to_stop_mm": {
+      "centre": 0.54,
+      "left_front": 0.917,
+      "right_front": 0.917
+    },
+    "board_rear_y_mm": 26.231,
+    "outer_paddle_y_mm": 35.6,
+    "pcb_rear_to_paddle_end_mm": 9.369,
+    "wire_rear_y_mm": 36.15,
+    "full_height_cheek_rear_y_mm": 35.35,
+    "rear_rod_and_battery_bed_y_mm": 43.65,
+    "centreline_yz_mm": [
+      32.3,
+      12.7
+    ],
+    "common_round_straight_line_diameter_mm": 3.596,
+    "common_round_straight_line_yz_mm": [
+      32.3,
+      12.7
+    ],
+    "journal_travel_each_direction_mm": {
+      "z_0.00": {
+        "forward": 0.126,
+        "rearward": 0.126,
+        "left": 0.16,
+        "right": 0.16
+      },
+      "z_0.20": {
+        "forward": 0.15,
+        "rearward": 0.15,
+        "left": 0.16,
+        "right": 0.16
+      },
+      "z_0.40": {
+        "forward": 0.15,
+        "rearward": 0.15,
+        "left": 0.16,
+        "right": 0.16
+      }
+    },
+    "bought_harness_clearances_mm": {
+      "seated_bundle_to_cheeks": 0.3,
+      "seated_bundle_to_paddle": 0.234,
+      "seated_bundle_to_clip": 1.307,
+      "bundle_to_holder_during_press": 0.265
+    },
+    "paddle_layer_backing": {
+      "layer_step_mm": 0.18,
+      "unsupported_new_sections": [],
+      "largest_region_beyond_previous_section_by_0_35_mm2": 21.605
+    },
+    "nominal_wire_centreline_lengths_to_open_side_mm": [
+      17.3,
+      19.65,
+      22.22
+    ],
+    "edge_press": {
+      "left": {
+        "roll_deg": -0.45,
+        "lateral_offset_mm": -0.1,
+        "button_contact_deg": 0.09177,
+        "case_stop_deg": 1.41034,
+        "plunger_travel_at_case_mm": 0.8328
+      },
+      "right": {
+        "roll_deg": 0.45,
+        "lateral_offset_mm": 0.1,
+        "button_contact_deg": 0.08159,
+        "case_stop_deg": 1.37501,
+        "plunger_travel_at_case_mm": 0.8169
+      }
+    },
+    "overlap_mm3": {
+      "wired_board_drop_over_posts": 0.00075,
+      "cable_post_bar_to_paddle": 0.0,
+      "prewired_paddle_lowered_into_bearings": 0.0,
+      "clip_from_rear": 0.0,
+      "wired_click_sweep_to_carrier_and_op1": 0.0,
+      "side_press_to_retainer": 0.0,
+      "socket_below_sensor_to_paddle": 0.0,
+      "fixed_socket_to_post_bar": 0.0,
+      "plug_mates_with_board_off_paddle": 0.0,
+      "all_outer_switches_caps_and_sockets_to_wired_paddle": 0.0,
+      "clip_to_paddle": 0.0,
+      "Hinge_Pin_insertion_both_sides": 0.0,
+      "Hinge_Pin_clip_seated": 0.0,
+      "Hinge_Pin_Snug_insertion_both_sides": 0.0,
+      "Hinge_Pin_Snug_clip_seated": 0.0,
+      "left_edge_press_to_fixed_parts": 0.0,
+      "right_edge_press_to_fixed_parts": 0.0
+    },
+    "assumptions": "PCB below-face housing, plug dimensions, 1.3 mm insulated wires and bend are nominal. Physical printed bearing friction, click force and cable flexibility remain unmeasured."
+  },
+  "post_bar_in_the_sweep": "hinge_fit64 moves the plain R57 post bar with the paddle; the ribbed bar differs only inside the board holes (posts.json)",
+  "key_places_in_the_sweep": "hinge_fit64 uses the R69 key places; the right key moved 2 mm away from the hinge (keys.json checks it at its R70 place)",
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "meshes_sha256": {
+    "Key_Carrier-assembly.stl": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+    "Touch_Paddle-assembly.stl": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+    "DFR_Post_Bar-assembly.stl": "e544866c3fd064c5886ae45db7c2eb67309cc0a8dbdd7bf120e6ad896f21c269"
+  },
+  "carrier_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+  "generator_sha256": {
+    "design70.py": "1e582ec32abe51209b9a9bad08ea5354857db7512f27a7aebe6351984c884184",
+    "hinge70.py": "7b5a294e15bb9c0f1c36469591ad26e2e5e8d2c94c6f5cd9d8b59ced8ca5ad58",
+    "kit70.py": "c5b1a7b228aa1ddf015a64fc042a205af05594debbdf83751dbf1f93df847336"
+  }
+}

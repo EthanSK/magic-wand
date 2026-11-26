@@ -31,11 +31,14 @@ def seam_samples(section):
     return np.asarray(points), np.asarray(normals), np.asarray(weights)
 
 
-def measure(archive, frame, body, *, regions=None, regional_base=None):
+def measure(archive, frame, body, *, regions=None, regional_base=None, max_layers=12):
     with ZipFile(archive) as src:
         text = src.read('Metadata/plate_1.gcode').decode()
         settings = json.loads(src.read('Metadata/project_settings.config'))
-    short = '; CHANGE_LAYER'.join(text.split('; CHANGE_LAYER')[:14])
+    # Follow the full caller-selected tie height; R70 has taller deck ties.
+    # The earlier fixed 2.4 mm window omitted their upper bonds.
+    # Found and fixed by GPT-6.1 Sol.
+    short = '; CHANGE_LAYER'.join(text.split('; CHANGE_LAYER')[:max_layers+2])
     data, labels, _ = q.extrusion_points(short, .06)
     data = data[~np.isin(data[:, 5], [i for i, label in enumerate(labels)
                                      if label in ('Prime tower', 'Skirt')])]
@@ -48,7 +51,7 @@ def measure(archive, frame, body, *, regions=None, regional_base=None):
     rows = []
     regional_area = dict.fromkeys(regions or {}, 0.0)
     regional_grid_area = dict.fromkeys(regions or {}, 0.0)
-    for layer in range(1, 13):
+    for layer in range(1, max_layers+1):
         z = layer * HEIGHT
         deposited = data[np.isclose(data[:, 7], z)]
         if not len(deposited):

@@ -1,0 +1,309 @@
+{
+  "revision": "R70",
+  "physical_fit_verified": false,
+  "sliced": false,
+  "fault": "R69: three fins were rooted in the 1.2 mm roof over the battery, two of them over the open pouch space; pulling one out left a hole",
+  "pieces": {
+    "r69": [
+      "DFR_Clip_Left",
+      "DFR_Clip_Right",
+      "DFR_Post_Bar",
+      "Hinge_Pin",
+      "Hinge_Pin_Snug",
+      "Key_Carrier",
+      "OP1_Lid_Stop",
+      "Pin_Clip",
+      "Pin_Clip_Spare",
+      "Socket_Backer_Left",
+      "Socket_Backer_Right",
+      "Touch_Paddle"
+    ],
+    "r70": [
+      "DFR_Clip_Left",
+      "DFR_Clip_Right",
+      "DFR_Post_Bar",
+      "Hinge_Pin",
+      "Key_Carrier",
+      "OP1_Lid_Stop",
+      "Pin_Clip",
+      "Pin_Clip_Spare",
+      "Touch_Paddle"
+    ],
+    "no_longer_printed": [
+      "Hinge_Pin_Snug",
+      "Socket_Backer_Left",
+      "Socket_Backer_Right"
+    ]
+  },
+  "holder_base": {
+    "r69": {
+      "holder_first_layer_mm2": 144.8,
+      "panel_sheet_mm2": 3243.2,
+      "first_layer_pieces": 2,
+      "fins": [
+        {
+          "face": "+y",
+          "at_x_mm": -19.7,
+          "meets_holder_at_print_xy_mm": [
+            -19.7,
+            8.47
+          ],
+          "height_mm": 2.2,
+          "full_section_mm2": 3.74,
+          "weakest_section_mm2": 3.74,
+          "necked": false,
+          "rooted_volume_mm3": 2.71
+        },
+        {
+          "face": "+y",
+          "at_x_mm": -15.9,
+          "meets_holder_at_print_xy_mm": [
+            -15.9,
+            8.47
+          ],
+          "height_mm": 2.2,
+          "full_section_mm2": 3.74,
+          "weakest_section_mm2": 3.74,
+          "necked": false,
+          "rooted_volume_mm3": 2.72
+        },
+        {
+          "face": "-y",
+          "at_x_mm": -24.0,
+          "meets_holder_at_print_xy_mm": [
+            -24.0,
+            2.37
+          ],
+          "height_mm": 2.4,
+          "full_section_mm2": 4.08,
+          "weakest_section_mm2": 4.08,
+          "necked": false,
+          "rooted_volume_mm3": 1.89
+        },
+        {
+          "face": "+y",
+          "at_x_mm": -23.8,
+          "meets_holder_at_print_xy_mm": [
+            -23.8,
+            8.47
+          ],
+          "height_mm": 2.2,
+          "full_section_mm2": 3.74,
+          "weakest_section_mm2": 3.74,
+          "necked": false,
+          "rooted_volume_mm3": 2.46
+        },
+        {
+          "face": "-y",
+          "at_x_mm": -7.4,
+          "meets_holder_at_print_xy_mm": [
+            -7.4,
+            7.26
+          ],
+          "height_mm": 3.0,
+          "full_section_mm2": 5.1,
+          "weakest_section_mm2": 5.1,
+          "necked": false,
+          "rooted_volume_mm3": 3.03
+        },
+        {
+          "face": "-y",
+          "at_x_mm": 13.0,
+          "meets_holder_at_print_xy_mm": [
+            13.0,
+            7.27
+          ],
+          "height_mm": 3.0,
+          "full_section_mm2": 5.1,
+          "weakest_section_mm2": 5.1,
+          "necked": false,
+          "rooted_volume_mm3": 1.83
+        }
+      ],
+      "total_full_section_mm2": 25.5,
+      "total_weakest_section_mm2": 25.5,
+      "base_volume_in_hinge_bay_mm3": 0.0,
+      "panel_pieces": 1,
+      "print_height_mm": 62.5
+    },
+    "r70": {
+      "holder_first_layer_mm2": 197.6,
+      "panel_sheet_mm2": 3123.0,
+      "first_layer_pieces": 1,
+      "fins": [
+        {
+          "face": "+y",
+          "at_x_mm": -16.4,
+          "meets_holder_at_print_xy_mm": [
+            -16.4,
+            11.11
+          ],
+          "height_mm": 2.0,
+          "full_section_mm2": 3.4,
+          "weakest_section_mm2": 3.4,
+          "necked": false,
+          "rooted_volume_mm3": 2.75
+        },
+        {
+          "face": "+y",
+          "at_x_mm": -23.1,
+          "meets_holder_at_print_xy_mm": [
+            -23.1,
+            8.47
+          ],
+          "height_mm": 1.8,
+          "full_section_mm2": 3.06,
+          "weakest_section_mm2": 1.51,
+          "necked": true,
+          "rooted_volume_mm3": 1.84
+        },
+        {
+          "face": "-y",
+          "at_x_mm": -23.1,
+          "meets_holder_at_print_xy_mm": [
+            -23.1,
+            2.37
+          ],
+          "height_mm": 1.8,
+          "full_section_mm2": 3.06,
+          "weakest_section_mm2": 1.51,
+          "necked": true,
+          "rooted_volume_mm3": 1.8
+        },
+        {
+          "face": "-y",
+          "at_x_mm": -7.4,
+          "meets_holder_at_print_xy_mm": [
+            -7.4,
+            7.26
+          ],
+          "height_mm": 4.8,
+          "full_section_mm2": 8.16,
+          "weakest_section_mm2": 8.16,
+          "necked": false,
+          "rooted_volume_mm3": 4.84
+        },
+        {
+          "face": "-y",
+          "at_x_mm": 13.0,
+          "meets_holder_at_print_xy_mm": [
+            13.0,
+            7.27
+          ],
+          "height_mm": 4.8,
+          "full_section_mm2": 8.16,
+          "weakest_section_mm2": 8.16,
+          "necked": false,
+          "rooted_volume_mm3": 4.81
+        }
+      ],
+      "total_full_section_mm2": 25.84,
+      "total_weakest_section_mm2": 22.74,
+      "base_volume_in_hinge_bay_mm3": 0.0,
+      "panel_pieces": 1,
+      "print_height_mm": 55.3
+    }
+  },
+  "plastic_behind_each_fin": {
+    "r69": [
+      {
+        "face": "+y",
+        "at_x_mm": -19.7,
+        "least_plastic_behind_the_fin_mm": 0.91
+      },
+      {
+        "face": "+y",
+        "at_x_mm": -15.9,
+        "least_plastic_behind_the_fin_mm": 0.91
+      },
+      {
+        "face": "-y",
+        "at_x_mm": -24.0,
+        "least_plastic_behind_the_fin_mm": 5.88
+      },
+      {
+        "face": "+y",
+        "at_x_mm": -23.8,
+        "least_plastic_behind_the_fin_mm": 5.96
+      },
+      {
+        "face": "-y",
+        "at_x_mm": -7.4,
+        "least_plastic_behind_the_fin_mm": 3.68
+      },
+      {
+        "face": "-y",
+        "at_x_mm": 13.0,
+        "least_plastic_behind_the_fin_mm": 3.78
+      }
+    ],
+    "r70": [
+      {
+        "face": "+y",
+        "at_x_mm": -16.4,
+        "least_plastic_behind_the_fin_mm": 3.31
+      },
+      {
+        "face": "+y",
+        "at_x_mm": -23.1,
+        "least_plastic_behind_the_fin_mm": 6.1
+      },
+      {
+        "face": "-y",
+        "at_x_mm": -23.1,
+        "least_plastic_behind_the_fin_mm": 6.1
+      },
+      {
+        "face": "-y",
+        "at_x_mm": -7.4,
+        "least_plastic_behind_the_fin_mm": 2.4
+      },
+      {
+        "face": "-y",
+        "at_x_mm": 13.0,
+        "least_plastic_behind_the_fin_mm": 3.05
+      }
+    ]
+  },
+  "neck": {
+    "width_mm": 0.84,
+    "length_mm": 0.6,
+    "starts_beyond_the_holder_face_mm": 0.08,
+    "full_fin_mm": 1.7,
+    "on": "the two fins of the battery corner block"
+  },
+  "assumptions": "A fin breaks at its smallest section. With the neck beside the holder and 2.9 mm of solid block behind it, the break should stay in the fin. Holding through the print rests on a larger first layer than R69 and a print 7.35 mm lower, with less fin section (numbers above). Neither is proven until the plate is sliced, printed and released.",
+  "fin_section_r70_over_r69": {
+    "full": 1.01,
+    "weakest": 0.89
+  },
+  "left_bank_fin": "stops 2.0 mm up, below the open pin approach trough, so no stub is left in the trough",
+  "release": [
+    "Nip or snap the two necked fins at the battery corner first: they are the weakest.",
+    "Nip the fin on top of the left key bank and the two under the deck (X -7.4 and X 13.0) with flush cutters.",
+    "Fold the two wings of the panel away. Nothing is attached at the hinge, the roof over the pouch, a wall or a lip."
+  ],
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "meshes_sha256": {
+    "Key_Carrier-assembly.stl": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+    "Touch_Paddle-assembly.stl": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+    "DFR_Post_Bar-assembly.stl": "e544866c3fd064c5886ae45db7c2eb67309cc0a8dbdd7bf120e6ad896f21c269"
+  },
+  "carrier_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+  "generator_sha256": {
+    "design70.py": "1e582ec32abe51209b9a9bad08ea5354857db7512f27a7aebe6351984c884184",
+    "hinge70.py": "7b5a294e15bb9c0f1c36469591ad26e2e5e8d2c94c6f5cd9d8b59ced8ca5ad58",
+    "kit70.py": "c5b1a7b228aa1ddf015a64fc042a205af05594debbdf83751dbf1f93df847336"
+  }
+}

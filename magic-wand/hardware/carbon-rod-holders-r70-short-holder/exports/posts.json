@@ -1,0 +1,168 @@
+{
+  "revision": "R70",
+  "physical_fit_verified": false,
+  "source": "DFRobot DFR0030 capacitive touch sensor: two mounting holes of 3 mm nominal, no tolerance published. The hole pitch on the bought board was read from photographs as 15 to 16 mm; the posts are 15.5 mm apart.",
+  "r57_post_mm": {
+    "across": 2.25,
+    "along": 2.52,
+    "play_in_a_3mm_hole": [
+      0.75,
+      0.48
+    ]
+  },
+  "ribs": {
+    "per_post": 2,
+    "root_angle_from_the_upper_edge_deg": 40.0,
+    "land_outer_x_at_seat_and_board_top_mm": [
+      1.27,
+      1.08
+    ],
+    "land_y_at_seat_and_board_top_mm": [
+      1.38,
+      1.12
+    ],
+    "crest_width_mm": 0.42,
+    "width_at_the_post_mm": 0.9,
+    "added_mm3": 1.314,
+    "built_z_span_mm": [
+      19.3,
+      20.9
+    ],
+    "board_z_mm": [
+      19.3,
+      20.9
+    ]
+  },
+  "fit_by_hole_diameter": [
+    {
+      "hole_mm": 3.0,
+      "rib_interference_at_seat_mid_top_mm": [
+        0.207,
+        0.049,
+        -0.107
+      ],
+      "r57_play_across_mm": 0.75,
+      "r57_play_along_mm": 0.48,
+      "plain_post_side_gap_mm": 0.356
+    },
+    {
+      "hole_mm": 3.1,
+      "rib_interference_at_seat_mid_top_mm": [
+        0.124,
+        -0.033,
+        -0.188
+      ],
+      "r57_play_across_mm": 0.85,
+      "r57_play_along_mm": 0.58,
+      "plain_post_side_gap_mm": 0.398
+    },
+    {
+      "hole_mm": 3.2,
+      "rib_interference_at_seat_mid_top_mm": [
+        0.041,
+        -0.114,
+        -0.268
+      ],
+      "r57_play_across_mm": 0.95,
+      "r57_play_along_mm": 0.68,
+      "plain_post_side_gap_mm": 0.438
+    },
+    {
+      "hole_mm": 3.3,
+      "rib_interference_at_seat_mid_top_mm": [
+        -0.04,
+        -0.194,
+        -0.346
+      ],
+      "r57_play_across_mm": 1.05,
+      "r57_play_along_mm": 0.78,
+      "plain_post_side_gap_mm": 0.478
+    }
+  ],
+  "fit_by_hole_pitch_at_the_seat": [
+    {
+      "hole_mm": 3.0,
+      "pitch_mm": 15.0,
+      "outer_rib_mm": 0.413,
+      "inner_rib_mm": 0.045
+    },
+    {
+      "hole_mm": 3.0,
+      "pitch_mm": 15.5,
+      "outer_rib_mm": 0.207,
+      "inner_rib_mm": 0.207
+    },
+    {
+      "hole_mm": 3.0,
+      "pitch_mm": 16.0,
+      "outer_rib_mm": 0.045,
+      "inner_rib_mm": 0.413
+    },
+    {
+      "hole_mm": 3.2,
+      "pitch_mm": 15.0,
+      "outer_rib_mm": 0.253,
+      "inner_rib_mm": -0.129
+    },
+    {
+      "hole_mm": 3.2,
+      "pitch_mm": 15.5,
+      "outer_rib_mm": 0.041,
+      "inner_rib_mm": 0.041
+    },
+    {
+      "hole_mm": 3.2,
+      "pitch_mm": 16.0,
+      "outer_rib_mm": -0.129,
+      "inner_rib_mm": 0.253
+    }
+  ],
+  "bar_outside_the_board_thickness_against_r57_mm3": 0.0,
+  "through_the_paddle_holes_mm3": 0.0,
+  "seated_in_the_paddle_mm3": 0.0,
+  "into_a_nominal_3mm_board_mm3": {
+    "r57": 0.0,
+    "r70": 0.31119
+  },
+  "clips_on_the_posts_mm3": {
+    "Left": {
+      "r57": 0.0,
+      "r70": 0.0
+    },
+    "Right": {
+      "r57": 0.0,
+      "r70": 0.0
+    }
+  },
+  "assembly_lower_y_mm": {
+    "r57": 14.07,
+    "r70": 14.07
+  },
+  "print_pose": "Upright on the broad bar foot; actual printed dimensions are in mechanical-sections.json, not these CAD tip values.",
+  "fit_measurement": "CAD crest-to-circle radial overlap, not measured printed squeeze or insertion force.",
+  "reading": "Two rigid 3 mm pins would force the board whenever its pitch is not exactly the posts'. The posts stay 2.25 mm; only the slim ribs touch the hole, and they crush or shave to the hole they meet.",
+  "not_measured": "the real hole diameter and pitch, the printed rib width, and the force to seat the board",
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "meshes_sha256": {
+    "Key_Carrier-assembly.stl": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+    "Touch_Paddle-assembly.stl": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+    "DFR_Post_Bar-assembly.stl": "e544866c3fd064c5886ae45db7c2eb67309cc0a8dbdd7bf120e6ad896f21c269"
+  },
+  "carrier_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+  "generator_sha256": {
+    "design70.py": "1e582ec32abe51209b9a9bad08ea5354857db7512f27a7aebe6351984c884184",
+    "hinge70.py": "7b5a294e15bb9c0f1c36469591ad26e2e5e8d2c94c6f5cd9d8b59ced8ca5ad58",
+    "kit70.py": "c5b1a7b228aa1ddf015a64fc042a205af05594debbdf83751dbf1f93df847336"
+  }
+}

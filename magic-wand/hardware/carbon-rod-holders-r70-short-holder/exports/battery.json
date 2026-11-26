@@ -1,0 +1,90 @@
+{
+  "revision": "R70",
+  "physical_fit_verified": false,
+  "pouch_mm": [
+    11.8,
+    27.0,
+    3.9
+  ],
+  "pouch_place": "unchanged: broad face 0.05 mm under the deck, front at Y 21.9",
+  "why_the_pouch_does_not_move_forward": "the left guard top arm is rooted in the deck at Y 21, directly in front of it",
+  "seat": {
+    "r69": {
+      "seated_overlap_with_the_spring_mm3": 2.55762,
+      "seated_overlap_without_the_spring_mm3": 0.0,
+      "slide_in_from_the_rear_without_the_spring_mm3": 0.0,
+      "deck_or_roof_over_the_pouch_mm2": 230.6,
+      "lips_under_the_pouch_mm2": 104.4,
+      "pouch_inside_the_rails_mm": 21.75,
+      "pouch_behind_the_rear_face_mm": 5.25
+    },
+    "r70": {
+      "seated_overlap_with_the_spring_mm3": 1.26474,
+      "seated_overlap_without_the_spring_mm3": 0.0,
+      "slide_in_from_the_rear_without_the_spring_mm3": 0.0,
+      "deck_or_roof_over_the_pouch_mm2": 144.6,
+      "lips_under_the_pouch_mm2": 69.8,
+      "pouch_inside_the_rails_mm": 14.55,
+      "pouch_behind_the_rear_face_mm": 12.45
+    }
+  },
+  "spring": {
+    "r69": {
+      "lever_mm": 8.8,
+      "leaf_height_mm": 3.03
+    },
+    "r70": {
+      "lever_mm": 8.25,
+      "leaf_height_mm": 2.36
+    },
+    "leaf_thickness_mm": 1.04,
+    "preload_mm": 0.21,
+    "stiffness_r70_over_r69": 0.945,
+    "pouch_behind_the_rear_face_mm": {
+      "r69": 5.25,
+      "r70": 12.45
+    },
+    "pouch_inside_the_rails_mm": {
+      "r69": 21.75,
+      "r70": 14.55
+    }
+  },
+  "spring_free_gap_to_everything_else_mm": {
+    "r69": 0.308,
+    "r70": 0.308
+  },
+  "nearest_to_the_free_spring": "the outboard front stop beside the leaf tip, as in R69",
+  "rail_sections_in_front_of_the_new_rear_face_against_r69": {
+    "sections": 81,
+    "spacing_mm": 0.2,
+    "max_area_mm2": 0.004777,
+    "worst_y_mm": 33.53,
+    "sum_area_times_step_mm3": 0.000955
+  },
+  "pouch_to_left_keys_mm3": 0.0,
+  "cover": "none: the pouch is held by two lips, the deck, two walls and the side spring, as in R69",
+  "not_measured": "spring force on the real pouch, and how firmly 14.4 mm of rail holds a 27 mm pouch in use",
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "meshes_sha256": {
+    "Key_Carrier-assembly.stl": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+    "Touch_Paddle-assembly.stl": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+    "DFR_Post_Bar-assembly.stl": "e544866c3fd064c5886ae45db7c2eb67309cc0a8dbdd7bf120e6ad896f21c269"
+  },
+  "carrier_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+  "generator_sha256": {
+    "design70.py": "1e582ec32abe51209b9a9bad08ea5354857db7512f27a7aebe6351984c884184",
+    "hinge70.py": "7b5a294e15bb9c0f1c36469591ad26e2e5e8d2c94c6f5cd9d8b59ced8ca5ad58",
+    "kit70.py": "c5b1a7b228aa1ddf015a64fc042a205af05594debbdf83751dbf1f93df847336"
+  }
+}

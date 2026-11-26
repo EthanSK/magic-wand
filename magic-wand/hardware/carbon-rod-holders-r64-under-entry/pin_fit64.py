@@ -67,6 +67,11 @@ def interval_for_segment(a,b,axis,cross,axial,allowed,outer):
 def profile_rows(folder):
     layout_bytes=(folder/'layout.frame.json').read_bytes()
     frames=json.loads(layout_bytes)['parts']
+    # R70 prints one pin; earlier kits retain both independent fit checks.
+    # Found and fixed by GPT-6.1 Sol.
+    names_present=tuple(n for n in NAMES if n in frames)
+    pin_names=tuple(n for n in names_present if n.startswith('Hinge_Pin'))
+    assert {'Hinge_Pin','Touch_Paddle','Key_Carrier'} <= set(names_present)
     archive=(folder/ARCHIVE).read_bytes()
     target={}
     with ZipFile(BytesIO(archive)) as data:
@@ -75,14 +80,14 @@ def profile_rows(folder):
         names={o.get('id'):tags(o).get('name') for o in root.findall('object')}
         for entry in root.find('plate').findall('model_instance'):
             item=tags(entry);name=names[item['object_id']]
-            if name in NAMES:
+            if name in names_present:
                 target[int(item['identify_id'])]=name
-        assert set(target.values())==set(NAMES)
+        assert set(target.values())==set(names_present)
         settings=json.loads(data.read('Metadata/project_settings.config'))
         off=np.fromstring(settings['extruder_offset'][0],sep='x')
         assert np.allclose(off,[0,0]),off
         windows={}
-        for name in NAMES:
+        for name in names_present:
             frame=np.asarray(frames[name]['assembly_to_machine'])
             pin=name.startswith('Hinge_Pin')
             # R58 prints the snug shaft 0.10 mm higher in its assembly source.
@@ -95,8 +100,8 @@ def profile_rows(folder):
         # Only allocate projected intervals for the four fitted pieces. Track
         # positioning and extrusion mode over the complete original G-code.
         pin_windows=(9., h.m.PIN_HALF-.50)
-        rows={n:defaultdict(list) for n in NAMES}
-        for name in NAMES[:2]:
+        rows={n:defaultdict(list) for n in names_present}
+        for name in pin_names:
             rows.update({(name,w):defaultdict(list) for w in pin_windows})
         feature=''; marked=None; pos=(0.,0.,0.); last_e=0.; relative_e=True; relative_xyz=False; width=.42; height=.2
         for raw in BytesIO(data.read('Metadata/plate_1.gcode')):
@@ -155,8 +160,8 @@ def profile_rows(folder):
         result[name]=np.array(rectangles)
         assert len(rectangles)>8,(name,len(rectangles))
     identity=dict(archive_sha256=sha256(archive).hexdigest(),layout_sha256=sha256(layout_bytes).hexdigest(),
-                  source_sha256={n:frames[n]['source_sha256'] for n in NAMES},
-                  tab_width_mm={n:frames[n]['adhesion_panel']['tie_width'] for n in NAMES[:2]})
+                  source_sha256={n:frames[n]['source_sha256'] for n in names_present},
+                  tab_width_mm={n:frames[n]['adhesion_panel']['tie_width'] for n in pin_names})
     return result,identity
 
 
@@ -187,7 +192,7 @@ def check(folder):
     walls={n:rows[n] for n in ('Touch_Paddle','Key_Carrier')}
     steps=np.linspace(-.18,.18,37)
     result={}
-    for name in ('Hinge_Pin','Hinge_Pin_Snug'):
+    for name in (n for n in ('Hinge_Pin','Hinge_Pin_Snug') if n in rows):
         spans=(('bearing_portions',9.),('through_start_of_taper',h.m.PIN_HALF-.50),('through_nominal_tips',h.m.PIN_HALF))
         regions={}
         for region,half_length in spans:
@@ -208,13 +213,14 @@ def check(folder):
             best_tested_whole_pin_clearance_mm=round(both[i],4),
             best_tested_whole_pin_axis_yz_mm=np.round([h.AXIS+y,h.KEEPER_Z+z],3).tolist(),
             shaft_bounds_yz_mm=np.round([pin[:,0].min(),pin[:,1].max(),pin[:,2].min(),pin[:,3].max()],3).tolist())
-    std,snug=(result[n]['stations']['through_nominal_tips']['clearance_at_nominal_line_mm'] for n in NAMES[:2])
+    clearances={n:r['stations']['through_nominal_tips']['clearance_at_nominal_line_mm'] for n,r in result.items()}
+    ordered=('Hinge_Pin_Snug' not in clearances or clearances['Hinge_Pin']>clearances['Hinge_Pin_Snug'])
     return dict(**identity,pose='Flat on the pin faces down in the assembled carrier; the same straight line passes through both cheeks and the barrel.',
                 nominal_axis_yz_mm=[h.AXIS,h.KEEPER_Z],arc_chord_error_bound_mm=ARC_ERROR,axis_grid_step_mm=.01,
                 removal='Cut both disposable pad ties flush with the nominal pin ends. Through-nominal-tips includes all first-layer stubs within those ends.',
                 method='All positive model extrusion widths and full layer slabs for the four named parts. Project the complete selected shaft and bore-owner material across the insertion direction. Positive distances are conservative one-sided gaps. Each circular G-code chord is expanded by its sag bound.',
                 physical_fit_verified=False,parts=result,
-                passes=bool(std>snug>0))
+                passes=bool(ordered and all(gap>0 for gap in clearances.values())))
 
 
 if __name__=='__main__':

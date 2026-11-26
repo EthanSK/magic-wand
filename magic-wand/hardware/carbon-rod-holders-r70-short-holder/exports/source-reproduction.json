@@ -1,0 +1,36 @@
+{
+  "revision": "R70",
+  "generator_sha256": {
+    "design70.py": "1e582ec32abe51209b9a9bad08ea5354857db7512f27a7aebe6351984c884184",
+    "hinge70.py": "7b5a294e15bb9c0f1c36469591ad26e2e5e8d2c94c6f5cd9d8b59ced8ca5ad58"
+  },
+  "meshes": {
+    "Key_Carrier-assembly.stl": {
+      "export_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+      "reproduced_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777"
+    },
+    "Touch_Paddle-assembly.stl": {
+      "export_sha256": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798",
+      "reproduced_sha256": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798"
+    },
+    "DFR_Post_Bar-assembly.stl": {
+      "export_sha256": "e544866c3fd064c5886ae45db7c2eb67309cc0a8dbdd7bf120e6ad896f21c269",
+      "reproduced_sha256": "e544866c3fd064c5886ae45db7c2eb67309cc0a8dbdd7bf120e6ad896f21c269"
+    },
+    "Gravity_Wires-assembly.stl": {
+      "export_sha256": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+      "reproduced_sha256": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752"
+    },
+    "OP1_Lid_Stop-assembly.stl": {
+      "export_sha256": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+      "reproduced_sha256": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422"
+    }
+  },
+  "inputs_sha256": {
+    "r69_carrier": "1363f07f6ea16b3bcf4b362e98b150e2af38128fc1312846442d57c3df3b2ee7",
+    "r69_retainer": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422"
+  },
+  "carrier_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+  "reproduced_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+  "passes": true
+}
