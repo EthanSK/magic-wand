@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
+import { get } from 'node:http';
 import { mkdtemp, mkdir, rm, utimes, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -44,6 +45,25 @@ test('a normal reload gets current viewer scripts even when their timestamp is u
   assert.equal(await initial.text(), 'document.title = "old";');
   const lastModified = initial.headers.get('last-modified');
   assert.equal(lastModified, timestamp.toUTCString());
+
+  await t.test('the server accepts a cold viewer’s burst of module requests', async () => {
+    // Open independent connections together, as happens when the viewer reloads
+    // while other preview tabs are also fetching their shared modules.
+    const requests = Array.from({ length: 32 }, () => new Promise((resolve, reject) => {
+      get(moduleUrl, { agent: false }, response => {
+        response.setEncoding('utf8');
+        let body = '';
+        response.on('data', chunk => { body += chunk; });
+        response.once('error', reject);
+        response.once('end', () => resolve([response.statusCode, body]));
+      }).once('error', reject);
+    }));
+    const results = await Promise.allSettled(requests);
+    for (const result of results) {
+      if (result.status === 'rejected') throw result.reason;
+      assert.deepEqual(result.value, [200, 'document.title = "old";']);
+    }
+  });
 
   await writeFile(dependency, 'document.title = "new";');
   await utimes(dependency, timestamp, timestamp);

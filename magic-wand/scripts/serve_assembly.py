@@ -3,6 +3,7 @@
 import argparse
 import os
 import plistlib
+import socket
 import subprocess
 import sys
 from functools import partial
@@ -14,6 +15,12 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 VIEWER_PATH = "/magic-wand/hardware/carbon-rod-holders/assembly/"
 SERVICE_LABEL = "com.ethansk.magic-wand-assembly-viewer"
 LIVE_SUFFIXES = {".html", ".css", ".js", ".mjs", ".json"}
+
+
+class AssemblyServer(ThreadingHTTPServer):
+    # A reload opens many module connections together. The five-slot default
+    # can reset connections on macOS before the handler sees the requests.
+    request_queue_size = socket.SOMAXCONN
 
 
 class AssemblyHandler(SimpleHTTPRequestHandler):
@@ -78,7 +85,7 @@ def main():
         install_service(args.port, args.directory)
         return
     handler = partial(AssemblyHandler, directory=args.directory)
-    with ThreadingHTTPServer(("127.0.0.1", args.port), handler) as server:
+    with AssemblyServer(("127.0.0.1", args.port), handler) as server:
         print(f"http://127.0.0.1:{server.server_port}{VIEWER_PATH}", flush=True)
         try:
             server.serve_forever()

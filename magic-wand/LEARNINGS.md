@@ -2514,6 +2514,13 @@ verify recovery with the selected version and component. This fixes the silent
 failure and recovery path; it does not establish the underlying reason an
 intermittent browser request failed.
 
+Self-improved — 2026-11-27: On macOS, a cold assembly reload could exhaust the
+local HTTP server’s five pending connection slots. Some module connections reset
+before the handler received them, so its access log showed only successful
+requests while the viewer displayed its startup error. The shared server uses
+the system listen backlog. The refresh regression opens 32 independent
+connections together and reads every response body.
+
 User-requested — 2026-11-14: the assembly server must survive a chat ending.
 Use its macOS login-service installer for continuing review; it reads the working
 tree and recovers after a process exit. The recovery check terminated the owned
