@@ -38,7 +38,7 @@ def compare_layers(folder, previous_dir=PREVIOUS):
     return new_spans
 
 
-def package(primary, reopened, *, plate=plate75, revision=75, layer_review=compare_layers, battery_route='battery_end_to_end'):
+def package(primary, reopened, *, plate=plate75, revision=75, layer_review=compare_layers, battery_route='battery_end_to_end', kit_name='Complete-Key-Holder'):
     out = plate.OUT
     source = out / plate.design.HOLDER
     checks = release61.read(out / f'fit{revision}.json')
@@ -71,7 +71,7 @@ def package(primary, reopened, *, plate=plate75, revision=75, layer_review=compa
         copyfile(primary / name, output / name)
     with ZipFile(primary / release61.ARCHIVE) as archive:
         (output / 'tray.png').write_bytes(archive.read('Metadata/top_1.png'))
-    release61.package(primary / release61.ARCHIVE, output / f'R{revision}-Complete-Key-Holder-A1-mini-PETG-print-only.3mf',
+    release61.package(primary / release61.ARCHIVE, output / f'R{revision}-{kit_name}-A1-mini-PETG-print-only.3mf',
                       inventory, [*reports, report])
 
 

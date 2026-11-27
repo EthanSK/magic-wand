@@ -1,0 +1,95 @@
+{
+  "archive_sha256": "2c413a51e99747557a4adae379ae4431fb41b0ab15f21687ad1215c24be6fc70",
+  "holder_first_layer_mm2": 201.4,
+  "panel_sheet_mm2": 3130.8,
+  "combined_first_layer_mm2": 3351.9,
+  "first_layer_pieces": 1,
+  "moat_mm": 1.5,
+  "yoke_top_y": 15.05,
+  "fins": [
+    {
+      "face": "+y",
+      "cut_at_xy": [
+        -17.0,
+        11.11
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 1.8,
+      "section_mm2": 3.06,
+      "rooted_volume_mm3": 0.54
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -19.0,
+        -0.68
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 1.8,
+      "section_mm2": 3.06,
+      "rooted_volume_mm3": 1.84
+    },
+    {
+      "face": "+y",
+      "cut_at_xy": [
+        17.0,
+        11.11
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 1.8,
+      "section_mm2": 3.06,
+      "rooted_volume_mm3": 0.54
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -8.0,
+        -0.68
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 4.8,
+      "section_mm2": 8.16,
+      "rooted_volume_mm3": 4.9
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        13.0,
+        7.27
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 4.8,
+      "section_mm2": 8.16,
+      "rooted_volume_mm3": 4.81
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        16.3,
+        7.27
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 4.8,
+      "section_mm2": 8.16,
+      "rooted_volume_mm3": 5.22
+    }
+  ],
+  "total_fin_section_mm2": 33.7,
+  "base_volume_mm3": 1777.4,
+  "revision": "R79",
+  "hinge_bay_xy": [
+    -14.5,
+    11.0,
+    14.5,
+    27.58
+  ],
+  "hinge_bay_open_to_panel_edge": true,
+  "base_volume_in_hinge_bay_mm3": 0.0,
+  "nearest_base_to_hinge_mm": 3.49,
+  "fins_on_hinge": 0,
+  "panel_pieces": 1,
+  "removal": [
+    "Support the solid body. Snip each thin rim connection at the marked points.",
+    "Peel the sides of the disposable sheet away from the hinge. Leave both pin holes intact."
+  ]
+}

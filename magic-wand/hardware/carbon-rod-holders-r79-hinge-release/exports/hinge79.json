@@ -1,0 +1,149 @@
+{
+  "revision": "R79",
+  "physical_fit_verified": false,
+  "sliced": false,
+  "source_carrier_sha256": "ecfa078e9f72dfce91d61e590d7e71076e429351896de1b54420170e2933957d",
+  "carrier_sha256": "eddb105e09b4b98dcc0debe4a36cfcf9b0d2bc4ced842432bda41f55d219e3d8",
+  "solids": 1,
+  "sides": {
+    "left": {
+      "web_mm3": 9.461,
+      "root_in_the_block": 1.0,
+      "root_in_the_plate": {
+        "buried_foot_z_mm": [
+          10.22,
+          10.55
+        ],
+        "buried_foot_inside_solid_r78_plate": 0.9953,
+        "landing_at_its_top_mm2": {
+          "web": 3.124,
+          "on_r78_plate": 3.108
+        },
+        "depth_below_that_level_mm": 0.33,
+        "rounded_rim_band_already_plate": 0.8639,
+        "rim_band_z_mm": [
+          10.55,
+          11.12
+        ]
+      },
+      "bed_contact_of_the_block_mm2": {
+        "r78": 25.99,
+        "r79": 22.18
+      },
+      "bed_contact_above_the_plate_block_and_web_mm2": {
+        "r78": 20.39,
+        "r79": 19.9
+      },
+      "islands_starting_on_nothing": {
+        "r78": [],
+        "r79": []
+      },
+      "bore_and_socket_unchanged_mm3": {
+        "removed": 0,
+        "added": 0
+      },
+      "changed_here_mm3": {
+        "removed": 2.12,
+        "added": 5.0202
+      }
+    },
+    "right": {
+      "web_mm3": 9.461,
+      "root_in_the_block": 1.0,
+      "root_in_the_plate": {
+        "buried_foot_z_mm": [
+          10.22,
+          10.55
+        ],
+        "buried_foot_inside_solid_r78_plate": 0.9954,
+        "landing_at_its_top_mm2": {
+          "web": 3.124,
+          "on_r78_plate": 3.109
+        },
+        "depth_below_that_level_mm": 0.33,
+        "rounded_rim_band_already_plate": 0.8894,
+        "rim_band_z_mm": [
+          10.55,
+          11.12
+        ]
+      },
+      "bed_contact_of_the_block_mm2": {
+        "r78": 25.99,
+        "r79": 22.18
+      },
+      "bed_contact_above_the_plate_block_and_web_mm2": {
+        "r78": 20.39,
+        "r79": 19.9
+      },
+      "islands_starting_on_nothing": {
+        "r78": [],
+        "r79": []
+      },
+      "bore_and_socket_unchanged_mm3": {
+        "removed": 0,
+        "added": 0
+      },
+      "changed_here_mm3": {
+        "removed": 2.12,
+        "added": 4.978
+      }
+    }
+  },
+  "web": {
+    "from_y_mm": 35.03,
+    "thick_mm": 1.42,
+    "reach_from_the_block_mm": 2.2,
+    "top_z_mm": 14.95,
+    "slope_from_to_xz_mm": [
+      [
+        11.5,
+        14.45
+      ],
+      [
+        13.7,
+        10.82
+      ]
+    ],
+    "foot_bottom_z_mm": 10.22,
+    "in_the_pin_trough_mm3": 0.0,
+    "to_the_pin_trough_mm": 0.35,
+    "in_the_seated_pin_mm3": 0.0,
+    "to_the_pin_mm": 1.462,
+    "to_paddle_and_wires_through_lift_and_click_mm": 2.6,
+    "key_poses_reaching_the_webs": 0,
+    "in_any_key_pose_mm3": 0.0
+  },
+  "relief": {
+    "chamfer_mm": 1.0,
+    "removed_mm3": 4.24,
+    "socket_rear_wall_untouched_below_z_mm": 15.95
+  },
+  "whole_carrier": {
+    "volume_mm3": {
+      "r78": 9211.234,
+      "r79": 9216.993
+    },
+    "volume_change_not_explained_by_the_two_bearing_boxes_mm3": 0.0013
+  },
+  "fins": {
+    "shoulder": {
+      "height_mm": 1.8,
+      "neck_mm": 0.84,
+      "break_mm2": 1.51,
+      "r78_break_mm2": {
+        "left": 2.27,
+        "right": 4.03
+      }
+    },
+    "added": {
+      "face": "-y",
+      "at": 16.3,
+      "height": 4.8,
+      "neck": 1.26,
+      "break_mm2": 6.05,
+      "outboard_of_the_bearing_mm": 3.95
+    },
+    "note": "nominal neck sections; the plate audit measures the deposited seam"
+  },
+  "passes": true
+}

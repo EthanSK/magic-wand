@@ -7,13 +7,16 @@ import plate77
 import release61
 
 
-def inspect(folder):
-    baseline = plate77.OUT / 'print-mechanisms'
+def inspect(folder, *, baseline=None, part_baselines=None):
+    baseline = baseline or plate77.OUT / 'print-mechanisms'
     before = release61.read(baseline / 'layers.json')['parts']
     after = release61.read(folder / 'layers.json')
     if after['native_support_moves']:
         raise ValueError('Unexpected generated supports on the fit plate')
     reference_frames = release61.read(baseline / 'layout.frame.json')['parts']
+    for name, directory in (part_baselines or {}).items():
+        before[name] = release61.read(directory / 'layers.json')['parts'][name]
+        reference_frames[name] = release61.read(directory / 'layout.frame.json')['parts'][name]
     frames = release61.read(folder / 'layout.frame.json')['parts']
     with ZipFile(folder / release61.ARCHIVE) as archive:
         lines = archive.read('Metadata/plate_1.gcode').decode().splitlines()

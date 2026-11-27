@@ -1,0 +1,35 @@
+{
+  "revision": "R79",
+  "carrier_sha256": "eddb105e09b4b98dcc0debe4a36cfcf9b0d2bc4ced842432bda41f55d219e3d8",
+  "hinge_interface_additional_overlap_mm3": {
+    "pin_go_gauge_through_both_cheeks": 0.0,
+    "barrel_between_cheeks_from_above": 0.0,
+    "pin_go_gauge_through_left_cheek": 0.0,
+    "pin_go_gauge_through_right_cheek": 0.0,
+    "wired_connector_lowering": 0.0,
+    "actual_retainer_insertion_and_removal": 0.0,
+    "new_fasteners_during_lift_and_click": 0.0
+  },
+  "clips": {
+    "Left": {
+      "mesh_sha256": "5673825587a7da76de3c89abe0f0296aecd7edd5699cd576df5137b86413aee9",
+      "original_and_current_slide_poses": 81,
+      "peak_snap_overlap_mm3": 0.1483,
+      "maximum_extra_overlap_vs_original_mm3": 0.0,
+      "seated_overlap_mm3": -0.0,
+      "available_lift_before_head_mm": 0.8,
+      "head_capture_probe_mm3": 0.1251
+    },
+    "Right": {
+      "mesh_sha256": "50dbdcc8ec0c1f1acf55225e654ff0d0ede25a448bd0b8abe786c8892cc94e5c",
+      "original_and_current_slide_poses": 81,
+      "peak_snap_overlap_mm3": 0.1483,
+      "maximum_extra_overlap_vs_original_mm3": 0.0,
+      "seated_overlap_mm3": -0.0,
+      "available_lift_before_head_mm": 0.8,
+      "head_capture_probe_mm3": 0.1251
+    }
+  },
+  "physical_fit_verified": false,
+  "passes": true
+}
