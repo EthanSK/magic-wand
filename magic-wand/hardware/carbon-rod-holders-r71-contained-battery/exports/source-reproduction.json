@@ -1,0 +1,56 @@
+{
+  "revision": "R71",
+  "generator_sha256": {
+    "design71.py": "985fb2334b3c652dfe6ea838cf9fc132a952991f53cd0bcba6521d4e2eac0878",
+    "hinge71.py": "a1b76f213d9b55420f6884177bc08a3f1bc37c11f7592120f999a7c45a210b14",
+    "design70.py": "1e582ec32abe51209b9a9bad08ea5354857db7512f27a7aebe6351984c884184",
+    "hinge70.py": "7b5a294e15bb9c0f1c36469591ad26e2e5e8d2c94c6f5cd9d8b59ced8ca5ad58"
+  },
+  "meshes": {
+    "Key_Carrier-assembly.stl": {
+      "export_sha256": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+      "reproduced_sha256": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160"
+    },
+    "Touch_Paddle-assembly.stl": {
+      "export_sha256": "a58ed3c10eac252bb540b8c34c4b665fd5be7571bccdf17c7b473f5214f18e9f",
+      "reproduced_sha256": "a58ed3c10eac252bb540b8c34c4b665fd5be7571bccdf17c7b473f5214f18e9f"
+    },
+    "DFR_Clip_Left-assembly.stl": {
+      "export_sha256": "9edacc6fe79d97b080b28293159f7d721214b61cbc98f2bd114250b4e8582d09",
+      "reproduced_sha256": "9edacc6fe79d97b080b28293159f7d721214b61cbc98f2bd114250b4e8582d09"
+    },
+    "DFR_Clip_Right-assembly.stl": {
+      "export_sha256": "f8e743eabed60e35d073b7c4b36d5acb02b9d5150a8f1593d1078c678a2520be",
+      "reproduced_sha256": "f8e743eabed60e35d073b7c4b36d5acb02b9d5150a8f1593d1078c678a2520be"
+    },
+    "DFR_Post_Bar-assembly.stl": {
+      "export_sha256": "1c0e534ddbd385a8880adc74f64485dde32bc9ba0a3963f4d3f016abc601891e",
+      "reproduced_sha256": "1c0e534ddbd385a8880adc74f64485dde32bc9ba0a3963f4d3f016abc601891e"
+    },
+    "Gravity_Wires-assembly.stl": {
+      "export_sha256": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+      "reproduced_sha256": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752"
+    },
+    "OP1_Lid_Stop-assembly.stl": {
+      "export_sha256": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+      "reproduced_sha256": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422"
+    }
+  },
+  "inputs_sha256": {
+    "r70_carrier": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+    "r70_paddle": "a1fea62758b511b443cfd63029757e7a7dff51de730297bce6fa7488b43ce798",
+    "r70_post_bar": "e544866c3fd064c5886ae45db7c2eb67309cc0a8dbdd7bf120e6ad896f21c269",
+    "r69_retainer": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+    "r59_clips": {
+      "Left": "5673825587a7da76de3c89abe0f0296aecd7edd5699cd576df5137b86413aee9",
+      "Right": "50dbdcc8ec0c1f1acf55225e654ff0d0ede25a448bd0b8abe786c8892cc94e5c"
+    }
+  },
+  "copied_from_r70": {
+    "Gravity_Wires-assembly.stl": true,
+    "OP1_Lid_Stop-assembly.stl": true
+  },
+  "carrier_sha256": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+  "reproduced_sha256": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+  "passes": true
+}

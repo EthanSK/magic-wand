@@ -1,0 +1,263 @@
+{
+  "revision": "R71",
+  "archive_sha256": "9bc93a9aa17bd0a4e3214409128429b11cdcf2bc8ad4a2f1823732f34c716785",
+  "reopened_sha256": "61ea65e44df19fbd2f3ecf32873888199d6f0333394cb32cf16de82ecf9ac6e8",
+  "layout_sha256": "28d2c298fec40a996f066556e48d46f6c254674cd70bbfd8182e9c4483e45915",
+  "trial_approved": true,
+  "physical_fit_verified": false,
+  "physical_strength_verified": false,
+  "author_models": [
+    "Claude Fable 5.2",
+    "GPT-6.1 Sol"
+  ],
+  "independent_reviewer": "Claude Opus 5.5",
+  "verdict": "No known blocking file issue. Ready for a monitored complete-part fit trial; physical acceptance is not established.",
+  "per_part": {
+    "Key_Carrier": {
+      "source_sha256": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+      "disposition": "Monitored complete-part fit trial",
+      "native_evidence": [
+        "layers.json",
+        "mechanical-sections.json",
+        "fit.json",
+        "supplemental-evidence.json"
+      ]
+    },
+    "Touch_Paddle": {
+      "source_sha256": "a58ed3c10eac252bb540b8c34c4b665fd5be7571bccdf17c7b473f5214f18e9f",
+      "disposition": "Monitored complete-part fit trial",
+      "native_evidence": [
+        "layers.json",
+        "mechanical-sections.json",
+        "fit.json",
+        "supplemental-evidence.json"
+      ]
+    },
+    "OP1_Lid_Stop": {
+      "source_sha256": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+      "disposition": "Monitored complete-part fit trial",
+      "native_evidence": [
+        "layers.json",
+        "mechanical-sections.json",
+        "fit.json",
+        "supplemental-evidence.json"
+      ]
+    },
+    "Pin_Clip": {
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "disposition": "Monitored complete-part fit trial",
+      "native_evidence": [
+        "layers.json",
+        "mechanical-sections.json",
+        "fit.json",
+        "supplemental-evidence.json"
+      ]
+    },
+    "Pin_Clip_Spare": {
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "disposition": "Monitored complete-part fit trial",
+      "native_evidence": [
+        "layers.json",
+        "mechanical-sections.json",
+        "fit.json",
+        "supplemental-evidence.json"
+      ]
+    },
+    "DFR_Clip_Left": {
+      "source_sha256": "9edacc6fe79d97b080b28293159f7d721214b61cbc98f2bd114250b4e8582d09",
+      "disposition": "Monitored complete-part fit trial",
+      "native_evidence": [
+        "layers.json",
+        "mechanical-sections.json",
+        "fit.json",
+        "supplemental-evidence.json",
+        "native-retention.json",
+        "native-spring-arms.json"
+      ]
+    },
+    "DFR_Clip_Right": {
+      "source_sha256": "f8e743eabed60e35d073b7c4b36d5acb02b9d5150a8f1593d1078c678a2520be",
+      "disposition": "Monitored complete-part fit trial",
+      "native_evidence": [
+        "layers.json",
+        "mechanical-sections.json",
+        "fit.json",
+        "supplemental-evidence.json",
+        "native-retention.json",
+        "native-spring-arms.json"
+      ]
+    },
+    "Hinge_Pin": {
+      "source_sha256": "6f51c4e92b4560519ad5e7ce9b5dc08624ee227c7aecbc15d5d8ca896aaedc2f",
+      "disposition": "Monitored complete-part fit trial",
+      "native_evidence": [
+        "layers.json",
+        "mechanical-sections.json",
+        "fit.json",
+        "supplemental-evidence.json"
+      ]
+    },
+    "DFR_Post_Bar": {
+      "source_sha256": "1c0e534ddbd385a8880adc74f64485dde32bc9ba0a3963f4d3f016abc601891e",
+      "disposition": "Monitored complete-part fit trial",
+      "native_evidence": [
+        "layers.json",
+        "mechanical-sections.json",
+        "fit.json",
+        "supplemental-evidence.json",
+        "native-retention.json"
+      ]
+    }
+  },
+  "native_warning": {
+    "reviewed_archive_warnings": {
+      "9bc93a9aa17bd0a4e3214409128429b11cdcf2bc8ad4a2f1823732f34c716785": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation.",
+      "61ea65e44df19fbd2f3ecf32873888199d6f0333394cb32cf16de82ecf9ac6e8": "It seems object Key_Carrier has floating regions. Please re-orient the object or enable support generation."
+    },
+    "evidence": "The carrier floating-regions warning is retained and disclosed. The unchanged guard/rail overhangs and spring-window bridge were included in native layer, opening and load-path checks and the earlier independent review. The final clips introduce no slicer warning. Adhesion, sag and actual strength remain trial checks."
+  },
+  "findings": [
+    {
+      "id": 1,
+      "origin": [
+        "Codex",
+        "Claude Opus 5.5"
+      ],
+      "priority": "P2",
+      "status": "fixed in source/native paths; physical grip unverified",
+      "issue": "Board could rise off the post grip",
+      "resolution": "Three-layer rib band and spring preload; native diameter remains above nominal hole through the permitted frame rise."
+    },
+    {
+      "id": 2,
+      "origin": [
+        "Claude Opus 5.5"
+      ],
+      "priority": "P2",
+      "status": "fixed in source/native paths; break location unverified",
+      "issue": "Both fin ends were equally weak",
+      "resolution": "Only holder-side neck remains; native plate/holder sections retain the measured break bias."
+    },
+    {
+      "id": 3,
+      "origin": [
+        "Claude Opus 5.5"
+      ],
+      "priority": "P2",
+      "status": "mitigated for trial; physical strength/creep unverified",
+      "issue": "High fitting-strain estimate at sharp arm root",
+      "resolution": "Longer leaf, flared/stepped root, lower nominal bend estimate and full native section coverage."
+    },
+    {
+      "id": 4,
+      "origin": [
+        "Claude Opus 5.5"
+      ],
+      "priority": "P3",
+      "status": "fixed",
+      "issue": "Fitting instruction did not identify the press point",
+      "resolution": "Guide specifies the front half between the feet; rear bar is explicitly excluded."
+    },
+    {
+      "id": 5,
+      "origin": [
+        "Claude Opus 5.5"
+      ],
+      "priority": "P2",
+      "status": "fixed",
+      "issue": "Five native stations missed the maximum at the flare",
+      "resolution": "0.02 mm profile plus step-edge sections reports the sampled native maximum; source-plan claims are qualified. No geometry or slice change."
+    }
+  ],
+  "physical_trials": [
+    "Battery removal, retention and actual socket wiring clearance",
+    "Actual DFR0030 hole size/pitch, post grip and spring-clip fitting/creep",
+    "Hinge feel and far-edge clicking",
+    "Guard/rail comfort and strength",
+    "First-layer adhesion and holder-side base release"
+  ],
+  "selected_views": [
+    "r71-critical-native-layers.png",
+    "op1-seat-comparison.png",
+    "tray.png"
+  ],
+  "source_files_sha256": {
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/arms71.py": "dcd59035394eb2a04a83dffa886a82ceacb1d68de6a099e036b26d60cbca16a3",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/guide71.py": "7035b0079de78ce6f00dd7c4e7237dfb2e726dd90dc391839ebe28af0e830ca1",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/kit71.py": "7c136cccc59238f6a9b0b47682b9971c86e602403dd6b50c28ee48025573326f",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/design71.py": "985fb2334b3c652dfe6ea838cf9fc132a952991f53cd0bcba6521d4e2eac0878",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/release71.py": "cecab26dd3594bdfbe68cc902c9743b996a78aa3160e0296d6d2caf2a907acd5",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/checks71.py": "2c8aca0bec28ec2712ba821d2c26f911c558f0da668623e265f2b28fa49bae70",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/hinge71.py": "a1b76f213d9b55420f6884177bc08a3f1bc37c11f7592120f999a7c45a210b14",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/sections71.py": "149df3609f07f99db6a34dbf29ff2380b27745f11537d3d708b0f7068b6971c0",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/README.md": "fae52631c323d6262323c189276508b173099176f46c9aa6b4607ef9fbcbda21",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/evidence71.py": "f7d2f79f2d651199ee37b6f01859df72af5144ed53bef2fe3689158d18d4a56c",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/audit71.py": "903bbd91ddde27bc882f912e8b56ddfb0e3339dfd25c0583c8df0d857f114799",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/retention71.py": "bc75687c0c331ef938ba9cd7a294275327b4f51b7286e7623d5837374005a5b4",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/Key_Carrier-assembly.stl": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/carrier.json": "611020dae8e150f6ec95e78dff300e067df5f4f3a3393a34c6fe71194382dc51",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/DFR_Post_Bar-assembly.stl": "1c0e534ddbd385a8880adc74f64485dde32bc9ba0a3963f4d3f016abc601891e",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/checks.json": "bd791298b1c3f1e136a13ef4411e024750ff7b1ce9fe77958763986dcac1eb5b",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/Touch_Paddle-assembly.stl": "a58ed3c10eac252bb540b8c34c4b665fd5be7571bccdf17c7b473f5214f18e9f",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/DFR_Clip_Left-assembly.stl": "9edacc6fe79d97b080b28293159f7d721214b61cbc98f2bd114250b4e8582d09",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/DFR_Clip_Right-assembly.stl": "f8e743eabed60e35d073b7c4b36d5acb02b9d5150a8f1593d1078c678a2520be",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/assembly-guide.json": "68b5dd7ec0e75ae86b6d592e54813f12e5b080f1784411afe28cbf313c4ef5bd",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/base.json": "9cc387f69f87ee887289f3539a57a996e4fe1b489709f08c74cda22133a13c7f",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/battery.json": "443b7da97027cce2985ec6a71f69ee53756aa8a69d8413e6c4a8d31912615b86",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/source-reproduction.json": "7a525df3071a1be915dbd237939baadbb34e238dbe2fc53c8f79bc15930f39b0",
+    "magic-wand/hardware/carbon-rod-holders-r71-contained-battery/exports/OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+    "magic-wand/tests/assembly-r71.test.mjs": "9cbf76ea3b6bd2cbc36eb3853d858e13574719366c7b5e2563b2e2287202c50f",
+    "magic-wand/hardware/carbon-rod-holders/assembly/catalog.json": "9bf1658752e7acf7dc388d3d7b1994961c007cc6112b5c8b8b0a7e13f7935db6",
+    ".agents/skills/model-user-requirements/catalog/carbon-rod/battery.json": "036c1382bf652088c38fd5c931e66e3cef44c23785cc69b8da315b64b2356fa4"
+  },
+  "evidence_sha256": {
+    "primary": {
+      "OP1-hinge.gcode.native.json": "50fa20fd29816d91e509df8a3b70cb2c0f49188b792117a754e19415462bbfb4",
+      "fit.json": "0b7c9f058b12abc2133e45c472baa058b8f1704306316b81611b7aff98481b07",
+      "layers.json": "c2c48acb320c1c399e66d8e8cc47f6b5b877f74a40e5913f26b07cfa9930d6d2",
+      "wide-bases.json": "015e16bf323808986aaac8aca035eaa40186c15f1ec53502e6e7a6a066482888",
+      "rod.json": "e4a6fa75d2e3708f034dc523d3ad70ee373f33a62e5e6ba4f42bd5a21edb25a0",
+      "separation-and-machine.json": "6cb4ab5da19c6d5029d08c75faa15a93b9bd0326c1ae063b43f01035ba3a2b80",
+      "joint.json": "f7db511bb77ece973799e643aaef81528d7efd1fb0bae1a75ce6c6542277acfd",
+      "fin-design.json": "656150f67280e327144047ea78f883e0448585ebbf5b0e8bd67f53063a327e04",
+      "battery-base.json": "b40e06b52549e45a196cbe1b562468e805f5549368cf517acc88c9d5094c0a01",
+      "passages.json": "144bc75720679f48ca9c2bed74357cab3e7f6e80c9a7e7fde64d5c8b5ab45a6e",
+      "pin-fit.json": "90462ad8a4efa9b9b4c882977cf8bd36afa5fd8db2472dcb929823b45874d8ee",
+      "printed-seat.json": "0b676dc95cb1dab0a0eac221cf4856d7b772851f056f802b216b3f1aa2f03e42",
+      "r70-base-reference.json": "2e6026c82ceded651b404a857d0e28c40407869fa6d3534bb8990e65bb6c8666",
+      "mechanical-sections.json": "b873c92ba96e62465292b7896720e5f27d9d38273dbf74934b612015816fc679",
+      "supplemental-evidence.json": "d40782d554c006b7477969db438745490dc964720a81d3343b37c859c200513c",
+      "native-retention.json": "8d8cb5672aed29465a6ec218660f7746e28e3786b1425437b8e5146f3fd3fe40",
+      "native-spring-arms.json": "0db3e9bf3d8ac2371ff1bacdfbdbb7b4b04310861babc80ebf5c630a34c6d1f6",
+      "r71-critical-native-layers.png": "f9c1145a11d635968066edb42ea4b94d810de6aa7ce855b967a36d728d402444",
+      "op1-seat-comparison.png": "717e6d33ff3ed1a6b578b8398a5aeb6e00f06b0b650fdae831c4ba2bd45f405d"
+    },
+    "reopened-": {
+      "OP1-hinge.gcode.native.json": "8ca28fe79e76bfe8dd4ec6f8b0240eff7444dd852d08ab92703b9268fae84eb4",
+      "fit.json": "62931e9276fbaae6488be7b09be657dac559e00f4ca4798ad89a049dd12e1b9f",
+      "layers.json": "77fa8e2d1f4808d445200f2171bd12be5fbb965d9d50baddfa8635c9968155e7",
+      "wide-bases.json": "b637a2ed20e0955397f52166aead4d0b692bc160a7b16fac7353584551e2b88c",
+      "rod.json": "b71d199cd237ace27e5e0f5d7ec5549711decc03dbbc778084c1220cd7133265",
+      "separation-and-machine.json": "0bc3d23529d714727a8fd3dffbb45ce425909bbda3640eee80f8f398baf24c78",
+      "joint.json": "75668d5ce3f38649a3b08505bba74ad38646b9b0cb50914111c1c2e91d1c8558",
+      "fin-design.json": "a6d2c51d2281a3de8046ee71d2e35c72a6c7941e0d148275d2f3c12e9a874036",
+      "battery-base.json": "bd811dbaebcba277bf683ad077c4896aad6bd2af3c16aa5d33de27d28f764fa7",
+      "passages.json": "62304a8954ee1cb68777e2a7ad573b5b3e6c19209f8bec1073e8447e2cbc358b",
+      "pin-fit.json": "29f6abeec6768a513a6c04cc28828962324aa83a705259e5233446c222b4286f",
+      "printed-seat.json": "3eaa1418db4f7776558f6169591270d1110101b7b5bd65c406da0f89e75c5196",
+      "r70-base-reference.json": "2e6026c82ceded651b404a857d0e28c40407869fa6d3534bb8990e65bb6c8666",
+      "mechanical-sections.json": "8cf8179da7b92c69c73f653ab52b47a0bc61eed5f6057cb3d9d11169bb27aaf7",
+      "supplemental-evidence.json": "5f1494fbd2900b07a7464de2e62820f9e7dee61c64dc4f19716414731d4c899a",
+      "native-retention.json": "70a96dfe2c4bdcd02334c24b730f78292ce0f657e2cfe760d818631d11e89353",
+      "native-spring-arms.json": "7ee385ce106241e43ee757b374c426399382106e6842eabeb0da94029c369428",
+      "r71-critical-native-layers.png": "83559187391ad5993d957281f5ac6d0c4abe2fbb19b5ac2adf7e303655f84621",
+      "op1-seat-comparison.png": "717e6d33ff3ed1a6b578b8398a5aeb6e00f06b0b650fdae831c4ba2bd45f405d"
+    }
+  },
+  "viewer_check": {
+    "served_sources": "Current R71 guide and all 45 meshes hash-match the owned files.",
+    "animation": "Historical manual Play reached 25/25; all current module poses/cameras/actor references match that checked guide apart from text.",
+    "limitation": "Fresh final-clip browser rendering could not be repeated because browser control was unavailable. No fresh render or playback pass is claimed."
+  }
+}

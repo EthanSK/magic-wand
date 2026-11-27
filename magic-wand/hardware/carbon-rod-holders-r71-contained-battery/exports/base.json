@@ -1,0 +1,368 @@
+{
+  "revision": "R71",
+  "physical_fit_verified": false,
+  "sliced": false,
+  "fault": "R70: the fins were hard to pull from the plate and left stubs. Each was a full 1.7 mm strip where it met its post on the plate, and three of the five were full width at the holder as well. Which fins and how long the stubs were was not measured.",
+  "pieces": {
+    "r70": [
+      "DFR_Clip_Left",
+      "DFR_Clip_Right",
+      "DFR_Post_Bar",
+      "Hinge_Pin",
+      "Key_Carrier",
+      "OP1_Lid_Stop",
+      "Pin_Clip",
+      "Pin_Clip_Spare",
+      "Touch_Paddle"
+    ],
+    "r71": [
+      "DFR_Clip_Left",
+      "DFR_Clip_Right",
+      "DFR_Post_Bar",
+      "Hinge_Pin",
+      "Key_Carrier",
+      "OP1_Lid_Stop",
+      "Pin_Clip",
+      "Pin_Clip_Spare",
+      "Touch_Paddle"
+    ]
+  },
+  "holder_base": {
+    "r70": {
+      "holder_first_layer_mm2": 197.6,
+      "panel_sheet_mm2": 3123.0,
+      "first_layer_pieces": 1,
+      "panel_pieces": 1,
+      "fins": [
+        {
+          "face": "+y",
+          "at_x_mm": -16.4,
+          "meets_holder_at_print_xy_mm": [
+            -16.4,
+            11.11
+          ],
+          "height_mm": 2.0,
+          "full_section_mm2": 3.4,
+          "at_the_holder_mm2": 3.4,
+          "at_the_plate_mm2": 3.4,
+          "rooted_volume_mm3": 2.75
+        },
+        {
+          "face": "+y",
+          "at_x_mm": -23.1,
+          "meets_holder_at_print_xy_mm": [
+            -23.1,
+            8.47
+          ],
+          "height_mm": 1.8,
+          "full_section_mm2": 3.06,
+          "at_the_holder_mm2": 1.51,
+          "at_the_plate_mm2": 3.06,
+          "rooted_volume_mm3": 1.84
+        },
+        {
+          "face": "-y",
+          "at_x_mm": -23.1,
+          "meets_holder_at_print_xy_mm": [
+            -23.1,
+            2.37
+          ],
+          "height_mm": 1.8,
+          "full_section_mm2": 3.06,
+          "at_the_holder_mm2": 1.51,
+          "at_the_plate_mm2": 3.06,
+          "rooted_volume_mm3": 1.8
+        },
+        {
+          "face": "-y",
+          "at_x_mm": -7.4,
+          "meets_holder_at_print_xy_mm": [
+            -7.4,
+            7.26
+          ],
+          "height_mm": 4.8,
+          "full_section_mm2": 8.16,
+          "at_the_holder_mm2": 8.16,
+          "at_the_plate_mm2": 8.16,
+          "rooted_volume_mm3": 4.84
+        },
+        {
+          "face": "-y",
+          "at_x_mm": 13.0,
+          "meets_holder_at_print_xy_mm": [
+            13.0,
+            7.27
+          ],
+          "height_mm": 4.8,
+          "full_section_mm2": 8.16,
+          "at_the_holder_mm2": 8.16,
+          "at_the_plate_mm2": 8.16,
+          "rooted_volume_mm3": 4.81
+        }
+      ],
+      "total_full_section_mm2": 25.84,
+      "total_at_the_holder_mm2": 22.74,
+      "total_at_the_plate_mm2": 25.84,
+      "weakest_path_mm2": 22.74,
+      "base_volume_in_hinge_bay_mm3": 0.0,
+      "print_height_mm": 55.3
+    },
+    "r71": {
+      "holder_first_layer_mm2": 193.3,
+      "panel_sheet_mm2": 3091.3,
+      "first_layer_pieces": 1,
+      "panel_pieces": 1,
+      "fins": [
+        {
+          "face": "+y",
+          "at_x_mm": -26.45,
+          "meets_holder_at_print_xy_mm": [
+            -26.45,
+            8.47
+          ],
+          "height_mm": 1.8,
+          "full_section_mm2": 3.06,
+          "at_the_holder_mm2": 2.27,
+          "at_the_plate_mm2": 3.06,
+          "rooted_volume_mm3": 1.84
+        },
+        {
+          "face": "-y",
+          "at_x_mm": -27.0,
+          "meets_holder_at_print_xy_mm": [
+            -27.0,
+            -1.48
+          ],
+          "height_mm": 1.8,
+          "full_section_mm2": 3.06,
+          "at_the_holder_mm2": 1.51,
+          "at_the_plate_mm2": 3.06,
+          "rooted_volume_mm3": 1.84
+        },
+        {
+          "face": "-y",
+          "at_x_mm": -12.6,
+          "meets_holder_at_print_xy_mm": [
+            -12.6,
+            7.27
+          ],
+          "height_mm": 4.8,
+          "full_section_mm2": 8.16,
+          "at_the_holder_mm2": 6.05,
+          "at_the_plate_mm2": 8.16,
+          "rooted_volume_mm3": 4.84
+        },
+        {
+          "face": "-y",
+          "at_x_mm": -7.4,
+          "meets_holder_at_print_xy_mm": [
+            -7.4,
+            7.26
+          ],
+          "height_mm": 4.8,
+          "full_section_mm2": 8.16,
+          "at_the_holder_mm2": 6.05,
+          "at_the_plate_mm2": 8.16,
+          "rooted_volume_mm3": 4.84
+        },
+        {
+          "face": "-y",
+          "at_x_mm": 13.0,
+          "meets_holder_at_print_xy_mm": [
+            13.0,
+            7.27
+          ],
+          "height_mm": 4.8,
+          "full_section_mm2": 8.16,
+          "at_the_holder_mm2": 6.05,
+          "at_the_plate_mm2": 8.16,
+          "rooted_volume_mm3": 4.81
+        }
+      ],
+      "total_full_section_mm2": 30.6,
+      "total_at_the_holder_mm2": 21.93,
+      "total_at_the_plate_mm2": 30.6,
+      "weakest_path_mm2": 21.93,
+      "base_volume_in_hinge_bay_mm3": 0.0,
+      "print_height_mm": 55.3
+    }
+  },
+  "plastic_behind_each_fin": {
+    "r70": [
+      {
+        "face": "+y",
+        "at_x_mm": -16.4,
+        "least_plastic_behind_the_fin_mm": 3.31
+      },
+      {
+        "face": "+y",
+        "at_x_mm": -23.1,
+        "least_plastic_behind_the_fin_mm": 6.1
+      },
+      {
+        "face": "-y",
+        "at_x_mm": -23.1,
+        "least_plastic_behind_the_fin_mm": 6.1
+      },
+      {
+        "face": "-y",
+        "at_x_mm": -7.4,
+        "least_plastic_behind_the_fin_mm": 2.4
+      },
+      {
+        "face": "-y",
+        "at_x_mm": 13.0,
+        "least_plastic_behind_the_fin_mm": 3.05
+      }
+    ],
+    "r71": [
+      {
+        "face": "+y",
+        "at_x_mm": -26.45,
+        "least_plastic_behind_the_fin_mm": 4.25
+      },
+      {
+        "face": "-y",
+        "at_x_mm": -27.0,
+        "least_plastic_behind_the_fin_mm": 1.6
+      },
+      {
+        "face": "-y",
+        "at_x_mm": -12.6,
+        "least_plastic_behind_the_fin_mm": 3.05
+      },
+      {
+        "face": "-y",
+        "at_x_mm": -7.4,
+        "least_plastic_behind_the_fin_mm": 2.4
+      },
+      {
+        "face": "-y",
+        "at_x_mm": 13.0,
+        "least_plastic_behind_the_fin_mm": 3.05
+      }
+    ]
+  },
+  "fin_width_mm": 1.7,
+  "necks": [
+    {
+      "face": "+y",
+      "at_x_mm": -26.45,
+      "moat_mm": 1.5,
+      "necks": [
+        {
+          "end": "holder",
+          "from_holder_face_mm": [
+            0.02,
+            0.47
+          ],
+          "width_mm": 1.26
+        }
+      ]
+    },
+    {
+      "face": "-y",
+      "at_x_mm": -27.0,
+      "moat_mm": 1.5,
+      "necks": [
+        {
+          "end": "holder",
+          "from_holder_face_mm": [
+            0.02,
+            0.47
+          ],
+          "width_mm": 0.84
+        }
+      ]
+    },
+    {
+      "face": "-y",
+      "at_x_mm": -12.6,
+      "moat_mm": 1.5,
+      "necks": [
+        {
+          "end": "holder",
+          "from_holder_face_mm": [
+            0.02,
+            0.47
+          ],
+          "width_mm": 1.26
+        }
+      ]
+    },
+    {
+      "face": "-y",
+      "at_x_mm": -7.4,
+      "moat_mm": 1.5,
+      "necks": [
+        {
+          "end": "holder",
+          "from_holder_face_mm": [
+            0.02,
+            0.47
+          ],
+          "width_mm": 1.26
+        }
+      ]
+    },
+    {
+      "face": "-y",
+      "at_x_mm": 13.0,
+      "moat_mm": 1.5,
+      "necks": [
+        {
+          "end": "holder",
+          "from_holder_face_mm": [
+            0.02,
+            0.47
+          ],
+          "width_mm": 1.26
+        }
+      ]
+    }
+  ],
+  "section_r71_over_r70": {
+    "at_the_plate": 1.18,
+    "at_the_holder": 0.96,
+    "weakest_path": 0.96
+  },
+  "load_path": "Each fin carries load from the holder through one neck beside the holder's face into a full-width fin, a 1.2 mm post, a buttress and a 9 x 11 mm foot on the 0.4 mm panel. That neck is the smallest section on the path. The panel, feet, buttresses and fin heights are R70's.",
+  "break_order": [
+    "First and only intended break: the neck beside the holder, 0.02 to 0.47 mm from its face. The fin stays on the plate.",
+    "The fin at the plate is full width, 1.35 to 2.03 times the neck's section, so it should not break there first.",
+    "An earlier R71 draft also necked the plate end to the same width; a fin breaking there would have left 1.5 mm on the holder."
+  ],
+  "release": [
+    "Fold a wing of the panel away from the holder: each fin breaks at its neck beside the holder.",
+    "What can stay on the holder is at most 0.47 mm long: nip or scrape it flush.",
+    "Nothing is attached at the hinge, over the open pouch lane or on a lip."
+  ],
+  "assumptions": "PETG breaks at the smallest section when bent. The force to break a neck was not measured. With slightly less section at the holder than R70 (numbers above), holding through the print is an assumption until the plate is sliced, its deposited beads are measured and it is printed.",
+  "first_layer_note": "holder first layer 193.3 mm2 (R70 197.6): the mirrored left shoulder takes some away and the deeper rail gives some back; the fins' smallest sections add up to 96% of R70's",
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "meshes_sha256": {
+    "Key_Carrier-assembly.stl": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+    "Touch_Paddle-assembly.stl": "a58ed3c10eac252bb540b8c34c4b665fd5be7571bccdf17c7b473f5214f18e9f",
+    "DFR_Post_Bar-assembly.stl": "1c0e534ddbd385a8880adc74f64485dde32bc9ba0a3963f4d3f016abc601891e",
+    "DFR_Clip_Left-assembly.stl": "9edacc6fe79d97b080b28293159f7d721214b61cbc98f2bd114250b4e8582d09",
+    "DFR_Clip_Right-assembly.stl": "f8e743eabed60e35d073b7c4b36d5acb02b9d5150a8f1593d1078c678a2520be",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422"
+  },
+  "carrier_sha256": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+  "generator_sha256": {
+    "design71.py": "985fb2334b3c652dfe6ea838cf9fc132a952991f53cd0bcba6521d4e2eac0878",
+    "hinge71.py": "a1b76f213d9b55420f6884177bc08a3f1bc37c11f7592120f999a7c45a210b14",
+    "design70.py": "1e582ec32abe51209b9a9bad08ea5354857db7512f27a7aebe6351984c884184",
+    "hinge70.py": "7b5a294e15bb9c0f1c36469591ad26e2e5e8d2c94c6f5cd9d8b59ced8ca5ad58",
+    "kit71.py": "7c136cccc59238f6a9b0b47682b9971c86e602403dd6b50c28ee48025573326f"
+  }
+}

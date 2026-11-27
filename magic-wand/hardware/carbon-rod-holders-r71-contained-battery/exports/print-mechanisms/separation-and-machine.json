@@ -1,0 +1,105 @@
+{
+  "archive_sha256": "9bc93a9aa17bd0a4e3214409128429b11cdcf2bc8ad4a2f1823732f34c716785",
+  "layout_sha256": "28d2c298fec40a996f066556e48d46f6c254674cd70bbfd8182e9c4483e45915",
+  "parts": [
+    "Key_Carrier",
+    "Touch_Paddle",
+    "OP1_Lid_Stop",
+    "Pin_Clip",
+    "Pin_Clip_Spare",
+    "DFR_Clip_Left",
+    "DFR_Clip_Right",
+    "Hinge_Pin",
+    "DFR_Post_Bar"
+  ],
+  "minimum_separation_mm": 3.399,
+  "projected_part_separation_lower_bounds_mm": {
+    "Key_Carrier / Touch_Paddle": 3.399,
+    "Key_Carrier / OP1_Lid_Stop": 12.199,
+    "Key_Carrier / Pin_Clip": 72.553,
+    "Key_Carrier / Pin_Clip_Spare": 80.349,
+    "Key_Carrier / DFR_Clip_Left": 60.807,
+    "Key_Carrier / DFR_Clip_Right": 25.049,
+    "Key_Carrier / Hinge_Pin": 92.299,
+    "Key_Carrier / DFR_Post_Bar": 96.208,
+    "Touch_Paddle / OP1_Lid_Stop": 56.399,
+    "Touch_Paddle / Pin_Clip": 52.299,
+    "Touch_Paddle / Pin_Clip_Spare": 52.299,
+    "Touch_Paddle / DFR_Clip_Left": 15.149,
+    "Touch_Paddle / DFR_Clip_Right": 7.549,
+    "Touch_Paddle / Hinge_Pin": 74.799,
+    "Touch_Paddle / DFR_Post_Bar": 71.799,
+    "OP1_Lid_Stop / Pin_Clip": 75.088,
+    "OP1_Lid_Stop / Pin_Clip_Spare": 94.605,
+    "OP1_Lid_Stop / DFR_Clip_Left": 104.299,
+    "OP1_Lid_Stop / DFR_Clip_Right": 48.299,
+    "OP1_Lid_Stop / Hinge_Pin": 54.352,
+    "OP1_Lid_Stop / DFR_Post_Bar": 96.549,
+    "Pin_Clip / Pin_Clip_Spare": 4.799,
+    "Pin_Clip / DFR_Clip_Left": 28.721,
+    "Pin_Clip / DFR_Clip_Right": 33.581,
+    "Pin_Clip / Hinge_Pin": 8.735,
+    "Pin_Clip / DFR_Post_Bar": 4.373,
+    "Pin_Clip_Spare / DFR_Clip_Left": 23.648,
+    "Pin_Clip_Spare / DFR_Clip_Right": 44.94,
+    "Pin_Clip_Spare / Hinge_Pin": 25.851,
+    "Pin_Clip_Spare / DFR_Post_Bar": 4.299,
+    "DFR_Clip_Left / DFR_Clip_Right": 43.798,
+    "DFR_Clip_Left / Hinge_Pin": 58.713,
+    "DFR_Clip_Left / DFR_Post_Bar": 43.148,
+    "DFR_Clip_Right / Hinge_Pin": 53.748,
+    "DFR_Clip_Right / DFR_Post_Bar": 58.105,
+    "Hinge_Pin / DFR_Post_Bar": 20.8
+  },
+  "machine": {
+    "passed": true,
+    "project_sha256": "9bc93a9aa17bd0a4e3214409128429b11cdcf2bc8ad4a2f1823732f34c716785",
+    "official_machine_templates_match": [
+      "machine_start_gcode",
+      "machine_end_gcode",
+      "time_lapse_gcode",
+      "change_filament_gcode"
+    ],
+    "first_object_nozzle_target_c": 245.0,
+    "first_object_bed_target_c": 60.0,
+    "printing_temperature_wait_present": true,
+    "ending_heater_targets_c": [
+      0,
+      0
+    ],
+    "approved_layer_change_extension": "R37 early_acceleration_commands",
+    "machine_limits_unchanged": true,
+    "early_acceleration_events": [
+      {
+        "layer": 0,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0,
+          "Z": 1500.0,
+          "E": 5000.0
+        }
+      },
+      {
+        "layer": 1,
+        "axes": {
+          "X": 1000.0,
+          "Y": 1000.0
+        }
+      },
+      {
+        "layer": 4,
+        "axes": {
+          "X": 20000.0,
+          "Y": 20000.0
+        }
+      }
+    ]
+  },
+  "filament_retraction_mm": [
+    "1.2"
+  ],
+  "filament_retraction_speed_mm_s": [
+    "35"
+  ],
+  "timelapse_type": "1"
+}
