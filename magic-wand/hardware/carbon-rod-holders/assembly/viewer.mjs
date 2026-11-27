@@ -357,7 +357,8 @@ async function chooseModule() {
     if (viewId !== component.defaultView) url.searchParams.set('view', viewId);
     else url.searchParams.delete('view');
     history.replaceState(null, '', url);
-    document.body.dataset.ready = 'true'; document.getElementById('error').style.display = 'none';
+    document.getElementById('error').style.display = 'none';
+    finishLoading('true');
   } catch (error) {
     disposeGroup(nextGroup);
     if (request === loadId) showError(error);
@@ -371,7 +372,16 @@ function disposeGroup(value) {
     if (object.userData.ownedGeometry) object.geometry.dispose();
   }
 }
-function showError(error) { const box = document.getElementById('error'); box.style.display = 'grid'; box.textContent = error.message; document.body.dataset.ready = 'error'; }
+function finishLoading(state) {
+  document.body.dataset.ready = state;
+  window.dispatchEvent(new Event('assembly-startup-finished'));
+}
+function showError(error) {
+  const box = document.getElementById('error');
+  box.style.display = 'grid';
+  box.textContent = error.message;
+  finishLoading('error');
+}
 async function chooseVersion(preferred, preferredView) {
   const versionRequest = ++versionLoadId; ++loadId;
   tools?.assembly.pause();
