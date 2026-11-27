@@ -1,0 +1,40 @@
+{
+  "revision": "R73",
+  "physical_fit_verified": false,
+  "layout_sha256": "276629f10ac96d45ec7eedc9bf9a2af31e9337d5c6f36bb8071de3d8f1b00afe",
+  "carrier_sha256": "a9b1257475f234c7b0e2f5b4bd41be601e43fd17591202cd12545b3922ff3b7f",
+  "slices": {
+    "primary": {
+      "archive_sha256": "f3b382cb45d23ec25b343e61a28950aea8c0b8cec5ba2c17b99c34101a6cb98c",
+      "route_groups": 79,
+      "part_count": 9,
+      "guard": {
+        "machine_bounds_mm": [
+          20.834865760803222,
+          148.9456665802002,
+          29.40017623901367,
+          33.42645308769827,
+          159.8856665802002,
+          44.900176239013675
+        ],
+        "unbacked_runs_requiring_review": []
+      }
+    },
+    "reopened": {
+      "archive_sha256": "f4dc50fad63d3325694edd1717d1dd4fb5dfba3707b51f4f35fde3bfb9313e7c",
+      "route_groups": 79,
+      "part_count": 9,
+      "guard": {
+        "machine_bounds_mm": [
+          20.834865760803222,
+          148.9456665802002,
+          29.40017623901367,
+          33.42645308769827,
+          159.8856665802002,
+          44.900176239013675
+        ],
+        "unbacked_runs_requiring_review": []
+      }
+    }
+  }
+}

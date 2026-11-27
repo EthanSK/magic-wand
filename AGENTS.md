@@ -24,7 +24,7 @@
 
 ## Project skills
 
-- Before changing any Magic Wand printable model, coupon, plate or mechanical viewer, and whenever new model requirements or fitted feedback arrive, use [model-user-requirements](.agents/skills/model-user-requirements/SKILL.md). Capture corrections when received and reconcile the staged change before committing.
+- Before changing any Magic Wand printable model, coupon, plate or mechanical viewer, and whenever new model requirements or fitted feedback arrive, use [model-user-requirements](.agents/skills/model-user-requirements/SKILL.md). Capture corrections when received and reconcile the staged change before committing. As you change CAD, leave comments beside the geometry with Ethan’s intentions: how it should feel, where it should meet the body, and what needs room to slide in.
 
 - Before finishing or delivering any 3D model, coupon or print project in this repository, use [printability-audit](.agents/skills/printability-audit/SKILL.md). Fully analyse the actual slice for holes filled by supports, support removal and anything too weak that could snap easily; fix problems while changing the design as little as possible. Follow the skill's current model roles. This is a project skill. User-requested — 2026-11-05; routing clarified — 2026-11-27.
 - For Wand device, receiver, integration, publication or hardware work, read [magic-wand-dev](.agents/skills/magic-wand-dev/SKILL.md). Its Wand-specific steps do not apply to unrelated devices.

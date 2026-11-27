@@ -324,12 +324,11 @@ test('R71 carries every installed actor and lead shape continuously between step
   }
 });
 
-test('the grouped viewer composes R71 and the catalog offers it first', () => {
+test('the grouped viewer composes R71 and keeps its guide available after later revisions', () => {
   const components = assemblyComponents(guide, true);
   assert.ok(components.keys && components.whole);
   const catalog = JSON.parse(readFileSync(new URL('../hardware/carbon-rod-holders/assembly/catalog.json', import.meta.url)));
-  assert.equal(catalog.current, 'r71');
-  assert.equal(catalog.versions[0].id, 'r71');
-  assert.equal(catalog.versions[0].guide, '../../carbon-rod-holders-r71-contained-battery/exports/assembly-guide.json');
+  const r71 = catalog.versions.find(version => version.id === 'r71');
+  assert.equal(r71?.guide, '../../carbon-rod-holders-r71-contained-battery/exports/assembly-guide.json');
   assert.ok(catalog.versions.some(version => version.id === 'r70'), 'R70 stays available');
 });
