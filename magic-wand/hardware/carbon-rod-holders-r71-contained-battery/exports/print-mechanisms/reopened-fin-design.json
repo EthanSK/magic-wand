@@ -1,0 +1,85 @@
+{
+  "archive_sha256": "61ea65e44df19fbd2f3ecf32873888199d6f0333394cb32cf16de82ecf9ac6e8",
+  "holder_first_layer_mm2": 193.3,
+  "panel_sheet_mm2": 3091.3,
+  "combined_first_layer_mm2": 3297.9,
+  "first_layer_pieces": 1,
+  "moat_mm": 1.5,
+  "yoke_top_y": 15.95,
+  "fins": [
+    {
+      "face": "+y",
+      "cut_at_xy": [
+        -26.45,
+        8.47
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 1.8,
+      "section_mm2": 3.06,
+      "rooted_volume_mm3": 1.84
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -27.0,
+        -1.48
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 1.8,
+      "section_mm2": 3.06,
+      "rooted_volume_mm3": 1.84
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -12.6,
+        7.27
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 4.8,
+      "section_mm2": 8.16,
+      "rooted_volume_mm3": 4.84
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -7.4,
+        7.26
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 4.8,
+      "section_mm2": 8.16,
+      "rooted_volume_mm3": 4.84
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        13.0,
+        7.27
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 4.8,
+      "section_mm2": 8.16,
+      "rooted_volume_mm3": 4.81
+    }
+  ],
+  "total_fin_section_mm2": 30.6,
+  "base_volume_mm3": 1667.7,
+  "revision": "R71",
+  "hinge_bay_xy": [
+    -14.5,
+    11.0,
+    14.5,
+    27.58
+  ],
+  "hinge_bay_open_to_panel_edge": true,
+  "base_volume_in_hinge_bay_mm3": 0.0,
+  "nearest_base_to_hinge_mm": 3.5,
+  "fins_on_hinge": 0,
+  "panel_pieces": 1,
+  "removal": [
+    "Fold a wing of the panel away from the holder: each fin breaks at its neck beside the holder.",
+    "What can stay on the holder is at most 0.47 mm long: nip or scrape it flush.",
+    "Nothing is attached at the hinge, over the open pouch lane or on a lip."
+  ]
+}

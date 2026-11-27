@@ -1,7 +1,7 @@
 [
   {
     "id": "battery-against-deck",
-    "status": "active",
+    "status": "superseded",
     "text": "Seat the integrated battery directly against the key carrier base to minimise tray height."
   },
   {
@@ -71,6 +71,9 @@
   {
     "id": "battery-contained-placement",
     "status": "active",
-    "text": "Move the integrated battery down the key carrier and outward as far as the fitted black hot-swap sockets, switch terminals, small body protrusions, wiring and complete assembly/removal routes permit. Unused key-opening space and decorative lightening holes may be overlapped or filled. Minimise projection beyond the carrier, clear the finger-guard beams and slim the outer rail while retaining safe pouch support, removable friction retention and rounded comfortable edges."
+    "text": "Move the integrated battery down the key carrier and outward as far as the fitted black hot-swap sockets, switch terminals, small body protrusions, wiring and complete assembly/removal routes permit. Unused key-opening space and decorative lightening holes may be overlapped or filled. Minimise projection beyond the carrier, clear the finger-guard beams and slim the outer rail while retaining safe pouch support, removable friction retention and rounded comfortable edges.",
+    "supersedes": [
+      "battery-against-deck"
+    ]
   }
 ]

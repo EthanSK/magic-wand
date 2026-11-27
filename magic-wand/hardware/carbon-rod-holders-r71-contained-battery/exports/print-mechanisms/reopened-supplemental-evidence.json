@@ -1,0 +1,72 @@
+{
+  "archive_sha256": "61ea65e44df19fbd2f3ecf32873888199d6f0333394cb32cf16de82ecf9ac6e8",
+  "checker_sha256": "90832d0106c4d43cdd3c98b85b725d5bb0e43b8e2cb3b650189eeb2324f19aea",
+  "carrier_sha256": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+  "guide_sha256": "68b5dd7ec0e75ae86b6d592e54813f12e5b080f1784411afe28cbf313c4ef5bd",
+  "passes": true,
+  "published_plug_route": {
+    "poses": 282,
+    "nearby_samples": 27536,
+    "checked_in_combined_route": 11542,
+    "obstructed_poses": []
+  },
+  "turn_poses": 19,
+  "all_deposited_samples": 2624566,
+  "turn_aabb_clearance_lower_bound_mm": 2.3994,
+  "positive_control": {
+    "poses": 1,
+    "nearby_samples": 14004,
+    "checked_in_combined_route": 7475,
+    "obstructed_poses": [
+      {
+        "pose": 0,
+        "bead_counts": {
+          "Inner wall": 3249,
+          "Outer wall": 1853
+        },
+        "examples": [
+          {
+            "assembly_xyz_mm": [
+              5.9847,
+              4.0502,
+              8.6211
+            ],
+            "feature": "Inner wall",
+            "line_width_mm": 0.34,
+            "layer_height_mm": 0.2
+          }
+        ]
+      }
+    ]
+  },
+  "lower_socket_sections": [
+    {
+      "z_mm": 7.3,
+      "deposited_section_area_mm2": 1061.925,
+      "bore_clear_radii_mm": [
+        1.6636,
+        1.6556,
+        1.6849
+      ]
+    },
+    {
+      "z_mm": 7.6,
+      "deposited_section_area_mm2": 992.01,
+      "bore_clear_radii_mm": [
+        1.6424,
+        1.6472,
+        1.6573
+      ]
+    },
+    {
+      "z_mm": 7.95,
+      "deposited_section_area_mm2": 1409.502,
+      "bore_clear_radii_mm": [
+        1.6433,
+        1.6471,
+        1.6571
+      ]
+    }
+  ],
+  "adapter_sha256": "f7d2f79f2d651199ee37b6f01859df72af5144ed53bef2fe3689158d18d4a56c"
+}

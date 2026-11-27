@@ -1,0 +1,395 @@
+{
+  "revision": "R71",
+  "archive_sha256": "9bc93a9aa17bd0a4e3214409128429b11cdcf2bc8ad4a2f1823732f34c716785",
+  "frame_sha256": "f55594f96c5aab22db0b50588e3b0cf2e442a1978dcd8055221b4a0a5d063df6",
+  "checker_sha256": "bc75687c0c331ef938ba9cd7a294275327b4f51b7286e7623d5837374005a5b4",
+  "parts": {
+    "Left": {
+      "native_head_contacts": {
+        "left_wing": {
+          "witnesses": 31,
+          "least_gap_mm": -0.0,
+          "largest_gap_mm": -0.0
+        },
+        "right_wing": {
+          "witnesses": 32,
+          "least_gap_mm": -0.0,
+          "largest_gap_mm": -0.0
+        },
+        "rear_ledge": {
+          "witnesses": 133,
+          "least_gap_mm": -0.0,
+          "largest_gap_mm": 0.8
+        }
+      },
+      "native_frame_seating_translation_mm": -0.0,
+      "rigid_board_lift_to_frame_mm": 0.2,
+      "checked_board_lift_mm": 0.25,
+      "spring_feet": {
+        "-1": {
+          "witnesses": 35,
+          "least_free_intrusion_mm": 0.2,
+          "required_arm_tip_deflection_mm": 0.2
+        },
+        "1": {
+          "witnesses": 35,
+          "least_free_intrusion_mm": 0.2,
+          "required_arm_tip_deflection_mm": 0.2
+        }
+      },
+      "spring_root_sections": {
+        "-1": [
+          {
+            "y_mm": 10.4105,
+            "source_width_mm": 1.8285,
+            "source_thickness_mm": 1.2,
+            "area_mm2": 2.1873,
+            "layer_widths_mm": [
+              1.8291,
+              1.8217,
+              1.813,
+              1.8128,
+              1.8298,
+              1.83
+            ]
+          },
+          {
+            "y_mm": 10.5805,
+            "source_width_mm": 1.8,
+            "source_thickness_mm": 1.2,
+            "area_mm2": 2.1219,
+            "layer_widths_mm": [
+              1.663,
+              1.796,
+              1.7958,
+              1.775,
+              1.7951,
+              1.7848
+            ]
+          },
+          {
+            "y_mm": 10.7305,
+            "source_width_mm": 1.8,
+            "source_thickness_mm": 1.0,
+            "area_mm2": 1.7776,
+            "layer_widths_mm": [
+              1.8005,
+              1.7925,
+              1.7867,
+              1.7937,
+              1.7147
+            ]
+          }
+        ],
+        "1": [
+          {
+            "y_mm": 10.4105,
+            "source_width_mm": 1.8285,
+            "source_thickness_mm": 1.2,
+            "area_mm2": 2.1882,
+            "layer_widths_mm": [
+              1.8298,
+              1.8175,
+              1.8272,
+              1.816,
+              1.8232,
+              1.8273
+            ]
+          },
+          {
+            "y_mm": 10.5805,
+            "source_width_mm": 1.8,
+            "source_thickness_mm": 1.2,
+            "area_mm2": 2.0878,
+            "layer_widths_mm": [
+              1.662,
+              1.796,
+              1.7764,
+              1.6117,
+              1.797,
+              1.7959
+            ]
+          },
+          {
+            "y_mm": 10.7305,
+            "source_width_mm": 1.8,
+            "source_thickness_mm": 1.0,
+            "area_mm2": 1.7846,
+            "layer_widths_mm": [
+              1.8005,
+              1.792,
+              1.7491,
+              1.7922,
+              1.7892
+            ]
+          }
+        ]
+      },
+      "post_sections": [
+        {
+          "board_plane_z_mm": 19.301,
+          "smallest_enclosing_diameter_mm": 3.0455,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0455,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1545,
+          "deposited_section_area_mm2": 4.3159
+        },
+        {
+          "board_plane_z_mm": 19.499,
+          "smallest_enclosing_diameter_mm": 3.0455,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0455,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1545,
+          "deposited_section_area_mm2": 4.3159
+        },
+        {
+          "board_plane_z_mm": 19.499,
+          "smallest_enclosing_diameter_mm": 3.0455,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0455,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1545,
+          "deposited_section_area_mm2": 4.3159
+        },
+        {
+          "board_plane_z_mm": 19.501,
+          "smallest_enclosing_diameter_mm": 3.0274,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0274,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1726,
+          "deposited_section_area_mm2": 4.289
+        },
+        {
+          "board_plane_z_mm": 19.501,
+          "smallest_enclosing_diameter_mm": 3.0274,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0274,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1726,
+          "deposited_section_area_mm2": 4.289
+        },
+        {
+          "board_plane_z_mm": 19.55,
+          "smallest_enclosing_diameter_mm": 3.0274,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0274,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1726,
+          "deposited_section_area_mm2": 4.289
+        }
+      ],
+      "full_rib_layer_sections": [
+        {
+          "board_plane_z_mm": 19.4,
+          "smallest_enclosing_diameter_mm": 3.0455,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0455,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1545,
+          "deposited_section_area_mm2": 4.3159
+        },
+        {
+          "board_plane_z_mm": 19.6,
+          "smallest_enclosing_diameter_mm": 3.0274,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0274,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1726,
+          "deposited_section_area_mm2": 4.289
+        },
+        {
+          "board_plane_z_mm": 19.8,
+          "smallest_enclosing_diameter_mm": 3.0274,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0274,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1726,
+          "deposited_section_area_mm2": 4.294
+        }
+      ],
+      "minimum_enclosing_diameter_through_checked_lift_mm": 3.0274,
+      "nominal_hole_mm": 3.0,
+      "actual_hole_tolerance_and_friction_unmeasured": true
+    },
+    "Right": {
+      "native_head_contacts": {
+        "left_wing": {
+          "witnesses": 31,
+          "least_gap_mm": -0.0,
+          "largest_gap_mm": -0.0
+        },
+        "right_wing": {
+          "witnesses": 32,
+          "least_gap_mm": -0.0,
+          "largest_gap_mm": -0.0
+        },
+        "rear_ledge": {
+          "witnesses": 133,
+          "least_gap_mm": -0.0,
+          "largest_gap_mm": 0.6
+        }
+      },
+      "native_frame_seating_translation_mm": -0.0,
+      "rigid_board_lift_to_frame_mm": 0.2,
+      "checked_board_lift_mm": 0.25,
+      "spring_feet": {
+        "-1": {
+          "witnesses": 35,
+          "least_free_intrusion_mm": 0.2,
+          "required_arm_tip_deflection_mm": 0.2
+        },
+        "1": {
+          "witnesses": 35,
+          "least_free_intrusion_mm": 0.2,
+          "required_arm_tip_deflection_mm": 0.2
+        }
+      },
+      "spring_root_sections": {
+        "-1": [
+          {
+            "y_mm": 10.4105,
+            "source_width_mm": 1.8285,
+            "source_thickness_mm": 1.2,
+            "area_mm2": 2.1866,
+            "layer_widths_mm": [
+              1.8283,
+              1.8177,
+              1.8135,
+              1.8129,
+              1.8307,
+              1.8301
+            ]
+          },
+          {
+            "y_mm": 10.5805,
+            "source_width_mm": 1.8,
+            "source_thickness_mm": 1.2,
+            "area_mm2": 2.1219,
+            "layer_widths_mm": [
+              1.662,
+              1.796,
+              1.7957,
+              1.7759,
+              1.7951,
+              1.7848
+            ]
+          },
+          {
+            "y_mm": 10.7305,
+            "source_width_mm": 1.8,
+            "source_thickness_mm": 1.0,
+            "area_mm2": 1.7778,
+            "layer_widths_mm": [
+              1.8005,
+              1.7925,
+              1.7875,
+              1.7937,
+              1.7147
+            ]
+          }
+        ],
+        "1": [
+          {
+            "y_mm": 10.4105,
+            "source_width_mm": 1.8285,
+            "source_thickness_mm": 1.2,
+            "area_mm2": 2.188,
+            "layer_widths_mm": [
+              1.8298,
+              1.8175,
+              1.8259,
+              1.8161,
+              1.8232,
+              1.8273
+            ]
+          },
+          {
+            "y_mm": 10.5805,
+            "source_width_mm": 1.8,
+            "source_thickness_mm": 1.2,
+            "area_mm2": 2.0878,
+            "layer_widths_mm": [
+              1.662,
+              1.796,
+              1.7764,
+              1.6115,
+              1.797,
+              1.7959
+            ]
+          },
+          {
+            "y_mm": 10.7305,
+            "source_width_mm": 1.8,
+            "source_thickness_mm": 1.0,
+            "area_mm2": 1.7846,
+            "layer_widths_mm": [
+              1.8005,
+              1.792,
+              1.7492,
+              1.7922,
+              1.7892
+            ]
+          }
+        ]
+      },
+      "post_sections": [
+        {
+          "board_plane_z_mm": 19.301,
+          "smallest_enclosing_diameter_mm": 3.0455,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0455,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1545,
+          "deposited_section_area_mm2": 4.315
+        },
+        {
+          "board_plane_z_mm": 19.499,
+          "smallest_enclosing_diameter_mm": 3.0455,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0455,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1545,
+          "deposited_section_area_mm2": 4.315
+        },
+        {
+          "board_plane_z_mm": 19.499,
+          "smallest_enclosing_diameter_mm": 3.0455,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0455,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1545,
+          "deposited_section_area_mm2": 4.315
+        },
+        {
+          "board_plane_z_mm": 19.501,
+          "smallest_enclosing_diameter_mm": 3.0274,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0274,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1726,
+          "deposited_section_area_mm2": 4.2873
+        },
+        {
+          "board_plane_z_mm": 19.501,
+          "smallest_enclosing_diameter_mm": 3.0274,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0274,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1726,
+          "deposited_section_area_mm2": 4.2873
+        },
+        {
+          "board_plane_z_mm": 19.55,
+          "smallest_enclosing_diameter_mm": 3.0274,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0274,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1726,
+          "deposited_section_area_mm2": 4.2873
+        }
+      ],
+      "full_rib_layer_sections": [
+        {
+          "board_plane_z_mm": 19.4,
+          "smallest_enclosing_diameter_mm": 3.0455,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0455,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1545,
+          "deposited_section_area_mm2": 4.315
+        },
+        {
+          "board_plane_z_mm": 19.6,
+          "smallest_enclosing_diameter_mm": 3.0274,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0274,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1726,
+          "deposited_section_area_mm2": 4.2873
+        },
+        {
+          "board_plane_z_mm": 19.8,
+          "smallest_enclosing_diameter_mm": 3.0274,
+          "nominal_3mm_hole_interference_on_diameter_mm": 0.0274,
+          "nominal_3_2mm_hole_clearance_on_diameter_mm": 0.1726,
+          "deposited_section_area_mm2": 4.2927
+        }
+      ],
+      "minimum_enclosing_diameter_through_checked_lift_mm": 3.0274,
+      "nominal_hole_mm": 3.0,
+      "actual_hole_tolerance_and_friction_unmeasured": true
+    }
+  },
+  "passes": true,
+  "physical_fit_force_and_creep_verified": false,
+  "method": "Complete native layer slabs and nominal circular bead footprints in matching assembly coordinates; sampled head/frame and foot/board contacts, then complete post-layer intervals through the conservative rigid-lift range."
+}

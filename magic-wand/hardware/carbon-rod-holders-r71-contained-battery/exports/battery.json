@@ -1,0 +1,548 @@
+{
+  "revision": "R71",
+  "physical_fit_verified": false,
+  "pouch": "Micron 72217 protected 3.7 V 100 mAh, nominal 27 x 11.8 x 3.9 mm, 35 mm leads, Molex 2 mm 2-pin. The cell was not measured; the lead exit end and slack are unknown and the connector is not modelled.",
+  "placement": {
+    "pouch_mm": [
+      11.8,
+      27.0,
+      3.9
+    ],
+    "pouch_x_mm": {
+      "r70": [
+        -21.25,
+        -9.45
+      ],
+      "r71": [
+        -27.45,
+        -15.65
+      ]
+    },
+    "pouch_front_y_mm": {
+      "r70": 21.9,
+      "r71": 9.45
+    },
+    "pouch_top_z_mm": {
+      "r70": 7.22,
+      "r71": 4.17
+    },
+    "pouch_underside_z_mm": {
+      "r70": 3.32,
+      "r71": 0.27
+    },
+    "rail_lowest_z_mm": {
+      "r70": 2.37,
+      "r71": -0.68
+    },
+    "moved_outward_mm": 6.2,
+    "moved_down_the_holder_mm": 12.45,
+    "lower_than_r70_mm": 3.05,
+    "under_the_deck_mm": {
+      "r70": 0.05,
+      "r71": 3.1
+    },
+    "behind_the_rear_face_mm": {
+      "r70": 12.45,
+      "r71": 0.0
+    },
+    "held_by_the_rail_mm": {
+      "r70": 14.55,
+      "r71": 16.05
+    },
+    "nose_in_front_of_the_rail_mm": 10.95,
+    "outer_rail_mm": {
+      "r70": 3.3,
+      "r71": 0.9
+    },
+    "inboard_rail_mm": {
+      "r70": 0.9,
+      "r71": 1.51
+    },
+    "rail_width_overall_mm": {
+      "r70": 16.0,
+      "r71": 14.21
+    },
+    "spring": {
+      "kind": "tongue cut into the inboard wall",
+      "thickness_mm": 1.04,
+      "height_mm": 2.36,
+      "lever_mm": 8.25,
+      "preload_mm": 0.21,
+      "width_allowance_mm": 0.47,
+      "r70": {
+        "thickness_mm": 1.04,
+        "height_mm": 2.36,
+        "lever_mm": 8.25,
+        "preload_mm": 0.21
+      }
+    },
+    "guard": {
+      "arm_radius_mm": 1.32,
+      "bar_radius_mm": 1.26,
+      "old_arm_kept_to_y_mm": 18.37,
+      "hub_mm": {
+        "r70": [
+          20.4,
+          10.2,
+          0.88
+        ],
+        "r71": [
+          20.4,
+          7.5,
+          0.88
+        ]
+      },
+      "arm_centre_beside_the_pouch_x_mm": -13.78,
+      "arm_centre_in_front_of_the_nose_y_mm": 8.08,
+      "arm_to_the_pouch_side_mm": 0.55,
+      "arm_to_the_pouch_front_mm": 0.05,
+      "arm_lowest_centre_z_mm": {
+        "r70": 0.8,
+        "r71": 0.88
+      },
+      "bars_centre_z_mm": {
+        "r70": 0.88,
+        "r71": 0.88
+      }
+    }
+  },
+  "other_places_tried": {
+    "rows": [
+      {
+        "height": "against the deck (R70)",
+        "pouch_top_z_mm": 7.22,
+        "under_the_deck_mm": 0.05,
+        "pouch_x0_mm": -29.05,
+        "hardware_only": {
+          "front_y_mm": 21.6,
+          "behind_the_rear_face_mm": 12.15
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 21.6,
+          "behind_the_rear_face_mm": 12.15
+        }
+      },
+      {
+        "height": "against the deck (R70)",
+        "pouch_top_z_mm": 7.22,
+        "under_the_deck_mm": 0.05,
+        "pouch_x0_mm": -27.45,
+        "hardware_only": {
+          "front_y_mm": 21.6,
+          "behind_the_rear_face_mm": 12.15
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 21.6,
+          "behind_the_rear_face_mm": 12.15
+        }
+      },
+      {
+        "height": "against the deck (R70)",
+        "pouch_top_z_mm": 7.22,
+        "under_the_deck_mm": 0.05,
+        "pouch_x0_mm": -24.5,
+        "hardware_only": {
+          "front_y_mm": 21.6,
+          "behind_the_rear_face_mm": 12.15
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 21.6,
+          "behind_the_rear_face_mm": 12.15
+        }
+      },
+      {
+        "height": "against the deck (R70)",
+        "pouch_top_z_mm": 7.22,
+        "under_the_deck_mm": 0.05,
+        "pouch_x0_mm": -21.25,
+        "hardware_only": {
+          "front_y_mm": 21.6,
+          "behind_the_rear_face_mm": 12.15
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 21.6,
+          "behind_the_rear_face_mm": 12.15
+        }
+      },
+      {
+        "height": "under the switch posts",
+        "pouch_top_z_mm": 6.12,
+        "under_the_deck_mm": 1.15,
+        "pouch_x0_mm": -29.05,
+        "hardware_only": {
+          "front_y_mm": 19.1,
+          "behind_the_rear_face_mm": 9.65
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 19.1,
+          "behind_the_rear_face_mm": 9.65
+        }
+      },
+      {
+        "height": "under the switch posts",
+        "pouch_top_z_mm": 6.12,
+        "under_the_deck_mm": 1.15,
+        "pouch_x0_mm": -27.45,
+        "hardware_only": {
+          "front_y_mm": 19.1,
+          "behind_the_rear_face_mm": 9.65
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 19.1,
+          "behind_the_rear_face_mm": 9.65
+        }
+      },
+      {
+        "height": "under the switch posts",
+        "pouch_top_z_mm": 6.12,
+        "under_the_deck_mm": 1.15,
+        "pouch_x0_mm": -24.5,
+        "hardware_only": {
+          "front_y_mm": 19.1,
+          "behind_the_rear_face_mm": 9.65
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 19.6,
+          "behind_the_rear_face_mm": 10.15
+        }
+      },
+      {
+        "height": "under the switch posts",
+        "pouch_top_z_mm": 6.12,
+        "under_the_deck_mm": 1.15,
+        "pouch_x0_mm": -21.25,
+        "hardware_only": {
+          "front_y_mm": 19.1,
+          "behind_the_rear_face_mm": 9.65
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 20.4,
+          "behind_the_rear_face_mm": 10.95
+        }
+      },
+      {
+        "height": "under the tape margin",
+        "pouch_top_z_mm": 5.1,
+        "under_the_deck_mm": 2.17,
+        "pouch_x0_mm": -29.05,
+        "hardware_only": {
+          "front_y_mm": 17.9,
+          "behind_the_rear_face_mm": 8.45
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 17.9,
+          "behind_the_rear_face_mm": 8.45
+        }
+      },
+      {
+        "height": "under the tape margin",
+        "pouch_top_z_mm": 5.1,
+        "under_the_deck_mm": 2.17,
+        "pouch_x0_mm": -27.45,
+        "hardware_only": {
+          "front_y_mm": 15.7,
+          "behind_the_rear_face_mm": 6.25
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 15.7,
+          "behind_the_rear_face_mm": 6.25
+        }
+      },
+      {
+        "height": "under the tape margin",
+        "pouch_top_z_mm": 5.1,
+        "under_the_deck_mm": 2.17,
+        "pouch_x0_mm": -24.5,
+        "hardware_only": {
+          "front_y_mm": 15.7,
+          "behind_the_rear_face_mm": 6.25
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 18.8,
+          "behind_the_rear_face_mm": 9.35
+        }
+      },
+      {
+        "height": "under the tape margin",
+        "pouch_top_z_mm": 5.1,
+        "under_the_deck_mm": 2.17,
+        "pouch_x0_mm": -21.25,
+        "hardware_only": {
+          "front_y_mm": 15.7,
+          "behind_the_rear_face_mm": 6.25
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 19.4,
+          "behind_the_rear_face_mm": 9.95
+        }
+      },
+      {
+        "height": "under the solder allowance (R71)",
+        "pouch_top_z_mm": 4.17,
+        "under_the_deck_mm": 3.1,
+        "pouch_x0_mm": -29.05,
+        "hardware_only": {
+          "front_y_mm": 9.45,
+          "behind_the_rear_face_mm": 0.0
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 12.3,
+          "behind_the_rear_face_mm": 2.85
+        }
+      },
+      {
+        "height": "under the solder allowance (R71)",
+        "pouch_top_z_mm": 4.17,
+        "under_the_deck_mm": 3.1,
+        "pouch_x0_mm": -27.45,
+        "hardware_only": {
+          "front_y_mm": 9.45,
+          "behind_the_rear_face_mm": 0.0
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 13.5,
+          "behind_the_rear_face_mm": 4.05
+        }
+      },
+      {
+        "height": "under the solder allowance (R71)",
+        "pouch_top_z_mm": 4.17,
+        "under_the_deck_mm": 3.1,
+        "pouch_x0_mm": -24.5,
+        "hardware_only": {
+          "front_y_mm": 9.45,
+          "behind_the_rear_face_mm": 0.0
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 18.0,
+          "behind_the_rear_face_mm": 8.55
+        }
+      },
+      {
+        "height": "under the solder allowance (R71)",
+        "pouch_top_z_mm": 4.17,
+        "under_the_deck_mm": 3.1,
+        "pouch_x0_mm": -21.25,
+        "hardware_only": {
+          "front_y_mm": 9.45,
+          "behind_the_rear_face_mm": 0.0
+        },
+        "hardware_and_the_r70_guard": {
+          "front_y_mm": 18.4,
+          "behind_the_rear_face_mm": 8.95
+        }
+      }
+    ],
+    "least_behind_the_rear_face_mm": {
+      "against the deck (R70)": {
+        "hardware_only": 12.15,
+        "hardware_and_the_r70_guard": 12.15
+      },
+      "under the switch posts": {
+        "hardware_only": 9.65,
+        "hardware_and_the_r70_guard": 9.65
+      },
+      "under the tape margin": {
+        "hardware_only": 6.25,
+        "hardware_and_the_r70_guard": 6.25
+      },
+      "under the solder allowance (R71)": {
+        "hardware_only": 0.0,
+        "hardware_and_the_r70_guard": 2.85
+      }
+    },
+    "fully_inside_at_the_tape_margin_into_the_solder_allowance_mm3": 6.29727,
+    "fully_inside_at_the_tape_margin_into_the_r70_guard_mm3": 16.77171,
+    "reading": "Sideways position does not help: both sockets span the bank. Height decides. Against the deck or under the switch posts the pouch stops behind the upper-left socket. Under the socket it can end at the rear face, if it also clears the solder allowance on the terminals and if the guard's top arm and the crown's rear bar leave its nose free. R71 does both."
+  },
+  "limits": {
+    "measured_on_the_fitted_models": {
+      "socket_underside_z_mm": 5.6,
+      "tape_underside_z_mm": 5.2,
+      "solder_allowance_underside_z_mm": 4.37,
+      "post_tip_z_mm": 6.27
+    },
+    "above": {
+      "what": "the stated solder-and-wire allowance on the terminals of both left sockets, at their seats",
+      "allowance_blocks": {
+        "key_3_soldered_socket_dogleg": [
+          -30.68,
+          12.38,
+          4.37,
+          -16.33,
+          17.87,
+          5.59
+        ],
+        "key_0_soldered_socket_slide": [
+          -28.57,
+          -4.67,
+          4.37,
+          -23.08,
+          9.68,
+          5.59
+        ]
+      },
+      "pad_underside_z_mm": 4.22,
+      "pouch_top_z_mm": 4.17,
+      "pads_to_the_allowance_mm": 0.15,
+      "pouch_to_the_allowance_mm": 0.2,
+      "pouch_to_the_tape_margin_mm": 1.03,
+      "pouch_to_the_fitted_switches_and_sockets_mm": 1.43,
+      "pouch_to_the_largest_sockets_mm": 1.43,
+      "under_the_deck_mm": 3.1,
+      "at_the_tape_margin_instead": {
+        "pouch_top_z_mm": 5.1,
+        "into_the_solder_allowance_mm3": 6.29727,
+        "reading": "0.93 mm less under the deck, but the pouch would lie in the space kept for two solder joints and their wires"
+      }
+    },
+    "forward": {
+      "what": "the rear face: a 27 mm pouch that ends there starts at Y 9.45",
+      "pouch_front_y_mm": 9.45,
+      "rear_face_y_mm": 36.449999999999996,
+      "behind_the_rear_face_mm": 0.0,
+      "front_stop": "the left guard's top arm, across the nose at the pouch's mid height",
+      "nose_to_the_arm_mm": 0.05,
+      "nose_to_the_lower_left_socket_mm": 1.86
+    },
+    "inboard": {
+      "what": "the left guard's top arm, re-routed beside the pouch",
+      "arm_to_the_pouch_side_mm": 0.55,
+      "rail_to_the_guard_mm": 2.154,
+      "guard_to_the_fitted_switches_and_sockets_mm": 2.079,
+      "guard_to_the_solder_allowance_mm": 1.861,
+      "guard_to_the_tape_margin_mm": 2.086
+    },
+    "outward": {
+      "what": "the side of the left key bank",
+      "bank_side_x_mm": -29.95,
+      "outer_wall_x_mm": [
+        -28.35,
+        -27.52
+      ],
+      "inset_mm": 1.6,
+      "edge_round_mm": 1.5
+    },
+    "below": {
+      "rail_lowest_z_mm": {
+        "r70": 2.37,
+        "r71": -0.68
+      },
+      "heel_under_the_outer_lip_z_mm": -1.48,
+      "pouch_underside_z_mm": {
+        "r70": 3.32,
+        "r71": 0.27
+      },
+      "left_guard_lowest_z_mm": {
+        "r70": -0.51,
+        "r71": -0.51
+      }
+    }
+  },
+  "fitted_parts": {
+    "pouch_to_switches_and_sockets_mm3": {
+      "switch_0": 0.0,
+      "socket_0": 0.0,
+      "switch_2": 0.0,
+      "socket_2": 0.0,
+      "switch_3": 0.0,
+      "socket_3": 0.0,
+      "switch_4": 0.0,
+      "socket_4": 0.0
+    },
+    "pouch_to_tape_and_solder_allowance_mm3": 0.0,
+    "rail_to_left_switches_and_sockets_mm3": {
+      "switch_0": 0.0,
+      "socket_0": 0.0,
+      "switch_3": 0.0,
+      "socket_3": 0.0
+    },
+    "rail_and_guard_to_tape_and_solder_allowance_mm3": 0.0
+  },
+  "loading": {
+    "key_poses_checked": 336,
+    "key_obstructions": [],
+    "upper_left_socket_routes_to_the_rail_gap_mm": 1.799,
+    "upper_left_socket_routes_to_the_guard_gap_mm": 1.348,
+    "lower_left_socket_route_to_the_guard_gap_mm": 0.435,
+    "routes_crossing_the_seated_pouch_mm3": {
+      "r70": {},
+      "r71": {
+        "key_3_socket_loading": 72.03721,
+        "key_3_maximum_socket_loading": 79.21425,
+        "key_0_soldered_socket_slide": 1.20704,
+        "key_3_soldered_socket_dogleg": 86.84077
+      }
+    },
+    "order": "Sockets first, taped, then the switches, then the pouch. The upper-left socket comes up through the place the pouch then takes, and the lower-left socket slides past its nose: take the pouch out before changing either. With the pouch out every key route is open."
+  },
+  "seat": {
+    "seated_overlap_with_the_spring_mm3": 1.50076,
+    "seated_overlap_without_the_spring_mm3": 0.0,
+    "slide_in_from_the_rear_without_the_spring_mm3": 0.0,
+    "slide_in_poses": 61,
+    "slide_in_against_switches_sockets_tape_and_solder_mm3": 0.0,
+    "widest_pouch_seated_mm3": 0.0,
+    "widest_pouch_mm": 12.25,
+    "pushed_0_2mm_past_the_stop_mm3": 0.19263,
+    "lips_under_the_pouch_mm2": {
+      "r70": 69.8,
+      "r71": 77.0
+    },
+    "bearing_over_the_pouch_mm2": {
+      "r70": 144.6,
+      "r71": 57.5
+    },
+    "vertical_play_mm": 0.2
+  },
+  "removal": {
+    "how": "Press a fingertip on the pouch's open underside, between the rail and the guard, and slide it back until its end can be held. Nothing has to be pulled by the leads.",
+    "underside_open_mm2": 241.6,
+    "underside_share_open": 0.76,
+    "open_window_in_front_of_the_rail_mm": [
+      11.8,
+      9.95
+    ],
+    "covered_inside_that_window_mm2": 0.0,
+    "top_open_from_above_mm2": 32.4,
+    "nothing_behind_the_pouch_end_mm3": 0.0
+  },
+  "spring": {
+    "tongue_to_frame_gap_mm": 0.7,
+    "room_behind_the_tongue_to_the_guard_mm": 3.959
+  },
+  "wires": "Assumed, not measured: the wires of both left sockets are taped to the deck, as the guide asks, inside the stated allowance. Over the pouch's nose there is 3.1 mm between pouch and deck for them; the strip of deck behind the upper-left socket is free to Y 20.40, as in R70. The battery leads leave from the rear end as before.",
+  "not_measured": "pouch size, lead exit, real solder joints and wire runs, spring force, how firmly 16 mm of rail holds in use, and the feel of a rail 3 mm lower",
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "meshes_sha256": {
+    "Key_Carrier-assembly.stl": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+    "Touch_Paddle-assembly.stl": "a58ed3c10eac252bb540b8c34c4b665fd5be7571bccdf17c7b473f5214f18e9f",
+    "DFR_Post_Bar-assembly.stl": "1c0e534ddbd385a8880adc74f64485dde32bc9ba0a3963f4d3f016abc601891e",
+    "DFR_Clip_Left-assembly.stl": "9edacc6fe79d97b080b28293159f7d721214b61cbc98f2bd114250b4e8582d09",
+    "DFR_Clip_Right-assembly.stl": "f8e743eabed60e35d073b7c4b36d5acb02b9d5150a8f1593d1078c678a2520be",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422"
+  },
+  "carrier_sha256": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+  "generator_sha256": {
+    "design71.py": "985fb2334b3c652dfe6ea838cf9fc132a952991f53cd0bcba6521d4e2eac0878",
+    "hinge71.py": "a1b76f213d9b55420f6884177bc08a3f1bc37c11f7592120f999a7c45a210b14",
+    "design70.py": "1e582ec32abe51209b9a9bad08ea5354857db7512f27a7aebe6351984c884184",
+    "hinge70.py": "7b5a294e15bb9c0f1c36469591ad26e2e5e8d2c94c6f5cd9d8b59ced8ca5ad58",
+    "kit71.py": "7c136cccc59238f6a9b0b47682b9971c86e602403dd6b50c28ee48025573326f"
+  }
+}

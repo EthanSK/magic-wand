@@ -1,0 +1,1003 @@
+{
+  "revision": "R71",
+  "physical_fit_verified": false,
+  "r70_carrier_sha256": "de2d45f20f3e6f324ca65101dd837287dbe97184d0423fc51a69cf1f23579777",
+  "unchanged_parts": {
+    "Gravity_Wires-assembly.stl": true,
+    "OP1_Lid_Stop-assembly.stl": true
+  },
+  "unchanged_zones_sections_against_r70": {
+    "right_of_the_old_rail": {
+      "sections": 277,
+      "spacing_mm": 0.2,
+      "max_area_mm2": 0.00368,
+      "worst_y_mm": 27.984,
+      "sum_area_times_step_mm3": 0.010161
+    },
+    "left_in_front_of_the_guard_crown": {
+      "sections": 93,
+      "spacing_mm": 0.2,
+      "max_area_mm2": 9.6e-05,
+      "worst_y_mm": 3.583,
+      "sum_area_times_step_mm3": 0.000641
+    },
+    "left_deck_in_front_of_the_rail": {
+      "sections": 82,
+      "spacing_mm": 0.2,
+      "max_area_mm2": 4.9e-05,
+      "worst_y_mm": 11.32,
+      "sum_area_times_step_mm3": 1.3e-05
+    },
+    "left_bank_above_its_rounded_edge": {
+      "sections": 96,
+      "spacing_mm": 0.2,
+      "max_area_mm2": 0.000263,
+      "worst_y_mm": 18.72,
+      "sum_area_times_step_mm3": 0.002534
+    }
+  },
+  "left_bank_inside_the_mirrored_outline": {
+    "removed_mm3": 0.0,
+    "added_mm3": 1.129,
+    "reading": "from the deck up, behind the taper line: nothing is taken; the tops of the rail walls and pad ribs show in the lightening windows"
+  },
+  "rear_outline_left_against_mirrored_right": {
+    "r70": {
+      "plate_above_the_deck_edge_round": {
+        "left_only_mm2": 26.38,
+        "right_only_mm2": 0.0
+      },
+      "deck_level": {
+        "left_only_mm2": 39.29,
+        "right_only_mm2": 0.0
+      }
+    },
+    "r71": {
+      "plate_above_the_deck_edge_round": {
+        "left_only_mm2": 0.03,
+        "right_only_mm2": 0.0
+      },
+      "deck_level": {
+        "left_only_mm2": 16.55,
+        "right_only_mm2": 0.0
+      }
+    },
+    "roof_strip_mm": [
+      -28.35,
+      -25.4
+    ],
+    "removed_for_the_taper_mm3": 97.9
+  },
+  "hinge": {
+    "report": "the printed R70 hinge clicked but felt slightly stiff; the rubbing place was not identified",
+    "click_values": {
+      "r70": {
+        "button_contact_deg": 0.0033110757462537777,
+        "case_stop_deg": 1.307781457901001,
+        "lift_stop_deg": 1.1305585086345675,
+        "plunger_travel_at_case_mm": 0.8237,
+        "reversed_plunger_travel_mm": 0.8343
+      },
+      "r71": {
+        "button_contact_deg": 0.0033110757462537777,
+        "case_stop_deg": 1.307781457901001,
+        "lift_stop_deg": 1.1305585086345675,
+        "plunger_travel_at_case_mm": 0.8237,
+        "reversed_plunger_travel_mm": 0.8343
+      }
+    },
+    "click_overlaps_mm3": {
+      "wired_board_drop_over_posts": 0.00075
+    },
+    "journal_flat_mm": 0.07,
+    "journal_radius_mm": 3.0,
+    "journal_room_above_and_below_mm": {
+      "r70": 0.035,
+      "r71": 0.105
+    },
+    "journal_room_fore_and_aft_mm": 0.15,
+    "journal_travel_each_way_mm": {
+      "forward": 0.145,
+      "rearward": 0.145,
+      "left": 0.16,
+      "right": 0.16
+    },
+    "paddle_to_holder_at_rest_mm": {
+      "r70": 0.035,
+      "r71": 0.105
+    },
+    "paddle_volume_mm3": {
+      "r70": 1502.22,
+      "r71": 1500.46
+    },
+    "joint_throat_mm2": {
+      "r70": {
+        "left": 30.17,
+        "right": 15.91
+      },
+      "r71": {
+        "left": 30.17,
+        "right": 15.91
+      }
+    }
+  },
+  "left_guard": {
+    "kept": "root and first 3.9 mm of the top arm (to Y 18.37), both lower rails, the closed outer tip, every height and both sections",
+    "moved": {
+      "hub_mm": {
+        "r70": [
+          20.4,
+          10.2,
+          0.88
+        ],
+        "r71": [
+          20.4,
+          7.5,
+          0.88
+        ]
+      },
+      "hub_moved_toward_the_lower_row_mm": 2.7,
+      "arm_centre_beside_the_pouch_x_mm": -13.78,
+      "arm_length_mm": {
+        "r70": 18.2,
+        "r71": 21.6
+      }
+    },
+    "new_members_core_missing_mm3": 0.0,
+    "old_arm_and_bars_left_mm3": 0.0,
+    "arm_root_section_changed_mm2": 0.02635,
+    "lowest_z_mm": {
+      "r70": -0.51,
+      "r71": -0.51
+    },
+    "crown_rear_edge_y_mm": {
+      "r70": 13.47,
+      "r71": 9.4
+    },
+    "plan_under_z_3_2_mm2": {
+      "r70": 155.9,
+      "r71": 144.0
+    },
+    "plan_no_longer_covered_mm2": 34.6,
+    "of_that_under_the_pouch_mm2": 21.7,
+    "plan_newly_covered_mm2": 22.6,
+    "slot_between_the_crown_and_the_pouch_nose_mm": 0.69,
+    "steepest_descent_from_the_print_axis_deg": {
+      "r70": 54.8,
+      "r71": 52.7
+    },
+    "sideways_run_to_the_hub": {
+      "r70": {
+        "length_mm": 8.7,
+        "rise_deg": 7.2
+      },
+      "r71": {
+        "length_mm": 4.75,
+        "rise_deg": 7.0
+      }
+    },
+    "reading": "The crown ends 2.7 mm nearer the lower row. The strip it used to cover lies under the pouch. Without a pouch that strip is open, as the space under the upper-left socket always was."
+  },
+  "print_layers": {
+    "r70": {
+      "islands_starting_on_nothing": [],
+      "layers_overhanging_more_than_0_5_mm": 15,
+      "overhang_total_mm2": 5.66,
+      "largest": [
+        {
+          "y_mm": 11.35,
+          "area_mm2": 1.54,
+          "x_mm": [
+            -21.3,
+            -19.7
+          ],
+          "z_mm": [
+            0.0,
+            1.7
+          ]
+        },
+        {
+          "y_mm": -1.65,
+          "area_mm2": 1.01,
+          "x_mm": [
+            -24.6,
+            -21.7
+          ],
+          "z_mm": [
+            0.7,
+            2.5
+          ]
+        },
+        {
+          "y_mm": 11.15,
+          "area_mm2": 0.97,
+          "x_mm": [
+            -22.7,
+            -21.3
+          ],
+          "z_mm": [
+            0.2,
+            1.5
+          ]
+        },
+        {
+          "y_mm": -1.45,
+          "area_mm2": 0.36,
+          "x_mm": [
+            -21.9,
+            -20.9
+          ],
+          "z_mm": [
+            2.0,
+            2.9
+          ]
+        },
+        {
+          "y_mm": 10.95,
+          "area_mm2": 0.33,
+          "x_mm": [
+            -23.7,
+            -22.9
+          ],
+          "z_mm": [
+            0.3,
+            1.4
+          ]
+        }
+      ]
+    },
+    "r71": {
+      "islands_starting_on_nothing": [],
+      "layers_overhanging_more_than_0_5_mm": 19,
+      "overhang_total_mm2": 12.1,
+      "largest": [
+        {
+          "y_mm": 22.55,
+          "area_mm2": 2.87,
+          "x_mm": [
+            -15.2,
+            -14.1
+          ],
+          "z_mm": [
+            0.8,
+            3.6
+          ]
+        },
+        {
+          "y_mm": 9.15,
+          "area_mm2": 1.19,
+          "x_mm": [
+            -18.8,
+            -17.0
+          ],
+          "z_mm": [
+            1.2,
+            2.8
+          ]
+        },
+        {
+          "y_mm": 8.35,
+          "area_mm2": 1.03,
+          "x_mm": [
+            -24.1,
+            -22.4
+          ],
+          "z_mm": [
+            0.2,
+            1.6
+          ]
+        },
+        {
+          "y_mm": -1.65,
+          "area_mm2": 1.01,
+          "x_mm": [
+            -24.6,
+            -21.7
+          ],
+          "z_mm": [
+            0.7,
+            2.5
+          ]
+        },
+        {
+          "y_mm": 9.35,
+          "area_mm2": 0.99,
+          "x_mm": [
+            -17.3,
+            -15.6
+          ],
+          "z_mm": [
+            1.9,
+            2.6
+          ]
+        }
+      ]
+    },
+    "reading": "R71's largest overhang is the wall closing over the free end of the spring tongue, which bridges 3.8 mm between two strips of the same wall. The re-routed guard arm and the crown bars overhang about as much per layer as R70's did. A native slice still has to confirm this."
+  },
+  "clips": {
+    "Left": {
+      "neck_mm": 2.2,
+      "layer_mm": 0.2,
+      "frame_mm": {
+        "r59": 1.4,
+        "r71": 2.0
+      },
+      "layers": {
+        "r59": 7,
+        "r71": 10
+      },
+      "print_height_layers": 12,
+      "free_lift_under_the_clip_mm": {
+        "r59": 0.8,
+        "r71": 0.0
+      },
+      "board_lift_before_the_frame_stops_it_mm": 0.2,
+      "arms": 2,
+      "arm": {
+        "width_mm": 0.8,
+        "root_width_mm": 1.8,
+        "thickness_mm": 0.6,
+        "layers": 3,
+        "root_steps": [
+          {
+            "in_front_of_the_rear_bar_mm": 1.5,
+            "thickness_mm": {
+              "in_front": 0.6,
+              "behind": 0.8
+            },
+            "strain_in_front_while_pressed_flat": 0.0189
+          },
+          {
+            "in_front_of_the_rear_bar_mm": 0.6,
+            "thickness_mm": {
+              "in_front": 0.8,
+              "behind": 1.0
+            },
+            "strain_in_front_while_pressed_flat": 0.0137
+          },
+          {
+            "in_front_of_the_rear_bar_mm": 0.3,
+            "thickness_mm": {
+              "in_front": 1.0,
+              "behind": 1.2
+            },
+            "strain_in_front_while_pressed_flat": 0.0094
+          }
+        ],
+        "lever_mm": 4.6,
+        "foot_below_the_frame_when_free_mm": 0.4,
+        "bent_when_seated_mm": 0.2,
+        "bent_while_pressed_flat_mm": 0.4,
+        "stiffness_n_per_mm": 3.29,
+        "force_when_seated_n": 0.66,
+        "force_while_pressed_flat_n": 1.32,
+        "bending_strain_when_seated": 0.0102,
+        "bending_strain_while_pressed_flat": 0.0205,
+        "largest_strain_is_mm_behind_the_post_axis": 1.99,
+        "largest_strain_in_the_plain_arm": true,
+        "strain_at_the_rear_bar_while_pressed_flat": 0.0065,
+        "sliding_friction": {
+          "assumed_coefficient": 0.3,
+          "adds_while_pressed_flat": 0.0086,
+          "adds_under_the_spring_alone": 0.0043,
+          "reading": "slid back off, friction on the feet adds this to the strain in the plain strip; slid on, it takes it away"
+        },
+        "foot_tilt_when_seated_mm_per_mm": 0.09,
+        "first_spring_clip": {
+          "arm": "0.8 mm wide, 1.0 mm thick, straight, from a rear bar 4.0 mm behind the post axis; a square corner under its root",
+          "loaded_at_the_heel": {
+            "lever_mm": 3.3,
+            "stiffness_n_per_mm": 11.13,
+            "force_when_seated_n": 2.23,
+            "force_while_pressed_flat_n": 4.45,
+            "bending_strain_when_seated": 0.0275,
+            "bending_strain_while_pressed_flat": 0.055,
+            "sliding_friction_adds_while_pressed_flat": 0.0095
+          },
+          "loaded_at_the_middle_of_the_foot_as_first_reported": {
+            "lever_mm": 3.7,
+            "stiffness_n_per_mm": 7.9,
+            "force_when_seated_n": 1.58,
+            "force_while_pressed_flat_n": 3.16,
+            "bending_strain_when_seated": 0.0219,
+            "bending_strain_while_pressed_flat": 0.0438,
+            "sliding_friction_adds_while_pressed_flat": 0.0068
+          }
+        },
+        "pressed_flat_strain_over_the_first_spring_clip": 0.37,
+        "modulus_assumed_mpa": 2000.0,
+        "method": "Euler beam, 460 stations from the exported plan, clamped at the rear bar, loaded at the heel of the foot; surface strain from bending only"
+      },
+      "hold_down_per_clip_n": 1.32,
+      "press_to_fit_per_clip_n": 2.64,
+      "first_spring_clip": {
+        "hold_down_per_clip_n": 4.46,
+        "press_to_fit_per_clip_n": 8.9
+      },
+      "rear_bar": {
+        "depth_mm": {
+          "first_spring_clip": 0.7,
+          "r71": 1.0
+        },
+        "arm_root_moment_while_pressed_flat_n_mm": {
+          "first_spring_clip": 14.7,
+          "r71": 6.1
+        }
+      },
+      "press_where": "on the front half of the clip, between its two feet; pressing the rear bar does not lower the prongs",
+      "free_on_the_board": {
+        "rests_on": "its two feet and the lower edge of its rear bar",
+        "prong_tips_above_the_board_mm": 0.59,
+        "room_under_the_head_for_them_mm": 0.2
+      },
+      "tip_chamfer_mm": 0.4,
+      "slide_axis": [
+        0,
+        -1
+      ],
+      "printed": "top face down: frame and arms on the bed, then the root steps, the two feet last",
+      "size_mm": [
+        5.9,
+        8.2,
+        2.4
+      ],
+      "volume_mm3": {
+        "r59": 12.39,
+        "r71": 52.71
+      },
+      "exported_pose": {
+        "what": "frame against the head's ledges, arms unbent",
+        "into_the_post_mm3": 0.0,
+        "feet_into_the_board_model_mm3": 0.30612
+      },
+      "fitted_pose": {
+        "what": "arms bent 0.2 mm, the heels of the feet on the board",
+        "into_the_post_mm3": 0.0,
+        "into_the_board_mm3": 0.0,
+        "frame_above_the_board_mm": 0.2,
+        "feet_plan_mm2": 1.53,
+        "feet_over_the_paddle_seat_mm2": 0.68
+      },
+      "frame_rise_to_the_ledges_mm": 0.21,
+      "bearing_under_the_ledges_mm2": {
+        "with_the_r70_head": 0.566,
+        "r71": 0.837
+      },
+      "pressed_flat": {
+        "what": "frame on the board, arms bent 0.4 mm",
+        "into_the_board_mm3": 1e-05,
+        "into_the_post_at_home_mm3": 0.0,
+        "into_the_ledges_while_sliding_on_mm3": 0.0,
+        "room_under_the_ledges_mm": 0.21
+      },
+      "snap_throat_overlap_per_mm_of_thickness_mm3": {
+        "r59": 0.1059,
+        "r71": 0.1059
+      },
+      "r59_clip_on_this_post": {
+        "into_the_post_at_home_mm3": 0.0,
+        "lift_before_the_ledges_mm": 0.81
+      },
+      "slots": {
+        "least_gap_between_arm_and_frame_mm": 0.35,
+        "open_spaces_checked": {
+          "spring_arm_side_slots": 2,
+          "space_below_the_spring_arms": 2
+        },
+        "clip_inside_those_spaces_mm3": 0.0
+      },
+      "print_layers": {
+        "layers": 12,
+        "islands_per_layer": [
+          1,
+          1,
+          1,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          2,
+          2
+        ],
+        "islands_starting_on_nothing": [],
+        "largest_overhang_beyond_0_3_mm_mm2": 0.0,
+        "first_layer_mm2": 33.59
+      },
+      "hold_down": {
+        "assumed_mass_g": 5.0,
+        "its_weight_n": 0.049,
+        "one_clip_over_that_weight": 26.9,
+        "reading": "the mass is an assumption, not a weighing; the frame stops a lift at 0.2 mm whatever the spring does"
+      },
+      "reading": "Pressed down on its front half, between its two feet, the clip slides on like the R59 clip, 0.2 mm under the head. Let go and the two arms lift the frame against the head's three ledges while the heels of their feet press the board down. Strains are bending estimates for the stated deflection and forces use a round-figure modulus: neither is a measurement, and PETG held bent relaxes with time. A board that lifts must bend the arms further; after 0.2 mm the frame itself is in the way."
+    },
+    "Right": {
+      "neck_mm": 2.2,
+      "layer_mm": 0.2,
+      "frame_mm": {
+        "r59": 1.4,
+        "r71": 2.0
+      },
+      "layers": {
+        "r59": 7,
+        "r71": 10
+      },
+      "print_height_layers": 12,
+      "free_lift_under_the_clip_mm": {
+        "r59": 0.8,
+        "r71": 0.0
+      },
+      "board_lift_before_the_frame_stops_it_mm": 0.2,
+      "arms": 2,
+      "arm": {
+        "width_mm": 0.8,
+        "root_width_mm": 1.8,
+        "thickness_mm": 0.6,
+        "layers": 3,
+        "root_steps": [
+          {
+            "in_front_of_the_rear_bar_mm": 1.5,
+            "thickness_mm": {
+              "in_front": 0.6,
+              "behind": 0.8
+            },
+            "strain_in_front_while_pressed_flat": 0.0189
+          },
+          {
+            "in_front_of_the_rear_bar_mm": 0.6,
+            "thickness_mm": {
+              "in_front": 0.8,
+              "behind": 1.0
+            },
+            "strain_in_front_while_pressed_flat": 0.0137
+          },
+          {
+            "in_front_of_the_rear_bar_mm": 0.3,
+            "thickness_mm": {
+              "in_front": 1.0,
+              "behind": 1.2
+            },
+            "strain_in_front_while_pressed_flat": 0.0094
+          }
+        ],
+        "lever_mm": 4.6,
+        "foot_below_the_frame_when_free_mm": 0.4,
+        "bent_when_seated_mm": 0.2,
+        "bent_while_pressed_flat_mm": 0.4,
+        "stiffness_n_per_mm": 3.29,
+        "force_when_seated_n": 0.66,
+        "force_while_pressed_flat_n": 1.32,
+        "bending_strain_when_seated": 0.0102,
+        "bending_strain_while_pressed_flat": 0.0205,
+        "largest_strain_is_mm_behind_the_post_axis": 1.99,
+        "largest_strain_in_the_plain_arm": true,
+        "strain_at_the_rear_bar_while_pressed_flat": 0.0065,
+        "sliding_friction": {
+          "assumed_coefficient": 0.3,
+          "adds_while_pressed_flat": 0.0086,
+          "adds_under_the_spring_alone": 0.0043,
+          "reading": "slid back off, friction on the feet adds this to the strain in the plain strip; slid on, it takes it away"
+        },
+        "foot_tilt_when_seated_mm_per_mm": 0.09,
+        "first_spring_clip": {
+          "arm": "0.8 mm wide, 1.0 mm thick, straight, from a rear bar 4.0 mm behind the post axis; a square corner under its root",
+          "loaded_at_the_heel": {
+            "lever_mm": 3.3,
+            "stiffness_n_per_mm": 11.13,
+            "force_when_seated_n": 2.23,
+            "force_while_pressed_flat_n": 4.45,
+            "bending_strain_when_seated": 0.0275,
+            "bending_strain_while_pressed_flat": 0.055,
+            "sliding_friction_adds_while_pressed_flat": 0.0095
+          },
+          "loaded_at_the_middle_of_the_foot_as_first_reported": {
+            "lever_mm": 3.7,
+            "stiffness_n_per_mm": 7.9,
+            "force_when_seated_n": 1.58,
+            "force_while_pressed_flat_n": 3.16,
+            "bending_strain_when_seated": 0.0219,
+            "bending_strain_while_pressed_flat": 0.0438,
+            "sliding_friction_adds_while_pressed_flat": 0.0068
+          }
+        },
+        "pressed_flat_strain_over_the_first_spring_clip": 0.37,
+        "modulus_assumed_mpa": 2000.0,
+        "method": "Euler beam, 460 stations from the exported plan, clamped at the rear bar, loaded at the heel of the foot; surface strain from bending only"
+      },
+      "hold_down_per_clip_n": 1.32,
+      "press_to_fit_per_clip_n": 2.64,
+      "first_spring_clip": {
+        "hold_down_per_clip_n": 4.46,
+        "press_to_fit_per_clip_n": 8.9
+      },
+      "rear_bar": {
+        "depth_mm": {
+          "first_spring_clip": 0.7,
+          "r71": 1.0
+        },
+        "arm_root_moment_while_pressed_flat_n_mm": {
+          "first_spring_clip": 14.7,
+          "r71": 6.1
+        }
+      },
+      "press_where": "on the front half of the clip, between its two feet; pressing the rear bar does not lower the prongs",
+      "free_on_the_board": {
+        "rests_on": "its two feet and the lower edge of its rear bar",
+        "prong_tips_above_the_board_mm": 0.59,
+        "room_under_the_head_for_them_mm": 0.2
+      },
+      "tip_chamfer_mm": 0.4,
+      "slide_axis": [
+        0,
+        -1
+      ],
+      "printed": "top face down: frame and arms on the bed, then the root steps, the two feet last",
+      "size_mm": [
+        5.9,
+        8.2,
+        2.4
+      ],
+      "volume_mm3": {
+        "r59": 12.39,
+        "r71": 52.71
+      },
+      "exported_pose": {
+        "what": "frame against the head's ledges, arms unbent",
+        "into_the_post_mm3": 0.0,
+        "feet_into_the_board_model_mm3": 0.30612
+      },
+      "fitted_pose": {
+        "what": "arms bent 0.2 mm, the heels of the feet on the board",
+        "into_the_post_mm3": 0.0,
+        "into_the_board_mm3": 0.0,
+        "frame_above_the_board_mm": 0.2,
+        "feet_plan_mm2": 1.53,
+        "feet_over_the_paddle_seat_mm2": 0.68
+      },
+      "frame_rise_to_the_ledges_mm": 0.21,
+      "bearing_under_the_ledges_mm2": {
+        "with_the_r70_head": 0.566,
+        "r71": 0.837
+      },
+      "pressed_flat": {
+        "what": "frame on the board, arms bent 0.4 mm",
+        "into_the_board_mm3": 1e-05,
+        "into_the_post_at_home_mm3": 0.0,
+        "into_the_ledges_while_sliding_on_mm3": 0.0,
+        "room_under_the_ledges_mm": 0.21
+      },
+      "snap_throat_overlap_per_mm_of_thickness_mm3": {
+        "r59": 0.1059,
+        "r71": 0.1059
+      },
+      "r59_clip_on_this_post": {
+        "into_the_post_at_home_mm3": 0.0,
+        "lift_before_the_ledges_mm": 0.81
+      },
+      "slots": {
+        "least_gap_between_arm_and_frame_mm": 0.35,
+        "open_spaces_checked": {
+          "spring_arm_side_slots": 2,
+          "space_below_the_spring_arms": 2
+        },
+        "clip_inside_those_spaces_mm3": 0.0
+      },
+      "print_layers": {
+        "layers": 12,
+        "islands_per_layer": [
+          1,
+          1,
+          1,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          2,
+          2
+        ],
+        "islands_starting_on_nothing": [],
+        "largest_overhang_beyond_0_3_mm_mm2": 0.0,
+        "first_layer_mm2": 33.59
+      },
+      "hold_down": {
+        "assumed_mass_g": 5.0,
+        "its_weight_n": 0.049,
+        "one_clip_over_that_weight": 26.9,
+        "reading": "the mass is an assumption, not a weighing; the frame stops a lift at 0.2 mm whatever the spring does"
+      },
+      "reading": "Pressed down on its front half, between its two feet, the clip slides on like the R59 clip, 0.2 mm under the head. Let go and the two arms lift the frame against the head's three ledges while the heels of their feet press the board down. Strains are bending estimates for the stated deflection and forces use a round-figure modulus: neither is a measurement, and PETG held bent relaxes with time. A board that lifts must bend the arms further; after 0.2 mm the frame itself is in the way."
+    }
+  },
+  "posts": {
+    "source": "R70 native slice 4976f9b8142a: its post rows at the first and last layer middles. Positive squeeze: the ribs must give by that much. Negative: clear. R71 has not been sliced; its rows are expectations, not measurements.",
+    "cad_minus_native_on_r70_mm": [
+      0.184,
+      0.167
+    ],
+    "full_section_layers": 3,
+    "full_section_height_mm": 0.6,
+    "layers": [
+      {
+        "layer": 1,
+        "plane_z_mm": 19.4,
+        "above_the_seat_mm": [
+          0.0,
+          0.2
+        ],
+        "cad_mm": {
+          "r70": 3.233,
+          "r71": 3.233
+        },
+        "r70_native_mm": 3.049,
+        "r71_expected_native_mm": [
+          3.049,
+          3.049
+        ],
+        "r71_same_section_as_r70_first_layer": true
+      },
+      {
+        "layer": 2,
+        "plane_z_mm": 19.6,
+        "above_the_seat_mm": [
+          0.2,
+          0.4
+        ],
+        "cad_mm": {
+          "r70": 3.185,
+          "r71": 3.233
+        },
+        "r70_native_mm": null,
+        "r71_expected_native_mm": [
+          3.049,
+          3.049
+        ],
+        "r71_same_section_as_r70_first_layer": true
+      },
+      {
+        "layer": 3,
+        "plane_z_mm": 19.8,
+        "above_the_seat_mm": [
+          0.4,
+          0.6
+        ],
+        "cad_mm": {
+          "r70": 3.137,
+          "r71": 3.233
+        },
+        "r70_native_mm": null,
+        "r71_expected_native_mm": [
+          3.049,
+          3.049
+        ],
+        "r71_same_section_as_r70_first_layer": true
+      },
+      {
+        "layer": 4,
+        "plane_z_mm": 20.0,
+        "above_the_seat_mm": [
+          0.6,
+          0.8
+        ],
+        "cad_mm": {
+          "r70": 3.088,
+          "r71": 3.197
+        },
+        "r70_native_mm": null,
+        "r71_expected_native_mm": [
+          3.013,
+          3.03
+        ],
+        "r71_same_section_as_r70_first_layer": false
+      },
+      {
+        "layer": 5,
+        "plane_z_mm": 20.2,
+        "above_the_seat_mm": [
+          0.8,
+          1.0
+        ],
+        "cad_mm": {
+          "r70": 3.04,
+          "r71": 3.124
+        },
+        "r70_native_mm": null,
+        "r71_expected_native_mm": [
+          2.94,
+          2.957
+        ],
+        "r71_same_section_as_r70_first_layer": false
+      },
+      {
+        "layer": 6,
+        "plane_z_mm": 20.4,
+        "above_the_seat_mm": [
+          1.0,
+          1.2
+        ],
+        "cad_mm": {
+          "r70": 2.992,
+          "r71": 3.052
+        },
+        "r70_native_mm": null,
+        "r71_expected_native_mm": [
+          2.868,
+          2.885
+        ],
+        "r71_same_section_as_r70_first_layer": false
+      },
+      {
+        "layer": 7,
+        "plane_z_mm": 20.6,
+        "above_the_seat_mm": [
+          1.2,
+          1.4
+        ],
+        "cad_mm": {
+          "r70": 2.943,
+          "r71": 2.979
+        },
+        "r70_native_mm": null,
+        "r71_expected_native_mm": [
+          2.795,
+          2.812
+        ],
+        "r71_same_section_as_r70_first_layer": false
+      },
+      {
+        "layer": 8,
+        "plane_z_mm": 20.8,
+        "above_the_seat_mm": [
+          1.4,
+          1.6
+        ],
+        "cad_mm": {
+          "r70": 2.895,
+          "r71": 2.907
+        },
+        "r70_native_mm": 2.7277,
+        "r71_expected_native_mm": [
+          2.723,
+          2.74
+        ],
+        "r71_same_section_as_r70_first_layer": false
+      }
+    ],
+    "holes": [
+      {
+        "hole_mm": 3.0,
+        "seated_squeeze_on_diameter_mm": 0.049,
+        "at_the_wing_stop_squeeze_on_diameter_mm": 0.049,
+        "r70_at_the_same_lift_expected_mm": [
+          0.001,
+          0.018
+        ]
+      },
+      {
+        "hole_mm": 3.1,
+        "seated_squeeze_on_diameter_mm": -0.051,
+        "at_the_wing_stop_squeeze_on_diameter_mm": -0.051,
+        "r70_at_the_same_lift_expected_mm": [
+          -0.099,
+          -0.082
+        ]
+      },
+      {
+        "hole_mm": 3.2,
+        "seated_squeeze_on_diameter_mm": -0.151,
+        "at_the_wing_stop_squeeze_on_diameter_mm": -0.151,
+        "r70_at_the_same_lift_expected_mm": [
+          -0.199,
+          -0.182
+        ]
+      }
+    ],
+    "largest_lift_under_the_clip_mm": 0.2,
+    "left_post_box_in_the_board_mm": {
+      "r70": [
+        -9.02,
+        14.071,
+        19.31,
+        -6.48,
+        16.711,
+        20.89
+      ],
+      "r71": [
+        -9.01,
+        14.071,
+        19.31,
+        -6.49,
+        16.697,
+        20.89
+      ]
+    },
+    "pushed_up_through_the_paddle_mm3": 0.0,
+    "seated_in_the_paddle_mm3": 0.0,
+    "post_above_the_board_fits_a_circle_of_mm": 2.67,
+    "added_mm3": 1.423,
+    "removed_mm3": 0.01,
+    "unchanged_outside_ribs_and_nose_mm3": 0.0,
+    "reading": "The board can rise 0.20 mm before the clip's frame stops it, and only by bending the clip's arms. Through that whole travel the hole's lower edge stays on layers with the full rib section. Real hole size and pitch are not measured: a hole above 3.05 mm is clear of the ribs at every height."
+  },
+  "fasteners_through_the_click": {
+    "poses": 19,
+    "into_holder_retainer_pin_and_op1_mm3": 0.0,
+    "least_gap_mm": {
+      "r70": 2.244,
+      "r71": 2.244
+    },
+    "clips_to_plug_housing_and_wires_mm": 2.3,
+    "clips_to_paddle_mm3": 0.0,
+    "clip_plan_beyond_the_board_edge_mm2": 0.0,
+    "clip_to_the_board_edge_mm": 0.3,
+    "clip_sliding_on_over_board_and_paddle_mm3": 0.0,
+    "paddle_with_fasteners_lowered_into_the_holder_mm3": 0.0
+  },
+  "lower_edge": {
+    "stations": 98,
+    "kinds": {
+      "round": 79,
+      "guard rail enters the deck here": 4,
+      "the face is not at this level here": 14,
+      "battery rail hangs from the deck here": 1
+    },
+    "round_share": 0.806,
+    "square": [],
+    "r70_round_share": 0.843
+  },
+  "components": 1,
+  "source_reproduction": {
+    "built_mm3": 9062.489,
+    "exported_mm3": 9062.443
+  },
+  "build_steps_mm3": {
+    "r69": 10371.75,
+    "right_key": 10239.53,
+    "short_holder": 9023.65,
+    "battery": 9130.3,
+    "bank_edges": 9063.01,
+    "edges": 9062.49
+  },
+  "holder_mass": {
+    "r70_g": 11.373,
+    "r71_g": 11.509
+  },
+  "kept_from_r70": "rear face, hinge line, bearing blocks, rod bore, right key, OP1 seat, right guard, the left guard's lower rails and root, the posts' shaft, neck, head and height, and the retainer",
+  "gates": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "passes": true,
+  "meshes_sha256": {
+    "Key_Carrier-assembly.stl": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+    "Touch_Paddle-assembly.stl": "a58ed3c10eac252bb540b8c34c4b665fd5be7571bccdf17c7b473f5214f18e9f",
+    "DFR_Post_Bar-assembly.stl": "1c0e534ddbd385a8880adc74f64485dde32bc9ba0a3963f4d3f016abc601891e",
+    "DFR_Clip_Left-assembly.stl": "9edacc6fe79d97b080b28293159f7d721214b61cbc98f2bd114250b4e8582d09",
+    "DFR_Clip_Right-assembly.stl": "f8e743eabed60e35d073b7c4b36d5acb02b9d5150a8f1593d1078c678a2520be",
+    "Gravity_Wires-assembly.stl": "0a80afde9ff4d208948f2ba5d5eb0d8fed53829d531d209f3589317d6b8b6752",
+    "OP1_Lid_Stop-assembly.stl": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422"
+  },
+  "carrier_sha256": "2a7e2047f1f960c38f71fbb778b9d4a26c347ba9154d6dfbae47a3253bca8160",
+  "generator_sha256": {
+    "design71.py": "985fb2334b3c652dfe6ea838cf9fc132a952991f53cd0bcba6521d4e2eac0878",
+    "hinge71.py": "a1b76f213d9b55420f6884177bc08a3f1bc37c11f7592120f999a7c45a210b14",
+    "design70.py": "1e582ec32abe51209b9a9bad08ea5354857db7512f27a7aebe6351984c884184",
+    "hinge70.py": "7b5a294e15bb9c0f1c36469591ad26e2e5e8d2c94c6f5cd9d8b59ced8ca5ad58",
+    "kit71.py": "7c136cccc59238f6a9b0b47682b9971c86e602403dd6b50c28ee48025573326f"
+  }
+}
