@@ -1,0 +1,1400 @@
+{
+  "revision": "R76",
+  "physical_fit_verified": false,
+  "layout_sha256": "0a7f1c9f77df523005d564869d11bf370ed3b933f32f49edebecf99f79c41863",
+  "carrier_sha256": "897644a2586dbf67ce552ec6ca31c317f7b0e43269bc1fb3424d897f84430610",
+  "slices": {
+    "primary": {
+      "archive_sha256": "28272ec767a91d09601509e3fd5342d7605bc991d10f46cc79754378bf18ace5",
+      "route_groups": 79,
+      "part_count": 9,
+      "new_anchored_spans": [
+        {
+          "span": {
+            "layer": 108,
+            "mm": 1.716,
+            "two_anchors": true,
+            "bend_mm": 0.56,
+            "midpoint_machine_xy": [
+              37.419,
+              156.511
+            ],
+            "extent_machine_xy": [
+              36.829,
+              156.491,
+              37.772,
+              157.055
+            ],
+            "gcode_lines": [
+              250051,
+              250073
+            ]
+          },
+          "local_xyz_mm": [
+            -13.47,
+            14.95,
+            6.6
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.716,
+            "max_speed_mm_s": 17.58,
+            "min_fan_fraction": 0.71
+          },
+          "reference": {
+            "layer": 129,
+            "mm": 1.763,
+            "two_anchors": true,
+            "bend_mm": 0.668,
+            "midpoint_machine_xy": [
+              77.869,
+              160.866
+            ],
+            "extent_machine_xy": [
+              77.869,
+              159.929,
+              78.682,
+              160.866
+            ],
+            "gcode_lines": [
+              293808,
+              293809
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 108,
+            "mm": 2.658,
+            "two_anchors": true,
+            "bend_mm": 0.895,
+            "midpoint_machine_xy": [
+              36.988,
+              156.256
+            ],
+            "extent_machine_xy": [
+              36.519,
+              156.183,
+              38.064,
+              157.177
+            ],
+            "gcode_lines": [
+              250283,
+              250303
+            ]
+          },
+          "local_xyz_mm": [
+            -13.9,
+            14.95,
+            6.34
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.197,
+            "max_speed_mm_s": 27.58,
+            "min_fan_fraction": 0.71
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 2.705,
+            "two_anchors": true,
+            "bend_mm": 1.004,
+            "midpoint_machine_xy": [
+              75.985,
+              160.569
+            ],
+            "extent_machine_xy": [
+              75.559,
+              159.565,
+              76.41,
+              160.569
+            ],
+            "gcode_lines": [
+              457839,
+              457843
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 108,
+            "mm": 3.906,
+            "two_anchors": true,
+            "bend_mm": 1.296,
+            "midpoint_machine_xy": [
+              36.875,
+              155.995
+            ],
+            "extent_machine_xy": [
+              36.204,
+              155.884,
+              38.345,
+              157.469
+            ],
+            "gcode_lines": [
+              250708,
+              250724
+            ]
+          },
+          "local_xyz_mm": [
+            -14.01,
+            14.95,
+            6.08
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.403,
+            "max_speed_mm_s": 12.97,
+            "min_fan_fraction": 0.71
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 4.249,
+            "two_anchors": true,
+            "bend_mm": 1.418,
+            "midpoint_machine_xy": [
+              67.625,
+              160.474
+            ],
+            "extent_machine_xy": [
+              67.105,
+              158.986,
+              68.48,
+              160.866
+            ],
+            "gcode_lines": [
+              458078,
+              458086
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 126,
+            "mm": 1.432,
+            "two_anchors": true,
+            "bend_mm": 0.679,
+            "midpoint_machine_xy": [
+              35.225,
+              153.997
+            ],
+            "extent_machine_xy": [
+              35.175,
+              153.896,
+              35.687,
+              154.57
+            ],
+            "gcode_lines": [
+              288037,
+              288046
+            ]
+          },
+          "local_xyz_mm": [
+            -15.66,
+            11.35,
+            4.08
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.432,
+            "max_speed_mm_s": 14.56,
+            "min_fan_fraction": 0.67
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 1.574,
+            "two_anchors": true,
+            "bend_mm": 0.682,
+            "midpoint_machine_xy": [
+              67.769,
+              159.792
+            ],
+            "extent_machine_xy": [
+              67.699,
+              158.986,
+              68.148,
+              159.818
+            ],
+            "gcode_lines": [
+              457679,
+              457683
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 126,
+            "mm": 2.938,
+            "two_anchors": true,
+            "bend_mm": 1.387,
+            "midpoint_machine_xy": [
+              34.775,
+              153.38
+            ],
+            "extent_machine_xy": [
+              34.669,
+              153.341,
+              35.883,
+              154.7
+            ],
+            "gcode_lines": [
+              288123,
+              288127
+            ]
+          },
+          "local_xyz_mm": [
+            -16.11,
+            11.35,
+            3.46
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.285,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 119,
+            "mm": 3.767,
+            "two_anchors": true,
+            "bend_mm": 1.572,
+            "midpoint_machine_xy": [
+              33.874,
+              160.569
+            ],
+            "extent_machine_xy": [
+              33.617,
+              158.986,
+              34.335,
+              160.569
+            ],
+            "gcode_lines": [
+              272322,
+              272326
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 127,
+            "mm": 1.539,
+            "two_anchors": true,
+            "bend_mm": 0.751,
+            "midpoint_machine_xy": [
+              33.918,
+              152.619
+            ],
+            "extent_machine_xy": [
+              33.918,
+              152.619,
+              34.567,
+              153.255
+            ],
+            "gcode_lines": [
+              289748,
+              289760
+            ]
+          },
+          "local_xyz_mm": [
+            -16.97,
+            11.15,
+            2.7
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.539,
+            "max_speed_mm_s": 13.12,
+            "min_fan_fraction": 0.64
+          },
+          "reference": {
+            "layer": 83,
+            "mm": 2.103,
+            "two_anchors": true,
+            "bend_mm": 0.892,
+            "midpoint_machine_xy": [
+              64.371,
+              160.302
+            ],
+            "extent_machine_xy": [
+              63.469,
+              160.149,
+              64.371,
+              160.579
+            ],
+            "gcode_lines": [
+              207565,
+              207589
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 127,
+            "mm": 2.879,
+            "two_anchors": true,
+            "bend_mm": 1.314,
+            "midpoint_machine_xy": [
+              33.481,
+              152.149
+            ],
+            "extent_machine_xy": [
+              33.4,
+              152.149,
+              34.752,
+              153.373
+            ],
+            "gcode_lines": [
+              289845,
+              289849
+            ]
+          },
+          "local_xyz_mm": [
+            -17.4,
+            11.15,
+            2.23
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.145,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 119,
+            "mm": 3.767,
+            "two_anchors": true,
+            "bend_mm": 1.572,
+            "midpoint_machine_xy": [
+              33.874,
+              160.569
+            ],
+            "extent_machine_xy": [
+              33.617,
+              158.986,
+              34.335,
+              160.569
+            ],
+            "gcode_lines": [
+              272322,
+              272326
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 128,
+            "mm": 2.18,
+            "two_anchors": true,
+            "bend_mm": 0.773,
+            "midpoint_machine_xy": [
+              32.369,
+              151.461
+            ],
+            "extent_machine_xy": [
+              32.369,
+              151.363,
+              33.141,
+              152.592
+            ],
+            "gcode_lines": [
+              291821,
+              291825
+            ]
+          },
+          "local_xyz_mm": [
+            -18.52,
+            10.95,
+            1.55
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.821,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 127,
+            "mm": 2.517,
+            "two_anchors": true,
+            "bend_mm": 1.114,
+            "midpoint_machine_xy": [
+              73.288,
+              150.936
+            ],
+            "extent_machine_xy": [
+              72.203,
+              150.331,
+              73.41,
+              151.282
+            ],
+            "gcode_lines": [
+              289022,
+              289030
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 129,
+            "mm": 1.418,
+            "two_anchors": true,
+            "bend_mm": 0.547,
+            "midpoint_machine_xy": [
+              31.583,
+              150.894
+            ],
+            "extent_machine_xy": [
+              31.562,
+              150.79,
+              32.314,
+              151.497
+            ],
+            "gcode_lines": [
+              293811,
+              293815
+            ]
+          },
+          "local_xyz_mm": [
+            -19.3,
+            10.75,
+            0.98
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.497,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 1.509,
+            "two_anchors": true,
+            "bend_mm": 0.556,
+            "midpoint_machine_xy": [
+              71.885,
+              159.974
+            ],
+            "extent_machine_xy": [
+              71.608,
+              159.418,
+              72.162,
+              159.974
+            ],
+            "gcode_lines": [
+              457334,
+              457338
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 132,
+            "mm": 1.366,
+            "two_anchors": true,
+            "bend_mm": 0.653,
+            "midpoint_machine_xy": [
+              29.307,
+              150.796
+            ],
+            "extent_machine_xy": [
+              29.307,
+              150.603,
+              29.969,
+              150.991
+            ],
+            "gcode_lines": [
+              302202,
+              302215
+            ]
+          },
+          "local_xyz_mm": [
+            -21.58,
+            10.15,
+            0.88
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.366,
+            "max_speed_mm_s": 13.29,
+            "min_fan_fraction": 0.6
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 1.574,
+            "two_anchors": true,
+            "bend_mm": 0.682,
+            "midpoint_machine_xy": [
+              67.769,
+              159.792
+            ],
+            "extent_machine_xy": [
+              67.699,
+              158.986,
+              68.148,
+              159.818
+            ],
+            "gcode_lines": [
+              457679,
+              457683
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 132,
+            "mm": 2.563,
+            "two_anchors": true,
+            "bend_mm": 1.162,
+            "midpoint_machine_xy": [
+              28.687,
+              150.796
+            ],
+            "extent_machine_xy": [
+              28.687,
+              150.33,
+              29.899,
+              151.277
+            ],
+            "gcode_lines": [
+              302326,
+              302330
+            ]
+          },
+          "local_xyz_mm": [
+            -22.2,
+            10.15,
+            0.88
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.071,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 3.178,
+            "two_anchors": true,
+            "bend_mm": 1.169,
+            "midpoint_machine_xy": [
+              67.922,
+              160.474
+            ],
+            "extent_machine_xy": [
+              67.387,
+              158.986,
+              68.314,
+              160.569
+            ],
+            "gcode_lines": [
+              457855,
+              457862
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 133,
+            "mm": 1.467,
+            "two_anchors": true,
+            "bend_mm": 0.583,
+            "midpoint_machine_xy": [
+              27.656,
+              150.796
+            ],
+            "extent_machine_xy": [
+              27.656,
+              150.394,
+              28.239,
+              151.197
+            ],
+            "gcode_lines": [
+              304270,
+              304273
+            ]
+          },
+          "local_xyz_mm": [
+            -23.23,
+            9.95,
+            0.88
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.749,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 44,
+            "mm": 1.561,
+            "two_anchors": true,
+            "bend_mm": 0.631,
+            "midpoint_machine_xy": [
+              66.083,
+              158.796
+            ],
+            "extent_machine_xy": [
+              65.884,
+              158.796,
+              66.183,
+              159.427
+            ],
+            "gcode_lines": [
+              151106,
+              151108
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 134,
+            "mm": 1.179,
+            "two_anchors": true,
+            "bend_mm": 0.425,
+            "midpoint_machine_xy": [
+              26.789,
+              150.796
+            ],
+            "extent_machine_xy": [
+              26.789,
+              150.437,
+              27.221,
+              151.15
+            ],
+            "gcode_lines": [
+              307794,
+              307797
+            ]
+          },
+          "local_xyz_mm": [
+            -24.1,
+            9.75,
+            0.88
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.597,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 158,
+            "mm": 1.184,
+            "two_anchors": true,
+            "bend_mm": 0.508,
+            "midpoint_machine_xy": [
+              29.828,
+              153.905
+            ],
+            "extent_machine_xy": [
+              29.566,
+              153.411,
+              30.122,
+              153.922
+            ],
+            "gcode_lines": [
+              346151,
+              346155
+            ]
+          }
+        }
+      ]
+    },
+    "reopened": {
+      "archive_sha256": "b2519a6db993e221985be999c6b668d3fbeea780cd447cfc15e281493d4f5583",
+      "route_groups": 79,
+      "part_count": 9,
+      "new_anchored_spans": [
+        {
+          "span": {
+            "layer": 108,
+            "mm": 1.716,
+            "two_anchors": true,
+            "bend_mm": 0.56,
+            "midpoint_machine_xy": [
+              37.419,
+              156.511
+            ],
+            "extent_machine_xy": [
+              36.829,
+              156.491,
+              37.772,
+              157.055
+            ],
+            "gcode_lines": [
+              250050,
+              250072
+            ]
+          },
+          "local_xyz_mm": [
+            -13.47,
+            14.95,
+            6.6
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.716,
+            "max_speed_mm_s": 17.58,
+            "min_fan_fraction": 0.71
+          },
+          "reference": {
+            "layer": 129,
+            "mm": 1.763,
+            "two_anchors": true,
+            "bend_mm": 0.668,
+            "midpoint_machine_xy": [
+              77.869,
+              160.866
+            ],
+            "extent_machine_xy": [
+              77.869,
+              159.929,
+              78.682,
+              160.866
+            ],
+            "gcode_lines": [
+              293808,
+              293809
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 108,
+            "mm": 2.658,
+            "two_anchors": true,
+            "bend_mm": 0.895,
+            "midpoint_machine_xy": [
+              36.988,
+              156.256
+            ],
+            "extent_machine_xy": [
+              36.519,
+              156.183,
+              38.064,
+              157.177
+            ],
+            "gcode_lines": [
+              250282,
+              250302
+            ]
+          },
+          "local_xyz_mm": [
+            -13.9,
+            14.95,
+            6.34
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.197,
+            "max_speed_mm_s": 27.58,
+            "min_fan_fraction": 0.71
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 2.705,
+            "two_anchors": true,
+            "bend_mm": 1.004,
+            "midpoint_machine_xy": [
+              75.985,
+              160.569
+            ],
+            "extent_machine_xy": [
+              75.559,
+              159.565,
+              76.41,
+              160.569
+            ],
+            "gcode_lines": [
+              457839,
+              457843
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 108,
+            "mm": 3.906,
+            "two_anchors": true,
+            "bend_mm": 1.296,
+            "midpoint_machine_xy": [
+              36.875,
+              155.995
+            ],
+            "extent_machine_xy": [
+              36.204,
+              155.884,
+              38.345,
+              157.469
+            ],
+            "gcode_lines": [
+              250707,
+              250723
+            ]
+          },
+          "local_xyz_mm": [
+            -14.01,
+            14.95,
+            6.08
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.403,
+            "max_speed_mm_s": 12.97,
+            "min_fan_fraction": 0.71
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 4.249,
+            "two_anchors": true,
+            "bend_mm": 1.418,
+            "midpoint_machine_xy": [
+              67.625,
+              160.474
+            ],
+            "extent_machine_xy": [
+              67.105,
+              158.986,
+              68.48,
+              160.866
+            ],
+            "gcode_lines": [
+              458078,
+              458086
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 126,
+            "mm": 1.432,
+            "two_anchors": true,
+            "bend_mm": 0.679,
+            "midpoint_machine_xy": [
+              35.225,
+              153.997
+            ],
+            "extent_machine_xy": [
+              35.175,
+              153.896,
+              35.687,
+              154.57
+            ],
+            "gcode_lines": [
+              288036,
+              288045
+            ]
+          },
+          "local_xyz_mm": [
+            -15.66,
+            11.35,
+            4.08
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.432,
+            "max_speed_mm_s": 14.56,
+            "min_fan_fraction": 0.67
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 1.574,
+            "two_anchors": true,
+            "bend_mm": 0.682,
+            "midpoint_machine_xy": [
+              67.769,
+              159.792
+            ],
+            "extent_machine_xy": [
+              67.699,
+              158.986,
+              68.148,
+              159.818
+            ],
+            "gcode_lines": [
+              457679,
+              457683
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 126,
+            "mm": 2.938,
+            "two_anchors": true,
+            "bend_mm": 1.387,
+            "midpoint_machine_xy": [
+              34.775,
+              153.38
+            ],
+            "extent_machine_xy": [
+              34.669,
+              153.341,
+              35.883,
+              154.7
+            ],
+            "gcode_lines": [
+              288122,
+              288126
+            ]
+          },
+          "local_xyz_mm": [
+            -16.11,
+            11.35,
+            3.46
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.285,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 119,
+            "mm": 3.767,
+            "two_anchors": true,
+            "bend_mm": 1.572,
+            "midpoint_machine_xy": [
+              33.874,
+              160.569
+            ],
+            "extent_machine_xy": [
+              33.617,
+              158.986,
+              34.335,
+              160.569
+            ],
+            "gcode_lines": [
+              272322,
+              272326
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 127,
+            "mm": 1.539,
+            "two_anchors": true,
+            "bend_mm": 0.751,
+            "midpoint_machine_xy": [
+              33.918,
+              152.619
+            ],
+            "extent_machine_xy": [
+              33.918,
+              152.619,
+              34.567,
+              153.255
+            ],
+            "gcode_lines": [
+              289747,
+              289759
+            ]
+          },
+          "local_xyz_mm": [
+            -16.97,
+            11.15,
+            2.7
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.539,
+            "max_speed_mm_s": 13.12,
+            "min_fan_fraction": 0.64
+          },
+          "reference": {
+            "layer": 83,
+            "mm": 2.103,
+            "two_anchors": true,
+            "bend_mm": 0.892,
+            "midpoint_machine_xy": [
+              64.371,
+              160.302
+            ],
+            "extent_machine_xy": [
+              63.469,
+              160.149,
+              64.371,
+              160.579
+            ],
+            "gcode_lines": [
+              207565,
+              207589
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 127,
+            "mm": 2.879,
+            "two_anchors": true,
+            "bend_mm": 1.314,
+            "midpoint_machine_xy": [
+              33.481,
+              152.149
+            ],
+            "extent_machine_xy": [
+              33.4,
+              152.149,
+              34.752,
+              153.373
+            ],
+            "gcode_lines": [
+              289844,
+              289848
+            ]
+          },
+          "local_xyz_mm": [
+            -17.4,
+            11.15,
+            2.23
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.145,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 119,
+            "mm": 3.767,
+            "two_anchors": true,
+            "bend_mm": 1.572,
+            "midpoint_machine_xy": [
+              33.874,
+              160.569
+            ],
+            "extent_machine_xy": [
+              33.617,
+              158.986,
+              34.335,
+              160.569
+            ],
+            "gcode_lines": [
+              272322,
+              272326
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 128,
+            "mm": 2.18,
+            "two_anchors": true,
+            "bend_mm": 0.773,
+            "midpoint_machine_xy": [
+              32.369,
+              151.461
+            ],
+            "extent_machine_xy": [
+              32.369,
+              151.363,
+              33.141,
+              152.592
+            ],
+            "gcode_lines": [
+              291820,
+              291824
+            ]
+          },
+          "local_xyz_mm": [
+            -18.52,
+            10.95,
+            1.55
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.821,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 127,
+            "mm": 2.517,
+            "two_anchors": true,
+            "bend_mm": 1.114,
+            "midpoint_machine_xy": [
+              73.288,
+              150.936
+            ],
+            "extent_machine_xy": [
+              72.203,
+              150.331,
+              73.41,
+              151.282
+            ],
+            "gcode_lines": [
+              289022,
+              289030
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 129,
+            "mm": 1.418,
+            "two_anchors": true,
+            "bend_mm": 0.547,
+            "midpoint_machine_xy": [
+              31.583,
+              150.894
+            ],
+            "extent_machine_xy": [
+              31.562,
+              150.79,
+              32.314,
+              151.497
+            ],
+            "gcode_lines": [
+              293810,
+              293814
+            ]
+          },
+          "local_xyz_mm": [
+            -19.3,
+            10.75,
+            0.98
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.497,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 1.509,
+            "two_anchors": true,
+            "bend_mm": 0.556,
+            "midpoint_machine_xy": [
+              71.885,
+              159.974
+            ],
+            "extent_machine_xy": [
+              71.608,
+              159.418,
+              72.162,
+              159.974
+            ],
+            "gcode_lines": [
+              457334,
+              457338
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 132,
+            "mm": 1.366,
+            "two_anchors": true,
+            "bend_mm": 0.653,
+            "midpoint_machine_xy": [
+              29.307,
+              150.796
+            ],
+            "extent_machine_xy": [
+              29.307,
+              150.603,
+              29.969,
+              150.991
+            ],
+            "gcode_lines": [
+              302201,
+              302214
+            ]
+          },
+          "local_xyz_mm": [
+            -21.58,
+            10.15,
+            0.88
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.366,
+            "max_speed_mm_s": 13.29,
+            "min_fan_fraction": 0.6
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 1.574,
+            "two_anchors": true,
+            "bend_mm": 0.682,
+            "midpoint_machine_xy": [
+              67.769,
+              159.792
+            ],
+            "extent_machine_xy": [
+              67.699,
+              158.986,
+              68.148,
+              159.818
+            ],
+            "gcode_lines": [
+              457679,
+              457683
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 132,
+            "mm": 2.563,
+            "two_anchors": true,
+            "bend_mm": 1.162,
+            "midpoint_machine_xy": [
+              28.687,
+              150.796
+            ],
+            "extent_machine_xy": [
+              28.687,
+              150.33,
+              29.899,
+              151.277
+            ],
+            "gcode_lines": [
+              302325,
+              302329
+            ]
+          },
+          "local_xyz_mm": [
+            -22.2,
+            10.15,
+            0.88
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 1.071,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 219,
+            "mm": 3.178,
+            "two_anchors": true,
+            "bend_mm": 1.169,
+            "midpoint_machine_xy": [
+              67.922,
+              160.474
+            ],
+            "extent_machine_xy": [
+              67.387,
+              158.986,
+              68.314,
+              160.569
+            ],
+            "gcode_lines": [
+              457855,
+              457862
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 133,
+            "mm": 1.467,
+            "two_anchors": true,
+            "bend_mm": 0.583,
+            "midpoint_machine_xy": [
+              27.656,
+              150.796
+            ],
+            "extent_machine_xy": [
+              27.656,
+              150.394,
+              28.239,
+              151.197
+            ],
+            "gcode_lines": [
+              304269,
+              304272
+            ]
+          },
+          "local_xyz_mm": [
+            -23.23,
+            9.95,
+            0.88
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.749,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 44,
+            "mm": 1.561,
+            "two_anchors": true,
+            "bend_mm": 0.631,
+            "midpoint_machine_xy": [
+              66.083,
+              158.796
+            ],
+            "extent_machine_xy": [
+              65.884,
+              158.796,
+              66.183,
+              159.427
+            ],
+            "gcode_lines": [
+              151106,
+              151108
+            ]
+          }
+        },
+        {
+          "span": {
+            "layer": 134,
+            "mm": 1.179,
+            "two_anchors": true,
+            "bend_mm": 0.425,
+            "midpoint_machine_xy": [
+              26.789,
+              150.796
+            ],
+            "extent_machine_xy": [
+              26.789,
+              150.437,
+              27.221,
+              151.15
+            ],
+            "gcode_lines": [
+              307793,
+              307796
+            ]
+          },
+          "local_xyz_mm": [
+            -24.1,
+            9.75,
+            0.88
+          ],
+          "bead": {
+            "bead_width_mm": 0.34,
+            "longest_free_mm": 0.597,
+            "max_speed_mm_s": 10.0,
+            "min_fan_fraction": 1.0
+          },
+          "reference": {
+            "layer": 158,
+            "mm": 1.184,
+            "two_anchors": true,
+            "bend_mm": 0.508,
+            "midpoint_machine_xy": [
+              29.828,
+              153.905
+            ],
+            "extent_machine_xy": [
+              29.566,
+              153.411,
+              30.122,
+              153.922
+            ],
+            "gcode_lines": [
+              346151,
+              346155
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

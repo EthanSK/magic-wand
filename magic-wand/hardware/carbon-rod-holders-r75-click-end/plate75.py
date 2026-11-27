@@ -10,14 +10,14 @@ import audit74
 OUT = design.OUT
 
 
-def parts():
+def parts(carrier_dir=OUT):
     rows = kit74.parts()
     for row in rows:
         if row['name'] == 'Key_Carrier':
-            row['source'] = OUT / design.HOLDER
+            row['source'] = carrier_dir / design.HOLDER
             row['assembly_to_print'] = kit74.base_plate.printer.pose_for(
                 row['source'], *kit74.base_plate.kit64.PRINT_POSES['Key_Carrier'])
-        row['mesh_reference'] = relpath(row['source'], OUT)
+        row['mesh_reference'] = relpath(row['source'], carrier_dir)
     return rows
 
 
