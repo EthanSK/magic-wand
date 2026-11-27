@@ -21,7 +21,14 @@ Tell Ethan this skill is active and briefly why, using response-preferences when
 
 ## Model changes
 
-Use the user-selected Astra for current mechanical design and implementation on the existing subscription. Earlier Claude author selections are superseded. Keep CAD authorship separate from the independent slice review.
+User-requested — 2026-11-27: “Fable is better at the 3D modeling.” Prefer Fable for making the model, then possibly one consolidated final correction, without overdoing its usage. This supersedes the earlier Astra author selection; preserve a later explicit model choice and the existing subscription-only boundary.
+
+- Gather the complete fit brief, bought-part evidence and known feedback before the authoring pass. Fable owns geometry, mechanisms, interfaces and ergonomics; allow the local probes, iterations, checks and exports needed to deliver a valid candidate. An authoring pass can contain many tool steps; do not force it into one tool-free answer or weaken its CAD validation to save calls.
+- The coordinating agent owns routine evidence collection, slicing, independent printability review, viewer checks, packaging, publication and printer operation through their existing workflows. Keep the required independent Opus audit of the actual slice; do not send routine execution or reporting back to Fable.
+- Collect the independent checks' open findings before handing geometry back. Prefer one combined final CAD correction in the same relevant author session, following invoke-claude's session-continuity rules. Give Fable the measured failures and affected features together. Skip the return when no CAD change is needed; the Opus printability audit already supplies the final independent review.
+- Further author returns need a concrete unresolved CAD problem or new user requirements, rather than an automatic review/fix loop. Integrate direction-changing feedback promptly; do not finish a superseded design merely to keep the pass count down. Recheck coverage invalidated by repairs and keep unresolved fit or strength risks visible. Preserve the selected reasoning effort; fewer handbacks must not silently mean weaker modelling.
+
+Read [user-preferences.md](user-preferences.md) only when an unsettled design or model-authoring choice needs the original preference context.
 
 ## Prototype holder priorities
 
