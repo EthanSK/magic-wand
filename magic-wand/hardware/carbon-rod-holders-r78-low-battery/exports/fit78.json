@@ -1,0 +1,28 @@
+{
+  "revision": "R78",
+  "carrier_sha256": "ecfa078e9f72dfce91d61e590d7e71076e429351896de1b54420170e2933957d",
+  "battery_to_deck_mm": 2.3,
+  "z_change_toward_deck_mm": 0.8,
+  "pack_end_projection_mm": 4.5,
+  "spring_contact_mm3": 1.5008,
+  "rigid_rail_rear_path_overlap_mm3": 0.0,
+  "minimum_fitted_socket_and_tape_gap_mm": 0.23,
+  "rear_path_mm": {
+    "key_3_socket_tape_zone": 0.23,
+    "key_3_soldered_socket_dogleg": 0.29
+  },
+  "switch_socket_poses": 336,
+  "obstructions": [],
+  "op1_routes_mm3": {
+    "op1_plug_rises_through_window": 0.0,
+    "op1_lead_in_channel": 0.0,
+    "op1_board_lowered_onto_seat": 0.0,
+    "op1_sockets_lowered_onto_seat": 0.0,
+    "op1_housing_lowered_onto_seat": 0.0,
+    "op1_plug_lowered_onto_seat": 0.0,
+    "op1_lead_lowered_onto_seat": 0.0
+  },
+  "carrier_solids": 1,
+  "physical_fit_verified": false,
+  "passes": true
+}
