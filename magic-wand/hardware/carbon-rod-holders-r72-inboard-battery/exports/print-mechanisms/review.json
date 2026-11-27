@@ -1,0 +1,101 @@
+{
+  "revision": "R72",
+  "trial_approved": true,
+  "physical_fit_verified": false,
+  "designer": "GPT-6.2 Astra",
+  "source_files_sha256": {
+    "magic-wand/hardware/carbon-rod-holders-r72-inboard-battery/verify72.py": "df241ce35b28d93f2cf83a5916fe36d2a4f73ec87d53ae44db00ca3d953a42b7",
+    "magic-wand/hardware/carbon-rod-holders-r72-inboard-battery/audit72.py": "53fd8f7c4bff6216efb3ddbf4bc7dd36ce18483df0c58579d86ec2d267786e35",
+    "magic-wand/hardware/carbon-rod-holders-r72-inboard-battery/README.md": "f184dd0c0db989cf701fe3667e5f3c08f2fa3ff82a6d0b0debe623d2ff248d95",
+    "magic-wand/hardware/carbon-rod-holders-r72-inboard-battery/sections72.py": "4b82a1ddc762826ed058c934674e77af71e0974becb3829d4fb410228198848d",
+    "magic-wand/hardware/carbon-rod-holders-r72-inboard-battery/release72.py": "a1a01e54832cdbea673886ac1a34cc5b82a4226147fe3ec150b7691666ba67cb",
+    "magic-wand/hardware/carbon-rod-holders-r72-inboard-battery/kit72.py": "2415fba16bb72163b214bc0e6e903eb5d9bbc10497aa9d7501eb5ca7c4b7123e",
+    "magic-wand/hardware/carbon-rod-holders-r72-inboard-battery/design72.py": "279784ed3a600ef00413d993eb40371b24fa1820a766d5db28702242b5d6deff",
+    "magic-wand/hardware/carbon-rod-holders-r72-inboard-battery/guide72.py": "61ebed7f1fa21ad8392c82f6f4ee15b523267442becfd94706fb9ef7de770676",
+    "magic-wand/hardware/carbon-rod-holders-r72-inboard-battery/exports/Key_Carrier-assembly.stl": "b366e7da2a673765712714a6939640419b6cea05efe7554d7d26bbc095bc56ee",
+    "magic-wand/hardware/carbon-rod-holders-r72-inboard-battery/exports/assembly-guide.json": "c01b957305e25412fb4a86c74bd7c484f0f230a9038adc95cfae10517e3bfd91",
+    "magic-wand/hardware/carbon-rod-holders-r72-inboard-battery/exports/fit72.json": "adc5433658ba2c7e09d16ec4e21773825da2136d8ade532f4c2e69c2c67a9c63"
+  },
+  "layout_sha256": "6d5e0fa19c2f5ad76457ec2b9f76a5e4d3774b9b824b38235dd1c77c927f7e80",
+  "archive_sha256": "82191ae688b613d0d8b28003e25118f2421445171a9ce3a49b8adb8b7f59863c",
+  "reopened_sha256": "82172918bd79c15e4d27719540bfd226610dfb46898eede8fb55c467f21fe9fd",
+  "warnings": {
+    "archive_sha256": "",
+    "reopened_sha256": ""
+  },
+  "per_part": {
+    "Key_Carrier": {
+      "source_sha256": "b366e7da2a673765712714a6939640419b6cea05efe7554d7d26bbc095bc56ee",
+      "changed": true
+    },
+    "Touch_Paddle": {
+      "source_sha256": "a58ed3c10eac252bb540b8c34c4b665fd5be7571bccdf17c7b473f5214f18e9f",
+      "changed": false
+    },
+    "OP1_Lid_Stop": {
+      "source_sha256": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+      "changed": false
+    },
+    "Pin_Clip": {
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "changed": false
+    },
+    "Pin_Clip_Spare": {
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "changed": false
+    },
+    "DFR_Clip_Left": {
+      "source_sha256": "9edacc6fe79d97b080b28293159f7d721214b61cbc98f2bd114250b4e8582d09",
+      "changed": false
+    },
+    "DFR_Clip_Right": {
+      "source_sha256": "f8e743eabed60e35d073b7c4b36d5acb02b9d5150a8f1593d1078c678a2520be",
+      "changed": false
+    },
+    "Hinge_Pin": {
+      "source_sha256": "6f51c4e92b4560519ad5e7ce9b5dc08624ee227c7aecbc15d5d8ca896aaedc2f",
+      "changed": false
+    },
+    "DFR_Post_Bar": {
+      "source_sha256": "1c0e534ddbd385a8880adc74f64485dde32bc9ba0a3963f4d3f016abc601891e",
+      "changed": false
+    }
+  },
+  "independent_assessment": {
+    "trial_approved": true,
+    "archive_sha256": "82191ae688b613d0d8b28003e25118f2421445171a9ce3a49b8adb8b7f59863c",
+    "scope": "Targeted printability of the deck gusset, rear attachment and arch",
+    "evidence": {
+      "native_slicer_warning": "",
+      "changed_corner_detached_islands": 0,
+      "arch_samples": 21864,
+      "arch_longest_unbacked_run_mm": 1.88,
+      "arch_longest_run_layer": 141,
+      "arch_longest_run_backed_at_both_ends": true,
+      "deck_to_toe_probe": {
+        "samples": 11896,
+        "machine_xy_mm": [
+          28.8,
+          31.8,
+          150.2,
+          159.1
+        ],
+        "layers": [
+          121,
+          152
+        ],
+        "maximum_contiguous_unbacked_mm": 0.52,
+        "prior_centerline_radius_mm": 0.5
+      },
+      "assessment": "The 1.88 mm diameter rounded gusset grows from the deck and supports the far side of the arch. The changed attachment has no long unsupported return loop."
+    },
+    "conditions": [
+      "Full primary clearance, attachment, and printability checks pass, including the complete socket insertion sweep.",
+      "Independently reopened slice preserves the checked paths and settings."
+    ],
+    "physical_fit_verified": false,
+    "physical_strength_verified": false
+  },
+  "gcode_primary": "ea16d5d68b93dea61cfe4bcf9f0e7f3d4b10acf26dd7f7827ccf3ecc53d1ca25",
+  "gcode_reopened": "35df743ce385e5dbd05fc57a2e7c46ae358e44f58e14fdd90d577cef2f3f3583"
+}

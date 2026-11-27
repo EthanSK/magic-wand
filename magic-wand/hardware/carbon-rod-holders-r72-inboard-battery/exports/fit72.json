@@ -1,0 +1,55 @@
+{
+  "revision": "R72",
+  "physical_fit_verified": false,
+  "carrier_sha256": "b366e7da2a673765712714a6939640419b6cea05efe7554d7d26bbc095bc56ee",
+  "pieces": 1,
+  "inboard_mm": 8.0,
+  "pouch_bounds": [
+    -19.45,
+    9.449999999999996,
+    0.27,
+    -7.649999999999999,
+    36.449999999999996,
+    4.17
+  ],
+  "original_depth_mm": [
+    0.27,
+    4.17
+  ],
+  "original_fore_aft_mm": [
+    9.449999999999996,
+    36.449999999999996
+  ],
+  "top_outline_drift_mm": 1.2560207498136125e-06,
+  "top_outline_difference_mm2": 3.118632398713128e-07,
+  "seated_rigid_mm3": 4.3378352913557736e-08,
+  "insertion_rigid_mm3": 4.3378352913557736e-08,
+  "insertion_hardware_mm3": 0.0,
+  "spring_contact_mm3": 1.5007581909411145,
+  "positive_stop_mm3": 1.5113524924929085,
+  "fork_root_overlap_mm3": 4.074574144584971,
+  "fork_crown_overlap_mm3": 9.380071765408484,
+  "key_poses": 336,
+  "key_hits": [],
+  "op1_routes_mm3": {
+    "op1_plug_rises_through_window": 0.0,
+    "op1_lead_in_channel": 0.0,
+    "op1_board_lowered_onto_seat": 0.0,
+    "op1_sockets_lowered_onto_seat": 0.0,
+    "op1_housing_lowered_onto_seat": 0.0,
+    "op1_plug_lowered_onto_seat": 0.0,
+    "op1_lead_lowered_onto_seat": 0.0
+  },
+  "pieces_to_print": [
+    "Key_Carrier",
+    "Touch_Paddle",
+    "OP1_Lid_Stop",
+    "Pin_Clip",
+    "Pin_Clip_Spare",
+    "DFR_Clip_Left",
+    "DFR_Clip_Right",
+    "Hinge_Pin",
+    "DFR_Post_Bar"
+  ],
+  "passes": true
+}

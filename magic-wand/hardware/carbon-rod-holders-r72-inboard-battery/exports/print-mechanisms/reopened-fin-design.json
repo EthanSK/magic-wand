@@ -1,0 +1,84 @@
+{
+  "archive_sha256": "82172918bd79c15e4d27719540bfd226610dfb46898eede8fb55c467f21fe9fd",
+  "holder_first_layer_mm2": 203.1,
+  "panel_sheet_mm2": 3094.1,
+  "combined_first_layer_mm2": 3310.3,
+  "first_layer_pieces": 1,
+  "moat_mm": 1.5,
+  "yoke_top_y": 15.95,
+  "fins": [
+    {
+      "face": "+y",
+      "cut_at_xy": [
+        -26.45,
+        8.47
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 1.8,
+      "section_mm2": 3.06,
+      "rooted_volume_mm3": 1.84
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -19.0,
+        -1.48
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 1.8,
+      "section_mm2": 3.06,
+      "rooted_volume_mm3": 1.84
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -26.5,
+        5.92
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 4.8,
+      "section_mm2": 8.16,
+      "rooted_volume_mm3": 10.5
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        -8.0,
+        -0.68
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 4.8,
+      "section_mm2": 8.16,
+      "rooted_volume_mm3": 4.9
+    },
+    {
+      "face": "-y",
+      "cut_at_xy": [
+        13.0,
+        7.27
+      ],
+      "fin_thickness": 1.7,
+      "fin_height": 4.8,
+      "section_mm2": 8.16,
+      "rooted_volume_mm3": 4.81
+    }
+  ],
+  "total_fin_section_mm2": 30.6,
+  "base_volume_mm3": 1772.4,
+  "revision": "R55",
+  "hinge_bay_xy": [
+    -14.5,
+    11.0,
+    14.5,
+    27.58
+  ],
+  "hinge_bay_open_to_panel_edge": true,
+  "base_volume_in_hinge_bay_mm3": 0.0,
+  "nearest_base_to_hinge_mm": 3.5,
+  "fins_on_hinge": 0,
+  "panel_pieces": 1,
+  "removal": [
+    "Cut the 4 underside fins and 1 top fin at their narrow necks.",
+    "Peel the two sides of the base away from the open hinge bay."
+  ]
+}

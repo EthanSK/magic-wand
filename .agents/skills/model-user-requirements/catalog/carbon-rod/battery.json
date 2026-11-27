@@ -70,10 +70,18 @@
   },
   {
     "id": "battery-contained-placement",
-    "status": "active",
+    "status": "superseded",
     "text": "Move the integrated battery down the key carrier and outward as far as the fitted black hot-swap sockets, switch terminals, small body protrusions, wiring and complete assembly/removal routes permit. Unused key-opening space and decorative lightening holes may be overlapped or filled. Minimise projection beyond the carrier, clear the finger-guard beams and slim the outer rail while retaining safe pouch support, removable friction retention and rounded comfortable edges.",
     "supersedes": [
       "battery-against-deck"
+    ]
+  },
+  {
+    "id": "battery-contained-inboard",
+    "status": "active",
+    "text": "Keep the integrated battery at the R71 lengthwise position and depth. Move its seat toward the carbon rod as far as the socket, lead, guard and spring clearances allow. Keep the symmetrical top outline, slim rounded rails, secure removable friction fit and front stop.",
+    "supersedes": [
+      "battery-contained-placement"
     ]
   }
 ]

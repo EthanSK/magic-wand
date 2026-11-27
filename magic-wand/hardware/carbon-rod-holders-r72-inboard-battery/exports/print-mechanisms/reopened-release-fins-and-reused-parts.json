@@ -1,0 +1,303 @@
+{
+  "archive_sha256": "82172918bd79c15e4d27719540bfd226610dfb46898eede8fb55c467f21fe9fd",
+  "prior_archive_sha256": "9bc93a9aa17bd0a4e3214409128429b11cdcf2bc8ad4a2f1823732f34c716785",
+  "frame_sha256": "e3a4c6107184299bd884f8b726af32529271f25d173a701e16ba3ef7c467f051",
+  "reused_bead_samples_equal": {
+    "Touch_Paddle": false,
+    "OP1_Lid_Stop": true,
+    "Pin_Clip": true,
+    "Pin_Clip_Spare": true,
+    "DFR_Clip_Left": true,
+    "DFR_Clip_Right": false,
+    "Hinge_Pin": true,
+    "DFR_Post_Bar": true
+  },
+  "unchanged_meshes": {
+    "Touch_Paddle": "a58ed3c10eac252bb540b8c34c4b665fd5be7571bccdf17c7b473f5214f18e9f",
+    "OP1_Lid_Stop": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+    "Pin_Clip": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+    "Pin_Clip_Spare": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+    "DFR_Clip_Left": "9edacc6fe79d97b080b28293159f7d721214b61cbc98f2bd114250b4e8582d09",
+    "DFR_Clip_Right": "f8e743eabed60e35d073b7c4b36d5acb02b9d5150a8f1593d1078c678a2520be",
+    "Hinge_Pin": "6f51c4e92b4560519ad5e7ce9b5dc08624ee227c7aecbc15d5d8ca896aaedc2f",
+    "DFR_Post_Bar": "1c0e534ddbd385a8880adc74f64485dde32bc9ba0a3963f4d3f016abc601891e"
+  },
+  "base_necks": [
+    {
+      "face": "+y",
+      "station": -26.45,
+      "height_mm": 1.8000000000000005,
+      "ends": [
+        {
+          "end": "holder",
+          "nominal_width_mm": 1.26,
+          "nominal_section_mm2": 2.268,
+          "rows": [
+            {
+              "outward_station_mm": 8.57,
+              "area_mm2": 2.2833,
+              "minimum_width_above_panel_mm": 1.2695
+            },
+            {
+              "outward_station_mm": 8.715,
+              "area_mm2": 2.2731,
+              "minimum_width_above_panel_mm": 1.2642
+            },
+            {
+              "outward_station_mm": 8.86,
+              "area_mm2": 2.2759,
+              "minimum_width_above_panel_mm": 1.2649
+            }
+          ],
+          "passes": true
+        },
+        {
+          "end": "plate",
+          "nominal_width_mm": 1.7,
+          "nominal_section_mm2": 3.06,
+          "rows": [
+            {
+              "outward_station_mm": 9.52,
+              "area_mm2": 3.0446,
+              "minimum_width_above_panel_mm": 1.6833
+            },
+            {
+              "outward_station_mm": 9.69,
+              "area_mm2": 3.0524,
+              "minimum_width_above_panel_mm": 1.695
+            },
+            {
+              "outward_station_mm": 9.86,
+              "area_mm2": 3.0531,
+              "minimum_width_above_panel_mm": 1.6925
+            }
+          ],
+          "passes": true
+        }
+      ],
+      "minimum_plate_to_maximum_holder_section_ratio": 1.3334,
+      "passes": true
+    },
+    {
+      "face": "-y",
+      "station": -19.0,
+      "height_mm": 1.8000000000000005,
+      "ends": [
+        {
+          "end": "holder",
+          "nominal_width_mm": 0.84,
+          "nominal_section_mm2": 1.512,
+          "rows": [
+            {
+              "outward_station_mm": 1.58,
+              "area_mm2": 1.5186,
+              "minimum_width_above_panel_mm": 0.8395
+            },
+            {
+              "outward_station_mm": 1.725,
+              "area_mm2": 1.5093,
+              "minimum_width_above_panel_mm": 0.8306
+            },
+            {
+              "outward_station_mm": 1.87,
+              "area_mm2": 1.5304,
+              "minimum_width_above_panel_mm": 0.8402
+            }
+          ],
+          "passes": true
+        },
+        {
+          "end": "plate",
+          "nominal_width_mm": 1.7,
+          "nominal_section_mm2": 3.06,
+          "rows": [
+            {
+              "outward_station_mm": 2.53,
+              "area_mm2": 3.0444,
+              "minimum_width_above_panel_mm": 1.6829
+            },
+            {
+              "outward_station_mm": 2.7,
+              "area_mm2": 3.0526,
+              "minimum_width_above_panel_mm": 1.695
+            },
+            {
+              "outward_station_mm": 2.87,
+              "area_mm2": 3.0529,
+              "minimum_width_above_panel_mm": 1.6922
+            }
+          ],
+          "passes": true
+        }
+      ],
+      "minimum_plate_to_maximum_holder_section_ratio": 1.9893,
+      "passes": true
+    },
+    {
+      "face": "-y",
+      "station": -26.5,
+      "height_mm": 4.800000000000001,
+      "ends": [
+        {
+          "end": "holder",
+          "nominal_width_mm": 0.84,
+          "nominal_section_mm2": 4.032,
+          "rows": [
+            {
+              "outward_station_mm": -5.82,
+              "area_mm2": 4.0335,
+              "minimum_width_above_panel_mm": 0.8395
+            },
+            {
+              "outward_station_mm": -5.675,
+              "area_mm2": 3.9943,
+              "minimum_width_above_panel_mm": 0.8306
+            },
+            {
+              "outward_station_mm": -5.53,
+              "area_mm2": 4.0421,
+              "minimum_width_above_panel_mm": 0.8402
+            }
+          ],
+          "passes": true
+        },
+        {
+          "end": "plate",
+          "nominal_width_mm": 1.7,
+          "nominal_section_mm2": 8.16,
+          "rows": [
+            {
+              "outward_station_mm": -4.87,
+              "area_mm2": 8.0933,
+              "minimum_width_above_panel_mm": 1.6792
+            },
+            {
+              "outward_station_mm": -4.7,
+              "area_mm2": 8.1418,
+              "minimum_width_above_panel_mm": 1.6872
+            },
+            {
+              "outward_station_mm": -4.53,
+              "area_mm2": 8.1239,
+              "minimum_width_above_panel_mm": 1.6807
+            }
+          ],
+          "passes": true
+        }
+      ],
+      "minimum_plate_to_maximum_holder_section_ratio": 2.0023,
+      "passes": true
+    },
+    {
+      "face": "-y",
+      "station": -8.0,
+      "height_mm": 4.800000000000001,
+      "ends": [
+        {
+          "end": "holder",
+          "nominal_width_mm": 1.26,
+          "nominal_section_mm2": 6.048,
+          "rows": [
+            {
+              "outward_station_mm": 0.78,
+              "area_mm2": 6.0612,
+              "minimum_width_above_panel_mm": 1.2628
+            },
+            {
+              "outward_station_mm": 0.925,
+              "area_mm2": 6.0393,
+              "minimum_width_above_panel_mm": 1.2584
+            },
+            {
+              "outward_station_mm": 1.07,
+              "area_mm2": 6.062,
+              "minimum_width_above_panel_mm": 1.263
+            }
+          ],
+          "passes": true
+        },
+        {
+          "end": "plate",
+          "nominal_width_mm": 1.7,
+          "nominal_section_mm2": 8.16,
+          "rows": [
+            {
+              "outward_station_mm": 1.73,
+              "area_mm2": 8.0926,
+              "minimum_width_above_panel_mm": 1.6792
+            },
+            {
+              "outward_station_mm": 1.9,
+              "area_mm2": 8.1503,
+              "minimum_width_above_panel_mm": 1.6956
+            },
+            {
+              "outward_station_mm": 2.07,
+              "area_mm2": 8.1371,
+              "minimum_width_above_panel_mm": 1.6807
+            }
+          ],
+          "passes": true
+        }
+      ],
+      "minimum_plate_to_maximum_holder_section_ratio": 1.335,
+      "passes": true
+    },
+    {
+      "face": "-y",
+      "station": 13.0,
+      "height_mm": 4.800000000000001,
+      "ends": [
+        {
+          "end": "holder",
+          "nominal_width_mm": 1.26,
+          "nominal_section_mm2": 6.048,
+          "rows": [
+            {
+              "outward_station_mm": -7.1699,
+              "area_mm2": 6.0617,
+              "minimum_width_above_panel_mm": 1.2628
+            },
+            {
+              "outward_station_mm": -7.0249,
+              "area_mm2": 6.0416,
+              "minimum_width_above_panel_mm": 1.2584
+            },
+            {
+              "outward_station_mm": -6.8799,
+              "area_mm2": 6.0641,
+              "minimum_width_above_panel_mm": 1.2631
+            }
+          ],
+          "passes": true
+        },
+        {
+          "end": "plate",
+          "nominal_width_mm": 1.7,
+          "nominal_section_mm2": 8.16,
+          "rows": [
+            {
+              "outward_station_mm": -6.2199,
+              "area_mm2": 8.0854,
+              "minimum_width_above_panel_mm": 1.6792
+            },
+            {
+              "outward_station_mm": -6.0499,
+              "area_mm2": 8.1543,
+              "minimum_width_above_panel_mm": 1.6979
+            },
+            {
+              "outward_station_mm": -5.8799,
+              "area_mm2": 8.1188,
+              "minimum_width_above_panel_mm": 1.6807
+            }
+          ],
+          "passes": true
+        }
+      ],
+      "minimum_plate_to_maximum_holder_section_ratio": 1.3333,
+      "passes": true
+    }
+  ],
+  "passes": true
+}
