@@ -33,8 +33,9 @@ What changes, the same on both sides:
 
 Those two small fins alone left the holder held by too little (the first R79 plate
 measured 15.7 mm2 of attachment where R78, which held, had 20.4). So carrier_panel() also
-adds one fin: under the right key bank's rear rim, on the 3.85 mm plate, 4.7 mm outboard
-of the bearing and on the other face of the plate from it, open to cutters from below.
+adds one fin: under the right key bank's rear rim, on the 3.85 mm plate. Its near edge is
+3.95 mm outboard of the bearing block, it is on the other face of the plate from the
+bearing, 1.6 mm from the fin already at X 13, and open to cutters from below.
 The battery rails, the rod ring, the wire window and the hinge bay get nothing new.
 
 The old flat DFRobot post clips (R59's, as printed through R70) are named by flat_clips().
@@ -180,6 +181,8 @@ def numbers(before, added, cut, shape):
     reaches = lambda pose: all(pose.bounding_box()[i] <= box[i + 3] and pose.bounding_box()[i + 3] >= box[i] for i in range(3))
     key_hits = [mm3(added, pose) for group in r77.spaces().values() for pose in group if reaches(pose)]
     trough, pin = hinge.approach(), hinge.pin()
+    r78_panel = json.loads((old.OUT / 'print-mechanisms' / 'layout.frame.json').read_text())['parts']['Key_Carrier']['adhesion_panel']
+    fins_before, fins_now = break_sections(r78_panel), break_sections(carrier_panel(r78_panel))
     sides, removed, grown = {}, 0., 0.
     for name, sign in (('left', -1), ('right', 1)):
         zone = _ear(sign)
@@ -202,7 +205,8 @@ def numbers(before, added, cut, shape):
                                    landing_at_its_top_mm2=dict(web=round(float((one ^ outboard).slice(ROOT_BELOW_Z - .005).area()), 3), on_r78_plate=landing(before)),
                                    depth_below_that_level_mm=round(ROOT_BELOW_Z - foot_z, 2),
                                    rounded_rim_band_already_plate=fraction(rim, before), rim_band_z_mm=[ROOT_BELOW_Z, PLATE_TOP]),
-            bed_contact_of_the_block_mm2=dict(r78=round(float(_print_frame(was ^ block).slice(.1).area()), 2), r79=round(float(_print_frame(now ^ block).slice(.1).area()), 2)),
+            # the whole block foot, Z 8.6 up: cut from the carriers themselves, because the local zone starts higher
+            bed_contact_of_the_block_mm2=dict(r78=round(float(_print_frame(before ^ block).slice(.1).area()), 2), r79=round(float(_print_frame(shape ^ block).slice(.1).area()), 2)),
             bed_contact_above_the_plate_block_and_web_mm2=dict(r78=round(float((_print_frame(was).slice(.1) ^ above_plate).area()), 2), r79=round(float((_print_frame(now).slice(.1) ^ above_plate).area()), 2)),
             islands_starting_on_nothing=dict(r78=_starts(was), r79=_starts(now)),
             bore_and_socket_unchanged_mm3=dict(removed=solid((was - now) ^ bearing_zone), added=solid((now - was) ^ bearing_zone)),
@@ -221,7 +225,10 @@ def numbers(before, added, cut, shape):
         whole_carrier=dict(volume_mm3=dict(r78=round(float(before.volume()), 3), r79=round(float(shape.volume()), 3)),
                            volume_change_not_explained_by_the_two_bearing_boxes_mm3=round(float(shape.volume()) - float(before.volume()) - (grown - removed), 4)),
         fins=dict(shoulder=dict(height_mm=SHOULDER_TIE_HEIGHT, neck_mm=SHOULDER_TIE_NECK, break_mm2=round(SHOULDER_TIE_HEIGHT * SHOULDER_TIE_NECK, 2), r78_break_mm2=dict(left=2.27, right=4.03)),
-                  added=dict(RIM_TIE, break_mm2=round(RIM_TIE['height'] * RIM_TIE['neck'], 2), outboard_of_the_bearing_mm=round(RIM_TIE['at'] - .85 - OUTER, 2)),
+                  added=dict(RIM_TIE, break_mm2=round(RIM_TIE['height'] * RIM_TIE['neck'], 2), outboard_of_the_bearing_mm=round(RIM_TIE['at'] - .85 - OUTER, 2),
+                             from_the_fin_at_13_mm=round(RIM_TIE['at'] - 13. - 1.7, 2)),
+                  all_r78=fins_before, all_r79=fins_now,
+                  nominal_sum_mm2=dict(r78=round(sum(fin['mm2'] for fin in fins_before), 2), r79=round(sum(fin['mm2'] for fin in fins_now), 2)),
                   note='nominal neck sections; the plate audit measures the deposited seam'))
 
 
@@ -248,6 +255,9 @@ def build():
         assert max(side['bore_and_socket_unchanged_mm3'].values()) < .001
         assert side['bed_contact_of_the_block_mm2']['r79'] < side['bed_contact_of_the_block_mm2']['r78'] - 3.5
         assert len(side['islands_starting_on_nothing']['r79']) <= len(side['islands_starting_on_nothing']['r78'])
+    fins = report['fins']
+    # Easier at the hinge end, but the holder as a whole is held by no less than R78, which stayed down.
+    assert fins['shoulder']['break_mm2'] < min(fins['shoulder']['r78_break_mm2'].values()) and fins['nominal_sum_mm2']['r79'] >= fins['nominal_sum_mm2']['r78']
     report['passes'] = True
     (OUT / 'hinge79.json').write_text(json.dumps(report, indent=2) + '\n')
     return shape

@@ -27,8 +27,8 @@
         ]
       },
       "bed_contact_of_the_block_mm2": {
-        "r78": 25.99,
-        "r79": 22.18
+        "r78": 31.18,
+        "r79": 27.36
       },
       "bed_contact_above_the_plate_block_and_web_mm2": {
         "r78": 20.39,
@@ -68,8 +68,8 @@
         ]
       },
       "bed_contact_of_the_block_mm2": {
-        "r78": 25.99,
-        "r79": 22.18
+        "r78": 31.18,
+        "r79": 27.36
       },
       "bed_contact_above_the_plate_block_and_web_mm2": {
         "r78": 20.39,
@@ -141,7 +141,71 @@
       "height": 4.8,
       "neck": 1.26,
       "break_mm2": 6.05,
-      "outboard_of_the_bearing_mm": 3.95
+      "outboard_of_the_bearing_mm": 3.95,
+      "from_the_fin_at_13_mm": 1.6
+    },
+    "all_r78": [
+      {
+        "face": "+y",
+        "at": -17.0,
+        "mm2": 2.27
+      },
+      {
+        "face": "-y",
+        "at": -19.0,
+        "mm2": 1.51
+      },
+      {
+        "face": "+y",
+        "at": 17.0,
+        "mm2": 4.03
+      },
+      {
+        "face": "-y",
+        "at": -8.0,
+        "mm2": 6.05
+      },
+      {
+        "face": "-y",
+        "at": 13.0,
+        "mm2": 6.05
+      }
+    ],
+    "all_r79": [
+      {
+        "face": "+y",
+        "at": -17.0,
+        "mm2": 1.51
+      },
+      {
+        "face": "-y",
+        "at": -19.0,
+        "mm2": 1.51
+      },
+      {
+        "face": "+y",
+        "at": 17.0,
+        "mm2": 1.51
+      },
+      {
+        "face": "-y",
+        "at": -8.0,
+        "mm2": 6.05
+      },
+      {
+        "face": "-y",
+        "at": 13.0,
+        "mm2": 6.05
+      },
+      {
+        "face": "-y",
+        "at": 16.3,
+        "mm2": 6.05
+      }
+    ],
+    "nominal_sum_mm2": {
+      "r78": 19.91,
+      "r79": 22.68
     },
     "note": "nominal neck sections; the plate audit measures the deposited seam"
   },

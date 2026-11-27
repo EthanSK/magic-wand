@@ -50,3 +50,19 @@ test('fixed pin ears and both flat clip mouths stay open in both native slices',
     assert.equal(reports('layers').native_support_moves, 0);
   }
 });
+
+test('the release-tab measurements match the shipped carrier and both native archives', () => {
+  const hinge = read('hinge79.json');
+  assert.equal(hinge.carrier_sha256, frame.Key_Carrier.source_sha256);
+  const slices = read('print-mechanisms/review.json').slices;
+  for (const [prefix, slice] of [['', slices.primary], ['reopened-', slices.reopened]]) {
+    const contacts = read('print-mechanisms/' + prefix + 'release-contacts.json');
+    assert.equal(contacts.archive_sha256, slice.archive_sha256);
+    const tabs = contacts.replacement_contacts_mm2;
+    const oldRight = contacts.r78_contacts_mm2['+y at 17'];
+    const right = tabs['+y at 17'];
+    assert.ok(right > 0 && right < oldRight / 2);
+    assert.ok(Math.abs(right - tabs['+y at -17']) < 0.4);
+    assert.equal(Object.keys(tabs).filter(name => name !== 'hinge_bay').length, 6);
+  }
+});
