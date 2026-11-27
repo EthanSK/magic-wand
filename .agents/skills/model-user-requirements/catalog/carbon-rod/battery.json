@@ -78,10 +78,18 @@
   },
   {
     "id": "battery-contained-inboard",
-    "status": "active",
+    "status": "superseded",
     "text": "Keep the integrated battery at the R71 lengthwise position and depth. Move its seat toward the carbon rod as far as the socket, lead, guard and spring clearances allow. Keep the symmetrical top outline, slim rounded rails, secure removable friction fit and front stop.",
     "supersedes": [
       "battery-contained-placement"
+    ]
+  },
+  {
+    "id": "battery-flat-through",
+    "status": "active",
+    "text": "Keep the R72 battery position beside the rod, the matching top tapers and removable friction fit. The wrapped pouch must slide all the way through the rails on a flat path. Keep printed stops, guard arms and pointed projections out of its path, including past the seated position. Keep its leads and connector accessible.",
+    "supersedes": [
+      "battery-contained-inboard"
     ]
   }
 ]

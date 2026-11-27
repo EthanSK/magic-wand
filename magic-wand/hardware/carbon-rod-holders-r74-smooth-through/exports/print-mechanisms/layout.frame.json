@@ -1,0 +1,464 @@
+{
+  "parts": {
+    "Key_Carrier": {
+      "source": "Key_Carrier-assembly.stl",
+      "source_sha256": "07c71a2ebc7c12e266dd3ff54daa48d9e3b501f9b5a50aeb51a85da86d37f922",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          50.88486576080322
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          149.9156665802002
+        ],
+        [
+          0.0,
+          -1.0,
+          0.0,
+          36.45017623901367
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          96,
+          44
+        ],
+        "keep_clear": [
+          [
+            3.9,
+            -2.5,
+            12.0,
+            7.3
+          ],
+          [
+            -15.0,
+            9.0,
+            16.0,
+            60.0
+          ],
+          [
+            -19.52,
+            0.12,
+            -6.140000000000001,
+            7.25
+          ]
+        ],
+        "ties": [
+          {
+            "face": "+y",
+            "at": -26.45,
+            "height": 1.8,
+            "neck": 1.26
+          },
+          {
+            "face": "-y",
+            "at": -19.0,
+            "height": 1.8,
+            "neck": 0.84
+          },
+          {
+            "face": "-y",
+            "at": -26.5,
+            "height": 4.8,
+            "neck": 0.84
+          },
+          {
+            "face": "-y",
+            "at": -8.0,
+            "height": 4.8,
+            "neck": 1.26
+          },
+          {
+            "face": "-y",
+            "at": 13.0,
+            "height": 4.8,
+            "neck": 1.26
+          }
+        ],
+        "fin_thickness": 1.7,
+        "holder_release": "R55"
+      }
+    },
+    "Touch_Paddle": {
+      "source": "../../carbon-rod-holders-r71-contained-battery/exports/Touch_Paddle-assembly.stl",
+      "source_sha256": "a58ed3c10eac252bb540b8c34c4b665fd5be7571bccdf17c7b473f5214f18e9f",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          126.12500057220458
+        ],
+        [
+          1.0,
+          -0.0,
+          -0.0,
+          145.99996900558472
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          19.30017852783203
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          75,
+          60
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0,
+        "wire_exit": true
+      }
+    },
+    "OP1_Lid_Stop": {
+      "source": "../../carbon-rod-holders-r71-contained-battery/exports/OP1_Lid_Stop-assembly.stl",
+      "source_sha256": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          30.58248996734619
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          101.44474849700927
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.149999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          29,
+          39
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.1
+      }
+    },
+    "Pin_Clip": {
+      "source": "../../carbon-rod-holders-r61-top-battery/exports/Pin_Clip-assembly.stl",
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          85.25
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          38.99000024795532
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.6000000238418579
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          15,
+          15
+        ],
+        "ties": [
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "Pin_Clip_Spare": {
+      "source": "../../carbon-rod-holders-r61-top-battery/exports/Pin_Clip-assembly.stl",
+      "source_sha256": "14bbd912cea138785848ccd29ee280e6db4dbaa1356f58f46b4eb1c0bdd7c1e1",
+      "assembly_to_machine": [
+        [
+          0.0,
+          1.0,
+          0.0,
+          105.25
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          38.99000024795532
+        ],
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.6000000238418579
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          15,
+          15
+        ],
+        "ties": [
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    },
+    "DFR_Clip_Left": {
+      "source": "../../carbon-rod-holders-r71-contained-battery/exports/DFR_Clip_Left-assembly.stl",
+      "source_sha256": "9edacc6fe79d97b080b28293159f7d721214b61cbc98f2bd114250b4e8582d09",
+      "assembly_to_machine": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          163.75
+        ],
+        [
+          0.0,
+          -1.0,
+          -0.0,
+          107.4305100440979
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          23.100000381469727
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          12,
+          13.3
+        ],
+        "ties": [
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          -1
+        ]
+      }
+    },
+    "DFR_Clip_Right": {
+      "source": "../../carbon-rod-holders-r71-contained-battery/exports/DFR_Clip_Right-assembly.stl",
+      "source_sha256": "f8e743eabed60e35d073b7c4b36d5acb02b9d5150a8f1593d1078c678a2520be",
+      "assembly_to_machine": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          92.25
+        ],
+        [
+          0.0,
+          -1.0,
+          -0.0,
+          115.0305100440979
+        ],
+        [
+          0.0,
+          0.0,
+          -1.0,
+          23.100000381469727
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          12,
+          13.3
+        ],
+        "ties": [
+          [
+            0,
+            1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          -1
+        ]
+      }
+    },
+    "Hinge_Pin": {
+      "source": "../../carbon-rod-holders-r61-top-battery/exports/Hinge_Pin-assembly.stl",
+      "source_sha256": "6f51c4e92b4560519ad5e7ce9b5dc08624ee227c7aecbc15d5d8ca896aaedc2f",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          97.5
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          -5.299999237060547
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -15.069999694824219
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          12
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 1.6
+      }
+    },
+    "DFR_Post_Bar": {
+      "source": "../../carbon-rod-holders-r71-contained-battery/exports/DFR_Post_Bar-assembly.stl",
+      "source_sha256": "1c0e534ddbd385a8880adc74f64485dde32bc9ba0a3963f4d3f016abc601891e",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          150.5
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          19.616228103637695
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -15.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          18
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    }
+  },
+  "layout_sha256": "c7def1631009ffc1246594a2d47a0b37f20097d3caf4e4128511906d6f28c8f5"
+}

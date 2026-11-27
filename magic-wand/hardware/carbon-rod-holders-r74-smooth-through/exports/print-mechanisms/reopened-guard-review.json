@@ -1,0 +1,115 @@
+{
+  "archive_sha256": "fddd8e690631d24435e3b3755bd83288f8ec40c7a9683daa7221a4fa330df22c",
+  "previous_archive_sha256": "f3b382cb45d23ec25b343e61a28950aea8c0b8cec5ba2c17b99c34101a6cb98c",
+  "parts": {
+    "Key_Carrier": {
+      "floating_starts": [],
+      "runs_in_reference": 88,
+      "runs_in_slice": 82,
+      "new_runs": 1
+    },
+    "Touch_Paddle": {
+      "floating_starts": [],
+      "runs_in_reference": 2,
+      "runs_in_slice": 2,
+      "new_runs": 0
+    },
+    "OP1_Lid_Stop": {
+      "floating_starts": [],
+      "runs_in_reference": 0,
+      "runs_in_slice": 0,
+      "new_runs": 0
+    },
+    "Pin_Clip": {
+      "floating_starts": [],
+      "runs_in_reference": 0,
+      "runs_in_slice": 0,
+      "new_runs": 0
+    },
+    "Pin_Clip_Spare": {
+      "floating_starts": [],
+      "runs_in_reference": 0,
+      "runs_in_slice": 0,
+      "new_runs": 0
+    },
+    "DFR_Clip_Left": {
+      "floating_starts": [],
+      "runs_in_reference": 0,
+      "runs_in_slice": 0,
+      "new_runs": 0
+    },
+    "DFR_Clip_Right": {
+      "floating_starts": [],
+      "runs_in_reference": 0,
+      "runs_in_slice": 0,
+      "new_runs": 0
+    },
+    "Hinge_Pin": {
+      "floating_starts": [],
+      "runs_in_reference": 0,
+      "runs_in_slice": 0,
+      "new_runs": 0
+    },
+    "DFR_Post_Bar": {
+      "floating_starts": [],
+      "runs_in_reference": 0,
+      "runs_in_slice": 0,
+      "new_runs": 0
+    }
+  },
+  "reviewed_bridges": [
+    {
+      "run": {
+        "part": "Key_Carrier",
+        "layer": 194,
+        "mm": 5.214,
+        "two_anchors": true,
+        "bend_mm": 0.241,
+        "midpoint_machine_xy": [
+          29.95,
+          155.423
+        ],
+        "extent_machine_xy": [
+          29.95,
+          152.637,
+          30.215,
+          157.675
+        ],
+        "gcode_lines": [
+          433889,
+          433910
+        ]
+      },
+      "overlap_at_ends_within_mm": [
+        0.0,
+        0.052
+      ],
+      "min_line_width_mm": 0.313,
+      "min_fan_fraction": 0.7,
+      "max_speed_mm_s": 13.03,
+      "earlier_anchored_bridge": {
+        "layer": 129,
+        "mm": 6.202,
+        "two_anchors": true,
+        "bend_mm": 1.445,
+        "midpoint_machine_xy": [
+          72.76,
+          160.569
+        ],
+        "extent_machine_xy": [
+          71.102,
+          159.124,
+          74.418,
+          160.569
+        ],
+        "gcode_lines": [
+          317083,
+          317085
+        ]
+      },
+      "passes": true
+    }
+  ],
+  "new_runs_for_inspection": [],
+  "passes": true
+}

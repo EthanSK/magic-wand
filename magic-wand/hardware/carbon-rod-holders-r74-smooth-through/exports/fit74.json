@@ -1,0 +1,81 @@
+{
+  "revision": "R74",
+  "carrier_sha256": "07c71a2ebc7c12e266dd3ff54daa48d9e3b501f9b5a50aeb51a85da86d37f922",
+  "physical_fit_verified": false,
+  "solids": 1,
+  "key_poses": 336,
+  "key_obstructions": [],
+  "op1_intersections_mm3": {
+    "op1_plug_rises_through_window": 0.0,
+    "op1_lead_in_channel": 0.0,
+    "op1_board_lowered_onto_seat": 0.0,
+    "op1_sockets_lowered_onto_seat": 0.0,
+    "op1_housing_lowered_onto_seat": 0.0,
+    "op1_plug_lowered_onto_seat": 0.0,
+    "op1_lead_lowered_onto_seat": 0.0
+  },
+  "lane_bounds_mm": [
+    -19.45,
+    -19.84629249572754,
+    0.27,
+    -7.649999999999999,
+    37.45017623901367,
+    4.17
+  ],
+  "old_lane_overlap_mm3": 110.69605650320756,
+  "rigid_lane_overlap_mm3": 4.3378352913557736e-08,
+  "spring_contact_mm3": 1.5007581909411145,
+  "front_exit_overlap_by_extra_clearance_mm3": {
+    "0.00": 0.0,
+    "0.05": 0.0,
+    "0.10": 0.0,
+    "0.15": 0.0,
+    "0.20": 0.0,
+    "0.25": 0.0,
+    "0.30": 0.0
+  },
+  "fitted_hardware_lane_overlap_mm3": {
+    "rod": 0.0,
+    "socket_0": 0.0,
+    "switch_0": 0.0,
+    "socket_2": 0.0,
+    "switch_2": 0.0,
+    "socket_3": 0.0,
+    "switch_3": 0.0,
+    "socket_4": 0.0,
+    "switch_4": 0.0,
+    "cap": 0.0,
+    "lid": 0.0,
+    "sensor": 0.0,
+    "board": 0.0,
+    "connector": 0.0,
+    "gravity_plug": 0.0,
+    "op1_wire": 0.0,
+    "sensor_lead": 0.0,
+    "key_0_socket_tape_zone": 0.0,
+    "key_0_soldered_socket_slide": 0.0,
+    "key_3_socket_tape_zone": 0.0,
+    "key_3_soldered_socket_dogleg": 0.0
+  },
+  "guard": {
+    "left_mm3": 130.97771436677456,
+    "right_mm3": 115.65370945445261,
+    "difference_mm3": 191.96308969602222
+  },
+  "old_guard": {
+    "left_mm3": 150.76783681575023,
+    "right_mm3": 115.65370945445261,
+    "difference_mm3": 103.73844314349685
+  },
+  "exported_fork": {
+    "extra_mm3": 2.8486299586534404e-05,
+    "missing_mm3": 3.681531029808548e-05,
+    "joined_beam_solids": 1,
+    "embedded_roots_mm3": [
+      5.289626268113127,
+      2.512498482427868,
+      6.011230260942081
+    ]
+  },
+  "passes": true
+}

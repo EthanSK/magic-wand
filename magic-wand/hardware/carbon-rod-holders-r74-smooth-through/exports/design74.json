@@ -1,0 +1,778 @@
+{
+  "revision": "R74",
+  "physical_fit_verified": false,
+  "sliced": false,
+  "source_carrier_sha256": "a9b1257475f234c7b0e2f5b4bd41be601e43fd17591202cd12545b3922ff3b7f",
+  "carrier_sha256": "07c71a2ebc7c12e266dd3ff54daa48d9e3b501f9b5a50aeb51a85da86d37f922",
+  "battery_path": {
+    "pouch_section_mm": {
+      "x": [
+        -19.45,
+        -7.65
+      ],
+      "z": [
+        0.27,
+        4.17
+      ]
+    },
+    "from_behind_the_holder_to_in_front_of_it_y_mm": [
+      44.45,
+      -24.04
+    ],
+    "room_kept_in_front_of_the_rails_mm": {
+      "each_side": 0.4,
+      "under": 0.3,
+      "over": 0.1
+    },
+    "carrier_in_the_nominal_section_between_the_rails_mm3": {
+      "r73": 0.0,
+      "r74": 0.0
+    },
+    "carrier_in_the_section_with_room_in_front_of_the_rails_mm3": {
+      "r73": 130.5525,
+      "r74": 0.0
+    },
+    "spring_shoe_in_the_pouch_mm3": {
+      "r73": 1.5008,
+      "r74": 1.5008
+    },
+    "fitted_switches_and_sockets_in_the_whole_path_mm3": 0.0,
+    "guard_to_the_pouch_side_mm": 0.45,
+    "rails_unchanged_mm3": {
+      "removed": 0.0,
+      "added_below_the_deck": 0.0
+    },
+    "not_modelled": "the pouch wrap, its leads and connector; how the pouch behaves once its nose is past the rails"
+  },
+  "guard": {
+    "members": [
+      "outer leg: rim root, straight down, turn, then the other bank's curve at the usual depth",
+      "inner branch beside the battery path, on a slim post under the key",
+      "rear leg to the deck between the two keys"
+    ],
+    "radius_mm": 1.35,
+    "lowest_z_mm": {
+      "r73": -0.47,
+      "r74": -0.47
+    },
+    "volume_mm3": {
+      "left_guard_r73": 423.8,
+      "left_guard_r74": 204.3
+    },
+    "in_the_left_key_spaces_mm3": 0.0,
+    "in_those_spaces_grown_by_the_margin_mm3": 0.0,
+    "margin_mm": 0.18,
+    "least_gap_to_the_left_key_spaces_mm": 0.181,
+    "in_the_fitted_switches_and_sockets_mm3": 0.0,
+    "outer_leg_against_the_other_bank": {
+      "root_on_the_rim_mm": {
+        "r74": [
+          -28.3,
+          -6.6
+        ],
+        "right_bank_mirrored": [
+          -28.3,
+          -6.6
+        ]
+      },
+      "same_curve_seen_from_below_to_mm_from_the_joint": 5.38,
+      "low_run_outside_the_mirrored_plan_mm3": 0.0032,
+      "joint_mm": {
+        "r74": [
+          -21.3,
+          4.0
+        ],
+        "right_bank_mirrored": [
+          -22.1,
+          5.2
+        ]
+      },
+      "differs": "in side view: it comes straight down behind the rim, then turns; the other three slope",
+      "why": "the mirrored leg itself would stand 24.29 mm3 in the lower-left socket's fitting poses"
+    },
+    "free_ends": 0
+  },
+  "key_fitting": {
+    "poses_checked": 336,
+    "obstructions": []
+  },
+  "plate": {
+    "openings": [
+      {
+        "key": "key_0",
+        "centre_mm": [
+          -21.03,
+          -5.72
+        ],
+        "size_mm": [
+          1.93,
+          2.41
+        ],
+        "area_mm2": 3.24,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 2.979,
+        "largest_pose_mm3": 2.979,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_0",
+        "centre_mm": [
+          -21.0,
+          -0.37
+        ],
+        "size_mm": [
+          3.6,
+          4.35
+        ],
+        "area_mm2": 10.86,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 12.619,
+        "largest_pose_mm3": 12.619,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_0",
+        "centre_mm": [
+          -21.0,
+          5.3
+        ],
+        "size_mm": [
+          2.0,
+          2.41
+        ],
+        "area_mm2": 3.35,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 2.979,
+        "largest_pose_mm3": 2.979,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_0",
+        "centre_mm": [
+          -25.83,
+          2.27
+        ],
+        "size_mm": [
+          5.27,
+          8.93
+        ],
+        "area_mm2": 18.2,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 14.347,
+        "largest_pose_mm3": 17.046,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_3",
+        "centre_mm": [
+          -20.93,
+          14.06
+        ],
+        "size_mm": [
+          3.33,
+          3.14
+        ],
+        "area_mm2": 8.07,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 7.19,
+        "largest_pose_mm3": 8.517,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_3",
+        "centre_mm": [
+          -15.6,
+          15.13
+        ],
+        "size_mm": [
+          3.2,
+          4.35
+        ],
+        "area_mm2": 10.86,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 0.019,
+        "largest_pose_mm3": 0.05,
+        "use": "touched only",
+        "closed": false
+      },
+      {
+        "key": "key_3",
+        "centre_mm": [
+          -26.65,
+          15.83
+        ],
+        "size_mm": [
+          5.3,
+          3.86
+        ],
+        "area_mm2": 9.99,
+        "on_the_seat_edge": true,
+        "fitted_part_mm3": 7.227,
+        "largest_pose_mm3": 8.498,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_3",
+        "centre_mm": [
+          -26.51,
+          19.74
+        ],
+        "size_mm": [
+          2.0,
+          2.41
+        ],
+        "area_mm2": 3.35,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 2.979,
+        "largest_pose_mm3": 2.979,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_3",
+        "centre_mm": [
+          -21.0,
+          19.58
+        ],
+        "size_mm": [
+          3.6,
+          4.35
+        ],
+        "area_mm2": 10.86,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 12.619,
+        "largest_pose_mm3": 12.619,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_3",
+        "centre_mm": [
+          -17.0,
+          24.25
+        ],
+        "size_mm": [
+          4.4,
+          4.2
+        ],
+        "area_mm2": 13.64,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 0.0,
+        "largest_pose_mm3": 0.0,
+        "use": "empty",
+        "closed": true
+      },
+      {
+        "key": "key_3",
+        "centre_mm": [
+          -25.0,
+          24.25
+        ],
+        "size_mm": [
+          4.4,
+          4.2
+        ],
+        "area_mm2": 13.64,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 0.0,
+        "largest_pose_mm3": 0.0,
+        "use": "empty",
+        "closed": true
+      },
+      {
+        "key": "key_3",
+        "centre_mm": [
+          -14.59,
+          21.46
+        ],
+        "size_mm": [
+          3.79,
+          13.59
+        ],
+        "area_mm2": 11.44,
+        "on_the_seat_edge": true,
+        "fitted_part_mm3": 2.979,
+        "largest_pose_mm3": 2.979,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_2",
+        "centre_mm": [
+          26.51,
+          -0.21
+        ],
+        "size_mm": [
+          2.0,
+          2.41
+        ],
+        "area_mm2": 3.35,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 2.979,
+        "largest_pose_mm3": 2.979,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_2",
+        "centre_mm": [
+          15.49,
+          -0.21
+        ],
+        "size_mm": [
+          2.0,
+          2.41
+        ],
+        "area_mm2": 3.35,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 2.979,
+        "largest_pose_mm3": 2.979,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_2",
+        "centre_mm": [
+          21.0,
+          -0.37
+        ],
+        "size_mm": [
+          3.6,
+          4.35
+        ],
+        "area_mm2": 10.86,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 12.619,
+        "largest_pose_mm3": 12.619,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_2",
+        "centre_mm": [
+          26.08,
+          3.54
+        ],
+        "size_mm": [
+          3.32,
+          3.74
+        ],
+        "area_mm2": 8.59,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 7.138,
+        "largest_pose_mm3": 8.31,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_2",
+        "centre_mm": [
+          15.6,
+          4.6
+        ],
+        "size_mm": [
+          3.2,
+          4.8
+        ],
+        "area_mm2": 12.8,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 0.067,
+        "largest_pose_mm3": 0.137,
+        "use": "touched only",
+        "closed": false
+      },
+      {
+        "key": "key_2",
+        "centre_mm": [
+          20.93,
+          5.57
+        ],
+        "size_mm": [
+          3.33,
+          3.78
+        ],
+        "area_mm2": 8.59,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 7.196,
+        "largest_pose_mm3": 8.584,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_4",
+        "centre_mm": [
+          25.0,
+          13.55
+        ],
+        "size_mm": [
+          4.4,
+          3.4
+        ],
+        "area_mm2": 9.45,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 0.0,
+        "largest_pose_mm3": 0.0,
+        "use": "empty",
+        "closed": true
+      },
+      {
+        "key": "key_4",
+        "centre_mm": [
+          17.0,
+          13.55
+        ],
+        "size_mm": [
+          4.4,
+          3.4
+        ],
+        "area_mm2": 10.12,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 0.0,
+        "largest_pose_mm3": 0.0,
+        "use": "empty",
+        "closed": true
+      },
+      {
+        "key": "key_4",
+        "centre_mm": [
+          13.17,
+          14.18
+        ],
+        "size_mm": [
+          0.95,
+          3.91
+        ],
+        "area_mm2": 2.11,
+        "on_the_seat_edge": true,
+        "fitted_part_mm3": 0.0,
+        "largest_pose_mm3": 0.0,
+        "use": "empty",
+        "closed": false
+      },
+      {
+        "key": "key_4",
+        "centre_mm": [
+          26.51,
+          17.74
+        ],
+        "size_mm": [
+          2.0,
+          2.41
+        ],
+        "area_mm2": 3.35,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 0.0,
+        "largest_pose_mm3": 2.979,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_4",
+        "centre_mm": [
+          15.49,
+          17.74
+        ],
+        "size_mm": [
+          2.0,
+          2.41
+        ],
+        "area_mm2": 3.35,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 0.0,
+        "largest_pose_mm3": 2.979,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_4",
+        "centre_mm": [
+          21.0,
+          17.58
+        ],
+        "size_mm": [
+          3.6,
+          4.35
+        ],
+        "area_mm2": 10.86,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 0.0,
+        "largest_pose_mm3": 12.619,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_4",
+        "centre_mm": [
+          26.08,
+          21.49
+        ],
+        "size_mm": [
+          3.32,
+          3.74
+        ],
+        "area_mm2": 8.59,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 0.0,
+        "largest_pose_mm3": 8.31,
+        "use": "holds a fitted part",
+        "closed": false
+      },
+      {
+        "key": "key_4",
+        "centre_mm": [
+          14.95,
+          21.11
+        ],
+        "size_mm": [
+          4.5,
+          7.67
+        ],
+        "area_mm2": 18.28,
+        "on_the_seat_edge": true,
+        "fitted_part_mm3": 0.0,
+        "largest_pose_mm3": 0.137,
+        "use": "touched only",
+        "closed": false
+      },
+      {
+        "key": "key_4",
+        "centre_mm": [
+          20.93,
+          23.52
+        ],
+        "size_mm": [
+          3.33,
+          3.78
+        ],
+        "area_mm2": 8.59,
+        "on_the_seat_edge": false,
+        "fitted_part_mm3": 0.0,
+        "largest_pose_mm3": 8.584,
+        "use": "holds a fitted part",
+        "closed": false
+      }
+    ],
+    "closed": 4,
+    "pockets_filled_flat_in_the_lower_left_seat": [
+      {
+        "mm3": 1.176,
+        "box_mm": [
+          -27.18,
+          -7.15,
+          7.27,
+          -20.0,
+          -5.41,
+          8.55
+        ]
+      },
+      {
+        "mm3": 8.749,
+        "box_mm": [
+          -28.2,
+          -4.79,
+          7.27,
+          -22.23,
+          9.8,
+          8.55
+        ]
+      },
+      {
+        "mm3": 0.469,
+        "box_mm": [
+          -28.2,
+          0.79,
+          7.27,
+          -26.71,
+          2.83,
+          8.55
+        ]
+      },
+      {
+        "mm3": 7.438,
+        "box_mm": [
+          -21.4,
+          -7.15,
+          7.27,
+          -14.2,
+          1.0,
+          8.55
+        ]
+      },
+      {
+        "mm3": 5.924,
+        "box_mm": [
+          -21.4,
+          1.23,
+          7.27,
+          -14.2,
+          8.42,
+          8.35
+        ]
+      }
+    ],
+    "hairline_slits_closed_inside_the_plate": [
+      {
+        "mm3": 0.814,
+        "box_mm": [
+          -14.43,
+          -3.99,
+          7.45,
+          -13.2,
+          0.4,
+          7.67
+        ]
+      }
+    ],
+    "rule": "closed only if no fitted switch or socket and no fitting pose puts anything in the opening; openings on a seat edge are left"
+  },
+  "removed_from_r73": {
+    "under_the_left_deck_mm3": 423.8,
+    "carrier_volume_mm3": {
+      "r73": 9132.6,
+      "r74": 8974.9
+    }
+  },
+  "print_layers": {
+    "r73": {
+      "islands_starting_on_nothing": [],
+      "overhang_total_mm2": 5.63,
+      "largest": [
+        {
+          "y_mm": 8.35,
+          "area_mm2": 1.61,
+          "x_mm": [
+            -24.1,
+            -17.8
+          ],
+          "z_mm": [
+            0.2,
+            1.6
+          ]
+        },
+        {
+          "y_mm": 8.15,
+          "area_mm2": 0.96,
+          "x_mm": [
+            -25.3,
+            -17.0
+          ],
+          "z_mm": [
+            0.2,
+            1.5
+          ]
+        },
+        {
+          "y_mm": 30.35,
+          "area_mm2": 0.54,
+          "x_mm": [
+            -12.8,
+            -12.6
+          ],
+          "z_mm": [
+            4.2,
+            6.9
+          ]
+        },
+        {
+          "y_mm": 8.55,
+          "area_mm2": 0.39,
+          "x_mm": [
+            -22.5,
+            -9.7
+          ],
+          "z_mm": [
+            0.5,
+            2.2
+          ]
+        },
+        {
+          "y_mm": 7.95,
+          "area_mm2": 0.34,
+          "x_mm": [
+            -26.1,
+            -16.5
+          ],
+          "z_mm": [
+            0.3,
+            1.5
+          ]
+        }
+      ]
+    },
+    "r74": {
+      "islands_starting_on_nothing": [],
+      "overhang_total_mm2": 8.76,
+      "largest": [
+        {
+          "y_mm": -5.45,
+          "area_mm2": 5.06,
+          "x_mm": [
+            -29.0,
+            -27.6
+          ],
+          "z_mm": [
+            3.0,
+            6.8
+          ]
+        },
+        {
+          "y_mm": -2.25,
+          "area_mm2": 2.33,
+          "x_mm": [
+            -21.1,
+            -20.5
+          ],
+          "z_mm": [
+            3.0,
+            7.3
+          ]
+        },
+        {
+          "y_mm": 30.35,
+          "area_mm2": 0.54,
+          "x_mm": [
+            -12.8,
+            -12.6
+          ],
+          "z_mm": [
+            4.2,
+            6.9
+          ]
+        },
+        {
+          "y_mm": 29.95,
+          "area_mm2": 0.25,
+          "x_mm": [
+            -13.8,
+            -13.7
+          ],
+          "z_mm": [
+            4.2,
+            6.8
+          ]
+        },
+        {
+          "y_mm": 29.75,
+          "area_mm2": 0.18,
+          "x_mm": [
+            -14.4,
+            -14.3
+          ],
+          "z_mm": [
+            4.3,
+            6.8
+          ]
+        }
+      ]
+    },
+    "note": "CAD sections with the rear face down, not a slice"
+  },
+  "generator_sha256": "93aa831f22ec2eb6b5a5974751ec56abbe9e7b4562512e3c4c55900a0efd72c9",
+  "passes": true
+}
