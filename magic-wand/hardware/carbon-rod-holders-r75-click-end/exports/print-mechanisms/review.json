@@ -1,0 +1,280 @@
+{
+  "revision": "R75",
+  "physical_fit_verified": false,
+  "layout_sha256": "ea5144dbe60ab842b52ed93e215a8694270eb4d702b790545c9b399cd1363fa8",
+  "carrier_sha256": "0a92e0b1da00ed3acc9cfb2da0de30abefe6d4f96122dd99890df77f068be799",
+  "slices": {
+    "primary": {
+      "archive_sha256": "5f62c88d499c71eefc4f11ea3b6a660bad0f989de41404c3752b9d777428506c",
+      "route_groups": 80,
+      "part_count": 9,
+      "new_anchored_spans": [
+        {
+          "part": "Key_Carrier",
+          "span": {
+            "layer": 158,
+            "mm": 1.184,
+            "two_anchors": true,
+            "bend_mm": 0.508,
+            "midpoint_machine_xy": [
+              29.828,
+              153.905
+            ],
+            "extent_machine_xy": [
+              29.566,
+              153.411,
+              30.122,
+              153.922
+            ],
+            "gcode_lines": [
+              346151,
+              346155
+            ]
+          },
+          "reference": {
+            "layer": 44,
+            "mm": 1.563,
+            "two_anchors": true,
+            "bend_mm": 0.632,
+            "midpoint_machine_xy": [
+              64.886,
+              158.796
+            ],
+            "extent_machine_xy": [
+              64.687,
+              158.796,
+              64.986,
+              159.428
+            ],
+            "gcode_lines": [
+              146683,
+              146685
+            ]
+          }
+        },
+        {
+          "part": "Key_Carrier",
+          "span": {
+            "layer": 159,
+            "mm": 1.371,
+            "two_anchors": true,
+            "bend_mm": 0.589,
+            "midpoint_machine_xy": [
+              29.994,
+              154.926
+            ],
+            "extent_machine_xy": [
+              29.637,
+              154.338,
+              30.208,
+              154.941
+            ],
+            "gcode_lines": [
+              349423,
+              349427
+            ]
+          },
+          "reference": {
+            "layer": 44,
+            "mm": 1.563,
+            "two_anchors": true,
+            "bend_mm": 0.632,
+            "midpoint_machine_xy": [
+              64.886,
+              158.796
+            ],
+            "extent_machine_xy": [
+              64.687,
+              158.796,
+              64.986,
+              159.428
+            ],
+            "gcode_lines": [
+              146683,
+              146685
+            ]
+          }
+        },
+        {
+          "part": "Key_Carrier",
+          "span": {
+            "layer": 219,
+            "mm": 1.509,
+            "two_anchors": true,
+            "bend_mm": 0.556,
+            "midpoint_machine_xy": [
+              71.885,
+              159.974
+            ],
+            "extent_machine_xy": [
+              71.608,
+              159.418,
+              72.162,
+              159.974
+            ],
+            "gcode_lines": [
+              457334,
+              457338
+            ]
+          },
+          "reference": {
+            "layer": 44,
+            "mm": 1.563,
+            "two_anchors": true,
+            "bend_mm": 0.632,
+            "midpoint_machine_xy": [
+              64.886,
+              158.796
+            ],
+            "extent_machine_xy": [
+              64.687,
+              158.796,
+              64.986,
+              159.428
+            ],
+            "gcode_lines": [
+              146683,
+              146685
+            ]
+          }
+        }
+      ]
+    },
+    "reopened": {
+      "archive_sha256": "ee278c64bc1cff11458be70d62d107a172a6cb6ee4590b7e3aaacbcb568aba18",
+      "route_groups": 80,
+      "part_count": 9,
+      "new_anchored_spans": [
+        {
+          "part": "Key_Carrier",
+          "span": {
+            "layer": 158,
+            "mm": 1.184,
+            "two_anchors": true,
+            "bend_mm": 0.508,
+            "midpoint_machine_xy": [
+              29.828,
+              153.905
+            ],
+            "extent_machine_xy": [
+              29.566,
+              153.411,
+              30.122,
+              153.922
+            ],
+            "gcode_lines": [
+              346138,
+              346142
+            ]
+          },
+          "reference": {
+            "layer": 44,
+            "mm": 1.563,
+            "two_anchors": true,
+            "bend_mm": 0.632,
+            "midpoint_machine_xy": [
+              64.886,
+              158.796
+            ],
+            "extent_machine_xy": [
+              64.687,
+              158.796,
+              64.986,
+              159.428
+            ],
+            "gcode_lines": [
+              146683,
+              146685
+            ]
+          }
+        },
+        {
+          "part": "Key_Carrier",
+          "span": {
+            "layer": 159,
+            "mm": 1.371,
+            "two_anchors": true,
+            "bend_mm": 0.589,
+            "midpoint_machine_xy": [
+              29.994,
+              154.926
+            ],
+            "extent_machine_xy": [
+              29.637,
+              154.338,
+              30.208,
+              154.941
+            ],
+            "gcode_lines": [
+              349410,
+              349414
+            ]
+          },
+          "reference": {
+            "layer": 44,
+            "mm": 1.563,
+            "two_anchors": true,
+            "bend_mm": 0.632,
+            "midpoint_machine_xy": [
+              64.886,
+              158.796
+            ],
+            "extent_machine_xy": [
+              64.687,
+              158.796,
+              64.986,
+              159.428
+            ],
+            "gcode_lines": [
+              146683,
+              146685
+            ]
+          }
+        },
+        {
+          "part": "Key_Carrier",
+          "span": {
+            "layer": 219,
+            "mm": 1.509,
+            "two_anchors": true,
+            "bend_mm": 0.556,
+            "midpoint_machine_xy": [
+              71.885,
+              159.974
+            ],
+            "extent_machine_xy": [
+              71.608,
+              159.418,
+              72.162,
+              159.974
+            ],
+            "gcode_lines": [
+              457306,
+              457310
+            ]
+          },
+          "reference": {
+            "layer": 44,
+            "mm": 1.563,
+            "two_anchors": true,
+            "bend_mm": 0.632,
+            "midpoint_machine_xy": [
+              64.886,
+              158.796
+            ],
+            "extent_machine_xy": [
+              64.687,
+              158.796,
+              64.986,
+              159.428
+            ],
+            "gcode_lines": [
+              146683,
+              146685
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

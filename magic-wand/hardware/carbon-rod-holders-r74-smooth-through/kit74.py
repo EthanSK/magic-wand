@@ -27,13 +27,14 @@ def parts():
     return rows
 
 
-def layout(path):
+def layout(path, rows=None, *, title='R74 complete key holder'):
     from plate_preview import embed
     from native_layout53 import MODEL, SETTINGS, add_modifiers, tag, value
-    rows = parts()
+    if rows is None:
+        rows = parts()
     base_plate.printer.write_layout(
         rows, path, base_plate.kit64.kit63.plate.plate60.prior.p58.TOWER,
-        'R74 complete key holder', panel_builder=base_plate.panel_builder)
+        title, panel_builder=base_plate.panel_builder)
     # At the edge of the filled pocket, Arachne produced an isolated 0.05 mm
     # loop in midair. Use one wider classic perimeter just around this pocket.
     # A plate-wide change also dropped useful bonds at the other switch seats.

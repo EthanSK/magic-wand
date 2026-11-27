@@ -19,12 +19,13 @@ class Element extends EventTarget {
   replaceChildren(...children) { this.children = children; }
 }
 
-function startup() {
+function startup(history) {
   const status = new Element('p');
   const errorBox = new Element('div');
   const body = new Element('body');
   body.dataset = {};
   const window = new EventTarget();
+  window.history = history;
   let reloads = 0;
   window.location = {reload() { reloads++; }};
   const document = {
@@ -37,6 +38,23 @@ function startup() {
   const viewer = body.children[0];
   return {status, errorBox, body, window, viewer, reloads: () => reloads};
 }
+
+test('a transient entry-module fetch retries the same view once and releases the retry after success', () => {
+  const history = {state: {selected: 'finger_rest'}, replaceState(value) { this.state = value; }};
+  const first = startup(history);
+  first.viewer.dispatchEvent(new Event('error'));
+  assert.equal(first.reloads(), 1);
+  assert.deepEqual(first.errorBox.children, []);
+  const second = startup(history);
+  second.viewer.dispatchEvent(new Event('error'));
+  assert.equal(second.reloads(), 0);
+  assert.equal(second.errorBox.children[1].textContent, 'Reload');
+  const recovered = startup(history);
+  recovered.body.dataset.ready = 'true';
+  recovered.window.dispatchEvent(new Event('assembly-startup-finished'));
+  assert.equal(history.state.selected, 'finger_rest');
+  assert.equal(history.state.assemblyModuleRetried, undefined);
+});
 
 test('a failed entry module or static dependency has a reload action outside the module graph', () => {
   const page = startup();

@@ -33,12 +33,32 @@
   }
 
   window.addEventListener('error', executionFailed);
-  viewer.addEventListener('error', failed, { once: true });
+  viewer.addEventListener('error', () => {
+    // A fresh document can recover a failed module fetch, including a static
+    // dependency. Limit recovery to one reload of this history entry so a
+    // broken build still gives the reader a usable error and Reload button.
+    const history = window.history;
+    if (!failureShown && history && !history.state?.assemblyModuleRetried) {
+      try {
+        history.replaceState({ ...history.state, assemblyModuleRetried: true }, '');
+        window.location.reload();
+        return;
+      } catch {
+        // An embedded viewer can disallow history writes.
+      }
+    }
+    failed();
+  }, { once: true });
   // The script load event can precede the catalog and mesh requests.
   window.addEventListener('assembly-startup-finished', () => {
     window.removeEventListener('error', executionFailed);
     status.hidden = true;
-    if (document.body.dataset.ready !== 'true') failed();
+    if (document.body.dataset.ready !== 'true') {
+      failed();
+    } else if (window.history?.state?.assemblyModuleRetried) {
+      const { assemblyModuleRetried, ...rest } = window.history.state;
+      try { window.history.replaceState(rest, ''); } catch { /* The model is ready. */ }
+    }
   }, { once: true });
   document.body.dataset.ready = 'loading';
   document.body.append(viewer);
