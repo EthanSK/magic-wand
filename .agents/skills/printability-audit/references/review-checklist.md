@@ -29,9 +29,9 @@ Self-improved — 2026-11-06: a track count or a median-width bead envelope does
 
 ## Independent review, repair and handoff
 
-Use the current `invoke-claude` workflow to give Opus the authored requirements, exact current artifacts, settings, visual slice evidence and measured checks. Ask for its own assessment of holes, support removal and weakness with minimal design changes; keep Codex's initial conclusion separate. Require actual file inspection and distinguish source-only review from review of a final slice. If stuck, use Gemini through the council when available under the user's requested boundary. Report unavailable coverage honestly.
+The coordinator defined in the skill's linked model-authoring split assesses the authored requirements, exact current artifacts, settings, visual slice evidence and measured checks independently of the CAD author's self-checks. Check holes, support removal and weakness with minimal design changes. Inspect the actual files and distinguish source-only review from review of a final slice. Run targeted measurements for unresolved questions and report unavailable coverage honestly; do not add another model or council pass automatically.
 
-Account for each finding, fix in-scope failures and repeat the affected final slice/visual/strength checks. Have Opus review the final affected artifacts when later changes invalidate its earlier view. No obsolete review or successful re-slice closes an unresolved opening or snap risk.
+Account for each finding, fix in-scope failures and repeat the affected final slice/visual/strength checks. The coordinator reviews the final affected artifacts when later changes invalidate its earlier view; consolidate needed geometry changes for the CAD author under the model-authoring split. No obsolete review or successful re-slice closes an unresolved opening or snap risk.
 
 Retain a concise reproducible report with exact hashes, per-part opening/support/bridge/section evidence, review disposition, changes versus the previous revision and remaining physical tests. Keep private prompts and model-run transcripts outside the public repository. Follow normal source/CAD generation, privacy, check, commit and push rules. Deliver the checked replacement and identify superseded files; do not send it to another person or restart a monitor without authorization.
 

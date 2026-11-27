@@ -1,6 +1,6 @@
 ---
 name: printability-audit
-description: Before finishing any 3D model, coupon or print project in this repository, review actual sliced holes, supports, removal access and likely snap points with Opus. Also use after physical print failures. Keep the design and bought-part interfaces intact.
+description: Before finishing any 3D model, coupon or print project in this repository, assess actual sliced holes, supports, removal access and likely snap points independently of the CAD author. Also use after physical print failures. Keep the design and bought-part interfaces intact.
 ---
 
 # Printability audit
@@ -19,7 +19,9 @@ Tell Ethan this skill is active and briefly why before its first use, following 
 
 ## User requirements
 
-User-requested — 2026-11-05: every time you finish a 3D model, fully analyse with Opus if it will print well because of the support structure, and what you can fix or add while changing the design as little as possible. Check every time that nothing is too weak and can snap easily. Check holes in general, including keycap/socket areas and holes sliding over the rod. Ask Gemini through the council if stuck; that does not require an automatic council pass for every model.
+User-requested — 2026-11-05: every time you finish a 3D model, fully analyse if it will print well because of the support structure, and what you can fix or add while changing the design as little as possible. Check every time that nothing is too weak and can snap easily. Check holes in general, including keycap/socket areas and holes sliding over the rod.
+
+Use the current coordinator/author roles in the [model-authoring split](../magic-wand-print-design/SKILL.md#model-changes), including preparation and the consolidated CAD handback. That contract supersedes the earlier Opus-review and Gemini-council routing, not the required check coverage. User-requested routing change — 2026-11-27.
 
 ## Proportionate final review
 
@@ -34,7 +36,7 @@ User-requested — 2026-11-08: improve speed; “whittle it down to useful requi
 - Every working opening and complete loading/removal route against all actual bead types, including supports, interfaces, transition, brim, raft and CAD helpers. Reject empty/misplaced scans; cleanup-dependent spaces remain obstructed until cleanup.
 - Likely snap points and complete load paths: minimum sections, joint overlap, surviving bead footprints, layer direction and spring freedom. Credit actual prior-layer plastic, not unprinted mesh. Helpers also need realised vertical/sideways gaps, backing and outward removal access.
 
-**One independent Opus review.** Use invoke-claude with actual source, slice and visual access. Request actionable failures, evidence, missing coverage and a verdict. Assess existing measurements; run targeted probes for doubts rather than rebuilding a passing audit. Keep Codex's assessment independent. After fixes, re-review only invalidated coverage. Use Gemini only if stuck under existing authority.
+**One independent coordinator assessment.** Inspect the actual source, slice and visual evidence independently of the CAD author's self-checks. Record actionable failures, evidence, missing coverage and a verdict. Assess existing measurements; run targeted probes for doubts rather than rebuilding a passing audit. After fixes, re-review only invalidated coverage. Do not add a separate model call or council pass merely to repeat this assessment.
 
 **Finish once.** Prefer orientation/settings, then local repairs preserving bought interfaces and ergonomics. Re-slice changed geometry/settings and check actual paths even if STLs match. Reopen/re-slice the final archive once; preserve known GUI requirements, report unavailable coverage and continue independent work instead of looping on a broken UI. Keep one hash-bound per-part report linking selected views, measurements, finding dispositions and physical trials. Extra research, calculations, views or coupons need a specific unresolved question; no speculative simulations or duplicate reports. A complete-part trial may replace an unrepresentative coupon.
 
