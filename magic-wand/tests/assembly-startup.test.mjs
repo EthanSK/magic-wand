@@ -62,11 +62,19 @@ test('an early execution failure is caught before the viewer can install its own
   assert.equal(page.errorBox.children.length, 2);
 });
 
+test('loading the module while its assembly requests are pending leaves the page loading', () => {
+  const page = startup();
+  page.viewer.dispatchEvent(new Event('load'));
+  assert.equal(page.body.dataset.ready, 'loading');
+  assert.equal(page.status.hidden, false);
+  assert.deepEqual(page.errorBox.children, []);
+});
+
 test('startup preserves the viewer error when a model request fails', () => {
   const page = startup();
   page.body.dataset.ready = 'error';
   page.errorBox.textContent = 'Assembly versions could not be loaded';
-  page.viewer.dispatchEvent(new Event('load'));
+  page.window.dispatchEvent(new Event('assembly-startup-finished'));
   assert.equal(page.errorBox.children[0].textContent, 'Assembly versions could not be loaded');
   assert.equal(page.errorBox.children[1].textContent, 'Reload');
 });
@@ -74,7 +82,7 @@ test('startup preserves the viewer error when a model request fails', () => {
 test('a completed viewer hides loading feedback and later errors are outside the startup boundary', () => {
   const page = startup();
   page.body.dataset.ready = 'true';
-  page.viewer.dispatchEvent(new Event('load'));
+  page.window.dispatchEvent(new Event('assembly-startup-finished'));
   assert.equal(page.status.hidden, true);
   page.window.dispatchEvent(new Event('error'));
   assert.equal(page.body.dataset.ready, 'true');

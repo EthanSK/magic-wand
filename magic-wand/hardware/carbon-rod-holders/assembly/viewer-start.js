@@ -34,7 +34,8 @@
 
   window.addEventListener('error', executionFailed);
   viewer.addEventListener('error', failed, { once: true });
-  viewer.addEventListener('load', () => {
+  // The script load event can precede the catalog and mesh requests.
+  window.addEventListener('assembly-startup-finished', () => {
     window.removeEventListener('error', executionFailed);
     status.hidden = true;
     if (document.body.dataset.ready !== 'true') failed();
