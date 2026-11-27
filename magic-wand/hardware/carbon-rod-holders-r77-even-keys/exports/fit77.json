@@ -1,0 +1,38 @@
+{
+  "revision": "R77",
+  "carrier_sha256": "368d212a5db71b2ef1eaebc43dc5bc7fb39f246606918e9dc3ff608d3dae2346",
+  "switch_socket_poses": 336,
+  "obstructions": [],
+  "cap_edge_gaps_mm": [
+    0.55,
+    0.55
+  ],
+  "rear_hinge_asymmetry_mm3": 0.0003749050986728,
+  "key_pitches_mm": [
+    17.95,
+    17.95
+  ],
+  "mirrored_outer_fork_missing_mm3": 7.33459435152887e-06,
+  "op1_routes_mm3": {
+    "op1_plug_rises_through_window": 0.0,
+    "op1_lead_in_channel": 0.0,
+    "op1_board_lowered_onto_seat": 0.0,
+    "op1_sockets_lowered_onto_seat": 0.0,
+    "op1_housing_lowered_onto_seat": 0.0,
+    "op1_plug_lowered_onto_seat": 0.0,
+    "op1_lead_lowered_onto_seat": 0.0
+  },
+  "battery_to_deck_mm": 3.0999999999999996,
+  "battery_to_solder_mm": 0.1999999999999993,
+  "battery_service_rigid_overlap_mm3": 4.3378352913557736e-08,
+  "wire_clearances_mm": {
+    "pin": 2.59,
+    "clip": 1.201,
+    "carrier": 4.629,
+    "paddle": 0.35,
+    "clip_during_insertion": 1.25
+  },
+  "paddle_sha256": "07c2e7786a6896a704fad534cdf4ec6f99a44ca58565a7fc2e16e0e8141d2da7",
+  "physical_fit_verified": false,
+  "passes": true
+}
