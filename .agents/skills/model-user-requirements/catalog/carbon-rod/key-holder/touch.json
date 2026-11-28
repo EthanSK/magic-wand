@@ -12,7 +12,7 @@
   {
     "id": "dfrobot-post-fit",
     "status": "active",
-    "text": "Size the touch-board locating posts for a snug removable fit in the purchased DFR0030 V2 mounting holes, with enough friction to prevent board wobble. Preserve successful post height and clip engagement; account for actual hole pitch, board tolerance and printed PETG fit without stressing the PCB."
+    "text": "Make the part of each locating post that passes through the DFR0030 V2 mounting hole thicker so the board cannot rock. Keep the narrower neck at the top for the easy flat clips and preserve the successful post height. Allow for hole pitch, board tolerance and printed PETG fit so the board seats without damaging it."
   },
   {
     "id": "dfrobot-hole-nominal",
@@ -38,5 +38,10 @@
     "id": "r78-board-clip-fit",
     "status": "evidence",
     "text": "When fitting the R78 touch-board clips, the user reported that one piece tore off because installation required too much force. The exact torn feature was not identified."
+  },
+  {
+    "id": "r79-board-post-play",
+    "status": "evidence",
+    "text": "On the fitted R79 assembly the touch board still wobbled on the posts with the flat clips. The actual hole diameter and amount and direction of play have not been measured."
   }
 ]
