@@ -1,0 +1,653 @@
+{
+  "revision": "R80",
+  "physical_fit_verified": false,
+  "sliced": false,
+  "written": {
+    "DFR_Post_Bar-assembly.stl": "fe20a620a2a5edae271d8b342f38edaf9fd35609370f62c540141c315ed49feb",
+    "OP1_Lid_Stop-assembly.stl": "e07550746596ba1257ed7987150a3b871902c5bfa8fdda1a7240c55564f4eb55"
+  },
+  "reused": {
+    "Touch_Paddle": {
+      "file": "carbon-rod-holders-r77-even-keys/exports/Touch_Paddle-assembly.stl",
+      "sha256": "07c2e7786a6896a704fad534cdf4ec6f99a44ca58565a7fc2e16e0e8141d2da7"
+    },
+    "Key_Carrier": {
+      "file": "carbon-rod-holders-r79-hinge-release/exports/Key_Carrier-assembly.stl",
+      "sha256": "eddb105e09b4b98dcc0debe4a36cfcf9b0d2bc4ced842432bda41f55d219e3d8"
+    },
+    "DFR_Clip_Left": {
+      "file": "carbon-rod-holders-r59-flipped-guard/exports/DFR_Clip_Left-assembly.stl",
+      "sha256": "5673825587a7da76de3c89abe0f0296aecd7edd5699cd576df5137b86413aee9"
+    },
+    "DFR_Clip_Right": {
+      "file": "carbon-rod-holders-r59-flipped-guard/exports/DFR_Clip_Right-assembly.stl",
+      "sha256": "50dbdcc8ec0c1f1acf55225e654ff0d0ede25a448bd0b8abe786c8892cc94e5c"
+    }
+  },
+  "compared_with": {
+    "post_bar": "1c0e534ddbd385a8880adc74f64485dde32bc9ba0a3963f4d3f016abc601891e",
+    "retainer": "e3a4a954badc22404c600566af25ed2fe986c4a15b99349bdabc408858194422"
+  },
+  "posts": {
+    "paddle_hole_half_sizes_mm": [
+      1.33,
+      1.47
+    ],
+    "paddle_hole_corner_from_its_centre_mm": 1.98,
+    "section_in_the_board": {
+      "r71_at_the_seat_box_mm": [
+        -1.26,
+        1.26,
+        -1.26,
+        1.367
+      ],
+      "r71_at_the_board_top_box_mm": [
+        -1.125,
+        1.125,
+        -1.26,
+        1.26
+      ],
+      "r80_rigid_body_box_mm": [
+        -1.27,
+        1.27,
+        -0.31,
+        1.26
+      ],
+      "r80_finger_box_mm": [
+        -1.1,
+        1.1,
+        -1.75,
+        -0.83
+      ],
+      "r80_body_and_finger_across_mm": [
+        2.54,
+        3.01
+      ],
+      "r71_across_mm": [
+        2.25,
+        2.52
+      ],
+      "r71_rib_crest_width_mm": 0.42,
+      "r71_full_rib_height_mm": 0.6
+    },
+    "lands": {
+      "on_a_circle_of_mm": 3.0,
+      "from_the_rear_deg": [
+        32.9,
+        50.0
+      ],
+      "each_land_width_mm": 0.45,
+      "lands_per_post": 2,
+      "full_section_height_mm": 1.35,
+      "board_thickness_mm": 1.6
+    },
+    "finger": {
+      "wide_mm": 2.2,
+      "stem_thick_mm": 0.55,
+      "stem_front_face_mm": -1.38,
+      "head_free_front_face_mm": -1.75,
+      "head_face_on_a_circle_of_mm": 2.8,
+      "head_beyond_a_3_0_hole_wall_mm": 0.25,
+      "travel_before_it_meets_the_body_mm": 0.52,
+      "full_face_in_the_board_z_mm": [
+        19.69,
+        20.3
+      ],
+      "full_face_left_in_a_board_lifted_0_8_mm": 0.2,
+      "top_z_mm": 20.7,
+      "spring": {
+        "mm_per_n": 1.296,
+        "n_per_mm": 0.772,
+        "share": {
+          "arm_bending": 0.32,
+          "arm_twist": 0.62,
+          "finger_bending": 0.06
+        },
+        "arm_bending_strain_per_mm_of_finger_travel": 0.0098,
+        "finger_root_stress_mpa_per_n": 21.6,
+        "arm": {
+          "length_mm": 6.75,
+          "across_mm": 1.0,
+          "tall_mm": 1.6,
+          "bends": "in the printed plane, along continuous lines"
+        },
+        "modulus_assumed_mpa": 2000.0,
+        "method": "Euler beam and thin-bar torsion; an estimate, not a measured force"
+      }
+    },
+    "holes": [
+      {
+        "hole_mm": 2.9,
+        "body_goes_in": true,
+        "hole_centre_in_front_of_the_post_axis_mm": -0.08,
+        "finger_pushed_in_mm": 0.38,
+        "board_play_fore_and_aft_mm": 0.0,
+        "finger_force_n": 0.29,
+        "within_the_finger_travel": true
+      },
+      {
+        "hole_mm": 2.95,
+        "body_goes_in": true,
+        "hole_centre_in_front_of_the_post_axis_mm": -0.04,
+        "finger_pushed_in_mm": 0.315,
+        "board_play_fore_and_aft_mm": 0.0,
+        "finger_force_n": 0.24,
+        "within_the_finger_travel": true
+      },
+      {
+        "hole_mm": 3.0,
+        "body_goes_in": true,
+        "hole_centre_in_front_of_the_post_axis_mm": -0.002,
+        "finger_pushed_in_mm": 0.252,
+        "board_play_fore_and_aft_mm": 0.0,
+        "finger_force_n": 0.19,
+        "within_the_finger_travel": true
+      },
+      {
+        "hole_mm": 3.05,
+        "body_goes_in": true,
+        "hole_centre_in_front_of_the_post_axis_mm": 0.028,
+        "finger_pushed_in_mm": 0.197,
+        "board_play_fore_and_aft_mm": 0.0,
+        "finger_force_n": 0.15,
+        "within_the_finger_travel": true
+      },
+      {
+        "hole_mm": 3.1,
+        "body_goes_in": true,
+        "hole_centre_in_front_of_the_post_axis_mm": 0.058,
+        "finger_pushed_in_mm": 0.142,
+        "board_play_fore_and_aft_mm": 0.0,
+        "finger_force_n": 0.11,
+        "within_the_finger_travel": true
+      },
+      {
+        "hole_mm": 3.15,
+        "body_goes_in": true,
+        "hole_centre_in_front_of_the_post_axis_mm": 0.088,
+        "finger_pushed_in_mm": 0.087,
+        "board_play_fore_and_aft_mm": 0.0,
+        "finger_force_n": 0.07,
+        "within_the_finger_travel": true
+      },
+      {
+        "hole_mm": 3.2,
+        "body_goes_in": true,
+        "hole_centre_in_front_of_the_post_axis_mm": 0.116,
+        "finger_pushed_in_mm": 0.034,
+        "board_play_fore_and_aft_mm": 0.0,
+        "finger_force_n": 0.03,
+        "within_the_finger_travel": true
+      },
+      {
+        "hole_mm": 3.25,
+        "body_goes_in": true,
+        "hole_centre_in_front_of_the_post_axis_mm": 0.146,
+        "finger_pushed_in_mm": 0.0,
+        "board_play_fore_and_aft_mm": 0.021,
+        "finger_force_n": 0.0,
+        "within_the_finger_travel": true
+      },
+      {
+        "hole_mm": 3.3,
+        "body_goes_in": true,
+        "hole_centre_in_front_of_the_post_axis_mm": 0.174,
+        "finger_pushed_in_mm": 0.0,
+        "board_play_fore_and_aft_mm": 0.074,
+        "finger_force_n": 0.0,
+        "within_the_finger_travel": true
+      }
+    ],
+    "hole_spacing": [
+      {
+        "hole_mm": 3.0,
+        "hole_spacing_off_by_mm": 0.1,
+        "goes_on": true,
+        "board_shifts_toward_the_hinge_mm": 0.062,
+        "finger_pushed_in_mm": 0.327
+      },
+      {
+        "hole_mm": 3.0,
+        "hole_spacing_off_by_mm": 0.2,
+        "goes_on": true,
+        "board_shifts_toward_the_hinge_mm": 0.132,
+        "finger_pushed_in_mm": 0.43
+      },
+      {
+        "hole_mm": 3.0,
+        "hole_spacing_off_by_mm": 0.3,
+        "goes_on": false
+      },
+      {
+        "hole_mm": 3.1,
+        "hole_spacing_off_by_mm": 0.1,
+        "goes_on": true,
+        "board_shifts_toward_the_hinge_mm": 0.04,
+        "finger_pushed_in_mm": 0.191
+      },
+      {
+        "hole_mm": 3.1,
+        "hole_spacing_off_by_mm": 0.2,
+        "goes_on": true,
+        "board_shifts_toward_the_hinge_mm": 0.106,
+        "finger_pushed_in_mm": 0.284
+      },
+      {
+        "hole_mm": 3.1,
+        "hole_spacing_off_by_mm": 0.3,
+        "goes_on": true,
+        "board_shifts_toward_the_hinge_mm": 0.178,
+        "finger_pushed_in_mm": 0.391
+      },
+      {
+        "hole_mm": 3.2,
+        "hole_spacing_off_by_mm": 0.1,
+        "goes_on": true,
+        "board_shifts_toward_the_hinge_mm": 0.03,
+        "finger_pushed_in_mm": 0.07
+      },
+      {
+        "hole_mm": 3.2,
+        "hole_spacing_off_by_mm": 0.2,
+        "goes_on": true,
+        "board_shifts_toward_the_hinge_mm": 0.082,
+        "finger_pushed_in_mm": 0.143
+      },
+      {
+        "hole_mm": 3.2,
+        "hole_spacing_off_by_mm": 0.3,
+        "goes_on": true,
+        "board_shifts_toward_the_hinge_mm": 0.146,
+        "finger_pushed_in_mm": 0.239
+      }
+    ],
+    "through_the_paddle": {
+      "everything_but_the_fingers_pushed_up_from_9_mm_below_mm3": -0.0,
+      "finger_heads_stand_past_the_paddle_hole_wall_mm": 0.28,
+      "each_finger_gives_while_the_bar_goes_in_mm": 0.28,
+      "finger_travel_mm": 0.52,
+      "free_bar_pushed_up_meets_the_paddle_mm3": 0.5765,
+      "heads_hold_the_bar_up_in_the_paddle": true,
+      "seated_mm3": 0.0,
+      "post_and_finger_to_the_paddle_hole_mm": 0.09,
+      "r71_post_to_the_paddle_hole_mm": 0.07,
+      "bar_below_the_paddle_to_it_mm3": 0.0
+    },
+    "flat_clips": {
+      "Left": {
+        "slide_poses": 81,
+        "most_extra_overlap_against_r71_mm3": 0.0,
+        "seated_overlap_mm3": 0.0,
+        "peak_snap_overlap_mm3": {
+          "r71": 0.1483,
+          "r80": 0.1483
+        },
+        "board_lift_under_the_clip_mm": 0.8,
+        "head_holds_a_lifted_clip_mm3": 0.1251
+      },
+      "Right": {
+        "slide_poses": 81,
+        "most_extra_overlap_against_r71_mm3": 1e-05,
+        "seated_overlap_mm3": 0.0,
+        "peak_snap_overlap_mm3": {
+          "r71": 0.1483,
+          "r80": 0.1483
+        },
+        "board_lift_under_the_clip_mm": 0.8,
+        "head_holds_a_lifted_clip_mm3": 0.1251
+      }
+    },
+    "above_the_board": {
+      "differs_from_r71_mm3": 0.00043,
+      "post_top_z_mm": 23.9,
+      "r71_post_top_z_mm": 23.9
+    },
+    "bar": {
+      "z_mm": [
+        15.899999999999999,
+        17.7
+      ],
+      "box_mm": [
+        -9.05,
+        13.58,
+        15.9,
+        9.05,
+        17.2,
+        23.9
+      ],
+      "r71_box_mm": [
+        -9.05,
+        14.07,
+        15.9,
+        9.05,
+        16.7,
+        23.9
+      ],
+      "solids": 1,
+      "slot_mm": 0.52,
+      "post_spacing_mm": 15.5
+    }
+  },
+  "click": {
+    "button_contact_deg": 0.0033,
+    "full_click_deg": 1.3078,
+    "r79": {
+      "paddle_lifts_before_the_lips_stop_it_deg": 1.131,
+      "feet": {
+        "rest": {
+          "left": {
+            "straight_down_mm": 1.48,
+            "straight_up_to_the_lip_mm": 0.82,
+            "along_the_pocket_mm": {
+              "toward_the_front": 2.0,
+              "toward_the_hinge": 2.0
+            },
+            "nearest_retainer_mm": 0.55
+          },
+          "right": {
+            "straight_down_mm": 1.48,
+            "straight_up_to_the_lip_mm": 0.82,
+            "along_the_pocket_mm": {
+              "toward_the_front": 2.0,
+              "toward_the_hinge": 2.0
+            },
+            "nearest_retainer_mm": 0.55
+          }
+        },
+        "full_click": {
+          "left": {
+            "straight_down_mm": 0.62,
+            "straight_up_to_the_lip_mm": 1.58,
+            "along_the_pocket_mm": {
+              "toward_the_front": 0.56,
+              "toward_the_hinge": 0.46
+            },
+            "nearest_retainer_mm": 0.446
+          },
+          "right": {
+            "straight_down_mm": 0.56,
+            "straight_up_to_the_lip_mm": 1.68,
+            "along_the_pocket_mm": {
+              "toward_the_front": 0.56,
+              "toward_the_hinge": 0.46
+            },
+            "nearest_retainer_mm": 0.445
+          }
+        },
+        "quarter_degree_past_full_click": {
+          "left": {
+            "straight_down_mm": 0.46,
+            "straight_up_to_the_lip_mm": 1.74,
+            "along_the_pocket_mm": {
+              "toward_the_front": 0.56,
+              "toward_the_hinge": 0.46
+            },
+            "nearest_retainer_mm": 0.442
+          },
+          "right": {
+            "straight_down_mm": 0.38,
+            "straight_up_to_the_lip_mm": 1.84,
+            "along_the_pocket_mm": {
+              "toward_the_front": 0.56,
+              "toward_the_hinge": 0.46
+            },
+            "nearest_retainer_mm": 0.357
+          }
+        }
+      },
+      "pressed_a_quarter_degree_too_far_and_leaning": [
+        {
+          "roll_deg": 0.0,
+          "shift_mm": 0.0,
+          "hinge_end_lifted_mm": 0.0,
+          "to_the_retainer_mm": 0.357,
+          "into_the_retainer_mm3": 0.0,
+          "to_the_holder_mm": 0.707,
+          "to_the_op1_board_and_its_parts_mm": 0.787
+        },
+        {
+          "roll_deg": 0.45,
+          "shift_mm": 0.1,
+          "hinge_end_lifted_mm": 0.0,
+          "to_the_retainer_mm": 0.32,
+          "into_the_retainer_mm3": 0.0,
+          "to_the_holder_mm": 0.686,
+          "to_the_op1_board_and_its_parts_mm": 0.756
+        },
+        {
+          "roll_deg": -0.45,
+          "shift_mm": -0.1,
+          "hinge_end_lifted_mm": 0.0,
+          "to_the_retainer_mm": 0.387,
+          "into_the_retainer_mm3": 0.0,
+          "to_the_holder_mm": 0.69,
+          "to_the_op1_board_and_its_parts_mm": 0.817
+        },
+        {
+          "roll_deg": 0.8,
+          "shift_mm": 0.2,
+          "hinge_end_lifted_mm": 0.35,
+          "to_the_retainer_mm": 0.245,
+          "into_the_retainer_mm3": 0.0,
+          "to_the_holder_mm": 0.613,
+          "to_the_op1_board_and_its_parts_mm": 0.688
+        },
+        {
+          "roll_deg": -0.8,
+          "shift_mm": -0.2,
+          "hinge_end_lifted_mm": 0.35,
+          "to_the_retainer_mm": 0.363,
+          "into_the_retainer_mm3": 0.0,
+          "to_the_holder_mm": 0.643,
+          "to_the_op1_board_and_its_parts_mm": 0.794
+        }
+      ],
+      "least_gap_past_full_click_mm": 0.245,
+      "bar_and_clips_through_lift_and_click": {
+        "poses": 19,
+        "into_fixed_parts_mm3": 0.0,
+        "least_gap_mm": 2.244
+      }
+    },
+    "r80": {
+      "paddle_lifts_before_the_lips_stop_it_deg": 1.131,
+      "feet": {
+        "rest": {
+          "left": {
+            "straight_down_mm": 1.76,
+            "straight_up_to_the_lip_mm": 0.82,
+            "along_the_pocket_mm": {
+              "toward_the_front": 2.0,
+              "toward_the_hinge": 2.0
+            },
+            "nearest_retainer_mm": 0.55
+          },
+          "right": {
+            "straight_down_mm": 1.92,
+            "straight_up_to_the_lip_mm": 0.82,
+            "along_the_pocket_mm": {
+              "toward_the_front": 2.0,
+              "toward_the_hinge": 2.0
+            },
+            "nearest_retainer_mm": 0.55
+          }
+        },
+        "full_click": {
+          "left": {
+            "straight_down_mm": 0.92,
+            "straight_up_to_the_lip_mm": 1.58,
+            "along_the_pocket_mm": {
+              "toward_the_front": 1.16,
+              "toward_the_hinge": 0.66
+            },
+            "nearest_retainer_mm": 0.548
+          },
+          "right": {
+            "straight_down_mm": 0.98,
+            "straight_up_to_the_lip_mm": 1.66,
+            "along_the_pocket_mm": {
+              "toward_the_front": 1.16,
+              "toward_the_hinge": 0.66
+            },
+            "nearest_retainer_mm": 0.55
+          }
+        },
+        "quarter_degree_past_full_click": {
+          "left": {
+            "straight_down_mm": 0.76,
+            "straight_up_to_the_lip_mm": 1.72,
+            "along_the_pocket_mm": {
+              "toward_the_front": 1.16,
+              "toward_the_hinge": 0.66
+            },
+            "nearest_retainer_mm": 0.547
+          },
+          "right": {
+            "straight_down_mm": 0.8,
+            "straight_up_to_the_lip_mm": 1.82,
+            "along_the_pocket_mm": {
+              "toward_the_front": 1.16,
+              "toward_the_hinge": 0.66
+            },
+            "nearest_retainer_mm": 0.551
+          }
+        }
+      },
+      "pressed_a_quarter_degree_too_far_and_leaning": [
+        {
+          "roll_deg": 0.0,
+          "shift_mm": 0.0,
+          "hinge_end_lifted_mm": 0.0,
+          "to_the_retainer_mm": 0.547,
+          "into_the_retainer_mm3": 0.0,
+          "to_the_holder_mm": 0.707,
+          "to_the_op1_board_and_its_parts_mm": 0.787
+        },
+        {
+          "roll_deg": 0.45,
+          "shift_mm": 0.1,
+          "hinge_end_lifted_mm": 0.0,
+          "to_the_retainer_mm": 0.497,
+          "into_the_retainer_mm3": 0.0,
+          "to_the_holder_mm": 0.686,
+          "to_the_op1_board_and_its_parts_mm": 0.756
+        },
+        {
+          "roll_deg": -0.45,
+          "shift_mm": -0.1,
+          "hinge_end_lifted_mm": 0.0,
+          "to_the_retainer_mm": 0.495,
+          "into_the_retainer_mm3": 0.0,
+          "to_the_holder_mm": 0.69,
+          "to_the_op1_board_and_its_parts_mm": 0.817
+        },
+        {
+          "roll_deg": 0.8,
+          "shift_mm": 0.2,
+          "hinge_end_lifted_mm": 0.35,
+          "to_the_retainer_mm": 0.453,
+          "into_the_retainer_mm3": 0.0,
+          "to_the_holder_mm": 0.613,
+          "to_the_op1_board_and_its_parts_mm": 0.688
+        },
+        {
+          "roll_deg": -0.8,
+          "shift_mm": -0.2,
+          "hinge_end_lifted_mm": 0.35,
+          "to_the_retainer_mm": 0.414,
+          "into_the_retainer_mm3": 0.0,
+          "to_the_holder_mm": 0.643,
+          "to_the_op1_board_and_its_parts_mm": 0.794
+        }
+      ],
+      "least_gap_past_full_click_mm": 0.414,
+      "bar_and_clips_through_lift_and_click": {
+        "poses": 19,
+        "into_fixed_parts_mm3": 0.0,
+        "least_gap_mm": 2.244
+      }
+    },
+    "retainer": {
+      "tine_section": {
+        "r79": {
+          "left": {
+            "least_mm2": 4.266,
+            "at_station_mm": -3.7,
+            "beside_the_foot_ends_mm2": [
+              4.266,
+              4.266,
+              4.266,
+              4.266
+            ]
+          },
+          "right": {
+            "least_mm2": 4.266,
+            "at_station_mm": -3.35,
+            "beside_the_foot_ends_mm2": [
+              4.266,
+              4.266,
+              4.266,
+              4.266
+            ]
+          }
+        },
+        "r80": {
+          "left": {
+            "least_mm2": 4.266,
+            "at_station_mm": -4.4,
+            "beside_the_foot_ends_mm2": [
+              4.691,
+              4.691,
+              4.691,
+              4.559
+            ]
+          },
+          "right": {
+            "least_mm2": 4.266,
+            "at_station_mm": -4.05,
+            "beside_the_foot_ends_mm2": [
+              4.691,
+              4.691,
+              4.691,
+              4.559
+            ]
+          }
+        },
+        "r59_mm2": 4.32,
+        "checks69_asks_mm2": 4.104,
+        "this_source_keeps_mm2": 4.2
+      },
+      "lip_runs_past_the_leg_mm": {
+        "front": 0.7,
+        "rear": 0.65
+      },
+      "lip_lead_in_mm": 0.5,
+      "old_lip_and_post_lost_mm3": 0.00084,
+      "plate_under_the_holder_rails_mm3": {
+        "r79": 89.42,
+        "r80": 89.421
+      },
+      "removed_mm3": 11.839,
+      "added_mm3": 7.436,
+      "solids": 1,
+      "pocket_beyond_the_leg_mm": {
+        "r79": [
+          0.55,
+          0.45
+        ],
+        "r80": [
+          1.15,
+          0.65
+        ]
+      },
+      "floor_open_beyond_the_leg_mm": 0.5
+    }
+  },
+  "not_known": [
+    "the real diameter and spacing of the board holes",
+    "the printed size of the lands and finger",
+    "creep of the arm under a small hole",
+    "which surface the paddle touched on the printed R79"
+  ],
+  "passes": true
+}

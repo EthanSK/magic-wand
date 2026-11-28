@@ -1,0 +1,58 @@
+{
+  "OP1_Lid_Stop": {
+    "moving_paddle_during_retainer_installation": {
+      "poses": 25,
+      "nearby_samples": 37670,
+      "checked_in_combined_route": 34956,
+      "obstructed_poses": []
+    },
+    "paddle_at_centre_press_and_return": {
+      "poses": 21,
+      "nearby_samples": 33892,
+      "checked_in_combined_route": 30288,
+      "obstructed_poses": []
+    },
+    "paddle_at_rolled_corner_press": {
+      "poses": 4,
+      "nearby_samples": 21215,
+      "checked_in_combined_route": 9866,
+      "obstructed_poses": []
+    }
+  },
+  "DFR_Clip_Left": {
+    "open_throat_and_seated_neck": {
+      "poses": 1,
+      "nearby_samples": 2125,
+      "checked_in_combined_route": 54,
+      "obstructed_poses": []
+    }
+  },
+  "DFR_Clip_Right": {
+    "open_throat_and_seated_neck": {
+      "poses": 1,
+      "nearby_samples": 2175,
+      "checked_in_combined_route": 172,
+      "obstructed_poses": []
+    }
+  },
+  "DFR_Post_Bar": {
+    "connector_as_board_is_lowered": {
+      "poses": 25,
+      "nearby_samples": 1647,
+      "checked_in_combined_route": 0,
+      "obstructed_poses": []
+    },
+    "gravity_plug_as_board_is_lowered": {
+      "poses": 25,
+      "nearby_samples": 0,
+      "checked_in_combined_route": 0,
+      "obstructed_poses": []
+    },
+    "sensor_lead_as_board_is_lowered": {
+      "poses": 25,
+      "nearby_samples": 0,
+      "checked_in_combined_route": 0,
+      "obstructed_poses": []
+    }
+  }
+}

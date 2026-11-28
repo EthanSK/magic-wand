@@ -1,0 +1,193 @@
+{
+  "parts": {
+    "OP1_Lid_Stop": {
+      "source": "OP1_Lid_Stop-assembly.stl",
+      "source_sha256": "e07550746596ba1257ed7987150a3b871902c5bfa8fdda1a7240c55564f4eb55",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          30.58248996734619
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          101.44474849700927
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -11.149999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          29,
+          39
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.1
+      }
+    },
+    "DFR_Clip_Left": {
+      "source": "../../carbon-rod-holders-r59-flipped-guard/exports/DFR_Clip_Left-assembly.stl",
+      "source_sha256": "5673825587a7da76de3c89abe0f0296aecd7edd5699cd576df5137b86413aee9",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          163.75
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          78.46949005126953
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          12,
+          12
+        ],
+        "ties": [
+          [
+            0,
+            -1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          1
+        ]
+      }
+    },
+    "DFR_Clip_Right": {
+      "source": "../../carbon-rod-holders-r59-flipped-guard/exports/DFR_Clip_Right-assembly.stl",
+      "source_sha256": "50dbdcc8ec0c1f1acf55225e654ff0d0ede25a448bd0b8abe786c8892cc94e5c",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          92.25
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          86.06949005126953
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -20.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          12,
+          12
+        ],
+        "ties": [
+          [
+            0,
+            -1
+          ]
+        ],
+        "tie_width": 3.0,
+        "clip_mouth": [
+          0,
+          1
+        ]
+      }
+    },
+    "DFR_Post_Bar": {
+      "source": "DFR_Post_Bar-assembly.stl",
+      "source_sha256": "fe20a620a2a5edae271d8b342f38edaf9fd35609370f62c540141c315ed49feb",
+      "assembly_to_machine": [
+        [
+          1.0,
+          -0.0,
+          0.0,
+          150.5
+        ],
+        [
+          0.0,
+          1.0,
+          -0.0,
+          19.611148357391357
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          -15.899999618530273
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "adhesion_panel": {
+        "size": [
+          32,
+          18
+        ],
+        "ties": [
+          [
+            -1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "tie_width": 3.0
+      }
+    }
+  },
+  "layout_sha256": "9fd9d406c7346185420737ba7ab84ef9d02e93a71ad6eeda024072bde7d544d7"
+}

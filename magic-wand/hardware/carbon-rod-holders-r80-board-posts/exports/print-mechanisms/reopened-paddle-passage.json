@@ -1,0 +1,22 @@
+{
+  "parts_sha256": {
+    "Touch_Paddle": "07c2e7786a6896a704fad534cdf4ec6f99a44ca58565a7fc2e16e0e8141d2da7",
+    "DFR_Post_Bar": "fe20a620a2a5edae271d8b342f38edaf9fd35609370f62c540141c315ed49feb"
+  },
+  "sides": {
+    "left": {
+      "rigid_post_to_reused_paddle_mm": 0.06,
+      "spring_travel_through_paddle_mm": 0.295,
+      "remaining_spring_gap_mm": 0.2123,
+      "spring_travel_in_nominal_3mm_board_hole_mm": 0.2433
+    },
+    "right": {
+      "rigid_post_to_reused_paddle_mm": 0.06,
+      "spring_travel_through_paddle_mm": 0.295,
+      "remaining_spring_gap_mm": 0.2126,
+      "spring_travel_in_nominal_3mm_board_hole_mm": 0.2438
+    }
+  },
+  "native_archive_sha256": "70d2488fff9c22f6e82cd231f25e1609d19baab2f0115b6ecec167c3a555ae3c",
+  "reference_archive_sha256": "af4f6892c0038d35867934584924d7e4b2466a35dc7d3e7795af920da06e9f34"
+}

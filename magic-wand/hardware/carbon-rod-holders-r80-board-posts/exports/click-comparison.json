@@ -1,0 +1,80 @@
+{
+  "r79": {
+    "centre_case_stop_deg": 1.3078,
+    "designed_upper_catch_deg": 1.1424,
+    "rest": {
+      "nearest_retainer_mm": 0.5499,
+      "pure_down_to_next_fixed_surface_mm": 1.47
+    },
+    "centre_and_corner_press": {
+      "square": {
+        "nearest_retainer_mm": 0.4452,
+        "pure_down_to_next_fixed_surface_mm": 0.54
+      },
+      "roll_-0.8_offset_-0.2": {
+        "nearest_retainer_mm": 0.3634,
+        "pure_down_to_next_fixed_surface_mm": 0.3679
+      },
+      "roll_-0.8_offset_0.2": {
+        "nearest_retainer_mm": 0.2931,
+        "pure_down_to_next_fixed_surface_mm": 0.3679
+      },
+      "roll_0.8_offset_-0.2": {
+        "nearest_retainer_mm": 0.2447,
+        "pure_down_to_next_fixed_surface_mm": 0.2557
+      },
+      "roll_0.8_offset_0.2": {
+        "nearest_retainer_mm": 0.2447,
+        "pure_down_to_next_fixed_surface_mm": 0.2557
+      }
+    },
+    "press_overlap_mm3": 0.0,
+    "free_return_overlap_mm3": 0.0
+  },
+  "r80": {
+    "centre_case_stop_deg": 1.3078,
+    "designed_upper_catch_deg": 1.1424,
+    "rest": {
+      "nearest_retainer_mm": 0.55,
+      "pure_down_to_next_fixed_surface_mm": 1.7512
+    },
+    "centre_and_corner_press": {
+      "square": {
+        "nearest_retainer_mm": 0.5481,
+        "pure_down_to_next_fixed_surface_mm": 0.9151
+      },
+      "roll_-0.8_offset_-0.2": {
+        "nearest_retainer_mm": 0.4142,
+        "pure_down_to_next_fixed_surface_mm": 0.6564
+      },
+      "roll_-0.8_offset_0.2": {
+        "nearest_retainer_mm": 0.3102,
+        "pure_down_to_next_fixed_surface_mm": 0.7986
+      },
+      "roll_0.8_offset_-0.2": {
+        "nearest_retainer_mm": 0.2668,
+        "pure_down_to_next_fixed_surface_mm": 0.693
+      },
+      "roll_0.8_offset_0.2": {
+        "nearest_retainer_mm": 0.4531,
+        "pure_down_to_next_fixed_surface_mm": 0.7011
+      }
+    },
+    "press_overlap_mm3": 0.0,
+    "free_return_overlap_mm3": 0.0
+  },
+  "new_retainer_insertion": {
+    "poses": 50,
+    "new_material_overlap_mm3": {
+      "carrier": 0.0,
+      "board": 0.0,
+      "sockets": 0.0,
+      "housing": 0.0,
+      "plug": 0.0,
+      "terminals": 0.0,
+      "switch": 0.0,
+      "cap": 0.0
+    }
+  },
+  "physical_fit_verified": false
+}
